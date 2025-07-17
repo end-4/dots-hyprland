@@ -161,7 +161,7 @@ Scope {
 
     GlobalShortcut {
         name: "mediaControlsToggle"
-        description: Translation.tr("Toggles media controls on press")
+        description: "Toggles media controls on press"
 
         onPressed: {
             if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
@@ -173,7 +173,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsOpen"
-        description: Translation.tr("Opens media controls on press")
+        description: "Opens media controls on press"
 
         onPressed: {
             mediaControlsLoader.active = true;
@@ -182,7 +182,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsClose"
-        description: Translation.tr("Closes media controls on press")
+        description: "Closes media controls on press"
 
         onPressed: {
             mediaControlsLoader.active = false;

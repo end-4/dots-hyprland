@@ -212,7 +212,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetToggle"
-        description: Translation.tr("Toggles cheatsheet on press")
+        description: "Toggles cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = !cheatsheetLoader.active;
@@ -221,7 +221,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetOpen"
-        description: Translation.tr("Opens cheatsheet on press")
+        description: "Opens cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = true;
@@ -230,7 +230,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetClose"
-        description: Translation.tr("Closes cheatsheet on press")
+        description: "Closes cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = false;

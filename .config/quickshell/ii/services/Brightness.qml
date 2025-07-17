@@ -141,13 +141,13 @@ Singleton {
 
     GlobalShortcut {
         name: "brightnessIncrease"
-        description: Translation.tr("Increase brightness")
+        description: "Increase brightness"
         onPressed: root.increaseBrightness()
     }
 
     GlobalShortcut {
         name: "brightnessDecrease"
-        description: Translation.tr("Decrease brightness")
+        description: "Decrease brightness"
         onPressed: root.decreaseBrightness()
     }
 }

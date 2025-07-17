@@ -141,7 +141,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskToggle"
-        description: Translation.tr("Toggles on screen keyboard on press")
+        description: "Toggles on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = !oskLoader.active;
@@ -150,7 +150,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskOpen"
-        description: Translation.tr("Opens on screen keyboard on press")
+        description: "Opens on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = true;
@@ -159,7 +159,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskClose"
-        description: Translation.tr("Closes on screen keyboard on press")
+        description: "Closes on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = false;

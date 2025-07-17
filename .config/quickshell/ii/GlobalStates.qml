@@ -41,7 +41,7 @@ Singleton {
 
     GlobalShortcut {
         name: "workspaceNumber"
-        description: Translation.tr("Hold to show workspace numbers, release to show icons")
+        description: "Hold to show workspace numbers, release to show icons"
 
         onPressed: {
             workspaceShowNumbersTimer.start()

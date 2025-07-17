@@ -224,7 +224,7 @@ Scope {
 
     GlobalShortcut {
         name: "sidebarRightToggle"
-        description: Translation.tr("Toggles right sidebar on press")
+        description: "Toggles right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -233,7 +233,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightOpen"
-        description: Translation.tr("Opens right sidebar on press")
+        description: "Opens right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = true;
@@ -242,7 +242,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightClose"
-        description: Translation.tr("Closes right sidebar on press")
+        description: "Closes right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = false;

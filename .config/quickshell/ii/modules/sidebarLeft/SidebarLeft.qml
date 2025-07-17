@@ -170,7 +170,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggle"
-        description: Translation.tr("Toggles left sidebar on press")
+        description: "Toggles left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
@@ -179,7 +179,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftOpen"
-        description: Translation.tr("Opens left sidebar on press")
+        description: "Opens left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = true;
@@ -188,7 +188,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftClose"
-        description: Translation.tr("Closes left sidebar on press")
+        description: "Closes left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = false;
@@ -197,7 +197,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggleDetach"
-        description: Translation.tr("Detach left sidebar into a window/Attach it back")
+        description: "Detach left sidebar into a window/Attach it back"
 
         onPressed: {
             root.detach = !root.detach;

@@ -586,7 +586,7 @@ Scope {
 
     GlobalShortcut {
         name: "barToggle"
-        description: Translation.tr("Toggles bar on press")
+        description: "Toggles bar on press"
 
         onPressed: {
             GlobalStates.barOpen = !GlobalStates.barOpen;
@@ -595,7 +595,7 @@ Scope {
 
     GlobalShortcut {
         name: "barOpen"
-        description: Translation.tr("Opens bar on press")
+        description: "Opens bar on press"
 
         onPressed: {
             GlobalStates.barOpen = true;
@@ -604,7 +604,7 @@ Scope {
 
     GlobalShortcut {
         name: "barClose"
-        description: Translation.tr("Closes bar on press")
+        description: "Closes bar on press"
 
         onPressed: {
             GlobalStates.barOpen = false;

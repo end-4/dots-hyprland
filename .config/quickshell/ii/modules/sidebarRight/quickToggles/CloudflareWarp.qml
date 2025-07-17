@@ -1,6 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "../"
+import "root:/"
 import QtQuick
 import Quickshell.Io
 import Quickshell

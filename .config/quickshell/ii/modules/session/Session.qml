@@ -210,7 +210,7 @@ Scope {
 
     GlobalShortcut {
         name: "sessionToggle"
-        description: Translation.tr("Toggles session screen on press")
+        description: "Toggles session screen on press"
 
         onPressed: {
             sessionLoader.active = !sessionLoader.active;
@@ -219,7 +219,7 @@ Scope {
 
     GlobalShortcut {
         name: "sessionOpen"
-        description: Translation.tr("Opens session screen on press")
+        description: "Opens session screen on press"
 
         onPressed: {
             sessionLoader.active = true;
