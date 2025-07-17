@@ -1,11 +1,8 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
-import Quickshell.Wayland
-import Quickshell.Widgets
 
 // TODO: More fancy animation
 Item {

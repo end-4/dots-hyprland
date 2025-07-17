@@ -1,16 +1,13 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "./calendar"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import "./notifications"
-import "./todo"
 import "./volumeMixer"
-import "root:/"
+import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
 
 Rectangle {
     id: root

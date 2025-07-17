@@ -1,12 +1,11 @@
 pragma ComponentBehavior: Bound
 
-import "root:/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions as CF
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -48,7 +47,7 @@ Scope {
             // Colors
             property color dominantColor: Appearance.colors.colPrimary
             property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
-            property color colText: ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
+            property color colText: CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
 
             // Layer props
             screen: modelData
@@ -194,8 +193,8 @@ Scope {
                             horizontalAlignment: bgRoot.textHorizontalAlignment
                             font {
                                 family: Appearance.font.family.expressive
-                                pixelSize: 85
-                                weight: Font.Medium
+                                pixelSize: 90
+                                weight: Font.Bold
                             }
                             color: bgRoot.colText
                             style: Text.Raised
@@ -208,7 +207,7 @@ Scope {
                             font {
                                 family: Appearance.font.family.expressive
                                 pixelSize: 20
-                                weight: Font.Medium
+                                weight: Font.DemiBold
                             }
                             color: bgRoot.colText
                             style: Text.Raised

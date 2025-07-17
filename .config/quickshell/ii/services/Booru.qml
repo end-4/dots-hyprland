@@ -1,11 +1,9 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common"
-import "root:/"
+import qs.modules.common
+import qs
 import Quickshell;
-import Quickshell.Io;
-import Qt.labs.platform
 import QtQuick;
 
 /**

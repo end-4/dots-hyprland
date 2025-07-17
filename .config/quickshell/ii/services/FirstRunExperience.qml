@@ -1,10 +1,9 @@
 pragma Singleton
 
-import "root:/modules/common/functions/file_utils.js" as FileUtils
-import "root:/modules/common"
+import qs.modules.common
+import qs.modules.common.functions
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
 
 Singleton {
     id: root

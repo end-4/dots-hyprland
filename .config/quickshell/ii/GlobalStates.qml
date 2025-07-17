@@ -1,5 +1,5 @@
-import "root:/modules/common/"
-import "root:/"
+import qs.modules.common
+import qs
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland

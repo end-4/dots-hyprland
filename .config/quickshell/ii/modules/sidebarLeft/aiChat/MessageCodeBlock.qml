@@ -1,20 +1,14 @@
 pragma ComponentBehavior: Bound
 
-import "root:/"
-import "root:/services"
-import "root:/modules/common/"
-import "root:/modules/common/widgets"
-import "../"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
-import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 import org.kde.syntaxhighlighting
 
 ColumnLayout {

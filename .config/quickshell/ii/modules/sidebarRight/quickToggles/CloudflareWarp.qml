@@ -1,10 +1,9 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs
 import QtQuick
 import Quickshell.Io
 import Quickshell
-import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root

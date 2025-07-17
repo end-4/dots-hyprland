@@ -1,10 +1,8 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "root:/"
-import Qt5Compat.GraphicalEffects
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import qs
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 

@@ -1,9 +1,8 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
