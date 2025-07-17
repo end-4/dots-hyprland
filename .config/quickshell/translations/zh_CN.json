@@ -303,12 +303,12 @@
   "Elements": "元素",
   "Scroll to change volume": "滚动以调节音量",
   "Connection failed. Please inspect manually with the <tt>warp-cli</tt> command": "连接失败。请使用 <tt>warp-cli</tt> 命令手动检查",
-  "UV Index": "UV Index",
-  "Pressure": "Pressure",
-  "Visibility": "Visibility",
-  "Sunrise": "Sunrise",
-  "Sunset": "Sunset",
-  "Humidity": "Humidity",
-  "Wind": "Wind",
-  "Precipitation": "Precipitation"
+  "UV Index": "紫外线指数",
+  "Pressure": "气压",
+  "Visibility": "能见度",
+  "Sunrise": "日出",
+  "Sunset": "日落",
+  "Humidity": "湿度",
+  "Wind": "风",
+  "Precipitation": "降水量"
 }
