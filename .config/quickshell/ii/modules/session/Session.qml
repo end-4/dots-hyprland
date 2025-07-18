@@ -15,6 +15,12 @@ Scope {
     id: root
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
+    function closeAllWindows() {
+        HyprlandData.windowList.map(w => w.pid).forEach((pid) => {
+            Quickshell.execDetached(["kill", pid]);
+        });
+    }
+
     Loader {
         id: sessionLoader
         active: false
@@ -111,7 +117,7 @@ Scope {
                         id: sessionLogout
                         buttonIcon: "logout"
                         buttonText: Translation.tr("Logout")
-                        onClicked: { Quickshell.execDetached(["pkill", "Hyprland"]); sessionRoot.hide() }
+                        onClicked: { root.closeAllWindows(); Quickshell.execDetached(["pkill", "Hyprland"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
                         KeyNavigation.right: sessionTaskManager
@@ -140,7 +146,7 @@ Scope {
                         id: sessionShutdown
                         buttonIcon: "power_settings_new"
                         buttonText: Translation.tr("Shutdown")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); sessionRoot.hide() }
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionHibernate
                         KeyNavigation.right: sessionReboot
@@ -150,7 +156,7 @@ Scope {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
                         buttonText: Translation.tr("Reboot")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
                         KeyNavigation.right: sessionFirmwareReboot
@@ -160,7 +166,7 @@ Scope {
                         id: sessionFirmwareReboot
                         buttonIcon: "settings_applications"
                         buttonText: Translation.tr("Reboot to firmware settings")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl reboot --firmware-setup || loginctl reboot --firmware-setup`]); sessionRoot.hide() }
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `systemctl reboot --firmware-setup || loginctl reboot --firmware-setup`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionTaskManager
                         KeyNavigation.left: sessionReboot

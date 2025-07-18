@@ -58,8 +58,8 @@ Singleton {
         },
         "konachan": {
             "name": "Konachan",
-            "url": "https://konachan.com",
-            "api": "https://konachan.com/post.json",
+            "url": "https://konachan.net",
+            "api": "https://konachan.net/post.json",
             "description": Translation.tr("For desktop wallpapers | Good quality"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -80,7 +80,7 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://konachan.com/tag.json?order=count&name={{query}}*",
+            "tagSearchTemplate": "https://konachan.net/tag.json?order=count&name={{query}}*",
             "tagMapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -360,7 +360,7 @@ Singleton {
 
     function makeRequest(tags, nsfw=false, limit=20, page=1) {
         var url = constructRequestUrl(tags, nsfw, limit, page)
-        // console.log("[Booru] Making request to " + url)
+        console.log("[Booru] Making request to " + url)
 
         const newResponse = root.booruResponseDataComponent.createObject(null, {
             "provider": currentProvider,

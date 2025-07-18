@@ -176,8 +176,8 @@ Scope {
                             NightLight {}
                             GameMode {}
                             IdleInhibitor {}
-                            CloudflareWarp {}
                             EasyEffectsToggle {}
+                            CloudflareWarp {}
                         }
 
                         // Center widget group

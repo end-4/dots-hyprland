@@ -1,4 +1,3 @@
-import qs.modules.common
 import qs.modules.common.widgets
 import qs
 import Quickshell.Io

@@ -14,7 +14,7 @@ RippleButton {
     property var entry
     property string query
     property bool entryShown: entry?.shown ?? true
-    property string itemType: entry?.type
+    property string itemType: entry?.type ?? Translation.tr("App")
     property string itemName: entry?.name
     property string itemIcon: entry?.icon ?? ""
     property var itemExecute: entry?.execute
@@ -221,5 +221,47 @@ RippleButton {
             horizontalAlignment: Text.AlignRight
             text: root.itemClickActionName
         }
+
+        RowLayout {
+            spacing: 4
+            Repeater {
+                model: (root.entry.actions ?? []).slice(0, 4)
+                delegate: RippleButton {
+                    id: actionButton
+                    required property var modelData
+                    implicitHeight: 34
+                    implicitWidth: 34
+
+                    contentItem: Item {
+                        id: actionContentItem
+                        anchors.centerIn: parent
+                        Loader {
+                            anchors.centerIn: parent
+                            active: !(actionButton.modelData.icon && actionButton.modelData.icon !== "")
+                            sourceComponent: MaterialSymbol {
+                                text: "video_settings"
+                                font.pixelSize: Appearance.font.pixelSize.hugeass
+                                color: Appearance.m3colors.m3onSurface
+                            }
+                        }
+                        Loader {
+                            anchors.centerIn: parent
+                            active: actionButton.modelData.icon && actionButton.modelData.icon !== ""
+                            sourceComponent: IconImage {
+                                source: Quickshell.iconPath(actionButton.modelData.icon)
+                                implicitSize: 20
+                            }
+                        }
+                    }
+
+                    onClicked: modelData.execute()
+
+                    StyledToolTip {
+                        content: modelData.name
+                    }
+                }
+            }
+        }
+
     }
 }
