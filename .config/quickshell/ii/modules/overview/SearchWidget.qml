@@ -294,8 +294,17 @@ Item { // Wrapper
                                     clickActionName: "",
                                     type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
                                     execute: () => {
-                                        Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode | wl-copy`]);
-                                    }
+                                        Cliphist.copy(entry)
+                                    },
+                                    actions: [
+                                        {
+                                            name: "Delete",
+                                            icon: "delete",
+                                            execute: () => {
+                                                Cliphist.deleteEntry(entry);
+                                            }
+                                        }
+                                    ]
                                 };
                             }).filter(Boolean);
                         }
