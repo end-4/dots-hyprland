@@ -56,10 +56,6 @@ Singleton {
         entry: a
     }))
 
-    onPreppedIconsChanged: {
-        console.log(JSON.stringify(root.list.map(a => a.icon)))
-    }
-
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
         if (root.sloppySearch) {
             const results = list.map(obj => ({
@@ -97,8 +93,8 @@ Singleton {
         if (!str || str.length == 0) return "image-missing";
 
         // Normal substitutions
-        if (substitutions[str])
-            return substitutions[str];
+        if (substitutions[str]) return substitutions[str];
+        if (substitutions[str.toLowerCase()]) return substitutions[str.toLowerCase()];
 
         // Regex substitutions
         for (let i = 0; i < regexSubstitutions.length; i++) {
