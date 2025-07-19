@@ -225,7 +225,10 @@ Scope {
 
                     RowLayout { // Middle section
                         id: middleSection
-                        anchors.centerIn: parent
+                        anchors {
+                            centerIn: parent
+                            horizontalCenterOffset: (rightCenterGroup.implicitWidth + (Config.options.bar.weather.enable ? weatherGroup.implicitWidth + spacing : 0) - barRoot.centerSideModuleWidth) / 2
+                        }
                         spacing: Config.options?.bar.borderless ? 4 : 8
 
                         BarGroup {
@@ -279,7 +282,6 @@ Scope {
                             id: rightCenterGroup
                             implicitWidth: rightCenterGroupContent.implicitWidth
                             implicitHeight: rightCenterGroupContent.implicitHeight
-                            Layout.preferredWidth: barRoot.centerSideModuleWidth
                             Layout.fillHeight: true
 
                             onPressed: {
@@ -293,7 +295,8 @@ Scope {
                                 ClockWidget {
                                     showDate: (Config.options.bar.verbose && barRoot.useShortenedForm < 2)
                                     Layout.alignment: Qt.AlignVCenter
-                                    Layout.fillWidth: true
+                                    Layout.leftMargin: 8
+                                    Layout.rightMargin: 8
                                 }
 
                                 UtilButtons {
@@ -310,6 +313,20 @@ Scope {
 
                         VerticalBarSeparator {
                             visible: Config.options.bar.borderless && Config.options.bar.weather.enable
+                        }
+
+                        // Weather
+                        BarGroup {
+                            id: weatherGroup
+                            visible: Config.options.bar.weather.enable
+                            implicitHeight: Appearance.sizes.baseBarHeight
+
+                            Loader {
+                                id: weatherLoader
+                                Layout.fillHeight: true
+                                active: Config.options.bar.weather.enable
+                                sourceComponent: WeatherBar {}
+                            }
                         }
                     }
 
@@ -482,17 +499,6 @@ Scope {
                                 Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                }
-
-                                // Weather
-                                Loader {
-                                    Layout.leftMargin: 8
-                                    Layout.fillHeight: true
-                                    active: Config.options.bar.weather.enable
-                                    sourceComponent: BarGroup {
-                                        implicitHeight: Appearance.sizes.baseBarHeight
-                                        WeatherBar {}
-                                    }
                                 }
                             }
                         }
