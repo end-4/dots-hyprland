@@ -35,7 +35,7 @@ Singleton {
         property Timer timer
 
         readonly property Connections conn: Connections {
-            target: wrapper.notification.Component
+            target: wrapper?.notification?.Component ?? root // stupid warning aaaaaaa
 
             function onDestruction(): void {
                 wrapper.destroy();
