@@ -26,25 +26,12 @@
   - **Transparent installation**: Every command is shown before it's run
 </details>
 <details> 
-  <summary>Instructions</summary>
+  <summary>Installation instructions</summary>
 
-   - **Prerequisite**: Your system works. That's it. You don't have to reinstall your system!
-   - **Automatic**, but guided and transparent, installation for Arch(-based) Linux:
-   ```bash
-   bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
-   ```
-
-   If you are using fish shell (non-posix-compliant shell) then:
-   ```bash
-   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
-   ```
-
-   - **Manual** installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
-    
-   - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
-     - For a list, hit `Super`+`/`
-     - For a terminal, hit `Super`+`Enter`
+   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
+   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. 
+     - `Super`+`/` = keybind list
+     - `Super`+`Enter` = terminal
 
 </details>
 

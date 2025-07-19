@@ -199,11 +199,13 @@ Item {
                         onExited: hovered = false // For hover color change
                         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                         drag.target: parent
-                        onPressed: {
+                        onPressed: (mouse) => {
                             root.draggingFromWorkspace = windowData?.workspace.id
                             window.pressed = true
                             window.Drag.active = true
                             window.Drag.source = window
+                            window.Drag.hotSpot.x = mouse.x
+                            window.Drag.hotSpot.y = mouse.y
                             // console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
                         }
                         onReleased: {

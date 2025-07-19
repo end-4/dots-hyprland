@@ -70,7 +70,7 @@ Item { // Notification item area
             easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
         }
         onFinished: () => {
-            Notifications.discardNotification(notificationObject.id);
+            Notifications.discardNotification(notificationObject.notificationId);
         }
     }
 
@@ -208,7 +208,7 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.RichText
                     text: {
-                        return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                        return `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>` + 
                                `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
                     }
 
@@ -269,7 +269,7 @@ Item { // Notification item area
                                 buttonText: modelData.text
                                 urgency: notificationObject.urgency
                                 onClicked: {
-                                    Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                    Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
                                 }
                             }
                         }

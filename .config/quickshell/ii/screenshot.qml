@@ -7,11 +7,11 @@
 
 pragma ComponentBehavior: "Bound"
 import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
