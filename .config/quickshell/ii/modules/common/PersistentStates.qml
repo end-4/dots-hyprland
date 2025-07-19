@@ -12,6 +12,7 @@ Singleton {
     property QtObject sidebar: QtObject {
         property QtObject bottomGroup: QtObject {
             property bool collapsed: false
+            property int tab: 0
         }
     }
 
