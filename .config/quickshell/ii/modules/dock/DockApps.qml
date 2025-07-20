@@ -57,9 +57,13 @@ Item {
                 if (pinnedApps.length > 0) {
                     map.set("SEPARATOR", { pinned: false, toplevels: [] });
                 }
-                
+
+                // Ignored apps regex
+                const ignoredAppsRegex = Config.options?.dock.ignoredAppsRegex ?? [];
+                const ignoredRegexes = ignoredAppsRegex.map(pattern => new RegExp(pattern));
                 // Open windows
                 for (const toplevel of ToplevelManager.toplevels.values) {
+                    if (ignoredRegexes.some(re => re.test(toplevel.appId.toLowerCase()))) continue;
                     if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
                         pinned: false,
                         toplevels: []
