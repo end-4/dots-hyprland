@@ -167,10 +167,12 @@ Singleton {
             // Popup
             if (!root.popupInhibited) {
                 newNotifObject.popup = true;
-                newNotifObject.timer = notifTimerComponent.createObject(root, {
-                    "notificationId": newNotifObject.notificationId,
-                    "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout,
-                });
+                if (notification.expireTimeout != 0) {
+                    newNotifObject.timer = notifTimerComponent.createObject(root, {
+                        "notificationId": newNotifObject.notificationId,
+                        "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout,
+                    });
+                }
             }
 
             root.notify(newNotifObject);
