@@ -13,7 +13,7 @@ Rectangle {
     color: Appearance.colors.colLayer1
     clip: true
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
-    property int selectedTab: 0
+    property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
         {"type": "calendar", "name": Translation.tr("Calendar"), "icon": "calendar_month", "widget": calendarWidget}, 
@@ -146,6 +146,7 @@ Rectangle {
                         buttonIcon: modelData.icon
                         onClicked: {
                             root.selectedTab = index
+                            Persistent.states.sidebar.bottomGroup.tab = index
                         }
                     }
                 }
@@ -171,10 +172,12 @@ Rectangle {
         StackLayout {
             id: tabStack
             Layout.fillWidth: true
-            height: tabStack.children[0]?.tabLoader?.implicitHeight // TODO: make this less stupid
+            // Take the highest one, because the TODO list has no implicit height. This way the heigth of the calendar is used when it's initially loaded with the TODO list
+            height: Math.max(...tabStack.children.map(child => child.tabLoader?.implicitHeight || 0)) // TODO: make this less stupid
             Layout.alignment: Qt.AlignVCenter
-            property int realIndex: 0
+            property int realIndex: root.selectedTab
             property int animationDuration: Appearance.animation.elementMoveFast.duration * 1.5
+            currentIndex: root.selectedTab
 
             // Switch the tab on halfway of the anim duration
             Connections {
