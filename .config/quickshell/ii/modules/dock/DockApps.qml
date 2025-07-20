@@ -58,9 +58,9 @@ Item {
                     map.set("SEPARATOR", { pinned: false, toplevels: [] });
                 }
 
-                // Ignored apps regex
-                const ignoredAppsRegex = Config.options?.dock.ignoredAppsRegex ?? [];
-                const ignoredRegexes = ignoredAppsRegex.map(pattern => new RegExp(pattern, "i"));
+                // Ignored apps
+                const ignoredAppRegexes = Config.options?.dock.ignoredAppRegexes ?? [];
+                const ignoredRegexes = ignoredAppRegexes.map(pattern => new RegExp(pattern, "i"));
                 // Open windows
                 for (const toplevel of ToplevelManager.toplevels.values) {
                     if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;

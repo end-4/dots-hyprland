@@ -160,7 +160,7 @@ Singleton {
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty",]
-                property list<string> ignoredAppsRegex: []
+                property list<string> ignoredAppRegexes: []
             }
 
             property JsonObject language: JsonObject {
