@@ -15,6 +15,8 @@ Singleton {
     property bool overviewOpen: false
     property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true
+    property bool screenLocked: false
+    property bool screenLockContainsCharacters: false
 
     property real screenZoom: 1
     onScreenZoomChanged: {
