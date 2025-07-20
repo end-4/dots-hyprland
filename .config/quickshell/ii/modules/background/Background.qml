@@ -19,7 +19,6 @@ Scope {
     readonly property real fixedClockY: Config.options.background.clockY
 
     Variants {
-        // For each monitor
         model: Quickshell.screens
 
         PanelWindow {
@@ -44,6 +43,8 @@ Scope {
             property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
             property var textHorizontalAlignment: clockX < screen.width / 3 ? Text.AlignLeft :
                 (clockX > screen.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
+            property var layoutHorizontalAlignment: clockX < screen.width / 3 ? Qt.AlignLeft :
+                (clockX > screen.width * 2 / 3 ? Qt.AlignRight : Qt.AlignHCenter)
             // Colors
             property color dominantColor: Appearance.colors.colPrimary
             property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
@@ -52,6 +53,7 @@ Scope {
             // Layer props
             screen: modelData
             exclusionMode: ExclusionMode.Ignore
+            // WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
             WlrLayershell.layer: WlrLayer.Bottom
             WlrLayershell.namespace: "quickshell:background"
             anchors {
@@ -186,7 +188,7 @@ Scope {
                     ColumnLayout {
                         id: clockColumn
                         anchors.centerIn: parent
-                        spacing: -5
+                        spacing: 0
 
                         StyledText {
                             Layout.fillWidth: true
@@ -203,6 +205,7 @@ Scope {
                         }
                         StyledText {
                             Layout.fillWidth: true
+                            Layout.topMargin: -5
                             horizontalAlignment: bgRoot.textHorizontalAlignment
                             font {
                                 family: Appearance.font.family.expressive
@@ -215,6 +218,51 @@ Scope {
                             text: DateTime.date
                         }
                     }
+
+                    RowLayout {
+                        anchors {
+                            top: clockColumn.bottom
+                            right: clockColumn.right
+                            topMargin: 5
+                        }
+                        opacity: GlobalStates.screenLocked ? 1 : 0
+                        visible: opacity > 0
+                        Behavior on opacity {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        MaterialSymbol {
+                            text: "lock"
+                            iconSize: Appearance.font.pixelSize.huge
+                            color: bgRoot.colText
+                        }
+                        StyledText {
+                            text: "Locked"
+                            color: bgRoot.colText
+                            font {
+                                pixelSize: Appearance.font.pixelSize.larger
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Password prompt
+            StyledText {
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: 30
+                }
+                opacity: (GlobalStates.screenLocked && !GlobalStates.screenLockContainsCharacters) ? 1 : 0
+                scale: opacity
+                visible: opacity > 0
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                text: "Enter password"
+                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.5)
+                font {
+                    pixelSize: Appearance.font.pixelSize.normal
                 }
             }
         }

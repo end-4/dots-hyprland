@@ -25,6 +25,15 @@ Scope {
         id: sessionLoader
         active: false
 
+        Connections {
+            target: GlobalStates
+            function onScreenLockedChanged() {
+                if (GlobalStates.screenLocked) {
+                    sessionLoader.active = false;
+                }
+            }
+        }
+
         sourceComponent: PanelWindow { // Session menu
             id: sessionRoot
             visible: sessionLoader.active

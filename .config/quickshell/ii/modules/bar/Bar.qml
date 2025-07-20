@@ -35,11 +35,11 @@ Scope {
                 return screens;
             return screens.filter(screen => list.includes(screen.name));
         }
-        Loader {
+        LazyLoader {
             id: barLoader
-            active: GlobalStates.barOpen
+            active: GlobalStates.barOpen && !GlobalStates.screenLocked
             required property ShellScreen modelData
-            sourceComponent: PanelWindow { // Bar window
+            component: PanelWindow { // Bar window
                 id: barRoot
                 screen: barLoader.modelData
 
@@ -47,9 +47,10 @@ Scope {
                 property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen.width) ? 1 : 0
                 readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
 
+                exclusionMode: ExclusionMode.Ignore
+                exclusiveZone: Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
                 WlrLayershell.namespace: "quickshell:bar"
                 implicitHeight: Appearance.sizes.barHeight + Appearance.rounding.screenRounding
-                exclusiveZone: Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
                 mask: Region {
                     item: barContent
                 }
