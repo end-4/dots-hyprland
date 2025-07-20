@@ -43,8 +43,6 @@ Scope {
             property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
             property var textHorizontalAlignment: clockX < screen.width / 3 ? Text.AlignLeft :
                 (clockX > screen.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
-            property var layoutHorizontalAlignment: clockX < screen.width / 3 ? Qt.AlignLeft :
-                (clockX > screen.width * 2 / 3 ? Qt.AlignRight : Qt.AlignHCenter)
             // Colors
             property color dominantColor: Appearance.colors.colPrimary
             property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
@@ -222,26 +220,35 @@ Scope {
                     RowLayout {
                         anchors {
                             top: clockColumn.bottom
-                            right: clockColumn.right
+                            left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
+                            right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
+                            horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
                             topMargin: 5
+                            leftMargin: -5
+                            rightMargin: -5
                         }
                         opacity: GlobalStates.screenLocked ? 1 : 0
                         visible: opacity > 0
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
                         MaterialSymbol {
                             text: "lock"
+                            Layout.fillWidth: false
                             iconSize: Appearance.font.pixelSize.huge
                             color: bgRoot.colText
                         }
                         StyledText {
+                            Layout.fillWidth: false
                             text: "Locked"
                             color: bgRoot.colText
                             font {
                                 pixelSize: Appearance.font.pixelSize.larger
                             }
                         }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
+
                     }
                 }
             }
