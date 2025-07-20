@@ -177,6 +177,7 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             property int realIndex: root.selectedTab
             property int animationDuration: Appearance.animation.elementMoveFast.duration * 1.5
+            currentIndex: root.selectedTab
 
             // Switch the tab on halfway of the anim duration
             Connections {
@@ -216,10 +217,6 @@ Rectangle {
                         focus: root.selectedTab === tabItem.tabIndex
                     }
                 }
-            }
-
-            Component.onCompleted: {
-                tabStack.currentIndex = root.selectedTab
             }
         }
     }
