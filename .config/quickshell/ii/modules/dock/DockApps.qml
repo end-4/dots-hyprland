@@ -59,8 +59,8 @@ Item {
                 }
 
                 // Ignored apps
-                const ignoredAppRegexes = Config.options?.dock.ignoredAppRegexes ?? [];
-                const ignoredRegexes = ignoredAppRegexes.map(pattern => new RegExp(pattern, "i"));
+                const ignoredRegexStrings = Config.options?.dock.ignoredAppRegexes ?? [];
+                const ignoredRegexes = ignoredRegexStrings.map(pattern => new RegExp(pattern, "i"));
                 // Open windows
                 for (const toplevel of ToplevelManager.toplevels.values) {
                     if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;
