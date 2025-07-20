@@ -60,10 +60,10 @@ Item {
 
                 // Ignored apps regex
                 const ignoredAppsRegex = Config.options?.dock.ignoredAppsRegex ?? [];
-                const ignoredRegexes = ignoredAppsRegex.map(pattern => new RegExp(pattern));
+                const ignoredRegexes = ignoredAppsRegex.map(pattern => new RegExp(pattern, "i"));
                 // Open windows
                 for (const toplevel of ToplevelManager.toplevels.values) {
-                    if (ignoredRegexes.some(re => re.test(toplevel.appId.toLowerCase()))) continue;
+                    if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;
                     if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
                         pinned: false,
                         toplevels: []
