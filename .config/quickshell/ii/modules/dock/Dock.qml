@@ -23,6 +23,7 @@ Scope { // Scope
             required property var modelData
             id: dockRoot
             screen: modelData
+            visible: !GlobalStates.screenLocked
             
             property bool reveal: root.pinned 
                 || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) 

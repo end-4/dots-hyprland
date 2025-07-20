@@ -33,7 +33,7 @@ Scope { // Scope
         
         sourceComponent: PanelWindow { // Window
             id: oskRoot
-            visible: oskLoader.active
+            visible: oskLoader.active && !GlobalStates.screenLocked
 
             anchors {
                 bottom: true

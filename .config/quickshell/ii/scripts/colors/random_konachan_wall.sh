@@ -33,5 +33,10 @@ response=$(curl "https://konachan.net/post.json?tags=rating%3Asafe&limit=1&page=
 link=$(echo "$response" | jq '.[0].file_url' -r);
 ext=$(echo "$link" | awk -F. '{print $NF}')
 downloadPath="$PICTURES_DIR/Wallpapers/konachan_random_image.$ext"
+illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
+currentWallpaperPath=$(jq -r '.background.wallpaperPath' $illogicalImpulseConfigPath)
+if [ "$downloadPath" == "$currentWallpaperPath" ]; then
+    downloadPath="$PICTURES_DIR/Wallpapers/konachan_random_image-1.$ext"
+fi
 curl "$link" -o "$downloadPath"
 "$SCRIPT_DIR/switchwall.sh" --image "$downloadPath"
