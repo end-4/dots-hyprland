@@ -32,6 +32,11 @@ Scope {
             property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
             // Wallpaper
             property string wallpaperPath: Config.options.background.wallpaperPath
+            property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4")
+                || Config.options.background.wallpaperPath.endsWith(".webm")
+                || Config.options.background.wallpaperPath.endsWith(".mkv")
+                || Config.options.background.wallpaperPath.endsWith(".avi")
+                || Config.options.background.wallpaperPath.endsWith(".mov")            
             property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
             property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
             property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
@@ -137,6 +142,7 @@ Scope {
 
             // Wallpaper
             Image {
+                visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
                     // Range = half-groups that workspaces span on
@@ -267,7 +273,7 @@ Scope {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 text: "Enter password"
-                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.5)
+                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.3)
                 font {
                     pixelSize: Appearance.font.pixelSize.normal
                 }
