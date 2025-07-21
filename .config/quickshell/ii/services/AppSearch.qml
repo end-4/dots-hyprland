@@ -111,6 +111,9 @@ Singleton {
 
 
         // Simple guesses
+        const lowercased = str.toLowerCase();
+        if (iconExists(lowercased)) return lowercased;
+
         const reverseDomainNameAppName = getReverseDomainNameAppName(str);
         if (iconExists(reverseDomainNameAppName)) return reverseDomainNameAppName;
 
