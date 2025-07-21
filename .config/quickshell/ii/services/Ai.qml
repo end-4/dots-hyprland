@@ -613,7 +613,8 @@ Singleton {
                         "text": chunk?.web?.title,
                         "url": chunk?.web?.uri,
                     }
-                });
+                }) ?? [];
+
                 const annotations = dataJson.candidates[0]?.groundingMetadata?.groundingSupports?.map(citation => {
                     return {
                         "type": "url_citation",
@@ -628,7 +629,7 @@ Singleton {
                 requester.message.annotations = annotations;
                 // console.log(JSON.stringify(requester.message, null, 2));
             } catch (e) {
-                console.log("[AI] Could not parse response from stream: ", e);
+                console.log("[AI] Gemini: Could not parse buffer: ", e);
                 requester.message.rawContent += requester.geminiBuffer;
                 requester.message.content += requester.geminiBuffer
             } finally {
