@@ -32,6 +32,11 @@ Scope {
             property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
             // Wallpaper
             property string wallpaperPath: Config.options.background.wallpaperPath
+            property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4")
+                || Config.options.background.wallpaperPath.endsWith(".webm")
+                || Config.options.background.wallpaperPath.endsWith(".mkv")
+                || Config.options.background.wallpaperPath.endsWith(".avi")
+                || Config.options.background.wallpaperPath.endsWith(".mov")            
             property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
             property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
             property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
@@ -43,8 +48,6 @@ Scope {
             property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
             property var textHorizontalAlignment: clockX < screen.width / 3 ? Text.AlignLeft :
                 (clockX > screen.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
-            property var layoutHorizontalAlignment: clockX < screen.width / 3 ? Qt.AlignLeft :
-                (clockX > screen.width * 2 / 3 ? Qt.AlignRight : Qt.AlignHCenter)
             // Colors
             property color dominantColor: Appearance.colors.colPrimary
             property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
@@ -53,8 +56,8 @@ Scope {
             // Layer props
             screen: modelData
             exclusionMode: ExclusionMode.Ignore
-            // WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
-            WlrLayershell.layer: WlrLayer.Bottom
+            WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
+            // WlrLayershell.layer: WlrLayer.Bottom
             WlrLayershell.namespace: "quickshell:background"
             anchors {
                 top: true
@@ -139,6 +142,7 @@ Scope {
 
             // Wallpaper
             Image {
+                visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
                     // Range = half-groups that workspaces span on
@@ -222,26 +226,35 @@ Scope {
                     RowLayout {
                         anchors {
                             top: clockColumn.bottom
-                            right: clockColumn.right
+                            left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
+                            right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
+                            horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
                             topMargin: 5
+                            leftMargin: -5
+                            rightMargin: -5
                         }
                         opacity: GlobalStates.screenLocked ? 1 : 0
                         visible: opacity > 0
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
                         MaterialSymbol {
                             text: "lock"
+                            Layout.fillWidth: false
                             iconSize: Appearance.font.pixelSize.huge
                             color: bgRoot.colText
                         }
                         StyledText {
+                            Layout.fillWidth: false
                             text: "Locked"
                             color: bgRoot.colText
                             font {
                                 pixelSize: Appearance.font.pixelSize.larger
                             }
                         }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
+
                     }
                 }
             }
@@ -260,7 +273,7 @@ Scope {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 text: "Enter password"
-                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.5)
+                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.3)
                 font {
                     pixelSize: Appearance.font.pixelSize.normal
                 }

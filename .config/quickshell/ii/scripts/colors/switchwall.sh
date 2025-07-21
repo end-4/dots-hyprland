@@ -151,6 +151,13 @@ EOF
     mv "$RESTORE_SCRIPT.tmp" "$RESTORE_SCRIPT"
 }
 
+set_wallpaper_path() {
+    local path="$1"
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+    fi
+}
+
 switch() {
     imgpath="$1"
     mode_flag="$2"
@@ -204,6 +211,10 @@ switch() {
                 exit 0
             fi
 
+            # Set wallpaper path
+            set_wallpaper_path "$imgpath"
+
+            # Set video wallpaper
             local video_path="$imgpath"
             monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
             for monitor in $monitors; do
@@ -228,9 +239,7 @@ switch() {
             matugen_args=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
-            if [ -f "$SHELL_CONFIG_FILE" ]; then
-                jq --arg path "$imgpath" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
-            fi
+            set_wallpaper_path "$imgpath"
             remove_restore
         fi
     fi
