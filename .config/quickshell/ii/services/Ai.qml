@@ -689,6 +689,7 @@ Singleton {
             }
 
             requester.message.content += newContent;
+            requester.message.rawContent += newContent;
 
             if (dataJson.done) {
                 requester.markDone();
