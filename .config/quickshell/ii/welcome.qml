@@ -40,7 +40,7 @@ ApplicationWindow {
     Process {
         id: konachanWallProc
         property string status: ""
-        command: ["bash", "-c", Quickshell.configPath("scripts/colors/random_konachan_wall.sh")]
+        command: ["bash", "-c", Quickshell.shellPath("scripts/colors/random_konachan_wall.sh")]
         stdout: SplitParser {
             onRead: data => {
                 console.log(`Konachan wall proc output: ${data}`);

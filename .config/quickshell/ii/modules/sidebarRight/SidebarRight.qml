@@ -17,7 +17,7 @@ Scope {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 12
-    property string settingsQmlPath: Quickshell.configPath("settings.qml")
+    property string settingsQmlPath: Quickshell.shellPath("settings.qml")
 
     PanelWindow {
         id: sidebarRoot

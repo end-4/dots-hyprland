@@ -117,7 +117,7 @@ Scope {
                 property int contentHeight: 300
                 property int horizontalPadding: bgRoot.movableXSpace
                 property int verticalPadding: bgRoot.movableYSpace
-                command: [Quickshell.configPath("scripts/images/least_busy_region.py"),
+                command: [Quickshell.shellPath("scripts/images/least_busy_region.py"),
                     "--screen-width", bgRoot.screen.width,
                     "--screen-height", bgRoot.screen.height,
                     "--width", contentWidth,

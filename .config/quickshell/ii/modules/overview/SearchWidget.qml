@@ -58,7 +58,7 @@ Item { // Wrapper
         {
             action: "konachanwall",
             execute: () => {
-                Quickshell.execDetached([Quickshell.configPath("scripts/colors/random_konachan_wall.sh")]);
+                Quickshell.execDetached([Quickshell.shellPath("scripts/colors/random_konachan_wall.sh")]);
             }
         },
         {

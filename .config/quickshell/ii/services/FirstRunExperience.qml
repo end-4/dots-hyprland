@@ -12,7 +12,7 @@ Singleton {
     property string firstRunNotifSummary: "Welcome!"
     property string firstRunNotifBody: "Hit Super+/ for a list of keybinds"
     property string defaultWallpaperPath: FileUtils.trimFileProtocol(`${Directories.assetsPath}/images/default_wallpaper.png`)
-    property string welcomeQmlPath: FileUtils.trimFileProtocol(Quickshell.configPath("welcome.qml"))
+    property string welcomeQmlPath: FileUtils.trimFileProtocol(Quickshell.shellPath("welcome.qml"))
 
     function load() {
         firstRunFileView.reload()
