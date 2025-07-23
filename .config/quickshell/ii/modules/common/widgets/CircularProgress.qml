@@ -18,6 +18,7 @@ Item {
     property real gapAngle: Math.PI / 9
     property bool fill: false
     property int fillOverflow: 2
+    property bool enableAnimation: true
     property int animationDuration: 1000
     property var easingType: Easing.OutCubic
 
@@ -83,6 +84,7 @@ Item {
         }
 
         Behavior on degree {
+            enabled: root.enableAnimation
             NumberAnimation {
                 duration: root.animationDuration
                 easing.type: root.easingType

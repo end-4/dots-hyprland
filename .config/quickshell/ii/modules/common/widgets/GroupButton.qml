@@ -93,12 +93,22 @@ Button {
             root.down = false
             if (event.button != Qt.LeftButton) return;
             if (root.releaseAction) root.releaseAction();
-            root.click() // Because the MouseArea already consumed the event
+        }
+        onClicked: (event) => {
+            if (event.button != Qt.LeftButton) return;
+            root.click()
         }
         onCanceled: (event) => {
             root.down = false
         }
+
+        onPressAndHold: () => {
+            altAction(); 
+            root.down = false; 
+            root.clicked = false;
+        };
     }
+
 
     background: Rectangle {
         id: buttonBackground

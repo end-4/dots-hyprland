@@ -69,6 +69,7 @@ Item {
                 Layout.fillHeight: true
                 clip: true
                 currentIndex: root.defaultChoice !== undefined ? root.items.indexOf(root.defaultChoice) : -1
+                spacing: 6
 
                 model: ScriptModel {
                     id: choiceModel

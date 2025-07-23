@@ -39,6 +39,7 @@ Item {
         }
 
         CircularProgress {
+            enableAnimation: false
             Layout.alignment: Qt.AlignVCenter
             lineWidth: 2
             value: percentage
