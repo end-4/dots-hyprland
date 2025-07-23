@@ -49,9 +49,10 @@ ShellRoot {
 
     // Force initialization of some singletons
     Component.onCompleted: {
-        MaterialThemeLoader.reapplyTheme()
         Cliphist.refresh()
         FirstRunExperience.load()
+        Hyprsunset.load()
+        MaterialThemeLoader.reapplyTheme()
     }
 
     LazyLoader { active: enableBar; component: Bar {} }
