@@ -21,7 +21,7 @@ startask () {
   printf '      If you would like it anyway, run the script in its branch instead: git checkout ii-ags && ./install.sh\n'
   printf '\n'
   printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
-  printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
+  printf '            2. does not handle system-level/hardware stuff like Nvidia drivers (though detects it)\n'
   printf "\e[31m"
 
   printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
@@ -256,6 +256,14 @@ for i in ${warn_files_tests[@]}; do
   test -f $i && warn_files+=($i)
   test -d $i && warn_files+=($i)
 done
+
+#Check for nvidia drivers then add fixes for hyprland
+if lsmod | grep -q '^nvidia'; then
+  {
+    echo "env = LIBVA_DRIVER_NAME,nvidia"
+    echo "env = __GLX_VENDOR_LIBRARY_NAME,nvidia"
+  } >> ~/.config/hypr/hyprland/env.conf
+fi
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
