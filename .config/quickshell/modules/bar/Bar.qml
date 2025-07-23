@@ -422,7 +422,7 @@ Scope {
                                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                                         sourceComponent: StyledText {
                                             text: HyprlandXkb.currentLayoutCode
-                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: rightSidebarButton.colText
                                         }
                                     }
