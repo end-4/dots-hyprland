@@ -459,6 +459,16 @@ Scope {
                                                 color: rightSidebarButton.colText
                                             }
                                         }
+                                        Loader {
+                                            active: HyprlandXkb.layoutCodes.length > 1
+                                            visible: active
+                                            Layout.rightMargin: indicatorsRowLayout.realSpacing
+                                            sourceComponent: StyledText {
+                                                text: HyprlandXkb.currentLayoutCode
+                                                font.pixelSize: Appearance.font.pixelSize.smaller
+                                                color: rightSidebarButton.colText
+                                            }
+                                        }
                                         MaterialSymbol {
                                             Layout.rightMargin: indicatorsRowLayout.realSpacing
                                             text: Network.materialSymbol
