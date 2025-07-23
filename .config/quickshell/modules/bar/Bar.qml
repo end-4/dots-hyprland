@@ -416,12 +416,15 @@ Scope {
                                             color: rightSidebarButton.colText
                                         }
                                     }
-                                    Label {
+                                    Loader {
+                                        active: HyprlandXkb.layoutCodes.length > 1
+                                        visible: active
                                         Layout.rightMargin: indicatorsRowLayout.realSpacing
-                                        text: LayoutService.currentLayout
-                                        visible: LayoutService.currentLayout !== ""
-                                        font.pixelSize: Appearance.font.pixelSize.larger - 3
-                                        color: rightSidebarButton.colText
+                                        sourceComponent: StyledText {
+                                            text: HyprlandXkb.currentLayoutCode
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            color: rightSidebarButton.colText
+                                        }
                                     }
                                     MaterialSymbol {
                                         Layout.rightMargin: indicatorsRowLayout.realSpacing
