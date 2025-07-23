@@ -5,11 +5,10 @@ pkgdesc='Illogical Impulse Screenshot and Recording Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	swappy
-	wf-recorder
 	hyprshot
+	slurp
+	swappy
 	tesseract
 	tesseract-data-eng
-	slurp
+	wf-recorder
 )
-
