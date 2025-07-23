@@ -91,9 +91,12 @@ Singleton {
                     root.needsLayoutRefresh = false;
                     fetchLayoutsProc.running = true;
                 }
+
+                // If there's only one layout, the updated layout is always the same
+                if (root.layoutCodes.length <= 1) return;
+
                 // Update when layout might have changed
                 const dataString = event.data;
-                // console.log("[HyprlandXkb] Received raw event:", event.name, "with data:", dataString);
                 if (!dataString.startsWith(root.targetDeviceName))
                     return;
                 root.currentLayoutName = dataString.split(",")[1];
