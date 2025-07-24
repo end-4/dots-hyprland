@@ -405,7 +405,12 @@ Item { // Wrapper
                     }
                 }
 
-                onModelChanged: root.focusFirstItemIfNeeded()
+                onModelChanged: {
+                    root.focusFirstItemIfNeeded();
+                    if (root.searchingText.startsWith(Config.options.search.prefix.clipboard) && appResults.count > 0) {
+                        appResults.positionViewAtIndex(0, ListView.Beginning);
+                    }
+                }
 
                 delegate: SearchItem {
                     // The selectable item for each search result
