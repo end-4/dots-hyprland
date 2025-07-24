@@ -529,7 +529,7 @@ Singleton {
                     "parts": [{ text: root.systemPrompt }]
                 },
                 "generationConfig": {
-                    // "temperature": root.temperature,
+                    "temperature": root.temperature,
                 },
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
@@ -548,7 +548,7 @@ Singleton {
                     }),
                 ],
                 "stream": true,
-                // "temperature": root.temperature,
+                "temperature": root.temperature,
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
         }
