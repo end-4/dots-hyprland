@@ -1,8 +1,7 @@
 pragma Singleton
 
 import qs.modules.common
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
-import "root:/modules/common/functions/levendist.js" as Levendist
+import qs.modules.common.functions
 import Quickshell
 
 /**
