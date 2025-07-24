@@ -14,6 +14,7 @@ import Quickshell.Hyprland
 Scope {
     id: root
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    property bool packageManagerRunning: false
 
     function closeAllWindows() {
         HyprlandData.windowList.map(w => w.pid).forEach((pid) => {
@@ -21,9 +22,26 @@ Scope {
         });
     }
 
+    function detectRunningPackageManager() {
+        packageManagerRunning = false;
+        detectPackageManagerProc.running = false;
+        detectPackageManagerProc.running = true;
+    }
+
+    Process {
+        id: detectPackageManagerProc
+        command: ["pidof", "pacman", "yay", "paru", "dnf", "zypper", "apt", "apx"]
+        onExited: (exitCode, exitStatus) => {
+            root.packageManagerRunning = (exitCode === 0);
+        }
+    }
+
     Loader {
         id: sessionLoader
         active: false
+        onActiveChanged: {
+            if (sessionLoader.active) root.detectRunningPackageManager();
+        }
 
         Connections {
             target: GlobalStates
@@ -42,7 +60,6 @@ Scope {
             function hide() {
                 sessionLoader.active = false
             }
-    
 
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:session"
@@ -68,6 +85,7 @@ Scope {
             }
 
             ColumnLayout { // Content column
+                id: contentColumn
                 anchors.centerIn: parent
                 spacing: 15
 
@@ -199,6 +217,33 @@ Scope {
                         anchors.centerIn: parent
                         color: Appearance.colors.colOnTooltip
                         text: sessionRoot.subtitle
+                    }
+                }
+            }
+
+            Loader {
+                active: root.packageManagerRunning
+                anchors {
+                    top: contentColumn.bottom
+                    topMargin: 10
+                    horizontalCenter: contentColumn.horizontalCenter
+                }
+                sourceComponent: Rectangle {
+                    radius: Appearance.rounding.normal
+                    implicitHeight: sessionWarning.implicitHeight + 10 * 2
+                    implicitWidth: sessionWarning.implicitWidth + 15 * 2
+                    color: Appearance.m3colors.m3errorContainer
+                    clip: true
+
+                    Behavior on implicitWidth {
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                    }
+
+                    StyledText {
+                        id: sessionWarning
+                        anchors.centerIn: parent
+                        color: Appearance.m3colors.m3onErrorContainer
+                        text: Translation.tr("Your package manager is running")
                     }
                 }
             }
