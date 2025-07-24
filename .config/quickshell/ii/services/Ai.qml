@@ -23,6 +23,13 @@ Singleton {
     property var messageByID: ({})
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
+    readonly property bool currentModelHasApiKey: {
+        const model = models[currentModelId];
+        if (!model || !model.requires_key) return true;
+        if (!apiKeysLoaded) return false;
+        const key = apiKeys[model.key_id];
+        return (key?.length > 0);
+    }
     property var postResponseHook
     property real temperature: Persistent.states?.ai?.temperature ?? 0.5
     property QtObject tokenCount: QtObject {
@@ -45,6 +52,8 @@ Singleton {
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
 
+    // Gemini: https://ai.google.dev/gemini-api/docs/function-calling
+    // OpenAI: https://platform.openai.com/docs/guides/function-calling
     property var tools: {
         "gemini": [{"functionDeclarations": [
             {
