@@ -2,9 +2,8 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import "./aiChat/"
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import qs.modules.common.functions
+import "./aiChat/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
