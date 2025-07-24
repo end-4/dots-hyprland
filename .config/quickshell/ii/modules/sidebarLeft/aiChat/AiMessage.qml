@@ -263,7 +263,6 @@ Rectangle {
         }
 
         Flow { // Annotations
-            id: annotationFlowLayout
             visible: root.messageData?.annotationSources?.length > 0
             spacing: 5
             Layout.fillWidth: true
@@ -274,12 +273,28 @@ Rectangle {
                     values: root.messageData?.annotationSources || []
                 }
                 delegate: AnnotationSourceButton {
-                    id: annotationButton
+                    required property var modelData
                     displayText: modelData.text
                     url: modelData.url
                 }
             }
+        }
 
+        Flow { // Search queries
+            visible: root.messageData?.searchQueries?.length > 0
+            spacing: 5
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignLeft
+
+            Repeater {
+                model: ScriptModel {
+                    values: root.messageData?.searchQueries || []
+                }
+                delegate: SearchQueryButton {
+                    required property var modelData
+                    query: modelData
+                }
+            }
         }
 
     }

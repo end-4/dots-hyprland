@@ -13,6 +13,7 @@ QtObject {
     property bool done: false
     property var annotations: []
     property var annotationSources: []
+    property list<string> searchQueries: []
     property string functionName
     property string functionCall
     property string functionResponse

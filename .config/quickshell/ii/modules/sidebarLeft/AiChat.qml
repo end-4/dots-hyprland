@@ -2,9 +2,8 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import "./aiChat/"
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import qs.modules.common.functions
+import "./aiChat/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -188,9 +187,75 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         }
     }
 
+    component StatusItem: MouseArea {
+        id: statusItem
+        property string icon
+        property string statusText
+        property string description
+        hoverEnabled: true
+        implicitHeight: statusItemRowLayout.implicitHeight
+        implicitWidth: statusItemRowLayout.implicitWidth
+
+        RowLayout {
+            id: statusItemRowLayout
+            spacing: 0
+            MaterialSymbol {
+                text: statusItem.icon
+                iconSize: Appearance.font.pixelSize.huge
+                color: Appearance.colors.colSubtext
+            }
+            StyledText {
+                font.pixelSize: Appearance.font.pixelSize.small
+                text: statusItem.statusText
+                color: Appearance.colors.colSubtext
+            }
+        }
+
+        StyledToolTip {
+            content: statusItem.description
+            extraVisibleCondition: false
+            alternativeVisibleCondition: statusItem.containsMouse
+        }
+    }
+
+    component StatusSeparator: Rectangle {
+        implicitWidth: 4
+        implicitHeight: 4
+        radius: implicitWidth / 2
+        color: Appearance.colors.colOutlineVariant
+    }
+
     ColumnLayout {
         id: columnLayout
         anchors.fill: parent
+
+        RowLayout { // Status
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 10
+
+            StatusItem {
+                icon: Ai.currentModelHasApiKey ? "key" : "key_off"
+                statusText: ""
+                description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
+            }
+            StatusSeparator {}
+            StatusItem {
+                icon: "device_thermostat"
+                statusText: Ai.temperature.toFixed(1)
+                description: Translation.tr("Temperature\nChange with /temp VALUE")
+            }
+            StatusSeparator {
+                visible: Ai.tokenCount.total > 0
+            }
+            StatusItem {
+                visible: Ai.tokenCount.total > 0
+                icon: "token"
+                statusText: Ai.tokenCount.total
+                description: Translation.tr("Total token count\nInput: %1\nOutput: %2")
+                    .arg(Ai.tokenCount.input)
+                    .arg(Ai.tokenCount.output)
+            }
+        }
 
         Item { // Messages
             Layout.fillWidth: true
