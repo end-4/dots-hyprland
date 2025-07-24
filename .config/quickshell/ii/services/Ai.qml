@@ -25,6 +25,11 @@ Singleton {
     readonly property var apiKeysLoaded: KeyringStorage.loaded
     property var postResponseHook
     property real temperature: Persistent.states?.ai?.temperature ?? 0.5
+    property QtObject tokenCount: QtObject {
+        property int input: -1
+        property int output: -1
+        property int total: -1
+    }
 
     function idForMessage(message) {
         // Generate a unique ID using timestamp and random value
@@ -626,6 +631,7 @@ Singleton {
                     root.handleGeminiFunctionCall(functionCall.name, functionCall.args);
                     return
                 }
+
                 // Normal text response
                 const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
                 requester.message.rawContent += responseContent;
@@ -638,6 +644,7 @@ Singleton {
                     }
                 }) ?? [];
 
+                // Handle annotations and search queries
                 const annotations = dataJson.candidates[0]?.groundingMetadata?.groundingSupports?.map(citation => {
                     return {
                         "type": "url_citation",
@@ -650,6 +657,16 @@ Singleton {
                 });
                 requester.message.annotationSources = annotationSources;
                 requester.message.annotations = annotations;
+                requester.message.searchQueries = dataJson.candidates[0]?.groundingMetadata?.webSearchQueries ?? [];
+                // console.log("[AI] Gemini: Search queries: ", JSON.stringify(requester.message.searchQueries, null, 2));
+
+                // Usage
+                root.tokenCount.input = dataJson.usageMetadata?.promptTokenCount ?? -1;
+                root.tokenCount.output = dataJson.usageMetadata?.candidatesTokenCount ?? -1;
+                root.tokenCount.total = dataJson.usageMetadata?.totalTokenCount ?? -1;
+                // console.log("[AI] Gemini: Token count: ", root.tokenCount);
+
+                // Last logging
                 // console.log(JSON.stringify(requester.message, null, 2));
             } catch (e) {
                 console.log("[AI] Gemini: Could not parse buffer: ", e);
