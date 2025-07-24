@@ -199,7 +199,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
         RowLayout {
             id: statusItemRowLayout
-            spacing: 4
+            spacing: 0
             MaterialSymbol {
                 text: statusItem.icon
                 iconSize: Appearance.font.pixelSize.huge
@@ -232,18 +232,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
         RowLayout { // Status
             Layout.alignment: Qt.AlignHCenter
-            spacing: 8
+            spacing: 10
 
+            StatusItem {
+                icon: Ai.currentModelHasApiKey ? "key" : "key_off"
+                statusText: ""
+                description: Ai.currentModelHasApiKey ? Translation.tr("API key is set") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
+            }
+            StatusSeparator {}
             StatusItem {
                 icon: "device_thermostat"
                 statusText: Ai.temperature.toFixed(1)
                 description: Translation.tr("Temperature")
             }
-
             StatusSeparator {
                 visible: Ai.tokenCount.total > 0
-            }            
-
+            }
             StatusItem {
                 visible: Ai.tokenCount.total > 0
                 icon: "token"
