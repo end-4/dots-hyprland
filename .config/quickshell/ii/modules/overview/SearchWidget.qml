@@ -75,9 +75,8 @@ Item { // Wrapper
         },
     ]
 
-    function focusFirstItemIfNeeded() {
-        if (searchInput.focus)
-            appResults.currentIndex = 0; // Focus the first item
+    function focusFirstItem() {
+        appResults.currentIndex = 0;
     }
 
     Timer {
@@ -99,7 +98,7 @@ Item { // Wrapper
         stdout: SplitParser {
             onRead: data => {
                 root.mathResult = data;
-                root.focusFirstItemIfNeeded();
+                root.focusFirstItem();
             }
         }
     }
@@ -277,6 +276,9 @@ Item { // Wrapper
 
                 model: ScriptModel {
                     id: model
+                    onValuesChanged: {
+                        root.focusFirstItem();
+                    }
                     values: {
                         // Search results are handled here
                         ////////////////// Skip? //////////////////
@@ -402,13 +404,6 @@ Item { // Wrapper
                         });
 
                         return result;
-                    }
-                }
-
-                onModelChanged: {
-                    root.focusFirstItemIfNeeded();
-                    if (root.searchingText.startsWith(Config.options.search.prefix.clipboard) && appResults.count > 0) {
-                        appResults.positionViewAtIndex(0, ListView.Beginning);
                     }
                 }
 
