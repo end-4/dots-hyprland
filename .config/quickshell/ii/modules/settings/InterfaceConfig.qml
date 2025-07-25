@@ -165,9 +165,9 @@ ContentPage {
                 }
                 ConfigSwitch {
                     text: "Performance Profile toggle"
-                    checked: Config.options.bar.utilButtons.showPerfProfileToggle
+                    checked: Config.options.bar.utilButtons.showPerformanceProfileToggle
                     onCheckedChanged: {
-                        Config.options.bar.utilButtons.showPerfProfileToggle = checked;
+                        Config.options.bar.utilButtons.showPerformanceProfileToggle = checked;
                     }
                 }
             }

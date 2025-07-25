@@ -1,5 +1,5 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -107,8 +107,8 @@ Item {
         }
 
         Loader {
-            active: Config.options.bar.utilButtons.showPerfProfileToggle
-            visible: Config.options.bar.utilButtons.showPerfProfileToggle
+            active: Config.options.bar.utilButtons.showPerformanceProfileToggle
+            visible: Config.options.bar.utilButtons.showPerformanceProfileToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: event => {
