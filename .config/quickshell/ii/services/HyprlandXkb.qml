@@ -16,7 +16,6 @@ Singleton {
     property string currentLayoutName: ""
     property string currentLayoutCode: ""
     // For the service
-    property string targetDeviceName: "hl-virtual-keyboard"
     property var baseLayoutFilePath: "/usr/share/X11/xkb/rules/base.lst"
     property bool needsLayoutRefresh: false
 
@@ -71,7 +70,7 @@ Singleton {
             id: devicesCollector
             onStreamFinished: {
                 const parsedOutput = JSON.parse(devicesCollector.text);
-                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.name === root.targetDeviceName);
+                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
                 root.layoutCodes = hyprlandKeyboard["layout"].split(",");
                 root.currentLayoutName = hyprlandKeyboard["active_keymap"];
                 // console.log("[HyprlandXkb] Fetched | Layouts (multiple: " + (root.layouts.length > 1) + "): "
@@ -85,8 +84,6 @@ Singleton {
         target: Hyprland
         function onRawEvent(event) {
             if (event.name === "activelayout") {
-                // We're triggering refresh here because Hyprland virtual kb after a config reload disappears
-                // from `hyprctl devices` and it only comes back at the next activelayout event.
                 if (root.needsLayoutRefresh) {
                     root.needsLayoutRefresh = false;
                     fetchLayoutsProc.running = true;
@@ -96,10 +93,7 @@ Singleton {
                 if (root.layoutCodes.length <= 1) return;
 
                 // Update when layout might have changed
-                const dataString = event.data;
-                if (!dataString.startsWith(root.targetDeviceName))
-                    return;
-                root.currentLayoutName = dataString.split(",")[1];
+                root.currentLayoutName = event.data.split(",")[1];
             } else if (event.name == "configreloaded") {
                 // Mark layout code list to be updated when config is reloaded
                 root.needsLayoutRefresh = true;
