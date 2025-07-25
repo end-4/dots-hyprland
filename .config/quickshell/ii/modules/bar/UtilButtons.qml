@@ -130,7 +130,7 @@ Item {
                     fill: 0
                     text: switch(PowerProfiles.profile) {
                         case PowerProfile.PowerSaver: return "battery_saver"
-                        case PowerProfile.Balanced: return "balance"
+                        case PowerProfile.Balanced: return "dynamic_form"
                         case PowerProfile.Performance: return "speed"
                     }
                     iconSize: Appearance.font.pixelSize.large
