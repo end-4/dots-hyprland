@@ -164,8 +164,11 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    opacity: 0
-                    enabled: false
+                    text: "Performance Profile toggle"
+                    checked: Config.options.bar.utilButtons.showPerformanceProfileToggle
+                    onCheckedChanged: {
+                        Config.options.bar.utilButtons.showPerformanceProfileToggle = checked;
+                    }
                 }
             }
         }
