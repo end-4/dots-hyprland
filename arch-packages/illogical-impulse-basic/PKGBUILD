@@ -17,4 +17,5 @@ depends=(
 	jq
 	meson
 	xdg-user-dirs
+        thunar
 )
