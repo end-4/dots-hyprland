@@ -1,11 +1,11 @@
 // We're going to use ydotool
 // See /usr/include/linux/input-event-codes.h for keycodes
 
-const defaultLayout = "qwerty_full";
+const defaultLayout = "English (US)";
 const byName = {
-    "qwerty_full": {
-        name: "QWERTY - Full",
+    "English (US)": {
         name_short: "US",
+        description: "QWERTY - Full",
         comment: "Like physical keyboard",
         // A key looks like this: { k: "a", ks: "A", t: "normal" } (key, key-shift, type)
         // key types are: normal, tab, caps, shift, control, fn (normal w/ half height), space, expand
@@ -113,9 +113,9 @@ const byName = {
             ]
         ]
     },
-    "qwertz_full": {
-        name: "QWERTZ - Full",
+    "German": {
         name_short: "DE",
+        description: "QWERTZ - Full",
         comment: "Keyboard layout commonly used in German-speaking countries",
         keys: [
             [
@@ -212,6 +212,100 @@ const byName = {
                 { keytype: "modkey", label: "Strg", shape: "control", keycode: 97 },
                 { keytype: "normal", label: "⇦", shape: "normal", keycode: 105 },
                 { keytype: "normal", label: "⇨", shape: "normal", keycode: 106 },
+            ]
+        ]
+    },
+    "Russian": {
+        name_short: "RU",
+        description: "ЙЦУКЕН - Full",
+        comment: "Standard Russian keyboard layout",
+        keys: [
+            [
+                { keytype: "normal", label: "Esc", shape: "fn", keycode: 1 },
+                { keytype: "normal", label: "F1", shape: "fn", keycode: 59 },
+                { keytype: "normal", label: "F2", shape: "fn", keycode: 60 },
+                { keytype: "normal", label: "F3", shape: "fn", keycode: 61 },
+                { keytype: "normal", label: "F4", shape: "fn", keycode: 62 },
+                { keytype: "normal", label: "F5", shape: "fn", keycode: 63 },
+                { keytype: "normal", label: "F6", shape: "fn", keycode: 64 },
+                { keytype: "normal", label: "F7", shape: "fn", keycode: 65 },
+                { keytype: "normal", label: "F8", shape: "fn", keycode: 66 },
+                { keytype: "normal", label: "F9", shape: "fn", keycode: 67 },
+                { keytype: "normal", label: "F10", shape: "fn", keycode: 68 },
+                { keytype: "normal", label: "F11", shape: "fn", keycode: 87 },
+                { keytype: "normal", label: "F12", shape: "fn", keycode: 88 },
+                { keytype: "normal", label: "PrtSc", shape: "fn", keycode: 99 },
+                { keytype: "normal", label: "Del", shape: "fn", keycode: 111 }
+            ],
+            [
+                { keytype: "normal", label: "ё", labelShift: "Ё", shape: "normal", keycode: 41 },
+                { keytype: "normal", label: "1", labelShift: "!", shape: "normal", keycode: 2 },
+                { keytype: "normal", label: "2", labelShift: "\"", shape: "normal", keycode: 3 },
+                { keytype: "normal", label: "3", labelShift: "№", shape: "normal", keycode: 4 },
+                { keytype: "normal", label: "4", labelShift: ";", shape: "normal", keycode: 5 },
+                { keytype: "normal", label: "5", labelShift: "%", shape: "normal", keycode: 6 },
+                { keytype: "normal", label: "6", labelShift: ":", shape: "normal", keycode: 7 },
+                { keytype: "normal", label: "7", labelShift: "?", shape: "normal", keycode: 8 },
+                { keytype: "normal", label: "8", labelShift: "*", shape: "normal", keycode: 9 },
+                { keytype: "normal", label: "9", labelShift: "(", shape: "normal", keycode: 10 },
+                { keytype: "normal", label: "0", labelShift: ")", shape: "normal", keycode: 11 },
+                { keytype: "normal", label: "-", labelShift: "_", shape: "normal", keycode: 12 },
+                { keytype: "normal", label: "=", labelShift: "+", shape: "normal", keycode: 13 },
+                { keytype: "normal", label: "Backspace", shape: "expand", keycode: 14 }
+            ],
+            [
+                { keytype: "normal", label: "Tab", shape: "tab", keycode: 15 },
+                { keytype: "normal", label: "й", labelShift: "Й", shape: "normal", keycode: 16 },
+                { keytype: "normal", label: "ц", labelShift: "Ц", shape: "normal", keycode: 17 },
+                { keytype: "normal", label: "у", labelShift: "У", shape: "normal", keycode: 18 },
+                { keytype: "normal", label: "к", labelShift: "К", shape: "normal", keycode: 19 },
+                { keytype: "normal", label: "е", labelShift: "Е", shape: "normal", keycode: 20 },
+                { keytype: "normal", label: "н", labelShift: "Н", shape: "normal", keycode: 21 },
+                { keytype: "normal", label: "г", labelShift: "Г", shape: "normal", keycode: 22 },
+                { keytype: "normal", label: "ш", labelShift: "Ш", shape: "normal", keycode: 23 },
+                { keytype: "normal", label: "щ", labelShift: "Щ", shape: "normal", keycode: 24 },
+                { keytype: "normal", label: "з", labelShift: "З", shape: "normal", keycode: 25 },
+                { keytype: "normal", label: "х", labelShift: "Х", shape: "normal", keycode: 26 },
+                { keytype: "normal", label: "ъ", labelShift: "Ъ", shape: "normal", keycode: 27 },
+                { keytype: "normal", label: "\\", labelShift: "/", shape: "expand", keycode: 43 }
+            ],
+            [
+                { keytype: "spacer", label: "", shape: "empty" },
+                { keytype: "spacer", label: "", shape: "empty" },
+                { keytype: "normal", label: "ф", labelShift: "Ф", shape: "normal", keycode: 30 },
+                { keytype: "normal", label: "ы", labelShift: "Ы", shape: "normal", keycode: 31 },
+                { keytype: "normal", label: "в", labelShift: "В", shape: "normal", keycode: 32 },
+                { keytype: "normal", label: "а", labelShift: "А", shape: "normal", keycode: 33 },
+                { keytype: "normal", label: "п", labelShift: "П", shape: "normal", keycode: 34 },
+                { keytype: "normal", label: "р", labelShift: "Р", shape: "normal", keycode: 35 },
+                { keytype: "normal", label: "о", labelShift: "О", shape: "normal", keycode: 36 },
+                { keytype: "normal", label: "л", labelShift: "Л", shape: "normal", keycode: 37 },
+                { keytype: "normal", label: "д", labelShift: "Д", shape: "normal", keycode: 38 },
+                { keytype: "normal", label: "ж", labelShift: "Ж", shape: "normal", keycode: 39 },
+                { keytype: "normal", label: "э", labelShift: "Э", shape: "normal", keycode: 40 },
+                { keytype: "normal", label: "Enter", shape: "expand", keycode: 28 }
+            ],
+            [
+                { keytype: "modkey", label: "Shift", shape: "shift", keycode: 42 },
+                { keytype: "normal", label: "я", labelShift: "Я", shape: "normal", keycode: 44 },
+                { keytype: "normal", label: "ч", labelShift: "Ч", shape: "normal", keycode: 45 },
+                { keytype: "normal", label: "с", labelShift: "С", shape: "normal", keycode: 46 },
+                { keytype: "normal", label: "м", labelShift: "М", shape: "normal", keycode: 47 },
+                { keytype: "normal", label: "и", labelShift: "И", shape: "normal", keycode: 48 },
+                { keytype: "normal", label: "т", labelShift: "Т", shape: "normal", keycode: 49 },
+                { keytype: "normal", label: "ь", labelShift: "Ь", shape: "normal", keycode: 50 },
+                { keytype: "normal", label: "б", labelShift: "Б", shape: "normal", keycode: 51 },
+                { keytype: "normal", label: "ю", labelShift: "Ю", shape: "normal", keycode: 52 },
+                { keytype: "normal", label: ".", labelShift: ",", shape: "normal", keycode: 53 },
+                { keytype: "modkey", label: "Shift", shape: "expand", keycode: 54 }
+            ],
+            [
+                { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 29 },
+                { keytype: "modkey", label: "Alt", shape: "normal", keycode: 56 },
+                { keytype: "normal", label: "Space", shape: "space", keycode: 57 },
+                { keytype: "modkey", label: "Alt", shape: "normal", keycode: 100 },
+                { keytype: "normal", label: "Menu", shape: "normal", keycode: 139 },
+                { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 97 }
             ]
         ]
     }
