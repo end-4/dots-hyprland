@@ -5,7 +5,7 @@ ApiStrategy {
     
     function buildEndpoint(model: AiModel): string {
         const result = model.endpoint + `?key=\$\{${root.apiKeyEnvVarName}\}`
-        console.log("[AI] Endpoint: " + result);
+        // console.log("[AI] Endpoint: " + result);
         return result;
     }
 

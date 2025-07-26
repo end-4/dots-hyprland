@@ -11,6 +11,9 @@ import "./ai/"
 
 /**
  * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
+ * Supports Gemini and OpenAI models.
+ * Limitations:
+ * - For now functions only work with Gemini API format
  */
 Singleton {
     id: root
@@ -85,6 +88,20 @@ Singleton {
                         }
                     },
                     "required": ["key", "value"]
+                }
+            },
+            {
+                "name": "run_shell_command",
+                "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "command": {
+                            "type": "string",
+                            "description": "The bash command to run",
+                        },
+                    },
+                    "required": ["command"]
                 }
             },
         ]}],
@@ -493,7 +510,7 @@ Singleton {
 
     Process {
         id: requester
-        property var baseCommand: ["bash", "-c"]
+        property list<string> baseCommand: ["bash", "-c"]
         property AiMessageData message
         property ApiStrategy currentStrategy
 
@@ -573,7 +590,8 @@ Singleton {
                     // console.log("[Ai] Parsed response result: ", JSON.stringify(result, null, 2));
                     
                     if (result.functionCall) {
-                        root.handleFunctionCall(result.functionCall.name, result.functionCall.args);
+                        requester.message.functionCall = result.functionCall;
+                        root.handleFunctionCall(result.functionCall.name, result.functionCall.args, requester.message);
                     }
                     if (result.tokenUsage) {
                         root.tokenCount.input = result.tokenUsage.input;
@@ -614,24 +632,68 @@ Singleton {
         requester.makeRequest();
     }
 
-    function addFunctionOutputMessage(name, output) {
-        const aiMessage = aiMessageComponent.createObject(root, {
+    function createFunctionOutputMessage(name, output, includeOutputInChat = true) {
+        return aiMessageComponent.createObject(root, {
             "role": "user",
-            "content": `[[ Output of ${name} ]]`,
-            "rawContent": `[[ Output of ${name} ]]`,
+            "content": `[[ Output of ${name} ]]${includeOutputInChat ? ("\n\n<think>\n" + output + "\n</think>") : ""}`,
+            "rawContent": `[[ Output of ${name} ]]${includeOutputInChat ? ("\n\n<think>\n" + output + "\n</think>") : ""}`,
             "functionName": name,
             "functionResponse": output,
             "thinking": false,
             "done": true,
-            "visibleToUser": false,
+            // "visibleToUser": false,
         });
-        // console.log("Adding function output message: ", JSON.stringify(aiMessage));
+    }
+
+    function addFunctionOutputMessage(name, output) {
+        const aiMessage = createFunctionOutputMessage(name, output);
         const id = idForMessage(aiMessage);
         root.messageIDs = [...root.messageIDs, id];
         root.messageByID[id] = aiMessage;
     }
 
-    function handleFunctionCall(name, args) {
+    function rejectCommand(message: AiMessageData) {
+        if (!message.thinking) return;
+        message.thinking = false; // User decided, no more "thinking"
+        addFunctionOutputMessage(message.functionName, Translation.tr("Command rejected by user"))
+    }
+
+    function approveCommand(message: AiMessageData) {
+        if (!message.thinking) return;
+        message.thinking = false; // User decided, no more "thinking"
+
+        const responseMessage = createFunctionOutputMessage(message.functionName, "", false);
+        const id = idForMessage(responseMessage);
+        root.messageIDs = [...root.messageIDs, id];
+        root.messageByID[id] = responseMessage;
+
+        commandExecutionProc.message = responseMessage;
+        commandExecutionProc.baseMessageContent = responseMessage.content;
+        commandExecutionProc.shellCommand = message.functionCall.args.command;
+        commandExecutionProc.running = true; // Start the command execution
+    }
+
+    Process {
+        id: commandExecutionProc
+        property string shellCommand: ""
+        property AiMessageData message
+        property string baseMessageContent: ""
+        command: ["bash", "-c", shellCommand]
+        stdout: SplitParser {
+            onRead: (output) => {
+                commandExecutionProc.message.functionResponse += output + "\n\n";
+                const updatedContent = commandExecutionProc.baseMessageContent + `\n\n<think>\n<tt>${commandExecutionProc.message.functionResponse}</tt>\n</think>`;
+                commandExecutionProc.message.rawContent = updatedContent;
+                commandExecutionProc.message.content = updatedContent;
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            commandExecutionProc.message.functionResponse += `[[ Command exited with code ${exitCode} (${exitStatus}) ]]\n`;
+            requester.makeRequest(); // Continue
+        }
+    }
+
+    function handleFunctionCall(name, args: var, message: AiMessageData) {
         if (name === "switch_to_search_mode") {
             const modelId = root.currentModelId;
             if (modelId.endsWith("-tools")) {
@@ -660,6 +722,15 @@ Singleton {
             const key = args.key;
             const value = args.value;
             Config.setNestedValue(key, value);
+        } else if (name === "run_shell_command") {
+            if (!args.command || args.command.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `command`."));
+                return;
+            }
+            const contentToAppend = `\n\n**Command execution request**\n\n\`\`\`command\n${args.command}\n\`\`\``;
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.thinking = true; // Use thinking to indicate the command is waiting for approval
         }
         else root.addMessage(Translation.tr("Unknown function call: %1").arg(name), "assistant");
     }

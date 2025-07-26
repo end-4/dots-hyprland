@@ -14,7 +14,7 @@ QtObject {
     property var annotationSources: []
     property list<string> searchQueries: []
     property string functionName
-    property string functionCall
+    property var functionCall
     property string functionResponse
     property bool visibleToUser: true
 }

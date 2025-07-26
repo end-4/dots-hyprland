@@ -4,7 +4,7 @@ ApiStrategy {
     property bool isReasoning: false
     
     function buildEndpoint(model: AiModel): string {
-        console.log("[AI] Endpoint: " + model.endpoint);
+        // console.log("[AI] Endpoint: " + model.endpoint);
         return model.endpoint;
     }
 
