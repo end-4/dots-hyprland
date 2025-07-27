@@ -15,6 +15,29 @@ Scope {
     id: root
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
     property bool packageManagerRunning: false
+    property bool downloadRunning: false
+
+    component DescriptionLabel: Rectangle {
+        id: descriptionLabel
+        property string text
+        property color textColor: Appearance.colors.colOnTooltip
+        color: Appearance.colors.colTooltip
+        clip: true
+        radius: Appearance.rounding.normal
+        implicitHeight: descriptionLabelText.implicitHeight + 10 * 2
+        implicitWidth: descriptionLabelText.implicitWidth + 15 * 2
+
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+
+        StyledText {
+            id: descriptionLabelText
+            anchors.centerIn: parent
+            color: descriptionLabel.textColor
+            text: descriptionLabel.text
+        }
+    }
 
     function closeAllWindows() {
         HyprlandData.windowList.map(w => w.pid).forEach((pid) => {
@@ -22,10 +45,13 @@ Scope {
         });
     }
 
-    function detectRunningPackageManager() {
+    function detectRunningStuff() {
         packageManagerRunning = false;
+        downloadRunning = false;
         detectPackageManagerProc.running = false;
         detectPackageManagerProc.running = true;
+        detectDownloadProc.running = false;
+        detectDownloadProc.running = true;
     }
 
     Process {
@@ -37,11 +63,19 @@ Scope {
         }
     }
 
+    Process {
+        id: detectDownloadProc
+        command: ["bash", "-c", "pidof curl wget aria2c yt-dlp || ls ~/Downloads | grep -E '\.crdownload$|\.part$'"]
+        onExited: (exitCode, exitStatus) => {
+            root.downloadRunning = (exitCode === 0);
+        }
+    }
+
     Loader {
         id: sessionLoader
         active: false
         onActiveChanged: {
-            if (sessionLoader.active) root.detectRunningPackageManager();
+            if (sessionLoader.active) root.detectRunningStuff();
         }
 
         Connections {
@@ -201,54 +235,39 @@ Scope {
                     }
                 }
 
-                Rectangle {
+                DescriptionLabel {
                     Layout.alignment: Qt.AlignHCenter
-                    radius: Appearance.rounding.normal
-                    implicitHeight: sessionSubtitle.implicitHeight + 10 * 2
-                    implicitWidth: sessionSubtitle.implicitWidth + 15 * 2
-                    color: Appearance.colors.colTooltip
-                    clip: true
-
-                    Behavior on implicitWidth {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-
-                    StyledText {
-                        id: sessionSubtitle
-                        anchors.centerIn: parent
-                        color: Appearance.colors.colOnTooltip
-                        text: sessionRoot.subtitle
-                    }
+                    text: sessionRoot.subtitle
                 }
             }
 
-            Loader {
-                active: root.packageManagerRunning
+            RowLayout {
                 anchors {
                     top: contentColumn.bottom
                     topMargin: 10
                     horizontalCenter: contentColumn.horizontalCenter
                 }
-                sourceComponent: Rectangle {
-                    radius: Appearance.rounding.normal
-                    implicitHeight: sessionWarning.implicitHeight + 10 * 2
-                    implicitWidth: sessionWarning.implicitWidth + 15 * 2
-                    color: Appearance.m3colors.m3errorContainer
-                    clip: true
+                spacing: 10
 
-                    Behavior on implicitWidth {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-
-                    StyledText {
-                        id: sessionWarning
-                        anchors.centerIn: parent
-                        color: Appearance.m3colors.m3onErrorContainer
+                Loader {
+                    active: root.packageManagerRunning
+                    visible: active
+                    sourceComponent: DescriptionLabel {
                         text: Translation.tr("Your package manager is running")
+                        textColor: Appearance.m3colors.m3onErrorContainer
+                        color: Appearance.m3colors.m3errorContainer
+                    }
+                }
+                Loader {
+                    active: root.downloadRunning
+                    visible: active
+                    sourceComponent: DescriptionLabel {
+                        text: Translation.tr("There might be a download in progress")
+                        textColor: Appearance.m3colors.m3onErrorContainer
+                        color: Appearance.m3colors.m3errorContainer
                     }
                 }
             }
-
         }
     }
 

@@ -49,7 +49,10 @@ Item {
                 Layout.topMargin: valueIndicatorVerticalPadding
                 Layout.bottomMargin: valueIndicatorVerticalPadding
                 MaterialSymbol { // Icon
-                    anchors.centerIn: parent
+                    anchors {
+                        centerIn: parent
+                        alignWhenCentered: !root.rotateIcon
+                    }
                     color: Appearance.colors.colOnLayer0
                     renderType: Text.QtRendering
 

@@ -41,8 +41,8 @@ Scope {
             property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
             property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
             property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
-            property real movableXSpace: (effectiveWallpaperScale - 1) / 2 * screen.width
-            property real movableYSpace: (effectiveWallpaperScale - 1) / 2 * screen.height
+            property real movableXSpace: (Math.min(wallpaperWidth * effectiveWallpaperScale, screen.width * preferredWallpaperScale) - screen.width) / 2
+            property real movableYSpace: (Math.min(wallpaperHeight * effectiveWallpaperScale, screen.height * preferredWallpaperScale) - screen.height) / 2
             // Position
             property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
             property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)

@@ -84,7 +84,7 @@ Scope {
 
             function setSearchingText(text) {
                 searchWidget.setSearchingText(text);
-                searchWidget.focusFirstItemIfNeeded();
+                searchWidget.focusFirstItem();
             }
 
             ColumnLayout {
