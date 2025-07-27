@@ -492,40 +492,12 @@ Item {
                     }, 
                 ]
 
-                Item {
-                    implicitHeight: providerRowLayout.implicitHeight + 5 * 2
-                    implicitWidth: providerRowLayout.implicitWidth + 10 * 2
-                    
-                    RowLayout {
-                        id: providerRowLayout
-                        anchors.centerIn: parent
-
-                        MaterialSymbol {
-                            text: "api"
-                            iconSize: Appearance.font.pixelSize.large
-                        }
-                        StyledText {
-                            id: providerName
-                            font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.m3colors.m3onSurface
-                            text: Booru.providers[Booru.currentProvider].name
-                        }
-                    }
-                    StyledToolTip {
-                        id: toolTip
-                        extraVisibleCondition: false
-                        alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        // content: Translation.tr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + Translation.tr("\nSet with /mode PROVIDER")
-                        content: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
-                            .arg(Booru.providers[Booru.currentProvider].url)
-                            .arg(root.commandPrefix)
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                    }
+                ApiInputBoxIndicator { // Tool indicator
+                    icon: "api"
+                    text: Booru.providers[Booru.currentProvider].name
+                    tooltipText: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
+                        .arg(Booru.providers[Booru.currentProvider].url)
+                        .arg(root.commandPrefix)
                 }
 
                 StyledText {
