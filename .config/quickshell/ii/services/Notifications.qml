@@ -34,11 +34,9 @@ Singleton {
         property string urgency: notification?.urgency.toString() ?? "normal"
         property Timer timer
 
-        readonly property Connections conn: Connections {
-            target: wrapper?.notification?.Component ?? root // stupid warning aaaaaaa
-
-            function onDestruction(): void {
-                wrapper.destroy();
+        onNotificationChanged: {
+            if (notification === null) {
+                root.discardNotification(notificationId);
             }
         }
     }
