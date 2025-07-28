@@ -20,6 +20,9 @@ ListView {
         root.dragDistance = 0
     }
 
+    maximumFlickVelocity: 3500
+    boundsBehavior: Flickable.DragOverBounds
+
     add: Transition {
         animations: [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {

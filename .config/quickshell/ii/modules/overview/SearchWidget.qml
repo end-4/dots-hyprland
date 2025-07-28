@@ -249,7 +249,7 @@ Item { // Wrapper
                 color: Appearance.colors.colOutlineVariant
             }
 
-            ListView { // App results
+            StyledListView { // App results
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
@@ -260,6 +260,8 @@ Item { // Wrapper
                 spacing: 2
                 KeyNavigation.up: searchBar
                 highlightMoveDuration: 100
+                add: null
+                remove: null
 
                 onFocusChanged: {
                     if (focus)
