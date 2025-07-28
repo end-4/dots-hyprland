@@ -144,6 +144,12 @@ Singleton {
             "none": [],
         }
     }
+    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
+    property var toolDescriptions: {
+        "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
+        "search": Translation.tr("Gives the model search capabilities (immediately)"),
+        "none": Translation.tr("Disable tools")
+    }
 
     // Model properties:
     // - name: Name of the model
@@ -402,7 +408,7 @@ Singleton {
 
     function setTool(tool) {
         if (!root.tools[models[currentModelId]?.api_format] || !(tool in root.tools[models[currentModelId]?.api_format])) {
-            root.addMessage(Translation.tr("Invalid tool. Supported tools:\n- %1").arg(Object.keys(root.tools[models[currentModelId]?.api_format]).join("\n- ")), root.interfaceRole);
+            root.addMessage(Translation.tr("Invalid tool. Supported tools:\n- %1").arg(root.availableTools.join("\n- ")), root.interfaceRole);
             return false;
         }
         Config.options.ai.tool = tool;
