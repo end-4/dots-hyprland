@@ -6,6 +6,7 @@ import qs.modules.common
 import qs
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import QtQuick
 import "./ai/"
 
@@ -25,7 +26,15 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
-    property string systemPrompt: Config.options?.ai?.systemPrompt ?? ""
+    property string systemPrompt: {
+        let prompt = Config.options?.ai?.systemPrompt ?? "";
+        for (let key in root.promptSubstitutions) {
+            // prompt = prompt.replaceAll(key, root.promptSubstitutions[key]);
+            // QML/JS doesn't support replaceAll, so use split/join
+            prompt = prompt.split(key).join(root.promptSubstitutions[key]);
+        }
+        return prompt;
+    }
     // property var messages: []
     property var messageIDs: []
     property var messageByID: ({})
@@ -59,6 +68,13 @@ Singleton {
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
+
+    property var promptSubstitutions: {
+        "{DISTRO}": SystemInfo.distroName,
+        "{DATETIME}": `${DateTime.time}, ${DateTime.collapsedCalendarFormat}`,
+        "{WINDOWCLASS}": ToplevelManager.activeToplevel.appId,
+        "{DE}": `${SystemInfo.desktopEnvironment} (${SystemInfo.windowingSystem})` 
+    }
 
     // Gemini: https://ai.google.dev/gemini-api/docs/function-calling
     // OpenAI: https://platform.openai.com/docs/guides/function-calling

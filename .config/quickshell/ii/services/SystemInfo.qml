@@ -20,6 +20,8 @@ Singleton {
     property string bugReportUrl: ""
     property string privacyPolicyUrl: ""
     property string logo: ""
+    property string desktopEnvironment: ""
+    property string windowingSystem: ""
 
     Timer {
         triggeredOnStart: true
@@ -79,6 +81,20 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.username = data.trim()
+            }
+        }
+    }
+
+    Process {
+        id: getDesktopEnvironment
+        running: true
+        command: ["bash", "-c", "echo $XDG_CURRENT_DESKTOP,$WAYLAND_DISPLAY"]
+        stdout: StdioCollector {
+            id: deCollector
+            onStreamFinished: {
+                const [desktop, wayland] = deCollector.text.split(",")
+                root.desktopEnvironment = desktop.trim()
+                root.windowingSystem = wayland.trim().length > 0 ? "Wayland" : "X11" // Are there others? 🤔
             }
         }
     }
