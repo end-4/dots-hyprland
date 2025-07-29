@@ -68,7 +68,7 @@
   "There might be a download in progress": "Возможно происходит скачивание",
   "Visibility": "Видимость",
   "Desktop": "Рабочий стол",
-  "Run": "Запустиnm",
+  "Run": "Запустить",
   "Sunrise": "Рассвет",
   "Set API key": "Задать API ключ",
   "Shell windows": "Окна оболочки",
@@ -331,5 +331,16 @@
   "Experimental | Online | Google's model\nCan do a little more but doesn't search quickly": "Эксперементальная | Онлайн | Модель Google\nМожет немного больше но не ищет очень быстро",
   "Sa": "Сб/*keep*/",
   "Chain of Thought": "Цепочка мыслей",
-  "Fr": "Пт/*keep*/"
+  "Fr": "Пт/*keep*/",
+  "Usage: %1load CHAT_NAME": "Использование: %1load ИМЯ_ЧАТА",
+  "Tool set to %1": "Установлен инструмент %1",
+  "Set the tool to use for the model.": "Установите инструмент для этой модели.",
+  "Invalid tool. Supported tools:\n- %1": "Неправильный инструмент. Доступны:\n- %1",
+  "Usage: %1tool TOOL_NAME": "Использование: %1tool ИНСТРУМЕНТ",
+  "Performance Profile toggle": "Профили производительности",
+  "Usage: %1save CHAT_NAME": "Использование: %1save ИМЯ_ЧАТА",
+  "Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput.": "Онлайн | Модель Google\nМодель Gemini 2.5 Flash оптимизирована под меньшие затраты и высокую производительнность",
+  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовая модель, которая медленее, чем ее предшественник, но выдает лучшее качество",
+  "Online | Google's model\nFast, can perform searches for up-to-date information": "Онлайн | Модель Google\nБыстрая, может выполнять искать актуальную информацию через поиск",
+  "Current tool: %1\nSet it with %2tool TOOL": "Текущий инструмент: %1\nИзменяется с помощью %2tool ИНСТРУМЕНТ"
 }
