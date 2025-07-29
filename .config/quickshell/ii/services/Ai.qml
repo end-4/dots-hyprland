@@ -61,7 +61,7 @@ Singleton {
     }
 
     function safeModelName(modelName) {
-        return modelName.replace(/:/g, "_").replace(/\./g, "_")
+        return modelName.replace(/:/g, "_").replace(/\./g, "_").replace(/ /g, "-").replace(/\//g, "-")
     }
 
     property list<var> defaultPrompts: []
@@ -206,6 +206,19 @@ Singleton {
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
         }),
+        "gemini-2.5-flash-pro": aiModelComponent.createObject(this, {
+            "name": "Gemini 2.5 Pro",
+            "icon": "google-gemini-symbolic",
+            "description": Translation.tr("Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks."),
+            "homepage": "https://aistudio.google.com",
+            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent",
+            "model": "gemini-2.5-pro",
+            "requires_key": true,
+            "key_id": "gemini",
+            "key_get_link": "https://aistudio.google.com/app/apikey",
+            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
+            "api_format": "gemini",
+        }),
         "gemini-2.5-flash-lite": aiModelComponent.createObject(this, {
             "name": "Gemini 2.5 Flash-Lite",
             "icon": "google-gemini-symbolic",
@@ -241,6 +254,17 @@ Singleton {
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
+    Connections {
+        target: Config
+        function onReadyChanged() {
+            if (!Config.ready) return;
+            (Config?.options.ai?.extraModels ?? []).forEach(model => {
+                const safeModelName = root.safeModelName(model["model"]);
+                root.addModel(safeModelName, model)
+            });
+        }
+    }
+
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
     }
@@ -266,6 +290,10 @@ Singleton {
         return result;
     }
 
+    function addModel(modelName, data) {
+        root.models[modelName] = aiModelComponent.createObject(this, data);
+    }
+
     Process {
         id: getOllamaModels
         running: true
@@ -278,7 +306,7 @@ Singleton {
                     root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
                         const safeModelName = root.safeModelName(model);
-                        root.models[safeModelName] = aiModelComponent.createObject(this, {
+                        root.addModel(safeModelName, {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
                             "description": Translation.tr("Local Ollama model | %1").arg(model),
