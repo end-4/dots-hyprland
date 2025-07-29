@@ -9,8 +9,8 @@ Item { // Model indicator
     property string icon: "api"
     property string text: ""
     property string tooltipText: ""
-    implicitHeight: rowLayout.implicitHeight + 5 * 2
-    implicitWidth: rowLayout.implicitWidth + 10 * 2
+    implicitHeight: rowLayout.implicitHeight + 4 * 2
+    implicitWidth: rowLayout.implicitWidth + 4 * 2
 
     RowLayout {
         id: rowLayout

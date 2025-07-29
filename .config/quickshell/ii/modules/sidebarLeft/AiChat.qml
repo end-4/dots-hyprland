@@ -635,9 +635,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 5
-                anchors.leftMargin: 5
+                anchors.leftMargin: 10
                 anchors.rightMargin: 5
-                spacing: 5
+                spacing: 4
 
                 property var commandsShown: [
                     {
