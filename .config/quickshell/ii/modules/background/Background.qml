@@ -142,6 +142,7 @@ Scope {
 
             // Wallpaper
             Image {
+                id: wallpaperImage
                 visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
@@ -176,7 +177,7 @@ Scope {
                     anchors {
                         left: parent.left
                         top: parent.top
-                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaperImage.effectiveValue * bgRoot.movableXSpace)
                         topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                         Behavior on leftMargin {
                             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)

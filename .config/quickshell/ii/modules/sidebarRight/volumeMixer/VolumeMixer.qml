@@ -40,7 +40,7 @@ Item {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            ListView {
+            StyledListView {
                 id: listView
                 model: root.appPwNodes
                 clip: true
@@ -187,7 +187,7 @@ Item {
                     Layout.rightMargin: dialogMargins
                 }
 
-                Flickable {
+                StyledFlickable {
                     id: dialogFlickable
                     Layout.fillWidth: true
                     clip: true
