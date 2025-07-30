@@ -16,5 +16,6 @@ QtObject {
     property string functionName
     property var functionCall
     property string functionResponse
+    property bool functionPending: false
     property bool visibleToUser: true
 }

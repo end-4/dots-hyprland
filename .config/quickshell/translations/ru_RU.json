@@ -341,6 +341,6 @@
   "Usage: %1save CHAT_NAME": "Использование: %1save ИМЯ_ЧАТА",
   "Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput.": "Онлайн | Модель Google\nМодель Gemini 2.5 Flash оптимизирована под меньшие затраты и высокую производительнность",
   "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовая модель, которая медленее, чем ее предшественник, но выдает лучшее качество",
-  "Online | Google's model\nFast, can perform searches for up-to-date information": "Онлайн | Модель Google\nБыстрая, может выполнять искать актуальную информацию через поиск",
+  "Online | Google's model\nFast, can perform searches for up-to-date information": "Онлайн | Модель Google\nБыстрая, может выполнять поиск актуальной информации",
   "Current tool: %1\nSet it with %2tool TOOL": "Текущий инструмент: %1\nИзменяется с помощью %2tool ИНСТРУМЕНТ"
 }
