@@ -184,7 +184,7 @@ Scope {
                 anchors {
                     left: wallpaper.left
                     top: wallpaper.top
-                    leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaperImage.effectiveValue * bgRoot.movableXSpace)
+                    leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaper.effectiveValue * bgRoot.movableXSpace)
                     topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
