@@ -37,12 +37,12 @@ Scope {
             property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
             property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
             // Wallpaper
-            property string wallpaperPath: Config.options.background.wallpaperPath
             property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4")
                 || Config.options.background.wallpaperPath.endsWith(".webm")
                 || Config.options.background.wallpaperPath.endsWith(".mkv")
                 || Config.options.background.wallpaperPath.endsWith(".avi")
-                || Config.options.background.wallpaperPath.endsWith(".mov")            
+                || Config.options.background.wallpaperPath.endsWith(".mov")
+            property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
             property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
             property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
             property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
@@ -148,7 +148,7 @@ Scope {
 
             // Wallpaper
             Image {
-                id: wallpaperImage
+                id: wallpaper
                 visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
@@ -176,93 +176,93 @@ Scope {
                     width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale
                     height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale
                 }
+            }
 
-                // The clock
-                Item {
-                    id: clock
+            // The clock
+            Item {
+                id: clock
+                anchors {
+                    left: wallpaper.left
+                    top: wallpaper.top
+                    leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaperImage.effectiveValue * bgRoot.movableXSpace)
+                    topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                    Behavior on leftMargin {
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                    }
+                    Behavior on topMargin {
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                    }
+                }
+
+                implicitWidth: clockColumn.implicitWidth
+                implicitHeight: clockColumn.implicitHeight
+
+                ColumnLayout {
+                    id: clockColumn
+                    anchors.centerIn: wallpaper
+                    spacing: 0
+
+                    StyledText {
+                        Layout.fillWidth: true
+                        horizontalAlignment: bgRoot.textHorizontalAlignment
+                        font {
+                            family: Appearance.font.family.expressive
+                            pixelSize: 90
+                            weight: Font.Bold
+                        }
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                        text: DateTime.time
+                    }
+                    StyledText {
+                        Layout.fillWidth: true
+                        Layout.topMargin: -5
+                        horizontalAlignment: bgRoot.textHorizontalAlignment
+                        font {
+                            family: Appearance.font.family.expressive
+                            pixelSize: 20
+                            weight: Font.DemiBold
+                        }
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                        text: DateTime.date
+                    }
+                }
+
+                RowLayout {
                     anchors {
-                        left: parent.left
-                        top: parent.top
-                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaperImage.effectiveValue * bgRoot.movableXSpace)
-                        topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
-                        Behavior on leftMargin {
-                            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                        }
-                        Behavior on topMargin {
-                            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                        top: clockColumn.bottom
+                        left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
+                        right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
+                        horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
+                        topMargin: 5
+                        leftMargin: -5
+                        rightMargin: -5
+                    }
+                    opacity: GlobalStates.screenLocked ? 1 : 0
+                    visible: opacity > 0
+                    Behavior on opacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                    Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
+                    MaterialSymbol {
+                        text: "lock"
+                        Layout.fillWidth: false
+                        iconSize: Appearance.font.pixelSize.huge
+                        color: bgRoot.colText
+                    }
+                    StyledText {
+                        Layout.fillWidth: false
+                        text: "Locked"
+                        color: bgRoot.colText
+                        font {
+                            pixelSize: Appearance.font.pixelSize.larger
                         }
                     }
+                    Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
 
-                    implicitWidth: clockColumn.implicitWidth
-                    implicitHeight: clockColumn.implicitHeight
-
-                    ColumnLayout {
-                        id: clockColumn
-                        anchors.centerIn: parent
-                        spacing: 0
-
-                        StyledText {
-                            Layout.fillWidth: true
-                            horizontalAlignment: bgRoot.textHorizontalAlignment
-                            font {
-                                family: Appearance.font.family.expressive
-                                pixelSize: 90
-                                weight: Font.Bold
-                            }
-                            color: bgRoot.colText
-                            style: Text.Raised
-                            styleColor: Appearance.colors.colShadow
-                            text: DateTime.time
-                        }
-                        StyledText {
-                            Layout.fillWidth: true
-                            Layout.topMargin: -5
-                            horizontalAlignment: bgRoot.textHorizontalAlignment
-                            font {
-                                family: Appearance.font.family.expressive
-                                pixelSize: 20
-                                weight: Font.DemiBold
-                            }
-                            color: bgRoot.colText
-                            style: Text.Raised
-                            styleColor: Appearance.colors.colShadow
-                            text: DateTime.date
-                        }
-                    }
-
-                    RowLayout {
-                        anchors {
-                            top: clockColumn.bottom
-                            left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
-                            right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
-                            horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
-                            topMargin: 5
-                            leftMargin: -5
-                            rightMargin: -5
-                        }
-                        opacity: GlobalStates.screenLocked ? 1 : 0
-                        visible: opacity > 0
-                        Behavior on opacity {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
-                        MaterialSymbol {
-                            text: "lock"
-                            Layout.fillWidth: false
-                            iconSize: Appearance.font.pixelSize.huge
-                            color: bgRoot.colText
-                        }
-                        StyledText {
-                            Layout.fillWidth: false
-                            text: "Locked"
-                            color: bgRoot.colText
-                            font {
-                                pixelSize: Appearance.font.pixelSize.larger
-                            }
-                        }
-                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
-
-                    }
                 }
             }
 
