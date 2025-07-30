@@ -25,6 +25,12 @@ Scope {
             id: bgRoot
 
             required property var modelData
+
+            // Hide when fullscreen
+            readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
+            property bool focusingThisMonitor: HyprlandData.activeWorkspace.monitor == monitor.name
+            visible: !(activeWindow?.fullscreen && activeWindow?.activated && focusingThisMonitor)
+
             // Workspaces
             property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
             property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
@@ -142,6 +148,7 @@ Scope {
 
             // Wallpaper
             Image {
+                id: wallpaperImage
                 visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
@@ -176,7 +183,7 @@ Scope {
                     anchors {
                         left: parent.left
                         top: parent.top
-                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaperImage.effectiveValue * bgRoot.movableXSpace)
                         topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                         Behavior on leftMargin {
                             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)

@@ -58,6 +58,8 @@
 
 </details>
 
+_Note: **THERE IS NO FUCKING WAYBAR**_
+
 
 <div align="center">
     <h2>• screenshots •</h2>

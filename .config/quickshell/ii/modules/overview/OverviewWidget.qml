@@ -61,7 +61,7 @@ Item {
         radius: Appearance.rounding.screenRounding * root.scale + padding
         color: Appearance.colors.colLayer0
         border.width: 1
-        border.color: Appearance.m3colors.m3outlineVariant
+        border.color: Appearance.colors.colLayer0Border
 
         ColumnLayout { // Workspaces
             id: workspaceColumnLayout

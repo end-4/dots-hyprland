@@ -97,7 +97,7 @@ Rectangle {
             }
         }
 
-        Flickable { // Tag strip
+        StyledFlickable { // Tag strip
             id: tagsFlickable
             visible: root.responseData.tags.length > 0
             Layout.alignment: Qt.AlignLeft

@@ -163,7 +163,7 @@ Item { // Wrapper
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
         border.width: 1
-        border.color: Appearance.m3colors.m3outlineVariant
+        border.color: Appearance.colors.colLayer0Border
 
         ColumnLayout {
             id: columnLayout
@@ -249,7 +249,7 @@ Item { // Wrapper
                 color: Appearance.colors.colOutlineVariant
             }
 
-            ListView { // App results
+            StyledListView { // App results
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
@@ -260,6 +260,8 @@ Item { // Wrapper
                 spacing: 2
                 KeyNavigation.up: searchBar
                 highlightMoveDuration: 100
+                add: null
+                remove: null
 
                 onFocusChanged: {
                     if (focus)
