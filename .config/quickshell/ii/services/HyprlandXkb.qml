@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import qs.modules.common
 
 /**
  * Exposes the active Hyprland Xkb keyboard layout name and code for indicators.
@@ -93,7 +94,11 @@ Singleton {
                 if (root.layoutCodes.length <= 1) return;
 
                 // Update when layout might have changed
-                root.currentLayoutName = event.data.split(",")[1];
+                const dataString = event.data;
+                root.currentLayoutName = dataString.split(",")[1];
+
+                // Update layout for on-screen keyboard (osk)
+                Config.options.osk.layout = root.currentLayoutName;
             } else if (event.name == "configreloaded") {
                 // Mark layout code list to be updated when config is reloaded
                 root.needsLayoutRefresh = true;
