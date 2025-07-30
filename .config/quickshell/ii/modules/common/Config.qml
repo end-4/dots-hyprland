@@ -115,6 +115,7 @@ Singleton {
                 property real clockX: -500
                 property real clockY: -500
                 property string wallpaperPath: ""
+                property string thumbnailPath: ""
                 property JsonObject parallax: JsonObject {
                     property bool enableWorkspace: true
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
