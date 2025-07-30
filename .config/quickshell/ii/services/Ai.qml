@@ -23,6 +23,7 @@ Singleton {
     property Component aiModelComponent: AiModel {}
     property Component geminiApiStrategy: GeminiApiStrategy {}
     property Component openaiApiStrategy: OpenAiApiStrategy {}
+    property Component mistralApiStrategy: MistralApiStrategy {}
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
@@ -72,7 +73,7 @@ Singleton {
     property var promptSubstitutions: {
         "{DISTRO}": SystemInfo.distroName,
         "{DATETIME}": `${DateTime.time}, ${DateTime.collapsedCalendarFormat}`,
-        "{WINDOWCLASS}": ToplevelManager.activeToplevel.appId,
+        "{WINDOWCLASS}": ToplevelManager.activeToplevel?.appId ?? "Unknown",
         "{DE}": `${SystemInfo.desktopEnvironment} (${SystemInfo.windowingSystem})` 
     }
 
@@ -131,12 +132,14 @@ Singleton {
         "openai": {
             "functions": [
                 {
-                    "type": "function",
-                    "name": "get_shell_config",
-                    "description": "Get the current shell configuration.",
+                    "name": "switch_to_search_mode",
+                    "description": "Search the web",
                 },
                 {
-                    "type": "function",
+                    "name": "get_shell_config",
+                    "description": "Get the desktop shell config file contents",
+                },
+                {
                     "name": "set_shell_config",
                     "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
                     "parameters": {
@@ -151,10 +154,75 @@ Singleton {
                                 "description": "The value to set, e.g. `true`"
                             }
                         },
-                        "required": ["key", "value"],
-                        "additionalProperties": false
+                        "required": ["key", "value"]
                     }
-                }
+                },
+                {
+                    "name": "run_shell_command",
+                    "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "command": {
+                                "type": "string",
+                                "description": "The bash command to run",
+                            },
+                        },
+                        "required": ["command"]
+                    }
+                },
+            ],
+            "search": [],
+            "none": [],
+        },
+        "mistral": {
+            "functions": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "get_shell_config",
+                        "description": "Get the desktop shell config file contents",
+                        "parameters": {}
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "set_shell_config",
+                        "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string",
+                                    "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "description": "The value to set, e.g. `true`"
+                                }
+                            },
+                            "required": ["key", "value"]
+                        }
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "run_shell_command",
+                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "string",
+                                    "description": "The bash command to run",
+                                },
+                            },
+                            "required": ["command"]
+                        }
+                    },
+                },
             ],
             "search": [],
             "none": [],
@@ -232,6 +300,19 @@ Singleton {
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
         }),
+        "mistral-medium-3": aiModelComponent.createObject(this, {
+            "name": "Mistral Medium 3",
+            "icon": "mistral-symbolic",
+            "description": Translation.tr("Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls").arg("Mistral"),
+            "homepage": "https://mistral.ai/news/mistral-medium-3",
+            "endpoint": "https://api.mistral.ai/v1/chat/completions",
+            "model": "mistral-medium-2505",
+            "requires_key": true,
+            "key_id": "mistral",
+            "key_get_link": "https://console.mistral.ai/api-keys",
+            "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
+            "api_format": "mistral",
+        }),
         "openrouter-deepseek-r1": aiModelComponent.createObject(this, {
             "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
@@ -251,6 +332,7 @@ Singleton {
     property var apiStrategies: {
         "openai": openaiApiStrategy.createObject(this),
         "gemini": geminiApiStrategy.createObject(this),
+        "mistral": mistralApiStrategy.createObject(this),
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
@@ -412,8 +494,8 @@ Singleton {
 
     function addApiKeyAdvice(model) {
         root.addMessage(
-            Translation.tr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3')
-                .arg(model.name).arg(model.key_get_link).arg(model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")), 
+            Translation.tr('To set an API key, pass it with the %4 command\n\nTo view the key, pass "get" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3')
+                .arg(model.name).arg(model.key_get_link).arg(model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")).arg("/key"), 
             Ai.interfaceRole
         );
     }
@@ -659,14 +741,14 @@ Singleton {
     }
 
     function rejectCommand(message: AiMessageData) {
-        if (!message.thinking) return;
-        message.thinking = false; // User decided, no more "thinking"
+        if (!message.functionPending) return;
+        message.functionPending = false; // User decided, no more "thinking"
         addFunctionOutputMessage(message.functionName, Translation.tr("Command rejected by user"))
     }
 
     function approveCommand(message: AiMessageData) {
-        if (!message.thinking) return;
-        message.thinking = false; // User decided, no more "thinking"
+        if (!message.functionPending) return;
+        message.functionPending = false; // User decided, no more "thinking"
 
         const responseMessage = createFunctionOutputMessage(message.functionName, "", false);
         const id = idForMessage(responseMessage);
@@ -726,7 +808,7 @@ Singleton {
             const contentToAppend = `\n\n**Command execution request**\n\n\`\`\`command\n${args.command}\n\`\`\``;
             message.rawContent += contentToAppend;
             message.content += contentToAppend;
-            message.thinking = true; // Use thinking to indicate the command is waiting for approval
+            message.functionPending = true; // Use thinking to indicate the command is waiting for approval
         }
         else root.addMessage(Translation.tr("Unknown function call: %1").arg(name), "assistant");
     }

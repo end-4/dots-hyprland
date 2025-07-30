@@ -252,7 +252,7 @@ ColumnLayout {
                     }
                 }
                 Loader {
-                    active: root.isCommandRequest && root.messageData.thinking
+                    active: root.isCommandRequest && root.messageData.functionPending
                     visible: active
                     Layout.fillWidth: true
                     Layout.margins: 6
