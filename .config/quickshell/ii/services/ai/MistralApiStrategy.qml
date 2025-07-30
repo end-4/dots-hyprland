@@ -14,15 +14,27 @@ ApiStrategy {
             "messages": [
                 {role: "system", content: systemPrompt},
                 ...messages.map(message => {
-                    return {
+                    const hasFunctionCall = message.functionCall != undefined && message.functionName.length > 0
+                    let messageData = {
                         "role": message.role,
                         "content": message.rawContent,
                     }
+                    if (hasFunctionCall) {
+                        if (message.functionResponse?.length > 0) {
+                            messageData.name = message.functionName; // Does the func call also need this name? or just the func output?
+                            messageData.role = "tool";
+                            messageData.content = message.functionResponse;
+                            messageData.tool_call_id = message.functionCall.id
+                        }
+                    }
+                    return messageData
                 }),
             ],
             "stream": true,
             "temperature": temperature,
+            "tools": tools,
         };
+        // console.log("[AI] Request data: ", JSON.stringify(baseData, null, 2));
         return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
     }
 
@@ -51,6 +63,21 @@ ApiStrategy {
             const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
             const responseReasoning = dataJson.choices[0]?.delta?.reasoning || dataJson.choices[0]?.delta?.reasoning_content;
 
+            // Function call
+            if (dataJson.choices[0]?.delta?.tool_calls) {
+                const functionCall = dataJson.choices[0].delta.tool_calls[0];
+                const functionName = functionCall.function.name;
+                const functionArgs = JSON.parse(functionCall.function.arguments) || {}; // Args are given as string???
+                const functionId = functionCall.id;
+                const newContent = `\n\n[[ Function: ${functionName}(${JSON.stringify(functionArgs, null, 2)}) ]]\n`;
+                message.rawContent += newContent;
+                message.content += newContent;
+                message.functionName = functionName;
+                message.functionCall = functionName; 
+                return { functionCall: { name: functionName, args: functionArgs, id: functionId } };
+            }
+
+            // Thinking?
             if (responseContent && responseContent.length > 0) {
                 if (isReasoning) {
                     isReasoning = false;
@@ -69,15 +96,16 @@ ApiStrategy {
                 newContent = responseReasoning;
             }
 
+            // Text
             message.content += newContent;
             message.rawContent += newContent;
 
-            if (dataJson.done) {
+            if (`dataJson`.done) {
                 return { finished: true };
             }
             
         } catch (e) {
-            console.log("[AI] OpenAI: Could not parse line: ", e);
+            console.log("[AI] Mistral: Could not parse line: ", e);
             message.rawContent += line;
             message.content += line;
         }
@@ -86,7 +114,6 @@ ApiStrategy {
     }
     
     function onRequestFinished(message) {
-        // OpenAI format doesn't need special finish handling
         return {};
     }
     

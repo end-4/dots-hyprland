@@ -6,11 +6,15 @@ import qs.modules.common
 import qs
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import QtQuick
 import "./ai/"
 
 /**
  * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
+ * Supports Gemini and OpenAI models.
+ * Limitations:
+ * - For now functions only work with Gemini API format
  */
 Singleton {
     id: root
@@ -19,10 +23,19 @@ Singleton {
     property Component aiModelComponent: AiModel {}
     property Component geminiApiStrategy: GeminiApiStrategy {}
     property Component openaiApiStrategy: OpenAiApiStrategy {}
+    property Component mistralApiStrategy: MistralApiStrategy {}
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
-    property string systemPrompt: Config.options?.ai?.systemPrompt ?? ""
+    property string systemPrompt: {
+        let prompt = Config.options?.ai?.systemPrompt ?? "";
+        for (let key in root.promptSubstitutions) {
+            // prompt = prompt.replaceAll(key, root.promptSubstitutions[key]);
+            // QML/JS doesn't support replaceAll, so use split/join
+            prompt = prompt.split(key).join(root.promptSubstitutions[key]);
+        }
+        return prompt;
+    }
     // property var messages: []
     property var messageIDs: []
     property var messageByID: ({})
@@ -49,7 +62,7 @@ Singleton {
     }
 
     function safeModelName(modelName) {
-        return modelName.replace(/:/g, "_").replace(/\./g, "_")
+        return modelName.replace(/:/g, "_").replace(/\./g, "_").replace(/ /g, "-").replace(/\//g, "-")
     }
 
     property list<var> defaultPrompts: []
@@ -57,64 +70,169 @@ Singleton {
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
 
+    property var promptSubstitutions: {
+        "{DISTRO}": SystemInfo.distroName,
+        "{DATETIME}": `${DateTime.time}, ${DateTime.collapsedCalendarFormat}`,
+        "{WINDOWCLASS}": ToplevelManager.activeToplevel?.appId ?? "Unknown",
+        "{DE}": `${SystemInfo.desktopEnvironment} (${SystemInfo.windowingSystem})` 
+    }
+
     // Gemini: https://ai.google.dev/gemini-api/docs/function-calling
     // OpenAI: https://platform.openai.com/docs/guides/function-calling
+    property string currentTool: Config?.options.ai.tool ?? "search"
     property var tools: {
-        "gemini": [{"functionDeclarations": [
-            {
-                "name": "switch_to_search_mode",
-                "description": "Search the web",
-            },
-            {
-                "name": "get_shell_config",
-                "description": "Get the desktop shell config file contents",
-            },
-            {
-                "name": "set_shell_config",
-                "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "key": {
-                            "type": "string",
-                            "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+        "gemini": {
+            "functions": [{"functionDeclarations": [
+                {
+                    "name": "switch_to_search_mode",
+                    "description": "Search the web",
+                },
+                {
+                    "name": "get_shell_config",
+                    "description": "Get the desktop shell config file contents",
+                },
+                {
+                    "name": "set_shell_config",
+                    "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "string",
+                                "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                            },
+                            "value": {
+                                "type": "string",
+                                "description": "The value to set, e.g. `true`"
+                            }
                         },
-                        "value": {
-                            "type": "string",
-                            "description": "The value to set, e.g. `true`"
+                        "required": ["key", "value"]
+                    }
+                },
+                {
+                    "name": "run_shell_command",
+                    "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "command": {
+                                "type": "string",
+                                "description": "The bash command to run",
+                            },
+                        },
+                        "required": ["command"]
+                    }
+                },
+            ]}],
+            "search": [{
+                "google_search": {}
+            }],
+            "none": []
+        },
+        "openai": {
+            "functions": [
+                {
+                    "name": "switch_to_search_mode",
+                    "description": "Search the web",
+                },
+                {
+                    "name": "get_shell_config",
+                    "description": "Get the desktop shell config file contents",
+                },
+                {
+                    "name": "set_shell_config",
+                    "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "string",
+                                "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                            },
+                            "value": {
+                                "type": "string",
+                                "description": "The value to set, e.g. `true`"
+                            }
+                        },
+                        "required": ["key", "value"]
+                    }
+                },
+                {
+                    "name": "run_shell_command",
+                    "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "command": {
+                                "type": "string",
+                                "description": "The bash command to run",
+                            },
+                        },
+                        "required": ["command"]
+                    }
+                },
+            ],
+            "search": [],
+            "none": [],
+        },
+        "mistral": {
+            "functions": [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "get_shell_config",
+                        "description": "Get the desktop shell config file contents",
+                        "parameters": {}
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "set_shell_config",
+                        "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string",
+                                    "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "description": "The value to set, e.g. `true`"
+                                }
+                            },
+                            "required": ["key", "value"]
+                        }
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "run_shell_command",
+                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "string",
+                                    "description": "The bash command to run",
+                                },
+                            },
+                            "required": ["command"]
                         }
                     },
-                    "required": ["key", "value"]
-                }
-            },
-        ]}],
-        "openai": [
-            {
-                "type": "function",
-                "name": "get_shell_config",
-                "description": "Get the current shell configuration.",
-            },
-            {
-                "type": "function",
-                "name": "set_shell_config",
-                "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "key": {
-                            "type": "string",
-                            "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
-                        },
-                        "value": {
-                            "type": "string",
-                            "description": "The value to set, e.g. `true`"
-                        }
-                    },
-                    "required": ["key", "value"],
-                    "additionalProperties": false
-                }
-            }
-        ]
+                },
+            ],
+            "search": [],
+            "none": [],
+        }
+    }
+    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
+    property var toolDescriptions: {
+        "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
+        "search": Translation.tr("Gives the model search capabilities (immediately)"),
+        "none": Translation.tr("Disable tools")
     }
 
     // Model properties:
@@ -128,13 +246,12 @@ Singleton {
     // - key_get_link: Link to get an API key
     // - key_get_description: Description of pricing and how to get an API key
     // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
-    // - tools: List of tools that the model can use. Each tool is an object with the tool name as the key and an empty object as the value.
     // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
     property var models: {
-        "gemini-2.0-flash-search": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.0 Flash (Search)",
+        "gemini-2.0-flash": aiModelComponent.createObject(this, {
+            "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nGives up-to-date information with search."),
+            "description": Translation.tr("Online | Google's model\nFast, can perform searches for up-to-date information"),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
@@ -143,28 +260,11 @@ Singleton {
             "key_get_link": "https://aistudio.google.com/app/apikey",
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
-            "tools": [{
-                "google_search": {}
-            }]
         }),
-        "gemini-2.0-flash-tools": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.0 Flash (Tools)",
+        "gemini-2.5-flash": aiModelComponent.createObject(this, {
+            "name": "Gemini 2.5 Flash",
             "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Experimental | Online | Google's model\nCan do a little more but takes an extra turn to perform search"),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
-            "model": "gemini-2.0-flash",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-            "tools": root.tools["gemini"],
-        }),
-        "gemini-2.5-flash-search": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash (Search)",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nGives up-to-date information with search."),
+            "description": Translation.tr("Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers"),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent",
             "model": "gemini-2.5-flash",
@@ -173,44 +273,24 @@ Singleton {
             "key_get_link": "https://aistudio.google.com/app/apikey",
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
-            "tools": [{
-                "google_search": {}
-            }]
         }),
-        "gemini-2.5-flash-tools": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash (Tools)",
+        "gemini-2.5-flash-pro": aiModelComponent.createObject(this, {
+            "name": "Gemini 2.5 Pro",
             "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Experimental | Online | Google's model\nCan do a little more but takes an extra turn to perform search"),
+            "description": Translation.tr("Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks."),
             "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent",
-            "model": "gemini-2.5-flash",
+            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent",
+            "model": "gemini-2.5-pro",
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
-            "tools": root.tools["gemini"],
-        }),
-        "gemini-2.5-flash-lite-search": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash-Lite (Search)",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Experimental | Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent",
-            "model": "gemini-2.5-flash-lite",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-            "tools": [{
-                "google_search": {}
-            }]
         }),
         "gemini-2.5-flash-lite": aiModelComponent.createObject(this, {
             "name": "Gemini 2.5 Flash-Lite",
             "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Experimental | Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput."),
+            "description": Translation.tr("Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput."),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent",
             "model": "gemini-2.5-flash-lite",
@@ -219,19 +299,19 @@ Singleton {
             "key_get_link": "https://aistudio.google.com/app/apikey",
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
-            "tools": root.tools["gemini"],
         }),
-        "openrouter-llama4-maverick": aiModelComponent.createObject(this, {
-            "name": "Llama 4 Maverick",
-            "icon": "ollama-symbolic",
-            "description": Translation.tr("Online via %1 | %2's model").arg("OpenRouter").arg("Meta"),
-            "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
-            "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-            "model": "meta-llama/llama-4-maverick:free",
+        "mistral-medium-3": aiModelComponent.createObject(this, {
+            "name": "Mistral Medium 3",
+            "icon": "mistral-symbolic",
+            "description": Translation.tr("Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls").arg("Mistral"),
+            "homepage": "https://mistral.ai/news/mistral-medium-3",
+            "endpoint": "https://api.mistral.ai/v1/chat/completions",
+            "model": "mistral-medium-2505",
             "requires_key": true,
-            "key_id": "openrouter",
-            "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": Translation.tr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
+            "key_id": "mistral",
+            "key_get_link": "https://console.mistral.ai/api-keys",
+            "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
+            "api_format": "mistral",
         }),
         "openrouter-deepseek-r1": aiModelComponent.createObject(this, {
             "name": "DeepSeek R1",
@@ -252,8 +332,20 @@ Singleton {
     property var apiStrategies: {
         "openai": openaiApiStrategy.createObject(this),
         "gemini": geminiApiStrategy.createObject(this),
+        "mistral": mistralApiStrategy.createObject(this),
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
+
+    Connections {
+        target: Config
+        function onReadyChanged() {
+            if (!Config.ready) return;
+            (Config?.options.ai?.extraModels ?? []).forEach(model => {
+                const safeModelName = root.safeModelName(model["model"]);
+                root.addModel(safeModelName, model)
+            });
+        }
+    }
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
@@ -280,6 +372,10 @@ Singleton {
         return result;
     }
 
+    function addModel(modelName, data) {
+        root.models[modelName] = aiModelComponent.createObject(this, data);
+    }
+
     Process {
         id: getOllamaModels
         running: true
@@ -292,7 +388,7 @@ Singleton {
                     root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
                         const safeModelName = root.safeModelName(model);
-                        root.models[safeModelName] = aiModelComponent.createObject(this, {
+                        root.addModel(safeModelName, {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
                             "description": Translation.tr("Local Ollama model | %1").arg(model),
@@ -398,8 +494,8 @@ Singleton {
 
     function addApiKeyAdvice(model) {
         root.addMessage(
-            Translation.tr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3')
-                .arg(model.name).arg(model.key_get_link).arg(model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")), 
+            Translation.tr('To set an API key, pass it with the %4 command\n\nTo view the key, pass "get" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3')
+                .arg(model.name).arg(model.key_get_link).arg(model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")).arg("/key"), 
             Ai.interfaceRole
         );
     }
@@ -434,6 +530,15 @@ Singleton {
         } else {
             if (feedback) root.addMessage(Translation.tr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n"), Ai.interfaceRole) + "\n```"
         }
+    }
+
+    function setTool(tool) {
+        if (!root.tools[models[currentModelId]?.api_format] || !(tool in root.tools[models[currentModelId]?.api_format])) {
+            root.addMessage(Translation.tr("Invalid tool. Supported tools:\n- %1").arg(root.availableTools.join("\n- ")), root.interfaceRole);
+            return false;
+        }
+        Config.options.ai.tool = tool;
+        return true;
     }
     
     function getTemperature() {
@@ -493,7 +598,7 @@ Singleton {
 
     Process {
         id: requester
-        property var baseCommand: ["bash", "-c"]
+        property list<string> baseCommand: ["bash", "-c"]
         property AiMessageData message
         property ApiStrategy currentStrategy
 
@@ -518,7 +623,7 @@ Singleton {
             const endpoint = root.currentApiStrategy.buildEndpoint(model);
             const messageArray = root.messageIDs.map(id => root.messageByID[id]);
             const filteredMessageArray = messageArray.filter(message => message.role !== Ai.interfaceRole);
-            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature);
+            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool]);
             // console.log("[Ai] Request data: ", JSON.stringify(data, null, 2));
 
             let requestHeaders = {
@@ -563,9 +668,9 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                // console.log("[Ai] Raw response line: ", data);
                 if (data.length === 0) return;
                 if (requester.message.thinking) requester.message.thinking = false;
+                // console.log("[Ai] Raw response line: ", data);
 
                 // Handle response line
                 try {
@@ -573,7 +678,8 @@ Singleton {
                     // console.log("[Ai] Parsed response result: ", JSON.stringify(result, null, 2));
                     
                     if (result.functionCall) {
-                        root.handleFunctionCall(result.functionCall.name, result.functionCall.args);
+                        requester.message.functionCall = result.functionCall;
+                        root.handleFunctionCall(result.functionCall.name, result.functionCall.args, requester.message);
                     }
                     if (result.tokenUsage) {
                         root.tokenCount.input = result.tokenUsage.input;
@@ -614,38 +720,72 @@ Singleton {
         requester.makeRequest();
     }
 
-    function addFunctionOutputMessage(name, output) {
-        const aiMessage = aiMessageComponent.createObject(root, {
+    function createFunctionOutputMessage(name, output, includeOutputInChat = true) {
+        return aiMessageComponent.createObject(root, {
             "role": "user",
-            "content": `[[ Output of ${name} ]]`,
-            "rawContent": `[[ Output of ${name} ]]`,
+            "content": `[[ Output of ${name} ]]${includeOutputInChat ? ("\n\n<think>\n" + output + "\n</think>") : ""}`,
+            "rawContent": `[[ Output of ${name} ]]${includeOutputInChat ? ("\n\n<think>\n" + output + "\n</think>") : ""}`,
             "functionName": name,
             "functionResponse": output,
             "thinking": false,
             "done": true,
-            "visibleToUser": false,
+            // "visibleToUser": false,
         });
-        // console.log("Adding function output message: ", JSON.stringify(aiMessage));
+    }
+
+    function addFunctionOutputMessage(name, output) {
+        const aiMessage = createFunctionOutputMessage(name, output);
         const id = idForMessage(aiMessage);
         root.messageIDs = [...root.messageIDs, id];
         root.messageByID[id] = aiMessage;
     }
 
-    function handleFunctionCall(name, args) {
+    function rejectCommand(message: AiMessageData) {
+        if (!message.functionPending) return;
+        message.functionPending = false; // User decided, no more "thinking"
+        addFunctionOutputMessage(message.functionName, Translation.tr("Command rejected by user"))
+    }
+
+    function approveCommand(message: AiMessageData) {
+        if (!message.functionPending) return;
+        message.functionPending = false; // User decided, no more "thinking"
+
+        const responseMessage = createFunctionOutputMessage(message.functionName, "", false);
+        const id = idForMessage(responseMessage);
+        root.messageIDs = [...root.messageIDs, id];
+        root.messageByID[id] = responseMessage;
+
+        commandExecutionProc.message = responseMessage;
+        commandExecutionProc.baseMessageContent = responseMessage.content;
+        commandExecutionProc.shellCommand = message.functionCall.args.command;
+        commandExecutionProc.running = true; // Start the command execution
+    }
+
+    Process {
+        id: commandExecutionProc
+        property string shellCommand: ""
+        property AiMessageData message
+        property string baseMessageContent: ""
+        command: ["bash", "-c", shellCommand]
+        stdout: SplitParser {
+            onRead: (output) => {
+                commandExecutionProc.message.functionResponse += output + "\n\n";
+                const updatedContent = commandExecutionProc.baseMessageContent + `\n\n<think>\n<tt>${commandExecutionProc.message.functionResponse}</tt>\n</think>`;
+                commandExecutionProc.message.rawContent = updatedContent;
+                commandExecutionProc.message.content = updatedContent;
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            commandExecutionProc.message.functionResponse += `[[ Command exited with code ${exitCode} (${exitStatus}) ]]\n`;
+            requester.makeRequest(); // Continue
+        }
+    }
+
+    function handleFunctionCall(name, args: var, message: AiMessageData) {
         if (name === "switch_to_search_mode") {
             const modelId = root.currentModelId;
-            if (modelId.endsWith("-tools")) {
-                const searchModelId = modelId.replace(/-tools$/, "-search");
-                if (root.modelList.indexOf(searchModelId) !== -1) {
-                    root.setModel(searchModelId, false);
-                    root.postResponseHook = () => root.setModel(modelId, false);
-                } else {
-                    root.addMessage(Translation.tr("No corresponding search model found for %1").arg(modelId), Ai.interfaceRole);
-                }
-            } else {
-                root.addMessage(Translation.tr("Cannot switch to search mode from %1").arg(root.currentModelId), Ai.interfaceRole);
-                return;
-            }
+            root.currentTool = "search"
+            root.postResponseHook = () => { root.currentTool = "functions" }
             addFunctionOutputMessage(name, Translation.tr("Switched to search mode. Continue with the user's request."))
             requester.makeRequest();
         } else if (name === "get_shell_config") {
@@ -660,6 +800,15 @@ Singleton {
             const key = args.key;
             const value = args.value;
             Config.setNestedValue(key, value);
+        } else if (name === "run_shell_command") {
+            if (!args.command || args.command.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `command`."));
+                return;
+            }
+            const contentToAppend = `\n\n**Command execution request**\n\n\`\`\`command\n${args.command}\n\`\`\``;
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.functionPending = true; // Use thinking to indicate the command is waiting for approval
         }
         else root.addMessage(Translation.tr("Unknown function call: %1").arg(name), "assistant");
     }

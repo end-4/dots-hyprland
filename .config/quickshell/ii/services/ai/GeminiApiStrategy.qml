@@ -5,17 +5,16 @@ ApiStrategy {
     
     function buildEndpoint(model: AiModel): string {
         const result = model.endpoint + `?key=\$\{${root.apiKeyEnvVarName}\}`
-        console.log("[AI] Endpoint: " + result);
+        // console.log("[AI] Endpoint: " + result);
         return result;
     }
 
-    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real) {
-        const tools = model.tools ?? [];
+    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>) {
         let baseData = {
             "contents": messages.map(message => {
                 const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
-                const usingSearch = tools[0].google_search != undefined                
-                if (!usingSearch && message.functionCall != undefined && message.functionCall.length > 0) {
+                const usingSearch = tools[0]?.google_search !== undefined
+                if (!usingSearch && message.functionCall != undefined && message.functionName.length > 0) {
                     return {
                         "role": geminiApiRoleName,
                         "parts": [{
@@ -25,7 +24,7 @@ ApiStrategy {
                         }]
                     }
                 }
-                if (!usingSearch && message.functionResponse != undefined && message.functionResponse.length > 0) {
+                if (!usingSearch && message.functionResponse != undefined && message.functionName.length > 0) {
                     return {
                         "role": geminiApiRoleName,
                         "parts": [{ 

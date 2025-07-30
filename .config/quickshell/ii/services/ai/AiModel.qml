@@ -12,7 +12,6 @@ import QtQuick;
  * - key_get_link: Link to get an API key
  * - key_get_description: Description of pricing and how to get an API key
  * - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
- * - tools: List of tools that the model can use. 
  * - extraParams: Extra parameters to be passed to the model. This is a JSON object.
  */
 

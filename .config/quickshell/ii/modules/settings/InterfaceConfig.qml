@@ -164,7 +164,7 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    text: "Performance Profile toggle"
+                    text: Translation.tr("Performance Profile toggle")
                     checked: Config.options.bar.utilButtons.showPerformanceProfileToggle
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showPerformanceProfileToggle = checked;

@@ -46,6 +46,22 @@ Item {
             }
         },
         {
+            name: "tool",
+            description: Translation.tr("Set the tool to use for the model."),
+            execute: (args) => {
+                // console.log(args)
+                if (args.length == 0 || args[0] == "get") {
+                    Ai.addMessage(Translation.tr("Usage: %1tool TOOL_NAME").arg(root.commandPrefix), Ai.interfaceRole);
+                } else {
+                    const tool = args[0];
+                    const switched = Ai.setTool(tool);
+                    if (switched) {
+                        Ai.addMessage(Translation.tr("Tool set to: %1").arg(tool), Ai.interfaceRole);
+                    }
+                }
+            }
+        },
+        {
             name: "prompt",
             description: Translation.tr("Set the system prompt for the model."),
             execute: (args) => {
@@ -73,7 +89,7 @@ Item {
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
-                    Ai.addMessage(`Usage: ${root.commandPrefix}save CHAT_NAME`, Ai.interfaceRole);
+                    Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
                     return;
                 }
                 Ai.saveChat(joinedArgs)
@@ -85,7 +101,7 @@ Item {
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
-                    Ai.addMessage(`Usage: ${root.commandPrefix}load CHAT_NAME`, Ai.interfaceRole);
+                    Ai.addMessage(Translation.tr("Usage: %1load CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
                     return;
                 }
                 Ai.loadChat(joinedArgs)
@@ -522,6 +538,25 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                     description: Translation.tr(`Load chat from %1`).arg(file.target),
                                 }
                             })
+                        } else if (messageInputField.text.startsWith(`${root.commandPrefix}tool`)) {
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            const toolResults = Fuzzy.go(root.suggestionQuery, Ai.availableTools.map(tool => {
+                                return {
+                                    name: Fuzzy.prepare(tool),
+                                    obj: tool,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            root.suggestionList = toolResults.map(tool => {
+                                const toolName = tool.target
+                                return {
+                                    name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "tool ") : ""}${tool.target}`,
+                                    displayName: toolName,
+                                    description: Ai.toolDescriptions[toolName],
+                                }
+                            })
                         } else if(messageInputField.text.startsWith(root.commandPrefix)) {
                             root.suggestionQuery = messageInputField.text
                             root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(messageInputField.text.substring(1))).map(cmd => {
@@ -600,60 +635,41 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 5
-                anchors.leftMargin: 5
+                anchors.leftMargin: 10
                 anchors.rightMargin: 5
-                spacing: 5
+                spacing: 4
 
                 property var commandsShown: [
                     {
-                        name: "model",
+                        name: "",
                         sendDirectly: false,
-                    },
+                        dontAddSpace: true,
+                    }, 
                     {
                         name: "clear",
                         sendDirectly: true,
                     }, 
                 ]
 
-                Item {
-                    implicitHeight: providerRowLayout.implicitHeight + 5 * 2
-                    implicitWidth: providerRowLayout.implicitWidth + 10 * 2
-                    
-                    RowLayout {
-                        id: providerRowLayout
-                        anchors.centerIn: parent
+                ApiInputBoxIndicator { // Model indicator
+                    icon: "api"
+                    text: Ai.getModel().name
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL")
+                        .arg(Ai.getModel().name)
+                        .arg(root.commandPrefix)
+                }
 
-                        MaterialSymbol {
-                            text: "api"
-                            iconSize: Appearance.font.pixelSize.large
-                        }
-                        StyledText {
-                            id: providerName
-                            font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.m3colors.m3onSurface
-                            elide: Text.ElideRight
-                            text: Ai.getModel().name
-                        }
-                    }
-                    StyledToolTip {
-                        id: toolTip
-                        extraVisibleCondition: false
-                        alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        content: Translation.tr("Current model: %1\nSet it with %2model MODEL")
-                            .arg(Ai.getModel().name)
-                            .arg(root.commandPrefix)
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                    }
+                ApiInputBoxIndicator { // Tool indicator
+                    icon: "service_toolbox"
+                    text: Ai.currentTool.charAt(0).toUpperCase() + Ai.currentTool.slice(1)
+                    tooltipText: Translation.tr("Current tool: %1\nSet it with %2tool TOOL")
+                        .arg(Ai.currentTool)
+                        .arg(root.commandPrefix)
                 }
 
                 Item { Layout.fillWidth: true }
 
-                ButtonGroup {
+                ButtonGroup { // Command buttons
                     padding: 0
 
                     Repeater { // Command buttons
@@ -665,7 +681,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 if(modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
-                                    messageInputField.text = commandRepresentation + " "
+                                    messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ")
                                     messageInputField.cursorPosition = messageInputField.text.length
                                     messageInputField.forceActiveFocus()
                                 }
