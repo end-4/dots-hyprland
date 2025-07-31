@@ -62,7 +62,7 @@ Singleton {
     }
 
     function safeModelName(modelName) {
-        return modelName.replace(/:/g, "_").replace(/\./g, "_").replace(/ /g, "-").replace(/\//g, "-")
+        return modelName.replace(/:/g, "_").replace(/ /g, "-").replace(/\//g, "-")
     }
 
     property list<var> defaultPrompts: []
