@@ -145,7 +145,7 @@ Scope {
                                     toggled: false
                                     buttonIcon: "settings"
                                     onClicked: {
-                                        Hyprland.dispatch("global quickshell:sidebarRightClose")
+                                        GlobalStates.sidebarRightOpen = false
                                         Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
@@ -156,7 +156,7 @@ Scope {
                                     toggled: false
                                     buttonIcon: "power_settings_new"
                                     onClicked: {
-                                        Hyprland.dispatch("global quickshell:sessionOpen")
+                                        GlobalStates.sessionOpen = true
                                     }
                                     StyledToolTip {
                                         content: Translation.tr("Session")

@@ -22,7 +22,7 @@ QuickToggleButton {
 
     altAction: () => {
         Quickshell.execDetached(["easyeffects"])
-        Hyprland.dispatch("global quickshell:sidebarRightClose")
+        GlobalStates.sidebarRightOpen = false
     }
 
     Process {

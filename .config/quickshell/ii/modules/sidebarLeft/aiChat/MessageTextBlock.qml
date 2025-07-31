@@ -128,7 +128,7 @@ ColumnLayout {
 
         onLinkActivated: (link) => {
             Qt.openUrlExternally(link)
-            Hyprland.dispatch("global quickshell:sidebarLeftClose")
+            GlobalStates.sidebarLeftOpen = false
         }
 
         MouseArea { // Pointing hand for links

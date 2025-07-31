@@ -24,7 +24,7 @@ RippleButton {
     onClicked: {
         if (url) {
             Qt.openUrlExternally(url)
-            Hyprland.dispatch("global quickshell:sidebarLeftClose")
+            GlobalStates.sidebarLeftOpen = false
         }
     }
 

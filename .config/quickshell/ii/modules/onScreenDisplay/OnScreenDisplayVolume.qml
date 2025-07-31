@@ -12,12 +12,11 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
-    property bool showOsdValues: false
     property string protectionMessage: ""
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
     function triggerOsd() {
-        showOsdValues = true
+        GlobalStates.osdVolumeOpen = true
         osdTimeout.restart()
     }
 
@@ -27,7 +26,7 @@ Scope {
         repeat: false
         running: false
         onTriggered: {
-            root.showOsdValues = false
+            GlobalStates.osdVolumeOpen = false
             root.protectionMessage = ""
         }
     }
@@ -35,7 +34,7 @@ Scope {
     Connections {
         target: Brightness
         function onBrightnessChanged() {
-            showOsdValues = false
+            GlobalStates.osdVolumeOpen = false
         }
     }
 
@@ -61,7 +60,7 @@ Scope {
 
     Loader {
         id: osdLoader
-        active: showOsdValues
+        active: GlobalStates.osdVolumeOpen
 
         sourceComponent: PanelWindow {
             id: osdRoot
@@ -103,7 +102,7 @@ Scope {
                     MouseArea {
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: root.showOsdValues = false
+                        onEntered: GlobalStates.osdVolumeOpen = false
                     }
 
                     ColumnLayout {
@@ -177,11 +176,11 @@ Scope {
         }
 
         function hide() {
-            showOsdValues = false
+            GlobalStates.osdVolumeOpen = false
         }
 
         function toggle() {
-            showOsdValues = !showOsdValues
+            GlobalStates.osdVolumeOpen = !GlobalStates.osdVolumeOpen
         }
 	}
     GlobalShortcut {
@@ -197,7 +196,7 @@ Scope {
         description: "Hides volume OSD on press"
 
         onPressed: {
-            root.showOsdValues = false
+            GlobalStates.osdVolumeOpen = false
         }
     }
 

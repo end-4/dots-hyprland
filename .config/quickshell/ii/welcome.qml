@@ -265,7 +265,7 @@ ApplicationWindow {
                         RippleButtonWithIcon {
                             materialIcon: "keyboard_alt"
                             onClicked: {
-                                Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                                Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "cheatsheet", "toggle"])
                             }
                             mainContentComponent: Component {
                                 RowLayout {

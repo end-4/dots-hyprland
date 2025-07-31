@@ -73,7 +73,7 @@ Scope {
 
     Loader {
         id: sessionLoader
-        active: false
+        active: GlobalStates.sessionOpen
         onActiveChanged: {
             if (sessionLoader.active) root.detectRunningStuff();
         }
@@ -275,15 +275,15 @@ Scope {
         target: "session"
 
         function toggle(): void {
-            sessionLoader.active = !sessionLoader.active;
+            GlobalStates.sessionOpen = !GlobalStates.sessionOpen;
         }
 
         function close(): void {
-            sessionLoader.active = false;
+            GlobalStates.sessionOpen = false
         }
 
         function open(): void {
-            sessionLoader.active = true;
+            GlobalStates.sessionOpen = true
         }
     }
 
@@ -292,7 +292,7 @@ Scope {
         description: "Toggles session screen on press"
 
         onPressed: {
-            sessionLoader.active = !sessionLoader.active;
+            GlobalStates.sessionOpen = !GlobalStates.sessionOpen;
         }
     }
 
@@ -301,7 +301,16 @@ Scope {
         description: "Opens session screen on press"
 
         onPressed: {
-            sessionLoader.active = true;
+            GlobalStates.sessionOpen = true
+        }
+    }
+
+    GlobalShortcut {
+        name: "sessionClose"
+        description: "Closes session screen on press"
+
+        onPressed: {
+            GlobalStates.sessionOpen = false
         }
     }
 

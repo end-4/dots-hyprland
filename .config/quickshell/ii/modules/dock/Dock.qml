@@ -129,7 +129,7 @@ Scope { // Scope
                             DockSeparator {}
                             DockButton {
                                 Layout.fillHeight: true
-                                onClicked: Hyprland.dispatch("global quickshell:overviewToggle")
+                                onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
                                 contentItem: MaterialSymbol {
                                     anchors.fill: parent
                                     horizontalAlignment: Text.AlignHCenter
