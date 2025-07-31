@@ -132,7 +132,7 @@ Scope {
                         }
                         onPressed: event => {
                             if (event.button === Qt.LeftButton) {
-                                Hyprland.dispatch('global quickshell:sidebarLeftOpen');
+                                GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
                             }
                         }
                         // Scroll to change brightness
@@ -154,7 +154,7 @@ Scope {
                                 const dx = mouse.x - barLeftSideMouseArea.lastScrollX;
                                 const dy = mouse.y - barLeftSideMouseArea.lastScrollY;
                                 if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                                    Hyprland.dispatch('global quickshell:osdBrightnessHide');
+                                    GlobalStates.osdBrightnessOpen = false;
                                     barLeftSideMouseArea.trackingScroll = false;
                                 }
                             }
@@ -199,7 +199,7 @@ Scope {
                                     property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
 
                                     onPressed: {
-                                        Hyprland.dispatch('global quickshell:sidebarLeftToggle');
+                                        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
                                     }
 
                                     CustomIcon {
@@ -265,7 +265,7 @@ Scope {
 
                                     onPressed: event => {
                                         if (event.button === Qt.RightButton) {
-                                            Hyprland.dispatch('global quickshell:overviewToggle');
+                                            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
                                         }
                                     }
                                 }
@@ -284,7 +284,7 @@ Scope {
                             Layout.fillHeight: true
 
                             onPressed: {
-                                Hyprland.dispatch('global quickshell:sidebarRightToggle');
+                                GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
                             }
 
                             BarGroup {
@@ -339,7 +339,7 @@ Scope {
                         }
                         onPressed: event => {
                             if (event.button === Qt.LeftButton) {
-                                Hyprland.dispatch('global quickshell:sidebarRightOpen');
+                                GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
                             } else if (event.button === Qt.RightButton) {
                                 MprisController.activePlayer.next();
                             }
@@ -365,7 +365,7 @@ Scope {
                                 const dx = mouse.x - barRightSideMouseArea.lastScrollX;
                                 const dy = mouse.y - barRightSideMouseArea.lastScrollY;
                                 if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                                    Hyprland.dispatch('global quickshell:osdVolumeHide');
+                                    GlobalStates.osdVolumeOpen = false;
                                     barRightSideMouseArea.trackingScroll = false;
                                 }
                             }
@@ -416,7 +416,7 @@ Scope {
                                     }
 
                                     onPressed: {
-                                        Hyprland.dispatch('global quickshell:sidebarRightToggle');
+                                        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
                                     }
 
                                     RowLayout {

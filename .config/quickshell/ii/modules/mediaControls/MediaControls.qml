@@ -88,7 +88,12 @@ Scope {
 
     Loader {
         id: mediaControlsLoader
-        active: false
+        active: GlobalStates.mediaControlsOpen
+        onActiveChanged: {
+            if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
+                GlobalStates.mediaControlsOpen = false;
+            }
+        }
 
         sourceComponent: PanelWindow {
             id: mediaControlsRoot
@@ -160,11 +165,7 @@ Scope {
         description: "Toggles media controls on press"
 
         onPressed: {
-            if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
-                return;
-            }
-            mediaControlsLoader.active = !mediaControlsLoader.active;
-            if(mediaControlsLoader.active) Notifications.timeoutAll();
+            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
         }
     }
     GlobalShortcut {
@@ -172,8 +173,7 @@ Scope {
         description: "Opens media controls on press"
 
         onPressed: {
-            mediaControlsLoader.active = true;
-            Notifications.timeoutAll();
+            GlobalStates.mediaControlsOpen = true;
         }
     }
     GlobalShortcut {
@@ -181,7 +181,7 @@ Scope {
         description: "Closes media controls on press"
 
         onPressed: {
-            mediaControlsLoader.active = false;
+            GlobalStates.mediaControlsOpen = false;
         }
     }
 

@@ -24,7 +24,7 @@ Scope { // Scope
 
     Loader {
         id: oskLoader
-        active: false
+        active: GlobalStates.oskOpen
         onActiveChanged: {
             if (!oskLoader.active) {
                 Ydotool.releaseAllKeys();
@@ -124,15 +124,15 @@ Scope { // Scope
         target: "osk"
 
         function toggle(): void {
-            oskLoader.active = !oskLoader.active
+            GlobalStates.oskOpen = !GlobalStates.oskOpen;
         }
 
         function close(): void {
-            oskLoader.active = false
+            GlobalStates.oskOpen = false
         }
 
         function open(): void {
-            oskLoader.active = true
+            GlobalStates.oskOpen = true
         }
     }
 
@@ -141,7 +141,7 @@ Scope { // Scope
         description: "Toggles on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = !oskLoader.active;
+            GlobalStates.oskOpen = !GlobalStates.oskOpen;
         }
     }
 
@@ -150,7 +150,7 @@ Scope { // Scope
         description: "Opens on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = true;
+            GlobalStates.oskOpen = true
         }
     }
 
@@ -159,7 +159,7 @@ Scope { // Scope
         description: "Closes on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = false;
+            GlobalStates.oskOpen = false
         }
     }
 

@@ -1,3 +1,4 @@
+import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
@@ -56,7 +57,7 @@ Item {
             visible: Config.options.bar.utilButtons.showKeyboardToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Hyprland.dispatch("global quickshell:oskToggle")
+                onClicked: GlobalStates.oskOpen = !GlobalStates.oskOpen
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 0

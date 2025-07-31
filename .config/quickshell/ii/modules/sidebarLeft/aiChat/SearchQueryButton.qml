@@ -1,3 +1,4 @@
+import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
@@ -25,7 +26,7 @@ RippleButton {
             url += ` -site:${site}`;
         }
         Qt.openUrlExternally(url);
-        Hyprland.dispatch("global quickshell:sidebarLeftClose")
+        GlobalStates.sidebarLeftOpen = false;
     }
 
     contentItem: Item {

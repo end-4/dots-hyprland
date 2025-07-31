@@ -158,7 +158,7 @@ Rectangle {
             textFormat: Text.MarkdownText
             onLinkActivated: (link) => {
                 Qt.openUrlExternally(link)
-                Hyprland.dispatch("global quickshell:sidebarLeftClose")
+                GlobalStates.sidebarLeftOpen = false
             }
             PointingHandLinkHover {}
         }
