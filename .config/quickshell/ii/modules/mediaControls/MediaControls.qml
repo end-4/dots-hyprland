@@ -25,7 +25,15 @@ Scope {
     property real artRounding: Appearance.rounding.verysmall
     property list<real> visualizerPoints: []
 
-    property bool hasPlasmaIntegration: false
+    property bool hasPlasmaIntegration: true
+    Process {
+        id: plasmaIntegrationAvailabilityCheckProc
+        running: true
+        command: ["bash", "-c", "command -v plasma-browser-integration-host"]
+        onExited: (exitCode, exitStatus) => {
+            root.hasPlasmaIntegration = (exitCode === 0);
+        }
+    }
     function isRealPlayer(player) {
         // return true
         return (
