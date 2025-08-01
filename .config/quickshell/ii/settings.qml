@@ -135,7 +135,7 @@ ApplicationWindow {
             }
         }
 
-        Rectangle { // Window content with navigation rail and content pane
+        Rectangle { // Window content with Navigation Section and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Appearance.m3colors.m3background
