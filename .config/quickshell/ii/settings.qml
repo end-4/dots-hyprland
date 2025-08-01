@@ -26,27 +26,35 @@ ApplicationWindow {
         {
             name: Translation.tr("Style"),
             icon: "palette",
-            component: "modules/settings/StyleConfig.qml"
+            component: "modules/settings/StyleConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("Interface"),
             icon: "cards",
-            component: "modules/settings/InterfaceConfig.qml"
+            component: "modules/settings/InterfaceConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("Services"),
             icon: "settings",
-            component: "modules/settings/ServicesConfig.qml"
+            component: "modules/settings/ServicesConfig.qml",
+            type: "item"
+        },
+        {
+            type: "divider"
         },
         {
             name: Translation.tr("Advanced"),
             icon: "construction",
-            component: "modules/settings/AdvancedConfig.qml"
+            component: "modules/settings/AdvancedConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("About"),
             icon: "info",
-            component: "modules/settings/About.qml"
+            component: "modules/settings/About.qml",
+            type: "item"
         }
     ]
     property int currentPage: 0
@@ -127,38 +135,60 @@ ApplicationWindow {
             }
         }
 
-        RowLayout { // Window content with navigation rail and content pane
+        Rectangle { // Window content with navigation rail and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 0
+            color: Appearance.m3colors.m3background
+
             Item {
                 id: menuContainer
-                Layout.fillHeight: true
-                implicitWidth: 150
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                implicitWidth: 174
                 ColumnLayout {
                     id: menuLayout
                     anchors.fill: parent
+                    anchors.margins: 12
                     spacing: 10
 
-                    FloatingActionButton {
-                        id: fab
-                        iconText: "edit"
-                        buttonText: Translation.tr("Edit config")
-                        expanded: true
-                        onClicked: {
-                            Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: 44
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 24
+                            anchors.rightMargin: 24
+                            spacing: 12
+
+                            MaterialSymbol { text: "edit"; iconSize: 20 }
+                            Label {
+                                text: Translation.tr("Edit config")
+                                color: Appearance.colors.colOnLayer0
+                            }
                         }
 
-                        StyledToolTip {
-                            content: "Edit shell config file"
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Appearance.rounding.small
+                            color: ma_edit.containsMouse ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                            z: -1
+                        }
+
+                        MouseArea {
+                            id: ma_edit
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`)
                         }
                     }
 
                     ListView {
                         id: sidebar
                         Layout.fillHeight: true
-                        implicitWidth: 150
-                        spacing: 0
+                        Layout.fillWidth: true
+                        spacing: 4
                         clip: true
                         model: root.pages
                         currentIndex: root.currentPage
@@ -166,19 +196,30 @@ ApplicationWindow {
 
                         highlight: Rectangle {
                             color: Appearance.m3colors.m3primaryContainer
-                            radius: 0
+                            radius: Appearance.rounding.small
+                            visible: modelData.type !== "divider"
                         }
                         highlightMoveDuration: 0
 
                         delegate: Item {
                             id: row
                             width: ListView.view.width
-                            height: 44
+                            height: modelData.type === "divider" ? 1 : 44
+
+                            Rectangle {
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: sidebar.width
+                                height: 1
+                                color: Appearance.m3colors.m3outline
+                                visible: modelData.type === "divider"
+                            }
 
                             RowLayout {
                                 anchors.fill: parent
-                                anchors.margins: 12
+                                anchors.leftMargin: 24
+                                anchors.rightMargin: 24
                                 spacing: 12
+                                visible: modelData.type !== "divider"
 
                                 MaterialSymbol { text: modelData.icon; iconSize: 20 }
                                 Label {
@@ -189,19 +230,10 @@ ApplicationWindow {
 
                             Rectangle {
                                 anchors.fill: parent
-                                radius: 0
+                                radius: Appearance.rounding.small
                                 color: ma.containsMouse && sidebar.currentIndex !== index ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
                                 z: -1
-                            }
-
-                            /* divider */
-                            Rectangle {
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
-                                height: 1
-                                color: Appearance.m3colors.m3outline
-                                visible: index < root.pages.length - 1
+                                visible: modelData.type !== "divider"
                             }
 
                             MouseArea {
@@ -209,6 +241,7 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 onClicked: sidebar.currentIndex = index
+                                enabled: modelData.type !== "divider"
                             }
                         }
                     }
@@ -219,8 +252,11 @@ ApplicationWindow {
                 }
             }
             Rectangle { // Content container
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: menuContainer.right
+                anchors.right: parent.right
+                anchors.leftMargin: 6
                 color: Appearance.m3colors.m3surfaceContainerLow
                 radius: Appearance.rounding.windowRounding - root.contentPadding
 
