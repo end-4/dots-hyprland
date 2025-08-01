@@ -145,11 +145,11 @@ ApplicationWindow {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                implicitWidth: 174
+                implicitWidth: 200
                 ColumnLayout {
                     id: menuLayout
                     anchors.fill: parent
-                    anchors.margins: 12
+                    anchors.margins: 8
                     spacing: 10
 
                     Item {
@@ -157,9 +157,9 @@ ApplicationWindow {
                         implicitHeight: 44
 
                         RowLayout {
-                            anchors.fill: parent
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 24
-                            anchors.rightMargin: 24
                             spacing: 12
 
                             MaterialSymbol { text: "edit"; iconSize: 20 }
@@ -188,7 +188,7 @@ ApplicationWindow {
                         id: sidebar
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        spacing: 4
+                        spacing: 8
                         clip: true
                         model: root.pages
                         currentIndex: root.currentPage
@@ -215,9 +215,9 @@ ApplicationWindow {
                             }
 
                             RowLayout {
-                                anchors.fill: parent
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
                                 anchors.leftMargin: 24
-                                anchors.rightMargin: 24
                                 spacing: 12
                                 visible: modelData.type !== "divider"
 
