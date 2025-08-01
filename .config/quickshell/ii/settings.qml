@@ -132,37 +132,24 @@ ApplicationWindow {
             Layout.fillHeight: true
             spacing: 0
             Item {
-                id: navRailWrapper
+                id: menuContainer
                 Layout.fillHeight: true
-                implicitWidth: navRail.expanded ? 150 : fab.baseSize
-                Behavior on implicitWidth {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                NavigationRail { // Window content with navigation rail and content pane
-                    id: navRail
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
-                    }
+                implicitWidth: 150
+                ColumnLayout {
+                    id: menuLayout
+                    anchors.fill: parent
                     spacing: 10
-                    expanded: root.width > 900
-                    
-                    NavigationRailExpandButton {
-                        focus: root.visible
-                    }
 
                     FloatingActionButton {
                         id: fab
                         iconText: "edit"
                         buttonText: Translation.tr("Edit config")
-                        expanded: navRail.expanded
+                        expanded: true
                         onClicked: {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
                         }
 
                         StyledToolTip {
-                            extraVisibleCondition: !navRail.expanded
                             content: "Edit shell config file"
                         }
                     }
@@ -203,7 +190,7 @@ ApplicationWindow {
                             Rectangle {
                                 anchors.fill: parent
                                 radius: 0
-                                color: ma.containsMouse && !ListView.isCurrentItem ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                                color: ma.containsMouse && sidebar.currentIndex !== index ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
                                 z: -1
                             }
 
