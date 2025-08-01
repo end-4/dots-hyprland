@@ -152,38 +152,6 @@ ApplicationWindow {
                     anchors.margins: 8
                     spacing: 10
 
-                    Item {
-                        Layout.fillWidth: true
-                        implicitHeight: 44
-
-                        RowLayout {
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.leftMargin: 24
-                            spacing: 12
-
-                            MaterialSymbol { text: "edit"; iconSize: 20 }
-                            Label {
-                                text: Translation.tr("Edit config")
-                                color: Appearance.colors.colOnLayer0
-                            }
-                        }
-
-                        Rectangle {
-                            anchors.fill: parent
-                            radius: Appearance.rounding.small
-                            color: ma_edit.containsMouse ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
-                            z: -1
-                        }
-
-                        MouseArea {
-                            id: ma_edit
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`)
-                        }
-                    }
-
                     ListView {
                         id: sidebar
                         Layout.fillHeight: true
@@ -248,6 +216,38 @@ ApplicationWindow {
 
                     Item {
                         Layout.fillHeight: true
+                    }
+
+                    Item { // Edit config button
+                        Layout.fillWidth: true
+                        implicitHeight: 44
+
+                        RowLayout {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.leftMargin: 24
+                            spacing: 12
+
+                            MaterialSymbol { text: "edit"; iconSize: 20 }
+                            Label {
+                                text: Translation.tr("Edit config")
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Appearance.rounding.small
+                            color: ma_edit.containsMouse ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                            z: -1
+                        }
+
+                        MouseArea {
+                            id: ma_edit
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`)
+                        }
                     }
                 }
             }
