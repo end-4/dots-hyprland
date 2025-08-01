@@ -152,8 +152,8 @@ Scope {
                 visible: !bgRoot.wallpaperIsVideo
                 property real value // 0 to 1, for offset
                 value: {
-                    // Range = half-groups that workspaces span on
-                    const chunkSize = 5;
+                    // Range = groups that workspaces span on
+                    const chunkSize = Config?.options.bar.workspaces.shown ?? 10;
                     const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
                     const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
                     const range = upper - lower;
