@@ -66,10 +66,8 @@ ApplicationWindow {
     color: Appearance.m3colors.m3background
 
     ColumnLayout {
-        anchors {
-            fill: parent
-            margins: contentPadding
-        }
+        anchors.fill: parent
+        anchors.margins: 0
 
         Keys.onPressed: (event) => {
             if (event.modifiers === Qt.ControlModifier) {
@@ -132,11 +130,10 @@ ApplicationWindow {
         RowLayout { // Window content with navigation rail and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: contentPadding
+            spacing: 0
             Item {
                 id: navRailWrapper
                 Layout.fillHeight: true
-                Layout.margins: 5
                 implicitWidth: navRail.expanded ? 150 : fab.baseSize
                 Behavior on implicitWidth {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -170,20 +167,61 @@ ApplicationWindow {
                         }
                     }
 
-                    NavigationRailTabArray {
+                    ListView {
+                        id: sidebar
+                        Layout.fillHeight: true
+                        implicitWidth: 150
+                        spacing: 0
+                        clip: true
+                        model: root.pages
                         currentIndex: root.currentPage
-                        expanded: navRail.expanded
-                        Repeater {
-                            model: root.pages
-                            NavigationRailButton {
-                                required property var index
-                                required property var modelData
-                                toggled: root.currentPage === index
-                                onClicked: root.currentPage = index;
-                                expanded: navRail.expanded
-                                buttonIcon: modelData.icon
-                                buttonText: modelData.name
-                                showToggledHighlight: false
+                        onCurrentIndexChanged: root.currentPage = currentIndex
+
+                        highlight: Rectangle {
+                            color: Appearance.m3colors.m3primaryContainer
+                            radius: 0
+                        }
+                        highlightMoveDuration: 0
+
+                        delegate: Item {
+                            id: row
+                            width: ListView.view.width
+                            height: 44
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                spacing: 12
+
+                                MaterialSymbol { text: modelData.icon; iconSize: 20 }
+                                Label {
+                                    text: modelData.name
+                                    color: Appearance.colors.colOnLayer0
+                                }
+                            }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 0
+                                color: ma.containsMouse && !ListView.isCurrentItem ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                                z: -1
+                            }
+
+                            /* divider */
+                            Rectangle {
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                                height: 1
+                                color: Appearance.m3colors.m3outline
+                                visible: index < root.pages.length - 1
+                            }
+
+                            MouseArea {
+                                id: ma
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: sidebar.currentIndex = index
                             }
                         }
                     }
