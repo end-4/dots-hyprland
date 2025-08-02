@@ -351,6 +351,13 @@ ContentPage {
 
     ContentSection {
         title: Translation.tr("Overview")
+        ConfigSwitch {
+            text: Translation.tr("Enable")
+            checked: Config.options.overview.enable
+            onCheckedChanged: {
+                Config.options.overview.enable = checked;
+            }
+        }
         ConfigSpinBox {
             text: Translation.tr("Scale (%)")
             value: Config.options.overview.scale * 100
