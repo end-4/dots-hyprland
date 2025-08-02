@@ -95,7 +95,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: Translation.tr("Appearance")
+            title: Translation.tr("Overall appearance")
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
@@ -187,11 +187,18 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    text: Translation.tr('Always show numbers')
-                    checked: Config.options.bar.workspaces.alwaysShowNumbers
+                    text: Translation.tr('Tint app icons')
+                    checked: Config.options.bar.workspaces.monochromeIcons
                     onCheckedChanged: {
-                        Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                        Config.options.bar.workspaces.monochromeIcons = checked;
                     }
+                }
+            }
+            ConfigSwitch {
+                text: Translation.tr('Always show numbers')
+                checked: Config.options.bar.workspaces.alwaysShowNumbers
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.alwaysShowNumbers = checked;
                 }
             }
             ConfigSpinBox {
@@ -212,6 +219,18 @@ ContentPage {
                 stepSize: 50
                 onValueChanged: {
                     Config.options.bar.workspaces.showNumberDelay = value;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Tray")
+            
+            ConfigSwitch {
+                text: Translation.tr('Tint icons')
+                checked: Config.options.bar.tray.monochromeIcons
+                onCheckedChanged: {
+                    Config.options.bar.tray.monochromeIcons = checked;
                 }
             }
         }
@@ -305,6 +324,13 @@ ContentPage {
                 onCheckedChanged: {
                     Config.options.dock.pinnedOnStartup = checked;
                 }
+            }
+        }
+        ConfigSwitch {
+            text: Translation.tr("Tint app icons")
+            checked: Config.options.dock.monochromeIcons
+            onCheckedChanged: {
+                Config.options.dock.monochromeIcons = checked;
             }
         }
     }
