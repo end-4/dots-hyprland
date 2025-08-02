@@ -26,27 +26,35 @@ ApplicationWindow {
         {
             name: Translation.tr("Style"),
             icon: "palette",
-            component: "modules/settings/StyleConfig.qml"
+            component: "modules/settings/StyleConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("Interface"),
             icon: "cards",
-            component: "modules/settings/InterfaceConfig.qml"
+            component: "modules/settings/InterfaceConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("Services"),
             icon: "settings",
-            component: "modules/settings/ServicesConfig.qml"
+            component: "modules/settings/ServicesConfig.qml",
+            type: "item"
+        },
+        {
+            type: "divider"
         },
         {
             name: Translation.tr("Advanced"),
             icon: "construction",
-            component: "modules/settings/AdvancedConfig.qml"
+            component: "modules/settings/AdvancedConfig.qml",
+            type: "item"
         },
         {
             name: Translation.tr("About"),
             icon: "info",
-            component: "modules/settings/About.qml"
+            component: "modules/settings/About.qml",
+            type: "item"
         }
     ]
     property int currentPage: 0
@@ -66,10 +74,8 @@ ApplicationWindow {
     color: Appearance.m3colors.m3background
 
     ColumnLayout {
-        anchors {
-            fill: parent
-            margins: contentPadding
-        }
+        anchors.fill: parent
+        anchors.margins: 0
 
         Keys.onPressed: (event) => {
             if (event.modifiers === Qt.ControlModifier) {
@@ -129,61 +135,81 @@ ApplicationWindow {
             }
         }
 
-        RowLayout { // Window content with navigation rail and content pane
+        Rectangle { // Window content with Navigation Section and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: contentPadding
+            color: Appearance.m3colors.m3background
+
             Item {
-                id: navRailWrapper
-                Layout.fillHeight: true
-                Layout.margins: 5
-                implicitWidth: navRail.expanded ? 150 : fab.baseSize
-                Behavior on implicitWidth {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                NavigationRail { // Window content with navigation rail and content pane
-                    id: navRail
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
-                    }
+                id: menuContainer
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                implicitWidth: 200
+                ColumnLayout {
+                    id: menuLayout
+                    anchors.fill: parent
+                    anchors.margins: 8
                     spacing: 10
-                    expanded: root.width > 900
-                    
-                    NavigationRailExpandButton {
-                        focus: root.visible
-                    }
 
-                    FloatingActionButton {
-                        id: fab
-                        iconText: "edit"
-                        buttonText: Translation.tr("Edit config")
-                        expanded: navRail.expanded
-                        onClicked: {
-                            Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
-                        }
-
-                        StyledToolTip {
-                            extraVisibleCondition: !navRail.expanded
-                            content: "Edit shell config file"
-                        }
-                    }
-
-                    NavigationRailTabArray {
+                    ListView {
+                        id: sidebar
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        spacing: 8
+                        clip: true
+                        model: root.pages
                         currentIndex: root.currentPage
-                        expanded: navRail.expanded
-                        Repeater {
-                            model: root.pages
-                            NavigationRailButton {
-                                required property var index
-                                required property var modelData
-                                toggled: root.currentPage === index
-                                onClicked: root.currentPage = index;
-                                expanded: navRail.expanded
-                                buttonIcon: modelData.icon
-                                buttonText: modelData.name
-                                showToggledHighlight: false
+                        onCurrentIndexChanged: root.currentPage = currentIndex
+
+                        highlight: Rectangle {
+                            color: Appearance.m3colors.m3primaryContainer
+                            radius: Appearance.rounding.small
+                            visible: modelData.type !== "divider"
+                        }
+                        highlightMoveDuration: 0
+
+                        delegate: Item {
+                            id: row
+                            width: ListView.view.width
+                            height: modelData.type === "divider" ? 1 : 44
+
+                            Rectangle {
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: sidebar.width
+                                height: 1
+                                color: Appearance.m3colors.m3outline
+                                visible: modelData.type === "divider"
+                            }
+
+                            RowLayout {
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.leftMargin: 24
+                                spacing: 12
+                                visible: modelData.type !== "divider"
+
+                                MaterialSymbol { text: modelData.icon; iconSize: 20 }
+                                Label {
+                                    text: modelData.name
+                                    color: Appearance.colors.colOnLayer0
+                                }
+                            }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: Appearance.rounding.small
+                                color: ma.containsMouse && sidebar.currentIndex !== index ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                                z: -1
+                                visible: modelData.type !== "divider"
+                            }
+
+                            MouseArea {
+                                id: ma
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: sidebar.currentIndex = index
+                                enabled: modelData.type !== "divider"
                             }
                         }
                     }
@@ -191,11 +217,46 @@ ApplicationWindow {
                     Item {
                         Layout.fillHeight: true
                     }
+
+                    Item { // Edit config button
+                        Layout.fillWidth: true
+                        implicitHeight: 44
+
+                        RowLayout {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.leftMargin: 24
+                            spacing: 12
+
+                            MaterialSymbol { text: "edit"; iconSize: 20 }
+                            Label {
+                                text: Translation.tr("Edit config")
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Appearance.rounding.small
+                            color: ma_edit.containsMouse ? Appearance.m3colors.m3surfaceContainerHigh : "transparent"
+                            z: -1
+                        }
+
+                        MouseArea {
+                            id: ma_edit
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`)
+                        }
+                    }
                 }
             }
             Rectangle { // Content container
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: menuContainer.right
+                anchors.right: parent.right
+                anchors.leftMargin: 6
                 color: Appearance.m3colors.m3surfaceContainerLow
                 radius: Appearance.rounding.windowRounding - root.contentPadding
 
