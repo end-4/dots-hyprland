@@ -82,7 +82,7 @@ Scope {
             target: GlobalStates
             function onScreenLockedChanged() {
                 if (GlobalStates.screenLocked) {
-                    sessionLoader.active = false;
+                    GlobalStates.sessionOpen = false;
                 }
             }
         }
@@ -93,7 +93,7 @@ Scope {
             property string subtitle
             
             function hide() {
-                sessionLoader.active = false
+                GlobalStates.sessionOpen = false;
             }
 
             exclusionMode: ExclusionMode.Ignore
