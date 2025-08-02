@@ -40,6 +40,8 @@ Scope {
             anchors {
                 top: true
                 bottom: true
+                left: !(Config?.options.overview.enable ?? true) 
+                right: !(Config?.options.overview.enable ?? true) 
             }
 
             HyprlandFocusGrab {
