@@ -235,6 +235,7 @@ Singleton {
             }
 
             property JsonObject sidebar: JsonObject {
+                property bool keepRightSidebarLoaded: true
                 property JsonObject translator: JsonObject {
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
                 }

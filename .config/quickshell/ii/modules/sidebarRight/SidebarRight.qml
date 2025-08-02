@@ -51,15 +51,10 @@ Scope {
 
         Loader {
             id: sidebarContentLoader
-            active: GlobalStates.sidebarRightOpen
+            active: GlobalStates.sidebarRightOpen || Config?.options.sidebar.keepRightSidebarLoaded
             anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                left: parent.left
-                topMargin: Appearance.sizes.hyprlandGapsOut
-                rightMargin: Appearance.sizes.hyprlandGapsOut
-                bottomMargin: Appearance.sizes.hyprlandGapsOut
+                fill: parent
+                margins: Appearance.sizes.hyprlandGapsOut
                 leftMargin: Appearance.sizes.elevationMargin
             }
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
