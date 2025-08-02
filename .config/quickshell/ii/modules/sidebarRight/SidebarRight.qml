@@ -102,26 +102,19 @@ Scope {
                             Layout.topMargin: 5
                             Layout.bottomMargin: 0
 
-                            Item {
-                                implicitWidth: distroIcon.width
-                                implicitHeight: distroIcon.height
-                                CustomIcon {
-                                    id: distroIcon
-                                    width: 25
-                                    height: 25
-                                    source: SystemInfo.distroIcon
-                                }
-                                ColorOverlay {
-                                    anchors.fill: distroIcon
-                                    source: distroIcon
-                                    color: Appearance.colors.colOnLayer0
-                                }
+                            CustomIcon {
+                                id: distroIcon
+                                width: 25
+                                height: 25
+                                source: SystemInfo.distroIcon
+                                colorize: true
+                                color: Appearance.colors.colOnLayer0
                             }
 
                             StyledText {
                                 font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer0
-                                text: Translation.tr("Uptime: %1").arg(DateTime.uptime)
+                                text: Translation.tr("Up %1").arg(DateTime.uptime)
                                 textFormat: Text.MarkdownText
                             }
 
