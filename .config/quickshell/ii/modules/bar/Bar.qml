@@ -111,7 +111,7 @@ Scope {
                                 left: parent.left
                             }
 
-                            size: Appearance.rounding.screenRounding
+                            implicitSize: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
 
                             corner: RoundCorner.CornerEnum.TopLeft
@@ -130,7 +130,7 @@ Scope {
                                 top: !Config.options.bar.bottom ? parent.top : undefined
                                 bottom: Config.options.bar.bottom ? parent.bottom : undefined
                             }
-                            size: Appearance.rounding.screenRounding
+                            implicitSize: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
 
                             corner: RoundCorner.CornerEnum.TopRight
