@@ -95,7 +95,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: Translation.tr("Appearance")
+            title: Translation.tr("Overall appearance")
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
@@ -187,11 +187,18 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    text: Translation.tr('Always show numbers')
-                    checked: Config.options.bar.workspaces.alwaysShowNumbers
+                    text: Translation.tr('Tint app icons')
+                    checked: Config.options.bar.workspaces.monochromeIcons
                     onCheckedChanged: {
-                        Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                        Config.options.bar.workspaces.monochromeIcons = checked;
                     }
+                }
+            }
+            ConfigSwitch {
+                text: Translation.tr('Always show numbers')
+                checked: Config.options.bar.workspaces.alwaysShowNumbers
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.alwaysShowNumbers = checked;
                 }
             }
             ConfigSpinBox {
@@ -212,6 +219,18 @@ ContentPage {
                 stepSize: 50
                 onValueChanged: {
                     Config.options.bar.workspaces.showNumberDelay = value;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Tray")
+            
+            ConfigSwitch {
+                text: Translation.tr('Tint icons')
+                checked: Config.options.bar.tray.monochromeIcons
+                onCheckedChanged: {
+                    Config.options.bar.tray.monochromeIcons = checked;
                 }
             }
         }
@@ -307,6 +326,27 @@ ContentPage {
                 }
             }
         }
+        ConfigSwitch {
+            text: Translation.tr("Tint app icons")
+            checked: Config.options.dock.monochromeIcons
+            onCheckedChanged: {
+                Config.options.dock.monochromeIcons = checked;
+            }
+        }
+    }
+
+    ContentSection {
+        title: Translation.tr("Sidebars")
+        ConfigSwitch {
+            text: Translation.tr('Keep right sidebar loaded')
+            checked: Config.options.sidebar.keepRightSidebarLoaded
+            onCheckedChanged: {
+                Config.options.sidebar.keepRightSidebarLoaded = checked;
+            }
+            StyledToolTip {
+                content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
+            }
+        }
     }
 
     ContentSection {
@@ -325,6 +365,13 @@ ContentPage {
 
     ContentSection {
         title: Translation.tr("Overview")
+        ConfigSwitch {
+            text: Translation.tr("Enable")
+            checked: Config.options.overview.enable
+            onCheckedChanged: {
+                Config.options.overview.enable = checked;
+            }
+        }
         ConfigSpinBox {
             text: Translation.tr("Scale (%)")
             value: Config.options.overview.scale * 100

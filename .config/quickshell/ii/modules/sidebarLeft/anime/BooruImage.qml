@@ -15,7 +15,7 @@ Button {
     id: root
     property var imageData
     property var rowHeight
-    property bool manualDownload: false
+    property bool manualDownload: true
     property string previewDownloadPath
     property string downloadPath
     property string nsfwPath

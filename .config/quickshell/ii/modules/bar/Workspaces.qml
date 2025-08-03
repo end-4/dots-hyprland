@@ -13,12 +13,12 @@ import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 Item {
-    required property var bar
+    id: root
     property bool borderless: Config.options.bar.borderless
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
     
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / Config.options.bar.workspaces.shown)
+    readonly property int workspaceGroup: Math.floor((monitor?.activeWorkspace?.id - 1) / Config.options.bar.workspaces.shown)
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
@@ -26,7 +26,7 @@ Item {
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
     property real workspaceIconMarginShrinked: -4
-    property int workspaceIndexInGroup: (monitor.activeWorkspace?.id - 1) % Config.options.bar.workspaces.shown
+    property int workspaceIndexInGroup: (monitor?.activeWorkspace?.id - 1) % Config.options.bar.workspaces.shown
 
     // Function to update workspaceOccupied
     function updateWorkspaceOccupied() {
@@ -87,8 +87,8 @@ Item {
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
                 radius: Appearance.rounding.full
-                property var leftOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index))
-                property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index+2))
+                property var leftOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
+                property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
                 property var radiusLeft: leftOccupied ? 0 : Appearance.rounding.full
                 property var radiusRight: rightOccupied ? 0 : Appearance.rounding.full
 
@@ -98,7 +98,7 @@ Item {
                 bottomRightRadius: radiusRight
                 
                 color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
-                opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index+1)) ? 1 : 0
+                opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+1)) ? 1 : 0
 
                 Behavior on opacity {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -188,7 +188,7 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
                         text: `${button.workspaceValue}`
                         elide: Text.ElideRight
-                        color: (monitor.activeWorkspace?.id == button.workspaceValue) ? 
+                        color: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
                             (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
                                 Appearance.colors.colOnLayer1Inactive)
@@ -208,7 +208,7 @@ Item {
                         width: workspaceButtonWidth * 0.18
                         height: width
                         radius: width / 2
-                        color: (monitor.activeWorkspace?.id == button.workspaceValue) ? 
+                        color: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
                             (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
                                 Appearance.colors.colOnLayer1Inactive)

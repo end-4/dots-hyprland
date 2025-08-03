@@ -233,6 +233,7 @@ esac
 # since the files here come from different places, not only about one program.
 # v rsync -av ".local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 v rsync -av ".local/share/icons/" "${XDG_DATA_HOME:-$HOME/.local/share}"/icons/
+v rsync -av ".local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
 
 # Prevent hyprland from not fully loaded
 sleep 1

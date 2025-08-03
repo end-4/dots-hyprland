@@ -40,6 +40,8 @@ Scope {
             anchors {
                 top: true
                 bottom: true
+                left: !(Config?.options.overview.enable ?? true) 
+                right: !(Config?.options.overview.enable ?? true) 
             }
 
             HyprlandFocusGrab {
@@ -122,7 +124,7 @@ Scope {
 
                 Loader {
                     id: overviewLoader
-                    active: GlobalStates.overviewOpen
+                    active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
