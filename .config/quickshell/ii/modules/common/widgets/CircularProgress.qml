@@ -1,6 +1,3 @@
-// From https://github.com/rafzby/circular-progressbar with modifications
-// License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
-
 import QtQuick
 import QtQuick.Shapes
 import qs.modules.common
@@ -11,25 +8,25 @@ import qs.modules.common
 Item {
     id: root
 
-    property int size: 30
+    property int implicitSize: 30
     property int lineWidth: 2
     property real value: 0
-    property color primaryColor: Appearance.m3colors.m3onSecondaryContainer
-    property color secondaryColor: Appearance.colors.colSecondaryContainer
-    property real gapAngle: 180 / 9
+    property color colPrimary: Appearance.m3colors.m3onSecondaryContainer
+    property color colSecondary: Appearance.colors.colSecondaryContainer
+    property real gapAngle: 360 / 18
     property bool fill: false
     property int fillOverflow: 2
     property bool enableAnimation: true
-    property int animationDuration: 1000
+    property int animationDuration: 800
     property var easingType: Easing.OutCubic
 
-    width: size
-    height: size
+    implicitWidth: implicitSize
+    implicitHeight: implicitSize
 
     property real degree: value * 360
     property real centerX: root.width / 2
     property real centerY: root.height / 2
-    property real arcRadius: root.size / 2 - root.lineWidth
+    property real arcRadius: root.implicitSize / 2 - root.lineWidth
     property real startAngle: -90
 
     Behavior on degree {
@@ -47,7 +44,7 @@ Item {
         
         sourceComponent: Rectangle {
             radius: 9999
-            color: root.secondaryColor
+            color: root.colSecondary
         }
     }
 
@@ -58,7 +55,7 @@ Item {
         preferredRendererType: Shape.CurveRenderer
         ShapePath {
             id: secondaryPath
-            strokeColor: root.secondaryColor
+            strokeColor: root.colSecondary
             strokeWidth: root.lineWidth
             capStyle: ShapePath.RoundCap
             fillColor: "transparent"
@@ -73,7 +70,7 @@ Item {
         }
         ShapePath {
             id: primaryPath
-            strokeColor: root.primaryColor
+            strokeColor: root.colPrimary
             strokeWidth: root.lineWidth
             capStyle: ShapePath.RoundCap
             fillColor: "transparent"
