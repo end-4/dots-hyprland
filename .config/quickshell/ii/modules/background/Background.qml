@@ -28,12 +28,12 @@ Scope {
 
             // Hide when fullscreen
             readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-            property bool focusingThisMonitor: HyprlandData.activeWorkspace.monitor == monitor.name
+            property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
             visible: !(activeWindow?.fullscreen && activeWindow?.activated && focusingThisMonitor)
 
             // Workspaces
             property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
-            property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
+            property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor?.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
             property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
             property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
             // Wallpaper
@@ -157,7 +157,7 @@ Scope {
                     const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
                     const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
                     const range = upper - lower;
-                    return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace.id - lower) / range) : 0.5)
+                    return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor?.activeWorkspace?.id ?? 1 - lower) / range) : 0.5)
                         + (0.15 * GlobalStates.sidebarRightOpen * Config.options.background.parallax.enableSidebar)
                         - (0.15 * GlobalStates.sidebarLeftOpen * Config.options.background.parallax.enableSidebar)
                 }
@@ -199,7 +199,7 @@ Scope {
 
                 ColumnLayout {
                     id: clockColumn
-                    anchors.centerIn: wallpaper
+                    anchors.centerIn: parent
                     spacing: 0
 
                     StyledText {
