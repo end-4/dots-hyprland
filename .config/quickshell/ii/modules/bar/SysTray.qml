@@ -8,8 +8,6 @@ import Quickshell.Services.SystemTray
 Item {
     id: root
 
-    required property var bar
-
     height: parent.height
     implicitWidth: rowLayout.implicitWidth
     Layout.leftMargin: Appearance.rounding.screenRounding
@@ -25,8 +23,6 @@ Item {
 
             SysTrayItem {
                 required property SystemTrayItem modelData
-
-                bar: root.bar
                 item: modelData
             }
 

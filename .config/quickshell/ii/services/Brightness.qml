@@ -1,7 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-// From https://github.com/caelestia-dots/shell/ (`quickshell` branch) with modifications.
+// From https://github.com/caelestia-dots/shell with modifications.
 // License: GPLv3
 
 import Quickshell

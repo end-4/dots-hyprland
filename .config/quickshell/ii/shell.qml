@@ -22,6 +22,7 @@ import "./modules/screenCorners/"
 import "./modules/session/"
 import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
