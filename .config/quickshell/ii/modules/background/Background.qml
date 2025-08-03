@@ -27,7 +27,7 @@ Variants {
 
         // Hide when fullscreen
         readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-        property bool focusingThisMonitor: HyprlandData.activeWorkspace.monitor == monitor.name
+        property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor.name
         visible: !(activeWindow?.fullscreen && activeWindow?.activated && focusingThisMonitor)
 
         // Workspaces
@@ -156,7 +156,7 @@ Variants {
                 const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
                 const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
                 const range = upper - lower;
-                return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace.id - lower) / range) : 0.5)
+                return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace?.id - lower) / range) : 0.5)
                     + (0.15 * GlobalStates.sidebarRightOpen * Config.options.background.parallax.enableSidebar)
                     - (0.15 * GlobalStates.sidebarLeftOpen * Config.options.background.parallax.enableSidebar)
             }

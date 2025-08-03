@@ -24,8 +24,6 @@ import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
 import "./services/"
