@@ -1,10 +1,12 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import qs
 import qs.modules.common
-import Quickshell
-import Quickshell.Io
-import QtQuick
+
+import Quickshell;
+import Quickshell.Io;
+import QtQuick;
 
 /**
  * Simple Pomodoro time manager.
@@ -12,58 +14,82 @@ import QtQuick
 Singleton {
     id: root
 
-    property int pomodoroWorkTime: 25 * 60  // 25 minutes in seconds
-    property int pomodoroBreakTime: 5 * 60  // 5 minutes in seconds
-    property int pomodoroTime: pomodoroWorkTime
-    property bool isPomodoroRunning: false
+    // TODO: read these values from a config file.
+    property int pomodoroFocusTime: Config.options.time.pomodoro.focus
+    property int pomodoroBreakTime: Config.options.time.pomodoro.breaktime
+    property int pomodoroLongBreakTime: Config.options.time.pomodoro.longbreak
+    property int pomodoroLongBreakCycle: Config.options.time.pomodoro.cycle
+
+    property int pomodoroTimeLeft: pomodoroFocusTime
+    property int getPomodoroSecondsLeft: pomodoroFocusTime
+    property int pomodoroTimeStarted: getCurrentTime()  // The time pomodoro was last Resumed
     property bool isPomodoroBreak: false
+    property bool isPomodoroRunning: false
+    property int pomodoroCycle: 1
+
     property int stopwatchTime: 0
     property bool isStopwatchRunning: false
 
+    // Pause and Resume button
     function togglePomodoro() {
-        isPomodoroRunning = !isPomodoroRunning;
-    }
-
-    function toggleStopwatch() {
-        isStopwatchRunning = !isStopwatchRunning;
-    }
-
-    function pomodoroReset() {
-        pomodoroTime = pomodoroWorkTime;
-        isPomodoroRunning = false;
-        isPomodoroBreak = false;
-    }
-
-    function stopwatchReset() {
-        stopwatchTime = 0;
-        isStopwatchRunning = false;
-    }
-
-    function tickSecond() {
-        if (pomodoroTime > 0) {
-            pomodoroTime--;
-        } else {
-            isPomodoroBreak = !isPomodoroBreak;
-            pomodoroTime = isPomodoroBreak ? pomodoroBreakTime : pomodoroWorkTime;
-            if (isPomodoroBreak) {
-                Quickshell.execDetached(["bash", "-c", `notify-send "☕ Short Break!" "Relax for ${Math.floor(pomodoroBreakTime / 60)} minutes."`]);
-            } else {
-                Quickshell.execDetached(["bash", "-c", `notify-send "🔴 Pomodoro started!" "Focus for ${Math.floor(pomodoroWorkTime / 60)} minutes."`]);
-            }
+        isPomodoroRunning = !isPomodoroRunning
+        if (isPomodoroRunning) {  // Pressed Start button
+            pomodoroTimeStarted = getCurrentTime()
+        } else {  // Pressed Pause button
+            pomodoroTimeLeft -= (getCurrentTime() - pomodoroTimeStarted)
         }
     }
 
-    function timeFormattedPomodoro() {
-        let minutes = Math.floor(pomodoroTime / 60);
-        let seconds = Math.floor(pomodoroTime % 60);
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    // Reset button
+    function pomodoroReset() {
+        pomodoroTimeLeft = pomodoroFocusTime
+        getPomodoroSecondsLeft = pomodoroFocusTime
+        isPomodoroBreak = false
+        isPomodoroRunning = false
     }
 
-    function timeFormattedStopwatch() {
-        let totalSeconds = Math.floor(stopwatchTime);
-        let hours = Math.floor(totalSeconds / 3600);
-        let minutes = Math.floor((totalSeconds % 3600) / 60);
-        let seconds = Math.floor(totalSeconds % 60);
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    function tickSecond() {
+        if (getCurrentTime() >= pomodoroTimeStarted + pomodoroTimeLeft) {
+            isPomodoroBreak = !isPomodoroBreak
+            pomodoroTimeStarted += pomodoroTimeLeft
+            pomodoroTimeLeft  = isPomodoroBreak ? pomodoroBreakTime : pomodoroFocusTime
+
+            if (isPomodoroBreak && pomodoroCycle % pomodoroLongBreakCycle == 0) {  // isPomodoroLongBreak
+                Quickshell.execDetached([
+                    "notify-send",
+                    Translation.tr("🌿 Long Break!"),
+                    Translation.tr(`Relax for %1 minutes.`).arg(Math.floor(pomodoroLongBreakTime / 60))
+                ])
+            } else if(isPomodoroBreak){
+                Quickshell.execDetached([
+                    "notify-send",
+                    Translation.tr("☕ Short Break!"),
+                    Translation.tr(`Relax for %1 minutes.`).arg(Math.floor(pomodoroBreakTime / 60))
+                ])
+            } else {
+                Quickshell.execDetached([
+                    "notify-send",
+                    Translation.tr("🔴 Pomodoro started!"),
+                    Translation.tr(`Focus for %1 minutes.`).arg(Math.floor(pomodoroFocusTime / 60))
+                ])
+                pomodoroCycle += 1
+            }
+        }
+
+        getPomodoroSecondsLeft = (pomodoroTimeStarted + pomodoroTimeLeft) - getCurrentTime()
+    }
+
+    function getCurrentTime() {
+        return Math.floor(Date.now() / 1000)
+    }
+
+    // Stopwatch functions
+    function toggleStopwatch() {
+        isStopwatchRunning = !isStopwatchRunning
+    }
+
+    function stopwatchReset() {
+        stopwatchTime = 0
+        isStopwatchRunning = false
     }
 }

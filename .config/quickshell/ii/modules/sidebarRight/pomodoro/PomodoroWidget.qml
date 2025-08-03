@@ -166,102 +166,102 @@ Item {
             Item {
                 ColumnLayout {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 18
-
-                    StyledText {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Pomodoro.timeFormattedPomodoro()
-                        font.pixelSize: 50
-                        color: Appearance.m3colors.m3onSurface
-                    }
+                    spacing: 20
 
                     RowLayout {
-                        Layout.alignment: Qt.AlignHCenter
-                        spacing: 20
+                        spacing: 40
+                        // The Pomodoro timer circle
+                        CircularProgress {
+                            Layout.alignment: Qt.AlignHCenter
+                            lineWidth: 7
+                            value: {
+                                let pomodoroTotalTime = Pomodoro.isPomodoroBreak ? Pomodoro.pomodoroBreakTime : Pomodoro.pomodoroFocusTime
+                                return Pomodoro.getPomodoroSecondsLeft / pomodoroTotalTime
+                            }
+                            size: 125
+                            secondaryColor: Appearance.colors.colSecondaryContainer
+                            primaryColor: Appearance.m3colors.m3onSecondaryContainer
+                            enableAnimation: true
 
-                        DialogButton {
-                            buttonText: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : Translation.tr("Start")
-                            Layout.preferredWidth: 90
-                            Layout.preferredHeight: 35
-                            font.pixelSize: Appearance.font.pixelSize.larger
-                            onClicked: Pomodoro.togglePomodoro()
-                            background: Rectangle {
-                                color: Appearance.m3colors.m3onSecondary
-                                radius: Appearance.rounding.normal
-                                border.color: Appearance.m3colors.m3outline
-                                border.width: 1
+                            ColumnLayout {
+                                anchors.centerIn: parent
+
+                                StyledText {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    text: {
+                                        let minutes = Math.floor(Pomodoro.getPomodoroSecondsLeft / 60).toString().padStart(2, '0')
+                                        let seconds = Math.floor(Pomodoro.getPomodoroSecondsLeft % 60).toString().padStart(2, '0')
+                                        return `${minutes}:${seconds}`
+                                    }
+                                    font.pixelSize: Appearance.font.pixelSize.hugeass + 4
+                                    color: Appearance.m3colors.m3onSurface
+                                }
+                                StyledText {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    text: Pomodoro.isPomodoroBreak ? Translation.tr("Break") : Translation.tr("Focus")
+                                    font.pixelSize: Appearance.font.pixelSize.normal
+                                    color: Appearance.m3colors.m3onSurface
+                                }
                             }
                         }
 
-                        StyledText {
+                        // The Start/Stop and Reset buttons
+                        ColumnLayout {
                             Layout.alignment: Qt.AlignHCenter
-                            text: Pomodoro.isPomodoroBreak ? Translation.tr("Break time") : Translation.tr("Focus time")
-                            font.pixelSize: Appearance.font.pixelSize.largest
-                            color: Appearance.m3colors.m3onSurface
-                        }
+                            spacing: 20
 
-                        DialogButton {
-                            buttonText: Translation.tr("Reset")
-                            Layout.preferredWidth: 90
-                            Layout.preferredHeight: 35
-                            font.pixelSize: Appearance.font.pixelSize.larger
-                            onClicked: Pomodoro.pomodoroReset()
-                            background: Rectangle {
-                                color: Appearance.m3colors.m3onError
-                                radius: Appearance.rounding.normal
-                                border.color: Appearance.m3colors.m3outline
-                                border.width: 1
+                            RippleButton {
+                                buttonText: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : Translation.tr("Start")
+                                Layout.preferredHeight: 35
+                                Layout.preferredWidth: 90
+                                font.pixelSize: Appearance.font.pixelSize.larger
+                                onClicked: Pomodoro.togglePomodoro()
+                                colBackground: Appearance.m3colors.m3onSecondary
+                                colBackgroundHover: Appearance.m3colors.m3onSecondary
+                            }
+
+                            RippleButton {
+                                buttonText: Translation.tr("Reset")
+                                Layout.preferredHeight: 35
+                                Layout.preferredWidth: 90
+                                font.pixelSize: Appearance.font.pixelSize.larger
+                                onClicked: Pomodoro.pomodoroReset()
+                                colBackground: Appearance.m3colors.m3onError
+                                colBackgroundHover: Appearance.m3colors.m3onError
                             }
                         }
                     }
 
+                    // The sliders for adjusting duration
                     ColumnLayout {
                         Layout.alignment: Qt.AlignHCenter
-                        spacing: 0
+                        spacing: 10
 
-                        StyledText {
-                            text: Translation.tr("Focus Duration: %1 min").arg(Pomodoro.pomodoroWorkTime / 60)
-                            color: Appearance.m3colors.m3onSurface
+                        ConfigSpinBox {
+                            text: Translation.tr("Focus Duration: ")
+                            value: Pomodoro.pomodoroFocusTime / 60
+                            onValueChanged: {
+                                Pomodoro.pomodoroFocusTime = value * 60
+                                Config.options.time.pomodoro.focus = value * 60
+                            }
+                            Layout.alignment: Qt.AlignCenter
                         }
-                        Slider {
-                            id: workTimeSlider
-                            Layout.fillWidth: true
-                            from: 5
-                            to: 120
-                            stepSize: 1
-                            value: Pomodoro.pomodoroWorkTime / 60
-                            onValueChanged: Pomodoro.pomodoroWorkTime = value * 60
-                            handle: Rectangle {
-                                x: workTimeSlider.leftPadding + workTimeSlider.visualPosition * (workTimeSlider.availableWidth - width)
-                                y: workTimeSlider.topPadding + (workTimeSlider.availableHeight - height) / 2
-                                implicitWidth: 20
-                                implicitHeight: 20
-                                radius: 10
-                                color: Appearance.m3colors.m3onSecondary
-                                border.color: Appearance.m3colors.m3outline
+
+                        ConfigSpinBox {
+                            text: Translation.tr("Break Duration:")
+                            value: Pomodoro.pomodoroBreakTime / 60
+                            onValueChanged: {
+                                Config.options.time.pomodoro.breaktime = value * 60
+                                Pomodoro.pomodoroBreakTime = value * 60
                             }
                         }
 
-                        StyledText {
-                            text: Translation.tr("Break Duration: %1 min").arg(Pomodoro.pomodoroBreakTime / 60)
-                            color: Appearance.m3colors.m3onSurface
-                        }
-                        Slider {
-                            id: breakTimeSlider
-                            Layout.fillWidth: true
-                            from: 1
-                            to: 60
-                            stepSize: 1
-                            value: Pomodoro.pomodoroBreakTime / 60
-                            onValueChanged: Pomodoro.pomodoroBreakTime = value * 60
-                            handle: Rectangle {
-                                x: breakTimeSlider.leftPadding + breakTimeSlider.visualPosition * (breakTimeSlider.availableWidth - width)
-                                y: breakTimeSlider.topPadding + (breakTimeSlider.availableHeight - height) / 2
-                                implicitWidth: 20
-                                implicitHeight: 20
-                                radius: 10
-                                color: Appearance.m3colors.m3onSecondary
-                                border.color: Appearance.m3colors.m3outline
+                        ConfigSpinBox {
+                            text: Translation.tr("Long Break Duration:")
+                            value: Pomodoro.pomodoroLongBreakTime / 60
+                            onValueChanged:{
+                                Pomodoro.pomodoroLongBreakTime = value * 60
+                                Config.options.time.pomodoro.longbreak = value * 60
                             }
                         }
                     }
@@ -276,7 +276,13 @@ Item {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: Pomodoro.timeFormattedStopwatch()
+                        text: {
+                            let totalSeconds = Math.floor(Pomodoro.stopwatchTime) 
+                            let hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0')
+                            let minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0')
+                            let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                            return `${hours}:${minutes}:${seconds}`
+                        }
                         font.pixelSize: 50
                         color: Appearance.m3colors.m3onSurface
                     }
@@ -302,7 +308,7 @@ Item {
                         StyledText {
                             Layout.alignment: Qt.AlignHCenter
                             text: Translation.tr("Stopwatch")
-                            font.pixelSize: Appearance.font.pixelSize.largest
+                            font.pixelSize: Appearance.font.pixelSize.large
                             color: Appearance.m3colors.m3onSurface
                         }
 
@@ -322,35 +328,6 @@ Item {
                     }
                 }
             }
-        }
-    }
-
-    // + FAB
-    StyledRectangularShadow {
-        target: fabButton
-        radius: fabButton.buttonRadius
-        blur: 0.6 * Appearance.sizes.elevationMargin
-    }
-    FloatingActionButton {
-        id: fabButton
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: root.fabMargins
-        anchors.bottomMargin: root.fabMargins
-
-        onClicked: {
-            if (currentTab === 0) {
-                Pomodoro.togglePomodoro()
-            } else {
-                Pomodoro.toggleStopwatch()
-            }
-        }
-
-        contentItem: MaterialSymbol {
-            text: (currentTab === 0 && Pomodoro.isPomodoroRunning) || (currentTab === 1 && Pomodoro.isStopwatchRunning) ? "pause" : "play_arrow"
-            horizontalAlignment: Text.AlignHCenter
-            iconSize: Appearance.font.pixelSize.huge
-            color: Appearance.m3colors.m3onPrimaryContainer
         }
     }
 }
