@@ -199,7 +199,7 @@ Scope {
 
                 ColumnLayout {
                     id: clockColumn
-                    anchors.centerIn: wallpaper
+                    anchors.centerIn: parent
                     spacing: 0
 
                     StyledText {
