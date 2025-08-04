@@ -344,7 +344,7 @@ ContentPage {
                 Config.options.sidebar.keepRightSidebarLoaded = checked;
             }
             StyledToolTip {
-                content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a different kernel might help with this delay")
+                content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
             }
         }
     }

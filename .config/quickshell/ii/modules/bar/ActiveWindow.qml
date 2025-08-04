@@ -4,13 +4,13 @@ import qs.modules.common.widgets
 import qs
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Item {
     id: root
-    required property var bar
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
     property string activeWindowAddress: `0x${activeWindow?.HyprlandToplevel?.address}`

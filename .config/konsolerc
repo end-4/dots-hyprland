@@ -1,0 +1,11 @@
+[Desktop Entry]
+DefaultProfile=Profile 1.profile
+
+[General]
+ConfigVersion=1
+
+[KonsoleWindow]
+UseSingleInstance=true
+
+[UiSettings]
+ColorScheme=

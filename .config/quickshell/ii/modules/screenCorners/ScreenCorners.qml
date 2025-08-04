@@ -35,7 +35,7 @@ Scope {
         implicitHeight: cornerWidget.implicitHeight
         RoundCorner {
             id: cornerWidget
-            size: Appearance.rounding.screenRounding
+            implicitSize: Appearance.rounding.screenRounding
             corner: cornerPanelWindow.corner
         }
     }
