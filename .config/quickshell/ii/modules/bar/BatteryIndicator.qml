@@ -3,8 +3,9 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 
-Item {
+MouseArea {
     id: root
     property bool borderless: Config.options.bar.borderless
     readonly property var chargeState: Battery.chargeState
@@ -17,6 +18,8 @@ Item {
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
+
+    hoverEnabled: true
 
     RowLayout {
         id: rowLayout
@@ -89,6 +92,27 @@ Item {
                 animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
+        }
+    }
+
+    LazyLoader {
+        id: popupLoader
+        active: root.containsMouse
+
+        component: PopupWindow {
+            id: popupWindow
+            visible: true
+            implicitWidth: batteryPopup.implicitWidth
+            implicitHeight: batteryPopup.implicitHeight
+            anchor.item: root
+            anchor.rect.x: (root.implicitWidth - popupWindow.implicitWidth) / 2
+            anchor.rect.y: Config.options.bar.bottom
+                ? (-batteryPopup.implicitHeight - 15)
+                : (root.implicitHeight + 15)
+            color: "transparent"
+            BatteryPopup {
+                id: batteryPopup
+            }
         }
     }
 

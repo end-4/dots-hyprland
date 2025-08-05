@@ -310,5 +310,11 @@
   "Sunset": "日落",
   "Humidity": "湿度",
   "Wind": "风",
-  "Precipitation": "降水量"
+  "Precipitation": "降水量",
+  "Temperature:": "温度：",
+  "Time to full:": "距离充满：",
+  "Time to empty:": "距离耗尽：",
+  "Fully charged": "已充满电",
+  "Charging:": "充电功率：",
+  "Discharging:": "放电功率："
 }

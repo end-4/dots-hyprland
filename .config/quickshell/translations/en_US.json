@@ -310,5 +310,11 @@
   "Sunrise": "Sunrise",
   "Pressure": "Pressure",
   "Visibility": "Visibility",
-  "Precipitation": "Precipitation"
+  "Precipitation": "Precipitation",
+  "Temperature:": "Temperature:",
+  "Time to full:": "Time to full:",
+  "Time to empty:": "Time to empty:",
+  "Fully charged": "Fully charged",
+  "Charging:": "Charging:",
+  "Discharging:": "Discharging:"
 }
