@@ -65,6 +65,7 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
+        enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
     }
 
     LazyLoader {
