@@ -95,11 +95,11 @@ MouseArea {
         }
     }
 
-    Loader {
+    LazyLoader {
         id: popupLoader
         active: root.containsMouse
 
-        sourceComponent: PanelWindow {
+        component: PanelWindow {
             id: popupWindow
             visible: true
             color: "transparent"
@@ -112,7 +112,10 @@ MouseArea {
             implicitHeight: batteryPopup.implicitHeight
 
             margins {
-                left: root.mapToGlobal(Qt.point(0, 0)).x - batteryPopup.implicitWidth / 3
+                left: root.mapToGlobal(Qt.point(
+                    (root.width - batteryPopup.implicitWidth) / 2,
+                    0
+                )).x
                 top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
             }
 

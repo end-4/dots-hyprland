@@ -40,18 +40,30 @@ MouseArea {
         id: popupLoader
         active: root.containsMouse
 
-        component: PopupWindow {
+        component: PanelWindow {
             id: popupWindow
             visible: true
             implicitWidth: weatherPopup.implicitWidth
             implicitHeight: weatherPopup.implicitHeight
-            anchor.item: root
-            anchor.edges: Edges.Top
-            anchor.rect.x: (root.implicitWidth - popupWindow.implicitWidth) / 2
-            anchor.rect.y: Config.options.bar.bottom ? 
-                (-weatherPopup.implicitHeight - 15) :
-                (root.implicitHeight + 15 )
+
             color: "transparent"
+            exclusiveZone: 0
+
+            anchors.top: true
+            anchors.left: true
+
+            margins {
+                left: root.mapToGlobal(Qt.point(
+                    (root.width - weatherPopup.implicitWidth) / 2,
+                    0
+                )).x
+                top: root.mapToGlobal(Qt.point(0, root.height)).y - 25
+            }
+
+            mask: Region {
+                item: weatherPopup
+            }
+            
             WeatherPopup {
                 id: weatherPopup
             }

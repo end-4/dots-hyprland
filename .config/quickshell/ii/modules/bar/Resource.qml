@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import Quickshell
 
 Item {
+    id: root
     required property string iconName
     required property double percentage
     property bool shown: true
@@ -21,28 +22,41 @@ Item {
     }
 
     // Generate tooltip content based on resource type
-    property string tooltipContent: {
+    property var tooltipData: {
         switch(iconName) {
             case "memory":
-                return `Memory Usage
-Used: ${formatKB(ResourceUsage.memoryUsed)}
-Free: ${formatKB(ResourceUsage.memoryFree)}
-Total: ${formatKB(ResourceUsage.memoryTotal)}
-Usage: ${Math.round(ResourceUsage.memoryUsedPercentage * 100)}%`
+                return [
+                    { icon: "memory", label: Translation.tr("Memory Usage"), value: "" },
+                    { icon: "storage", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.memoryUsed) },
+                    { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.memoryFree) },
+                    { icon: "dns", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.memoryTotal) },
+                    { icon: "percent", label: Translation.tr("Usage:"), value: `${Math.round(ResourceUsage.memoryUsedPercentage * 100)}%` }
+                ]
             case "swap_horiz":
-                return ResourceUsage.swapTotal > 0 ? 
-                    `Swap Usage
-Used: ${formatKB(ResourceUsage.swapUsed)}
-Free: ${formatKB(ResourceUsage.swapFree)}
-Total: ${formatKB(ResourceUsage.swapTotal)}
-Usage: ${Math.round(ResourceUsage.swapUsedPercentage * 100)}%` :
-                    "Swap: Not configured"
+                return ResourceUsage.swapTotal > 0 ?
+                [
+                    { icon: "swap_horiz", label: Translation.tr("Swap Usage"), value: "" },
+                    { icon: "storage", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.swapUsed) },
+                    { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.swapFree) },
+                    { icon: "dns", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.swapTotal) },
+                    { icon: "percent", label: Translation.tr("Usage:"), value: `${Math.round(ResourceUsage.swapUsedPercentage * 100)}%` }
+                ] :
+                [
+                    { icon: "swap_horiz", label: Translation.tr("Swap:"), value: Translation.tr("Not configured") }
+                ]
             case "settings_slow_motion":
-                return `CPU Usage
-Current: ${Math.round(ResourceUsage.cpuUsage * 100)}%
-Load: ${ResourceUsage.cpuUsage > 0.8 ? "High" : ResourceUsage.cpuUsage > 0.5 ? "Medium" : "Low"}`
+                return [
+                    { icon: "settings_slow_motion", label: Translation.tr("CPU Usage"), value: "" },
+                    { icon: "bolt", label: Translation.tr("Current:"), value: `${Math.round(ResourceUsage.cpuUsage * 100)}%` },
+                    { icon: "speed", label: Translation.tr("Load:"), value: ResourceUsage.cpuUsage > 0.8 ?
+                        Translation.tr("High") :
+                        ResourceUsage.cpuUsage > 0.5 ? Translation.tr("Medium") : Translation.tr("Low")
+                    }
+                ]
             default:
-                return "System Resource"
+                return [
+                    { icon: "info", label: Translation.tr("System Resource"), value: "" }
+                ]
         }
     }
 
@@ -57,35 +71,66 @@ Load: ${ResourceUsage.cpuUsage > 0.8 ? "High" : ResourceUsage.cpuUsage > 0.5 ? "
         id: popupLoader
         active: mouseArea.containsMouse
 
-        component: PopupWindow {
+        component: PanelWindow {
             id: popupWindow
             visible: true
+
+            color: "transparent"
+            exclusiveZone: 0
+            anchors.top: true
+            anchors.left: true
+
             implicitWidth: resourcePopup.implicitWidth
             implicitHeight: resourcePopup.implicitHeight
-            anchor.item: root
-            anchor.edges: Edges.Top
-            anchor.rect.x: (root.implicitWidth - popupWindow.implicitWidth) / 2
-            anchor.rect.y: Config.options.bar.bottom ? 
-                (-resourcePopup.implicitHeight - 15) :
-                (root.implicitHeight + 15)
-            color: "transparent"
+
+            margins {
+                left: root.mapToGlobal(Qt.point(
+                    (root.width - resourcePopup.implicitWidth) / 2,
+                    0
+                )).x
+                top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
+            }
+
             
             Rectangle {
                 id: resourcePopup
                 readonly property real margin: 10
-                implicitWidth: popupText.implicitWidth + margin * 2
-                implicitHeight: popupText.implicitHeight + margin * 2
+                implicitWidth: columnLayout.implicitWidth + margin * 2
+                implicitHeight: columnLayout.implicitHeight + margin * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.small
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
-                
-                StyledText {
-                    id: popupText
+                clip: true
+
+                ColumnLayout {
+                    id: columnLayout
                     anchors.centerIn: parent
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    color: Appearance.colors.colOnLayer0
-                    text: tooltipContent
+                    spacing: 6
+
+                    Repeater {
+                        model: root.tooltipData
+                        delegate: RowLayout {
+                            spacing: 5
+                            Layout.fillWidth: true
+
+                            MaterialSymbol {
+                                text: modelData.icon
+                                color: Appearance.m3colors.m3onSecondaryContainer
+                            }
+                            StyledText {
+                                text: modelData.label
+                                color: Appearance.colors.colOnLayer1
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                                visible: modelData.value !== ""
+                                color: Appearance.colors.colOnLayer1
+                                text: modelData.value
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -17,7 +17,7 @@ Item {
     function getUpcomingTodos() {
         const unfinishedTodos = Todo.list.filter(function(item) { return !item.done; })
         if (unfinishedTodos.length === 0) {
-            return "No pending tasks"
+            return Translation.tr("No pending tasks")
         }
         
         // Limit to first 5 todos to keep popup manageable
@@ -27,21 +27,17 @@ Item {
         }).join('\n')
         
         if (unfinishedTodos.length > 5) {
-            todoText += `\n... and ${unfinishedTodos.length - 5} more`
+            todoText += `\n${Translation.tr("... and %1 more").arg(unfinishedTodos.length - 5)}`
         }
         
         return todoText
     }
 
-    // Generate popup content with date and upcoming todos
-    property string dateDetails: {
-        const todosSection = getUpcomingTodos()
-        return `${Qt.locale().toString(DateTime.clock.date, "dddd, MMMM dd, yyyy")} • ${DateTime.time}
-Uptime: ${DateTime.uptime}
-
-📋 Upcoming Tasks:
-${todosSection}`
-    }
+    // Popup Data
+    property string formattedDate: Qt.locale().toString(DateTime.clock.date, "dddd, MMMM dd, yyyy")
+    property string formattedTime: DateTime.time
+    property string formattedUptime: DateTime.uptime
+    property string todosSection: getUpcomingTodos()
 
     MouseArea {
         id: mouseArea
@@ -54,37 +50,95 @@ ${todosSection}`
         id: popupLoader
         active: mouseArea.containsMouse
 
-        component: PopupWindow {
+        component: PanelWindow {
             id: popupWindow
             visible: true
             implicitWidth: datePopup.implicitWidth
             implicitHeight: datePopup.implicitHeight
-            anchor.item: root
-            anchor.edges: Edges.Top
-            anchor.rect.x: (root.implicitWidth - popupWindow.implicitWidth) / 2
-            anchor.rect.y: Config.options.bar.bottom ? 
-                (-datePopup.implicitHeight - 15) :
-                (root.implicitHeight + 15)
             color: "transparent"
+            exclusiveZone: 0
+
+            anchors.top: true
+            anchors.left: true
+
+            margins {
+                left: root.mapToGlobal(Qt.point(
+                    (root.width - datePopup.implicitWidth) / 2,
+                    0
+                )).x
+                top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
+            }
+
+            mask: Region {
+                item: datePopup
+            }
             
             Rectangle {
                 id: datePopup
                 readonly property real margin: 12
-                implicitWidth: popupText.implicitWidth + margin * 2
-                implicitHeight: popupText.implicitHeight + margin * 2
+                implicitWidth: columnLayout.implicitWidth + margin * 2
+                implicitHeight: columnLayout.implicitHeight + margin * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.small
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
-                
-                StyledText {
-                    id: popupText
+                clip: true
+
+                ColumnLayout {
+                    id: columnLayout
                     anchors.centerIn: parent
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    color: Appearance.colors.colOnLayer0
-                    text: dateDetails
+                    spacing: 8
+
+                    // Date + Time row
+                    RowLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            color: Appearance.colors.colOnLayer1
+                            text: `${root.formattedDate} • ${root.formattedTime}`
+                        }
+                    }
+
+                    // Uptime row
+                    RowLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
+                        MaterialSymbol { text: "timelapse"; color: Appearance.m3colors.m3onSecondaryContainer }
+                        StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnLayer1 }
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignRight
+                            color: Appearance.colors.colOnLayer1
+                            text: root.formattedUptime
+                        }
+                    }
+
+                    // Upcoming tasks row
+                    ColumnLayout {
+                        spacing: 2
+                        Layout.fillWidth: true
+
+                        RowLayout {
+                            spacing: 5
+                            Layout.fillWidth: true
+                            MaterialSymbol { text: "checklist"; color: Appearance.m3colors.m3onSecondaryContainer }
+                            StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnLayer1 }
+                        }
+
+                        StyledText {
+                            Layout.fillWidth: true
+                            topPadding: 5
+                            horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.Wrap
+                            color: Appearance.colors.colOnLayer1
+                            text: root.todosSection
+                        }
+                    }
                 }
             }
+
         }
     }
 
