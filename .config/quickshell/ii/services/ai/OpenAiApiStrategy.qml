@@ -46,6 +46,7 @@ ApiStrategy {
         // Real stuff
         try {
             const dataJson = JSON.parse(cleanData);
+            console.log(JSON.stringify(dataJson, null, 2));
             let newContent = "";
             
             const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
@@ -71,6 +72,17 @@ ApiStrategy {
 
             message.content += newContent;
             message.rawContent += newContent;
+
+            // Usage metadata
+            if (dataJson.usage) {
+                return {
+                    tokenUsage: {
+                        input: dataJson.usage.prompt_tokens ?? -1,
+                        output: dataJson.usage.completion_tokens ?? -1,
+                        total: dataJson.usage.total_tokens ?? -1
+                    }
+                };
+            }
 
             if (dataJson.done) {
                 return { finished: true };
