@@ -41,6 +41,15 @@ ListView {
         }
     }
 
+    Behavior on contentY {
+        NumberAnimation {
+            id: scrollAnim
+            duration: Appearance.animation.scroll.duration
+            easing.type: Appearance.animation.scroll.type
+            easing.bezierCurve: Appearance.animation.scroll.bezierCurve
+        }
+    }
+
     add: Transition {
         animations: [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {

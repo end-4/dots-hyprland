@@ -23,4 +23,13 @@ Flickable {
             root.contentY = targetY;
         }
     }
+
+    Behavior on contentY {
+        NumberAnimation {
+            id: scrollAnim
+            duration: Appearance.animation.scroll.duration
+            easing.type: Appearance.animation.scroll.type
+            easing.bezierCurve: Appearance.animation.scroll.bezierCurve
+        }
+    }
 }

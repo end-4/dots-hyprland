@@ -299,15 +299,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                 add: null // Prevent function calls from being janky
 
-                Behavior on contentY {
-                    NumberAnimation {
-                        id: scrollAnim
-                        duration: Appearance.animation.scroll.duration
-                        easing.type: Appearance.animation.scroll.type
-                        easing.bezierCurve: Appearance.animation.scroll.bezierCurve
-                    }
-                }
-
                 model: ScriptModel {
                     values: Ai.messageIDs.filter(id => {
                         const message = Ai.messageByID[id];
