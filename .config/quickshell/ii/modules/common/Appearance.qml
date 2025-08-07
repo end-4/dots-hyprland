@@ -266,7 +266,6 @@ Singleton {
                     easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
         }
-
         property QtObject clickBounce: QtObject {
             property int duration: 200
             property int type: Easing.BezierSpline
@@ -279,7 +278,7 @@ Singleton {
             }}
         }
         property QtObject scroll: QtObject {
-            property int duration: 400
+            property int duration: 200
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.standardDecel
         }

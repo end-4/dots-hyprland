@@ -282,8 +282,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 spacing: 10
                 popin: false
 
-                touchpadScrollFactor: 600
-                mouseScrollFactor: 200
+                touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
+                mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
 

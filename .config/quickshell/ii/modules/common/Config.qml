@@ -184,8 +184,8 @@ Singleton {
             property JsonObject interactions: JsonObject {
                 property JsonObject scrolling: JsonObject {
                     property int mouseScrollDeltaThreshold: 120 // delta >= this then it gets detected as mouse scroll rather than touchpad
-                    property int mouseScrollFactor: 50
-                    property int touchpadScrollFactor: 100
+                    property int mouseScrollFactor: 120
+                    property int touchpadScrollFactor: 450
                 }
             }
 
