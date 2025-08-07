@@ -1,14 +1,138 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
+import QtMultimedia 6.0
 
 Singleton {
     id: root
     property string filePath: Directories.shellConfigPath
     property alias options: configOptionsJsonAdapter
-    property bool ready: false
+
+    property int pomodoroWorkMinutes: 30
+    property int pomodoroBreakMinutes: 15
+    property int pomodoroLongBreakMinutes: 30
+    property int pomodoroSessions: 0
+    property bool pomodoroIsWorking: true
+    property bool pomodoroRunning: false
+    property int pomodoroTimeLeft: pomodoroWorkMinutes * 60
+
+    property bool pomodoroAtInitialState: {
+        if (root.pomodoroIsWorking) {
+            return root.pomodoroTimeLeft === root.pomodoroWorkMinutes * 60;
+        } else {
+            if (root.pomodoroSessions % 4 === 0) {
+                return root.pomodoroTimeLeft === root.pomodoroLongBreakMinutes * 60;
+            } else {
+                return root.pomodoroTimeLeft === root.pomodoroBreakMinutes * 60;
+            }
+        }
+    }
+
+    property real pomodoroTotalTime: {
+        if (root.pomodoroIsWorking) {
+            return root.pomodoroWorkMinutes * 60;
+        } else {
+            if (root.pomodoroSessions % 4 === 0) {
+                return root.pomodoroLongBreakMinutes * 60;
+            } else {
+                return root.pomodoroBreakMinutes * 60;
+            }
+        }
+    }
+
+    property real pomodoroProgress: (root.pomodoroTotalTime - root.pomodoroTimeLeft) / root.pomodoroTotalTime
+
+    Timer {
+        id: pomodoroTimer
+        interval: 1000
+        running: root.pomodoroRunning
+        repeat: true
+        onTriggered: {
+            if (root.pomodoroTimeLeft > 0) {
+                root.pomodoroTimeLeft--;
+            } else {
+                pomodoroSoundEffect.play();
+                if (root.pomodoroIsWorking) {
+                    Quickshell.execDetached(["notify-send", "Pomodoro", "Hora de fazer uma pausa!"]);
+                    root.pomodoroSessions++;
+                    root.pomodoroRunning = false;
+
+                    if (root.pomodoroSessions % 4 === 0) {
+                        root.pomodoroIsWorking = false;
+                        root.pomodoroTimeLeft = root.pomodoroLongBreakMinutes * 60;
+                    } else {
+                        root.pomodoroIsWorking = false;
+                        root.pomodoroTimeLeft = root.pomodoroBreakMinutes * 60;
+                    }
+                    autoStartTimer.start();
+                } else {
+                    Quickshell.execDetached(["notify-send", "Pomodoro", "Hora de voltar ao trabalho!"]);
+                    root.pomodoroRunning = false;
+                    root.pomodoroIsWorking = true;
+                    root.pomodoroTimeLeft = root.pomodoroWorkMinutes * 60;
+                    autoStartTimer.start();
+                }
+            }
+        }
+    }
+
+    SoundEffect {
+        id: pomodoroSoundEffect
+        source: "qrc:/home/jiboli/.config/quickshell/ii/pleasant.mp3" // Placeholder: Replace with your sound file path
+        volume: 0.5
+    }
+
+    Timer {
+        id: autoStartTimer
+        interval: 2000
+        running: false
+        repeat: false
+        onTriggered: {
+            root.pomodoroRunning = true;
+        }
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0');
+    }
+
+    function startPomodoro() {
+        root.pomodoroRunning = true;
+    }
+
+    function pausePomodoro() {
+        root.pomodoroRunning = false;
+    }
+
+    function resetPomodoro() {
+        root.pomodoroRunning = false;
+        root.pomodoroIsWorking = true;
+        root.pomodoroTimeLeft = root.pomodoroWorkMinutes * 60;
+        root.pomodoroSessions = 0;
+    }
+
+    function skipPomodoro() {
+        root.pomodoroRunning = false;
+        if (root.pomodoroIsWorking) {
+            root.pomodoroSessions++;
+            if (root.pomodoroSessions % 4 === 0) {
+                root.pomodoroIsWorking = false;
+                root.pomodoroTimeLeft = root.pomodoroLongBreakMinutes * 60;
+            } else {
+                root.pomodoroIsWorking = false;
+                root.pomodoroTimeLeft = root.pomodoroBreakMinutes * 60;
+            }
+        } else {
+            root.pomodoroIsWorking = true;
+            root.pomodoroTimeLeft = root.pomodoroWorkMinutes * 60;
+        }
+        autoStartTimer.start();
+    }
 
     function setNestedValue(nestedKey, value) {
         let keys = nestedKey.split(".");
@@ -42,10 +166,10 @@ Singleton {
 
     FileView {
         path: root.filePath
+
         watchChanges: true
         onFileChanged: reload()
         onAdapterUpdated: writeAdapter()
-        onLoaded: root.ready = true
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
                 writeAdapter();

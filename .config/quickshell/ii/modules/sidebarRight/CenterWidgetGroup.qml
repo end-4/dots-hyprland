@@ -3,6 +3,7 @@ import qs.modules.common.widgets
 import qs.services
 import "./notifications"
 import "./volumeMixer"
+import "./pomodoro"
 import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -15,7 +16,7 @@ Rectangle {
     color: Appearance.colors.colLayer1
 
     property int selectedTab: 0
-    property var tabButtonList: [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}]
+    property var tabButtonList: [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}, {"icon": "timer", "name": Translation.tr("Pomodoro")}]
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) {
@@ -75,6 +76,7 @@ Rectangle {
 
             NotificationList {}
             VolumeMixer {}
+            PomodoroControls {}
         }
     }
 }

@@ -51,10 +51,14 @@ Scope {
 
         Loader {
             id: sidebarContentLoader
-            active: GlobalStates.sidebarRightOpen || Config?.options.sidebar.keepRightSidebarLoaded
             anchors {
-                fill: parent
-                margins: Appearance.sizes.hyprlandGapsOut
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+                topMargin: Appearance.sizes.hyprlandGapsOut
+                rightMargin: Appearance.sizes.hyprlandGapsOut
+                bottomMargin: Appearance.sizes.hyprlandGapsOut
                 leftMargin: Appearance.sizes.elevationMargin
             }
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
@@ -82,7 +86,6 @@ Scope {
                     implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                     color: Appearance.colors.colLayer0
                     border.width: 1
-                    border.color: Appearance.colors.colLayer0Border
                     radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                     ColumnLayout {
@@ -97,19 +100,26 @@ Scope {
                             Layout.topMargin: 5
                             Layout.bottomMargin: 0
 
-                            CustomIcon {
-                                id: distroIcon
-                                width: 25
-                                height: 25
-                                source: SystemInfo.distroIcon
-                                colorize: true
-                                color: Appearance.colors.colOnLayer0
+                            Item {
+                                implicitWidth: distroIcon.width
+                                implicitHeight: distroIcon.height
+                                CustomIcon {
+                                    id: distroIcon
+                                    width: 25
+                                    height: 25
+                                    source: SystemInfo.distroIcon
+                                }
+                                ColorOverlay {
+                                    anchors.fill: distroIcon
+                                    source: distroIcon
+                                    color: Appearance.colors.colOnLayer0
+                                }
                             }
 
                             StyledText {
                                 font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer0
-                                text: Translation.tr("Up %1").arg(DateTime.uptime)
+                                text: Translation.tr("Uptime: %1").arg(DateTime.uptime)
                                 textFormat: Text.MarkdownText
                             }
 
@@ -133,7 +143,7 @@ Scope {
                                     toggled: false
                                     buttonIcon: "settings"
                                     onClicked: {
-                                        GlobalStates.sidebarRightOpen = false
+                                        Hyprland.dispatch("global quickshell:sidebarRightClose")
                                         Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
@@ -144,7 +154,7 @@ Scope {
                                     toggled: false
                                     buttonIcon: "power_settings_new"
                                     onClicked: {
-                                        GlobalStates.sessionOpen = true
+                                        Hyprland.dispatch("global quickshell:sessionOpen")
                                     }
                                     StyledToolTip {
                                         content: Translation.tr("Session")
@@ -168,7 +178,8 @@ Scope {
                             CloudflareWarp {}
                         }
 
-                        // Center widget group
+                        
+
                         CenterWidgetGroup {
                             focus: sidebarRoot.visible
                             Layout.alignment: Qt.AlignHCenter
@@ -176,12 +187,16 @@ Scope {
                             Layout.fillWidth: true
                         }
 
+                        
+
                         BottomWidgetGroup {
                             Layout.alignment: Qt.AlignHCenter
                             Layout.fillHeight: false
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                         }
+
+                        
                     }
                 }
             }
