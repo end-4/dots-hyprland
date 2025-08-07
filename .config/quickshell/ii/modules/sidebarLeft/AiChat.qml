@@ -282,6 +282,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 spacing: 10
                 popin: false
 
+                touchpadScrollFactor: 600
+                mouseScrollFactor: 200
+
                 property int lastResponseLength: 0
 
                 clip: true

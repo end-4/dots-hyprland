@@ -137,6 +137,9 @@ Item {
                 anchors.fill: parent
                 spacing: 10
                 
+                touchpadScrollFactor: 600
+                mouseScrollFactor: 200
+
                 property int lastResponseLength: 0
 
                 clip: true
