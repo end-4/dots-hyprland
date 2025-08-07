@@ -46,7 +46,6 @@ ApiStrategy {
         // Real stuff
         try {
             const dataJson = JSON.parse(cleanData);
-            console.log(JSON.stringify(dataJson, null, 2));
             let newContent = "";
             
             const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
