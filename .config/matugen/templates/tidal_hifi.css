@@ -1,0 +1,57 @@
+:root {
+    --wave-color-solid-base-fill: {{colors.surface_container_lowest.default.hex}};
+    --wave-color-solid-base-bright: {{colors.surface_container_low.default.hex}};
+    --wave-color-solid-base-brighter: {{colors.surface_container.default.hex}};
+    --wave-color-solid-base-brightest: {{colors.surface_container_high.default.hex}};
+  
+    --wave-color-solid-contrast-fill: {{colors.on_surface.default.hex}};
+    --wave-color-solid-contrast-dark: {{colors.on_surface_variant.default.hex}};
+    --wave-color-solid-contrast-darker: {{colors.outline.default.hex}};
+    --wave-color-solid-contrast-darkest: {{colors.outline_variant.default.hex}};
+  
+    --wave-color-solid-accent-fill: {{colors.primary.default.hex}};
+    --wave-color-solid-accent-bright: color-mix(in srgb, {{colors.primary.default.hex}} 80%, transparent);
+    --wave-color-solid-accent-brighter: color-mix(in srgb, {{colors.primary.default.hex}} 93%, transparent);
+    --wave-color-solid-accent-dark: color-mix(in srgb, {{colors.primary.default.hex}} 66%, black);
+    --wave-color-solid-accent-darker: color-mix(in srgb, {{colors.primary.default.hex}} 53%, black);
+    --wave-color-solid-accent-darkest: color-mix(in srgb, {{colors.primary.default.hex}} 33%, black);
+  
+    --wave-color-solid-rainbow-red-fill: {{colors.error.default.hex}};
+    --wave-color-solid-rainbow-orange-fill: {{colors.tertiary.default.hex}};
+    --wave-color-solid-rainbow-yellow-fill: {{colors.tertiary_container.default.hex}};
+    --wave-color-solid-rainbow-green-fill: {{colors.secondary.default.hex}};
+    --wave-color-solid-rainbow-blue-fill: {{colors.primary.default.hex}};
+    --wave-color-solid-rainbow-purple-fill: {{colors.secondary_container.default.hex}};
+  
+    --wave-color-solid-warning-fill: {{colors.error.default.hex}};
+    --wave-color-solid-warning-bright: color-mix(in srgb, {{colors.error.default.hex}} 80%, transparent);
+    --wave-color-solid-warning-brighter: color-mix(in srgb, {{colors.error.default.hex}} 93%, transparent);
+    --wave-color-solid-warning-dark: color-mix(in srgb, {{colors.error.default.hex}} 66%, black);
+    --wave-color-solid-warning-darker: color-mix(in srgb, {{colors.error.default.hex}} 53%, black);
+    --wave-color-solid-warning-darkest: color-mix(in srgb, {{colors.error.default.hex}} 33%, black);
+  
+    --wave-color-solid-special-fill: {{colors.primary_container.default.hex}};
+    --wave-color-solid-special-bright: color-mix(in srgb, {{colors.primary_container.default.hex}} 80%, transparent);
+    --wave-color-solid-special-brighter: color-mix(in srgb, {{colors.primary_container.default.hex}} 93%, transparent);
+    --wave-color-solid-special-dark: color-mix(in srgb, {{colors.primary_container.default.hex}} 66%, black);
+    --wave-color-solid-special-darker: color-mix(in srgb, {{colors.primary_container.default.hex}} 53%, black);
+    --wave-color-solid-special-darkest: color-mix(in srgb, {{colors.primary_container.default.hex}} 33%, black);
+  
+    --wave-color-opacity-base-fill-ultra-thin: color-mix(in srgb, {{colors.surface_container_lowest.default.hex}} 5%, transparent);
+    --wave-color-opacity-base-fill-thin: color-mix(in srgb, {{colors.surface_container_lowest.default.hex}} 20%, transparent);
+    --wave-color-opacity-base-fill-regular: color-mix(in srgb, {{colors.surface_container_lowest.default.hex}} 40%, transparent);
+    --wave-color-opacity-base-fill-thick: color-mix(in srgb, {{colors.surface_container_lowest.default.hex}} 60%, transparent);
+    --wave-color-opacity-base-fill-ultra-thick: color-mix(in srgb, {{colors.surface_container_lowest.default.hex}} 80%, transparent);
+  
+    --wave-color-text-main: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-secondary: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-tertiary: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-disabled: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-placeholder: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-link: var(--wave-color-solid-contrast-fill);
+    --wave-color-text-danger: var(--wave-color-solid-rainbow-red-fill);
+}
+
+body {
+    background-color: var(--wave-color-solid-base-fill) !important;
+}
