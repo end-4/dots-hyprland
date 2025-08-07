@@ -181,6 +181,14 @@ Singleton {
                 property list<string> ignoredAppRegexes: []
             }
 
+            property JsonObject interactions: JsonObject {
+                property JsonObject scrolling: JsonObject {
+                    property int mouseScrollDeltaThreshold: 120 // delta >= this then it gets detected as mouse scroll rather than touchpad
+                    property int mouseScrollFactor: 50
+                    property int touchpadScrollFactor: 100
+                }
+            }
+
             property JsonObject language: JsonObject {
                 property JsonObject translator: JsonObject {
                     property string engine: "auto" // Run `trans -list-engines` for available engines. auto should use google

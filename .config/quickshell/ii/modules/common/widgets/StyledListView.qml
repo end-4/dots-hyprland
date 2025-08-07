@@ -15,8 +15,9 @@ ListView {
     property real dragDistance: 0
     property bool popin: true
 
-    property real touchpadScrollFactor: 100
-    property real mouseScrollFactor: 50
+    property real touchpadScrollFactor: Config?.options.interactions.scrolling.touchpadScrollFactor ?? 100
+    property real mouseScrollFactor: Config?.options.interactions.scrolling.mouseScrollFactor ?? 50
+    property real mouseScrollDeltaThreshold: Config?.options.interactions.scrolling.mouseScrollDeltaThreshold ?? 120
 
     function resetDrag() {
         root.dragIndex = -1
@@ -30,10 +31,10 @@ ListView {
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
         onWheel: function(wheelEvent) {
-            var delta = wheelEvent.angleDelta.y / 120;
+            const delta = wheelEvent.angleDelta.y / root.mouseScrollDeltaThreshold;
             // The angleDelta.y of a touchpad is usually small and continuous, 
             // while that of a mouse wheel is typically in multiples of ±120.
-            var scrollFactor = Math.abs(wheelEvent.angleDelta.y) >= 120 ? root.mouseScrollFactor : root.touchpadScrollFactor;
+            var scrollFactor = Math.abs(wheelEvent.angleDelta.y) >= root.mouseScrollDeltaThreshold ? root.mouseScrollFactor : root.touchpadScrollFactor;
             var targetY = root.contentY - delta * scrollFactor;
             targetY = Math.max(0, Math.min(targetY, root.contentHeight - root.height));
             root.contentY = targetY;
