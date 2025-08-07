@@ -137,6 +137,9 @@ Item {
                 anchors.fill: parent
                 spacing: 10
                 
+                touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
+                mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
+
                 property int lastResponseLength: 0
 
                 clip: true
@@ -146,15 +149,6 @@ Item {
                         width: swipeView.width
                         height: swipeView.height
                         radius: Appearance.rounding.small
-                    }
-                }
-
-                Behavior on contentY {
-                    NumberAnimation {
-                        id: scrollAnim
-                        duration: Appearance.animation.scroll.duration
-                        easing.type: Appearance.animation.scroll.type
-                        easing.bezierCurve: Appearance.animation.scroll.bezierCurve
                     }
                 }
 
