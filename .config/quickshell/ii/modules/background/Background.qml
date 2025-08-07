@@ -26,9 +26,10 @@ Variants {
         required property var modelData
 
         // Hide when fullscreen
-        readonly property var monitorHasFullscreen: ToplevelManager.toplevels.values.filter(window=>(window.screens[0].name == monitor.name) && window.fullscreen)[0]
-
-        visible: !(monitorHasFullscreen != undefined)
+        property list<HyprlandWorkspace> workspacesForMonitor: Hyprland.workspaces.values.filter(workspace=>workspace.monitor && workspace.monitor.name == monitor.name)
+        property var activeWorkspaceWithFullscreen: workspacesForMonitor.filter(workspace=>((workspace.toplevels.values.filter(window=>window.wayland.fullscreen)[0] != undefined) && workspace.active))[0]
+      
+        visible: !(activeWorkspaceWithFullscreen != undefined)
 
         // Workspaces
         property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
