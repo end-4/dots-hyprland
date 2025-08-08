@@ -6,15 +6,17 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 
-GroupButton {
+RippleButton {
     id: button
     required property bool input
 
     buttonRadius: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
-    colBackgroundActive: Appearance.colors.colLayer2Active
-    clickedWidth: baseWidth + 30
+    colRipple: Appearance.colors.colLayer2Active
+
+    implicitHeight: contentItem.implicitHeight + 6 * 2
+    implicitWidth: contentItem.implicitWidth + 6 * 2
 
     contentItem: RowLayout {
         anchors.fill: parent
