@@ -91,6 +91,7 @@ Button {
 
     RippleAnim {
         id: rippleFadeAnim
+        duration: rippleDuration * 2
         target: ripple
         property: "opacity"
         to: 0
