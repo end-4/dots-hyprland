@@ -32,32 +32,15 @@ Singleton {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
-    // When user is not reluctant while pressing super, they probably don't need to see workspace numbers
-    onSuperReleaseMightTriggerChanged: { 
-        workspaceShowNumbersTimer.stop()
-    }
-
-    Timer {
-        id: workspaceShowNumbersTimer
-        interval: Config.options.bar.workspaces.showNumberDelay
-        repeat: false
-        onTriggered: {
-            workspaceShowNumbers = true
-        }
-    }
-
     GlobalShortcut {
         name: "workspaceNumber"
         description: "Hold to show workspace numbers, release to show icons"
 
         onPressed: {
             root.superDown = true
-            workspaceShowNumbersTimer.start()
         }
         onReleased: {
             root.superDown = false
-            workspaceShowNumbersTimer.stop()
-            workspaceShowNumbers = false
         }
     }
 
