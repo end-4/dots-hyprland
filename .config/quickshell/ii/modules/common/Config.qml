@@ -254,11 +254,12 @@ Singleton {
                 property string format: "hh:mm"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
+                    property string alertSound: ""
+                    property bool autoRun: false
                     property int breakTime: 300
                     property int cycle: 4
                     property int focus: 1500
                     property int longBreak: 1200
-                    property bool running: false
                 }
             }
 

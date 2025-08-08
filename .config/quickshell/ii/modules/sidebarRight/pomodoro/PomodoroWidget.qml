@@ -21,7 +21,7 @@ Item {
     property int lapsListItemSpacing: 5
 
 
-    // These are keybinds, make sure to change them.
+    // These are keybinds for stopwatch and pomodoro
     Keys.onPressed: (event) => {
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageDown) {
@@ -30,15 +30,15 @@ Item {
                 currentTab = Math.max(currentTab - 1, 0)
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_Space && !showDialog) {
-            // Toggle start/stop with Space key
+        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) {
+            // Toggle start/stop with Space or S key
             if (currentTab === 0) {
                 Pomodoro.togglePomodoro()
             } else {
                 Pomodoro.toggleStopwatch()
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_R && !showDialog) {
+        } else if (event.key === Qt.Key_R) {
             // Reset with R key
             if (currentTab === 0) {
                 Pomodoro.pomodoroReset()
@@ -46,18 +46,18 @@ Item {
                 Pomodoro.stopwatchReset()
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_Escape && showDialog) {
-            showDialog = false
-            event.accepted = true
+        } else if (event.key === Qt.Key_L) {
+            // record Stopwatch lap with L key, regardless of current Tab
+            Pomodoro.recordLaps() 
         }
     }
 
     Timer {
         id: pomodoroTimer
         interval: 200
-        running: Config.options.time.pomodoro.running
+        running: Pomodoro.isPomodoroRunning
         repeat: true
-        onTriggered: Pomodoro.tickSecond()
+        onTriggered: Pomodoro.refreshPomodoro()
     }
 
     Timer {
@@ -65,7 +65,7 @@ Item {
         interval: 10
         running: Pomodoro.isStopwatchRunning
         repeat: true
-        onTriggered: Pomodoro.tick10ms()
+        onTriggered: Pomodoro.refreshStopwatch()
     }
 
 
@@ -116,7 +116,7 @@ Item {
             Rectangle {
                 id: indicator
                 property int tabCount: root.tabButtonList.length
-                property real fullTabSize: root.width / tabCount
+                property real fullTabSize: root.width / tabCount;
                 property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
 
                 implicitWidth: targetWidth
@@ -176,7 +176,7 @@ Item {
                             lineWidth: 7
                             gapAngle: Math.PI / 14
                             value: {
-                                let pomodoroTotalTime = Pomodoro.isPomodoroBreak ? Pomodoro.pomodoroBreakTime : Pomodoro.pomodoroFocusTime
+                                let pomodoroTotalTime = Pomodoro.isBreak ? Pomodoro.breakTime : Pomodoro.focusTime
                                 return Pomodoro.getPomodoroSecondsLeft / pomodoroTotalTime
                             }
                             size: 125
@@ -200,7 +200,7 @@ Item {
                                 }
                                 StyledText {
                                     Layout.alignment: Qt.AlignHCenter
-                                    text: Pomodoro.isPomodoroBreak ? Translation.tr("Break") : Translation.tr("Focus")
+                                    text: Pomodoro.isBreak ? Translation.tr("Break") : Translation.tr("Focus")
                                     font.pixelSize: Appearance.font.pixelSize.normal
                                     color: Appearance.m3colors.m3onSurface
                                 }
@@ -273,6 +273,10 @@ Item {
                                 value: Config.options.time.pomodoro.focus / 60
                                 onValueChanged: {
                                     Config.options.time.pomodoro.focus = value * 60
+                                    if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
+                                        Pomodoro.getPomodoroSecondsLeft = Pomodoro.focusTime
+                                        Pomodoro.timeLeft = Pomodoro.focusTime
+                                    }
                                 }
                             }
 
@@ -335,7 +339,9 @@ Item {
 
             // Stopwatch Tab
             Item {
+                id: stopwatchTab
                 Layout.fillWidth: true
+                Layout.fillHeight: true
 
                 ColumnLayout {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -346,6 +352,7 @@ Item {
                         spacing: 40
                         // The Stopwatch circle
                         CircularProgress {
+                            id: stopwatchClock
                             Layout.alignment: Qt.AlignHCenter
                             lineWidth: 7
                             gapAngle: Math.PI / 18
@@ -413,7 +420,7 @@ Item {
                                 Layout.preferredHeight: 35
                                 Layout.preferredWidth: 90
                                 font.pixelSize: Appearance.font.pixelSize.larger
-                                onClicked: Pomodoro.stopwatchReset()
+                                onClicked: Pomodoro.stopwatchResetOrLaps()
                                 colBackground: Appearance.m3colors.m3onError
                                 colBackgroundHover: Appearance.m3colors.m3onError
                             }
@@ -423,9 +430,10 @@ Item {
                     StyledListView {
                         id: lapsList
                         Layout.fillWidth: true
-                        Layout.preferredHeight: contentHeight
+                        Layout.preferredHeight: stopwatchTab.height - stopwatchClock.height - 20
                         spacing: lapsListItemSpacing
                         clip: true
+                        popin: true
                         model: Pomodoro.stopwatchLaps
 
                         delegate: Rectangle {
@@ -446,11 +454,8 @@ Item {
                                 font.pixelSize: Appearance.font.pixelSize.normal
 
                                 text: {
-                                    let lapIndex = index + 1
                                     let lapTime = modelData
-                                    // if (index > 0) {
-                                        // lapTime = modelData - Pomodoro.stopwatchLaps[index - 1]
-                                    // }
+
                                     let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
                                     let totalSeconds = Math.floor(lapTime) / 100
                                     let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
@@ -472,9 +477,8 @@ Item {
                                 color: Appearance.colors.colPrimary
 
                                 text: {
-                                    let lapTime = modelData
                                     if (index != Pomodoro.stopwatchLaps.length - 1) {  // except first lap
-                                        lapTime = modelData - Pomodoro.stopwatchLaps[index + 1]
+                                        let lapTime = modelData - Pomodoro.stopwatchLaps[index + 1]
                                         let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
                                         let totalSeconds = Math.floor(lapTime) / 100
                                         let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')

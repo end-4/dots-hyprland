@@ -14,64 +14,72 @@ import QtQuick
 Singleton {
     id: root
 
-    property int pomodoroFocusTime: Config.options.time.pomodoro.focus
-    property int pomodoroBreakTime: Config.options.time.pomodoro.breakTime
-    property int pomodoroLongBreakTime: Config.options.time.pomodoro.longBreak
-    property int pomodoroLongBreakCycle: Config.options.time.pomodoro.cycle
-    property bool isPomodoroRunning: Config.options.time.pomodoro.running
+    property int focusTime: Config.options.time.pomodoro.focus
+    property int breakTime: Config.options.time.pomodoro.breakTime
+    property int longBreakTime: Config.options.time.pomodoro.longBreak
+    property int longBreakCycle: Config.options.time.pomodoro.cycle
+    property string alertSound: Config.options.time.pomodoro.alertSound
 
-    property int pomodoroTimeLeft: pomodoroFocusTime
-    property int getPomodoroSecondsLeft: pomodoroFocusTime
-    property int pomodoroTimeStarted: getCurrentTimeInSeconds()  // The time pomodoro was last Resumed
-    property bool isPomodoroBreak: false
+    property bool isPomodoroRunning: Config.options.time.pomodoro.autoRun
+    property bool isBreak: false
+    property bool isPomodoroReset: !isPomodoroRunning
+    property int timeLeft: focusTime
+    property int getPomodoroSecondsLeft: focusTime
+    property int pomodoroStartTime: getCurrentTimeInSeconds()  // The time pomodoro was last Resumed
     property int pomodoroCycle: 1
 
-    property int stopwatchTime: 0
     property bool isStopwatchRunning: false
-    property int stopwatchStartTime: 0
+    property int stopwatchTime: 0
+    property int stopwatchStart: 0
     property var stopwatchLaps: []
 
     // Start and Stop button
     function togglePomodoro() {
-        Config.options.time.pomodoro.running = !isPomodoroRunning
+        isPomodoroReset = false
+        isPomodoroRunning = !isPomodoroRunning
         if (isPomodoroRunning) {  // Pressed Start button
-            pomodoroTimeStarted = getCurrentTimeInSeconds()
+            pomodoroStartTime = getCurrentTimeInSeconds()
         } else {  // Pressed Stop button
-            pomodoroTimeLeft -= (getCurrentTimeInSeconds() - pomodoroTimeStarted)
+            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStartTime)
         }
     }
 
     // Reset button
     function pomodoroReset() {
-        pomodoroTimeLeft = pomodoroFocusTime
-        getPomodoroSecondsLeft = pomodoroFocusTime
-        isPomodoroBreak = false
-        Config.options.time.pomodoro.running = false
+        isPomodoroRunning = false
+        isBreak = false
+        isPomodoroReset = true
+        timeLeft = focusTime
+        pomodoroStartTime = getCurrentTimeInSeconds()
         pomodoroCycle = 1
+        refreshPomodoro()
     }
 
-    function tickSecond() {
-        if (getCurrentTimeInSeconds() >= pomodoroTimeStarted + pomodoroTimeLeft) {
-            isPomodoroBreak = !isPomodoroBreak
-            pomodoroTimeStarted += pomodoroTimeLeft
-            pomodoroTimeLeft = isPomodoroBreak ? pomodoroBreakTime : pomodoroFocusTime
+    function refreshPomodoro() {
+        if (getCurrentTimeInSeconds() >= pomodoroStartTime + timeLeft) {
+            isBreak = !isBreak
+            pomodoroStartTime += timeLeft
+            timeLeft = isBreak ? breakTime : focusTime
 
             let notificationTitle, notificationMessage
 
-            if (isPomodoroBreak && pomodoroCycle % pomodoroLongBreakCycle === 0) {  // isPomodoroLongBreak
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(pomodoroLongBreakTime / 60))
-            } else if (isPomodoroBreak) {
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(pomodoroBreakTime / 60))
+            if (isBreak && pomodoroCycle % longBreakCycle === 0) {  // isPomodoroLongBreak
+                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60))
+            } else if (isBreak) {
+                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60))
             } else {
-                notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(pomodoroFocusTime / 60))
+                notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(focusTime / 60))
                 pomodoroCycle += 1
             }
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"])
+            if (alertSound) {  // Play sound only if alertSound is explicitly specified
+                Quickshell.execDetached(["bash", "-c", `ffplay -nodisp -autoexit ${alertSound}`])
+            }
         }
 
         // A nice abstraction for resume logic by updating the TimeStarted
-        getPomodoroSecondsLeft = (pomodoroTimeStarted + pomodoroTimeLeft) - getCurrentTimeInSeconds()
+        getPomodoroSecondsLeft = (pomodoroStartTime + timeLeft) - getCurrentTimeInSeconds()
     }
 
     function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds
@@ -82,8 +90,8 @@ Singleton {
         return Math.floor(Date.now() / 10)
     }
 
-    function tick10ms() {  // stopwatch stores time in 10ms
-        stopwatchTime = getCurrentTimeIn10ms() - stopwatchStartTime
+    function refreshStopwatch() {  // stopwatch stores time in 10ms
+        stopwatchTime = getCurrentTimeIn10ms() - stopwatchStart
     }
 
     // Stopwatch functions
@@ -91,20 +99,28 @@ Singleton {
         isStopwatchRunning = !isStopwatchRunning
         if (isStopwatchRunning) {
             // Resume from paused time by adjusting start time
-            stopwatchStartTime = getCurrentTimeIn10ms() - stopwatchTime
+            stopwatchStart = getCurrentTimeIn10ms() - stopwatchTime
+        }
+    }
+
+    function stopwatchResetOrLaps() {
+        if (isStopwatchRunning) {  // Clicked on Lap
+            recordLaps()
+        } else {  // Clicked on Reset
+            stopwatchReset()
         }
     }
 
     function stopwatchReset() {
-        if (isStopwatchRunning) {  // Clicked on Lap
+            isStopwatchRunning = false
+            stopwatchTime = 0
+            stopwatchStart = 0
+            stopwatchLaps = []
+    }
+
+    function recordLaps() {
             stopwatchLaps.unshift(stopwatchTime)  // Last lap goes first on list
             // Reassign to trigger onListChanged, idk copied from Todo.qml
             root.stopwatchLaps = stopwatchLaps.slice(0)
-        } else {  // Clicked on Reset
-            isStopwatchRunning = false
-            stopwatchTime = 0
-            stopwatchStartTime = 0
-            stopwatchLaps = []
-        }
     }
 }
