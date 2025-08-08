@@ -69,7 +69,7 @@ Singleton {
 
     Process {
         id: getClients
-        command: ["bash", "-c", "hyprctl clients -j"]
+        command: ["hyprctl", "clients", "-j"]
         stdout: StdioCollector {
             id: clientsCollector
             onStreamFinished: {
@@ -87,7 +87,7 @@ Singleton {
 
     Process {
         id: getMonitors
-        command: ["bash", "-c", "hyprctl monitors -j"]
+        command: ["hyprctl", "monitors", "-j"]
         stdout: StdioCollector {
             id: monitorsCollector
             onStreamFinished: {
@@ -98,7 +98,7 @@ Singleton {
 
     Process {
         id: getLayers
-        command: ["bash", "-c", "hyprctl layers -j"]
+        command: ["hyprctl", "layers", "-j"]
         stdout: StdioCollector {
             id: layersCollector
             onStreamFinished: {
@@ -109,7 +109,7 @@ Singleton {
 
     Process {
         id: getWorkspaces
-        command: ["bash", "-c", "hyprctl workspaces -j"]
+        command: ["hyprctl", "workspaces", "-j"]
         stdout: StdioCollector {
             id: workspacesCollector
             onStreamFinished: {
@@ -127,7 +127,7 @@ Singleton {
 
     Process {
         id: getActiveWorkspace
-        command: ["bash", "-c", "hyprctl activeworkspace -j"]
+        command: ["hyprctl", "activeworkspace", "-j"]
         stdout: StdioCollector {
             id: activeWorkspaceCollector
             onStreamFinished: {
