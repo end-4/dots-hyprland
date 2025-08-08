@@ -63,12 +63,16 @@ Button {
             anchors.fill: parent
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
-            visible: opacity > 0
-            opacity: status === Image.Ready ? 1 : 0
             fillMode: Image.PreserveAspectFit
             source: modelData.preview_url
             sourceSize.width: root.rowHeight * modelData.aspect_ratio
             sourceSize.height: root.rowHeight
+
+            visible: opacity > 0
+            opacity: status === Image.Ready ? 1 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+            }
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -77,10 +81,6 @@ Button {
                     height: root.rowHeight
                     radius: imageRadius
                 }
-            }
-
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
         }
 
