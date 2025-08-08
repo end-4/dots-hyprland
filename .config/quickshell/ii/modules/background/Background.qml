@@ -150,6 +150,7 @@ Variants {
             id: wallpaper
             visible: !bgRoot.wallpaperIsVideo
             property real value // 0 to 1, for offset
+            asynchronous: true
             value: {
                 // Range = groups that workspaces span on
                 const chunkSize = Config?.options.bar.workspaces.shown ?? 10;
