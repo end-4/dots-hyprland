@@ -129,7 +129,7 @@ Singleton {
                     property bool pushWindows: false
                     property JsonObject showWhenPressingSuper: JsonObject {
                         property bool enable: true
-                        property int delay: 100
+                        property int delay: 140
                     }
                 }
                 property bool bottom: false // Instead of top
