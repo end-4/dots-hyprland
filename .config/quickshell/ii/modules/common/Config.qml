@@ -125,10 +125,10 @@ Singleton {
 
             property JsonObject bar: JsonObject {
                 property JsonObject autoHide: JsonObject {
-                    property bool enabled: false
+                    property bool enable: false
                     property bool pushWindows: false
                     property JsonObject showWhenPressingSuper: JsonObject {
-                        property bool enabled: true
+                        property bool enable: true
                         property int delay: 100
                     }
                 }
