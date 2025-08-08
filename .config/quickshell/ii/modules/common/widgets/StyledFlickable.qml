@@ -11,6 +11,7 @@ Flickable {
     property real mouseScrollDeltaThreshold: Config?.options.interactions.scrolling.mouseScrollDeltaThreshold ?? 120
 
     MouseArea {
+        visible: Config?.options.interactions.scrolling.fasterTouchpadScroll
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
         onWheel: function(wheelEvent) {
