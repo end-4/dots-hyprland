@@ -17,11 +17,12 @@ Singleton {
     property bool osdVolumeOpen: false
     property bool oskOpen: false
     property bool overviewOpen: false
-    property bool sessionOpen: false
-    property bool workspaceShowNumbers: false
-    property bool superReleaseMightTrigger: true
     property bool screenLocked: false
     property bool screenLockContainsCharacters: false
+    property bool sessionOpen: false
+    property bool superDown: false
+    property bool superReleaseMightTrigger: true
+    property bool workspaceShowNumbers: false
 
     property real screenZoom: 1
     onScreenZoomChanged: {
@@ -51,9 +52,11 @@ Singleton {
         description: "Hold to show workspace numbers, release to show icons"
 
         onPressed: {
+            root.superDown = true
             workspaceShowNumbersTimer.start()
         }
         onReleased: {
+            root.superDown = false
             workspaceShowNumbersTimer.stop()
             workspaceShowNumbers = false
         }

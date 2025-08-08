@@ -124,6 +124,11 @@ Singleton {
             }
 
             property JsonObject bar: JsonObject {
+                property JsonObject autoHide: JsonObject {
+                    property bool enabled: false
+                    property bool pushWindows: false
+                    property bool showWhenPressingSuper: true
+                }
                 property bool bottom: false // Instead of top
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
                 property bool borderless: false // true for no grouping of items
