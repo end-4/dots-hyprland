@@ -127,7 +127,10 @@ Singleton {
                 property JsonObject autoHide: JsonObject {
                     property bool enabled: false
                     property bool pushWindows: false
-                    property bool showWhenPressingSuper: true
+                    property JsonObject showWhenPressingSuper: JsonObject {
+                        property bool enabled: true
+                        property int delay: 100
+                    }
                 }
                 property bool bottom: false // Instead of top
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle

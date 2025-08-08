@@ -40,7 +40,6 @@ Singleton {
     Timer {
         id: workspaceShowNumbersTimer
         interval: Config.options.bar.workspaces.showNumberDelay
-        // interval: 0
         repeat: false
         onTriggered: {
             workspaceShowNumbers = true
