@@ -35,15 +35,16 @@ Singleton {
 
     // General
     Component.onCompleted: {
-        if (!isStopwatchRunning) stopwatchReset()
+        if (!isStopwatchRunning)
+            stopwatchReset();
     }
 
     function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds
-        return Math.floor(Date.now() / 1000)
+        return Math.floor(Date.now() / 1000);
     }
 
     function getCurrentTimeIn10ms() {  // Stopwatch uses 10ms
-        return Math.floor(Date.now() / 10)
+        return Math.floor(Date.now() / 10);
     }
 
     // Pomodoro
@@ -51,32 +52,31 @@ Singleton {
         // Work <-> break ?
         if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
             // Reset counts
-            const currentTimeInSeconds = getCurrentTimeInSeconds()
-            Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak
-            Persistent.states.timer.pomodoro.isLongBreak = Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak)
-            Persistent.states.timer.pomodoro.start = currentTimeInSeconds
+            const currentTimeInSeconds = getCurrentTimeInSeconds();
+            Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
+            Persistent.states.timer.pomodoro.isLongBreak = Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
+            Persistent.states.timer.pomodoro.start = currentTimeInSeconds;
 
             // Send notification
-            let notificationTitle, notificationMessage
-            if (Persistent.states.timer.pomodoro.isBreak && pomodoroCycle % cyclesBeforeLongBreak === 0) {  // isPomodoroLongBreak
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60))
+            let notificationMessage;
+            if (Persistent.states.timer.pomodoro.isLongBreak) {
+                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60));
             } else if (Persistent.states.timer.pomodoro.isBreak) {
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60))
+                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60));
             } else {
-                notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(focusTime / 60))
+                notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(focusTime / 60));
             }
 
-            Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"])
-            if (alertSound) {  // Play sound only if alertSound is explicitly specified
-                Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound])
-            }
+            Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"]);
+            if (alertSound)
+                Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound]);
 
             if (!isBreak) {
                 Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
             }
         }
 
-        pomodoroSecondsLeft = pomodoroLapDuration - (getCurrentTimeInSeconds() - Persistent.states.timer.pomodoro.start)
+        pomodoroSecondsLeft = pomodoroLapDuration - (getCurrentTimeInSeconds() - Persistent.states.timer.pomodoro.start);
     }
 
     Timer {
@@ -88,23 +88,24 @@ Singleton {
     }
 
     function togglePomodoro() {
-        Persistent.states.timer.pomodoro.running = !isPomodoroRunning
-        if (Persistent.states.timer.pomodoro.running) { // Start/Resume
-            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - pomodoroLapDuration
+        Persistent.states.timer.pomodoro.running = !isPomodoroRunning;
+        if (Persistent.states.timer.pomodoro.running) {
+            // Start/Resume
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - pomodoroLapDuration;
         }
     }
 
     function resetPomodoro() {
-        Persistent.states.timer.pomodoro.running = false
-        Persistent.states.timer.pomodoro.isBreak = false
-        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        Persistent.states.timer.pomodoro.cycle = 0
-        refreshPomodoro()
+        Persistent.states.timer.pomodoro.running = false;
+        Persistent.states.timer.pomodoro.isBreak = false;
+        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
+        Persistent.states.timer.pomodoro.cycle = 0;
+        refreshPomodoro();
     }
 
     // Stopwatch
     function refreshStopwatch() {  // Stopwatch stores time in 10ms
-        stopwatchTime = getCurrentTimeIn10ms() - stopwatchStart
+        stopwatchTime = getCurrentTimeIn10ms() - stopwatchStart;
     }
 
     Timer {
@@ -117,28 +118,28 @@ Singleton {
 
     function toggleStopwatch() {
         if (root.isStopwatchRunning)
-            stopwatchPause()
+            stopwatchPause();
         else
-            stopwatchResume()
+            stopwatchResume();
     }
 
     function stopwatchPause() {
-        Persistent.states.timer.stopwatch.running = false
+        Persistent.states.timer.stopwatch.running = false;
     }
 
     function stopwatchResume() {
-        Persistent.states.timer.stopwatch.running = true
-        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime
+        Persistent.states.timer.stopwatch.running = true;
+        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime;
     }
 
     function stopwatchReset() {
-        Persistent.states.timer.stopwatch.running = false
-        stopwatchTime = 0
-        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms()
-        Persistent.states.timer.stopwatch.laps = []
+        Persistent.states.timer.stopwatch.running = false;
+        stopwatchTime = 0;
+        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms();
+        Persistent.states.timer.stopwatch.laps = [];
     }
 
     function stopwatchRecordLap() {
-        Persistent.states.timer.stopwatch.laps.push(stopwatchTime)
+        Persistent.states.timer.stopwatch.laps.push(stopwatchTime);
     }
 }
