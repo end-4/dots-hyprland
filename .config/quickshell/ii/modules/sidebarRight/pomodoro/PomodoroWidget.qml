@@ -16,32 +16,26 @@ Item {
 
     // These are keybinds for stopwatch and pomodoro
     Keys.onPressed: (event) => {
-        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) { // Switch tabs
             if (event.key === Qt.Key_PageDown) {
                 currentTab = Math.min(currentTab + 1, root.tabButtonList.length - 1)
             } else if (event.key === Qt.Key_PageUp) {
                 currentTab = Math.max(currentTab - 1, 0)
             }
-            event.accepted = true
-        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) {
-            // Toggle start/stop with Space or S key
+        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) { // Pause/resume with Space or S
             if (currentTab === 0) {
                 Pomodoro.togglePomodoro()
             } else {
                 Pomodoro.toggleStopwatch()
             }
-            event.accepted = true
-        } else if (event.key === Qt.Key_R) {
-            // Reset with R key
+        } else if (event.key === Qt.Key_R) { // Reset with R
             if (currentTab === 0) {
                 Pomodoro.resetPomodoro()
             } else {
                 Pomodoro.stopwatchReset()
             }
-            event.accepted = true
-        } else if (event.key === Qt.Key_L) {
-            // record Stopwatch lap with L key, regardless of current Tab
-            Pomodoro.recordLaps() 
+        } else if (event.key === Qt.Key_L) { // Record lap with L
+            Pomodoro.stopwatchRecordLap()
         }
     }
 
