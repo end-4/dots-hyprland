@@ -52,10 +52,9 @@ Singleton {
         // Work <-> break ?
         if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
             // Reset counts
-            const currentTimeInSeconds = getCurrentTimeInSeconds();
             Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
             Persistent.states.timer.pomodoro.isLongBreak = Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
-            Persistent.states.timer.pomodoro.start = currentTimeInSeconds;
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
 
             // Send notification
             let notificationMessage;
