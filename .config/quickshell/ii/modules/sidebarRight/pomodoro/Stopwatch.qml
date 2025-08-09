@@ -61,7 +61,9 @@ Item {
                     Layout.preferredWidth: 90
                     font.pixelSize: Appearance.font.pixelSize.larger
 
-                    onClicked: Pomodoro.toggleStopwatch()
+                    onClicked: {
+                        Pomodoro.toggleStopwatch()
+                    }
 
                     colBackground: Pomodoro.isStopwatchRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary 
                     colBackgroundHover: Pomodoro.isStopwatchRunning ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colPrimaryHover 
@@ -79,7 +81,12 @@ Item {
                     implicitWidth: 90
                     font.pixelSize: Appearance.font.pixelSize.larger
 
-                    onClicked: Pomodoro.stopwatchResetOrLaps()
+                    onClicked: {
+                        if (Pomodoro.isStopwatchRunning) 
+                            Pomodoro.stopwatchRecordLap()
+                        else 
+                            Pomodoro.stopwatchReset()
+                    }
                     enabled: Pomodoro.stopwatchTime !== 0
 
                     colBackground: Pomodoro.isStopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer

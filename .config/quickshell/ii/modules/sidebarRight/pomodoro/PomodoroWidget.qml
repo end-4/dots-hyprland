@@ -45,23 +45,6 @@ Item {
         }
     }
 
-    Timer {
-        id: pomodoroTimer
-        interval: 200
-        running: Pomodoro.isPomodoroRunning
-        repeat: true
-        onTriggered: Pomodoro.refreshPomodoro()
-    }
-
-    Timer {
-        id: stopwatchTimer
-        interval: 10
-        running: Pomodoro.isStopwatchRunning
-        repeat: true
-        onTriggered: Pomodoro.refreshStopwatch()
-    }
-
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 0

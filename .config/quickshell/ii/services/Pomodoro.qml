@@ -21,7 +21,7 @@ Singleton {
     property string alertSound: Config.options.time.pomodoro.alertSound
 
     property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
-    property bool isBreak: false
+    property bool isBreak: Persistent.states.timer.pomodoro.isBreak
     property bool isPomodoroReset: !isPomodoroRunning
     property int timeLeft: focusTime
     property int pomodoroSecondsLeft: focusTime
@@ -33,35 +33,24 @@ Singleton {
     property int stopwatchStart: Persistent.states.timer.stopwatch.start
     property var stopwatchLaps: Persistent.states.timer.stopwatch.laps
 
+    // General
     Component.onCompleted: {
         if (!isStopwatchRunning) stopwatchReset()
     }
 
-    // Start and Stop button
-    function togglePomodoro() {
-        isPomodoroReset = false
-        Persistent.states.timer.pomodoro.running = !isPomodoroRunning
-        if (isPomodoroRunning) {  // Pressed Start button
-            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        } else {  // Pressed Stop button
-            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStart)
-        }
+    function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds
+        return Math.floor(Date.now() / 1000)
     }
 
-    // Reset button
-    function resetPomodoro() {
-        Persistent.states.timer.pomodoro.running = false
-        isBreak = false
-        isPomodoroReset = true
-        timeLeft = focusTime
-        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        pomodoroCycle = 1
-        refreshPomodoro()
+    function getCurrentTimeIn10ms() {  // Stopwatch uses 10ms
+        return Math.floor(Date.now() / 10)
     }
 
+    // Pomodoro
     function refreshPomodoro() {
+        // Work <-> break ?
         if (getCurrentTimeInSeconds() >= pomodoroStart + timeLeft) {
-            isBreak = !isBreak
+            Persistent.states.timer.pomodoro.isBreak = !isBreak
             Persistent.states.timer.pomodoro.start += timeLeft
             timeLeft = isBreak ? breakTime : focusTime
 
@@ -86,45 +75,71 @@ Singleton {
         pomodoroSecondsLeft = (pomodoroStart + timeLeft) - getCurrentTimeInSeconds()
     }
 
-    function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds
-        return Math.floor(Date.now() / 1000)
+    Timer {
+        id: pomodoroTimer
+        interval: 200
+        running: root.isPomodoroRunning
+        repeat: true
+        onTriggered: Pomodoro.refreshPomodoro()
     }
 
-    function getCurrentTimeIn10ms() {  // Stopwatch uses 10ms
-        return Math.floor(Date.now() / 10)
+    function togglePomodoro() {
+        isPomodoroReset = false
+        Persistent.states.timer.pomodoro.running = !isPomodoroRunning
+        if (isPomodoroRunning) {  // Pressed Start button
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
+        } else {  // Pressed Stop button
+            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStart)
+        }
     }
 
-    function refreshStopwatch() {  // stopwatch stores time in 10ms
+    function resetPomodoro() {
+        Persistent.states.timer.pomodoro.running = false
+        Persistent.states.timer.pomodoro.isBreak = false
+        isPomodoroReset = true
+        timeLeft = focusTime
+        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
+        pomodoroCycle = 1
+        refreshPomodoro()
+    }
+
+    // Stopwatch
+    function refreshStopwatch() {  // Stopwatch stores time in 10ms
         stopwatchTime = getCurrentTimeIn10ms() - stopwatchStart
     }
 
-    // Stopwatch functions
-    function toggleStopwatch() {
-        Persistent.states.timer.stopwatch.running = !isStopwatchRunning
-        if (isStopwatchRunning) {
-            // Resume from paused time by adjusting start time
-            Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime
-        }
+    Timer {
+        id: stopwatchTimer
+        interval: 10
+        running: root.isStopwatchRunning
+        repeat: true
+        onTriggered: root.refreshStopwatch()
     }
 
-    function stopwatchResetOrLaps() {
-        if (isStopwatchRunning) {
-            recordLaps()
-        } else {
-            stopwatchReset()
-        }
+    function toggleStopwatch() {
+        if (root.isStopwatchRunning)
+            root.stopwatchPause()
+        else
+            root.stopwatchResume()
+    }
+
+    function stopwatchPause() {
+        Persistent.states.timer.stopwatch.running = false
+    }
+
+    function stopwatchResume() {
+        Persistent.states.timer.stopwatch.running = true
+        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime
     }
 
     function stopwatchReset() {
         Persistent.states.timer.stopwatch.running = false
         stopwatchTime = 0
-        stopwatchStart = getCurrentTimeIn10ms()
+        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms()
         Persistent.states.timer.stopwatch.laps = []
     }
 
-    function recordLaps() {
+    function stopwatchRecordLap() {
         Persistent.states.timer.stopwatch.laps.push(stopwatchTime)
-        // Reassign to trigger change
-        // Persistent.states.timer.stopwatch.laps = Persistent.states.timer.stopwatch.laps.slice(0)
     }
 }
