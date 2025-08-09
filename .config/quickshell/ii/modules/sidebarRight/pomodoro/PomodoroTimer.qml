@@ -23,14 +23,10 @@ Item {
         CircularProgress {
             Layout.alignment: Qt.AlignHCenter
             lineWidth: 8
-            gapAngle: Math.PI / 14
             value: {
-                let pomodoroTotalTime = Pomodoro.isBreak ? Pomodoro.breakTime : Pomodoro.focusTime;
-                return Pomodoro.pomodoroSecondsLeft / pomodoroTotalTime;
+                return Pomodoro.pomodoroSecondsLeft / Pomodoro.pomodoroLapDuration;
             }
             size: 200
-            primaryColor: Appearance.m3colors.m3onSecondaryContainer
-            secondaryColor: Appearance.colors.colSecondaryContainer
             enableAnimation: true
 
             ColumnLayout {
@@ -49,9 +45,28 @@ Item {
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: Pomodoro.isBreak ? Translation.tr("Break") : Translation.tr("Focus")
+                    text: Pomodoro.isLongBreak ? Translation.tr("Long break") : Pomodoro.isBreak ? Translation.tr("Break") : Translation.tr("Focus")
                     font.pixelSize: Appearance.font.pixelSize.normal
                     color: Appearance.colors.colSubtext
+                }
+            }
+
+            Rectangle {
+                radius: Appearance.rounding.full
+                color: Appearance.colors.colLayer2
+                
+                anchors {
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                implicitWidth: 36
+                implicitHeight: implicitWidth
+
+                StyledText {
+                    id: cycleText
+                    anchors.centerIn: parent
+                    color: Appearance.colors.colOnLayer2
+                    text: Pomodoro.pomodoroCycle + 1
                 }
             }
         }
@@ -81,7 +96,7 @@ Item {
                 implicitWidth: 90
 
                 onClicked: Pomodoro.resetPomodoro()
-                enabled: (Pomodoro.pomodoroSecondsLeft < (Pomodoro.isBreak ? Pomodoro.breakTime : Pomodoro.focusTime))
+                enabled: (Pomodoro.pomodoroSecondsLeft < Pomodoro.pomodoroLapDuration) || Pomodoro.pomodoroCycle > 0 || Pomodoro.isBreak
 
                 font.pixelSize: Appearance.font.pixelSize.larger
                 colBackground: Appearance.colors.colErrorContainer

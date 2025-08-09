@@ -22,11 +22,11 @@ Singleton {
 
     property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool isBreak: Persistent.states.timer.pomodoro.isBreak
-    property bool isPomodoroReset: !isPomodoroRunning
-    property int timeLeft: focusTime
+    property bool isLongBreak: Persistent.states.timer.pomodoro.isLongBreak
+    property bool isPomodoroLongBreak: Persistent.states.timer.pomodoro.isLongBreak
+    property int pomodoroLapDuration: isBreak ? (isLongBreak ? longBreakTime : breakTime) : focusTime
     property int pomodoroSecondsLeft: focusTime
-    property int pomodoroStart: Persistent.states.timer.pomodoro.start
-    property int pomodoroCycle: 1
+    property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
     property bool isStopwatchRunning: Persistent.states.timer.stopwatch.running
     property int stopwatchTime: 0
@@ -49,30 +49,34 @@ Singleton {
     // Pomodoro
     function refreshPomodoro() {
         // Work <-> break ?
-        if (getCurrentTimeInSeconds() >= pomodoroStart + timeLeft) {
-            Persistent.states.timer.pomodoro.isBreak = !isBreak
-            Persistent.states.timer.pomodoro.start += timeLeft
-            timeLeft = isBreak ? breakTime : focusTime
+        if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
+            // Reset counts
+            const currentTimeInSeconds = getCurrentTimeInSeconds()
+            Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak
+            Persistent.states.timer.pomodoro.isLongBreak = Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak)
+            Persistent.states.timer.pomodoro.start = currentTimeInSeconds
 
+            // Send notification
             let notificationTitle, notificationMessage
-
-            if (isBreak && pomodoroCycle % cyclesBeforeLongBreak === 0) {  // isPomodoroLongBreak
+            if (Persistent.states.timer.pomodoro.isBreak && pomodoroCycle % cyclesBeforeLongBreak === 0) {  // isPomodoroLongBreak
                 notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60))
-            } else if (isBreak) {
+            } else if (Persistent.states.timer.pomodoro.isBreak) {
                 notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60))
             } else {
                 notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(focusTime / 60))
-                pomodoroCycle += 1
             }
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"])
             if (alertSound) {  // Play sound only if alertSound is explicitly specified
                 Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound])
             }
+
+            if (!isBreak) {
+                Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
+            }
         }
 
-        // A nice abstraction for resume logic by updating the TimeStarted
-        pomodoroSecondsLeft = (pomodoroStart + timeLeft) - getCurrentTimeInSeconds()
+        pomodoroSecondsLeft = pomodoroLapDuration - (getCurrentTimeInSeconds() - Persistent.states.timer.pomodoro.start)
     }
 
     Timer {
@@ -84,21 +88,17 @@ Singleton {
     }
 
     function togglePomodoro() {
-        isPomodoroReset = false
         Persistent.states.timer.pomodoro.running = !isPomodoroRunning
         if (Persistent.states.timer.pomodoro.running) { // Start/Resume
-            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - (isBreak ? breakTime : focusTime)
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - pomodoroLapDuration
         }
     }
 
     function resetPomodoro() {
         Persistent.states.timer.pomodoro.running = false
         Persistent.states.timer.pomodoro.isBreak = false
-        isPomodoroReset = true
-        timeLeft = focusTime
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        pomodoroSecondsLeft = 0
-        Persistent.states.timer.pomodoro.cycle = 1
+        Persistent.states.timer.pomodoro.cycle = 0
         refreshPomodoro()
     }
 
