@@ -22,20 +22,24 @@ Item {
             } else if (event.key === Qt.Key_PageUp) {
                 currentTab = Math.max(currentTab - 1, 0)
             }
+            event.accepted = true
         } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) { // Pause/resume with Space or S
             if (currentTab === 0) {
                 Pomodoro.togglePomodoro()
             } else {
                 Pomodoro.toggleStopwatch()
             }
+            event.accepted = true
         } else if (event.key === Qt.Key_R) { // Reset with R
             if (currentTab === 0) {
                 Pomodoro.resetPomodoro()
             } else {
                 Pomodoro.stopwatchReset()
             }
+            event.accepted = true
         } else if (event.key === Qt.Key_L) { // Record lap with L
             Pomodoro.stopwatchRecordLap()
+            event.accepted = true
         }
     }
 
