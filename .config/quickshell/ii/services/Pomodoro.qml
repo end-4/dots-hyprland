@@ -84,7 +84,7 @@ Singleton {
         interval: 200
         running: root.isPomodoroRunning
         repeat: true
-        onTriggered: Pomodoro.refreshPomodoro()
+        onTriggered: refreshPomodoro()
     }
 
     function togglePomodoro() {
@@ -112,14 +112,14 @@ Singleton {
         interval: 10
         running: root.isStopwatchRunning
         repeat: true
-        onTriggered: root.refreshStopwatch()
+        onTriggered: refreshStopwatch()
     }
 
     function toggleStopwatch() {
         if (root.isStopwatchRunning)
-            root.stopwatchPause()
+            stopwatchPause()
         else
-            root.stopwatchResume()
+            stopwatchResume()
     }
 
     function stopwatchPause() {
