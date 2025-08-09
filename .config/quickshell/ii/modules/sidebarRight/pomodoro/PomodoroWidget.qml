@@ -34,7 +34,7 @@ Item {
         } else if (event.key === Qt.Key_R) {
             // Reset with R key
             if (currentTab === 0) {
-                Pomodoro.pomodoroReset()
+                Pomodoro.resetPomodoro()
             } else {
                 Pomodoro.stopwatchReset()
             }

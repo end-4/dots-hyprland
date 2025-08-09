@@ -76,7 +76,7 @@ Item {
                     implicitHeight: 35
                     implicitWidth: 90
 
-                    onClicked: Pomodoro.pomodoroReset()
+                    onClicked: Pomodoro.resetPomodoro()
                     enabled: (Pomodoro.pomodoroSecondsLeft < Pomodoro.focusTime)
 
                     font.pixelSize: Appearance.font.pixelSize.larger
@@ -95,82 +95,101 @@ Item {
         }
 
         // The SpinBoxes for adjusting duration
-        GridLayout {
-            Layout.alignment: Qt.AlignHCenter
-            columns: 2
-            uniformCellWidths: true
-            columnSpacing: 20
-            rowSpacing: 4
+        // GridLayout {
+        //     Layout.alignment: Qt.AlignHCenter
+        //     columns: 2
+        //     uniformCellWidths: true
+        //     columnSpacing: 20
+        //     rowSpacing: 4
 
-            StyledText {
-                Layout.alignment: Qt.AlignHCenter
-                text: Translation.tr("Focus")
-            }
+        //     StyledText {
+        //         Layout.alignment: Qt.AlignHCenter
+        //         text: Translation.tr("Focus")
+        //     }
 
-            StyledText {
-                Layout.alignment: Qt.AlignHCenter
-                text: Translation.tr("Break")
-            }
+        //     StyledText {
+        //         Layout.alignment: Qt.AlignHCenter
+        //         text: Translation.tr("Break")
+        //     }
 
-            ConfigSpinBox {
-                id: focusSpinBox
-                spacing: 0
-                Layout.leftMargin: 0
-                Layout.rightMargin: 0
-                value: Config.options.time.pomodoro.focus / 60
-                onValueChanged: {
-                    Config.options.time.pomodoro.focus = value * 60
-                    if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
-                        Pomodoro.pomodoroSecondsLeft = Pomodoro.focusTime
-                        Pomodoro.timeLeft = Pomodoro.focusTime
-                    }
-                }
-            }
+        //     ConfigSpinBox {
+        //         id: focusSpinBox
+        //         spacing: 0
+        //         Layout.leftMargin: 0
+        //         Layout.rightMargin: 0
+        //         from: 0
+        //         to: 120
+        //         Connections {
+        //             target: Config
+        //             function onReadyChanged() {
+        //                 focusSpinBox.valueChanged()
+        //             }
+        //         }
+        //         value: {
+        //             console.log("New focus time: " + (Config.options.time.pomodoro.focus / 60))
+        //             return Config.options.time.pomodoro.focus / 60
+        //         }
+        //         onValueChanged: {
+        //             console.log("New focus time is " + value + " minutes, Config is ready:", Config.ready)
+        //             if (!Config.ready) return;
+        //             console.log("Setting focus time to " + value + " minutes")
+        //             Config.options.time.pomodoro.focus = value * 60
+        //             if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
+        //                 Pomodoro.pomodoroSecondsLeft = Pomodoro.focusTime
+        //                 Pomodoro.timeLeft = Pomodoro.focusTime
+        //             }
+        //         }
+        //     }
 
-            ConfigSpinBox {
-                id: breakSpinBox
-                spacing: 0
-                Layout.leftMargin: 0
-                Layout.rightMargin: 0
-                value: Config.options.time.pomodoro.breakTime / 60
-                onValueChanged: {
-                    Config.options.time.pomodoro.breakTime = value * 60
-                }
-            }
+        //     ConfigSpinBox {
+        //         id: breakSpinBox
+        //         value: Config.options.time.pomodoro.breakTime / 60
+        //         spacing: 0
+        //         from: 0
+        //         to: 120
+        //         Layout.leftMargin: 0
+        //         Layout.rightMargin: 0
+        //         onValueChanged: {
+        //             Config.options.time.pomodoro.breakTime = value * 60
+        //         }
+        //     }
 
-            StyledText {
-                Layout.topMargin: 6
-                Layout.alignment: Qt.AlignHCenter
-                text: Translation.tr("Cycle")
-            }
-            StyledText {
-                Layout.topMargin: 6
-                Layout.alignment: Qt.AlignHCenter
-                text: Translation.tr("Long break")
-            }
+        //     StyledText {
+        //         Layout.topMargin: 6
+        //         Layout.alignment: Qt.AlignHCenter
+        //         text: Translation.tr("Cycle")
+        //     }
+        //     StyledText {
+        //         Layout.topMargin: 6
+        //         Layout.alignment: Qt.AlignHCenter
+        //         text: Translation.tr("Long break")
+        //     }
 
-            ConfigSpinBox {
-                id: cycleSpinBox
-                spacing: 0
-                from: 1
-                Layout.leftMargin: 0
-                Layout.rightMargin: 0
-                value: Config.options.time.pomodoro.cycle
-                onValueChanged: {
-                    Config.options.time.pomodoro.cycle = value
-                }
-            }
+        //     ConfigSpinBox {
+        //         id: cycleSpinBox
+        //         value: Config.options.time.pomodoro.cycle
+        //         spacing: 0
+        //         from: 1
+        //         to: 20
+        //         Layout.leftMargin: 0
+        //         Layout.rightMargin: 0
+        //         onValueChanged: {
+        //             Config.options.time.pomodoro.cycle = value
+        //         }
+        //     }
 
-            ConfigSpinBox {
-                id: longBreakSpinBox
-                spacing: 0
-                Layout.leftMargin: 0
-                Layout.rightMargin: 0
-                value: Config.options.time.pomodoro.longBreak / 60
-                onValueChanged: {
-                    Config.options.time.pomodoro.longBreak = value * 60
-                }
-            }
-        }
+        //     ConfigSpinBox {
+        //         id: longBreakSpinBox
+        //         spacing: 0
+        //         Layout.leftMargin: 0
+        //         Layout.rightMargin: 0
+        //         value: Config.options.time.pomodoro.longBreak / 60
+        //         from: 0
+        //         to: 120
+        //         onValueChanged: {
+        //             Config.options.time.pomodoro.longBreak = value * 60
+        //         }
+        //     }
+        // }
     }
 }

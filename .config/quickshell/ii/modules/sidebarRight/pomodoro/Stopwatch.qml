@@ -31,7 +31,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 0
                 StyledText {
-                    Layout.preferredWidth: elapsedIndicator.width * 0.6 // Prevent shakiness
+                    // Layout.preferredWidth: elapsedIndicator.width * 0.6 // Prevent shakiness
                     font.pixelSize: 40
                     color: Appearance.m3colors.m3onSurface
                     text: {
@@ -100,12 +100,12 @@ Item {
             id: lapsList
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: lapsListItemSpacing
+            spacing: 4
             clip: true
             popin: true
 
             model: ScriptModel {
-                values: Pomodoro.stopwatchLaps
+                values: Pomodoro.stopwatchLaps.map((v, i, arr) => arr[arr.length - 1 - i])
             }
 
             delegate: Rectangle {
@@ -139,11 +139,11 @@ Item {
                     StyledText {
                         font.pixelSize: Appearance.font.pixelSize.small
                         text: {
-                            let lapTime = lapItem.modelData
-                            let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
-                            let totalSeconds = Math.floor(lapTime) / 100
-                            let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-                            let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                            const lapTime = lapItem.modelData
+                            const _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
+                            const totalSeconds = Math.floor(lapTime) / 100
+                            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
+                            const seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
                             return `${minutes}:${seconds}.${_10ms}`
                         }
                     }
@@ -154,12 +154,13 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colPrimary
                         text: {
-                            let lastTime = (lapItem.index != Pomodoro.stopwatchLaps.length - 1) ? Pomodoro.stopwatchLaps[lapItem.index + 1] : 0
-                            let lapTime = lapItem.modelData - lastTime
-                            let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
-                            let totalSeconds = Math.floor(lapTime) / 100
-                            let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-                            let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                            const originalIndex = Pomodoro.stopwatchLaps.length - lapItem.index - 1
+                            const lastTime = originalIndex > 0 ? Pomodoro.stopwatchLaps[originalIndex - 1] : 0
+                            const lapTime = lapItem.modelData - lastTime
+                            const _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
+                            const totalSeconds = Math.floor(lapTime) / 100
+                            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
+                            const seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
                             return `+${minutes == "00" ? "" : minutes + ":"}${seconds}.${_10ms}`
                         }
                     }

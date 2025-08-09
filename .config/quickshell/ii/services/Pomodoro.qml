@@ -25,13 +25,17 @@ Singleton {
     property bool isPomodoroReset: !isPomodoroRunning
     property int timeLeft: focusTime
     property int pomodoroSecondsLeft: focusTime
-    property int pomodoroStartTime: Persistent.states.timer.pomodoro.start
+    property int pomodoroStart: Persistent.states.timer.pomodoro.start
     property int pomodoroCycle: 1
 
-    property bool isStopwatchRunning: false
+    property bool isStopwatchRunning: Persistent.states.timer.stopwatch.running
     property int stopwatchTime: 0
-    property int stopwatchStart: 0
-    property var stopwatchLaps: []
+    property int stopwatchStart: Persistent.states.timer.stopwatch.start
+    property var stopwatchLaps: Persistent.states.timer.stopwatch.laps
+
+    Component.onCompleted: {
+        if (!isStopwatchRunning) stopwatchReset()
+    }
 
     // Start and Stop button
     function togglePomodoro() {
@@ -40,12 +44,12 @@ Singleton {
         if (isPomodoroRunning) {  // Pressed Start button
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
         } else {  // Pressed Stop button
-            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStartTime)
+            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStart)
         }
     }
 
     // Reset button
-    function pomodoroReset() {
+    function resetPomodoro() {
         Persistent.states.timer.pomodoro.running = false
         isBreak = false
         isPomodoroReset = true
@@ -56,7 +60,7 @@ Singleton {
     }
 
     function refreshPomodoro() {
-        if (getCurrentTimeInSeconds() >= pomodoroStartTime + timeLeft) {
+        if (getCurrentTimeInSeconds() >= pomodoroStart + timeLeft) {
             isBreak = !isBreak
             Persistent.states.timer.pomodoro.start += timeLeft
             timeLeft = isBreak ? breakTime : focusTime
@@ -74,12 +78,12 @@ Singleton {
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"])
             if (alertSound) {  // Play sound only if alertSound is explicitly specified
-                Quickshell.execDetached(["bash", "-c", `ffplay -nodisp -autoexit ${alertSound}`])
+                Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound])
             }
         }
 
         // A nice abstraction for resume logic by updating the TimeStarted
-        pomodoroSecondsLeft = (pomodoroStartTime + timeLeft) - getCurrentTimeInSeconds()
+        pomodoroSecondsLeft = (pomodoroStart + timeLeft) - getCurrentTimeInSeconds()
     }
 
     function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds
@@ -96,31 +100,31 @@ Singleton {
 
     // Stopwatch functions
     function toggleStopwatch() {
-        isStopwatchRunning = !isStopwatchRunning
+        Persistent.states.timer.stopwatch.running = !isStopwatchRunning
         if (isStopwatchRunning) {
             // Resume from paused time by adjusting start time
-            stopwatchStart = getCurrentTimeIn10ms() - stopwatchTime
+            Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime
         }
     }
 
     function stopwatchResetOrLaps() {
-        if (isStopwatchRunning) {  // Clicked on Lap
+        if (isStopwatchRunning) {
             recordLaps()
-        } else {  // Clicked on Reset
+        } else {
             stopwatchReset()
         }
     }
 
     function stopwatchReset() {
-            isStopwatchRunning = false
-            stopwatchTime = 0
-            stopwatchStart = 0
-            stopwatchLaps = []
+        Persistent.states.timer.stopwatch.running = false
+        stopwatchTime = 0
+        stopwatchStart = getCurrentTimeIn10ms()
+        Persistent.states.timer.stopwatch.laps = []
     }
 
     function recordLaps() {
-            stopwatchLaps.unshift(stopwatchTime)  // Last lap goes first on list
-            // Reassign to trigger onListChanged, idk copied from Todo.qml
-            root.stopwatchLaps = stopwatchLaps.slice(0)
+        Persistent.states.timer.stopwatch.laps.push(stopwatchTime)
+        // Reassign to trigger change
+        // Persistent.states.timer.stopwatch.laps = Persistent.states.timer.stopwatch.laps.slice(0)
     }
 }
