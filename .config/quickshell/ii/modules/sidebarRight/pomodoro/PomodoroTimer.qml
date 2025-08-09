@@ -24,7 +24,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             lineWidth: 8
             value: {
-                return Pomodoro.pomodoroSecondsLeft / Pomodoro.pomodoroLapDuration;
+                return TimerService.pomodoroSecondsLeft / TimerService.pomodoroLapDuration;
             }
             size: 200
             enableAnimation: true
@@ -36,8 +36,8 @@ Item {
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: {
-                        let minutes = Math.floor(Pomodoro.pomodoroSecondsLeft / 60).toString().padStart(2, '0');
-                        let seconds = Math.floor(Pomodoro.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
+                        let minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, '0');
+                        let seconds = Math.floor(TimerService.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
                         return `${minutes}:${seconds}`;
                     }
                     font.pixelSize: 40
@@ -45,7 +45,7 @@ Item {
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: Pomodoro.isLongBreak ? Translation.tr("Long break") : Pomodoro.isBreak ? Translation.tr("Break") : Translation.tr("Focus")
+                    text: TimerService.isLongBreak ? Translation.tr("Long break") : TimerService.isBreak ? Translation.tr("Break") : Translation.tr("Focus")
                     font.pixelSize: Appearance.font.pixelSize.normal
                     color: Appearance.colors.colSubtext
                 }
@@ -66,7 +66,7 @@ Item {
                     id: cycleText
                     anchors.centerIn: parent
                     color: Appearance.colors.colOnLayer2
-                    text: Pomodoro.pomodoroCycle + 1
+                    text: TimerService.pomodoroCycle + 1
                 }
             }
         }
@@ -80,23 +80,23 @@ Item {
                 contentItem: StyledText {
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
-                    text: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : (Pomodoro.pomodoroSecondsLeft === Pomodoro.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
-                    color: Pomodoro.isPomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
+                    text: TimerService.isPomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
+                    color: TimerService.isPomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
                 }
                 implicitHeight: 35
                 implicitWidth: 90
                 font.pixelSize: Appearance.font.pixelSize.larger
-                onClicked: Pomodoro.togglePomodoro()
-                colBackground: Pomodoro.isPomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
-                colBackgroundHover: Pomodoro.isPomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
+                onClicked: TimerService.togglePomodoro()
+                colBackground: TimerService.isPomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
+                colBackgroundHover: TimerService.isPomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
             }
 
             RippleButton {
                 implicitHeight: 35
                 implicitWidth: 90
 
-                onClicked: Pomodoro.resetPomodoro()
-                enabled: (Pomodoro.pomodoroSecondsLeft < Pomodoro.pomodoroLapDuration) || Pomodoro.pomodoroCycle > 0 || Pomodoro.isBreak
+                onClicked: TimerService.resetPomodoro()
+                enabled: (TimerService.pomodoroSecondsLeft < TimerService.pomodoroLapDuration) || TimerService.pomodoroCycle > 0 || TimerService.isBreak
 
                 font.pixelSize: Appearance.font.pixelSize.larger
                 colBackground: Appearance.colors.colErrorContainer

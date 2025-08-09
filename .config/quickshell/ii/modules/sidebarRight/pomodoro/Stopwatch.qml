@@ -13,91 +13,61 @@ Item {
     Layout.fillWidth: true
     Layout.fillHeight: true
 
-    ColumnLayout {
+    Item {
         anchors {
             fill: parent
-            leftMargin: 20
-            rightMargin: 20
+            topMargin: 8
+            leftMargin: 16
+            rightMargin: 16
         }
-        spacing: 20
 
-        ColumnLayout {
-            spacing: 8
-            Layout.alignment: Qt.AlignHCenter
-            Layout.fillWidth: false
+        RowLayout { // Elapsed
+            id: elapsedIndicator
+            
+            anchors {
+                top: undefined
+                verticalCenter: parent.verticalCenter
+                left: controlButtons.left
+                leftMargin: 6
+            }
 
-            RowLayout { // Elapsed
-                id: elapsedIndicator
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 0
-                StyledText {
-                    // Layout.preferredWidth: elapsedIndicator.width * 0.6 // Prevent shakiness
-                    font.pixelSize: 40
-                    color: Appearance.m3colors.m3onSurface
-                    text: {
-                        let totalSeconds = Math.floor(Pomodoro.stopwatchTime) / 100
-                        let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-                        let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
-                        return `${minutes}:${seconds}`
-                    }
-                }
-                StyledText {
-                    Layout.fillWidth: true
-                    font.pixelSize: 40
-                    color: Appearance.colors.colSubtext
-                    text: {
-                        return `:<sub>${(Math.floor(Pomodoro.stopwatchTime) % 100).toString().padStart(2, '0')}</sub>`
-                    }
+            states: State {
+                name: "hasLaps"
+                when: TimerService.stopwatchLaps.length > 0
+                AnchorChanges {
+                    target: elapsedIndicator
+                    anchors.top: parent.top
+                    anchors.verticalCenter: undefined
+                    anchors.left: controlButtons.left
                 }
             }
 
-            // The Start/Stop and Reset buttons
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 4
-
-                RippleButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 90
-                    font.pixelSize: Appearance.font.pixelSize.larger
-
-                    onClicked: {
-                        Pomodoro.toggleStopwatch()
-                    }
-
-                    colBackground: Pomodoro.isStopwatchRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary 
-                    colBackgroundHover: Pomodoro.isStopwatchRunning ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colPrimaryHover 
-                    colRipple: Pomodoro.isStopwatchRunning ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colPrimaryActive 
-
-                    contentItem: StyledText {
-                        horizontalAlignment: Text.AlignHCenter
-                        color: Pomodoro.isStopwatchRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
-                        text: Pomodoro.isStopwatchRunning ? Translation.tr("Pause") : Pomodoro.stopwatchTime === 0 ? Translation.tr("Start") : Translation.tr("Resume")
-                    }
+            transitions: Transition {
+                AnchorAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
+            }
 
-                RippleButton {
-                    implicitHeight: 35
-                    implicitWidth: 90
-                    font.pixelSize: Appearance.font.pixelSize.larger
-
-                    onClicked: {
-                        if (Pomodoro.isStopwatchRunning) 
-                            Pomodoro.stopwatchRecordLap()
-                        else 
-                            Pomodoro.stopwatchReset()
-                    }
-                    enabled: Pomodoro.stopwatchTime !== 0
-
-                    colBackground: Pomodoro.isStopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer
-                    colBackgroundHover: Pomodoro.isStopwatchRunning ? Appearance.colors.colLayer2Hover : Appearance.colors.colErrorContainerHover
-                    colRipple: Pomodoro.isStopwatchRunning ? Appearance.colors.colLayer2Active : Appearance.colors.colErrorContainerActive
-
-                    contentItem: StyledText {
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Pomodoro.isStopwatchRunning ? Translation.tr("Lap") : Translation.tr("Reset")
-                        color: Pomodoro.isStopwatchRunning ? Appearance.colors.colOnLayer2 : Appearance.colors.colOnErrorContainer
-                    }
+            spacing: 0
+            StyledText {
+                // Layout.preferredWidth: elapsedIndicator.width * 0.6 // Prevent shakiness
+                font.pixelSize: 40
+                color: Appearance.m3colors.m3onSurface
+                text: {
+                    let totalSeconds = Math.floor(TimerService.stopwatchTime) / 100
+                    let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
+                    let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                    return `${minutes}:${seconds}`
+                }
+            }
+            StyledText {
+                Layout.fillWidth: true
+                font.pixelSize: 40
+                color: Appearance.colors.colSubtext
+                text: {
+                    return `:<sub>${(Math.floor(TimerService.stopwatchTime) % 100).toString().padStart(2, '0')}</sub>`
                 }
             }
         }
@@ -105,14 +75,20 @@ Item {
         // Laps
         StyledListView {
             id: lapsList
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            anchors {
+                top: elapsedIndicator.bottom
+                bottom: controlButtons.top
+                left: parent.left
+                right: parent.right
+                topMargin: 16
+                bottomMargin: 16
+            }
             spacing: 4
             clip: true
             popin: true
 
             model: ScriptModel {
-                values: Pomodoro.stopwatchLaps.map((v, i, arr) => arr[arr.length - 1 - i])
+                values: TimerService.stopwatchLaps.map((v, i, arr) => arr[arr.length - 1 - i])
             }
 
             delegate: Rectangle {
@@ -140,7 +116,7 @@ Item {
                     StyledText {
                         font.pixelSize: Appearance.font.pixelSize.small
                         color: Appearance.colors.colSubtext
-                        text: `${Pomodoro.stopwatchLaps.length - lapItem.index}.`
+                        text: `${TimerService.stopwatchLaps.length - lapItem.index}.`
                     }
 
                     StyledText {
@@ -161,8 +137,8 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colPrimary
                         text: {
-                            const originalIndex = Pomodoro.stopwatchLaps.length - lapItem.index - 1
-                            const lastTime = originalIndex > 0 ? Pomodoro.stopwatchLaps[originalIndex - 1] : 0
+                            const originalIndex = TimerService.stopwatchLaps.length - lapItem.index - 1
+                            const lastTime = originalIndex > 0 ? TimerService.stopwatchLaps[originalIndex - 1] : 0
                             const lapTime = lapItem.modelData - lastTime
                             const _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
                             const totalSeconds = Math.floor(lapTime) / 100
@@ -171,6 +147,60 @@ Item {
                             return `+${minutes == "00" ? "" : minutes + ":"}${seconds}.${_10ms}`
                         }
                     }
+                }
+            }
+        }
+
+        RowLayout {
+            id: controlButtons
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                bottomMargin: 6
+            }
+            spacing: 4
+
+            RippleButton {
+                Layout.preferredHeight: 35
+                Layout.preferredWidth: 90
+                font.pixelSize: Appearance.font.pixelSize.larger
+
+                onClicked: {
+                    TimerService.toggleStopwatch()
+                }
+
+                colBackground: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary 
+                colBackgroundHover: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colPrimaryHover 
+                colRipple: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colPrimaryActive 
+
+                contentItem: StyledText {
+                    horizontalAlignment: Text.AlignHCenter
+                    color: TimerService.isStopwatchRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
+                    text: TimerService.isStopwatchRunning ? Translation.tr("Pause") : TimerService.stopwatchTime === 0 ? Translation.tr("Start") : Translation.tr("Resume")
+                }
+            }
+
+            RippleButton {
+                implicitHeight: 35
+                implicitWidth: 90
+                font.pixelSize: Appearance.font.pixelSize.larger
+
+                onClicked: {
+                    if (TimerService.isStopwatchRunning) 
+                        TimerService.stopwatchRecordLap()
+                    else 
+                        TimerService.stopwatchReset()
+                }
+                enabled: TimerService.stopwatchTime !== 0
+
+                colBackground: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer
+                colBackgroundHover: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2Hover : Appearance.colors.colErrorContainerHover
+                colRipple: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2Active : Appearance.colors.colErrorContainerActive
+
+                contentItem: StyledText {
+                    horizontalAlignment: Text.AlignHCenter
+                    text: TimerService.isStopwatchRunning ? Translation.tr("Lap") : Translation.tr("Reset")
+                    color: TimerService.isStopwatchRunning ? Appearance.colors.colOnLayer2 : Appearance.colors.colOnErrorContainer
                 }
             }
         }

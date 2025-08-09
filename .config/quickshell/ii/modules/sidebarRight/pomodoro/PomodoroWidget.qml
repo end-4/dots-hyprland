@@ -25,20 +25,20 @@ Item {
             event.accepted = true
         } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) { // Pause/resume with Space or S
             if (currentTab === 0) {
-                Pomodoro.togglePomodoro()
+                TimerService.togglePomodoro()
             } else {
-                Pomodoro.toggleStopwatch()
+                TimerService.toggleStopwatch()
             }
             event.accepted = true
         } else if (event.key === Qt.Key_R) { // Reset with R
             if (currentTab === 0) {
-                Pomodoro.resetPomodoro()
+                TimerService.resetPomodoro()
             } else {
-                Pomodoro.stopwatchReset()
+                TimerService.stopwatchReset()
             }
             event.accepted = true
         } else if (event.key === Qt.Key_L) { // Record lap with L
-            Pomodoro.stopwatchRecordLap()
+            TimerService.stopwatchRecordLap()
             event.accepted = true
         }
     }
