@@ -24,7 +24,7 @@ Singleton {
     property bool isBreak: false
     property bool isPomodoroReset: !isPomodoroRunning
     property int timeLeft: focusTime
-    property int getPomodoroSecondsLeft: focusTime
+    property int pomodoroSecondsLeft: focusTime
     property int pomodoroStartTime: Persistent.states.timer.pomodoro.start
     property int pomodoroCycle: 1
 
@@ -79,7 +79,7 @@ Singleton {
         }
 
         // A nice abstraction for resume logic by updating the TimeStarted
-        getPomodoroSecondsLeft = (pomodoroStartTime + timeLeft) - getCurrentTimeInSeconds()
+        pomodoroSecondsLeft = (pomodoroStartTime + timeLeft) - getCurrentTimeInSeconds()
     }
 
     function getCurrentTimeInSeconds() {  // Pomodoro uses Seconds

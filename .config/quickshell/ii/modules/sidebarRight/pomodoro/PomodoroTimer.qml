@@ -22,7 +22,7 @@ Item {
                 gapAngle: Math.PI / 14
                 value: {
                     let pomodoroTotalTime = Pomodoro.isBreak ? Pomodoro.breakTime : Pomodoro.focusTime
-                    return Pomodoro.getPomodoroSecondsLeft / pomodoroTotalTime
+                    return Pomodoro.pomodoroSecondsLeft / pomodoroTotalTime
                 }
                 size: 125
                 primaryColor: Appearance.m3colors.m3onSecondaryContainer
@@ -36,8 +36,8 @@ Item {
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
                         text: {
-                            let minutes = Math.floor(Pomodoro.getPomodoroSecondsLeft / 60).toString().padStart(2, '0')
-                            let seconds = Math.floor(Pomodoro.getPomodoroSecondsLeft % 60).toString().padStart(2, '0')
+                            let minutes = Math.floor(Pomodoro.pomodoroSecondsLeft / 60).toString().padStart(2, '0')
+                            let seconds = Math.floor(Pomodoro.pomodoroSecondsLeft % 60).toString().padStart(2, '0')
                             return `${minutes}:${seconds}`
                         }
                         font.pixelSize: Appearance.font.pixelSize.hugeass + 4
@@ -61,7 +61,7 @@ Item {
                     contentItem: StyledText {
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
-                        text: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : (Pomodoro.getPomodoroSecondsLeft === Pomodoro.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
+                        text: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : (Pomodoro.pomodoroSecondsLeft === Pomodoro.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
                         color: Pomodoro.isPomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
                     }
                     implicitHeight: 35
@@ -77,7 +77,7 @@ Item {
                     implicitWidth: 90
 
                     onClicked: Pomodoro.pomodoroReset()
-                    enabled: (Pomodoro.getPomodoroSecondsLeft < Pomodoro.focusTime)
+                    enabled: (Pomodoro.pomodoroSecondsLeft < Pomodoro.focusTime)
 
                     font.pixelSize: Appearance.font.pixelSize.larger
                     colBackground: Appearance.colors.colErrorContainer
@@ -121,7 +121,7 @@ Item {
                 onValueChanged: {
                     Config.options.time.pomodoro.focus = value * 60
                     if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
-                        Pomodoro.getPomodoroSecondsLeft = Pomodoro.focusTime
+                        Pomodoro.pomodoroSecondsLeft = Pomodoro.focusTime
                         Pomodoro.timeLeft = Pomodoro.focusTime
                     }
                 }
