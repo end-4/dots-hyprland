@@ -44,6 +44,13 @@ Singleton {
                 property bool allowNsfw: false
                 property string provider: "yandere"
             }
+
+            property JsonObject timer: JsonObject {
+                property JsonObject pomodoro: JsonObject {
+                    property bool running: false
+                    property int start: 0
+                }
+            }
         }
     }
 }

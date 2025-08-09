@@ -20,12 +20,12 @@ Singleton {
     property int longBreakCycle: Config.options.time.pomodoro.cycle
     property string alertSound: Config.options.time.pomodoro.alertSound
 
-    property bool isPomodoroRunning: Config.options.time.pomodoro.autoRun
+    property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool isBreak: false
     property bool isPomodoroReset: !isPomodoroRunning
     property int timeLeft: focusTime
     property int getPomodoroSecondsLeft: focusTime
-    property int pomodoroStartTime: getCurrentTimeInSeconds()  // The time pomodoro was last Resumed
+    property int pomodoroStartTime: Persistent.states.timer.pomodoro.start
     property int pomodoroCycle: 1
 
     property bool isStopwatchRunning: false
@@ -36,9 +36,9 @@ Singleton {
     // Start and Stop button
     function togglePomodoro() {
         isPomodoroReset = false
-        isPomodoroRunning = !isPomodoroRunning
+        Persistent.states.timer.pomodoro.running = !isPomodoroRunning
         if (isPomodoroRunning) {  // Pressed Start button
-            pomodoroStartTime = getCurrentTimeInSeconds()
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
         } else {  // Pressed Stop button
             timeLeft -= (getCurrentTimeInSeconds() - pomodoroStartTime)
         }
@@ -46,11 +46,11 @@ Singleton {
 
     // Reset button
     function pomodoroReset() {
-        isPomodoroRunning = false
+        Persistent.states.timer.pomodoro.running = false
         isBreak = false
         isPomodoroReset = true
         timeLeft = focusTime
-        pomodoroStartTime = getCurrentTimeInSeconds()
+        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
         pomodoroCycle = 1
         refreshPomodoro()
     }
@@ -58,7 +58,7 @@ Singleton {
     function refreshPomodoro() {
         if (getCurrentTimeInSeconds() >= pomodoroStartTime + timeLeft) {
             isBreak = !isBreak
-            pomodoroStartTime += timeLeft
+            Persistent.states.timer.pomodoro.start += timeLeft
             timeLeft = isBreak ? breakTime : focusTime
 
             let notificationTitle, notificationMessage
