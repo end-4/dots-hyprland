@@ -256,9 +256,9 @@ Singleton {
                 property JsonObject pomodoro: JsonObject {
                     property string alertSound: ""
                     property int breakTime: 300
-                    property int cycle: 4
+                    property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
-                    property int longBreak: 1200
+                    property int longBreak: 900
                 }
             }
 

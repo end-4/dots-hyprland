@@ -17,7 +17,7 @@ Singleton {
     property int focusTime: Config.options.time.pomodoro.focus
     property int breakTime: Config.options.time.pomodoro.breakTime
     property int longBreakTime: Config.options.time.pomodoro.longBreak
-    property int longBreakCycle: Config.options.time.pomodoro.cycle
+    property int cyclesBeforeLongBreak: Config.options.time.pomodoro.cyclesBeforeLongBreak
     property string alertSound: Config.options.time.pomodoro.alertSound
 
     property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
@@ -56,7 +56,7 @@ Singleton {
 
             let notificationTitle, notificationMessage
 
-            if (isBreak && pomodoroCycle % longBreakCycle === 0) {  // isPomodoroLongBreak
+            if (isBreak && pomodoroCycle % cyclesBeforeLongBreak === 0) {  // isPomodoroLongBreak
                 notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60))
             } else if (isBreak) {
                 notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60))
@@ -86,10 +86,8 @@ Singleton {
     function togglePomodoro() {
         isPomodoroReset = false
         Persistent.states.timer.pomodoro.running = !isPomodoroRunning
-        if (isPomodoroRunning) {  // Pressed Start button
-            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        } else {  // Pressed Stop button
-            timeLeft -= (getCurrentTimeInSeconds() - pomodoroStart)
+        if (Persistent.states.timer.pomodoro.running) { // Start/Resume
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - (isBreak ? breakTime : focusTime)
         }
     }
 
@@ -99,7 +97,8 @@ Singleton {
         isPomodoroReset = true
         timeLeft = focusTime
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds()
-        pomodoroCycle = 1
+        pomodoroSecondsLeft = 0
+        Persistent.states.timer.pomodoro.cycle = 1
         refreshPomodoro()
     }
 
