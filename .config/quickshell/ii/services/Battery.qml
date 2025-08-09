@@ -4,6 +4,8 @@ import qs
 import qs.modules.common
 import Quickshell
 import Quickshell.Services.UPower
+import QtQuick
+import Quickshell.Io
 
 Singleton {
     property bool available: UPower.displayDevice.isLaptopBattery
@@ -20,6 +22,10 @@ Singleton {
     property bool isLowAndNotCharging: isLow && !isCharging
     property bool isCriticalAndNotCharging: isCritical && !isCharging
     property bool isSuspendingAndNotCharging: allowAutomaticSuspend && isSuspending && !isCharging
+
+    property real energyRate: UPower.displayDevice.changeRate
+    property real timeToEmpty: UPower.displayDevice.timeToEmpty
+    property real timeToFull: UPower.displayDevice.timeToFull
 
     onIsLowAndNotChargingChanged: {
         if (available && isLowAndNotCharging) Quickshell.execDetached([
