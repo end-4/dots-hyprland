@@ -42,6 +42,7 @@ LazyLoader {
 
         mask: maskEnabled ? popupMask : undefined
         WlrLayershell.namespace: "quickshell:styledPopup" //maybe this can fix with the popups not showing ?
+        WlrLayershell.layer: WlrLayer.Overlay
 
         Region {
             id: popupMask
