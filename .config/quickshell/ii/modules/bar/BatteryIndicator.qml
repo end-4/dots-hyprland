@@ -95,39 +95,13 @@ MouseArea {
         }
     }
 
-    LazyLoader {
-        id: popupLoader
-        active: root.containsMouse
-
-        component: PanelWindow {
-            id: popupWindow
-            visible: true
-            color: "transparent"
-            exclusiveZone: 0
-
-            anchors.top: true
-            anchors.left: true
-
-            implicitWidth: batteryPopup.implicitWidth
-            implicitHeight: batteryPopup.implicitHeight
-
-            margins {
-                left: root.mapToGlobal(Qt.point(
-                    (root.width - batteryPopup.implicitWidth) / 2,
-                    0
-                )).x
-                top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
-            }
-
-            mask: Region {
-                item: batteryPopup
-            }
-
-            BatteryPopup {
-                id: batteryPopup
-                anchors.centerIn: parent
-            }
+    StyledPopup {
+        hoverTarget: root
+        offsetY: -30
+        maskEnabled: true
+        contentComponent: BatteryPopup {
+            id: batteryPopup
+            anchors.centerIn: parent
         }
     }
-
 }

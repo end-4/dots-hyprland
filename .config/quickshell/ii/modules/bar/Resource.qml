@@ -68,71 +68,49 @@ Item {
         enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
     }
 
-    LazyLoader {
-        id: popupLoader
-        active: mouseArea.containsMouse
+    StyledPopup {
+        hoverTarget: mouseArea
+        offsetY: -30
+        contentComponent: Rectangle {
+            id: resourcePopup
+            readonly property real margin: 10
+            implicitWidth: columnLayout.implicitWidth + margin * 2
+            implicitHeight: columnLayout.implicitHeight + margin * 2
+            color: Appearance.colors.colLayer0
+            radius: Appearance.rounding.small
+            border.width: 1
+            border.color: Appearance.colors.colLayer0Border
+            clip: true
 
-        component: PanelWindow {
-            id: popupWindow
-            visible: true
+            ColumnLayout {
+                id: columnLayout
+                anchors.centerIn: parent
+                spacing: 6
 
-            color: "transparent"
-            exclusiveZone: 0
-            anchors.top: true
-            anchors.left: true
+                Repeater {
+                    model: root.tooltipData
+                    delegate: RowLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
 
-            implicitWidth: resourcePopup.implicitWidth
-            implicitHeight: resourcePopup.implicitHeight
-
-            margins {
-                left: root.mapToGlobal(Qt.point(
-                    (root.width - resourcePopup.implicitWidth) / 2,
-                    0
-                )).x
-                top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
-            }
-
-            
-            Rectangle {
-                id: resourcePopup
-                readonly property real margin: 10
-                implicitWidth: columnLayout.implicitWidth + margin * 2
-                implicitHeight: columnLayout.implicitHeight + margin * 2
-                color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.small
-                border.width: 1
-                border.color: Appearance.colors.colLayer0Border
-                clip: true
-
-                ColumnLayout {
-                    id: columnLayout
-                    anchors.centerIn: parent
-                    spacing: 6
-
-                    Repeater {
-                        model: root.tooltipData
-                        delegate: RowLayout {
-                            spacing: 5
+                        MaterialSymbol {
+                            text: modelData.icon
+                            color: Appearance.m3colors.m3onSecondaryContainer
+                        }
+                        StyledText {
+                            text: modelData.label
+                            color: Appearance.colors.colOnLayer1
+                        }
+                        StyledText {
                             Layout.fillWidth: true
-
-                            MaterialSymbol {
-                                text: modelData.icon
-                                color: Appearance.m3colors.m3onSecondaryContainer
-                            }
-                            StyledText {
-                                text: modelData.label
-                                color: Appearance.colors.colOnLayer1
-                            }
-                            StyledText {
-                                Layout.fillWidth: true
-                                horizontalAlignment: Text.AlignRight
-                                visible: modelData.value !== ""
-                                color: Appearance.colors.colOnLayer1
-                                text: modelData.value
-                            }
+                            horizontalAlignment: Text.AlignRight
+                            visible: modelData.value !== ""
+                            color: Appearance.colors.colOnLayer1
+                            text: modelData.value
                         }
                     }
                 }
+
             }
         }
     }

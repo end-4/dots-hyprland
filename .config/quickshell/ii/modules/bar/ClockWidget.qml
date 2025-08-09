@@ -46,99 +46,73 @@ Item {
         acceptedButtons: Qt.NoButton
     }
 
-    LazyLoader {
-        id: popupLoader
-        active: mouseArea.containsMouse
+    StyledPopup {
+        hoverTarget: mouseArea
+        offsetY: -30
+        contentComponent: Rectangle {
+            id: datePopup
+            readonly property real margin: 12
+            implicitWidth: columnLayout.implicitWidth + margin * 2
+            implicitHeight: columnLayout.implicitHeight + margin * 2
+            color: Appearance.colors.colLayer0
+            radius: Appearance.rounding.small
+            border.width: 1
+            border.color: Appearance.colors.colLayer0Border
+            clip: true
 
-        component: PanelWindow {
-            id: popupWindow
-            visible: true
-            implicitWidth: datePopup.implicitWidth
-            implicitHeight: datePopup.implicitHeight
-            color: "transparent"
-            exclusiveZone: 0
+            ColumnLayout {
+                id: columnLayout
+                anchors.centerIn: parent
+                spacing: 8
 
-            anchors.top: true
-            anchors.left: true
+                // Date + Time row
+                RowLayout {
+                    spacing: 5
+                    Layout.fillWidth: true
+                    StyledText {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignLeft
+                        color: Appearance.colors.colOnLayer1
+                        text: `${root.formattedDate} • ${root.formattedTime}`
+                    }
+                }
 
-            margins {
-                left: root.mapToGlobal(Qt.point(
-                    (root.width - datePopup.implicitWidth) / 2,
-                    0
-                )).x
-                top: root.mapToGlobal(Qt.point(0, root.height)).y - 30 
-            }
+                // Uptime row
+                RowLayout {
+                    spacing: 5
+                    Layout.fillWidth: true
+                    MaterialSymbol { text: "timelapse"; color: Appearance.m3colors.m3onSecondaryContainer }
+                    StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnLayer1 }
+                    StyledText {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                        color: Appearance.colors.colOnLayer1
+                        text: root.formattedUptime
+                    }
+                }
 
-            mask: Region {
-                item: datePopup
-            }
-            
-            Rectangle {
-                id: datePopup
-                readonly property real margin: 12
-                implicitWidth: columnLayout.implicitWidth + margin * 2
-                implicitHeight: columnLayout.implicitHeight + margin * 2
-                color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.small
-                border.width: 1
-                border.color: Appearance.colors.colLayer0Border
-                clip: true
-
+                // Upcoming tasks row
                 ColumnLayout {
-                    id: columnLayout
-                    anchors.centerIn: parent
-                    spacing: 8
+                    spacing: 2
+                    Layout.fillWidth: true
 
-                    // Date + Time row
                     RowLayout {
                         spacing: 5
                         Layout.fillWidth: true
-                        StyledText {
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignLeft
-                            color: Appearance.colors.colOnLayer1
-                            text: `${root.formattedDate} • ${root.formattedTime}`
-                        }
+                        MaterialSymbol { text: "checklist"; color: Appearance.m3colors.m3onSecondaryContainer }
+                        StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnLayer1 }
                     }
 
-                    // Uptime row
-                    RowLayout {
-                        spacing: 5
+                    StyledText {
                         Layout.fillWidth: true
-                        MaterialSymbol { text: "timelapse"; color: Appearance.m3colors.m3onSecondaryContainer }
-                        StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnLayer1 }
-                        StyledText {
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignRight
-                            color: Appearance.colors.colOnLayer1
-                            text: root.formattedUptime
-                        }
-                    }
-
-                    // Upcoming tasks row
-                    ColumnLayout {
-                        spacing: 2
-                        Layout.fillWidth: true
-
-                        RowLayout {
-                            spacing: 5
-                            Layout.fillWidth: true
-                            MaterialSymbol { text: "checklist"; color: Appearance.m3colors.m3onSecondaryContainer }
-                            StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnLayer1 }
-                        }
-
-                        StyledText {
-                            Layout.fillWidth: true
-                            topPadding: 5
-                            horizontalAlignment: Text.AlignLeft
-                            wrapMode: Text.Wrap
-                            color: Appearance.colors.colOnLayer1
-                            text: root.todosSection
-                        }
+                        topPadding: 5
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.Wrap
+                        color: Appearance.colors.colOnLayer1
+                        text: root.todosSection
                     }
                 }
             }
-
         }
     }
 
