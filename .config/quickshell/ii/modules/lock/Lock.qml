@@ -19,6 +19,9 @@ Scope {
 			// Unlock the screen before exiting, or the compositor will display a
 			// fallback lock you can't interact with.
 			GlobalStates.screenLocked = false;
+			
+			// Refocus last focused window on unlock (hack)
+			Quickshell.execDetached(["bash", "-c", `sleep 0.2; hyprctl --batch "dispatch togglespecialworkspace; dispatch togglespecialworkspace"`])
 		}
 	}
 
