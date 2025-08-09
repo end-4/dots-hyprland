@@ -146,6 +146,14 @@ Singleton {
         property color colScrim: ColorUtils.transparentize(m3colors.m3scrim, 0.5)
         property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.7)
         property color colOutlineVariant: m3colors.m3outlineVariant
+        property color colError: m3colors.m3error
+        property color colErrorHover: ColorUtils.mix(m3colors.m3error, colLayer1Hover, 0.85)
+        property color colErrorActive: ColorUtils.mix(m3colors.m3error, colLayer1Active, 0.7)
+        property color colOnError: m3colors.m3onError
+        property color colErrorContainer: m3colors.m3errorContainer
+        property color colErrorContainerHover: ColorUtils.mix(m3colors.m3errorContainer, m3colors.m3onErrorContainer, 0.90)
+        property color colErrorContainerActive: ColorUtils.mix(m3colors.m3errorContainer, m3colors.m3onErrorContainer, 0.70)
+        property color colOnErrorContainer: m3colors.m3onErrorContainer
     }
 
     rounding: QtObject {

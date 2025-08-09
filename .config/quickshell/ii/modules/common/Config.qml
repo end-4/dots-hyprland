@@ -275,6 +275,13 @@ Singleton {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
                 property string dateFormat: "ddd, dd/MM"
+                property JsonObject pomodoro: JsonObject {
+                    property string alertSound: ""
+                    property int breakTime: 300
+                    property int cyclesBeforeLongBreak: 4
+                    property int focus: 1500
+                    property int longBreak: 900
+                }
             }
 
             property JsonObject windows: JsonObject {
