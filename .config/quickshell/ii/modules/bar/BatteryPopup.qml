@@ -21,14 +21,6 @@ Rectangle {
         anchors.centerIn: parent
         spacing: 8
 
-        RowLayout {
-            spacing: 5
-            Layout.fillWidth: true
-            MaterialSymbol { text: "thermostat"; color: Appearance.m3colors.m3onSecondaryContainer }
-            StyledText { text: Translation.tr("Temperature:"); color: Appearance.colors.colOnLayer1 }
-            StyledText { Layout.fillWidth: true; horizontalAlignment: Text.AlignRight; color: Appearance.colors.colOnLayer1; text: `${Battery.temperature}°C` }
-        }
-
         // This row is hidden when the battery is full.
         RowLayout {
             spacing: 5
