@@ -289,6 +289,10 @@ Singleton {
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
             }
+
+            property JsonObject seekablePlayer: JsonObject {
+                property bool useSeekableSlider: false
+            }
         }
     }
 }
