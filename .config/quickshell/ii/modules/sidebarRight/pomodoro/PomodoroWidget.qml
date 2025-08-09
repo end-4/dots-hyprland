@@ -15,9 +15,6 @@ Item {
         {"name": Translation.tr("Pomodoro"), "icon": "timer_play"},
         {"name": Translation.tr("Stopwatch"), "icon": "timer"}
     ]
-    property int lapsListItemPadding: 8
-    property int lapsListItemSpacing: 5
-
 
     // These are keybinds for stopwatch and pomodoro
     Keys.onPressed: (event) => {
@@ -214,7 +211,7 @@ Item {
                                 contentItem: StyledText {
                                     anchors.centerIn: parent
                                     horizontalAlignment: Text.AlignHCenter
-                                    text: Pomodoro.isPomodoroRunning ? Translation.tr("Stop") : Translation.tr("Start")
+                                    text: Pomodoro.isPomodoroRunning ? Translation.tr("Pause") : Translation.tr("Start")
                                     color: Appearance.colors.colSecondary
                                 }
                                 Layout.preferredHeight: 35
@@ -330,62 +327,53 @@ Item {
                 Layout.fillHeight: true
 
                 ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors {
+                        fill: parent
+                        leftMargin: 20
+                        rightMargin: 20
+                    }
                     spacing: 20
-                    Layout.fillWidth: true
 
-                    RowLayout {
-                        spacing: 40
-                        // The Stopwatch circle
-                        CircularProgress {
-                            id: stopwatchClock
+                    ColumnLayout {
+                        spacing: 8
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: false
+
+                        RowLayout { // Elapsed
+                            id: elapsedIndicator
                             Layout.alignment: Qt.AlignHCenter
-                            lineWidth: 7
-                            gapAngle: Math.PI / 18
-                            value: {
-                                return Pomodoro.stopwatchTime % 6000 / 6000  // The seconds in percent
-                            }
-                            size: 125
-                            primaryColor: Math.floor(Pomodoro.stopwatchTime / 6000) % 2 ? Appearance.colors.colSecondaryContainer : Appearance.m3colors.m3onSecondaryContainer
-                            secondaryColor: Math.floor(Pomodoro.stopwatchTime / 6000) % 2 ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colSecondaryContainer
-                            enableAnimation: false  // The animation seems weird after each cycle
-
-                            ColumnLayout {
-                                anchors.centerIn: parent
-                                spacing: 0
-
-                                StyledText {
-                                    Layout.alignment: Qt.AlignHCenter
-                                    text: {
-                                        let totalSeconds = Math.floor(Pomodoro.stopwatchTime) / 100
-                                        let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-                                        let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
-                                        return `${minutes}:${seconds}`
-                                    }
-                                    font.pixelSize: Appearance.font.pixelSize.hugeass + 4
-                                    color: Appearance.m3colors.m3onSurface
+                            spacing: 0
+                            StyledText {
+                                Layout.preferredWidth: elapsedIndicator.width * 0.6 // Prevent shakiness
+                                font.pixelSize: 40
+                                color: Appearance.m3colors.m3onSurface
+                                text: {
+                                    let totalSeconds = Math.floor(Pomodoro.stopwatchTime) / 100
+                                    let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
+                                    let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                                    return `${minutes}:${seconds}`
                                 }
-                                StyledText {
-                                    Layout.alignment: Qt.AlignHCenter
-                                    text: {
-                                        return (Math.floor(Pomodoro.stopwatchTime) % 100).toString().padStart(2, '0')
-                                    }
-                                    font.pixelSize: Appearance.font.pixelSize.normal
-                                    color: Appearance.m3colors.m3onSurface
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                font.pixelSize: 40
+                                color: Appearance.colors.colSubtext
+                                text: {
+                                    return `:<sub>${(Math.floor(Pomodoro.stopwatchTime) % 100).toString().padStart(2, '0')}</sub>`
                                 }
                             }
                         }
 
                         // The Start/Stop and Reset buttons
-                        ColumnLayout {
+                        RowLayout {
                             Layout.alignment: Qt.AlignHCenter
-                            spacing: 10
+                            spacing: 4
 
                             RippleButton {
                                 contentItem: StyledText {
                                     anchors.centerIn: parent
                                     horizontalAlignment: Text.AlignHCenter
-                                    text: Pomodoro.isStopwatchRunning ? Translation.tr("Stop") : Translation.tr("Start")
+                                    text: Pomodoro.isStopwatchRunning ? Translation.tr("Pause") : Pomodoro.stopwatchTime === 0 ? Translation.tr("Start") : Translation.tr("Resume")
                                     color: Appearance.colors.colSecondary
                                 }
                                 Layout.preferredHeight: 35
@@ -413,65 +401,75 @@ Item {
                         }
                     }
 
+                    // Laps
                     StyledListView {
                         id: lapsList
                         Layout.fillWidth: true
-                        Layout.preferredHeight: stopwatchTab.height - stopwatchClock.height - 20
+                        Layout.fillHeight: true
                         spacing: lapsListItemSpacing
                         clip: true
                         popin: true
-                        model: Pomodoro.stopwatchLaps
+
+                        model: ScriptModel {
+                            values: Pomodoro.stopwatchLaps
+                        }
 
                         delegate: Rectangle {
+                            id: lapItem
+                            required property int index
+                            required property var modelData
+                            property var horizontalPadding: 10
+                            property var verticalPadding: 6
                             width: lapsList.width
-                            implicitHeight: lapsContentText.implicitHeight + lapsListItemPadding
+                            implicitHeight: lapRow.implicitHeight + verticalPadding * 2
+                            implicitWidth: lapRow.implicitWidth + horizontalPadding * 2
                             color: Appearance.colors.colLayer2
                             radius: Appearance.rounding.small
 
-                            StyledText {
-                                id: lapsContentText
-                                anchors.left: parent.left
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                leftPadding: lapsListItemPadding
-                                rightPadding: lapsListItemPadding
-                                topPadding: lapsListItemPadding / 2
-                                bottomPadding: lapsListItemPadding / 2
-                                font.pixelSize: Appearance.font.pixelSize.normal
-
-                                text: {
-                                    let lapTime = modelData
-
-                                    let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
-                                    let totalSeconds = Math.floor(lapTime) / 100
-                                    let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-                                    let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
-                                    return `${minutes}:${seconds}.${_10ms}`
+                            RowLayout {
+                                id: lapRow
+                                anchors {
+                                    fill: parent
+                                    leftMargin: lapItem.horizontalPadding
+                                    rightMargin: lapItem.horizontalPadding
+                                    topMargin: lapItem.verticalPadding
+                                    bottomMargin: lapItem.verticalPadding
                                 }
-                            }
 
-                            StyledText {
-                                id: lapsDiffText
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                leftPadding: lapsListItemPadding
-                                rightPadding: lapsListItemPadding * 2
-                                topPadding: lapsListItemPadding / 2
-                                bottomPadding: lapsListItemPadding / 2
-                                font.pixelSize: Appearance.font.pixelSize.normal
-                                color: Appearance.colors.colPrimary
+                                StyledText {
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                    text: `${Pomodoro.stopwatchLaps.length - lapItem.index}.`
+                                }
 
-                                text: {
-                                    if (index != Pomodoro.stopwatchLaps.length - 1) {  // except first lap
-                                        let lapTime = modelData - Pomodoro.stopwatchLaps[index + 1]
+                                StyledText {
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    text: {
+                                        let lapTime = lapItem.modelData
                                         let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
                                         let totalSeconds = Math.floor(lapTime) / 100
                                         let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
                                         let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
-                                        return `+${minutes}:${seconds}.${_10ms}`
-                                    } else {
-                                        return ``  // Nothing for first lap
+                                        return `${minutes}:${seconds}.${_10ms}`
+                                    }
+                                }
+
+                                Item { Layout.fillWidth: true }
+
+                                StyledText {
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    color: Appearance.colors.colPrimary
+                                    text: {
+                                        if (lapItem.index != Pomodoro.stopwatchLaps.length - 1) {  // except first lap
+                                            let lapTime = lapItem.modelData - Pomodoro.stopwatchLaps[lapItem.index + 1]
+                                            let _10ms = (Math.floor(lapTime) % 100).toString().padStart(2, '0')
+                                            let totalSeconds = Math.floor(lapTime) / 100
+                                            let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
+                                            let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
+                                            return `+${minutes == "00" ? "" : minutes + ":"}${seconds}.${_10ms}`
+                                        } else {
+                                            return ``  // Nothing for first lap
+                                        }
                                     }
                                 }
                             }
