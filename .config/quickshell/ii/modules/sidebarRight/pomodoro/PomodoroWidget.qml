@@ -8,8 +8,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 
-
-
 Item {
     id: root
     property int currentTab: 0
@@ -245,92 +243,80 @@ Item {
                     }
 
                     // The SpinBoxes for adjusting duration
-                    ColumnLayout {
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 20
+                    GridLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        columns: 2
+                        uniformCellWidths: true
+                        columnSpacing: 20
+                        rowSpacing: 6
 
-                            StyledText {
-                                id: focusTextBox
-                                Layout.leftMargin: focusSpinBox.implicitWidth / 2 - 7
-                                text: Translation.tr("Focus")
-                            }
-                            StyledText {
-                                Layout.leftMargin: breakSpinBox.implicitWidth / 2 + 10
-                                text: Translation.tr("Break")
-                            }
-                        }
-
-                        RowLayout {
+                        StyledText {
                             Layout.alignment: Qt.AlignHCenter
-                            spacing: 0
-
-                            ConfigSpinBox {
-                                id: focusSpinBox
-                                spacing: 0
-                                Layout.leftMargin: 0
-                                Layout.rightMargin: 0
-                                value: Config.options.time.pomodoro.focus / 60
-                                onValueChanged: {
-                                    Config.options.time.pomodoro.focus = value * 60
-                                    if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
-                                        Pomodoro.getPomodoroSecondsLeft = Pomodoro.focusTime
-                                        Pomodoro.timeLeft = Pomodoro.focusTime
-                                    }
-                                }
-                            }
-
-                            ConfigSpinBox {
-                                id: breakSpinBox
-                                spacing: 0
-                                Layout.leftMargin: 0
-                                Layout.rightMargin: 0
-                                value: Config.options.time.pomodoro.breakTime / 60
-                                onValueChanged: {
-                                    Config.options.time.pomodoro.breakTime = value * 60
-                                }
-                            }
+                            text: Translation.tr("Focus")
                         }
 
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 20
-
-                            StyledText {
-                                Layout.leftMargin: focusSpinBox.implicitWidth / 2 - 6
-                                text: Translation.tr("Cycle")
-                            }
-                            StyledText {
-                                Layout.leftMargin: breakSpinBox.implicitWidth / 2
-                                text: Translation.tr("Long break")
-                            }
-                        }
-
-                        RowLayout {
+                        StyledText {
                             Layout.alignment: Qt.AlignHCenter
-                            spacing: 0
+                            text: Translation.tr("Break")
+                        }
 
-                            ConfigSpinBox {
-                                id: cycleSpinBox
-                                spacing: 0
-                                from: 1
-                                Layout.leftMargin: 0
-                                Layout.rightMargin: 0
-                                value: Config.options.time.pomodoro.cycle
-                                onValueChanged: {
-                                    Config.options.time.pomodoro.cycle = value
+                        ConfigSpinBox {
+                            id: focusSpinBox
+                            spacing: 0
+                            Layout.leftMargin: 0
+                            Layout.rightMargin: 0
+                            value: Config.options.time.pomodoro.focus / 60
+                            onValueChanged: {
+                                Config.options.time.pomodoro.focus = value * 60
+                                if (Pomodoro.isPomodoroReset) {  // Special case for Pomodoro in Reset state
+                                    Pomodoro.getPomodoroSecondsLeft = Pomodoro.focusTime
+                                    Pomodoro.timeLeft = Pomodoro.focusTime
                                 }
                             }
+                        }
 
-                            ConfigSpinBox {
-                                id: longBreakSpinBox
-                                spacing: 0
-                                Layout.leftMargin: 0
-                                Layout.rightMargin: 0
-                                value: Config.options.time.pomodoro.longBreak / 60
-                                onValueChanged: {
-                                    Config.options.time.pomodoro.longBreak = value * 60
-                                }
+                        ConfigSpinBox {
+                            id: breakSpinBox
+                            spacing: 0
+                            Layout.leftMargin: 0
+                            Layout.rightMargin: 0
+                            value: Config.options.time.pomodoro.breakTime / 60
+                            onValueChanged: {
+                                Config.options.time.pomodoro.breakTime = value * 60
+                            }
+                        }
+
+                        StyledText {
+                            Layout.topMargin: 6
+                            Layout.alignment: Qt.AlignHCenter
+                            text: Translation.tr("Cycle")
+                        }
+                        StyledText {
+                            Layout.topMargin: 6
+                            Layout.alignment: Qt.AlignHCenter
+                            text: Translation.tr("Long break")
+                        }
+
+                        ConfigSpinBox {
+                            id: cycleSpinBox
+                            spacing: 0
+                            from: 1
+                            Layout.leftMargin: 0
+                            Layout.rightMargin: 0
+                            value: Config.options.time.pomodoro.cycle
+                            onValueChanged: {
+                                Config.options.time.pomodoro.cycle = value
+                            }
+                        }
+
+                        ConfigSpinBox {
+                            id: longBreakSpinBox
+                            spacing: 0
+                            Layout.leftMargin: 0
+                            Layout.rightMargin: 0
+                            value: Config.options.time.pomodoro.longBreak / 60
+                            onValueChanged: {
+                                Config.options.time.pomodoro.longBreak = value * 60
                             }
                         }
                     }
