@@ -60,11 +60,11 @@ Singleton {
             // Send notification
             let notificationMessage;
             if (Persistent.states.timer.pomodoro.isLongBreak) {
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(longBreakTime / 60));
+                notificationMessage = Translation.tr(`🌿 Long break: %1 minutes`).arg(Math.floor(longBreakTime / 60));
             } else if (Persistent.states.timer.pomodoro.isBreak) {
-                notificationMessage = Translation.tr(`Relax for %1 minutes`).arg(Math.floor(breakTime / 60));
+                notificationMessage = Translation.tr(`☕ Break: %1 minutes`).arg(Math.floor(breakTime / 60));
             } else {
-                notificationMessage = Translation.tr(`Focus for %1 minutes`).arg(Math.floor(focusTime / 60));
+                notificationMessage = Translation.tr(`🔴 Focus: %1 minutes`).arg(Math.floor(focusTime / 60));
             }
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"]);
@@ -98,6 +98,7 @@ Singleton {
     function resetPomodoro() {
         Persistent.states.timer.pomodoro.running = false;
         Persistent.states.timer.pomodoro.isBreak = false;
+        Persistent.states.timer.pomodoro.isLongBreak = false;
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
         Persistent.states.timer.pomodoro.cycle = 0;
         refreshPomodoro();
