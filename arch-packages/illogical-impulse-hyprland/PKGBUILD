@@ -18,4 +18,5 @@ depends=(
   hyprwayland-scanner
   xdg-desktop-portal-hyprland
   wl-clipboard
+  nwg-displays
 )
