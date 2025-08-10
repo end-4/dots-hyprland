@@ -13,7 +13,7 @@ Rectangle { // App icon
     property var urgency: NotificationUrgency.Normal
     property var image: ""
     property real scale: 1
-    property real size: 45 * scale
+    property real size: 38 * scale
     property real materialIconScale: 0.57
     property real appIconScale: 0.7
     property real smallAppIconScale: 0.49
