@@ -26,7 +26,7 @@ Item {
             value: {
                 return TimerService.pomodoroSecondsLeft / TimerService.pomodoroLapDuration;
             }
-            size: 200
+            implicitSize: 200
             enableAnimation: true
 
             ColumnLayout {
