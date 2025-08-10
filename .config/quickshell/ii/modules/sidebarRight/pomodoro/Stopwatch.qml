@@ -191,7 +191,7 @@ Item {
                     else 
                         TimerService.stopwatchReset()
                 }
-                enabled: TimerService.stopwatchTime !== 0
+                enabled: TimerService.stopwatchTime > 0 || Persistent.states.timer.stopwatch.laps.length > 0
 
                 colBackground: TimerService.stopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer
                 colBackgroundHover: TimerService.stopwatchRunning ? Appearance.colors.colLayer2Hover : Appearance.colors.colErrorContainerHover

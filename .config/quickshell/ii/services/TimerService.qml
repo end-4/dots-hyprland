@@ -125,6 +125,7 @@ Singleton {
     }
 
     function stopwatchResume() {
+        if (stopwatchTime === 0) Persistent.states.timer.stopwatch.laps = [];
         Persistent.states.timer.stopwatch.running = true;
         Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms() - stopwatchTime;
     }
