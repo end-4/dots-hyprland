@@ -22,10 +22,9 @@ Singleton {
 
     property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool isBreak: Persistent.states.timer.pomodoro.isBreak
-    property bool isLongBreak: Persistent.states.timer.pomodoro.isLongBreak
-    property bool isPomodoroLongBreak: Persistent.states.timer.pomodoro.isLongBreak
+    property bool isLongBreak: Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
     property int pomodoroLapDuration: isBreak ? (isLongBreak ? longBreakTime : breakTime) : focusTime
-    property int pomodoroSecondsLeft: focusTime
+    property int pomodoroSecondsLeft: isLongBreak ? longBreakTime : (isBreak ? breakTime : focusTime)
     property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
     property bool isStopwatchRunning: Persistent.states.timer.stopwatch.running
@@ -53,7 +52,6 @@ Singleton {
         if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
             // Reset counts
             Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
-            Persistent.states.timer.pomodoro.isLongBreak = Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
 
             // Send notification
@@ -97,7 +95,6 @@ Singleton {
     function resetPomodoro() {
         Persistent.states.timer.pomodoro.running = false;
         Persistent.states.timer.pomodoro.isBreak = false;
-        Persistent.states.timer.pomodoro.isLongBreak = false;
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
         Persistent.states.timer.pomodoro.cycle = 0;
         refreshPomodoro();
@@ -133,10 +130,9 @@ Singleton {
     }
 
     function stopwatchReset() {
-        Persistent.states.timer.stopwatch.running = false;
         stopwatchTime = 0;
-        Persistent.states.timer.stopwatch.start = getCurrentTimeIn10ms();
         Persistent.states.timer.stopwatch.laps = [];
+        Persistent.states.timer.stopwatch.running = false;
     }
 
     function stopwatchRecordLap() {
