@@ -99,6 +99,23 @@ ContentPage {
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
+                    text: Translation.tr("Automatically hide")
+                    checked: Config.options.bar.autoHide.enable
+                    onCheckedChanged: {
+                        Config.options.bar.autoHide.enable = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Place at the bottom")
+                    checked: Config.options.bar.bottom
+                    onCheckedChanged: {
+                        Config.options.bar.bottom = checked;
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
                     text: Translation.tr('Borderless')
                     checked: Config.options.bar.borderless
                     onCheckedChanged: {
