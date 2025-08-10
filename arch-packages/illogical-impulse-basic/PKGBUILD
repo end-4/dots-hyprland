@@ -16,5 +16,6 @@ depends=(
 	ripgrep
 	jq
 	meson
+	wl-clip-persist
 	xdg-user-dirs
 )
