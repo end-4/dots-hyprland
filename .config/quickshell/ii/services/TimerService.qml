@@ -20,21 +20,21 @@ Singleton {
     property int cyclesBeforeLongBreak: Config.options.time.pomodoro.cyclesBeforeLongBreak
     property string alertSound: Config.options.time.pomodoro.alertSound
 
-    property bool isPomodoroRunning: Persistent.states.timer.pomodoro.running
-    property bool isBreak: Persistent.states.timer.pomodoro.isBreak
-    property bool isLongBreak: Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
-    property int pomodoroLapDuration: isBreak ? (isLongBreak ? longBreakTime : breakTime) : focusTime
-    property int pomodoroSecondsLeft: isLongBreak ? longBreakTime : (isBreak ? breakTime : focusTime)
+    property bool pomodoroRunning: Persistent.states.timer.pomodoro.running
+    property bool pomodoroBreak: Persistent.states.timer.pomodoro.isBreak
+    property bool pomodoroLongBreak: Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
+    property int pomodoroLapDuration: pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime // This is a binding that's to be kept
+    property int pomodoroSecondsLeft: pomodoroLapDuration // Reasonable init value, to be changed
     property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
-    property bool isStopwatchRunning: Persistent.states.timer.stopwatch.running
+    property bool stopwatchRunning: Persistent.states.timer.stopwatch.running
     property int stopwatchTime: 0
     property int stopwatchStart: Persistent.states.timer.stopwatch.start
     property var stopwatchLaps: Persistent.states.timer.stopwatch.laps
 
     // General
     Component.onCompleted: {
-        if (!isStopwatchRunning)
+        if (!stopwatchRunning)
             stopwatchReset();
     }
 
@@ -56,7 +56,7 @@ Singleton {
 
             // Send notification
             let notificationMessage;
-            if (Persistent.states.timer.pomodoro.isLongBreak) {
+            if (Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak)) {
                 notificationMessage = Translation.tr(`🌿 Long break: %1 minutes`).arg(Math.floor(longBreakTime / 60));
             } else if (Persistent.states.timer.pomodoro.isBreak) {
                 notificationMessage = Translation.tr(`☕ Break: %1 minutes`).arg(Math.floor(breakTime / 60));
@@ -68,7 +68,7 @@ Singleton {
             if (alertSound)
                 Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound]);
 
-            if (!isBreak) {
+            if (!pomodoroBreak) {
                 Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
             }
         }
@@ -79,13 +79,13 @@ Singleton {
     Timer {
         id: pomodoroTimer
         interval: 200
-        running: root.isPomodoroRunning
+        running: root.pomodoroRunning
         repeat: true
         onTriggered: refreshPomodoro()
     }
 
     function togglePomodoro() {
-        Persistent.states.timer.pomodoro.running = !isPomodoroRunning;
+        Persistent.states.timer.pomodoro.running = !pomodoroRunning;
         if (Persistent.states.timer.pomodoro.running) {
             // Start/Resume
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds() + pomodoroSecondsLeft - pomodoroLapDuration;
@@ -108,13 +108,13 @@ Singleton {
     Timer {
         id: stopwatchTimer
         interval: 10
-        running: root.isStopwatchRunning
+        running: root.stopwatchRunning
         repeat: true
         onTriggered: refreshStopwatch()
     }
 
     function toggleStopwatch() {
-        if (root.isStopwatchRunning)
+        if (root.stopwatchRunning)
             stopwatchPause();
         else
             stopwatchResume();

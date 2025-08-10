@@ -169,14 +169,14 @@ Item {
                     TimerService.toggleStopwatch()
                 }
 
-                colBackground: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary 
-                colBackgroundHover: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colPrimaryHover 
-                colRipple: TimerService.isStopwatchRunning ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colPrimaryActive 
+                colBackground: TimerService.stopwatchRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary 
+                colBackgroundHover: TimerService.stopwatchRunning ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colPrimaryHover 
+                colRipple: TimerService.stopwatchRunning ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colPrimaryActive 
 
                 contentItem: StyledText {
                     horizontalAlignment: Text.AlignHCenter
-                    color: TimerService.isStopwatchRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
-                    text: TimerService.isStopwatchRunning ? Translation.tr("Pause") : TimerService.stopwatchTime === 0 ? Translation.tr("Start") : Translation.tr("Resume")
+                    color: TimerService.stopwatchRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
+                    text: TimerService.stopwatchRunning ? Translation.tr("Pause") : TimerService.stopwatchTime === 0 ? Translation.tr("Start") : Translation.tr("Resume")
                 }
             }
 
@@ -186,21 +186,21 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.larger
 
                 onClicked: {
-                    if (TimerService.isStopwatchRunning) 
+                    if (TimerService.stopwatchRunning) 
                         TimerService.stopwatchRecordLap()
                     else 
                         TimerService.stopwatchReset()
                 }
                 enabled: TimerService.stopwatchTime !== 0
 
-                colBackground: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer
-                colBackgroundHover: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2Hover : Appearance.colors.colErrorContainerHover
-                colRipple: TimerService.isStopwatchRunning ? Appearance.colors.colLayer2Active : Appearance.colors.colErrorContainerActive
+                colBackground: TimerService.stopwatchRunning ? Appearance.colors.colLayer2 : Appearance.colors.colErrorContainer
+                colBackgroundHover: TimerService.stopwatchRunning ? Appearance.colors.colLayer2Hover : Appearance.colors.colErrorContainerHover
+                colRipple: TimerService.stopwatchRunning ? Appearance.colors.colLayer2Active : Appearance.colors.colErrorContainerActive
 
                 contentItem: StyledText {
                     horizontalAlignment: Text.AlignHCenter
-                    text: TimerService.isStopwatchRunning ? Translation.tr("Lap") : Translation.tr("Reset")
-                    color: TimerService.isStopwatchRunning ? Appearance.colors.colOnLayer2 : Appearance.colors.colOnErrorContainer
+                    text: TimerService.stopwatchRunning ? Translation.tr("Lap") : Translation.tr("Reset")
+                    color: TimerService.stopwatchRunning ? Appearance.colors.colOnLayer2 : Appearance.colors.colOnErrorContainer
                 }
             }
         }
