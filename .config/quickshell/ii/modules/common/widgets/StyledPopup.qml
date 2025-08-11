@@ -36,7 +36,7 @@ LazyLoader {
             top: Appearance.sizes.hyprlandGapsOut
             bottom: Appearance.sizes.hyprlandGapsOut
         }
-        WlrLayershell.namespace: "quickshell:popup" //maybe this can fix with the popups not showing ?
+        WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
 
         Loader {

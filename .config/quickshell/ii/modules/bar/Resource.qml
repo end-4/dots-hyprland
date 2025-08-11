@@ -75,10 +75,8 @@ Item {
             readonly property real margin: 10
             implicitWidth: columnLayout.implicitWidth + margin * 2
             implicitHeight: columnLayout.implicitHeight + margin * 2
-            color: Appearance.colors.colLayer0
+            color: Appearance.colors.colTooltip
             radius: Appearance.rounding.small
-            border.width: 1
-            border.color: Appearance.colors.colLayer0Border
             clip: true
 
             ColumnLayout {
@@ -94,17 +92,17 @@ Item {
 
                         MaterialSymbol {
                             text: modelData.icon
-                            color: Appearance.m3colors.m3onSecondaryContainer
+                            color: Appearance.colors.colOnTooltip
                         }
                         StyledText {
                             text: modelData.label
-                            color: Appearance.colors.colOnLayer1
+                            color: Appearance.colors.colOnTooltip
                         }
                         StyledText {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignRight
                             visible: modelData.value !== ""
-                            color: Appearance.colors.colOnLayer1
+                            color: Appearance.colors.colOnTooltip
                             text: modelData.value
                         }
                     }

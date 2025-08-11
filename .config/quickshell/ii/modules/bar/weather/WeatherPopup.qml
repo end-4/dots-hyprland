@@ -11,10 +11,8 @@ Rectangle {
     readonly property real margin: 10
     implicitWidth: columnLayout.implicitWidth + margin * 2
     implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colLayer0
+    color: Appearance.colors.colTooltip
     radius: Appearance.rounding.small
-    border.width: 1
-    border.color: Appearance.colors.colLayer0Border
     clip: true
 
     ColumnLayout {
@@ -34,13 +32,14 @@ Rectangle {
                 fill: 0
                 text: "location_on"
                 iconSize: Appearance.font.pixelSize.huge
+                color: Appearance.colors.colOnTooltip
             }
 
             StyledText {
                 text: Weather.data.city
                 font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
-                color: Appearance.colors.colOnLayer0
+                color: Appearance.colors.colOnTooltip
             }
         }
 

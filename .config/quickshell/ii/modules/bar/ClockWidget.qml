@@ -53,10 +53,8 @@ Item {
             readonly property real margin: 12
             implicitWidth: columnLayout.implicitWidth + margin * 2
             implicitHeight: columnLayout.implicitHeight + margin * 2
-            color: Appearance.colors.colLayer0
+            color: Appearance.colors.colTooltip
             radius: Appearance.rounding.small
-            border.width: 1
-            border.color: Appearance.colors.colLayer0Border
             clip: true
 
             ColumnLayout {
@@ -71,7 +69,7 @@ Item {
                     StyledText {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignLeft
-                        color: Appearance.colors.colOnLayer1
+                        color: Appearance.colors.colOnTooltip
                         text: `${root.formattedDate} • ${root.formattedTime}`
                     }
                 }
@@ -80,12 +78,12 @@ Item {
                 RowLayout {
                     spacing: 5
                     Layout.fillWidth: true
-                    MaterialSymbol { text: "timelapse"; color: Appearance.m3colors.m3onSecondaryContainer }
-                    StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnLayer1 }
+                    MaterialSymbol { text: "timelapse"; color: Appearance.colors.colOnTooltip }
+                    StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnTooltip }
                     StyledText {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignRight
-                        color: Appearance.colors.colOnLayer1
+                        color: Appearance.colors.colOnTooltip
                         text: root.formattedUptime
                     }
                 }
@@ -98,8 +96,8 @@ Item {
                     RowLayout {
                         spacing: 5
                         Layout.fillWidth: true
-                        MaterialSymbol { text: "checklist"; color: Appearance.m3colors.m3onSecondaryContainer }
-                        StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnLayer1 }
+                        MaterialSymbol { text: "checklist"; color: Appearance.colors.colOnTooltip }
+                        StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnTooltip }
                     }
 
                     StyledText {
@@ -107,7 +105,7 @@ Item {
                         topPadding: 5
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.Wrap
-                        color: Appearance.colors.colOnLayer1
+                        color: Appearance.colors.colOnTooltip
                         text: root.todosSection
                     }
                 }

@@ -10,10 +10,8 @@ Rectangle {
     readonly property real margin: 10
     implicitWidth: columnLayout.implicitWidth + margin * 2
     implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colLayer0
+    color: Appearance.colors.colTooltip
     radius: Appearance.rounding.small
-    border.width: 1
-    border.color: Appearance.colors.colLayer0Border
     clip: true
 
     ColumnLayout {
@@ -34,12 +32,12 @@ Rectangle {
             opacity: rowVisible ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: 500 } }
 
-            MaterialSymbol { text: "schedule"; color: Appearance.m3colors.m3onSecondaryContainer }
-            StyledText { text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:"); color: Appearance.colors.colOnLayer1 }
+            MaterialSymbol { text: "schedule"; color: Appearance.colors.colOnTooltip }
+            StyledText { text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:"); color: Appearance.colors.colOnTooltip }
             StyledText {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignRight
-                color: Appearance.colors.colOnLayer1
+                color: Appearance.colors.colOnTooltip
                 text: {
                     function formatTime(seconds) {
                         var h = Math.floor(seconds / 3600);
@@ -82,7 +80,7 @@ Rectangle {
                         return "battery_0_bar";
                     }
                 }
-                color: Appearance.m3colors.m3onSecondaryContainer
+                color: Appearance.colors.colOnTooltip
             }
 
 
@@ -96,13 +94,13 @@ Rectangle {
                         return Translation.tr("Discharging:");
                     }
                 }
-                color: Appearance.colors.colOnLayer1
+                color: Appearance.colors.colOnTooltip
             }
 
             StyledText {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignRight
-                color: Appearance.colors.colOnLayer1
+                color: Appearance.colors.colOnTooltip
                 text: {
                     if (Battery.chargeState == 4) {
                         return "";
