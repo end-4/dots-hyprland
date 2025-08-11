@@ -1,9 +1,5 @@
-import qs
 import qs.modules.common
-import qs.modules.common.widgets
-import qs.services
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
@@ -20,7 +16,6 @@ LazyLoader {
         id: popupWindow
         visible: true
         color: "transparent"
-        exclusiveZone: 0
 
         anchors.left: true
         anchors.top: !Config.options.bar.bottom
@@ -29,11 +24,15 @@ LazyLoader {
         implicitWidth: popupBackground.implicitWidth + Appearance.sizes.hyprlandGapsOut * 2
         implicitHeight: popupBackground.implicitHeight + Appearance.sizes.hyprlandGapsOut * 2
 
+        exclusionMode: ExclusionMode.Ignore
+        exclusiveZone: 0
         margins {
             left: root.QsWindow?.mapFromItem(
                 root.hoverTarget, 
                 (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
                 ).x
+            top: Config?.options.bar.bottom ? 0 : Appearance.sizes.barHeight
+            bottom: Config?.options.bar.bottom ? Appearance.sizes.barHeight : 0
         }
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
