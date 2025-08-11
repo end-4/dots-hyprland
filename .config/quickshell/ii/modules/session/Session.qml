@@ -179,7 +179,12 @@ Scope {
                         id: sessionLogout
                         buttonIcon: "logout"
                         buttonText: Translation.tr("Logout")
-                        onClicked: { root.closeAllWindows(); Quickshell.execDetached(["pkill", "Hyprland"]); sessionRoot.hide() }
+                        onClicked: {
+                            root.closeAllWindows();
+                            // Try to terminate the session via systemd/logind, fallback to pkill Hyprland
+                            Quickshell.execDetached(["bash", "-c", "if [ -n '$XDG_SESSION_ID' ]; then loginctl terminate-session $XDG_SESSION_ID; else pkill Hyprland; fi"]);
+                            sessionRoot.hide();
+                        }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
                         KeyNavigation.right: sessionTaskManager
