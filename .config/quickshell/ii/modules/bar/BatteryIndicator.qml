@@ -94,12 +94,8 @@ MouseArea {
         }
     }
 
-    StyledPopup {
+    BatteryPopup {
+        id: batteryPopup
         hoverTarget: root
-
-        BatteryPopup {
-            id: batteryPopup
-            anchors.centerIn: parent
-        }
     }
 }

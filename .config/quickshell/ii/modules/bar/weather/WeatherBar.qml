@@ -21,7 +21,7 @@ MouseArea {
 
         MaterialSymbol {
             fill: 0
-            text: WeatherIcons.codeToName[Weather.data.wCode]
+            text: WeatherIcons.codeToName[Weather.data.wCode] ?? "cloud"
             iconSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             Layout.alignment: Qt.AlignVCenter
@@ -36,12 +36,8 @@ MouseArea {
         }
     }
 
-    StyledPopup {
+    WeatherPopup {
+        id: weatherPopup
         hoverTarget: root
-
-        WeatherPopup {
-            id: weatherPopup
-            anchors.centerIn: parent
-        }
     }
 }
