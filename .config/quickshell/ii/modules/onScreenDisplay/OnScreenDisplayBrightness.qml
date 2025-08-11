@@ -52,6 +52,7 @@ Scope {
 
         sourceComponent: PanelWindow {
             id: osdRoot
+            color: "transparent"
 
             Connections {
                 target: root
@@ -60,17 +61,21 @@ Scope {
                 }
             }
 
-            exclusionMode: ExclusionMode.Normal
             WlrLayershell.namespace: "quickshell:onScreenDisplay"
             WlrLayershell.layer: WlrLayer.Overlay
-            color: "transparent"
-
             anchors {
                 top: !Config.options.bar.bottom
                 bottom: Config.options.bar.bottom
             }
             mask: Region {
                 item: osdValuesWrapper
+            }
+
+            exclusionMode: ExclusionMode.Ignore
+            exclusiveZone: 0
+            margins {
+                top: Appearance.sizes.barHeight
+                bottom: Appearance.sizes.barHeight
             }
 
             implicitWidth: columnLayout.implicitWidth

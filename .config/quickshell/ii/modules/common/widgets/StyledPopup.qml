@@ -15,7 +15,6 @@ LazyLoader {
 
     component: PanelWindow {
         id: popupWindow
-        visible: true
         color: "transparent"
 
         anchors.left: true
