@@ -58,6 +58,9 @@ LazyLoader {
             color: Appearance.colors.colSurfaceContainer
             radius: Appearance.rounding.small
             children: [root.contentItem]
+
+            border.width: 1
+            border.color: Appearance.colors.colLayer0Border
         }
     }
 }
