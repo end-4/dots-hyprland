@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This file is provided for non-Arch(based) distros.
 # As for Arch Linux, we use local PKGBUILDs or AUR packages, which is the "right" way compared to copying files directly into /usr/local/* .
 # P.S. install-yay() should be kept for Arch(based) distros.

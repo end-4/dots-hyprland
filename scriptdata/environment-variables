@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 XDG_BIN_HOME=${XDG_BIN_HOME:-$HOME/.local/bin}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
