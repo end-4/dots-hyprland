@@ -25,6 +25,7 @@ parser.add_argument('--term_fg_boost', type=float , default=0.35, help='Make ter
 parser.add_argument('--blend_bg_fg', action='store_true', default=False, help='Shift terminal background or foreground towards accent')
 parser.add_argument('--cache', type=str, default=None, help='file path to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
+parser.add_argument('--max-pixels', type=int, default=None, help='Maximum image pixels allowed (None for unlimited)')
 args = parser.parse_args()
 
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}".format(rgba[0], rgba[1], rgba[2])
@@ -62,6 +63,10 @@ darkmode = (args.mode == 'dark')
 transparent = (args.transparency == 'transparent')
 
 if args.path is not None:
+    # Set PIL image pixel limit from command line argument
+    if args.max_pixels is not None:
+        Image.MAX_IMAGE_PIXELS = args.max_pixels
+    
     image = Image.open(args.path)
 
     if image.format == "GIF":
