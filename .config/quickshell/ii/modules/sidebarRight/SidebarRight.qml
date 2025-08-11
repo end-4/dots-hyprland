@@ -142,6 +142,17 @@ Scope {
                                 }
                                 QuickToggleButton {
                                     toggled: false
+                                    buttonIcon: "monitor"
+                                    onClicked: {
+                                        GlobalStates.sidebarRightOpen = false
+                                        Quickshell.execDetached(["nwg-displays"])
+                                    }
+                                    StyledToolTip {
+                                        content: Translation.tr("Display Settings")
+                                    }
+                                }
+                                QuickToggleButton {
+                                    toggled: false
                                     buttonIcon: "power_settings_new"
                                     onClicked: {
                                         GlobalStates.sessionOpen = true
