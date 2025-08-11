@@ -79,7 +79,7 @@ Item {
                     spacing: 5
                     Layout.fillWidth: true
                     MaterialSymbol { text: "timelapse"; color: Appearance.colors.colOnTooltip }
-                    StyledText { text: Translation.tr("Uptime:"); color: Appearance.colors.colOnTooltip }
+                    StyledText { text: Translation.tr("System uptime:"); color: Appearance.colors.colOnTooltip }
                     StyledText {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignRight
@@ -88,7 +88,7 @@ Item {
                     }
                 }
 
-                // Upcoming tasks row
+                // Tasks
                 ColumnLayout {
                     spacing: 2
                     Layout.fillWidth: true
@@ -97,7 +97,7 @@ Item {
                         spacing: 5
                         Layout.fillWidth: true
                         MaterialSymbol { text: "checklist"; color: Appearance.colors.colOnTooltip }
-                        StyledText { text: Translation.tr("Upcoming Tasks:"); color: Appearance.colors.colOnTooltip }
+                        StyledText { text: Translation.tr("To Do:"); color: Appearance.colors.colOnTooltip }
                     }
 
                     StyledText {

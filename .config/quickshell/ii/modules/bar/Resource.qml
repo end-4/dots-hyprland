@@ -27,19 +27,17 @@ Item {
             case "memory":
                 return [
                     { icon: "memory", label: Translation.tr("Memory Usage"), value: "" },
-                    { icon: "storage", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.memoryUsed) },
+                    { icon: "clock_loader_60", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.memoryUsed) },
                     { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.memoryFree) },
-                    { icon: "dns", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.memoryTotal) },
-                    { icon: "percent", label: Translation.tr("Usage:"), value: `${Math.round(ResourceUsage.memoryUsedPercentage * 100)}%` }
+                    { icon: "empty_dashboard", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.memoryTotal) },
                 ]
             case "swap_horiz":
                 return ResourceUsage.swapTotal > 0 ?
                 [
                     { icon: "swap_horiz", label: Translation.tr("Swap Usage"), value: "" },
-                    { icon: "storage", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.swapUsed) },
+                    { icon: "clock_loader_60", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.swapUsed) },
                     { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.swapFree) },
-                    { icon: "dns", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.swapTotal) },
-                    { icon: "percent", label: Translation.tr("Usage:"), value: `${Math.round(ResourceUsage.swapUsedPercentage * 100)}%` }
+                    { icon: "empty_dashboard", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.swapTotal) },
                 ] :
                 [
                     { icon: "swap_horiz", label: Translation.tr("Swap:"), value: Translation.tr("Not configured") }
@@ -47,10 +45,10 @@ Item {
             case "settings_slow_motion":
                 return [
                     { icon: "settings_slow_motion", label: Translation.tr("CPU Usage"), value: "" },
-                    { icon: "bolt", label: Translation.tr("Current:"), value: `${Math.round(ResourceUsage.cpuUsage * 100)}%` },
-                    { icon: "speed", label: Translation.tr("Load:"), value: ResourceUsage.cpuUsage > 0.8 ?
+                    { icon: "bolt", label: Translation.tr("Load:"), value: (ResourceUsage.cpuUsage > 0.8 ?
                         Translation.tr("High") :
-                        ResourceUsage.cpuUsage > 0.5 ? Translation.tr("Medium") : Translation.tr("Low")
+                        ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low"))
+                        + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
                     }
                 ]
             default:
@@ -130,7 +128,7 @@ Item {
                 anchors.centerIn: parent
                 fill: 1
                 text: iconName
-                iconSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.large
                 color: Appearance.m3colors.m3onSecondaryContainer
             }
 
