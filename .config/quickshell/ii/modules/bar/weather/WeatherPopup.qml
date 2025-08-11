@@ -6,41 +6,37 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle {
+StyledPopup {
     id: root
-    readonly property real margin: 10
-    implicitWidth: columnLayout.implicitWidth + margin * 2
-    implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colLayer0
-    radius: Appearance.rounding.small
-    border.width: 1
-    border.color: Appearance.colors.colLayer0Border
-    clip: true
 
     ColumnLayout {
         id: columnLayout
-        spacing: 5
-        anchors.centerIn: root
+        anchors.centerIn: parent
         implicitWidth: Math.max(header.implicitWidth, gridLayout.implicitWidth)
         implicitHeight: gridLayout.implicitHeight
+        spacing: 5
 
         // Header
         RowLayout {
             id: header
             spacing: 5
-            Layout.fillWidth: parent
             Layout.alignment: Qt.AlignHCenter
+
             MaterialSymbol {
                 fill: 0
+                font.weight: Font.Medium
                 text: "location_on"
-                iconSize: Appearance.font.pixelSize.huge
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnSurfaceVariant
             }
 
             StyledText {
                 text: Weather.data.city
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
-                color: Appearance.colors.colOnLayer0
+                font {
+                    weight: Font.Medium
+                    pixelSize: Appearance.font.pixelSize.normal
+                }
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
 

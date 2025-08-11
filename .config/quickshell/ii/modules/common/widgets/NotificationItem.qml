@@ -140,8 +140,8 @@ Item { // Notification item area
         color: (expanded && !onlyNotification) ? 
             (notificationObject.urgency == NotificationUrgency.Critical) ? 
                 ColorUtils.mix(Appearance.colors.colSecondaryContainer, Appearance.colors.colLayer2, 0.35) :
-                (Appearance.colors.colSurfaceContainerHigh) :
-            ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHighest)
+                (Appearance.colors.colLayer3) :
+            ColorUtils.transparentize(Appearance.colors.colLayer3)
 
         implicitHeight: expanded ? (contentColumn.implicitHeight + padding * 2) : summaryRow.implicitHeight
         Behavior on implicitHeight {
@@ -168,7 +168,7 @@ Item { // Notification item area
                     id: summaryText
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
-                    color: Appearance.colors.colOnLayer2
+                    color: Appearance.colors.colOnLayer3
                     elide: Text.ElideRight
                     text: root.notificationObject.summary || ""
                 }

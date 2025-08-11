@@ -18,10 +18,10 @@ MouseArea {
     RowLayout {
         id: rowLayout
         anchors.centerIn: parent
-        
+
         MaterialSymbol {
             fill: 0
-            text: WeatherIcons.codeToName[Weather.data.wCode]
+            text: WeatherIcons.codeToName[Weather.data.wCode] ?? "cloud"
             iconSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             Layout.alignment: Qt.AlignVCenter
@@ -31,30 +31,13 @@ MouseArea {
             visible: true
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
-            text: Weather.data.temp
+            text: Weather.data?.temp ?? "--°"
             Layout.alignment: Qt.AlignVCenter
         }
     }
 
-    LazyLoader {
-        id: popupLoader
-        active: root.containsMouse
-
-        component: PopupWindow {
-            id: popupWindow
-            visible: true
-            implicitWidth: weatherPopup.implicitWidth
-            implicitHeight: weatherPopup.implicitHeight
-            anchor.item: root
-            anchor.edges: Edges.Top
-            anchor.rect.x: (root.implicitWidth - popupWindow.implicitWidth) / 2
-            anchor.rect.y: Config.options.bar.bottom ? 
-                (-weatherPopup.implicitHeight - 15) :
-                (root.implicitHeight + 15 )
-            color: "transparent"
-            WeatherPopup {
-                id: weatherPopup
-            }
-        }
+    WeatherPopup {
+        id: weatherPopup
+        hoverTarget: root
     }
 }

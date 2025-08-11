@@ -29,6 +29,7 @@ Button {
     property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
     property color colRippleToggled: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
+    opacity: root.enabled ? 1 : 0.4
     property color buttonColor: root.enabled ? (root.toggled ? 
         (root.hovered ? colBackgroundToggledHover : 
             colBackgroundToggled) :
@@ -91,6 +92,7 @@ Button {
 
     RippleAnim {
         id: rippleFadeAnim
+        duration: rippleDuration * 2
         target: ripple
         property: "opacity"
         to: 0
