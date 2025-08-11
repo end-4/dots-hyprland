@@ -26,13 +26,13 @@ Variants {
         required property var modelData
 
         // Hide when fullscreen
-        readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-        property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor.name
-        visible: !(activeWindow?.fullscreen && activeWindow?.activated && focusingThisMonitor)
+        property list<HyprlandWorkspace> workspacesForMonitor: Hyprland.workspaces.values.filter(workspace=>workspace.monitor && workspace.monitor.name == monitor.name)
+        property var activeWorkspaceWithFullscreen: workspacesForMonitor.filter(workspace=>((workspace.toplevels.values.filter(window=>window.wayland.fullscreen)[0] != undefined) && workspace.active))[0]
+        visible: !(activeWorkspaceWithFullscreen != undefined)
 
         // Workspaces
         property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
-        property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
+        property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor?.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
         property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
         property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
         // Wallpaper
@@ -148,8 +148,13 @@ Variants {
         // Wallpaper
         Image {
             id: wallpaper
-            visible: !bgRoot.wallpaperIsVideo
+            visible: opacity > 0
+            opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+            }
             property real value // 0 to 1, for offset
+            asynchronous: true
             value: {
                 // Range = groups that workspaces span on
                 const chunkSize = Config?.options.bar.workspaces.shown ?? 10;
@@ -278,8 +283,8 @@ Variants {
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            text: "Enter password"
-            color: CF.ColorUtils.transparentize(bgRoot.colText, 0.3)
+            text: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+            color: GlobalStates.screenUnlockFailed ? Appearance.colors.colError : bgRoot.colText
             font {
                 pixelSize: Appearance.font.pixelSize.normal
             }

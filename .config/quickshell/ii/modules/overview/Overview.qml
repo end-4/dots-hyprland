@@ -21,7 +21,7 @@ Scope {
             required property var modelData
             property string searchingText: ""
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
-            property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
+            property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
             screen: modelData
             visible: GlobalStates.overviewOpen
 

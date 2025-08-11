@@ -24,7 +24,10 @@ Scope {
     }
 
     onCurrentTextChanged: {
-        showFailure = false; // Clear the failure text once the user starts typing.
+        if (currentText.length > 0) {
+            showFailure = false;
+            GlobalStates.screenUnlockFailed = false;
+        }
         GlobalStates.screenLockContainsCharacters = currentText.length > 0;
         passwordClearTimer.restart();
     }
@@ -58,6 +61,7 @@ Scope {
                 root.unlocked();
             } else {
                 root.showFailure = true;
+                GlobalStates.screenUnlockFailed = true;
             }
 
             root.currentText = "";

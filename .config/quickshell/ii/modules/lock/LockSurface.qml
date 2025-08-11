@@ -75,16 +75,9 @@ MouseArea {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
         radius: Appearance.rounding.full
-        color: Appearance.colors.colLayer2
+        color: Appearance.m3colors.m3surfaceContainer
         implicitWidth: 160
         implicitHeight: 44
-
-        StyledText {
-            visible: root.context.showFailure && passwordBox.text.length == 0
-            anchors.centerIn: parent
-            text: "Incorrect"
-            color: Appearance.m3colors.m3error
-        }
 
         StyledTextInput {
             id: passwordBox

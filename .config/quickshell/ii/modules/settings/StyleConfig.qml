@@ -140,9 +140,9 @@ ContentPage {
             ConfigRow {
                 ConfigSwitch {
                     text: Translation.tr("Enable")
-                    checked: Config.options.appearance.transparency
+                    checked: Config.options.appearance.transparency.enable
                     onCheckedChanged: {
-                        Config.options.appearance.transparency = checked;
+                        Config.options.appearance.transparency.enable = checked;
                     }
                     StyledToolTip {
                         content: Translation.tr("Might look ass. Unsupported.")

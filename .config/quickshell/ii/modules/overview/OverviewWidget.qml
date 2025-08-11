@@ -20,7 +20,7 @@ Item {
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
-    property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
+    property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor?.id)
     property real scale: Config.options.overview.scale
     property color activeBorderColor: Appearance.colors.colSecondary
 
@@ -149,14 +149,15 @@ Item {
                             const address = `0x${toplevel.HyprlandToplevel.address}`
                             var win = windowByAddress[address]
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
-                            const inMonitor = root.monitor.id === win.monitor
-                            return inWorkspaceGroup && inMonitor;
+                            return inWorkspaceGroup;
                         })
                     }
                 }
                 delegate: OverviewWindow {
                     id: window
                     required property var modelData
+                    property int monitorId: windowData?.monitor
+                    property var monitor: HyprlandData.monitors[monitorId]
                     property var address: `0x${modelData.HyprlandToplevel.address}`
                     windowData: windowByAddress[address]
                     toplevel: modelData
@@ -164,9 +165,7 @@ Item {
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
-
-                    property int monitorId: windowData?.monitor
-                    property var monitor: HyprlandData.monitors[monitorId]
+                    widgetMonitorId: root.monitor.id
 
                     property bool atInitPosition: (initX == x && initY == y)
 
