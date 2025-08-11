@@ -10,14 +10,37 @@ Rectangle {
     readonly property real margin: 10
     implicitWidth: columnLayout.implicitWidth + margin * 2
     implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colTooltip
+    color: Appearance.colors.colSurfaceContainer
     radius: Appearance.rounding.small
     clip: true
 
     ColumnLayout {
         id: columnLayout
         anchors.centerIn: parent
-        spacing: 8
+        spacing: 4
+
+        // Header
+        RowLayout {
+            id: header
+            spacing: 5
+
+            MaterialSymbol {
+                fill: 0
+                font.weight: Font.Medium
+                text: "battery_android_full"
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+
+            StyledText {
+                text: "Battery"
+                font {
+                    weight: Font.Medium
+                    pixelSize: Appearance.font.pixelSize.normal
+                }
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+        }
 
         // This row is hidden when the battery is full.
         RowLayout {
@@ -30,14 +53,25 @@ Rectangle {
             }
             visible: rowVisible
             opacity: rowVisible ? 1 : 0
-            Behavior on opacity { NumberAnimation { duration: 500 } }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 500
+                }
+            }
 
-            MaterialSymbol { text: "schedule"; color: Appearance.colors.colOnTooltip }
-            StyledText { text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:"); color: Appearance.colors.colOnTooltip }
+            MaterialSymbol {
+                text: "schedule"
+                color: Appearance.colors.colOnSurfaceVariant
+                iconSize: Appearance.font.pixelSize.large
+            }
+            StyledText {
+                text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:")
+                color: Appearance.colors.colOnSurfaceVariant
+            }
             StyledText {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignRight
-                color: Appearance.colors.colOnTooltip
+                color: Appearance.colors.colOnSurfaceVariant
                 text: {
                     function formatTime(seconds) {
                         var h = Math.floor(seconds / 3600);
@@ -62,27 +96,17 @@ Rectangle {
             property bool rowVisible: !(Battery.chargeState != 4 && Battery.energyRate == 0)
             visible: rowVisible
             opacity: rowVisible ? 1 : 0
-            Behavior on opacity { NumberAnimation { duration: 500 } }
-
-            MaterialSymbol {
-                text: {
-                    if (Battery.isCharging) {
-                        return "power";
-                    } else if (Battery.percentage >= 0.8) {
-                        return "battery_full";
-                    } else if (Battery.percentage >= 0.6) {
-                        return "battery_5_bar";
-                    } else if (Battery.percentage >= 0.4) {
-                        return "battery_4_bar";
-                    } else if (Battery.percentage >= 0.2) {
-                        return "battery_2_bar";
-                    } else {
-                        return "battery_0_bar";
-                    }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 500
                 }
-                color: Appearance.colors.colOnTooltip
             }
 
+            MaterialSymbol {
+                text: "bolt"
+                color: Appearance.colors.colOnSurfaceVariant
+                iconSize: Appearance.font.pixelSize.large
+            }
 
             StyledText {
                 text: {
@@ -94,13 +118,13 @@ Rectangle {
                         return Translation.tr("Discharging:");
                     }
                 }
-                color: Appearance.colors.colOnTooltip
+                color: Appearance.colors.colOnSurfaceVariant
             }
 
             StyledText {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignRight
-                color: Appearance.colors.colOnTooltip
+                color: Appearance.colors.colOnSurfaceVariant
                 text: {
                     if (Battery.chargeState == 4) {
                         return "";
@@ -110,6 +134,5 @@ Rectangle {
                 }
             }
         }
-
     }
 }

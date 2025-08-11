@@ -11,7 +11,7 @@ Rectangle {
     readonly property real margin: 10
     implicitWidth: columnLayout.implicitWidth + margin * 2
     implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colTooltip
+    color: Appearance.colors.colSurfaceContainer
     radius: Appearance.rounding.small
     clip: true
 
@@ -26,20 +26,23 @@ Rectangle {
         RowLayout {
             id: header
             spacing: 5
-            Layout.fillWidth: parent
             Layout.alignment: Qt.AlignHCenter
+
             MaterialSymbol {
                 fill: 0
+                font.weight: Font.Medium
                 text: "location_on"
-                iconSize: Appearance.font.pixelSize.huge
-                color: Appearance.colors.colOnTooltip
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnSurfaceVariant
             }
 
             StyledText {
                 text: Weather.data.city
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
-                color: Appearance.colors.colOnTooltip
+                font {
+                    weight: Font.Medium
+                    pixelSize: Appearance.font.pixelSize.normal
+                }
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
 

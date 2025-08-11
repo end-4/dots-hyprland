@@ -10,6 +10,9 @@ Item {
     id: root
     required property string iconName
     required property double percentage
+    property var tooltipData: [{ icon: "info", label: "System resource", value: "" }]
+    property var tooltipHeaderIcon
+    property var tooltipHeaderText
     property bool shown: true
     clip: true
     visible: width > 0 && height > 0
@@ -19,95 +22,6 @@ Item {
     // Helper function to format KB to GB  
     function formatKB(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB"
-    }
-
-    // Generate tooltip content based on resource type
-    property var tooltipData: {
-        switch(iconName) {
-            case "memory":
-                return [
-                    { icon: "memory", label: Translation.tr("Memory Usage"), value: "" },
-                    { icon: "clock_loader_60", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.memoryUsed) },
-                    { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.memoryFree) },
-                    { icon: "empty_dashboard", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.memoryTotal) },
-                ]
-            case "swap_horiz":
-                return ResourceUsage.swapTotal > 0 ?
-                [
-                    { icon: "swap_horiz", label: Translation.tr("Swap Usage"), value: "" },
-                    { icon: "clock_loader_60", label: Translation.tr("Used:"), value: formatKB(ResourceUsage.swapUsed) },
-                    { icon: "check_circle", label: Translation.tr("Free:"), value: formatKB(ResourceUsage.swapFree) },
-                    { icon: "empty_dashboard", label: Translation.tr("Total:"), value: formatKB(ResourceUsage.swapTotal) },
-                ] :
-                [
-                    { icon: "swap_horiz", label: Translation.tr("Swap:"), value: Translation.tr("Not configured") }
-                ]
-            case "settings_slow_motion":
-                return [
-                    { icon: "settings_slow_motion", label: Translation.tr("CPU Usage"), value: "" },
-                    { icon: "bolt", label: Translation.tr("Load:"), value: (ResourceUsage.cpuUsage > 0.8 ?
-                        Translation.tr("High") :
-                        ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low"))
-                        + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
-                    }
-                ]
-            default:
-                return [
-                    { icon: "info", label: Translation.tr("System Resource"), value: "" }
-                ]
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        acceptedButtons: Qt.NoButton
-        enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
-    }
-
-    StyledPopup {
-        hoverTarget: mouseArea
-        contentComponent: Rectangle {
-            id: resourcePopup
-            readonly property real margin: 10
-            implicitWidth: columnLayout.implicitWidth + margin * 2
-            implicitHeight: columnLayout.implicitHeight + margin * 2
-            color: Appearance.colors.colTooltip
-            radius: Appearance.rounding.small
-            clip: true
-
-            ColumnLayout {
-                id: columnLayout
-                anchors.centerIn: parent
-                spacing: 6
-
-                Repeater {
-                    model: root.tooltipData
-                    delegate: RowLayout {
-                        spacing: 5
-                        Layout.fillWidth: true
-
-                        MaterialSymbol {
-                            text: modelData.icon
-                            color: Appearance.colors.colOnTooltip
-                        }
-                        StyledText {
-                            text: modelData.label
-                            color: Appearance.colors.colOnTooltip
-                        }
-                        StyledText {
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignRight
-                            visible: modelData.value !== ""
-                            color: Appearance.colors.colOnTooltip
-                            text: modelData.value
-                        }
-                    }
-                }
-
-            }
-        }
     }
 
     RowLayout {
@@ -144,6 +58,83 @@ Item {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
 
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
+    }
+
+    StyledPopup {
+        hoverTarget: mouseArea
+        contentComponent: Rectangle {
+            id: resourcePopup
+            readonly property real margin: 10
+            implicitWidth: columnLayout.implicitWidth + margin * 2
+            implicitHeight: columnLayout.implicitHeight + margin * 2
+            color: Appearance.colors.colSurfaceContainer
+            radius: Appearance.rounding.small
+            clip: true
+
+            ColumnLayout {
+                id: columnLayout
+                anchors.centerIn: parent
+                spacing: 4
+
+                // Header
+                RowLayout {
+                    id: header
+                    spacing: 5
+
+                    MaterialSymbol {
+                        fill: 0
+                        font.weight: Font.Medium
+                        text: root.tooltipHeaderIcon
+                        iconSize: Appearance.font.pixelSize.large
+                        color: Appearance.colors.colOnSurfaceVariant
+                    }
+
+                    StyledText {
+                        text: root.tooltipHeaderText
+                        font {
+                            weight: Font.Medium
+                            pixelSize: Appearance.font.pixelSize.normal
+                        }
+                        color: Appearance.colors.colOnSurfaceVariant
+                    }
+                }
+
+                // Info rows
+                Repeater {
+                    model: root.tooltipData
+                    delegate: RowLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
+
+                        MaterialSymbol {
+                            text: modelData.icon
+                            color: Appearance.colors.colOnSurfaceVariant
+                            iconSize: Appearance.font.pixelSize.large
+                        }
+                        StyledText {
+                            text: modelData.label
+                            color: Appearance.colors.colOnSurfaceVariant
+                        }
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignRight
+                            visible: modelData.value !== ""
+                            color: Appearance.colors.colOnSurfaceVariant
+                            text: modelData.value
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     Behavior on implicitWidth {
