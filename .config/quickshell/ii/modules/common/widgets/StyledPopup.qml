@@ -10,8 +10,8 @@ import Quickshell.Wayland
 LazyLoader {
     id: root
 
-    property Item hoverTarget
-    property Component contentComponent
+    property MouseArea hoverTarget
+    default property Item contentItem
 
     active: hoverTarget && hoverTarget.containsMouse
 
@@ -25,13 +25,13 @@ LazyLoader {
         anchors.top: !Config.options.bar.bottom
         anchors.bottom: Config.options.bar.bottom
 
-        implicitWidth: popupContent.implicitWidth
-        implicitHeight: popupContent.implicitHeight
+        implicitWidth: popupBackground.implicitWidth
+        implicitHeight: popupBackground.implicitHeight
 
         margins {
             left: root.QsWindow?.mapFromItem(
                 root.hoverTarget, 
-                (root.hoverTarget.width - popupContent.implicitWidth) / 2, 0
+                (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
                 ).x
             top: Appearance.sizes.hyprlandGapsOut
             bottom: Appearance.sizes.hyprlandGapsOut
@@ -39,10 +39,16 @@ LazyLoader {
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
 
-        Loader {
-            id: popupContent
-            sourceComponent: root.contentComponent
-            anchors.centerIn: parent
+        Rectangle {
+            id: popupBackground
+            readonly property real margin: 10
+            color: Appearance.colors.colSurfaceContainer
+            radius: Appearance.rounding.small
+
+            implicitWidth: root.contentItem.implicitWidth + margin * 2
+            implicitHeight: root.contentItem.implicitHeight + margin * 2
+
+            children: [root.contentItem]
         }
     }
 }

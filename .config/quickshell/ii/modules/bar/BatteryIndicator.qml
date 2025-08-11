@@ -97,7 +97,8 @@ MouseArea {
 
     StyledPopup {
         hoverTarget: root
-        contentComponent: BatteryPopup {
+        
+        BatteryPopup {
             id: batteryPopup
             anchors.centerIn: parent
         }

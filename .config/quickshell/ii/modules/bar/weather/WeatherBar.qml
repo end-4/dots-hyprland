@@ -38,7 +38,8 @@ MouseArea {
 
     StyledPopup {
         hoverTarget: root
-        contentComponent: WeatherPopup {
+        
+        WeatherPopup {
             id: weatherPopup
             anchors.centerIn: parent
         }

@@ -75,72 +75,63 @@ Item {
 
     StyledPopup {
         hoverTarget: mouseArea
-        contentComponent: Rectangle {
-            id: datePopup
-            readonly property real margin: 12
-            implicitWidth: columnLayout.implicitWidth + margin * 2
-            implicitHeight: columnLayout.implicitHeight + margin * 2
-            color: Appearance.colors.colSurfaceContainer
-            radius: Appearance.rounding.small
-            clip: true
+        
+        ColumnLayout {
+            id: columnLayout
+            anchors.centerIn: parent
+            spacing: 4
 
+            // Date + Time row
+            RowLayout {
+                spacing: 5
+
+                MaterialSymbol {
+                    fill: 0
+                    font.weight: Font.Medium
+                    text: "calendar_month"
+                    iconSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+                StyledText {
+                    horizontalAlignment: Text.AlignLeft
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: `${root.formattedDate} • ${root.formattedTime}`
+                    font.weight: Font.Medium
+                }
+            }
+
+            // Uptime row
+            RowLayout {
+                spacing: 5
+                Layout.fillWidth: true
+                MaterialSymbol { text: "timelapse"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
+                StyledText { text: Translation.tr("System uptime:"); color: Appearance.colors.colOnSurfaceVariant }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: root.formattedUptime
+                }
+            }
+
+            // Tasks
             ColumnLayout {
-                id: columnLayout
-                anchors.centerIn: parent
-                spacing: 4
+                spacing: 0
+                Layout.fillWidth: true
 
-                // Date + Time row
                 RowLayout {
-                    spacing: 5
-
-                    MaterialSymbol {
-                        fill: 0
-                        font.weight: Font.Medium
-                        text: "calendar_month"
-                        iconSize: Appearance.font.pixelSize.large
-                        color: Appearance.colors.colOnSurfaceVariant
-                    }
-                    StyledText {
-                        horizontalAlignment: Text.AlignLeft
-                        color: Appearance.colors.colOnSurfaceVariant
-                        text: `${root.formattedDate} • ${root.formattedTime}`
-                        font.weight: Font.Medium
-                    }
+                    spacing: 4
+                    Layout.fillWidth: true
+                    MaterialSymbol { text: "checklist"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
+                    StyledText { text: Translation.tr("To Do:"); color: Appearance.colors.colOnSurfaceVariant }
                 }
 
-                // Uptime row
-                RowLayout {
-                    spacing: 5
+                StyledText {
                     Layout.fillWidth: true
-                    MaterialSymbol { text: "timelapse"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
-                    StyledText { text: Translation.tr("System uptime:"); color: Appearance.colors.colOnSurfaceVariant }
-                    StyledText {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignRight
-                        color: Appearance.colors.colOnSurfaceVariant
-                        text: root.formattedUptime
-                    }
-                }
-
-                // Tasks
-                ColumnLayout {
-                    spacing: 0
-                    Layout.fillWidth: true
-
-                    RowLayout {
-                        spacing: 4
-                        Layout.fillWidth: true
-                        MaterialSymbol { text: "checklist"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
-                        StyledText { text: Translation.tr("To Do:"); color: Appearance.colors.colOnSurfaceVariant }
-                    }
-
-                    StyledText {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.Wrap
-                        color: Appearance.colors.colOnSurfaceVariant
-                        text: root.todosSection
-                    }
+                    horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.Wrap
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: root.todosSection
                 }
             }
         }
