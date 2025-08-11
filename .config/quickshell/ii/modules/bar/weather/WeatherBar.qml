@@ -38,7 +38,6 @@ MouseArea {
 
     StyledPopup {
         hoverTarget: root
-        offsetY: -25
         contentComponent: WeatherPopup {
             id: weatherPopup
             anchors.centerIn: parent

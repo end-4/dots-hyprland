@@ -97,8 +97,6 @@ MouseArea {
 
     StyledPopup {
         hoverTarget: root
-        offsetY: -30
-        maskEnabled: true
         contentComponent: BatteryPopup {
             id: batteryPopup
             anchors.centerIn: parent

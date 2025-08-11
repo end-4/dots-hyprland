@@ -70,7 +70,6 @@ Item {
 
     StyledPopup {
         hoverTarget: mouseArea
-        offsetY: -30
         contentComponent: Rectangle {
             id: resourcePopup
             readonly property real margin: 10

@@ -48,7 +48,6 @@ Item {
 
     StyledPopup {
         hoverTarget: mouseArea
-        offsetY: -30
         contentComponent: Rectangle {
             id: datePopup
             readonly property real margin: 12
