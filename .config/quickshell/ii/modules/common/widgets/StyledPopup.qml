@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Effects
 import Quickshell
@@ -54,7 +55,7 @@ LazyLoader {
             anchors.centerIn: parent
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
-            color: Appearance.colors.colSurfaceContainer
+            color: ColorUtils.applyAlpha(Appearance.colors.colSurfaceContainer, 1 - Appearance.backgroundTransparency)
             radius: Appearance.rounding.small
             children: [root.contentItem]
 
