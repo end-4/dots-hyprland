@@ -3,7 +3,9 @@ import QtQuick.Layouts
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
+import Quickshell
 
 ContentPage {
     forceWidth: true
@@ -211,7 +213,14 @@ ContentPage {
                 currentValue: Config.options.time.format
                 configOptionName: "time.format"
                 onSelected: newValue => {
+                    if (newValue === "hh:mm") {
+                        Quickshell.execDetached(["bash", "-c", `sed -i 's/\\TIME12\\b/TIME/' '${FileUtils.trimFileProtocol(Directories.config)}/hypr/hyprlock.conf'`]);
+                    } else {
+                        Quickshell.execDetached(["bash", "-c", `sed -i 's/\\TIME\\b/TIME12/' '${FileUtils.trimFileProtocol(Directories.config)}/hypr/hyprlock.conf'`]);
+                    }
+
                     Config.options.time.format = newValue;
+                    
                 }
                 options: [
                     {
