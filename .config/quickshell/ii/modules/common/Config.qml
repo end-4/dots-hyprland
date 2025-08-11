@@ -81,7 +81,12 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
-                property bool transparency: false
+                property JsonObject transparency: JsonObject {
+                    property bool enable: true
+                    property bool automatic: true
+                    property real backgroundTransparency: 0.11
+                    property real contentTransparency: 0.57
+                }
                 property JsonObject wallpaperTheming: JsonObject {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true

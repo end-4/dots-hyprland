@@ -15,7 +15,7 @@ Rectangle { // App icon
     property real scale: 1
     property real size: 38 * scale
     property real materialIconScale: 0.57
-    property real appIconScale: 0.7
+    property real appIconScale: 0.8
     property real smallAppIconScale: 0.49
     property real materialIconSize: size * materialIconScale
     property real appIconSize: size * appIconScale
