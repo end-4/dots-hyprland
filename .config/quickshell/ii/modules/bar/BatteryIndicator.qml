@@ -58,9 +58,7 @@ MouseArea {
                 iconSize: Appearance.font.pixelSize.normal
                 color: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
             }
-
         }
-
     }
 
     Loader {
@@ -72,7 +70,8 @@ MouseArea {
         Connections {
             target: root
             function onIsChargingChanged() {
-                if (isCharging) boltIconLoader.active = true
+                if (isCharging)
+                    boltIconLoader.active = true;
             }
         }
 
@@ -85,19 +84,19 @@ MouseArea {
             visible: opacity > 0 // Only show when charging
             opacity: isCharging ? 1 : 0 // Keep opacity for visibility
             onVisibleChanged: {
-                if (!visible) boltIconLoader.active = false
+                if (!visible)
+                    boltIconLoader.active = false;
             }
 
             Behavior on opacity {
                 animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
-
         }
     }
 
     StyledPopup {
         hoverTarget: root
-        
+
         BatteryPopup {
             id: batteryPopup
             anchors.centerIn: parent

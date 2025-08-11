@@ -10,7 +10,13 @@ Item {
     id: root
     required property string iconName
     required property double percentage
-    property var tooltipData: [{ icon: "info", label: "System resource", value: "" }]
+    property var tooltipData: [
+        {
+            icon: "info",
+            label: "System resource",
+            value: ""
+        }
+    ]
     property var tooltipHeaderIcon
     property var tooltipHeaderText
     property bool shown: true
@@ -19,14 +25,14 @@ Item {
     implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
     implicitHeight: resourceRowLayout.implicitHeight
 
-    // Helper function to format KB to GB  
+    // Helper function to format KB to GB
     function formatKB(kb) {
-        return (kb / (1024 * 1024)).toFixed(1) + " GB"
+        return (kb / (1024 * 1024)).toFixed(1) + " GB";
     }
 
     RowLayout {
-        spacing: 4
         id: resourceRowLayout
+        spacing: 4
         x: shown ? 0 : -resourceRowLayout.width
 
         CircularProgress {
@@ -45,7 +51,6 @@ Item {
                 iconSize: Appearance.font.pixelSize.large
                 color: Appearance.m3colors.m3onSecondaryContainer
             }
-
         }
 
         StyledText {
@@ -57,7 +62,6 @@ Item {
         Behavior on x {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
-
     }
 
     MouseArea {
@@ -70,7 +74,7 @@ Item {
 
     StyledPopup {
         hoverTarget: mouseArea
-        
+
         ColumnLayout {
             id: columnLayout
             anchors.centerIn: parent
@@ -124,7 +128,6 @@ Item {
                     }
                 }
             }
-
         }
     }
 

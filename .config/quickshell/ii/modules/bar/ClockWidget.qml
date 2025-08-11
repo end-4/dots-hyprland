@@ -15,22 +15,24 @@ Item {
 
     // Helper function to get upcoming todos
     function getUpcomingTodos() {
-        const unfinishedTodos = Todo.list.filter(function(item) { return !item.done; })
+        const unfinishedTodos = Todo.list.filter(function (item) {
+            return !item.done;
+        });
         if (unfinishedTodos.length === 0) {
-            return Translation.tr("No pending tasks")
+            return Translation.tr("No pending tasks");
         }
-        
+
         // Limit to first 5 todos to keep popup manageable
-        const limitedTodos = unfinishedTodos.slice(0, 5)
-        let todoText = limitedTodos.map(function(item, index) {
-            return `${index + 1}. ${item.content}`
-        }).join('\n')
-        
+        const limitedTodos = unfinishedTodos.slice(0, 5);
+        let todoText = limitedTodos.map(function (item, index) {
+            return `${index + 1}. ${item.content}`;
+        }).join('\n');
+
         if (unfinishedTodos.length > 5) {
-            todoText += `\n${Translation.tr("... and %1 more").arg(unfinishedTodos.length - 5)}`
+            todoText += `\n${Translation.tr("... and %1 more").arg(unfinishedTodos.length - 5)}`;
         }
-        
-        return todoText
+
+        return todoText;
     }
 
     // Popup Data
@@ -63,7 +65,6 @@ Item {
             color: Appearance.colors.colOnLayer1
             text: DateTime.date
         }
-
     }
 
     MouseArea {
@@ -75,7 +76,7 @@ Item {
 
     StyledPopup {
         hoverTarget: mouseArea
-        
+
         ColumnLayout {
             id: columnLayout
             anchors.centerIn: parent
@@ -104,8 +105,15 @@ Item {
             RowLayout {
                 spacing: 5
                 Layout.fillWidth: true
-                MaterialSymbol { text: "timelapse"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
-                StyledText { text: Translation.tr("System uptime:"); color: Appearance.colors.colOnSurfaceVariant }
+                MaterialSymbol {
+                    text: "timelapse"
+                    color: Appearance.colors.colOnSurfaceVariant
+                    font.pixelSize: Appearance.font.pixelSize.large
+                }
+                StyledText {
+                    text: Translation.tr("System uptime:")
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
                 StyledText {
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
@@ -122,8 +130,15 @@ Item {
                 RowLayout {
                     spacing: 4
                     Layout.fillWidth: true
-                    MaterialSymbol { text: "checklist"; color: Appearance.colors.colOnSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.large }
-                    StyledText { text: Translation.tr("To Do:"); color: Appearance.colors.colOnSurfaceVariant }
+                    MaterialSymbol {
+                        text: "checklist"
+                        color: Appearance.colors.colOnSurfaceVariant
+                        font.pixelSize: Appearance.font.pixelSize.large
+                    }
+                    StyledText {
+                        text: Translation.tr("To Do:")
+                        color: Appearance.colors.colOnSurfaceVariant
+                    }
                 }
 
                 StyledText {
@@ -136,5 +151,4 @@ Item {
             }
         }
     }
-
 }

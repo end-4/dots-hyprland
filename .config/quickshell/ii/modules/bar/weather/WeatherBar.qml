@@ -18,7 +18,7 @@ MouseArea {
     RowLayout {
         id: rowLayout
         anchors.centerIn: parent
-        
+
         MaterialSymbol {
             fill: 0
             text: WeatherIcons.codeToName[Weather.data.wCode]
@@ -38,7 +38,7 @@ MouseArea {
 
     StyledPopup {
         hoverTarget: root
-        
+
         WeatherPopup {
             id: weatherPopup
             anchors.centerIn: parent
