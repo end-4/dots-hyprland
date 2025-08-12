@@ -120,7 +120,6 @@ Variants {
             leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
             leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
             leastBusyRegionProc.running = false;
-            console.log(leastBusyRegionProc.command.join(" "))
             leastBusyRegionProc.running = true;
         }
         Process {
@@ -138,13 +137,13 @@ Variants {
                 "--horizontal-padding", horizontalPadding,
                 "--vertical-padding", verticalPadding,
                 path, 
-                "--visual-output",
+                // "--visual-output",
             ]
             stdout: StdioCollector {
                 id: leastBusyRegionOutputCollector
                 onStreamFinished: {
                     const output = leastBusyRegionOutputCollector.text
-                    console.log("[Background] Least busy region output:", output)
+                    // console.log("[Background] Least busy region output:", output)
                     if (output.length === 0) return;
                     const parsedContent = JSON.parse(output)
                     bgRoot.clockX = parsedContent.center_x * bgRoot.effectiveWallpaperScale
