@@ -91,13 +91,19 @@ Variants {
                 onStreamFinished: {
                     const output = wallpaperSizeOutputCollector.text
                     const [width, height] = output.split(" ").map(Number);
+                    const [screenWidth, screenHeight] = [bgRoot.screen.width, bgRoot.screen.height];
                     bgRoot.wallpaperWidth = width
                     bgRoot.wallpaperHeight = height
-                    bgRoot.effectiveWallpaperScale = Math.max(1, Math.min(
-                        bgRoot.preferredWallpaperScale,
-                        width / bgRoot.screen.width,
-                        height / bgRoot.screen.height
-                    ));
+
+                    if (width <= screenWidth || height <= screenHeight) { // Undersized/perfectly sized wallpapers
+                        bgRoot.effectiveWallpaperScale = Math.max(screenWidth / width, screenHeight / height);
+                    } else { // Oversized = can be zoomed for parallax, yay
+                        bgRoot.effectiveWallpaperScale = Math.min(
+                            bgRoot.preferredWallpaperScale,
+                            width / screenWidth, height / screenHeight
+                        );
+                    }
+
 
                     bgRoot.updateClockPosition()
                 }
