@@ -32,7 +32,7 @@ Item {
 
     RowLayout {
         id: resourceRowLayout
-        spacing: 4
+        spacing: 2
         x: shown ? 0 : -resourceRowLayout.width
 
         CircularProgress {
@@ -53,10 +53,22 @@ Item {
             }
         }
 
-        StyledText {
+        Item {
             Layout.alignment: Qt.AlignVCenter
-            color: Appearance.colors.colOnLayer1
-            text: `${Math.round(percentage * 100)}`
+            implicitWidth: fullPercentageTextMetrics.width
+            implicitHeight: percentageText.implicitHeight
+
+            TextMetrics {
+                id: fullPercentageTextMetrics
+                text: "100"
+            }
+
+            StyledText {
+                id: percentageText
+                anchors.centerIn: parent
+                color: Appearance.colors.colOnLayer1
+                text: `${Math.round(percentage * 100).toString()}`
+            }
         }
 
         Behavior on x {

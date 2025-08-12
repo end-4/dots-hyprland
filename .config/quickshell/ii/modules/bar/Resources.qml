@@ -39,7 +39,7 @@ Item {
             shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || 
                 (MprisController.activePlayer?.trackTitle == null) ||
                 root.alwaysShowAllResources
-            Layout.leftMargin: shown ? 4 : 0
+            Layout.leftMargin: shown ? 6 : 0
 
             tooltipHeaderIcon: "swap_horiz"
             tooltipHeaderText: Translation.tr("Swap usage")
@@ -58,7 +58,7 @@ Item {
             shown: Config.options.bar.resources.alwaysShowCpu || 
                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
                 root.alwaysShowAllResources
-            Layout.leftMargin: shown ? 4 : 0
+            Layout.leftMargin: shown ? 6 : 0
 
             tooltipHeaderIcon: "settings_slow_motion"
             tooltipHeaderText: Translation.tr("CPU usage")
