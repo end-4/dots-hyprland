@@ -1,12 +1,8 @@
-import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 /**

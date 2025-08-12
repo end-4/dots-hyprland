@@ -3,7 +3,6 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 
 MouseArea {
     id: root
@@ -28,7 +27,7 @@ MouseArea {
         ClippedProgressBar {
             id: batteryProgress
             value: percentage
-            highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.m3colors.m3onSecondaryContainer
+            highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
 
             Item {
                 anchors.centerIn: parent
@@ -47,15 +46,7 @@ MouseArea {
                         fill: 1
                         text: "bolt"
                         iconSize: Appearance.font.pixelSize.smaller
-                        visible: isCharging && percentage < 1
-                        onVisibleChanged: {
-                            if (!visible)
-                                boltIconLoader.active = false;
-                        }
-
-                        Behavior on opacity {
-                            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                        }
+                        visible: isCharging && percentage < 1 // TODO: animation
                     }
                     StyledText {
                         Layout.alignment: Qt.AlignVCenter
