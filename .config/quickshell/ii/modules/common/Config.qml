@@ -81,7 +81,12 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
-                property bool transparency: false
+                property JsonObject transparency: JsonObject {
+                    property bool enable: true
+                    property bool automatic: true
+                    property real backgroundTransparency: 0.11
+                    property real contentTransparency: 0.57
+                }
                 property JsonObject wallpaperTheming: JsonObject {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true
@@ -135,7 +140,7 @@ Singleton {
                 property bool bottom: false // Instead of top
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
                 property bool borderless: false // true for no grouping of items
-                property string topLeftIcon: "spark" // Options: distro, spark
+                property string topLeftIcon: "spark" // Options: "distro" or any icon name in ~/.config/quickshell/ii/assets/icons
                 property bool showBackground: true
                 property bool verbose: true
                 property JsonObject resources: JsonObject {

@@ -33,7 +33,6 @@ ProgressBar {
     }
     
     background: Item {
-        anchors.fill: parent
         implicitHeight: valueBarHeight
         implicitWidth: valueBarWidth
     }

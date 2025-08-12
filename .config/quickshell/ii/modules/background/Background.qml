@@ -42,12 +42,13 @@ Variants {
             || Config.options.background.wallpaperPath.endsWith(".avi")
             || Config.options.background.wallpaperPath.endsWith(".mov")
         property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
+        property real wallpaperToScreenRatio: Math.min(wallpaperWidth / screen.width, wallpaperHeight / screen.height)
         property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
         property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
-        property real movableXSpace: (Math.min(wallpaperWidth * effectiveWallpaperScale, screen.width * preferredWallpaperScale) - screen.width) / 2
-        property real movableYSpace: (Math.min(wallpaperHeight * effectiveWallpaperScale, screen.height * preferredWallpaperScale) - screen.height) / 2
+        property real movableXSpace: ((wallpaperWidth / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.width) / 2
+        property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
         // Position
         property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
         property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
@@ -91,13 +92,19 @@ Variants {
                 onStreamFinished: {
                     const output = wallpaperSizeOutputCollector.text
                     const [width, height] = output.split(" ").map(Number);
+                    const [screenWidth, screenHeight] = [bgRoot.screen.width, bgRoot.screen.height];
                     bgRoot.wallpaperWidth = width
                     bgRoot.wallpaperHeight = height
-                    bgRoot.effectiveWallpaperScale = Math.max(1, Math.min(
-                        bgRoot.preferredWallpaperScale,
-                        width / bgRoot.screen.width,
-                        height / bgRoot.screen.height
-                    ));
+
+                    if (width <= screenWidth || height <= screenHeight) { // Undersized/perfectly sized wallpapers
+                        bgRoot.effectiveWallpaperScale = Math.max(screenWidth / width, screenHeight / height);
+                    } else { // Oversized = can be zoomed for parallax, yay
+                        bgRoot.effectiveWallpaperScale = Math.min(
+                            bgRoot.preferredWallpaperScale,
+                            width / screenWidth, height / screenHeight
+                        );
+                    }
+
 
                     bgRoot.updateClockPosition()
                 }
@@ -110,8 +117,8 @@ Variants {
             leastBusyRegionProc.path = bgRoot.wallpaperPath
             leastBusyRegionProc.contentWidth = clock.implicitWidth
             leastBusyRegionProc.contentHeight = clock.implicitHeight
-            leastBusyRegionProc.horizontalPadding = (effectiveWallpaperScale - 1) / 2 * screen.width + 100
-            leastBusyRegionProc.verticalPadding = (effectiveWallpaperScale - 1) / 2 * screen.height + 100
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
             leastBusyRegionProc.running = false;
             leastBusyRegionProc.running = true;
         }
@@ -123,13 +130,14 @@ Variants {
             property int horizontalPadding: bgRoot.movableXSpace
             property int verticalPadding: bgRoot.movableYSpace
             command: [Quickshell.shellPath("scripts/images/least_busy_region.py"),
-                "--screen-width", bgRoot.screen.width,
-                "--screen-height", bgRoot.screen.height,
+                "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale),
+                "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale),
                 "--width", contentWidth,
                 "--height", contentHeight,
                 "--horizontal-padding", horizontalPadding,
                 "--vertical-padding", verticalPadding,
-                path
+                path, 
+                // "--visual-output",
             ]
             stdout: StdioCollector {
                 id: leastBusyRegionOutputCollector
@@ -138,8 +146,8 @@ Variants {
                     // console.log("[Background] Least busy region output:", output)
                     if (output.length === 0) return;
                     const parsedContent = JSON.parse(output)
-                    bgRoot.clockX = parsedContent.center_x
-                    bgRoot.clockY = parsedContent.center_y
+                    bgRoot.clockX = parsedContent.center_x * bgRoot.effectiveWallpaperScale
+                    bgRoot.clockY = parsedContent.center_y * bgRoot.effectiveWallpaperScale
                     bgRoot.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary
                 }
             }
@@ -154,6 +162,7 @@ Variants {
                 animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
             property real value // 0 to 1, for offset
+            cache: false
             asynchronous: true
             value: {
                 // Range = groups that workspaces span on
@@ -188,8 +197,8 @@ Variants {
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
-                leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaper.effectiveValue * bgRoot.movableXSpace)
-                topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                 Behavior on leftMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
@@ -256,14 +265,16 @@ Variants {
                     Layout.fillWidth: false
                     iconSize: Appearance.font.pixelSize.huge
                     color: bgRoot.colText
+                    style: Text.Raised
+                    styleColor: Appearance.colors.colShadow
                 }
                 StyledText {
                     Layout.fillWidth: false
                     text: "Locked"
                     color: bgRoot.colText
-                    font {
-                        pixelSize: Appearance.font.pixelSize.larger
-                    }
+                    font.pixelSize: Appearance.font.pixelSize.larger
+                    style: Text.Raised
+                    styleColor: Appearance.colors.colShadow
                 }
                 Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
 
@@ -283,11 +294,11 @@ Variants {
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            text: "Enter password"
-            color: CF.ColorUtils.transparentize(bgRoot.colText, 0.3)
-            font {
-                pixelSize: Appearance.font.pixelSize.normal
-            }
+            text: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+            color: GlobalStates.screenUnlockFailed ? Appearance.colors.colError : bgRoot.colText
+            style: Text.Raised
+            styleColor: Appearance.colors.colShadow
+            font.pixelSize: Appearance.font.pixelSize.normal
         }
     }
 }

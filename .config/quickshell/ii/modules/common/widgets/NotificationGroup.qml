@@ -105,7 +105,7 @@ Item { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: Appearance.colors.colSurfaceContainer
+        color: popup ? ColorUtils.applyAlpha(Appearance.colors.colLayer2, 1 - Appearance.backgroundTransparency) : Appearance.colors.colLayer2
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 

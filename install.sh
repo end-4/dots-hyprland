@@ -259,15 +259,19 @@ for i in ${warn_files_tests[@]}; do
 done
 
 #####################################################################################
-printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
 printf "\n"
-printf "\e[36mIt is recommended to check out\n"
-printf "https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation \n"
-printf "for hints on launching Hyprland.\e[0m\n"
+printf "\n"
+printf "\n"
+printf "\e[36m[$0]: Finished\e[0m\n"
+printf "\n"
+printf "\e[36mWhen starting Hyprland from your display manager (login screen) \e[30m\e[46m DO NOT SELECT UWSM \e[0m\e[36m\e[0m\n"
 printf "\n"
 printf "\e[36mIf you are already running Hyprland,\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
+printf "\n"
+printf "\e[36mFor suggestions/hints after installation:\e[0m\n"
+printf "\e[36m\e[4m https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation \e[0m\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in

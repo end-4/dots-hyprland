@@ -7,9 +7,9 @@ import qs.modules.common.widgets
 Rectangle {
     id: root
     radius: Appearance.rounding.small
-    color: Appearance.colors.colLayer1
-    implicitWidth: columnLayout.implicitWidth * 2
-    implicitHeight: columnLayout.implicitHeight * 2
+    color: Appearance.colors.colSurfaceContainerHigh
+    implicitWidth: columnLayout.implicitWidth + 14 * 2
+    implicitHeight: columnLayout.implicitHeight + 14 * 2
     Layout.fillWidth: parent
 
     property alias title: title.text
@@ -26,18 +26,19 @@ Rectangle {
                 id: symbol
                 fill: 0
                 iconSize: Appearance.font.pixelSize.normal
+                color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {
                 id: title
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colOnLayer1
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
         StyledText {
             id: value
             Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer1
+            font.pixelSize: Appearance.font.pixelSize.small
+            color: Appearance.colors.colOnSurfaceVariant
         }
     }
 }
