@@ -117,8 +117,8 @@ Variants {
             leastBusyRegionProc.path = bgRoot.wallpaperPath
             leastBusyRegionProc.contentWidth = clock.implicitWidth
             leastBusyRegionProc.contentHeight = clock.implicitHeight
-            leastBusyRegionProc.horizontalPadding = (effectiveWallpaperScale - 1) / 2 * screen.width + 100
-            leastBusyRegionProc.verticalPadding = (effectiveWallpaperScale - 1) / 2 * screen.height + 100
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace * 2 + 100
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace * 2 + 100
             leastBusyRegionProc.running = false;
             leastBusyRegionProc.running = true;
         }
@@ -142,7 +142,7 @@ Variants {
                 id: leastBusyRegionOutputCollector
                 onStreamFinished: {
                     const output = leastBusyRegionOutputCollector.text
-                    // console.log("[Background] Least busy region output:", output)
+                    console.log("[Background] Least busy region output:", output)
                     if (output.length === 0) return;
                     const parsedContent = JSON.parse(output)
                     bgRoot.clockX = parsedContent.center_x
@@ -195,7 +195,7 @@ Variants {
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
-                leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2) - (wallpaper.effectiveValue * bgRoot.movableXSpace)
+                leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
                 topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                 Behavior on leftMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
