@@ -11,7 +11,7 @@ output_path = '~/.config/hypr/hyprland/colors.conf'
 
 [templates.hyprlock]
 input_path = '~/.config/matugen/templates/hyprland/hyprlock-colors.conf'
-output_path = '~/.config/hypr/hyprlock-colors.conf'
+output_path = '~/.config/hypr/hyprlock/colors.conf'
 
 [templates.fuzzel]
 input_path = '~/.config/matugen/templates/fuzzel/fuzzel_theme.ini'
