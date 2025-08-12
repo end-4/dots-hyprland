@@ -117,8 +117,8 @@ Variants {
             leastBusyRegionProc.path = bgRoot.wallpaperPath
             leastBusyRegionProc.contentWidth = clock.implicitWidth
             leastBusyRegionProc.contentHeight = clock.implicitHeight
-            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace * 2 + 100
-            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace * 2 + 100
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
             leastBusyRegionProc.running = false;
             leastBusyRegionProc.running = true;
         }
