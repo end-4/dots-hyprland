@@ -162,6 +162,7 @@ Variants {
                 animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
             property real value // 0 to 1, for offset
+            cache: false
             asynchronous: true
             value: {
                 // Range = groups that workspaces span on
