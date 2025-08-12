@@ -11,7 +11,7 @@ Item {
     property int lineWidth: 2
     property real value: 0
     property color colPrimary: Appearance?.colors.colOnSecondaryContainer ?? "#685496"
-    property color colSecondary: ColorUtils.transparentize(colPrimary, 0.4) ?? "#F1D3F9"
+    property color colSecondary: ColorUtils.transparentize(colPrimary, 0.5) ?? "#F1D3F9"
     property real gapAngle: 360 / 18
     property bool fill: true
     property int fillOverflow: 2
@@ -32,8 +32,7 @@ Item {
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
-    // property real degree: value * 360
-    property real degree: 0.65 * 360
+    property real degree: value * 360
     property real centerX: root.width / 2
     property real centerY: root.height / 2
     property real arcRadius: root.implicitSize / 2 - root.lineWidth
