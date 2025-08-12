@@ -35,7 +35,7 @@ Item {
     property real degree: value * 360
     property real centerX: root.width / 2
     property real centerY: root.height / 2
-    property real arcRadius: root.implicitSize / 2 - root.lineWidth
+    property real arcRadius: root.implicitSize / 2 - root.lineWidth / 2 - 0.5 // the 0.5 is to account for light bleeding
     property real startAngle: -90
 
     Behavior on degree {
