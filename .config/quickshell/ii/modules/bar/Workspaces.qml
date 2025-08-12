@@ -59,15 +59,22 @@ Item {
         })
     }
 
-    // Initialize workspaceOccupied when the component is created
+    // Occupied workspace updates
     Component.onCompleted: updateWorkspaceOccupied()
-
-    // Listen for changes in Hyprland.workspaces.values
     Connections {
         target: Hyprland.workspaces
         function onValuesChanged() {
             updateWorkspaceOccupied();
         }
+    }
+    Connections {
+        target: Hyprland
+        function onFocusedWorkspaceChanged() {
+            updateWorkspaceOccupied();
+        }
+    }
+    onWorkspaceGroupChanged: {
+        updateWorkspaceOccupied();
     }
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
