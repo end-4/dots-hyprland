@@ -44,10 +44,30 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
             print(f"Using original image size: {orig_w}x{orig_h}")
     arr = img.astype(np.float64)
     h, w = arr.shape
+    # Validate & adjust stride
+    stride = max(1, int(stride) if stride else 1)
+    # Adjust region size if it does not fit given padding
+    if horizontal_padding * 2 >= w or vertical_padding * 2 >= h:
+        # Reduce padding to fit at least a 1x1 region
+        horizontal_padding = max(0, min(horizontal_padding, (w - 1) // 2))
+        vertical_padding = max(0, min(vertical_padding, (h - 1) // 2))
+    max_region_w = w - 2 * horizontal_padding
+    max_region_h = h - 2 * vertical_padding
+    if max_region_w <= 0 or max_region_h <= 0:
+        raise ValueError("Image too small for the specified padding.")
+    if region_width > max_region_w:
+        if verbose:
+            print(f"Requested region_width {region_width} too large; clamping to {max_region_w}")
+        region_width = max_region_w
+    if region_height > max_region_h:
+        if verbose:
+            print(f"Requested region_height {region_height} too large; clamping to {max_region_h}")
+        region_height = max_region_h
     # Use OpenCV's integral for fast computation
     integral = cv2.integral(arr, sdepth=cv2.CV_64F)[1:,1:]
     integral_sq = cv2.integral(arr**2, sdepth=cv2.CV_64F)[1:,1:]
     def region_sum(ii, x1, y1, x2, y2):
+        # Assume bounds have been checked before calling
         total = ii[y2, x2]
         if x1 > 0:
             total -= ii[y2, x1-1]
@@ -57,16 +77,22 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
             total += ii[y1-1, x1-1]
         return total
     min_var = None
-    min_coords = (0, 0)
+    min_coords = (horizontal_padding, vertical_padding)
     area = region_width * region_height
     x_start = horizontal_padding
     y_start = vertical_padding
     x_end = w - region_width - horizontal_padding + 1
     y_end = h - region_height - vertical_padding + 1
-    for y in range(y_start, max(y_end, y_start+1), stride):
-        for x in range(x_start, max(x_end, x_start+1), stride):
+    if x_end < x_start:
+        x_end = x_start
+    if y_end < y_start:
+        y_end = y_start
+    for y in range(y_start, y_end + 1, stride):
+        for x in range(x_start, x_end + 1, stride):
             x1, y1 = x, y
             x2, y2 = x + region_width - 1, y + region_height - 1
+            if x2 >= w or y2 >= h:
+                continue  # Skip out-of-bounds window
             s = region_sum(integral, x1, y1, x2, y2)
             s2 = region_sum(integral_sq, x1, y1, x2, y2)
             mean = s / area
@@ -81,6 +107,7 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
     orig_h, orig_w = img.shape
+    # ...existing scaling logic...
     scale = 1.0
     if screen_width is not None and screen_height is not None:
         scale_w = screen_width / orig_w
@@ -102,6 +129,12 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
             print(f"Using original image size: {orig_w}x{orig_h}")
     arr = img.astype(np.float64)
     h, w = arr.shape
+    stride = max(1, int(stride) if stride else 1)
+    threshold = max(0.0, float(threshold))
+    # Adjust padding if image too small
+    if horizontal_padding * 2 >= w or vertical_padding * 2 >= h:
+        horizontal_padding = max(0, min(horizontal_padding, (w - 1) // 2))
+        vertical_padding = max(0, min(vertical_padding, (h - 1) // 2))
     # Use OpenCV's integral for fast computation
     integral = cv2.integral(arr, sdepth=cv2.CV_64F)[1:,1:]
     integral_sq = cv2.integral(arr**2, sdepth=cv2.CV_64F)[1:,1:]
@@ -115,29 +148,44 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
             total += ii[y1-1, x1-1]
         return total
     min_size = 10
-    max_size = min(h, int(w / aspect_ratio)) if aspect_ratio >= 1.0 else min(int(h * aspect_ratio), w)
+    # Determine maximum feasible size respecting padding
+    effective_w = w - 2 * horizontal_padding
+    effective_h = h - 2 * vertical_padding
+    if effective_w <= 0 or effective_h <= 0:
+        return None, (0, 0), None
+    # Largest square-ish dimension given aspect ratio and effective space
+    if aspect_ratio >= 1.0:
+        max_size = min(effective_h, int(effective_w / aspect_ratio))
+    else:
+        max_size = min(int(effective_h * aspect_ratio), effective_w)
+    if max_size < min_size:
+        min_size = 1
+        max_size = max(1, max_size)
     best = None
-    best_size = min_size
     while min_size <= max_size:
         mid = (min_size + max_size) // 2
         if aspect_ratio >= 1.0:
             region_h = mid
-            region_w = int(mid * aspect_ratio)
+            region_w = int(round(mid * aspect_ratio))
         else:
             region_w = mid
-            region_h = int(mid / aspect_ratio)
-        if region_w > w or region_h > h:
+            region_h = int(round(mid / aspect_ratio if aspect_ratio != 0 else mid))
+        if region_w <= 0 or region_h <= 0:
+            break
+        if region_w > effective_w or region_h > effective_h:
             max_size = mid - 1
             continue
         found = False
         x_start = horizontal_padding
         y_start = vertical_padding
-        x_end = w - region_w - horizontal_padding + 1
-        y_end = h - region_h - vertical_padding + 1
-        for y in range(y_start, max(y_end, y_start+1), stride):
-            for x in range(x_start, max(x_end, x_start+1), stride):
+        x_end = w - region_w - horizontal_padding
+        y_end = h - region_h - vertical_padding
+        for y in range(y_start, y_end + 1, stride):
+            for x in range(x_start, x_end + 1, stride):
                 x1, y1 = x, y
                 x2, y2 = x + region_w - 1, y + region_h - 1
+                if x2 >= w or y2 >= h:
+                    continue
                 s = region_sum(integral, x1, y1, x2, y2)
                 s2 = region_sum(integral_sq, x1, y1, x2, y2)
                 area = region_w * region_h
@@ -150,7 +198,6 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
             if found:
                 break
         if found:
-            best_size = mid
             min_size = mid + 1
         else:
             max_size = mid - 1
@@ -181,7 +228,7 @@ def draw_region(image_path, coords, region_width=300, region_height=200, output_
     x, y = coords
     cv2.rectangle(img, (x, y), (x+region_width-1, y+region_height-1), (0,0,255), 3)
     cv2.imwrite(output_path, img)
-    print(f"Saved output image with rectangle at {output_path}")
+    # print removed for quieter operation
 
 def draw_largest_region(image_path, center, size, output_path='output.png', screen_width=None, screen_height=None, screen_mode="fill"):
     img = cv2.imread(image_path)
@@ -207,7 +254,7 @@ def draw_largest_region(image_path, center, size, output_path='output.png', scre
     y2 = cy + region_h // 2 - 1
     cv2.rectangle(img, (x1, y1), (x2, y2), (255,0,0), 3)
     cv2.imwrite(output_path, img)
-    print(f"Saved output image with largest region at {output_path}")
+    # print removed for quieter operation
 
 def get_dominant_color(image_path, x, y, w, h, screen_width=None, screen_height=None, screen_mode="fill"):
     img = cv2.imread(image_path)

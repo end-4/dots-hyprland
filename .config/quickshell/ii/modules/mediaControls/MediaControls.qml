@@ -116,10 +116,7 @@ Scope {
                 bottom: Appearance.sizes.barHeight
                 left: (mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth
             }
-            implicitWidth: {
-                console.log(root.widgetWidth)
-                return root.widgetWidth
-            }
+            implicitWidth: root.widgetWidth
             implicitHeight: playerColumnLayout.implicitHeight
             color: "transparent"
             WlrLayershell.namespace: "quickshell:mediaControls"

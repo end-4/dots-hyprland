@@ -120,6 +120,7 @@ Variants {
             leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
             leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
             leastBusyRegionProc.running = false;
+            console.log(leastBusyRegionProc.command.join(" "))
             leastBusyRegionProc.running = true;
         }
         Process {
@@ -130,13 +131,14 @@ Variants {
             property int horizontalPadding: bgRoot.movableXSpace
             property int verticalPadding: bgRoot.movableYSpace
             command: [Quickshell.shellPath("scripts/images/least_busy_region.py"),
-                "--screen-width", bgRoot.screen.width,
-                "--screen-height", bgRoot.screen.height,
+                "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale),
+                "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale),
                 "--width", contentWidth,
                 "--height", contentHeight,
                 "--horizontal-padding", horizontalPadding,
                 "--vertical-padding", verticalPadding,
-                path
+                path, 
+                "--visual-output",
             ]
             stdout: StdioCollector {
                 id: leastBusyRegionOutputCollector
@@ -145,8 +147,8 @@ Variants {
                     console.log("[Background] Least busy region output:", output)
                     if (output.length === 0) return;
                     const parsedContent = JSON.parse(output)
-                    bgRoot.clockX = parsedContent.center_x
-                    bgRoot.clockY = parsedContent.center_y
+                    bgRoot.clockX = parsedContent.center_x * bgRoot.effectiveWallpaperScale
+                    bgRoot.clockY = parsedContent.center_y * bgRoot.effectiveWallpaperScale
                     bgRoot.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary
                 }
             }
@@ -195,8 +197,8 @@ Variants {
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
-                leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                 Behavior on leftMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
