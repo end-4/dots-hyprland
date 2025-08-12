@@ -188,6 +188,16 @@ ContentPage {
                     }
                 }
             }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Wallpaper Selector")
+                    checked: Config.options.bar.utilButtons.showWallpaperSelector
+                    onCheckedChanged: {
+                        Config.options.bar.utilButtons.showWallpaperSelector = checked;
+                    }
+                }
+            }
         }
 
         ContentSubsection {

@@ -24,7 +24,8 @@ Singleton {
     property bool superDown: false
     property bool superReleaseMightTrigger: true
     property bool workspaceShowNumbers: false
-
+    property bool wppselectorOpen: false
+    
     property real screenZoom: 1
     onScreenZoomChanged: {
         Quickshell.execDetached(["hyprctl", "keyword", "cursor:zoom_factor", root.screenZoom.toString()]);

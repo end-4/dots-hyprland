@@ -334,5 +334,10 @@
   "High": "High",
   "Medium": "Medium",
   "Low": "Low",
-  "System Resource": "System Resource"
+  "System Resource": "System Resource",
+  "Wallpaper Selector": "Wallpaper Selector",
+  "Generate Thumbnails": "Generate Thumbnails",
+  "Toggles wallpaper selector on press": "Toggles wallpaper selector on press",
+  "Opens wallpaper selector on press": "Opens wallpaper selector on press",
+  "Closes wallpaper selector on press": "Closes wallpaper selector on press"
 }
