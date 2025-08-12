@@ -54,7 +54,7 @@ MouseArea {
             MaterialSymbol {
                 anchors.centerIn: parent
                 fill: 1
-                text: "battery_full"
+                text: "battery_android_full"
                 iconSize: Appearance.font.pixelSize.normal
                 color: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
             }
