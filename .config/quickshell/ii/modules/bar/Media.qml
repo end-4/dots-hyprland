@@ -52,7 +52,7 @@ Item {
             id: mediaCircProg
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
-            value: percentage
+            value: activePlayer?.position / activePlayer?.length
             implicitSize: 22
             colPrimary: Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
