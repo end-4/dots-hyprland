@@ -22,8 +22,9 @@ Item {
         ShapePath {
             id: shapePath
             strokeWidth: 0
-
             fillColor: root.color
+            pathHints: ShapePath.PathSolid & ShapePath.PathNonIntersecting
+
             startX: switch (root.corner) {
                 case RoundCorner.CornerEnum.TopLeft: return 0;
                 case RoundCorner.CornerEnum.TopRight: return root.implicitSize;

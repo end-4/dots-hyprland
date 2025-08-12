@@ -48,24 +48,28 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        CircularProgress {
+        ClippedFilledCircularProgress {
+            id: mediaCircProg
             Layout.alignment: Qt.AlignVCenter
-            Layout.leftMargin: rowLayout.spacing
-            lineWidth: 2
-            value: activePlayer?.position / activePlayer?.length
-            implicitSize: 26
-            colSecondary: Appearance.colors.colSecondaryContainer
-            colPrimary: Appearance.m3colors.m3onSecondaryContainer
+            lineWidth: Appearance.rounding.unsharpen
+            value: percentage
+            implicitSize: 22
+            colPrimary: Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
 
-            MaterialSymbol {
+            Item {
                 anchors.centerIn: parent
-                fill: 1
-                text: activePlayer?.isPlaying ? "pause" : "music_note"
-                iconSize: Appearance.font.pixelSize.normal
-                color: Appearance.m3colors.m3onSecondaryContainer
+                width: mediaCircProg.implicitSize
+                height: mediaCircProg.implicitSize
+                
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    fill: 1
+                    text: activePlayer?.isPlaying ? "pause" : "music_note"
+                    iconSize: Appearance.font.pixelSize.normal
+                    color: Appearance.m3colors.m3onSecondaryContainer
+                }
             }
-
         }
 
         StyledText {
