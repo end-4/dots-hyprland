@@ -42,12 +42,13 @@ Variants {
             || Config.options.background.wallpaperPath.endsWith(".avi")
             || Config.options.background.wallpaperPath.endsWith(".mov")
         property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
+        property real wallpaperToScreenRatio: Math.min(wallpaperWidth / screen.width, wallpaperHeight / screen.height)
         property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
         property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
-        property real movableXSpace: (Math.min(wallpaperWidth * effectiveWallpaperScale, screen.width * preferredWallpaperScale) - screen.width) / 2
-        property real movableYSpace: (Math.min(wallpaperHeight * effectiveWallpaperScale, screen.height * preferredWallpaperScale) - screen.height) / 2
+        property real movableXSpace: ((wallpaperWidth / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.width) / 2
+        property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
         // Position
         property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
         property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
