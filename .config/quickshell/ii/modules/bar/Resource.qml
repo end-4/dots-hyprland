@@ -51,6 +51,7 @@ Item {
                 
                 MaterialSymbol {
                     anchors.centerIn: parent
+                    font.weight: Font.DemiBold
                     fill: 1
                     text: iconName
                     iconSize: Appearance.font.pixelSize.normal
