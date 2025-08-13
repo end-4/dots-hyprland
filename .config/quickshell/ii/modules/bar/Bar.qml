@@ -66,7 +66,7 @@ Scope {
                 WlrLayershell.namespace: "quickshell:bar"
                 implicitHeight: Appearance.sizes.barHeight + Appearance.rounding.screenRounding
                 mask: Region {
-                    item: barContent
+                    item: hoverMaskRegion
                 }
                 color: "transparent"
 
@@ -82,6 +82,15 @@ Scope {
                     hoverEnabled: true
                     anchors.fill: parent
 
+                    Item {
+                        id: hoverMaskRegion
+                        anchors {
+                            fill: barContent
+                            topMargin: -1
+                            bottomMargin: -1
+                        }
+                    }
+
                     BarContent {
                         id: barContent
                         
@@ -91,7 +100,7 @@ Scope {
                             left: parent.left
                             top: parent.top
                             bottom: undefined
-                            topMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight + 1 : 0
+                            topMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight : 0
                             bottomMargin: 0
                         }
                         Behavior on anchors.topMargin {
@@ -116,7 +125,7 @@ Scope {
                             PropertyChanges {
                                 target: barContent
                                 anchors.topMargin: 0
-                                anchors.bottomMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight + 1 : 0
+                                anchors.bottomMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight : 0
                             }
                         }
                     }
