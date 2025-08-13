@@ -414,6 +414,13 @@ Item { // Bar content region
                             color: rightSidebarButton.colText
                         }
                         MaterialSymbol {
+                            Layout.rightMargin: indicatorsRowLayout.realSpacing
+                            text: VPN.materialSymbol
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                            visible: VPN.available
+                        }
+                        MaterialSymbol {
                             text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
                             iconSize: Appearance.font.pixelSize.larger
                             color: rightSidebarButton.colText
