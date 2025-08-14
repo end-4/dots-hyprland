@@ -166,7 +166,7 @@ Item { // Bar content region
     RowLayout { // Middle section
         id: middleSection
         anchors.centerIn: parent
-        spacing: Config.options?.bar.borderless ? 4 : 8
+        spacing: 4
 
         BarGroup {
             id: leftCenterGroup
@@ -247,9 +247,6 @@ Item { // Bar content region
             }
         }
 
-        VerticalBarSeparator {
-            visible: Config.options.bar.borderless && Config.options.bar.weather.enable
-        }
     }
 
     MouseArea { // Right side | scroll to change volume

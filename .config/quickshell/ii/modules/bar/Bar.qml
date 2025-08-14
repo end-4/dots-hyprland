@@ -139,7 +139,6 @@ Scope {
                             top: barContent.bottom
                             bottom: undefined
                         }
-                        width: parent.width
                         height: Appearance.rounding.screenRounding
                         active: showBarBackground && Config.options.bar.cornerStyle === 0 // Hug
 
