@@ -246,7 +246,6 @@ Item { // Bar content region
                 }
             }
         }
-
     }
 
     MouseArea { // Right side | scroll to change volume

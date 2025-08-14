@@ -23,7 +23,7 @@ Item {
     clip: true
     visible: width > 0 && height > 0
     implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
-    implicitHeight: resourceRowLayout.implicitHeight
+    implicitHeight: Appearance.sizes.barHeight
 
     // Helper function to format KB to GB
     function formatKB(kb) {
@@ -34,6 +34,9 @@ Item {
         id: resourceRowLayout
         spacing: 2
         x: shown ? 0 : -resourceRowLayout.width
+        anchors {
+            verticalCenter: parent.verticalCenter
+        }
 
         ClippedFilledCircularProgress {
             id: resourceCircProg
