@@ -30,15 +30,6 @@ Singleton {
     property int clockMinute: DateTime.clock.minutes
 
 
-    function isNoLater(hour1, minute1, hour2, minute2) {
-        if (hour1 < hour2)
-            return true;
-        if (hour1 === hour2 && minute1 < minute2)
-            return true;
-        return false;
-    }
-
-
     onClockMinuteChanged: reEvaluate()
     onAutomaticChanged: {
         root.manualActive = undefined;
@@ -46,10 +37,16 @@ Singleton {
         reEvaluate();
     }
     function reEvaluate() {
-        const toHourIsNextDay = !isNoLater(fromHour, fromMinute, toHour, toMinute);
-        const toHourWrapped = toHourIsNextDay ? toHour + 24 : toHour;
-        const toMinuteWrapped = toMinute;
-        root.shouldBeOn = isNoLater(fromHour, fromMinute, clockHour, clockMinute) && isNoLater(clockHour, clockMinute, toHourWrapped, toMinuteWrapped);
+        const t = clockHour * 60 + clockMinute;
+        const from = fromHour * 60 + fromMinute;
+        const to = toHour * 60 + toMinute;
+
+        if (from < to) {
+            root.shouldBeOn = t >= from && t <= to;
+        } else {
+            // Wrapped around midnight
+            root.shouldBeOn = t >= from || t <= to;
+        }
         if (firstEvaluation) {
             firstEvaluation = false;
             root.ensureState();
