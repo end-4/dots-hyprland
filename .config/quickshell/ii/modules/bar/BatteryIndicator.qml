@@ -14,7 +14,7 @@ MouseArea {
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: 32
+    implicitHeight: Appearance.sizes.barGroupHeight
 
     hoverEnabled: true
 

@@ -10,7 +10,7 @@ Item {
     property bool borderless: Config.options.bar.borderless
     property bool alwaysShowAllResources: false
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
-    implicitHeight: 32
+    implicitHeight: Appearance.sizes.barGroupHeight
 
     RowLayout {
         id: rowLayout
