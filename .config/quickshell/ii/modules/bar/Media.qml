@@ -53,7 +53,7 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
             value: activePlayer?.position / activePlayer?.length
-            implicitSize: 22
+            implicitSize: 20
             colPrimary: Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
 

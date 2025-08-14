@@ -180,7 +180,7 @@ Singleton {
     }
 
     rounding: QtObject {
-        property int unsharpen: 3
+        property int unsharpen: 2
         property int unsharpenmore: 6
         property int verysmall: 8
         property int small: 12
