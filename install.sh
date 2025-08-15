@@ -7,7 +7,7 @@ source ./scriptdata/installers
 source ./scriptdata/options
 
 #####################################################################################
-if ! command -v pacman >/dev/null 2>&1; then 
+if ! command -v pacman >/dev/null 2>&1; then
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
   exit 1
 fi
@@ -23,7 +23,7 @@ startask () {
   printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
   printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
   printf "\e[31m"
-  
+
   printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
   read -p " " backup_confirm
   case $backup_confirm in
@@ -34,7 +34,7 @@ startask () {
       echo "Skipping backup..."
       ;;
   esac
-  
+
 
   printf '\n'
   printf 'Do you want to confirm every time before a command executes?\n'
@@ -144,7 +144,6 @@ esac
 
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
-v sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -sf /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu
 v systemctl --user enable ydotool --now
 v sudo systemctl enable bluetooth --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
@@ -234,6 +233,7 @@ esac
 # since the files here come from different places, not only about one program.
 # v rsync -av ".local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 v rsync -av ".local/share/icons/" "${XDG_DATA_HOME:-$HOME/.local/share}"/icons/
+v rsync -av ".local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
 
 # Prevent hyprland from not fully loaded
 sleep 1
@@ -259,15 +259,19 @@ for i in ${warn_files_tests[@]}; do
 done
 
 #####################################################################################
-printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
 printf "\n"
-printf "\e[36mIt is recommended to check out\n"
-printf "https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation \n"
-printf "for hints on launching Hyprland.\e[0m\n"
+printf "\n"
+printf "\n"
+printf "\e[36m[$0]: Finished\e[0m\n"
+printf "\n"
+printf "\e[36mWhen starting Hyprland from your display manager (login screen) \e[30m\e[46m DO NOT SELECT UWSM \e[0m\e[36m\e[0m\n"
 printf "\n"
 printf "\e[36mIf you are already running Hyprland,\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
+printf "\n"
+printf "\e[36mFor suggestions/hints after installation:\e[0m\n"
+printf "\e[36m\e[4m https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation \e[0m\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in

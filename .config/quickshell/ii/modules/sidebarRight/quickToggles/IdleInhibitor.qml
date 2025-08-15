@@ -1,9 +1,8 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "../"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs
 import Quickshell.Io
 import Quickshell
-import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
@@ -21,12 +20,12 @@ QuickToggleButton {
     Process {
         id: fetchActiveState
         running: true
-        command: ["bash", "-c", "pidof wayland-idle-inhibitor.py"]
+        command: ["pidof", "wayland-idle-inhibitor.py"]
         onExited: (exitCode, exitStatus) => {
             root.toggled = exitCode === 0
         }
     }
     StyledToolTip {
-        content: qsTr("Keep system awake")
+        content: Translation.tr("Keep system awake")
     }
 }

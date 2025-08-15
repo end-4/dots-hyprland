@@ -1,6 +1,7 @@
 //@ pragma UseQApplication
 //@ pragma Env QS_NO_RELOAD_POPUP=1
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
+//@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 
 // Adjust this to make the app smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
@@ -12,12 +13,11 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 ApplicationWindow {
     id: root
@@ -26,23 +26,31 @@ ApplicationWindow {
     property real contentPadding: 8
     property bool showNextTime: false
     visible: true
-    onClosing: Qt.quit()
-    title: "illogical-impulse Welcome"
+    onClosing: {
+        Quickshell.execDetached([
+            "notify-send", 
+            Translation.tr("Welcome app"), 
+            Translation.tr("Enjoy! You can reopen the welcome app any time with <tt>Super+Shift+Alt+/</tt>. To open the settings app, hit <tt>Super+I</tt>"),
+            "-a", "Shell"
+        ])
+        Qt.quit()
+    }
+    title: Translation.tr("illogical-impulse Welcome")
 
     Component.onCompleted: {
-        MaterialThemeLoader.reapplyTheme()
+        MaterialThemeLoader.reapplyTheme();
     }
 
     minimumWidth: 600
     minimumHeight: 400
-    width: 800
+    width: 900
     height: 650
     color: Appearance.m3colors.m3background
 
     Process {
         id: konachanWallProc
         property string status: ""
-        command: ["bash", "-c", Quickshell.configPath("scripts/colors/random_konachan_wall.sh")]
+        command: ["bash", "-c", Quickshell.shellPath("scripts/colors/random_konachan_wall.sh")]
         stdout: SplitParser {
             onRead: data => {
                 console.log(`Konachan wall proc output: ${data}`);
@@ -57,7 +65,8 @@ ApplicationWindow {
             margins: contentPadding
         }
 
-        Item { // Titlebar
+        Item {
+            // Titlebar
             visible: Config.options?.windows.showTitlebar
             Layout.fillWidth: true
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
@@ -70,7 +79,7 @@ ApplicationWindow {
                     leftMargin: 12
                 }
                 color: Appearance.colors.colOnLayer0
-                text: "Yooooo hi there"
+                text: Translation.tr("Hi there! First things first...")
                 font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
             }
@@ -80,7 +89,7 @@ ApplicationWindow {
                 anchors.right: parent.right
                 StyledText {
                     font.pixelSize: Appearance.font.pixelSize.smaller
-                    text: "Show next time"
+                    text: Translation.tr("Show next time")
                 }
                 StyledSwitch {
                     id: showNextTimeSwitch
@@ -89,9 +98,9 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignVCenter
                     onCheckedChanged: {
                         if (checked) {
-                            Quickshell.execDetached(["rm", root.firstRunFilePath])
+                            Quickshell.execDetached(["rm", root.firstRunFilePath]);
                         } else {
-                            Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`])
+                            Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`]);
                         }
                     }
                 }
@@ -109,38 +118,91 @@ ApplicationWindow {
                 }
             }
         }
-        Rectangle { // Content container
+        Rectangle {
+            // Content container
             color: Appearance.m3colors.m3surfaceContainerLow
             radius: Appearance.rounding.windowRounding - root.contentPadding
             implicitHeight: contentColumn.implicitHeight
             implicitWidth: contentColumn.implicitWidth
             Layout.fillWidth: true
             Layout.fillHeight: true
-            
 
             ContentPage {
                 id: contentColumn
                 anchors.fill: parent
 
                 ContentSection {
-                    title: "Bar style"
+                    title: Translation.tr("Bar")
 
-                    ConfigSelectionArray {
-                        currentValue: Config.options.bar.cornerStyle
-                        configOptionName: "bar.cornerStyle"
-                        onSelected: (newValue) => {
-                            Config.options.bar.cornerStyle = newValue; // Update local copy
+                    ConfigRow {
+                        ContentSubsection {
+                            title: "Corner style"
+
+                            ConfigSelectionArray {
+                                currentValue: Config.options.bar.cornerStyle
+                                configOptionName: "bar.cornerStyle"
+                                onSelected: newValue => {
+                                    Config.options.bar.cornerStyle = newValue; // Update local copy
+                                }
+                                options: [
+                                    {
+                                        displayName: Translation.tr("Hug"),
+                                        value: 0
+                                    },
+                                    {
+                                        displayName: Translation.tr("Float"),
+                                        value: 1
+                                    },
+                                    {
+                                        displayName: Translation.tr("Plain rectangle"),
+                                        value: 2
+                                    }
+                                ]
+                            }
                         }
-                        options: [
-                            { displayName: "Hug", value: 0 },
-                            { displayName: "Float", value: 1 },
-                            { displayName: "Plain rectangle", value: 2 }
-                        ]
+
+                        ContentSubsection {
+                            title: "Bar layout"
+                            ConfigSelectionArray {
+                                currentValue: Config.options.bar.vertical
+                                configOptionName: "bar.vertical"
+                                onSelected: newValue => {
+                                    Config.options.bar.vertical = newValue;
+                                }
+                                options: [
+                                    {
+                                        displayName: Translation.tr("Horizontal"),
+                                        value: false
+                                    },
+                                    {
+                                        displayName: Translation.tr("Vertical"),
+                                        value: true
+                                    },
+                                ]
+                            }
+                        }
+                    }
+
+                    ConfigRow {
+                        ConfigSwitch {
+                            text: Translation.tr("Automatically hide")
+                            checked: Config.options.bar.autoHide.enable
+                            onCheckedChanged: {
+                                Config.options.bar.autoHide.enable = checked;
+                            }
+                        }
+                        ConfigSwitch {
+                            text: Translation.tr("Place at the bottom/right")
+                            checked: Config.options.bar.bottom
+                            onCheckedChanged: {
+                                Config.options.bar.bottom = checked;
+                            }
+                        }
                     }
                 }
 
                 ContentSection {
-                    title: "Style & wallpaper"
+                    title: Translation.tr("Style & wallpaper")
 
                     ButtonGroup {
                         Layout.fillWidth: true
@@ -159,29 +221,29 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
                             materialIcon: "wallpaper"
-                            mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                            mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                             onClicked: {
-                                console.log(konachanWallProc.command.join(" "))
+                                console.log(konachanWallProc.command.join(" "));
                                 konachanWallProc.running = true;
                             }
                             StyledToolTip {
-                                content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
+                                content: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "wallpaper"
                             StyledToolTip {
-                                content: "Pick wallpaper image on your system"
+                                content: Translation.tr("Pick wallpaper image on your system")
                             }
                             onClicked: {
-                                Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`])
+                                Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`]);
                             }
                             mainContentComponent: Component {
                                 RowLayout {
                                     spacing: 10
                                     StyledText {
                                         font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Choose file"
+                                        text: Translation.tr("Choose file")
                                         color: Appearance.colors.colOnSecondaryContainer
                                     }
                                     RowLayout {
@@ -207,48 +269,66 @@ ApplicationWindow {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: "Change any time later with /dark, /light, /img in the launcher"
+                        text: Translation.tr("Change any time later with /dark, /light, /img in the launcher")
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colSubtext
                     }
                 }
 
                 ContentSection {
-                    title: "Policies"
+                    title: Translation.tr("Policies")
 
                     ConfigRow {
-                        ColumnLayout { // Weeb policy
-                            ContentSubsectionLabel {
-                                text: "Weeb"
-                            }
+                        Layout.fillWidth: true
+
+                        ContentSubsection {
+                            title: "Weeb"
+
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.weeb
                                 configOptionName: "policies.weeb"
-                                onSelected: (newValue) => {
+                                onSelected: newValue => {
                                     Config.options.policies.weeb = newValue;
                                 }
                                 options: [
-                                    { displayName: "No", value: 0 },
-                                    { displayName: "Yes", value: 1 },
-                                    { displayName: "Closet", value: 2 }
+                                    {
+                                        displayName: Translation.tr("No"),
+                                        value: 0
+                                    },
+                                    {
+                                        displayName: Translation.tr("Yes"),
+                                        value: 1
+                                    },
+                                    {
+                                        displayName: Translation.tr("Closet"),
+                                        value: 2
+                                    }
                                 ]
                             }
                         }
 
-                        ColumnLayout { // AI policy
-                            ContentSubsectionLabel {
-                                text: "AI"
-                            }
+                        ContentSubsection {
+                            title: "AI"
+
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.ai
                                 configOptionName: "policies.ai"
-                                onSelected: (newValue) => {
+                                onSelected: newValue => {
                                     Config.options.policies.ai = newValue;
                                 }
                                 options: [
-                                    { displayName: "No", value: 0 },
-                                    { displayName: "Yes", value: 1 },
-                                    { displayName: "Local only", value: 2 }
+                                    {
+                                        displayName: Translation.tr("No"),
+                                        value: 0
+                                    },
+                                    {
+                                        displayName: Translation.tr("Yes"),
+                                        value: 1
+                                    },
+                                    {
+                                        displayName: Translation.tr("Local only"),
+                                        value: 2
+                                    }
                                 ]
                             }
                         }
@@ -256,7 +336,7 @@ ApplicationWindow {
                 }
 
                 ContentSection {
-                    title: "Info"
+                    title: Translation.tr("Info")
 
                     Flow {
                         Layout.fillWidth: true
@@ -265,14 +345,14 @@ ApplicationWindow {
                         RippleButtonWithIcon {
                             materialIcon: "keyboard_alt"
                             onClicked: {
-                                Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                                Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "cheatsheet", "toggle"]);
                             }
                             mainContentComponent: Component {
                                 RowLayout {
                                     spacing: 10
                                     StyledText {
                                         font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Keybinds"
+                                        text: Translation.tr("Keybinds")
                                         color: Appearance.colors.colOnSecondaryContainer
                                     }
                                     RowLayout {
@@ -294,23 +374,23 @@ ApplicationWindow {
 
                         RippleButtonWithIcon {
                             materialIcon: "help"
-                            mainText: "Usage"
+                            mainText: Translation.tr("Usage")
                             onClicked: {
-                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/");
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "construction"
-                            mainText: "Configuration"
+                            mainText: Translation.tr("Configuration")
                             onClicked: {
-                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/");
                             }
                         }
                     }
                 }
 
                 ContentSection {
-                    title: "Useless buttons"
+                    title: Translation.tr("Useless buttons")
 
                     Flow {
                         Layout.fillWidth: true
@@ -318,16 +398,16 @@ ApplicationWindow {
 
                         RippleButtonWithIcon {
                             nerdIcon: "󰊤"
-                            mainText: "GitHub"
+                            mainText: Translation.tr("GitHub")
                             onClicked: {
-                                Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
+                                Qt.openUrlExternally("https://github.com/end-4/dots-hyprland");
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "favorite"
                             mainText: "Funny number"
                             onClicked: {
-                                Qt.openUrlExternally("https://github.com/sponsors/end-4")
+                                Qt.openUrlExternally("https://github.com/sponsors/end-4");
                             }
                         }
                     }

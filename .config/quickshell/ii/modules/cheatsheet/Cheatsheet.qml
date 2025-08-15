@@ -1,16 +1,13 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
@@ -19,11 +16,11 @@ Scope { // Scope
     property var tabButtonList: [
         {
             "icon": "keyboard",
-            "name": qsTr("Keybinds")
+            "name": Translation.tr("Keybinds")
         },
         {
             "icon": "experiment",
-            "name": qsTr("Elements")
+            "name": Translation.tr("Elements")
         },
     ]
     property int selectedTab: 0
@@ -77,7 +74,7 @@ Scope { // Scope
                 anchors.centerIn: parent
                 color: Appearance.colors.colLayer0
                 border.width: 1
-                border.color: Appearance.m3colors.m3outlineVariant
+                border.color: Appearance.colors.colLayer0Border
                 radius: Appearance.rounding.windowRounding
                 property real padding: 30
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
@@ -139,7 +136,7 @@ Scope { // Scope
                         Layout.alignment: Qt.AlignHCenter
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
-                        text: qsTr("Cheat sheet")
+                        text: Translation.tr("Cheat sheet")
                     }
                     PrimaryTabBar { // Tab strip
                         id: tabBar
@@ -158,14 +155,20 @@ Scope { // Scope
                         spacing: 10
 
                         Behavior on implicitWidth {
+                            id: contentWidthBehavior
+                            enabled: false
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
                         Behavior on implicitHeight {
+                            id: contentHeightBehavior
+                            enabled: false
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
                         currentIndex: tabBar.externalTrackedTab
                         onCurrentIndexChanged: {
+                            contentWidthBehavior.enabled = true;
+                            contentHeightBehavior.enabled = true;
                             tabBar.enableIndicatorAnimation = true;
                             root.selectedTab = currentIndex;
                         }
@@ -206,7 +209,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetToggle"
-        description: qsTr("Toggles cheatsheet on press")
+        description: "Toggles cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = !cheatsheetLoader.active;
@@ -215,7 +218,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetOpen"
-        description: qsTr("Opens cheatsheet on press")
+        description: "Opens cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = true;
@@ -224,7 +227,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetClose"
-        description: qsTr("Closes cheatsheet on press")
+        description: "Closes cheatsheet on press"
 
         onPressed: {
             cheatsheetLoader.active = false;

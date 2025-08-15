@@ -1,12 +1,12 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs
+import qs.services
 import "./calendar"
 import "./todo"
+import "./pomodoro"
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
 
 Rectangle {
     id: root
@@ -14,11 +14,12 @@ Rectangle {
     color: Appearance.colors.colLayer1
     clip: true
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
-    property int selectedTab: 0
+    property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
-        {"type": "calendar", "name": "Calendar", "icon": "calendar_month", "widget": calendarWidget}, 
-        {"type": "todo", "name": "To Do", "icon": "done_outline", "widget": todoWidget}
+        {"type": "calendar", "name": Translation.tr("Calendar"), "icon": "calendar_month", "widget": calendarWidget}, 
+        {"type": "todo", "name": Translation.tr("To Do"), "icon": "done_outline", "widget": todoWidget},
+        {"type": "timer", "name": Translation.tr("Timer"), "icon": "schedule", "widget": pomodoroWidget},
     ]
 
     Behavior on implicitHeight {
@@ -97,7 +98,8 @@ Rectangle {
             property int remainingTasks: Todo.list.filter(task => !task.done).length;
             Layout.margins: 10
             Layout.leftMargin: 0
-            text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
+            // text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
+            text: Translation.tr("%1   •   %2 tasks").arg(DateTime.collapsedCalendarFormat).arg(remainingTasks)
             font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
         }
@@ -146,6 +148,7 @@ Rectangle {
                         buttonIcon: modelData.icon
                         onClicked: {
                             root.selectedTab = index
+                            Persistent.states.sidebar.bottomGroup.tab = index
                         }
                     }
                 }
@@ -171,10 +174,12 @@ Rectangle {
         StackLayout {
             id: tabStack
             Layout.fillWidth: true
-            height: tabStack.children[0]?.tabLoader?.implicitHeight // TODO: make this less stupid
+            // Take the highest one, because the TODO list has no implicit height. This way the heigth of the calendar is used when it's initially loaded with the TODO list
+            height: Math.max(...tabStack.children.map(child => child.tabLoader?.implicitHeight || 0)) // TODO: make this less stupid
             Layout.alignment: Qt.AlignVCenter
-            property int realIndex: 0
+            property int realIndex: root.selectedTab
             property int animationDuration: Appearance.animation.elementMoveFast.duration * 1.5
+            currentIndex: root.selectedTab
 
             // Switch the tab on halfway of the anim duration
             Connections {
@@ -231,6 +236,15 @@ Rectangle {
     Component {
         id: todoWidget
         TodoWidget {
+            anchors.fill: parent
+            anchors.margins: 5
+        }
+    }
+
+    // Pomodoro component
+    Component {
+        id: pomodoroWidget
+        PomodoroWidget {
             anchors.fill: parent
             anchors.margins: 5
         }

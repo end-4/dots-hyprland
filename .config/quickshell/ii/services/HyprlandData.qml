@@ -4,7 +4,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
 import Quickshell.Hyprland
 
 /**
@@ -70,10 +69,11 @@ Singleton {
 
     Process {
         id: getClients
-        command: ["bash", "-c", "hyprctl clients -j | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.windowList = JSON.parse(data);
+        command: ["hyprctl", "clients", "-j"]
+        stdout: StdioCollector {
+            id: clientsCollector
+            onStreamFinished: {
+                root.windowList = JSON.parse(clientsCollector.text)
                 let tempWinByAddress = {};
                 for (var i = 0; i < root.windowList.length; ++i) {
                     var win = root.windowList[i];
@@ -87,30 +87,33 @@ Singleton {
 
     Process {
         id: getMonitors
-        command: ["bash", "-c", "hyprctl monitors -j | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.monitors = JSON.parse(data);
+        command: ["hyprctl", "monitors", "-j"]
+        stdout: StdioCollector {
+            id: monitorsCollector
+            onStreamFinished: {
+                root.monitors = JSON.parse(monitorsCollector.text);
             }
         }
     }
 
     Process {
         id: getLayers
-        command: ["bash", "-c", "hyprctl layers -j | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.layers = JSON.parse(data);
+        command: ["hyprctl", "layers", "-j"]
+        stdout: StdioCollector {
+            id: layersCollector
+            onStreamFinished: {
+                root.layers = JSON.parse(layersCollector.text);
             }
         }
     }
 
     Process {
         id: getWorkspaces
-        command: ["bash", "-c", "hyprctl workspaces -j | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.workspaces = JSON.parse(data);
+        command: ["hyprctl", "workspaces", "-j"]
+        stdout: StdioCollector {
+            id: workspacesCollector
+            onStreamFinished: {
+                root.workspaces = JSON.parse(workspacesCollector.text);
                 let tempWorkspaceById = {};
                 for (var i = 0; i < root.workspaces.length; ++i) {
                     var ws = root.workspaces[i];
@@ -124,10 +127,11 @@ Singleton {
 
     Process {
         id: getActiveWorkspace
-        command: ["bash", "-c", "hyprctl activeworkspace -j | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.activeWorkspace = JSON.parse(data);
+        command: ["hyprctl", "activeworkspace", "-j"]
+        stdout: StdioCollector {
+            id: activeWorkspaceCollector
+            onStreamFinished: {
+                root.activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
             }
         }
     }

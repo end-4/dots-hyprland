@@ -12,8 +12,7 @@ add_newline = false
 # """
 format = """
 $cmd_duration 󰜥 $directory $git_branch
-$character
-"""
+$character"""
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"

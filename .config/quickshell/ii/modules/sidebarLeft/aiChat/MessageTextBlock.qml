@@ -1,19 +1,14 @@
 pragma ComponentBehavior: Bound
 
-import "root:/"
-import "root:/services"
-import "root:/modules/common/"
-import "root:/modules/common/widgets"
-import "../"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
-import Quickshell
-import Quickshell.Widgets
 import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 
 ColumnLayout {
     id: root
@@ -124,7 +119,7 @@ ColumnLayout {
         wrapMode: TextEdit.Wrap
         color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
         textFormat: renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText
-        text: qsTr("Waiting for response...")
+        text: Translation.tr("Waiting for response...")
 
         onTextChanged: {
             if (!root.editing) return
@@ -133,7 +128,7 @@ ColumnLayout {
 
         onLinkActivated: (link) => {
             Qt.openUrlExternally(link)
-            Hyprland.dispatch("global quickshell:sidebarLeftClose")
+            GlobalStates.sidebarLeftOpen = false
         }
 
         MouseArea { // Pointing hand for links

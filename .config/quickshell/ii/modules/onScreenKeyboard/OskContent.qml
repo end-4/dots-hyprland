@@ -1,7 +1,7 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import "layouts.js" as Layouts
 import QtQuick
 import QtQuick.Controls
@@ -13,8 +13,10 @@ import Quickshell.Hyprland
 
 Item {
     id: root    
-    property var activeLayoutName: Config.options?.osk.layout ?? Layouts.defaultLayout
     property var layouts: Layouts.byName
+    property var activeLayoutName: (layouts.hasOwnProperty(Config.options?.osk.layout)) 
+        ? Config.options?.osk.layout 
+        : Layouts.defaultLayout
     property var currentLayout: layouts[activeLayoutName]
 
     implicitWidth: keyRows.implicitWidth

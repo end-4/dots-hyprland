@@ -1,16 +1,18 @@
 //@ pragma UseQApplication
 //@ pragma Env QS_NO_RELOAD_POPUP=1
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
+//@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 
 // Adjust this to make it smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 
 pragma ComponentBehavior: "Bound"
-import "./modules/common/"
-import "./modules/common/widgets"
-import "./modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
@@ -18,7 +20,6 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "./services/"
 
 ShellRoot {
     id: root
@@ -444,7 +445,7 @@ ShellRoot {
                                 }
                             }
                             StyledText {
-                                text: "Drag or click a region • LMB: Copy • RMB: Edit"
+                                text: Translation.tr("Drag or click a region • LMB: Copy • RMB: Edit")
                                 color: root.genericContentForeground
                             }
                         }

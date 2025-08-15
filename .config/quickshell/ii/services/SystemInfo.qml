@@ -20,6 +20,8 @@ Singleton {
     property string bugReportUrl: ""
     property string privacyPolicyUrl: ""
     property string logo: ""
+    property string desktopEnvironment: ""
+    property string windowingSystem: ""
 
     Timer {
         triggeredOnStart: true
@@ -36,9 +38,9 @@ Singleton {
             const nameMatch = textOsRelease.match(/^NAME="(.+?)"/m)
             distroName = prettyNameMatch ? prettyNameMatch[1] : (nameMatch ? nameMatch[1].replace(/Linux/i, "").trim() : "Unknown")
 
-            // Extract the ID (LOGO field, fallback to "unknown")
-            const logoMatch = textOsRelease.match(/^LOGO=(.+)$/m)
-            distroId = logoMatch ? logoMatch[1].replace(/"/g, "") : "unknown"
+            // Extract the ID
+            const idMatch = textOsRelease.match(/^ID="?(.+?)"?$/m)
+            distroId = idMatch ? idMatch[1] : "unknown"
 
             // Extract additional URLs and logo
             const homeUrlMatch = textOsRelease.match(/^HOME_URL="(.+?)"/m)
@@ -70,6 +72,14 @@ Singleton {
                 case "kali": distroIcon = "debian-symbolic"; break;
                 default: distroIcon = "linux-symbolic"; break;
             }
+            if (textOsRelease.toLowerCase().includes("nyarch")) {
+                distroIcon = "nyarch-symbolic"
+            }
+
+            if (logo.trim().length === 0) {
+                logo = distroIcon
+            }
+
         }
     }
 
@@ -79,6 +89,20 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.username = data.trim()
+            }
+        }
+    }
+
+    Process {
+        id: getDesktopEnvironment
+        running: true
+        command: ["bash", "-c", "echo $XDG_CURRENT_DESKTOP,$WAYLAND_DISPLAY"]
+        stdout: StdioCollector {
+            id: deCollector
+            onStreamFinished: {
+                const [desktop, wayland] = deCollector.text.split(",")
+                root.desktopEnvironment = desktop.trim()
+                root.windowingSystem = wayland.trim().length > 0 ? "Wayland" : "X11" // Are there others? 🤔
             }
         }
     }

@@ -1,5 +1,6 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.modules.common
+import qs
+import qs.modules.common.widgets
 import "./calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Controls
@@ -48,7 +49,7 @@ Item {
             CalendarHeaderButton {
                 clip: true
                 buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
-                tooltipText: (monthShift === 0) ? "" : qsTr("Jump to current month")
+                tooltipText: (monthShift === 0) ? "" : Translation.tr("Jump to current month")
                 onClicked: {
                     monthShift = 0;
                 }
@@ -92,7 +93,7 @@ Item {
             Repeater {
                 model: CalendarLayout.weekDays
                 delegate: CalendarDayButton {
-                    day: modelData.day
+                    day: Translation.tr(modelData.day)
                     isToday: modelData.today
                     bold: true
                     enabled: false

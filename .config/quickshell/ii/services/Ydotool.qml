@@ -1,9 +1,7 @@
 pragma Singleton
 
-import "root:/modules/common"
+import qs.modules.common
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -11,12 +9,6 @@ Singleton {
     property list<int> shiftKeys: [42, 54] // Keycodes for Shift keys (left and right)
     property list<int> altKeys: [56, 100] // Keycodes for Alt keys (left and right) 
     property list<int> ctrlKeys: [29, 97] // Keycodes for Ctrl keys (left and right)
-
-    onShiftModeChanged: {
-        if (shiftMode === 0) {
-            
-        }
-    }
 
     function releaseAllKeys() {
         const keycodes = Array.from(Array(249).keys());

@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 // From https://git.outfoxxed.me/outfoxxed/nixnew
 // It does not have a license, but the author is okay with redistribution.
 
+import qs
 import QtQml.Models
 import QtQuick
 import Quickshell
@@ -85,9 +86,9 @@ Singleton {
 		this.activeTrack = {
 			uniqueId: this.activePlayer?.uniqueId ?? 0,
 			artUrl: this.activePlayer?.trackArtUrl ?? "",
-			title: this.activePlayer?.trackTitle || qsTr("Unknown Title"),
-			artist: this.activePlayer?.trackArtist || qsTr("Unknown Artist"),
-			album: this.activePlayer?.trackAlbum || qsTr("Unknown Album"),
+			title: this.activePlayer?.trackTitle || Translation.tr("Unknown Title"),
+			artist: this.activePlayer?.trackArtist || Translation.tr("Unknown Artist"),
+			album: this.activePlayer?.trackAlbum || Translation.tr("Unknown Album"),
 		};
 
 		this.trackChanged(__reverse);

@@ -1,22 +1,91 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.modules.common
+import qs
+import qs.services
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
     id: root
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    property bool packageManagerRunning: false
+    property bool downloadRunning: false
+
+    component DescriptionLabel: Rectangle {
+        id: descriptionLabel
+        property string text
+        property color textColor: Appearance.colors.colOnTooltip
+        color: Appearance.colors.colTooltip
+        clip: true
+        radius: Appearance.rounding.normal
+        implicitHeight: descriptionLabelText.implicitHeight + 10 * 2
+        implicitWidth: descriptionLabelText.implicitWidth + 15 * 2
+
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+
+        StyledText {
+            id: descriptionLabelText
+            anchors.centerIn: parent
+            color: descriptionLabel.textColor
+            text: descriptionLabel.text
+        }
+    }
+
+    function closeAllWindows() {
+        HyprlandData.windowList.map(w => w.pid).forEach((pid) => {
+            Quickshell.execDetached(["kill", pid]);
+        });
+    }
+
+    function detectRunningStuff() {
+        packageManagerRunning = false;
+        downloadRunning = false;
+        detectPackageManagerProc.running = false;
+        detectPackageManagerProc.running = true;
+        detectDownloadProc.running = false;
+        detectDownloadProc.running = true;
+    }
+
+    Process {
+        id: detectPackageManagerProc
+        command: ["pidof", "pacman", "yay", "paru", "dnf", "zypper", "apt", "apx", "xbps", "flatpak", "snap", "apk",
+            "yum", "epsi", "pikman"]
+        onExited: (exitCode, exitStatus) => {
+            root.packageManagerRunning = (exitCode === 0);
+        }
+    }
+
+    Process {
+        id: detectDownloadProc
+        command: ["bash", "-c", "pidof curl wget aria2c yt-dlp || ls ~/Downloads | grep -E '\.crdownload$|\.part$'"]
+        onExited: (exitCode, exitStatus) => {
+            root.downloadRunning = (exitCode === 0);
+        }
+    }
 
     Loader {
         id: sessionLoader
-        active: false
+        active: GlobalStates.sessionOpen
+        onActiveChanged: {
+            if (sessionLoader.active) root.detectRunningStuff();
+        }
+
+        Connections {
+            target: GlobalStates
+            function onScreenLockedChanged() {
+                if (GlobalStates.screenLocked) {
+                    GlobalStates.sessionOpen = false;
+                }
+            }
+        }
 
         sourceComponent: PanelWindow { // Session menu
             id: sessionRoot
@@ -24,9 +93,8 @@ Scope {
             property string subtitle
             
             function hide() {
-                sessionLoader.active = false
+                GlobalStates.sessionOpen = false;
             }
-    
 
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:session"
@@ -52,6 +120,7 @@ Scope {
             }
 
             ColumnLayout { // Content column
+                id: contentColumn
                 anchors.centerIn: parent
                 spacing: 15
 
@@ -70,15 +139,14 @@ Scope {
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
                         font.weight: Font.DemiBold
-                        text: qsTr("Session")
+                        text: Translation.tr("Session")
                     }
 
                     StyledText { // Small instruction
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignHCenter
-                        font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.normal
-                        text: qsTr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
+                        text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
                     }
                 }
 
@@ -91,8 +159,8 @@ Scope {
                         id: sessionLock
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
-                        buttonText: qsTr("Lock")
-                        onClicked:  { Hyprland.dispatch("exec loginctl lock-session"); sessionRoot.hide() }
+                        buttonText: Translation.tr("Lock")
+                        onClicked:  { Quickshell.execDetached(["loginctl", "lock-session"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.right: sessionSleep
                         KeyNavigation.down: sessionHibernate
@@ -100,8 +168,8 @@ Scope {
                     SessionActionButton {
                         id: sessionSleep
                         buttonIcon: "dark_mode"
-                        buttonText: qsTr("Sleep")
-                        onClicked:  { Hyprland.dispatch("exec systemctl suspend || loginctl suspend"); sessionRoot.hide() }
+                        buttonText: Translation.tr("Sleep")
+                        onClicked:  { Quickshell.execDetached(["bash", "-c", "systemctl suspend || loginctl suspend"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLock
                         KeyNavigation.right: sessionLogout
@@ -110,8 +178,8 @@ Scope {
                     SessionActionButton {
                         id: sessionLogout
                         buttonIcon: "logout"
-                        buttonText: qsTr("Logout")
-                        onClicked: { Hyprland.dispatch("exec pkill Hyprland"); sessionRoot.hide() }
+                        buttonText: Translation.tr("Logout")
+                        onClicked: { root.closeAllWindows(); Quickshell.execDetached(["pkill", "Hyprland"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
                         KeyNavigation.right: sessionTaskManager
@@ -120,7 +188,7 @@ Scope {
                     SessionActionButton {
                         id: sessionTaskManager
                         buttonIcon: "browse_activity"
-                        buttonText: qsTr("Task Manager")
+                        buttonText: Translation.tr("Task Manager")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `${Config.options.apps.taskManager}`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLogout
@@ -130,7 +198,7 @@ Scope {
                     SessionActionButton {
                         id: sessionHibernate
                         buttonIcon: "downloading"
-                        buttonText: qsTr("Hibernate")
+                        buttonText: Translation.tr("Hibernate")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl hibernate || loginctl hibernate`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionLock
@@ -139,8 +207,8 @@ Scope {
                     SessionActionButton {
                         id: sessionShutdown
                         buttonIcon: "power_settings_new"
-                        buttonText: qsTr("Shutdown")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); sessionRoot.hide() }
+                        buttonText: Translation.tr("Shutdown")
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionHibernate
                         KeyNavigation.right: sessionReboot
@@ -149,8 +217,8 @@ Scope {
                     SessionActionButton {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
-                        buttonText: qsTr("Reboot")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
+                        buttonText: Translation.tr("Reboot")
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
                         KeyNavigation.right: sessionFirmwareReboot
@@ -159,35 +227,47 @@ Scope {
                     SessionActionButton {
                         id: sessionFirmwareReboot
                         buttonIcon: "settings_applications"
-                        buttonText: qsTr("Reboot to firmware settings")
-                        onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl reboot --firmware-setup || loginctl reboot --firmware-setup`]); sessionRoot.hide() }
+                        buttonText: Translation.tr("Reboot to firmware settings")
+                        onClicked:  { root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `systemctl reboot --firmware-setup || loginctl reboot --firmware-setup`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionTaskManager
                         KeyNavigation.left: sessionReboot
                     }
                 }
 
-                Rectangle {
+                DescriptionLabel {
                     Layout.alignment: Qt.AlignHCenter
-                    radius: Appearance.rounding.normal
-                    implicitHeight: sessionSubtitle.implicitHeight + 10 * 2
-                    implicitWidth: sessionSubtitle.implicitWidth + 15 * 2
-                    color: Appearance.colors.colTooltip
-                    clip: true
-
-                    Behavior on implicitWidth {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-
-                    StyledText {
-                        id: sessionSubtitle
-                        anchors.centerIn: parent
-                        color: Appearance.colors.colOnTooltip
-                        text: sessionRoot.subtitle
-                    }
+                    text: sessionRoot.subtitle
                 }
             }
 
+            RowLayout {
+                anchors {
+                    top: contentColumn.bottom
+                    topMargin: 10
+                    horizontalCenter: contentColumn.horizontalCenter
+                }
+                spacing: 10
+
+                Loader {
+                    active: root.packageManagerRunning
+                    visible: active
+                    sourceComponent: DescriptionLabel {
+                        text: Translation.tr("Your package manager is running")
+                        textColor: Appearance.m3colors.m3onErrorContainer
+                        color: Appearance.m3colors.m3errorContainer
+                    }
+                }
+                Loader {
+                    active: root.downloadRunning
+                    visible: active
+                    sourceComponent: DescriptionLabel {
+                        text: Translation.tr("There might be a download in progress")
+                        textColor: Appearance.m3colors.m3onErrorContainer
+                        color: Appearance.m3colors.m3errorContainer
+                    }
+                }
+            }
         }
     }
 
@@ -195,33 +275,42 @@ Scope {
         target: "session"
 
         function toggle(): void {
-            sessionLoader.active = !sessionLoader.active;
+            GlobalStates.sessionOpen = !GlobalStates.sessionOpen;
         }
 
         function close(): void {
-            sessionLoader.active = false;
+            GlobalStates.sessionOpen = false
         }
 
         function open(): void {
-            sessionLoader.active = true;
+            GlobalStates.sessionOpen = true
         }
     }
 
     GlobalShortcut {
         name: "sessionToggle"
-        description: qsTr("Toggles session screen on press")
+        description: "Toggles session screen on press"
 
         onPressed: {
-            sessionLoader.active = !sessionLoader.active;
+            GlobalStates.sessionOpen = !GlobalStates.sessionOpen;
         }
     }
 
     GlobalShortcut {
         name: "sessionOpen"
-        description: qsTr("Opens session screen on press")
+        description: "Opens session screen on press"
 
         onPressed: {
-            sessionLoader.active = true;
+            GlobalStates.sessionOpen = true
+        }
+    }
+
+    GlobalShortcut {
+        name: "sessionClose"
+        description: "Closes session screen on press"
+
+        onPressed: {
+            GlobalStates.sessionOpen = false
         }
     }
 

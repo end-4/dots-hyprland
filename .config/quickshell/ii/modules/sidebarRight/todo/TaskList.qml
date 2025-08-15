@@ -1,6 +1,6 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -16,7 +16,7 @@ Item {
     property int todoListItemPadding: 8
     property int listBottomPadding: 80
 
-    Flickable {
+    StyledFlickable {
         id: flickable
         anchors.fill: parent
         contentHeight: columnLayout.height

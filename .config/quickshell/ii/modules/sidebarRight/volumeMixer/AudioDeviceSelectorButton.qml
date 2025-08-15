@@ -1,22 +1,22 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import Qt5Compat.GraphicalEffects
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
-GroupButton {
+RippleButton {
     id: button
     required property bool input
 
     buttonRadius: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
-    colBackgroundActive: Appearance.colors.colLayer2Active
-    clickedWidth: baseWidth + 30
+    colRipple: Appearance.colors.colLayer2Active
+
+    implicitHeight: contentItem.implicitHeight + 6 * 2
+    implicitWidth: contentItem.implicitWidth + 6 * 2
 
     contentItem: RowLayout {
         anchors.fill: parent
@@ -40,14 +40,14 @@ GroupButton {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.normal
-                text: input ? qsTr("Input") : qsTr("Output")
+                text: input ? Translation.tr("Input") : Translation.tr("Output")
                 color: Appearance.colors.colOnLayer2
             }
             StyledText {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? qsTr("Unknown")
+                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? Translation.tr("Unknown")
                 color: Appearance.m3colors.m3outline
             }
         }

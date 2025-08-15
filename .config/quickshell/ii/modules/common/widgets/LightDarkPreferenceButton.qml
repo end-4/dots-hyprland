@@ -1,12 +1,10 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
 
 GroupButton {
     id: lightDarkButtonRoot
@@ -115,7 +113,7 @@ GroupButton {
             }
             StyledText {
                 Layout.fillWidth: true
-                text: dark ? "Dark" : "Light"
+                text: dark ? Translation.tr("Dark") : Translation.tr("Light")
                 color: lightDarkButtonRoot.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2
                 horizontalAlignment: Text.AlignHCenter
             }

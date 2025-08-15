@@ -1,15 +1,12 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
@@ -27,7 +24,7 @@ Scope { // Scope
 
     Loader {
         id: oskLoader
-        active: false
+        active: GlobalStates.oskOpen
         onActiveChanged: {
             if (!oskLoader.active) {
                 Ydotool.releaseAllKeys();
@@ -36,7 +33,7 @@ Scope { // Scope
         
         sourceComponent: PanelWindow { // Window
             id: oskRoot
-            visible: oskLoader.active
+            visible: oskLoader.active && !GlobalStates.screenLocked
 
             anchors {
                 bottom: true
@@ -127,42 +124,42 @@ Scope { // Scope
         target: "osk"
 
         function toggle(): void {
-            oskLoader.active = !oskLoader.active
+            GlobalStates.oskOpen = !GlobalStates.oskOpen;
         }
 
         function close(): void {
-            oskLoader.active = false
+            GlobalStates.oskOpen = false
         }
 
         function open(): void {
-            oskLoader.active = true
+            GlobalStates.oskOpen = true
         }
     }
 
     GlobalShortcut {
         name: "oskToggle"
-        description: qsTr("Toggles on screen keyboard on press")
+        description: "Toggles on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = !oskLoader.active;
+            GlobalStates.oskOpen = !GlobalStates.oskOpen;
         }
     }
 
     GlobalShortcut {
         name: "oskOpen"
-        description: qsTr("Opens on screen keyboard on press")
+        description: "Opens on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = true;
+            GlobalStates.oskOpen = true
         }
     }
 
     GlobalShortcut {
         name: "oskClose"
-        description: qsTr("Closes on screen keyboard on press")
+        description: "Closes on screen keyboard on press"
 
         onPressed: {
-            oskLoader.active = false;
+            GlobalStates.oskOpen = false
         }
     }
 

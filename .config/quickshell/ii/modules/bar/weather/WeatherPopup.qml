@@ -1,45 +1,42 @@
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle {
+StyledPopup {
     id: root
-    readonly property real margin: 10
-    implicitWidth: columnLayout.implicitWidth + margin * 2
-    implicitHeight: columnLayout.implicitHeight + margin * 2
-    color: Appearance.colors.colLayer0
-    radius: Appearance.rounding.small
-    border.width: 1
-    border.color: Appearance.m3colors.m3outlineVariant
-    clip: true
 
     ColumnLayout {
         id: columnLayout
-        spacing: 5
-        anchors.centerIn: root
+        anchors.centerIn: parent
         implicitWidth: Math.max(header.implicitWidth, gridLayout.implicitWidth)
         implicitHeight: gridLayout.implicitHeight
+        spacing: 5
 
         // Header
         RowLayout {
             id: header
             spacing: 5
-            Layout.fillWidth: parent
             Layout.alignment: Qt.AlignHCenter
+
             MaterialSymbol {
                 fill: 0
+                font.weight: Font.Medium
                 text: "location_on"
-                iconSize: Appearance.font.pixelSize.huge
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnSurfaceVariant
             }
 
             StyledText {
                 text: Weather.data.city
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
-                color: Appearance.colors.colOnLayer0
+                font {
+                    weight: Font.Medium
+                    pixelSize: Appearance.font.pixelSize.normal
+                }
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
 
@@ -52,42 +49,42 @@ Rectangle {
             uniformCellWidths: true
 
             WeatherCard {
-                title: "UV Index"
+                title: Translation.tr("UV Index")
                 symbol: "wb_sunny"
                 value: Weather.data.uv
             }
             WeatherCard {
-                title: "Wind"
+                title: Translation.tr("Wind")
                 symbol: "air"
                 value: `(${Weather.data.windDir}) ${Weather.data.wind}`
             }
             WeatherCard {
-                title: "Precipitation"
+                title: Translation.tr("Precipitation")
                 symbol: "rainy_light"
                 value: Weather.data.precip
             }
             WeatherCard {
-                title: "Humidity"
+                title: Translation.tr("Humidity")
                 symbol: "humidity_low"
                 value: Weather.data.humidity
             }
             WeatherCard {
-                title: "Visibility"
+                title: Translation.tr("Visibility")
                 symbol: "visibility"
                 value: Weather.data.visib
             }
             WeatherCard {
-                title: "Pressure"
+                title: Translation.tr("Pressure")
                 symbol: "readiness_score"
                 value: Weather.data.press
             }
             WeatherCard {
-                title: "Sunrise"
+                title: Translation.tr("Sunrise")
                 symbol: "wb_twilight"
                 value: Weather.data.sunrise
             }
             WeatherCard {
-                title: "Sunset"
+                title: Translation.tr("Sunset")
                 symbol: "bedtime"
                 value: Weather.data.sunset
             }

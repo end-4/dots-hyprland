@@ -1,15 +1,10 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Effects
-import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
@@ -101,7 +96,7 @@ Scope { // Scope
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 border.width: 1
-                border.color: Appearance.m3colors.m3outlineVariant
+                border.color: Appearance.colors.colLayer0Border
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                 Behavior on width {
@@ -170,7 +165,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggle"
-        description: qsTr("Toggles left sidebar on press")
+        description: "Toggles left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
@@ -179,7 +174,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftOpen"
-        description: qsTr("Opens left sidebar on press")
+        description: "Opens left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = true;
@@ -188,7 +183,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftClose"
-        description: qsTr("Closes left sidebar on press")
+        description: "Closes left sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = false;
@@ -197,7 +192,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggleDetach"
-        description: qsTr("Detach left sidebar into a window/Attach it back")
+        description: "Detach left sidebar into a window/Attach it back"
 
         onPressed: {
             root.detach = !root.detach;

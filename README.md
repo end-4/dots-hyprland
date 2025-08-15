@@ -7,7 +7,7 @@
 
 ![](https://img.shields.io/github/last-commit/end-4/dots-hyprland?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)
 ![](https://img.shields.io/github/stars/end-4/dots-hyprland?style=for-the-badge&logo=andela&color=86dbd7&logoColor=D9E0EE&labelColor=1E202B)
-![](https://img.shields.io/github/repo-size/end-4/dots-hyprland?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=26230e)
+![](https://img.shields.io/github/repo-size/end-4/dots-hyprland?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B)
 <a href="https://discord.gg/GtdRBXgMwq"> <img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Finvites%2FGtdRBXgMwq%3Fwith_counts%3Dtrue&query=approximate_member_count&style=for-the-badge&logo=discord&logoColor=D9E0EE&label=discord&labelColor=%231E202B&color=86dbc0&link=https%3A%2F%2Fdiscord.gg%2FGtdRBXgMwq"> </a>
 
 </div>
@@ -26,25 +26,15 @@
   - **Transparent installation**: Every command is shown before it's run
 </details>
 <details>
-  <summary>Instructions</summary>
+  <summary>Installation instructions</summary>
 
-   - **Prerequisite**: Your system works. That's it. You don't have to reinstall your system!
-   - **Automatic**, but guided and transparent, installation for Arch(-based) Linux:
-   ```bash
-   bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
-   ```
+   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
+   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users.
+     - `Super`+`/` = keybind list
+     - `Super`+`Enter` = terminal
+     - If for whatever reason the keybind list widget does not work, here's an image:
+     <img width="1412" height="828" alt="image" src="https://github.com/user-attachments/assets/8f7bd216-9e03-47e3-8709-0008772a4133" />
 
-   If you are using fish shell (non-posix-compliant shell) then:
-   ```bash
-   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
-   ```
-
-   - **Manual** installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
-
-   - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME.
-     - For a list, hit `Super`+`/`
-     - For a terminal, hit `Super`+`Enter`
 
 </details>
 
@@ -73,17 +63,25 @@
 
 </details>
 
+_Note: **THERE IS NO FUCKING WAYBAR**_
+
 
 <div align="center">
     <h2>• screenshots •</h2>
     <h3></h3>
 </div>
 
-<div align="center">
-    <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo">
-</div>
+<table style="border-collapse: collapse;">
+  <tr>
+    <td width="25%">
+      <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:100%;">
+    </td>
+    <td width="75%">
+      <i>latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below.</i>
+    </td>
+  </tr>
+</table>
 
-_latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below._
 
 ### illogical-impulse<sup>Quickshell</sup>
 
@@ -156,6 +154,8 @@ Widget system: AGS | Support: Limited, no new features
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
+
+ <sup><sup><sup><sup><sup>[@tokyobot](https://github.com/tokyob0t) for saying hi</sup></sup></sup></sup></sup>
 
 <div align="center">
     <h2>• stonks •</h2>

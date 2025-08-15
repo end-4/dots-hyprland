@@ -1,12 +1,11 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Widgets
 
 Item {
     id: root
@@ -61,7 +60,7 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3outline
                 horizontalAlignment: Text.AlignHCenter
-                text: qsTr("No notifications")
+                text: Translation.tr("No notifications")
             }
         }
     }
@@ -84,7 +83,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 10
             horizontalAlignment: Text.AlignHCenter
-            text: `${Notifications.list.length} notifications`
+            text: Translation.tr("%1 notifications").arg(Notifications.list.length)
 
             opacity: Notifications.list.length > 0 ? 1 : 0
             visible: opacity > 0
@@ -101,7 +100,7 @@ Item {
 
             NotificationStatusButton {
                 buttonIcon: "notifications_paused"
-                buttonText: qsTr("Silent")
+                buttonText: Translation.tr("Silent")
                 toggled: Notifications.silent
                 onClicked: () => {
                     Notifications.silent = !Notifications.silent;
@@ -109,7 +108,7 @@ Item {
             }
             NotificationStatusButton {
                 buttonIcon: "clear_all"
-                buttonText: qsTr("Clear")
+                buttonText: Translation.tr("Clear")
                 onClicked: () => {
                     Notifications.discardAllNotifications()
                 }

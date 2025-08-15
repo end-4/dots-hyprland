@@ -1,15 +1,11 @@
 // pragma NativeMethodBehavior: AcceptThisObject
-import "root:/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Hyprland
 
@@ -18,7 +14,7 @@ RippleButton {
     property var entry
     property string query
     property bool entryShown: entry?.shown ?? true
-    property string itemType: entry?.type
+    property string itemType: entry?.type ?? Translation.tr("App")
     property string itemName: entry?.name
     property string itemIcon: entry?.icon ?? ""
     property var itemExecute: entry?.execute
@@ -94,7 +90,7 @@ RippleButton {
 
     onClicked: {
         root.itemExecute()
-        Hyprland.dispatch("global quickshell:overviewClose")
+        GlobalStates.overviewOpen = false
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -163,7 +159,7 @@ RippleButton {
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colSubtext
-                visible: root.itemType && root.itemType != qsTr("App")
+                visible: root.itemType && root.itemType != Translation.tr("App")
                 text: root.itemType
             }
             RowLayout {
@@ -225,5 +221,47 @@ RippleButton {
             horizontalAlignment: Text.AlignRight
             text: root.itemClickActionName
         }
+
+        RowLayout {
+            spacing: 4
+            Repeater {
+                model: (root.entry.actions ?? []).slice(0, 4)
+                delegate: RippleButton {
+                    id: actionButton
+                    required property var modelData
+                    implicitHeight: 34
+                    implicitWidth: 34
+
+                    contentItem: Item {
+                        id: actionContentItem
+                        anchors.centerIn: parent
+                        Loader {
+                            anchors.centerIn: parent
+                            active: !(actionButton.modelData.icon && actionButton.modelData.icon !== "")
+                            sourceComponent: MaterialSymbol {
+                                text: "video_settings"
+                                font.pixelSize: Appearance.font.pixelSize.hugeass
+                                color: Appearance.m3colors.m3onSurface
+                            }
+                        }
+                        Loader {
+                            anchors.centerIn: parent
+                            active: actionButton.modelData.icon && actionButton.modelData.icon !== ""
+                            sourceComponent: IconImage {
+                                source: Quickshell.iconPath(actionButton.modelData.icon)
+                                implicitSize: 20
+                            }
+                        }
+                    }
+
+                    onClicked: modelData.execute()
+
+                    StyledToolTip {
+                        content: modelData.name
+                    }
+                }
+            }
+        }
+
     }
 }

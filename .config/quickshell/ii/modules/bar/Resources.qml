@@ -1,18 +1,17 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import qs
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
-import Quickshell.Services.Mpris
 
-Item {
+MouseArea {
     id: root
     property bool borderless: Config.options.bar.borderless
     property bool alwaysShowAllResources: false
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
-    implicitHeight: 32
+    implicitHeight: Appearance.sizes.barHeight
+    hoverEnabled: true
 
     RowLayout {
         id: rowLayout
@@ -33,18 +32,21 @@ Item {
             shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || 
                 (MprisController.activePlayer?.trackTitle == null) ||
                 root.alwaysShowAllResources
-            Layout.leftMargin: shown ? 4 : 0
+            Layout.leftMargin: shown ? 6 : 0
         }
 
         Resource {
-            iconName: "settings_slow_motion"
+            iconName: "planner_review"
             percentage: ResourceUsage.cpuUsage
             shown: Config.options.bar.resources.alwaysShowCpu || 
                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
                 root.alwaysShowAllResources
-            Layout.leftMargin: shown ? 4 : 0
+            Layout.leftMargin: shown ? 6 : 0
         }
 
     }
 
+    ResourcesPopup {
+        hoverTarget: root
+    }
 }

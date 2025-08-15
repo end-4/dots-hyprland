@@ -1,12 +1,9 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import Qt5Compat.GraphicalEffects
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
-import Quickshell.Widgets
 
 /**
  * Material 3 button with expressive bounciness. 
@@ -96,12 +93,22 @@ Button {
             root.down = false
             if (event.button != Qt.LeftButton) return;
             if (root.releaseAction) root.releaseAction();
-            root.click() // Because the MouseArea already consumed the event
+        }
+        onClicked: (event) => {
+            if (event.button != Qt.LeftButton) return;
+            root.click()
         }
         onCanceled: (event) => {
             root.down = false
         }
+
+        onPressAndHold: () => {
+            altAction(); 
+            root.down = false; 
+            root.clicked = false;
+        };
     }
+
 
     background: Rectangle {
         id: buttonBackground

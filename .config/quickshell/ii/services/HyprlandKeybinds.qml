@@ -1,12 +1,11 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common"
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
 import Quickshell.Hyprland
 
 /**
@@ -41,7 +40,7 @@ Singleton {
     Process {
         id: getDefaultKeybinds
         running: true
-        command: [root.keybindParserPath, "--path", root.defaultKeybindConfigPath,]
+        command: [root.keybindParserPath, "--path", root.defaultKeybindConfigPath]
         
         stdout: SplitParser {
             onRead: data => {

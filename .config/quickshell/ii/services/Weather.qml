@@ -6,7 +6,7 @@ import Quickshell.Io
 import QtQuick
 import QtPositioning
 
-import "root:/modules/common"
+import qs.modules.common
 
 Singleton {
     id: root
@@ -17,25 +17,25 @@ Singleton {
     property bool gpsActive: Config.options.bar.weather.enableGPS
 
     property var location: ({
-            valid: false,
-            lat: 0,
-            lon: 0
-        })
+        valid: false,
+        lat: 0,
+        lon: 0
+    })
 
     property var data: ({
-            uv: 0,
-            humidity: 0,
-            sunrise: 0,
-            sunset: 0,
-            windDir: 0,
-            wCode: 0,
-            city: 0,
-            wind: 0,
-            precip: 0,
-            visib: 0,
-            press: 0,
-            temp: 0
-        })
+        uv: 0,
+        humidity: 0,
+        sunrise: 0,
+        sunset: 0,
+        windDir: 0,
+        wCode: 0,
+        city: 0,
+        wind: 0,
+        precip: 0,
+        visib: 0,
+        press: 0,
+        temp: 0
+    })
 
     function refineData(data) {
         let temp = {};
@@ -90,8 +90,7 @@ Singleton {
     }
 
     Component.onCompleted: {
-        if (!root.gpsActive)
-            return;
+        if (!root.gpsActive) return;
         console.info("[WeatherService] Starting the GPS service.");
         positionSource.start();
     }
@@ -139,7 +138,7 @@ Singleton {
                 positionSource.stop();
                 root.location.valid = false;
                 root.gpsActive = false;
-                Quickshell.execDetached(["bash", "-c", `notify-send WeatherService 'Can not find a GPS service. Using the fallback method instead.'`]);
+                Quickshell.execDetached(["notify-send", Translation.tr("Weather Service"), Translation.tr("Cannot find a GPS service. Using the fallback method instead."), "-a", "Shell"]);
                 console.error("[WeatherService] Could not aquire a valid backend plugin.");
             }
         }

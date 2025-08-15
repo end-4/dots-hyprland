@@ -1,16 +1,10 @@
-import "root:/modules/common"
-import "root:/services"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import "./notification_utils.js" as NotificationUtils
-import Qt5Compat.GraphicalEffects
+import qs
+import qs.modules.common
+import qs.services
+import qs.modules.common.functions
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
 import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 
@@ -76,7 +70,7 @@ Item { // Notification item area
             easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
         }
         onFinished: () => {
-            Notifications.discardNotification(notificationObject.id);
+            Notifications.discardNotification(notificationObject.notificationId);
         }
     }
 
@@ -146,8 +140,8 @@ Item { // Notification item area
         color: (expanded && !onlyNotification) ? 
             (notificationObject.urgency == NotificationUrgency.Critical) ? 
                 ColorUtils.mix(Appearance.colors.colSecondaryContainer, Appearance.colors.colLayer2, 0.35) :
-                (Appearance.colors.colSurfaceContainerHigh) :
-            ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHighest)
+                (Appearance.colors.colLayer3) :
+            ColorUtils.transparentize(Appearance.colors.colLayer3)
 
         implicitHeight: expanded ? (contentColumn.implicitHeight + padding * 2) : summaryRow.implicitHeight
         Behavior on implicitHeight {
@@ -174,20 +168,21 @@ Item { // Notification item area
                     id: summaryText
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
-                    color: Appearance.colors.colOnLayer2
+                    color: Appearance.colors.colOnLayer3
                     elide: Text.ElideRight
                     text: root.notificationObject.summary || ""
                 }
                 StyledText {
                     opacity: !root.expanded ? 1 : 0
                     visible: opacity > 0
+                    Layout.fillWidth: true
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
-                    Layout.fillWidth: true
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
+                    wrapMode: Text.Wrap // Needed for proper eliding????
                     maximumLineCount: 1
                     textFormat: Text.StyledText
                     text: {
@@ -213,19 +208,19 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.RichText
                     text: {
-                        return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                        return `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>` + 
                                `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
                     }
 
                     onLinkActivated: (link) => {
                         Qt.openUrlExternally(link)
-                        Hyprland.dispatch("global quickshell:sidebarRightClose")
+                        GlobalStates.sidebarRightOpen = false
                     }
                     
                     PointingHandLinkHover {}
                 }
 
-                Flickable { // Notification actions
+                StyledFlickable { // Notification actions
                     id: actionsFlickable
                     Layout.fillWidth: true
                     implicitHeight: actionRowLayout.implicitHeight
@@ -248,7 +243,7 @@ Item { // Notification item area
 
                         NotificationActionButton {
                             Layout.fillWidth: true
-                            buttonText: qsTr("Close")
+                            buttonText: Translation.tr("Close")
                             urgency: notificationObject.urgency
                             implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
                                 (contentItem.implicitWidth + leftPadding + rightPadding)
@@ -274,7 +269,7 @@ Item { // Notification item area
                                 buttonText: modelData.text
                                 urgency: notificationObject.urgency
                                 onClicked: {
-                                    Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                    Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
                                 }
                             }
                         }

@@ -1,11 +1,10 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs.modules.common.functions
 import Qt.labs.platform
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 
 Singleton {
     // XDG Dirs, with "file://"
@@ -16,8 +15,8 @@ Singleton {
     readonly property string downloads: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
     
     // Other dirs used by the shell, without "file://"
-    property string assetsPath: Quickshell.configPath("assets")
-    property string scriptPath: Quickshell.configPath("scripts")
+    property string assetsPath: Quickshell.shellPath("assets")
+    property string scriptPath: Quickshell.shellPath("scripts")
     property string favicons: FileUtils.trimFileProtocol(`${Directories.cache}/media/favicons`)
     property string coverArt: FileUtils.trimFileProtocol(`${Directories.cache}/media/coverart`)
     property string booruPreviews: FileUtils.trimFileProtocol(`${Directories.cache}/media/boorus`)
@@ -33,7 +32,7 @@ Singleton {
     property string cliphistDecode: FileUtils.trimFileProtocol(`/tmp/quickshell/media/cliphist`)
     property string screenshotTemp: "/tmp/quickshell/media/screenshot"
     property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/switchwall.sh`)
-    property string defaultAiPrompts: Quickshell.configPath("defaults/ai/prompts")
+    property string defaultAiPrompts: Quickshell.shellPath("defaults/ai/prompts")
     property string userAiPrompts: FileUtils.trimFileProtocol(`${Directories.shellConfig}/ai/prompts`)
     property string aiChats: FileUtils.trimFileProtocol(`${Directories.state}/user/ai/chats`)
     // Cleanup on init

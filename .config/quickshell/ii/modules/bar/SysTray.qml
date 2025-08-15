@@ -1,42 +1,36 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
-import Quickshell.Wayland
-import Quickshell.Widgets
 
-// TODO: More fancy animation
 Item {
     id: root
+    implicitWidth: gridLayout.implicitWidth
+    implicitHeight: gridLayout.implicitHeight
+    property bool vertical: false
 
-    required property var bar
-
-    height: parent.height
-    implicitWidth: rowLayout.implicitWidth
-    Layout.leftMargin: Appearance.rounding.screenRounding
-
-    RowLayout {
-        id: rowLayout
-
+    GridLayout {
+        id: gridLayout
+        columns: root.vertical ? 1 : -1
         anchors.fill: parent
-        spacing: 15
+        rowSpacing: 10
+        columnSpacing: 15
 
         Repeater {
             model: SystemTray.items
 
             SysTrayItem {
                 required property SystemTrayItem modelData
-
-                bar: root.bar
                 item: modelData
+                Layout.fillHeight: !root.vertical
+                Layout.fillWidth: root.vertical
             }
 
         }
 
         StyledText {
-            Layout.alignment: Qt.AlignVCenter
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             font.pixelSize: Appearance.font.pixelSize.larger
             color: Appearance.colors.colSubtext
             text: "•"

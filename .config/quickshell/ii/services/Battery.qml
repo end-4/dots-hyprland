@@ -1,10 +1,11 @@
 pragma Singleton
 
-import "root:/modules/common"
+import qs
+import qs.modules.common
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
 import Quickshell.Services.UPower
+import QtQuick
+import Quickshell.Io
 
 Singleton {
     property bool available: UPower.displayDevice.isLaptopBattery
@@ -22,14 +23,29 @@ Singleton {
     property bool isCriticalAndNotCharging: isCritical && !isCharging
     property bool isSuspendingAndNotCharging: allowAutomaticSuspend && isSuspending && !isCharging
 
+    property real energyRate: UPower.displayDevice.changeRate
+    property real timeToEmpty: UPower.displayDevice.timeToEmpty
+    property real timeToFull: UPower.displayDevice.timeToFull
+
     onIsLowAndNotChargingChanged: {
-        if (available && isLowAndNotCharging) 
-            Quickshell.execDetached(["bash", "-c", `notify-send "Low battery" "Consider plugging in your device" -u critical -a "Shell"`]);
+        if (available && isLowAndNotCharging) Quickshell.execDetached([
+            "notify-send", 
+            Translation.tr("Low battery"), 
+            Translation.tr("Consider plugging in your device"), 
+            "-u", "critical",
+            "-a", "Shell"
+        ])
     }
 
     onIsCriticalAndNotChargingChanged: {
-        if (available && isCriticalAndNotCharging) 
-            Quickshell.execDetached(["bash", "-c", `notify-send "Critically low battery" "🙏 I beg for pleas charg\nAutomatic suspend triggers at ${Config.options.battery.suspend}%" -u critical -a "Shell"`]);
+        if (available && isCriticalAndNotCharging) Quickshell.execDetached([
+            "notify-send", 
+            Translation.tr("Critically low battery"), 
+            Translation.tr("Please charge!\nAutomatic suspend triggers at %1").arg(Config.options.battery.suspend), 
+            "-u", "critical",
+            "-a", "Shell"
+        ]);
+            
     }
 
     onIsSuspendingAndNotChargingChanged: {

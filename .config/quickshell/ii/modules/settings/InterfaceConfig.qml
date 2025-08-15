@@ -1,20 +1,20 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
     ContentSection {
-        title: "Policies"
+        title: Translation.tr("Policies")
 
         ConfigRow {
             ColumnLayout {
                 // Weeb policy
                 ContentSubsectionLabel {
-                    text: "Weeb"
+                    text: Translation.tr("Weeb")
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.weeb
@@ -24,15 +24,15 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: "No",
+                            displayName: Translation.tr("No"),
                             value: 0
                         },
                         {
-                            displayName: "Yes",
+                            displayName: Translation.tr("Yes"),
                             value: 1
                         },
                         {
-                            displayName: "Closet",
+                            displayName: Translation.tr("Closet"),
                             value: 2
                         }
                     ]
@@ -42,7 +42,7 @@ ContentPage {
             ColumnLayout {
                 // AI policy
                 ContentSubsectionLabel {
-                    text: "AI"
+                    text: Translation.tr("AI")
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
@@ -52,15 +52,15 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: "No",
+                            displayName: Translation.tr("No"),
                             value: 0
                         },
                         {
-                            displayName: "Yes",
+                            displayName: Translation.tr("Yes"),
                             value: 1
                         },
                         {
-                            displayName: "Local only",
+                            displayName: Translation.tr("Local only"),
                             value: 2
                         }
                     ]
@@ -70,67 +70,111 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Bar"
+        title: Translation.tr("Bar")
 
-        ConfigSelectionArray {
-            currentValue: Config.options.bar.cornerStyle
-            configOptionName: "bar.cornerStyle"
-            onSelected: newValue => {
-                Config.options.bar.cornerStyle = newValue;
-            }
-            options: [
-                {
-                    displayName: "Hug",
-                    value: 0
-                },
-                {
-                    displayName: "Float",
-                    value: 1
-                },
-                {
-                    displayName: "Plain rectangle",
-                    value: 2
+        ConfigRow {
+            ContentSubsection {
+                title: "Corner style"
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.bar.cornerStyle
+                    configOptionName: "bar.cornerStyle"
+                    onSelected: newValue => {
+                        Config.options.bar.cornerStyle = newValue; // Update local copy
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Hug"),
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Float"),
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Plain rectangle"),
+                            value: 2
+                        }
+                    ]
                 }
-            ]
+            }
+
+            ContentSubsection {
+                title: "Bar layout"
+                ConfigSelectionArray {
+                    currentValue: Config.options.bar.vertical
+                    configOptionName: "bar.vertical"
+                    onSelected: newValue => {
+                        Config.options.bar.vertical = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Horizontal"),
+                            value: false
+                        },
+                        {
+                            displayName: Translation.tr("Vertical"),
+                            value: true
+                        },
+                    ]
+                }
+            }
         }
 
         ContentSubsection {
-            title: "Appearance"
+            title: Translation.tr("Overall appearance")
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: 'Borderless'
+                    text: Translation.tr("Automatically hide")
+                    checked: Config.options.bar.autoHide.enable
+                    onCheckedChanged: {
+                        Config.options.bar.autoHide.enable = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Place at the bottom/right")
+                    checked: Config.options.bar.bottom
+                    onCheckedChanged: {
+                        Config.options.bar.bottom = checked;
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr('Borderless')
                     checked: Config.options.bar.borderless
                     onCheckedChanged: {
                         Config.options.bar.borderless = checked;
                     }
                 }
                 ConfigSwitch {
-                    text: 'Show background'
+                    text: Translation.tr('Show background')
                     checked: Config.options.bar.showBackground
                     onCheckedChanged: {
                         Config.options.bar.showBackground = checked;
                     }
                     StyledToolTip {
-                        content: "Note: turning off can hurt readability"
+                        content: Translation.tr("Note: turning off can hurt readability")
                     }
                 }
             }
         }
 
         ContentSubsection {
-            title: "Buttons"
+            title: Translation.tr("Buttons")
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: "Screen snip"
+                    text: Translation.tr("Screen snip")
                     checked: Config.options.bar.utilButtons.showScreenSnip
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showScreenSnip = checked;
                     }
                 }
                 ConfigSwitch {
-                    text: "Color picker"
+                    text: Translation.tr("Color picker")
                     checked: Config.options.bar.utilButtons.showColorPicker
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showColorPicker = checked;
@@ -140,14 +184,14 @@ ContentPage {
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: "Mic toggle"
+                    text: Translation.tr("Mic toggle")
                     checked: Config.options.bar.utilButtons.showMicToggle
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showMicToggle = checked;
                     }
                 }
                 ConfigSwitch {
-                    text: "Keyboard toggle"
+                    text: Translation.tr("Keyboard toggle")
                     checked: Config.options.bar.utilButtons.showKeyboardToggle
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showKeyboardToggle = checked;
@@ -157,42 +201,52 @@ ContentPage {
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: "Dark/Light toggle"
+                    text: Translation.tr("Dark/Light toggle")
                     checked: Config.options.bar.utilButtons.showDarkModeToggle
                     onCheckedChanged: {
                         Config.options.bar.utilButtons.showDarkModeToggle = checked;
                     }
                 }
                 ConfigSwitch {
-                    opacity: 0
-                    enabled: false
+                    text: Translation.tr("Performance Profile toggle")
+                    checked: Config.options.bar.utilButtons.showPerformanceProfileToggle
+                    onCheckedChanged: {
+                        Config.options.bar.utilButtons.showPerformanceProfileToggle = checked;
+                    }
                 }
             }
         }
 
         ContentSubsection {
-            title: "Workspaces"
-            tooltip: "Tip: Hide icons and always show numbers for\nthe classic illogical-impulse experience"
+            title: Translation.tr("Workspaces")
+            tooltip: Translation.tr("Tip: Hide icons and always show numbers for\nthe classic illogical-impulse experience")
 
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: 'Show app icons'
+                    text: Translation.tr('Show app icons')
                     checked: Config.options.bar.workspaces.showAppIcons
                     onCheckedChanged: {
                         Config.options.bar.workspaces.showAppIcons = checked;
                     }
                 }
                 ConfigSwitch {
-                    text: 'Always show numbers'
-                    checked: Config.options.bar.workspaces.alwaysShowNumbers
+                    text: Translation.tr('Tint app icons')
+                    checked: Config.options.bar.workspaces.monochromeIcons
                     onCheckedChanged: {
-                        Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                        Config.options.bar.workspaces.monochromeIcons = checked;
                     }
                 }
             }
+            ConfigSwitch {
+                text: Translation.tr('Always show numbers')
+                checked: Config.options.bar.workspaces.alwaysShowNumbers
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                }
+            }
             ConfigSpinBox {
-                text: "Workspaces shown"
+                text: Translation.tr("Workspaces shown")
                 value: Config.options.bar.workspaces.shown
                 from: 1
                 to: 30
@@ -202,7 +256,7 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: "Number show delay when pressing Super (ms)"
+                text: Translation.tr("Number show delay when pressing Super (ms)")
                 value: Config.options.bar.workspaces.showNumberDelay
                 from: 0
                 to: 1000
@@ -214,9 +268,21 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: "Weather"
+            title: Translation.tr("Tray")
+            
             ConfigSwitch {
-                text: "Enable"
+                text: Translation.tr('Tint icons')
+                checked: Config.options.bar.tray.monochromeIcons
+                onCheckedChanged: {
+                    Config.options.bar.tray.monochromeIcons = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Weather")
+            ConfigSwitch {
+                text: Translation.tr("Enable")
                 checked: Config.options.bar.weather.enable
                 onCheckedChanged: {
                     Config.options.bar.weather.enable = checked;
@@ -226,12 +292,12 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Battery"
+        title: Translation.tr("Battery")
 
         ConfigRow {
             uniform: true
             ConfigSpinBox {
-                text: "Low warning"
+                text: Translation.tr("Low warning")
                 value: Config.options.battery.low
                 from: 0
                 to: 100
@@ -241,7 +307,7 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: "Critical warning"
+                text: Translation.tr("Critical warning")
                 value: Config.options.battery.critical
                 from: 0
                 to: 100
@@ -254,17 +320,17 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
-                text: "Automatic suspend"
+                text: Translation.tr("Automatic suspend")
                 checked: Config.options.battery.automaticSuspend
                 onCheckedChanged: {
                     Config.options.battery.automaticSuspend = checked;
                 }
                 StyledToolTip {
-                    content: "Automatically suspends the system when battery is low"
+                    content: Translation.tr("Automatically suspends the system when battery is low")
                 }
             }
             ConfigSpinBox {
-                text: "Suspend at"
+                text: Translation.tr("Suspend at")
                 value: Config.options.battery.suspend
                 from: 0
                 to: 100
@@ -277,10 +343,10 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Dock"
+        title: Translation.tr("Dock")
 
         ConfigSwitch {
-            text: "Enable"
+            text: Translation.tr("Enable")
             checked: Config.options.dock.enable
             onCheckedChanged: {
                 Config.options.dock.enable = checked;
@@ -290,26 +356,47 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
-                text: "Hover to reveal"
+                text: Translation.tr("Hover to reveal")
                 checked: Config.options.dock.hoverToReveal
                 onCheckedChanged: {
                     Config.options.dock.hoverToReveal = checked;
                 }
             }
             ConfigSwitch {
-                text: "Pinned on startup"
+                text: Translation.tr("Pinned on startup")
                 checked: Config.options.dock.pinnedOnStartup
                 onCheckedChanged: {
                     Config.options.dock.pinnedOnStartup = checked;
                 }
             }
         }
+        ConfigSwitch {
+            text: Translation.tr("Tint app icons")
+            checked: Config.options.dock.monochromeIcons
+            onCheckedChanged: {
+                Config.options.dock.monochromeIcons = checked;
+            }
+        }
     }
 
     ContentSection {
-        title: "On-screen display"
+        title: Translation.tr("Sidebars")
+        ConfigSwitch {
+            text: Translation.tr('Keep right sidebar loaded')
+            checked: Config.options.sidebar.keepRightSidebarLoaded
+            onCheckedChanged: {
+                Config.options.sidebar.keepRightSidebarLoaded = checked;
+            }
+            StyledToolTip {
+                content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
+            }
+        }
+    }
+
+    ContentSection {
+        title: Translation.tr("On-screen display")
         ConfigSpinBox {
-            text: "Timeout (ms)"
+            text: Translation.tr("Timeout (ms)")
             value: Config.options.osd.timeout
             from: 100
             to: 3000
@@ -321,9 +408,16 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Overview"
+        title: Translation.tr("Overview")
+        ConfigSwitch {
+            text: Translation.tr("Enable")
+            checked: Config.options.overview.enable
+            onCheckedChanged: {
+                Config.options.overview.enable = checked;
+            }
+        }
         ConfigSpinBox {
-            text: "Scale (%)"
+            text: Translation.tr("Scale (%)")
             value: Config.options.overview.scale * 100
             from: 1
             to: 100
@@ -335,7 +429,7 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSpinBox {
-                text: "Rows"
+                text: Translation.tr("Rows")
                 value: Config.options.overview.rows
                 from: 1
                 to: 20
@@ -345,7 +439,7 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: "Columns"
+                text: Translation.tr("Columns")
                 value: Config.options.overview.columns
                 from: 1
                 to: 20
@@ -358,16 +452,16 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Screenshot tool"
+        title: Translation.tr("Screenshot tool")
 
         ConfigSwitch {
-            text: 'Show regions of potential interest'
+            text: Translation.tr('Show regions of potential interest')
             checked: Config.options.screenshotTool.showContentRegions
             onCheckedChanged: {
                 Config.options.screenshotTool.showContentRegions = checked;
             }
             StyledToolTip {
-                content: "Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used."
+                content: Translation.tr("Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.")
             }
         }        
     }

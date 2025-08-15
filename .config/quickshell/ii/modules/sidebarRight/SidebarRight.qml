@@ -1,26 +1,23 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 15
-    property string settingsQmlPath: Quickshell.configPath("settings.qml")
+    property int sidebarPadding: 12
+    property string settingsQmlPath: Quickshell.shellPath("settings.qml")
 
     PanelWindow {
         id: sidebarRoot
@@ -54,15 +51,10 @@ Scope {
 
         Loader {
             id: sidebarContentLoader
-            active: GlobalStates.sidebarRightOpen
+            active: GlobalStates.sidebarRightOpen || Config?.options.sidebar.keepRightSidebarLoaded
             anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                left: parent.left
-                topMargin: Appearance.sizes.hyprlandGapsOut
-                rightMargin: Appearance.sizes.hyprlandGapsOut
-                bottomMargin: Appearance.sizes.hyprlandGapsOut
+                fill: parent
+                margins: Appearance.sizes.hyprlandGapsOut
                 leftMargin: Appearance.sizes.elevationMargin
             }
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
@@ -90,13 +82,13 @@ Scope {
                     implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                     color: Appearance.colors.colLayer0
                     border.width: 1
-                    border.color: Appearance.m3colors.m3outlineVariant
+                    border.color: Appearance.colors.colLayer0Border
                     radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                     ColumnLayout {
-                        spacing: sidebarPadding
                         anchors.fill: parent
                         anchors.margins: sidebarPadding
+                        spacing: sidebarPadding
 
                         RowLayout {
                             Layout.fillHeight: false
@@ -105,26 +97,19 @@ Scope {
                             Layout.topMargin: 5
                             Layout.bottomMargin: 0
 
-                            Item {
-                                implicitWidth: distroIcon.width
-                                implicitHeight: distroIcon.height
-                                CustomIcon {
-                                    id: distroIcon
-                                    width: 25
-                                    height: 25
-                                    source: SystemInfo.distroIcon
-                                }
-                                ColorOverlay {
-                                    anchors.fill: distroIcon
-                                    source: distroIcon
-                                    color: Appearance.colors.colOnLayer0
-                                }
+                            CustomIcon {
+                                id: distroIcon
+                                width: 25
+                                height: 25
+                                source: SystemInfo.distroIcon
+                                colorize: true
+                                color: Appearance.colors.colOnLayer0
                             }
 
                             StyledText {
                                 font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer0
-                                text: StringUtils.format(qsTr("Uptime: {0}"), DateTime.uptime)
+                                text: Translation.tr("Up %1").arg(DateTime.uptime)
                                 textFormat: Text.MarkdownText
                             }
 
@@ -141,28 +126,28 @@ Scope {
                                         Quickshell.reload(true)
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Reload Hyprland & Quickshell")
+                                        content: Translation.tr("Reload Hyprland & Quickshell")
                                     }
                                 }
                                 QuickToggleButton {
                                     toggled: false
                                     buttonIcon: "settings"
                                     onClicked: {
-                                        Hyprland.dispatch("global quickshell:sidebarRightClose")
+                                        GlobalStates.sidebarRightOpen = false
                                         Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Settings")
+                                        content: Translation.tr("Settings")
                                     }
                                 }
                                 QuickToggleButton {
                                     toggled: false
                                     buttonIcon: "power_settings_new"
                                     onClicked: {
-                                        Hyprland.dispatch("global quickshell:sessionOpen")
+                                        GlobalStates.sessionOpen = true
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Session")
+                                        content: Translation.tr("Session")
                                     }
                                 }
                             }
@@ -179,6 +164,7 @@ Scope {
                             NightLight {}
                             GameMode {}
                             IdleInhibitor {}
+                            EasyEffectsToggle {}
                             CloudflareWarp {}
                         }
 
@@ -224,7 +210,7 @@ Scope {
 
     GlobalShortcut {
         name: "sidebarRightToggle"
-        description: qsTr("Toggles right sidebar on press")
+        description: "Toggles right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -233,7 +219,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightOpen"
-        description: qsTr("Opens right sidebar on press")
+        description: "Opens right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = true;
@@ -242,7 +228,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightClose"
-        description: qsTr("Closes right sidebar on press")
+        description: "Closes right sidebar on press"
 
         onPressed: {
             GlobalStates.sidebarRightOpen = false;

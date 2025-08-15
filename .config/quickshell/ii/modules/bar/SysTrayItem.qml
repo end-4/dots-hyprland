@@ -1,5 +1,5 @@
-import "root:/modules/common/"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -10,14 +10,13 @@ import Qt5Compat.GraphicalEffects
 MouseArea {
     id: root
 
-    required property var bar
+    property var bar: root.QsWindow.window
     required property SystemTrayItem item
     property bool targetMenuOpen: false
-    property int trayItemWidth: Appearance.font.pixelSize.larger
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
-    Layout.fillHeight: true
-    implicitWidth: trayItemWidth
+    implicitWidth: 20
+    implicitHeight: 20
     onClicked: (event) => {
         switch (event.button) {
         case Qt.LeftButton:
@@ -35,10 +34,11 @@ MouseArea {
 
         menu: root.item.menu
         anchor.window: bar
-        anchor.rect.x: root.x + bar.width
-        anchor.rect.y: root.y
+        anchor.rect.x: root.x + (Config.options.bar.vertical ? 0 : bar?.width)
+        anchor.rect.y: root.y + (Config.options.bar.vertical ? bar?.height : 0)
         anchor.rect.height: root.height
-        anchor.edges: Edges.Bottom
+        anchor.rect.width: root.width
+        anchor.edges: Config.options.bar.bottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Right)
     }
 
     IconImage {
@@ -59,12 +59,12 @@ MouseArea {
                 visible: false // There's already color overlay
                 anchors.fill: parent
                 source: trayIcon
-                desaturation: 1 // 1.0 means fully grayscale
+                desaturation: 0.8 // 1.0 means fully grayscale
             }
             ColorOverlay {
                 anchors.fill: desaturatedIcon
                 source: desaturatedIcon
-                color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.6)
+                color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.9)
             }
         }
     }

@@ -1,15 +1,17 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 
 Item {
     id: root
     property bool borderless: Config.options.bar.borderless
     property bool showDate: Config.options.bar.verbose
     implicitWidth: rowLayout.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Appearance.sizes.barHeight
 
     RowLayout {
         id: rowLayout
@@ -35,7 +37,16 @@ Item {
             color: Appearance.colors.colOnLayer1
             text: DateTime.date
         }
-
     }
 
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+
+        ClockWidgetTooltip {
+            hoverTarget: mouseArea
+        }
+    }
 }
