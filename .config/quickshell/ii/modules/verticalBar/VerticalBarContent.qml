@@ -150,7 +150,8 @@ Item { // Bar content region
         anchors.centerIn: parent
         spacing: 4
 
-        VerticalBarGroup {
+        Bar.BarGroup {
+            vertical: true
             padding: 8
             Resources {
                 Layout.fillWidth: true
@@ -162,8 +163,9 @@ Item { // Bar content region
             visible: Config.options?.bar.borderless
         }
 
-        VerticalBarGroup {
+        Bar.BarGroup {
             id: middleCenterGroup
+            vertical: true
             padding: 6
             Layout.fillHeight: true
 
@@ -187,7 +189,8 @@ Item { // Bar content region
             visible: Config.options?.bar.borderless
         }
 
-        VerticalBarGroup {
+        Bar.BarGroup {
+            vertical: true
             padding: 8
             
             VerticalClockWidget {
