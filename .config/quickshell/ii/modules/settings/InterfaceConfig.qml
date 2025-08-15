@@ -72,26 +72,53 @@ ContentPage {
     ContentSection {
         title: Translation.tr("Bar")
 
-        ConfigSelectionArray {
-            currentValue: Config.options.bar.cornerStyle
-            configOptionName: "bar.cornerStyle"
-            onSelected: newValue => {
-                Config.options.bar.cornerStyle = newValue;
-            }
-            options: [
-                {
-                    displayName: Translation.tr("Hug"),
-                    value: 0
-                },
-                {
-                    displayName: Translation.tr("Float"),
-                    value: 1
-                },
-                {
-                    displayName: Translation.tr("Plain rectangle"),
-                    value: 2
+        ConfigRow {
+            ContentSubsection {
+                title: "Corner style"
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.bar.cornerStyle
+                    configOptionName: "bar.cornerStyle"
+                    onSelected: newValue => {
+                        Config.options.bar.cornerStyle = newValue; // Update local copy
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Hug"),
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Float"),
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Plain rectangle"),
+                            value: 2
+                        }
+                    ]
                 }
-            ]
+            }
+
+            ContentSubsection {
+                title: "Bar layout"
+                ConfigSelectionArray {
+                    currentValue: Config.options.bar.vertical
+                    configOptionName: "bar.vertical"
+                    onSelected: newValue => {
+                        Config.options.bar.vertical = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Horizontal"),
+                            value: false
+                        },
+                        {
+                            displayName: Translation.tr("Vertical"),
+                            value: true
+                        },
+                    ]
+                }
+            }
         }
 
         ContentSubsection {
@@ -106,7 +133,7 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    text: Translation.tr("Place at the bottom")
+                    text: Translation.tr("Place at the bottom/right")
                     checked: Config.options.bar.bottom
                     onCheckedChanged: {
                         Config.options.bar.bottom = checked;

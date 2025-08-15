@@ -22,6 +22,7 @@ import "./modules/screenCorners/"
 import "./modules/session/"
 import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
+import "./modules/verticalBar/"
 
 import QtQuick
 import QtQuick.Window
@@ -47,6 +48,7 @@ ShellRoot {
     property bool enableSession: true
     property bool enableSidebarLeft: true
     property bool enableSidebarRight: true
+    property bool enableVerticalBar: true
 
     // Force initialization of some singletons
     Component.onCompleted: {
@@ -56,7 +58,7 @@ ShellRoot {
         MaterialThemeLoader.reapplyTheme()
     }
 
-    LazyLoader { active: enableBar; component: Bar {} }
+    LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
     LazyLoader { active: enableBackground; component: Background {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
     LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
@@ -72,5 +74,6 @@ ShellRoot {
     LazyLoader { active: enableSession; component: Session {} }
     LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
     LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
+    LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
 }
 
