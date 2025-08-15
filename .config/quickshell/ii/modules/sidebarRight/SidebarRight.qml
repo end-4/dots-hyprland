@@ -166,6 +166,7 @@ Scope {
                             IdleInhibitor {}
                             EasyEffectsToggle {}
                             CloudflareWarp {}
+                            VPNToggle {}
                         }
 
                         // Center widget group
