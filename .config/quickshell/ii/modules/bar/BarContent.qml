@@ -54,6 +54,7 @@ Item { // Bar content region
         id: barLeftSideMouseArea
         anchors.left: parent.left
         implicitHeight: Appearance.sizes.baseBarHeight
+        implicitWidth: leftSectionRowLayout.implicitWidth
         height: Appearance.sizes.barHeight
         width: (root.width - middleSection.width) / 2
         property bool hovered: false
@@ -75,6 +76,7 @@ Item { // Bar content region
                 GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
             }
         }
+
         // Scroll to change brightness
         WheelHandler {
             onWheel: event => {
@@ -99,66 +101,61 @@ Item { // Bar content region
                 }
             }
         }
-        Item {
-            // Left section
-            anchors.fill: parent
-            implicitHeight: leftSectionRowLayout.implicitHeight
-            implicitWidth: leftSectionRowLayout.implicitWidth
+        
+        // Visual content
+        ScrollHint {
+            reveal: barLeftSideMouseArea.hovered
+            icon: "light_mode"
+            tooltipText: Translation.tr("Scroll to change brightness")
+            side: "left"
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
-            ScrollHint {
-                reveal: barLeftSideMouseArea.hovered
-                icon: "light_mode"
-                tooltipText: Translation.tr("Scroll to change brightness")
-                side: "left"
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
+        RowLayout {
+            id: leftSectionRowLayout
+            anchors.fill: parent
+            spacing: 10
+
+            RippleButton {
+                // Left sidebar button
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                Layout.leftMargin: Appearance.rounding.screenRounding
+                Layout.fillWidth: false
+                property real buttonPadding: 5
+                implicitWidth: distroIcon.width + buttonPadding * 2
+                implicitHeight: distroIcon.height + buttonPadding * 2
+
+                buttonRadius: Appearance.rounding.full
+                colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                colBackgroundHover: Appearance.colors.colLayer1Hover
+                colRipple: Appearance.colors.colLayer1Active
+                colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                toggled: GlobalStates.sidebarLeftOpen
+                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+
+                onPressed: {
+                    GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+                }
+
+                CustomIcon {
+                    id: distroIcon
+                    anchors.centerIn: parent
+                    width: 19.5
+                    height: 19.5
+                    source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
+                    colorize: true
+                    color: Appearance.colors.colOnLayer0
+                }
             }
 
-            RowLayout { // Content
-                id: leftSectionRowLayout
-                anchors.fill: parent
-                spacing: 10
-
-                RippleButton {
-                    // Left sidebar button
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    Layout.leftMargin: Appearance.rounding.screenRounding
-                    Layout.fillWidth: false
-                    property real buttonPadding: 5
-                    implicitWidth: distroIcon.width + buttonPadding * 2
-                    implicitHeight: distroIcon.height + buttonPadding * 2
-
-                    buttonRadius: Appearance.rounding.full
-                    colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                    colBackgroundHover: Appearance.colors.colLayer1Hover
-                    colRipple: Appearance.colors.colLayer1Active
-                    colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                    colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                    colRippleToggled: Appearance.colors.colSecondaryContainerActive
-                    toggled: GlobalStates.sidebarLeftOpen
-                    property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
-
-                    onPressed: {
-                        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-                    }
-
-                    CustomIcon {
-                        id: distroIcon
-                        anchors.centerIn: parent
-                        width: 19.5
-                        height: 19.5
-                        source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
-                        colorize: true
-                        color: Appearance.colors.colOnLayer0
-                    }
-                }
-
-                ActiveWindow {
-                    visible: root.useShortenedForm === 0
-                    Layout.rightMargin: Appearance.rounding.screenRounding
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
+            ActiveWindow {
+                visible: root.useShortenedForm === 0
+                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
     }
@@ -171,7 +168,7 @@ Item { // Bar content region
         BarGroup {
             id: leftCenterGroup
             Layout.preferredWidth: root.centerSideModuleWidth
-            Layout.fillHeight: true
+            Layout.fillHeight: false
 
             Resources {
                 alwaysShowAllResources: root.useShortenedForm === 2
@@ -252,6 +249,7 @@ Item { // Bar content region
         id: barRightSideMouseArea
 
         anchors.right: parent.right
+        implicitWidth: rightSectionRowLayout.implicitWidth
         implicitHeight: Appearance.sizes.baseBarHeight
         height: Appearance.sizes.barHeight
         width: (root.width - middleSection.width) / 2
@@ -278,6 +276,7 @@ Item { // Bar content region
                 MprisController.activePlayer.next();
             }
         }
+
         // Scroll to change volume
         WheelHandler {
             onWheel: event => {
@@ -305,138 +304,125 @@ Item { // Bar content region
             }
         }
 
-        Item {
-            anchors.fill: parent
-            implicitHeight: rightSectionRowLayout.implicitHeight
-            implicitWidth: rightSectionRowLayout.implicitWidth
+        // Visual content
+        ScrollHint {
+            reveal: barRightSideMouseArea.hovered
+            icon: "volume_up"
+            tooltipText: Translation.tr("Scroll to change volume")
+            side: "right"
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
-            ScrollHint {
-                reveal: barRightSideMouseArea.hovered
-                icon: "volume_up"
-                tooltipText: Translation.tr("Scroll to change volume")
-                side: "right"
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
+        RowLayout {
+            id: rightSectionRowLayout
+            anchors.fill: parent
+            spacing: 5
+            layoutDirection: Qt.RightToLeft
+
+            RippleButton { // Right sidebar button
+                id: rightSidebarButton
+
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.fillWidth: false
+
+                implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
+                implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+
+                buttonRadius: Appearance.rounding.full
+                colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                colBackgroundHover: Appearance.colors.colLayer1Hover
+                colRipple: Appearance.colors.colLayer1Active
+                colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                toggled: GlobalStates.sidebarRightOpen
+                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+
+                Behavior on colText {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
+
+                onPressed: {
+                    GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+                }
+
+                RowLayout {
+                    id: indicatorsRowLayout
+                    anchors.centerIn: parent
+                    property real realSpacing: 15
+                    spacing: 0
+
+                    Revealer {
+                        reveal: Audio.sink?.audio?.muted ?? false
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        MaterialSymbol {
+                            text: "volume_off"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                        }
+                    }
+                    Revealer {
+                        reveal: Audio.source?.audio?.muted ?? false
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        MaterialSymbol {
+                            text: "mic_off"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                        }
+                    }
+                    Loader {
+                        active: HyprlandXkb.layoutCodes.length > 1
+                        visible: active
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                        sourceComponent: StyledText {
+                            text: HyprlandXkb.currentLayoutCode
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: rightSidebarButton.colText
+                        }
+                    }
+                    MaterialSymbol {
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                        text: Network.materialSymbol
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                    }
+                    MaterialSymbol {
+                        text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                    }
+                }
             }
 
-            RowLayout {
-                id: rightSectionRowLayout
-                anchors.fill: parent
-                spacing: 5
-                layoutDirection: Qt.RightToLeft
+            SysTray {
+                visible: root.useShortenedForm === 0
+                Layout.fillWidth: false
+                Layout.fillHeight: true
+            }
 
-                RippleButton { // Right sidebar button
-                    id: rightSidebarButton
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
 
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    Layout.rightMargin: Appearance.rounding.screenRounding
-                    Layout.fillWidth: false
-
-                    implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
-                    implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
-
-                    buttonRadius: Appearance.rounding.full
-                    colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                    colBackgroundHover: Appearance.colors.colLayer1Hover
-                    colRipple: Appearance.colors.colLayer1Active
-                    colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                    colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                    colRippleToggled: Appearance.colors.colSecondaryContainerActive
-                    toggled: GlobalStates.sidebarRightOpen
-                    property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
-
-                    Behavior on colText {
-                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                    }
-
-                    onPressed: {
-                        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-                    }
-
-                    RowLayout {
-                        id: indicatorsRowLayout
-                        anchors.centerIn: parent
-                        property real realSpacing: 15
-                        spacing: 0
-
-                        Revealer {
-                            reveal: Audio.sink?.audio?.muted ?? false
-                            Layout.fillHeight: true
-                            Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                            Behavior on Layout.rightMargin {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
-                            }
-                            MaterialSymbol {
-                                text: "volume_off"
-                                iconSize: Appearance.font.pixelSize.larger
-                                color: rightSidebarButton.colText
-                            }
-                        }
-                        Revealer {
-                            reveal: Audio.source?.audio?.muted ?? false
-                            Layout.fillHeight: true
-                            Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                            Behavior on Layout.rightMargin {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
-                            }
-                            MaterialSymbol {
-                                text: "mic_off"
-                                iconSize: Appearance.font.pixelSize.larger
-                                color: rightSidebarButton.colText
-                            }
-                        }
-                        Loader {
-                            active: HyprlandXkb.layoutCodes.length > 1
-                            visible: active
-                            Layout.rightMargin: indicatorsRowLayout.realSpacing
-                            sourceComponent: StyledText {
-                                text: HyprlandXkb.currentLayoutCode
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                color: rightSidebarButton.colText
-                            }
-                        }
-                        MaterialSymbol {
-                            Layout.rightMargin: indicatorsRowLayout.realSpacing
-                            text: Network.materialSymbol
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-                        }
-                        MaterialSymbol {
-                            text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-                        }
-                    }
-                }
-
-                SysTray {
-                    visible: root.useShortenedForm === 0
-                    Layout.fillWidth: false
-                    Layout.fillHeight: true
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                // Weather
-                Loader {
-                    Layout.leftMargin: 8
-                    Layout.fillHeight: true
-                    active: Config.options.bar.weather.enable
-                    sourceComponent: BarGroup {
-                        implicitHeight: Appearance.sizes.baseBarHeight
-                        WeatherBar {}
-                    }
+            // Weather
+            Loader {
+                Layout.leftMargin: 8
+                Layout.fillHeight: true
+                active: Config.options.bar.weather.enable
+                sourceComponent: BarGroup {
+                    implicitHeight: Appearance.sizes.baseBarHeight
+                    WeatherBar {}
                 }
             }
         }
