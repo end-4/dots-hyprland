@@ -1,0 +1,54 @@
+name: Issue
+description: for reporting any issue
+labels: ["ISSUE"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Welcome to submit a new issue!**\n- It takes only 3 steps, so please be patient :)\n- Tip: If your issue is not a feature request, and it does not fit into the following form, for example \"how can I edit some widget\", please use [Discussions](https://github.com/end-4/dots-hyprland/discussions) instead."
+  - type: checkboxes
+    attributes:
+      label: "Step 1. Before you submit"
+      description: "Hint: The 2nd and 3rd checkbox is **not** forcely required as you may have failed to do so."
+      options:
+        - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/) pages.
+          required: true
+        - label: I've successfully updated to the latest version following the [guidance](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#updating).
+          required: false # Not required cuz user may have failed to do so
+        - label: I've successfully updated the system packages to the latest.
+          required: false # Not required cuz user may have failed to do so
+        - label: I've ticked the checkboxes without reading their contents
+          required: false # Obviously
+
+  - type: textarea
+    attributes:
+      label: "Step 2. Quick diagnose info"
+      description: "Run `./diagnose` inside the repo, and paste the result (which is also saved as file `./diagnose.result`) below."
+      value: "<details><summary>Quick diagnose</summary>\n\n```\n<!-- Run `./diagnose` inside the repo, and paste the result here! -->\n```\n\n</details>"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Tips for the following Step 3**
+        1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
+        2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
+           - Bar and widgets not showing? run `pkill agsv1; agsv1` for logs.
+           - Installation failed? Run installation again for logs.
+           - You may use more code blocks when needed.
+        3. In case you are confused, the `<details>`, `<summary>`, `</summary>`, `</details>` are HTML tags for folding the logs (typically very long) inside. Please do not touch them (unless you know what you are doing).
+        4. If the logs are suuuuuuper long, consider using an online pastebin service instead.
+
+  - type: textarea
+    attributes:
+      label: "Step 3. Describe the issue"
+      value: "\n<!-- Firsly describe your issue here! -->\n\n<details><summary>Logs</summary>\n\n```\n<!-- Put your log content here!-->\n```\n\n</details>"
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Reminder
+      options:
+        - label: I agree that it's usually impossible for others to help me without my logs.
+          required: true

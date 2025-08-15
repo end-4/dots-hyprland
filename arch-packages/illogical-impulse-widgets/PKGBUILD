@@ -1,19 +1,19 @@
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=1
+pkgrel=3
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	dart-sass
-	python-pywayland
-	python-psutil
-	hypridle-git
- 	hyprutils-git
-	hyprlock-git
+	fuzzel
+	glib2 # for `gsettings` it seems?
+	hypridle
+    hyprutils
+	hyprlock
+	hyprpicker
+	nm-connection-editor
+	quickshell-git
+	swww
+	translate-shell
 	wlogout
-	wl-clipboard
-	hyprpicker-git
-	anyrun-git
 )
-

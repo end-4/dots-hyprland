@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# This is NOT a script for execution, but for loading functions, so NOT need execution permission.
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
 # The script that use this file should have two lines on its top as follows:
@@ -39,8 +38,7 @@ function x() {
   while [ $cmdstatus == 1 ] ;do
     echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed."
     echo -e "You may need to resolve the problem manually BEFORE repeating this command."
-    echo -e "[Tip] If a certain package is failing to install, try installing it separately in another terminal."
-    echo -e "[Tip] If a package is conflicting with its -git version, in another terminal, install the -git one.\e[0m"
+    echo -e "[Tip] If a certain package is failing to install, try installing it separately in another terminal.\e[0m"
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
     echo "  i = Ignore this error and continue (your setup might not work correctly)"

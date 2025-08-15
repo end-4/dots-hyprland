@@ -1,0 +1,15 @@
+pkgname=illogical-impulse-kde
+pkgver=1.0
+pkgrel=2
+pkgdesc='Illogical Impulse KDE Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	bluedevil
+	gnome-keyring
+	networkmanager
+	plasma-nm
+	polkit-kde-agent
+ 	dolphin
+	systemsettings
+)

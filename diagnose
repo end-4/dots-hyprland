@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+#
+# This script is for quickly generate helpful info
+#
+
+cd "$(dirname "$0")";export base="$(pwd)"
+output_file=diagnose.result;rm $output_file
+export LANG=C;export LC_ALL=C
+case $(whoami) in
+  root)echo -e "\e[31m[$0]: This script is NOT to be executed with sudo or as root. Aborting...\e[0m";exit 1;;
+esac
+
+
+x() { ii_exec "$@" 2>&1 | tee -a $output_file ; }
+e() { ii_box "$@" | tee -a $output_file ; }
+ii_box() {
+  length=$(echo "$1" | wc -L);total_width=$((length + 2))
+  #line=$(printf "═%.0s" $(seq 1 $total_width))
+  #border_up="╔${line}╗";border_down="╚${line}╝"
+  #border_vertical="║"
+  line=$(printf "=%.0s" $(seq 1 $total_width))
+  border_up="/${line}\\";border_down="\\${line}/"
+  border_vertical="|"
+  echo -e "\n$border_up"
+  echo "$border_vertical $1 $border_vertical"
+  echo "$border_down"
+}
+ii_exec() {
+  printf "\n[===diagnose===] $*\n"
+  "$@"
+  err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
+}
+ii_check_distro() {
+  lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
+}
+ii_check_venv() {
+  source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+  which python
+  deactivate
+}
+
+e "Checking git repo info"
+x git remote get-url origin
+x git rev-parse HEAD
+
+e "Checking distro"
+x ii_check_distro 
+
+e "Checking variables"
+x declare -p XDG_CACHE_HOME # ~/.cache
+x declare -p XDG_CONFIG_HOME # ~/.config
+x declare -p XDG_DATA_HOME # ~/.local/share
+x declare -p XDG_STATE_HOME # ~/.local/state
+x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/quickshell/.venv
+
+e "Checking directories/files"
+x ls -l ~/.local/state/quickshell/.venv
+#x cat ~/.config/ags/
+
+#e "Checking command existence"
+#commands=(yay pacman zypper apt dnf yum)
+commands+=(ags agsv1)
+#commands+=(Hyprland hypr{ctl,idle,lock,picker})
+#commands+=(uv)
+#for i in "${commands[@]}";do x command -v $i;done
+
+e "Checking versions"
+x Hyprland --version
+
+e "Finished. Output saved as \"$output_file\"."
+if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
+echo "(Optional) Do you agree to upload the file \"$output_file\" to the online pastebin (https://0x0.st)?"
+echo "Notes:"
+echo "1. It is a public service and the logfile will be expired in 15 days."
+echo "2. You should have a look at the content of \"$output_file\" before agreeing to upload it."
+echo "3. Only agree when necessary, typically when you are creating an issue and not able to upload the \"diagnose.result\" file there or copy-paste the output directly."
+read -p "y=yes, n=no (default) ====> " p
+case $p in
+  [yY]) echo "OK, uploading..."
+        curl -F'file=@diagnose.result' -Fexpires=360 https://0x0.st && \
+          echo "Uploaded. Please attach the URL above when asking for help."
+        ;;
+  *) echo "Uploading aborted.";;
+esac
