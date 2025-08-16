@@ -1,29 +1,14 @@
-#!/bin/bash
-##This script is kinda an improvement for the workspace_action script of end4. This script allows for relative workspace keybind. The next and prev workspaces allow for relative-
-##Workspace support, using the second arg. while the first arg is "ch" or "mv"
-
-##Example Usage: bash workspace_action ch next
-
-curr_workspace="$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .activeWorkspace.name')"
-next_workspace="$(echo $curr_workspace +1 | bc)" 
-prev_workspace="$(echo $curr_workspace -1 | bc)"
-
-if [ "$1" == "ch" ]; then
-  if [ "$2" == "next" ]; then
-    hyprctl dispatch workspace $next_workspace
-  elif [ "$2" == "prev" ]; then
-    hyprctl dispatch workspace $prev_workspace
-  else 
-    hyprctl dispatch workspace $2
-  fi 
-elif [ "$1" == "mv" ]; then
-   if [ "$2" == "next" ]; then
-    hyprctl dispatch movetoworkspace $next_workspace
-   elif [ "$2" == "prev" ]; then
-    hyprctl dispatch movetoworkspace $prev_workspace
-   else 
-    hyprctl dispatch movetoworkspace $2
-   fi 
-else
-  echo "Valid Options are: mv and ch"
+#!/usr/bin/env bash
+curr_workspace="$(hyprctl monitors -j | jq -r ".[].activeWorkspace.id")" ##parses json output of hyprctl monitors
+dispatcher="$1"; shift ##Any dispatcher that hyprland supports, the shift the arguments such that $2 is not $1
+if [[ "$1" == *"+"* || "$1" == *"-"* ]]; then ##pattern matching
+  hyprctl dispatch "${dispatcher}" "$1" ##$1 = workspace id since we shifted earlier.
+elif [[ "$1" =~ ^[0-9] ]]; then ##Regex matching
+  target_workspace=$(((($curr_workspace - 1) / 10 ) * 10 + $1)) ##decreases curr_workspace by 1, then floor division by 10. then multiplica
+                                                                ##ion by 10, and then adding $1. for eg, if $curr_workspace=24, and $1 = 6,
+                                                                ##((24-1)/10)*10 + 6
+                                                                ##(23 / 10) * 10 + 6
+                                                                ##2*10+6
+                                                                ##26
+  hyprctl dispatch "${dispatcher}" "${target_workspace}"
 fi
