@@ -35,6 +35,8 @@
      - If for whatever reason the keybind list widget does not work, here's an image:
      <img width="1412" height="828" alt="image" src="https://github.com/user-attachments/assets/8f7bd216-9e03-47e3-8709-0008772a4133" />
 
+   - **Common fixes**:
+     - **Terminal colors not loading/invisible text**: If your terminal text appears invisible or colors aren't applying from wallpaper theming, this may be due to large wallpaper images failing color generation. Go to Settings → Advanced → Max image pixels and increase the limit for your wallpaper size. You can set to 0 for unlimited, but be careful with untrusted images as very large files could use excessive memory.
 
 </details>
 

@@ -41,5 +41,22 @@ ContentPage {
             }
 
         }
+        
+        ConfigRow {
+            uniform: true
+            ConfigSpinBox {
+                text: Translation.tr("Max image pixels (millions)")
+                value: Math.round((Config.options.appearance.wallpaperTheming.maxImagePixels || 200000000) / 1000000)
+                onValueChanged: {
+                    Config.options.appearance.wallpaperTheming.maxImagePixels = value === 0 ? 0 : value * 1000000;
+                }
+                from: 0
+                to: 1000
+                stepSize: 50
+                StyledToolTip {
+                    content: Translation.tr("Maximum pixels allowed for wallpaper images. 0 = unlimited. Default 200MP for security.")
+                }
+            }
+        }
     }
 }

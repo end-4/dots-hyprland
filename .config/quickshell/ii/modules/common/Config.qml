@@ -91,6 +91,7 @@ Singleton {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true
                     property bool enableTerminal: true
+                    property int maxImagePixels: 200000000 // ~200MP limit, set to 0 for unlimited
                 }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
