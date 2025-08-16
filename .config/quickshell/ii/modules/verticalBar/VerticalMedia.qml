@@ -8,6 +8,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Mpris
 
+import "../bar" as Bar
+
 MouseArea {
     id: root
     property bool borderless: Config.options.bar.borderless
@@ -64,7 +66,7 @@ MouseArea {
         }
     }
 
-    StyledPopup {
+    Bar.StyledPopup {
         hoverTarget: root
         active: GlobalStates.mediaControlsOpen ? false : root.containsMouse
 

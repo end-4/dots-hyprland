@@ -5,6 +5,7 @@ import qs.modules.common.widgets
 
 import QtQuick
 import QtQuick.Layouts
+import "../"
 
 StyledPopup {
     id: root
