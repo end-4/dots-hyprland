@@ -153,6 +153,10 @@ Item { // Bar content region
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }
+            VerticalMedia {
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+            }
         }
 
         HorizontalBarSeparator {
