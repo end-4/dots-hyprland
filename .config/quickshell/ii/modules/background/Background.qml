@@ -242,6 +242,20 @@ Variants {
                     styleColor: Appearance.colors.colShadow
                     text: DateTime.date
                 }
+                StyledText {
+                    Layout.fillWidth: true
+                    Layout.topMargin: -5
+                    horizontalAlignment: bgRoot.textHorizontalAlignment
+                    font {
+                        family: Appearance.font.family.expressive
+                        pixelSize: 20
+                        weight: Font.DemiBold
+                    }
+                    color: bgRoot.colText
+                    style: Text.Raised
+                    styleColor: Appearance.colors.colShadow
+                    text: Config.options.background.mantra
+                }
             }
 
             RowLayout {
