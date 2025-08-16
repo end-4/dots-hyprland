@@ -243,8 +243,6 @@ Variants {
                     text: DateTime.date
                 }
                 StyledText {
-                    Layout.fillWidth: true
-                    Layout.topMargin: -5
                     horizontalAlignment: bgRoot.textHorizontalAlignment
                     font {
                         family: Appearance.font.family.expressive
@@ -253,6 +251,9 @@ Variants {
                     }
                     color: bgRoot.colText
                     style: Text.Raised
+                    visible: {
+                        return (Config.options.background.mantra !== "")
+                    }
                     styleColor: Appearance.colors.colShadow
                     text: Config.options.background.mantra
                 }
