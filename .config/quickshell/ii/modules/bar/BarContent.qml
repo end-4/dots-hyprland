@@ -269,8 +269,6 @@ Item { // Bar content region
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            } else if (event.button === Qt.RightButton) {
-                MprisController.activePlayer.next();
             }
         }
 
@@ -417,8 +415,8 @@ Item { // Bar content region
                 Layout.leftMargin: 8
                 Layout.fillHeight: true
                 active: Config.options.bar.weather.enable
+
                 sourceComponent: BarGroup {
-                    implicitHeight: Appearance.sizes.baseBarHeight
                     WeatherBar {}
                 }
             }

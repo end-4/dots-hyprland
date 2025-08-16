@@ -253,8 +253,6 @@ Item { // Bar content region
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            } else if (event.button === Qt.RightButton) {
-                MprisController.activePlayer.next();
             }
         }
         // Scroll to change volume
