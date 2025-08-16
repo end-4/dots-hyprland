@@ -364,6 +364,17 @@ Item { // Bar content region
                     WeatherBar {}
                 }
             }
+
+            // Network Speed
+            Loader {
+                Layout.leftMargin: 8
+                Layout.fillHeight: true
+                active: Config.options.bar.networkSpeed.enable
+                sourceComponent: BarGroup {
+                    implicitHeight: Appearance.sizes.baseBarHeight
+                    NetworkSpeed {}
+                }
+            }
         }
     }
 }
