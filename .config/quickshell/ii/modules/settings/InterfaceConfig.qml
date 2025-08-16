@@ -269,7 +269,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Tray")
-            
+
             ConfigSwitch {
                 text: Translation.tr('Tint icons')
                 checked: Config.options.bar.tray.monochromeIcons
@@ -286,6 +286,17 @@ ContentPage {
                 checked: Config.options.bar.weather.enable
                 onCheckedChanged: {
                     Config.options.bar.weather.enable = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Network Speed")
+            ConfigSwitch {
+                text: Translation.tr("Enable")
+                checked: Config.options.bar.networkSpeed.enable
+                onCheckedChanged: {
+                    Config.options.bar.networkSpeed.enable = checked;
                 }
             }
         }
@@ -463,6 +474,6 @@ ContentPage {
             StyledToolTip {
                 content: Translation.tr("Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.")
             }
-        }        
+        }
     }
 }

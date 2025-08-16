@@ -174,6 +174,9 @@ Singleton {
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
+                property JsonObject networkSpeed: JsonObject {
+                    property bool enable: false
+                }
             }
 
             property JsonObject battery: JsonObject {

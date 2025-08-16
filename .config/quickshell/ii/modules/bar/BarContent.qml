@@ -98,7 +98,7 @@ Item { // Bar content region
                 }
             }
         }
-        
+
         // Visual content
         ScrollHint {
             reveal: barLeftSideMouseArea.hovered
@@ -418,6 +418,17 @@ Item { // Bar content region
 
                 sourceComponent: BarGroup {
                     WeatherBar {}
+                }
+            }
+
+            // Network Speed
+            Loader {
+                Layout.leftMargin: 8
+                Layout.fillHeight: true
+                active: Config.options.bar.networkSpeed.enable
+                sourceComponent: BarGroup {
+                    implicitHeight: Appearance.sizes.baseBarHeight
+                    NetworkSpeed {}
                 }
             }
         }
