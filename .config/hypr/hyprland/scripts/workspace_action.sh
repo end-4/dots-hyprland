@@ -5,6 +5,7 @@ shift ##Any dispatcher that hyprland supports, the shift shifts the target such 
 
 if [[ -z "${dispatcher}" || "${dispatcher}" == "--help" || "${dispatcher}" == "-h" || -z "$1" ]]; then
   echo "Usage: $0 <dispatcher> <target>"
+  exit 1
 fi
 if [[ "$1" == *"+"* || "$1" == *"-"* ]]; then ##pattern matching (works with r+1 and +1 only aswell)
   hyprctl dispatch "${dispatcher}" "$1" ##$1 = workspace id since we shifted earlier.
@@ -18,4 +19,5 @@ elif [[ "$1" =~ ^[0-9]+$ ]]; then ##Regex matching
   hyprctl dispatch "${dispatcher}" "${target_workspace}"
 else
  echo "Invalid target."
+ exit 1
 fi
