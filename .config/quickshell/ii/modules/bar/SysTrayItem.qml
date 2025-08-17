@@ -13,11 +13,10 @@ MouseArea {
     property var bar: root.QsWindow.window
     required property SystemTrayItem item
     property bool targetMenuOpen: false
-    property int trayItemWidth: Appearance.font.pixelSize.larger
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
-    Layout.fillHeight: true
-    implicitWidth: trayItemWidth
+    implicitWidth: 20
+    implicitHeight: 20
     onClicked: (event) => {
         switch (event.button) {
         case Qt.LeftButton:
@@ -35,10 +34,11 @@ MouseArea {
 
         menu: root.item.menu
         anchor.window: bar
-        anchor.rect.x: root.x + bar.width
-        anchor.rect.y: root.y
+        anchor.rect.x: root.x + (Config.options.bar.vertical ? 0 : bar?.width)
+        anchor.rect.y: root.y + (Config.options.bar.vertical ? bar?.height : 0)
         anchor.rect.height: root.height
-        anchor.edges: Edges.Bottom
+        anchor.rect.width: root.width
+        anchor.edges: Config.options.bar.bottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Right)
     }
 
     IconImage {

@@ -21,6 +21,7 @@ ApiStrategy {
                 }),
             ],
             "stream": true,
+            "tools": tools,
             "temperature": temperature,
         };
         return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
@@ -36,6 +37,8 @@ ApiStrategy {
         if (cleanData.startsWith("data:")) {
             cleanData = cleanData.slice(5).trim();
         }
+
+        // console.log("[AI] OpenAI: Data:", cleanData);
         
         // Handle special cases
         if (!cleanData || cleanData.startsWith(":")) return {};

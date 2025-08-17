@@ -3,6 +3,7 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
+import "./../bar" as Bar
 
 MouseArea {
     id: root
@@ -13,38 +14,42 @@ MouseArea {
     readonly property real percentage: Battery.percentage
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
 
-    implicitWidth: batteryProgress.implicitWidth
-    implicitHeight: Appearance.sizes.barHeight
-
+    implicitHeight: batteryProgress.implicitHeight
     hoverEnabled: true
 
     ClippedProgressBar {
         id: batteryProgress
         anchors.centerIn: parent
+        vertical: true
+        valueBarWidth: 21
+        valueBarHeight: 40
         value: percentage
         highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
 
-        Item {
+        font {
+            pixelSize: text.length > 2 ? 11 : 13
+            weight: text.length > 2 ? Font.Medium : Font.DemiBold
+        }
+
+        textMask: Item {
             anchors.centerIn: parent
             width: batteryProgress.valueBarWidth
             height: batteryProgress.valueBarHeight
 
-            RowLayout {
+            ColumnLayout {
                 anchors.centerIn: parent
                 spacing: 0
 
                 MaterialSymbol {
                     id: boltIcon
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.leftMargin: -2
-                    Layout.rightMargin: -2
+                    Layout.alignment: Qt.AlignHCenter
                     fill: 1
-                    text: "bolt"
-                    iconSize: Appearance.font.pixelSize.smaller
-                    visible: isCharging && percentage < 1 // TODO: animation
+                    text: isCharging ? "bolt" : "battery_android_full"
+                    iconSize: Appearance.font.pixelSize.normal
+                    visible: percentage < 1
                 }
                 StyledText {
-                    Layout.alignment: Qt.AlignVCenter
+                    Layout.alignment: Qt.AlignHCenter
                     font: batteryProgress.font
                     text: batteryProgress.text
                 }
@@ -52,7 +57,7 @@ MouseArea {
         }
     }
 
-    BatteryPopup {
+    Bar.BatteryPopup {
         id: batteryPopup
         hoverTarget: root
     }

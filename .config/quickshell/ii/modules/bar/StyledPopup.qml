@@ -17,9 +17,10 @@ LazyLoader {
         id: popupWindow
         color: "transparent"
 
-        anchors.left: true
-        anchors.top: !Config.options.bar.bottom
-        anchors.bottom: Config.options.bar.bottom
+        anchors.left: !Config.options.bar.vertical || (Config.options.bar.vertical && !Config.options.bar.bottom)
+        anchors.right: Config.options.bar.vertical && Config.options.bar.bottom
+        anchors.top: Config.options.bar.vertical || (!Config.options.bar.vertical && !Config.options.bar.bottom)
+        anchors.bottom: !Config.options.bar.vertical && Config.options.bar.bottom
 
         implicitWidth: popupBackground.implicitWidth + Appearance.sizes.hyprlandGapsOut * 2
         implicitHeight: popupBackground.implicitHeight + Appearance.sizes.hyprlandGapsOut * 2
@@ -27,12 +28,22 @@ LazyLoader {
         exclusionMode: ExclusionMode.Ignore
         exclusiveZone: 0
         margins {
-            left: root.QsWindow?.mapFromItem(
-                root.hoverTarget, 
-                (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
-                ).x
-            top: Config?.options.bar.bottom ? 0 : Appearance.sizes.barHeight
-            bottom: Config?.options.bar.bottom ? Appearance.sizes.barHeight : 0
+            left: {
+                if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
+                    root.hoverTarget, 
+                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
+                ).x;
+                return Appearance.sizes.barHeight
+            }
+            top: {
+                if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
+                return root.QsWindow?.mapFromItem(
+                    root.hoverTarget, 
+                    (root.hoverTarget.height - popupBackground.implicitHeight) / 2, 0
+                ).y;
+            }
+            right: Appearance.sizes.barHeight
+            bottom: Appearance.sizes.barHeight
         }
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
