@@ -21,7 +21,7 @@ Singleton {
     // Supported image extensions. Videos are intentionally excluded for now
     // to keep the overview lightweight.
     readonly property list<string> extensions: [
-        "jpg", "jpeg", "png", "webp", "avif", "bmp"
+        "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
     ]
 
     // Resulting list of absolute file paths (without file:// prefix)
