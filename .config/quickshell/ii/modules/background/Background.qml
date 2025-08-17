@@ -251,9 +251,7 @@ Variants {
                     }
                     color: bgRoot.colText
                     style: Text.Raised
-                    visible: {
-                        return (Config.options.background.mantra !== "")
-                    }
+                    visible: Config.options.background.mantra !== ""
                     styleColor: Appearance.colors.colShadow
                     text: Config.options.background.mantra
                 }
