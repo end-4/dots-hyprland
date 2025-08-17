@@ -45,57 +45,22 @@ Item { // Bar content region
         border.color: Appearance.colors.colLayer0Border
     }
 
-    MouseArea { // Top section | scroll to change brightness
+    FocusedScrollMouseArea { // Top section | scroll to change brightness
         id: barTopSectionMouseArea
         anchors.top: parent.top
         implicitHeight: topSectionColumnLayout.implicitHeight
         implicitWidth: Appearance.sizes.baseVerticalBarWidth
         height: (root.height - middleSection.height) / 2
         width: Appearance.sizes.verticalBarWidth
-        property bool hovered: false
-        property real lastScrollX: 0
-        property real lastScrollY: 0
-        property bool trackingScroll: false
-        acceptedButtons: Qt.LeftButton
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onEntered: event => {
-            barTopSectionMouseArea.hovered = true;
-        }
-        onExited: event => {
-            barTopSectionMouseArea.hovered = false;
-            barTopSectionMouseArea.trackingScroll = false;
-        }
+
+        onScrollDown: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05)
+        onScrollUp: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05)
+        onMovedAway: GlobalStates.osdBrightnessOpen = false
         onPressed: event => {
-            if (event.button === Qt.LeftButton) {
+            if (event.button === Qt.LeftButton)
                 GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-            }
         }
-        // Scroll to change brightness
-        WheelHandler {
-            onWheel: event => {
-                if (event.angleDelta.y < 0)
-                    root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05);
-                else if (event.angleDelta.y > 0)
-                    root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05);
-                // Store the mouse position and start tracking
-                barTopSectionMouseArea.lastScrollX = event.x;
-                barTopSectionMouseArea.lastScrollY = event.y;
-                barTopSectionMouseArea.trackingScroll = true;
-            }
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        }
-        onPositionChanged: mouse => {
-            if (barTopSectionMouseArea.trackingScroll) {
-                const dx = mouse.x - barTopSectionMouseArea.lastScrollX;
-                const dy = mouse.y - barTopSectionMouseArea.lastScrollY;
-                if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                    GlobalStates.osdBrightnessOpen = false;
-                    barTopSectionMouseArea.trackingScroll = false;
-                }
-            }
-        }
-        
+
         ColumnLayout { // Content
             id: topSectionColumnLayout
             anchors.fill: parent
@@ -223,7 +188,7 @@ Item { // Bar content region
         }
     }
 
-    MouseArea { // Bottom section | scroll to change volume
+    FocusedScrollMouseArea { // Bottom section | scroll to change volume
         id: barBottomSectionMouseArea
 
         anchors {
@@ -233,54 +198,21 @@ Item { // Bar content region
         }
         implicitWidth: Appearance.sizes.baseVerticalBarWidth
         implicitHeight: bottomSectionColumnLayout.implicitHeight
-        width: Appearance.sizes.verticalBarWidth
-
-        property bool hovered: false
-        property real lastScrollX: 0
-        property real lastScrollY: 0
-        property bool trackingScroll: false
-
-        acceptedButtons: Qt.LeftButton
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onEntered: event => {
-            barBottomSectionMouseArea.hovered = true;
+        
+        onScrollDown: {
+            const currentVolume = Audio.value;
+            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+            Audio.sink.audio.volume -= step;
         }
-        onExited: event => {
-            barBottomSectionMouseArea.hovered = false;
-            barBottomSectionMouseArea.trackingScroll = false;
+        onScrollUp: {
+            const currentVolume = Audio.value;
+            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+            Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
         }
+        onMovedAway: GlobalStates.osdVolumeOpen = false;
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            } else if (event.button === Qt.RightButton) {
-                MprisController.activePlayer.next();
-            }
-        }
-        // Scroll to change volume
-        WheelHandler {
-            onWheel: event => {
-                const currentVolume = Audio.value;
-                const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
-                if (event.angleDelta.y < 0)
-                    Audio.sink.audio.volume -= step;
-                else if (event.angleDelta.y > 0)
-                    Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
-                // Store the mouse position and start tracking
-                barBottomSectionMouseArea.lastScrollX = event.x;
-                barBottomSectionMouseArea.lastScrollY = event.y;
-                barBottomSectionMouseArea.trackingScroll = true;
-            }
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        }
-        onPositionChanged: mouse => {
-            if (barBottomSectionMouseArea.trackingScroll) {
-                const dx = mouse.x - barBottomSectionMouseArea.lastScrollX;
-                const dy = mouse.y - barBottomSectionMouseArea.lastScrollY;
-                if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                    GlobalStates.osdVolumeOpen = false;
-                    barBottomSectionMouseArea.trackingScroll = false;
-                }
             }
         }
 

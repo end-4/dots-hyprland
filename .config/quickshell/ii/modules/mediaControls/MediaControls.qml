@@ -111,21 +111,24 @@ Scope {
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
-            margins {
-                top: Appearance.sizes.barHeight
-                bottom: Appearance.sizes.barHeight
-                left: (mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth
-            }
             implicitWidth: root.widgetWidth
             implicitHeight: playerColumnLayout.implicitHeight
             color: "transparent"
             WlrLayershell.namespace: "quickshell:mediaControls"
 
             anchors {
-                top: !Config.options.bar.bottom
-                bottom: Config.options.bar.bottom
-                left: true
+                top: !Config.options.bar.bottom || Config.options.bar.vertical
+                bottom: Config.options.bar.bottom && !Config.options.bar.vertical
+                left: !(Config.options.bar.vertical && Config.options.bar.bottom)
+                right: Config.options.bar.vertical && Config.options.bar.bottom
             }
+            margins {
+                top: Config.options.bar.vertical ? ((mediaControlsRoot.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
+                bottom: Appearance.sizes.barHeight
+                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth)
+                right: Appearance.sizes.barHeight
+            }
+
             mask: Region {
                 item: playerColumnLayout
             }
@@ -143,6 +146,8 @@ Scope {
                         required property MprisPlayer modelData
                         player: modelData
                         visualizerPoints: root.visualizerPoints
+                        implicitWidth: widgetWidth
+                        implicitHeight: widgetHeight
                     }
                 }
             }
