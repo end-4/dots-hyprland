@@ -15,8 +15,8 @@ Singleton {
     id: root
 
     // Directory to search for wallpapers (new location)
-    // Resolves to: ~/Pictures/wallpapers
-    property list<string> searchDirs: [ FileUtils.trimFileProtocol(`${Directories.pictures}/wallpapers`) ]
+    // Resolves to: ~/Pictures/Wallpapers
+    property list<string> searchDirs: [ FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`) ]
 
     // Supported image extensions. Videos are intentionally excluded for now
     // to keep the overview lightweight.
