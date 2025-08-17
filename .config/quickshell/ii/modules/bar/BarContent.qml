@@ -236,7 +236,7 @@ Item { // Bar content region
             const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
             Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
         }
-        onMovedAway: GlobalStates.osdVolumeOpen = false;
+        onMovedAway: GlobalStates.osdVolumeOpen = false
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
