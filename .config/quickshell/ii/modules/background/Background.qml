@@ -243,6 +243,8 @@ Variants {
                     text: DateTime.date
                 }
                 StyledText {
+                    Layout.fillWidth: true
+                    Layout.topMargin: 8
                     horizontalAlignment: bgRoot.textHorizontalAlignment
                     font {
                         family: Appearance.font.family.expressive
