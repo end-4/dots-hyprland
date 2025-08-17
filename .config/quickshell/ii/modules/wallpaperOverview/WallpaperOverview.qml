@@ -11,7 +11,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-// Fullscreen panel similar to Overview, but shows a grid of wallpaper previews.
 Scope {
     id: scope
 
@@ -19,20 +18,26 @@ Scope {
         id: variants
         model: Quickshell.screens
 
-                    PanelWindow {
-                id: root
-                required property var modelData
-                readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
-                property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
-                screen: modelData
-                visible: GlobalStates.wallpaperOverviewOpen && monitorIsFocused
+        PanelWindow {
+            id: root
+            required property var modelData
+            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
+            property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
+            screen: modelData
+            visible: GlobalStates.wallpaperOverviewOpen && monitorIsFocused
+            property var filteredWallpapers: Wallpapers.wallpapers
 
             WlrLayershell.namespace: "quickshell:wallpaper-overview"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
-            anchors { top: true; bottom: true; left: true; right: true }
+            anchors {
+                top: true
+                bottom: true
+                left: true
+                right: true
+            }
 
             ColumnLayout {
                 id: layout
@@ -40,7 +45,76 @@ Scope {
                 anchors.top: parent.top
                 spacing: 8
 
-                Item { width: 1; height: 1 }
+                Item {
+                    width: 1
+                    height: 1
+                }
+
+                TextField {
+                    id: filterField
+                    Layout.preferredWidth: bg.implicitWidth
+                    Layout.alignment: Qt.AlignHcenter
+                    implicitHeight: 40
+                    padding: 10
+                    placeholderText: "Search wallpapers..."
+                    placeholderTextColor: Appearance.colors.colSubtext
+                    color: Appearance.colors.colPrimary
+                    background: Rectangle {
+                        color: Appearance.colors.colLayer0
+                        border.color: Appearance.colors.colLayer0Border
+                        border.width: 1
+                        radius: Appearance.rounding.small
+                    }
+                    font.family: Appearance.font.family.main
+                    font.pixelSize: Appearance.font.pixelSize.normal
+
+                    onTextChanged: {
+                        let newModel = [];
+                        if (text.length > 0) {
+                            for (let i = 0; i < Wallpapers.wallpapers.length; ++i) {
+                                let wallpaperPath = Wallpapers.wallpapers[i];
+                                if (wallpaperPath.toLowerCase().includes(text.toLowerCase())) {
+                                    newModel.push(wallpaperPath);
+                                }
+                            }
+                            root.filteredWallpapers = newModel;
+                        } else {
+                            root.filteredWallpapers = Wallpapers.wallpapers;
+                        }
+                    }
+
+                    Keys.onPressed: event => {
+                        if (text.length === 0) {
+                            if (event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
+                                bg.forceActiveFocus();
+                                if (event.key === Qt.Key_Down)
+                                    grid.moveSelection(grid.columns);
+                                else if (event.key === Qt.Key_Left)
+                                    grid.moveSelection(-1);
+                                else if (event.key === Qt.Key_Right)
+                                    grid.moveSelection(1);
+                                event.accepted = true;
+                            }
+                        } else {
+                            if (event.key === Qt.Key_Down) {
+                                grid.moveSelection(grid.columns);
+                                event.accepted = true;
+                                bg.forceActiveFocus();
+                            }
+                        }
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            grid.activateCurrent();
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Escape) {
+                            if (filterField.text.length > 0) {
+                                filterField.text = "";
+                            } else {
+                                GlobalStates.wallpaperOverviewOpen = false;
+                            }
+                            event.accepted = true;
+                        }
+                    }
+                }
 
                 Rectangle {
                     id: bg
@@ -50,29 +124,76 @@ Scope {
                     border.color: Appearance.colors.colLayer0Border
                     radius: Appearance.rounding.screenRounding
 
-                    // Compact size for 4 thumbnails per row, 3 rows high
-                    implicitWidth: Math.min(root.width * 0.7, 900)
-                    implicitHeight: Math.min(root.height * 0.6, 500)
+                    property int calculatedRows: Math.ceil(grid.count / grid.columns)
 
-                    Keys.onPressed: (event) => {
+                    implicitWidth: {
+                        if (root.filteredWallpapers.length === 0) {
+                            return 300;
+                        } else if (root.filteredWallpapers.length < grid.columns) {
+                            return root.filteredWallpapers.length * grid.cellWidth + 16;
+                        } else {
+                            return Math.min(root.width * 0.7, 900);
+                        }
+                    }
+
+                    implicitHeight: {
+                        if (root.filteredWallpapers.length === 0) {
+                            return 100;
+                        } else {
+                            return Math.min(root.height * 0.6, Math.min(calculatedRows, 3) * grid.cellHeight + 16);
+                        }
+                    }
+
+                    Behavior on implicitWidth {
+                        SpringAnimation {
+                            spring: 3
+                            damping: 0.2
+                        }
+                    }
+
+                    Behavior on implicitHeight {
+                        SpringAnimation {
+                            spring: 3
+                            damping: 0.2
+                        }
+                    }
+
+                    Keys.onPressed: event => {
                         if (event.key === Qt.Key_Escape) {
-                            GlobalStates.wallpaperOverviewOpen = false
-                            event.accepted = true
+                            GlobalStates.wallpaperOverviewOpen = false;
+                            event.accepted = true;
                         } else if (event.key === Qt.Key_Left) {
-                            grid.moveSelection(-1)
-                            event.accepted = true
+                            grid.moveSelection(-1);
+                            event.accepted = true;
                         } else if (event.key === Qt.Key_Right) {
-                            grid.moveSelection(1)
-                            event.accepted = true
+                            grid.moveSelection(1);
+                            event.accepted = true;
                         } else if (event.key === Qt.Key_Up) {
-                            grid.moveSelection(-grid.columns)
-                            event.accepted = true
+                            if (grid.currentIndex < grid.columns) {
+                                filterField.forceActiveFocus();
+                            } else {
+                                grid.moveSelection(-grid.columns);
+                            }
+                            event.accepted = true;
                         } else if (event.key === Qt.Key_Down) {
-                            grid.moveSelection(grid.columns)
-                            event.accepted = true
+                            grid.moveSelection(grid.columns);
+                            event.accepted = true;
                         } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            grid.activateCurrent()
-                            event.accepted = true
+                            grid.activateCurrent();
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Backspace) {
+                            if (filterField.text.length > 0) {
+                                filterField.text = filterField.text.substring(0, filterField.text.length - 1);
+                            }
+                            filterField.forceActiveFocus();
+                            event.accepted = true;
+                        } else {
+                            filterField.forceActiveFocus();
+                            if (event.text.length > 0) {
+                                filterField.text += event.text;
+                                filterField.cursorPosition = filterField.text.length;
+                            }
+                            event.accepted = true;
                         }
                     }
 
@@ -83,12 +204,14 @@ Scope {
 
                         GridView {
                             id: grid
-                            readonly property int columns: 4  // Fixed to 4 columns
+                            visible: root.filteredWallpapers.length > 0
+
+                            readonly property int columns: 4
                             property int currentIndex: 0
                             readonly property int rows: Math.max(1, Math.ceil(count / columns))
 
                             Layout.preferredWidth: columns * cellWidth
-                            Layout.alignment: Qt.AlignHCenter
+                            Layout.alignment: Qt.AlignHcenter
                             Layout.fillHeight: true
                             cellWidth: 220
                             cellHeight: 140
@@ -96,43 +219,57 @@ Scope {
                             interactive: true
                             keyNavigationWraps: true
                             boundsBehavior: Flickable.StopAtBounds
-                            
-                            // Performance optimization: cache more delegates for smoother scrolling
-                            cacheBuffer: cellHeight * 2  // Cache 2 extra rows above/below visible area
-                            ScrollBar.horizontal: ScrollBar { 
+
+                            cacheBuffer: cellHeight * 2
+                            ScrollBar.horizontal: ScrollBar {
                                 policy: ScrollBar.AsNeeded
                                 visible: false
                             }
-                            ScrollBar.vertical: ScrollBar { 
+                            ScrollBar.vertical: ScrollBar {
                                 policy: ScrollBar.AsNeeded
                                 visible: false
                             }
-                            // Back to simple wallpapers array
-                            model: Wallpapers.wallpapers
+
+                            model: root.filteredWallpapers
                             onModelChanged: currentIndex = 0
 
                             function moveSelection(delta) {
-                                // Clear all hover states when using keyboard navigation
                                 for (let i = 0; i < count; i++) {
-                                    const item = itemAtIndex(i)
+                                    const item = itemAtIndex(i);
                                     if (item) {
-                                        item.isHovered = false
+                                        item.isHovered = false;
                                     }
                                 }
-                                currentIndex = Math.max(0, Math.min(count - 1, currentIndex + delta))
-                                positionViewAtIndex(currentIndex, GridView.Contain)
+                                currentIndex = Math.max(0, Math.min(count - 1, currentIndex + delta));
+                                positionViewAtIndex(currentIndex, GridView.Contain);
                             }
                             function activateCurrent() {
-                                const path = Wallpapers.wallpapers[currentIndex]
-                                if (!path) return
-                                GlobalStates.wallpaperOverviewOpen = false
-                                Wallpapers.apply(path)
+                                const path = model[currentIndex];
+                                if (!path)
+                                    return;
+                                GlobalStates.wallpaperOverviewOpen = false;
+                                filterField.text = "";
+                                Wallpapers.apply(path);
                             }
 
                             delegate: Item {
                                 width: grid.cellWidth
                                 height: grid.cellHeight
                                 property bool isHovered: false
+
+                                Behavior on width {
+                                    NumberAnimation {
+                                        duration: animationCurves.expressiveDefaultSpatialDuration
+                                        easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                    }
+                                }
+
+                                Behavior on height {
+                                    NumberAnimation {
+                                        duration: animationCurves.expressiveDefaultSpatialDuration
+                                        easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                    }
+                                }
 
                                 Rectangle {
                                     anchors.fill: parent
@@ -147,8 +284,7 @@ Scope {
                                     anchors.margins: 8
                                     color: Appearance.colors.colLayer2
                                     radius: Appearance.rounding.elementRounding
-                                    
-                                    // Loading placeholder
+
                                     Rectangle {
                                         anchors.centerIn: parent
                                         width: Math.min(parent.width * 0.4, 32)
@@ -156,14 +292,21 @@ Scope {
                                         radius: Appearance.rounding.elementRounding
                                         color: Appearance.colors.colLayer3
                                         visible: thumbnailImage.status !== Image.Ready
-                                        
-                                        // Simple loading animation
+
                                         opacity: 0.3
                                         SequentialAnimation on opacity {
                                             running: parent.visible
                                             loops: Animation.Infinite
-                                            NumberAnimation { to: 1.0; duration: 800; easing.type: Easing.InOutSine }
-                                            NumberAnimation { to: 0.3; duration: 800; easing.type: Easing.InOutSine }
+                                            NumberAnimation {
+                                                to: 1.0
+                                                duration: 800
+                                                easing.type: Easing.InOutSine
+                                            }
+                                            NumberAnimation {
+                                                to: 0.3
+                                                duration: 800
+                                                easing.type: Easing.InOutSine
+                                            }
                                         }
                                     }
 
@@ -175,21 +318,17 @@ Scope {
                                         asynchronous: true
                                         cache: false
                                         smooth: true
-                                        
-                                        // Much smaller sourceSize for faster loading - this is key!
-                                        // Using smaller dimensions significantly reduces decode time
+
                                         sourceSize.width: Math.min(128, grid.cellWidth - 16)
                                         sourceSize.height: Math.min(96, grid.cellHeight - 16)
-                                        
-                                        // Disable mipmap for faster loading (quality vs speed tradeoff)
+
                                         mipmap: false
-                                        
-                                        // Smooth fade-in when ready
+
                                         opacity: status === Image.Ready ? 1 : 0
                                         Behavior on opacity {
-                                            NumberAnimation { 
+                                            NumberAnimation {
                                                 duration: 200
-                                                easing.type: Easing.OutCubic 
+                                                easing.type: Easing.OutCubic
                                             }
                                         }
                                     }
@@ -199,24 +338,71 @@ Scope {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     onEntered: {
-                                        // Clear all other hover states and set current index
                                         for (let i = 0; i < grid.count; i++) {
-                                            const item = grid.itemAtIndex(i)
+                                            const item = grid.itemAtIndex(i);
                                             if (item && item !== parent) {
-                                                item.isHovered = false
+                                                item.isHovered = false;
                                             }
                                         }
-                                        parent.isHovered = true
-                                        grid.currentIndex = index
+                                        parent.isHovered = true;
+                                        grid.currentIndex = index;
                                     }
                                     onExited: {
-                                        parent.isHovered = false
+                                        parent.isHovered = false;
                                     }
                                     onClicked: {
-                                        GlobalStates.wallpaperOverviewOpen = false
-                                        Wallpapers.apply(modelData)
+                                        GlobalStates.wallpaperOverviewOpen = false;
+                                        filterField.text = "";
+                                        Wallpapers.apply(modelData);
                                     }
                                 }
+                            }
+
+                            add: Transition {
+                                from: "*"
+                                to: "*"
+                                ParallelAnimation {
+                                    PropertyAnimation {
+                                        property: "x"
+                                        from: grid.contentX + (grid.width / 2) - width / 2
+                                    }
+                                    PropertyAnimation {
+                                        property: "y"
+                                        from: grid.contentY + (grid.height / 2) - height / 2
+                                    }
+                                    NumberAnimation {
+                                        property: "scale"
+                                        from: 0.0
+                                        to: 1.0
+                                        duration: animationCurves.expressiveDefaultSpatialDuration
+                                        easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                    }
+                                    NumberAnimation {
+                                        property: "opacity"
+                                        from: 0.0
+                                        to: 1.0
+                                        duration: animationCurves.expressiveDefaultSpatialDuration
+                                        easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                    }
+                                }
+                            }
+                        }
+                        // show when no wallpaper found
+                        ColumnLayout {
+                            id: noWallpapersFoundLayout
+                            visible: root.filteredWallpapers.length === 0
+                            anchors.centerIn: parent
+
+                            implicitHeight: noWallpapersFoundLabel.implicitHeight
+                            implicitWidth: noWallpapersFoundLabel.implicitWidth
+
+                            Label {
+                                id: noWallpapersFoundLabel
+                                text: "No wallpapers found"
+                                font.family: Appearance.font.family.main
+                                font.pixelSize: Appearance.font.pixelSize.normal
+                                color: Appearance.colors.colSubtext
+                                Layout.alignment: Qt.AlignHcenter | Qt.AlignVCenter
                             }
                         }
                     }
@@ -227,7 +413,7 @@ Scope {
                 target: GlobalStates
                 function onWallpaperOverviewOpenChanged() {
                     if (GlobalStates.wallpaperOverviewOpen && monitorIsFocused) {
-                        bg.forceActiveFocus();
+                        filterField.forceActiveFocus();
                     }
                 }
             }
@@ -237,8 +423,8 @@ Scope {
     GlobalShortcut {
         name: "wallpaperOverviewToggle"
         description: "Toggle wallpaper overview"
-        onPressed: { GlobalStates.wallpaperOverviewOpen = !GlobalStates.wallpaperOverviewOpen }
+        onPressed: {
+            GlobalStates.wallpaperOverviewOpen = !GlobalStates.wallpaperOverviewOpen;
+        }
     }
 }
-
-
