@@ -126,6 +126,7 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
+                property string mantra: ""
             }
 
             property JsonObject bar: JsonObject {
