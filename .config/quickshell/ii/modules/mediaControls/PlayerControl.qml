@@ -23,9 +23,6 @@ Item { // Player instance
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
 
-    implicitWidth: widgetWidth
-    implicitHeight: widgetHeight
-
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
         implicitHeight: 24
