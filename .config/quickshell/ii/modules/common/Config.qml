@@ -127,6 +127,7 @@ Singleton {
                     property bool enableSidebar: true
                 }
                 property string mantra: ""
+                property bool hideWhenFullscreen: true
             }
 
             property JsonObject bar: JsonObject {
