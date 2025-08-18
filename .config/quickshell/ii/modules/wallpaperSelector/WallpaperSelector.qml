@@ -301,7 +301,7 @@ Scope {
                                         }
                                         fillMode: Image.PreserveAspectCrop
                                         asynchronous: true
-                                        cache: true
+                                        cache: false
                                         smooth: true
 
                                         sourceSize.width: Math.min(128, grid.cellWidth - 16)
