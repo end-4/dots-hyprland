@@ -13,4 +13,6 @@ RippleButton {
 
     topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
     bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+
+    background.implicitHeight: 50
 }
