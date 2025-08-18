@@ -51,7 +51,7 @@ Singleton {
         showDotAndDotDot: false
         showOnlyReadable: true
         sortField: FolderListModel.Time
-        sortReversed: true
+        sortReversed: false
         onCountChanged: {
             console.log(`[Wallpapers] FolderListModel count=${files.count} folder=${files.folder}`)
             root.wallpapers = []
