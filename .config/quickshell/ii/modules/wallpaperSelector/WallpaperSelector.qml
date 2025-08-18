@@ -402,6 +402,14 @@ Scope {
         }
     }
 
+    IpcHandler {
+        target: "wallpaperSelector"
+
+        function toggle(): void {
+            GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen
+        }
+    }
+
     GlobalShortcut {
         name: "wallpaperSelectorToggle"
         description: "Toggle wallpaper selector"
