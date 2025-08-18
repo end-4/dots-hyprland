@@ -134,17 +134,11 @@ Scope {
                 }
 
                 Behavior on implicitWidth {
-                    SpringAnimation {
-                        spring: 3
-                        damping: 0.2
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
                 Behavior on implicitHeight {
-                    SpringAnimation {
-                        spring: 3
-                        damping: 0.2
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
                 Keys.onPressed: event => {
@@ -247,17 +241,11 @@ Scope {
                             property bool isHovered: false
 
                             Behavior on width {
-                                NumberAnimation {
-                                    duration: animationCurves.expressiveDefaultSpatialDuration
-                                    easing.bezierCurve: animationCurves.expressiveDefaultSpatial
-                                }
+                                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                             }
 
                             Behavior on height {
-                                NumberAnimation {
-                                    duration: animationCurves.expressiveDefaultSpatialDuration
-                                    easing.bezierCurve: animationCurves.expressiveDefaultSpatial
-                                }
+                                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                             }
 
                             Rectangle {
@@ -315,10 +303,7 @@ Scope {
 
                                     opacity: status === Image.Ready ? 1 : 0
                                     Behavior on opacity {
-                                        NumberAnimation {
-                                            duration: 200
-                                            easing.type: Easing.OutCubic
-                                        }
+                                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                                     }
                                 }
                             }
