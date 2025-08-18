@@ -46,7 +46,6 @@ MouseArea {
                     fill: 1
                     text: isCharging ? "bolt" : "battery_android_full"
                     iconSize: Appearance.font.pixelSize.normal
-                    visible: percentage < 1
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
