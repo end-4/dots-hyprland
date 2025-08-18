@@ -109,11 +109,6 @@ Scope {
                     }
                 }
 
-                Item {
-                    height: 1 // Prevent Wayland protocol error
-                    width: 1 // Prevent Wayland protocol error
-                }
-
                 SearchWidget {
                     id: searchWidget
                     Layout.alignment: Qt.AlignHCenter
