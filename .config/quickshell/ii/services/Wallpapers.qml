@@ -35,12 +35,11 @@ Singleton {
 
     function apply(path) {
         if (!path || path.length === 0) return
-        applyProc.command = [
+        applyProc.exec([
             "bash", "-c",
             `${StringUtils.shellSingleQuoteEscape(Directories.wallpaperSwitchScriptPath)} ` +
             `--image ${StringUtils.shellSingleQuoteEscape(path)}`
-        ]
-        applyProc.running = true
+        ])
     }
 
     // Folder model
