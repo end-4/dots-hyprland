@@ -15,14 +15,15 @@ Scope {
     id: scope
 
     Loader {
-        active: GlobalStates.wallpaperOverviewOpen
+        active: GlobalStates.wallpaperSelectorOpen
+
         sourceComponent: PanelWindow {
             id: root
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
             property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
             property var filteredWallpapers: Wallpapers.wallpapers
 
-            WlrLayershell.namespace: "quickshell:wallpaper-overview"
+            WlrLayershell.namespace: "quickshell:wallpaperSelector"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
@@ -99,7 +100,7 @@ Scope {
                             if (filterField.text.length > 0) {
                                 filterField.text = "";
                             } else {
-                                GlobalStates.wallpaperOverviewOpen = false;
+                                GlobalStates.wallpaperSelectorOpen = false;
                             }
                             event.accepted = true;
                         }
@@ -144,7 +145,7 @@ Scope {
 
                     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Escape) {
-                            GlobalStates.wallpaperOverviewOpen = false;
+                            GlobalStates.wallpaperSelectorOpen = false;
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Left) {
                             grid.moveSelection(-1);
@@ -231,7 +232,7 @@ Scope {
                                 const path = model[currentIndex];
                                 if (!path)
                                     return;
-                                GlobalStates.wallpaperOverviewOpen = false;
+                                GlobalStates.wallpaperSelectorOpen = false;
                                 filterField.text = "";
                                 Wallpapers.apply(path);
                             }
@@ -332,7 +333,7 @@ Scope {
                                         parent.isHovered = false;
                                     }
                                     onClicked: {
-                                        GlobalStates.wallpaperOverviewOpen = false;
+                                        GlobalStates.wallpaperSelectorOpen = false;
                                         filterField.text = "";
                                         Wallpapers.apply(modelData);
                                     }
@@ -392,8 +393,8 @@ Scope {
 
             Connections {
                 target: GlobalStates
-                function onWallpaperOverviewOpenChanged() {
-                    if (GlobalStates.wallpaperOverviewOpen && monitorIsFocused) {
+                function onwallpaperSelectorOpenChanged() {
+                    if (GlobalStates.wallpaperSelectorOpen && monitorIsFocused) {
                         filterField.forceActiveFocus();
                     }
                 }
@@ -402,10 +403,10 @@ Scope {
     }
 
     GlobalShortcut {
-        name: "wallpaperOverviewToggle"
-        description: "Toggle wallpaper overview"
+        name: "wallpaperSelectorToggle"
+        description: "Toggle wallpaper selector"
         onPressed: {
-            GlobalStates.wallpaperOverviewOpen = !GlobalStates.wallpaperOverviewOpen;
+            GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen;
         }
     }
 }
