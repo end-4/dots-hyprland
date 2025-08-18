@@ -29,7 +29,7 @@ Singleton {
 
     // Public API (FolderListModel driven)
     function reload() {
-        files.folder = `file://${root.searchDirs[0]}`
+        files.folder = Qt.resolvedUrl(root.searchDirs[0])
     }
     onSearchDirsChanged: reload()
 
