@@ -386,6 +386,6 @@
   "Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks.": "Онлайн | Модель Google\nСовременная универсальная модель Google, которая превосходно справляется с задачами кодирования и сложными рассуждениями.",
   "When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help": "При включении этого параметра содержимое правой боковой панели сохраняется загруженным, что сокращает задержку при открытии,\nзатрачивая около 15 МБ постоянного использования оперативной памяти. Длительность задержки зависит от производительности вашей системы.\nИспользование пользовательского ядра, например, linux-cachyos, может помочь.",
   "High": "Высокий",
-  "Focus": "Focus",
+  "Focus": "Фокус",
   "Load:": "Load:"
 }
