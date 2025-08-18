@@ -33,7 +33,7 @@ LazyLoader {
                     root.hoverTarget, 
                     (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
                 ).x;
-                return Appearance.sizes.barHeight
+                return Appearance.sizes.verticalBarWidth
             }
             top: {
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
@@ -42,7 +42,7 @@ LazyLoader {
                     (root.hoverTarget.height - popupBackground.implicitHeight) / 2, 0
                 ).y;
             }
-            right: Appearance.sizes.barHeight
+            right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
         }
         WlrLayershell.namespace: "quickshell:popup"

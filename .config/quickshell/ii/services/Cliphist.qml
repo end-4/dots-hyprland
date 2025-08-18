@@ -98,4 +98,12 @@ Singleton {
             }
         }
     }
+
+    IpcHandler {
+        target: "cliphistService"
+
+        function update(): void {
+            root.refresh()
+        }
+    }
 }
