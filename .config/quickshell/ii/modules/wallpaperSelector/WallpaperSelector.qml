@@ -242,14 +242,6 @@ Scope {
                                 height: grid.cellHeight
                                 property bool isHovered: false
 
-                                Behavior on width {
-                                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                                }
-
-                                Behavior on height {
-                                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                                }
-
                                 Rectangle {
                                     anchors.fill: parent
                                     radius: Appearance.rounding.windowRounding
