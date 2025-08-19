@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
+import qs
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
@@ -14,6 +15,15 @@ MouseArea {
     implicitHeight: rowLayout.implicitHeight
 
     hoverEnabled: true
+
+    onClicked: {
+        Weather.getData();
+        Quickshell.execDetached(["notify-send", 
+            Translation.tr("Weather"), 
+            Translation.tr("Refreshing (manually triggered)")
+            , "-a", "Shell"
+        ])
+    }
 
     RowLayout {
         id: rowLayout
