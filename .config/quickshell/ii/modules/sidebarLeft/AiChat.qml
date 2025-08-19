@@ -224,6 +224,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 font.pixelSize: Appearance.font.pixelSize.small
                 text: statusItem.statusText
                 color: Appearance.colors.colSubtext
+                animateChange: true
             }
         }
 

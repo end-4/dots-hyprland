@@ -26,6 +26,7 @@ Item { // Model indicator
             color: Appearance.m3colors.m3onSurface
             elide: Text.ElideRight
             text: root.text
+            animateChange: true
         }
     }
 

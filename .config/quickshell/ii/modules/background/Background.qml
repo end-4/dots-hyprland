@@ -241,6 +241,7 @@ Variants {
                     style: Text.Raised
                     styleColor: Appearance.colors.colShadow
                     text: DateTime.date
+                    animateChange: true
                 }
                 StyledText {
                     Layout.fillWidth: true
