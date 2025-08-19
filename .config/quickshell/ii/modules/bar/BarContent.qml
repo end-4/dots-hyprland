@@ -129,7 +129,6 @@ Item { // Bar content region
         BarGroup {
             id: middleCenterGroup
             padding: workspacesWidget.widgetPadding
-            Layout.fillHeight: true
 
             Workspaces {
                 id: workspacesWidget
@@ -157,7 +156,6 @@ Item { // Bar content region
             implicitWidth: rightCenterGroupContent.implicitWidth
             implicitHeight: rightCenterGroupContent.implicitHeight
             Layout.preferredWidth: root.centerSideModuleWidth
-            Layout.fillHeight: true
 
             onPressed: {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -328,8 +326,7 @@ Item { // Bar content region
 
             // Weather
             Loader {
-                Layout.leftMargin: 8
-                Layout.fillHeight: true
+                Layout.leftMargin: 4
                 active: Config.options.bar.weather.enable
 
                 sourceComponent: BarGroup {
