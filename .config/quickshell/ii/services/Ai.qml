@@ -27,6 +27,8 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
+    signal responseFinished()
+
     property string systemPrompt: {
         let prompt = Config.options?.ai?.systemPrompt ?? "";
         for (let key in root.promptSubstitutions) {
@@ -628,6 +630,7 @@ Singleton {
                 root.postResponseHook = null; // Reset hook after use
             }
             root.saveChat("lastSession")
+            root.responseFinished()
         }
 
         function makeRequest() {

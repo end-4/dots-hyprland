@@ -82,38 +82,10 @@ Item { // Bar content region
             anchors.fill: parent
             spacing: 10
 
-            RippleButton {
-                // Left sidebar button
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            LeftSidebarButton { // Left sidebar button
+                Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
-                Layout.fillWidth: false
-                property real buttonPadding: 5
-                implicitWidth: distroIcon.width + buttonPadding * 2
-                implicitHeight: distroIcon.height + buttonPadding * 2
-
-                buttonRadius: Appearance.rounding.full
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                colBackgroundHover: Appearance.colors.colLayer1Hover
-                colRipple: Appearance.colors.colLayer1Active
-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                colRippleToggled: Appearance.colors.colSecondaryContainerActive
-                toggled: GlobalStates.sidebarLeftOpen
-                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
-
-                onPressed: {
-                    GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-                }
-
-                CustomIcon {
-                    id: distroIcon
-                    anchors.centerIn: parent
-                    width: 19.5
-                    height: 19.5
-                    source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
-                    colorize: true
-                    color: Appearance.colors.colOnLayer0
-                }
             }
 
             ActiveWindow {
