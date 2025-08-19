@@ -266,6 +266,9 @@ Singleton {
                     property string action: "/"
                     property string clipboard: ";"
                     property string emojis: ":"
+                    property string math: "="
+                    property string shellCommand: "$"
+                    property string webSearch: "?"
                 }
             }
 
