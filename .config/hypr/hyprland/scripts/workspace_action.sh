@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 curr_workspace="$(hyprctl activeworkspace -j | jq -r ".id")" ##parses json output of hyprctl activeworkspace on the active monitor
 dispatcher="$1"
 shift ##Any dispatcher that hyprland supports, the shift shifts the target such that target is now in $1, not $2
