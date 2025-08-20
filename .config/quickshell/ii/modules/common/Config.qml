@@ -162,6 +162,7 @@ Singleton {
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
+                    property list<string> pinnedItems: [ "Fcitx" ]
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true

@@ -8,7 +8,7 @@ import Quickshell.Wayland
 LazyLoader {
     id: root
 
-    property MouseArea hoverTarget
+    property Item hoverTarget
     default property Item contentItem
 
     active: hoverTarget && hoverTarget.containsMouse
