@@ -28,7 +28,7 @@ Variants {
         // Hide when fullscreen
         property list<HyprlandWorkspace> workspacesForMonitor: Hyprland.workspaces.values.filter(workspace=>workspace.monitor && workspace.monitor.name == monitor.name)
         property var activeWorkspaceWithFullscreen: workspacesForMonitor.filter(workspace=>((workspace.toplevels.values.filter(window=>window.wayland.fullscreen)[0] != undefined) && workspace.active))[0]
-        visible: !(activeWorkspaceWithFullscreen != undefined)
+        visible: GlobalStates.screenLocked || (!(activeWorkspaceWithFullscreen != undefined)) || !Config?.options.background.hideWhenFullscreen
 
         // Workspaces
         property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
@@ -62,7 +62,7 @@ Variants {
         // Layer props
         screen: modelData
         exclusionMode: ExclusionMode.Ignore
-        WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
+        WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Overlay : WlrLayer.Bottom
         // WlrLayershell.layer: WlrLayer.Bottom
         WlrLayershell.namespace: "quickshell:background"
         anchors {
@@ -161,25 +161,43 @@ Variants {
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
-            property real value // 0 to 1, for offset
             cache: false
             asynchronous: true
-            value: {
-                // Range = groups that workspaces span on
-                const chunkSize = Config?.options.bar.workspaces.shown ?? 10;
-                const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
-                const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
-                const range = upper - lower;
-                return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace?.id - lower) / range) : 0.5)
-                    + (0.15 * GlobalStates.sidebarRightOpen * Config.options.background.parallax.enableSidebar)
-                    - (0.15 * GlobalStates.sidebarLeftOpen * Config.options.background.parallax.enableSidebar)
+            // Range = groups that workspaces span on
+            property int chunkSize: Config?.options.bar.workspaces.shown ?? 10;
+            property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
+            property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
+            property int range: upper - lower;
+            property real valueX: {
+                let result = 0.5;
+                if (Config.options.background.parallax.enableWorkspace && !Config.options.background.parallax.vertical) {
+                    result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                }
+                if (Config.options.background.parallax.enableSidebar) {
+                    result += (0.15 * GlobalStates.sidebarRightOpen - 0.15 * GlobalStates.sidebarLeftOpen);
+                }
+                return result;
             }
-            property real effectiveValue: Math.max(0, Math.min(1, value))
-            x: -(bgRoot.movableXSpace) - (effectiveValue - 0.5) * 2 * bgRoot.movableXSpace
-            y: -(bgRoot.movableYSpace)
+            property real valueY: {
+                let result = 0.5;
+                if (Config.options.background.parallax.enableWorkspace && Config.options.background.parallax.vertical) {
+                    result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                }
+                return result;
+            }
+            property real effectiveValueX: Math.max(0, Math.min(1, valueX))
+            property real effectiveValueY: Math.max(0, Math.min(1, valueY))
+            x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
+            y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
             source: bgRoot.wallpaperPath
             fillMode: Image.PreserveAspectCrop
             Behavior on x {
+                NumberAnimation {
+                    duration: 600
+                    easing.type: Easing.OutCubic
+                }
+            }
+            Behavior on y {
                 NumberAnimation {
                     duration: 600
                     easing.type: Easing.OutCubic
@@ -241,6 +259,7 @@ Variants {
                     style: Text.Raised
                     styleColor: Appearance.colors.colShadow
                     text: DateTime.date
+                    animateChange: true
                 }
                 StyledText {
                     Layout.fillWidth: true

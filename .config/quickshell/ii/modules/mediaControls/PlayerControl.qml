@@ -205,6 +205,9 @@ Item { // Player instance
                     color: blendedColors.colOnLayer0
                     elide: Text.ElideRight
                     text: StringUtils.cleanMusicTitle(playerController.player?.trackTitle) || "Untitled"
+                    animateChange: true
+                    animationDistanceX: 6
+                    animationDistanceY: 0
                 }
                 StyledText {
                     id: trackArtist
@@ -213,6 +216,9 @@ Item { // Player instance
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
                     text: playerController.player?.trackArtist
+                    animateChange: true
+                    animationDistanceX: 6
+                    animationDistanceY: 0
                 }
                 Item { Layout.fillHeight: true }
                 Item {

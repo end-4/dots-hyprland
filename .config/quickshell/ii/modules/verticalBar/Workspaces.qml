@@ -106,11 +106,7 @@ Item {
         z: 1
 
         spacing: 0
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
+        anchors.fill: parent
         implicitWidth: Appearance.sizes.verticalBarWidth
 
         Repeater {
@@ -125,6 +121,8 @@ Item {
                 property var nextOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
                 property var radiusTop: previousOccupied ? 0 : (width / 2)
                 property var radiusBottom: nextOccupied ? 0 : (width / 2)
+
+                Layout.alignment: Qt.AlignHCenter
 
                 topLeftRadius: radiusTop
                 topRightRadius: radiusTop

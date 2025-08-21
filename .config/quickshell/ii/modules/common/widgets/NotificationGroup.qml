@@ -10,7 +10,7 @@ import Quickshell
  * A group of notifications from the same app.
  * Similar to Android's notifications
  */
-Item { // Notification group area
+MouseArea { // Notification group area
     id: root
     property var notificationGroup
     property var notifications: notificationGroup?.notifications ?? []
@@ -36,6 +36,17 @@ Item { // Notification group area
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.running = true;
+    }
+
+    hoverEnabled: true
+    onContainsMouseChanged: {
+        if (!root.popup) return;
+        if (root.containsMouse) root.notifications.forEach(notif => {
+            Notifications.cancelTimeout(notif.notificationId);
+        });
+        else root.notifications.forEach(notif => {
+            Notifications.timeoutNotification(notif.notificationId);
+        });
     }
 
     SequentialAnimation { // Drag finish animation

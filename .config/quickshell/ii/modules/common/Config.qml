@@ -122,11 +122,13 @@ Singleton {
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property JsonObject parallax: JsonObject {
+                    property bool vertical: false
                     property bool enableWorkspace: true
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
                 property string mantra: ""
+                property bool hideWhenFullscreen: true
             }
 
             property JsonObject bar: JsonObject {
@@ -160,6 +162,8 @@ Singleton {
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
+                    property bool invertPinnedItems: false // Makes the below a whitelist for the tray and blacklist for the pinned area
+                    property list<string> pinnedItems: [ "Fcitx" ]
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
@@ -262,9 +266,13 @@ Singleton {
                 property list<string> excludedSites: ["quora.com"]
                 property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
                 property JsonObject prefix: JsonObject {
+                    property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"
                     property string clipboard: ";"
                     property string emojis: ":"
+                    property string math: "="
+                    property string shellCommand: "$"
+                    property string webSearch: "?"
                 }
             }
 

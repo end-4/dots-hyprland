@@ -26,7 +26,7 @@
   - **Transparent installation**: Every command is shown before it's run
 </details>
 <details> 
-  <summary>Installation instructions</summary>
+  <summary>Installation (illogical-impulse<sup>Quickshell</sup>)</summary>
 
    - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. 

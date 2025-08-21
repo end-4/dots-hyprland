@@ -14,6 +14,7 @@ Singleton {
     property Component booruResponseDataComponent: BooruResponseData {}
 
     signal tagSuggestion(string query, var suggestions)
+    signal responseFinished()
 
     property string failMessage: Translation.tr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
@@ -399,6 +400,7 @@ Singleton {
             else if (xhr.readyState === XMLHttpRequest.DONE) {
                 console.log("[Booru] Request failed with status: " + xhr.status)
             }
+            root.responseFinished()
         }
 
         try {
