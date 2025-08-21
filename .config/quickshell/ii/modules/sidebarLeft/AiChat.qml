@@ -39,6 +39,13 @@ Item {
 
     property var allCommands: [
         {
+            name: "attach",
+            description: Translation.tr("Attach a file. Only works with Gemini."),
+            execute: (args) => {
+                Ai.attachFile(args.join(" ").trim());
+            }
+        },
+        {
             name: "model",
             description: Translation.tr("Choose model"),
             execute: (args) => {
@@ -421,13 +428,13 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
         Rectangle { // Input area
             id: inputWrapper
-            property real columnSpacing: 5
+            property real spacing: 5
             Layout.fillWidth: true
             radius: Appearance.rounding.small
             color: Appearance.colors.colLayer1
-            implicitWidth: messageInputField.implicitWidth
-            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin 
-                + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + columnSpacing, 45)
+            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin
+                + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45)
+                + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin)
             clip: true
             border.color: Appearance.colors.colOutlineVariant
             border.width: 1
@@ -436,12 +443,26 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
+            AttachedFileIndicator {
+                id: attachedFileIndicator
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    margins: visible ? 5 : 0
+                }
+                filePath: Ai.pendingFilePath
+                onRemove: Ai.attachFile("")
+            }
+
             RowLayout { // Input field and send button
                 id: inputFieldRowLayout
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.topMargin: 5
+                anchors {
+                    top: attachedFileIndicator.bottom
+                    left: parent.left
+                    right: parent.right
+                    topMargin: 5
+                }
                 spacing: 0
 
                 StyledTextArea { // The actual TextArea
