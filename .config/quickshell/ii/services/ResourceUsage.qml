@@ -5,7 +5,6 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import QtSensors
 /**
  * Simple polled resource usage service with RAM, Swap, and CPU usage.
  */
