@@ -415,9 +415,11 @@ Item { // Wrapper
                         result = result.concat(launcherActionObjects);
 
                         /// Math result, command, web search ///
-                        if (!startsWithShellCommandPrefix) result.push(commandResultObject);
-                        if (!startsWithNumber && !startsWithMathPrefix) result.push(mathResultObject);
-                        if (!startsWithWebSearchPrefix) result.push(webSearchResultObject);
+                        if (Config.options.search.prefix.showDefaultActionsWithoutPrefix) {
+                            if (!startsWithShellCommandPrefix) result.push(commandResultObject);
+                            if (!startsWithNumber && !startsWithMathPrefix) result.push(mathResultObject);
+                            if (!startsWithWebSearchPrefix) result.push(webSearchResultObject);
+                        }
 
                         return result;
                     }
