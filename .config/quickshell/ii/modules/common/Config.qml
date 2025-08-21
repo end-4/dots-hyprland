@@ -162,6 +162,7 @@ Singleton {
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
+                    property bool invertPinnedItems: false // Makes the below a whitelist for the tray and blacklist for the pinned area
                     property list<string> pinnedItems: [ "Fcitx" ]
                 }
                 property JsonObject workspaces: JsonObject {
