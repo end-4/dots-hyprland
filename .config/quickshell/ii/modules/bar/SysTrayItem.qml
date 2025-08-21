@@ -1,7 +1,7 @@
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
@@ -13,6 +13,7 @@ MouseArea {
     property var bar: root.QsWindow.window
     required property SystemTrayItem item
     property bool targetMenuOpen: false
+    hoverEnabled: true
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     implicitWidth: 20
@@ -67,6 +68,16 @@ MouseArea {
                 color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.9)
             }
         }
+    }
+
+    StyledToolTip {
+        content: {
+            let c = root.item.id
+            if (root.item.tooltipDescription.length > 0) c += " • " + root.item.tooltipDescription
+            return c;
+        }
+        extraVisibleCondition: root.containsMouse
+        alternativeVisibleCondition: extraVisibleCondition
     }
 
 }
