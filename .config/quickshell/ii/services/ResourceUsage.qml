@@ -61,7 +61,7 @@ Singleton {
             const cpuInfo = fileCpuinfo.text()
             const cpuCoreFrequencies = cpuInfo.match(/cpu MHz\s+:\s+(\d+\.\d+)\n/g).map(x => Number(x.match(/\d+\.\d+/)))
             const cpuCoreFreqencyAvg = cpuCoreFrequencies.reduce((a, b) => a + b, 0) / cpuCoreFrequencies.length
-            cpuFreqency = cpuCoreFreqencyAvg
+            cpuFreqency = cpuCoreFreqencyAvg / 1000
             
 
             //Process process temp
