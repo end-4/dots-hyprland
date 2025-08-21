@@ -141,7 +141,14 @@ StyledPopup {
                    ResourceItem {
                     icon: "planner_review"
                     label: Translation.tr("Freq:")
-                    value: ` ${ Math.round(ResourceUsage.cpuFreqency)}MHz` 
+                    value: ` ${ Math.round(ResourceUsage.cpuFreqency)} MHz` 
+
+                  }
+
+                  ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value: ` ${ Math.round(ResourceUsage.cpuTemperature)} °C` 
 
                 }
             }
