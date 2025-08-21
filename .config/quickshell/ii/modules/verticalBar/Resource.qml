@@ -22,6 +22,7 @@ Item {
         id: resourceProgress
         anchors.centerIn: parent
         value: percentage
+        enableAnimation: false
         
         MaterialSymbol {
             font.weight: Font.Medium
