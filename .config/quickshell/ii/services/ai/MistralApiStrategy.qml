@@ -8,7 +8,7 @@ ApiStrategy {
         return model.endpoint;
     }
 
-    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>) {
+    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>, filePath: string) {
         let baseData = {
             "model": model.model,
             "messages": [
