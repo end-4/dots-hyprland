@@ -102,16 +102,15 @@ Item {
         }
 
         Item {
+            Layout.alignment: Qt.AlignHCenter
             implicitWidth: wallpaperGridBackground.implicitWidth
             implicitHeight: wallpaperGridBackground.implicitHeight
-            
+
             StyledRectangularShadow {
                 target: wallpaperGridBackground
             }
             Rectangle {
                 id: wallpaperGridBackground
-
-                Layout.alignment: Qt.AlignHCenter
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding
                 border.width: 1
