@@ -631,17 +631,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 root.handleInput(inputText)
                                 event.accepted = true
                             }
-                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
+                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image pasting
                             // Try image paste first
                             const currentClipboardEntry = Cliphist.entries[0]
                             if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) { // First entry = currently copied entry = image?
-                                print("CLIPBOARD IZ IMAGE, ATTACHING I REPEAT ATTACHING")
                                 decodeImageAndAttachProc.handleEntry(currentClipboardEntry)
                                 event.accepted = true;
                                 return;
                             }
-                            event.accepted = false;
-                            // fall through to normal paste for text
+                            event.accepted = false; // No image, let text pasting proceed
+                        } else if (event.key === Qt.Key_Escape) { // Esc to detach file
+                            if (Ai.pendingFilePath.length > 0) {
+                                Ai.attachFile("");
+                                event.accepted = true;
+                            } else {
+                                event.accepted = false;
+                            }
                         }
                     }
                 }
