@@ -9,6 +9,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Io
 
 Item {
     id: root
@@ -207,6 +208,26 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         }
         else {
             Ai.sendUserMessage(inputText);
+        }
+    }
+
+    Process {
+        id: decodeImageAndAttachProc
+        property string imageDecodePath: Directories.cliphistDecode
+        property string imageDecodeFileName: "image"
+        property string imageDecodeFilePath: `${imageDecodePath}/${imageDecodeFileName}`
+        function handleEntry(entry: string) {
+            imageDecodeFileName = parseInt(entry.match(/^(\d+)\t/)[1])
+            decodeImageAndAttachProc.exec(["bash", "-c", 
+                `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode > '${imageDecodeFilePath}'`
+            ])
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 0) {
+                Ai.attachFile(imageDecodeFilePath);
+            } else {
+                console.error("[AiChat] Failed to decode image in clipboard content")
+            }
         }
     }
 
@@ -610,6 +631,17 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 root.handleInput(inputText)
                                 event.accepted = true
                             }
+                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
+                            // Try image paste first
+                            const currentClipboardEntry = Cliphist.entries[0]
+                            if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) { // First entry = currently copied entry = image?
+                                print("CLIPBOARD IZ IMAGE, ATTACHING I REPEAT ATTACHING")
+                                decodeImageAndAttachProc.handleEntry(currentClipboardEntry)
+                                event.accepted = true;
+                                return;
+                            }
+                            event.accepted = false;
+                            // fall through to normal paste for text
                         }
                     }
                 }
