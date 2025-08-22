@@ -145,6 +145,14 @@ Rectangle {
                             radius: Appearance.rounding.normal
                         }
                     }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "transparent"
+                        border.width: 1
+                        border.color: Appearance.colors.colOutlineVariant
+                        radius: Appearance.rounding.normal
+                    }
                 }
             }
         }
