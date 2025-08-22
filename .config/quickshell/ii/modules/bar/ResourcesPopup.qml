@@ -152,6 +152,40 @@ StyledPopup {
 
                 }
             }
+          }
+
+            ColumnLayout {
+            Layout.alignment: Qt.AlignTop
+            spacing: 8
+            visible:ResourceUsage.gpuAvailable
+
+            ResourceHeaderItem {
+                icon: "empty_dashboard"
+                label: "GPU"
+            }
+            ColumnLayout {
+                ResourceItem {
+                    icon: "bolt"
+                    label: Translation.tr("Load:")
+                    value: (ResourceUsage.gpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.gpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.gpuUsage  * 100)}%)`
+
+                  }
+
+                   ResourceItem {
+                    icon: "clock_loader_60"
+                    label: Translation.tr("VRAM Used:")
+                    value: ` ${Math.round(ResourceUsage.gpuVramUsage * 100)} %`
+
+
+                  }
+
+                  ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value:  ` ${ResourceUsage.gpuTempemperature} %` 
+
+                }
+            }
         }
     }
 }

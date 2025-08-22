@@ -21,6 +21,12 @@ Singleton {
     property double cpuFreqency: 0
     property var previousCpuStats
     property double cpuTemperature:  0
+    
+    property bool gpuAvailable: false
+    property double gpuUsage: 0
+    property double gpuVramUsage:0
+    property double gpuTempemperature:0
+
 
 
 	Timer {
@@ -64,8 +70,12 @@ Singleton {
             cpuFreqency = cpuCoreFreqencyAvg / 1000
             
 
-            //Process process temp
+            //Process process CPU temp
             tempProc.running = true
+
+            //Process process GPU info
+            gpuinfoProc.running = true
+
 
 
             interval = Config.options?.resources?.updateInterval ?? 3000
@@ -89,6 +99,23 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished:{
         cpuTemperature = Number(this.text) /1000
+       }
+    }
+  }
+
+   Process {
+    id: gpuinfoProc
+    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_gpuinfo.sh`.replace(/file:\/\//, "")]
+    running: true
+
+    stdout: StdioCollector {
+      onStreamFinished:{
+        gpuAvailable =  this.text.indexOf("No GPU available") ==-1
+        if(gpuAvailable){
+          gpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
+          gpuVramUsage =  this.text.match(/\sVRAM\s:\s(\d+)/)?.[1] / 100 ?? 0
+          gpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
+        }
        }
     }
   }
