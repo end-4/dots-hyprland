@@ -47,9 +47,9 @@ MouseArea {
          Resource {
             iconName: "empty_dashboard"
             percentage: ResourceUsage.gpuUsage
-            shown: Config.options.bar.resources.alwaysShowGpu || 
+            shown: (Config.options.bar.resources.alwaysShowGpu || 
                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
-                root.alwaysShowAllResources
+                root.alwaysShowAllResources) && ResourceUsage.gpuAvailable
             Layout.leftMargin: shown ? 6 : 0
         }
 
