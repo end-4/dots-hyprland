@@ -15,6 +15,7 @@ Scope {
     id: root
 
     Loader {
+        id: wallpaperSelectorLoader
         active: GlobalStates.wallpaperSelectorOpen
 
         sourceComponent: PanelWindow {
@@ -35,12 +36,25 @@ Scope {
                 left: true
                 right: true
             }
-
             margins {
                 top: Appearance.sizes.barHeight + Appearance.sizes.hyprlandGapsOut
             }
 
+            mask: Region {
+                item: content
+            }
+
+            HyprlandFocusGrab { // Click outside to close
+                id: grab
+                windows: [ panelWindow ]
+                active: wallpaperSelectorLoader.active
+                onCleared: () => {
+                    if (!active) GlobalStates.wallpaperSelectorOpen = false;
+                }
+            }
+
             WallpaperSelectorContent {
+                id: content
                 anchors {
                     top: parent.top
                     horizontalCenter: parent.horizontalCenter
