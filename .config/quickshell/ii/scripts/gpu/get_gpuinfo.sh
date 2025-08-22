@@ -37,25 +37,6 @@ if command -v rocm-smi &> /dev/null; then
 fi
 
 
-#Check and display Intel GPU info
-
-if command -v intel_gpu_top &> /dev/null; then
-      echo "[Intel GPU]"
-        
-      gpu_usage=$(intel_gpu_top -J -s 100 | jq -r '.engines["Render/3D/0"].busy // 0')
-      vram_used=$(intel_gpu_top -J -s 100 | jq -r '.memory.local.total // "?"')
-      vram_total=$(intel_gpu_top -J -s 100 | jq -r '.memory.system.total // "?"')
-      vram_percent=$(( vram_used * 100 / vram_total ))
-      temperature=$(intel_gpu_top -J -s 100 | jq -r '.power."GPU temperature" // "?"')
-
-      echo "  Usage : ${gpu_usage}%"
-      echo "  VRAM : ${vram_percent} %"
-      echo "  Temp : ${temperature}"
-
-
-      exit 0 # only check one gpu
-fi
-
 
 echo "No GPU available."
 echo "Make sure you have one of the following tools installed:"
