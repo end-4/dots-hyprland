@@ -9,30 +9,23 @@ pragma ComponentBehavior: Bound
 
 /**
  * Provides a list of wallpapers and an "apply" action that calls the existing
- * switchwall.sh script. Uses QML's built-in image scaling for thumbnails.
+ * switchwall.sh script. Pretty much a limited file browsing service.
  */
 Singleton {
     id: root
 
-    // Directory to search for wallpapers (new location)
-    // Resolves to: ~/Pictures/Wallpapers
-    property list<string> searchDirs: [ FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`) ]
-
-    // Supported image extensions. Videos are intentionally excluded for now
-    // to keep the overview lightweight.
-    readonly property list<string> extensions: [
+    property string searchDir: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
+    readonly property list<string> extensions: [ // TODO: add videos
         "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
     ]
+    property alias filesModel: files // Expose for direct binding when needed
+    property list<string> wallpapers: [] // List of absolute file paths (without file://)
 
-    // Resulting list of absolute file paths (without file:// prefix)
-    property list<string> wallpapers: []
-
-    // Public API (FolderListModel driven)
-    function reload() {
-        files.folder = Qt.resolvedUrl(root.searchDirs[0])
+    // Executions
+    Process {
+        id: applyProc
     }
-    onSearchDirsChanged: reload()
-
+    
     function openFallbackPicker() {
         applyProc.exec([Directories.wallpaperSwitchScriptPath])
     }
@@ -49,14 +42,14 @@ Singleton {
     // Folder model
     FolderListModel {
         id: files
-        nameFilters: extensions.map(ext => `*.${ext}`)
+        folder: Qt.resolvedUrl(root.searchDir)
+        nameFilters: root.extensions.map(ext => `*.${ext}`)
         showDirs: false
         showDotAndDotDot: false
         showOnlyReadable: true
         sortField: FolderListModel.Time
         sortReversed: false
         onCountChanged: {
-            console.log(`[Wallpapers] FolderListModel count=${files.count} folder=${files.folder}`)
             root.wallpapers = []
             for (let i = 0; i < files.count; i++) {
                 const path = files.get(i, "filePath") || FileUtils.trimFileProtocol(files.get(i, "fileURL"))
@@ -64,16 +57,4 @@ Singleton {
             }
         }
     }
-
-    // Expose the model for direct binding when needed
-    property alias filesModel: files
-
-    // Internal: applying a wallpaper
-    Process {
-        id: applyProc
-    }
-
-    Component.onCompleted: reload()
 }
-
-
