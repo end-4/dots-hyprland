@@ -465,4 +465,74 @@ ContentPage {
             }
         }        
     }
+        ContentSection {
+        title: Translation.tr("Language")
+
+        ContentSubsection {
+            title: Translation.tr("Interface Language")
+            tooltip: Translation.tr("Select the language for the user interface.\n\"Auto\" will use your system's locale.")
+
+            ConfigSelectionArray {
+                id: languageSelector
+                currentValue: Config.options.language.ui
+                configOptionName: "language.ui"
+                onSelected: newValue => {
+                    Config.options.language.ui = newValue;
+                    reloadNotice.visible = true;
+                }
+                options: {
+                    var baseOptions = [
+                        {
+                            displayName: Translation.tr("Auto (System)"),
+                            value: "auto"
+                        }
+                    ];
+                    
+                    // Generate language options from available languages
+                    // Intl.DisplayNames is not used. Show the language code with underscore replaced by hyphen.
+                    for (var i = 0; i < Translation.availableLanguages.length; i++) {
+                        var lang = Translation.availableLanguages[i];
+                        var displayName = lang.replace('_', '-');
+                        baseOptions.push({ displayName: displayName, value: lang });
+                    }
+                    
+                    return baseOptions;
+                }
+            }
+
+            Rectangle {
+                id: reloadNotice
+                visible: false
+                Layout.fillWidth: true
+                Layout.topMargin: 8
+                height: noticeText.implicitHeight + 16
+                radius: 8
+                color: Appearance.m3colors.m3secondaryContainer
+                border.color: Appearance.m3colors.m3outline
+                border.width: 1
+
+                Row {
+                    anchors.fill: parent
+                    anchors.margins: 8
+                    spacing: 8
+
+                    MaterialSymbol {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "info"
+                        iconSize: 20
+                        color: Appearance.m3colors.m3onSecondaryContainer
+                    }
+
+                    StyledText {
+                        id: noticeText
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width - 36
+                        text: Translation.tr("Language setting saved. Please restart the quickshell to apply the new language.")
+                        color: Appearance.m3colors.m3onSecondaryContainer
+                        wrapMode: Text.WordWrap
+                    }
+                }
+            }
+        }
+    }
 }

@@ -393,5 +393,10 @@
   "Lap": "计时",
   "Welcome app": "欢迎应用",
   "Corner style": "角落样式",
-  "Bar layout": "条栏布局"
+  "Bar layout": "条栏布局",
+  "Language": "语言",
+  "Select the language for the user interface.\n\"Auto\" will use your system's locale.": "选择用户界面的语言。\n\"自动\" 将使用系统语言环境。",
+  "Language setting saved. Please restart the quickshell to apply the new language.": "语言设置已保存。请重启 quickshell 以应用新语言。",
+  "Auto (System)": "自动（系统）",
+  "Interface Language": "界面语言"
 }
