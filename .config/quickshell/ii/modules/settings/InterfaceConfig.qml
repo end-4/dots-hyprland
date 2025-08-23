@@ -74,7 +74,7 @@ ContentPage {
 
         ConfigRow {
             ContentSubsection {
-                title: "Corner style"
+                title: Translation.tr("Corner style")
 
                 ConfigSelectionArray {
                     currentValue: Config.options.bar.cornerStyle
@@ -100,7 +100,7 @@ ContentPage {
             }
 
             ContentSubsection {
-                title: "Bar layout"
+                title: Translation.tr("Bar layout")
                 ConfigSelectionArray {
                     currentValue: Config.options.bar.vertical
                     configOptionName: "bar.vertical"
