@@ -67,9 +67,12 @@ Rectangle {
                     padding: 10
                     text: root.directory
 
-                    onAccepted: {
-                        root.navigateToDirectory(text);
-                        root.showBreadcrumb = true;
+                    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            root.navigateToDirectory(text);
+                            root.showBreadcrumb = true;
+                            event.accepted = true;
+                        }
                     }
 
                     MouseArea {

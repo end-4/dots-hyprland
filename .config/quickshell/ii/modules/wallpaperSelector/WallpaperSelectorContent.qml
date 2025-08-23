@@ -53,11 +53,14 @@ Item {
         } else if (event.modifiers & Qt.ControlModifier && event.key === Qt.Key_L) {
             addressBar.focusBreadcrumb();
             event.accepted = true;
-        } else {
+        } else if (event.key === Qt.Key_Slash) {
             filterField.forceActiveFocus();
+            event.accepted = true;
+        } else {
             if (event.text.length > 0) {
                 filterField.text += event.text;
                 filterField.cursorPosition = filterField.text.length;
+                filterField.forceActiveFocus();
             }
             event.accepted = true;
         }
@@ -368,7 +371,7 @@ Item {
                                         Layout.bottomMargin: 2
                                         implicitWidth: 200
                                         padding: 10
-                                        placeholderText: Translation.tr("Search wallpapers...")
+                                        placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
                                         placeholderTextColor: Appearance.colors.colSubtext
                                         color: Appearance.colors.colOnLayer0
                                         font.pixelSize: Appearance.font.pixelSize.small
