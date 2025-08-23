@@ -173,16 +173,15 @@ StyledPopup {
 
                    ResourceItem {
                     icon: "clock_loader_60"
-                    label: Translation.tr("VRAM Used:")
-                    value: ` ${Math.round(ResourceUsage.gpuVramUsage * 100)} %`
-
+                    label: Translation.tr("VRAM:")
+                    value: ` ${Math.round(ResourceUsage.gpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.gpuVramTotalGB * 10) / 10} GB`
 
                   }
 
                   ResourceItem {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value:  ` ${ResourceUsage.gpuTempemperature} %` 
+                    value:  `${ResourceUsage.gpuTempemperature} °C` 
 
                 }
             }

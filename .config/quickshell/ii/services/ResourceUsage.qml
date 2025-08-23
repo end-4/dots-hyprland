@@ -26,6 +26,8 @@ Singleton {
     property double gpuUsage: 0
     property double gpuVramUsage:0
     property double gpuTempemperature:0
+    property double gpuVramUsedGB: 0    
+    property double gpuVramTotalGB: 0
 
 
 
@@ -113,7 +115,10 @@ Singleton {
         gpuAvailable =  this.text.indexOf("No GPU available") ==-1
         if(gpuAvailable){
           gpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
-          gpuVramUsage =  this.text.match(/\sVRAM\s:\s(\d+)/)?.[1] / 100 ?? 0
+          const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
+          gpuVramUsedGB = Number(vramLine?.[1] ?? 0)
+          gpuVramTotalGB = Number(vramLine?.[2] ?? 0)
+          gpuVramUsage = gpuVramTotalGB > 0 ? (gpuVramUsedGB / gpuVramTotalGB) : 0;
           gpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
         }
        }
