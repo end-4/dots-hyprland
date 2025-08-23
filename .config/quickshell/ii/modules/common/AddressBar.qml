@@ -108,6 +108,10 @@ Rectangle {
                 iconSize: Appearance.font.pixelSize.larger
                 color: dirEditButton.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer2
             }
+
+            StyledToolTip {
+                content: Translation.tr("Edit directory")
+            }
         }
     }
 }

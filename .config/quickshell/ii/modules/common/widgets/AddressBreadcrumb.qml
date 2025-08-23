@@ -27,7 +27,10 @@ ListView {
         required property var modelData
         required property int index
         buttonText: index === 0 ? "/" : modelData
-        toggled: index === directory.split("/").length - 1
+        toggled: {
+            if (directory.trim() === "/") return index === 0;
+            return index === directory.split("/").length - 1
+        }
         leftmost: index === 0
         rightmost: index === breadcrumbDirectory.split("/").length - 1
 

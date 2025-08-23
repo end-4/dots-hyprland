@@ -44,6 +44,7 @@ Singleton {
         property string nicePath: ""
         function setDirectoryIfValid(path) {
             validateDirProc.nicePath = FileUtils.trimFileProtocol(path).replace(/\/+$/, "")
+            if (/^\/*$/.test(validateDirProc.nicePath)) validateDirProc.nicePath = "/";
             validateDirProc.exec(["test", "-d", nicePath])
         }
         onExited: (exitCode, exitStatus) => {
@@ -61,7 +62,7 @@ Singleton {
         id: files
         folder: Qt.resolvedUrl(root.directory)
         nameFilters: root.extensions.map(ext => `*.${ext}`)
-        showDirs: false
+        showDirs: true
         showDotAndDotDot: false
         showOnlyReadable: true
         sortField: FolderListModel.Time
