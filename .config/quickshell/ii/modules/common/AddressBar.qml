@@ -17,6 +17,11 @@ Rectangle {
     implicitHeight: mainLayout.implicitHeight + padding * 2
     color: Appearance.colors.colLayer2
 
+    function focusBreadcrumb() {
+        root.showBreadcrumb = false;
+        addressInput.forceActiveFocus();
+    }
+
     RowLayout {
         id: mainLayout
         anchors {
@@ -38,43 +43,54 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Loader {
-                active: !root.showBreadcrumb
+            Rectangle {
+                id: directoryEntry
                 visible: !root.showBreadcrumb
                 anchors.fill: parent
-                sourceComponent: Rectangle {
-                    color: Appearance.colors.colLayer1
-                    radius: Appearance.rounding.full
-                    implicitWidth: addressInput.implicitWidth
-                    implicitHeight: addressInput.implicitHeight
+                color: Appearance.colors.colLayer1
+                radius: Appearance.rounding.full
+                implicitWidth: addressInput.implicitWidth
+                implicitHeight: addressInput.implicitHeight
 
-                    StyledTextInput {
-                        id: addressInput
+                Keys.onPressed: event => {
+                    if (directoryEntry.visible && event.key === Qt.Key_Escape) {
+                        root.showBreadcrumb = true;
+                        event.accepted = true;
+                        return;
+                    }
+                    event.accepted = false;
+                }
+
+                StyledTextInput {
+                    id: addressInput
+                    anchors.fill: parent
+                    padding: 10
+                    text: root.directory
+
+                    onAccepted: {
+                        root.navigateToDirectory(text);
+                        root.showBreadcrumb = true;
+                    }
+
+                    MouseArea {
+                        // I-beam cursor
                         anchors.fill: parent
-                        padding: 10
-                        text: root.directory
-
-                        onAccepted: root.navigateToDirectory(text)
-
-                        MouseArea {
-                            // I-beam cursor
-                            anchors.fill: parent
-                            acceptedButtons: Qt.NoButton
-                            hoverEnabled: true
-                            cursorShape: Qt.IBeamCursor
-                        }
+                        acceptedButtons: Qt.NoButton
+                        hoverEnabled: true
+                        cursorShape: Qt.IBeamCursor
                     }
                 }
             }
 
             Loader {
+                id: breadcrumbLoader
                 active: root.showBreadcrumb
                 visible: root.showBreadcrumb
                 anchors.fill: parent
                 sourceComponent: AddressBreadcrumb {
                     directory: root.directory
-                    onNavigateToDirectory: (dir) => {
-                        root.navigateToDirectory(dir)
+                    onNavigateToDirectory: dir => {
+                        root.navigateToDirectory(dir);
                     }
                 }
             }

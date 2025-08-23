@@ -30,13 +30,30 @@ Singleton {
         applyProc.exec([Directories.wallpaperSwitchScriptPath])
     }
 
-    function apply(path) {
+    function apply(path, darkMode = Appearance.m3colors.darkmode) {
         if (!path || path.length === 0) return
         applyProc.exec([
-            "bash", "-c",
-            `${StringUtils.shellSingleQuoteEscape(Directories.wallpaperSwitchScriptPath)} ` +
-            `--image ${StringUtils.shellSingleQuoteEscape(path)}`
+            Directories.wallpaperSwitchScriptPath,
+            "--image", path,
+            "--mode", (darkMode ? "dark" : "light")
         ])
+    }
+
+    Process {
+        id: validateDirProc
+        property string nicePath: ""
+        function setDirectoryIfValid(path) {
+            validateDirProc.nicePath = FileUtils.trimFileProtocol(path).replace(/\/+$/, "")
+            validateDirProc.exec(["test", "-d", nicePath])
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 0) {
+                root.directory = validateDirProc.nicePath
+            }
+        }
+    }
+    function setDirectory(path) {
+        validateDirProc.setDirectoryIfValid(path)
     }
 
     // Folder model

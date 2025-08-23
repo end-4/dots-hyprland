@@ -20,10 +20,14 @@ Item {
     implicitWidth: columnLayout.implicitWidth
     property var wallpapers: Wallpapers.wallpapers
     property string filterQuery: ""
+    property bool useDarkMode: Appearance.m3colors.darkmode
 
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Escape) {
             GlobalStates.wallpaperSelectorOpen = false;
+            event.accepted = true;
+        } else if (event.modifiers & Qt.AltModifier && event.key === Qt.Key_Up) {
+            Wallpapers.setDirectory(FileUtils.parentDirectory(Wallpapers.directory));
             event.accepted = true;
         } else if (event.key === Qt.Key_Left) {
             grid.moveSelection(-1);
@@ -32,11 +36,7 @@ Item {
             grid.moveSelection(1);
             event.accepted = true;
         } else if (event.key === Qt.Key_Up) {
-            if (grid.currentIndex < grid.columns) {
-                filterField.forceActiveFocus();
-            } else {
-                grid.moveSelection(-grid.columns);
-            }
+            grid.moveSelection(-grid.columns);
             event.accepted = true;
         } else if (event.key === Qt.Key_Down) {
             grid.moveSelection(grid.columns);
@@ -49,6 +49,9 @@ Item {
                 filterField.text = filterField.text.substring(0, filterField.text.length - 1);
             }
             filterField.forceActiveFocus();
+            event.accepted = true;
+        } else if (event.modifiers & Qt.ControlModifier && event.key === Qt.Key_L) {
+            addressBar.focusBreadcrumb();
             event.accepted = true;
         } else {
             filterField.forceActiveFocus();
@@ -103,7 +106,7 @@ Item {
                         Layout.fillHeight: false
                         directory: Wallpapers.directory
                         onNavigateToDirectory: path => {
-                            Wallpapers.directory = path;
+                            Wallpapers.setDirectory(path);
                         }
                         radius: wallpaperGridBackground.radius - Layout.margins
                     }
@@ -154,12 +157,13 @@ Item {
                             }
 
                             function activateCurrent() {
-                                const path = model[currentIndex];
+                                print("ACTIVATE");
+                                const path = grid.model.values[currentIndex];
                                 if (!path)
                                     return;
                                 GlobalStates.wallpaperSelectorOpen = false;
                                 filterField.text = "";
-                                Wallpapers.apply(path);
+                                Wallpapers.apply(path, root.useDarkMode);
                             }
 
                             model: ScriptModel {
@@ -284,7 +288,7 @@ Item {
                                     onClicked: {
                                         GlobalStates.wallpaperSelectorOpen = false;
                                         filterField.text = "";
-                                        Wallpapers.apply(wallpaperItem.modelData);
+                                        Wallpapers.apply(wallpaperItem.modelData, root.useDarkMode);
                                     }
                                 }
                             }
@@ -326,22 +330,34 @@ Item {
                                         Layout.fillHeight: true
                                         Layout.topMargin: 2
                                         Layout.bottomMargin: 2
+                                        implicitWidth: height
                                         buttonRadius: Appearance.rounding.full
                                         onClicked: {
                                             Wallpapers.openFallbackPicker();
                                             GlobalStates.wallpaperSelectorOpen = false;
                                         }
-                                        contentItem: RowLayout {
-                                            MaterialSymbol {
-                                                text: "files"
-                                                iconSize: Appearance.font.pixelSize.larger
-                                            }
-                                            StyledText {
-                                                text: Translation.tr("System")
-                                            }
+                                        contentItem: MaterialSymbol {
+                                            text: "files"
+                                            iconSize: Appearance.font.pixelSize.larger
                                         }
                                         StyledToolTip {
-                                            content: "Use the system file picker instead"
+                                            content: Translation.tr("Use the system file picker instead")
+                                        }
+                                    }
+
+                                    RippleButton {
+                                        Layout.fillHeight: true
+                                        Layout.topMargin: 2
+                                        Layout.bottomMargin: 2
+                                        implicitWidth: height
+                                        buttonRadius: Appearance.rounding.full
+                                        onClicked: root.useDarkMode = !root.useDarkMode
+                                        contentItem: MaterialSymbol {
+                                            text: root.useDarkMode ? "dark_mode" : "light_mode"
+                                            iconSize: Appearance.font.pixelSize.larger
+                                        }
+                                        StyledToolTip {
+                                            content: Translation.tr("Click to toggle light/dark mode (applied when wallpaper is chosen)")
                                         }
                                     }
 
@@ -369,35 +385,20 @@ Item {
                                         }
 
                                         Keys.onPressed: event => {
-                                            if (text.length === 0) {
-                                                if (event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
-                                                    wallpaperGrid.forceActiveFocus();
-                                                    if (event.key === Qt.Key_Down)
-                                                        grid.moveSelection(grid.columns);
-                                                    else if (event.key === Qt.Key_Left)
-                                                        grid.moveSelection(-1);
-                                                    else if (event.key === Qt.Key_Right)
-                                                        grid.moveSelection(1);
-                                                    event.accepted = true;
-                                                }
-                                            } else {
+                                            if (text.length !== 0) {
+                                                // No filtering, just navigate grid
                                                 if (event.key === Qt.Key_Down) {
                                                     grid.moveSelection(grid.columns);
-                                                    event.accepted = true;
                                                     wallpaperGrid.forceActiveFocus();
+                                                    event.accepted = true;
+                                                }
+                                                if (event.key === Qt.Key_Up) {
+                                                    grid.moveSelection(-grid.columns);
+                                                    wallpaperGrid.forceActiveFocus();
+                                                    event.accepted = true;
                                                 }
                                             }
-                                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                                grid.activateCurrent();
-                                                event.accepted = true;
-                                            } else if (event.key === Qt.Key_Escape) {
-                                                if (filterField.text.length > 0) {
-                                                    filterField.text = "";
-                                                } else {
-                                                    GlobalStates.wallpaperSelectorOpen = false;
-                                                }
-                                                event.accepted = true;
-                                            }
+                                            event.accepted = false;
                                         }
                                     }
 
@@ -409,15 +410,9 @@ Item {
                                         onClicked: {
                                             GlobalStates.wallpaperSelectorOpen = false;
                                         }
-                                        implicitWidth: height
 
-                                        contentItem: MaterialSymbol {
-                                            text: "close"
-                                            iconSize: Appearance.font.pixelSize.larger
-                                        }
-
-                                        StyledToolTip {
-                                            content: "Cancel"
+                                        contentItem: StyledText {
+                                            text: "Cancel"
                                         }
                                     }
                                 }
