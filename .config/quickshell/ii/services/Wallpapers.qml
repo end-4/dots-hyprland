@@ -14,7 +14,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
 
-    property string searchDir: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
+    property string directory: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
     readonly property list<string> extensions: [ // TODO: add videos
         "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
     ]
@@ -42,7 +42,7 @@ Singleton {
     // Folder model
     FolderListModel {
         id: files
-        folder: Qt.resolvedUrl(root.searchDir)
+        folder: Qt.resolvedUrl(root.directory)
         nameFilters: root.extensions.map(ext => `*.${ext}`)
         showDirs: false
         showDotAndDotDot: false

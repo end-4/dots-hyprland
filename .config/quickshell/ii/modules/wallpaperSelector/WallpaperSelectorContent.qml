@@ -86,324 +86,340 @@ Item {
                 border.color: Appearance.colors.colLayer0Border
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Rectangle {
-                        width: wallpaperGridBackground.width
-                        height: wallpaperGridBackground.height
-                        radius: wallpaperGridBackground.radius
-                    }
-                }
 
                 property int calculatedRows: Math.ceil(grid.count / grid.columns)
 
                 // implicitWidth: gridColumnLayout.implicitWidth
                 // implicitHeight: gridColumnLayout.implicitHeight
 
-                Item {
+                ColumnLayout {
                     // The grid
                     anchors.fill: parent
 
-                    GridView {
-                        id: grid
-                        visible: root.wallpapers.length > 0
-
-                        property int currentIndex: 0
-                        readonly property int columns: root.columns
-                        readonly property int rows: Math.max(1, Math.ceil(count / columns))
-
-                        anchors.fill: parent
-                        cellWidth: width / root.columns
-                        cellHeight: cellWidth / root.previewCellAspectRatio
-                        clip: true
-                        interactive: true
-                        keyNavigationWraps: true
-                        boundsBehavior: Flickable.StopAtBounds
-
-                        ScrollBar.horizontal: ScrollBar {
-                            policy: ScrollBar.AsNeeded
+                    AddressBar {
+                        id: addressBar
+                        Layout.margins: 4
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        directory: Wallpapers.directory
+                        onNavigateToDirectory: path => {
+                            Wallpapers.directory = path;
                         }
-                        ScrollBar.vertical: ScrollBar {
-                            policy: ScrollBar.AsNeeded
-                        }
+                        radius: wallpaperGridBackground.radius - Layout.margins
+                    }
 
-                        model: ScriptModel {
-                            values: {
-                                let filtered = root.wallpapers.filter(w => (w.toLowerCase().includes(root.filterQuery.toLowerCase())));
-                                // Add 'columns' empty entries to the end
-                                for (let i = 0; i < root.columns; i++) {
-                                    filtered.push("");
-                                }
-                                return filtered;
+                    Item {
+                        id: gridDisplayRegion
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: gridDisplayRegion.width
+                                height: gridDisplayRegion.height
+                                radius: wallpaperGridBackground.radius
                             }
                         }
-                        onModelChanged: currentIndex = 0
 
-                        function moveSelection(delta) {
-                            for (let i = 0; i < count; i++) {
-                                const item = itemAtIndex(i);
-                                if (item) {
-                                    item.isHovered = false;
-                                }
+                        GridView {
+                            id: grid
+                            visible: root.wallpapers.length > 0
+
+                            readonly property int columns: root.columns
+                            readonly property int rows: Math.max(1, Math.ceil(count / columns))
+                            property int currentIndex: 0
+
+                            anchors.fill: parent
+                            cellWidth: width / root.columns
+                            cellHeight: cellWidth / root.previewCellAspectRatio
+                            interactive: true
+                            clip: true
+                            keyNavigationWraps: true
+                            boundsBehavior: Flickable.StopAtBounds
+                            bottomMargin: extraOptions.implicitHeight
+
+                            ScrollBar.vertical: ScrollBar {
+                                policy: ScrollBar.AsNeeded
                             }
-                            currentIndex = Math.max(0, Math.min(root.wallpapers.length - 1, currentIndex + delta));
-                            positionViewAtIndex(currentIndex, GridView.Contain);
-                        }
-                        function activateCurrent() {
-                            const path = model[currentIndex];
-                            if (!path)
-                                return;
-                            GlobalStates.wallpaperSelectorOpen = false;
-                            filterField.text = "";
-                            Wallpapers.apply(path);
-                        }
 
-                        delegate: Item {
-                            id: wallpaperItem
-                            required property var modelData
-                            required property int index
-                            visible: modelData.length > 0
-                            width: grid.cellWidth
-                            height: grid.cellHeight
-                            property bool isHovered: false
-
-                            Rectangle {
-                                anchors {
-                                    fill: parent
-                                    margins: 8
+                            function moveSelection(delta) {
+                                for (let i = 0; i < count; i++) {
+                                    const item = itemAtIndex(i);
+                                    if (item) {
+                                        item.isHovered = false;
+                                    }
                                 }
-                                radius: Appearance.rounding.normal
-                                color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colPrimary)
+                                currentIndex = Math.max(0, Math.min(root.wallpapers.length - 1, currentIndex + delta));
+                                positionViewAtIndex(currentIndex, GridView.Contain);
+                            }
 
-                                ColumnLayout {
-                                    id: wallpaperItemColumnLayout
+                            function activateCurrent() {
+                                const path = model[currentIndex];
+                                if (!path)
+                                    return;
+                                GlobalStates.wallpaperSelectorOpen = false;
+                                filterField.text = "";
+                                Wallpapers.apply(path);
+                            }
+
+                            model: ScriptModel {
+                                values: root.wallpapers.filter(w => (w.toLowerCase().includes(root.filterQuery.toLowerCase())))
+                            }
+                            onModelChanged: currentIndex = 0
+
+                            delegate: Item {
+                                id: wallpaperItem
+                                required property var modelData
+                                required property int index
+                                visible: modelData.length > 0
+                                width: grid.cellWidth
+                                height: grid.cellHeight
+                                property bool isHovered: false
+
+                                Rectangle {
                                     anchors {
                                         fill: parent
-                                        margins: 6
+                                        margins: 8
                                     }
-                                    spacing: 4
+                                    radius: Appearance.rounding.normal
+                                    color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colPrimary)
+                                    Behavior on color {
+                                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                                    }
 
-                                    Item {
-                                        id: wallpaperItemImageContainer
-                                        Layout.fillHeight: true
-                                        Layout.fillWidth: true
-
-                                        StyledRectangularShadow {
-                                            target: thumbnailImageLoader
-                                            radius: Appearance.rounding.small
+                                    ColumnLayout {
+                                        id: wallpaperItemColumnLayout
+                                        anchors {
+                                            fill: parent
+                                            margins: 6
                                         }
+                                        spacing: 4
 
-                                        Loader {
-                                            id: thumbnailImageLoader
-                                            anchors.fill: parent
-                                            active: wallpaperItem.visible
-                                            sourceComponent: Image {
-                                                id: thumbnailImage
-                                                source: {
-                                                    if (wallpaperItem.modelData.length == 0)
-                                                        return;
-                                                    const resolvedUrl = Qt.resolvedUrl(wallpaperItem.modelData);
-                                                    const md5Hash = Qt.md5(resolvedUrl);
-                                                    const cacheSize = "normal";
-                                                    const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
-                                                    return thumbnailPath;
-                                                }
-                                                asynchronous: true
-                                                cache: false
-                                                smooth: true
-                                                mipmap: false
+                                        Item {
+                                            id: wallpaperItemImageContainer
+                                            Layout.fillHeight: true
+                                            Layout.fillWidth: true
 
-                                                fillMode: Image.PreserveAspectCrop
-                                                clip: true
-                                                sourceSize.width: wallpaperItemColumnLayout.width
-                                                sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
+                                            StyledRectangularShadow {
+                                                target: thumbnailImageLoader
+                                                radius: Appearance.rounding.small
+                                            }
 
-                                                opacity: status === Image.Ready ? 1 : 0
-                                                Behavior on opacity {
-                                                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                                                }
+                                            Loader {
+                                                id: thumbnailImageLoader
+                                                anchors.fill: parent
+                                                active: wallpaperItem.visible
+                                                sourceComponent: Image {
+                                                    id: thumbnailImage
+                                                    source: {
+                                                        if (wallpaperItem.modelData.length == 0)
+                                                            return;
+                                                        const resolvedUrl = Qt.resolvedUrl(wallpaperItem.modelData);
+                                                        const md5Hash = Qt.md5(resolvedUrl);
+                                                        const cacheSize = "normal";
+                                                        const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
+                                                        return thumbnailPath;
+                                                    }
+                                                    asynchronous: true
+                                                    cache: false
+                                                    smooth: true
+                                                    mipmap: false
 
-                                                layer.enabled: true
-                                                layer.effect: OpacityMask {
-                                                    maskSource: Rectangle {
-                                                        width: wallpaperItemImageContainer.width
-                                                        height: wallpaperItemImageContainer.height
-                                                        radius: Appearance.rounding.small
+                                                    fillMode: Image.PreserveAspectCrop
+                                                    clip: true
+                                                    sourceSize.width: wallpaperItemColumnLayout.width
+                                                    sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
+
+                                                    opacity: status === Image.Ready ? 1 : 0
+                                                    Behavior on opacity {
+                                                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                                                    }
+
+                                                    layer.enabled: true
+                                                    layer.effect: OpacityMask {
+                                                        maskSource: Rectangle {
+                                                            width: wallpaperItemImageContainer.width
+                                                            height: wallpaperItemImageContainer.height
+                                                            radius: Appearance.rounding.small
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    StyledText {
-                                        id: wallpaperItemName
-                                        Layout.fillWidth: true
-                                        Layout.leftMargin: 10
-                                        Layout.rightMargin: 10
-                                        horizontalAlignment: Text.AlignHCenter
-                                        elide: Text.ElideRight
-                                        font.pixelSize: Appearance.font.pixelSize.smaller
-                                        color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer0
-                                        text: FileUtils.fileNameForPath(wallpaperItem.modelData)
-                                    }
-                                }
-                            }
+                                        StyledText {
+                                            id: wallpaperItemName
+                                            Layout.fillWidth: true
+                                            Layout.leftMargin: 10
+                                            Layout.rightMargin: 10
 
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onEntered: {
-                                    for (let i = 0; i < grid.count; i++) {
-                                        const item = grid.itemAtIndex(i);
-                                        if (item && item !== parent) {
-                                            item.isHovered = false;
+                                            horizontalAlignment: Text.AlignHCenter
+                                            elide: Text.ElideRight
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer0
+                                            Behavior on color {
+                                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                                            }
+                                            text: FileUtils.fileNameForPath(wallpaperItem.modelData)
                                         }
                                     }
-                                    parent.isHovered = true;
-                                    grid.currentIndex = index;
                                 }
-                                onExited: {
-                                    parent.isHovered = false;
-                                }
-                                onClicked: {
-                                    GlobalStates.wallpaperSelectorOpen = false;
-                                    filterField.text = "";
-                                    Wallpapers.apply(wallpaperItem.modelData);
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onEntered: {
+                                        for (let i = 0; i < grid.count; i++) {
+                                            const item = grid.itemAtIndex(i);
+                                            if (item && item !== parent) {
+                                                item.isHovered = false;
+                                            }
+                                        }
+                                        parent.isHovered = true;
+                                        grid.currentIndex = index;
+                                    }
+                                    onExited: {
+                                        parent.isHovered = false;
+                                    }
+                                    onClicked: {
+                                        GlobalStates.wallpaperSelectorOpen = false;
+                                        filterField.text = "";
+                                        Wallpapers.apply(wallpaperItem.modelData);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    Label {
-                        id: noWallpapersFoundLabel
-                        visible: grid.model.values.length === 0
-                        anchors.centerIn: parent
-                        text: "No wallpapers found"
-                        font.family: Appearance.font.family.main
-                        font.pixelSize: Appearance.font.pixelSize.normal
-                        color: Appearance.colors.colSubtext
-                    }
-
-                    StyledRectangularShadow {
-                        target: extraOptionsBackground
-                    }
-
-                    Rectangle { // Bottom toolbar
-                        id: extraOptionsBackground
-                        property real padding: 6
-                        anchors {
-                            bottom: parent.bottom
-                            horizontalCenter: parent.horizontalCenter
-                            bottomMargin: 8
-                        }
-                        color: Appearance.colors.colLayer2
-                        implicitHeight: extraOptionsRowLayout.implicitHeight + padding * 2
-                        implicitWidth: extraOptionsRowLayout.implicitWidth + padding * 2
-                        radius: Appearance.rounding.full
-
-                        RowLayout {
-                            id: extraOptionsRowLayout
+                        Item {
+                            id: extraOptions
                             anchors {
-                                fill: parent
-                                margins: extraOptionsBackground.padding
+                                bottom: parent.bottom
+                                horizontalCenter: parent.horizontalCenter
+                            }
+                            implicitHeight: extraOptionsBackground.implicitHeight + extraOptionsBackground.anchors.margins * 2
+                            implicitWidth: extraOptionsBackground.implicitWidth + extraOptionsBackground.anchors.margins * 2
+
+                            StyledRectangularShadow {
+                                target: extraOptionsBackground
                             }
 
-                            RippleButton {
-                                Layout.fillHeight: true
-                                Layout.topMargin: 2
-                                Layout.bottomMargin: 2
-                                buttonRadius: Appearance.rounding.full
-                                onClicked: {
-                                    Wallpapers.openFallbackPicker();
-                                    GlobalStates.wallpaperSelectorOpen = false;
+                            Rectangle { // Bottom toolbar
+                                id: extraOptionsBackground
+                                property real padding: 6
+                                anchors {
+                                    fill: parent
+                                    margins: 8
                                 }
-                                contentItem: RowLayout {
-                                    MaterialSymbol {
-                                        text: "files"
-                                        iconSize: Appearance.font.pixelSize.larger
-                                    }
-                                    StyledText {
-                                        text: Translation.tr("System")
-                                    }
-                                }
-                                StyledToolTip {
-                                    content: "Use the system file picker instead"
-                                }
-                            }
+                                color: Appearance.colors.colLayer2
+                                implicitHeight: extraOptionsRowLayout.implicitHeight + padding * 2
+                                implicitWidth: extraOptionsRowLayout.implicitWidth + padding * 2
+                                radius: Appearance.rounding.full
 
-                            TextField {
-                                id: filterField
-                                Layout.fillHeight: true
-                                Layout.topMargin: 2
-                                Layout.bottomMargin: 2
-                                implicitWidth: 200
-                                padding: 10
-                                placeholderText: Translation.tr("Search wallpapers...")
-                                placeholderTextColor: Appearance.colors.colSubtext
-                                color: Appearance.colors.colOnLayer0
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                renderType: Text.NativeRendering
-                                selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-                                selectionColor: Appearance.colors.colSecondaryContainer
-                                background: Rectangle {
-                                    color: Appearance.colors.colLayer1
-                                    radius: Appearance.rounding.full
-                                }
-
-                                onTextChanged: {
-                                    root.filterQuery = text;
-                                }
-
-                                Keys.onPressed: event => {
-                                    if (text.length === 0) {
-                                        if (event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
-                                            wallpaperGrid.forceActiveFocus();
-                                            if (event.key === Qt.Key_Down)
-                                                grid.moveSelection(grid.columns);
-                                            else if (event.key === Qt.Key_Left)
-                                                grid.moveSelection(-1);
-                                            else if (event.key === Qt.Key_Right)
-                                                grid.moveSelection(1);
-                                            event.accepted = true;
-                                        }
-                                    } else {
-                                        if (event.key === Qt.Key_Down) {
-                                            grid.moveSelection(grid.columns);
-                                            event.accepted = true;
-                                            wallpaperGrid.forceActiveFocus();
-                                        }
+                                RowLayout {
+                                    id: extraOptionsRowLayout
+                                    anchors {
+                                        fill: parent
+                                        margins: extraOptionsBackground.padding
                                     }
-                                    if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                        grid.activateCurrent();
-                                        event.accepted = true;
-                                    } else if (event.key === Qt.Key_Escape) {
-                                        if (filterField.text.length > 0) {
-                                            filterField.text = "";
-                                        } else {
+
+                                    RippleButton {
+                                        Layout.fillHeight: true
+                                        Layout.topMargin: 2
+                                        Layout.bottomMargin: 2
+                                        buttonRadius: Appearance.rounding.full
+                                        onClicked: {
+                                            Wallpapers.openFallbackPicker();
                                             GlobalStates.wallpaperSelectorOpen = false;
                                         }
-                                        event.accepted = true;
+                                        contentItem: RowLayout {
+                                            MaterialSymbol {
+                                                text: "files"
+                                                iconSize: Appearance.font.pixelSize.larger
+                                            }
+                                            StyledText {
+                                                text: Translation.tr("System")
+                                            }
+                                        }
+                                        StyledToolTip {
+                                            content: "Use the system file picker instead"
+                                        }
                                     }
-                                }
-                            }
 
-                            RippleButton {
-                                Layout.fillHeight: true
-                                Layout.topMargin: 2
-                                Layout.bottomMargin: 2
-                                buttonRadius: Appearance.rounding.full
-                                onClicked: {
-                                    GlobalStates.wallpaperSelectorOpen = false;
-                                }
-                                implicitWidth: height
+                                    TextField {
+                                        id: filterField
+                                        Layout.fillHeight: true
+                                        Layout.topMargin: 2
+                                        Layout.bottomMargin: 2
+                                        implicitWidth: 200
+                                        padding: 10
+                                        placeholderText: Translation.tr("Search wallpapers...")
+                                        placeholderTextColor: Appearance.colors.colSubtext
+                                        color: Appearance.colors.colOnLayer0
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        renderType: Text.NativeRendering
+                                        selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+                                        selectionColor: Appearance.colors.colSecondaryContainer
+                                        background: Rectangle {
+                                            color: Appearance.colors.colLayer1
+                                            radius: Appearance.rounding.full
+                                        }
 
-                                contentItem: MaterialSymbol {
-                                    text: "close"
-                                    iconSize: Appearance.font.pixelSize.larger
-                                }
+                                        onTextChanged: {
+                                            root.filterQuery = text;
+                                        }
 
-                                StyledToolTip {
-                                    content: "Cancel"
+                                        Keys.onPressed: event => {
+                                            if (text.length === 0) {
+                                                if (event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
+                                                    wallpaperGrid.forceActiveFocus();
+                                                    if (event.key === Qt.Key_Down)
+                                                        grid.moveSelection(grid.columns);
+                                                    else if (event.key === Qt.Key_Left)
+                                                        grid.moveSelection(-1);
+                                                    else if (event.key === Qt.Key_Right)
+                                                        grid.moveSelection(1);
+                                                    event.accepted = true;
+                                                }
+                                            } else {
+                                                if (event.key === Qt.Key_Down) {
+                                                    grid.moveSelection(grid.columns);
+                                                    event.accepted = true;
+                                                    wallpaperGrid.forceActiveFocus();
+                                                }
+                                            }
+                                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                                grid.activateCurrent();
+                                                event.accepted = true;
+                                            } else if (event.key === Qt.Key_Escape) {
+                                                if (filterField.text.length > 0) {
+                                                    filterField.text = "";
+                                                } else {
+                                                    GlobalStates.wallpaperSelectorOpen = false;
+                                                }
+                                                event.accepted = true;
+                                            }
+                                        }
+                                    }
+
+                                    RippleButton {
+                                        Layout.fillHeight: true
+                                        Layout.topMargin: 2
+                                        Layout.bottomMargin: 2
+                                        buttonRadius: Appearance.rounding.full
+                                        onClicked: {
+                                            GlobalStates.wallpaperSelectorOpen = false;
+                                        }
+                                        implicitWidth: height
+
+                                        contentItem: MaterialSymbol {
+                                            text: "close"
+                                            iconSize: Appearance.font.pixelSize.larger
+                                        }
+
+                                        StyledToolTip {
+                                            content: "Cancel"
+                                        }
+                                    }
                                 }
                             }
                         }
