@@ -33,6 +33,10 @@ Singleton {
     }
     onSearchDirsChanged: reload()
 
+    function openFallbackPicker() {
+        applyProc.exec([Directories.wallpaperSwitchScriptPath])
+    }
+
     function apply(path) {
         if (!path || path.length === 0) return
         applyProc.exec([
