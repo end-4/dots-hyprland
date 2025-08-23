@@ -15,8 +15,7 @@ import Quickshell.Hyprland
 Item {
     id: root
     property int columns: 4
-    property int thumbnailWidth: 256
-    property int thumbnailHeight: 144
+    property real previewAspectRatio: 16 / 9
     implicitHeight: columnLayout.implicitHeight
     implicitWidth: columnLayout.implicitWidth
     property var filteredWallpapers: Wallpapers.wallpapers
@@ -63,13 +62,13 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        spacing: 8
+        anchors.fill: parent
+        spacing: -Appearance.sizes.elevationMargin
 
-        Item { // Search box
-            implicitHeight: filterField.implicitHeight
-            implicitWidth: filterField.implicitWidth
+        Item {
+            // Search box
+            implicitHeight: filterField.implicitHeight + Appearance.sizes.elevationMargin * 2
+            implicitWidth: filterField.implicitWidth + Appearance.sizes.elevationMargin * 2
             Layout.alignment: Qt.AlignHCenter
 
             StyledRectangularShadow {
@@ -78,7 +77,11 @@ Item {
 
             TextField {
                 id: filterField
-                implicitHeight: 40
+                anchors {
+                    fill: parent
+                    margins: Appearance.sizes.elevationMargin
+                }
+                implicitHeight: 44
                 implicitWidth: Appearance.sizes.searchWidth
                 padding: 10
                 placeholderText: "Search wallpapers..."
@@ -94,7 +97,7 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.normal
 
                 onTextChanged: {
-                    root.filterQuery = text
+                    root.filterQuery = text;
                 }
 
                 Keys.onPressed: event => {
@@ -133,48 +136,38 @@ Item {
 
         Item { // The grid
             id: wallpaperGrid
-            Layout.alignment: Qt.AlignHCenter
-            implicitWidth: wallpaperGridBackground.implicitWidth
-            implicitHeight: wallpaperGridBackground.implicitHeight
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            implicitWidth: wallpaperGridBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
+            implicitHeight: wallpaperGridBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
 
             StyledRectangularShadow {
                 target: wallpaperGridBackground
             }
             Rectangle {
                 id: wallpaperGridBackground
-                color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.screenRounding
+                anchors {
+                    fill: parent
+                    margins: Appearance.sizes.elevationMargin
+                }
+                focus: true
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
-                focus: true
+                color: Appearance.colors.colLayer0
+                radius: Appearance.rounding.screenRounding
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: wallpaperGridBackground.width
+                        height: wallpaperGridBackground.height
+                        radius: wallpaperGridBackground.radius
+                    }
+                }
 
                 property int calculatedRows: Math.ceil(grid.count / grid.columns)
 
-                implicitWidth: {
-                    if (root.filteredWallpapers.length === 0) {
-                        return 300;
-                    } else if (root.filteredWallpapers.length < grid.columns) {
-                        return root.filteredWallpapers.length * grid.cellWidth + 16;
-                    } else {
-                        return Math.min(panelWindow.width * 0.7, 900);
-                    }
-                }
-
-                implicitHeight: {
-                    if (root.filteredWallpapers.length === 0) {
-                        return 100;
-                    } else {
-                        return Math.min(panelWindow.height * 0.6, Math.min(calculatedRows, 3) * grid.cellHeight + 16);
-                    }
-                }
-
-                Behavior on implicitWidth {
-                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                }
-
-                Behavior on implicitHeight {
-                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                }
+                implicitWidth: grid.implicitWidth
+                implicitHeight: grid.implicitHeight
 
                 GridView {
                     id: grid
@@ -185,8 +178,8 @@ Item {
                     readonly property int rows: Math.max(1, Math.ceil(count / columns))
 
                     anchors.fill: parent
-                    cellWidth: root.thumbnailWidth
-                    cellHeight: root.thumbnailHeight
+                    cellWidth: width / root.columns
+                    cellHeight: cellWidth / root.previewAspectRatio
                     clip: true
                     interactive: true
                     keyNavigationWraps: true
@@ -202,9 +195,7 @@ Item {
 
                     model: ScriptModel {
                         values: {
-                            return root.filteredWallpapers.filter(w => (
-                                w.toLowerCase().includes(root.filterQuery.toLowerCase())
-                            ));
+                            return root.filteredWallpapers.filter(w => (w.toLowerCase().includes(root.filterQuery.toLowerCase())));
                         }
                     }
                     onModelChanged: currentIndex = 0
@@ -233,60 +224,48 @@ Item {
                         height: grid.cellHeight
                         property bool isHovered: false
 
-                        Rectangle {
-                            anchors.fill: parent
-                            radius: Appearance.rounding.windowRounding
-                            color: Appearance.colors.colLayer1
-                            border.width: (index === grid.currentIndex || parent.isHovered) ? 3 : 0
-                            border.color: Appearance.colors.colSecondary
-                        }
+                        Image {
+                            id: thumbnailImage
+                            anchors {
+                                fill: parent
+                                margins: 8
+                            }
+                            source: {
+                                const resolvedUrl = Qt.resolvedUrl(modelData);
+                                const md5Hash = Qt.md5(resolvedUrl);
+                                const cacheSize = "normal";
+                                const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
+                                return thumbnailPath;
+                            }
+                            fillMode: Image.PreserveAspectCrop
+                            asynchronous: true
+                            cache: false
+                            smooth: true
+                            mipmap: false
 
-                        Rectangle {
-                            anchors.fill: parent
-                            anchors.margins: 8
-                            color: Appearance.colors.colLayer2
-                            radius: Appearance.rounding.small
+                            sourceSize.width: Math.min(128, grid.cellWidth - 16)
+                            sourceSize.height: Math.min(96, grid.cellHeight - 16)
 
-                            Image {
-                                id: thumbnailImage
-                                anchors.fill: parent
-                                source: {
-                                    const resolvedUrl = Qt.resolvedUrl(modelData);
-                                    const md5Hash = Qt.md5(resolvedUrl);
-                                    const cacheSize = "normal";
-                                    const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
-                                    return thumbnailPath;
-                                }
-                                fillMode: Image.PreserveAspectCrop
-                                asynchronous: true
-                                cache: false
-                                smooth: true
-                                mipmap: false
+                            opacity: status === Image.Ready ? 1 : 0
+                            Behavior on opacity {
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
 
-                                sourceSize.width: Math.min(128, grid.cellWidth - 16)
-                                sourceSize.height: Math.min(96, grid.cellHeight - 16)
-
-                                opacity: status === Image.Ready ? 1 : 0
-                                Behavior on opacity {
-                                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                                }
-
-                                layer.enabled: true
-                                layer.effect: OpacityMask {
-                                    maskSource: Rectangle {
-                                        width: thumbnailImage.width
-                                        height: thumbnailImage.height
-                                        radius: Appearance.rounding.small
-                                    }
-                                }
-
-                                Rectangle {
-                                    anchors.fill: parent
-                                    color: "transparent"
-                                    border.width: 1
-                                    border.color: Appearance.colors.colOutlineVariant
+                            layer.enabled: true
+                            layer.effect: OpacityMask {
+                                maskSource: Rectangle {
+                                    width: thumbnailImage.width
+                                    height: thumbnailImage.height
                                     radius: Appearance.rounding.small
                                 }
+                            }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                                radius: Appearance.rounding.small
+                                border.width: (index === grid.currentIndex || parent.isHovered) ? 2 : 1
+                                border.color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colSecondary : Appearance.colors.colOutlineVariant
                             }
                         }
 
@@ -310,35 +289,6 @@ Item {
                                 GlobalStates.wallpaperSelectorOpen = false;
                                 filterField.text = "";
                                 Wallpapers.apply(modelData);
-                            }
-                        }
-                    }
-
-                    add: Transition {
-                        from: "*"
-                        to: "*"
-                        ParallelAnimation {
-                            PropertyAnimation {
-                                property: "x"
-                                from: grid.contentX + (grid.width / 2) - width / 2
-                            }
-                            PropertyAnimation {
-                                property: "y"
-                                from: grid.contentY + (grid.height / 2) - height / 2
-                            }
-                            NumberAnimation {
-                                property: "scale"
-                                from: 0.0
-                                to: 1.0
-                                duration: Appearance.animationCurves.expressiveDefaultSpatialDuration
-                                easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
-                            }
-                            NumberAnimation {
-                                property: "opacity"
-                                from: 0.0
-                                to: 1.0
-                                duration: Appearance.animationCurves.expressiveDefaultSpatialDuration
-                                easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
                             }
                         }
                     }

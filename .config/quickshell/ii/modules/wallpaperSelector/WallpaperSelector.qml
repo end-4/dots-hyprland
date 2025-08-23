@@ -28,12 +28,7 @@ Scope {
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
-            anchors {
-                top: true
-                bottom: true
-                left: true
-                right: true
-            }
+            anchors.top: true
             margins {
                 top: Appearance.sizes.barHeight + Appearance.sizes.hyprlandGapsOut
             }
@@ -41,6 +36,9 @@ Scope {
             mask: Region {
                 item: content
             }
+
+            implicitHeight: Appearance.sizes.wallpaperSelectorHeight
+            implicitWidth: Appearance.sizes.wallpaperSelectorWidth
 
             HyprlandFocusGrab { // Click outside to close
                 id: grab
@@ -54,8 +52,7 @@ Scope {
             WallpaperSelectorContent {
                 id: content
                 anchors {
-                    top: parent.top
-                    horizontalCenter: parent.horizontalCenter
+                    fill: parent
                 }
             }
         }
