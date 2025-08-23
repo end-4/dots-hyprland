@@ -5,7 +5,6 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -22,7 +21,6 @@ Scope {
             id: panelWindow
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
             property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
-            property var filteredWallpapers: Wallpapers.wallpapers
 
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:wallpaperSelector"

@@ -15,10 +15,51 @@ import Quickshell.Hyprland
 Item {
     id: root
     property int columns: 4
-    property int thumbnailWidth: 192
-    property int thumbnailHeight: 108
+    property int thumbnailWidth: 256
+    property int thumbnailHeight: 144
     implicitHeight: columnLayout.implicitHeight
     implicitWidth: columnLayout.implicitWidth
+    property var filteredWallpapers: Wallpapers.wallpapers
+    property string filterQuery: ""
+
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Escape) {
+            GlobalStates.wallpaperSelectorOpen = false;
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Left) {
+            grid.moveSelection(-1);
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Right) {
+            grid.moveSelection(1);
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Up) {
+            if (grid.currentIndex < grid.columns) {
+                filterField.forceActiveFocus();
+            } else {
+                grid.moveSelection(-grid.columns);
+            }
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Down) {
+            grid.moveSelection(grid.columns);
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            grid.activateCurrent();
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Backspace) {
+            if (filterField.text.length > 0) {
+                filterField.text = filterField.text.substring(0, filterField.text.length - 1);
+            }
+            filterField.forceActiveFocus();
+            event.accepted = true;
+        } else {
+            filterField.forceActiveFocus();
+            if (event.text.length > 0) {
+                filterField.text += event.text;
+                filterField.cursorPosition = filterField.text.length;
+            }
+            event.accepted = true;
+        }
+    }
 
     ColumnLayout {
         id: columnLayout
@@ -26,7 +67,7 @@ Item {
         anchors.top: parent.top
         spacing: 8
 
-        Item {
+        Item { // Search box
             implicitHeight: filterField.implicitHeight
             implicitWidth: filterField.implicitWidth
             Layout.alignment: Qt.AlignHCenter
@@ -53,24 +94,13 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.normal
 
                 onTextChanged: {
-                    let newModel = [];
-                    if (text.length > 0) {
-                        for (let i = 0; i < Wallpapers.wallpapers.length; ++i) {
-                            let wallpaperPath = Wallpapers.wallpapers[i];
-                            if (wallpaperPath.toLowerCase().includes(text.toLowerCase())) {
-                                newModel.push(wallpaperPath);
-                            }
-                        }
-                        panelWindow.filteredWallpapers = newModel;
-                    } else {
-                        panelWindow.filteredWallpapers = Wallpapers.wallpapers;
-                    }
+                    root.filterQuery = text
                 }
 
                 Keys.onPressed: event => {
                     if (text.length === 0) {
                         if (event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
-                            bg.forceActiveFocus();
+                            wallpaperGrid.forceActiveFocus();
                             if (event.key === Qt.Key_Down)
                                 grid.moveSelection(grid.columns);
                             else if (event.key === Qt.Key_Left)
@@ -83,7 +113,7 @@ Item {
                         if (event.key === Qt.Key_Down) {
                             grid.moveSelection(grid.columns);
                             event.accepted = true;
-                            bg.forceActiveFocus();
+                            wallpaperGrid.forceActiveFocus();
                         }
                     }
                     if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -101,7 +131,8 @@ Item {
             }
         }
 
-        Item {
+        Item { // The grid
+            id: wallpaperGrid
             Layout.alignment: Qt.AlignHCenter
             implicitWidth: wallpaperGridBackground.implicitWidth
             implicitHeight: wallpaperGridBackground.implicitHeight
@@ -120,17 +151,17 @@ Item {
                 property int calculatedRows: Math.ceil(grid.count / grid.columns)
 
                 implicitWidth: {
-                    if (panelWindow.filteredWallpapers.length === 0) {
+                    if (root.filteredWallpapers.length === 0) {
                         return 300;
-                    } else if (panelWindow.filteredWallpapers.length < grid.columns) {
-                        return panelWindow.filteredWallpapers.length * grid.cellWidth + 16;
+                    } else if (root.filteredWallpapers.length < grid.columns) {
+                        return root.filteredWallpapers.length * grid.cellWidth + 16;
                     } else {
                         return Math.min(panelWindow.width * 0.7, 900);
                     }
                 }
 
                 implicitHeight: {
-                    if (panelWindow.filteredWallpapers.length === 0) {
+                    if (root.filteredWallpapers.length === 0) {
                         return 100;
                     } else {
                         return Math.min(panelWindow.height * 0.6, Math.min(calculatedRows, 3) * grid.cellHeight + 16);
@@ -145,48 +176,9 @@ Item {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
-                Keys.onPressed: event => {
-                    if (event.key === Qt.Key_Escape) {
-                        GlobalStates.wallpaperSelectorOpen = false;
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Left) {
-                        grid.moveSelection(-1);
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Right) {
-                        grid.moveSelection(1);
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Up) {
-                        if (grid.currentIndex < grid.columns) {
-                            filterField.forceActiveFocus();
-                        } else {
-                            grid.moveSelection(-grid.columns);
-                        }
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Down) {
-                        grid.moveSelection(grid.columns);
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                        grid.activateCurrent();
-                        event.accepted = true;
-                    } else if (event.key === Qt.Key_Backspace) {
-                        if (filterField.text.length > 0) {
-                            filterField.text = filterField.text.substring(0, filterField.text.length - 1);
-                        }
-                        filterField.forceActiveFocus();
-                        event.accepted = true;
-                    } else {
-                        filterField.forceActiveFocus();
-                        if (event.text.length > 0) {
-                            filterField.text += event.text;
-                            filterField.cursorPosition = filterField.text.length;
-                        }
-                        event.accepted = true;
-                    }
-                }
-
                 GridView {
                     id: grid
-                    visible: panelWindow.filteredWallpapers.length > 0
+                    visible: root.filteredWallpapers.length > 0
 
                     property int currentIndex: 0
                     readonly property int columns: root.columns
@@ -208,7 +200,13 @@ Item {
                         policy: ScrollBar.AsNeeded
                     }
 
-                    model: panelWindow.filteredWallpapers
+                    model: ScriptModel {
+                        values: {
+                            return root.filteredWallpapers.filter(w => (
+                                w.toLowerCase().includes(root.filterQuery.toLowerCase())
+                            ));
+                        }
+                    }
                     onModelChanged: currentIndex = 0
 
                     function moveSelection(delta) {
@@ -332,15 +330,15 @@ Item {
                                 property: "scale"
                                 from: 0.0
                                 to: 1.0
-                                duration: animationCurves.expressiveDefaultSpatialDuration
-                                easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                duration: Appearance.animationCurves.expressiveDefaultSpatialDuration
+                                easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
                             }
                             NumberAnimation {
                                 property: "opacity"
                                 from: 0.0
                                 to: 1.0
-                                duration: animationCurves.expressiveDefaultSpatialDuration
-                                easing.bezierCurve: animationCurves.expressiveDefaultSpatial
+                                duration: Appearance.animationCurves.expressiveDefaultSpatialDuration
+                                easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
                             }
                         }
                     }
@@ -348,7 +346,7 @@ Item {
 
                 Label {
                     id: noWallpapersFoundLabel
-                    visible: panelWindow.filteredWallpapers.length === 0
+                    visible: root.filteredWallpapers.length === 0
                     anchors.centerIn: parent
                     text: "No wallpapers found"
                     font.family: Appearance.font.family.main
