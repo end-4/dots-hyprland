@@ -12,14 +12,16 @@ import Quickshell.Io
 
 Item {
     id: root
-    required property string path
+    required property var fileModelData
+    property bool isDirectory: fileModelData.fileIsDir
+    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
     property bool isHovered: false
 
     property alias color: background.color
     property alias radius: background.radius
     property alias padding: background.anchors.margins
 
-    signal activated()
+    signal activated
 
     Rectangle {
         id: background
@@ -45,21 +47,27 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                StyledRectangularShadow {
-                    target: thumbnailImageLoader
-                    radius: Appearance.rounding.small
+                Loader {
+                    id: thumbnailShadowLoader
+                    active: thumbnailImageLoader.active && thumbnailImageLoader.item.status === Image.Ready
+                    anchors.fill: thumbnailImageLoader
+                    sourceComponent: StyledRectangularShadow {
+                        target: thumbnailImageLoader
+                        anchors.fill: undefined
+                        radius: Appearance.rounding.small
+                    }
                 }
 
                 Loader {
                     id: thumbnailImageLoader
                     anchors.fill: parent
-                    active: root.visible
+                    active: root.useThumbnail
                     sourceComponent: Image {
                         id: thumbnailImage
                         source: {
-                            if (root.path.length == 0)
+                            if (fileModelData.filePath.length == 0)
                                 return;
-                            const resolvedUrl = Qt.resolvedUrl(root.path);
+                            const resolvedUrl = Qt.resolvedUrl(fileModelData.filePath);
                             const md5Hash = Qt.md5(resolvedUrl);
                             const cacheSize = "normal";
                             const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
@@ -79,6 +87,8 @@ Item {
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
+                        onStatusChanged: if (status === Image.Error)
+                            root.useThumbnail = false
 
                         layer.enabled: true
                         layer.effect: OpacityMask {
@@ -88,6 +98,17 @@ Item {
                                 radius: Appearance.rounding.small
                             }
                         }
+                    }
+                }
+
+                Loader {
+                    id: iconLoader
+                    active: !root.useThumbnail
+                    anchors.fill: parent
+                    sourceComponent: DirectoryIcon {
+                        fileModelData: root.fileModelData
+                        sourceSize.width: wallpaperItemColumnLayout.width
+                        sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
                     }
                 }
             }
@@ -105,7 +126,7 @@ Item {
                 Behavior on color {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
-                text: FileUtils.fileNameForPath(root.path)
+                text: fileModelData.fileName
             }
         }
     }

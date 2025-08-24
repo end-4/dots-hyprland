@@ -14,8 +14,6 @@ Item {
     id: root
     property int columns: 4
     property real previewCellAspectRatio: 4 / 3
-    property var wallpapers: Wallpapers.wallpapers
-    property string filterQuery: ""
     property bool useDarkMode: Appearance.m3colors.darkmode
 
     Keys.onPressed: event => {
@@ -102,7 +100,7 @@ Item {
                     id: quickDirColumnLayout
                     anchors.fill: parent
                     spacing: 0
-                    
+
                     StyledText {
                         Layout.margins: 12
                         font {
@@ -118,14 +116,46 @@ Item {
                         implicitWidth: 140
                         clip: true
                         model: [
-                            { icon: "home", name: "Home", path: Directories.home },
-                            { icon: "folder", name: "Documents", path: Directories.documents },
-                            { icon: "download", name: "Downloads", path: Directories.downloads },
-                            { icon: "image", name: "Pictures", path: Directories.pictures },
-                            { icon: "movie", name: "Videos", path: Directories.videos },
-                            { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" },
-                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` },
-                            { icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` },
+                            {
+                                icon: "home",
+                                name: "Home",
+                                path: Directories.home
+                            },
+                            {
+                                icon: "folder",
+                                name: "Documents",
+                                path: Directories.documents
+                            },
+                            {
+                                icon: "download",
+                                name: "Downloads",
+                                path: Directories.downloads
+                            },
+                            {
+                                icon: "image",
+                                name: "Pictures",
+                                path: Directories.pictures
+                            },
+                            {
+                                icon: "movie",
+                                name: "Videos",
+                                path: Directories.videos
+                            },
+                            {
+                                icon: "",
+                                name: "---",
+                                path: "INTENTIONALLY_INVALID_DIR"
+                            },
+                            {
+                                icon: "wallpaper",
+                                name: "Wallpapers",
+                                path: `${Directories.pictures}/Wallpapers`
+                            },
+                            {
+                                icon: "favorite",
+                                name: "Homework",
+                                path: `${Directories.pictures}/homework`
+                            },
                         ]
                         delegate: RippleButton {
                             id: quickDirButton
@@ -191,7 +221,7 @@ Item {
 
                     GridView {
                         id: grid
-                        visible: root.wallpapers.length > 0
+                        visible: Wallpapers.folderModel.count > 0
 
                         readonly property int columns: root.columns
                         readonly property int rows: Math.max(1, Math.ceil(count / columns))
@@ -217,36 +247,29 @@ Item {
                                     item.isHovered = false;
                                 }
                             }
-                            currentIndex = Math.max(0, Math.min(root.wallpapers.length - 1, currentIndex + delta));
+                            currentIndex = Math.max(0, Math.min(grid.model.count - 1, currentIndex + delta));
                             positionViewAtIndex(currentIndex, GridView.Contain);
                         }
 
                         function activateCurrent() {
-                            print("ACTIVATE");
-                            const path = grid.model.values[currentIndex];
-                            if (!path)
-                                return;
-                            GlobalStates.wallpaperSelectorOpen = false;
+                            const filePath = grid.model.get(currentIndex, "filePath")
+                            Wallpapers.select(filePath, root.useDarkMode);
                             filterField.text = "";
-                            Wallpapers.apply(path, root.useDarkMode);
                         }
 
-                        model: ScriptModel {
-                            values: root.wallpapers.filter(w => (w.toLowerCase().includes(root.filterQuery.toLowerCase())))
-                        }
+                        model: Wallpapers.folderModel
                         onModelChanged: currentIndex = 0
 
                         delegate: WallpaperDirectoryItem {
                             required property var modelData
                             required property int index
-                            visible: modelData.length > 0
+                            fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            path: modelData
                             color: (index === grid?.currentIndex || parent?.isHovered) ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colPrimary)
                             onActivated: {
-                                Wallpapers.apply(path, root.useDarkMode);
-                                GlobalStates.wallpaperSelectorOpen = false;
+                                Wallpapers.select(fileModelData.filePath, root.useDarkMode);
+                                
                                 filterField.text = "";
                             }
                         }
@@ -339,7 +362,7 @@ Item {
                                     }
 
                                     onTextChanged: {
-                                        root.filterQuery = text;
+                                        Wallpapers.searchQuery = text;
                                     }
 
                                     Keys.onPressed: event => {
@@ -387,6 +410,13 @@ Item {
             if (GlobalStates.wallpaperSelectorOpen && monitorIsFocused) {
                 filterField.forceActiveFocus();
             }
+        }
+    }
+
+    Connections {
+        target: Wallpapers
+        function onChanged() {
+            GlobalStates.wallpaperSelectorOpen = false;
         }
     }
 }

@@ -15,11 +15,14 @@ Singleton {
     id: root
 
     property string directory: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
+    property alias folderModel: folderModel // Expose for direct binding when needed
+    property string searchQuery: ""
     readonly property list<string> extensions: [ // TODO: add videos
         "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
     ]
-    property alias filesModel: files // Expose for direct binding when needed
     property list<string> wallpapers: [] // List of absolute file paths (without file://)
+
+    signal changed()
 
     // Executions
     Process {
@@ -37,6 +40,29 @@ Singleton {
             "--image", path,
             "--mode", (darkMode ? "dark" : "light")
         ])
+        root.changed()
+    }
+
+    Process {
+        id: selectProc
+        property string filePath: ""
+        property bool darkMode: Appearance.m3colors.darkmode
+        function select(filePath, darkMode = Appearance.m3colors.darkmode) {
+            selectProc.filePath = filePath
+            selectProc.darkMode = darkMode
+            selectProc.exec(["test", "-d", FileUtils.trimFileProtocol(filePath)])
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 0) {
+                setDirectory(selectProc.filePath);
+                return;
+            }
+            root.apply(selectProc.filePath, selectProc.darkMode);
+        }
+    }
+
+    function select(filePath, darkMode = Appearance.m3colors.darkmode) {
+        selectProc.select(filePath);
     }
 
     Process {
@@ -59,9 +85,10 @@ Singleton {
 
     // Folder model
     FolderListModel {
-        id: files
+        id: folderModel
         folder: Qt.resolvedUrl(root.directory)
-        nameFilters: root.extensions.map(ext => `*.${ext}`)
+        caseSensitive: false
+        nameFilters: root.extensions.map(ext => `*${searchQuery.split(" ").filter(s => s.length > 0).map(s => `*${s}*`)}*.${ext}`)
         showDirs: true
         showDotAndDotDot: false
         showOnlyReadable: true
@@ -69,8 +96,8 @@ Singleton {
         sortReversed: false
         onCountChanged: {
             root.wallpapers = []
-            for (let i = 0; i < files.count; i++) {
-                const path = files.get(i, "filePath") || FileUtils.trimFileProtocol(files.get(i, "fileURL"))
+            for (let i = 0; i < folderModel.count; i++) {
+                const path = folderModel.get(i, "filePath") || FileUtils.trimFileProtocol(folderModel.get(i, "fileURL"))
                 if (path && path.length) root.wallpapers.push(path)
             }
         }

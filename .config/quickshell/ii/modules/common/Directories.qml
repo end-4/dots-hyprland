@@ -16,6 +16,7 @@ Singleton {
     readonly property string documents: StandardPaths.standardLocations(StandardPaths.DocumentsLocation)[0]
     readonly property string downloads: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
     readonly property string pictures: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+    readonly property string music: StandardPaths.standardLocations(StandardPaths.MusicLocation)[0]
     readonly property string videos: StandardPaths.standardLocations(StandardPaths.MoviesLocation)[0]
 
     // Other dirs used by the shell, without "file://"
