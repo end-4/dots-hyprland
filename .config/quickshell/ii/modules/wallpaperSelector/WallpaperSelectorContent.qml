@@ -204,9 +204,7 @@ Item {
                         boundsBehavior: Flickable.StopAtBounds
                         bottomMargin: extraOptions.implicitHeight
 
-                        ScrollBar.vertical: ScrollBar {
-                            policy: ScrollBar.AsNeeded
-                        }
+                        ScrollBar.vertical: StyledScrollBar {}
 
                         function moveSelection(delta) {
                             currentIndex = Math.max(0, Math.min(grid.model.count - 1, currentIndex + delta));
