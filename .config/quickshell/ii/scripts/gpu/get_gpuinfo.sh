@@ -22,19 +22,47 @@ fi
 # AMD
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
     echo "[AMD GPU]"
+
+    # VRAM Selection or prioritize boot_vga=0
     card_path=""
+    best_vram_total=-1
+    best_boot_vga=1
     for d in /sys/class/drm/card*/device; do
-        if [[ -r "$d/vendor" ]] && grep -qi "0x1002" "$d/vendor"; then
-            card_path="$d"
-            break
+        [[ -r "$d/vendor" ]] || continue
+        if grep -qi "0x1002" "$d/vendor"; then
+            vtot=0
+            [[ -r "$d/mem_info_vram_total" ]] && vtot=$(cat "$d/mem_info_vram_total")
+            boot=1
+            [[ -r "$d/boot_vga" ]] && boot=$(cat "$d/boot_vga")
+            if (( vtot > best_vram_total )) || { (( vtot == best_vram_total )) && [[ "$boot" == "0" && "$best_boot_vga" != "0" ]]; }; then
+                card_path="$d"
+                best_vram_total=$vtot
+                best_boot_vga=$boot
+            fi
         fi
     done
+    # Fallback
+    if [[ -z "$card_path" ]]; then
+        for d in /sys/class/drm/card*/device; do
+            if [[ -r "$d/vendor" ]] && grep -qi "0x1002" "$d/vendor"; then
+                card_path="$d"
+                break
+            fi
+        done
+    fi
+
+    # Manual override via env var AMD_GPU_CARD=cardX
+    if [[ -n "${AMD_GPU_CARD:-}" && -d "/sys/class/drm/${AMD_GPU_CARD}/device" ]]; then
+        card_path="/sys/class/drm/${AMD_GPU_CARD}/device"
+    fi
+
     if [[ -n "$card_path" ]]; then
         if [[ -r "$card_path/gpu_busy_percent" ]]; then
             gpu_usage=$(cat "$card_path/gpu_busy_percent")
         else
             gpu_usage=0
         fi
+
         if [[ -r "$card_path/mem_info_vram_used" && -r "$card_path/mem_info_vram_total" ]]; then
             vram_used_b=$(cat "$card_path/mem_info_vram_used")
             vram_total_b=$(cat "$card_path/mem_info_vram_total")
@@ -50,6 +78,8 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             vram_used_gb=0.0
             vram_total_gb=0.0
         fi
+
+        # Priority: Edge > Junction > Whateverrrrr
         temperature=0
         found=0
         for hm in "$card_path"/hwmon/hwmon*; do
@@ -90,12 +120,15 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             fi
             [[ $found -eq 1 ]] && break
         done
+
         echo "  Usage : ${gpu_usage}%"
         echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
         echo "  Temp : ${temperature} °C"
+
         exit 0
     fi
 fi
+
 
 echo "No GPU available."
 echo "Make sure you have one of the following tools installed:"
