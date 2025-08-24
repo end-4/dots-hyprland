@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# NVIDIA
+# NVIDIA dGPU
 if command -v nvidia-smi &> /dev/null; then
     echo "[NVIDIA GPU]"
     gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
@@ -20,14 +20,14 @@ if command -v nvidia-smi &> /dev/null; then
 fi
 
 
-# AMD
+# AMD dGPU
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
     echo "[AMD GPU]"
 
     # VRAM Selection or prioritize boot_vga=0
     card_path=""
     best_vram_total=-1
-    best_boot_vga=1
+    best_boot_vga=0
     for d in /sys/class/drm/card*/device; do
         [[ -r "$d/vendor" ]] || continue
         if grep -qi "0x1002" "$d/vendor"; then

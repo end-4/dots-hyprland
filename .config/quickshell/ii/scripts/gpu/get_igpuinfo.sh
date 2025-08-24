@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# INTEL
+# INTEL iGPU
 if command -v "intel_gpu_top" &> /dev/null; then # install intel_gpu_top to get info about iGPU
       echo "[INTEL GPU]"
       # iGPU has unified memory therefore system meory is equal to video memory      
@@ -25,69 +25,76 @@ if command -v "intel_gpu_top" &> /dev/null; then # install intel_gpu_top to get 
       exit 0
 fi
 
-# AMD
+# AMD iGPU
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
-    echo "[AMD GPU]"
+    echo "[AMD GPU - iGPU only]"
 
-    # VRAM Selection or prioritize boot_vga=0
     card_path=""
-    best_vram_total=-1
-    best_boot_vga=0
+
+    # prefer AMD with boot_vga=1 and no dedicated VRAM
     for d in /sys/class/drm/card*/device; do
         [[ -r "$d/vendor" ]] || continue
         if grep -qi "0x1002" "$d/vendor"; then
+            boot=0; [[ -r "$d/boot_vga" ]] && boot=$(cat "$d/boot_vga")
             vtot=0
-            [[ -r "$d/mem_info_vram_total" ]] && vtot=$(cat "$d/mem_info_vram_total")
-            boot=1
-            [[ -r "$d/boot_vga" ]] && boot=$(cat "$d/boot_vga")
-            if (( vtot > best_vram_total )) || { (( vtot == best_vram_total )) && [[ "$boot" == "0" && "$best_boot_vga" != "0" ]]; }; then
+            if [[ -r "$d/mem_info_vis_vram_total" ]]; then
+                vtot=$(cat "$d/mem_info_vis_vram_total")
+            elif [[ -r "$d/mem_info_vram_total" ]]; then
+                vtot=$(cat "$d/mem_info_vram_total")
+            fi
+            if [[ "$boot" == "1" ]] && (( vtot == 0 )); then
                 card_path="$d"
-                best_vram_total=$vtot
-                best_boot_vga=$boot
+                break
             fi
         fi
     done
-    # Fallback
+
+    # fallback: with less VRAM
     if [[ -z "$card_path" ]]; then
+        best_vram_total=-1
         for d in /sys/class/drm/card*/device; do
-            if [[ -r "$d/vendor" ]] && grep -qi "0x1002" "$d/vendor"; then
-                card_path="$d"
-                break
+            [[ -r "$d/vendor" ]] || continue
+            if grep -qi "0x1002" "$d/vendor"; then
+                vtot=0
+                if [[ -r "$d/mem_info_vis_vram_total" ]]; then
+                    vtot=$(cat "$d/mem_info_vis_vram_total")
+                elif [[ -r "$d/mem_info_vram_total" ]]; then
+                    vtot=$(cat "$d/mem_info_vram_total")
+                fi
+                if (( best_vram_total < 0 )) || (( vtot < best_vram_total )); then
+                    best_vram_total=$vtot
+                    card_path="$d"
+                fi
             fi
         done
     fi
 
-    # Manual override via env var AMD_GPU_CARD=cardX
+    # manual override
     if [[ -n "${AMD_GPU_CARD:-}" && -d "/sys/class/drm/${AMD_GPU_CARD}/device" ]]; then
         card_path="/sys/class/drm/${AMD_GPU_CARD}/device"
     fi
 
     if [[ -n "$card_path" ]]; then
-        if [[ -r "$card_path/gpu_busy_percent" ]]; then
-            gpu_usage=$(cat "$card_path/gpu_busy_percent")
+        [[ -r "$card_path/gpu_busy_percent" ]] && gpu_usage=$(cat "$card_path/gpu_busy_percent") || gpu_usage=0
+
+        used_b=0; total_b=0
+        if [[ -r "$card_path/mem_info_vis_vram_used" && -r "$card_path/mem_info_vis_vram_total" ]]; then
+            used_b=$(cat "$card_path/mem_info_vis_vram_used")
+            total_b=$(cat "$card_path/mem_info_vis_vram_total")
+        elif [[ -r "$card_path/mem_info_vram_used" && -r "$card_path/mem_info_vram_total" ]]; then
+            used_b=$(cat "$card_path/mem_info_vram_used")
+            total_b=$(cat "$card_path/mem_info_vram_total")
         else
-            gpu_usage=0
+            vram_total_kib=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+            vram_available_kib=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+            used_b=$(( (vram_total_kib - vram_available_kib) * 1024 ))
+            total_b=$(( vram_total_kib * 1024 ))
         fi
 
-        if [[ -r "$card_path/mem_info_vram_used" && -r "$card_path/mem_info_vram_total" ]]; then
-            vram_used_b=$(cat "$card_path/mem_info_vram_used")
-            vram_total_b=$(cat "$card_path/mem_info_vram_total")
-            if [[ "${vram_total_b:-0}" -gt 0 ]]; then
-                vram_percent=$(( vram_used_b * 100 / vram_total_b ))
-            else
-                vram_percent=0
-            fi
-            vram_used_gb=$(awk -v u="$vram_used_b" 'BEGIN{printf "%.1f", u/1024/1024/1024}')
-            vram_total_gb=$(awk -v t="$vram_total_b" 'BEGIN{printf "%.1f", t/1024/1024/1024}')
-        else
-            vram_percent=0
-            vram_used_gb=0.0
-            vram_total_gb=0.0
-        fi
+        vram_used_gb=$(awk -v u="${used_b:-0}" 'BEGIN{printf "%.1f", u/1024/1024/1024}')
+        vram_total_gb=$(awk -v t="${total_b:-0}" 'BEGIN{printf "%.1f", t/1024/1024/1024}')
 
-        # Priority: Edge > Junction > Whateverrrrr
-        temperature=0
-        found=0
+        temperature=0; found=0
         for hm in "$card_path"/hwmon/hwmon*; do
             [[ -d "$hm" ]] || continue
             for lbl in "$hm"/temp*_label; do
@@ -95,9 +102,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
                 if grep -qi "edge" "$lbl"; then
                     base="${lbl%_label}"
                     if [[ -r "${base}_input" ]]; then
-                        temperature=$(awk '{printf "%.0f",$1/1000}' "${base}_input")
-                        found=1
-                        break
+                        temperature=$(awk '{printf "%.0f",$1/1000}' "${base}_input"); found=1; break
                     fi
                 fi
             done
@@ -108,9 +113,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
                     if grep -qi "junction" "$lbl"; then
                         base="${lbl%_label}"
                         if [[ -r "${base}_input" ]]; then
-                            temperature=$(awk '{printf "%.0f",$1/1000}' "${base}_input")
-                            found=1
-                            break
+                            temperature=$(awk '{printf "%.0f",$1/1000}' "${base}_input"); found=1; break
                         fi
                     fi
                 done
@@ -119,22 +122,18 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             if [[ $found -eq 0 ]]; then
                 for tin in "$hm"/temp*_input; do
                     [[ -r "$tin" ]] || continue
-                    temperature=$(awk '{printf "%.0f",$1/1000}' "$tin")
-                    found=1
-                    break
+                    temperature=$(awk '{printf "%.0f",$1/1000}' "$tin"); found=1; break
                 done
             fi
             [[ $found -eq 1 ]] && break
         done
 
         echo "  Usage : ${gpu_usage}%"
-        echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
-        echo "  Temp : ${temperature} °C"
-
+        echo "  VRAM  : ${vram_used_gb}/${vram_total_gb} GB"
+        echo "  Temp  : ${temperature} °C"
         exit 0
     fi
 fi
-
 
 echo "No GPU available."
 echo "Make sure you have one of the following tools installed:"
