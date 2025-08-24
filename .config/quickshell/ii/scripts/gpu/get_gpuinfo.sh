@@ -19,6 +19,31 @@ if command -v nvidia-smi &> /dev/null; then
     exit 0
 fi
 
+
+# INTEL
+if command -v "intel_gpu_top" &> /dev/null; then # install intel_gpu_top to get info about iGPU
+      echo "[INTEL GPU]"
+      # iGPU has unified memory therefore system meory is equal to video memory      
+      vram_total_kib=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+      vram_available_kib=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+      vram_used_kib=$((vram_total_kib - vram_available_kib))
+      vram_percent=$(( vram_used_kib * 100 / vram_total_kib ))
+      vram_used_gb=$(awk -v u="$vram_used_kib" 'BEGIN{printf "%.1f", u/1024/1024}')
+      vram_total_gb=$(awk -v t="$vram_total_kib" 'BEGIN{printf "%.1f", t/1024/1024}')
+
+      # iGPU is inside cpu therefore they share the same temp
+      temperature=$(awk '{printf "%.1f", $1/1000}' <(paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/thermal_zone*/temp) | grep x86_pkg_temp | awk '{print $2}'))
+
+
+
+      # Render/3D Usage
+      echo  " Usage : $(intel_gpu_top  -o - | head -n 3 | awk 'END{print $9}') %" # hijack gpu usage
+
+      echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
+      echo "  Temp : ${temperature} °C"
+      exit 0
+fi
+
 # AMD
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
     echo "[AMD GPU]"
