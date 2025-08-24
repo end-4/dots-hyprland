@@ -157,7 +157,7 @@ StyledPopup {
             ColumnLayout {
             Layout.alignment: Qt.AlignTop
             spacing: 8
-            visible:ResourceUsage.gpuAvailable && (Config.options.bar.resources.gpuLayout  == 1 || Config.options.bar.resources.gpuLayout  == 2) 
+            visible:ResourceUsage.dGpuAvailable && (Config.options.bar.resources.gpuLayout  == 1 || Config.options.bar.resources.gpuLayout  == 2) 
 
             ResourceHeaderItem {
                 icon: "empty_dashboard"
@@ -167,21 +167,21 @@ StyledPopup {
                 ResourceItem {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (ResourceUsage.gpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.gpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.gpuUsage  * 100)}%)`
+                    value: (ResourceUsage.iGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.iGpuUsage  * 100)}%)`
 
                   }
 
                    ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("VRAM:")
-                    value: ` ${Math.round(ResourceUsage.gpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.gpuVramTotalGB * 10) / 10} GB`
+                    value: ` ${Math.round(ResourceUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.iGpuVramTotalGB * 10) / 10} GB`
 
                   }
 
                   ResourceItem {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value:  `${ResourceUsage.gpuTempemperature} °C` 
+                    value:  `${ResourceUsage.iGpuTempemperature} °C` 
 
                 }
             }
@@ -191,7 +191,7 @@ StyledPopup {
         ColumnLayout {
             Layout.alignment: Qt.AlignTop
             spacing: 8
-            visible:ResourceUsage.gpuAvailable && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout  == 2) 
+            visible:ResourceUsage.dGpuAvailable && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout  == 2) 
 
             ResourceHeaderItem {
                 icon: "empty_dashboard"
@@ -201,21 +201,21 @@ StyledPopup {
                 ResourceItem {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (ResourceUsage.gpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.gpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.gpuUsage  * 100)}%)`
+                    value: (ResourceUsage.dGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.dGpuUsage  * 100)}%)`
 
                   }
 
                    ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("VRAM:")
-                    value: ` ${Math.round(ResourceUsage.gpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.gpuVramTotalGB * 10) / 10} GB`
+                    value: ` ${Math.round(ResourceUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.dGpuVramTotalGB * 10) / 10} GB`
 
                   }
 
                   ResourceItem {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value:  `${ResourceUsage.gpuTempemperature} °C` 
+                    value:  `${ResourceUsage.dGpuTempemperature} °C` 
 
                 }
             }

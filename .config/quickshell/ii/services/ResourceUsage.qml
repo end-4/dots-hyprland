@@ -22,13 +22,19 @@ Singleton {
     property var previousCpuStats
     property double cpuTemperature:  0
     
-    property bool gpuAvailable: false
-    property double gpuUsage: 0
-    property double gpuVramUsage:0
-    property double gpuTempemperature:0
-    property double gpuVramUsedGB: 0    
-    property double gpuVramTotalGB: 0
-
+    property bool dGpuAvailable: true
+    property double dGpuUsage: 0
+    property double dGpuVramUsage:0
+    property double dGpuTempemperature:0
+    property double dGpuVramUsedGB: 0    
+    property double dGpuVramTotalGB: 0
+    
+    property bool iGpuAvailable: true
+    property double iGpuUsage: 0
+    property double iGpuVramUsage:0
+    property double iGpuTempemperature:0
+    property double iGpuVramUsedGB: 0    
+    property double iGpuVramTotalGB: 0
 
 
 	Timer {
@@ -76,7 +82,15 @@ Singleton {
             tempProc.running = true
 
             //Process process GPU info
-            gpuinfoProc.running = true
+            if(iGpuAvailable){
+              iGpuinfoProc.running = true
+            }
+
+            if(dGpuAvailable){
+              dGpuinfoProc.running = true
+            }
+
+
 
             interval = Config.options?.resources?.updateInterval ?? 3000
         }
@@ -104,20 +118,41 @@ Singleton {
   }
 
    Process {
-    id: gpuinfoProc
-    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_gpuinfo.sh`.replace(/file:\/\//, "")]
+    id: dGpuinfoProc
+    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_dgpuinfo.sh`.replace(/file:\/\//, "")]
     running: true
 
     stdout: StdioCollector {
       onStreamFinished:{
-        gpuAvailable =  this.text.indexOf("No GPU available") ==-1
-        if(gpuAvailable){
-          gpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
+        dGpuAvailable =  this.text.indexOf("No GPU available") ==-1
+        if(dGpuAvailable){
+          dGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
           const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
-          gpuVramUsedGB = Number(vramLine?.[1] ?? 0)
-          gpuVramTotalGB = Number(vramLine?.[2] ?? 0)
-          gpuVramUsage = gpuVramTotalGB > 0 ? (gpuVramUsedGB / gpuVramTotalGB) : 0;
-          gpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
+          dGpuVramUsedGB = Number(vramLine?.[1] ?? 0)
+          dGpuVramTotalGB = Number(vramLine?.[2] ?? 0)
+          dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0;
+          dGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
+        }
+       }
+    }
+  }
+
+
+  Process {
+    id: iGpuinfoProc
+    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_igpuinfo.sh`.replace(/file:\/\//, "")]
+    running: true
+
+    stdout: StdioCollector {
+      onStreamFinished:{
+        iGpuAvailable =  this.text.indexOf("No GPU available") ==-1
+        if(iGpuAvailable){
+          iGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
+          const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
+          iGpuVramUsedGB = Number(vramLine?.[1] ?? 0)
+          iGpuVramTotalGB = Number(vramLine?.[2] ?? 0)
+          iGpuVramUsage = iGpuVramTotalGB > 0 ? (iGpuVramUsedGB / iGpuVramTotalGB) : 0;
+          iGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
         }
        }
     }

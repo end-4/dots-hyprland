@@ -1,25 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# NVIDIA
-if command -v nvidia-smi &> /dev/null; then
-    echo "[NVIDIA GPU]"
-    gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
-    vram_used_mib=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -n1)
-    vram_total_mib=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n1)
-    vram_percent=$(( vram_used_mib * 100 / vram_total_mib ))
-    vram_used_gb=$(awk -v u="$vram_used_mib" 'BEGIN{printf "%.1f", u/1024}')
-    vram_total_gb=$(awk -v t="$vram_total_mib" 'BEGIN{printf "%.1f", t/1024}')
-    temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits | head -n1)
-
-    echo "  Usage : ${gpu_usage} %"
-    echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
-    echo "  Temp : ${temperature} °C"
-
-    exit 0
-fi
-
-
 # INTEL
 if command -v "intel_gpu_top" &> /dev/null; then # install intel_gpu_top to get info about iGPU
       echo "[INTEL GPU]"
@@ -51,7 +32,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
     # VRAM Selection or prioritize boot_vga=0
     card_path=""
     best_vram_total=-1
-    best_boot_vga=1
+    best_boot_vga=0
     for d in /sys/class/drm/card*/device; do
         [[ -r "$d/vendor" ]] || continue
         if grep -qi "0x1002" "$d/vendor"; then
