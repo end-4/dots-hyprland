@@ -151,6 +151,7 @@ Singleton {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: false
                     property bool alwaysShowGPU: false
+                    property int gpuLayout : 0 // 0: DGPU | 1: IGPU | 2: Hybrid 
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
                 property JsonObject utilButtons: JsonObject {

@@ -78,8 +78,6 @@ Singleton {
             //Process process GPU info
             gpuinfoProc.running = true
 
-
-
             interval = Config.options?.resources?.updateInterval ?? 3000
         }
 	}
