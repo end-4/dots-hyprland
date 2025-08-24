@@ -209,12 +209,6 @@ Item {
                         }
 
                         function moveSelection(delta) {
-                            for (let i = 0; i < count; i++) {
-                                const item = itemAtIndex(i);
-                                if (item) {
-                                    item.isHovered = false;
-                                }
-                            }
                             currentIndex = Math.max(0, Math.min(grid.model.count - 1, currentIndex + delta));
                             positionViewAtIndex(currentIndex, GridView.Contain);
                         }
@@ -234,11 +228,15 @@ Item {
                             fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            colBackground: (index === grid?.currentIndex || parent?.isHovered) ? Appearance.colors.colPrimaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
-                            colText: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
+                            colBackground: (index === grid?.currentIndex || containsMouse) ? Appearance.colors.colPrimaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
+                            colText: (index === grid.currentIndex || containsMouse) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
+
+                            onEntered: {
+                                grid.currentIndex = index;
+                            }
+                            
                             onActivated: {
                                 Wallpapers.select(fileModelData.filePath, root.useDarkMode);
-                                
                                 filterField.text = "";
                             }
                         }

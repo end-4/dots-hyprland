@@ -10,12 +10,11 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 
-Item {
+MouseArea {
     id: root
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
     property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
-    property bool isHovered: false
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -23,6 +22,9 @@ Item {
     property alias padding: background.anchors.margins
 
     signal activated
+
+    hoverEnabled: true
+    onClicked: root.activated()
 
     Rectangle {
         id: background
@@ -129,24 +131,5 @@ Item {
                 text: fileModelData.fileName
             }
         }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: {
-            for (let i = 0; i < grid.count; i++) {
-                const item = grid.itemAtIndex(i);
-                if (item && item !== parent) {
-                    item.isHovered = false;
-                }
-            }
-            parent.isHovered = true;
-            grid.currentIndex = index;
-        }
-        onExited: {
-            parent.isHovered = false;
-        }
-        onClicked: root.activated()
     }
 }
