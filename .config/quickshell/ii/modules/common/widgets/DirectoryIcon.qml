@@ -16,10 +16,9 @@ Image {
         if (!fileModelData.fileIsDir)
             return Quickshell.iconPath("application-x-zerosize");
 
-        const name = fileModelData.fileName;
         const homeDir = Directories.home
-        if ([Directories.documents, Directories.downloads, Directories.music, Directories.pictures, Directories.videos].includes(name))
-            return Quickshell.iconPath(`folder-${name.toLowerCase()}`);
+        if ([Directories.documents, Directories.downloads, Directories.music, Directories.pictures, Directories.videos].includes(fileModelData.filePath))
+            return Quickshell.iconPath(`folder-${fileModelData.fileName.toLowerCase()}`);
 
         return Quickshell.iconPath("inode-directory");
     }

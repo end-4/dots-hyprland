@@ -29,8 +29,11 @@ Singleton {
         id: applyProc
     }
     
-    function openFallbackPicker() {
-        applyProc.exec([Directories.wallpaperSwitchScriptPath])
+    function openFallbackPicker(darkMode = Appearance.m3colors.darkmode) {
+        applyProc.exec([
+            Directories.wallpaperSwitchScriptPath,
+            "--mode", (darkMode ? "dark" : "light")
+        ])
     }
 
     function apply(path, darkMode = Appearance.m3colors.darkmode) {
@@ -62,7 +65,7 @@ Singleton {
     }
 
     function select(filePath, darkMode = Appearance.m3colors.darkmode) {
-        selectProc.select(filePath);
+        selectProc.select(filePath, darkMode);
     }
 
     Process {

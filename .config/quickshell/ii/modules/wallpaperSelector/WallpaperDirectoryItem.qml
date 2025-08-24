@@ -17,7 +17,8 @@ Item {
     property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
     property bool isHovered: false
 
-    property alias color: background.color
+    property alias colBackground: background.color
+    property alias colText: wallpaperItemName.color
     property alias radius: background.radius
     property alias padding: background.anchors.margins
 
@@ -122,7 +123,6 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer0
                 Behavior on color {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }

@@ -116,46 +116,14 @@ Item {
                         implicitWidth: 140
                         clip: true
                         model: [
-                            {
-                                icon: "home",
-                                name: "Home",
-                                path: Directories.home
-                            },
-                            {
-                                icon: "folder",
-                                name: "Documents",
-                                path: Directories.documents
-                            },
-                            {
-                                icon: "download",
-                                name: "Downloads",
-                                path: Directories.downloads
-                            },
-                            {
-                                icon: "image",
-                                name: "Pictures",
-                                path: Directories.pictures
-                            },
-                            {
-                                icon: "movie",
-                                name: "Videos",
-                                path: Directories.videos
-                            },
-                            {
-                                icon: "",
-                                name: "---",
-                                path: "INTENTIONALLY_INVALID_DIR"
-                            },
-                            {
-                                icon: "wallpaper",
-                                name: "Wallpapers",
-                                path: `${Directories.pictures}/Wallpapers`
-                            },
-                            {
-                                icon: "favorite",
-                                name: "Homework",
-                                path: `${Directories.pictures}/homework`
-                            },
+                            { icon: "home", name: "Home", path: Directories.home }, 
+                            { icon: "docs", name: "Documents", path: Directories.documents }, 
+                            { icon: "download", name: "Downloads", path: Directories.downloads }, 
+                            { icon: "image", name: "Pictures", path: Directories.pictures }, 
+                            { icon: "movie", name: "Videos", path: Directories.videos }, 
+                            { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
+                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
+                            { icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` },
                         ]
                         delegate: RippleButton {
                             id: quickDirButton
@@ -266,7 +234,8 @@ Item {
                             fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            color: (index === grid?.currentIndex || parent?.isHovered) ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colPrimary)
+                            colBackground: (index === grid?.currentIndex || parent?.isHovered) ? Appearance.colors.colPrimaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
+                            colText: (index === grid.currentIndex || parent.isHovered) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
                             onActivated: {
                                 Wallpapers.select(fileModelData.filePath, root.useDarkMode);
                                 
@@ -314,7 +283,7 @@ Item {
                                     implicitWidth: height
                                     buttonRadius: Appearance.rounding.full
                                     onClicked: {
-                                        Wallpapers.openFallbackPicker();
+                                        Wallpapers.openFallbackPicker(root.useDarkMode);
                                         GlobalStates.wallpaperSelectorOpen = false;
                                     }
                                     contentItem: MaterialSymbol {
@@ -370,12 +339,10 @@ Item {
                                             // No filtering, just navigate grid
                                             if (event.key === Qt.Key_Down) {
                                                 grid.moveSelection(grid.columns);
-                                                wallpaperGrid.forceActiveFocus();
                                                 event.accepted = true;
                                             }
                                             if (event.key === Qt.Key_Up) {
                                                 grid.moveSelection(-grid.columns);
-                                                wallpaperGrid.forceActiveFocus();
                                                 event.accepted = true;
                                             }
                                         }
