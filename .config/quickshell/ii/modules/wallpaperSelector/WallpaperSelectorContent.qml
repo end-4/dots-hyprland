@@ -226,8 +226,8 @@ Item {
                             fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            colBackground: (index === grid?.currentIndex || containsMouse) ? Appearance.colors.colPrimaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
-                            colText: (index === grid.currentIndex || containsMouse) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
+                            colBackground: (fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colPrimary : (index === grid?.currentIndex || containsMouse) ? Appearance.colors.colPrimaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
+                            colText: (fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colOnPrimary : (index === grid.currentIndex || containsMouse) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
 
                             onEntered: {
                                 grid.currentIndex = index;

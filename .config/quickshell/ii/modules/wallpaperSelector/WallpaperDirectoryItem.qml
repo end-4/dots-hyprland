@@ -65,33 +65,14 @@ MouseArea {
                     id: thumbnailImageLoader
                     anchors.fill: parent
                     active: root.useThumbnail
-                    sourceComponent: Image {
+                    sourceComponent: ThumbnailImage {
                         id: thumbnailImage
-                        source: {
-                            if (fileModelData.filePath.length == 0)
-                                return;
-                            const resolvedUrl = Qt.resolvedUrl(fileModelData.filePath);
-                            const md5Hash = Qt.md5(resolvedUrl);
-                            const cacheSize = "normal";
-                            const thumbnailPath = `${Directories.genericCache}/thumbnails/${cacheSize}/${md5Hash}.png`;
-                            return thumbnailPath;
-                        }
-                        asynchronous: true
-                        cache: false
-                        smooth: true
-                        mipmap: false
+                        sourcePath: fileModelData.filePath
 
                         fillMode: Image.PreserveAspectCrop
                         clip: true
                         sourceSize.width: wallpaperItemColumnLayout.width
                         sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
-
-                        opacity: status === Image.Ready ? 1 : 0
-                        Behavior on opacity {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        onStatusChanged: if (status === Image.Error)
-                            root.useThumbnail = false
 
                         layer.enabled: true
                         layer.effect: OpacityMask {
