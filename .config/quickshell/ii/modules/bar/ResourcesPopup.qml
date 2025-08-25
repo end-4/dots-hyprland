@@ -136,8 +136,90 @@ StyledPopup {
                     icon: "bolt"
                     label: Translation.tr("Load:")
                     value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
+                  }
+
+                   ResourceItem {
+                    icon: "planner_review"
+                    label: Translation.tr("Freq:")
+                    value: ` ${ Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz` 
+
+                  }
+
+                  ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value: ` ${ Math.round(ResourceUsage.cpuTemperature)} °C` 
+
+                }
+            }
+          }
+
+            ColumnLayout {
+            Layout.alignment: Qt.AlignTop
+            spacing: 8
+            visible:ResourceUsage.dGpuAvailable && (Config.options.bar.resources.gpuLayout  == 1 || Config.options.bar.resources.gpuLayout  == 2) 
+
+            ResourceHeaderItem {
+                icon: "empty_dashboard"
+                label: "IGPU"
+            }
+            ColumnLayout {
+                ResourceItem {
+                    icon: "bolt"
+                    label: Translation.tr("Load:")
+                    value: (ResourceUsage.iGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.iGpuUsage  * 100)}%)`
+
+                  }
+
+                   ResourceItem {
+                    icon: "clock_loader_60"
+                    label: Translation.tr("VRAM:")
+                    value: ` ${Math.round(ResourceUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.iGpuVramTotalGB * 10) / 10} GB`
+
+                  }
+
+                  ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value:  `${ResourceUsage.iGpuTempemperature} °C` 
+
+                }
+            }
+          }
+
+
+        ColumnLayout {
+            Layout.alignment: Qt.AlignTop
+            spacing: 8
+            visible:ResourceUsage.dGpuAvailable && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout  == 2) 
+
+            ResourceHeaderItem {
+                icon: "empty_dashboard"
+                label: "DGPU"
+            }
+            ColumnLayout {
+                ResourceItem {
+                    icon: "bolt"
+                    label: Translation.tr("Load:")
+                    value: (ResourceUsage.dGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.dGpuUsage  * 100)}%)`
+
+                  }
+
+                   ResourceItem {
+                    icon: "clock_loader_60"
+                    label: Translation.tr("VRAM:")
+                    value: ` ${Math.round(ResourceUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.dGpuVramTotalGB * 10) / 10} GB`
+
+                  }
+
+                  ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value:  `${ResourceUsage.dGpuTempemperature} °C` 
+
                 }
             }
         }
+
     }
 }
