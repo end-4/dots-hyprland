@@ -412,7 +412,32 @@ ContentPage {
                     }
 
                     StyledToolTip {
-                        content: "When this is off you'll have to click"
+                        content: Translation.tr("When this is off you'll have to click")
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Place at bottom")
+                    checked: Config.options.sidebar.cornerOpen.bottom
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.bottom = checked;
+                    }
+
+                    StyledToolTip {
+                        content: Translation.tr("Place the corners to trigger at the bottom")
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Value scroll")
+                    checked: Config.options.sidebar.cornerOpen.valueScroll
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.valueScroll = checked;
+                    }
+
+                    StyledToolTip {
+                        content: Translation.tr("Brightness and volume")
                     }
                 }
             }

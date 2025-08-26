@@ -295,8 +295,10 @@ Singleton {
                 }
                 property JsonObject cornerOpen: JsonObject {
                     property bool enable: true
-                    property bool clickless: true
-                    property real cornerRegionWidth: 30
+                    property bool bottom: false
+                    property bool valueScroll: true
+                    property bool clickless: false
+                    property real cornerRegionWidth: 60
                     property real cornerRegionHeight: 2
                     property bool visualize: false
                 }

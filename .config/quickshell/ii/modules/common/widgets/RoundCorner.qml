@@ -17,13 +17,17 @@ Item {
     property bool isBottomLeft: corner === RoundCorner.CornerEnum.BottomLeft
     property bool isTopRight: corner === RoundCorner.CornerEnum.TopRight
     property bool isBottomRight: corner === RoundCorner.CornerEnum.BottomRight
+    property bool isTop: isTopLeft || isTopRight
+    property bool isBottom: isBottomLeft || isBottomRight
+    property bool isLeft: isTopLeft || isBottomLeft
+    property bool isRight: isTopRight || isBottomRight
 
     Shape {
         anchors {
-            top: (isTopLeft || isTopRight) ? parent.top : undefined
-            bottom: (isBottomLeft || isBottomRight) ? parent.bottom : undefined
-            left: (isTopLeft || isBottomLeft) ? parent.left : undefined
-            right: (isTopRight || isBottomRight) ? parent.right : undefined
+            top: root.isTop ? parent.top : undefined
+            bottom: root.isBottom ? parent.bottom : undefined
+            left: root.isLeft ? parent.left : undefined
+            right: root.isRight ? parent.right : undefined
         }
         layer.enabled: true
         layer.smooth: true

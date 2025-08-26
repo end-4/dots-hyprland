@@ -19,6 +19,7 @@ MouseArea { // Right side | scroll to change volume
     property real lastScrollX: 0
     property real lastScrollY: 0
     property bool trackingScroll: false
+    property real moveThreshold: 20
 
     acceptedButtons: Qt.LeftButton
     hoverEnabled: true
@@ -47,7 +48,7 @@ MouseArea { // Right side | scroll to change volume
         if (root.trackingScroll) {
             const dx = mouse.x - root.lastScrollX;
             const dy = mouse.y - root.lastScrollY;
-            if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
+            if (Math.sqrt(dx * dx + dy * dy) > root.moveThreshold) {
                 root.movedAway();
                 root.trackingScroll = false;
             }

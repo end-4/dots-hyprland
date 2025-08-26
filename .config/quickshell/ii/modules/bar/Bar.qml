@@ -14,8 +14,6 @@ import qs.modules.common.functions
 
 Scope {
     id: bar
-
-    readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: Config.options.bar.showBackground
 
     Variants {
