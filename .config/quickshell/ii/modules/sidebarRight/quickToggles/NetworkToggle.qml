@@ -10,7 +10,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 QuickToggleButton {
-    toggled: Network.networkName.length > 0 && Network.networkName != "lo"
+    toggled: Network.wifiEnabled
     buttonIcon: Network.materialSymbol
     onClicked: {
         toggleNetwork.running = true
