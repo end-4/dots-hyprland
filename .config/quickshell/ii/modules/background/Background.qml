@@ -18,6 +18,8 @@ Variants {
     readonly property bool fixedClockPosition: Config.options.background.fixedClockPosition
     readonly property real fixedClockX: Config.options.background.clockX
     readonly property real fixedClockY: Config.options.background.clockY
+    readonly property real clockSizePadding: 20
+    readonly property real screenSizePadding: 50
     model: Quickshell.screens
 
     PanelWindow {
@@ -115,10 +117,10 @@ Variants {
         function updateClockPosition() {
             // Somehow all this manual setting is needed to make the proc correctly use the new values
             leastBusyRegionProc.path = bgRoot.wallpaperPath
-            leastBusyRegionProc.contentWidth = clock.implicitWidth
-            leastBusyRegionProc.contentHeight = clock.implicitHeight
-            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
-            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
+            leastBusyRegionProc.contentWidth = clock.implicitWidth + root.clockSizePadding * 2
+            leastBusyRegionProc.contentHeight = clock.implicitHeight + root.clockSizePadding * 2
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2
             leastBusyRegionProc.running = false;
             leastBusyRegionProc.running = true;
         }
