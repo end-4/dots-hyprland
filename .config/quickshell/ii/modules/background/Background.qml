@@ -210,8 +210,8 @@ Variants {
                 width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
                 height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
             }
-            width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale
-            height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale
+            width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
+            height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
         }
 
         // The clock
