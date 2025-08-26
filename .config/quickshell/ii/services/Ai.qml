@@ -26,6 +26,7 @@ Singleton {
     property Component mistralApiStrategy: MistralApiStrategy {}
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
+    property bool requestRunning: false
 
     signal responseFinished()
 
@@ -710,6 +711,7 @@ Singleton {
             requesterScriptFile.setText(scriptContent)
             requester.command = baseCommand.concat([shellScriptPath]);
             requester.running = true
+            root.requestRunning  = true
         }
 
         stdout: SplitParser {
@@ -757,6 +759,8 @@ Singleton {
             if (requester.message.content.includes("API key not valid")) {
                 root.addApiKeyAdvice(models[requester.message.model]);
             }
+
+            root.requestRunning  = false
         }
     }
 
@@ -764,6 +768,24 @@ Singleton {
         if (message.length === 0) return;
         root.addMessage(message, "user");
         requester.makeRequest();
+    }
+
+    function stopUserMessage() {
+      requester.running = false //Sends SIGKILL to process
+    
+      requester.message.content += "\n\n<span style='color:" + Appearance.m3colors.m3onError + "; font-weight:bold;'>Response canceled by user</span>"
+      requester.message.rawContent += "\n\n<span style='color:" + Appearance.m3colors.m3onError + "; font-weight:bold;'>Response canceled by user</span>"
+
+      
+      if(root.models[root.currentModelId].endpoint.includes("localhost")){ 
+          stopOllamaLlm.running = true
+          stopOllamaLlm.command = ["bash", "-c", "ollama stop " +root.models[root.currentModelId].model ]
+      }
+    }
+
+    Process {
+      id: stopOllamaLlm
+      running: false
     }
 
     function attachFile(filePath: string) {
