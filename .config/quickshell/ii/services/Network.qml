@@ -26,6 +26,17 @@ Singleton {
         "signal_wifi_0_bar"
     ) : "signal_wifi_off"
 
+    // Control
+    function toggleWifi(): void {
+        const cmd = wifiEnabled ? "off" : "on";
+        enableWifiProc.exec(["nmcli", "radio", "wifi", cmd]);
+    }
+
+    Process {
+        id: enableWifiProc
+    }
+
+    // Status update
     function update() {
         updateConnectionType.startCheck();
         wifiStatusProcess.running = true
