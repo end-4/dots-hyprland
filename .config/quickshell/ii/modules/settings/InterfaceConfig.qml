@@ -508,7 +508,7 @@ ContentPage {
                 id: reloadNotice
                 visible: false
                 Layout.topMargin: 8
-                radius: 8
+                radius: Appearance.rounding.normal
                 color: Appearance.colors.colPrimaryContainer
                 Layout.fillWidth: true
                 implicitWidth: languageRowLayout.implicitWidth + languageRowLayout.anchors.margins * 2
