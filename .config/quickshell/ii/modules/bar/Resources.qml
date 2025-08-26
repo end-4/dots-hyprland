@@ -1,7 +1,5 @@
 import qs.modules.common
-import qs.modules.common.widgets
 import qs.services
-import qs
 import QtQuick
 import QtQuick.Layouts
 
@@ -24,6 +22,7 @@ MouseArea {
         Resource {
             iconName: "memory"
             percentage: ResourceUsage.memoryUsedPercentage
+            warningThreshold: Config.options.bar.resources.memoryWarningThreshold
         }
 
         Resource {
@@ -33,6 +32,7 @@ MouseArea {
                 (MprisController.activePlayer?.trackTitle == null) ||
                 root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
+            warningThreshold: Config.options.bar.resources.swapWarningThreshold
         }
 
         Resource {
@@ -42,6 +42,7 @@ MouseArea {
                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
                 root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
+            warningThreshold: Config.options.bar.resources.cpuWarningThreshold
         }
 
     }
