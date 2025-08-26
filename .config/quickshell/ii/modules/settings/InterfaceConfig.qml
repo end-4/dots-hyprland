@@ -269,7 +269,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Tray")
-            
+
             ConfigSwitch {
                 text: Translation.tr('Tint icons')
                 checked: Config.options.bar.tray.monochromeIcons
@@ -463,9 +463,10 @@ ContentPage {
             StyledToolTip {
                 content: Translation.tr("Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.")
             }
-        }        
+        }
     }
-        ContentSection {
+    
+    ContentSection {
         title: Translation.tr("Language")
 
         ContentSubsection {
@@ -487,15 +488,18 @@ ContentPage {
                             value: "auto"
                         }
                     ];
-                    
+
                     // Generate language options from available languages
                     // Intl.DisplayNames is not used. Show the language code with underscore replaced by hyphen.
                     for (var i = 0; i < Translation.availableLanguages.length; i++) {
                         var lang = Translation.availableLanguages[i];
                         var displayName = lang.replace('_', '-');
-                        baseOptions.push({ displayName: displayName, value: lang });
+                        baseOptions.push({
+                            displayName: displayName,
+                            value: lang
+                        });
                     }
-                    
+
                     return baseOptions;
                 }
             }
@@ -503,32 +507,33 @@ ContentPage {
             Rectangle {
                 id: reloadNotice
                 visible: false
-                Layout.fillWidth: true
                 Layout.topMargin: 8
-                height: noticeText.implicitHeight + 16
                 radius: 8
-                color: Appearance.m3colors.m3secondaryContainer
-                border.color: Appearance.m3colors.m3outline
-                border.width: 1
+                color: Appearance.colors.colPrimaryContainer
+                Layout.fillWidth: true
+                implicitWidth: languageRowLayout.implicitWidth + languageRowLayout.anchors.margins * 2
+                implicitHeight: languageRowLayout.implicitHeight + languageRowLayout.anchors.margins * 2
 
-                Row {
+                RowLayout {
+                    id: languageRowLayout
                     anchors.fill: parent
                     anchors.margins: 8
                     spacing: 8
 
                     MaterialSymbol {
-                        anchors.verticalCenter: parent.verticalCenter
+                        Layout.fillWidth: false
+                        Layout.alignment: Qt.AlignVCenter
                         text: "info"
-                        iconSize: 20
-                        color: Appearance.m3colors.m3onSecondaryContainer
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: Appearance.colors.colOnPrimaryContainer
                     }
 
                     StyledText {
                         id: noticeText
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width - 36
-                        text: Translation.tr("Language setting saved. Please restart the quickshell to apply the new language.")
-                        color: Appearance.m3colors.m3onSecondaryContainer
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                        text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
+                        color: Appearance.colors.colOnPrimaryContainer
                         wrapMode: Text.WordWrap
                     }
                 }
