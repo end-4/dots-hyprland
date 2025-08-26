@@ -315,25 +315,5 @@ Variants {
 
             }
         }
-
-        // Password prompt
-        StyledText {
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
-                bottomMargin: 30
-            }
-            opacity: (GlobalStates.screenLocked && !GlobalStates.screenLockContainsCharacters) ? 1 : 0
-            scale: opacity
-            visible: opacity > 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            text: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
-            color: GlobalStates.screenUnlockFailed ? Appearance.colors.colError : bgRoot.colText
-            style: Text.Raised
-            styleColor: Appearance.colors.colShadow
-            font.pixelSize: Appearance.font.pixelSize.normal
-        }
     }
 }
