@@ -202,7 +202,10 @@ ApplicationWindow {
                     id: pageLoader
                     anchors.fill: parent
                     opacity: 1.0
+
+                    active: Config.ready
                     source: root.pages[0].component
+
                     Connections {
                         target: root
                         function onCurrentPageChanged() {
