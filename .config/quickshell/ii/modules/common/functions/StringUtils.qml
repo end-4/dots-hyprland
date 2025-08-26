@@ -40,7 +40,6 @@ Singleton {
       * @returns { string }
       */
     function shellSingleQuoteEscape(str) {
-        //  escape single quotes
         return String(str)
         // .replace(/\\/g, '\\\\')
         .replace(/'/g, "'\\''");

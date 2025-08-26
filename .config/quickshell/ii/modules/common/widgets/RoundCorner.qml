@@ -13,8 +13,18 @@ Item {
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
+    property bool isTopLeft: corner === RoundCorner.CornerEnum.TopLeft
+    property bool isBottomLeft: corner === RoundCorner.CornerEnum.BottomLeft
+    property bool isTopRight: corner === RoundCorner.CornerEnum.TopRight
+    property bool isBottomRight: corner === RoundCorner.CornerEnum.BottomRight
+
     Shape {
-        anchors.fill: parent
+        anchors {
+            top: (isTopLeft || isTopRight) ? parent.top : undefined
+            bottom: (isBottomLeft || isBottomRight) ? parent.bottom : undefined
+            left: (isTopLeft || isBottomLeft) ? parent.left : undefined
+            right: (isTopRight || isBottomRight) ? parent.right : undefined
+        }
         layer.enabled: true
         layer.smooth: true
         preferredRendererType: Shape.CurveRenderer

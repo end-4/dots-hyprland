@@ -7,6 +7,9 @@ QtObject {
     property string role
     property string content
     property string rawContent
+    property string fileMimeType
+    property string fileUri
+    property string localFilePath
     property string model
     property bool thinking: true
     property bool done: false

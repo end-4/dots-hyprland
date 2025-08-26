@@ -84,7 +84,7 @@ Singleton {
     function getLanguageCode() {
         var configLang = "auto"
         try {
-            configLang = ConfigOptions.language.ui
+            configLang = Config.options.language.ui
         } catch (e) {
             configLang = "auto"
         }

@@ -1,29 +1,27 @@
 import qs
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
-import qs.services
 import QtQuick
-import QtQuick.Layouts
-import Quickshell
 
 Item {
     id: root
     required property string iconName
     required property double percentage
+    property int warningThreshold: 100
     implicitHeight: resourceProgress.implicitHeight
     implicitWidth: Appearance.sizes.verticalBarWidth
 
-    // Helper function to format KB to GB
-    function formatKB(kb) {
-        return (kb / (1024 * 1024)).toFixed(1) + " GB";
-    }
+    property bool warning: percentage * 100 >= warningThreshold
 
     ClippedFilledCircularProgress {
         id: resourceProgress
         anchors.centerIn: parent
         value: percentage
         enableAnimation: false
-        
+        colPrimary: root.warning ? Appearance.colors.colError : Appearance.colors.colOnSecondaryContainer
+        accountForLightBleeding: !root.warning
+
         MaterialSymbol {
             font.weight: Font.Medium
             fill: 1
@@ -40,5 +38,4 @@ Item {
         acceptedButtons: Qt.NoButton
         enabled: root.visible
     }
-
 }

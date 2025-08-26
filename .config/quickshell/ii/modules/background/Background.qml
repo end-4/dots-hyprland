@@ -163,6 +163,7 @@ Variants {
             }
             cache: false
             asynchronous: true
+            retainWhileLoading: true
             // Range = groups that workspaces span on
             property int chunkSize: Config?.options.bar.workspaces.shown ?? 10;
             property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;

@@ -553,7 +553,10 @@ done
 
 if [[ "$check" == true ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
-  safe_read "BY CONTINUE YOU WILL USE IT AT YOUR OWN RISK (y/N): " response "N"
+  log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
+  log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
+  log_warning "In general, prefer install.sh for updates."
+  safe_read "Continue? (y/N): " response "N"
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
     log_error "Update aborted by user"

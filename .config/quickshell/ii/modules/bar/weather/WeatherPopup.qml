@@ -18,26 +18,37 @@ StyledPopup {
         spacing: 5
 
         // Header
-        RowLayout {
+        ColumnLayout {
             id: header
-            spacing: 5
             Layout.alignment: Qt.AlignHCenter
+            spacing: 2
 
-            MaterialSymbol {
-                fill: 0
-                font.weight: Font.Medium
-                text: "location_on"
-                iconSize: Appearance.font.pixelSize.large
-                color: Appearance.colors.colOnSurfaceVariant
-            }
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 6
 
-            StyledText {
-                text: Weather.data.city
-                font {
-                    weight: Font.Medium
-                    pixelSize: Appearance.font.pixelSize.normal
+                MaterialSymbol {
+                    fill: 0
+                    font.weight: Font.Medium
+                    text: "location_on"
+                    iconSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnSurfaceVariant
                 }
+
+                StyledText {
+                    text: Weather.data.city
+                    font {
+                        weight: Font.Medium
+                        pixelSize: Appearance.font.pixelSize.normal
+                    }
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+            }
+            StyledText {
+                id: temp
+                font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colOnSurfaceVariant
+                text: Weather.data.temp + " • " + Translation.tr("Feels like %1").arg(Weather.data.tempFeelsLike)
             }
         }
 
