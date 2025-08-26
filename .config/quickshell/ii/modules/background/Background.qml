@@ -193,6 +193,7 @@ Variants {
             x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
             y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
             source: bgRoot.wallpaperPath
+            fillMode: Image.PreserveAspectCrop
             Behavior on x {
                 NumberAnimation {
                     duration: 600
