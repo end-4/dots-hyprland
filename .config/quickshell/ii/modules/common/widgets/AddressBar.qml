@@ -8,7 +8,10 @@ import qs.modules.common.functions
 Rectangle {
     id: root
     required property var directory
-    property bool showBreadcrumb: true // TODO: make this work
+    property bool showBreadcrumb: true
+    onShowBreadcrumbChanged: {
+        addressInput.text = root.directory;
+    }
 
     signal navigateToDirectory(string path)
 
