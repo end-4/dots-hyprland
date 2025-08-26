@@ -293,6 +293,13 @@ Singleton {
                         property string username: "[unset]"
                     }
                 }
+                property JsonObject cornerOpen: JsonObject {
+                    property bool enable: true
+                    property bool clickless: true
+                    property real cornerRegionWidth: 30
+                    property real cornerRegionHeight: 2
+                    property bool visualize: false
+                }
             }
 
             property JsonObject time: JsonObject {

@@ -391,6 +391,65 @@ ContentPage {
                 content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Corner open")
+            tooltip: Translation.tr("Allows you to open sidebars by clicking or hovering screen corners regardless of bar position")
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Enable")
+                    checked: Config.options.sidebar.cornerOpen.enable
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.enable = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Hover to trigger")
+                    checked: Config.options.sidebar.cornerOpen.clickless
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.clickless = checked;
+                    }
+
+                    StyledToolTip {
+                        content: "When this is off you'll have to click"
+                    }
+                }
+            }
+            ConfigSwitch {
+                text: Translation.tr("Visualize region")
+                checked: Config.options.sidebar.cornerOpen.visualize
+                onCheckedChanged: {
+                    Config.options.sidebar.cornerOpen.visualize = checked;
+                }
+
+                StyledToolTip {
+                    content: "When this is off you'll have to click"
+                }
+            }
+            ConfigRow {
+                ConfigSpinBox {
+                    text: Translation.tr("Region width")
+                    value: Config.options.sidebar.cornerOpen.cornerRegionWidth
+                    from: 1
+                    to: 300
+                    stepSize: 1
+                    onValueChanged: {
+                        Config.options.sidebar.cornerOpen.cornerRegionWidth = value;
+                    }
+                }
+                ConfigSpinBox {
+                    text: Translation.tr("Region height")
+                    value: Config.options.sidebar.cornerOpen.cornerRegionHeight
+                    from: 1
+                    to: 300
+                    stepSize: 1
+                    onValueChanged: {
+                        Config.options.sidebar.cornerOpen.cornerRegionHeight = value;
+                    }
+                }
+            }
+        }
     }
 
     ContentSection {
@@ -465,7 +524,7 @@ ContentPage {
             }
         }
     }
-    
+
     ContentSection {
         title: Translation.tr("Language")
 
