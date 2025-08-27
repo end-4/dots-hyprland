@@ -217,22 +217,20 @@ Variants {
         // The clock
         Loader {
             active: Config.options.background.showClock
+            anchors {
+                left: wallpaper.left
+                top: wallpaper.top
+                leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                Behavior on leftMargin {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+                Behavior on topMargin {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+            }
             sourceComponent: Item {
                 id: clock
-                visible: Config.options.background.show_clock
-                anchors {
-                    left: wallpaper.left
-                    top: wallpaper.top
-                    leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                    topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
-                    Behavior on leftMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-                    Behavior on topMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-                }
-
                 implicitWidth: clockColumn.implicitWidth
                 implicitHeight: clockColumn.implicitHeight
 
