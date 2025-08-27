@@ -19,19 +19,19 @@ MouseArea {
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
     property alias radius: background.radius
-    property alias padding: background.anchors.margins
+    property alias margins: background.anchors.margins
+    property alias padding: wallpaperItemColumnLayout.anchors.margins
+    margins: Appearance.sizes.wallpaperSelectorItemMargins
+    padding: Appearance.sizes.wallpaperSelectorItemPadding
 
-    signal activated
+    signal activated()
 
     hoverEnabled: true
     onClicked: root.activated()
 
     Rectangle {
         id: background
-        anchors {
-            fill: parent
-            margins: 8
-        }
+        anchors.fill: parent
         radius: Appearance.rounding.normal
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -39,10 +39,7 @@ MouseArea {
 
         ColumnLayout {
             id: wallpaperItemColumnLayout
-            anchors {
-                fill: parent
-                margins: 6
-            }
+            anchors.fill: parent
             spacing: 4
 
             Item {
@@ -67,12 +64,23 @@ MouseArea {
                     active: root.useThumbnail
                     sourceComponent: ThumbnailImage {
                         id: thumbnailImage
+                        generateThumbnail: false
                         sourcePath: fileModelData.filePath
 
                         fillMode: Image.PreserveAspectCrop
                         clip: true
                         sourceSize.width: wallpaperItemColumnLayout.width
                         sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
+
+                        Connections {
+                            target: Wallpapers
+                            function onThumbnailGenerated(directory) {
+                                if (thumbnailImage.status !== Image.Error) return;
+                                if (FileUtils.parentDirectory(thumbnailImage.sourcePath) !== directory) return;
+                                thumbnailImage.source = "";
+                                thumbnailImage.source = thumbnailImage.thumbnailPath;
+                            }
+                        }
 
                         layer.enabled: true
                         layer.effect: OpacityMask {

@@ -5,28 +5,15 @@ import qs.modules.common
 import qs.modules.common.functions
 
 /**
- * Thumbnail image.
+ * Thumbnail image. It currently generates to the right place at the right size, but does not handle metadata/maintenance on modification.
  * See Freedesktop's spec: https://specifications.freedesktop.org/thumbnail-spec/thumbnail-spec-latest.html
  */
 Image {
     id: root
 
+    property bool generateThumbnail: true
     required property string sourcePath
-    readonly property var thumbnailSizes: ({
-        "normal": 128,
-        "large": 256,
-        "x-large": 512,
-        "xx-large": 1024
-    })
-    property string thumbnailSizeName: { // https://specifications.freedesktop.org/thumbnail-spec/latest/directory.html
-        const sizeNames = Object.keys(thumbnailSizes);
-        for(let i = 0; i < sizeNames.length; i++) {
-            const sizeName = sizeNames[i];
-            const maxSize = thumbnailSizes[sizeName];
-            if (root.sourceSize.width <= maxSize && root.sourceSize.height <= maxSize) return sizeName;
-        }
-        return "xx-large";
-    }
+    property string thumbnailSizeName: Images.thumbnailSizeNameForDimensions(sourceSize.width, sourceSize.height)
     property string thumbnailPath: {
         if (sourcePath.length == 0) return;
         const resolvedUrl = Qt.resolvedUrl(sourcePath);
@@ -46,13 +33,14 @@ Image {
     }
 
     onSourceSizeChanged: {
-        thumbnailGeneration.running = false
-        thumbnailGeneration.running = true
+        if (!root.generateThumbnail) return;
+        thumbnailGeneration.running = false;
+        thumbnailGeneration.running = true;
     }
     Process {
         id: thumbnailGeneration
         command: {
-            const maxSize = root.thumbnailSizes[root.thumbnailSizeName];
+            const maxSize = Images.thumbnailSizes[root.thumbnailSizeName];
             return ["bash", "-c", 
                 `[ -f '${FileUtils.trimFileProtocol(root.thumbnailPath)}' ] && exit 0 || { magick '${root.sourcePath}' -resize ${maxSize}x${maxSize} '${FileUtils.trimFileProtocol(root.thumbnailPath)}' && exit 1; }`
             ]

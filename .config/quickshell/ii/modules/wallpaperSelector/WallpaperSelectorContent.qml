@@ -16,6 +16,19 @@ Item {
     property real previewCellAspectRatio: 4 / 3
     property bool useDarkMode: Appearance.m3colors.darkmode
 
+    function updateThumbnails() {
+        const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2
+        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions(grid.cellWidth - totalImageMargin, grid.cellHeight - totalImageMargin)
+        Wallpapers.generateThumbnail(thumbnailSizeName)
+    }
+
+    Connections {
+        target: Wallpapers
+        function onDirectoryChanged() {
+            root.updateThumbnails()
+        }
+    }
+
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Escape) {
             GlobalStates.wallpaperSelectorOpen = false;
@@ -203,8 +216,11 @@ Item {
                         keyNavigationWraps: true
                         boundsBehavior: Flickable.StopAtBounds
                         bottomMargin: extraOptions.implicitHeight
-
                         ScrollBar.vertical: StyledScrollBar {}
+
+                        Component.onCompleted: {
+                            root.updateThumbnails()
+                        }
 
                         function moveSelection(delta) {
                             currentIndex = Math.max(0, Math.min(grid.model.count - 1, currentIndex + delta));
@@ -219,7 +235,6 @@ Item {
 
                         model: Wallpapers.folderModel
                         onModelChanged: currentIndex = 0
-
                         delegate: WallpaperDirectoryItem {
                             required property var modelData
                             required property int index

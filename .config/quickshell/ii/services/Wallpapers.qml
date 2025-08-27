@@ -14,6 +14,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
 
+    property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/thumbgen.py`
     property string directory: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
     property alias folderModel: folderModel // Expose for direct binding when needed
     property string searchQuery: ""
@@ -23,6 +24,7 @@ Singleton {
     property list<string> wallpapers: [] // List of absolute file paths (without file://)
 
     signal changed()
+    signal thumbnailGenerated(directory: string)
 
     // Executions
     Process {
@@ -103,6 +105,26 @@ Singleton {
                 const path = folderModel.get(i, "filePath") || FileUtils.trimFileProtocol(folderModel.get(i, "fileURL"))
                 if (path && path.length) root.wallpapers.push(path)
             }
+        }
+    }
+
+    // Thumbnail generation
+    function generateThumbnail(size: string) {
+        if (!["normal", "large", "x-large", "xx-large"].includes(size)) throw new Error("Invalid thumbnail size");
+        thumbgenProc.directory = root.directory
+        thumbgenProc.running = false
+        thumbgenProc.command = [
+            thumbgenScriptPath,
+            "--size", size,
+            "-d", `${root.directory}`
+        ]
+        thumbgenProc.running = true
+    }
+    Process {
+        id: thumbgenProc
+        property string directory
+        onExited: (exitCode, exitStatus) => {
+            root.thumbnailGenerated(thumbgenProc.directory)
         }
     }
 }
