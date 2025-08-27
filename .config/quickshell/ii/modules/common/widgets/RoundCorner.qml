@@ -5,7 +5,7 @@ Item {
     id: root
 
     enum CornerEnum { TopLeft, TopRight, BottomLeft, BottomRight }
-    property var corner: RoundCorner.CornerEnum.TopLeft // Default to TopLeft
+    property var corner: RoundCorner.CornerEnum.TopLeft
 
     property int implicitSize: 25
     property color color: "#000000"

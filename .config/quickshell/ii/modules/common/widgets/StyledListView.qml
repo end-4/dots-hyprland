@@ -14,6 +14,8 @@ ListView {
     property int dragIndex: -1
     property real dragDistance: 0
     property bool popin: true
+    property bool animateAppearance: true
+    property bool animateMovement: false
     // Accumulated scroll destination so wheel deltas stack while animating
     property real scrollTargetY: 0
 
@@ -66,17 +68,17 @@ ListView {
     }
 
     add: Transition {
-        animations: [
+        animations: animateAppearance ? [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: popin ? "opacity,scale" : "opacity",
                 from: 0,
                 to: 1,
             }),
-        ]
+        ] : []
     }
 
     addDisplaced: Transition {
-        animations: [
+        animations: animateAppearance ? [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
@@ -84,46 +86,46 @@ ListView {
                 properties: popin ? "opacity,scale" : "opacity",
                 to: 1,
             }),
-        ]
+        ] : []
     }
     
-    // displaced: Transition {
-    //     animations: [
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             property: "y",
-    //         }),
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             properties: "opacity,scale",
-    //             to: 1,
-    //         }),
-    //     ]
-    // }
+    displaced: Transition {
+        animations: root.animateMovement ? [
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                property: "y",
+            }),
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                properties: "opacity,scale",
+                to: 1,
+            }),
+        ] : []
+    } 
 
-    // move: Transition {
-    //     animations: [
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             property: "y",
-    //         }),
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             properties: "opacity,scale",
-    //             to: 1,
-    //         }),
-    //     ]
-    // }
-    // moveDisplaced: Transition {
-    //     animations: [
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             property: "y",
-    //         }),
-    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-    //             properties: "opacity,scale",
-    //             to: 1,
-    //         }),
-    //     ]
-    // }
+    move: Transition {
+        animations: root.animateMovement ? [
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                property: "y",
+            }),
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                properties: "opacity,scale",
+                to: 1,
+            }),
+        ] : []
+    }
+    moveDisplaced: Transition {
+        animations: root.animateMovement ? [
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                property: "y",
+            }),
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+                properties: "opacity,scale",
+                to: 1,
+            }),
+        ] : []
+    }
 
     remove: Transition {
-        animations: [
+        animations: animateAppearance ? [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "x",
                 to: root.width + root.removeOvershoot,
@@ -132,12 +134,12 @@ ListView {
                 property: "opacity",
                 to: 0,
             })
-        ]
+        ] : []
     }
 
     // This is movement when something is removed, not removing animation!
     removeDisplaced: Transition { 
-        animations: [
+        animations: animateAppearance ? [
             Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
@@ -145,6 +147,6 @@ ListView {
                 properties: "opacity,scale",
                 to: 1,
             }),
-        ]
+        ] : []
     }
 }

@@ -259,7 +259,7 @@ Singleton {
                         // Alcy doesn't provide dimensions and images are often of god resolution
                         "width": 1000,
                         "height": 1000,
-                        "aspect_ratio": 1, // Default aspect ratio
+                        "aspect_ratio": 1,
                         "tags": "[no tags]",
                         "rating": "s",
                         "is_nsfw": false,
