@@ -117,8 +117,8 @@ Variants {
         function updateClockPosition() {
             // Somehow all this manual setting is needed to make the proc correctly use the new values
             leastBusyRegionProc.path = bgRoot.wallpaperPath
-            leastBusyRegionProc.contentWidth = clock.implicitWidth + root.clockSizePadding * 2
-            leastBusyRegionProc.contentHeight = clock.implicitHeight + root.clockSizePadding * 2
+            leastBusyRegionProc.contentWidth = clockLoader.item.implicitWidth + root.clockSizePadding * 2
+            leastBusyRegionProc.contentHeight = clockLoader.item.implicitHeight + root.clockSizePadding * 2
             leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2
             leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2
             leastBusyRegionProc.running = false;
@@ -216,6 +216,7 @@ Variants {
 
         // The clock
         Loader {
+            id: clockLoader
             active: Config.options.background.showClock
             anchors {
                 left: wallpaper.left
