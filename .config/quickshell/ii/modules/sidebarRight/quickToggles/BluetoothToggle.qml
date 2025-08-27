@@ -10,13 +10,13 @@ import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
-    readonly property bool bluetoothEnabled: Bluetooth.defaultAdapter.enabled
-    readonly property BluetoothDevice bluetoothDevice: Bluetooth.defaultAdapter.devices.values.find(device => device.connected)
+    readonly property bool bluetoothEnabled: Bluetooth.defaultAdapter?.enabled ?? false
+    readonly property BluetoothDevice bluetoothDevice: Bluetooth.defaultAdapter?.devices.values.find(device => device.connected) ?? null
     readonly property bool bluetoothConnected: bluetoothDevice !== undefined
     toggled: bluetoothEnabled
     buttonIcon: bluetoothConnected ? "bluetooth_connected" : bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
     onClicked: {
-        Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
+        Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter?.enabled
     }
     altAction: () => {
         Quickshell.execDetached(["bash", "-c", `${Config.options.apps.bluetooth}`])
