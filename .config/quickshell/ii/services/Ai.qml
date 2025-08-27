@@ -27,6 +27,8 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
+    signal responseFinished()
+
     property string systemPrompt: {
         let prompt = Config.options?.ai?.systemPrompt ?? "";
         for (let key in root.promptSubstitutions) {
@@ -132,44 +134,50 @@ Singleton {
         "openai": {
             "functions": [
                 {
-                    "name": "switch_to_search_mode",
-                    "description": "Search the web",
+                    "type": "function",
+                    "function": {
+                        "name": "get_shell_config",
+                        "description": "Get the desktop shell config file contents",
+                        "parameters": {}
+                    },
                 },
                 {
-                    "name": "get_shell_config",
-                    "description": "Get the desktop shell config file contents",
-                },
-                {
-                    "name": "set_shell_config",
-                    "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "key": {
-                                "type": "string",
-                                "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                    "type": "function",
+                    "function": {
+                        "name": "set_shell_config",
+                        "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string",
+                                    "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "description": "The value to set, e.g. `true`"
+                                }
                             },
-                            "value": {
-                                "type": "string",
-                                "description": "The value to set, e.g. `true`"
-                            }
-                        },
-                        "required": ["key", "value"]
+                            "required": ["key", "value"]
+                        }
                     }
                 },
                 {
-                    "name": "run_shell_command",
-                    "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "command": {
-                                "type": "string",
-                                "description": "The bash command to run",
+                    "type": "function",
+                    "function": {
+                        "name": "run_shell_command",
+                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "string",
+                                    "description": "The bash command to run",
+                                },
                             },
-                        },
-                        "required": ["command"]
-                    }
+                            "required": ["command"]
+                        }
+                    },
                 },
             ],
             "search": [],
@@ -313,6 +321,19 @@ Singleton {
             "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
             "api_format": "mistral",
         }),
+        "github-gpt-5-nano": aiModelComponent.createObject(this, {
+            "name": "GPT-5 Nano (GH Models)",
+            "icon": "github-symbolic",
+            "api_format": "openai",
+            "description": Translation.tr("Online via %1 | %2's model").arg("GitHub Models").arg("OpenAI"),
+            "homepage": "https://github.com/marketplace/models",
+            "endpoint": "https://models.inference.ai.azure.com/chat/completions",
+            "model": "gpt-5-nano",
+            "requires_key": true,
+            "key_id": "github",
+            "key_get_link": "https://github.com/settings/tokens",
+            "key_get_description": Translation.tr("**Pricing**: Free tier available with limited rates. See https://docs.github.com/en/billing/concepts/product-billing/github-models\n\n**Instructions**: Generate a GitHub personal access token with Models permission, then set as API key here\n\n**Note**: To use this you will have to set the temperature parameter to 1"),
+        }),
         "openrouter-deepseek-r1": aiModelComponent.createObject(this, {
             "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
@@ -346,6 +367,9 @@ Singleton {
             });
         }
     }
+
+    property string requestScriptFilePath: "/tmp/quickshell/ai/request.sh"
+    property string pendingFilePath: ""
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
@@ -596,9 +620,13 @@ Singleton {
         root.tokenCount.total = -1;
     }
 
+    FileView {
+        id: requesterScriptFile
+    }
+
     Process {
         id: requester
-        property list<string> baseCommand: ["bash", "-c"]
+        property list<string> baseCommand: ["bash"]
         property AiMessageData message
         property ApiStrategy currentStrategy
 
@@ -609,6 +637,7 @@ Singleton {
                 root.postResponseHook = null; // Reset hook after use
             }
             root.saveChat("lastSession")
+            root.responseFinished()
         }
 
         function makeRequest() {
@@ -623,7 +652,7 @@ Singleton {
             const endpoint = root.currentApiStrategy.buildEndpoint(model);
             const messageArray = root.messageIDs.map(id => root.messageByID[id]);
             const filteredMessageArray = messageArray.filter(message => message.role !== Ai.interfaceRole);
-            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool]);
+            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool], root.pendingFilePath);
             // console.log("[Ai] Request data: ", JSON.stringify(data, null, 2));
 
             let requestHeaders = {
@@ -655,14 +684,31 @@ Singleton {
             /* Get authorization header from strategy */
             const authHeader = requester.currentStrategy.buildAuthorizationHeader(root.apiKeyEnvVarName);
             
+            /* Script shebang */
+            const scriptShebang = "#!/usr/bin/env bash\n";
+
+            /* Create extra setup when there's an attached file */
+            let scriptFileSetupContent = ""
+            if (root.pendingFilePath && root.pendingFilePath.length > 0) {
+                requester.message.localFilePath = root.pendingFilePath;
+                scriptFileSetupContent = requester.currentStrategy.buildScriptFileSetup(root.pendingFilePath);
+                root.pendingFilePath = ""
+            }
+
             /* Create command string */
-            const requestCommandString = `curl --no-buffer "${endpoint}"`
+            let scriptRequestContent = ""
+            scriptRequestContent += `curl --no-buffer "${endpoint}"`
                 + ` ${headerString}`
                 + (authHeader ? ` ${authHeader}` : "")
-                + ` -d '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
+                + ` --data '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
+                + "\n"
             
             /* Send the request */
-            requester.command = baseCommand.concat([requestCommandString]);
+            const scriptContent = requester.currentStrategy.finalizeScriptContent(scriptShebang + scriptFileSetupContent + scriptRequestContent)
+            const shellScriptPath = CF.FileUtils.trimFileProtocol(root.requestScriptFilePath)
+            requesterScriptFile.path = Qt.resolvedUrl(shellScriptPath)
+            requesterScriptFile.setText(scriptContent)
+            requester.command = baseCommand.concat([shellScriptPath]);
             requester.running = true
         }
 
@@ -676,7 +722,7 @@ Singleton {
                 try {
                     const result = requester.currentStrategy.parseResponseLine(data, requester.message);
                     // console.log("[Ai] Parsed response result: ", JSON.stringify(result, null, 2));
-                    
+
                     if (result.functionCall) {
                         requester.message.functionCall = result.functionCall;
                         root.handleFunctionCall(result.functionCall.name, result.functionCall.args, requester.message);
@@ -718,6 +764,10 @@ Singleton {
         if (message.length === 0) return;
         root.addMessage(message, "user");
         requester.makeRequest();
+    }
+
+    function attachFile(filePath: string) {
+        root.pendingFilePath = CF.FileUtils.trimFileProtocol(filePath);
     }
 
     function createFunctionOutputMessage(name, output, includeOutputInChat = true) {
@@ -819,6 +869,9 @@ Singleton {
             return ({
                 "role": message.role,
                 "rawContent": message.rawContent,
+                "fileMimeType": message.fileMimeType,
+                "fileUri": message.fileUri,
+                "localFilePath": message.localFilePath,
                 "model": message.model,
                 "thinking": false,
                 "done": true,
@@ -836,7 +889,7 @@ Singleton {
         id: chatSaveFile
         property string chatName: "chat"
         path: `${Directories.aiChats}/${chatName}.json`
-        blockLoading: true
+        blockLoading: true // Prevent race conditions
     }
 
     /**
@@ -872,6 +925,9 @@ Singleton {
                     "role": message.role,
                     "rawContent": message.rawContent,
                     "content": message.rawContent,
+                    "fileMimeType": message.fileMimeType,
+                    "fileUri": message.fileUri,
+                    "localFilePath": message.localFilePath,
                     "model": message.model,
                     "thinking": message.thinking,
                     "done": message.done,

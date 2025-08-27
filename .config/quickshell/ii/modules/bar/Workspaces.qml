@@ -117,11 +117,11 @@ Item {
                 z: 1
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
-                radius: Appearance.rounding.full
-                property var leftOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
+                radius: (width / 2)
+                property var previousOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
                 property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
-                property var radiusLeft: leftOccupied ? 0 : Appearance.rounding.full
-                property var radiusRight: rightOccupied ? 0 : Appearance.rounding.full
+                property var radiusLeft: previousOccupied ? 0 : (width / 2)
+                property var radiusRight: rightOccupied ? 0 : (width / 2)
 
                 topLeftRadius: radiusLeft
                 bottomLeftRadius: radiusLeft

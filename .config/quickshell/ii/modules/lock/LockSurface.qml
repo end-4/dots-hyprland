@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -27,23 +28,20 @@ MouseArea {
         }
     }
 
-    Keys.onPressed: (event) => { // Esc to clear
-        // console.log("KEY!!")
+    Keys.onPressed: event => { // Esc to clear
         if (event.key === Qt.Key_Escape) {
-            root.context.currentText = ""
+            root.context.currentText = "";
         }
         forceFieldFocus();
     }
 
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
-    onPressed: (mouse) => {
+    onPressed: mouse => {
         forceFieldFocus();
-        // console.log("Pressed")
     }
-    onPositionChanged: (mouse) => {
+    onPositionChanged: mouse => {
         forceFieldFocus();
-        // console.log(JSON.stringify(mouse))
     }
 
     anchors.fill: parent
@@ -63,38 +61,57 @@ MouseArea {
     //     }
     // }
 
-    // Password entry
-    Rectangle {
-        id: passwordBoxContainer
+    // Controls
+    Toolbar {
         anchors {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            bottomMargin: root.showInputField ? 20 : -height
+            bottomMargin: 20
         }
         Behavior on anchors.bottomMargin {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
-        radius: Appearance.rounding.full
-        color: Appearance.m3colors.m3surfaceContainer
-        implicitWidth: 160
-        implicitHeight: 44
 
-        StyledTextInput {
+        scale: 0.9
+        opacity: 0
+        Component.onCompleted: {
+            scale = 1
+            opacity = 1
+        }
+        Behavior on scale {
+            NumberAnimation {
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+            }
+        }
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+
+        ToolbarButton {
+            id: sleepButton
+            implicitWidth: height
+
+            onClicked: Session.suspend()
+
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "dark_mode"
+                color: Appearance.colors.colOnPrimaryContainer
+            }
+        }
+
+        ToolbarTextField {
             id: passwordBox
+            placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
 
-            anchors {
-                fill: parent
-                margins: 10
-            }
+            // Style
             clip: true
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            focus: true
-            onFocusChanged: root.forceFieldFocus();
-            color: Appearance.colors.colOnLayer2
-            font {
-                pixelSize: 10
-            }
+            font.pixelSize: Appearance.font.pixelSize.small
 
             // Password
             enabled: !root.context.unlockInProgress
@@ -111,30 +128,24 @@ MouseArea {
                 }
             }
         }
-    }
 
-    RippleButton {
-        anchors {
-            verticalCenter: passwordBoxContainer.verticalCenter
-            left: passwordBoxContainer.right
-            leftMargin: 5
-        }
+        ToolbarButton {
+            id: confirmButton
+            implicitWidth: height
+            toggled: true
+            enabled: !root.context.unlockInProgress && root.context.currentText.length > 0
+            colBackgroundToggled: Appearance.colors.colPrimary
 
-        visible: opacity > 0
-        implicitHeight: passwordBoxContainer.implicitHeight - 12
-        implicitWidth: implicitHeight
-        toggled: true
-        buttonRadius: passwordBoxContainer.radius
-        colBackground: Appearance.colors.colLayer2
-        onClicked: root.context.tryUnlock()
+            onClicked: root.context.tryUnlock()
 
-        contentItem: MaterialSymbol {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            iconSize: 24
-            text: "arrow_right_alt"
-            color: Appearance.colors.colOnPrimary
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "arrow_right_alt"
+                color: confirmButton.enabled ? Appearance.colors.colOnPrimary : Appearance.colors.colSubtext
+            }
         }
     }
 }

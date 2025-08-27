@@ -13,46 +13,40 @@ MouseArea {
     readonly property real percentage: Battery.percentage
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
 
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: 32
+    implicitWidth: batteryProgress.implicitWidth
+    implicitHeight: Appearance.sizes.barHeight
 
     hoverEnabled: true
 
-    RowLayout {
-        id: rowLayout
-
-        spacing: 4
+    ClippedProgressBar {
+        id: batteryProgress
         anchors.centerIn: parent
+        value: percentage
+        highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
 
-        ClippedProgressBar {
-            id: batteryProgress
-            value: percentage
-            highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
+        Item {
+            anchors.centerIn: parent
+            width: batteryProgress.valueBarWidth
+            height: batteryProgress.valueBarHeight
 
-            Item {
+            RowLayout {
                 anchors.centerIn: parent
-                width: batteryProgress.valueBarWidth
-                height: batteryProgress.valueBarHeight
+                spacing: 0
 
-                RowLayout {
-                    anchors.centerIn: parent
-                    spacing: 0
-
-                    MaterialSymbol {
-                        id: boltIcon
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: -2
-                        Layout.rightMargin: -2
-                        fill: 1
-                        text: "bolt"
-                        iconSize: Appearance.font.pixelSize.smaller
-                        visible: isCharging && percentage < 1 // TODO: animation
-                    }
-                    StyledText {
-                        Layout.alignment: Qt.AlignVCenter
-                        font: batteryProgress.font
-                        text: batteryProgress.text
-                    }
+                MaterialSymbol {
+                    id: boltIcon
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.leftMargin: -2
+                    Layout.rightMargin: -2
+                    fill: 1
+                    text: "bolt"
+                    iconSize: Appearance.font.pixelSize.smaller
+                    visible: isCharging && percentage < 1 // TODO: animation
+                }
+                StyledText {
+                    Layout.alignment: Qt.AlignVCenter
+                    font: batteryProgress.font
+                    text: batteryProgress.text
                 }
             }
         }

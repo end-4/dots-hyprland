@@ -18,6 +18,8 @@ Variants {
     readonly property bool fixedClockPosition: Config.options.background.fixedClockPosition
     readonly property real fixedClockX: Config.options.background.clockX
     readonly property real fixedClockY: Config.options.background.clockY
+    readonly property real clockSizePadding: 20
+    readonly property real screenSizePadding: 50
     model: Quickshell.screens
 
     PanelWindow {
@@ -28,7 +30,7 @@ Variants {
         // Hide when fullscreen
         property list<HyprlandWorkspace> workspacesForMonitor: Hyprland.workspaces.values.filter(workspace=>workspace.monitor && workspace.monitor.name == monitor.name)
         property var activeWorkspaceWithFullscreen: workspacesForMonitor.filter(workspace=>((workspace.toplevels.values.filter(window=>window.wayland.fullscreen)[0] != undefined) && workspace.active))[0]
-        visible: !(activeWorkspaceWithFullscreen != undefined)
+        visible: GlobalStates.screenLocked || (!(activeWorkspaceWithFullscreen != undefined)) || !Config?.options.background.hideWhenFullscreen
 
         // Workspaces
         property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
@@ -62,7 +64,7 @@ Variants {
         // Layer props
         screen: modelData
         exclusionMode: ExclusionMode.Ignore
-        WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
+        WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Overlay : WlrLayer.Bottom
         // WlrLayershell.layer: WlrLayer.Bottom
         WlrLayershell.namespace: "quickshell:background"
         anchors {
@@ -115,10 +117,10 @@ Variants {
         function updateClockPosition() {
             // Somehow all this manual setting is needed to make the proc correctly use the new values
             leastBusyRegionProc.path = bgRoot.wallpaperPath
-            leastBusyRegionProc.contentWidth = clock.implicitWidth
-            leastBusyRegionProc.contentHeight = clock.implicitHeight
-            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + 100
-            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + 100
+            leastBusyRegionProc.contentWidth = clock.implicitWidth + root.clockSizePadding * 2
+            leastBusyRegionProc.contentHeight = clock.implicitHeight + root.clockSizePadding * 2
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2
             leastBusyRegionProc.running = false;
             leastBusyRegionProc.running = true;
         }
@@ -161,22 +163,35 @@ Variants {
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
-            property real value // 0 to 1, for offset
             cache: false
             asynchronous: true
-            value: {
-                // Range = groups that workspaces span on
-                const chunkSize = Config?.options.bar.workspaces.shown ?? 10;
-                const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
-                const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
-                const range = upper - lower;
-                return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace?.id - lower) / range) : 0.5)
-                    + (0.15 * GlobalStates.sidebarRightOpen * Config.options.background.parallax.enableSidebar)
-                    - (0.15 * GlobalStates.sidebarLeftOpen * Config.options.background.parallax.enableSidebar)
+            retainWhileLoading: true
+            // Range = groups that workspaces span on
+            property int chunkSize: Config?.options.bar.workspaces.shown ?? 10;
+            property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
+            property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
+            property int range: upper - lower;
+            property real valueX: {
+                let result = 0.5;
+                if (Config.options.background.parallax.enableWorkspace && !Config.options.background.parallax.vertical) {
+                    result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                }
+                if (Config.options.background.parallax.enableSidebar) {
+                    result += (0.15 * GlobalStates.sidebarRightOpen - 0.15 * GlobalStates.sidebarLeftOpen);
+                }
+                return result;
             }
-            property real effectiveValue: Math.max(0, Math.min(1, value))
-            x: -(bgRoot.movableXSpace) - (effectiveValue - 0.5) * 2 * bgRoot.movableXSpace
-            y: -(bgRoot.movableYSpace)
+            property real valueY: {
+                let result = 0.5;
+                if (Config.options.background.parallax.enableWorkspace && Config.options.background.parallax.vertical) {
+                    result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                }
+                return result;
+            }
+            property real effectiveValueX: Math.max(0, Math.min(1, valueX))
+            property real effectiveValueY: Math.max(0, Math.min(1, valueY))
+            x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
+            y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
             source: bgRoot.wallpaperPath
             fillMode: Image.PreserveAspectCrop
             Behavior on x {
@@ -185,10 +200,18 @@ Variants {
                     easing.type: Easing.OutCubic
                 }
             }
-            sourceSize {
-                width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale
-                height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale
+            Behavior on y {
+                NumberAnimation {
+                    duration: 600
+                    easing.type: Easing.OutCubic
+                }
             }
+            sourceSize {
+                width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
+                height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
+            }
+            width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
+            height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
         }
 
         // The clock
@@ -213,7 +236,7 @@ Variants {
             ColumnLayout {
                 id: clockColumn
                 anchors.centerIn: parent
-                spacing: 0
+                spacing: 6
 
                 StyledText {
                     Layout.fillWidth: true
@@ -241,6 +264,21 @@ Variants {
                     style: Text.Raised
                     styleColor: Appearance.colors.colShadow
                     text: DateTime.date
+                    animateChange: true
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: bgRoot.textHorizontalAlignment
+                    font {
+                        family: Appearance.font.family.expressive
+                        pixelSize: 20
+                        weight: Font.DemiBold
+                    }
+                    color: bgRoot.colText
+                    style: Text.Raised
+                    visible: Config.options.background.mantra !== ""
+                    styleColor: Appearance.colors.colShadow
+                    text: Config.options.background.mantra
                 }
             }
 
@@ -279,26 +317,6 @@ Variants {
                 Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
 
             }
-        }
-
-        // Password prompt
-        StyledText {
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
-                bottomMargin: 30
-            }
-            opacity: (GlobalStates.screenLocked && !GlobalStates.screenLockContainsCharacters) ? 1 : 0
-            scale: opacity
-            visible: opacity > 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            text: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
-            color: GlobalStates.screenUnlockFailed ? Appearance.colors.colError : bgRoot.colText
-            style: Text.Raised
-            styleColor: Appearance.colors.colShadow
-            font.pixelSize: Appearance.font.pixelSize.normal
         }
     }
 }

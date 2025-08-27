@@ -158,15 +158,14 @@ ApplicationWindow {
                     FloatingActionButton {
                         id: fab
                         iconText: "edit"
-                        buttonText: Translation.tr("Edit config")
+                        buttonText: Translation.tr("Config file")
                         expanded: navRail.expanded
                         onClicked: {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
                         }
 
                         StyledToolTip {
-                            extraVisibleCondition: !navRail.expanded
-                            content: "Edit shell config file"
+                            content: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
                         }
                     }
 
@@ -203,7 +202,10 @@ ApplicationWindow {
                     id: pageLoader
                     anchors.fill: parent
                     opacity: 1.0
+
+                    active: Config.ready
                     source: root.pages[0].component
+
                     Connections {
                         target: root
                         function onCurrentPageChanged() {

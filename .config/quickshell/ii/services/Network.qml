@@ -13,30 +13,43 @@ Singleton {
 
     property bool wifi: true
     property bool ethernet: false
-    property int updateInterval: 1000
+    
+    property bool wifiEnabled: false
     property string networkName: ""
     property int networkStrength
     property string materialSymbol: ethernet ? "lan" :
-        (Network.networkName.length > 0 && Network.networkName != "lo") ? (
+        wifiEnabled ? (
         Network.networkStrength > 80 ? "signal_wifi_4_bar" :
         Network.networkStrength > 60 ? "network_wifi_3_bar" :
         Network.networkStrength > 40 ? "network_wifi_2_bar" :
         Network.networkStrength > 20 ? "network_wifi_1_bar" :
         "signal_wifi_0_bar"
     ) : "signal_wifi_off"
+
+    // Control
+    function toggleWifi(): void {
+        const cmd = wifiEnabled ? "off" : "on";
+        enableWifiProc.exec(["nmcli", "radio", "wifi", cmd]);
+    }
+
+    Process {
+        id: enableWifiProc
+    }
+
+    // Status update
     function update() {
         updateConnectionType.startCheck();
+        wifiStatusProcess.running = true
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
     }
 
-    Timer {
-        interval: 10
+    Process {
+        id: subscriber
         running: true
-        repeat: true
-        onTriggered: {
-            root.update();
-            interval = root.updateInterval;
+        command: ["nmcli", "monitor"]
+        stdout: SplitParser {
+            onRead: root.update()
         }
     }
 
@@ -87,6 +100,21 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.networkStrength = parseInt(data);
+            }
+        }
+    }
+
+    Process {
+        id: wifiStatusProcess
+        command: ["nmcli", "radio", "wifi"]
+        Component.onCompleted: running = true
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.wifiEnabled = text.trim() === "enabled";
             }
         }
     }

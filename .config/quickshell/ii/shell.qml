@@ -19,9 +19,10 @@ import "./modules/onScreenDisplay/"
 import "./modules/onScreenKeyboard/"
 import "./modules/overview/"
 import "./modules/screenCorners/"
-import "./modules/session/"
+import "./modules/sessionScreen/"
 import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
+import "./modules/verticalBar/"
 
 import QtQuick
 import QtQuick.Window
@@ -44,19 +45,21 @@ ShellRoot {
     property bool enableOverview: true
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
-    property bool enableSession: true
+    property bool enableSessionScreen: true
     property bool enableSidebarLeft: true
     property bool enableSidebarRight: true
+    property bool enableVerticalBar: true
 
     // Force initialization of some singletons
     Component.onCompleted: {
-        Cliphist.refresh()
-        FirstRunExperience.load()
-        Hyprsunset.load()
         MaterialThemeLoader.reapplyTheme()
+        Hyprsunset.load()
+        FirstRunExperience.load()
+        ConflictKiller.load()
+        Cliphist.refresh()
     }
 
-    LazyLoader { active: enableBar; component: Bar {} }
+    LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
     LazyLoader { active: enableBackground; component: Background {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
     LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
@@ -69,8 +72,9 @@ ShellRoot {
     LazyLoader { active: enableOverview; component: Overview {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
     LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
-    LazyLoader { active: enableSession; component: Session {} }
+    LazyLoader { active: enableSessionScreen; component: SessionScreen {} }
     LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
     LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
+    LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
 }
 

@@ -14,8 +14,6 @@ import qs.modules.common.functions
 
 Scope {
     id: bar
-
-    readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: Config.options.bar.showBackground
 
     Variants {
@@ -139,7 +137,6 @@ Scope {
                             top: barContent.bottom
                             bottom: undefined
                         }
-                        width: parent.width
                         height: Appearance.rounding.screenRounding
                         active: showBarBackground && Config.options.bar.cornerStyle === 0 // Hug
 

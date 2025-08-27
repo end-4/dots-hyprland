@@ -135,7 +135,7 @@ ShellRoot {
                 const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
                 const topLayers = layersOfThisMonitor.levels["2"]
                 const nonBarTopLayers = topLayers
-                    .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":dock")))
+                    .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":verticalBar") || layer.namespace.includes(":dock")))
                     .map(layer => {
                     return {
                         at: [layer.x, layer.y],

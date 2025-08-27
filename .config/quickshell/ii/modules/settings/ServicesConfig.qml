@@ -39,7 +39,7 @@ ContentPage {
                 text: Translation.tr("Volume limit")
                 value: Config.options.audio.protection.maxAllowed
                 from: 0
-                to: 100
+                to: 154 // pavucontrol allows up to 153%
                 stepSize: 2
                 onValueChanged: {
                     Config.options.audio.protection.maxAllowed = value;

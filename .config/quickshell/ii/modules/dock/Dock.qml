@@ -16,19 +16,18 @@ Scope { // Scope
     id: root
     property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
 
-    Variants { // For each monitor
+    Variants {
+        // For each monitor
         model: Quickshell.screens
 
-        PanelWindow { // Window
-            required property var modelData
+        PanelWindow {
             id: dockRoot
+            // Window
+            required property var modelData
             screen: modelData
             visible: !GlobalStates.screenLocked
-            
-            property bool reveal: root.pinned 
-                || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) 
-                || dockApps.requestDockShow 
-                || (!ToplevelManager.activeToplevel?.activated)
+
+            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
 
             anchors {
                 bottom: true
@@ -36,9 +35,7 @@ Scope { // Scope
                 right: true
             }
 
-            exclusiveZone: root.pinned ? implicitHeight 
-                - (Appearance.sizes.hyprlandGapsOut) 
-                - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
+            exclusiveZone: root.pinned ? implicitHeight - (Appearance.sizes.hyprlandGapsOut) - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
@@ -55,9 +52,7 @@ Scope { // Scope
                 height: parent.height
                 anchors {
                     top: parent.top
-                    topMargin: dockRoot.reveal ? 0 : 
-                        Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) :
-                        (dockRoot.implicitHeight + 1)
+                    topMargin: dockRoot.reveal ? 0 : Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
                     horizontalCenter: parent.horizontalCenter
                 }
                 implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
@@ -108,7 +103,8 @@ Scope { // Scope
 
                             VerticalButtonGroup {
                                 Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
-                                GroupButton { // Pin button
+                                GroupButton {
+                                    // Pin button
                                     baseWidth: 35
                                     baseHeight: 35
                                     clickedWidth: baseWidth
@@ -125,11 +121,16 @@ Scope { // Scope
                                 }
                             }
                             DockSeparator {}
-                            DockApps { id: dockApps; }
+                            DockApps {
+                                id: dockApps
+                                buttonPadding: dockRow.padding
+                            }
                             DockSeparator {}
                             DockButton {
                                 Layout.fillHeight: true
                                 onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
+                                topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
                                 contentItem: MaterialSymbol {
                                     anchors.fill: parent
                                     horizontalAlignment: Text.AlignHCenter
@@ -139,9 +140,8 @@ Scope { // Scope
                                 }
                             }
                         }
-                    }    
+                    }
                 }
-
             }
         }
     }
