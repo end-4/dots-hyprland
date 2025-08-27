@@ -20,14 +20,13 @@ Item {
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 12
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
-    property bool showDialog: false
-    property bool dialogIsWifi: true
+    property bool showWifiDialog: false
 
     Connections {
         target: GlobalStates
         function onSidebarRightOpenChanged() {
             if (!GlobalStates.sidebarRightOpen) {
-                root.showDialog = false
+                root.showWifiDialog = false;
             }
         }
     }
@@ -86,8 +85,8 @@ Item {
                         toggled: false
                         buttonIcon: "restart_alt"
                         onClicked: {
-                            Hyprland.dispatch("reload")
-                            Quickshell.reload(true)
+                            Hyprland.dispatch("reload");
+                            Quickshell.reload(true);
                         }
                         StyledToolTip {
                             content: Translation.tr("Reload Hyprland & Quickshell")
@@ -97,8 +96,8 @@ Item {
                         toggled: false
                         buttonIcon: "settings"
                         onClicked: {
-                            GlobalStates.sidebarRightOpen = false
-                            Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
+                            GlobalStates.sidebarRightOpen = false;
+                            Quickshell.execDetached(["qs", "-p", root.settingsQmlPath]);
                         }
                         StyledToolTip {
                             content: Translation.tr("Settings")
@@ -108,7 +107,7 @@ Item {
                         toggled: false
                         buttonIcon: "power_settings_new"
                         onClicked: {
-                            GlobalStates.sessionOpen = true
+                            GlobalStates.sessionOpen = true;
                         }
                         StyledToolTip {
                             content: Translation.tr("Session")
@@ -125,10 +124,9 @@ Item {
 
                 NetworkToggle {
                     altAction: () => {
-                        Network.enableWifi()
-                        Network.rescanWifi()
-                        root.dialogIsWifi = true
-                        root.showDialog = true
+                        Network.enableWifi();
+                        Network.rescanWifi();
+                        root.showWifiDialog = true;
                     }
                 }
                 BluetoothToggle {}
@@ -155,65 +153,21 @@ Item {
         }
     }
 
-    WindowDialog {
-        show: root.showDialog
-        onDismiss: root.showDialog = false
-        anchors {
-            fill: parent
-        }
-        
-        WindowDialogTitle {
-            text: Translation.tr("Connect to Wi-Fi")
-        }
-        WindowDialogSeparator {
-            // TODO: add indeterminate progress bar when scanning
-        }
-        StyledListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.topMargin: -15
-            Layout.bottomMargin: -16
-            Layout.leftMargin: -Appearance.rounding.large
-            Layout.rightMargin: -Appearance.rounding.large
-            
-            clip: true
-            spacing: 0
-            animateAppearance: false
+    onShowWifiDialogChanged: if (showWifiDialog) wifiDialogLoader.active = true;
+    Loader {
+        id: wifiDialogLoader
+        anchors.fill: parent
 
-            model: ScriptModel {
-                values: [...Network.wifiNetworks].sort((a, b) => {
-                    if (a.active && !b.active) return -1;
-                    if (!a.active && b.active) return 1;
-                    return b.strength - a.strength;
-                })
-            }
-            // model: Network.wifiNetworks
-            delegate: WifiNetworkItem {
-                required property WifiAccessPoint modelData
-                wifiNetwork: modelData
-                anchors {
-                    left: parent?.left
-                    right: parent?.right
-                }
-            }
-        }
-        WindowDialogSeparator {}
-        WindowDialogButtonRow {
-            DialogButton {
-                buttonText: Translation.tr("Details")
-                onClicked: {
-                    Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`])
-                    GlobalStates.sidebarRightOpen = false
-                }
-            }
+        active: root.showWifiDialog || item.visible
+        onActiveChanged: if (active) item.show = true
 
-            Item {
-                Layout.fillWidth: true
+        sourceComponent: WifiDialog {
+            onDismiss: {
+                show = false
+                root.showWifiDialog = false
             }
-
-            DialogButton {
-                buttonText: Translation.tr("Done")
-                onClicked: root.showDialog = false
+            onVisibleChanged: {
+                if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
             }
         }
     }

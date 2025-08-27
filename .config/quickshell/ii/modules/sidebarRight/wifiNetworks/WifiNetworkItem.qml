@@ -45,20 +45,21 @@ RippleButton {
             spacing: 10
             MaterialSymbol {
                 iconSize: Appearance.font.pixelSize.larger
-                text: root.wifiNetwork?.strength > 80 ? "signal_wifi_4_bar" :
-                    root.wifiNetwork?.strength > 60 ? "network_wifi_3_bar" :
-                    root.wifiNetwork?.strength > 40 ? "network_wifi_2_bar" :
-                    root.wifiNetwork?.strength > 20 ? "network_wifi_1_bar" :
+                property int strength: root.wifiNetwork?.strength ?? 0
+                text: strength > 80 ? "signal_wifi_4_bar" :
+                    strength > 60 ? "network_wifi_3_bar" :
+                    strength > 40 ? "network_wifi_2_bar" :
+                    strength > 20 ? "network_wifi_1_bar" :
                     "signal_wifi_0_bar"
                 color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {
                 Layout.fillWidth: true
-                text: root.wifiNetwork?.ssid
+                text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
                 color: Appearance.colors.colOnSurfaceVariant
             }
             MaterialSymbol {
-                visible: root.wifiNetwork?.isSecure || root.wifiNetwork?.active
+                visible: (root.wifiNetwork?.isSecure || root.wifiNetwork?.active) ?? false
                 text: root.wifiNetwork?.active ? "check" : Network.wifiConnectTarget === root.wifiNetwork ? "settings_ethernet" : "lock"
                 iconSize: Appearance.font.pixelSize.larger
                 color: Appearance.colors.colOnSurfaceVariant
@@ -67,7 +68,7 @@ RippleButton {
 
         ColumnLayout {
             id: passwordPrompt
-            visible: root.wifiNetwork?.askingPassword
+            visible: root.wifiNetwork?.askingPassword ?? false
             Layout.topMargin: 12
 
             MaterialTextField {
