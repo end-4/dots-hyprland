@@ -23,6 +23,7 @@ import "./modules/sessionScreen/"
 import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
 import "./modules/verticalBar/"
+import "./modules/wallpaperSelector/"
 
 import QtQuick
 import QtQuick.Window
@@ -49,6 +50,7 @@ ShellRoot {
     property bool enableSidebarLeft: true
     property bool enableSidebarRight: true
     property bool enableVerticalBar: true
+    property bool enableWallpaperSelector: true
 
     // Force initialization of some singletons
     Component.onCompleted: {
@@ -76,5 +78,6 @@ ShellRoot {
     LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
     LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
     LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
+    LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
 }
 
