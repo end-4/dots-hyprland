@@ -217,6 +217,7 @@ Variants {
         // The clock
         Item {
             id: clock
+            visible: Config.options.background.show_clock
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
