@@ -159,7 +159,12 @@ Item {
         anchors.fill: parent
 
         active: root.showWifiDialog || item.visible
-        onActiveChanged: if (active) item.show = true
+        onActiveChanged: {
+            if (active) {
+                item.show = true;
+                item.forceActiveFocus();
+            }
+        }
 
         sourceComponent: WifiDialog {
             onDismiss: {

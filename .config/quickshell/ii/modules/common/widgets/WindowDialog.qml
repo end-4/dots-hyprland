@@ -12,7 +12,14 @@ Rectangle {
     default property alias data: contentColumn.data
     property real backgroundHeight: 600
     property real backgroundAnimationMovementDistance: 60
+    
     signal dismiss()
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_Escape) {
+            root.dismiss();
+            event.accepted = true;
+        }
+    }
 
     color: root.show ? Appearance.colors.colScrim : ColorUtils.transparentize(Appearance.colors.colScrim)
     Behavior on color {

@@ -17,7 +17,7 @@ import Quickshell.Hyprland
 
 WindowDialog {
     id: root
-    
+
     WindowDialogTitle {
         text: Translation.tr("Connect to Wi-Fi")
     }
