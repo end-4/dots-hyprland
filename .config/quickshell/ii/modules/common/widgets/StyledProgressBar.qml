@@ -9,8 +9,8 @@ import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 /**
- * Material 3 progress bar. See https://m3.material.io/components/progress-indicators/overview
- */
+* Material 3 progress bar. See https://m3.material.io/components/progress-indicators/overview
+*/
 ProgressBar {
     id: root
     property real valueBarWidth: 120
@@ -31,7 +31,7 @@ ProgressBar {
     Behavior on value {
         animation: Appearance?.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
-    
+
     background: Item {
         implicitHeight: valueBarHeight
         implicitWidth: valueBarWidth
@@ -74,8 +74,12 @@ ProgressBar {
             }
             Connections {
                 target: root
-                function onValueChanged() { wavyFill.requestPaint(); }
-                function onHighlightColorChanged() { wavyFill.requestPaint(); }
+                function onValueChanged() {
+                    wavyFill.requestPaint();
+                }
+                function onHighlightColorChanged() {
+                    wavyFill.requestPaint();
+                }
             }
             Timer {
                 interval: 1000 / root.spermFps
@@ -84,14 +88,16 @@ ProgressBar {
                 onTriggered: wavyFill.requestPaint()
             }
         }
-        Rectangle { // Right remaining part fill
+        Rectangle {
+            // Right remaining part fill
             anchors.right: parent.right
             width: (1 - root.visualPosition) * parent.width - valueBarGap
             height: parent.height
             radius: Appearance?.rounding.full ?? 9999
             color: root.trackColor
         }
-        Rectangle { // Stop point
+        Rectangle {
+            // Stop point
             anchors.right: parent.right
             width: valueBarGap
             height: valueBarGap
