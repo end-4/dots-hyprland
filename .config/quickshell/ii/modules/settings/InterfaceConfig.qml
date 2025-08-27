@@ -630,9 +630,9 @@ ContentPage {
 
         ConfigSwitch {
             text: Translation.tr("Show clock")
-            checked: Config.options.background.show_clock
+            checked: Config.options.background.showClock
             onCheckedChanged: {
-                Config.options.background.show_clock = checked;
+                Config.options.background.showClock = checked;
             }
         }
     }

@@ -119,7 +119,7 @@ Singleton {
                 property bool fixedClockPosition: false
                 property real clockX: -500
                 property real clockY: -500
-                property bool show_clock: true
+                property bool showClock: true
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property JsonObject parallax: JsonObject {
