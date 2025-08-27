@@ -22,13 +22,39 @@ Singleton {
         todoFileView.setText(JSON.stringify(root.list))
     }
 
-    function addTask(desc) {
+    function addTask(desc, durationDate) {
         const item = {
             "content": desc,
+            "date": durationDate,
             "done": false,
         }
         addItem(item)
+      }
+
+
+    function getTasksByDate(currentDate) {
+        const res = [];
+        
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        for (let i = 0; i < root.list.length; i++) {
+            const taskDate = new Date(root.list[i]['date']);
+            if (
+                taskDate.getDate() === currentDay &&
+                taskDate.getMonth() === currentMonth &&
+                taskDate.getFullYear() === currentYear
+              ) {
+                res.push(root.list[i]);
+              }
+        }
+
+        return res;
     }
+
+
+
 
     function markDone(index) {
         if (index >= 0 && index < list.length) {
@@ -71,6 +97,11 @@ Singleton {
         onLoaded: {
             const fileContents = todoFileView.text()
             root.list = JSON.parse(fileContents)
+
+            for (let i=0; i< root.list.length; i++){ //parse date as date object
+              root.list[i]['date'] = new Date(root.list[i]['date'])
+            }
+
             console.log("[To Do] File loaded")
         }
         onLoadFailed: (error) => {

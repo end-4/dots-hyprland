@@ -1,15 +1,25 @@
-import qs
-import qs.services
-import qs.modules.common
-import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 
 Item {
+    // Open add dialog on "N" (any modifiers)
+    // Close dialog on Esc if open
+
     id: root
+
     property int currentTab: 0
-    property var tabButtonList: [{"icon": "checklist", "name": Translation.tr("Unfinished")}, {"name": Translation.tr("Done"), "icon": "check_circle"}]
+    property var tabButtonList: [{
+        "icon": "checklist",
+        "name": Translation.tr("Unfinished")
+    }, {
+        "name": Translation.tr("Done"),
+        "icon": "check_circle"
+    }]
     property bool showAddDialog: false
     property int dialogMargins: 20
     property int fabSize: 48
@@ -17,21 +27,16 @@ Item {
 
     Keys.onPressed: (event) => {
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
-            if (event.key === Qt.Key_PageDown) {
-                currentTab = Math.min(currentTab + 1, root.tabButtonList.length - 1)
-            } else if (event.key === Qt.Key_PageUp) {
-                currentTab = Math.max(currentTab - 1, 0)
-            }
+            if (event.key === Qt.Key_PageDown)
+                currentTab = Math.min(currentTab + 1, root.tabButtonList.length - 1);
+            else if (event.key === Qt.Key_PageUp)
+                currentTab = Math.max(currentTab - 1, 0);
             event.accepted = true;
-        }
-        // Open add dialog on "N" (any modifiers)
-        else if (event.key === Qt.Key_N) {
-            root.showAddDialog = true
+        } else if (event.key === Qt.Key_N) {
+            root.showAddDialog = true;
             event.accepted = true;
-        }
-        // Close dialog on Esc if open
-        else if (event.key === Qt.Key_Escape && root.showAddDialog) {
-            root.showAddDialog = false
+        } else if (event.key === Qt.Key_Escape && root.showAddDialog) {
+            root.showAddDialog = false;
             event.accepted = true;
         }
     }
@@ -42,60 +47,70 @@ Item {
 
         TabBar {
             id: tabBar
+
             Layout.fillWidth: true
             currentIndex: currentTab
             onCurrentIndexChanged: currentTab = currentIndex
 
-            background: Item {
-                WheelHandler {
-                    onWheel: (event) => {
-                        if (event.angleDelta.y < 0)
-                            tabBar.currentIndex = Math.min(tabBar.currentIndex + 1, root.tabButtonList.length - 1)
-                        else if (event.angleDelta.y > 0)
-                            tabBar.currentIndex = Math.max(tabBar.currentIndex - 1, 0)
-                    }
-                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                }
-            }
-
             Repeater {
                 model: root.tabButtonList
+
                 delegate: SecondaryTabButton {
                     selected: (index == currentTab)
                     buttonText: modelData.name
                     buttonIcon: modelData.icon
                 }
+
             }
+
+            background: Item {
+                WheelHandler {
+                    onWheel: (event) => {
+                        if (event.angleDelta.y < 0)
+                            tabBar.currentIndex = Math.min(tabBar.currentIndex + 1, root.tabButtonList.length - 1);
+                        else if (event.angleDelta.y > 0)
+                            tabBar.currentIndex = Math.max(tabBar.currentIndex - 1, 0);
+                    }
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                }
+
+            }
+
         }
 
-        Item { // Tab indicator
+        // Tab indicator
+        Item {
             id: tabIndicator
+
+            property bool enableIndicatorAnimation: false
+
             Layout.fillWidth: true
             height: 3
-            property bool enableIndicatorAnimation: false
+
             Connections {
-                target: root
                 function onCurrentTabChanged() {
-                    tabIndicator.enableIndicatorAnimation = true
+                    tabIndicator.enableIndicatorAnimation = true;
                 }
+
+                target: root
             }
 
             Rectangle {
                 id: indicator
+
                 property int tabCount: root.tabButtonList.length
-                property real fullTabSize: root.width / tabCount;
+                property real fullTabSize: root.width / tabCount
                 property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
 
                 implicitWidth: targetWidth
+                x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
+                color: Appearance.colors.colPrimary
+                radius: Appearance.rounding.full
+
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
                 }
-
-                x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
-
-                color: Appearance.colors.colPrimary
-                radius: Appearance.rounding.full
 
                 Behavior on x {
                     enabled: tabIndicator.enableIndicatorAnimation
@@ -106,11 +121,15 @@ Item {
                     enabled: tabIndicator.enableIndicatorAnimation
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
+
             }
+
         }
 
-        Rectangle { // Tabbar bottom border
+        // Tabbar bottom border
+        Rectangle {
             id: tabBarBottomBorder
+
             Layout.fillWidth: true
             height: 1
             color: Appearance.colors.colOutlineVariant
@@ -118,6 +137,7 @@ Item {
 
         SwipeView {
             id: swipeView
+
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -125,8 +145,8 @@ Item {
             clip: true
             currentIndex: currentTab
             onCurrentIndexChanged: {
-                tabIndicator.enableIndicatorAnimation = true
-                currentTab = currentIndex
+                tabIndicator.enableIndicatorAnimation = true;
+                currentTab = currentIndex;
             }
 
             // To Do tab
@@ -134,20 +154,32 @@ Item {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
                 emptyPlaceholderText: Translation.tr("Nothing here!")
-                taskList: Todo.list
-                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
-                    .filter(function(item) { return !item.done; })
+                taskList: Todo.list.map(function(item, i) {
+                    return Object.assign({
+                    }, item, {
+                        "originalIndex": i
+                    });
+                }).filter(function(item) {
+                    return !item.done;
+                })
             }
+
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
                 emptyPlaceholderText: Translation.tr("Finished tasks will go here")
-                taskList: Todo.list
-                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
-                    .filter(function(item) { return item.done; })
+                taskList: Todo.list.map(function(item, i) {
+                    return Object.assign({
+                    }, item, {
+                        "originalIndex": i
+                    });
+                }).filter(function(item) {
+                    return item.done;
+                })
             }
 
         }
+
     }
 
     // + FAB
@@ -156,13 +188,14 @@ Item {
         radius: fabButton.buttonRadius
         blur: 0.6 * Appearance.sizes.elevationMargin
     }
+
     FloatingActionButton {
         id: fabButton
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: root.fabMargins
         anchors.bottomMargin: root.fabMargins
-
         onClicked: root.showAddDialog = true
 
         contentItem: MaterialSymbol {
@@ -171,63 +204,63 @@ Item {
             iconSize: Appearance.font.pixelSize.huge
             color: Appearance.m3colors.m3onPrimaryContainer
         }
+
     }
 
     Item {
         anchors.fill: parent
         z: 9999
-
         visible: opacity > 0
         opacity: root.showAddDialog ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { 
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-            }
-        }
-
         onVisibleChanged: {
             if (!visible) {
-                todoInput.text = ""
-                fabButton.focus = true
+                todoInput.text = "";
+                fabButton.focus = true;
             }
         }
 
-        Rectangle { // Scrim
+        // Scrim
+        Rectangle {
             anchors.fill: parent
             radius: Appearance.rounding.small
             color: Appearance.colors.colScrim
+
             MouseArea {
                 hoverEnabled: true
                 anchors.fill: parent
                 preventStealing: true
                 propagateComposedEvents: false
             }
+
         }
 
-        Rectangle { // The dialog
+        // The dialog
+        Rectangle {
             id: dialog
+
+            function addTask() {
+                if (todoInput.text.length > 0) {
+                    const d = new Date();
+                    d.setDate(d.getDate() + (todoDayWheel.currentIndex - 1));
+                    Todo.addTask(todoInput.text, d);
+                    todoInput.text = "";
+                    todoDayWheel.currentIndex.currentIndex = 0;
+                    root.showAddDialog = false;
+                    root.currentTab = 0; // Show unfinished tasks
+                }
+            }
+
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: root.dialogMargins
             implicitHeight: dialogColumnLayout.implicitHeight
-
             color: Appearance.colors.colSurfaceContainerHigh
             radius: Appearance.rounding.normal
 
-            function addTask() {
-                if (todoInput.text.length > 0) {
-                    Todo.addTask(todoInput.text)
-                    todoInput.text = ""
-                    root.showAddDialog = false
-                    root.currentTab = 0 // Show unfinished tasks
-                }
-            }
-
             ColumnLayout {
                 id: dialogColumnLayout
+
                 anchors.fill: parent
                 spacing: 16
 
@@ -243,6 +276,7 @@ Item {
 
                 TextField {
                     id: todoInput
+
                     Layout.fillWidth: true
                     Layout.leftMargin: 16
                     Layout.rightMargin: 16
@@ -269,6 +303,56 @@ Item {
                         color: todoInput.activeFocus ? Appearance.colors.colPrimary : "transparent"
                         radius: 1
                     }
+
+                }
+
+                Item {
+                    height: 40
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 16
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: Appearance.rounding.verysmall
+                        border.width: 2
+                        border.color: todoInput.activeFocus ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
+                        color: "transparent"
+
+                        ListView {
+                            id: todoDayWheel
+
+                            anchors.fill: parent
+                            model: 365
+                            clip: true
+                            interactive: true
+                            currentIndex: 0
+                            snapMode: ListView.SnapOneItem
+                            highlightFollowsCurrentItem: true
+                            highlightRangeMode: ListView.StrictlyEnforceRange
+
+                            delegate: Text {
+                                height: 40
+                                padding: 20
+                                color: Appearance.m3colors.m3onSecondaryContainer
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                text: {
+                                    if (index == 0) {
+                                        // show placeholder value
+                                        this.color = Appearance.m3colors.m3outline;
+                                        return Translation.tr("Select Deadline");
+                                    }
+                                    var d = new Date();
+                                    d.setDate(d.getDate() + (index - 1));
+                                    return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
+                                }
+                            }
+
+                        }
+
+                    }
+
                 }
 
                 RowLayout {
@@ -282,13 +366,28 @@ Item {
                         buttonText: Translation.tr("Cancel")
                         onClicked: root.showAddDialog = false
                     }
+
                     DialogButton {
                         buttonText: Translation.tr("Add")
-                        enabled: todoInput.text.length > 0
+                        enabled: todoInput.text.length > 0 && todoDayWheel.currentIndex > 0
                         onClicked: dialog.addTask()
                     }
+
                 }
+
             }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            }
+
+        }
+
     }
+
 }
