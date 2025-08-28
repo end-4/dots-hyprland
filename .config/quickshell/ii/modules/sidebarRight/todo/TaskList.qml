@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
@@ -106,7 +107,7 @@ Item {
                                 Layout.leftMargin: 10
                                 Layout.rightMargin: 10
                                 Layout.topMargin: todoListItemPadding
-                                text: "Deadline: " + Qt.formatDate(modelData.date, Qt.format)
+                                text: Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format)
                                 color: Appearance.m3colors.m3outline
                                 wrapMode: Text.Wrap
                             }
