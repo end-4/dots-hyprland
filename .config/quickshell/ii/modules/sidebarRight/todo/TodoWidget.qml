@@ -244,7 +244,7 @@ Item {
                     d.setDate(d.getDate() + (todoDayWheel.currentIndex - 1));
                     Todo.addTask(todoInput.text, d);
                     todoInput.text = "";
-                    todoDayWheel.currentIndex.currentIndex = 0;
+                    todoDayWheel.currentIndex = 0;
                     root.showAddDialog = false;
                     root.currentTab = 0; // Show unfinished tasks
                 }
@@ -364,7 +364,10 @@ Item {
 
                     DialogButton {
                         buttonText: Translation.tr("Cancel")
-                        onClicked: root.showAddDialog = false
+                        onClicked: {
+                            root.showAddDialog = false;
+                            todoDayWheel.currentIndex = 0;
+                        }
                     }
 
                     DialogButton {
