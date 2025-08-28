@@ -174,6 +174,7 @@ Singleton {
                     property bool showAppIcons: true
                     property bool alwaysShowNumbers: false
                     property int showNumberDelay: 300 // milliseconds
+                    property list<string> numberMapping: []
                 }
                 property JsonObject weather: JsonObject {
                     property bool enable: false
