@@ -694,7 +694,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     buttonRadius: Appearance.rounding.small
                     enabled: true
                     toggled: true
-                    visible: Ai.requestRunning
+                    visible: Ai.requestRunning || Ai.localLLMRunning
 
                     MouseArea {
                         anchors.fill: parent

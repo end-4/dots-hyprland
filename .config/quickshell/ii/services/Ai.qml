@@ -27,6 +27,7 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
     property bool requestRunning: false
+    property bool localLLMRunning: false
 
     signal responseFinished()
 
@@ -768,24 +769,53 @@ Singleton {
         if (message.length === 0) return;
         root.addMessage(message, "user");
         requester.makeRequest();
+        ollamCheckStatusTimer.running = true
     }
 
     function stopUserMessage() {
+      if(root.requestRunning){
       requester.running = false //Sends SIGKILL to process
     
       requester.message.content += "\n\n<span style='color:" + Appearance.m3colors.m3onError + "; font-weight:bold;'>Response canceled by user</span>"
       requester.message.rawContent += "\n\n<span style='color:" + Appearance.m3colors.m3onError + "; font-weight:bold;'>Response canceled by user</span>"
+      }
 
       
       if(root.models[root.currentModelId].endpoint.includes("localhost")){ 
           stopOllamaLlm.running = true
           stopOllamaLlm.command = ["bash", "-c", "ollama stop " +root.models[root.currentModelId].model ]
+          ollamCheckStatusTimer.running = false
+          root.localLLMRunning  = false
       }
     }
 
     Process {
       id: stopOllamaLlm
       running: false
+    }
+
+    Process {
+      id: checkOllamaLlmStatus
+      running: false
+      command: ["/bin/bash", "-c", "ollama ps | awk 'NR==2 {print $1}'"]
+
+      stdout: StdioCollector {
+
+        onStreamFinished:{
+          root.localLLMRunning = this.text.includes(root.models[root.currentModelId].model)
+
+          if(!root.localLLMRunning){ // stop timer if model is not there any more
+            ollamCheckStatusTimer.running = false
+          }
+        }
+      }
+    }
+    Timer {
+      id: ollamCheckStatusTimer
+      interval: 1000
+      running: false
+      repeat: true
+      onTriggered: checkOllamaLlmStatus.running = true
     }
 
     function attachFile(filePath: string) {
