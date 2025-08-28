@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
 import qs
 import qs.modules.common
 import qs.modules.common.widgets
@@ -36,81 +37,100 @@ RippleButton {
         anchors.fill: parent
         active: dayPopUp.visible
 
-        Rectangle {
+        PanelWindow {
             id: dayPopUp
 
             visible: false
-            anchors.bottom: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 240
-            height: Math.min(columnLayout.implicitHeight + 2 * todoMargin, 400)
-            color: Appearance.m3colors.m3background
-            radius: Appearance.rounding.small
+            color: "transparent"
+            exclusionMode: ExclusionMode.Ignore
+            exclusiveZone: 0
+            WlrLayershell.namespace: "quickshell:popup"
+            WlrLayershell.layer: WlrLayer.Overlay
+            implicitWidth: sidebarRoot.width
+            implicitHeight: sidebarRoot.height
+              
+        anchors {
+            top: true
+            right: true
+            bottom: true
+        }
 
-            StyledFlickable {
-                id: styledFlicker
 
-                contentWidth: parent.width
-                contentHeight: columnLayout.implicitHeight
 
-                ColumnLayout {
-                    id: columnLayout
+            Rectangle {
+                id: dayPopRect
 
-                    width: parent.width - 2 * todoMargin
-                    height: parent.height - 2 * todoMargin
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
+                width: 240
+                height: Math.min(columnLayout.implicitHeight + 2 * todoMargin, 400)
+                color: Appearance.m3colors.m3background
+                radius: Appearance.rounding.small
 
-                    Repeater {
+                StyledFlickable {
+                    id: styledFlicker
 
-                        model: ScriptModel {
-                            values: taskList.slice(0, 3) // limit shown elments to 3 since otherwiese it woul get to much
-                        }
+                    contentWidth: parent.width
+                    contentHeight: columnLayout.implicitHeight
 
-                        delegate: Rectangle {
-                            width: parent.width
-                            color: Appearance.colors.colLayer2
-                            radius: Appearance.rounding.small
-                            implicitHeight: contentColumn.implicitHeight
+                    ColumnLayout {
+                        id: columnLayout
 
-                            ColumnLayout {
-                                id: contentColumn
+                        width: parent.width - 2 * todoMargin
+                        height: parent.height - 2 * todoMargin
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 8
 
+                        Repeater {
+
+                            model: ScriptModel {
+                                values: taskList.slice(0, 3) // limit shown elments to 3 since otherwiese it woul get to much
+                            }
+
+                            delegate: Rectangle {
                                 width: parent.width
-                                spacing: 4
-                                Layout.margins: 10
+                                color: Appearance.colors.colLayer2
+                                radius: Appearance.rounding.small
+                                implicitHeight: contentColumn.implicitHeight
 
-                                StyledText {
-                                    Layout.fillWidth: true // Needed for wrapping
-                                    Layout.leftMargin: 10
-                                    Layout.rightMargin: 10
-                                    Layout.topMargin: 4
-                                    text: modelData.content
-                                    wrapMode: Text.Wrap
-                                }
+                                ColumnLayout {
+                                    id: contentColumn
 
-                                StyledText {
-                                    Layout.fillWidth: true // Needed for wrapping
-                                    Layout.leftMargin: 10
-                                    Layout.rightMargin: 10
-                                    Layout.topMargin: 4
-                                    text: Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format)
-                                    color: Appearance.m3colors.m3outline
-                                    wrapMode: Text.Wrap
-                                }
+                                    width: parent.width
+                                    spacing: 4
+                                    Layout.margins: 10
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-
-                                    Item {
-                                        Layout.fillWidth: true
+                                    StyledText {
+                                        Layout.fillWidth: true // Needed for wrapping
+                                        Layout.leftMargin: 10
+                                        Layout.rightMargin: 10
+                                        Layout.topMargin: 4
+                                        text: modelData.content
+                                        wrapMode: Text.Wrap
                                     }
 
-                                    MaterialSymbol {
-                                        text: modelData.done ? "check" : "remove_done"
-                                        iconSize: Appearance.font.pixelSize.larger
-                                        color: Appearance.colors.colOnLayer1
+                                    StyledText {
+                                        Layout.fillWidth: true // Needed for wrapping
+                                        Layout.leftMargin: 10
+                                        Layout.rightMargin: 10
+                                        Layout.topMargin: 4
+                                        text: Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format)
+                                        color: Appearance.m3colors.m3outline
+                                        wrapMode: Text.Wrap
+                                    }
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+
+                                        Item {
+                                            Layout.fillWidth: true
+                                        }
+
+                                        MaterialSymbol {
+                                            text: modelData.done ? "check" : "remove_done"
+                                            iconSize: Appearance.font.pixelSize.larger
+                                            color: Appearance.colors.colOnLayer1
+                                        }
+
                                     }
 
                                 }
@@ -140,7 +160,12 @@ RippleButton {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                dayPopUp.visible = button.taskList.length > 0;
+                if (button.taskList.length > 0) {
+                    dayPopUp.visible = true;
+                    const globalPos = dayPopUp.QsWindow?.mapFromItem(button, 0 , 0);
+                    dayPopRect.x =globalPos.x - dayPopRect.width/2;
+                    dayPopRect.y = globalPos.y - dayPopRect.height +button.height 
+                }
             }
             onExited: dayPopUp.visible = false
         }
