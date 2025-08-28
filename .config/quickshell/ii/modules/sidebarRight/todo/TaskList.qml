@@ -106,7 +106,6 @@ Item {
                                 Layout.fillWidth: true // Needed for wrapping
                                 Layout.leftMargin: 10
                                 Layout.rightMargin: 10
-                                Layout.topMargin: todoListItemPadding
                                 text: Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format)
                                 color: Appearance.m3colors.m3outline
                                 wrapMode: Text.Wrap
@@ -115,7 +114,6 @@ Item {
                             RowLayout {
                                 Layout.leftMargin: 10
                                 Layout.rightMargin: 10
-                                Layout.bottomMargin: todoListItemPadding
 
                                 Item {
                                     Layout.fillWidth: true

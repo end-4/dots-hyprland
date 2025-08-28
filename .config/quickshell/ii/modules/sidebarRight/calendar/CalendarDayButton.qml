@@ -85,7 +85,7 @@ RippleButton {
                                     Layout.fillWidth: true // Needed for wrapping
                                     Layout.leftMargin: 10
                                     Layout.rightMargin: 10
-                                    Layout.topMargin: todoListItemPadding
+                                    Layout.topMargin: 4
                                     text: modelData.content
                                     wrapMode: Text.Wrap
                                 }
@@ -94,7 +94,7 @@ RippleButton {
                                     Layout.fillWidth: true // Needed for wrapping
                                     Layout.leftMargin: 10
                                     Layout.rightMargin: 10
-                                    Layout.topMargin: todoListItemPadding
+                                    Layout.topMargin: 4
                                     text: Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format)
                                     color: Appearance.m3colors.m3outline
                                     wrapMode: Text.Wrap
