@@ -278,7 +278,7 @@ Variants {
                     style: Text.Raised
                     visible: Config.options.background.mantra !== ""
                     styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.mantra
+                    text: Config.options.background.quote
                 }
             }
 
