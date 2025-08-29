@@ -23,11 +23,11 @@ RippleButton {
 
     buttonRadius: 0
     colBackground: ColorUtils.transparentize(Appearance.colors.colLayer3)
-    colBackgroundHover: wifiNetwork?.askingPassword ? colBackground : Appearance.colors.colLayer3Hover
+    colBackgroundHover: (wifiNetwork?.askingPassword || wifiNetwork?.active) ? colBackground : Appearance.colors.colLayer3Hover
     colRipple: Appearance.colors.colLayer3Active
 
     onClicked: {
-        Network.connectToWifiNetwork(wifiNetwork)
+        Network.connectToWifiNetwork(wifiNetwork);
     }
 
     contentItem: ColumnLayout {
@@ -42,15 +42,12 @@ RippleButton {
         spacing: 0
 
         RowLayout {
+            // Name
             spacing: 10
             MaterialSymbol {
                 iconSize: Appearance.font.pixelSize.larger
                 property int strength: root.wifiNetwork?.strength ?? 0
-                text: strength > 80 ? "signal_wifi_4_bar" :
-                    strength > 60 ? "network_wifi_3_bar" :
-                    strength > 40 ? "network_wifi_2_bar" :
-                    strength > 20 ? "network_wifi_1_bar" :
-                    "signal_wifi_0_bar"
+                text: strength > 80 ? "signal_wifi_4_bar" : strength > 60 ? "network_wifi_3_bar" : strength > 40 ? "network_wifi_2_bar" : strength > 20 ? "network_wifi_1_bar" : "signal_wifi_0_bar"
                 color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {
@@ -66,10 +63,10 @@ RippleButton {
             }
         }
 
-        ColumnLayout {
+        ColumnLayout { // Password
             id: passwordPrompt
             visible: root.wifiNetwork?.askingPassword ?? false
-            Layout.topMargin: 12
+            Layout.topMargin: 8
 
             MaterialTextField {
                 id: passwordField
@@ -81,7 +78,7 @@ RippleButton {
                 inputMethodHints: Qt.ImhSensitiveData
 
                 onAccepted: {
-                    Network.changePassword(root.wifiNetwork, passwordField.text)
+                    Network.changePassword(root.wifiNetwork, passwordField.text);
                 }
             }
 
@@ -95,18 +92,37 @@ RippleButton {
                 DialogButton {
                     buttonText: Translation.tr("Cancel")
                     onClicked: {
-                        root.wifiNetwork.askingPassword = false
+                        root.wifiNetwork.askingPassword = false;
                     }
                 }
 
                 DialogButton {
                     buttonText: Translation.tr("Connect")
                     onClicked: {
-                        Network.changePassword(root.wifiNetwork, passwordField.text)
+                        Network.changePassword(root.wifiNetwork, passwordField.text);
                     }
                 }
             }
+        }
 
+        ColumnLayout { // Public wifi login page
+            id: publicWifiPortal
+            visible: root.wifiNetwork?.active && (root.wifiNetwork?.security ?? "").trim().length === 0
+            Layout.topMargin: 8
+
+            RowLayout {
+                DialogButton {
+                    Layout.fillWidth: true
+                    buttonText: Translation.tr("Open network portal")
+                    colBackground: Appearance.colors.colLayer4
+                    colBackgroundHover: Appearance.colors.colLayer4Hover
+                    colRipple: Appearance.colors.colLayer4Active
+                    onClicked: {
+                        Network.openPublicWifiPortal()
+                        GlobalStates.sidebarRightOpen = false
+                    }
+                }
+            }
         }
     }
 }

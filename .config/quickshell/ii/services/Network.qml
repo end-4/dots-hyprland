@@ -62,6 +62,10 @@ Singleton {
         if (active) disconnectProc.exec(["nmcli", "connection", "down", active.ssid]);
     }
 
+    function openPublicWifiPortal() {
+        Quickshell.execDetached(["xdg-open", "https://nmcheck.gnome.org/"]) // From some StackExchange thread, seems to work
+    }
+
     function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
