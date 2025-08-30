@@ -80,6 +80,12 @@ MouseArea {
                                 thumbnailImage.source = "";
                                 thumbnailImage.source = thumbnailImage.thumbnailPath;
                             }
+                            function onThumbnailGeneratedFile(filePath) {
+                                if (thumbnailImage.status !== Image.Error) return;
+                                if (Qt.resolvedUrl(thumbnailImage.sourcePath) !== Qt.resolvedUrl(filePath)) return;
+                                thumbnailImage.source = "";
+                                thumbnailImage.source = thumbnailImage.thumbnailPath;
+                            }
                         }
 
                         layer.enabled: true

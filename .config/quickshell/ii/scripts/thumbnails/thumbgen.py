@@ -1,4 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-xc\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
 
 # From https://github.com/difference-engine/thumbnail-generator-ubuntu (MIT License)
 # Since the script is small and the maintainers seem inactive to accept my PR (#11) I decided to just copy it over.
@@ -57,13 +57,22 @@ def make_thumbnail(fpath: str) -> bool:
 
 
 @logger.catch()
-def thumbnail_folder(*, dir_path: Path, workers: int, only_images: bool, recursive: bool) -> None:
+def thumbnail_folder(*, dir_path: Path, workers: int, only_images: bool, recursive: bool, machine_progress: bool = False) -> None:
     all_files = get_all_files(dir_path=dir_path, recursive=recursive)
     if only_images:
         all_files = get_all_images(all_files=all_files)
     all_files = [str(fpath) for fpath in all_files]
-    with Pool(processes=workers) as p:
-        list(tqdm(p.imap(make_thumbnail, all_files), total=len(all_files)))
+    if machine_progress:
+        completed = 0
+        total = len(all_files)
+        with Pool(processes=workers) as p:
+            for result in p.imap(make_thumbnail, all_files):
+                completed += 1
+                print(f"PROGRESS {completed}/{total} FILE {all_files[completed-1]}")
+                sys.stdout.flush()
+    else:
+        with Pool(processes=workers) as p:
+            list(tqdm(p.imap(make_thumbnail, all_files), total=len(all_files)))
 
 
 def get_all_images(*, all_files: List[Path]) -> List[Path]:
@@ -96,12 +105,13 @@ def get_all_files(*, dir_path: Path, recursive: bool) -> List[Path]:
     "-i", "--only_images", is_flag=True, default=False, help="Whether to only look for images to be thumbnailed"
 )
 @click.option("-r", "--recursive", is_flag=True, default=False, help="Whether to recursively look for files")
-def main(img_dirs: str, size: str, workers: str, only_images: bool, recursive: bool) -> None:
+@click.option("--machine_progress", is_flag=True, default=False, help="Print machine-readable progress lines instead of a progress bar")
+def main(img_dirs: str, size: str, workers: str, only_images: bool, recursive: bool, machine_progress: bool) -> None:
     img_dirs = [Path(img_dir) for img_dir in img_dirs.split()]
     global factory
     factory = GnomeDesktop.DesktopThumbnailFactory.new(thumbnail_size_map[size])
     for img_dir in img_dirs:
-        thumbnail_folder(dir_path=img_dir, workers=workers, only_images=only_images, recursive=recursive)
+        thumbnail_folder(dir_path=img_dir, workers=workers, only_images=only_images, recursive=recursive, machine_progress=machine_progress)
     print("Thumbnail Generation Completed!")
 
 

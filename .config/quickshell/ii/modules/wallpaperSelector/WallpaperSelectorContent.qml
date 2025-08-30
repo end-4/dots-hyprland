@@ -205,7 +205,9 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    StyledProgressBar {
+                    StyledIndeterminateProgressBar {
+                        id: indeterminateProgressBar
+                        visible: Wallpapers.thumbnailGenerationRunning && value == 0
                         anchors {
                             bottom: parent.top
                             left: parent.left
@@ -213,7 +215,12 @@ Item {
                             leftMargin: 4
                             rightMargin: 4
                         }
-                        indeterminate: true
+                    }
+
+                    StyledProgressBar {
+                        visible: Wallpapers.thumbnailGenerationRunning && value > 0
+                        value: Wallpapers.thumbnailGenerationProgress
+                        anchors.fill: indeterminateProgressBar
                     }
 
                     GridView {
