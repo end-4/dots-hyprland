@@ -191,13 +191,16 @@ Item {
                     id: gridDisplayRegion
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Rectangle {
-                            width: gridDisplayRegion.width
-                            height: gridDisplayRegion.height
-                            radius: wallpaperGridBackground.radius
+
+                    StyledProgressBar {
+                        anchors {
+                            bottom: parent.top
+                            left: parent.left
+                            right: parent.right
+                            leftMargin: 4
+                            rightMargin: 4
                         }
+                        indeterminate: true
                     }
 
                     GridView {
@@ -253,127 +256,87 @@ Item {
                                 filterField.text = "";
                             }
                         }
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: gridDisplayRegion.width
+                                height: gridDisplayRegion.height
+                                radius: wallpaperGridBackground.radius
+                            }
+                        }
                     }
 
-                    Item {
+                    Toolbar {
                         id: extraOptions
                         anchors {
                             bottom: parent.bottom
                             horizontalCenter: parent.horizontalCenter
-                        }
-                        implicitHeight: extraOptionsBackground.implicitHeight + extraOptionsBackground.anchors.margins * 2
-                        implicitWidth: extraOptionsBackground.implicitWidth + extraOptionsBackground.anchors.margins * 2
-
-                        StyledRectangularShadow {
-                            target: extraOptionsBackground
+                            bottomMargin: 8
                         }
 
-                        Rectangle { // Bottom toolbar
-                            id: extraOptionsBackground
-                            property real padding: 6
-                            anchors {
-                                fill: parent
-                                margins: 8
+                        ToolbarButton {
+                            implicitWidth: height
+                            onClicked: {
+                                Wallpapers.openFallbackPicker(root.useDarkMode);
+                                GlobalStates.wallpaperSelectorOpen = false;
                             }
-                            color: Appearance.colors.colLayer2
-                            implicitHeight: extraOptionsRowLayout.implicitHeight + padding * 2
-                            implicitWidth: extraOptionsRowLayout.implicitWidth + padding * 2
-                            radius: Appearance.rounding.full
+                            contentItem: MaterialSymbol {
+                                text: "open_in_new"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                content: Translation.tr("Use the system file picker instead")
+                            }
+                        }
 
-                            RowLayout {
-                                id: extraOptionsRowLayout
-                                anchors {
-                                    fill: parent
-                                    margins: extraOptionsBackground.padding
-                                }
+                        ToolbarButton {
+                            implicitWidth: height
+                            onClicked: root.useDarkMode = !root.useDarkMode
+                            contentItem: MaterialSymbol {
+                                text: root.useDarkMode ? "dark_mode" : "light_mode"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                content: Translation.tr("Click to toggle light/dark mode (applied when wallpaper is chosen)")
+                            }
+                        }
 
-                                RippleButton {
-                                    Layout.fillHeight: true
-                                    Layout.topMargin: 2
-                                    Layout.bottomMargin: 2
-                                    implicitWidth: height
-                                    buttonRadius: Appearance.rounding.full
-                                    onClicked: {
-                                        Wallpapers.openFallbackPicker(root.useDarkMode);
-                                        GlobalStates.wallpaperSelectorOpen = false;
-                                    }
-                                    contentItem: MaterialSymbol {
-                                        text: "open_in_new"
-                                        iconSize: Appearance.font.pixelSize.larger
-                                    }
-                                    StyledToolTip {
-                                        content: Translation.tr("Use the system file picker instead")
-                                    }
-                                }
+                        ToolbarTextField {
+                            id: filterField
+                            placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
 
-                                RippleButton {
-                                    Layout.fillHeight: true
-                                    Layout.topMargin: 2
-                                    Layout.bottomMargin: 2
-                                    implicitWidth: height
-                                    buttonRadius: Appearance.rounding.full
-                                    onClicked: root.useDarkMode = !root.useDarkMode
-                                    contentItem: MaterialSymbol {
-                                        text: root.useDarkMode ? "dark_mode" : "light_mode"
-                                        iconSize: Appearance.font.pixelSize.larger
-                                    }
-                                    StyledToolTip {
-                                        content: Translation.tr("Click to toggle light/dark mode (applied when wallpaper is chosen)")
-                                    }
-                                }
+                            // Style
+                            clip: true
+                            font.pixelSize: Appearance.font.pixelSize.small
 
-                                TextField {
-                                    id: filterField
-                                    Layout.fillHeight: true
-                                    Layout.topMargin: 2
-                                    Layout.bottomMargin: 2
-                                    implicitWidth: 200
-                                    padding: 10
-                                    placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
-                                    placeholderTextColor: Appearance.colors.colSubtext
-                                    color: Appearance.colors.colOnLayer0
-                                    font.pixelSize: Appearance.font.pixelSize.small
-                                    renderType: Text.NativeRendering
-                                    selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-                                    selectionColor: Appearance.colors.colSecondaryContainer
-                                    background: Rectangle {
-                                        color: Appearance.colors.colLayer1
-                                        radius: Appearance.rounding.full
-                                    }
+                            // Search
+                            onTextChanged: {
+                                Wallpapers.searchQuery = text;
+                            }
 
-                                    onTextChanged: {
-                                        Wallpapers.searchQuery = text;
+                            Keys.onPressed: event => {
+                                if (text.length !== 0) {
+                                    // No filtering, just navigate grid
+                                    if (event.key === Qt.Key_Down) {
+                                        grid.moveSelection(grid.columns);
+                                        event.accepted = true;
                                     }
-
-                                    Keys.onPressed: event => {
-                                        if (text.length !== 0) {
-                                            // No filtering, just navigate grid
-                                            if (event.key === Qt.Key_Down) {
-                                                grid.moveSelection(grid.columns);
-                                                event.accepted = true;
-                                            }
-                                            if (event.key === Qt.Key_Up) {
-                                                grid.moveSelection(-grid.columns);
-                                                event.accepted = true;
-                                            }
-                                        }
-                                        event.accepted = false;
+                                    if (event.key === Qt.Key_Up) {
+                                        grid.moveSelection(-grid.columns);
+                                        event.accepted = true;
                                     }
                                 }
+                                event.accepted = false;
+                            }
+                        }
 
-                                RippleButton {
-                                    Layout.fillHeight: true
-                                    Layout.topMargin: 2
-                                    Layout.bottomMargin: 2
-                                    buttonRadius: Appearance.rounding.full
-                                    onClicked: {
-                                        GlobalStates.wallpaperSelectorOpen = false;
-                                    }
-
-                                    contentItem: StyledText {
-                                        text: "Cancel"
-                                    }
-                                }
+                        ToolbarButton {
+                            onClicked: {
+                                GlobalStates.wallpaperSelectorOpen = false;
+                            }
+                            contentItem: StyledText {
+                                text: "Cancel"
                             }
                         }
                     }

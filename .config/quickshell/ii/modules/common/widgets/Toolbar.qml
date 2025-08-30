@@ -23,7 +23,7 @@ Item {
     Rectangle {
         id: background
         anchors.centerIn: parent
-        color: Appearance.colors.colLayer2
+        color: Appearance.m3colors.m3surfaceContainer // Needs to be opaque
         implicitHeight: toolbarLayout.implicitHeight + root.padding * 2
         implicitWidth: toolbarLayout.implicitWidth + root.padding * 2
         radius: Appearance.rounding.full
