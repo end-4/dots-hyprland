@@ -304,7 +304,7 @@ Item {
 
                         ToolbarTextField {
                             id: filterField
-                            placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+                            placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
 
                             // Style
                             clip: true
