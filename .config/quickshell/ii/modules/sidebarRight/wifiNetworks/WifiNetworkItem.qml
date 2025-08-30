@@ -1,37 +1,21 @@
 import qs
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import qs.services.network
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 
-RippleButton {
+DialogListItem {
     id: root
     required property WifiAccessPoint wifiNetwork
 
-    horizontalPadding: Appearance.rounding.large
-    verticalPadding: 12
-    implicitWidth: mainLayout.implicitWidth + horizontalPadding * 2
-    implicitHeight: mainLayout.implicitHeight + verticalPadding * 2
-    Behavior on implicitHeight {
-        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-    }
-    clip: true
-
-    buttonRadius: 0
-    colBackground: ColorUtils.transparentize(Appearance.colors.colLayer3)
-    colBackgroundHover: (wifiNetwork?.askingPassword || wifiNetwork?.active) ? colBackground : Appearance.colors.colLayer3Hover
-    colRipple: Appearance.colors.colLayer3Active
-
+    active: (wifiNetwork?.askingPassword || wifiNetwork?.active)
     onClicked: {
         Network.connectToWifiNetwork(wifiNetwork);
     }
 
     contentItem: ColumnLayout {
-        id: mainLayout
         anchors {
             fill: parent
             topMargin: root.verticalPadding
@@ -52,8 +36,9 @@ RippleButton {
             }
             StyledText {
                 Layout.fillWidth: true
-                text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
                 color: Appearance.colors.colOnSurfaceVariant
+                elide: Text.ElideRight
+                text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
             }
             MaterialSymbol {
                 visible: (root.wifiNetwork?.isSecure || root.wifiNetwork?.active) ?? false
@@ -65,8 +50,8 @@ RippleButton {
 
         ColumnLayout { // Password
             id: passwordPrompt
-            visible: root.wifiNetwork?.askingPassword ?? false
             Layout.topMargin: 8
+            visible: root.wifiNetwork?.askingPassword ?? false
 
             MaterialTextField {
                 id: passwordField
@@ -107,8 +92,8 @@ RippleButton {
 
         ColumnLayout { // Public wifi login page
             id: publicWifiPortal
-            visible: root.wifiNetwork?.active && (root.wifiNetwork?.security ?? "").trim().length === 0
             Layout.topMargin: 8
+            visible: root.wifiNetwork?.active && (root.wifiNetwork?.security ?? "").trim().length === 0
 
             RowLayout {
                 DialogButton {
@@ -123,6 +108,10 @@ RippleButton {
                     }
                 }
             }
+        }
+
+        Item {
+            Layout.fillHeight: true
         }
     }
 }

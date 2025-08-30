@@ -20,6 +20,7 @@ RippleButton {
     colBackground: ColorUtils.transparentize(Appearance.colors.colLayer3)
     colBackgroundHover: Appearance.colors.colLayer3Hover
     colRipple: Appearance.colors.colLayer3Active
+    property alias colText: buttonTextWidget.color
 
     contentItem: StyledText {
         id: buttonTextWidget

@@ -1,18 +1,15 @@
 import qs
 import qs.services
-import qs.services.network
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.modules.common.functions
 import "./quickToggles/"
 import "./wifiNetworks/"
+import "./bluetoothDevices/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import Quickshell.Io
 import Quickshell
-import Quickshell.Wayland
+import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
 Item {
@@ -21,12 +18,14 @@ Item {
     property int sidebarPadding: 12
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showWifiDialog: false
+    property bool showBluetoothDialog: false
 
     Connections {
         target: GlobalStates
         function onSidebarRightOpenChanged() {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
+                root.showBluetoothDialog = false;
             }
         }
     }
@@ -129,7 +128,13 @@ Item {
                         root.showWifiDialog = true;
                     }
                 }
-                BluetoothToggle {}
+                BluetoothToggle {
+                    altAction: () => {
+                        Bluetooth.defaultAdapter.enabled = true;
+                        Bluetooth.defaultAdapter.discovering = true;
+                        root.showBluetoothDialog = true;
+                    }
+                }
                 NightLight {}
                 GameMode {}
                 IdleInhibitor {}
@@ -138,7 +143,6 @@ Item {
             }
 
             CenterWidgetGroup {
-                focus: sidebarRoot.visible
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -173,6 +177,30 @@ Item {
             }
             onVisibleChanged: {
                 if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
+            }
+        }
+    }
+
+    onShowBluetoothDialogChanged: if (showBluetoothDialog) bluetoothDialogLoader.active = true;
+    Loader {
+        id: bluetoothDialogLoader
+        anchors.fill: parent
+
+        active: root.showBluetoothDialog || item.visible
+        onActiveChanged: {
+            if (active) {
+                item.show = true;
+                item.forceActiveFocus();
+            }
+        }
+
+        sourceComponent: BluetoothDialog {
+            onDismiss: {
+                show = false
+                root.showBluetoothDialog = false
+            }
+            onVisibleChanged: {
+                if (!visible && !root.showBluetoothDialog) bluetoothDialogLoader.active = false;
             }
         }
     }

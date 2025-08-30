@@ -1,17 +1,23 @@
 import qs
 import qs.services
-import qs.services.network
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import Quickshell.Io
+import Quickshell.Bluetooth
 import Quickshell
+import Quickshell.Wayland
+import Quickshell.Hyprland
 
 WindowDialog {
     id: root
 
     WindowDialogTitle {
-        text: Translation.tr("Connect to Wi-Fi")
+        text: Translation.tr("Bluetooth devices")
     }
     // TODO: add indeterminate progress bar when scanning
     WindowDialogSeparator {}
@@ -28,17 +34,11 @@ WindowDialog {
         animateAppearance: false
 
         model: ScriptModel {
-            values: [...Network.wifiNetworks].sort((a, b) => {
-                if (a.active && !b.active)
-                    return -1;
-                if (!a.active && b.active)
-                    return 1;
-                return b.strength - a.strength;
-            })
+            values: [...Bluetooth.devices.values].sort((a, b) => (b.connected - a.connected) || (b.paired - a.paired))
         }
-        delegate: WifiNetworkItem {
-            required property WifiAccessPoint modelData
-            wifiNetwork: modelData
+        delegate: BluetoothDeviceItem {
+            required property BluetoothDevice modelData
+            device: modelData
             anchors {
                 left: parent?.left
                 right: parent?.right
@@ -50,7 +50,7 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
-                Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`]);
+                Quickshell.execDetached(["bash", "-c", `${Config.options.apps.bluetooth}`]);
                 GlobalStates.sidebarRightOpen = false;
             }
         }
