@@ -10,7 +10,7 @@ import qs.modules.common.widgets
 Item {
     id: root
 
-    property real padding: 6
+    property real padding: 8
     property alias colBackground: background.color
     default property alias data: toolbarLayout.data
     implicitWidth: background.implicitWidth
@@ -30,6 +30,7 @@ Item {
 
         RowLayout {
             id: toolbarLayout
+            spacing: 4
             anchors {
                 fill: parent
                 margins: root.padding
