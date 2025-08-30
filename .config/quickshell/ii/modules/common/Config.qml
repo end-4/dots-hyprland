@@ -174,6 +174,8 @@ Singleton {
                     property bool showAppIcons: true
                     property bool alwaysShowNumbers: false
                     property int showNumberDelay: 300 // milliseconds
+                    property list<string> numberMap: ["1", "2"] // Characters to show instead of numbers on workspace indicator
+                    property bool useNerdFont: false
                 }
                 property JsonObject weather: JsonObject {
                     property bool enable: false
