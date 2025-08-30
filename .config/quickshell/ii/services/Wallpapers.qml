@@ -76,11 +76,21 @@ Singleton {
         function setDirectoryIfValid(path) {
             validateDirProc.nicePath = FileUtils.trimFileProtocol(path).replace(/\/+$/, "")
             if (/^\/*$/.test(validateDirProc.nicePath)) validateDirProc.nicePath = "/";
-            validateDirProc.exec(["test", "-d", nicePath])
+            validateDirProc.exec([
+                "bash", "-c",
+                `if [ -d "${validateDirProc.nicePath}" ]; then echo dir; elif [ -f "${validateDirProc.nicePath}" ]; then echo file; else echo invalid; fi`
+            ])
         }
-        onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0) {
-                root.directory = validateDirProc.nicePath
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const result = text.trim()
+                if (result === "dir") {
+                    root.directory = validateDirProc.nicePath
+                } else if (result === "file") {
+                    root.directory = FileUtils.parentDirectory(validateDirProc.nicePath)
+                } else {
+                    // Ignore
+                }
             }
         }
     }

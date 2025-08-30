@@ -29,10 +29,23 @@ Item {
         }
     }
 
+    function handleFilePasting(event) {
+        const currentClipboardEntry = Cliphist.entries[0]
+        if (/^\d+\tfile:\/\/\S+/.test(currentClipboardEntry)) {
+            const url = StringUtils.cleanCliphistEntry(currentClipboardEntry);
+            Wallpapers.setDirectory(FileUtils.trimFileProtocol(decodeURIComponent(url)));
+            event.accepted = true;
+        } else {
+            event.accepted = false; // No image, let text pasting proceed
+        }
+    }
+
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Escape) {
             GlobalStates.wallpaperSelectorOpen = false;
             event.accepted = true;
+        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers
+            root.handleFilePasting(event);
         } else if (event.modifiers & Qt.AltModifier && event.key === Qt.Key_Up) {
             Wallpapers.setDirectory(FileUtils.parentDirectory(Wallpapers.directory));
             event.accepted = true;
@@ -316,15 +329,21 @@ Item {
                             }
 
                             Keys.onPressed: event => {
-                                if (text.length !== 0) {
+                                if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers
+                                    root.handleFilePasting(event);
+                                    return;
+                                }
+                                else if (text.length !== 0) {
                                     // No filtering, just navigate grid
                                     if (event.key === Qt.Key_Down) {
                                         grid.moveSelection(grid.columns);
                                         event.accepted = true;
+                                        return;
                                     }
                                     if (event.key === Qt.Key_Up) {
                                         grid.moveSelection(-grid.columns);
                                         event.accepted = true;
+                                        return;
                                     }
                                 }
                                 event.accepted = false;
