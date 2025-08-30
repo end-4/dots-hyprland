@@ -10,7 +10,7 @@ DialogListItem {
     id: root
     required property WifiAccessPoint wifiNetwork
 
-    active: (wifiNetwork?.askingPassword || wifiNetwork?.active)
+    active: (wifiNetwork?.askingPassword || wifiNetwork?.active) ?? false
     onClicked: {
         Network.connectToWifiNetwork(wifiNetwork);
     }
@@ -93,7 +93,7 @@ DialogListItem {
         ColumnLayout { // Public wifi login page
             id: publicWifiPortal
             Layout.topMargin: 8
-            visible: root.wifiNetwork?.active && (root.wifiNetwork?.security ?? "").trim().length === 0
+            visible: (root.wifiNetwork?.active && (root.wifiNetwork?.security ?? "").trim().length === 0) ?? false
 
             RowLayout {
                 DialogButton {
