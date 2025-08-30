@@ -181,7 +181,10 @@ Item {
         }
     }
 
-    onShowBluetoothDialogChanged: if (showBluetoothDialog) bluetoothDialogLoader.active = true;
+    onShowBluetoothDialogChanged: {
+        if (showBluetoothDialog) bluetoothDialogLoader.active = true;
+        else Bluetooth.defaultAdapter.discovering = false;
+    }
     Loader {
         id: bluetoothDialogLoader
         anchors.fill: parent

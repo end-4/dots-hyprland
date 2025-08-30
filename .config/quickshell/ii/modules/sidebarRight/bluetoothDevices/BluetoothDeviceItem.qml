@@ -46,10 +46,10 @@ DialogListItem {
                     Layout.fillWidth: true
                     color: Appearance.colors.colOnSurfaceVariant
                     elide: Text.ElideRight
-                    text: root.device?.name
+                    text: root.device?.name || Translation.tr("Unknown device")
                 }
                 StyledText {
-                    visible: root.device?.connected || root.device?.paired
+                    visible: (root.device?.connected || root.device?.paired) ?? false
                     Layout.fillWidth: true
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colSubtext
@@ -93,7 +93,7 @@ DialogListItem {
                 }
             }
             ActionButton {
-                visible: root.device?.paired
+                visible: root.device?.paired ?? false
                 colBackground: Appearance.colors.colError
                 colBackgroundHover: Appearance.colors.colErrorHover
                 colRipple: Appearance.colors.colErrorActive
