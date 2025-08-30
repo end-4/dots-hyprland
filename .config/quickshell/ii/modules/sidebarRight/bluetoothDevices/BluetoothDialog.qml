@@ -19,8 +19,17 @@ WindowDialog {
     WindowDialogTitle {
         text: Translation.tr("Bluetooth devices")
     }
-    // TODO: add indeterminate progress bar when scanning
-    WindowDialogSeparator {}
+    WindowDialogSeparator {
+        visible: !Bluetooth.defaultAdapter.discovering
+    }
+    StyledIndeterminateProgressBar {
+        visible: Bluetooth.defaultAdapter.discovering
+        Layout.fillWidth: true
+        Layout.topMargin: -8
+        Layout.bottomMargin: -8
+        Layout.leftMargin: -Appearance.rounding.large
+        Layout.rightMargin: -Appearance.rounding.large
+    }
     StyledListView {
         Layout.fillHeight: true
         Layout.fillWidth: true

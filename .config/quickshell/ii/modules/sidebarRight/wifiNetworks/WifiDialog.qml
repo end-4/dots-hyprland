@@ -13,9 +13,18 @@ WindowDialog {
     WindowDialogTitle {
         text: Translation.tr("Connect to Wi-Fi")
     }
-    // TODO: add indeterminate progress bar when scanning
-    WindowDialogSeparator {}
-    StyledListView {
+    WindowDialogSeparator {
+        visible: !Network.wifiScanning
+    }
+    StyledIndeterminateProgressBar {
+        visible: Network.wifiScanning
+        Layout.fillWidth: true
+        Layout.topMargin: -8
+        Layout.bottomMargin: -8
+        Layout.leftMargin: -Appearance.rounding.large
+        Layout.rightMargin: -Appearance.rounding.large
+    }
+    ListView {
         Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.topMargin: -15
@@ -25,7 +34,6 @@ WindowDialog {
 
         clip: true
         spacing: 0
-        animateAppearance: false
 
         model: ScriptModel {
             values: [...Network.wifiNetworks].sort((a, b) => {
