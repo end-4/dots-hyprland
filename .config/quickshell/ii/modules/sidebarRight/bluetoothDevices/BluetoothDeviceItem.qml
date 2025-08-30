@@ -12,6 +12,7 @@ DialogListItem {
     pointingHandCursor: !expanded
 
     onClicked: expanded = !expanded
+    altAction: () => expanded = !expanded
     
     component ActionButton: DialogButton {
         colBackground: Appearance.colors.colPrimary
