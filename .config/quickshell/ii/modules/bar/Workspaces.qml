@@ -216,7 +216,10 @@ Item {
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
+                        font {
+                            pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
+                            family: Config.options?.bar.workspaces.useNerdFont ? Appearance.font.family.iconNerd : Appearance.font.family.main
+                        }
                         text: Config.options?.bar.workspaces.numberMap[button.workspaceValue - 1] || button.workspaceValue
                         elide: Text.ElideRight
                         color: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
