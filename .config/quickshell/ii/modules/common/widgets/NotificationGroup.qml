@@ -1,5 +1,6 @@
-import qs.modules.common
+import qs
 import qs.services
+import qs.modules.common
 import qs.modules.common.functions
 import "./notification_utils.js" as NotificationUtils
 import QtQuick
@@ -211,6 +212,11 @@ MouseArea { // Notification group area
                         expanded: root.expanded
                         fontSize: topRow.fontSize
                         onClicked: { root.toggleExpanded() }
+                        altAction: () => { root.toggleExpanded() }
+
+                        StyledToolTip {
+                            content: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                        }
                     }
                 }
 
