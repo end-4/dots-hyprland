@@ -1,3 +1,4 @@
+import qs
 import qs.modules.common
 import QtQuick
 import Quickshell
@@ -11,7 +12,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     property var clock: SystemClock {
         id: clock
-        precision: SystemClock.Minutes
+        precision: GlobalStates.screenLocked ? SystemClock.Seconds : SystemClock.Minutes // Hack to ensure clock is correct after waking up from suspend
     }
     property string time: Qt.locale().toString(clock.date, Config.options?.time.format ?? "hh:mm")
     property string shortDate: Qt.locale().toString(clock.date, Config.options?.time.shortDateFormat ?? "dd/MM")

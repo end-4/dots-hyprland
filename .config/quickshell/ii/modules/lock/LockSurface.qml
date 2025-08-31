@@ -133,7 +133,7 @@ MouseArea {
             id: confirmButton
             implicitWidth: height
             toggled: true
-            enabled: !root.context.unlockInProgress && root.context.currentText.length > 0
+            enabled: !root.context.unlockInProgress
             colBackgroundToggled: Appearance.colors.colPrimary
 
             onClicked: root.context.tryUnlock()

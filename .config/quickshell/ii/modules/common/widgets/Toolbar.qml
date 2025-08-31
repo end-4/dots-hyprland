@@ -10,7 +10,7 @@ import qs.modules.common.widgets
 Item {
     id: root
 
-    property real padding: 6
+    property real padding: 8
     property alias colBackground: background.color
     default property alias data: toolbarLayout.data
     implicitWidth: background.implicitWidth
@@ -23,13 +23,14 @@ Item {
     Rectangle {
         id: background
         anchors.centerIn: parent
-        color: Appearance.colors.colLayer2
+        color: Appearance.m3colors.m3surfaceContainer // Needs to be opaque
         implicitHeight: toolbarLayout.implicitHeight + root.padding * 2
         implicitWidth: toolbarLayout.implicitWidth + root.padding * 2
         radius: Appearance.rounding.full
 
         RowLayout {
             id: toolbarLayout
+            spacing: 4
             anchors {
                 fill: parent
                 margins: root.padding

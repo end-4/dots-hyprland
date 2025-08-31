@@ -10,8 +10,6 @@ TextField {
     property alias colBackground: background.color
 
     Layout.fillHeight: true
-    Layout.topMargin: 2
-    Layout.bottomMargin: 2
     implicitWidth: 200
     padding: 10
 
