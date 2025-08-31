@@ -28,16 +28,16 @@ RippleButton {
     visible: root.entryShown
     property int horizontalMargin: 10
     property int buttonHorizontalPadding: 10
-    property int buttonVerticalPadding: 5
+    property int buttonVerticalPadding: 6
     property bool keyboardDown: false
 
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
     colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colSecondaryContainerActive : 
-        ((root.hovered || root.focus) ? Appearance.colors.colSecondaryContainerHover : 
+        ((root.hovered || root.focus) ? Appearance.colors.colSecondaryContainer : 
         ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, 1))
-    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+    colBackgroundHover: Appearance.colors.colSecondaryContainer
     colRipple: Appearance.colors.colSecondaryContainerActive
 
     property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
@@ -224,32 +224,40 @@ RippleButton {
         }
 
         RowLayout {
+            Layout.alignment: Qt.AlignTop
+            Layout.topMargin: root.buttonVerticalPadding
+            Layout.bottomMargin: -root.buttonVerticalPadding // Why is this necessary? Good question.
             spacing: 4
             Repeater {
                 model: (root.entry.actions ?? []).slice(0, 4)
                 delegate: RippleButton {
                     id: actionButton
                     required property var modelData
+                    property string iconName: modelData.icon
+                    property string materialIconName: modelData.materialIcon
                     implicitHeight: 34
                     implicitWidth: 34
+
+                    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+                    colRipple: Appearance.colors.colSecondaryContainerActive
 
                     contentItem: Item {
                         id: actionContentItem
                         anchors.centerIn: parent
                         Loader {
                             anchors.centerIn: parent
-                            active: !(actionButton.modelData.icon && actionButton.modelData.icon !== "")
+                            active: !(actionButton.iconName && actionButton.iconName !== "") || actionButton.materialIconName
                             sourceComponent: MaterialSymbol {
-                                text: "video_settings"
+                                text: actionButton.materialIconName || "video_settings"
                                 font.pixelSize: Appearance.font.pixelSize.hugeass
                                 color: Appearance.m3colors.m3onSurface
                             }
                         }
                         Loader {
                             anchors.centerIn: parent
-                            active: actionButton.modelData.icon && actionButton.modelData.icon !== ""
+                            active: !actionButton.materialIconName && actionButton.iconName && actionButton.iconName !== ""
                             sourceComponent: IconImage {
-                                source: Quickshell.iconPath(actionButton.modelData.icon)
+                                source: Quickshell.iconPath(actionButton.iconName)
                                 implicitSize: 20
                             }
                         }

@@ -322,8 +322,15 @@ Item { // Wrapper
                                     },
                                     actions: [
                                         {
+                                            name: "Copy",
+                                            materialIcon: "content_copy",
+                                            execute: () => {
+                                                Cliphist.copy(entry);
+                                            }
+                                        },
+                                        {
                                             name: "Delete",
-                                            icon: "delete",
+                                            materialIcon: "delete",
                                             execute: () => {
                                                 Cliphist.deleteEntry(entry);
                                             }
