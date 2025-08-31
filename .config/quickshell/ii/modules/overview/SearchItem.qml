@@ -1,5 +1,6 @@
 // pragma NativeMethodBehavior: AcceptThisObject
 import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
@@ -89,8 +90,8 @@ RippleButton {
     }
 
     onClicked: {
-        root.itemExecute()
         GlobalStates.overviewOpen = false
+        root.itemExecute()
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -201,7 +202,7 @@ RippleButton {
                 }
             }
             Loader { // Clipboard image preview
-                active: root.cliphistRawString && /^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(root.cliphistRawString)
+                active: root.cliphistRawString && Cliphist.entryIsImage(root.cliphistRawString)
                 sourceComponent: CliphistImage {
                     Layout.fillWidth: true
                     entry: root.cliphistRawString
