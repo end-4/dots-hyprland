@@ -117,8 +117,8 @@ Variants {
         function updateClockPosition() {
             // Somehow all this manual setting is needed to make the proc correctly use the new values
             leastBusyRegionProc.path = bgRoot.wallpaperPath
-            leastBusyRegionProc.contentWidth = clock.implicitWidth + root.clockSizePadding * 2
-            leastBusyRegionProc.contentHeight = clock.implicitHeight + root.clockSizePadding * 2
+            leastBusyRegionProc.contentWidth = clockLoader.implicitWidth + root.clockSizePadding * 2
+            leastBusyRegionProc.contentHeight = clockLoader.implicitHeight + root.clockSizePadding * 2
             leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2
             leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2
             leastBusyRegionProc.running = false;
@@ -215,8 +215,9 @@ Variants {
         }
 
         // The clock
-        Item {
-            id: clock
+        Loader {
+            id: clockLoader
+            active: Config.options.background.showClock
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
@@ -229,93 +230,95 @@ Variants {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
             }
+            sourceComponent: Item {
+                id: clock
+                implicitWidth: clockColumn.implicitWidth
+                implicitHeight: clockColumn.implicitHeight
 
-            implicitWidth: clockColumn.implicitWidth
-            implicitHeight: clockColumn.implicitHeight
+                ColumnLayout {
+                    id: clockColumn
+                    anchors.centerIn: parent
+                    spacing: 6
 
-            ColumnLayout {
-                id: clockColumn
-                anchors.centerIn: parent
-                spacing: 6
-
-                StyledText {
-                    Layout.fillWidth: true
-                    horizontalAlignment: bgRoot.textHorizontalAlignment
-                    font {
-                        family: Appearance.font.family.expressive
-                        pixelSize: 90
-                        weight: Font.Bold
+                    StyledText {
+                        Layout.fillWidth: true
+                        horizontalAlignment: bgRoot.textHorizontalAlignment
+                        font {
+                            family: Appearance.font.family.expressive
+                            pixelSize: 90
+                            weight: Font.Bold
+                        }
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                        text: DateTime.time
                     }
-                    color: bgRoot.colText
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                    text: DateTime.time
-                }
-                StyledText {
-                    Layout.fillWidth: true
-                    Layout.topMargin: -5
-                    horizontalAlignment: bgRoot.textHorizontalAlignment
-                    font {
-                        family: Appearance.font.family.expressive
-                        pixelSize: 20
-                        weight: Font.DemiBold
+                    StyledText {
+                        Layout.fillWidth: true
+                        Layout.topMargin: -5
+                        horizontalAlignment: bgRoot.textHorizontalAlignment
+                        font {
+                            family: Appearance.font.family.expressive
+                            pixelSize: 20
+                            weight: Font.DemiBold
+                        }
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                        text: DateTime.date
+                        animateChange: true
                     }
-                    color: bgRoot.colText
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                    text: DateTime.date
-                    animateChange: true
-                }
-                StyledText {
-                    Layout.fillWidth: true
-                    horizontalAlignment: bgRoot.textHorizontalAlignment
-                    font {
-                        family: Appearance.font.family.expressive
-                        pixelSize: 20
-                        weight: Font.DemiBold
+                    StyledText {
+                        Layout.fillWidth: true
+                        horizontalAlignment: bgRoot.textHorizontalAlignment
+                        font {
+                            family: Appearance.font.family.expressive
+                            pixelSize: 20
+                            weight: Font.DemiBold
+                        }
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        visible: Config.options.background.quote !== ""
+                        styleColor: Appearance.colors.colShadow
+                        text: Config.options.background.quote
                     }
-                    color: bgRoot.colText
-                    style: Text.Raised
-                    visible: Config.options.background.quote !== ""
-                    styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.quote
                 }
-            }
 
-            RowLayout {
-                anchors {
-                    top: clockColumn.bottom
-                    left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
-                    right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
-                    horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
-                    topMargin: 5
-                    leftMargin: -5
-                    rightMargin: -5
-                }
-                opacity: GlobalStates.screenLocked ? 1 : 0
-                visible: opacity > 0
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
-                MaterialSymbol {
-                    text: "lock"
-                    Layout.fillWidth: false
-                    iconSize: Appearance.font.pixelSize.huge
-                    color: bgRoot.colText
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                }
-                StyledText {
-                    Layout.fillWidth: false
-                    text: "Locked"
-                    color: bgRoot.colText
-                    font.pixelSize: Appearance.font.pixelSize.larger
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                }
-                Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
+                RowLayout {
+                    anchors {
+                        top: clockColumn.bottom
+                        left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
+                        right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
+                        horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
+                        topMargin: 5
+                        leftMargin: -5
+                        rightMargin: -5
+                    }
+                    opacity: GlobalStates.screenLocked ? 1 : 0
+                    visible: opacity > 0
+                    Behavior on opacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                    Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
+                    MaterialSymbol {
+                        text: "lock"
+                        Layout.fillWidth: false
+                        iconSize: Appearance.font.pixelSize.huge
+                        color: bgRoot.colText
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                    }
+                    StyledText {
+                        Layout.fillWidth: false
+                        text: "Locked"
+                        color: bgRoot.colText
+                        font.pixelSize: Appearance.font.pixelSize.larger
+                        style: Text.Raised
+                        styleColor: Appearance.colors.colShadow
+                    }
+                    Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
 
+                }
             }
         }
     }

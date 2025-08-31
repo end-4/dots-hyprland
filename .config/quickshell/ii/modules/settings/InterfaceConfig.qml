@@ -70,6 +70,18 @@ ContentPage {
     }
 
     ContentSection {
+        title: Translation.tr("Background")
+
+        ConfigSwitch {
+            text: Translation.tr("Show clock")
+            checked: Config.options.background.showClock
+            onCheckedChanged: {
+                Config.options.background.showClock = checked;
+            }
+        }
+    }
+
+    ContentSection {
         title: Translation.tr("Bar")
 
         ConfigRow {
