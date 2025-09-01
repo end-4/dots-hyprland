@@ -104,12 +104,11 @@ Singleton {
   Process {
     id: tempProc
     command: [
-        "/bin/bash",
-        "-c",
-        "paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/thermal_zone*/temp) | grep x86_pkg_temp | awk '{print $2}'"
+      "/bin/bash",
+      "-c",
+      "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"
     ]
-     running: true
-
+    running: true
     stdout: StdioCollector {
       onStreamFinished:{
         cpuTemperature = Number(this.text) /1000
