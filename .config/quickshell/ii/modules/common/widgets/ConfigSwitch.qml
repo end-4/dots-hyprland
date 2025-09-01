@@ -6,12 +6,17 @@ import QtQuick.Controls
 
 RippleButton {
     id: root
+    property string buttonIcon
     Layout.fillWidth: true
     implicitHeight: contentItem.implicitHeight + 8 * 2
     onClicked: checked = !checked
 
     contentItem: RowLayout {
         spacing: 10
+        OptionalMaterialSymbol {
+            icon: root.buttonIcon
+            iconSize: Appearance.font.pixelSize.larger
+        }
         StyledText {
             id: labelWidget
             Layout.fillWidth: true

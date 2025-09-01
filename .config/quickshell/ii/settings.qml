@@ -29,6 +29,12 @@ ApplicationWindow {
             component: "modules/settings/QuickConfig.qml"
         },
         {
+            name: Translation.tr("Bar"),
+            icon: "toast",
+            iconRotation: 180,
+            component: "modules/settings/BarConfig.qml"
+        },
+        {
             name: Translation.tr("Interface"),
             icon: "cards",
             component: "modules/settings/InterfaceConfig.qml"
@@ -181,6 +187,7 @@ ApplicationWindow {
                                 onClicked: root.currentPage = index;
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
+                                buttonIconRotation: modelData.iconRotation || 0
                                 buttonText: modelData.name
                                 showToggledHighlight: false
                             }

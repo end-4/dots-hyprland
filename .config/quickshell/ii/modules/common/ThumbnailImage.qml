@@ -2,13 +2,14 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.common.functions
 
 /**
  * Thumbnail image. It currently generates to the right place at the right size, but does not handle metadata/maintenance on modification.
  * See Freedesktop's spec: https://specifications.freedesktop.org/thumbnail-spec/thumbnail-spec-latest.html
  */
-Image {
+StyledImage {
     id: root
 
     property bool generateThumbnail: true
@@ -24,7 +25,6 @@ Image {
     source: thumbnailPath
 
     asynchronous: true
-    cache: false
     smooth: true
     mipmap: false
 

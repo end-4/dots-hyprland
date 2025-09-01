@@ -5,7 +5,7 @@ import qs.modules.common.widgets
 
 StyledFlickable {
     id: root
-    property real baseWidth: 550
+    property real baseWidth: 600
     property bool forceWidth: false
     property real bottomContentPadding: 100
 
@@ -21,9 +21,9 @@ StyledFlickable {
         anchors {
             top: parent.top
             horizontalCenter: parent.horizontalCenter
-            margins: 10
+            margins: 20
         }
-        spacing: 20
+        spacing: 30
     }
 
 }
