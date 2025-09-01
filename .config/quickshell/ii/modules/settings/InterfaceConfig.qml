@@ -600,39 +600,13 @@ ContentPage {
                 }
             }
 
-            Rectangle {
+            NoticeBox {
                 id: reloadNotice
                 visible: false
                 Layout.topMargin: 8
-                radius: Appearance.rounding.normal
-                color: Appearance.colors.colPrimaryContainer
                 Layout.fillWidth: true
-                implicitWidth: languageRowLayout.implicitWidth + languageRowLayout.anchors.margins * 2
-                implicitHeight: languageRowLayout.implicitHeight + languageRowLayout.anchors.margins * 2
 
-                RowLayout {
-                    id: languageRowLayout
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 8
-
-                    MaterialSymbol {
-                        Layout.fillWidth: false
-                        Layout.alignment: Qt.AlignVCenter
-                        text: "info"
-                        iconSize: Appearance.font.pixelSize.larger
-                        color: Appearance.colors.colOnPrimaryContainer
-                    }
-
-                    StyledText {
-                        id: noticeText
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
-                        text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
-                        color: Appearance.colors.colOnPrimaryContainer
-                        wrapMode: Text.WordWrap
-                    }
-                }
+                text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
             }
         }
     }
