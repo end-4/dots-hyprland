@@ -103,11 +103,11 @@ Singleton {
 
   Process {
     id: tempProc
-    command: [
-      "/bin/bash",
-      "-c",
-      "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"
-    ]
+     command: [
+    "/bin/bash",
+    "-c",
+    "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ] || [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"k10temp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"
+  ]
     running: true
     stdout: StdioCollector {
       onStreamFinished:{
