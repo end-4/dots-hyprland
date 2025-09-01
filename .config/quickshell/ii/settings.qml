@@ -24,9 +24,9 @@ ApplicationWindow {
     property bool showNextTime: false
     property var pages: [
         {
-            name: Translation.tr("Style"),
-            icon: "palette",
-            component: "modules/settings/StyleConfig.qml"
+            name: Translation.tr("Quick"),
+            icon: "instant_mix",
+            component: "modules/settings/QuickConfig.qml"
         },
         {
             name: Translation.tr("Interface"),

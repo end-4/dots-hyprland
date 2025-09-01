@@ -10,7 +10,6 @@ Flow {
     Layout.fillWidth: true
     spacing: 2
     property list<var> options: []
-    property string configOptionName: ""
     property var currentValue: null
 
     signal selected(var newValue)

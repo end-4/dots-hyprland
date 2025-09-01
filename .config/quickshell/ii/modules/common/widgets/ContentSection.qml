@@ -18,6 +18,11 @@ ColumnLayout {
     }
     ColumnLayout {
         id: sectionContent
+        Layout.fillWidth: true
         spacing: 8
+
+        Item {
+            Layout.fillWidth: true
+        }
     }
 }

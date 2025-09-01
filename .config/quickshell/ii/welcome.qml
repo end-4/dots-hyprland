@@ -140,7 +140,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.bar.cornerStyle
-                                configOptionName: "bar.cornerStyle"
                                 onSelected: newValue => {
                                     Config.options.bar.cornerStyle = newValue; // Update local copy
                                 }
@@ -165,7 +164,6 @@ ApplicationWindow {
                             title: "Bar layout"
                             ConfigSelectionArray {
                                 currentValue: Config.options.bar.vertical
-                                configOptionName: "bar.vertical"
                                 onSelected: newValue => {
                                     Config.options.bar.vertical = newValue;
                                 }
@@ -284,7 +282,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.weeb
-                                configOptionName: "policies.weeb"
                                 onSelected: newValue => {
                                     Config.options.policies.weeb = newValue;
                                 }
@@ -310,7 +307,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.ai
-                                configOptionName: "policies.ai"
                                 onSelected: newValue => {
                                     Config.options.policies.ai = newValue;
                                 }

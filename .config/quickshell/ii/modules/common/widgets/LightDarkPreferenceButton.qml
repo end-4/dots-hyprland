@@ -6,7 +6,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
-GroupButton {
+RippleButton {
     id: lightDarkButtonRoot
     required property bool dark
     property color previewBg: dark ? ColorUtils.colorWithHueOf("#3f3838", Appearance.m3colors.m3primary) : 

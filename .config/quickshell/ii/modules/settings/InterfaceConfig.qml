@@ -18,7 +18,6 @@ ContentPage {
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.weeb
-                    configOptionName: "policies.weeb"
                     onSelected: newValue => {
                         Config.options.policies.weeb = newValue;
                     }
@@ -46,7 +45,6 @@ ContentPage {
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
-                    configOptionName: "policies.ai"
                     onSelected: newValue => {
                         Config.options.policies.ai = newValue;
                     }
@@ -90,7 +88,6 @@ ContentPage {
 
                 ConfigSelectionArray {
                     currentValue: Config.options.bar.cornerStyle
-                    configOptionName: "bar.cornerStyle"
                     onSelected: newValue => {
                         Config.options.bar.cornerStyle = newValue; // Update local copy
                     }
@@ -115,7 +112,6 @@ ContentPage {
                 title: Translation.tr("Bar layout")
                 ConfigSelectionArray {
                     currentValue: Config.options.bar.vertical
-                    configOptionName: "bar.vertical"
                     onSelected: newValue => {
                         Config.options.bar.vertical = newValue;
                     }
@@ -572,7 +568,6 @@ ContentPage {
             ConfigSelectionArray {
                 id: languageSelector
                 currentValue: Config.options.language.ui
-                configOptionName: "language.ui"
                 onSelected: newValue => {
                     Config.options.language.ui = newValue;
                     reloadNotice.visible = true;
