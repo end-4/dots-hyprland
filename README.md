@@ -92,7 +92,7 @@ Widget system: Quickshell | Support: Yes
 
 ### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
-Widget system: AGS | Support: Limited, no new features
+Widget system: AGS | Support: No
 
 | AI | Common widgets |
 |:---|:---------------|
