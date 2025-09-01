@@ -129,8 +129,8 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
         done
 
         echo "  Usage : ${gpu_usage}%"
-        echo "  VRAM  : ${vram_used_gb}/${vram_total_gb} GB"
-        echo "  Temp  : ${temperature} °C"
+        echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
+        echo "  Temp : ${temperature} °C"
         exit 0
     fi
 fi
