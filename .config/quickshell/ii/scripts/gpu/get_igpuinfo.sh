@@ -18,9 +18,9 @@ if command -v "intel_gpu_top" &> /dev/null; then # install intel_gpu_top to get 
 
 
       # Render/3D Usage
-      echo  " Usage : $(intel_gpu_top  -o - | head -n 3 | awk 'END{print $9}') %" # hijack gpu usage
+      echo  "  Usage : $(intel_gpu_top  -o - | head -n 3 | awk 'END{print $9}') %" # hijack gpu usage
 
-      echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
+      echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
       echo "  Temp : ${temperature} °C"
       exit 0
 fi
@@ -128,8 +128,9 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             [[ $found -eq 1 ]] && break
         done
 
-        echo "  Usage : ${gpu_usage}%"
-        echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
+
+        echo "  Usage : ${gpu_usage} %"
+        echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
         echo "  Temp : ${temperature} °C"
         exit 0
     fi
