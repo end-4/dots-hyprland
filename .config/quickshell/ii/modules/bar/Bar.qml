@@ -89,10 +89,11 @@ Scope {
                         }
                     }
 
-                    BarContent {
-                        id: barContent
-                        
-                        implicitHeight: Appearance.sizes.barHeight
+                BarContent {
+                    id: barContent
+                    isBarVisible: barRoot.mustShow
+                    
+                    implicitHeight: Appearance.sizes.barHeight
                         anchors {
                             right: parent.right
                             left: parent.left

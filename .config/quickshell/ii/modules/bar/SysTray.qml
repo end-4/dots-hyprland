@@ -10,6 +10,9 @@ Item {
     implicitWidth: gridLayout.implicitWidth
     implicitHeight: gridLayout.implicitHeight
     property bool vertical: false
+    
+    // Tracks parent visibility to manage tray overflow state appropriately
+    property bool parentVisible: true
     property bool invertSide: false
     property bool trayOverflowOpen: false
 
@@ -19,6 +22,13 @@ Item {
     property list<var> pinnedItems: invertPins ? itemsNotInUserList : itemsInUserList
     property list<var> unpinnedItems: invertPins ? itemsInUserList : itemsNotInUserList
     onUnpinnedItemsChanged: if (unpinnedItems.length == 0) root.trayOverflowOpen = false;
+
+    // Auto-close tray overflow when parent becomes invisible to prevent orphaned popups
+    onParentVisibleChanged: {
+        if (!parentVisible) {
+            root.trayOverflowOpen = false;
+        }
+    }
 
     GridLayout {
         id: gridLayout
