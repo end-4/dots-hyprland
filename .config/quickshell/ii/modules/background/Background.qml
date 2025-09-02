@@ -51,6 +51,7 @@ Variants {
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
         property real movableXSpace: ((wallpaperWidth / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.width) / 2
         property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
+        readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
         // Position
         property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
         property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
@@ -173,7 +174,7 @@ Variants {
             property int range: upper - lower;
             property real valueX: {
                 let result = 0.5;
-                if (Config.options.background.parallax.enableWorkspace && !Config.options.background.parallax.vertical) {
+                if (Config.options.background.parallax.enableWorkspace && !bgRoot.verticalParallax) {
                     result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
                 }
                 if (Config.options.background.parallax.enableSidebar) {
@@ -183,7 +184,7 @@ Variants {
             }
             property real valueY: {
                 let result = 0.5;
-                if (Config.options.background.parallax.enableWorkspace && Config.options.background.parallax.vertical) {
+                if (Config.options.background.parallax.enableWorkspace && bgRoot.verticalParallax) {
                     result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
                 }
                 return result;
