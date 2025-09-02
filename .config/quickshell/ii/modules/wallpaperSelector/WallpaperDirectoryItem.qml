@@ -67,6 +67,7 @@ MouseArea {
                         generateThumbnail: false
                         sourcePath: fileModelData.filePath
 
+                        cache: false
                         fillMode: Image.PreserveAspectCrop
                         clip: true
                         sourceSize.width: wallpaperItemColumnLayout.width
