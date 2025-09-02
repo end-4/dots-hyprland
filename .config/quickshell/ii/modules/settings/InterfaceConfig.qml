@@ -8,6 +8,7 @@ import qs.modules.common.widgets
 ContentPage {
     forceWidth: true
     ContentSection {
+        icon: "rule"
         title: Translation.tr("Policies")
 
         ConfigRow {
@@ -18,7 +19,6 @@ ContentPage {
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.weeb
-                    configOptionName: "policies.weeb"
                     onSelected: newValue => {
                         Config.options.policies.weeb = newValue;
                     }
@@ -46,7 +46,6 @@ ContentPage {
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
-                    configOptionName: "policies.ai"
                     onSelected: newValue => {
                         Config.options.policies.ai = newValue;
                     }
@@ -70,228 +69,61 @@ ContentPage {
     }
 
     ContentSection {
-        title: Translation.tr("Bar")
+        icon: "wallpaper"
+        title: Translation.tr("Background")
 
-        ConfigRow {
-            ContentSubsection {
-                title: Translation.tr("Corner style")
-
-                ConfigSelectionArray {
-                    currentValue: Config.options.bar.cornerStyle
-                    configOptionName: "bar.cornerStyle"
-                    onSelected: newValue => {
-                        Config.options.bar.cornerStyle = newValue; // Update local copy
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Hug"),
-                            value: 0
-                        },
-                        {
-                            displayName: Translation.tr("Float"),
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Plain rectangle"),
-                            value: 2
-                        }
-                    ]
-                }
-            }
-
-            ContentSubsection {
-                title: Translation.tr("Bar layout")
-                ConfigSelectionArray {
-                    currentValue: Config.options.bar.vertical
-                    configOptionName: "bar.vertical"
-                    onSelected: newValue => {
-                        Config.options.bar.vertical = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Horizontal"),
-                            value: false
-                        },
-                        {
-                            displayName: Translation.tr("Vertical"),
-                            value: true
-                        },
-                    ]
-                }
+        ConfigSwitch {
+            text: Translation.tr("Show clock")
+            checked: Config.options.background.showClock
+            onCheckedChanged: {
+                Config.options.background.showClock = checked;
             }
         }
 
         ContentSubsection {
-            title: Translation.tr("Overall appearance")
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr("Automatically hide")
-                    checked: Config.options.bar.autoHide.enable
-                    onCheckedChanged: {
-                        Config.options.bar.autoHide.enable = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr("Place at the bottom/right")
-                    checked: Config.options.bar.bottom
-                    onCheckedChanged: {
-                        Config.options.bar.bottom = checked;
-                    }
-                }
-            }
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr('Borderless')
-                    checked: Config.options.bar.borderless
-                    onCheckedChanged: {
-                        Config.options.bar.borderless = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr('Show background')
-                    checked: Config.options.bar.showBackground
-                    onCheckedChanged: {
-                        Config.options.bar.showBackground = checked;
-                    }
-                    StyledToolTip {
-                        content: Translation.tr("Note: turning off can hurt readability")
-                    }
-                }
-            }
-        }
+            title: Translation.tr("Wallpaper parallax")
 
-        ContentSubsection {
-            title: Translation.tr("Buttons")
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr("Screen snip")
-                    checked: Config.options.bar.utilButtons.showScreenSnip
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showScreenSnip = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr("Color picker")
-                    checked: Config.options.bar.utilButtons.showColorPicker
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showColorPicker = checked;
-                    }
-                }
-            }
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr("Mic toggle")
-                    checked: Config.options.bar.utilButtons.showMicToggle
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showMicToggle = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr("Keyboard toggle")
-                    checked: Config.options.bar.utilButtons.showKeyboardToggle
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showKeyboardToggle = checked;
-                    }
-                }
-            }
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr("Dark/Light toggle")
-                    checked: Config.options.bar.utilButtons.showDarkModeToggle
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showDarkModeToggle = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr("Performance Profile toggle")
-                    checked: Config.options.bar.utilButtons.showPerformanceProfileToggle
-                    onCheckedChanged: {
-                        Config.options.bar.utilButtons.showPerformanceProfileToggle = checked;
-                    }
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Workspaces")
-            tooltip: Translation.tr("Tip: Hide icons and always show numbers for\nthe classic illogical-impulse experience")
-
-            ConfigRow {
-                uniform: true
-                ConfigSwitch {
-                    text: Translation.tr('Show app icons')
-                    checked: Config.options.bar.workspaces.showAppIcons
-                    onCheckedChanged: {
-                        Config.options.bar.workspaces.showAppIcons = checked;
-                    }
-                }
-                ConfigSwitch {
-                    text: Translation.tr('Tint app icons')
-                    checked: Config.options.bar.workspaces.monochromeIcons
-                    onCheckedChanged: {
-                        Config.options.bar.workspaces.monochromeIcons = checked;
-                    }
-                }
-            }
             ConfigSwitch {
-                text: Translation.tr('Always show numbers')
-                checked: Config.options.bar.workspaces.alwaysShowNumbers
+                text: Translation.tr("Vertical")
+                checked: Config.options.background.parallax.vertical
                 onCheckedChanged: {
-                    Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                    Config.options.background.parallax.vertical = checked;
+                }
+            }
+
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Depends on workspace")
+                    checked: Config.options.background.parallax.enableWorkspace
+                    onCheckedChanged: {
+                        Config.options.background.parallax.enableWorkspace = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Depends on sidebars")
+                    checked: Config.options.background.parallax.enableSidebar
+                    onCheckedChanged: {
+                        Config.options.background.parallax.enableSidebar = checked;
+                    }
                 }
             }
             ConfigSpinBox {
-                text: Translation.tr("Workspaces shown")
-                value: Config.options.bar.workspaces.shown
-                from: 1
-                to: 30
+                text: Translation.tr("Preferred wallpaper zoom (%)")
+                value: Config.options.background.parallax.workspaceZoom * 100
+                from: 100
+                to: 150
                 stepSize: 1
                 onValueChanged: {
-                    Config.options.bar.workspaces.shown = value;
-                }
-            }
-            ConfigSpinBox {
-                text: Translation.tr("Number show delay when pressing Super (ms)")
-                value: Config.options.bar.workspaces.showNumberDelay
-                from: 0
-                to: 1000
-                stepSize: 50
-                onValueChanged: {
-                    Config.options.bar.workspaces.showNumberDelay = value;
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Tray")
-
-            ConfigSwitch {
-                text: Translation.tr('Tint icons')
-                checked: Config.options.bar.tray.monochromeIcons
-                onCheckedChanged: {
-                    Config.options.bar.tray.monochromeIcons = checked;
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Weather")
-            ConfigSwitch {
-                text: Translation.tr("Enable")
-                checked: Config.options.bar.weather.enable
-                onCheckedChanged: {
-                    Config.options.bar.weather.enable = checked;
+                    console.log(value/100)
+                    Config.options.background.parallax.workspaceZoom = value / 100;
                 }
             }
         }
     }
 
     ContentSection {
+        icon: "battery_android_full"
         title: Translation.tr("Battery")
 
         ConfigRow {
@@ -343,6 +175,7 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "call_to_action"
         title: Translation.tr("Dock")
 
         ConfigSwitch {
@@ -380,7 +213,9 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "side_navigation"
         title: Translation.tr("Sidebars")
+
         ConfigSwitch {
             text: Translation.tr('Keep right sidebar loaded')
             checked: Config.options.sidebar.keepRightSidebarLoaded
@@ -412,7 +247,32 @@ ContentPage {
                     }
 
                     StyledToolTip {
-                        content: "When this is off you'll have to click"
+                        content: Translation.tr("When this is off you'll have to click")
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Place at bottom")
+                    checked: Config.options.sidebar.cornerOpen.bottom
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.bottom = checked;
+                    }
+
+                    StyledToolTip {
+                        content: Translation.tr("Place the corners to trigger at the bottom")
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Value scroll")
+                    checked: Config.options.sidebar.cornerOpen.valueScroll
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.valueScroll = checked;
+                    }
+
+                    StyledToolTip {
+                        content: Translation.tr("Brightness and volume")
                     }
                 }
             }
@@ -453,7 +313,9 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "voting_chip"
         title: Translation.tr("On-screen display")
+
         ConfigSpinBox {
             text: Translation.tr("Timeout (ms)")
             value: Config.options.osd.timeout
@@ -467,7 +329,9 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "overview_key"
         title: Translation.tr("Overview")
+
         ConfigSwitch {
             text: Translation.tr("Enable")
             checked: Config.options.overview.enable
@@ -511,6 +375,7 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "screenshot_frame_2"
         title: Translation.tr("Screenshot tool")
 
         ConfigSwitch {
@@ -526,6 +391,7 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "language"
         title: Translation.tr("Language")
 
         ContentSubsection {
@@ -535,7 +401,6 @@ ContentPage {
             ConfigSelectionArray {
                 id: languageSelector
                 currentValue: Config.options.language.ui
-                configOptionName: "language.ui"
                 onSelected: newValue => {
                     Config.options.language.ui = newValue;
                     reloadNotice.visible = true;
@@ -563,39 +428,13 @@ ContentPage {
                 }
             }
 
-            Rectangle {
+            NoticeBox {
                 id: reloadNotice
                 visible: false
                 Layout.topMargin: 8
-                radius: Appearance.rounding.normal
-                color: Appearance.colors.colPrimaryContainer
                 Layout.fillWidth: true
-                implicitWidth: languageRowLayout.implicitWidth + languageRowLayout.anchors.margins * 2
-                implicitHeight: languageRowLayout.implicitHeight + languageRowLayout.anchors.margins * 2
 
-                RowLayout {
-                    id: languageRowLayout
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 8
-
-                    MaterialSymbol {
-                        Layout.fillWidth: false
-                        Layout.alignment: Qt.AlignVCenter
-                        text: "info"
-                        iconSize: Appearance.font.pixelSize.larger
-                        color: Appearance.colors.colOnPrimaryContainer
-                    }
-
-                    StyledText {
-                        id: noticeText
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
-                        text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
-                        color: Appearance.colors.colOnPrimaryContainer
-                        wrapMode: Text.WordWrap
-                    }
-                }
+                text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
             }
         }
     }

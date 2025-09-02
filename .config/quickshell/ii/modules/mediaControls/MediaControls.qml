@@ -40,37 +40,34 @@ Scope {
         }
         return (
             // Remove unecessary native buses from browsers if there's plasma integration
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
+            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) && !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
             // playerctld just copies other buses and we don't need duplicates
             !player.dbusName?.startsWith('org.mpris.MediaPlayer2.playerctld') &&
             // Non-instance mpd bus
-            !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd'))
-        );
+            !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
     }
     function filterDuplicatePlayers(players) {
         let filtered = [];
         let used = new Set();
 
         for (let i = 0; i < players.length; ++i) {
-            if (used.has(i)) continue;
+            if (used.has(i))
+                continue;
             let p1 = players[i];
             let group = [i];
 
             // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle &&
-                    (p1.trackTitle.includes(p2.trackTitle) 
-                        || p2.trackTitle.includes(p1.trackTitle))
-                        || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
                     group.push(j);
                 }
             }
 
             // Pick the one with non-empty trackArtUrl, or fallback to the first
             let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
-            if (chosenIdx === undefined) chosenIdx = group[0];
+            if (chosenIdx === undefined)
+                chosenIdx = group[0];
 
             filtered.push(players[chosenIdx]);
             group.forEach(idx => used.add(idx));
@@ -133,6 +130,16 @@ Scope {
                 item: playerColumnLayout
             }
 
+            HyprlandFocusGrab {
+                windows: [mediaControlsRoot]
+                active: mediaControlsLoader.active
+                onCleared: () => {
+                    if (!active) {
+                        GlobalStates.mediaControlsOpen = false;
+                    }
+                }
+            }
+
             ColumnLayout {
                 id: playerColumnLayout
                 anchors.fill: parent
@@ -148,6 +155,43 @@ Scope {
                         visualizerPoints: root.visualizerPoints
                         implicitWidth: widgetWidth
                         implicitHeight: widgetHeight
+                        radius: root.popupRounding
+                    }
+                }
+
+                Item { // No player placeholder
+                    Layout.fillWidth: true
+                    visible: root.meaningfulPlayers.length === 0
+                    implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
+                    implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
+
+                    StyledRectangularShadow {
+                        target: placeholderBackground
+                    }
+
+                    Rectangle { 
+                        id: placeholderBackground
+                        anchors.centerIn: parent
+                        color: Appearance.colors.colLayer0
+                        radius: root.popupRounding
+                        property real padding: 20
+                        implicitWidth: placeholderLayout.implicitWidth + padding * 2
+                        implicitHeight: placeholderLayout.implicitHeight + padding * 2
+
+                        ColumnLayout {
+                            id: placeholderLayout
+                            anchors.centerIn: parent
+
+                            StyledText {
+                                text: Translation.tr("No active player")
+                                font.pixelSize: Appearance.font.pixelSize.large
+                            }
+                            StyledText {
+                                color: Appearance.colors.colSubtext
+                                text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                            }
+                        }
                     }
                 }
             }
@@ -159,7 +203,8 @@ Scope {
 
         function toggle(): void {
             mediaControlsLoader.active = !mediaControlsLoader.active;
-            if(mediaControlsLoader.active) Notifications.timeoutAll();
+            if (mediaControlsLoader.active)
+                Notifications.timeoutAll();
         }
 
         function close(): void {
@@ -196,5 +241,4 @@ Scope {
             GlobalStates.mediaControlsOpen = false;
         }
     }
-
 }

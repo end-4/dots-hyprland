@@ -219,7 +219,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         function handleEntry(entry: string) {
             imageDecodeFileName = parseInt(entry.match(/^(\d+)\t/)[1])
             decodeImageAndAttachProc.exec(["bash", "-c", 
-                `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode > '${imageDecodeFilePath}'`
+                `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`
             ])
         }
         onExited: (exitCode, exitStatus) => {

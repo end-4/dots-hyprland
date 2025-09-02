@@ -9,8 +9,18 @@ Flow {
     id: root
     Layout.fillWidth: true
     spacing: 2
-    property list<var> options: []
-    property string configOptionName: ""
+    property list<var> options: [
+        {
+            "displayName": "Option 1",
+            "icon": "check",
+            "value": 1
+        },
+        {
+            "displayName": "Option 2",
+            "icon": "close",
+            "value": 2
+        },
+    ]
     property var currentValue: null
 
     signal selected(var newValue)
@@ -33,7 +43,8 @@ Flow {
             }
             leftmost: index === 0
             rightmost: index === root.options.length - 1
-            buttonText: modelData.displayName;
+            buttonIcon: modelData.icon || ""
+            buttonText: modelData.displayName
             toggled: root.currentValue === modelData.value
             onClicked: {
                 root.selected(modelData.value);

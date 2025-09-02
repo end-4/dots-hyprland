@@ -44,5 +44,4 @@ RippleButton { // Expand button
             }
         }
     }
-
 }

@@ -146,15 +146,15 @@ Singleton {
         property color colPrimaryHover: ColorUtils.mix(colors.colPrimary, colLayer1Hover, 0.87)
         property color colPrimaryActive: ColorUtils.mix(colors.colPrimary, colLayer1Active, 0.7)
         property color colPrimaryContainer: m3colors.m3primaryContainer
-        property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Hover, 0.7)
-        property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Active, 0.6)
+        property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colors.colOnPrimaryContainer, 0.9)
+        property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colors.colOnPrimaryContainer, 0.8)
         property color colOnPrimaryContainer: m3colors.m3onPrimaryContainer
         property color colSecondary: m3colors.m3secondary
         property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
         property color colSecondaryContainer: m3colors.m3secondaryContainer
         property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, m3colors.m3onSecondaryContainer, 0.90)
-        property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
+        property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, m3colors.m3onSecondaryContainer, 0.54)
         property color colTertiary: m3colors.m3tertiary
         property color colTertiaryHover: ColorUtils.mix(m3colors.m3tertiary, colLayer1Hover, 0.85)
         property color colTertiaryActive: ColorUtils.mix(m3colors.m3tertiary, colLayer1Active, 0.4)
@@ -204,7 +204,7 @@ Singleton {
             property string main: "Rubik"
             property string title: "Gabarito"
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "SpaceMono NF"
+            property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
             property string expressive: "Space Grotesk"
@@ -350,6 +350,10 @@ Singleton {
         property real baseVerticalBarWidth: 46
         property real verticalBarWidth: Config.options.bar.cornerStyle === 1 ? 
             (baseVerticalBarWidth + root.sizes.hyprlandGapsOut * 2) : baseVerticalBarWidth
+        property real wallpaperSelectorWidth: 1200
+        property real wallpaperSelectorHeight: 690
+        property real wallpaperSelectorItemMargins: 8
+        property real wallpaperSelectorItemPadding: 6
     }
 
     syntaxHighlightingTheme: root.m3colors.darkmode ? "Monokai" : "ayu Light"

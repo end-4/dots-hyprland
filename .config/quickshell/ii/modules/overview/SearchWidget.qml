@@ -38,9 +38,21 @@ Item { // Wrapper
 
     property var searchActions: [
         {
+            action: "accentcolor",
+            execute: args => {
+                Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--noswitch", "--color", ...(args != '' ? [`${args}`] : [])]);
+            }
+        },
+        {
             action: "dark",
             execute: () => {
                 Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", "dark", "--noswitch"]);
+            }
+        },
+        {
+            action: "konachanwallpaper",
+            execute: () => {
+                Quickshell.execDetached([Quickshell.shellPath("scripts/colors/random_konachan_wall.sh")]);
             }
         },
         {
@@ -50,27 +62,33 @@ Item { // Wrapper
             }
         },
         {
-            action: "wall",
-            execute: () => {
-                Quickshell.execDetached([Directories.wallpaperSwitchScriptPath]);
-            }
-        },
-        {
-            action: "konachanwall",
-            execute: () => {
-                Quickshell.execDetached([Quickshell.shellPath("scripts/colors/random_konachan_wall.sh")]);
-            }
-        },
-        {
-            action: "accentcolor",
+            action: "superpaste",
             execute: args => {
-                Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--noswitch", "--color", ...(args != '' ? [`${args}`] : [])]);
+                if (!/^(\d+)/.test(args.trim())) { // Invalid if doesn't start with numbers
+                    Quickshell.execDetached([
+                        "notify-send", 
+                        Translation.tr("Superpaste"), 
+                        Translation.tr("Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries").arg(Config.options.search.prefix.action),
+                        "-a", "Shell"
+                    ]);
+                    return;
+                }
+                const syntaxMatch = /^(?:(\d+)(i)?)/.exec(args.trim());
+                const count = syntaxMatch[1] ? parseInt(syntaxMatch[1]) : 1;
+                const isImage = !!syntaxMatch[2];
+                Cliphist.superpaste(count, isImage);
             }
         },
         {
             action: "todo",
             execute: args => {
                 Todo.addTask(args);
+            }
+        },
+        {
+            action: "wallpaper",
+            execute: () => {
+                GlobalStates.wallpaperSelectorOpen = true;
             }
         },
     ]
@@ -296,7 +314,7 @@ Item { // Wrapper
                             return Cliphist.fuzzyQuery(searchString).map(entry => {
                                 return {
                                     cliphistRawString: entry,
-                                    name: entry.replace(/^\s*\S+\s+/, ""),
+                                    name: StringUtils.cleanCliphistEntry(entry),
                                     clickActionName: "",
                                     type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
                                     execute: () => {
@@ -304,8 +322,15 @@ Item { // Wrapper
                                     },
                                     actions: [
                                         {
+                                            name: "Copy",
+                                            materialIcon: "content_copy",
+                                            execute: () => {
+                                                Cliphist.copy(entry);
+                                            }
+                                        },
+                                        {
                                             name: "Delete",
-                                            icon: "delete",
+                                            materialIcon: "delete",
                                             execute: () => {
                                                 Cliphist.deleteEntry(entry);
                                             }

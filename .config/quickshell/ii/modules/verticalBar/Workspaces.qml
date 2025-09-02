@@ -20,7 +20,8 @@ Item {
     
     readonly property int workspaceGroup: Math.floor((monitor?.activeWorkspace?.id - 1) / Config.options.bar.workspaces.shown)
     property list<bool> workspaceOccupied: []
-    property int workspaceButtonWidth: 26
+    property real workspaceButtonWidth: 26
+    property real activeWorkspaceMargin: 2
     property real workspaceIconSize: workspaceButtonWidth * 0.69
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
@@ -150,20 +151,16 @@ Item {
     Rectangle {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
-        property real activeWorkspaceMargin: 2
-        implicitWidth: workspaceButtonWidth - activeWorkspaceMargin * 2
+        implicitWidth: workspaceButtonWidth - root.activeWorkspaceMargin * 2
         radius: Appearance.rounding.full
         color: Appearance.colors.colPrimary
         anchors.horizontalCenter: parent.horizontalCenter
 
         property real idx1: workspaceIndexInGroup
         property real idx2: workspaceIndexInGroup
-        y: Math.min(idx1, idx2) * workspaceButtonWidth + activeWorkspaceMargin
-        implicitHeight: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - activeWorkspaceMargin * 2
+        y: Math.min(idx1, idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
+        implicitHeight: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2
 
-        Behavior on activeWorkspaceMargin {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
         Behavior on idx1 { // Leading anim
             NumberAnimation {
                 duration: 100

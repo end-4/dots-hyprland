@@ -53,7 +53,7 @@ Rectangle {
     Process {
         id: decodeImageProcess
         command: ["bash", "-c", 
-            `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | cliphist decode > '${imageDecodeFilePath}'`
+            `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`
         ]
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {

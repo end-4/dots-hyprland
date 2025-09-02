@@ -17,12 +17,13 @@ RippleButton {
         }
     }
     implicitHeight: 35
-    horizontalPadding: 15
+    horizontalPadding: 10
     buttonRadius: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
 
     contentItem: RowLayout {
         Item {
+            Layout.fillWidth: false
             implicitWidth: Math.max(materialIconLoader.implicitWidth, nerdIconLoader.implicitWidth)
             Loader {
                 id: materialIconLoader
@@ -48,6 +49,7 @@ RippleButton {
             }
         }
         Loader {
+            Layout.fillWidth: true
             sourceComponent: buttonWithIconRoot.mainContentComponent
             Layout.alignment: Qt.AlignVCenter
         }

@@ -82,7 +82,7 @@ Singleton {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
                 property JsonObject transparency: JsonObject {
-                    property bool enable: true
+                    property bool enable: false
                     property bool automatic: true
                     property real backgroundTransparency: 0.11
                     property real contentTransparency: 0.57
@@ -119,6 +119,7 @@ Singleton {
                 property bool fixedClockPosition: false
                 property real clockX: -500
                 property real clockY: -500
+                property bool showClock: true
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property JsonObject parallax: JsonObject {
@@ -127,7 +128,7 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
-                property string mantra: ""
+                property string quote: ""
                 property bool hideWhenFullscreen: true
             }
 
@@ -178,6 +179,8 @@ Singleton {
                     property bool showAppIcons: true
                     property bool alwaysShowNumbers: false
                     property int showNumberDelay: 300 // milliseconds
+                    property list<string> numberMap: ["1", "2"] // Characters to show instead of numbers on workspace indicator
+                    property bool useNerdFont: false
                 }
                 property JsonObject weather: JsonObject {
                     property bool enable: false
@@ -299,8 +302,10 @@ Singleton {
                 }
                 property JsonObject cornerOpen: JsonObject {
                     property bool enable: true
-                    property bool clickless: true
-                    property real cornerRegionWidth: 30
+                    property bool bottom: false
+                    property bool valueScroll: true
+                    property bool clickless: false
+                    property real cornerRegionWidth: 60
                     property real cornerRegionHeight: 2
                     property bool visualize: false
                 }

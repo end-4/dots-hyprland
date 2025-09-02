@@ -140,7 +140,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.bar.cornerStyle
-                                configOptionName: "bar.cornerStyle"
                                 onSelected: newValue => {
                                     Config.options.bar.cornerStyle = newValue; // Update local copy
                                 }
@@ -165,7 +164,6 @@ ApplicationWindow {
                             title: "Bar layout"
                             ConfigSelectionArray {
                                 currentValue: Config.options.bar.vertical
-                                configOptionName: "bar.vertical"
                                 onSelected: newValue => {
                                     Config.options.bar.vertical = newValue;
                                 }
@@ -267,11 +265,9 @@ ApplicationWindow {
                         }
                     }
 
-                    StyledText {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Translation.tr("Change any time later with /dark, /light, /img in the launcher")
-                        font.pixelSize: Appearance.font.pixelSize.smaller
-                        color: Appearance.colors.colSubtext
+                    NoticeBox {
+                        Layout.fillWidth: true
+                        text: Translation.tr("Change any time later with /dark, /light, /wallpaper in the launcher\nIf the shell's colors aren't changing:\n    1. Open the right sidebar with Super+N\n    2. Click \"Reload Hyprland & Quickshell\" in the top-right corner")
                     }
                 }
 
@@ -286,7 +282,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.weeb
-                                configOptionName: "policies.weeb"
                                 onSelected: newValue => {
                                     Config.options.policies.weeb = newValue;
                                 }
@@ -312,7 +307,6 @@ ApplicationWindow {
 
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.ai
-                                configOptionName: "policies.ai"
                                 onSelected: newValue => {
                                     Config.options.policies.ai = newValue;
                                 }

@@ -19,10 +19,11 @@ import "./modules/onScreenDisplay/"
 import "./modules/onScreenKeyboard/"
 import "./modules/overview/"
 import "./modules/screenCorners/"
-import "./modules/session/"
+import "./modules/sessionScreen/"
 import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
 import "./modules/verticalBar/"
+import "./modules/wallpaperSelector/"
 
 import QtQuick
 import QtQuick.Window
@@ -45,10 +46,11 @@ ShellRoot {
     property bool enableOverview: true
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
-    property bool enableSession: true
+    property bool enableSessionScreen: true
     property bool enableSidebarLeft: true
     property bool enableSidebarRight: true
     property bool enableVerticalBar: true
+    property bool enableWallpaperSelector: true
 
     // Force initialization of some singletons
     Component.onCompleted: {
@@ -72,9 +74,10 @@ ShellRoot {
     LazyLoader { active: enableOverview; component: Overview {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
     LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
-    LazyLoader { active: enableSession; component: Session {} }
+    LazyLoader { active: enableSessionScreen; component: SessionScreen {} }
     LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
     LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
     LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
+    LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
 }
 
