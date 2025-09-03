@@ -13,10 +13,10 @@ import Quickshell.Io
 Singleton {
     id: root
     property var manualActive
-    property string from: Config.options?.light?.night?.from ?? "19:00" // Default to 7 PM
-    property string to: Config.options?.light?.night?.to ?? "06:30" // Default to 6:30 AM
+    property string from: Config.options?.light?.night?.from ?? "19:00" 
+    property string to: Config.options?.light?.night?.to ?? "06:30"
     property bool automatic: Config.options?.light?.night?.automatic && (Config?.ready ?? true)
-    property int colorTemperature: Config.options?.light?.night?.colorTemperature ?? 5000 // Default color temperature
+    property int colorTemperature: Config.options?.light?.night?.colorTemperature ?? 5000
     property bool shouldBeOn
     property bool firstEvaluation: true
     property bool active: false

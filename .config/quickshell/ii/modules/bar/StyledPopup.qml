@@ -8,8 +8,9 @@ import Quickshell.Wayland
 LazyLoader {
     id: root
 
-    property MouseArea hoverTarget
+    property Item hoverTarget
     default property Item contentItem
+    property real popupBackgroundMargin: 0
 
     active: hoverTarget && hoverTarget.containsMouse
 
@@ -22,8 +23,8 @@ LazyLoader {
         anchors.top: Config.options.bar.vertical || (!Config.options.bar.vertical && !Config.options.bar.bottom)
         anchors.bottom: !Config.options.bar.vertical && Config.options.bar.bottom
 
-        implicitWidth: popupBackground.implicitWidth + Appearance.sizes.hyprlandGapsOut * 2
-        implicitHeight: popupBackground.implicitHeight + Appearance.sizes.hyprlandGapsOut * 2
+        implicitWidth: popupBackground.implicitWidth + Appearance.sizes.hyprlandGapsOut * 2 + root.popupBackgroundMargin
+        implicitHeight: popupBackground.implicitHeight + Appearance.sizes.hyprlandGapsOut * 2 + root.popupBackgroundMargin
 
         exclusionMode: ExclusionMode.Ignore
         exclusiveZone: 0
@@ -33,7 +34,7 @@ LazyLoader {
                     root.hoverTarget, 
                     (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
                 ).x;
-                return Appearance.sizes.barHeight
+                return Appearance.sizes.verticalBarWidth
             }
             top: {
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
@@ -42,7 +43,7 @@ LazyLoader {
                     (root.hoverTarget.height - popupBackground.implicitHeight) / 2, 0
                 ).y;
             }
-            right: Appearance.sizes.barHeight
+            right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
         }
         WlrLayershell.namespace: "quickshell:popup"
@@ -62,7 +63,13 @@ LazyLoader {
         Rectangle {
             id: popupBackground
             readonly property real margin: 10
-            anchors.centerIn: parent
+            anchors {
+                fill: parent
+                leftMargin: Appearance.sizes.hyprlandGapsOut + root.popupBackgroundMargin * (!popupWindow.anchors.left)
+                rightMargin: Appearance.sizes.hyprlandGapsOut + root.popupBackgroundMargin * (!popupWindow.anchors.right)
+                topMargin: Appearance.sizes.hyprlandGapsOut + root.popupBackgroundMargin * (!popupWindow.anchors.top)
+                bottomMargin: Appearance.sizes.hyprlandGapsOut + root.popupBackgroundMargin * (!popupWindow.anchors.bottom)
+            }
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
             color: ColorUtils.applyAlpha(Appearance.colors.colSurfaceContainer, 1 - Appearance.backgroundTransparency)

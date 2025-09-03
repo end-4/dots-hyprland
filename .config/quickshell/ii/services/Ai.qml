@@ -27,6 +27,8 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
+    signal responseFinished()
+
     property string systemPrompt: {
         let prompt = Config.options?.ai?.systemPrompt ?? "";
         for (let key in root.promptSubstitutions) {
@@ -366,6 +368,9 @@ Singleton {
         }
     }
 
+    property string requestScriptFilePath: "/tmp/quickshell/ai/request.sh"
+    property string pendingFilePath: ""
+
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
     }
@@ -615,9 +620,13 @@ Singleton {
         root.tokenCount.total = -1;
     }
 
+    FileView {
+        id: requesterScriptFile
+    }
+
     Process {
         id: requester
-        property list<string> baseCommand: ["bash", "-c"]
+        property list<string> baseCommand: ["bash"]
         property AiMessageData message
         property ApiStrategy currentStrategy
 
@@ -628,6 +637,7 @@ Singleton {
                 root.postResponseHook = null; // Reset hook after use
             }
             root.saveChat("lastSession")
+            root.responseFinished()
         }
 
         function makeRequest() {
@@ -642,7 +652,7 @@ Singleton {
             const endpoint = root.currentApiStrategy.buildEndpoint(model);
             const messageArray = root.messageIDs.map(id => root.messageByID[id]);
             const filteredMessageArray = messageArray.filter(message => message.role !== Ai.interfaceRole);
-            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool]);
+            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool], root.pendingFilePath);
             // console.log("[Ai] Request data: ", JSON.stringify(data, null, 2));
 
             let requestHeaders = {
@@ -674,14 +684,31 @@ Singleton {
             /* Get authorization header from strategy */
             const authHeader = requester.currentStrategy.buildAuthorizationHeader(root.apiKeyEnvVarName);
             
+            /* Script shebang */
+            const scriptShebang = "#!/usr/bin/env bash\n";
+
+            /* Create extra setup when there's an attached file */
+            let scriptFileSetupContent = ""
+            if (root.pendingFilePath && root.pendingFilePath.length > 0) {
+                requester.message.localFilePath = root.pendingFilePath;
+                scriptFileSetupContent = requester.currentStrategy.buildScriptFileSetup(root.pendingFilePath);
+                root.pendingFilePath = ""
+            }
+
             /* Create command string */
-            const requestCommandString = `curl --no-buffer "${endpoint}"`
+            let scriptRequestContent = ""
+            scriptRequestContent += `curl --no-buffer "${endpoint}"`
                 + ` ${headerString}`
                 + (authHeader ? ` ${authHeader}` : "")
-                + ` -d '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
+                + ` --data '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
+                + "\n"
             
             /* Send the request */
-            requester.command = baseCommand.concat([requestCommandString]);
+            const scriptContent = requester.currentStrategy.finalizeScriptContent(scriptShebang + scriptFileSetupContent + scriptRequestContent)
+            const shellScriptPath = CF.FileUtils.trimFileProtocol(root.requestScriptFilePath)
+            requesterScriptFile.path = Qt.resolvedUrl(shellScriptPath)
+            requesterScriptFile.setText(scriptContent)
+            requester.command = baseCommand.concat([shellScriptPath]);
             requester.running = true
         }
 
@@ -695,7 +722,7 @@ Singleton {
                 try {
                     const result = requester.currentStrategy.parseResponseLine(data, requester.message);
                     // console.log("[Ai] Parsed response result: ", JSON.stringify(result, null, 2));
-                    
+
                     if (result.functionCall) {
                         requester.message.functionCall = result.functionCall;
                         root.handleFunctionCall(result.functionCall.name, result.functionCall.args, requester.message);
@@ -737,6 +764,10 @@ Singleton {
         if (message.length === 0) return;
         root.addMessage(message, "user");
         requester.makeRequest();
+    }
+
+    function attachFile(filePath: string) {
+        root.pendingFilePath = CF.FileUtils.trimFileProtocol(filePath);
     }
 
     function createFunctionOutputMessage(name, output, includeOutputInChat = true) {
@@ -838,6 +869,9 @@ Singleton {
             return ({
                 "role": message.role,
                 "rawContent": message.rawContent,
+                "fileMimeType": message.fileMimeType,
+                "fileUri": message.fileUri,
+                "localFilePath": message.localFilePath,
                 "model": message.model,
                 "thinking": false,
                 "done": true,
@@ -855,7 +889,7 @@ Singleton {
         id: chatSaveFile
         property string chatName: "chat"
         path: `${Directories.aiChats}/${chatName}.json`
-        blockLoading: true
+        blockLoading: true // Prevent race conditions
     }
 
     /**
@@ -891,6 +925,9 @@ Singleton {
                     "role": message.role,
                     "rawContent": message.rawContent,
                     "content": message.rawContent,
+                    "fileMimeType": message.fileMimeType,
+                    "fileUri": message.fileUri,
+                    "localFilePath": message.localFilePath,
                     "model": message.model,
                     "thinking": message.thinking,
                     "done": message.done,

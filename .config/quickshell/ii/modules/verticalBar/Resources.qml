@@ -1,4 +1,5 @@
 import qs.services
+import qs.modules.common
 import QtQuick
 import QtQuick.Layouts
 import "../bar" as Bar
@@ -19,18 +20,21 @@ MouseArea {
             Layout.alignment: Qt.AlignHCenter
             iconName: "memory"
             percentage: ResourceUsage.memoryUsedPercentage
+            warningThreshold: Config.options.bar.resources.memoryWarningThreshold
         }
 
         Resource {
             Layout.alignment: Qt.AlignHCenter
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
+            warningThreshold: Config.options.bar.resources.swapWarningThreshold
         }
 
         Resource {
             Layout.alignment: Qt.AlignHCenter
             iconName: "planner_review"
             percentage: ResourceUsage.cpuUsage
+            warningThreshold: Config.options.bar.resources.cpuWarningThreshold
         }
 
     }

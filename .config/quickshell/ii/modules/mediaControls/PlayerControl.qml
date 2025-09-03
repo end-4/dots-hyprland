@@ -22,9 +22,7 @@ Item { // Player instance
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
-
-    implicitWidth: widgetWidth
-    implicitHeight: widgetHeight
+    property real radius
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -110,7 +108,7 @@ Item { // Player instance
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
         color: blendedColors.colLayer0
-        radius: root.popupRounding
+        radius: playerController.radius
 
         layer.enabled: true
         layer.effect: OpacityMask {
@@ -144,7 +142,7 @@ Item { // Player instance
             Rectangle {
                 anchors.fill: parent
                 color: ColorUtils.transparentize(blendedColors.colLayer0, 0.3)
-                radius: root.popupRounding
+                radius: playerController.radius
             }
         }
 
@@ -208,6 +206,9 @@ Item { // Player instance
                     color: blendedColors.colOnLayer0
                     elide: Text.ElideRight
                     text: StringUtils.cleanMusicTitle(playerController.player?.trackTitle) || "Untitled"
+                    animateChange: true
+                    animationDistanceX: 6
+                    animationDistanceY: 0
                 }
                 StyledText {
                     id: trackArtist
@@ -216,6 +217,9 @@ Item { // Player instance
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
                     text: playerController.player?.trackArtist
+                    animateChange: true
+                    animationDistanceX: 6
+                    animationDistanceY: 0
                 }
                 Item { Layout.fillHeight: true }
                 Item {

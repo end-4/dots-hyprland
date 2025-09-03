@@ -40,7 +40,6 @@ Singleton {
       * @returns { string }
       */
     function shellSingleQuoteEscape(str) {
-        //  escape single quotes
         return String(str)
         // .replace(/\\/g, '\\\\')
         .replace(/'/g, "'\\''");
@@ -217,5 +216,9 @@ Singleton {
         if (typeof str !== 'string')
             return str;
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function cleanCliphistEntry(str: string): string {
+        return str.replace(/^\d+\t/, "");
     }
 }

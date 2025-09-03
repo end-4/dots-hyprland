@@ -1,5 +1,6 @@
-import qs.modules.common
+import qs
 import qs.services
+import qs.modules.common
 import qs.modules.common.functions
 import "./notification_utils.js" as NotificationUtils
 import QtQuick
@@ -10,7 +11,7 @@ import Quickshell
  * A group of notifications from the same app.
  * Similar to Android's notifications
  */
-Item { // Notification group area
+MouseArea { // Notification group area
     id: root
     property var notificationGroup
     property var notifications: notificationGroup?.notifications ?? []
@@ -36,6 +37,17 @@ Item { // Notification group area
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.running = true;
+    }
+
+    hoverEnabled: true
+    onContainsMouseChanged: {
+        if (!root.popup) return;
+        if (root.containsMouse) root.notifications.forEach(notif => {
+            Notifications.cancelTimeout(notif.notificationId);
+        });
+        else root.notifications.forEach(notif => {
+            Notifications.timeoutNotification(notif.notificationId);
+        });
     }
 
     SequentialAnimation { // Drag finish animation
@@ -200,6 +212,11 @@ Item { // Notification group area
                         expanded: root.expanded
                         fontSize: topRow.fontSize
                         onClicked: { root.toggleExpanded() }
+                        altAction: () => { root.toggleExpanded() }
+
+                        StyledToolTip {
+                            content: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                        }
                     }
                 }
 

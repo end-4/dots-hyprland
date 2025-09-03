@@ -2,9 +2,6 @@ import "./weather"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Wayland
-import Quickshell.Hyprland
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -50,58 +47,26 @@ Item { // Bar content region
         border.color: Appearance.colors.colLayer0Border
     }
 
-    MouseArea { // Left side | scroll to change brightness
+    FocusedScrollMouseArea { // Left side | scroll to change brightness
         id: barLeftSideMouseArea
-        anchors.left: parent.left
-        implicitHeight: Appearance.sizes.baseBarHeight
+
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+            right: middleSection.left
+        }
         implicitWidth: leftSectionRowLayout.implicitWidth
-        height: Appearance.sizes.barHeight
-        width: (root.width - middleSection.width) / 2
-        property bool hovered: false
-        property real lastScrollX: 0
-        property real lastScrollY: 0
-        property bool trackingScroll: false
-        acceptedButtons: Qt.LeftButton
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onEntered: event => {
-            barLeftSideMouseArea.hovered = true;
-        }
-        onExited: event => {
-            barLeftSideMouseArea.hovered = false;
-            barLeftSideMouseArea.trackingScroll = false;
-        }
+        implicitHeight: Appearance.sizes.baseBarHeight
+
+        onScrollDown: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05)
+        onScrollUp: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05)
+        onMovedAway: GlobalStates.osdBrightnessOpen = false
         onPressed: event => {
-            if (event.button === Qt.LeftButton) {
+            if (event.button === Qt.LeftButton)
                 GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-            }
         }
 
-        // Scroll to change brightness
-        WheelHandler {
-            onWheel: event => {
-                if (event.angleDelta.y < 0)
-                    root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05);
-                else if (event.angleDelta.y > 0)
-                    root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05);
-                // Store the mouse position and start tracking
-                barLeftSideMouseArea.lastScrollX = event.x;
-                barLeftSideMouseArea.lastScrollY = event.y;
-                barLeftSideMouseArea.trackingScroll = true;
-            }
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        }
-        onPositionChanged: mouse => {
-            if (barLeftSideMouseArea.trackingScroll) {
-                const dx = mouse.x - barLeftSideMouseArea.lastScrollX;
-                const dy = mouse.y - barLeftSideMouseArea.lastScrollY;
-                if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                    GlobalStates.osdBrightnessOpen = false;
-                    barLeftSideMouseArea.trackingScroll = false;
-                }
-            }
-        }
-        
         // Visual content
         ScrollHint {
             reveal: barLeftSideMouseArea.hovered
@@ -117,38 +82,10 @@ Item { // Bar content region
             anchors.fill: parent
             spacing: 10
 
-            RippleButton {
-                // Left sidebar button
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            LeftSidebarButton { // Left sidebar button
+                Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
-                Layout.fillWidth: false
-                property real buttonPadding: 5
-                implicitWidth: distroIcon.width + buttonPadding * 2
-                implicitHeight: distroIcon.height + buttonPadding * 2
-
-                buttonRadius: Appearance.rounding.full
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                colBackgroundHover: Appearance.colors.colLayer1Hover
-                colRipple: Appearance.colors.colLayer1Active
-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                colRippleToggled: Appearance.colors.colSecondaryContainerActive
-                toggled: GlobalStates.sidebarLeftOpen
-                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
-
-                onPressed: {
-                    GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-                }
-
-                CustomIcon {
-                    id: distroIcon
-                    anchors.centerIn: parent
-                    width: 19.5
-                    height: 19.5
-                    source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
-                    colorize: true
-                    color: Appearance.colors.colOnLayer0
-                }
             }
 
             ActiveWindow {
@@ -162,7 +99,11 @@ Item { // Bar content region
 
     RowLayout { // Middle section
         id: middleSection
-        anchors.centerIn: parent
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
         spacing: 4
 
         BarGroup {
@@ -188,7 +129,6 @@ Item { // Bar content region
         BarGroup {
             id: middleCenterGroup
             padding: workspacesWidget.widgetPadding
-            Layout.fillHeight: true
 
             Workspaces {
                 id: workspacesWidget
@@ -216,7 +156,6 @@ Item { // Bar content region
             implicitWidth: rightCenterGroupContent.implicitWidth
             implicitHeight: rightCenterGroupContent.implicitHeight
             Layout.preferredWidth: root.centerSideModuleWidth
-            Layout.fillHeight: true
 
             onPressed: {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -245,62 +184,32 @@ Item { // Bar content region
         }
     }
 
-    MouseArea { // Right side | scroll to change volume
+    FocusedScrollMouseArea { // Right side | scroll to change volume
         id: barRightSideMouseArea
 
-        anchors.right: parent.right
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: middleSection.right
+            right: parent.right
+        }
         implicitWidth: rightSectionRowLayout.implicitWidth
         implicitHeight: Appearance.sizes.baseBarHeight
-        height: Appearance.sizes.barHeight
-        width: (root.width - middleSection.width) / 2
 
-        property bool hovered: false
-        property real lastScrollX: 0
-        property real lastScrollY: 0
-        property bool trackingScroll: false
-
-        acceptedButtons: Qt.LeftButton
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onEntered: event => {
-            barRightSideMouseArea.hovered = true;
+        onScrollDown: {
+            const currentVolume = Audio.value;
+            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+            Audio.sink.audio.volume -= step;
         }
-        onExited: event => {
-            barRightSideMouseArea.hovered = false;
-            barRightSideMouseArea.trackingScroll = false;
+        onScrollUp: {
+            const currentVolume = Audio.value;
+            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+            Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
         }
+        onMovedAway: GlobalStates.osdVolumeOpen = false;
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            } else if (event.button === Qt.RightButton) {
-                MprisController.activePlayer.next();
-            }
-        }
-
-        // Scroll to change volume
-        WheelHandler {
-            onWheel: event => {
-                const currentVolume = Audio.value;
-                const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
-                if (event.angleDelta.y < 0)
-                    Audio.sink.audio.volume -= step;
-                else if (event.angleDelta.y > 0)
-                    Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
-                // Store the mouse position and start tracking
-                barRightSideMouseArea.lastScrollX = event.x;
-                barRightSideMouseArea.lastScrollY = event.y;
-                barRightSideMouseArea.trackingScroll = true;
-            }
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        }
-        onPositionChanged: mouse => {
-            if (barRightSideMouseArea.trackingScroll) {
-                const dx = mouse.x - barRightSideMouseArea.lastScrollX;
-                const dy = mouse.y - barRightSideMouseArea.lastScrollY;
-                if (Math.sqrt(dx * dx + dy * dy) > osdHideMouseMoveThreshold) {
-                    GlobalStates.osdVolumeOpen = false;
-                    barRightSideMouseArea.trackingScroll = false;
-                }
             }
         }
 
@@ -397,7 +306,7 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
-                        text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                        text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
@@ -408,6 +317,7 @@ Item { // Bar content region
                 visible: root.useShortenedForm === 0
                 Layout.fillWidth: false
                 Layout.fillHeight: true
+                invertSide: Config?.options.bar.bottom
             }
 
             Item {
@@ -417,11 +327,10 @@ Item { // Bar content region
 
             // Weather
             Loader {
-                Layout.leftMargin: 8
-                Layout.fillHeight: true
+                Layout.leftMargin: 4
                 active: Config.options.bar.weather.enable
+
                 sourceComponent: BarGroup {
-                    implicitHeight: Appearance.sizes.baseBarHeight
                     WeatherBar {}
                 }
             }

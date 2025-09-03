@@ -233,6 +233,15 @@ Rectangle {
             }
         }
 
+        Loader {
+            Layout.fillWidth: true
+            active: root.messageData?.localFilePath && root.messageData?.localFilePath.length > 0
+            sourceComponent: AttachedFileIndicator {
+                filePath: root.messageData?.localFilePath
+                canRemove: false
+            }
+        }
+
         ColumnLayout { // Message content
             id: messageContentColumnLayout
 
