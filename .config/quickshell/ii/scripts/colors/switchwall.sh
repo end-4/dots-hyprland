@@ -268,6 +268,14 @@ switch() {
     [[ -n "$type_flag" ]] && matugen_args+=(--type "$type_flag") && generate_colors_material_args+=(--scheme "$type_flag")
     generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
     generate_colors_material_args+=(--cache "$STATE_DIR/user/generated/color.txt")
+    
+    # Add maxImagePixels from config if specified
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        max_pixels=$(jq -r '.appearance.wallpaperTheming.maxImagePixels // 200000000' "$SHELL_CONFIG_FILE")
+        if [ -n "$max_pixels" ]; then
+            generate_colors_material_args+=(--max-pixels "$max_pixels")
+        fi
+    fi
 
     pre_process "$mode_flag"
 
