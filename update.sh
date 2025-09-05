@@ -4,7 +4,8 @@
 #
 # Features:
 # - Pull latest commits from remote
-# - Update existing dependencies with selection options
+# - Smart dependency installation (auto-enabled)
+# - Only process files that differ between local and remote commits
 # - Auto-sync mode for files
 # - Numbered selection for files and packages
 # - Handle config file conflicts with user choices
@@ -16,7 +17,7 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
-CHECK_DEPENDENCIES=false
+CHECK_DEPENDENCIES=true  # Auto-enabled for smart dependency management
 AUTO_SYNC_MODE=false
 REPO_DIR="$(cd "$(dirname $0)" &>/dev/null && pwd)"
 ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
@@ -86,6 +87,75 @@ safe_read() {
       log_error "Failed to read input"
       return 1
     fi
+  fi
+}
+
+# Function to get files that differ between local and remote commits
+get_diff_files_between_commits() {
+  local local_commit="${1:-HEAD}"
+  local remote_commit="${2:-origin/$(git branch --show-current)}"
+  
+  # Get files that are different between the two commits
+  git diff --name-only "$local_commit" "$remote_commit" 2>/dev/null || {
+    log_warning "Could not compare commits, falling back to all files"
+    return 1
+  }
+}
+
+# Function to get files that changed in the last pull
+get_changed_files_since_pull() {
+  local dir_path="$1"
+  
+  if [[ "$FORCE_CHECK" == true ]]; then
+    find "$dir_path" -type f -print0 2>/dev/null
+    return
+  fi
+
+  # First try to get files that differ between local and remote
+  local current_branch=$(git branch --show-current)
+  local remote_branch="origin/${current_branch}"
+  
+  # Check if remote branch exists
+  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+    log_info "Checking differences between local and remote commits..."
+    
+    # Get files that differ between HEAD and origin/branch
+    local diff_files=()
+    while IFS= read -r file; do
+      if [[ -n "$file" ]]; then
+        diff_files+=("$file")
+      fi
+    done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
+    
+    if [[ ${#diff_files[@]} -gt 0 ]]; then
+      log_info "Found ${#diff_files[@]} files that differ between local and remote"
+      # Output only files that are in the specified directory
+      for file in "${diff_files[@]}"; do
+        local full_path="${REPO_DIR}/${file}"
+        if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
+          printf '%s\0' "$full_path"
+        fi
+      done
+      return
+    else
+      log_info "No differences found between local and remote commits"
+    fi
+  fi
+
+  # Fallback: check changes since last commit (HEAD@{1})
+  if git rev-parse --verify HEAD@{1} &>/dev/null; then
+    log_info "Checking changes since last local commit..."
+    local changed_files=()
+    while IFS= read -r file; do
+      local full_path="${REPO_DIR}/${file}"
+      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
+        printf '%s\0' "$full_path"
+      fi
+    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+  else
+    # No previous commit reference, check all files
+    log_info "No previous commit reference found, checking all files in directory"
+    find "$dir_path" -type f -print0 2>/dev/null
   fi
 }
 
@@ -175,7 +245,7 @@ should_auto_sync() {
         fi
         if [[ "$pattern" == /* ]]; then
           local root_pattern="${pattern#/}"
-          if [[ "$relative_path" == "$root_pattern" ]] || [[ "$relative_path" == "$root_pattern"/* ]] ||
+          if [[ "$relative_path" == "$root_pattern" ]] || [[ "$relative_path" == "$root_parameter"/* ]] ||
             [[ "$repo_relative" == "$root_pattern" ]] || [[ "$repo_relative" == "$root_pattern"/* ]]; then
             should_sync=true
           fi
@@ -386,7 +456,7 @@ update_python_packages() {
   fi
 }
 
-# Function to handle dependencies with numbered selection (update only)
+# Function to handle dependencies with smart installation (auto-enabled)
 handle_dependencies() {
   if [[ ! -f "$DEPLISTFILE" ]]; then
     log_warning "Dependencies file not found: $DEPLISTFILE"
@@ -395,7 +465,7 @@ handle_dependencies() {
 
   # Check if yay is available
   if ! command -v yay >/dev/null 2>&1; then
-    log_warning "yay not found. Cannot update dependencies."
+    log_warning "yay not found. Cannot manage dependencies."
     log_info "Please run install.sh first to set up the package manager."
     return 1
   fi
@@ -423,118 +493,56 @@ handle_dependencies() {
     return 0
   fi
 
-  log_info "Found ${#pkglist[@]} dependencies in config:"
-  echo
-  for i in "${!pkglist[@]}"; do
-    local pkg="${pkglist[$i]}"
-    # Check if package is installed
+  # Smart dependency handling: separate installed vs new packages
+  local installed_packages=()
+  local new_packages=()
+  
+  for pkg in "${pkglist[@]}"; do
     if pacman -Qq "$pkg" &>/dev/null; then
-      printf "%2d) ${GREEN}✓${NC} %s (installed)\n" $((i+1)) "$pkg"
+      installed_packages+=("$pkg")
     else
-      printf "%2d) ${RED}✗${NC} %s (not installed)\n" $((i+1)) "$pkg"
+      new_packages+=("$pkg")
     fi
   done
 
-  echo
-  echo "Dependency update options:"
-  echo "1) Update all dependencies (installed packages only)"
-  echo "2) Select specific dependencies by number"
-  echo "3) Check for new dependencies to install"
-  echo "4) Skip dependency updates"
+  log_info "Smart dependency analysis:"
+  log_info "- Total dependencies in config: ${#pkglist[@]}"
+  log_info "- Currently installed: ${#installed_packages[@]}"
+  log_info "- New/missing packages: ${#new_packages[@]}"
 
-  if ! safe_read "Choose an option (1-4): " dep_choice "4"; then
-    log_warning "Failed to read input. Skipping dependencies."
-    return 1
+  # Always update installed packages
+  if [[ ${#installed_packages[@]} -gt 0 ]]; then
+    log_info "Updating ${#installed_packages[@]} installed dependencies..."
+    if yay -S --needed --noconfirm "${installed_packages[@]}"; then
+      log_success "Installed dependencies updated successfully"
+    else
+      log_warning "Some installed dependencies failed to update"
+    fi
   fi
 
-  case $dep_choice in
-  1)
-    log_info "Updating all installed dependencies..."
-    # Only update packages that are already installed
-    installed_packages=()
-    for pkg in "${pkglist[@]}"; do
-      if pacman -Qq "$pkg" &>/dev/null; then
-        installed_packages+=("$pkg")
-      fi
-    done
+  # Auto-install new dependencies if they exist
+  if [[ ${#new_packages[@]} -gt 0 ]]; then
+    echo -e "\n${YELLOW}Found ${#new_packages[@]} new dependencies:${NC}"
+    printf " - %s\n" "${new_packages[@]}"
     
-    if [[ ${#installed_packages[@]} -eq 0 ]]; then
-      log_info "No dependencies are currently installed."
-    else
-      log_info "Updating ${#installed_packages[@]} installed packages..."
-      yay -S --needed --noconfirm "${installed_packages[@]}"
-      log_success "Dependencies updated"
-    fi
-    ;;
-  2)
-    echo
-    echo "Enter the numbers of packages to update/install (space-separated, e.g., 1 3 5-7 10):"
-    if ! safe_read "Package numbers: " selections ""; then
-      log_warning "Failed to read input. Skipping dependencies."
-      return 1
-    fi
-
-    if [[ -z "$selections" ]]; then
-      log_info "No packages selected"
-      return 0
-    fi
-
-    # Parse selections (support ranges like 5-7)
-    selected_packages=()
-    for selection in $selections; do
-      if [[ "$selection" == *-* ]]; then
-        # Handle range
-        IFS='-' read -r start end <<< "$selection"
-        for ((i=start; i<=end; i++)); do
-          if [[ $i -ge 1 && $i -le ${#pkglist[@]} ]]; then
-            selected_packages+=("${pkglist[$((i-1))]}")
-          fi
-        done
+    if safe_read "Install these new dependencies automatically? (Y/n): " install_new "Y"; then
+      if [[ ! "$install_new" =~ ^[Nn]$ ]]; then
+        log_info "Installing ${#new_packages[@]} new dependencies..."
+        if yay -S --needed --noconfirm "${new_packages[@]}"; then
+          log_success "New dependencies installed successfully"
+        else
+          log_warning "Some new dependencies failed to install"
+        fi
       else
-        # Handle single number
-        if [[ "$selection" =~ ^[0-9]+$ ]] && [[ $selection -ge 1 && $selection -le ${#pkglist[@]} ]]; then
-          selected_packages+=("${pkglist[$((selection-1))]}")
-        fi
-      fi
-    done
-
-    if [[ ${#selected_packages[@]} -eq 0 ]]; then
-      log_warning "No valid packages selected"
-      return 0
-    fi
-
-    log_info "Selected packages: ${selected_packages[*]}"
-    yay -S --needed --noconfirm "${selected_packages[@]}"
-    log_success "Selected dependencies updated/installed"
-    ;;
-  3)
-    log_info "Checking for new dependencies to install..."
-    new_packages=()
-    for pkg in "${pkglist[@]}"; do
-      if ! pacman -Qq "$pkg" &>/dev/null; then
-        new_packages+=("$pkg")
-      fi
-    done
-    
-    if [[ ${#new_packages[@]} -eq 0 ]]; then
-      log_info "All dependencies are already installed."
-    else
-      log_info "Found ${#new_packages[@]} new dependencies: ${new_packages[*]}"
-      if safe_read "Install these new dependencies? (y/N): " install_new "N"; then
-        if [[ "$install_new" =~ ^[Yy]$ ]]; then
-          yay -S --needed --noconfirm "${new_packages[@]}"
-          log_success "New dependencies installed"
-        fi
+        log_info "Skipping installation of new dependencies"
       fi
     fi
-    ;;
-  4 | *)
-    log_info "Skipping dependency updates"
-    ;;
-  esac
+  fi
+
+  return 0
 }
 
-# Function to check if PKGBUILD has changed
+# Function to check if PKGBUILD has changed between commits
 check_pkgbuild_changed() {
   local pkg_dir="$1"
   local pkgbuild_path="${pkg_dir}/PKGBUILD"
@@ -542,11 +550,21 @@ check_pkgbuild_changed() {
   [[ ! -f "$pkgbuild_path" ]] && return 1
 
   local relative_path="${pkgbuild_path#$REPO_DIR/}"
+  local current_branch=$(git branch --show-current)
+  local remote_branch="origin/${current_branch}"
 
   if [[ "$FORCE_CHECK" == true ]]; then
     return 0
   fi
 
+  # Check if PKGBUILD changed between local and remote
+  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+    if git diff --name-only "HEAD" "$remote_branch" 2>/dev/null | grep -q "^${relative_path}$"; then
+      return 0
+    fi
+  fi
+
+  # Fallback: check if changed since last local commit
   if git diff --name-only HEAD@{1} HEAD 2>/dev/null | grep -q "^${relative_path}$"; then
     return 0
   fi
@@ -731,31 +749,18 @@ list_and_select_packages() {
   return 0
 }
 
-# Function to get list of changed files since last pull or all files if force check
-get_changed_files() {
-  local dir_path="$1"
-
-  if [[ "$FORCE_CHECK" == true ]]; then
-    find "$dir_path" -type f -print0 2>/dev/null
-  else
-    local changed_files=()
-    while IFS= read -r file; do
-      local full_path="${REPO_DIR}/${file}"
-      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-        printf '%s\0' "$full_path"
-      fi
-    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
-
-    if ! git diff --quiet HEAD@{1} HEAD 2>/dev/null; then
-      :
-    else
-      find "$dir_path" -type f -print0 2>/dev/null
+# Function to check if we have differences between local and remote commits
+has_commit_differences() {
+  local current_branch=$(git branch --show-current)
+  local remote_branch="origin/${current_branch}"
+  
+  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+    if [[ "$(git rev-parse HEAD)" != "$(git rev-parse "$remote_branch" 2>/dev/null || echo "")" ]]; then
+      return 0
     fi
   fi
-}
-
-# Function to check if we have new commits
-has_new_commits() {
+  
+  # Fallback: check if we have new commits since last reference
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
     [[ "$(git rev-parse HEAD)" != "$(git rev-parse HEAD@{1})" ]]
   else
@@ -764,7 +769,7 @@ has_new_commits() {
 }
 
 # Main script starts here
-log_header "Enhanced Dotfiles Update Script (Update Only)"
+log_header "Enhanced Dotfiles Update Script (Smart Dependencies + Commit Diff)"
 
 check=true
 
@@ -781,9 +786,9 @@ while [[ $# -gt 0 ]]; do
     log_info "Package checking enabled"
     shift
     ;;
-  -d | --dependencies)
-    CHECK_DEPENDENCIES=true
-    log_info "Dependency checking enabled"
+  --no-deps)
+    CHECK_DEPENDENCIES=false
+    log_info "Smart dependency management disabled"
     shift
     ;;
   -a | --auto-sync)
@@ -795,18 +800,24 @@ while [[ $# -gt 0 ]]; do
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  -f, --force         Force check all files even if no new commits"
+    echo "  -f, --force         Force check all files even if no commit differences"
     echo "  -p, --packages      Enable package checking and rebuilding"
-    echo "  -d, --dependencies  Enable dependency checking and updating"
+    echo "  --no-deps           Disable smart dependency management (enabled by default)"
     echo "  -a, --auto-sync     Enable auto-sync mode for configured files"
     echo "  -h, --help          Show this help message"
     echo ""
     echo "This script updates your existing dotfiles by:"
     echo "  1. Pulling latest changes from git remote"
-    echo "  2. Optionally updating existing dependencies (if -d flag is used)"
-    echo "  3. Optionally rebuilding existing packages (if -p flag is used)"
-    echo "  4. Syncing configuration files with conflict resolution"
-    echo "  5. Reloading Hyprland if running"
+    echo "  2. Smart dependency management (auto-enabled) - updates installed, installs new"
+    echo "  3. Optionally rebuilding packages with changed PKGBUILDs (if -p flag is used)"
+    echo "  4. Syncing only files that differ between local and remote commits"
+    echo "  5. Handling config file conflicts with resolution options"
+    echo "  6. Reloading Hyprland if running"
+    echo ""
+    echo "Key Features:"
+    echo "  - Smart Dependencies: Automatically updates installed packages and offers to install new ones"
+    echo "  - Commit-based File Checking: Only processes files that differ between local and remote"
+    echo "  - Conflict Resolution: Interactive handling of file differences"
     echo ""
     echo "Note: This script only updates existing installations."
     echo "      For initial setup, use install.sh instead."
@@ -830,9 +841,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$check" == true ]]; then
-  log_info "This is an UPDATE-ONLY script. It will not install new software or set up system-level configurations."
+  log_info "This is an UPDATE-ONLY script with smart dependency management."
+  log_info "Features: Smart deps (auto-enabled), commit-based file diff, conflict resolution"
   log_info "For initial setup, please use install.sh instead."
-  safe_read "Continue with update? (Y/n): " response "Y"
+  safe_read "Continue with smart update? (Y/n): " response "Y"
 
   if [[ "$response" =~ ^[Nn]$ ]]; then
     log_error "Update aborted by user"
@@ -887,28 +899,67 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   log_info "Changes stashed"
 fi
 
-# Check if remote exists
+# Check if remote exists and fetch latest
 if git remote get-url origin &>/dev/null; then
-  # Pull changes
-  log_info "Pulling changes from origin/$current_branch..."
-  if git pull; then
-    log_success "Successfully pulled latest changes"
+  # Fetch latest changes first
+  log_info "Fetching latest changes from origin..."
+  if git fetch origin; then
+    log_success "Successfully fetched latest changes"
+    
+    # Check if there are differences between local and remote
+    remote_branch="origin/${current_branch}"
+    if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+      local_commit=$(git rev-parse HEAD)
+      remote_commit=$(git rev-parse "$remote_branch" 2>/dev/null || echo "")
+      
+      if [[ "$local_commit" != "$remote_commit" ]]; then
+        log_info "Differences detected between local ($local_commit) and remote ($remote_commit)"
+        
+        # Show what will be updated
+        echo -e "\n${CYAN}Changes to be pulled:${NC}"
+        git log --oneline HEAD.."$remote_branch" 2>/dev/null || echo "Unable to show change log"
+        echo
+        
+        if ! safe_read "Pull these changes? (Y/n): " pull_response "Y"; then
+          echo
+          log_error "Failed to read input. Aborting."
+          exit 1
+        fi
+
+        if [[ ! "$pull_response" =~ ^[Nn]$ ]]; then
+          # Pull changes
+          log_info "Pulling changes from origin/$current_branch..."
+          if git pull; then
+            log_success "Successfully pulled latest changes"
+          else
+            log_warning "Failed to pull changes from remote. Continuing with current state..."
+            log_info "You may need to resolve conflicts manually later."
+          fi
+        else
+          log_info "Skipping pull, working with current local state"
+        fi
+      else
+        log_info "Local and remote are in sync - no changes to pull"
+      fi
+    else
+      log_warning "Remote branch $remote_branch not found"
+    fi
   else
-    log_warning "Failed to pull changes from remote. Continuing with local repository..."
-    log_info "You may need to resolve conflicts manually later."
+    log_warning "Failed to fetch from remote. Continuing with local repository..."
   fi
 else
   log_warning "No remote 'origin' configured. Skipping pull operation."
   log_info "This appears to be a local-only repository."
 fi
 
-# Step 2: Handle dependencies (if requested and tools are available)
+# Step 2: Handle smart dependencies (auto-enabled)
+log_header "Smart Dependency Management"
+log_info "Smart dependency management is enabled by default (use --no-deps to disable)"
+
 if [[ "$CHECK_DEPENDENCIES" == true ]]; then
-  log_header "Dependency Updates"
   handle_dependencies
 else
-  log_header "Dependency Updates"
-  log_info "Dependency checking disabled. Use -d or --dependencies flag to enable dependency updates."
+  log_info "Smart dependency management disabled by user flag"
 fi
 
 # Step 3: Handle package rebuilding (if requested and tools are available)
@@ -952,13 +1003,13 @@ else
     done
 
     if [[ $changed_count -gt 0 ]]; then
-      log_warning "Note: $changed_count package(s) have changed PKGBUILDs. Use -p flag to manage packages."
+      log_warning "Note: $changed_count package(s) have changed PKGBUILDs since last update. Use -p flag to manage packages."
     fi
   fi
 fi
 
-# Step 4: Update configuration files
-log_header "Updating Configuration Files"
+# Step 4: Update configuration files (only changed ones)
+log_header "Smart Configuration File Updates"
 
 # Source required files for configuration handling
 if [[ -f "${REPO_DIR}/scriptdata/environment-variables" ]]; then
@@ -969,16 +1020,45 @@ if [[ -f "${REPO_DIR}/scriptdata/functions" ]]; then
   source "${REPO_DIR}/scriptdata/functions"
 fi
 
-# Check if we should process files
+# Check if we should process files based on commit differences
 process_files=false
+commit_diff_files=()
+
 if [[ "$FORCE_CHECK" == true ]]; then
   process_files=true
   log_info "Force mode: checking all configuration files"
-elif has_new_commits; then
+elif has_commit_differences; then
   process_files=true
-  log_info "New commits detected: checking changed configuration files"
+  log_info "Commit differences detected: analyzing changed files..."
+  
+  # Get list of files that differ between commits
+  current_branch=$(git branch --show-current)
+  remote_branch="origin/${current_branch}"
+  
+  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+    while IFS= read -r file; do
+      if [[ -n "$file" ]]; then
+        commit_diff_files+=("$file")
+      fi
+    done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
+  fi
+  
+  if [[ ${#commit_diff_files[@]} -eq 0 ]]; then
+    # Fallback to checking since last local commit
+    while IFS= read -r file; do
+      if [[ -n "$file" ]]; then
+        commit_diff_files+=("$file")
+      fi
+    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+  fi
+  
+  log_info "Found ${#commit_diff_files[@]} files with differences"
+  if [[ ${#commit_diff_files[@]} -gt 0 ]]; then
+    echo -e "${CYAN}Files to be processed:${NC}"
+    printf " - %s\n" "${commit_diff_files[@]}"
+  fi
 else
-  log_info "No new commits found: checking for local file differences"
+  log_info "No commit differences found: checking for local file differences anyway"
   process_files=true # Always check for differences even without commits
 fi
 
@@ -986,6 +1066,7 @@ if [[ "$process_files" == true ]]; then
   files_processed=0
   files_updated=0
   files_created=0
+  files_skipped=0
 
   # Handle MISC configs (everything except fish and hypr)
   log_info "Processing miscellaneous configuration files..."
@@ -994,18 +1075,20 @@ if [[ "$process_files" == true ]]; then
     target_path="$XDG_CONFIG_HOME/$i"
     
     if should_ignore "$target_path"; then
+      ((files_skipped++))
       continue
     fi
     
     echo "[$0]: Found target: $config_path"
     if [[ -d "$config_path" ]]; then
       if [[ -d "$target_path" ]]; then
-        # Directory exists, handle conflicts file by file
-        find "$config_path" -type f 2>/dev/null | while read -r file; do
+        # Directory exists, handle conflicts file by file (only changed files)
+        while IFS= read -r -d '' file; do
           rel_path="${file#$config_path/}"
           target_file="$target_path/$rel_path"
           
           if should_ignore "$target_file"; then
+            ((files_skipped++))
             continue
           fi
           
@@ -1026,7 +1109,7 @@ if [[ "$process_files" == true ]]; then
             ((files_created++))
           fi
           ((files_processed++))
-        done
+        done < <(get_changed_files_since_pull "$config_path")
       else
         # Directory doesn't exist, create it
         mkdir -p "$target_path"
@@ -1038,38 +1121,46 @@ if [[ "$process_files" == true ]]; then
         ((files_created++))
       fi
     elif [[ -f "$config_path" ]]; then
-      mkdir -p "$(dirname "$target_path")"
-      if [[ -f "$target_path" ]] && ! cmp -s "$config_path" "$target_path"; then
-        if should_auto_sync "$target_path"; then
+      # Check if this specific file was changed
+      config_relative="${config_path#./}"
+      if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
+        mkdir -p "$(dirname "$target_path")"
+        if [[ -f "$target_path" ]] && ! cmp -s "$config_path" "$target_path"; then
+          if should_auto_sync "$target_path"; then
+            cp -p "$config_path" "$target_path"
+            log_success "Auto-synced: $target_path"
+            ((files_updated++))
+          else
+            handle_file_conflict "$config_path" "$target_path"
+            ((files_updated++))
+          fi
+        elif [[ ! -f "$target_path" ]]; then
           cp -p "$config_path" "$target_path"
-          log_success "Auto-synced: $target_path"
-          ((files_updated++))
-        else
-          handle_file_conflict "$config_path" "$target_path"
-          ((files_updated++))
+          log_success "Created new file: $target_path"
+          ((files_created++))
         fi
-      elif [[ ! -f "$target_path" ]]; then
-        cp -p "$config_path" "$target_path"
-        log_success "Created new file: $target_path"
-        ((files_created++))
+        ((files_processed++))
+      else
+        log_info "Skipping unchanged file: $config_path"
+        ((files_skipped++))
       fi
-      ((files_processed++))
     fi
   done
 
-  # Handle Fish configuration
+  # Handle Fish configuration (only changed files)
   log_info "Processing Fish configuration..."
   fish_source=".config/fish"
   fish_target="$XDG_CONFIG_HOME/fish"
   
   if [[ -d "$fish_source" ]]; then
     if [[ -d "$fish_target" ]]; then
-      # Handle fish config with conflict resolution
-      find "$fish_source" -type f 2>/dev/null | while read -r file; do
+      # Handle fish config with conflict resolution (only changed files)
+      while IFS= read -r -d '' file; do
         rel_path="${file#$fish_source/}"
         target_file="$fish_target/$rel_path"
         
         if should_ignore "$target_file"; then
+          ((files_skipped++))
           continue
         fi
         
@@ -1090,7 +1181,7 @@ if [[ "$process_files" == true ]]; then
           ((files_created++))
         fi
         ((files_processed++))
-      done
+      done < <(get_changed_files_since_pull "$fish_source")
     else
       mkdir -p "$fish_target"
       rsync -av "$fish_source/" "$fish_target/" 2>/dev/null || {
@@ -1102,7 +1193,7 @@ if [[ "$process_files" == true ]]; then
     fi
   fi
 
-  # Handle Hyprland configuration with special logic
+  # Handle Hyprland configuration with special logic (only changed files)
   log_info "Processing Hyprland configuration..."
   hypr_source=".config/hypr"
   hypr_target="$XDG_CONFIG_HOME/hypr"
@@ -1110,12 +1201,19 @@ if [[ "$process_files" == true ]]; then
   if [[ -d "$hypr_source" ]]; then
     mkdir -p "$hypr_target"
     
-    # Handle all files except the special ones
-    find "$hypr_source" -type f ! -path "*/custom/*" ! -name "hyprland.conf" ! -name "hypridle.conf" ! -name "hyprlock.conf" 2>/dev/null | while read -r file; do
+    # Handle all files except the special ones (only changed files)
+    while IFS= read -r -d '' file; do
       rel_path="${file#$hypr_source/}"
       target_file="$hypr_target/$rel_path"
       
+      # Skip custom directory and special config files
+      if [[ "$rel_path" == custom/* ]] || [[ "$rel_path" == "hyprland.conf" ]] || 
+         [[ "$rel_path" == "hypridle.conf" ]] || [[ "$rel_path" == "hyprlock.conf" ]]; then
+        continue
+      fi
+      
       if should_ignore "$target_file"; then
+        ((files_skipped++))
         continue
       fi
       
@@ -1136,37 +1234,44 @@ if [[ "$process_files" == true ]]; then
         ((files_created++))
       fi
       ((files_processed++))
-    done
+    done < <(get_changed_files_since_pull "$hypr_source")
     
-    # Handle special Hyprland config files
+    # Handle special Hyprland config files (check if they were changed)
     for config_file in "hyprland.conf" "hypridle.conf" "hyprlock.conf"; do
       source_file="$hypr_source/$config_file"
       target_file="$hypr_target/$config_file"
+      config_relative=".config/hypr/$config_file"
       
       if [[ -f "$source_file" ]]; then
-        if [[ -f "$target_file" ]]; then
-          if ! cmp -s "$source_file" "$target_file"; then
-            echo -e "\n${YELLOW}Special Hyprland config detected: $config_file${NC}"
-            echo "This is a critical Hyprland configuration file."
-            if should_auto_sync "$target_file"; then
-              cp -p "$source_file" "$target_file"
-              log_success "Auto-synced critical config: $target_file"
-              ((files_updated++))
-            else
-              handle_file_conflict "$source_file" "$target_file"
-              ((files_updated++))
+        # Check if this config file was changed
+        if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
+          if [[ -f "$target_file" ]]; then
+            if ! cmp -s "$source_file" "$target_file"; then
+              echo -e "\n${YELLOW}Special Hyprland config detected: $config_file${NC}"
+              echo "This is a critical Hyprland configuration file that was changed."
+              if should_auto_sync "$target_file"; then
+                cp -p "$source_file" "$target_file"
+                log_success "Auto-synced critical config: $target_file"
+                ((files_updated++))
+              else
+                handle_file_conflict "$source_file" "$target_file"
+                ((files_updated++))
+              fi
             fi
+          else
+            cp -p "$source_file" "$target_file"
+            log_success "Created new Hyprland config: $target_file"
+            ((files_created++))
           fi
+          ((files_processed++))
         else
-          cp -p "$source_file" "$target_file"
-          log_success "Created new Hyprland config: $target_file"
-          ((files_created++))
+          log_info "Skipping unchanged Hyprland config: $config_file"
+          ((files_skipped++))
         fi
-        ((files_processed++))
       fi
     done
     
-    # Handle custom directory (never overwrite)
+    # Handle custom directory (never overwrite, only create if missing)
     custom_source="$hypr_source/custom"
     custom_target="$hypr_target/custom"
     
@@ -1182,7 +1287,7 @@ if [[ "$process_files" == true ]]; then
     fi
   fi
 
-  # Process other directories (like .local/bin)
+  # Process other directories (like .local/bin) - only changed files
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
     home_dir_path="${HOME}/${dir_name}"
@@ -1199,6 +1304,7 @@ if [[ "$process_files" == true ]]; then
       home_file="${home_dir_path}/${rel_path}"
 
       if should_ignore "$home_file"; then
+        ((files_skipped++))
         continue
       fi
 
@@ -1222,10 +1328,10 @@ if [[ "$process_files" == true ]]; then
         log_success "Created new file: $home_file"
         ((files_created++))
       fi
-    done < <(get_changed_files "$repo_dir_path")
+    done < <(get_changed_files_since_pull "$repo_dir_path")
   done
 
-  # Copy other important directories (only if they exist)
+  # Copy other important directories (only update, don't create from scratch)
   log_info "Processing other resource directories..."
   
   # Handle .local/share/icons (only update, don't create from scratch)
@@ -1250,12 +1356,13 @@ if [[ "$process_files" == true ]]; then
 
   # Show processing summary
   echo
-  log_info "File processing summary:"
+  log_info "Smart file processing summary:"
   log_info "- Files processed: $files_processed"
   log_info "- Files with conflicts/updates: $files_updated"
   log_info "- New files created: $files_created"
+  log_info "- Files skipped (ignored/unchanged): $files_skipped"
 else
-  log_info "Skipping file updates (no changes detected and not in force mode)"
+  log_info "Skipping file updates (no commit differences detected and not in force mode)"
 fi
 
 # Step 5: Update Python packages (if available and user wants to)
@@ -1290,23 +1397,25 @@ else
 fi
 
 # Step 7: Update Complete
-log_header "Update Complete"
-log_success "Enhanced dotfiles update completed successfully!"
+log_header "Smart Update Complete"
+log_success "Enhanced dotfiles smart update completed successfully!"
 
 # Show summary
 echo
-echo -e "${CYAN}Summary:${NC}"
+echo -e "${CYAN}Smart Update Summary:${NC}"
 echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)' 2>/dev/null || echo 'Unable to get commit info')"
 echo "- Branch: $current_branch"
-echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
+echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Commit diff")"
+echo "- Smart dependencies: $([ "$CHECK_DEPENDENCIES" == true ] && echo "Enabled" || echo "Disabled")"
 echo "- Package updates: $([ "$CHECK_PACKAGES" == true ] && echo "Enabled" || echo "Disabled")"
-echo "- Dependency updates: $([ "$CHECK_DEPENDENCIES" == true ] && echo "Enabled" || echo "Disabled")"
 echo "- Auto-sync mode: $([ "$AUTO_SYNC_MODE" == true ] && echo "Enabled" || echo "Disabled")"
 
 if [[ "$process_files" == true ]]; then
   echo "- Files processed: $files_processed"
   echo "- Files updated/conflicted: $files_updated"
   echo "- New files created: $files_created"
+  echo "- Files skipped: $files_skipped"
+  echo "- Commit diff files found: ${#commit_diff_files[@]}"
 fi
 
 echo "- Configuration directories: ${MONITOR_DIRS[*]}"
