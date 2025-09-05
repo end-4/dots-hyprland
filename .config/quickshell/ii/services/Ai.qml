@@ -887,8 +887,8 @@ Singleton {
 
     FileView {
         id: chatSaveFile
-        property string chatName: "chat"
-        path: `${Directories.aiChats}/${chatName}.json`
+        property string chatName: ""
+        path: chatName.length > 0 ? `${Directories.aiChats}/${chatName}.json` : ""
         blockLoading: true // Prevent race conditions
     }
 
