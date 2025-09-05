@@ -6,6 +6,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import qs.modules.bar as Bar
 
 MouseArea {
     id: root
@@ -63,6 +64,7 @@ MouseArea {
 
     // Controls
     Toolbar {
+        id: mainIsland
         anchors {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
@@ -75,8 +77,8 @@ MouseArea {
         scale: 0.9
         opacity: 0
         Component.onCompleted: {
-            scale = 1
-            opacity = 1
+            scale = 1;
+            opacity = 1;
         }
         Behavior on scale {
             NumberAnimation {
@@ -87,22 +89,6 @@ MouseArea {
         }
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-
-        ToolbarButton {
-            id: sleepButton
-            implicitWidth: height
-
-            onClicked: Session.suspend()
-
-            contentItem: MaterialSymbol {
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                iconSize: 24
-                text: "dark_mode"
-                color: Appearance.colors.colOnSurfaceVariant
-            }
         }
 
         ToolbarTextField {
@@ -147,5 +133,68 @@ MouseArea {
                 color: confirmButton.enabled ? Appearance.colors.colOnPrimary : Appearance.colors.colSubtext
             }
         }
+    }
+
+    Toolbar {
+        anchors {
+            right: mainIsland.left
+            top: mainIsland.top
+            bottom: mainIsland.bottom
+            rightMargin: 20
+        }
+
+        ToolbarButton {
+            id: powerButton
+            implicitWidth: height
+
+            onClicked: Session.poweroff()
+
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "power_settings_new"
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+        }
+
+        ToolbarButton {
+            id: sleepButton
+            implicitWidth: height
+
+            onClicked: Session.suspend()
+
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "dark_mode"
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+        }
+
+        RowLayout {
+            spacing: 6
+            Layout.fillHeight: true
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
+
+            MaterialSymbol {
+                id: boltIcon
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: -2
+                Layout.rightMargin: -2
+                fill: 1
+                text: Battery.isCharging ? "bolt" : "battery_android_full"
+                iconSize: Appearance.font.pixelSize.huge
+                animateChange: true
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignVCenter
+                text: (Battery.percentage * 100)
+            }
+        }        
     }
 }
