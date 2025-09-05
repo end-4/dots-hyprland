@@ -41,9 +41,22 @@ GroupButton {
             }
         }
 
-        StyledText {
-            color: root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-            text: root.buttonText
+        Item {
+            implicitWidth: textItem.implicitWidth
+            implicitHeight: textMetrics.height // Force height to that of regular text
+
+            TextMetrics {
+                id: textMetrics
+                font.family: Appearance.font.family.main
+                text: "Abc"
+            }
+
+            StyledText {
+                id: textItem
+                anchors.centerIn: parent
+                color: root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                text: root.buttonText
+            }
         }
     }
 }

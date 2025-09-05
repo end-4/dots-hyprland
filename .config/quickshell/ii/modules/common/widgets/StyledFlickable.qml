@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import qs.modules.common
 
 Flickable {
@@ -11,6 +12,8 @@ Flickable {
     property real mouseScrollDeltaThreshold: Config?.options.interactions.scrolling.mouseScrollDeltaThreshold ?? 120
     // Accumulated scroll destination so wheel deltas stack while animating
     property real scrollTargetY: 0
+
+    ScrollBar.vertical: StyledScrollBar {}
 
     MouseArea {
         visible: Config?.options.interactions.scrolling.fasterTouchpadScroll
