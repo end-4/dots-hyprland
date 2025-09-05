@@ -12,6 +12,7 @@ Item {
 
     property real padding: 8
     property alias colBackground: background.color
+    property alias spacing: toolbarLayout.spacing
     default property alias data: toolbarLayout.data
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
@@ -24,7 +25,7 @@ Item {
         id: background
         anchors.centerIn: parent
         color: Appearance.m3colors.m3surfaceContainer // Needs to be opaque
-        implicitHeight: toolbarLayout.implicitHeight + root.padding * 2
+        implicitHeight: Math.max(toolbarLayout.implicitHeight + root.padding * 2, 56)
         implicitWidth: toolbarLayout.implicitWidth + root.padding * 2
         radius: Appearance.rounding.full
 

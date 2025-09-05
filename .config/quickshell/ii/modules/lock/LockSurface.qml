@@ -5,6 +5,8 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import qs.modules.bar as Bar
+import Quickshell.Services.SystemTray
 
 MouseArea {
     id: root
@@ -135,29 +137,108 @@ MouseArea {
     }
 
     Toolbar {
+        id: leftIsland
         anchors {
             right: mainIsland.left
             top: mainIsland.top
             bottom: mainIsland.bottom
-            rightMargin: 20
+            rightMargin: 10
+        }
+        scale: root.toolbarScale
+        opacity: root.toolbarOpacity
+
+        // Username
+        RowLayout {
+            spacing: 6
+            Layout.leftMargin: 8
+            Layout.fillHeight: true
+
+            MaterialSymbol {
+                id: userIcon
+                Layout.alignment: Qt.AlignVCenter
+                fill: 1
+                text: "account_circle"
+                iconSize: Appearance.font.pixelSize.huge
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignVCenter
+                text: SystemInfo.username
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+        }
+
+        // Keyboard layout (Xkb)
+        Loader {
+            Layout.leftMargin: 8
+            Layout.rightMargin: 8
+            Layout.fillHeight: true
+
+            active: true
+            visible: active
+            
+            sourceComponent: RowLayout {
+                spacing: 8
+
+                MaterialSymbol {
+                    id: keyboardIcon
+                    Layout.alignment: Qt.AlignVCenter
+                    fill: 1
+                    text: "keyboard_alt"
+                    iconSize: Appearance.font.pixelSize.huge
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+                StyledText {
+                    text: HyprlandXkb.currentLayoutCode
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+            }
+        }
+
+        // Keyboard layout (Fcitx)
+        Bar.SysTray {
+            Layout.rightMargin: 10
+            Layout.alignment: Qt.AlignVCenter
+            showSeparator: false
+            showOverflowMenu: false
+            pinnedItems: SystemTray.items.values.filter(i => i.id == "Fcitx")
+            visible: pinnedItems.length > 0
+        }
+    }
+
+    Toolbar {
+        id: rightIsland
+        anchors {
+            left: mainIsland.right
+            top: mainIsland.top
+            bottom: mainIsland.bottom
+            leftMargin: 10
         }
 
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
 
-        ToolbarButton {
-            id: powerButton
-            implicitWidth: height
+        RowLayout {
+            spacing: 6
+            Layout.fillHeight: true
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
 
-            onClicked: Session.poweroff()
-
-            contentItem: MaterialSymbol {
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                iconSize: 24
-                text: "power_settings_new"
-                color: Appearance.colors.colOnSurfaceVariant
+            MaterialSymbol {
+                id: boltIcon
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: -2
+                Layout.rightMargin: -2
+                fill: 1
+                text: Battery.isCharging ? "bolt" : "battery_android_full"
+                iconSize: Appearance.font.pixelSize.huge
+                animateChange: true
+                color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignVCenter
+                text: Math.round(Battery.percentage * 100)
+                color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
             }
         }
 
@@ -177,26 +258,20 @@ MouseArea {
             }
         }
 
-        RowLayout {
-            spacing: 6
-            Layout.fillHeight: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
+        ToolbarButton {
+            id: powerButton
+            implicitWidth: height
 
-            MaterialSymbol {
-                id: boltIcon
-                Layout.alignment: Qt.AlignVCenter
-                Layout.leftMargin: -2
-                Layout.rightMargin: -2
-                fill: 1
-                text: Battery.isCharging ? "bolt" : "battery_android_full"
-                iconSize: Appearance.font.pixelSize.huge
-                animateChange: true
+            onClicked: Session.poweroff()
+
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "power_settings_new"
+                color: Appearance.colors.colOnSurfaceVariant
             }
-            StyledText {
-                Layout.alignment: Qt.AlignVCenter
-                text: (Battery.percentage * 100)
-            }
-        }        
+        }
     }
 }
