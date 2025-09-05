@@ -4,6 +4,7 @@ add_newline = false
 # Powerline symbols                                     
 # Wedges 🭧🭒 🭣🭧🭓
 # Random noise 🬖🬥🬔🬗
+# Cool stuff 󰜥   
 
 # format = """
 # $cmd_duration$username$hostname $directory $git_branch
@@ -11,13 +12,12 @@ add_newline = false
 # """
 format = """
 $cmd_duration 󰜥 $directory $git_branch
-$character
-"""
+$character"""
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[ 󰜥 ](bold fg:blue)"
-error_symbol = "[ 󰜥 ](bold fg:red)"
+success_symbol = "[   ](bold fg:blue)"
+error_symbol = "[   ](bold fg:red)"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -83,7 +83,7 @@ read_only = "  "
 style = "bg:green fg:black"
 truncation_length = 6
 truncation_symbol = " ••/"
-format = '[](bold fg:green)[󰉋 $path]($style)[](bold fg:green)'
+format = '[](bold fg:green)[󰉋 $path]($style)[](bold fg:green)'
 
 
 [directory.substitutions]

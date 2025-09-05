@@ -225,10 +225,11 @@ handle_file_conflict() {
   echo "4) Save repository version as ${filename}.new, keep local file"
   echo "5) Show diff and decide"
   echo "6) Skip this file"
+  echo "7) Add to ignore and skip"
   echo
 
   while true; do
-    if ! safe_read "Enter your choice (1-6): " choice "6"; then
+    if ! safe_read "Enter your choice (1-7): " choice "6"; then
       echo
       log_warning "Failed to read input. Skipping file."
       return
@@ -264,8 +265,9 @@ handle_file_conflict() {
       echo "b) Backup local and use repository version"
       echo "n) Save repository version as .new"
       echo "s) Skip this file"
+      echo "i) Add to ignore and skip"
 
-      if ! safe_read "Enter your choice (r/k/b/n/s): " subchoice "s"; then
+      if ! safe_read "Enter your choice (r/k/b/n/s/i): " subchoice "s"; then
         echo
         log_warning "Failed to read input. Skipping file."
         return
@@ -296,6 +298,12 @@ handle_file_conflict() {
         log_info "Skipping $home_file"
         break
         ;;
+      i)
+        local relative_path_to_home="${home_file#$HOME/}"
+        echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
+        log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+        break
+        ;;
       *)
         echo "Invalid choice. Please try again."
         ;;
@@ -305,8 +313,14 @@ handle_file_conflict() {
       log_info "Skipping $home_file"
       break
       ;;
+    7)
+      local relative_path_to_home="${home_file#$HOME/}"
+      echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
+      log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+      break
+      ;;
     *)
-      echo "Invalid choice. Please enter 1-6."
+      echo "Invalid choice. Please enter 1-7."
       ;;
     esac
   done
@@ -561,7 +575,10 @@ done
 
 if [[ "$check" == true ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
-  safe_read "BY CONTINUE YOU WILL USE IT AT YOUR OWN RISK (y/N): " response "N"
+  log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
+  log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
+  log_warning "In general, prefer install.sh for updates."
+  safe_read "Continue? (y/N): " response "N"
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
     log_error "Update aborted by user"

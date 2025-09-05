@@ -21,19 +21,22 @@ if pgrep wf-recorder > /dev/null; then
     notify-send "Recording Stopped" "Stopped" -a 'Recorder' &
     pkill wf-recorder &
 else
-    if ! region="$(slurp 2>&1)"; then
-      notify-send "Recording cancelled" "Selection was cancelled" -a 'Recorder'
-      exit 1
-    fi
-
-    notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder'
-    if [[ "$1" == "--sound" ]]; then
-        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" --audio="$(getaudiooutput)" & disown
-    elif [[ "$1" == "--fullscreen-sound" ]]; then
-        wf-recorder -o $(getactivemonitor) --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --audio="$(getaudiooutput)" & disown
+    if [[ "$1" == "--fullscreen-sound" ]]; then
+        notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --audio="$(getaudiooutput)"
     elif [[ "$1" == "--fullscreen" ]]; then
-        wf-recorder -o $(getactivemonitor) --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t & disown
+        notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t
     else
-        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" & disown
+        if ! region="$(slurp 2>&1)"; then
+            notify-send "Recording cancelled" "Selection was cancelled" -a 'Recorder' & disown
+            exit 1
+        fi
+        notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        if [[ "$1" == "--sound" ]]; then
+            wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" --audio="$(getaudiooutput)"
+        else
+            wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region"
+        fi
     fi
 fi

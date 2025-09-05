@@ -6,13 +6,16 @@ arch=(any)
 license=(None)
 depends=(
   adw-gtk-theme-git
+  breeze
   breeze-plus
+  darkly-bin
   eza
   fish
   fontconfig
   kde-material-you-colors
   kitty
   matugen-bin
+  otf-space-grotesk
   starship
   ttf-gabarito-git
   ttf-jetbrains-mono-nerd

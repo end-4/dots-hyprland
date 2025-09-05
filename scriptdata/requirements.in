@@ -8,3 +8,8 @@ materialyoucolor
 libsass
 material-color-utilities
 setproctitle
+click
+loguru
+pycairo
+pygobject
+tqdm
