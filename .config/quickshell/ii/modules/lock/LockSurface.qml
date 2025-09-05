@@ -176,7 +176,7 @@ MouseArea {
 
             active: true
             visible: active
-            
+
             sourceComponent: RowLayout {
                 spacing: 8
 
@@ -191,6 +191,7 @@ MouseArea {
                 StyledText {
                     text: HyprlandXkb.currentLayoutCode
                     color: Appearance.colors.colOnSurfaceVariant
+                    animateChange: true
                 }
             }
         }
