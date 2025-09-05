@@ -115,7 +115,6 @@ ContentPage {
                 to: 150
                 stepSize: 1
                 onValueChanged: {
-                    console.log(value/100)
                     Config.options.background.parallax.workspaceZoom = value / 100;
                 }
             }
@@ -403,38 +402,19 @@ ContentPage {
                 currentValue: Config.options.language.ui
                 onSelected: newValue => {
                     Config.options.language.ui = newValue;
-                    reloadNotice.visible = true;
                 }
-                options: {
-                    var baseOptions = [
-                        {
-                            displayName: Translation.tr("Auto (System)"),
-                            value: "auto"
-                        }
-                    ];
-
-                    // Generate language options from available languages
-                    // Intl.DisplayNames is not used. Show the language code with underscore replaced by hyphen.
-                    for (var i = 0; i < Translation.availableLanguages.length; i++) {
-                        var lang = Translation.availableLanguages[i];
-                        var displayName = lang.replace('_', '-');
-                        baseOptions.push({
-                            displayName: displayName,
+                options: [
+                    {
+                        displayName: Translation.tr("Auto (System)"),
+                        value: "auto"
+                    },
+                    ...Translation.availableLanguages.map(lang => {
+                        return {
+                            displayName: lang.replace('_', '-'),
                             value: lang
-                        });
-                    }
-
-                    return baseOptions;
-                }
-            }
-
-            NoticeBox {
-                id: reloadNotice
-                visible: false
-                Layout.topMargin: 8
-                Layout.fillWidth: true
-
-                text: Translation.tr("Language setting saved. Please restart Quickshell (Ctrl+Super+R) to apply the new language.")
+                        };
+                    })
+                ]
             }
         }
     }

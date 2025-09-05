@@ -4,172 +4,100 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.modules.common
+import qs.modules.common.functions
 
 Singleton {
     id: root
-    
+
     property var translations: ({})
-    property string currentLanguage: "en_US"
     property var availableLanguages: ["en_US"]
-    property bool isScanning: false
+    property bool isScanning: scanLanguagesProcess.running
     property bool isLoading: false
-    
+    property string translationKeepSuffix: "/*keep*/"
+
+    property string languageCode: {
+        var configLang = Config?.options.language.ui ?? "auto";
+
+        if (configLang !== "auto")
+            return configLang;
+
+        return Qt.locale().name;
+    }
+
     Process {
         id: scanLanguagesProcess
-        command: ["find", Qt.resolvedUrl(Directories.config + "/quickshell/translations/").toString().replace("file://", ""), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
-        running: false
-        
+        command: ["find", FileUtils.trimFileProtocol(Qt.resolvedUrl(Directories.config + "/quickshell/translations/").toString()), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
+        running: true
+
         stdout: SplitParser {
             onRead: data => {
-                if (data.trim().length === 0) return
-                
-                var files = data.trim().split('\n')
-                
+                if (data.trim().length === 0)
+                    return;
+                var files = data.trim().split('\n');
+
                 for (var i = 0; i < files.length; i++) {
-                    var lang = files[i].trim()
+                    var lang = files[i].trim();
                     if (lang.length > 0 && root.availableLanguages.indexOf(lang) === -1) {
-                        root.availableLanguages.push(lang)
+                        root.availableLanguages.push(lang);
                     }
                 }
             }
         }
-        
+
         onExited: (exitCode, exitStatus) => {
-            root.isScanning = false
+            root.availableLanguages = [...root.availableLanguages] // Forcibly emit change
+
             if (exitCode !== 0) {
-                root.availableLanguages = ["en_US"]
+                root.availableLanguages = ["en_US"];
             }
-            root.loadTranslations()
+            // TODO: notify and offer to translate when translation not available
         }
     }
-    
+
+    onLanguageCodeChanged: {
+        translationFileView.reload();
+    }
+
     FileView {
         id: translationFileView
+        path: root.languageCode?.length > 0 ? Qt.resolvedUrl(Directories.config + "/quickshell/translations/" + root.languageCode + ".json") : ""
+
         onLoaded: {
-            var textContent = ""
+            var textContent = "";
             try {
-                textContent = text()
+                textContent = text();
+                var jsonData = JSON.parse(textContent);
+                root.translations = jsonData;
             } catch (e) {
-                root.translations = {}
-                root.isLoading = false
-                return
+                console.log("[Translation] Failed to load translations:", e);
+                root.translations = {};
             }
-            
-            if (textContent.length === 0) {
-                root.translations = {}
-                root.isLoading = false
-                return
-            }
-            
-            try {
-                var jsonData = JSON.parse(textContent)
-                root.translations = jsonData
-                root.isLoading = false
-            } catch (e) {
-                root.translations = {}
-                root.isLoading = false
-            }
+            root.isLoading = false;
         }
-        onLoadFailed: (error) => {
-            root.translations = {}
-            root.isLoading = false
+        onLoadFailed: error => {
+            root.translations = {};
+            root.isLoading = false;
         }
     }
-    
-    function detectSystemLanguage() {
-        var locale = Qt.locale().name
-        return locale
-    }
-    
-    function getLanguageCode() {
-        var configLang = "auto"
-        try {
-            configLang = Config.options.language.ui
-        } catch (e) {
-            configLang = "auto"
-        }
-        
-        if (configLang === "auto") {
-            return detectSystemLanguage()
-        } else {
-            if (root.availableLanguages.indexOf(configLang) !== -1) {
-                return configLang
-            } else {
-                return detectSystemLanguage()
-            }
-        }
-    }
-    
-    function loadTranslations() {
-        if (root.isScanning) {
-            return
-        }
-        
-        var targetLang = getLanguageCode()
-        root.currentLanguage = targetLang
-        
-        // Use empty translations for English (default language)
-        if (targetLang === "en_US" || targetLang === "en") {
-            root.translations = {}
-            return
-        }
-        
-        // Check if target language is available
-        if (root.availableLanguages.indexOf(targetLang) === -1) {
-            root.currentLanguage = "en_US"
-            root.translations = {}
-            return
-        }
-        
-        // Load translation file
-        root.isLoading = true
-        var translationsPath = Qt.resolvedUrl(Directories.config + "/quickshell/translations/" + targetLang + ".json")
-        translationFileView.path = translationsPath
-    }
-    
+
     function tr(text) {
-        if (!text) {
-            return ""
-        }
-        
-        var key = text.toString()
-        
-        if (root.isLoading) {
-            return key
-        }
-        
-        if (root.currentLanguage === "en_US" || root.currentLanguage === "en" || !root.translations) {
-            return key
-        }
-        
+        if (!text)
+            return "";
+        var key = text.toString();
+        if (root.isLoading)
+            return key;
+
         if (root.translations.hasOwnProperty(key)) {
-            var translation = root.translations[key]
-            if (translation && translation.toString().trim().length > 0) {
-                var str = translation.toString().trim()
-                if (str.endsWith("/*keep*/")) {
-                    return str.substring(0, str.length - 8).trim()
-                } else {
-                    return str
-                }
-            } else {
-                return translation.toString()
+            var translation = root.translations[key].toString().trim();
+            if (translation.length === 0)
+                return key;
+
+            if (translation.endsWith(root.translationKeepSuffix)) {
+                translation = translation.substring(0, translation.length - root.translationKeepSuffix.length).trim();
             }
+            return translation;
         }
 
-        return key // Fallback to key name
-    }
-    
-    function reloadTranslations() {
-        root.scanLanguages()
-    }
-    
-    function scanLanguages() {
-        var translationsDir = Qt.resolvedUrl(Directories.config + "/quickshell/translations/").toString().replace("file://", "")
-        root.isScanning = true
-        scanLanguagesProcess.running = true
-    }
-    
-    Component.onCompleted: {
-        root.scanLanguages()
+        return key; // Fallback to key name
     }
 }
