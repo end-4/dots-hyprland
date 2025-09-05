@@ -7,6 +7,8 @@ ScrollBar {
     id: root
 
     policy: ScrollBar.AsNeeded
+    topPadding: Appearance.rounding.normal
+    bottomPadding: Appearance.rounding.normal
 
     contentItem: Rectangle {
         implicitWidth: 4
