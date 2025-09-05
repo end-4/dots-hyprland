@@ -841,10 +841,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$check" == true ]]; then
-  log_info "This is an UPDATE-ONLY script with smart dependency management."
-  log_info "Features: Smart deps (auto-enabled), commit-based file diff, conflict resolution"
-  log_info "For initial setup, please use install.sh instead."
-  safe_read "Continue with smart update? (Y/n): " response "Y"
+  log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
+  log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
+  log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
+  log_warning "In general, prefer install.sh for updates."
+  safe_read "Continue? (y/N): " response "N"
 
   if [[ "$response" =~ ^[Nn]$ ]]; then
     log_error "Update aborted by user"
