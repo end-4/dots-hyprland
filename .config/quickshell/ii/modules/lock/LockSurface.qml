@@ -101,7 +101,7 @@ MouseArea {
                 verticalAlignment: Text.AlignVCenter
                 iconSize: 24
                 text: "dark_mode"
-                color: Appearance.colors.colOnPrimaryContainer
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
 
