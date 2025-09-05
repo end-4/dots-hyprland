@@ -1,12 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import qs.modules.bar as Bar
 
 MouseArea {
     id: root
@@ -18,15 +16,30 @@ MouseArea {
         passwordBox.forceActiveFocus();
     }
 
-    Component.onCompleted: {
-        forceFieldFocus();
-    }
-
     Connections {
         target: context
         function onShouldReFocus() {
             forceFieldFocus();
         }
+    }
+
+    property real toolbarScale: 0.9
+    property real toolbarOpacity: 0
+    Behavior on toolbarScale {
+        NumberAnimation {
+            duration: Appearance.animation.elementMove.duration
+            easing.type: Appearance.animation.elementMove.type
+            easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+        }
+    }
+    Behavior on toolbarOpacity {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
+    Component.onCompleted: {
+        forceFieldFocus();
+        toolbarScale = 1;
+        toolbarOpacity = 1;
     }
 
     Keys.onPressed: event => { // Esc to clear
@@ -74,22 +87,8 @@ MouseArea {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
 
-        scale: 0.9
-        opacity: 0
-        Component.onCompleted: {
-            scale = 1;
-            opacity = 1;
-        }
-        Behavior on scale {
-            NumberAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
-            }
-        }
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
+        scale: root.toolbarScale
+        opacity: root.toolbarOpacity
 
         ToolbarTextField {
             id: passwordBox
@@ -142,6 +141,9 @@ MouseArea {
             bottom: mainIsland.bottom
             rightMargin: 20
         }
+
+        scale: root.toolbarScale
+        opacity: root.toolbarOpacity
 
         ToolbarButton {
             id: powerButton
