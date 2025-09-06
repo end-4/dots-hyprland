@@ -40,7 +40,19 @@ ContentPage {
                     content: Translation.tr("Shell & utilities theming must also be enabled")
                 }
             }
-
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                text: Translation.tr("Force dark mode in terminal")
+                checked: Config.options.appearance.wallpaperTheming.forceTerminalDarkMode
+                onCheckedChanged: {
+                    Config.options.appearance.wallpaperTheming.forceTerminalDarkMode = checked;
+                }
+                StyledToolTip {
+                    content: Translation.tr("Ignored if terminal theming is not enabled")
+                }
+            }
         }
     }
 }
