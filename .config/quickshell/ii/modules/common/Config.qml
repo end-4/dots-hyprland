@@ -91,8 +91,8 @@ Singleton {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true
                     property bool enableTerminal: true
-                    property JsonObject generationProps: JsonObject {
-                        property real harmony: 0.5
+                    property JsonObject terminalGenerationProps: JsonObject {
+                        property real harmony: 0.8
                         property real harmonizeThreshold: 100
                         property real termFgBoost: 0.35
                     }
