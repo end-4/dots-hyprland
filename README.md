@@ -86,9 +86,9 @@ Widget system: Quickshell | Support: Yes
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/4d45e860-ae60-418a-a564-309b4939f5c4) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/22aa335a-0a23-4789-8ce9-c601b9f95858" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50009d7f-e456-4200-bc41-49b29abbafe3" /> |
 | Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/292259fc-57d3-4663-a583-2ce2faad13fb) |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 
 ### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
