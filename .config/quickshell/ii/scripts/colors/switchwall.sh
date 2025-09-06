@@ -264,10 +264,14 @@ switch() {
         fi
     fi
 
-    [[ -n "$mode_flag" ]] && matugen_args+=(--mode "$mode_flag") && generate_colors_material_args+=(--mode "$mode_flag")
     [[ -n "$type_flag" ]] && matugen_args+=(--type "$type_flag") && generate_colors_material_args+=(--scheme "$type_flag")
     generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
     generate_colors_material_args+=(--cache "$STATE_DIR/user/generated/color.txt")
+
+    generate_colors_material_dark_args=("${generate_colors_material_args[@]}")
+    generate_colors_material_dark_args+=(--mode "dark")
+    [[ -n "$mode_flag" ]] && matugen_args+=(--mode "$mode_flag") && generate_colors_material_args+=(--mode "$mode_flag")
+
 
     pre_process "$mode_flag"
 
@@ -284,6 +288,8 @@ switch() {
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
+    python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_dark_args[@]}" \
+        > "$STATE_DIR"/user/generated/material_colors_dark.scss
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
 
