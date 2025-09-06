@@ -236,6 +236,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter
                         RippleButtonWithIcon {
                             id: rndWallBtn
+                            visible: Config.options.policies.weeb === 1
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
                             materialIcon: "wallpaper"
