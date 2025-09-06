@@ -841,11 +841,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$check" == true ]]; then
-  log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
-  log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
-  log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
-  log_warning "In general, prefer install.sh for updates."
-  safe_read "Continue? (y/N): " response "N"
+  log_info "This is an UPDATE-ONLY script with smart dependency management."
+  log_info "Features: Smart deps (auto-enabled), commit-based file diff, conflict resolution"
+  log_info "For initial setup, please use install.sh instead."
+  safe_read "Continue with smart update? (Y/n): " response "Y"
 
   if [[ "$response" =~ ^[Nn]$ ]]; then
     log_error "Update aborted by user"
@@ -1288,7 +1287,7 @@ if [[ "$process_files" == true ]]; then
     fi
   fi
 
-  # Process other directories (like .local/bin) - only changed files
+  # Process other directories (like .local/bin) - check all files for differences
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
     home_dir_path="${HOME}/${dir_name}"
@@ -1300,9 +1299,11 @@ if [[ "$process_files" == true ]]; then
     log_info "Processing directory: $dir_name"
     mkdir -p "$home_dir_path"
 
-    while IFS= read -r -d '' repo_file; do
+    # Process all files in the directory, checking each one
+    find "$repo_dir_path" -type f 2>/dev/null | while read -r repo_file; do
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
+      config_relative="${repo_file#$REPO_DIR/}"
 
       if should_ignore "$home_file"; then
         ((files_skipped++))
@@ -1314,7 +1315,8 @@ if [[ "$process_files" == true ]]; then
 
       if [[ -f "$home_file" ]]; then
         if ! cmp -s "$repo_file" "$home_file"; then
-          log_info "Found difference in: $rel_path"
+          log_info "Found difference in $dir_name: $rel_path"
+          
           if should_auto_sync "$home_file"; then
             cp -p "$repo_file" "$home_file"
             log_success "Auto-synced: $home_file"
@@ -1323,13 +1325,15 @@ if [[ "$process_files" == true ]]; then
             handle_file_conflict "$repo_file" "$home_file"
             ((files_updated++))
           fi
+        else
+          log_info "File $rel_path in $dir_name is identical, skipping"
         fi
       else
         cp -p "$repo_file" "$home_file"
         log_success "Created new file: $home_file"
         ((files_created++))
       fi
-    done < <(get_changed_files_since_pull "$repo_dir_path")
+    done
   done
 
   # Copy other important directories (only update, don't create from scratch)
