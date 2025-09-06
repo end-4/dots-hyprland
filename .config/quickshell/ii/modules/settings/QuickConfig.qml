@@ -90,6 +90,7 @@ ContentPage {
             ColumnLayout {
                 RippleButtonWithIcon {
                     id: rndWallBtn
+                    visible: Config.options.policies.weeb === 1
                     Layout.fillWidth: true
                     buttonRadius: Appearance.rounding.small
                     materialIcon: "wallpaper"
