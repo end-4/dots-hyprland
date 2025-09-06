@@ -153,15 +153,17 @@ Item {
                         })
                     }
                 }
+            // TODO: Fix various issues in multiple monitors
+            //  1. Indicator for workspace ID is wrong when workspaces in overview are included from multiple monitors
                 delegate: OverviewWindow {
                     id: window
                     required property var modelData
                     property int monitorId: windowData?.monitor
-                    property var monitor: HyprlandData.monitors[monitorId]
+                    property var monitor: HyprlandData.monitors.find(m => m.id == Hyprland.focusedMonitor?.id)
                     property var address: `0x${modelData.HyprlandToplevel.address}`
                     windowData: windowByAddress[address]
                     toplevel: modelData
-                    monitorData: HyprlandData.monitors[monitorId]
+                    monitorData: root.monitorData
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
