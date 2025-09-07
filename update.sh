@@ -915,28 +915,18 @@ if git remote get-url origin &>/dev/null; then
       if [[ "$local_commit" != "$remote_commit" ]]; then
         log_info "Differences detected between local ($local_commit) and remote ($remote_commit)"
         
-        # Show what will be updated
+        # Show what will be pulled
         echo -e "\n${CYAN}Changes to be pulled:${NC}"
         git log --oneline HEAD.."$remote_branch" 2>/dev/null || echo "Unable to show change log"
         echo
         
-        if ! safe_read "Pull these changes? (Y/n): " pull_response "Y"; then
-          echo
-          log_error "Failed to read input. Aborting."
-          exit 1
-        fi
-
-        if [[ ! "$pull_response" =~ ^[Nn]$ ]]; then
-          # Pull changes
-          log_info "Pulling changes from origin/$current_branch..."
-          if git pull; then
-            log_success "Successfully pulled latest changes"
-          else
-            log_warning "Failed to pull changes from remote. Continuing with current state..."
-            log_info "You may need to resolve conflicts manually later."
-          fi
+        # Pull changes
+        log_info "Pulling changes from origin/$current_branch..."
+        if git pull; then
+          log_success "Successfully pulled latest changes"
         else
-          log_info "Skipping pull, working with current local state"
+          log_warning "Failed to pull changes from remote. Continuing with current state..."
+          log_info "You may need to resolve conflicts manually later."
         fi
       else
         log_info "Local and remote are in sync - no changes to pull"
@@ -1425,12 +1415,7 @@ fi
 
 echo "- Configuration directories: ${MONITOR_DIRS[*]}"
 
-# Post-update reminders
-echo
-echo -e "${CYAN}Post-update reminders:${NC}"
-echo "- If you updated Hyprland configs, press Ctrl+Super+T to select a wallpaper"  
-echo "- Press Super+/ for a list of keybinds"
-echo "- Check https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation"
+
 
 # Environment variable warning (only if Hyprland configs were touched)
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV:-}" && "$process_files" == true ]]; then
