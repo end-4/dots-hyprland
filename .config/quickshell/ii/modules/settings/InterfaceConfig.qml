@@ -7,66 +7,6 @@ import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
-    ContentSection {
-        icon: "rule"
-        title: Translation.tr("Policies")
-
-        ConfigRow {
-            ColumnLayout {
-                // Weeb policy
-                ContentSubsectionLabel {
-                    text: Translation.tr("Weeb")
-                }
-                ConfigSelectionArray {
-                    currentValue: Config.options.policies.weeb
-                    onSelected: newValue => {
-                        Config.options.policies.weeb = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("No"),
-                            value: 0
-                        },
-                        {
-                            displayName: Translation.tr("Yes"),
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Closet"),
-                            value: 2
-                        }
-                    ]
-                }
-            }
-
-            ColumnLayout {
-                // AI policy
-                ContentSubsectionLabel {
-                    text: Translation.tr("AI")
-                }
-                ConfigSelectionArray {
-                    currentValue: Config.options.policies.ai
-                    onSelected: newValue => {
-                        Config.options.policies.ai = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("No"),
-                            value: 0
-                        },
-                        {
-                            displayName: Translation.tr("Yes"),
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Local only"),
-                            value: 2
-                        }
-                    ]
-                }
-            }
-        }
-    }
 
     ContentSection {
         icon: "wallpaper"
@@ -116,58 +56,6 @@ ContentPage {
                 stepSize: 1
                 onValueChanged: {
                     Config.options.background.parallax.workspaceZoom = value / 100;
-                }
-            }
-        }
-    }
-
-    ContentSection {
-        icon: "battery_android_full"
-        title: Translation.tr("Battery")
-
-        ConfigRow {
-            uniform: true
-            ConfigSpinBox {
-                text: Translation.tr("Low warning")
-                value: Config.options.battery.low
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.low = value;
-                }
-            }
-            ConfigSpinBox {
-                text: Translation.tr("Critical warning")
-                value: Config.options.battery.critical
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.critical = value;
-                }
-            }
-        }
-        ConfigRow {
-            uniform: true
-            ConfigSwitch {
-                text: Translation.tr("Automatic suspend")
-                checked: Config.options.battery.automaticSuspend
-                onCheckedChanged: {
-                    Config.options.battery.automaticSuspend = checked;
-                }
-                StyledToolTip {
-                    content: Translation.tr("Automatically suspends the system when battery is low")
-                }
-            }
-            ConfigSpinBox {
-                text: Translation.tr("Suspend at")
-                value: Config.options.battery.suspend
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.suspend = value;
                 }
             }
         }
@@ -281,10 +169,6 @@ ContentPage {
                 onCheckedChanged: {
                     Config.options.sidebar.cornerOpen.visualize = checked;
                 }
-
-                StyledToolTip {
-                    content: "When this is off you'll have to click"
-                }
             }
             ConfigRow {
                 ConfigSpinBox {
@@ -389,33 +273,4 @@ ContentPage {
         }
     }
 
-    ContentSection {
-        icon: "language"
-        title: Translation.tr("Language")
-
-        ContentSubsection {
-            title: Translation.tr("Interface Language")
-            tooltip: Translation.tr("Select the language for the user interface.\n\"Auto\" will use your system's locale.")
-
-            ConfigSelectionArray {
-                id: languageSelector
-                currentValue: Config.options.language.ui
-                onSelected: newValue => {
-                    Config.options.language.ui = newValue;
-                }
-                options: [
-                    {
-                        displayName: Translation.tr("Auto (System)"),
-                        value: "auto"
-                    },
-                    ...Translation.availableLanguages.map(lang => {
-                        return {
-                            displayName: lang.replace('_', '-'),
-                            value: lang
-                        };
-                    })
-                ]
-            }
-        }
-    }
 }
