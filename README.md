@@ -26,10 +26,10 @@
   - **Transparent installation**: Every command is shown before it's run
 </details>
 <details> 
-  <summary>Installation (illogical-impulse<sup>Quickshell</sup>)</summary>
+  <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
-   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. 
+   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(both install script and manual installation available)</sub>
+   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
      - If for whatever reason the keybind list widget does not work, here's an image:
@@ -44,12 +44,11 @@
 
   | Software | Purpose |
   | ------------- | ------------- |
-  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
-  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, responsible for the status bar, sidebars, etc. |
+  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
+  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-
-
-  - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
+  - THERE IS NO WAYBAR
+  - For the full list of dependencies, see the [arch-packages folder](https://github.com/end-4/dots-hyprland/tree/main/arch-packages)
 </details>
 
 <details>
@@ -57,9 +56,6 @@
         <a href="https://discord.gg/GtdRBXgMwq"> Server link </a> | I hope this provides a friendlier environment for support without needing me to personally accept every friend request/DM. For real issues, prefer GitHub
 
 </details>
-
-_Note: **THERE IS NO FUCKING WAYBAR**_
-
 
 <div align="center">
     <h2>• screenshots •</h2>
@@ -102,7 +98,7 @@ Widget system: AGS | Support: No
 
 ### Very old stuff
 
-- Source code not likely to work but still available in the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch. Extremely spaghetti.
+- Not likely to work, but the source is still available in the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch. Extremely spaghetti.
 - Click image for a presentation video
 
 #### m3ww
@@ -142,27 +138,22 @@ Widget system: AGS | Support: No
     <h3></h3>
 </div>
 
- - [@clsty](https://github.com/clsty) for making my work accessible by taking care of the install script and many other things
+ - [@clsty](https://github.com/clsty) for making the dotfiles accessible by taking care of the install script and many other things
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
  - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
  - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
- - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
- - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
- - AI bots for providing useful examples
-
- <sup><sup><sup><sup><sup>[@tokyobot](https://github.com/tokyob0t) for saying hi</sup></sup></sup></sup></sup>
+ - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
+ - EWW: [fufexan](https://github.com/fufexan/dotfiles)
 
 <div align="center">
     <h2>• stonks •</h2>
     <h3></h3>
 </div>
 
-- Funny useful number: https://github.com/sponsors/end-4
-- Funny useless number:
+- If you would like to give me some milk😳 (i dont drink coffee): https://github.com/sponsors/end-4
+- Virtual tentacle cat website points chart
 
 [![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
-
-- *Jokes aside i do appreciate both*
 
 
 <div align="center">
@@ -171,4 +162,4 @@ Widget system: AGS | Support: No
 </div>
 
  - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
- - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (unless you do weird stuff and violate the license). (this note is here because some people actually asked)
+ - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (unless you do weird stuff and violate the license). <sub>(this note is here because some people actually asked)</sub>
