@@ -1,0 +1,97 @@
+// https://github.com/AvengeMedia/DankMaterialShell/blob/master/Services/CalendarService.qml
+
+import QtQuick
+import Quickshell
+import Quickshell.Io
+pragma Singleton
+pragma ComponentBehavior: Bound
+import Qt.labs.platform
+import qs.modules.common.functions
+Singleton {
+    id: root
+
+    property bool khalAvailable: false
+    property var items: []
+
+    // Process for checking khal configuration
+    Process {
+        id: khalCheckProcess
+
+        command: ["khal", "list", "today"]
+        running: true
+        onExited: (exitCode) => {
+          root.khalAvailable = (exitCode === 0);
+          Todo.refresh() 
+        }
+    }
+
+    // Process for loading events
+    Process {
+      id: getEventsProcess
+      running: true
+        // get events for 3 months
+        command: ["khal", "list", "--json", "title", "--json", "start-date",  Qt.formatDate(new Date(), "dd/MM/yyyy") ,Qt.formatDate((() => { let d = new Date(); d.setMonth(d.getMonth() + 3); return d; })(), "dd/MM/yyyy")]
+        stdout: StdioCollector {
+
+          onStreamFinished:{
+             let lines = this.text.split('\n')
+             for(let line of lines){
+               line = line.trim()
+               if (!line || line === "[]")
+                    continue
+                let dayEvents = JSON.parse(line)
+                for(let event of dayEvents){
+                 let startParts = event['start-date'].split('/')
+                 let startDate = new Date(parseInt(startParts[2]),
+                                           parseInt(startParts[1]) - 1,
+                                           parseInt(startParts[0]))
+                  root.items.push({
+                      "content": event['title'],
+                      "date": startDate,
+                      "done": false,
+                  })
+                }
+              }
+              Todo.refresh()
+          }
+    
+        }
+      }
+
+      
+      Process {
+        id: khalAddTaskProcess
+        running: false
+      }
+
+
+
+      function addItem(item){
+        let title =  item['content']
+        let formattedDate = Qt.formatDate(item['date'], "dd/MM/yyyy")
+        khalAddTaskProcess.command = ["khal", "new", formattedDate, title]
+        khalAddTaskProcess.running = true
+      }
+
+
+    Process {
+        id: khalRemoveProcess
+        running: false
+      }
+
+      function removeItem(item){
+        let taskToDelete =  item['content']
+
+        khalRemoveProcess.command = [ // currently only this hack is possible to delte without interactive shell issue:https://github.com/pimutils/khal/issues/603
+          "sqlite3",
+          String(StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]).replace("file://", "") + "/.local/share/khal/khal.db",
+          "DELETE FROM events WHERE item LIKE '%SUMMARY:" + taskToDelete + "%';"
+          ]
+
+        
+          khalRemoveProcess.running = true
+          console.log(khalRemoveProcess.command)
+
+
+    }
+}
