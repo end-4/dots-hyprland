@@ -31,13 +31,13 @@ RippleButton {
         anchors.left: parent.left
     }
 
-    Loader {
+    LazyLoader {
         id: dayPopUpLoader
-
-        anchors.fill: parent
         active: dayPopUp.visible
-
-        PanelWindow {
+        component: dayPopUp
+      }
+      
+      PanelWindow {
             id: dayPopUp
 
             visible: false
@@ -131,7 +131,6 @@ RippleButton {
                                             color: Appearance.colors.colOnLayer1
                                         }
 
-                                    }
 
                                 }
 
