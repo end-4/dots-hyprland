@@ -30,7 +30,7 @@ ApplicationWindow {
         },
         {
             name: Translation.tr("General"),
-            icon: "dashboard",
+            icon: "browse",
             iconRotation: 180,
             component: "modules/settings/GeneralConfig.qml"
         },
@@ -42,7 +42,7 @@ ApplicationWindow {
         },
         {
             name: Translation.tr("Interface"),
-            icon: "cards",
+            icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
