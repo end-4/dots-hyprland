@@ -29,6 +29,12 @@ ApplicationWindow {
             component: "modules/settings/QuickConfig.qml"
         },
         {
+            name: Translation.tr("General"),
+            icon: "browse",
+            iconRotation: 180,
+            component: "modules/settings/GeneralConfig.qml"
+        },
+        {
             name: Translation.tr("Bar"),
             icon: "toast",
             iconRotation: 180,
@@ -36,7 +42,7 @@ ApplicationWindow {
         },
         {
             name: Translation.tr("Interface"),
-            icon: "cards",
+            icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
