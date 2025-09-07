@@ -168,7 +168,7 @@ RippleButton {
                     const dayPopRect = dayPopUp.dayPopRectProp
                     const globalPos = dayPopUp.QsWindow?.mapFromItem(button, 0 , 0);
                     dayPopRect.x =globalPos.x - dayPopRect.width/2;
-                    dayPopRect.y = globalPos.y 
+                    dayPopRect.y = globalPos.y + button.height  - dayPopRect.height 
                 }
             }
             onExited: dayPopUpLoader.active  = false
