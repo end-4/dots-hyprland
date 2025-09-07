@@ -33,14 +33,13 @@ RippleButton {
 
     LazyLoader {
         id: dayPopUpLoader
-        active: dayPopUp.visible
-        component: dayPopUp
-      }
+        active: false
+    
       
       PanelWindow {
             id: dayPopUp
 
-            visible: false
+            visible: true
             color: "transparent"
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
@@ -48,6 +47,8 @@ RippleButton {
             WlrLayershell.layer: WlrLayer.Overlay
             implicitWidth: sidebarRoot.width
             implicitHeight: sidebarRoot.height
+            property Rectangle dayPopRectProp: dayPopRect
+
               
         anchors {
             top: true
@@ -57,7 +58,8 @@ RippleButton {
 
 
 
-            Rectangle {
+
+        Rectangle {
                 id: dayPopRect
 
                 width: 240
@@ -132,7 +134,7 @@ RippleButton {
                                         }
 
 
-                                }
+                               }
 
                             }
 
@@ -142,6 +144,7 @@ RippleButton {
 
                 }
 
+              }
             }
 
         }
@@ -159,14 +162,16 @@ RippleButton {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                if (button.taskList.length > 0) {
-                    dayPopUp.visible = true;
+              if (button.taskList.length > 0) {
+                    dayPopUpLoader.active = true;
+                    const dayPopUp = dayPopUpLoader.item
+                    const dayPopRect = dayPopUp.dayPopRectProp
                     const globalPos = dayPopUp.QsWindow?.mapFromItem(button, 0 , 0);
                     dayPopRect.x =globalPos.x - dayPopRect.width/2;
-                    dayPopRect.y = globalPos.y - dayPopRect.height +button.height 
+                    dayPopRect.y = globalPos.y
                 }
             }
-            onExited: dayPopUp.visible = false
+            onExited: dayPopUpLoader.active  = false
         }
 
         Behavior on color {
