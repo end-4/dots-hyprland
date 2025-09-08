@@ -310,14 +310,17 @@ ApplicationWindow {
                                 options: [
                                     {
                                         displayName: Translation.tr("No"),
+                                        icon: "close",
                                         value: 0
                                     },
                                     {
                                         displayName: Translation.tr("Yes"),
+                                        icon: "check",
                                         value: 1
                                     },
                                     {
                                         displayName: Translation.tr("Closet"),
+                                        icon: "ev_shadow",
                                         value: 2
                                     }
                                 ]
@@ -335,14 +338,17 @@ ApplicationWindow {
                                 options: [
                                     {
                                         displayName: Translation.tr("No"),
+                                        icon: "close",
                                         value: 0
                                     },
                                     {
                                         displayName: Translation.tr("Yes"),
+                                        icon: "check",
                                         value: 1
                                     },
                                     {
                                         displayName: Translation.tr("Local only"),
+                                        icon: "sync_saved_locally",
                                         value: 2
                                     }
                                 ]
