@@ -95,6 +95,7 @@ Singleton {
                         property real harmony: 0.8
                         property real harmonizeThreshold: 100
                         property real termFgBoost: 0.35
+                        property bool forceDarkMode: false
                     }
                 }
                 property JsonObject palette: JsonObject {
