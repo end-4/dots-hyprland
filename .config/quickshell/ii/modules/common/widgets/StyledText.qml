@@ -25,6 +25,11 @@ Text {
         easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
     }
 
+    Component.onCompleted: {
+        textAnimationBehavior.originalX = root.x;
+        textAnimationBehavior.originalY = root.y;
+    }
+
     Behavior on text {
         id: textAnimationBehavior
         property real originalX: root.x
@@ -33,12 +38,6 @@ Text {
 
         SequentialAnimation {
             alwaysRunToEnd: true
-            ScriptAction {
-                script: textAnimationBehavior.originalX = root.x;
-            }
-            ScriptAction {
-                script: textAnimationBehavior.originalY = root.y;
-            }
             ParallelAnimation {
                 Anim {
                     property: "x"
