@@ -16,6 +16,7 @@ RowLayout {
     Layout.rightMargin: 8
 
     RowLayout {
+        spacing: 10
         OptionalMaterialSymbol {
             icon: root.icon
         }

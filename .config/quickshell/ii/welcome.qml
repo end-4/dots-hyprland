@@ -236,6 +236,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter
                         RippleButtonWithIcon {
                             id: rndWallBtn
+                            visible: Config.options.policies.weeb === 1
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
                             materialIcon: "wallpaper"
@@ -309,14 +310,17 @@ ApplicationWindow {
                                 options: [
                                     {
                                         displayName: Translation.tr("No"),
+                                        icon: "close",
                                         value: 0
                                     },
                                     {
                                         displayName: Translation.tr("Yes"),
+                                        icon: "check",
                                         value: 1
                                     },
                                     {
                                         displayName: Translation.tr("Closet"),
+                                        icon: "ev_shadow",
                                         value: 2
                                     }
                                 ]
@@ -334,14 +338,17 @@ ApplicationWindow {
                                 options: [
                                     {
                                         displayName: Translation.tr("No"),
+                                        icon: "close",
                                         value: 0
                                     },
                                     {
                                         displayName: Translation.tr("Yes"),
+                                        icon: "check",
                                         value: 1
                                     },
                                     {
                                         displayName: Translation.tr("Local only"),
+                                        icon: "sync_saved_locally",
                                         value: 2
                                     }
                                 ]

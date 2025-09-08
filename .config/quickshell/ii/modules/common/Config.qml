@@ -91,7 +91,11 @@ Singleton {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true
                     property bool enableTerminal: true
-                    property bool forceTerminalDarkMode: false
+                    property JsonObject terminalGenerationProps: JsonObject {
+                        property real harmony: 0.8
+                        property real harmonizeThreshold: 100
+                        property real termFgBoost: 0.35
+                    }
                 }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
@@ -168,6 +172,7 @@ Singleton {
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
+                    property bool showItemId: false
                     property bool invertPinnedItems: false // Makes the below a whitelist for the tray and blacklist for the pinned area
                     property list<string> pinnedItems: [ "Fcitx" ]
                 }

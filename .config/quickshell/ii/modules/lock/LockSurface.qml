@@ -14,17 +14,26 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
 
+    // Force focus on entry
     function forceFieldFocus() {
         passwordBox.forceActiveFocus();
     }
-
     Connections {
         target: context
         function onShouldReFocus() {
             forceFieldFocus();
         }
     }
+    hoverEnabled: true
+    acceptedButtons: Qt.LeftButton
+    onPressed: mouse => {
+        forceFieldFocus();
+    }
+    onPositionChanged: mouse => {
+        forceFieldFocus();
+    }
 
+    // Toolbar appearing animation
     property real toolbarScale: 0.9
     property real toolbarOpacity: 0
     Behavior on toolbarScale {
@@ -38,29 +47,21 @@ MouseArea {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    // Init
     Component.onCompleted: {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
     }
 
-    Keys.onPressed: event => { // Esc to clear
-        if (event.key === Qt.Key_Escape) {
+    // Key presses
+    Keys.onPressed: event => {
+        root.context.resetClearTimer();
+        if (event.key === Qt.Key_Escape) { // Esc to clear
             root.context.currentText = "";
         }
         forceFieldFocus();
     }
-
-    hoverEnabled: true
-    acceptedButtons: Qt.LeftButton
-    onPressed: mouse => {
-        forceFieldFocus();
-    }
-    onPositionChanged: mouse => {
-        forceFieldFocus();
-    }
-
-    anchors.fill: parent
 
     // RippleButton {
     //     anchors {
@@ -77,7 +78,7 @@ MouseArea {
     //     }
     // }
 
-    // Controls
+    // Main toolbar: password box
     Toolbar {
         id: mainIsland
         anchors {
@@ -114,6 +115,10 @@ MouseArea {
                     passwordBox.text = root.context.currentText;
                 }
             }
+
+            Keys.onPressed: event => {
+                root.context.resetClearTimer();
+            }
         }
 
         ToolbarButton {
@@ -136,6 +141,7 @@ MouseArea {
         }
     }
 
+    // Left toolbar
     Toolbar {
         id: leftIsland
         anchors {
@@ -207,6 +213,7 @@ MouseArea {
         }
     }
 
+    // Right toolbar
     Toolbar {
         id: rightIsland
         anchors {
