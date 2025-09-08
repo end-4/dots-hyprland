@@ -50,7 +50,7 @@ Singleton {
         property color m3surfaceDim: "#161217"
         property color m3surfaceBright: "#3D373D"
         property color m3surfaceContainerLowest: "#110D12"
-        property color m3surfaceContainerLow: "#1F1A1F"
+        property color m3surfaceContainerLow: "#131313"
         property color m3surfaceContainer: "#231E23"
         property color m3surfaceContainerHigh: "#2D282E"
         property color m3surfaceContainerHighest: "#383339"
