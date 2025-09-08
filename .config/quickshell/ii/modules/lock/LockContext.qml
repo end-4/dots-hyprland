@@ -15,6 +15,10 @@ Scope {
     property bool unlockInProgress: false
     property bool showFailure: false
 
+    function resetClearTimer() {
+        passwordClearTimer.restart();
+    }
+
     Timer {
         id: passwordClearTimer
         interval: 10000

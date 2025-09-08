@@ -52,7 +52,7 @@ StyledPopup {
             StyledText {
                 horizontalAlignment: Text.AlignLeft
                 color: Appearance.colors.colOnSurfaceVariant
-                text: `${root.formattedDate} • ${root.formattedTime}`
+                text: `${root.formattedDate}`
                 font.weight: Font.Medium
             }
         }

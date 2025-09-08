@@ -255,7 +255,7 @@ Singleton {
     // - key_get_description: Description of pricing and how to get an API key
     // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
     // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
-    property var models: {
+    property var models: Config.options.policies.ai === 2 ? {} : {
         "gemini-2.0-flash": aiModelComponent.createObject(this, {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
@@ -887,8 +887,8 @@ Singleton {
 
     FileView {
         id: chatSaveFile
-        property string chatName: "chat"
-        path: `${Directories.aiChats}/${chatName}.json`
+        property string chatName: ""
+        path: chatName.length > 0 ? `${Directories.aiChats}/${chatName}.json` : ""
         blockLoading: true // Prevent race conditions
     }
 

@@ -14,6 +14,7 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
+    property bool vertical: false
     property bool borderless: Config.options.bar.borderless
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
@@ -22,6 +23,7 @@ Item {
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
+    property real activeWorkspaceMargin: 2
     property real workspaceIconSize: workspaceButtonWidth * 0.69
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
@@ -77,8 +79,8 @@ Item {
         updateWorkspaceOccupied();
     }
 
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: Appearance.sizes.barHeight
+    implicitWidth: root.vertical ? Appearance.sizes.verticalBarWidth : backgroundLayout.implicitWidth
+    implicitHeight: root.vertical ? backgroundLayout.implicitHeight : Appearance.sizes.barHeight
 
     // Scroll to switch workspaces
     WheelHandler {
@@ -102,31 +104,36 @@ Item {
     }
 
     // Workspaces - background
-    RowLayout {
-        id: rowLayout
+    GridLayout {
+        id: backgroundLayout
         z: 1
-
-        spacing: 0
         anchors.fill: parent
-        implicitHeight: Appearance.sizes.barHeight
+        implicitHeight: root.vertical ? root.workspaceButtonWidth : Appearance.sizes.barHeight
+        implicitWidth: root.vertical ? Appearance.sizes.verticalBarWidth : root.workspaceButtonWidth
+
+        rowSpacing: 0
+        columnSpacing: 0
+        columns: root.vertical ? 1 : -1
 
         Repeater {
             model: Config.options.bar.workspaces.shown
 
             Rectangle {
                 z: 1
+                Layout.alignment: root.vertical ? Qt.AlignHCenter : Qt.AlignVCenter
+
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
                 radius: (width / 2)
                 property var previousOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
                 property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
-                property var radiusLeft: previousOccupied ? 0 : (width / 2)
-                property var radiusRight: rightOccupied ? 0 : (width / 2)
+                property var radiusPrev: previousOccupied ? 0 : (width / 2)
+                property var radiusNext: rightOccupied ? 0 : (width / 2)
 
-                topLeftRadius: radiusLeft
-                bottomLeftRadius: radiusLeft
-                topRightRadius: radiusRight
-                bottomRightRadius: radiusRight
+                topLeftRadius: radiusPrev
+                bottomLeftRadius: root.vertical ? radiusNext : radiusPrev
+                topRightRadius: root.vertical ? radiusPrev : radiusNext
+                bottomRightRadius: radiusNext
                 
                 color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
                 opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+1)) ? 1 : 0
@@ -134,11 +141,11 @@ Item {
                 Behavior on opacity {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
-                Behavior on radiusLeft {
+                Behavior on radiusPrev {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
-                Behavior on radiusRight {
+                Behavior on radiusNext {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
@@ -152,27 +159,34 @@ Item {
     Rectangle {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
-        property real activeWorkspaceMargin: 2
-        implicitHeight: workspaceButtonWidth - activeWorkspaceMargin * 2
         radius: Appearance.rounding.full
         color: Appearance.colors.colPrimary
-        anchors.verticalCenter: parent.verticalCenter
 
+        anchors {
+            verticalCenter: vertical ? undefined : parent.verticalCenter
+            horizontalCenter: vertical ? parent.horizontalCenter : undefined
+        }
+
+        // idx1 is the "leading" indicator position, idx2 is the "following" one
+        // The former animates faster than the latter, see the NumberAnimations below
         property real idx1: workspaceIndexInGroup
         property real idx2: workspaceIndexInGroup
-        x: Math.min(idx1, idx2) * workspaceButtonWidth + activeWorkspaceMargin
-        implicitWidth: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - activeWorkspaceMargin * 2
+        property real indicatorPosition: Math.min(idx1, idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
+        property real indicatorLength: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2
+        property real indicatorThickness: workspaceButtonWidth - root.activeWorkspaceMargin * 2
 
-        Behavior on activeWorkspaceMargin {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-        Behavior on idx1 { // Leading anim
+        x: root.vertical ? null : indicatorPosition
+        implicitWidth: root.vertical ? indicatorThickness : indicatorLength
+        y: root.vertical ? indicatorPosition : null
+        implicitHeight: root.vertical ? indicatorLength : indicatorThickness
+
+        Behavior on idx1 {
             NumberAnimation {
                 duration: 100
                 easing.type: Easing.OutSine
             }
         }
-        Behavior on idx2 { // Following anim
+        Behavior on idx2 {
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutSine
@@ -181,13 +195,17 @@ Item {
     }
 
     // Workspaces - numbers
-    RowLayout {
+    GridLayout {
         id: rowLayoutNumbers
         z: 3
 
-        spacing: 0
+        columns: vertical ? 1 : -1
+        columnSpacing: 0
+        rowSpacing: 0
+
         anchors.fill: parent
-        implicitHeight: Appearance.sizes.barHeight
+        implicitHeight: vertical ? Appearance.sizes.barWidth : Appearance.sizes.barHeight
+        implicitWidth: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.verticalBarWidth
 
         Repeater {
             model: Config.options.bar.workspaces.shown
@@ -195,10 +213,12 @@ Item {
             Button {
                 id: button
                 property int workspaceValue: workspaceGroup * Config.options.bar.workspaces.shown + index + 1
-                Layout.fillHeight: true
+                Layout.fillHeight: !root.vertical
+                Layout.fillWidth: root.vertical
                 onPressed: Hyprland.dispatch(`workspace ${workspaceValue}`)
-                width: workspaceButtonWidth
-                
+                width: vertical ? undefined : workspaceButtonWidth
+                height: vertical ? workspaceButtonWidth : undefined
+
                 background: Item {
                     id: workspaceButtonBackground
                     implicitWidth: workspaceButtonWidth

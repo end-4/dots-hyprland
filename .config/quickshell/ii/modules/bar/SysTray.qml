@@ -12,6 +12,8 @@ Item {
     property bool vertical: false
     property bool invertSide: false
     property bool trayOverflowOpen: false
+    property bool showSeparator: true
+    property bool showOverflowMenu: true
 
     property list<var> itemsInUserList: SystemTray.items.values.filter(i => Config.options.bar.tray.pinnedItems.includes(i.id))
     property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => !Config.options.bar.tray.pinnedItems.includes(i.id))
@@ -29,7 +31,7 @@ Item {
 
         RippleButton {
             id: trayOverflowButton
-            visible: root.unpinnedItems.length > 0
+            visible: root.showOverflowMenu && root.unpinnedItems.length > 0
             toggled: root.trayOverflowOpen
             property bool containsMouse: hovered
 
@@ -101,9 +103,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.larger
             color: Appearance.colors.colSubtext
             text: "•"
-            visible: {
-                SystemTray.items.values.length > 0
-            }
+            visible: root.showSeparator && SystemTray.items.values.length > 0
         }
 
     }

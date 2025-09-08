@@ -3,6 +3,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
+import QtQuick.Controls
 
 /**
  * A ListView with animations.
@@ -30,6 +31,7 @@ ListView {
 
     maximumFlickVelocity: 3500
     boundsBehavior: Flickable.DragOverBounds
+    ScrollBar.vertical: StyledScrollBar {}
 
     MouseArea {
         visible: Config?.options.interactions.scrolling.fasterTouchpadScroll
