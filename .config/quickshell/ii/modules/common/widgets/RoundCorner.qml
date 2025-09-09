@@ -72,8 +72,4 @@ Item {
         }
     }
 
-    Behavior on implicitSize {
-        animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-
 }
