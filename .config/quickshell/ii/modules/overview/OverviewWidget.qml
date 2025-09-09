@@ -153,8 +153,6 @@ Item {
                         })
                     }
                 }
-            // TODO: Fix various issues in multiple monitors
-            //  1. Indicator for workspace ID is wrong when workspaces in overview are included from multiple monitors
                 delegate: OverviewWindow {
                     id: window
                     required property var modelData
