@@ -23,7 +23,33 @@ Singleton {
           root.khalAvailable = (exitCode === 0);
           Todo.refresh() 
         }
+      }
+
+
+      function getTasksByDate(currentDate) {
+        if(!khalAvailable){
+          return []
+        }
+        const res = [];
+        
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        for (let i = 0; i < root.items.length; i++) {
+            const taskDate = new Date(root.items[i]['date']);
+            if (
+                taskDate.getDate() === currentDay &&
+                taskDate.getMonth() === currentMonth &&
+                taskDate.getFullYear() === currentYear
+              ) {
+                res.push(root.items[i]);
+              }
+        }
+
+        return res;
     }
+
 
     // Process for loading events
     Process {
@@ -48,7 +74,7 @@ Singleton {
                   root.items.push({
                       "content": event['title'],
                       "date": startDate,
-                      "done": false,
+                      "isTodo":false
                   })
                 }
               }

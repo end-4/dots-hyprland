@@ -100,8 +100,11 @@ RippleButton {
                                     width: parent.width
                                     spacing: 4
                                     Layout.margins: 10
+                                    
+                                    RowLayout {
+                                        Layout.fillWidth: true
 
-                                    StyledText {
+                                        StyledText {
                                         Layout.fillWidth: true // Needed for wrapping
                                         Layout.leftMargin: 10
                                         Layout.rightMargin: 10
@@ -109,6 +112,16 @@ RippleButton {
                                         text: modelData.content
                                         wrapMode: Text.Wrap
                                     }
+                                          Rectangle {
+                                            Layout.rightMargin: 10
+                                            width: 12
+                                            height: 12
+                                            radius: 6
+                                            color:  modelData.isTodo? Appearance.m3colors.m3primary  :Appearance.m3colors.m3tertiary 
+                                          }
+                                      }
+
+                                    
 
                                     StyledText {
                                         Layout.fillWidth: true // Needed for wrapping
@@ -128,7 +141,7 @@ RippleButton {
                                         }
 
                                         MaterialSymbol {
-                                            text: modelData.done ? "check" : "remove_done"
+                                          text:  modelData.isTodo?  modelData.done ? "check" : "remove_done": ""
                                             iconSize: Appearance.font.pixelSize.larger
                                             color: Appearance.colors.colOnLayer1
                                         }

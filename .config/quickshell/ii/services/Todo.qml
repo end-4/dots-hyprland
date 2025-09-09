@@ -22,12 +22,7 @@ Singleton {
           // Reassign to trigger onListChanged
           root.list = list.slice(0)
 
-          if(!CalendarService.khalAvailable){
           todoFileView.setText(JSON.stringify(root.list))
-          return
-        }
-
-      CalendarService.addItem(item)
     }
 
     function addTask(desc, durationDate) {
@@ -35,6 +30,7 @@ Singleton {
             "content": desc,
             "date": durationDate,
             "done": false,
+            "isTodo": true
         }
         addItem(item)
       }
@@ -70,10 +66,6 @@ Singleton {
             // Reassign to trigger onListChanged
             root.list = list.slice(0)
 
-            if(CalendarService.khalAvailable){ //kahl does not support saving mark
-              return
-            }
-
             todoFileView.setText(JSON.stringify(root.list))
 
            
@@ -100,24 +92,14 @@ Singleton {
             // Reassign to trigger onListChanged
             root.list = list.slice(0)
 
-            if(CalendarService.khalAvailable){
-              CalendarService.removeItem(item)
-              return
-            }
- 
           todoFileView.setText(JSON.stringify(root.list))
  
         }
     }
 
     function refresh() {
-        if(!CalendarService.khalAvailable){
-          todoFileView.reload()
-          return
-        }
+        todoFileView.reload()
 
-        root.list = CalendarService.items
-        root.list.slice(0)
     }
 
     Component.onCompleted: {
@@ -128,10 +110,6 @@ Singleton {
         id: todoFileView
         path: Qt.resolvedUrl(root.filePath)
         onLoaded: {
-            if(CalendarService.khalAvailable){
-                return
-            }
-            
             const fileContents = todoFileView.text()
             root.list = JSON.parse(fileContents)
 
@@ -142,10 +120,6 @@ Singleton {
             console.log("[To Do] File loaded")
         }
         onLoadFailed: (error) => {
-            if (CalendarService.khalAvailable){
-              return
-            }
-
             if(error == FileViewError.FileNotFound) {
                 console.log("[To Do] File not found, creating new file.")
                 root.list = []
