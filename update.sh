@@ -145,13 +145,18 @@ get_changed_files_since_pull() {
   # Fallback: check changes since last commit (HEAD@{1})
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
     log_info "Checking changes since last local commit..."
-    local changed_files=()
-    while IFS= read -r file; do
-      local full_path="${REPO_DIR}/${file}"
-      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-        printf '%s\0' "$full_path"
-      fi
-    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+    local changed_files_output
+    changed_files_output=$(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+    if [[ -n "$changed_files_output" ]]; then
+        while IFS= read -r file; do
+          local full_path="${REPO_DIR}/${file}"
+          if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
+            printf '%s\0' "$full_path"
+          fi
+        done <<< "$changed_files_output"
+    else
+        find "$dir_path" -type f -print0 2>/dev/null
+    fi
   else
     # No previous commit reference, check all files
     log_info "No previous commit reference found, checking all files in directory"
