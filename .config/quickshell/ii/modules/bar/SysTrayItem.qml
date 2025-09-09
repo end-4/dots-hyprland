@@ -29,6 +29,12 @@ MouseArea {
         }
         event.accepted = true;
     }
+    onEntered: {
+        tooltip.content = item.tooltipTitle.length > 0 ? item.tooltipTitle
+                : (item.title.length > 0 ? item.title : item.id);
+        if (item.tooltipDescription.length > 0) tooltip.content += " • " + item.tooltipDescription;
+        if (Config.options.bar.tray.showItemId) tooltip.content += "\n[" + item.id + "]";
+    }
 
     QsMenuAnchor {
         id: menu
@@ -71,11 +77,7 @@ MouseArea {
     }
 
     StyledToolTip {
-        content: {
-            let c = root.item.id
-            if (root.item.tooltipDescription.length > 0) c += " • " + root.item.tooltipDescription
-            return c;
-        }
+        id: tooltip
         extraVisibleCondition: root.containsMouse
         alternativeVisibleCondition: extraVisibleCondition
     }
