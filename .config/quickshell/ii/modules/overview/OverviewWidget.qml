@@ -155,13 +155,13 @@ Item {
                 }
                 delegate: OverviewWindow {
                     id: window
+                    windowData: windowByAddress[address]
                     required property var modelData
                     property int monitorId: windowData?.monitor
-                    property var monitor: HyprlandData.monitors.find(m => m.id == Hyprland.focusedMonitor?.id)
+                    property var monitor: HyprlandData.monitors.find(m => m.id == monitorId)
                     property var address: `0x${modelData.HyprlandToplevel.address}`
-                    windowData: windowByAddress[address]
                     toplevel: modelData
-                    monitorData: root.monitorData
+                    monitorData: this.monitor
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
