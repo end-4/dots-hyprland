@@ -56,7 +56,7 @@ Singleton {
       id: getEventsProcess
       running: true
         // get events for 3 months
-        command: ["khal", "list", "--json", "title", "--json", "start-date",  Qt.formatDate(new Date(), "dd/MM/yyyy") ,Qt.formatDate((() => { let d = new Date(); d.setMonth(d.getMonth() + 3); return d; })(), "dd/MM/yyyy")]
+        command: ["khal", "list", "--json", "title", "--json", "start-date", "--json" ,"start-time",  Qt.formatDate(new Date(), "dd/MM/yyyy") ,Qt.formatDate((() => { let d = new Date(); d.setMonth(d.getMonth() + 3); return d; })(), "dd/MM/yyyy")]
         stdout: StdioCollector {
 
           onStreamFinished:{
@@ -67,10 +67,14 @@ Singleton {
                     continue
                 let dayEvents = JSON.parse(line)
                 for(let event of dayEvents){
-                 let startParts = event['start-date'].split('/')
-                 let startDate = new Date(parseInt(startParts[2]),
-                                           parseInt(startParts[1]) - 1,
-                                           parseInt(startParts[0]))
+                  let startDateParts = event['start-date'].split('/')
+                  let startTimeParts = event['start-time'].split(':')
+
+                  let startDate = new Date(parseInt(startDateParts[2]),
+                                           parseInt(startDateParts[1]) - 1,
+                                           parseInt(startDateParts[0]),
+                                           parseInt(startTimeParts[0]), 
+                                          parseInt(startTimeParts[1]))
                   root.items.push({
                       "content": event['title'],
                       "date": startDate,
