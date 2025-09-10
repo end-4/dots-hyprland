@@ -800,13 +800,9 @@ Singleton {
         if (!message.functionPending) return;
         message.functionPending = false; // User decided, no more "thinking"
 
-        const responseMessage = createFunctionOutputMessage(message.functionName, "", false);
-        const id = idForMessage(responseMessage);
-        root.messageIDs = [...root.messageIDs, id];
-        root.messageByID[id] = responseMessage;
-
-        commandExecutionProc.message = responseMessage;
-        commandExecutionProc.baseMessageContent = responseMessage.content;
+        // Instead of creating a new message, append output to the existing AI message
+        commandExecutionProc.message = message;
+        commandExecutionProc.baseMessageContent = message.content;
         commandExecutionProc.shellCommand = message.functionCall.args.command;
         commandExecutionProc.running = true; // Start the command execution
     }
@@ -827,6 +823,10 @@ Singleton {
         }
         onExited: (exitCode, exitStatus) => {
             commandExecutionProc.message.functionResponse += `[[ Command exited with code ${exitCode} (${exitStatus}) ]]\n`;
+            
+            // Mark the message as completed and continue
+            commandExecutionProc.message.thinking = false;
+            commandExecutionProc.message.done = true;
             requester.makeRequest(); // Continue
         }
     }
