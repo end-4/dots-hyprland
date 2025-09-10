@@ -1119,7 +1119,7 @@ if [[ "$process_files" == true ]]; then
     elif [[ -f "$config_path" ]]; then
       # Check if this specific file was changed
       config_relative="${config_path#./}"
-      if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
+      if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]] || ! cmp -s "$config_path" "$target_path" 2>/dev/null; then
         mkdir -p "$(dirname "$target_path")"
         if [[ -f "$target_path" ]] && ! cmp -s "$config_path" "$target_path"; then
           if should_auto_sync "$target_path"; then
@@ -1240,7 +1240,7 @@ if [[ "$process_files" == true ]]; then
       
       if [[ -f "$source_file" ]]; then
         # Check if this config file was changed
-        if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
+        if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]] || ! cmp -s "$source_file" "$target_file" 2>/dev/null; then
           if [[ -f "$target_file" ]]; then
             if ! cmp -s "$source_file" "$target_file"; then
               echo -e "\n${YELLOW}Special Hyprland config detected: $config_file${NC}"
