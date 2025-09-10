@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
 # Default system prompt
-SYSTEM_PROMPT="You are a helpful, quick assistant that provides brief and concise explanation \
-to given content in at most 100 characters. If the given content is not in English, translate \
-it to English. If the content is an English word, provide its meaning. If the content is a name, \
-provide some info about it. For a math expression, provide a simplification, \
-each step on a line following this style: \`2x=11 (subtract 7 from both sides)\`. \
-If you do not know the answer, simply say 'No info available'. \
-Only respond for the appropriate case and use as little text as possible.\
-The content:"
+SYSTEM_PROMPT="You are a helpful, quick assistant that provides brief and concise explanation  to given content in at most 100 characters. If the given content is not in English, translate  it to English. If the content is an English word, provide its meaning. If the content is a name,  provide some info about it. For a math expression, provide a simplification,  each step on a line following this style: \`2x=11 (subtract 7 from both sides)\`. If you do not know the answer, simply say 'No info available'. Only respond for the appropriate case and use as little text as possible. The content:"
 
 first_loaded_model=$("$(dirname "$0")/show-loaded-ollama-models.sh" -j | jq -r '.[0].model' 2>/dev/null) || first_loaded_model=""
 model=${first_loaded_model:-"llama3.2"}
@@ -23,13 +16,22 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Combine the system prompt with the clipboard content
-content=$(wl-paste -p | tr '\n' ' ')
-prompt="$SYSTEM_PROMPT $content"
+content=$(wl-paste -p | tr '\n' ' ' | head -c 2000)  # 2000 char limit to prevent overflow
+
+# Properly escape content for JSON using jq
+prompt_json=$(jq -n --arg system_prompt "$SYSTEM_PROMPT" --arg content "$content" '$system_prompt + " " + $content')
 
 # Make the API call with the specified or default model
-response=$(curl http://localhost:11434/api/generate -d \
-    "{\"model\": \"$model\",\"prompt\": \"$prompt\",\"stream\": false}" \
-    | jq -r '.response')
+response=$(curl -s http://localhost:11434/api/generate -d \
+    "{\"model\": \"$model\",\"prompt\": $prompt_json,\"stream\": false}" \
+    | jq -r '.response' 2>/dev/null)
+
+# Simple fallback - if empty/null, try llama3.2
+if [[ -z "$response" || "$response" == "null" ]]; then
+    response=$(curl -s http://localhost:11434/api/generate -d \
+        "{\"model\": \"llama3.2\",\"prompt\": $prompt_json,\"stream\": false}" \
+        | jq -r '.response' 2>/dev/null)
+fi
 
 # Check if content is a single line and no longer than 30 characters
 if [[ ${#content} -le 30 && "$content" != *$'\n'* ]]; then
