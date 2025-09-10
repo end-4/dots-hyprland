@@ -194,10 +194,12 @@ MouseArea {
                     iconSize: Appearance.font.pixelSize.huge
                     color: Appearance.colors.colOnSurfaceVariant
                 }
-                StyledText {
-                    text: HyprlandXkb.currentLayoutCode
-                    color: Appearance.colors.colOnSurfaceVariant
-                    animateChange: true
+                Loader {
+                    sourceComponent: StyledText {
+                        text: HyprlandXkb.currentLayoutCode
+                        color: Appearance.colors.colOnSurfaceVariant
+                        animateChange: true
+                    }
                 }
             }
         }
