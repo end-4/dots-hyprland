@@ -75,10 +75,17 @@ Scope {
                     right: true
                 }
 
+                margins {
+                    right: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * -1
+                }
+
                 MouseArea  {
                     id: hoverRegion
                     hoverEnabled: true
-                    anchors.fill: parent
+                    anchors {
+                        fill: parent
+                        rightMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * 1
+                    }
 
                     Item {
                         id: hoverMaskRegion
@@ -100,6 +107,7 @@ Scope {
                             bottom: undefined
                             topMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight : 0
                             bottomMargin: 0
+                            rightMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * -1
                         }
                         Behavior on anchors.topMargin {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
