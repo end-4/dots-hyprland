@@ -76,6 +76,7 @@ Singleton {
         required property ShellScreen screen
         readonly property bool isDdc: root.ddcMonitors.some(m => m.model === screen.model)
         readonly property string busNum: root.ddcMonitors.find(m => m.model === screen.model)?.busNum ?? ""
+        property int maxBrightness: 100
         property real brightness
         property bool ready: false
 
@@ -95,7 +96,8 @@ Singleton {
             stdout: SplitParser {
                 onRead: data => {
                     const [, , , current, max] = data.split(" ");
-                    monitor.brightness = parseInt(current) / parseInt(max);
+                    monitor.maxBrightness = parseInt(max);
+                    monitor.brightness = parseInt(current) / monitor.maxBrightness;
                     monitor.ready = true;
                 }
             }
@@ -103,8 +105,8 @@ Singleton {
 
         function setBrightness(value: real): void {
             value = Math.max(0.01, Math.min(1, value));
-            const rounded = Math.round(value * 100);
-            if (Math.round(brightness * 100) === rounded)
+            const rounded = Math.round(value * monitor.maxBrightness);
+            if (Math.round(brightness * monitor.maxBrightness) === rounded)
                 return;
             brightness = value;
             setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "s", `${rounded}%`, "--quiet"];
