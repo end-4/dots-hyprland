@@ -22,7 +22,7 @@ Item {
     readonly property int workspaceGroup: Math.floor((monitor?.activeWorkspace?.id - 1) / Config.options.bar.workspaces.shown)
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
-    property int workspaceButtonWidth: 26
+    property int workspaceButtonWidth: 32 //int workspaceButtonWidth: 26
     property real activeWorkspaceMargin: 2
     property real workspaceIconSize: workspaceButtonWidth * 0.69
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
@@ -135,7 +135,7 @@ Item {
                 topRightRadius: root.vertical ? radiusPrev : radiusNext
                 bottomRightRadius: radiusNext
                 
-                color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
+                color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 1) //ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
                 opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+1)) ? 1 : 0
 
                 Behavior on opacity {
@@ -159,8 +159,8 @@ Item {
     Rectangle {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
-        radius: Appearance.rounding.full
-        color: Appearance.colors.colPrimary
+        radius: Appearance.rounding.verysmall //Appearance.rounding.full
+        color: ColorUtils.transparentize(Appearance.colors.colPrimary, 0.4) //Appearance.colors.colPrimary
 
         anchors {
             verticalCenter: vertical ? undefined : parent.verticalCenter

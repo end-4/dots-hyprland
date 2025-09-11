@@ -21,7 +21,11 @@ Singleton {
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
         "zen": "zen-browser",
-        "brave-browser": "brave-desktop"
+        "brave-browser": "brave-desktop",
+        "dev.aunetx.deezer": "deezer",
+        "brave-cbinddfjoklonneiljlmkmmeejnpjoke-Profile_1": "homeassistant",
+        "org.keepassxc.KeePassXC": "keepassxc",
+        "jetbrains-idea": "idea"
     })
     property var regexSubstitutions: [
         {

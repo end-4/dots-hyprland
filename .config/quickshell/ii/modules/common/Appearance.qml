@@ -201,12 +201,12 @@ Singleton {
 
     font: QtObject {
         property QtObject family: QtObject {
-            property string main: "Rubik"
-            property string title: "Gabarito"
+            property string main: "Varela Round"
+            property string title: "Varela Round"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
-            property string reading: "Readex Pro"
+            property string reading: "Varela Round"
             property string expressive: "Space Grotesk"
         }
         property QtObject pixelSize: QtObject {
