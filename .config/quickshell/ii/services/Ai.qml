@@ -255,7 +255,7 @@ Singleton {
     // - key_get_description: Description of pricing and how to get an API key
     // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
     // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
-    property var models: Config.options.policies.ai === 2 ? {} : {
+    property var models: {
         "gemini-2.0-flash": aiModelComponent.createObject(this, {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
@@ -348,7 +348,22 @@ Singleton {
         }),
     }
     property var modelList: Object.keys(root.models)
-    property var currentModelId: Persistent.states?.ai?.model || modelList[0]
+    property var filteredModelList: {
+        // Filter models based on policies.ai setting
+        if (Config.options?.policies?.ai === 2) {
+            // Local only - filter to localhost endpoints only
+            return modelList.filter(modelId => {
+                const model = root.models[modelId];
+                return model?.endpoint?.includes("localhost");
+            });
+        }
+        return modelList;
+    }
+    property var currentModelId: {
+        // Ensure this is reactive to Persistent.states changes
+        const savedModel = Persistent.states?.ai?.model;
+        return (savedModel && filteredModelList.indexOf(savedModel) !== -1) ? savedModel : filteredModelList[0];
+    }
 
     property var apiStrategies: {
         "openai": openaiApiStrategy.createObject(this),
@@ -531,7 +546,7 @@ Singleton {
     function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
         modelId = modelId.toLowerCase()
-        if (modelList.indexOf(modelId) !== -1) {
+        if (filteredModelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
             // Fetch API keys if needed
             if (model?.requires_key) KeyringStorage.fetchKeyringData();
