@@ -193,7 +193,7 @@ Item {
                     Layout.margins: 4
                     Layout.fillWidth: true
                     Layout.fillHeight: false
-                    directory: Wallpapers.directory
+                    directory: Wallpapers.effectiveDirectory
                     onNavigateToDirectory: path => {
                         Wallpapers.setDirectory(path.length == 0 ? "/" : path);
                     }
