@@ -22,15 +22,15 @@ content=$(wl-paste -p | tr '\n' ' ' | head -c 2000)  # 2000 char limit to preven
 prompt_json=$(jq -n --arg system_prompt "$SYSTEM_PROMPT" --arg content "$content" '$system_prompt + " " + $content')
 
 # Make the API call with the specified or default model
-response=$(curl -s http://localhost:11434/api/generate -d \
-    "{\"model\": \"$model\",\"prompt\": $prompt_json,\"stream\": false}" \
-    | jq -r '.response' 2>/dev/null)
+api_payload=$(jq -n --arg model "$model" --argjson prompt "$prompt_json" --argjson stream false \
+    '{model: $model, prompt: $prompt, stream: $stream}')
+response=$(curl -s http://localhost:11434/api/generate -d "$api_payload" | jq -r '.response' 2>/dev/null)
 
 # Simple fallback - if empty/null, try llama3.2
 if [[ -z "$response" || "$response" == "null" ]]; then
-    response=$(curl -s http://localhost:11434/api/generate -d \
-        "{\"model\": \"llama3.2\",\"prompt\": $prompt_json,\"stream\": false}" \
-        | jq -r '.response' 2>/dev/null)
+    fallback_payload=$(jq -n --arg model "llama3.2" --argjson prompt "$prompt_json" --argjson stream false \
+        '{model: $model, prompt: $prompt, stream: $stream}')
+    response=$(curl -s http://localhost:11434/api/generate -d "$fallback_payload" | jq -r '.response' 2>/dev/null)
 fi
 
 # Check if content is a single line and no longer than 30 characters
