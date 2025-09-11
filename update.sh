@@ -103,7 +103,7 @@ get_diff_files_between_commits() {
   # If we have tracked pull information, use that
   if [[ -n "$PRE_PULL_HEAD" && -n "$POST_PULL_HEAD" && "$PRE_PULL_HEAD" != "$POST_PULL_HEAD" ]]; then
     git diff --name-only "$PRE_PULL_HEAD" "$POST_PULL_HEAD" 2>/dev/null || {
-      log_warning "Could not compare pre/post pull commits, falling back to alternative methods"
+      log_warning "Could not compare pre/post pull commits, falling back to alternative methods" >&2
       return 1
     }
     return 0
@@ -111,7 +111,7 @@ get_diff_files_between_commits() {
   
   # Get files that are different between the two commits
   git diff --name-only "$local_commit" "$remote_commit" 2>/dev/null || {
-    log_warning "Could not compare commits, falling back to all files"
+    log_warning "Could not compare commits, falling back to all files" >&2
     return 1
   }
 }
@@ -131,7 +131,8 @@ get_changed_files_since_pull() {
   
   # Check if remote branch exists
   if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
-    log_info "Checking differences between local and remote commits..."
+    # Redirect log messages to stderr to avoid capturing them in the output
+    log_info "Checking differences between local and remote commits..." >&2
     
     # Get files that differ between HEAD and origin/branch
     local diff_files=()
@@ -142,7 +143,7 @@ get_changed_files_since_pull() {
     done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
     
     if [[ ${#diff_files[@]} -gt 0 ]]; then
-      log_info "Found ${#diff_files[@]} files that differ between local and remote"
+      log_info "Found ${#diff_files[@]} files that differ between local and remote" >&2
       # Output only files that are in the specified directory
       for file in "${diff_files[@]}"; do
         local full_path="${REPO_DIR}/${file}"
@@ -152,7 +153,7 @@ get_changed_files_since_pull() {
       done
       return
     else
-      log_info "No differences found between local and remote commits, checking all files in directory."
+      log_info "No differences found between local and remote commits, checking all files in directory." >&2
       find "$dir_path" -type f -print0 2>/dev/null
       return
     fi
@@ -160,7 +161,7 @@ get_changed_files_since_pull() {
 
   # Fallback: check changes since last commit (HEAD@{1})
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
-    log_info "Checking changes since last local commit..."
+    log_info "Checking changes since last local commit..." >&2
     local changed_files_output
     changed_files_output=$(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
     if [[ -n "$changed_files_output" ]]; then
@@ -175,7 +176,7 @@ get_changed_files_since_pull() {
     fi
   else
     # No previous commit reference, check all files
-    log_info "No previous commit reference found, checking all files in directory"
+    log_info "No previous commit reference found, checking all files in directory" >&2
     find "$dir_path" -type f -print0 2>/dev/null
   fi
 }
