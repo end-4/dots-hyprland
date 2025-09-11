@@ -54,7 +54,7 @@ Item {
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     color: Appearance.m3colors.m3onSurface
-                    font.pixelSize: Appearance.font.pixelSize.medium
+                    font.pixelSize: Appearance.font.pixelSize.normal
                     text: Translation.tr("Next prayer")
                 }
                 StyledText {
