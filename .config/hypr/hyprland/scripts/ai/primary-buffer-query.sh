@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Default system prompt
-SYSTEM_PROMPT="You are a helpful, quick assistant that provides brief and concise explanation  to given content in at most 100 characters. If the given content is not in English, translate  it to English. If the content is an English word, provide its meaning. If the content is a name,  provide some info about it. For a math expression, provide a simplification,  each step on a line following this style: \`2x=11 (subtract 7 from both sides)\`. If you do not know the answer, simply say 'No info available'. Only respond for the appropriate case and use as little text as possible. The content:"
+SYSTEM_PROMPT="You are a helpful, quick assistant that provides brief and concise explanation to given content in at most 100 characters. If the given content is not in English, translate it to English. If the content is an English word, provide its meaning. If the content is a name, provide some info about it. For a math expression, provide a simplification, each step on a line following this style: \`2x=11 (subtract 7 from both sides)\`. If you do not know the answer, simply say 'No info available'. Only respond for the appropriate case and use as little text as possible. The content:"
 
 first_loaded_model=$("$(dirname "$0")/show-loaded-ollama-models.sh" -j | jq -r '.[0].model' 2>/dev/null) || first_loaded_model=""
 model=${first_loaded_model:-"llama3.2"}
