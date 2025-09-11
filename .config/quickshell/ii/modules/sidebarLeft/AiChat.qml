@@ -209,6 +209,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         else {
             Ai.sendUserMessage(inputText);
         }
+        
+        // Always scroll to bottom when user sends a message
+        messageListView.shouldAutoScroll = true
+        messageListView.positionViewAtEnd()
     }
 
     Process {
@@ -315,6 +319,28 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
+
+                // Simple auto-scroll state tracking (proven chat pattern)
+                property bool shouldAutoScroll: true
+                
+                // Track when user scrolls - simple and reliable
+                onContentYChanged: {
+                    shouldAutoScroll = atYEnd
+                }
+                
+                // Auto-scroll when content height changes (during streaming)
+                onContentHeightChanged: {
+                    if (shouldAutoScroll) {
+                        positionViewAtEnd()
+                    }
+                }
+                
+                // Auto-scroll when new messages are added
+                onCountChanged: {
+                    if (shouldAutoScroll) {
+                        positionViewAtEnd()
+                    }
+                }
 
                 clip: true
                 layer.enabled: true
