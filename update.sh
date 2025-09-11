@@ -138,7 +138,9 @@ get_changed_files_since_pull() {
       done
       return
     else
-      log_info "No differences found between local and remote commits"
+      log_info "No differences found between local and remote commits, checking all files in directory."
+      find "$dir_path" -type f -print0 2>/dev/null
+      return
     fi
   fi
 
