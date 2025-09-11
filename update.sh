@@ -27,6 +27,11 @@ AUTO_SYNC_FILE="${REPO_DIR}/.autosync"
 HOME_AUTO_SYNC_FILE="${HOME}/.autosync"
 DEPLISTFILE="${REPO_DIR}/scriptdata/dependencies.conf"
 
+# Global variables to track pull state
+PRE_PULL_HEAD=""
+POST_PULL_HEAD=""
+PULL_HAD_CHANGES=false
+
 # Directories to monitor for changes
 MONITOR_DIRS=(".config" ".local/bin")
 
@@ -94,6 +99,15 @@ safe_read() {
 get_diff_files_between_commits() {
   local local_commit="${1:-HEAD}"
   local remote_commit="${2:-origin/$(git branch --show-current)}"
+  
+  # If we have tracked pull information, use that
+  if [[ -n "$PRE_PULL_HEAD" && -n "$POST_PULL_HEAD" && "$PRE_PULL_HEAD" != "$POST_PULL_HEAD" ]]; then
+    git diff --name-only "$PRE_PULL_HEAD" "$POST_PULL_HEAD" 2>/dev/null || {
+      log_warning "Could not compare pre/post pull commits, falling back to alternative methods"
+      return 1
+    }
+    return 0
+  fi
   
   # Get files that are different between the two commits
   git diff --name-only "$local_commit" "$remote_commit" 2>/dev/null || {
@@ -758,9 +772,15 @@ list_and_select_packages() {
 
 # Function to check if we have differences between local and remote commits
 has_commit_differences() {
+  # If we tracked a pull operation with changes, return true
+  if [[ "$PULL_HAD_CHANGES" == true ]]; then
+    return 0
+  fi
+  
   local current_branch=$(git branch --show-current)
   local remote_branch="origin/${current_branch}"
   
+  # Check if remote branch exists and differs from local
   if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
     if [[ "$(git rev-parse HEAD)" != "$(git rev-parse "$remote_branch" 2>/dev/null || echo "")" ]]; then
       return 0
@@ -771,6 +791,7 @@ has_commit_differences() {
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
     [[ "$(git rev-parse HEAD)" != "$(git rev-parse HEAD@{1})" ]]
   else
+    # If no previous reference, assume we should check (safer approach)
     return 0
   fi
 }
@@ -909,6 +930,9 @@ fi
 
 # Check if remote exists and fetch latest
 if git remote get-url origin &>/dev/null; then
+  # Store pre-pull HEAD
+  PRE_PULL_HEAD=$(git rev-parse HEAD)
+  
   # Fetch latest changes first
   log_info "Fetching latest changes from origin..."
   if git fetch origin; then
@@ -931,7 +955,14 @@ if git remote get-url origin &>/dev/null; then
         # Pull changes
         log_info "Pulling changes from origin/$current_branch..."
         if git pull; then
-          log_success "Successfully pulled latest changes"
+          POST_PULL_HEAD=$(git rev-parse HEAD)
+          # Check if the pull actually changed anything
+          if [[ "$PRE_PULL_HEAD" != "$POST_PULL_HEAD" ]]; then
+            PULL_HAD_CHANGES=true
+            log_success "Successfully pulled latest changes (HEAD: $PRE_PULL_HEAD -> $POST_PULL_HEAD)"
+          else
+            log_info "Pull completed but no changes were made"
+          fi
         else
           log_warning "Failed to pull changes from remote. Continuing with current state..."
           log_info "You may need to resolve conflicts manually later."
@@ -1025,29 +1056,40 @@ commit_diff_files=()
 if [[ "$FORCE_CHECK" == true ]]; then
   process_files=true
   log_info "Force mode: checking all configuration files"
-elif has_commit_differences; then
+elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
   process_files=true
-  log_info "Commit differences detected: analyzing changed files..."
+  log_info "Changes detected: analyzing changed files..."
   
   # Get list of files that differ between commits
-  current_branch=$(git branch --show-current)
-  remote_branch="origin/${current_branch}"
-  
-  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+  if [[ "$PULL_HAD_CHANGES" == true && -n "$PRE_PULL_HEAD" && -n "$POST_PULL_HEAD" ]]; then
+    # Use tracked pull information for most accurate diff
     while IFS= read -r file; do
       if [[ -n "$file" ]]; then
         commit_diff_files+=("$file")
       fi
-    done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
-  fi
-  
-  if [[ ${#commit_diff_files[@]} -eq 0 ]]; then
-    # Fallback to checking since last local commit
-    while IFS= read -r file; do
-      if [[ -n "$file" ]]; then
-        commit_diff_files+=("$file")
-      fi
-    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+    done < <(git diff --name-only "$PRE_PULL_HEAD" "$POST_PULL_HEAD" 2>/dev/null || true)
+    log_info "Using tracked pull changes (${PRE_PULL_HEAD:0:7} -> ${POST_PULL_HEAD:0:7})"
+  else
+    # Fallback to comparing with remote
+    current_branch=$(git branch --show-current)
+    remote_branch="origin/${current_branch}"
+    
+    if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+      while IFS= read -r file; do
+        if [[ -n "$file" ]]; then
+          commit_diff_files+=("$file")
+        fi
+      done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
+    fi
+    
+    if [[ ${#commit_diff_files[@]} -eq 0 ]]; then
+      # Final fallback to checking since last local commit
+      while IFS= read -r file; do
+        if [[ -n "$file" ]]; then
+          commit_diff_files+=("$file")
+        fi
+      done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+    fi
   fi
   
   log_info "Found ${#commit_diff_files[@]} files with differences"
@@ -1056,8 +1098,8 @@ elif has_commit_differences; then
     printf " - %s\n" "${commit_diff_files[@]}"
   fi
 else
-  log_info "No commit differences found: checking for local file differences anyway"
-  process_files=true # Always check for differences even without commits
+  log_info "No changes detected, but will still check for file differences"
+  process_files=true # Always check for differences even without commits (more robust)
 fi
 
 if [[ "$process_files" == true ]]; then
@@ -1422,8 +1464,6 @@ if [[ "$process_files" == true ]]; then
 fi
 
 echo "- Configuration directories: ${MONITOR_DIRS[*]}"
-
-
 
 # Environment variable warning (only if Hyprland configs were touched)
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV:-}" && "$process_files" == true ]]; then
