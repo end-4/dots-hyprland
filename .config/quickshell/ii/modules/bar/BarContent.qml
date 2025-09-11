@@ -335,6 +335,16 @@ Item { // Bar content region
                     WeatherBar {}
                 }
             }
+
+            // PrayerTime
+            Loader {
+                Layout.leftMargin: 4
+                active: Config.options.bar.prayerTimes.widget
+
+                sourceComponent: BarGroup {
+                    PrayerTime {}
+                }
+            }
         }
     }
 }

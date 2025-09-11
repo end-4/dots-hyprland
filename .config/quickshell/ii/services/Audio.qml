@@ -2,6 +2,8 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
+import Quickshell.Hyprland
+
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -51,4 +53,9 @@ Singleton {
         
     }
 
+    function playSound(relativeSoundPath) {
+        const fullPath = Quickshell.shellPath(relativeSoundPath);
+        const command = `exec /usr/bin/paplay ${fullPath}`;
+        Hyprland.dispatch(command);
+    }
 }

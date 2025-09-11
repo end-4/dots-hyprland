@@ -193,6 +193,13 @@ Singleton {
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
+                property JsonObject prayerTimes: JsonObject {
+                    property string city: ""
+                    property string country: ""
+                    property bool adhan: true
+                    property bool widget: false
+
+                }
             }
 
             property JsonObject battery: JsonObject {

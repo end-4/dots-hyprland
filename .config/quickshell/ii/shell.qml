@@ -59,6 +59,7 @@ ShellRoot {
         FirstRunExperience.load()
         ConflictKiller.load()
         Cliphist.refresh()
+        PrayerTimes.refresh()
     }
 
     LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }

@@ -283,4 +283,53 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "mosque"
+        title: Translation.tr("Prayer Times")
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.bar.prayerTimes.widget
+                onCheckedChanged: {
+                    Config.options.bar.prayerTimes.widget = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "volume_up"
+                text: Translation.tr("Play Adhan")
+                checked: Config.options.bar.prayerTimes.adhan
+                onCheckedChanged: {
+                    Config.options.bar.prayerTimes.adhan = checked;
+                }
+                StyledToolTip {
+                    content: Translation.tr("Play Adhan at the time of Salat")
+                }
+            }
+        }
+        ConfigRow {
+            uniform: true
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("City")
+                text: Config.options.bar.prayerTimes.city
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.bar.prayerTimes.city = text;
+                }
+            }
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Country")
+                text: Config.options.bar.prayerTimes.country
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.bar.prayerTimes.country = text;
+                }
+            }
+        }
+    }
 }
