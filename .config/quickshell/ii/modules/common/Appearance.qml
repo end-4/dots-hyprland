@@ -210,7 +210,7 @@ Singleton {
             property string expressive: "Space Grotesk"
         }
         property QtObject pixelSize: QtObject {
-            property int smallest: 10
+            property int smallest: 11
             property int smaller: 12
             property int small: 15
             property int normal: 16
