@@ -17,6 +17,7 @@ Singleton {
     property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/thumbgen.py`
     property string generateThumbnailsMagicScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
     property string directory: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
+    readonly property string effectiveDirectory: FileUtils.trimFileProtocol(folderModel.folder.toString())
     property alias folderModel: folderModel // Expose for direct binding when needed
     property string searchQuery: ""
     readonly property list<string> extensions: [ // TODO: add videos
