@@ -10,7 +10,7 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 
-Item {
+MouseArea {
     id: root
     property int columns: 4
     property real previewCellAspectRatio: 4 / 3
@@ -40,6 +40,15 @@ Item {
         }
     }
 
+    acceptedButtons: Qt.BackButton | Qt.ForwardButton
+    onPressed: event => {
+        if (event.button === Qt.BackButton) {
+            Wallpapers.navigateBack();
+        } else if (event.button === Qt.ForwardButton) {
+            Wallpapers.navigateForward();
+        }
+    }
+
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Escape) {
             GlobalStates.wallpaperSelectorOpen = false;
@@ -47,7 +56,13 @@ Item {
         } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers
             root.handleFilePasting(event);
         } else if (event.modifiers & Qt.AltModifier && event.key === Qt.Key_Up) {
-            Wallpapers.setDirectory(FileUtils.parentDirectory(Wallpapers.directory));
+            Wallpapers.navigateUp();
+            event.accepted = true;
+        } else if (event.modifiers & Qt.AltModifier && event.key === Qt.Key_Left) {
+            Wallpapers.navigateBack();
+            event.accepted = true;
+        } else if (event.modifiers & Qt.AltModifier && event.key === Qt.Key_Right) {
+            Wallpapers.navigateForward();
             event.accepted = true;
         } else if (event.key === Qt.Key_Left) {
             grid.moveSelection(-1);
@@ -160,7 +175,7 @@ Item {
                             }
                             onClicked: Wallpapers.setDirectory(quickDirButton.modelData.path)
                             enabled: modelData.icon.length > 0
-                            toggled: Wallpapers.directory === FileUtils.trimFileProtocol(modelData.path)
+                            toggled: Wallpapers.directory === Qt.resolvedUrl(modelData.path)
                             colBackgroundToggled: Appearance.colors.colSecondaryContainer
                             colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                             colRippleToggled: Appearance.colors.colSecondaryContainerActive
