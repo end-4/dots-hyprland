@@ -362,6 +362,7 @@ Singleton {
     property var currentModelId: {
         // Ensure this is reactive to Persistent.states changes
         const savedModel = Persistent.states?.ai?.model;
+        if (filteredModelList.length === 0) return null;
         return (savedModel && filteredModelList.indexOf(savedModel) !== -1) ? savedModel : filteredModelList[0];
     }
 
@@ -413,6 +414,7 @@ Singleton {
 
     function addModel(modelName, data) {
         root.models[modelName] = aiModelComponent.createObject(this, data);
+        root.modelsChanged(); // Signal that the models object has changed
     }
 
     Process {
@@ -424,7 +426,6 @@ Singleton {
                 try {
                     if (data.length === 0) return;
                     const dataJson = JSON.parse(data);
-                    root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
                         const safeModelName = root.safeModelName(model);
                         root.addModel(safeModelName, {
@@ -437,8 +438,6 @@ Singleton {
                             "requires_key": false,
                         })
                     });
-
-                    root.modelList = Object.keys(root.models);
 
                 } catch (e) {
                     console.log("Could not fetch Ollama models:", e);
