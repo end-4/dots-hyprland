@@ -415,14 +415,14 @@ update_python_packages() {
 handle_dependencies() {
     if [[ ! -f "$DEPLISTFILE" ]]; then
         log_warning "Dependencies file not found: $DEPLISTFILE"
-        return 1
+        return 0
     fi
 
     # Check if yay is available
     if ! command -v yay >/dev/null 2>&1; then
         log_warning "yay not found. Cannot manage dependencies."
         log_info "Please run install.sh first to set up the package manager."
-        return 1
+        return 0
     fi
 
     # Source required files
@@ -435,7 +435,7 @@ handle_dependencies() {
 
     # Remove comments and empty lines from dependencies file
     local -a pkglist=()
-    if [[ -f "${REPO_DIR}/scriptdata/functions" ]]; then
+    if [[ -f "${REPO_DIR}/scriptdata/functions" ]] && command -v remove_bashcomments_emptylines >/dev/null 2>&1; then
         mkdir -p "${REPO_DIR}/cache"
         remove_bashcomments_emptylines "${DEPLISTFILE}" "${REPO_DIR}/cache/dependencies_stripped.conf"
         readarray -t pkglist < "${REPO_DIR}/cache/dependencies_stripped.conf"
@@ -529,14 +529,16 @@ check_pkgbuild_changed() {
 
 # Function to list available packages with numbered selection
 list_and_select_packages() {
+    log_info "Debug: Starting list_and_select_packages function"
     local available_packages=()
     local changed_packages=()
 
     if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
         log_warning "No arch-packages directory found"
-        return 1
+        return 0
     fi
 
+    log_info "Debug: Scanning packages in $ARCH_PACKAGES_DIR"
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
         if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
             local pkg_name=$(basename "$pkg_dir")
@@ -550,9 +552,10 @@ list_and_select_packages() {
 
     if [[ ${#available_packages[@]} -eq 0 ]]; then
         log_info "No packages found in arch-packages directory"
-        return 1
+        return 0
     fi
 
+    log_info "Debug: Found ${#available_packages[@]} packages"
     echo -e "\n${CYAN}Available packages:${NC}"
     for i in "${!available_packages[@]}"; do
         local pkg="${available_packages[$i]}"
@@ -565,9 +568,9 @@ list_and_select_packages() {
         fi
         
         if [[ " ${changed_packages[*]} " =~ " ${pkg} " ]]; then
-            printf "%2d) %s ${GREEN}● %s${NC} (PKGBUILD changed)\n" $((i+1)) "$installed_status" "$pkg"
+            printf "%2d) $installed_status ${GREEN}● %s${NC} (PKGBUILD changed)\n" $((i+1)) "$pkg"
         else
-            printf "%2d) %s ○ %s\n" $((i+1)) "$installed_status" "$pkg"
+            printf "%2d) $installed_status ○ %s\n" $((i+1)) "$pkg"
         fi
     done
 
@@ -584,9 +587,10 @@ list_and_select_packages() {
     echo "3) Select specific packages by number"
     echo "4) Skip package updates"
 
+    local pkg_choice
     if ! safe_read "Choose an option (1-4): " pkg_choice "4"; then
         log_warning "Failed to read input. Skipping package updates."
-        return 1
+        return 0
     fi
 
     local packages_to_build=()
@@ -611,9 +615,10 @@ list_and_select_packages() {
     3) 
         echo
         echo "Enter the numbers of packages to rebuild (space-separated, e.g., 1 3 5-7 10):"
+        local selections
         if ! safe_read "Package numbers: " selections ""; then
             log_warning "Failed to read input. Skipping package updates."
-            return 1
+            return 0
         fi
 
         if [[ -z "$selections" ]]; then
@@ -656,9 +661,10 @@ list_and_select_packages() {
 
     echo -e "\n${CYAN}Packages to rebuild: ${packages_to_build[*]}${NC}"
 
+    local confirm
     if ! safe_read "Proceed with rebuilding these packages? (Y/n): " confirm "Y"; then
         log_warning "Failed to read input. Skipping package rebuilding."
-        return 1
+        return 0
     fi
 
     if [[ "$confirm" =~ ^[Nn]$ ]]; then
@@ -692,7 +698,10 @@ list_and_select_packages() {
             log_error "Failed to rebuild package $pkg_name"
         fi
 
-        cd "$REPO_DIR" || die "Failed to return to repository directory"
+        cd "$REPO_DIR" || {
+            log_error "Failed to return to repository directory"
+            return 0
+        }
     done
 
     if [[ $rebuilt_packages -eq 0 ]]; then
@@ -701,6 +710,7 @@ list_and_select_packages() {
         log_success "Successfully rebuilt $rebuilt_packages package(s)"
     fi
 
+    log_info "Debug: Completed list_and_select_packages function"
     return 0
 }
 
@@ -1271,9 +1281,7 @@ main() {
         if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
             local changed_count=0
             for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
-                if [[ -f "${pkg_dir}/PKGBUILD" ]] && check_pkgbuild_changed "$pkg_dir"; then
-                    ((changed_count++))
-                fi
+                check_pkgbuild_changed "$pkg_dir" && ((changed_count++)) || true
             done
 
             if [[ $changed_count -gt 0 ]]; then
