@@ -116,46 +116,6 @@ get_diff_files_between_commits() {
   }
 }
 
-# Function to get files that changed in the last pull
-get_changed_files_since_pull() {
-  local dir_path="$1"
-  
-  if [[ "$FORCE_CHECK" == true ]]; then
-    find "$dir_path" -type f -print0 2>/dev/null
-    return
-  fi
-
-  # First try to get files that differ between local and remote
-  local current_branch=$(git branch --show-current)
-  local remote_branch="origin/${current_branch}"
-  
-  # Check if remote branch exists
-  if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
-    # Redirect log messages to stderr to avoid capturing them in the output
-    log_info "Checking differences between local and remote commits..." >&2
-    
-    # Get files that differ between HEAD and origin/branch
-    local diff_files=()
-    while IFS= read -r file; do
-      if [[ -n "$file" ]]; then
-        diff_files+=("$file")
-      fi
-    done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
-    
-    if [[ ${#diff_files[@]} -gt 0 ]]; then
-      log_info "Found ${#diff_files[@]} files that differ between local and remote" >&2
-      # Output only files that are in the specified directory
-      for file in "${diff_files[@]}"; do
-        local full_path="${REPO_DIR}/${file}"
-        if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-          printf '%s\0' "$full_path"
-        fi
-      done
-      return
-    fi
-  fi
-}
-
 # Function to check if a file should be ignored
 should_ignore() {
   local file_path="$1"
@@ -359,59 +319,59 @@ handle_file_conflict() {
       fi
 
       case $subchoice in
-      r)
+      r) 
         cp -p "$repo_file" "$home_file"
         log_success "Updated $home_file with repository version"
         break
-        ;;
-      k)
+        ;; 
+      k) 
         log_info "Keeping current version of $home_file"
         break
-        ;;
-      b)
+        ;; 
+      b) 
         mv "$home_file" "${dirname}/${filename}.old"
         cp -p "$repo_file" "$home_file"
         log_success "Backed up current file and updated"
         break
-        ;;
-      n)
+        ;; 
+      n) 
         cp -p "$repo_file" "${dirname}/${filename}.new"
         log_success "Saved repository version as ${filename}.new"
         break
-        ;;
-      s)
+        ;; 
+      s) 
         log_info "Skipping $home_file"
         break
-        ;;
-      i)
+        ;; 
+      i) 
         local relative_path_to_home="${home_file#$HOME/}"
         echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
         log_success "Added '$relative_path_to_home' to ignore list and skipped."
         break
-        ;;
-      a)
+        ;; 
+      a) 
         local relative_path_to_home="${home_file#$HOME/}"
         echo "$relative_path_to_home" >>"$HOME_AUTO_SYNC_FILE"
         cp -p "$repo_file" "$home_file"
         log_success "Added '$relative_path_to_home' to auto-sync list and updated."
         break
-        ;;
+        ;; 
       *)
         echo "Invalid choice. Please try again."
-        ;;
+        ;; 
       esac
       ;;
-    6)
+    6) 
       log_info "Skipping $home_file"
       break
       ;;
-    7)
+    7) 
       local relative_path_to_home="${home_file#$HOME/}"
       echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
       log_success "Added '$relative_path_to_home' to ignore list and skipped."
       break
       ;;
-    8)
+    8) 
       local relative_path_to_home="${home_file#$HOME/}"
       echo "$relative_path_to_home" >>"$HOME_AUTO_SYNC_FILE"
       cp -p "$repo_file" "$home_file"
@@ -556,7 +516,7 @@ check_pkgbuild_changed() {
 
   # Check if PKGBUILD changed between local and remote
   if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
-    if git diff --name-only "HEAD" "$remote_branch" 2>/dev/null | grep -q "^${relative_path}$"; then
+    if git diff --name-only "HEAD" "$remote_branch" 2>/dev/null | grep -q "^${relative_path}$\""; then
       return 0
     fi
   fi
@@ -574,7 +534,8 @@ list_and_select_packages() {
     return 1
   fi
 
-  for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
+  for pkg_dir in "$ARCH_PACKAGES_DIR"/*/;
+ do
     if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
       local pkg_name=$(basename "$pkg_dir")
       available_packages+=("$pkg_name")
@@ -629,23 +590,23 @@ list_and_select_packages() {
   local packages_to_build=()
 
   case $pkg_choice in
-  1)
+  1) 
     # Only rebuild changed packages that are installed
     for pkg in "${changed_packages[@]}"; do
       if pacman -Qq "$pkg" &>/dev/null; then
         packages_to_build+=("$pkg")
       fi
     done
-    ;;
-  2)
+    ;; 
+  2) 
     # Only rebuild packages that are installed
     for pkg in "${available_packages[@]}"; do
       if pacman -Qq "$pkg" &>/dev/null; then
         packages_to_build+=("$pkg")
       fi
     done
-    ;;
-  3)
+    ;; 
+  3) 
     echo
     echo "Enter the numbers of packages to rebuild (space-separated, e.g., 1 3 5-7 10):"
     if ! safe_read "Package numbers: " selections ""; then
@@ -659,7 +620,8 @@ list_and_select_packages() {
     fi
 
     # Parse selections (support ranges like 5-7)
-    for selection in $selections; do
+    for selection in $selections;
+ do
       if [[ "$selection" == *-* ]]; then
         # Handle range
         IFS='-' read -r start end <<< "$selection"
@@ -675,11 +637,11 @@ list_and_select_packages() {
         fi
       fi
     done
-    ;;
-  4 | *)
+    ;; 
+  4 | *) 
     log_info "Skipping package updates"
     return 0
-    ;;
+    ;; 
   esac
 
   if [[ ${#packages_to_build[@]} -eq 0 ]]; then
@@ -769,27 +731,27 @@ check=true
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
-  -f | --force)
+  -f | --force) 
     FORCE_CHECK=true
     log_info "Force check mode enabled - will check all files regardless of git changes"
     shift
-    ;;
-  -p | --packages)
+    ;; 
+  -p | --packages) 
     CHECK_PACKAGES=true
     log_info "Package checking enabled"
     shift
-    ;;
-  --no-deps)
+    ;; 
+  --no-deps) 
     CHECK_DEPENDENCIES=false
     log_info "Smart dependency management disabled"
     shift
-    ;;
-  -a | --auto-sync)
+    ;; 
+  -a | --auto-sync) 
     AUTO_SYNC_MODE=true
     log_info "Auto-sync mode enabled for configured files"
     shift
-    ;;
-  -h | --help)
+    ;; 
+  -h | --help) 
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
@@ -819,17 +781,17 @@ while [[ $# -gt 0 ]]; do
     echo "  ~/.updateignore or .updateignore - files to ignore during updates"
     echo "  ~/.autosync or .autosync - files to auto-sync without prompting"
     exit 0
-    ;;
-  --skip-notice)
+    ;; 
+  --skip-notice) 
     log_warning "Skipping notice about update-only mode"
     check=false
     shift
-    ;;
-  *)
+    ;; 
+  *) 
     log_error "Unknown option: $1"
     echo "Use --help for usage information"
     exit 1
-    ;;
+    ;; 
   esac
 done
 
@@ -905,7 +867,7 @@ if git remote get-url origin &>/dev/null; then
     
     # Check if there are differences between local and remote
     remote_branch="origin/${current_branch}"
-    if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
+    if git show-ref --verify --quiet "refs/remotes/${remote_branch}"; then
       local_commit=$(git rev-parse HEAD)
       remote_commit=$(git rev-parse "$remote_branch" 2>/dev/null || echo "")
       
@@ -990,7 +952,8 @@ else
   # Still show a hint if there are changed PKGBUILDs
   if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
     changed_count=0
-    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
+    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/;
+ do
       if [[ -f "${pkg_dir}/PKGBUILD" ]] && check_pkgbuild_changed "$pkg_dir"; then
         ((changed_count++))
       fi
@@ -1028,7 +991,7 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
   # Get list of files that differ between commits
   if [[ "$PULL_HAD_CHANGES" == true && -n "$PRE_PULL_HEAD" && -n "$POST_PULL_HEAD" ]]; then
     # Use tracked pull information for most accurate diff
-    while IFS= read -r file;
+    while IFS= read -r file; 
  do
       if [[ -n "$file" ]]; then
         commit_diff_files+=("$file")
@@ -1041,7 +1004,7 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
     remote_branch="origin/${current_branch}"
     
     if git show-ref --verify --quiet "refs/remotes/${remote_branch}"; then
-      while IFS= read -r file;
+      while IFS= read -r file; 
  do
         if [[ -n "$file" ]]; then
           commit_diff_files+=("$file")
@@ -1051,7 +1014,7 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
     
     if [[ ${#commit_diff_files[@]} -eq 0 ]]; then
       # Final fallback to checking since last local commit
-      while IFS= read -r file;
+      while IFS= read -r file; 
  do
         if [[ -n "$file" ]]; then
           commit_diff_files+=("$file")
@@ -1077,7 +1040,8 @@ if [[ "$process_files" == true ]]; then
 
   # Handle MISC configs (everything except fish and hypr)
   log_info "Processing miscellaneous configuration files..."
-  for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \; 2>/dev/null || true); do
+  for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \; 2>/dev/null || true);
+ do
     config_path=".config/$i"
     target_path="$XDG_CONFIG_HOME/$i"
     
@@ -1090,33 +1054,41 @@ if [[ "$process_files" == true ]]; then
     if [[ -d "$config_path" ]]; then
       if [[ -d "$target_path" ]]; then
         # Directory exists, handle conflicts file by file (only changed files)
-        while IFS= read -r -d '' file; do
-          rel_path="${file#$config_path/}"
-          target_file="$target_path/$rel_path"
-          
-          if should_ignore "$target_file"; then
-            ((files_skipped++))
-            continue
-          fi
-          
-          mkdir -p "$(dirname "$target_file")"
-          
-          if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
-            if should_auto_sync "$target_file"; then
-              cp -p "$file" "$target_file"
-              log_success "Auto-synced: $target_file"
-              ((files_updated++))
-            else
-              handle_file_conflict "$file" "$target_file"
-              ((files_updated++))
+        changed_in_dir=0
+        for file_rel_path in "${commit_diff_files[@]}"; do
+          if [[ "$file_rel_path" == "$config_path"/* ]]; then
+            ((changed_in_dir++))
+            repo_file="${REPO_DIR}/${file_rel_path}"
+            rel_path="${file_rel_path#$config_path/}"
+            target_file="$target_path/$rel_path"
+            
+            if should_ignore "$target_file"; then
+              ((files_skipped++))
+              continue
             fi
-          elif [[ ! -f "$target_file" ]]; then
-            cp -p "$file" "$target_file"
-            log_success "Created new file: $target_file"
-            ((files_created++))
+            
+            mkdir -p "$(dirname "$target_file")"
+            
+            if [[ -f "$target_file" ]] && ! cmp -s "$repo_file" "$target_file"; then
+              if should_auto_sync "$target_file"; then
+                cp -p "$repo_file" "$target_file"
+                log_success "Auto-synced: $target_file"
+                ((files_updated++))
+              else
+                handle_file_conflict "$repo_file" "$target_file"
+                ((files_updated++))
+              fi
+            elif [[ ! -f "$target_file" ]]; then
+              cp -p "$repo_file" "$target_file"
+              log_success "Created new file: $target_file"
+              ((files_created++))
+            fi
+            ((files_processed++))
           fi
-          ((files_processed++))
-        done < <(get_changed_files_since_pull "$config_path")
+        done
+        if [[ "$changed_in_dir" -gt 0 ]]; then
+            log_info "Found $changed_in_dir changed files in $config_path"
+        fi
       else
         # Directory doesn't exist, create it
         mkdir -p "$target_path"
@@ -1162,33 +1134,41 @@ if [[ "$process_files" == true ]]; then
   if [[ -d "$fish_source" ]]; then
     if [[ -d "$fish_target" ]]; then
       # Handle fish config with conflict resolution (only changed files)
-      while IFS= read -r -d '' file; do
-        rel_path="${file#$fish_source/}"
-        target_file="$fish_target/$rel_path"
-        
-        if should_ignore "$target_file"; then
-          ((files_skipped++))
-          continue
-        fi
-        
-        mkdir -p "$(dirname "$target_file")"
-        
-        if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
-          if should_auto_sync "$target_file"; then
-            cp -p "$file" "$target_file"
-            log_success "Auto-synced: $target_file"
-            ((files_updated++))
-          else
-            handle_file_conflict "$file" "$target_file"
-            ((files_updated++))
+      changed_in_dir=0
+      for file_rel_path in "${commit_diff_files[@]}"; do
+        if [[ "$file_rel_path" == "$fish_source"/* ]]; then
+          ((changed_in_dir++))
+          repo_file="${REPO_DIR}/${file_rel_path}"
+          rel_path="${file_rel_path#$fish_source/}"
+          target_file="$fish_target/$rel_path"
+          
+          if should_ignore "$target_file"; then
+            ((files_skipped++))
+            continue
           fi
-        elif [[ ! -f "$target_file" ]]; then
-          cp -p "$file" "$target_file"
-          log_success "Created new fish config file: $target_file"
-          ((files_created++))
+          
+          mkdir -p "$(dirname "$target_file")"
+          
+          if [[ -f "$target_file" ]] && ! cmp -s "$repo_file" "$target_file"; then
+            if should_auto_sync "$target_file"; then
+              cp -p "$repo_file" "$target_file"
+              log_success "Auto-synced: $target_file"
+              ((files_updated++))
+            else
+              handle_file_conflict "$repo_file" "$target_file"
+              ((files_updated++))
+            fi
+          elif [[ ! -f "$target_file" ]]; then
+            cp -p "$repo_file" "$target_file"
+            log_success "Created new fish config file: $target_file"
+            ((files_created++))
+          fi
+          ((files_processed++))
         fi
-        ((files_processed++))
-      done < <(get_changed_files_since_pull "$fish_source")
+      done
+      if [[ "$changed_in_dir" -gt 0 ]]; then
+        log_info "Found $changed_in_dir changed files in $fish_source"
+      fi
     else
       mkdir -p "$fish_target"
       rsync -av "$fish_source/" "$fish_target/" 2>/dev/null || {
@@ -1209,39 +1189,48 @@ if [[ "$process_files" == true ]]; then
     mkdir -p "$hypr_target"
     
     # Handle all files except the special ones (only changed files)
-    while IFS= read -r -d '' file; do
-      rel_path="${file#$hypr_source/}"
-      target_file="$hypr_target/$rel_path"
-      
-      # Skip custom directory and special config files
-      if [[ "$rel_path" == custom/* ]] || [[ "$rel_path" == "hyprland.conf" ]] || 
-         [[ "$rel_path" == "hypridle.conf" ]] || [[ "$rel_path" == "hyprlock.conf" ]]; then
-        continue
-      fi
-      
-      if should_ignore "$target_file"; then
-        ((files_skipped++))
-        continue
-      fi
-      
-      mkdir -p "$(dirname "$target_file")"
-      
-      if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
-        if should_auto_sync "$target_file"; then
-          cp -p "$file" "$target_file"
-          log_success "Auto-synced: $target_file"
-          ((files_updated++))
-        else
-          handle_file_conflict "$file" "$target_file"
-          ((files_updated++))
+    changed_in_dir=0
+    for file_rel_path in "${commit_diff_files[@]}"; do
+        if [[ "$file_rel_path" == "$hypr_source"/* ]]; then
+            repo_file="${REPO_DIR}/${file_rel_path}"
+            rel_path="${file_rel_path#$hypr_source/}"
+            target_file="$hypr_target/$rel_path"
+            
+            # Skip custom directory and special config files
+            if [[ "$rel_path" == custom/* ]] || [[ "$rel_path" == "hyprland.conf" ]] || \
+                [[ "$rel_path" == "hypridle.conf" ]] || [[ "$rel_path" == "hyprlock.conf" ]]; then
+                continue
+            fi
+            
+            ((changed_in_dir++))
+
+            if should_ignore "$target_file"; then
+                ((files_skipped++))
+                continue
+            fi
+            
+            mkdir -p "$(dirname "$target_file")"
+            
+            if [[ -f "$target_file" ]] && ! cmp -s "$repo_file" "$target_file"; then
+                if should_auto_sync "$target_file"; then
+                cp -p "$repo_file" "$target_file"
+                log_success "Auto-synced: $target_file"
+                ((files_updated++))
+                else
+                handle_file_conflict "$repo_file" "$target_file"
+                ((files_updated++))
+                fi
+            elif [[ ! -f "$target_file" ]]; then
+                cp -p "$repo_file" "$target_file"
+                log_success "Created new Hyprland config file: $target_file"
+                ((files_created++))
+            fi
+            ((files_processed++))
         fi
-      elif [[ ! -f "$target_file" ]]; then
-        cp -p "$file" "$target_file"
-        log_success "Created new Hyprland config file: $target_file"
-        ((files_created++))
-      fi
-      ((files_processed++))
-    done < <(get_changed_files_since_pull "$hypr_source")
+    done
+    if [[ "$changed_in_dir" -gt 0 ]]; then
+        log_info "Found $changed_in_dir changed files in $hypr_source (excluding special configs)"
+    fi
     
     # Handle special Hyprland config files (check if they were changed)
     for config_file in "hyprland.conf" "hypridle.conf" "hyprlock.conf"; do
@@ -1307,7 +1296,8 @@ if [[ "$process_files" == true ]]; then
     mkdir -p "$home_dir_path"
 
     # Process all files in the directory, checking each one
-    find "$repo_dir_path" -type f 2>/dev/null | while read -r repo_file; do
+    find "$repo_dir_path" -type f 2>/dev/null | while read -r repo_file;
+ do
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
       config_relative="${repo_file#$REPO_DIR/}"
