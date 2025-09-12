@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 pragma Singleton
 pragma ComponentBehavior: Bound
+import qs.modules.common
 import Qt.labs.platform
 import qs.modules.common.functions
 Singleton {
@@ -53,13 +54,14 @@ Singleton {
     // Process for loading events
     Process {
       id: getEventsProcess
-      running: true
+      running: false
         // get events for 3 months
         command: ["khal", "list", "--json", "title", "--json", "start-date", "--json" ,"start-time", "--json" ,"end-time",   Qt.formatDate(new Date(), "dd/MM/yyyy") ,Qt.formatDate((() => { let d = new Date(); d.setMonth(d.getMonth() + 3); return d; })(), "dd/MM/yyyy")]
         stdout: StdioCollector {
 
           onStreamFinished:{
-             let lines = this.text.split('\n')
+            let events = []
+            let lines = this.text.split('\n')
              for(let line of lines){
                line = line.trim()
                if (!line || line === "[]")
@@ -88,7 +90,7 @@ Singleton {
                                            parseInt(endTimeParts[0]), 
                                            parseInt(endTimeParts[1]))
 
-                  root.items.push({
+                  events.push({
                       "content": event['title'],
                       "startDate": startDate,
                       "endDate": endDate,
@@ -96,11 +98,23 @@ Singleton {
                   })
                 }
               }
-            console.log(JSON.stringify(root.items))
+              root.items = events
           }
     
         }
       }
+
+       Timer {
+        interval: 10
+        running: true
+        repeat: true
+        onTriggered: {
+            getEventsProcess.running = true
+            interval = Config.options?.resources?.updateInterval ?? 3000
+        }
+    }
+
+
 
       
       Process {
