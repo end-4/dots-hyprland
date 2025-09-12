@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.models
 import qs.modules.common.functions
 import QtQuick
 import Qt.labs.folderlistmodel
@@ -16,8 +17,9 @@ Singleton {
 
     property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/thumbgen.py`
     property string generateThumbnailsMagicScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
-    property string directory: FileUtils.trimFileProtocol(`${Directories.pictures}/Wallpapers`)
+    property alias directory: folderModel.folder
     readonly property string effectiveDirectory: FileUtils.trimFileProtocol(folderModel.folder.toString())
+    property url defaultFolder: Qt.resolvedUrl(`${Directories.pictures}/Wallpapers`)
     property alias folderModel: folderModel // Expose for direct binding when needed
     property string searchQuery: ""
     readonly property list<string> extensions: [ // TODO: add videos
@@ -88,11 +90,11 @@ Singleton {
         }
         stdout: StdioCollector {
             onStreamFinished: {
+                    root.directory = Qt.resolvedUrl(validateDirProc.nicePath)
                 const result = text.trim()
                 if (result === "dir") {
-                    root.directory = validateDirProc.nicePath
                 } else if (result === "file") {
-                    root.directory = FileUtils.parentDirectory(validateDirProc.nicePath)
+                    root.directory = Qt.resolvedUrl(FileUtils.parentDirectory(validateDirProc.nicePath))
                 } else {
                     // Ignore
                 }
@@ -102,11 +104,20 @@ Singleton {
     function setDirectory(path) {
         validateDirProc.setDirectoryIfValid(path)
     }
+    function navigateUp() {
+        folderModel.navigateUp()
+    }
+    function navigateBack() {
+        folderModel.navigateBack()
+    }
+    function navigateForward() {
+        folderModel.navigateForward()
+    }
 
     // Folder model
-    FolderListModel {
+    FolderListModelWithHistory {
         id: folderModel
-        folder: Qt.resolvedUrl(root.directory)
+        folder: Qt.resolvedUrl(root.defaultFolder)
         caseSensitive: false
         nameFilters: root.extensions.map(ext => `*${searchQuery.split(" ").filter(s => s.length > 0).map(s => `*${s}*`)}*.${ext}`)
         showDirs: true
