@@ -152,10 +152,6 @@ get_changed_files_since_pull() {
         fi
       done
       return
-    else
-      log_info "No differences found between local and remote commits, checking all files in directory." >&2
-      find "$dir_path" -type f -print0 2>/dev/null
-      return
     fi
   fi
 
@@ -171,13 +167,7 @@ get_changed_files_since_pull() {
             printf '%s\0' "$full_path"
           fi
         done <<< "$changed_files_output"
-    else
-        find "$dir_path" -type f -print0 2>/dev/null
     fi
-  else
-    # No previous commit reference, check all files
-    log_info "No previous commit reference found, checking all files in directory" >&2
-    find "$dir_path" -type f -print0 2>/dev/null
   fi
 }
 
@@ -1099,8 +1089,7 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
     printf " - %s\n" "${commit_diff_files[@]}"
   fi
 else
-  log_info "No changes detected, but will still check for file differences"
-  process_files=true # Always check for differences even without commits (more robust)
+  log_info "No changes detected, and not in force mode. Skipping file updates."
 fi
 
 if [[ "$process_files" == true ]]; then
