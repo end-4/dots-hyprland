@@ -59,7 +59,7 @@ Singleton {
         property color m3onSurfaceVariant: "#CFC3CD"
         property color m3inverseSurface: "#EAE0E7"
         property color m3inverseOnSurface: "#342F34"
-        property color m3outline: "#988E97"
+        property color m3outline: "#584E57"
         property color m3outlineVariant: "#4C444D"
         property color m3shadow: "#000000"
         property color m3scrim: "#000000"
@@ -116,6 +116,7 @@ Singleton {
     }
 
     colors: QtObject {
+        property color colActiveWinTitle: "#006383"
         property color colSubtext: m3colors.m3outline
         property color colLayer0: ColorUtils.mix(ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency), m3colors.m3primary, Config.options.appearance.extraBackgroundTint ? 0.99 : 1)
         property color colOnLayer0: m3colors.m3onBackground
@@ -201,17 +202,17 @@ Singleton {
 
     font: QtObject {
         property QtObject family: QtObject {
-            property string main: "Varela Round"
-            property string title: "Varela Round"
+            property string main: "SF Pro"
+            property string title: "SF Pro"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
-            property string reading: "Varela Round"
+            property string reading: "SF Pro"
             property string expressive: "Space Grotesk"
         }
         property QtObject pixelSize: QtObject {
             property int smallest: 11
-            property int smaller: 12
+            property int smaller: 13
             property int small: 15
             property int normal: 16
             property int large: 17

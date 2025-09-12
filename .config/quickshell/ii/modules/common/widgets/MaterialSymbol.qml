@@ -7,7 +7,7 @@ StyledText {
     property real fill: 0
     property real truncatedFill: Math.round(fill * 100) / 100 // Reduce memory consumption spikes from constant font remapping
     font {
-        hintingPreference: Font.PreferFullHinting
+        hintingPreference: Font.PreferNoHinting
         family: Appearance?.font.family.iconMaterial ?? "Material Symbols Rounded"
         pixelSize: iconSize
         weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill

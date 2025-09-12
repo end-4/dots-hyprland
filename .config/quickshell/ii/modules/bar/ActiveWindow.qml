@@ -29,8 +29,9 @@ Item {
 
         StyledText {
             Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.smaller
-            color: Appearance.colors.colSubtext
+            font.pixelSize: Appearance.font.pixelSize.small
+            font.weight: Font.DemiBold
+            color: Appearance.colors.colActiveWinTitle
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.appId :
@@ -40,7 +41,8 @@ Item {
 
         StyledText {
             Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.small
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            font.hintingPreference: Font.PreferNoHinting
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 

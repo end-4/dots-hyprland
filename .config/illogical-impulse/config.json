@@ -1,8 +1,6 @@
 {
-    "ai":
-    {
-        "extraModels":
-        [
+    "ai": {
+        "extraModels": [
             {
                 "api_format": "openai",
                 "description": "This is a custom model. Edit the config to add more! | Anyway, this is DeepSeek R1 Distill LLaMA 70B",
@@ -19,28 +17,23 @@
         "systemPrompt": "## Style\n- Use casual tone, don't be formal! Make sure you answer precisely without hallucination and prefer bullet points over walls of text. You can have a friendly greeting at the beginning of the conversation, but don't repeat the user's question. Respond as an american glam metal girl from the 80s.\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a CachyOS Linux system\n- Desktop environment: Hyprland + Quickshell\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with h2 headers and a relevant emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless you're offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the user's use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX '$$' delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n",
         "tool": "functions"
     },
-    "appearance":
-    {
+    "appearance": {
         "extraBackgroundTint": true,
         "fakeScreenRounding": 2,
-        "palette":
-        {
+        "palette": {
             "type": "scheme-fruit-salad"
         },
-        "transparency":
-        {
+        "transparency": {
             "automatic": false,
             "backgroundTransparency": 0.3,
             "contentTransparency": 0.57,
             "enable": true
         },
-        "wallpaperTheming":
-        {
+        "wallpaperTheming": {
             "enableAppsAndShell": true,
             "enableQtApps": true,
             "enableTerminal": false,
-            "terminalGenerationProps":
-            {
+            "terminalGenerationProps": {
                 "forceDarkMode": false,
                 "harmonizeThreshold": 100,
                 "harmony": 0.8,
@@ -48,31 +41,26 @@
             }
         }
     },
-    "apps":
-    {
+    "apps": {
         "bluetooth": "kcmshell6 kcm_bluetooth",
         "network": "kitty -1 fish -c nmtui",
         "networkEthernet": "kcmshell6 kcm_networkmanagement",
         "taskManager": "plasma-systemmonitor --page-name Processes",
         "terminal": "kitty -1"
     },
-    "audio":
-    {
-        "protection":
-        {
+    "audio": {
+        "protection": {
             "enable": true,
             "maxAllowed": 100,
             "maxAllowedIncrease": 10
         }
     },
-    "background":
-    {
+    "background": {
         "clockX": -500,
         "clockY": -500,
         "fixedClockPosition": false,
         "hideWhenFullscreen": true,
-        "parallax":
-        {
+        "parallax": {
             "autoVertical": false,
             "enableSidebar": true,
             "enableWorkspace": true,
@@ -84,14 +72,11 @@
         "thumbnailPath": "",
         "wallpaperPath": "/home/s4bba7/Obrazy/Tapety/abstrakt/pobrane_upscayl_2x_upscayl-standard-4x.png"
     },
-    "bar":
-    {
-        "autoHide":
-        {
+    "bar": {
+        "autoHide": {
             "enable": false,
             "pushWindows": false,
-            "showWhenPressingSuper":
-            {
+            "showWhenPressingSuper": {
                 "delay": 140,
                 "enable": true
             }
@@ -99,30 +84,26 @@
         "borderless": true,
         "bottom": false,
         "cornerStyle": 0,
-        "resources":
-        {
+        "resources": {
             "alwaysShowCpu": true,
             "alwaysShowSwap": true,
             "cpuWarningThreshold": 90,
             "memoryWarningThreshold": 95,
             "swapWarningThreshold": 85
         },
-        "screenList":
-        [],
+        "screenList": [
+        ],
         "showBackground": true,
         "topLeftIcon": "spark",
-        "tray":
-        {
+        "tray": {
             "invertPinnedItems": true,
             "monochromeIcons": false,
-            "pinnedItems":
-            [
+            "pinnedItems": [
                 "Fcitx"
             ],
             "showItemId": false
         },
-        "utilButtons":
-        {
+        "utilButtons": {
             "showColorPicker": true,
             "showDarkModeToggle": false,
             "showKeyboardToggle": true,
@@ -132,20 +113,17 @@
         },
         "verbose": true,
         "vertical": false,
-        "weather":
-        {
+        "weather": {
             "city": "",
             "enable": true,
             "enableGPS": true,
             "fetchInterval": 10,
             "useUSCS": false
         },
-        "workspaces":
-        {
+        "workspaces": {
             "alwaysShowNumbers": false,
             "monochromeIcons": false,
-            "numberMap":
-            [
+            "numberMap": [
                 "1",
                 "2"
             ],
@@ -155,119 +133,96 @@
             "useNerdFont": false
         }
     },
-    "battery":
-    {
+    "battery": {
         "automaticSuspend": true,
         "critical": 5,
         "low": 20,
         "suspend": 15
     },
-    "conflictKiller":
-    {
+    "conflictKiller": {
         "autoKillNotificationDaemons": true,
         "autoKillTrays": true
     },
-    "dock":
-    {
+    "dock": {
         "enable": false,
         "height": 60,
         "hoverRegionHeight": 2,
         "hoverToReveal": true,
-        "ignoredAppRegexes":
-        [],
+        "ignoredAppRegexes": [
+        ],
         "monochromeIcons": false,
-        "pinnedApps":
-        [
+        "pinnedApps": [
             "org.kde.dolphin",
             "kitty"
         ],
         "pinnedOnStartup": false
     },
-    "hacks":
-    {
+    "hacks": {
         "arbitraryRaceConditionDelay": 20
     },
-    "interactions":
-    {
-        "deadPixelWorkaround":
-        {
+    "interactions": {
+        "deadPixelWorkaround": {
             "enable": true
         },
-        "scrolling":
-        {
+        "scrolling": {
             "fasterTouchpadScroll": false,
             "mouseScrollDeltaThreshold": 120,
             "mouseScrollFactor": 120,
             "touchpadScrollFactor": 450
         }
     },
-    "language":
-    {
-        "translator":
-        {
+    "language": {
+        "translator": {
             "engine": "auto",
             "sourceLanguage": "auto",
             "targetLanguage": "auto"
         },
         "ui": "auto"
     },
-    "light":
-    {
-        "night":
-        {
+    "light": {
+        "night": {
             "automatic": true,
             "colorTemperature": 5000,
             "from": "19:00",
             "to": "06:30"
         }
     },
-    "media":
-    {
+    "media": {
         "filterDuplicatePlayers": true
     },
-    "networking":
-    {
+    "networking": {
         "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     },
-    "osd":
-    {
+    "osd": {
         "timeout": 2000
     },
-    "osk":
-    {
+    "osk": {
         "layout": "qwerty_full",
         "pinnedOnStartup": false
     },
-    "overview":
-    {
+    "overview": {
         "columns": 5,
         "enable": true,
         "rows": 2,
         "scale": 0.1
     },
-    "policies":
-    {
+    "policies": {
         "ai": 1,
         "weeb": 0
     },
-    "resources":
-    {
+    "resources": {
         "updateInterval": 3000
     },
-    "screenshotTool":
-    {
+    "screenshotTool": {
         "showContentRegions": false
     },
-    "search":
-    {
+    "search": {
         "engineBaseUrl": "https://www.google.com/search?q=",
-        "excludedSites":
-        [
+        "excludedSites": [
             "quora.com"
         ],
         "nonAppResultDelay": 30,
-        "prefix":
-        {
+        "prefix": {
             "action": "/",
             "clipboard": ";",
             "emojis": ":",
@@ -278,20 +233,16 @@
         },
         "sloppy": false
     },
-    "sidebar":
-    {
-        "booru":
-        {
+    "sidebar": {
+        "booru": {
             "allowNsfw": false,
             "defaultProvider": "yandere",
             "limit": 20,
-            "zerochan":
-            {
+            "zerochan": {
                 "username": "[unset]"
             }
         },
-        "cornerOpen":
-        {
+        "cornerOpen": {
             "bottom": false,
             "clickless": false,
             "cornerRegionHeight": 2,
@@ -301,17 +252,14 @@
             "visualize": false
         },
         "keepRightSidebarLoaded": true,
-        "translator":
-        {
+        "translator": {
             "delay": 300
         }
     },
-    "time":
-    {
+    "time": {
         "dateFormat": "ddd, dd/MM",
         "format": "hh:mm",
-        "pomodoro":
-        {
+        "pomodoro": {
             "alertSound": "",
             "breakTime": 300,
             "cyclesBeforeLongBreak": 4,
@@ -320,8 +268,7 @@
         },
         "shortDateFormat": "dd/MM"
     },
-    "windows":
-    {
+    "windows": {
         "centerTitle": true,
         "showTitlebar": true
     }

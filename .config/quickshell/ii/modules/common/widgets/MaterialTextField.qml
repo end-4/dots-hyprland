@@ -26,7 +26,7 @@ TextField {
     font {
         family: Appearance?.font.family.main ?? "sans-serif"
         pixelSize: Appearance?.font.pixelSize.small ?? 15
-        hintingPreference: Font.PreferFullHinting
+        hintingPreference: Font.PreferNoHinting
     }
     wrapMode: TextEdit.Wrap
 
