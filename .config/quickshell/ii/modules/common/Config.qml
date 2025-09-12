@@ -344,6 +344,24 @@ Singleton {
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
             }
+
+
+            property JsonObject quickToggle: JsonObject {
+                // style 0 for classic , 1 for android 16 inspired
+                property int style : 1
+
+                // only for if style == 1
+                property list<string> toggles : [
+                "NetworkToggle", "BluetoothToggle", "GameModeToggle", "NightLightToggle", "DarkModeToggle", "IdleInhibitorToggle", "LocationToggle", "Screenshot", "PowerSaverToggle", "CloudflareWarpToggle", "EasyEffectsToggle", "MicrophoneToggle"
+                ]
+                property list<int> spans : [2, 2, 2 ,1 ,1, 2, 2]
+                // uses larger-first algorithm, if false empty spaces is
+                // possible so you have to adjust the spans properly to avoid it
+                property bool sorted : false
+
+
+            }
+
         }
     }
 }
