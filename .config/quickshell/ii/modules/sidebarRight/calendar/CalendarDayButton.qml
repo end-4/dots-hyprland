@@ -128,7 +128,14 @@ RippleButton {
                                         Layout.leftMargin: 10
                                         Layout.rightMargin: 10
                                         Layout.topMargin: 4
-                                        text: modelData.isTodo? Translation.tr("Deadline") + ": " + Qt.formatDate(modelData.date, Qt.format): Translation.tr("Starttime") + ": " + Qt.formatDateTime(modelData.date, "HH:mm")
+                                                       
+                                        text: modelData.isTodo
+                                            ? Qt.formatDate(modelData.date, Qt.format)
+                                            : (Qt.formatDateTime(modelData.endDate, "HH:mm") !== "00:00"
+                                                ? Qt.formatDate(modelData.startDate, Qt.format)  + " : " + Qt.formatDateTime(modelData.startDate, "HH:mm") + " - " + Qt.formatDateTime(modelData.endDate, "HH:mm")
+                                                : Qt.formatDate(modelData.startDate, Qt.format) )
+
+
                                         color: Appearance.m3colors.m3outline
                                         wrapMode: Text.Wrap
                                     }
