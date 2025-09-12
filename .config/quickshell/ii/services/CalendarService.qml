@@ -72,7 +72,7 @@ Singleton {
                       : [0, 0];
 
                   let endTimeParts = event['end-time'] 
-                      ? event['end-time'].split(':') 
+                      ? event['end-time'].split(':').map(Number) 
                       : [0, 0];
              
                   
