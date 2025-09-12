@@ -22,6 +22,9 @@ Singleton {
         running: true
         onExited: (exitCode) => {
           root.khalAvailable = (exitCode === 0);
+          if(root.khalAvailable){
+            interval.running = true
+          }
         }
       }
 
@@ -104,13 +107,15 @@ Singleton {
         }
       }
 
-       Timer {
-        interval: 10
-        running: true
+      Timer {
+        id: interval
+        running: false
+        interval:10
         repeat: true
         onTriggered: {
-            getEventsProcess.running = true
-            interval = Config.options?.resources?.updateInterval ?? 3000
+          getEventsProcess.running = true
+          this.interval =    Config.options?.resources?.updateInterval ?? 3000
+                   
         }
     }
 
