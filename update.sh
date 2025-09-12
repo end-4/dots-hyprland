@@ -154,21 +154,6 @@ get_changed_files_since_pull() {
       return
     fi
   fi
-
-  # Fallback: check changes since last commit (HEAD@{1})
-  if git rev-parse --verify HEAD@{1} &>/dev/null; then
-    log_info "Checking changes since last local commit..." >&2
-    local changed_files_output
-    changed_files_output=$(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
-    if [[ -n "$changed_files_output" ]]; then
-        while IFS= read -r file; do
-          local full_path="${REPO_DIR}/${file}"
-          if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-            printf '%s\0' "$full_path"
-          fi
-        done <<< "$changed_files_output"
-    fi
-  fi
 }
 
 # Function to check if a file should be ignored
@@ -576,11 +561,6 @@ check_pkgbuild_changed() {
     fi
   fi
 
-  # Fallback: check if changed since last local commit
-  if git diff --name-only HEAD@{1} HEAD 2>/dev/null | grep -q "^${relative_path}$"; then
-    return 0
-  fi
-
   return 1
 }
 
@@ -778,13 +758,7 @@ has_commit_differences() {
     fi
   fi
   
-  # Fallback: check if we have new commits since last reference
-  if git rev-parse --verify HEAD@{1} &>/dev/null; then
-    [[ "$(git rev-parse HEAD)" != "$(git rev-parse HEAD@{1})" ]]
-  else
-    # If no previous reference, assume we should check (safer approach)
-    return 0
-  fi
+  return 1
 }
 
 # Main script starts here
@@ -1054,7 +1028,8 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
   # Get list of files that differ between commits
   if [[ "$PULL_HAD_CHANGES" == true && -n "$PRE_PULL_HEAD" && -n "$POST_PULL_HEAD" ]]; then
     # Use tracked pull information for most accurate diff
-    while IFS= read -r file; do
+    while IFS= read -r file;
+ do
       if [[ -n "$file" ]]; then
         commit_diff_files+=("$file")
       fi
@@ -1065,17 +1040,19 @@ elif [[ "$PULL_HAD_CHANGES" == true ]] || has_commit_differences; then
     current_branch=$(git branch --show-current)
     remote_branch="origin/${current_branch}"
     
-    if git show-ref --verify --quiet "refs/remotes/$remote_branch"; then
-      while IFS= read -r file; do
+    if git show-ref --verify --quiet "refs/remotes/${remote_branch}"; then
+      while IFS= read -r file;
+ do
         if [[ -n "$file" ]]; then
           commit_diff_files+=("$file")
         fi
-      done < <(get_diff_files_between_commits "HEAD" "$remote_branch")
+      done < <(get_diff_files_between_commits "HEAD" "${remote_branch}")
     fi
     
     if [[ ${#commit_diff_files[@]} -eq 0 ]]; then
       # Final fallback to checking since last local commit
-      while IFS= read -r file; do
+      while IFS= read -r file;
+ do
         if [[ -n "$file" ]]; then
           commit_diff_files+=("$file")
         fi
@@ -1153,7 +1130,7 @@ if [[ "$process_files" == true ]]; then
     elif [[ -f "$config_path" ]]; then
       # Check if this specific file was changed
       config_relative="${config_path#./}"
-      if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]] || ! cmp -s "$config_path" "$target_path" 2>/dev/null; then
+      if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
         mkdir -p "$(dirname "$target_path")"
         if [[ -f "$target_path" ]] && ! cmp -s "$config_path" "$target_path"; then
           if should_auto_sync "$target_path"; then
@@ -1274,7 +1251,7 @@ if [[ "$process_files" == true ]]; then
       
       if [[ -f "$source_file" ]]; then
         # Check if this config file was changed
-        if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]] || ! cmp -s "$source_file" "$target_file" 2>/dev/null; then
+        if [[ "$FORCE_CHECK" == true ]] || [[ " ${commit_diff_files[*]} " =~ " ${config_relative} " ]]; then
           if [[ -f "$target_file" ]]; then
             if ! cmp -s "$source_file" "$target_file"; then
               echo -e "\n${YELLOW}Special Hyprland config detected: $config_file${NC}"
