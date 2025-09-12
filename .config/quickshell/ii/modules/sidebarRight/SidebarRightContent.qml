@@ -5,6 +5,8 @@ import qs.modules.common.widgets
 import "./quickToggles/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
+import "./"
+import "./quickPanel/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -17,15 +19,15 @@ Item {
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 12
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
-    property bool showWifiDialog: false
-    property bool showBluetoothDialog: false
+    property bool showWifiDialog: WifiDialogContext.showWifiDialog
+    property bool showBluetoothDialog: BluetoothDialogContext.showBluetoothDialog
 
     Connections {
         target: GlobalStates
         function onSidebarRightOpenChanged() {
             if (!GlobalStates.sidebarRightOpen) {
-                root.showWifiDialog = false;
-                root.showBluetoothDialog = false;
+                WifiDialogContext.showWifiDialog = false;
+                BluetoothDialog.showBluetoothDialog = false;
             }
         }
     }
@@ -115,32 +117,51 @@ Item {
                 }
             }
 
-            ButtonGroup {
+            Loader {
                 Layout.alignment: Qt.AlignHCenter
-                spacing: 5
-                padding: 5
-                color: Appearance.colors.colLayer1
-
-                NetworkToggle {
-                    altAction: () => {
-                        Network.enableWifi();
-                        Network.rescanWifi();
-                        root.showWifiDialog = true;
-                    }
-                }
-                BluetoothToggle {
-                    altAction: () => {
-                        Bluetooth.defaultAdapter.enabled = true;
-                        Bluetooth.defaultAdapter.discovering = true;
-                        root.showBluetoothDialog = true;
-                    }
-                }
-                NightLight {}
-                GameMode {}
-                IdleInhibitor {}
-                EasyEffectsToggle {}
-                CloudflareWarp {}
+                sourceComponent: Config?.options.quickToggle.style === 0 ?  classicPanel : androidPanel
             }
+
+            Component {
+                id: classicPanel
+                ButtonGroup {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 5
+                    padding: 5
+                    color: Appearance.colors.colLayer1
+
+                    NetworkToggle {
+                        altAction: () => {
+                            Network.enableWifi();
+                            Network.rescanWifi();
+                            WifiDialogContext.showWifiDialog = true;
+                        }
+                    }
+                    BluetoothToggle {
+                        altAction: () => {
+                            Bluetooth.defaultAdapter.enabled = true;
+                            Bluetooth.defaultAdapter.discovering = true;
+                            BluetoothDialogContext.showBluetoothDialog = true;
+                        }
+                    }
+                    NightLight {}
+                    GameMode {}
+                    IdleInhibitor {}
+                    EasyEffectsToggle {}
+                    CloudflareWarp {}
+                } }
+
+            Component {
+                id: androidPanel
+                QuickPanel {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: false
+                    Layout.fillHeight: false
+                    Layout.preferredHeight: implicitHeight
+                }
+
+            }
+
 
             CenterWidgetGroup {
                 Layout.alignment: Qt.AlignHCenter
@@ -157,12 +178,14 @@ Item {
         }
     }
 
-    onShowWifiDialogChanged: if (showWifiDialog) wifiDialogLoader.active = true;
+    onShowWifiDialogChanged: () => {
+        if (WifiDialogContext.showWifiDialog) wifiDialogLoader.active = true;
+    }
+
     Loader {
         id: wifiDialogLoader
         anchors.fill: parent
-
-        active: root.showWifiDialog || item.visible
+        active: WifiDialogContext.showWifiDialog || item.visible
         onActiveChanged: {
             if (active) {
                 item.show = true;
@@ -173,23 +196,23 @@ Item {
         sourceComponent: WifiDialog {
             onDismiss: {
                 show = false
-                root.showWifiDialog = false
+                WifiDialogContext.showWifiDialog = false
             }
             onVisibleChanged: {
-                if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
+                if (!visible && !WifiDialogContext.showWifiDialog) wifiDialogLoader.active = false;
             }
         }
     }
 
-    onShowBluetoothDialogChanged: {
-        if (showBluetoothDialog) bluetoothDialogLoader.active = true;
+    onShowBluetoothDialogChanged:() => {
+        if (BluetoothDialogContext.showBluetoothDialog) bluetoothDialogLoader.active = true;
         else Bluetooth.defaultAdapter.discovering = false;
     }
     Loader {
         id: bluetoothDialogLoader
         anchors.fill: parent
 
-        active: root.showBluetoothDialog || item.visible
+        active: BluetoothDialogContext.showBluetoothDialog || item.visible
         onActiveChanged: {
             if (active) {
                 item.show = true;
@@ -200,10 +223,10 @@ Item {
         sourceComponent: BluetoothDialog {
             onDismiss: {
                 show = false
-                root.showBluetoothDialog = false
+                BluetoothDialogContext.showBluetoothDialog = false
             }
             onVisibleChanged: {
-                if (!visible && !root.showBluetoothDialog) bluetoothDialogLoader.active = false;
+                if (!visible && !BluetoothDialogContext.showBluetoothDialog) bluetoothDialogLoader.active = false;
             }
         }
     }
