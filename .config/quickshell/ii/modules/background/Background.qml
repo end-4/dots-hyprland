@@ -167,6 +167,7 @@ Variants {
             cache: false
             asynchronous: true
             retainWhileLoading: true
+            smooth: false
             // Range = groups that workspaces span on
             property int chunkSize: Config?.options.bar.workspaces.shown ?? 10;
             property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
@@ -213,6 +214,14 @@ Variants {
             }
             width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
             height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
+            // scale: GlobalStates.screenLocked ? 1.04 : 1
+            // Behavior on scale {
+            //     NumberAnimation {
+            //         duration: 400
+            //         easing.type: Easing.BezierSpline
+            //         easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+            //     }
+            // }
         }
 
         // The clock

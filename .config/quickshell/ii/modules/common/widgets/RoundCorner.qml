@@ -6,6 +6,10 @@ Item {
 
     enum CornerEnum { TopLeft, TopRight, BottomLeft, BottomRight }
     property var corner: RoundCorner.CornerEnum.TopLeft
+    property alias leftVisualMargin: shape.anchors.leftMargin
+    property alias topVisualMargin: shape.anchors.topMargin
+    property alias rightVisualMargin: shape.anchors.rightMargin
+    property alias bottomVisualMargin: shape.anchors.bottomMargin
 
     property int implicitSize: 25
     property color color: "#000000"
@@ -23,6 +27,7 @@ Item {
     property bool isRight: isTopRight || isBottomRight
 
     Shape {
+        id: shape
         anchors {
             top: root.isTop ? parent.top : undefined
             bottom: root.isBottom ? parent.bottom : undefined
@@ -70,10 +75,6 @@ Item {
                 y: shapePath.startY
             }
         }
-    }
-
-    Behavior on implicitSize {
-        animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
 }

@@ -95,6 +95,7 @@ Singleton {
                         property real harmony: 0.8
                         property real harmonizeThreshold: 100
                         property real termFgBoost: 0.35
+                        property bool forceDarkMode: false
                     }
                 }
                 property JsonObject palette: JsonObject {
@@ -172,8 +173,9 @@ Singleton {
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
-                    property bool invertPinnedItems: false // Makes the below a whitelist for the tray and blacklist for the pinned area
-                    property list<string> pinnedItems: [ "Fcitx" ]
+                    property bool showItemId: false
+                    property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
+                    property list<string> pinnedItems: [ ]
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
@@ -223,6 +225,9 @@ Singleton {
                     property int mouseScrollDeltaThreshold: 120 // delta >= this then it gets detected as mouse scroll rather than touchpad
                     property int mouseScrollFactor: 120
                     property int touchpadScrollFactor: 450
+                }
+                property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
+                    property bool enable: true
                 }
             }
 

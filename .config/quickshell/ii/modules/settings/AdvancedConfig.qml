@@ -41,6 +41,20 @@ ContentPage {
                 content: Translation.tr("Shell & utilities theming must also be enabled")
             }
         }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "dark_mode"
+                text: Translation.tr("Force dark mode in terminal")
+                checked: Config.options.appearance.wallpaperTheming.terminalGenerationProps.forceDarkMode
+                onCheckedChanged: {
+                     Config.options.appearance.wallpaperTheming.terminalGenerationProps.forceDarkMode= checked;
+                }
+                StyledToolTip {
+                    content: Translation.tr("Ignored if terminal theming is not enabled")
+                }
+            }
+        }
 
         ConfigSpinBox {
             icon: "invert_colors"

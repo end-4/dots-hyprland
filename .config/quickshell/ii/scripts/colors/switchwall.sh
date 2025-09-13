@@ -264,7 +264,15 @@ switch() {
         fi
     fi
 
-    [[ -n "$mode_flag" ]] && matugen_args+=(--mode "$mode_flag") && generate_colors_material_args+=(--mode "$mode_flag")
+    # enforce dark mode for terminal
+    if [[ -n "$mode_flag" ]]; then
+        matugen_args+=(--mode "$mode_flag")
+        if [[ $(jq -r '.appearance.wallpaperTheming.terminalGenerationProps.forceDarkMode' "$SHELL_CONFIG_FILE") == "true" ]]; then
+            generate_colors_material_args+=(--mode "dark")
+        else
+            generate_colors_material_args+=(--mode "$mode_flag")
+        fi
+    fi
     [[ -n "$type_flag" ]] && matugen_args+=(--type "$type_flag") && generate_colors_material_args+=(--scheme "$type_flag")
     generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
     generate_colors_material_args+=(--cache "$STATE_DIR/user/generated/color.txt")

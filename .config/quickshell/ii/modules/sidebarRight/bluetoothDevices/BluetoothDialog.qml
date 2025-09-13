@@ -43,7 +43,20 @@ WindowDialog {
         animateAppearance: false
 
         model: ScriptModel {
-            values: [...Bluetooth.devices.values].sort((a, b) => (b.connected - a.connected) || (b.paired - a.paired))
+            values: [...Bluetooth.devices.values].sort((a, b) => {
+                // Connected -> paired -> others
+                let conn = (b.connected - a.connected) || (b.paired - a.paired);
+                if (conn !== 0) return conn;
+
+                // Ones with meaningful names before MAC addresses
+                const macRegex = /^([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2}$/;
+                const aIsMac = macRegex.test(a.name);
+                const bIsMac = macRegex.test(b.name);
+                if (aIsMac !== bIsMac) return aIsMac ? 1 : -1;
+
+                // Alphabetical by name
+                return a.name.localeCompare(b.name);
+            })
         }
         delegate: BluetoothDeviceItem {
             required property BluetoothDevice modelData
