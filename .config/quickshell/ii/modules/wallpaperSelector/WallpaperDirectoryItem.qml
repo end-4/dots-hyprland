@@ -64,7 +64,7 @@ MouseArea {
                     active: root.useThumbnail
                     sourceComponent: ThumbnailImage {
                         id: thumbnailImage
-                        generateThumbnail: false
+                        generateThumbnail: true
                         sourcePath: fileModelData.filePath
 
                         cache: false
