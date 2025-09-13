@@ -40,13 +40,77 @@ Singleton {
         obj[keys[keys.length - 1]] = convertedValue;
     }
 
+    // ListModel for UI display
+    property ListModel toggleModel: ListModel {}
+    property string lastToggleJson
+
+    // Parse JSON arrays into listModel
+    function updateListProperties() {
+        if (!root.options?.quickToggles || !root.options?.quickToggleSpans) {
+            console.warn("Invalid or missing quickToggles/quickToggleSpans in JSON");
+            return;
+        }
+        // Prepare data for JSON comparison
+        let currentToggleJson = JSON.stringify({
+            quickToggles: root.options.quickToggles,
+            quickToggleSpans: root.options.quickToggleSpans
+        });
+        console.info("Current JSON:", currentToggleJson);
+        console.info("Last JSON:", root.lastToggleJson);
+
+        // Update only if toggles acutally changed
+        if (currentToggleJson !== root.lastToggleJson || toggleModel.count === 0) {
+            console.info("JSON data changed or toggleModel empty, updating toggleModel");
+            root.lastToggleJson = currentToggleJson;
+
+            // Update ListModel
+            toggleModel.clear();
+            let len = root.options.quickToggles.length;
+            let tempArray = [];
+            for (var k = 0; k < len; ++k) {
+                tempArray.push({
+                    name: root.options.quickToggles[k],
+                    span: root.options.quickToggleSpans[k] || 1
+                });
+            }
+            if (root.options?.quickPanel.sorted) {
+                tempArray = stableSort(tempArray, (a, b) => b.span - a.span);
+            }
+            console.info("tempArray", tempArray);
+            tempArray.forEach(item => toggleModel.append(item));
+            console.info("Toggle model updated, count:", toggleModel.count);
+        }
+    // else console.info("Toggle Same Not Updating, count:", toggleModel.count);
+    }
+
+    function stableSort(arr, compare) {
+        return arr.map((item, index) => ({
+                    item,
+                    index
+                })).sort((a, b) => compare(a.item, b.item) || a.index - b.index).map(({
+                item
+            }) => item);
+    }
+
     FileView {
+        id: fileView
         path: root.filePath
         watchChanges: true
-        onFileChanged: reload()
-        onAdapterUpdated: writeAdapter()
-        onLoaded: root.ready = true
+        onFileChanged: {
+            console.warn("File changed, reloading:", path);
+            reload();
+        }
+        onAdapterUpdated: {
+            console.info("Adapter updated, writing to file");
+            writeAdapter();
+        }
+        onLoaded: {
+            console.info("FileView loaded, raw data:", data);
+            updateListProperties(); // Parse lists after load
+            root.ready = true;
+        }
         onLoadFailed: error => {
+            console.error("FileView load failed:", error);
             if (error == FileViewError.FileNotFound) {
                 writeAdapter();
             }
@@ -64,12 +128,16 @@ Singleton {
                 property string tool: "functions" // search, functions, or none
                 property list<var> extraModels: [
                     {
-                        "api_format": "openai", // Most of the time you want "openai". Use "gemini" for Google's models
+                        "api_format": "openai" // Most of the time you want "openai". Use "gemini" for Google's models
+                        ,
                         "description": "This is a custom model. Edit the config to add more! | Anyway, this is DeepSeek R1 Distill LLaMA 70B",
                         "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                        "homepage": "https://openrouter.ai/deepseek/deepseek-r1-distill-llama-70b:free", // Not mandatory
-                        "icon": "spark-symbolic", // Not mandatory
-                        "key_get_link": "https://openrouter.ai/settings/keys", // Not mandatory
+                        "homepage": "https://openrouter.ai/deepseek/deepseek-r1-distill-llama-70b:free" // Not mandatory
+                        ,
+                        "icon": "spark-symbolic" // Not mandatory
+                        ,
+                        "key_get_link": "https://openrouter.ai/settings/keys" // Not mandatory
+                        ,
                         "key_id": "openrouter",
                         "model": "deepseek/deepseek-r1-distill-llama-70b:free",
                         "name": "Custom: DS R1 Dstl. LLaMA 70B",
@@ -175,7 +243,7 @@ Singleton {
                     property bool monochromeIcons: true
                     property bool showItemId: false
                     property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
-                    property list<string> pinnedItems: [ ]
+                    property list<string> pinnedItems: []
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
@@ -226,7 +294,8 @@ Singleton {
                     property int mouseScrollFactor: 120
                     property int touchpadScrollFactor: 450
                 }
-                property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
+                property JsonObject deadPixelWorkaround: JsonObject {
+                    // Hyprland leaves out 1 pixel on the right for interactions
                     property bool enable: true
                 }
             }
@@ -345,23 +414,17 @@ Singleton {
                 property bool showContentRegions: true
             }
 
-
-            property JsonObject quickToggle: JsonObject {
+            property JsonObject quickPanel: JsonObject {
                 // style 0 for classic , 1 for android 16 inspired
-                property int style : 1
+                property int style: 1
 
                 // only for if style == 1
-                property list<string> toggles : [
-                "NetworkToggle", "BluetoothToggle", "GameModeToggle", "NightLightToggle", "DarkModeToggle", "IdleInhibitorToggle", "LocationToggle", "Screenshot", "PowerSaverToggle", "CloudflareWarpToggle", "EasyEffectsToggle", "MicrophoneToggle"
-                ]
-                property list<int> spans : [2, 2, 2 ,1 ,1, 2, 2]
                 // uses larger-first algorithm, if false empty spaces is
                 // possible so you have to adjust the spans properly to avoid it
-                property bool sorted : false
-
-
+                property bool sorted: false
             }
-
+            property list<string> quickToggles: ["NightLightToggle", "DarkModeToggle", "IdleInhibitorToggle", "LocationToggle", "Screenshot", "PowerSaverToggle", "CloudflareWarpToggle", "EasyEffectsToggle", "MicrophoneToggle"]
+            property list<var> quickToggleSpans: [2, 2, 1, 1, 1, 1, 1, 1, 1]
         }
     }
 }

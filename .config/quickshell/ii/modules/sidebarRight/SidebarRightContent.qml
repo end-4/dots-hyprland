@@ -119,7 +119,7 @@ Item {
 
             Loader {
                 Layout.alignment: Qt.AlignHCenter
-                sourceComponent: Config?.options.quickToggle.style === 0 ?  classicPanel : androidPanel
+                sourceComponent: Config?.options.quickPanel.style === 0 ? classicPanel : androidPanel
             }
 
             Component {
@@ -149,7 +149,8 @@ Item {
                     IdleInhibitor {}
                     EasyEffectsToggle {}
                     CloudflareWarp {}
-                } }
+                }
+            }
 
             Component {
                 id: androidPanel
@@ -159,9 +160,7 @@ Item {
                     Layout.fillHeight: false
                     Layout.preferredHeight: implicitHeight
                 }
-
             }
-
 
             CenterWidgetGroup {
                 Layout.alignment: Qt.AlignHCenter
@@ -179,7 +178,8 @@ Item {
     }
 
     onShowWifiDialogChanged: () => {
-        if (WifiDialogContext.showWifiDialog) wifiDialogLoader.active = true;
+        if (WifiDialogContext.showWifiDialog)
+            wifiDialogLoader.active = true;
     }
 
     Loader {
@@ -195,18 +195,21 @@ Item {
 
         sourceComponent: WifiDialog {
             onDismiss: {
-                show = false
-                WifiDialogContext.showWifiDialog = false
+                show = false;
+                WifiDialogContext.showWifiDialog = false;
             }
             onVisibleChanged: {
-                if (!visible && !WifiDialogContext.showWifiDialog) wifiDialogLoader.active = false;
+                if (!visible && !WifiDialogContext.showWifiDialog)
+                    wifiDialogLoader.active = false;
             }
         }
     }
 
-    onShowBluetoothDialogChanged:() => {
-        if (BluetoothDialogContext.showBluetoothDialog) bluetoothDialogLoader.active = true;
-        else Bluetooth.defaultAdapter.discovering = false;
+    onShowBluetoothDialogChanged: () => {
+        if (BluetoothDialogContext.showBluetoothDialog)
+            bluetoothDialogLoader.active = true;
+        else
+            Bluetooth.defaultAdapter.discovering = false;
     }
     Loader {
         id: bluetoothDialogLoader
@@ -222,11 +225,12 @@ Item {
 
         sourceComponent: BluetoothDialog {
             onDismiss: {
-                show = false
-                BluetoothDialogContext.showBluetoothDialog = false
+                show = false;
+                BluetoothDialogContext.showBluetoothDialog = false;
             }
             onVisibleChanged: {
-                if (!visible && !BluetoothDialogContext.showBluetoothDialog) bluetoothDialogLoader.active = false;
+                if (!visible && !BluetoothDialogContext.showBluetoothDialog)
+                    bluetoothDialogLoader.active = false;
             }
         }
     }

@@ -14,15 +14,14 @@ import "../"
 QuickToggle {
     id: root
     toggled: false
-    visible: true
     buttonIcon: "location_on" // Material Design icon for location
     toggleText: "Location"
 
     downAction: () => {
-        if (toggled) {
+        if (toggled && !stopProc.running) {
             root.toggled = false
             stopProc.running = true
-        } else {
+        } else if (!startProc.running){
             root.toggled = true
             startProc.running = true
         }
@@ -40,7 +39,7 @@ QuickToggle {
             if (exitCode !== 0) {
                 Quickshell.execDetached(["notify-send",
                     "Location Service",
-                    "Failed to start location service. Please check manually with 'systemctl --user status geoclue.service'",
+                    "Failed to start location service. Please check manually with 'systemctl status geoclue.service'",
                     "-a", "Shell"
                 ])
                 root.toggled = false

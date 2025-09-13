@@ -22,38 +22,6 @@ Item {
     width: columns * columnWidth + (columns - 1) * gap
     implicitHeight: flow.implicitHeight + gap * 2
 
-    ListModel {
-        id: items
-
-        Component.onCompleted: {
-            if (Config?.options?.quickToggle?.toggles?.length > 0) {
-                let toggles = Config.options.quickToggle.toggles;
-                let spans = Config.options.quickToggle.spans || [];
-                let tempArray = [];
-
-                // Create array of objects to sort
-                for (let i = 0; i < toggles.length; i++) {
-                    tempArray.push({
-                        name: toggles[i],
-                        span: Math.max(1, Math.min(2, spans[i] || 1))
-                    });
-                }
-
-                // Sort by span (descending) for larger-first layout if enabled in config
-                if(Config.options.quickToggle.sorted)
-                tempArray.sort((a, b) => b.span - a.span);
-
-                // Append sorted items to ListModel
-                tempArray.forEach(item => {
-                    items.append({
-                        name: item.name,
-                        span: item.span
-                    });
-                });
-            }
-        }
-    }
-
     Flow {
         id: flow
         anchors.fill: parent
@@ -64,29 +32,28 @@ Item {
         width: root.width
 
         Repeater {
-            model: items
-            delegate: Rectangle {
-                id: itemRect
-                width: (model.span * root.columnWidth) + ((model.span - 1) * root.gap)
+            model: Config.toggleModel
+            delegate: Loader {
+                id: loader
+                source: model.name ? "./toggles/" + model.name + ".qml" : ""
+                visible: item ? item.isSupported : true
+                width: model.span * root.columnWidth + (model.span - 1) * root.gap
                 height: root.rowHeight
-                color: "transparent"
-
-                Loader {
-                    id: loader
-                    anchors.fill: parent
-                    source: model.name ? "./toggles/" + model.name + ".qml" : ""
-                    onStatusChanged: {
-                        if (status === Loader.Error) {
-                            console.error("Failed to load toggle component: " + source)
-                        }
+                onStatusChanged: {
+                    if (status === Loader.Error) {
+                        console.error("Failed to load toggle component: " + source);
                     }
-                    onLoaded: {
-                        if (item && item.hasOwnProperty("sizeType")) {
-                            item.sizeType = model.span
-                        }
-                        itemRect.visible = item.visible
-
+                }
+                onLoaded: {
+                    if (item && item.hasOwnProperty("sizeType")) {
+                        item.sizeType = model.span;
                     }
+                    // loader.visible = item.isSupported;
+                    item.onIsSupportedChanged.connect(function () {
+                        loader.visible = item.isSupported;
+                    // console.warn(item , " isSupported has changed : ", item.isSupported)
+
+                    });
                 }
             }
         }

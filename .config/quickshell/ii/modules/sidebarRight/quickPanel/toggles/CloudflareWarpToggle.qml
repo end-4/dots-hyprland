@@ -10,18 +10,17 @@ import "../"
 QuickToggle {
     id: root
     toggled: false
-    // don't if work or not
-    visible: Quickshell.execDetached(["command", "-v", "warp-cli"])?.length > 0
+    isSupported: false
     customIcon: true
     buttonIcon: "cloudflare-dns-symbolic"
 
     downAction: () => {
         if (toggled) {
-            root.toggled = false
-            Quickshell.execDetached(["warp-cli", "disconnect"])
+            root.toggled = false;
+            Quickshell.execDetached(["warp-cli", "disconnect"]);
         } else {
-            root.toggled = true
-            Quickshell.execDetached(["warp-cli", "connect"])
+            root.toggled = true;
+            Quickshell.execDetached(["warp-cli", "connect"]);
         }
     }
 
@@ -33,10 +32,10 @@ QuickToggle {
             id: warpCliCollector
             onStreamFinished: {
                 if (warpCliCollector.text.length > 0) {
-                    root.visible = true // Set visible to true if warp-cli is found
-                    fetchActiveState.running = true // Proceed to check status
+                    root.isSupported = true; // Only show if warp-cli is found
+                    fetchActiveState.running = true; // Proceed to check status
                 } else {
-                    root.visible = false // Hide if warp-cli is not installed
+                    root.isSupported = false; // Hide if warp-cli is not installed
                 }
             }
         }
@@ -47,11 +46,7 @@ QuickToggle {
         command: ["warp-cli", "connect"]
         onExited: (exitCode, exitStatus) => {
             if (exitCode !== 0) {
-                Quickshell.execDetached(["notify-send",
-                    Translation.tr("Cloudflare WARP"),
-                    Translation.tr("Connection failed. Please inspect manually with the <tt>warp-cli</tt> command"),
-                    "-a", "Shell"
-                ])
+                Quickshell.execDetached(["notify-send", Translation.tr("Cloudflare WARP"), Translation.tr("Connection failed. Please inspect manually with the <tt>warp-cli</tt> command"), "-a", "Shell"]);
             }
         }
     }
@@ -60,15 +55,11 @@ QuickToggle {
         id: registrationProc
         command: ["warp-cli", "registration", "new"]
         onExited: (exitCode, exitStatus) => {
-            console.log("Warp registration exited with code and status:", exitCode, exitStatus)
+            console.log("Warp registration exited with code and status:", exitCode, exitStatus);
             if (exitCode === 0) {
-                connectProc.running = true
+                connectProc.running = true;
             } else {
-                Quickshell.execDetached(["notify-send",
-                    Translation.tr("Cloudflare WARP"),
-                    Translation.tr("Registration failed. Please inspect manually with the <tt>warp-cli</tt> command"),
-                    "-a", "Shell"
-                ])
+                Quickshell.execDetached(["notify-send", Translation.tr("Cloudflare WARP"), Translation.tr("Registration failed. Please inspect manually with the <tt>warp-cli</tt> command"), "-a", "Shell"]);
             }
         }
     }
@@ -81,11 +72,11 @@ QuickToggle {
             id: warpStatusCollector
             onStreamFinished: {
                 if (warpStatusCollector.text.includes("Unable")) {
-                    registrationProc.running = true
+                    registrationProc.running = true;
                 } else if (warpStatusCollector.text.includes("Connected")) {
-                    root.toggled = true
+                    root.toggled = true;
                 } else if (warpStatusCollector.text.includes("Disconnected")) {
-                    root.toggled = false
+                    root.toggled = false;
                 }
             }
         }

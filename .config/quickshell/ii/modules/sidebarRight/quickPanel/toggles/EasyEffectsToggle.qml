@@ -9,16 +9,19 @@ import QtQuick
 
 QuickToggle {
     id: root
+    isSupported: EasyEffects.available
     toggled: EasyEffects.active
     halfToggled : false
     toggleText : "EasyEffects"
     stateText: EasyEffects.active ? "Active" : "Inactive"
-    // visible: EasyEffects.available
-    visible : false
+
     buttonIcon: "instant_mix"
 
     Component.onCompleted: {
+        EasyEffects.fetchAvailability()
         EasyEffects.fetchActiveState()
+
+
     }
 
     downAction:() => {
