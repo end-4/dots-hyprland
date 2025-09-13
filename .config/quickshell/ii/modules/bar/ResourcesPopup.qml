@@ -137,6 +137,19 @@ StyledPopup {
                     label: Translation.tr("Load:")
                     value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
                 }
+
+                 ResourceItem {
+                    icon: "planner_review"
+                    label: Translation.tr("Freq:")
+                    value: ` ${ Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz` 
+
+                  }
+
+                ResourceItem {
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value: `${Math.round(ResourceUsage.cpuTemp)}°C`
+                }
             }
         }
     }
