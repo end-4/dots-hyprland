@@ -7,6 +7,7 @@ import qs.modules.common.widgets
 import qs.modules.common.functions as CF
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -53,19 +54,27 @@ Variants {
         property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
         readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
         // Position
-        property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
-        property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
-        property var textHorizontalAlignment: clockX < screen.width / 3 ? Text.AlignLeft :
-            (clockX > screen.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
+        property real clockX: (modelData.width / 2)
+        property real clockY: (modelData.height / 2)
+        property var textHorizontalAlignment: {
+            if (Config.options.background.blur.enable && Config.options.background.blur.centerClock && GlobalStates.screenLocked)
+                return Text.AlignHCenter;
+            if (clockX < screen.width / 3)
+                return Text.AlignLeft;
+            if (clockX > screen.width * 2 / 3)
+                return Text.AlignRight;
+            return Text.AlignHCenter;
+        }
         // Colors
         property color dominantColor: Appearance.colors.colPrimary
         property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
         property color colText: CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
+        property bool shouldBlur: (GlobalStates.screenLocked && Config.options.background.blur.enable)
 
         // Layer props
         screen: modelData
         exclusionMode: ExclusionMode.Ignore
-        WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Overlay : WlrLayer.Bottom
+        WlrLayershell.layer: (GlobalStates.screenLocked && !scaleAnim.running) ? WlrLayer.Overlay : WlrLayer.Bottom
         // WlrLayershell.layer: WlrLayer.Bottom
         WlrLayershell.namespace: "quickshell:background"
         anchors {
@@ -214,14 +223,31 @@ Variants {
             }
             width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
             height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
-            // scale: GlobalStates.screenLocked ? 1.04 : 1
-            // Behavior on scale {
-            //     NumberAnimation {
-            //         duration: 400
-            //         easing.type: Easing.BezierSpline
-            //         easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
-            //     }
-            // }
+        }
+
+        Loader {
+            id: blurLoader
+            active: Config.options.background.blur.enable && (GlobalStates.screenLocked || scaleAnim.running)
+            anchors.fill: wallpaper
+            scale: GlobalStates.screenLocked ? Config.options.background.blur.extraZoom : 1
+            Behavior on scale {
+                NumberAnimation {
+                    id: scaleAnim
+                    duration: 400
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+                }
+            }
+            sourceComponent: GaussianBlur {
+                source: wallpaper
+                radius: GlobalStates.screenLocked ? Config.options.background.blur.radius : 0
+                samples: radius * 2 + 1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: CF.ColorUtils.transparentize(Appearance.colors.colLayer0, 0.7)
+                }
+            }
         }
 
         // The clock
@@ -231,13 +257,37 @@ Variants {
             anchors {
                 left: wallpaper.left
                 top: wallpaper.top
+                horizontalCenter: undefined
                 leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                topMargin: {
+                    if (bgRoot.shouldBlur)
+                        return bgRoot.modelData.height / 3
+                    return bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                }
                 Behavior on leftMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
                 Behavior on topMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+            }
+            states: State {
+                name: "centered"
+                when: bgRoot.shouldBlur
+                AnchorChanges {
+                    target: clockLoader
+                    anchors {
+                        left: undefined
+                        horizontalCenter: wallpaper.horizontalCenter
+                        right: undefined
+                    }
+                }
+            }
+            transitions: Transition {
+                AnchorAnimation {
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                 }
             }
             sourceComponent: Item {
@@ -304,7 +354,7 @@ Variants {
                         leftMargin: -5
                         rightMargin: -5
                     }
-                    opacity: GlobalStates.screenLocked ? 1 : 0
+                    opacity: GlobalStates.screenLocked && (!Config.options.background.blur.enable || Config.options.background.blur.showLockedText) ? 1 : 0
                     visible: opacity > 0
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

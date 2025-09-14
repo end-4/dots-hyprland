@@ -48,23 +48,18 @@ Scope {
 	// Blur layer hack
 	Variants {
         model: Quickshell.screens
-
-        LazyLoader {
-			id: blurLayerLoader
-			required property var modelData
-			active: GlobalStates.screenLocked
-			component: PanelWindow {
-				screen: blurLayerLoader.modelData
-				WlrLayershell.namespace: "quickshell:lockWindowPusher"
-				color: "transparent"
-				anchors {
-					top: true
-					left: true
-					right: true
+		delegate: Scope {
+			required property ShellScreen modelData
+			property bool shouldPush: GlobalStates.screenLocked
+			property string targetMonitorName: modelData.name
+			property int verticalMovementDistance: modelData.height
+			property int horizontalSqueeze: modelData.width * 0.2
+			onShouldPushChanged: {
+				if (shouldPush) {
+					Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, ${verticalMovementDistance}, ${-verticalMovementDistance}, ${horizontalSqueeze}, ${horizontalSqueeze}`])
+				} else {
+					Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, 0, 0, 0, 0`])
 				}
-				// implicitHeight: lockContext.currentText == "" ? 1 : screen.height
-				implicitHeight: 1
-				exclusiveZone: screen.height * 3 // For some reason if we don't multiply by some number it would look really weird
 			}
 		}
 	}
