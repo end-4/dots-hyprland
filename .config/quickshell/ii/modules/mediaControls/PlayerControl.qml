@@ -131,12 +131,8 @@ Item { // Player instance
             asynchronous: true
 
             layer.enabled: true
-            layer.effect: MultiEffect {
+            layer.effect: StyledBlurEffect {
                 source: blurredArt
-                saturation: 0.2
-                blurEnabled: true
-                blurMax: 100
-                blur: 1
             }
 
             Rectangle {
