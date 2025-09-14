@@ -13,7 +13,7 @@ Rectangle { // App icon
     property var urgency: NotificationUrgency.Normal
     property var image: ""
     property real scale: 1
-    property real size: 38 * scale
+    property real size: 44 * scale
     property real materialIconScale: 0.57
     property real appIconScale: 0.8
     property real smallAppIconScale: 0.49
@@ -54,6 +54,9 @@ Rectangle { // App icon
             implicitSize: root.appIconSize
             asynchronous: true
             source: Quickshell.iconPath(root.appIcon, "image-missing")
+        Component.onCompleted: {
+            console.log("Loaded appIcon:", root.appIcon)
+        }
         }
     }
     Loader {
@@ -96,6 +99,9 @@ Rectangle { // App icon
                     implicitSize: root.smallAppIconSize
                     asynchronous: true
                     source: Quickshell.iconPath(root.appIcon, "image-missing")
+                            Component.onCompleted: {
+            console.log("Loaded appIcon:", root.appIcon)
+        }
                 }
             }
         }

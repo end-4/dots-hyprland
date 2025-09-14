@@ -211,12 +211,12 @@ Singleton {
             property string expressive: "Space Grotesk"
         }
         property QtObject pixelSize: QtObject {
-            property int smallest: 11
-            property int smaller: 13
+            property int smallest: 12
+            property int smaller: 14
             property int small: 15
             property int normal: 16
             property int large: 17
-            property int larger: 19
+            property int larger: 18
             property int huge: 22
             property int hugeass: 23
             property int title: huge

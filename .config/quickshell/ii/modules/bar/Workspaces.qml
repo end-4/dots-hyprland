@@ -159,7 +159,7 @@ Item {
     Rectangle {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
-        radius: Appearance.rounding.verysmall //Appearance.rounding.full
+        radius: Appearance.rounding.full
         color: ColorUtils.transparentize(Appearance.colors.colPrimary, 0.4) //Appearance.colors.colPrimary
 
         anchors {
