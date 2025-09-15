@@ -168,7 +168,7 @@ Variants {
         // Wallpaper
         Image {
             id: wallpaper
-            visible: opacity > 0
+            visible: opacity > 0 && !blurLoader.active
             opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
@@ -244,6 +244,7 @@ Variants {
                 samples: radius * 2 + 1
 
                 Rectangle {
+                    opacity: GlobalStates.screenLocked ? 1 : 0
                     anchors.fill: parent
                     color: CF.ColorUtils.transparentize(Appearance.colors.colLayer0, 0.7)
                 }
