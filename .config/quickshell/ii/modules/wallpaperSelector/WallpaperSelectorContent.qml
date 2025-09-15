@@ -316,12 +316,17 @@ MouseArea {
                                 Wallpapers.openFallbackPicker(root.useDarkMode);
                                 GlobalStates.wallpaperSelectorOpen = false;
                             }
+                            altAction: () => {
+                                Wallpapers.openFallbackPicker(root.useDarkMode);
+                                GlobalStates.wallpaperSelectorOpen = false;
+                                Config.options.wallpaperSelector.useSystemFileDialog = true
+                            }
                             contentItem: MaterialSymbol {
                                 text: "open_in_new"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
                             StyledToolTip {
-                                content: Translation.tr("Use the system file picker instead")
+                                content: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
                             }
                         }
 

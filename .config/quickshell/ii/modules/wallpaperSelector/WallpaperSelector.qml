@@ -57,19 +57,25 @@ Scope {
         }
     }
 
+    function toggleWallpaperSelector() {
+        if (Config.options.wallpaperSelector.useSystemFileDialog) {
+            Wallpapers.openFallbackPicker(Appearance.m3colors.darkmode);
+            return;
+        }
+        GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen
+    }
+
     IpcHandler {
         target: "wallpaperSelector"
 
         function toggle(): void {
-            GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen
+            root.toggleWallpaperSelector();
         }
     }
 
     GlobalShortcut {
         name: "wallpaperSelectorToggle"
         description: "Toggle wallpaper selector"
-        onPressed: {
-            GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen;
-        }
+        onPressed: root.toggleWallpaperSelector();
     }
 }
