@@ -171,7 +171,7 @@ MouseArea {
                             { icon: "movie", name: "Videos", path: Directories.videos }, 
                             { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
                             { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
-                            { icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` },
+                            ...(Config.options.policies.weeb === 1 ? [{ icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` }] : []),
                         ]
                         delegate: RippleButton {
                             id: quickDirButton
@@ -327,6 +327,8 @@ MouseArea {
                                 Config.options.wallpaperSelector.useSystemFileDialog = true
                             }
                             contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
                                 text: "open_in_new"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
@@ -343,6 +345,8 @@ MouseArea {
                                 root.selectWallpaperPath(filePath);
                             }
                             contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
                                 text: "ifl"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
@@ -355,11 +359,13 @@ MouseArea {
                             implicitWidth: height
                             onClicked: root.useDarkMode = !root.useDarkMode
                             contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
                                 text: root.useDarkMode ? "dark_mode" : "light_mode"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
                             StyledToolTip {
-                                content: Translation.tr("Click to toggle light/dark mode (applied when wallpaper is chosen)")
+                                content: Translation.tr("Click to toggle light/dark mode\n(applied when wallpaper is chosen)")
                             }
                         }
 
@@ -399,11 +405,18 @@ MouseArea {
                         }
 
                         ToolbarButton {
+                            implicitWidth: height
                             onClicked: {
                                 GlobalStates.wallpaperSelectorOpen = false;
                             }
-                            contentItem: StyledText {
-                                text: "Cancel"
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
+                                text: "cancel_presentation"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                content: Translation.tr("Cancel wallpaper selection")
                             }
                         }
                     }
