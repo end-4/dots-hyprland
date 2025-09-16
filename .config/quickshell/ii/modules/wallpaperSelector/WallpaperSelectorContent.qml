@@ -192,6 +192,7 @@ MouseArea {
                                     color: quickDirButton.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
                                     iconSize: Appearance.font.pixelSize.larger
                                     text: quickDirButton.modelData.icon
+                                    fill: quickDirButton.toggled ? 1 : 0
                                 }
                                 StyledText {
                                     Layout.fillWidth: true
