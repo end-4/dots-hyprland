@@ -40,6 +40,13 @@ MouseArea {
         }
     }
 
+    function selectWallpaperPath(filePath) {
+        if (filePath && filePath.length > 0) {
+            Wallpapers.select(filePath, root.useDarkMode);
+            filterField.text = "";
+        }
+    }
+
     acceptedButtons: Qt.BackButton | Qt.ForwardButton
     onPressed: event => {
         if (event.button === Qt.BackButton) {
@@ -267,8 +274,7 @@ MouseArea {
 
                         function activateCurrent() {
                             const filePath = grid.model.get(currentIndex, "filePath")
-                            Wallpapers.select(filePath, root.useDarkMode);
-                            filterField.text = "";
+                            root.selectWallpaperPath(filePath);
                         }
 
                         model: Wallpapers.folderModel
@@ -287,8 +293,7 @@ MouseArea {
                             }
                             
                             onActivated: {
-                                Wallpapers.select(fileModelData.filePath, root.useDarkMode);
-                                filterField.text = "";
+                                root.selectWallpaperPath(fileModelData.filePath);
                             }
                         }
 
@@ -327,6 +332,22 @@ MouseArea {
                             }
                             StyledToolTip {
                                 content: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
+                            }
+                        }
+
+                        ToolbarButton {
+                            implicitWidth: height
+                            onClicked: {
+                                const randomIndex = Math.floor(Math.random() * Wallpapers.folderModel.count);
+                                const filePath = Wallpapers.folderModel.get(randomIndex, "filePath");
+                                root.selectWallpaperPath(filePath);
+                            }
+                            contentItem: MaterialSymbol {
+                                text: "ifl"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                content: Translation.tr("Pick random from this folder")
                             }
                         }
 
