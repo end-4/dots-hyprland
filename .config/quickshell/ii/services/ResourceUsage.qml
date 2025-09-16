@@ -19,6 +19,8 @@ Singleton {
 	property double swapUsed: swapTotal - swapFree
     property double swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property double cpuUsage: 0
+    property double cpuTemp: 0
+    property double cpuFreqency: 0
     property var previousCpuStats
 
 	Timer {
@@ -29,6 +31,8 @@ Singleton {
             // Reload files
             fileMeminfo.reload()
             fileStat.reload()
+            fileTemp.reload()
+            fileCpuinfo.reload()
 
             // Parse memory and swap usage
             const textMeminfo = fileMeminfo.text()
@@ -53,10 +57,21 @@ Singleton {
 
                 previousCpuStats = { total, idle }
             }
+            const rawTemp = Number(fileTemp.text().trim())
+            if (!isNaN(rawTemp)) {
+                cpuTemp = rawTemp / 1000.0 
+            }
+            const cpuInfo = fileCpuinfo.text()
+            const cpuCoreFrequencies = cpuInfo.match(/cpu MHz\s+:\s+(\d+\.\d+)\n/g).map(x => Number(x.match(/\d+\.\d+/)))
+            const cpuCoreFreqencyAvg = cpuCoreFrequencies.reduce((a, b) => a + b, 0) / cpuCoreFrequencies.length
+            cpuFreqency = cpuCoreFreqencyAvg / 1000
+
             interval = Config.options?.resources?.updateInterval ?? 3000
         }
 	}
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
+    FileView { id: fileTemp; path: "/home/darshil/.config/quickshell/ii/coretemp" }
+    FileView { id: fileCpuinfo; path: "/proc/cpuinfo" }
 }
