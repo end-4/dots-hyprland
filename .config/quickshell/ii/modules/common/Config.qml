@@ -135,8 +135,8 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
-                property JsonObject blur: JsonObject {
-                    property bool enable: true
+                property JsonObject lockBlur: JsonObject {
+                    property bool enable: false
                     property int radius: 100
                     property bool centerClock: true
                     property bool showLockedText: true
