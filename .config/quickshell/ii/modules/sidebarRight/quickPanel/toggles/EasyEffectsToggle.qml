@@ -1,22 +1,25 @@
-import qs.modules.common.widgets
 import qs
 import qs.services
-import QtQuick
-import Quickshell.Io
+import "../"
 import Quickshell
-import Quickshell.Hyprland
+import QtQuick
 
-QuickToggleButton {
+QuickToggle {
     id: root
+    isSupported: EasyEffects.available
     toggled: EasyEffects.active
-    visible: EasyEffects.available
+    halfToggled : false
+    toggleText : "EasyEffects"
+    stateText: EasyEffects.active ? "Active" : "Inactive"
+
     buttonIcon: "instant_mix"
 
     Component.onCompleted: {
+        EasyEffects.fetchAvailability()
         EasyEffects.fetchActiveState()
     }
 
-    onClicked: {
+    downAction:() => {
         EasyEffects.toggle()
     }
 
@@ -25,7 +28,5 @@ QuickToggleButton {
         GlobalStates.sidebarRightOpen = false
     }
 
-    StyledToolTip {
-        content: Translation.tr("EasyEffects | Right-click to configure")
-    }
+
 }

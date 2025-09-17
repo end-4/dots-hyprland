@@ -2,9 +2,10 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import "./quickToggles/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
+import "./quickPanel/"
+import "./quickPanel/toggles"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -19,6 +20,11 @@ Item {
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showWifiDialog: false
     property bool showBluetoothDialog: false
+    property string quickToggles: Config.options.quickToggles.androidStyle.enable ? "android" : "android"
+    readonly property var panelUrlMap: ({
+            "android": "./quickPanel/AndroidStylePanel.qml",
+            "classic": "./quickPanel/ClassicStylePanel.qml"
+        })
 
     Connections {
         target: GlobalStates
@@ -80,66 +86,52 @@ Item {
                 }
 
                 ButtonGroup {
-                    QuickToggleButton {
+                    QuickToggle {
+                        toggleType: 0
                         toggled: false
                         buttonIcon: "restart_alt"
                         onClicked: {
                             Hyprland.dispatch("reload");
                             Quickshell.reload(true);
                         }
-                        StyledToolTip {
-                            content: Translation.tr("Reload Hyprland & Quickshell")
-                        }
+                        toolTipText: Translation.tr("Reload Hyprland & Quickshell")
                     }
-                    QuickToggleButton {
+                    QuickToggle {
+                        toggleType: 0
                         toggled: false
                         buttonIcon: "settings"
                         onClicked: {
                             GlobalStates.sidebarRightOpen = false;
                             Quickshell.execDetached(["qs", "-p", root.settingsQmlPath]);
                         }
-                        StyledToolTip {
-                            content: Translation.tr("Settings")
-                        }
+                        toolTipText: Translation.tr("Settings")
                     }
-                    QuickToggleButton {
+                    QuickToggle {
                         toggled: false
+                        toggleType: 0
                         buttonIcon: "power_settings_new"
                         onClicked: {
                             GlobalStates.sessionOpen = true;
                         }
-                        StyledToolTip {
-                            content: Translation.tr("Session")
-                        }
+                        toolTipText: Translation.tr("Session")
                     }
                 }
             }
 
-            ButtonGroup {
+            Loader {
+                id: panelLoader
                 Layout.alignment: Qt.AlignHCenter
-                spacing: 5
-                padding: 5
-                color: Appearance.colors.colLayer1
-
-                NetworkToggle {
-                    altAction: () => {
-                        Network.enableWifi();
-                        Network.rescanWifi();
-                        root.showWifiDialog = true;
+                // Using source to avoid loading the panel in memory which is not used.
+                source: panelUrlMap[Config.options.quickToggles.androidStyle.enable ? "android": "classic"]
+                Connections {
+                    target: panelLoader.item
+                    function onShowWifiDialogChanged() {
+                        root.showWifiDialog = panelLoader.item.showWifiDialog;
+                    }
+                    function onShowBluetoothDialogChanged() {
+                        root.showBluetoothDialog = panelLoader.item.showBluetoothDialog;
                     }
                 }
-                BluetoothToggle {
-                    altAction: () => {
-                        Bluetooth.defaultAdapter.enabled = true;
-                        Bluetooth.defaultAdapter.discovering = true;
-                        root.showBluetoothDialog = true;
-                    }
-                }
-                NightLight {}
-                GameMode {}
-                IdleInhibitor {}
-                EasyEffectsToggle {}
-                CloudflareWarp {}
             }
 
             CenterWidgetGroup {
@@ -157,7 +149,10 @@ Item {
         }
     }
 
-    onShowWifiDialogChanged: if (showWifiDialog) wifiDialogLoader.active = true;
+    onShowWifiDialogChanged: {
+        if (showWifiDialog) wifiDialogLoader.active = true;
+        panelLoader.item.showWifiDialog = root.showWifiDialog;
+    }
     Loader {
         id: wifiDialogLoader
         anchors.fill: parent
@@ -184,6 +179,7 @@ Item {
     onShowBluetoothDialogChanged: {
         if (showBluetoothDialog) bluetoothDialogLoader.active = true;
         else Bluetooth.defaultAdapter.discovering = false;
+        panelLoader.item.showBluetoothDialog = showBluetoothDialog;
     }
     Loader {
         id: bluetoothDialogLoader

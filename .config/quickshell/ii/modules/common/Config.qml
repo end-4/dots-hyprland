@@ -338,11 +338,11 @@ Singleton {
                     property int longBreak: 900
                 }
             }
-            
+
             property JsonObject wallpaperSelector: JsonObject {
                 property bool useSystemFileDialog: false
             }
-            
+
             property JsonObject windows: JsonObject {
                 property bool showTitlebar: true // Client-side decoration for shell apps
                 property bool centerTitle: true
@@ -354,6 +354,23 @@ Singleton {
 
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
+            }
+
+            property JsonObject quickToggles: JsonObject {
+                property JsonObject androidStyle: JsonObject {
+                    property bool enable: true
+                    // only for sizeType = 1
+                    property bool enableToolTip: true
+                    property bool enableBorder: false
+
+                    property string rounding: "verylarge" // "small", "normal", "large", "verylarge", "full"
+
+                    // uses larger-first approach to avoid empty cells, if false empty cells are
+                    // possible so you have to adjust the spans properly to avoid it.
+                    property bool sorted: false
+                    property list<string> toggles: ["network", "bluetooth", "nightlight", "gamemode"]
+                    property list<var> spans: [2, 2, 1, 1, 1, 1, 1]
+                }
             }
         }
     }
