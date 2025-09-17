@@ -21,7 +21,7 @@ QuickToggleButton {
     }
 
     altAction: () => {
-        Quickshell.execDetached(["easyeffects"])
+        Quickshell.execDetached(["bash", "-c", "flatpak run com.github.wwmm.easyeffects || easyeffects"])
         GlobalStates.sidebarRightOpen = false
     }
 
