@@ -22,7 +22,7 @@ MouseArea {
 
     Timer {
         running: activePlayer?.playbackState == MprisPlaybackState.Playing
-        interval: 1000
+        interval: Config.options.resources.updateInterval
         repeat: true
         onTriggered: activePlayer.positionChanged()
     }
