@@ -93,8 +93,8 @@ Scope {
                         id: hoverMaskRegion
                         anchors {
                             fill: barContent
-                            topMargin: -1
-                            bottomMargin: -1
+                            topMargin: -Config.options.bar.autoHide.hoverRegionWidth
+                            bottomMargin: -Config.options.bar.autoHide.hoverRegionWidth
                         }
                     }
 
