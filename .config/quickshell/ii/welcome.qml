@@ -109,6 +109,10 @@ ApplicationWindow {
                         text: "close"
                         iconSize: 20
                     }
+
+                    StyledToolTip {
+                        content: Translation.tr("Tip: Close a window with Super+Q")
+                    }
                 }
             }
         }
