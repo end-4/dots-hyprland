@@ -277,7 +277,7 @@ Variants {
             }
             states: State {
                 name: "centered"
-                when: bgRoot.shouldBlur
+                when: bgRoot.shouldBlur && Config.options.background.lockBlur.centerClock
                 AnchorChanges {
                     target: clockLoader
                     anchors {

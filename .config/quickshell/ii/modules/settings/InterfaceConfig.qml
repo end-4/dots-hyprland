@@ -100,6 +100,48 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "lock"
+        title: Translation.tr("Lock screen")
+
+        ContentSubsection {
+            title: Translation.tr("Blurred style")
+
+            ConfigSwitch {
+                font.pixelSize: Appearance.font.pixelSize.large
+                text: Translation.tr('Enable blur')
+                checked: Config.options.background.lockBlur.enable
+                onCheckedChanged: {
+                    Config.options.background.lockBlur.enable = checked;
+                }
+            }
+
+            ConfigRow {
+                uniform: true
+
+                ConfigSwitch {
+                    enabled: Config.options.background.lockBlur.enable
+                    font.pixelSize: Appearance.font.pixelSize.large
+                    text: Translation.tr('Center clock')
+                    checked: Config.options.background.lockBlur.centerClock
+                    onCheckedChanged: {
+                        Config.options.background.lockBlur.centerClock = checked;
+                    }
+                }
+                ConfigSwitch {
+                    enabled: Config.options.background.lockBlur.enable
+                    font.pixelSize: Appearance.font.pixelSize.large
+                    text: Translation.tr('Show "Locked" text')
+                    checked: Config.options.background.lockBlur.showLockedText
+                    onCheckedChanged: {
+                        Config.options.background.lockBlur.showLockedText = checked;
+                    }
+                }
+            }
+
+        }
+    }
+
+    ContentSection {
         icon: "side_navigation"
         title: Translation.tr("Sidebars")
 
