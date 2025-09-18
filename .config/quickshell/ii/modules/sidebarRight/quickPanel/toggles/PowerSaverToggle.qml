@@ -17,5 +17,4 @@ QuickToggle {
         PowerProfiles.profile = toggled ? PowerProfile.Balanced : PowerProfiles.PowerSaver;
     }
 
-    altAction: downAction
 }

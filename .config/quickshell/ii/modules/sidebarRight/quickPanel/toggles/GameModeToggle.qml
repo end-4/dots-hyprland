@@ -27,5 +27,4 @@ QuickToggle  {
             root.toggled = exitCode !== 0
         }
     }
-    altAction: downAction
 }

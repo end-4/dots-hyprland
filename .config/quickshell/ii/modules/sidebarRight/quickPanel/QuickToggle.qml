@@ -16,6 +16,7 @@ GroupButton {
     property string toolTipText: toggleText + (stateText !== "" ? (" | " + stateText) : "")
     property bool isSupported: true
     property int toggleType: parent.toggleType // 0: small (for classic), 1: normal (icon-only), 2: large: (icon + text)
+    altAction : root.downAction
     // It is to avoid a lot of toggleType ternaries which looks convoluted especially with 3 different styles
     property QtObject style: ToggleStyles[ToggleStyles.toggleTypeMap[toggleType]]
     property int gap: parent.gap || 16
@@ -75,9 +76,6 @@ GroupButton {
         animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
     }
 
-    // Component.onCompleted: {
-    //     // console.warn(toggleText, "radius : ", root.buttonRadius, root.buttonRadiusPressed, root.buttonRadiusToggled, root.radius, toggleType, ToggleStyles.rounding, "Classic", Config.options.quickToggles.androidStyle.enable);
-    // }
 
     states: [
         State {
