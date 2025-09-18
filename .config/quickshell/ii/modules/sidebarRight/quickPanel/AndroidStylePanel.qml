@@ -118,10 +118,9 @@ Item {
 
     ScriptModel {
         id: toggles
-        objectProp: "span"
         values: {
-            let spanArray = Config.options?.quickToggles.androidStyle.spans;
-            let toggleArray = Config.options?.quickToggles.androidStyle.toggles.map((toggle, index) => ({
+            let spanArray = Config.options?.quickToggles?.androidStyle?.spans;
+            let toggleArray = Config.options?.quickToggles?.androidStyle?.toggles.map((toggle, index) => ({
                         name: toggle.toLowerCase(),
                         span: spanArray[index] ?? 1
                     }));

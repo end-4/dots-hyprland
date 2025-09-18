@@ -68,7 +68,7 @@ Singleton {
 
     large: QtObject {
         readonly property int scalar: 1
-        readonly property int baseWidth: 90
+        readonly property int baseWidth: 196
         readonly property int baseHeight: 65
         readonly property int iconSize: 24
         readonly property color colBackground:toggleStyles.colBackground
