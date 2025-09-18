@@ -338,11 +338,11 @@ Singleton {
                     property int longBreak: 900
                 }
             }
-
+            
             property JsonObject wallpaperSelector: JsonObject {
                 property bool useSystemFileDialog: false
             }
-
+            
             property JsonObject windows: JsonObject {
                 property bool showTitlebar: true // Client-side decoration for shell apps
                 property bool centerTitle: true
