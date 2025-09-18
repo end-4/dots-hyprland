@@ -133,11 +133,11 @@ Singleton {
         property color colLayer2Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.90), root.contentTransparency)
         property color colLayer2Active: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.80), root.contentTransparency);
         property color colLayer2Disabled: ColorUtils.transparentize(ColorUtils.mix(colLayer2, m3colors.m3background, 0.8), root.contentTransparency);
-        property color colLayer3: root.contentTransparency ? m3colors.darkmode ? ColorUtils.transparentize("white", 0.91) : ColorUtils.transparentize("white", 0.5) : m3colors.m3surfaceContainerHigh
+        property color colLayer3: root.contentTransparency ? m3colors.darkmode ? ColorUtils.transparentize("white", 0.92) : ColorUtils.transparentize("white", 0.5) : m3colors.m3surfaceContainerHigh
         property color colOnLayer3: m3colors.m3onSurface;
         property color colLayer3Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer3, colOnLayer3, 0.90), root.contentTransparency)
         property color colLayer3Active: ColorUtils.transparentize(ColorUtils.mix(colLayer3, colOnLayer3, 0.80), root.contentTransparency);
-        property color colLayer4: root.contentTransparency ? m3colors.darkmode ? ColorUtils.transparentize("white", 0.88): ColorUtils.transparentize("white", 0.2) : m3colors.m3surfaceContainerHighest
+        property color colLayer4: root.contentTransparency ? m3colors.darkmode ? ColorUtils.transparentize("white", 0.9): ColorUtils.transparentize("white", 0.2) : m3colors.m3surfaceContainerHighest
         property color colOnLayer4: m3colors.m3onSurface;
         property color colLayer4Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer4, colOnLayer4, 0.90), root.contentTransparency)
         property color colLayer4Active: ColorUtils.transparentize(ColorUtils.mix(colLayer4, colOnLayer4, 0.80), root.contentTransparency);
