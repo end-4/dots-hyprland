@@ -59,7 +59,7 @@ Singleton {
                     if (matchVariant && matchVariant[3] === targetDescription) {
                         const complexLayout = matchVariant[2] + " " + matchVariant[1];
                         root.cachedLayoutCodes[matchVariant[3]] = complexLayout;
-                        root.currentLayourCode = complexLayout;
+                        root.currentLayoutCode = complexLayout;
                         return true;
                     }
                     
