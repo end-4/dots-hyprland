@@ -28,7 +28,7 @@ MouseArea { // Notification group area
     property var parentDragIndex: qmlParent.dragIndex
     property var parentDragDistance: qmlParent.dragDistance
     property var dragIndexDiff: Math.abs(parentDragIndex - index)
-    property real xOffset: dragIndexDiff == 0 ? Math.max(0, parentDragDistance) :
+    property real xOffset: dragIndexDiff == 0 ? Math.max(0, parentDragDistance) : 
         parentDragDistance > dragConfirmThreshold ? 0 :
         dragIndexDiff == 1 ? Math.max(0, parentDragDistance * 0.3) :
         dragIndexDiff == 2 ? Math.max(0, parentDragDistance * 0.1) : 0
@@ -85,9 +85,9 @@ MouseArea { // Notification group area
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
         onClicked: (mouse) => {
-            if (mouse.button === Qt.RightButton)
+            if (mouse.button === Qt.RightButton) 
                 root.toggleExpanded();
-            else if (mouse.button === Qt.MiddleButton)
+            else if (mouse.button === Qt.MiddleButton) 
                 root.destroyWithAnimation();
         }
 
@@ -104,7 +104,7 @@ MouseArea { // Notification group area
         onDragReleased: (diffX, diffY) => {
             if (diffX > root.dragConfirmThreshold)
                 root.destroyWithAnimation();
-            else
+            else 
                 dragManager.resetDrag();
         }
     }
@@ -117,7 +117,7 @@ MouseArea { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: popup ? Appearance.m3colors.darkmode ? ColorUtils.applyAlpha(Appearance.colors.colLayer0, 0.8):  ColorUtils.applyAlpha(Appearance.colors.colLayer2, 1 - Appearance.backgroundTransparency) : Appearance.colors.colLayer2
+        color: popup ? ColorUtils.applyAlpha(Appearance.colors.colLayer2, 1 - Appearance.backgroundTransparency) : Appearance.colors.colLayer2
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 
@@ -129,9 +129,9 @@ MouseArea { // Notification group area
                 easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
             }
         }
-
+        
         clip: true
-        implicitHeight: expanded ?
+        implicitHeight: expanded ? 
             row.implicitHeight + padding * 2 :
             Math.min(80, row.implicitHeight + padding * 2)
 
@@ -158,8 +158,8 @@ MouseArea { // Notification group area
 
             ColumnLayout { // Content
                 Layout.fillWidth: true
-                spacing: expanded ? (root.multipleNotifications ?
-                    (notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 :
+                spacing: expanded ? (root.multipleNotifications ? 
+                    (notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 : 
                     5 : 0) : 0
                 // spacing: 00
                 Behavior on spacing {
@@ -231,7 +231,7 @@ MouseArea { // Notification group area
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                     model: ScriptModel {
-                        values: root.expanded ? root.notifications.slice().reverse() :
+                        values: root.expanded ? root.notifications.slice().reverse() : 
                             root.notifications.slice().reverse().slice(0, 2)
                     }
                     delegate: NotificationItem {
