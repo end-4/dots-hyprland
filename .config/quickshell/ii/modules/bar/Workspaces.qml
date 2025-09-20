@@ -204,7 +204,7 @@ Item {
         rowSpacing: 0
 
         anchors.fill: parent
-        implicitHeight: vertical ? Appearance.sizes.barWidth : Appearance.sizes.barHeight
+        implicitHeight: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.barHeight
         implicitWidth: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.verticalBarWidth
 
         Repeater {
