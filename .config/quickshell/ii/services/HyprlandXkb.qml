@@ -57,7 +57,7 @@ Singleton {
                     // Match variant: (whitespace + ) variant + whitespace + key + whitespace + description
                     const matchVariant = line.match(/^\s*(\S+)\s+(\S+)\s+(.+)$/);
                     if (matchVariant && matchVariant[3] === targetDescription) {
-                        const complexLayout = matchVariant[2] + " " + matchVariant[1];
+                        const complexLayout = matchVariant[2] + matchVariant[1];
                         root.cachedLayoutCodes[matchVariant[3]] = complexLayout;
                         root.currentLayoutCode = complexLayout;
                         return true;
