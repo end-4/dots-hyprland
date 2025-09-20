@@ -3,6 +3,7 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
 
 Item {
@@ -14,20 +15,58 @@ Item {
     property bool trayOverflowOpen: false
     property bool showSeparator: true
     property bool showOverflowMenu: true
+    property var activeMenu: null
 
     property list<var> itemsInUserList: SystemTray.items.values.filter(i => (Config.options.bar.tray.pinnedItems.includes(i.id) && i.status !== Status.Passive))
     property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => (!Config.options.bar.tray.pinnedItems.includes(i.id) && i.status !== Status.Passive))
     property bool invertPins: Config.options.bar.tray.invertPinnedItems
     property list<var> pinnedItems: invertPins ? itemsNotInUserList : itemsInUserList
     property list<var> unpinnedItems: invertPins ? itemsInUserList : itemsNotInUserList
-    onUnpinnedItemsChanged: if (unpinnedItems.length == 0)
-        root.trayOverflowOpen = false
+    onUnpinnedItemsChanged: {
+        if (unpinnedItems.length == 0) root.closeOverflowMenu();
+    }
+
+    function grabFocus() {
+        focusGrab.active = true;
+    }
+
+    function setExtraWindowAndGrabFocus(window) {
+        root.activeMenu = window;
+        root.grabFocus();
+    }
+
+    function releaseFocus() {
+        focusGrab.active = false;
+    }
+
+    function closeOverflowMenu() {
+        focusGrab.active = false;
+    }
+
+    onTrayOverflowOpenChanged: {
+        if (root.trayOverflowOpen) {
+            root.grabFocus();
+        }
+    }
+
+    HyprlandFocusGrab {
+        id: focusGrab
+        active: false
+        windows: [trayOverflowLayout.QsWindow?.window, root.activeMenu]
+        onCleared: {
+            root.trayOverflowOpen = false;
+            if (root.activeMenu) {
+                root.activeMenu.close();
+                root.activeMenu = null;
+            }
+        }
+    }
 
     GridLayout {
         id: gridLayout
         columns: root.vertical ? 1 : -1
         anchors.fill: parent
-        rowSpacing: 6
+        rowSpacing: 8
         columnSpacing: 15
 
         RippleButton {
@@ -60,6 +99,7 @@ Item {
             }
 
             StyledPopup {
+                id: overflowPopup
                 hoverTarget: trayOverflowButton
                 active: root.trayOverflowOpen
                 popupBackgroundMargin: 300 // This should be plenty... makes sure tooltips don't get cutoff (easily)
@@ -79,6 +119,8 @@ Item {
                             item: modelData
                             Layout.fillHeight: !root.vertical
                             Layout.fillWidth: root.vertical
+                            onMenuClosed: root.releaseFocus();
+                            onMenuOpened: (qsWindow) => root.setExtraWindowAndGrabFocus(qsWindow);
                         }
                     }
                 }
@@ -95,6 +137,10 @@ Item {
                 item: modelData
                 Layout.fillHeight: !root.vertical
                 Layout.fillWidth: root.vertical
+                onMenuClosed: root.releaseFocus();
+                onMenuOpened: (qsWindow) => {
+                    root.setExtraWindowAndGrabFocus(qsWindow);
+                }
             }
         }
 
