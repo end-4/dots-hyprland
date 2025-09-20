@@ -19,7 +19,7 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     implicitWidth: 20
     implicitHeight: 20
-    onClicked: (event) => {
+    onPressed: (event) => {
         switch (event.button) {
         case Qt.LeftButton:
             item.activate();
