@@ -281,7 +281,7 @@ Item { // Bar content region
                                 anchors.centerIn: parent
                                 horizontalAlignment: Text.AlignHCenter
                                 text: HyprlandXkb.currentLayoutCode.split(":").join("\n")
-                                font.pixelSize: text.includes("\n") ? Appearance.font.pixelSize.smaller : Appearance.font.pixelSize.small
+                                font.pixelSize: text.includes("\n") ? Appearance.font.pixelSize.smallie : Appearance.font.pixelSize.small
                                 color: rightSidebarButton.colText
                                 animateChange: true
                             }
