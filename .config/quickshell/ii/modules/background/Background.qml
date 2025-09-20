@@ -69,7 +69,7 @@ Variants {
         property bool shouldBlur: (GlobalStates.screenLocked && Config.options.background.lockBlur.enable)
         property color dominantColor: Appearance.colors.colPrimary
         property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
-        property color colText: (GlobalStates.screenLocked && shouldBlur) ? Appearance.colors.colSecondary : CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
+        property color colText: (GlobalStates.screenLocked && shouldBlur) ? Appearance.colors.colOnLayer0 : CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
         Behavior on colText {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
@@ -262,6 +262,7 @@ Variants {
                 left: wallpaper.left
                 top: wallpaper.top
                 horizontalCenter: undefined
+                verticalCenter: undefined
                 leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
                 topMargin: {
                     if (bgRoot.shouldBlur)
@@ -282,8 +283,9 @@ Variants {
                     target: clockLoader
                     anchors {
                         left: undefined
-                        horizontalCenter: wallpaper.horizontalCenter
                         right: undefined
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
                     }
                 }
             }
