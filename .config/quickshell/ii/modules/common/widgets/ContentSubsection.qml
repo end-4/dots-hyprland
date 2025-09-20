@@ -32,7 +32,7 @@ ColumnLayout {
                 StyledToolTip {
                     extraVisibleCondition: false
                     alternativeVisibleCondition: infoMouseArea.containsMouse
-                    content: root.tooltip
+                    text: root.tooltip
                 }
             }
         }

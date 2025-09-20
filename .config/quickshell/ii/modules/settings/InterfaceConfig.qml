@@ -168,7 +168,7 @@ ContentPage {
                 Config.options.sidebar.keepRightSidebarLoaded = checked;
             }
             StyledToolTip {
-                content: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
+                text: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
             }
         }
 
@@ -192,7 +192,7 @@ ContentPage {
                     }
 
                     StyledToolTip {
-                        content: Translation.tr("When this is off you'll have to click")
+                        text: Translation.tr("When this is off you'll have to click")
                     }
                 }
             }
@@ -206,7 +206,7 @@ ContentPage {
                     }
 
                     StyledToolTip {
-                        content: Translation.tr("Place the corners to trigger at the bottom")
+                        text: Translation.tr("Place the corners to trigger at the bottom")
                     }
                 }
                 ConfigSwitch {
@@ -217,7 +217,7 @@ ContentPage {
                     }
 
                     StyledToolTip {
-                        content: Translation.tr("Brightness and volume")
+                        text: Translation.tr("Brightness and volume")
                     }
                 }
             }
@@ -326,7 +326,7 @@ ContentPage {
                 Config.options.screenshotTool.showContentRegions = checked;
             }
             StyledToolTip {
-                content: Translation.tr("Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.")
+                text: Translation.tr("Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.")
             }
         }
     }

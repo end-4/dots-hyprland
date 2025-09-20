@@ -209,7 +209,7 @@ Item { // Notification item area
                     textFormat: Text.RichText
                     text: {
                         return `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>` + 
-                               `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
+                            `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
                     }
 
                     onLinkActivated: (link) => {

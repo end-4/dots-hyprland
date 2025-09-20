@@ -21,7 +21,7 @@ ContentPage {
                 Config.options.audio.protection.enable = checked;
             }
             StyledToolTip {
-                content: Translation.tr("Prevents abrupt increments and restricts volume limit")
+                text: Translation.tr("Prevents abrupt increments and restricts volume limit")
             }
         }
         ConfigRow {
@@ -85,7 +85,7 @@ ContentPage {
                     Config.options.battery.automaticSuspend = checked;
                 }
                 StyledToolTip {
-                    content: Translation.tr("Automatically suspends the system when battery is low")
+                    text: Translation.tr("Automatically suspends the system when battery is low")
                 }
             }
             ConfigSpinBox {

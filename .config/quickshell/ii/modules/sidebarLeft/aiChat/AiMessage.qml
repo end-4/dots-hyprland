@@ -164,7 +164,7 @@ Rectangle {
                     text: "visibility_off"
                 }
                 StyledToolTip {
-                    content: Translation.tr("Not visible to model")
+                    text: Translation.tr("Not visible to model")
                 }
             }
 
@@ -191,7 +191,7 @@ Rectangle {
                     }
                     
                     StyledToolTip {
-                        content: Translation.tr("Copy")
+                        text: Translation.tr("Copy")
                     }
                 }
                 AiMessageControlButton {
@@ -206,7 +206,7 @@ Rectangle {
                         }
                     }
                     StyledToolTip {
-                        content: root.editing ? Translation.tr("Save") : Translation.tr("Edit")
+                        text: root.editing ? Translation.tr("Save") : Translation.tr("Edit")
                     }
                 }
                 AiMessageControlButton {
@@ -217,7 +217,7 @@ Rectangle {
                         root.renderMarkdown = !root.renderMarkdown
                     }
                     StyledToolTip {
-                        content: Translation.tr("View Markdown source")
+                        text: Translation.tr("View Markdown source")
                     }
                 }
                 AiMessageControlButton {
@@ -227,7 +227,7 @@ Rectangle {
                         Ai.removeMessage(root.messageIndex)
                     }
                     StyledToolTip {
-                        content: Translation.tr("Delete")
+                        text: Translation.tr("Delete")
                     }
                 }
             }

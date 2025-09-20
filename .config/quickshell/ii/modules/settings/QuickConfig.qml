@@ -99,14 +99,14 @@ ContentPage {
                         konachanWallProc.running = true;
                     }
                     StyledToolTip {
-                        content: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
+                        text: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
                     }
                 }
                 RippleButtonWithIcon {
                     Layout.fillWidth: true
                     materialIcon: "wallpaper"
                     StyledToolTip {
-                        content: Translation.tr("Pick wallpaper image on your system")
+                        text: Translation.tr("Pick wallpaper image on your system")
                     }
                     onClicked: {
                         Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
@@ -161,7 +161,7 @@ ContentPage {
                         Config.options.appearance.transparency.enable = checked;
                     }
                     StyledToolTip {
-                        content: Translation.tr("Might look ass. Unsupported.")
+                        text: Translation.tr("Might look ass. Unsupported.")
                     }
                 }
             }
