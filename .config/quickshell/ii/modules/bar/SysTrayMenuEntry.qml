@@ -72,11 +72,9 @@ RippleButton {
                 active: root.menuEntry.buttonType === QsMenuButtonType.RadioButton
 
                 sourceComponent: StyledRadioButton {
+                    enabled: false
                     padding: 0
                     checked: root.menuEntry.checkState === Qt.Checked
-                    onCheckedChanged: {
-                        if (checked) root.clicked()
-                    }
                 }
             }
 
