@@ -91,10 +91,11 @@ MouseArea {
         }
     }
 
-    StyledToolTip {
+    PopupToolTip {
         id: tooltip
         extraVisibleCondition: root.containsMouse
         alternativeVisibleCondition: extraVisibleCondition
+        anchorEdges: (!Config.options.bar.bottom && !Config.options.bar.vertical) ? Edges.Bottom : Edges.Top
     }
 
 }

@@ -7,21 +7,25 @@ import QtQuick.Layouts
 Item {
     id: root
     required property string text
-    property bool shown: true
+    property bool shown: false
     property real horizontalPadding: 10
     property real verticalPadding: 5
     implicitWidth: tooltipTextObject.implicitWidth + 2 * root.horizontalPadding
     implicitHeight: tooltipTextObject.implicitHeight + 2 * root.verticalPadding
 
+    property bool isVisible: backgroundRectangle.implicitHeight > 0
+
     Rectangle {
         id: backgroundRectangle
-        anchors.bottom: root.bottom
-        anchors.horizontalCenter: root.horizontalCenter
+        anchors {
+            bottom: root.bottom
+            horizontalCenter: root.horizontalCenter
+        }
         color: Appearance?.colors.colTooltip ?? "#3C4043"
         radius: Appearance?.rounding.verysmall ?? 7
         opacity: shown ? 1 : 0
-        implicitWidth: shown ? (tooltipTextObject.implicitWidth + 2 * padding) : 0
-        implicitHeight: shown ? (tooltipTextObject.implicitHeight + 2 * padding) : 0
+        implicitWidth: shown ? (tooltipTextObject.implicitWidth + 2 * root.horizontalPadding) : 0
+        implicitHeight: shown ? (tooltipTextObject.implicitHeight + 2 * root.verticalPadding) : 0
         clip: true
 
         Behavior on implicitWidth {
