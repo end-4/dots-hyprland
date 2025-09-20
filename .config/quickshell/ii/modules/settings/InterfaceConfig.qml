@@ -142,6 +142,22 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "notifications"
+        title: Translation.tr("Notifications")
+
+        ConfigSpinBox {
+            text: Translation.tr("Timeout duration (if not defined by notification) (ms)")
+            value: Config.options.notifications.timeout
+            from: 1000
+            to: 60000
+            stepSize: 1000
+            onValueChanged: {
+                Config.options.notifications.timeout = value;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "side_navigation"
         title: Translation.tr("Sidebars")
 
