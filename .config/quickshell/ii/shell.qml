@@ -11,6 +11,7 @@ import "./modules/common/"
 import "./modules/background/"
 import "./modules/bar/"
 import "./modules/cheatsheet/"
+import "./modules/crosshair/"
 import "./modules/dock/"
 import "./modules/lock/"
 import "./modules/mediaControls/"
@@ -36,6 +37,7 @@ ShellRoot {
     property bool enableBar: true
     property bool enableBackground: true
     property bool enableCheatsheet: true
+    property bool enableCrosshair: true
     property bool enableDock: true
     property bool enableLock: true
     property bool enableMediaControls: true
@@ -64,6 +66,7 @@ ShellRoot {
     LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
     LazyLoader { active: enableBackground; component: Background {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
+    LazyLoader { active: enableCrosshair; component: Crosshair {} }
     LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
     LazyLoader { active: enableLock; component: Lock {} }
     LazyLoader { active: enableMediaControls; component: MediaControls {} }

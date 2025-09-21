@@ -62,6 +62,37 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "point_scan"
+        title: Translation.tr("Crosshair")
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Valorant crosshair code")
+            text: Config.options.crosshair.code
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.crosshair.code = text;
+            }
+        }
+
+        RowLayout {
+            Item { Layout.fillWidth: true }
+            RippleButtonWithIcon {
+                id: editorButton
+                buttonRadius: Appearance.rounding.full
+                materialIcon: "open_in_new"
+                mainText: Translation.tr("Open editor")
+                onClicked: {
+                    Qt.openUrlExternally(`https://www.vcrdb.net/builder?c=${Config.options.crosshair.code}`);
+                }
+                StyledToolTip {
+                    text: "www.vcrdb.net"
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "call_to_action"
         title: Translation.tr("Dock")
 
