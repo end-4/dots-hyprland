@@ -33,6 +33,8 @@ Singleton {
     signal thumbnailGenerated(directory: string)
     signal thumbnailGeneratedFile(filePath: string)
 
+    function load () {} // For forcing initialization
+
     // Executions
     Process {
         id: applyProc
@@ -75,6 +77,14 @@ Singleton {
 
     function select(filePath, darkMode = Appearance.m3colors.darkmode) {
         selectProc.select(filePath, darkMode);
+    }
+
+    function randomFromCurrentFolder(darkMode = Appearance.m3colors.darkmode) {
+        if (folderModel.count === 0) return;
+        const randomIndex = Math.floor(Math.random() * folderModel.count);
+        const filePath = folderModel.get(randomIndex, "filePath");
+        print("Randomly selected wallpaper:", filePath);
+        root.select(filePath, darkMode);
     }
 
     Process {

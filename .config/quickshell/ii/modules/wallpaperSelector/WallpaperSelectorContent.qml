@@ -341,9 +341,7 @@ MouseArea {
                         ToolbarButton {
                             implicitWidth: height
                             onClicked: {
-                                const randomIndex = Math.floor(Math.random() * Wallpapers.folderModel.count);
-                                const filePath = Wallpapers.folderModel.get(randomIndex, "filePath");
-                                root.selectWallpaperPath(filePath);
+                                Wallpapers.randomFromCurrentFolder();
                             }
                             contentItem: MaterialSymbol {
                                 anchors.centerIn: parent

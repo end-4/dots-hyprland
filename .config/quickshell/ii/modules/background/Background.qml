@@ -263,12 +263,7 @@ Variants {
             property real effectiveValueY: Math.max(0, Math.min(1, valueY))
             x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
             y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
-            source: {
-                print("-----------------")
-                print("Safety triggered:", bgRoot.wallpaperSafetyTriggered);
-                print("Wallpaper path:", bgRoot.wallpaperPath);
-                return bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
-            }
+            source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
             fillMode: Image.PreserveAspectCrop
             Behavior on x {
                 NumberAnimation {

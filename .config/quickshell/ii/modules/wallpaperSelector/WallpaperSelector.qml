@@ -71,11 +71,25 @@ Scope {
         function toggle(): void {
             root.toggleWallpaperSelector();
         }
+
+        function random(): void {
+            Wallpapers.randomFromCurrentFolder();
+        }
     }
 
     GlobalShortcut {
         name: "wallpaperSelectorToggle"
         description: "Toggle wallpaper selector"
-        onPressed: root.toggleWallpaperSelector();
+        onPressed: {
+            root.toggleWallpaperSelector();
+        }
+    }
+
+    GlobalShortcut {
+        name: "wallpaperSelectorRandom"
+        description: "Select random wallpaper in current folder"
+        onPressed: {
+            Wallpapers.randomFromCurrentFolder();
+        }
     }
 }
