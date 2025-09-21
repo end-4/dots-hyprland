@@ -128,6 +128,8 @@ Singleton {
                 property bool showClock: true
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
+                property string quote: ""
+                property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
@@ -142,8 +144,13 @@ Singleton {
                     property bool showLockedText: true
                     property real extraZoom: 1.1
                 }
-                property string quote: ""
-                property bool hideWhenFullscreen: true
+                property JsonObject wallpaperSafety: JsonObject {
+                    property bool enable: true
+                    property JsonObject triggerCondition: JsonObject {
+                        property list<string> wallpaperKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
+                        property list<string> networkNameKeywords: ["guest", "public", "free", "airport"]
+                    }
+                }
             }
 
             property JsonObject bar: JsonObject {
