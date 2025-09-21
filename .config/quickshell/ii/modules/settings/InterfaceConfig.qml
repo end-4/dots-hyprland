@@ -67,7 +67,7 @@ ContentPage {
 
         MaterialTextArea {
             Layout.fillWidth: true
-            placeholderText: Translation.tr("Valorant crosshair code")
+            placeholderText: Translation.tr("Crosshair code (in Valorant's format)")
             text: Config.options.crosshair.code
             wrapMode: TextEdit.Wrap
             onTextChanged: {
