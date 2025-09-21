@@ -378,6 +378,7 @@ Variants {
                         text: DateTime.date
                     }
                     StyledText { // Somehow gets fucked up if made a ClockText???
+                        visible: Config.options.background.quote.length > 0
                         Layout.fillWidth: true
                         horizontalAlignment: bgRoot.textHorizontalAlignment
                         font {
@@ -389,7 +390,6 @@ Variants {
                         color: bgRoot.colText
                         style: Text.Raised
                         styleColor: Appearance.colors.colShadow
-                        // visible: Config.options.background.quote.length > 0
                         text: Config.options.background.quote
                     }
                 }
