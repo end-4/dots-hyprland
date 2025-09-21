@@ -16,7 +16,7 @@ Singleton {
     id: root
 
     property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/thumbgen.py`
-    property string generateThumbnailsMagicScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
+    property string generateThumbnailsMagickScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
     property alias directory: folderModel.folder
     readonly property string effectiveDirectory: FileUtils.trimFileProtocol(folderModel.folder.toString())
     property url defaultFolder: Qt.resolvedUrl(`${Directories.pictures}/Wallpapers`)
@@ -136,12 +136,13 @@ Singleton {
 
     // Thumbnail generation
     function generateThumbnail(size: string) {
+        // console.log("[Wallpapers] Updating thumbnails")
         if (!["normal", "large", "x-large", "xx-large"].includes(size)) throw new Error("Invalid thumbnail size");
         thumbgenProc.directory = root.directory
         thumbgenProc.running = false
         thumbgenProc.command = [
             "bash", "-c",
-            `${thumbgenScriptPath} --size ${size} --machine_progress -d ${root.directory} || ${generateThumbnailsMagicScriptPath} --size ${size} -d ${root.directory}`,
+            `${thumbgenScriptPath} --size ${size} --machine_progress -d ${FileUtils.trimFileProtocol(root.directory)} || ${generateThumbnailsMagickScriptPath} --size ${size} -d ${root.directory}`,
         ]
         root.thumbnailGenerationProgress = 0
         thumbgenProc.running = true

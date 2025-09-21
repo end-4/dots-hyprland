@@ -40,6 +40,13 @@ MouseArea {
         }
     }
 
+    function selectWallpaperPath(filePath) {
+        if (filePath && filePath.length > 0) {
+            Wallpapers.select(filePath, root.useDarkMode);
+            filterField.text = "";
+        }
+    }
+
     acceptedButtons: Qt.BackButton | Qt.ForwardButton
     onPressed: event => {
         if (event.button === Qt.BackButton) {
@@ -164,7 +171,7 @@ MouseArea {
                             { icon: "movie", name: "Videos", path: Directories.videos }, 
                             { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
                             { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
-                            { icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` },
+                            ...(Config.options.policies.weeb === 1 ? [{ icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` }] : []),
                         ]
                         delegate: RippleButton {
                             id: quickDirButton
@@ -185,6 +192,7 @@ MouseArea {
                                     color: quickDirButton.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
                                     iconSize: Appearance.font.pixelSize.larger
                                     text: quickDirButton.modelData.icon
+                                    fill: quickDirButton.toggled ? 1 : 0
                                 }
                                 StyledText {
                                     Layout.fillWidth: true
@@ -267,8 +275,7 @@ MouseArea {
 
                         function activateCurrent() {
                             const filePath = grid.model.get(currentIndex, "filePath")
-                            Wallpapers.select(filePath, root.useDarkMode);
-                            filterField.text = "";
+                            root.selectWallpaperPath(filePath);
                         }
 
                         model: Wallpapers.folderModel
@@ -287,8 +294,7 @@ MouseArea {
                             }
                             
                             onActivated: {
-                                Wallpapers.select(fileModelData.filePath, root.useDarkMode);
-                                filterField.text = "";
+                                root.selectWallpaperPath(fileModelData.filePath);
                             }
                         }
 
@@ -316,12 +322,37 @@ MouseArea {
                                 Wallpapers.openFallbackPicker(root.useDarkMode);
                                 GlobalStates.wallpaperSelectorOpen = false;
                             }
+                            altAction: () => {
+                                Wallpapers.openFallbackPicker(root.useDarkMode);
+                                GlobalStates.wallpaperSelectorOpen = false;
+                                Config.options.wallpaperSelector.useSystemFileDialog = true
+                            }
                             contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
                                 text: "open_in_new"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
                             StyledToolTip {
-                                content: Translation.tr("Use the system file picker instead")
+                                text: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
+                            }
+                        }
+
+                        ToolbarButton {
+                            implicitWidth: height
+                            onClicked: {
+                                const randomIndex = Math.floor(Math.random() * Wallpapers.folderModel.count);
+                                const filePath = Wallpapers.folderModel.get(randomIndex, "filePath");
+                                root.selectWallpaperPath(filePath);
+                            }
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
+                                text: "ifl"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                text: Translation.tr("Pick random from this folder")
                             }
                         }
 
@@ -329,11 +360,13 @@ MouseArea {
                             implicitWidth: height
                             onClicked: root.useDarkMode = !root.useDarkMode
                             contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
                                 text: root.useDarkMode ? "dark_mode" : "light_mode"
                                 iconSize: Appearance.font.pixelSize.larger
                             }
                             StyledToolTip {
-                                content: Translation.tr("Click to toggle light/dark mode (applied when wallpaper is chosen)")
+                                text: Translation.tr("Click to toggle light/dark mode\n(applied when wallpaper is chosen)")
                             }
                         }
 
@@ -373,11 +406,18 @@ MouseArea {
                         }
 
                         ToolbarButton {
+                            implicitWidth: height
                             onClicked: {
                                 GlobalStates.wallpaperSelectorOpen = false;
                             }
-                            contentItem: StyledText {
-                                text: "Cancel"
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
+                                text: "cancel_presentation"
+                                iconSize: Appearance.font.pixelSize.larger
+                            }
+                            StyledToolTip {
+                                text: Translation.tr("Cancel wallpaper selection")
                             }
                         }
                     }

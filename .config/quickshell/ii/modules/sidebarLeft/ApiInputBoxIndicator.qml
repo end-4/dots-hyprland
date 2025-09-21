@@ -41,7 +41,7 @@ Item { // Model indicator
                 id: toolTip
                 extraVisibleCondition: false
                 alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                content: root.tooltipText
+                text: root.tooltipText
             }
         }
     }

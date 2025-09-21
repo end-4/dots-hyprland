@@ -46,9 +46,9 @@ Item { // Player instance
         }
     }
 
-    Timer { // Force update for prevision
+    Timer { // Force update for revision
         running: playerController.player?.playbackState == MprisPlaybackState.Playing
-        interval: 1000
+        interval: Config.options.resources.updateInterval
         repeat: true
         onTriggered: {
             playerController.player.positionChanged()
@@ -131,12 +131,8 @@ Item { // Player instance
             asynchronous: true
 
             layer.enabled: true
-            layer.effect: MultiEffect {
+            layer.effect: StyledBlurEffect {
                 source: blurredArt
-                saturation: 0.2
-                blurEnabled: true
-                blurMax: 100
-                blur: 1
             }
 
             Rectangle {

@@ -24,7 +24,7 @@ Revealer { // Scroll hint
 
         // StyledToolTip {
         //     extraVisibleCondition: tooltipText.length > 0
-        //     content: tooltipText
+        //     text: tooltipText
         // }
 
         ColumnLayout {

@@ -18,6 +18,6 @@ QuickToggleButton {
         GlobalStates.sidebarRightOpen = false
     }
     StyledToolTip {
-        content: Translation.tr("%1 | Right-click to configure").arg(Network.networkName)
+        text: Translation.tr("%1 | Right-click to configure").arg(Network.networkName)
     }
 }

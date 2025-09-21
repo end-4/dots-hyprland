@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
 import QtQuick.Effects
@@ -26,6 +27,10 @@ LazyLoader {
         implicitWidth: popupBackground.implicitWidth + Appearance.sizes.hyprlandGapsOut * 2 + root.popupBackgroundMargin
         implicitHeight: popupBackground.implicitHeight + Appearance.sizes.hyprlandGapsOut * 2 + root.popupBackgroundMargin
 
+        mask: Region {
+            item: popupBackground
+        }
+
         exclusionMode: ExclusionMode.Ignore
         exclusiveZone: 0
         margins {
@@ -49,15 +54,8 @@ LazyLoader {
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
 
-        RectangularShadow {
-            property var target: popupBackground
-            anchors.fill: target
-            radius: target.radius
-            blur: 0.9 * Appearance.sizes.hyprlandGapsOut
-            offset: Qt.vector2d(0.0, 1.0)
-            spread: 0.7
-            color: Appearance.colors.colShadow
-            cached: true
+        StyledRectangularShadow {
+            target: popupBackground
         }
 
         Rectangle {

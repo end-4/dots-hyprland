@@ -92,7 +92,7 @@ Singleton {
                     property bool enableQtApps: true
                     property bool enableTerminal: true
                     property JsonObject terminalGenerationProps: JsonObject {
-                        property real harmony: 0.8
+                        property real harmony: 0.6
                         property real harmonizeThreshold: 100
                         property real termFgBoost: 0.35
                         property bool forceDarkMode: false
@@ -135,6 +135,13 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
+                property JsonObject lockBlur: JsonObject {
+                    property bool enable: false
+                    property int radius: 100
+                    property bool centerClock: true
+                    property bool showLockedText: true
+                    property real extraZoom: 1.1
+                }
                 property string quote: ""
                 property bool hideWhenFullscreen: true
             }
@@ -142,6 +149,7 @@ Singleton {
             property JsonObject bar: JsonObject {
                 property JsonObject autoHide: JsonObject {
                     property bool enable: false
+                    property int hoverRegionWidth: 2
                     property bool pushWindows: false
                     property JsonObject showWhenPressingSuper: JsonObject {
                         property bool enable: true
@@ -227,7 +235,7 @@ Singleton {
                     property int touchpadScrollFactor: 450
                 }
                 property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
-                    property bool enable: true
+                    property bool enable: false
                 }
             }
 
@@ -256,6 +264,10 @@ Singleton {
 
             property JsonObject networking: JsonObject {
                 property string userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+            }
+
+            property JsonObject notifications: JsonObject {
+                property int timeout: 7000
             }
 
             property JsonObject osd: JsonObject {
@@ -331,7 +343,11 @@ Singleton {
                     property int longBreak: 900
                 }
             }
-
+            
+            property JsonObject wallpaperSelector: JsonObject {
+                property bool useSystemFileDialog: false
+            }
+            
             property JsonObject windows: JsonObject {
                 property bool showTitlebar: true // Client-side decoration for shell apps
                 property bool centerTitle: true

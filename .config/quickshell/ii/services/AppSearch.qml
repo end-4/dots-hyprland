@@ -20,8 +20,6 @@ Singleton {
         "wps": "wps-office2019-kprometheus",
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
-        "zen": "zen-browser",
-        "brave-browser": "brave-desktop"
     })
     property var regexSubstitutions: [
         {
@@ -90,6 +88,10 @@ Singleton {
 
     function guessIcon(str) {
         if (!str || str.length == 0) return "image-missing";
+
+        // Quickshell's desktop entry lookup
+        const entry = DesktopEntries.heuristicLookup(str);
+        if (entry) return entry.icon;
 
         // Normal substitutions
         if (substitutions[str]) return substitutions[str];

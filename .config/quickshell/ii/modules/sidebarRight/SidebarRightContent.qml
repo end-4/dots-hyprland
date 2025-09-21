@@ -88,7 +88,7 @@ Item {
                             Quickshell.reload(true);
                         }
                         StyledToolTip {
-                            content: Translation.tr("Reload Hyprland & Quickshell")
+                            text: Translation.tr("Reload Hyprland & Quickshell")
                         }
                     }
                     QuickToggleButton {
@@ -99,7 +99,7 @@ Item {
                             Quickshell.execDetached(["qs", "-p", root.settingsQmlPath]);
                         }
                         StyledToolTip {
-                            content: Translation.tr("Settings")
+                            text: Translation.tr("Settings")
                         }
                     }
                     QuickToggleButton {
@@ -109,7 +109,7 @@ Item {
                             GlobalStates.sessionOpen = true;
                         }
                         StyledToolTip {
-                            content: Translation.tr("Session")
+                            text: Translation.tr("Session")
                         }
                     }
                 }

@@ -289,16 +289,9 @@ Item { // Bar content region
                             color: rightSidebarButton.colText
                         }
                     }
-                    Loader {
-                        active: HyprlandXkb.layoutCodes.length > 1
-                        visible: active
+                    HyprlandXkbIndicator {
+                        Layout.alignment: Qt.AlignVCenter
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
-                        sourceComponent: StyledText {
-                            text: HyprlandXkb.currentLayoutCode
-                            font.pixelSize: Appearance.font.pixelSize.small
-                            color: rightSidebarButton.colText
-                            animateChange: true
-                        }
                     }
                     MaterialSymbol {
                         Layout.rightMargin: indicatorsRowLayout.realSpacing

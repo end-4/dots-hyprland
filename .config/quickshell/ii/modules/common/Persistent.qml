@@ -62,6 +62,10 @@ Singleton {
                 property string provider: "yandere"
             }
 
+            property JsonObject idle: JsonObject {
+                property bool inhibit: false
+            }
+
             property JsonObject timer: JsonObject {
                 property JsonObject pomodoro: JsonObject {
                     property bool running: false

@@ -177,7 +177,7 @@ ApplicationWindow {
                         }
 
                         StyledToolTip {
-                            content: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
+                            text: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
                         }
                     }
 

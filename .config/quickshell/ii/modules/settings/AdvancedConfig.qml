@@ -27,7 +27,7 @@ ContentPage {
                 Config.options.appearance.wallpaperTheming.enableQtApps = checked;
             }
             StyledToolTip {
-                content: Translation.tr("Shell & utilities theming must also be enabled")
+                text: Translation.tr("Shell & utilities theming must also be enabled")
             }
         }
         ConfigSwitch {
@@ -38,7 +38,7 @@ ContentPage {
                 Config.options.appearance.wallpaperTheming.enableTerminal = checked;
             }
             StyledToolTip {
-                content: Translation.tr("Shell & utilities theming must also be enabled")
+                text: Translation.tr("Shell & utilities theming must also be enabled")
             }
         }
         ConfigRow {
@@ -51,7 +51,7 @@ ContentPage {
                      Config.options.appearance.wallpaperTheming.terminalGenerationProps.forceDarkMode= checked;
                 }
                 StyledToolTip {
-                    content: Translation.tr("Ignored if terminal theming is not enabled")
+                    text: Translation.tr("Ignored if terminal theming is not enabled")
                 }
             }
         }

@@ -23,6 +23,6 @@ QuickToggleButton {
     }
     
     StyledToolTip {
-        content: Translation.tr("Night Light | Right-click to toggle Auto mode")
+        text: Translation.tr("Night Light | Right-click to toggle Auto mode")
     }
 }

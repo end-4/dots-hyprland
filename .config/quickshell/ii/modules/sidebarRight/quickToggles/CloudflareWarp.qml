@@ -87,6 +87,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: Translation.tr("Cloudflare WARP (1.1.1.1)")
+        text: Translation.tr("Cloudflare WARP (1.1.1.1)")
     }
 }
