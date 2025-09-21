@@ -11,8 +11,9 @@ Loader {
     visible: active
 
     sourceComponent: Item {
-        implicitWidth: root.vertical ? undefined : layoutCodeText.implicitWidth
-        implicitHeight: root.vertical ? layoutCodeText.implicitHeight : undefined
+        implicitWidth: root.vertical ? null : layoutCodeText.implicitWidth
+        implicitHeight: root.vertical ? layoutCodeText.implicitHeight : null
+
         StyledText {
             id: layoutCodeText
             anchors.centerIn: parent
