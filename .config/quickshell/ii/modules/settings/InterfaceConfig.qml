@@ -20,6 +20,17 @@ ContentPage {
             }
         }
 
+        ConfigSpinBox {
+            text: Translation.tr("Scale (%)")
+            value: Config.options.background.clock.scale * 100
+            from: 1
+            to: 200
+            stepSize: 2
+            onValueChanged: {
+                Config.options.background.clock.scale = value / 100;
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Clock style")
             ConfigSelectionArray {

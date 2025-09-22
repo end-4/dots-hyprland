@@ -257,6 +257,7 @@ Variants {
             // The clock
             Loader {
                 id: clockLoader
+                scale: Config.options.background.clock.scale
                 active: Config.options.background.clock.show
                 anchors {
                     left: wallpaper.left
