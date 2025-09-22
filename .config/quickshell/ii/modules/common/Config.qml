@@ -141,13 +141,6 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
-                property JsonObject lockBlur: JsonObject {
-                    property bool enable: false
-                    property int radius: 100
-                    property bool centerClock: true
-                    property bool showLockedText: true
-                    property real extraZoom: 1.1
-                }
                 property JsonObject wallpaperSafety: JsonObject {
                     property bool enable: true
                     property JsonObject triggerCondition: JsonObject {
@@ -271,6 +264,16 @@ Singleton {
                     property string to: "06:30"   // Format: "HH:mm", 24-hour time
                     property int colorTemperature: 5000
                 }
+            }
+
+            property JsonObject lock: JsonObject {
+                property JsonObject blur: JsonObject {
+                    property bool enable: false
+                    property real radius: 100
+                    property real extraZoom: 1.1
+                }
+                property bool centerClock: true
+                property bool showLockedText: true
             }
 
             property JsonObject media: JsonObject {

@@ -24,7 +24,6 @@ RowLayout {
             id: labelWidget
             Layout.fillWidth: true
             text: root.text
-            font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnSecondaryContainer
         }
     }

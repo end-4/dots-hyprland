@@ -33,7 +33,7 @@ Item {
         anchors.fill: source
         horizontalOffset: 0
         verticalOffset: 2
-        radius: 8
+        radius: 12
         samples: radius * 2 + 1
         color: Appearance.colors.colShadow
         transparentBorder: true
