@@ -101,8 +101,6 @@ Singleton {
         const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const d = new Date();
         const num_day_today = d.getDay();
-        console.log(num_day_today)
-        console.log(num_day_today)
         let result = [];
         for (let i = 0; i < weekdays.length; i++) {
             d.setDate(d.getDate() - d.getDay() + i);
@@ -116,7 +114,6 @@ Singleton {
                 let start_time = Qt.formatDateTime(evt["startDate"], Config.options.time.format);
                 let end_time = Qt.formatDateTime(evt["endDate"], Config.options.time.format);
                 let title = evt["content"];
-                console.log(start_time)
                 obj["events"].push({
                     "start": start_time,
                     "end": end_time,
