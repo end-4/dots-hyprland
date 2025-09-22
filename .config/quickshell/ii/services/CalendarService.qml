@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 pragma Singleton
 pragma ComponentBehavior: Bound
+import qs
 import qs.modules.common
 import Qt.labs.platform
 import qs.modules.common.functions
@@ -58,10 +59,11 @@ Singleton {
 
 
       function getEventsInWeek() {
+        const weekdays = [Translation.tr("Sunday"), Translation.tr("Monday"), Translation.tr("Tuesday"), Translation.tr("Wednesday"), Translation.tr("Thursday"), Translation.tr("Friday"), Translation.tr("Saturday")];
         if(!khalAvailable){
           return [
             {
-              name: "Monday",
+              name:  weekdays[0],
               events: [
                 {
                   title: "Example: You need to install khal to view events",
@@ -72,33 +74,32 @@ Singleton {
               ]
             },
             {
-              name: "Tuesday",
+              name: weekdays[1],
               events: []
             },
             {
-              name: "Wednesday",
+              name: weekdays[2],
               events: []
             },
             {
-              name: "Thursday",
+              name: weekdays[3],
               events: []
             },
             {
-              name: "Friday",
+              name: weekdays[4],
               events: []
             },
             {
-              name: "Saturday",
+              name: weekdays[5],
               events: []
             },
             {
-              name: "Sunday",
+              name: weekdays[6],
               events: []
             }
           ]; 
         }
 
-        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const d = new Date();
         const num_day_today = d.getDay();
         let result = [];
