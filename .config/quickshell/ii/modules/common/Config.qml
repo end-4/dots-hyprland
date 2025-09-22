@@ -122,10 +122,13 @@ Singleton {
             }
 
             property JsonObject background: JsonObject {
-                property bool fixedClockPosition: false
-                property real clockX: -500
-                property real clockY: -500
-                property bool showClock: true
+                property JsonObject clock: JsonObject {
+                    property bool fixedPosition: false
+                    property real x: -500
+                    property real y: -500
+                    property bool show: true
+                    property string style: "cookie" // Options: "cookie", "digital"
+                }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
