@@ -339,6 +339,7 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
+                        Layout.alignment: Qt.AlignHCenter
                         visible: root.clockStyle === "cookie"
                         active: visible
                         sourceComponent: CookieClock {}
@@ -363,10 +364,11 @@ Variants {
 
                         Rectangle {
                             id: statusTextBg
+                            clip: true
                             opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
                             visible: opacity > 0
                             implicitHeight: statusTextRow.implicitHeight + 5 * 2
-                            implicitWidth: statusTextRow.implicitWidth + 10 * 2
+                            implicitWidth: statusTextRow.implicitWidth + 5 * 2
                             radius: Appearance.rounding.small
                             color: CF.ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, cookieClockLoader.active ? 0 : 1)
 
@@ -383,7 +385,7 @@ Variants {
                             RowLayout {
                                 id: statusTextRow
                                 anchors.centerIn: parent
-                                spacing: 16
+                                spacing: 14
                                 Item {
                                     Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft
                                     implicitWidth: 1
