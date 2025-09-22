@@ -14,7 +14,7 @@ Singleton {
     id: root
 
     property bool khalAvailable: false
-    property var items: []
+    property var events: []
     property var eventsInWeek:[]
 
     // Process for checking khal configuration
@@ -42,14 +42,14 @@ Singleton {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        for (let i = 0; i < root.items.length; i++) {
-            const taskDate = new Date(root.items[i]['startDate']);
+        for (let i = 0; i < root.events.length; i++) {
+            const taskDate = new Date(root.events[i]['startDate']);
             if (
                 taskDate.getDate() === currentDay &&
                 taskDate.getMonth() === currentMonth &&
                 taskDate.getFullYear() === currentYear
               ) {
-                res.push(root.items[i]);
+                res.push(root.events[i]);
               }
         }
 
@@ -192,7 +192,7 @@ Singleton {
                   })
                 }
               }
-              root.items = events
+              root.events = events
               root.eventsInWeek = root.getEventsInWeek()
           }
     
