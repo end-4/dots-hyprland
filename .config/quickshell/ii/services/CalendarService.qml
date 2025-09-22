@@ -8,11 +8,14 @@ pragma ComponentBehavior: Bound
 import qs.modules.common
 import Qt.labs.platform
 import qs.modules.common.functions
+import qs.modules.common
+
 Singleton {
     id: root
 
     property bool khalAvailable: false
     property var items: []
+    property var eventsInWeek:[]
 
     // Process for checking khal configuration
     Process {
@@ -51,7 +54,98 @@ Singleton {
         }
 
         return res;
+      }
+
+
+      function getEventsInWeek() {
+        if(!khalAvailable){
+          return [
+            {
+              name: "Monday",
+              events: [
+                {
+                  title: "Example: You need to install khal to view events",
+                  start: "7:30",
+                  end: "9:20",
+                  color: Appearance.m3colors.m3error   
+                },
+              ]
+            },
+            {
+              name: "Tuesday",
+              events: []
+            },
+            {
+              name: "Wednesday",
+              events: []
+            },
+            {
+              name: "Thursday",
+              events: []
+            },
+            {
+              name: "Friday",
+              events: []
+            },
+            {
+              name: "Saturday",
+              events: []
+            },
+            {
+              name: "Sunday",
+              events: []
+            }
+          ]; 
+        }
+
+        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const d = new Date();
+        const num_day_today = d.getDay();
+        console.log(num_day_today)
+        console.log(num_day_today)
+        let result = [];
+        for (let i = 0; i < weekdays.length; i++) {
+            d.setDate(d.getDate() - d.getDay() + i);
+            const events = this.getTasksByDate(d);
+            const name_weekday = weekdays[d.getDay()];
+            let obj = {
+                "name": name_weekday,
+                "events": []
+              };
+              events.forEach((evt, i) => {
+                let start_time = Qt.formatDateTime(evt["startDate"], Config.options.time.format);
+                let end_time = Qt.formatDateTime(evt["endDate"], Config.options.time.format);
+                let title = evt["content"];
+                console.log(start_time)
+                obj["events"].push({
+                    "start": start_time,
+                    "end": end_time,
+                    "title": title,
+                    "color": stringToColor(title)  
+                });
+              });
+              result.push(obj)
+
+          }
+        
+        return result;
+      }
+
+      function stringToColor(str) { //https://gist.github.com/0x263b/2bdd90886c2036a1ad5bcf06d6e6fb37
+        let hash = 0
+         if (str.length === 0) return hash;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            hash = hash & hash;
+        }
+        let color = '#';
+        for (var i = 0; i < 3; i++) {
+        let value = (hash >> (i * 8)) & 255;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+        return color;
     }
+
 
 
     // Process for loading events
@@ -102,6 +196,7 @@ Singleton {
                 }
               }
               root.items = events
+              root.eventsInWeek = root.getEventsInWeek()
           }
     
         }

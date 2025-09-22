@@ -21,6 +21,10 @@ Scope { // Scope
         {
             "icon": "experiment",
             "name": Translation.tr("Elements")
+          },
+        {
+            "icon": "calendar_view_week",
+            "name": Translation.tr("TimeTable")
         },
     ]
     property int selectedTab: 0
@@ -185,6 +189,7 @@ Scope { // Scope
 
                         CheatsheetKeybinds {}
                         CheatsheetPeriodicTable {}
+                        CheatsheetTimetable {}
                     }
                 }
             }
