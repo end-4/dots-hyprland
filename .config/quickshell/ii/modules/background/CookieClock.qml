@@ -20,11 +20,17 @@ Item {
     property real minuteHandWidth: 8
     property real centerDotSize: 10
     property real hourDotSize: minuteHandWidth
-    property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
 
-    property list<string> clockNumbers: DateTime.time.split(/[: ]/)
-    property int clockHour: parseInt(clockNumbers[0]) % 12
-    property int clockMinute: parseInt(clockNumbers[1])
+    property color colShadow: Appearance.colors.colShadow
+    property color colBackground: Appearance.colors.colSecondaryContainer
+    property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
+    property color colHourHand: Appearance.colors.colPrimary
+    property color colMinuteHand: Appearance.colors.colSecondary
+    property color colOnHourHand: Appearance.colors.colOnPrimary
+
+    readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
+    readonly property int clockHour: parseInt(clockNumbers[0]) % 12
+    readonly property int clockMinute: parseInt(clockNumbers[1])
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
@@ -35,7 +41,7 @@ Item {
         verticalOffset: 2
         radius: 12
         samples: radius * 2 + 1
-        color: Appearance.colors.colShadow
+        color: root.colShadow
         transparentBorder: true
     }
 
@@ -45,7 +51,7 @@ Item {
         implicitSize: root.implicitSize
         amplitude: implicitSize / 70
         sides: 12
-        color: Appearance.colors.colSecondaryContainer
+        color: root.colBackground
 
         // 12 dots around the cookie
         Repeater {
@@ -105,7 +111,7 @@ Item {
             width: hourHandLength
             height: hourHandWidth
             radius: hourHandWidth / 2
-            color: Appearance.colors.colPrimary
+            color: root.colHourHand
         }
     }
 
@@ -120,14 +126,14 @@ Item {
             width: minuteHandLength
             height: minuteHandWidth
             radius: minuteHandWidth / 2
-            color: Appearance.colors.colSecondary
+            color: root.colMinuteHand
         }
     }
 
     // Center dot
     Rectangle {
         z: 4
-        color: Appearance.colors.colOnPrimary
+        color: root.colOnHourHand
         anchors.centerIn: parent
         implicitWidth: centerDotSize
         implicitHeight: implicitWidth
