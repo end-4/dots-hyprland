@@ -76,6 +76,7 @@ ContentPage {
                     sourceSize.height: parent.implicitHeight
                     fillMode: Image.PreserveAspectCrop
                     source: Config.options.background.wallpaperPath
+                    cache: false
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: Rectangle {
@@ -93,7 +94,7 @@ ContentPage {
                     visible: Config.options.policies.weeb === 1
                     Layout.fillWidth: true
                     buttonRadius: Appearance.rounding.small
-                    materialIcon: "wallpaper"
+                    materialIcon: "ifl"
                     mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                     onClicked: {
                         konachanWallProc.running = true;
