@@ -10,10 +10,10 @@ Item {
     property real spacing: 8
     property color backgroundColor: "transparent"
 
-    property int startHour: 7
-    property int startMinute: 30
-    property int endHour: 19
-    property int slotDuration: 30 // in minutes
+    property int startHour: 0
+    property int startMinute: 0
+    property int endHour: 24
+    property int slotDuration: 60 // in minutes
     property int slotHeight: 60 // in pixels
     property int timeColumnWidth: 100
     property real maxContentWidth: 1200
