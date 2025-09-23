@@ -145,7 +145,7 @@ Singleton {
                     property bool enable: true
                     property JsonObject triggerCondition: JsonObject {
                         property list<string> wallpaperKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
-                        property list<string> networkNameKeywords: ["guest", "public", "free", "airport"]
+                        property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
                     }
                 }
             }
