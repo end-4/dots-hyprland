@@ -88,7 +88,7 @@ Item {
             delegate: StyledText {
                 required property string modelData
 
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenter: parent?.horizontalCenter
                 font {
                     pixelSize: modelData.match(/am|pm/i) ? 26 : 68
                     family: Appearance.font.family.expressive
