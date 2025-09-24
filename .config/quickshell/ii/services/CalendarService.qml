@@ -112,8 +112,8 @@ Singleton {
                 "events": []
               };
               events.forEach((evt, i) => {
-                let start_time = Qt.formatDateTime(evt["startDate"], Config.options.time.format);
-                let end_time = Qt.formatDateTime(evt["endDate"], Config.options.time.format);
+                let start_time = Qt.formatDateTime(evt["startDate"], "hh:mm");
+                let end_time = Qt.formatDateTime(evt["endDate"], "hh:mm");
                 let title = evt["content"];
                 obj["events"].push({
                     "start": start_time,
