@@ -63,7 +63,7 @@ RippleButton {
                 id: dayPopRect
 
                 width: 240
-                height: Math.min(columnLayout.implicitHeight + 2 * todoMargin, 400)
+                height: Math.min(columnLayout.implicitHeight + 2 * todoMargin, 1000)
                 color: Appearance.m3colors.m3background
                 radius: Appearance.rounding.small
 
@@ -85,7 +85,7 @@ RippleButton {
                         Repeater {
 
                             model: ScriptModel {
-                                values: taskList.slice(0, 3) // limit shown elments to 3 since otherwiese it woul get to much
+                                values: taskList.slice(0, 6) // limit shown elments to 6 since otherwiese it woul get to much
                             }
 
                             delegate: Rectangle {
