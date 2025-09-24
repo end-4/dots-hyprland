@@ -182,7 +182,7 @@ RippleButton {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-              if (button.taskList.length > 0) {
+              if  (button.taskList.length > 0 && button.isToday !== -1 && !button.bold) {
                     dayPopUpLoader.active = true;
                     const dayPopUp = dayPopUpLoader.item
                     const dayPopRect = dayPopUp.dayPopRectProp
