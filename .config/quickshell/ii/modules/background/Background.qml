@@ -266,11 +266,7 @@ Variants {
                     horizontalCenter: undefined
                     verticalCenter: undefined
                     leftMargin: bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                    topMargin: {
-                        if (bgRoot.shouldBlur)
-                            return bgRoot.modelData.height / 3;
-                        return bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2);
-                    }
+                    topMargin: bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }
@@ -300,7 +296,6 @@ Variants {
                     }
                 }
                 sourceComponent: ColumnLayout {
-                    id: clock
                     spacing: 8
 
                     Loader {
@@ -345,68 +340,71 @@ Variants {
                         active: visible
                         sourceComponent: CookieClock {}
                     }
+                }
 
-                    Item {
-                        Layout.alignment: {
-                            if (bgRoot.textHorizontalAlignment === Text.AlignHCenter || root.clockStyle === "cookie")
-                                return Qt.AlignHCenter;
-                            return (bgRoot.textHorizontalAlignment === Text.AlignLeft ? Qt.AlignLeft : Qt.AlignRight)
+                Item {
+                    anchors {
+                        top: clockLoader.bottom
+                        topMargin: 8
+                        horizontalCenter: (bgRoot.textHorizontalAlignment === Text.AlignHCenter || root.clockStyle === "cookie") ? clockLoader.horizontalCenter : undefined
+                        left: (bgRoot.textHorizontalAlignment === Text.AlignLeft) ? clockLoader.left : undefined
+                        right: (bgRoot.textHorizontalAlignment === Text.AlignRight) ? clockLoader.right : undefined
+                        leftMargin: -26
+                        rightMargin: -26
+                    }
+                    implicitWidth: statusTextBg.implicitWidth
+                    implicitHeight: statusTextBg.implicitHeight
+
+                    StyledRectangularShadow {
+                        target: statusTextBg
+                        visible: statusTextBg.visible && root.clockStyle === "cookie"
+                        opacity: statusTextBg.opacity
+                    }
+
+                    Rectangle {
+                        id: statusTextBg
+                        anchors.centerIn: parent
+                        clip: true
+                        opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
+                        visible: opacity > 0
+                        implicitHeight: statusTextRow.implicitHeight + 5 * 2
+                        implicitWidth: statusTextRow.implicitWidth + 5 * 2
+                        radius: Appearance.rounding.small
+                        color: CF.ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, root.clockStyle === "cookie" ? 0 : 1)
+
+                        Behavior on implicitWidth {
+                            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                         }
-                        Layout.leftMargin: -26
-                        Layout.rightMargin: -26
-                        implicitWidth: statusTextBg.implicitWidth
-                        implicitHeight: statusTextBg.implicitHeight
-
-                        StyledRectangularShadow {
-                            target: statusTextBg
-                            visible: statusTextBg.visible && cookieClockLoader.active
-                            opacity: statusTextBg.opacity
+                        Behavior on implicitHeight {
+                            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                        }
+                        Behavior on opacity {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
-                        Rectangle {
-                            id: statusTextBg
-                            clip: true
-                            opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
-                            visible: opacity > 0
-                            implicitHeight: statusTextRow.implicitHeight + 5 * 2
-                            implicitWidth: statusTextRow.implicitWidth + 5 * 2
-                            radius: Appearance.rounding.small
-                            color: CF.ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, cookieClockLoader.active ? 0 : 1)
-
-                            Behavior on implicitWidth {
-                                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                        RowLayout {
+                            id: statusTextRow
+                            anchors.centerIn: parent
+                            spacing: 14
+                            Item {
+                                Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft
+                                implicitWidth: 1
                             }
-                            Behavior on implicitHeight {
-                                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                            ClockStatusText {
+                                id: safetyStatusText
+                                shown: bgRoot.wallpaperSafetyTriggered
+                                statusIcon: "hide_image"
+                                statusText: qsTr("Wallpaper safety enforced")
                             }
-                            Behavior on opacity {
-                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            ClockStatusText {
+                                id: lockStatusText
+                                shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
+                                statusIcon: "lock"
+                                statusText: qsTr("Locked")
                             }
-
-                            RowLayout {
-                                id: statusTextRow
-                                anchors.centerIn: parent
-                                spacing: 14
-                                Item {
-                                    Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft
-                                    implicitWidth: 1
-                                }
-                                ClockStatusText {
-                                    id: safetyStatusText
-                                    shown: bgRoot.wallpaperSafetyTriggered
-                                    statusIcon: "hide_image"
-                                    statusText: qsTr("Wallpaper safety enforced")
-                                }
-                                ClockStatusText {
-                                    id: lockStatusText
-                                    shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
-                                    statusIcon: "lock"
-                                    statusText: qsTr("Locked")
-                                }
-                                Item {
-                                    Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight
-                                    implicitWidth: 1
-                                }
+                            Item {
+                                Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight
+                                implicitWidth: 1
                             }
                         }
                     }
