@@ -238,7 +238,7 @@ Item {
                         StyledToolTip {
                             extraVisibleCondition: false
                             alternativeVisibleCondition: dragArea.containsMouse && !window.Drag.active
-                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}\n`
+                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}`
                         }
                     }
                 }
