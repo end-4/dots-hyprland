@@ -25,6 +25,42 @@ DockButton {
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
+    // Drag and drop properties
+    property bool isDragging: false
+    property bool isDropTarget: false
+    property real dragStartX: 0
+
+    states: [
+        State {
+            name: "dragging"
+            when: isDragging
+            PropertyChanges {
+                target: root
+                z: 100
+                scale: 1.05
+                opacity: 0.8
+            }
+        },
+        State {
+            name: "dropTarget"
+            when: isDropTarget
+            PropertyChanges {
+                target: root
+                scale: 0.95
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            NumberAnimation {
+                properties: "scale,opacity"
+                duration: 150
+                easing.type: Easing.OutCubic
+            }
+        }
+    ]
+
     Loader {
         active: isSeparator
         anchors {
@@ -35,35 +71,80 @@ DockButton {
         sourceComponent: DockSeparator {}
     }
 
-    Loader {
+    // Drag manager for drag and drop functionality
+    DragManager {
+        id: dragManager
         anchors.fill: parent
-        active: appToplevel.toplevels.length > 0
-        sourceComponent: MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.NoButton
-            onEntered: {
+        enabled: !isSeparator
+        hoverEnabled: true
+        z: isDragging ? 200 : 1
+
+        property bool dragThresholdMet: false
+        property real dragThreshold: 8
+        property point startPos: Qt.point(0, 0)
+
+        onEntered: {
+            if (!isDragging && appToplevel.toplevels.length > 0) {
                 appListRoot.lastHoveredButton = root
                 appListRoot.buttonHovered = true
                 lastFocused = appToplevel.toplevels.length - 1
             }
-            onExited: {
-                if (appListRoot.lastHoveredButton === root) {
-                    appListRoot.buttonHovered = false
+        }
+
+        onExited: {
+            if (appListRoot.lastHoveredButton === root && !isDragging) {
+                appListRoot.buttonHovered = false
+            }
+        }
+
+        onPressed: (mouse) => {
+            startPos = Qt.point(mouse.x, mouse.y)
+            dragThresholdMet = false
+            // Accept all clicks to ensure full icon coverage
+            mouse.accepted = true
+        }
+
+        onDragPressed: (diffX, diffY) => {
+            const distance = Math.sqrt(diffX * diffX + diffY * diffY)
+            if (distance > dragThreshold && !dragThresholdMet) {
+                dragThresholdMet = true
+                isDragging = true
+                // Notify parent about drag start
+                if (appListRoot.onDragStart) {
+                    appListRoot.onDragStart(root)
                 }
+            }
+
+            if (isDragging && appListRoot.onDragMove) {
+                // Calculate actual global position
+                const globalPos = dragManager.mapToItem(appListRoot, startPos.x + diffX, startPos.y + diffY)
+                appListRoot.onDragMove(root, globalPos.x, globalPos.y)
+            }
+        }
+
+        onDragReleased: (diffX, diffY) => {
+            if (isDragging) {
+                isDragging = false
+                if (appListRoot.onDragEnd) {
+                    const globalPos = dragManager.mapToItem(appListRoot, startPos.x + diffX, startPos.y + diffY)
+                    appListRoot.onDragEnd(root, globalPos.x, globalPos.y)
+                }
+            }
+        }
+
+        onClicked: {
+            if (!dragThresholdMet) {
+                // Normal click behavior
+                if (appToplevel.toplevels.length === 0) {
+                    root.desktopEntry?.execute();
+                    return;
+                }
+                lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
+                appToplevel.toplevels[lastFocused].activate()
             }
         }
     }
 
-    onClicked: {
-        if (appToplevel.toplevels.length === 0) {
-            root.desktopEntry?.execute();
-            return;
-        }
-        lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
-        appToplevel.toplevels[lastFocused].activate()
-    }
 
     middleClickAction: () => {
         root.desktopEntry?.execute();
@@ -102,7 +183,7 @@ DockButton {
                 sourceComponent: Item {
                     Desaturate {
                         id: desaturatedIcon
-                        visible: false // There's already color overlay
+                        visible: false
                         anchors.fill: parent
                         source: iconImageLoader
                         desaturation: 0.8
@@ -127,7 +208,7 @@ DockButton {
                     delegate: Rectangle {
                         required property int index
                         radius: Appearance.rounding.full
-                        implicitWidth: (appToplevel.toplevels.length <= 3) ? 
+                        implicitWidth: (appToplevel.toplevels.length <= 3) ?
                             root.countDotWidth : root.countDotHeight // Circles when too many
                         implicitHeight: root.countDotHeight
                         color: appIsActive ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)

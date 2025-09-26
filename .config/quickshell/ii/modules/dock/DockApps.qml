@@ -22,6 +22,172 @@ Item {
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
 
+    // Drag and drop properties
+    property Item draggedItem: null
+    property int draggedIndex: -1
+    property int targetIndex: -1
+
+    // Throttling timer for smooth reordering
+    Timer {
+        id: reorderTimer
+        interval: 80
+        property int targetIndex: -1
+        onTriggered: {
+            if (draggedItem && targetIndex !== -1 && targetIndex !== draggedIndex) {
+                performLiveReorder(draggedIndex, targetIndex)
+            }
+        }
+    }
+
+
+    // Drag and drop handlers
+    function onDragStart(item) {
+        draggedItem = item
+        draggedIndex = getDockItemModelIndex(item)
+
+        targetIndex = -1
+    }
+
+    function onDragMove(item, globalX, globalY) {
+        if (draggedItem !== item) return
+
+        // Calculate insertion point based on mouse position
+        const newTargetIndex = calculateInsertionPoint(globalX)
+
+        if (newTargetIndex !== targetIndex && Math.abs(newTargetIndex - targetIndex) >= 1) {
+            targetIndex = newTargetIndex
+
+            // Perform live reorder with throttling for smoothness
+            if (targetIndex !== -1 && targetIndex !== draggedIndex) {
+                // Use a timer to throttle rapid changes
+                reorderTimer.targetIndex = targetIndex
+                reorderTimer.restart()
+            }
+        }
+    }
+
+    function onDragEnd(item, globalX, globalY) {
+        if (draggedItem !== item) return
+
+        if (targetIndex !== -1 && targetIndex !== draggedIndex) {
+            saveReorderConfiguration()
+        }
+
+        // Clean up
+        draggedItem = null
+        draggedIndex = -1
+        targetIndex = -1
+    }
+
+    function getDockItemModelIndex(item) {
+        // Find the model index by matching the appId
+        const values = listView.model.values
+        for (let i = 0; i < values.length; i++) {
+            if (values[i].appId === item.appToplevel.appId) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    function calculateInsertionPoint(globalX) {
+        // Convert to ListView coordinate space
+        const listViewPos = listView.mapFromItem(root, globalX, 0)
+        const dragX = listViewPos.x
+
+        const values = listView.model.values
+        if (!values || values.length === 0) return 0
+
+        // If drag is before the first item, insert at beginning
+        if (dragX < 0) return 0
+
+        // Find insertion point by checking against each item's position
+        let insertionIndex = 0
+
+        for (let modelIndex = 0; modelIndex < values.length; modelIndex++) {
+            // Skip the dragged item itself
+            if (modelIndex === draggedIndex) continue
+
+            // Find the visual item for this model index
+            const visualItem = findVisualItemByModelIndex(modelIndex)
+            if (!visualItem) continue
+
+            const itemCenter = visualItem.x + visualItem.width / 2
+
+            if (dragX < itemCenter) {
+                // Insert before this item
+                return modelIndex
+            }
+
+            insertionIndex = modelIndex + 1
+        }
+
+        // Insert at the end
+        return Math.min(insertionIndex, values.length)
+    }
+
+    function findVisualItemByModelIndex(modelIndex) {
+        const values = listView.model.values
+        if (!values || modelIndex >= values.length) return null
+
+        const targetAppId = values[modelIndex].appId
+
+        // Find the visual item with this appId
+        for (let i = 0; i < listView.contentItem.children.length; i++) {
+            const child = listView.contentItem.children[i]
+            if (child && child.appToplevel && child.appToplevel.appId === targetAppId) {
+                return child
+            }
+        }
+        return null
+    }
+
+    function performLiveReorder(fromIndex, toIndex) {
+        const values = listView.model.values
+        if (!values || fromIndex < 0 || fromIndex >= values.length) return
+
+        // Clamp toIndex
+        toIndex = Math.max(0, Math.min(toIndex, values.length))
+
+        if (fromIndex === toIndex) return
+
+        // Create new array with item moved to new position
+        let newValues = [...values]
+        const item = newValues.splice(fromIndex, 1)[0]
+
+        // Adjust insertion index
+        const actualToIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
+        newValues.splice(actualToIndex, 0, item)
+
+        // Update model
+        listView.model.values = newValues
+
+        // Update tracking indices
+        draggedIndex = actualToIndex
+    }
+
+    function saveReorderConfiguration() {
+        const values = listView.model.values
+        updatePinnedAppsOrder(values)
+    }
+
+
+
+    function updatePinnedAppsOrder(newValues) {
+        // Extract pinned apps in their new order
+        const newPinnedApps = []
+        for (const item of newValues) {
+            if (item.pinned && item.appId !== "SEPARATOR") {
+                newPinnedApps.push(item.appId)
+            }
+        }
+
+        // Update the configuration
+        if (newPinnedApps.length > 0) {
+            Config.options.dock.pinnedApps = newPinnedApps
+        }
+    }
+
     Layout.fillHeight: true
     Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
     implicitWidth: listView.implicitWidth
@@ -36,7 +202,13 @@ Item {
         }
         implicitWidth: contentWidth
 
+        // Disable interactive behavior during drag
+        interactive: draggedItem === null
+        flickableDirection: Flickable.AutoFlickDirection
+        boundsBehavior: Flickable.StopAtBounds
+
         Behavior on implicitWidth {
+            enabled: draggedItem === null
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
 
@@ -88,6 +260,49 @@ Item {
 
             topInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
             bottomInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
+
+            // Ultra-smooth position animation
+            Behavior on x {
+                enabled: !isDragging
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.OutExpo
+                }
+            }
+        }
+
+        // Smoother ListView transitions
+        add: Transition {
+            NumberAnimation {
+                properties: "x,opacity"
+                duration: 350
+                easing.type: Easing.OutExpo
+            }
+        }
+
+        move: Transition {
+            NumberAnimation {
+                properties: "x"
+                duration: 300
+                easing.type: Easing.OutExpo
+            }
+        }
+
+        displaced: Transition {
+            NumberAnimation {
+                properties: "x"
+                duration: 300
+                easing.type: Easing.OutExpo
+            }
+        }
+
+        // Smooth content width changes
+        Behavior on contentWidth {
+            enabled: draggedItem === null
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutExpo
+            }
         }
     }
 
