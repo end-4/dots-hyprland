@@ -24,6 +24,8 @@ RippleButton {
     property string bigText: entry?.bigText ?? ""
     property string materialSymbol: entry?.materialSymbol ?? ""
     property string cliphistRawString: entry?.cliphistRawString ?? ""
+    property bool blurImage: entry?.blurImage ?? false
+    property string blurImageText: entry?.blurImageText ?? "Image hidden"
     
     visible: root.entryShown
     property int horizontalMargin: 10
@@ -208,6 +210,8 @@ RippleButton {
                     entry: root.cliphistRawString
                     maxWidth: contentColumn.width
                     maxHeight: 140
+                    blur: root.blurImage
+                    blurText: root.blurImageText
                 }
             }
         }
