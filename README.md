@@ -86,7 +86,7 @@ Widget system: Quickshell | Support: Yes
 | Window management | Weeb power |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 
-### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
+### illogical-impulse<sup>AGS</sup>
 
 Widget system: AGS | Support: No
 
