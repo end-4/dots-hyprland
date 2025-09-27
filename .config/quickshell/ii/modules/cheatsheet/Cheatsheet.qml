@@ -19,6 +19,10 @@ Scope { // Scope
             "name": Translation.tr("Keybinds")
         },
         {
+            "icon": "calendar_view_week",
+            "name": Translation.tr("TimeTable")
+        },
+        {
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
@@ -80,7 +84,8 @@ Scope { // Scope
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
 
-                Keys.onPressed: event => { // Esc to close
+                Keys.onPressed: event => {
+                    // Esc to close
                     if (event.key === Qt.Key_Escape) {
                         cheatsheetRoot.hide();
                     }
@@ -184,6 +189,7 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
+                        CheatsheetTimetable {}
                         CheatsheetPeriodicTable {}
                     }
                 }
