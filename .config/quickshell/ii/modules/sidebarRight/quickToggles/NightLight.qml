@@ -7,22 +7,38 @@ import Quickshell.Io
 
 QuickToggleButton {
     id: nightLightButton
-    property bool enabled: Hyprsunset.active
-    toggled: enabled
-    buttonIcon: Config.options.light.night.automatic ? "night_sight_auto" : "bedtime"
+
+    property int nightLightState: 0 // Start with "off" state
+
+    toggled: nightLightState > 0
+    buttonIcon: {
+        switch (nightLightState) {
+            case 0: return "bedtime"; // Off
+            case 1: return "bedtime"; // On
+            case 2: return "night_sight_auto"; // Auto
+        }
+    }
+
     onClicked: {
-        Hyprsunset.toggle()
-    }
+        // Cycle through states: 0 (off) -> 1 (on) -> 2 (auto) -> 0 (off)
+        nightLightState = (nightLightState + 1) % 3;
 
-    altAction: () => {
-        Config.options.light.night.automatic = !Config.options.light.night.automatic
-    }
-
-    Component.onCompleted: {
-        Hyprsunset.fetchState()
-    }
-    
-    StyledToolTip {
-        text: Translation.tr("Night Light | Right-click to toggle Auto mode")
+        switch (nightLightState) {
+            case 0: // Set to Off
+                Config.options.light.night.automatic = false;
+                if (Hyprsunset.active) {
+                    Hyprsunset.toggle();
+                }
+                break;
+            case 1: // Set to On
+                Config.options.light.night.automatic = false;
+                if (!Hyprsunset.active) {
+                    Hyprsunset.toggle();
+                }
+                break;
+            case 2: // Set to Auto
+                Config.options.light.night.automatic = true;
+                break;
+        }
     }
 }
