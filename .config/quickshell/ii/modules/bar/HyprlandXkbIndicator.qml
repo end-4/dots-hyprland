@@ -6,9 +6,15 @@ import qs.modules.common.widgets
 Loader {
     id: root
     property bool vertical: false
-
     active: HyprlandXkb.layoutCodes.length > 1
     visible: active
+
+    function abbreviateLayoutCode(fullCode) {
+        return fullCode.split(':').map(layout => {
+                const baseLayout = layout.split('-')[0];
+                return baseLayout.length > 4 ? baseLayout.slice(0, 4) : baseLayout;
+            }).join('\n');
+        }
 
     sourceComponent: Item {
         implicitWidth: root.vertical ? null : layoutCodeText.implicitWidth
@@ -18,7 +24,7 @@ Loader {
             id: layoutCodeText
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
-            text: HyprlandXkb.currentLayoutCode.split(":").join("\n")
+            text: abbreviateLayoutCode(HyprlandXkb.currentLayoutCode)
             font.pixelSize: text.includes("\n") ? Appearance.font.pixelSize.smallie : Appearance.font.pixelSize.small
             color: rightSidebarButton.colText
             animateChange: true
