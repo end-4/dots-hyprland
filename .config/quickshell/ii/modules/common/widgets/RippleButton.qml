@@ -63,7 +63,7 @@ Button {
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         onPressed: (event) => { 
             if(event.button === Qt.RightButton) {
-                if (root.altAction) root.altAction();
+                if (root.altAction) root.altAction(event);
                 return;
             }
             if(event.button === Qt.MiddleButton) {

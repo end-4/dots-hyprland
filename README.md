@@ -47,8 +47,8 @@
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-  - THERE IS NO WAYBAR
   - For the full list of dependencies, see the [arch-packages folder](https://github.com/end-4/dots-hyprland/tree/main/arch-packages)
+  - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
 </details>
 
 <details>
@@ -62,19 +62,13 @@
     <h3></h3>
 </div>
 
-<table style="border-collapse: collapse;">
-  <tr>
-    <td width="25%">
-      <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:100%;">
-    </td>
-    <td width="75%">
-      <i>latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below.</i>
-    </td>
-  </tr>
-</table>
-
+<div align="center">
+    <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:400;">
+</div>
 
 ### illogical-impulse<sup>Quickshell</sup>
+
+This is the latest and only supported style. Other stuff are still there mostly for viewing pleasure and not actual use, but code is still available, see below.
 
 Widget system: Quickshell | Support: Yes
 
@@ -86,52 +80,7 @@ Widget system: Quickshell | Support: Yes
 | Window management | Weeb power |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 
-### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
-
-Widget system: AGS | Support: No
-
-| AI | Common widgets |
-|:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
-| Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
-
-### Very old stuff
-
-- Not likely to work, but the source is still available in the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch. Extremely spaghetti.
-- Click image for a presentation video
-
-#### m3ww
-
-   Widget system: EWW | Support: No, dead
-
-   <a href="https://streamable.com/85ch8x">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-   </a>
-
-#### NovelKnock
-
-   Widget system: EWW | Support: No, dead
-
-   <a href="https://streamable.com/7vo61k">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-   </a>
-
-#### Hybrid
-
-   Widget system: EWW | Support: No, dead
-   
-   <a href="https://streamable.com/4oogot">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-   </a>
-
-#### Windoes
-
-   Widget system: EWW | Support: No, dead
-   
-   <a href="https://streamable.com/5qx614">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-   </a>
+### Other styles: Available at the end of the readme.
 
 <div align="center">
     <h2>• thank you •</h2>
@@ -162,4 +111,60 @@ Widget system: AGS | Support: No
 </div>
 
  - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
- - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (unless you do weird stuff and violate the license). <sub>(this note is here because some people actually asked)</sub>
+ - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (maybe unless you loudly do weird stuff and violate the license) <sub>(some people actually had to ask smh)</sub>
+
+---
+
+---
+
+<div align="center">
+    <h2>• old, UNSUPPORTED stuff •</h2>
+    <h3></h3>
+</div>
+
+- Source for illogical-impulse AGS available in the `ii-ags` branch, others in the `archive` branch.
+- The list goes from newest to the oldest, and the code quality is worse the older a style is
+- No bug fix or official support will be provided.
+
+### illogical-impulse<sup>AGS</sup>
+
+Widget system: AGS | Support: No
+
+| AI | Common widgets |
+|:---|:---------------|
+| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
+| Window management | Weeb power |
+| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
+
+#### m3ww
+
+   Widget system: EWW | Support: No, dead
+
+   <a href="https://streamable.com/85ch8x">
+    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
+   </a>
+
+#### NovelKnock
+
+   Widget system: EWW | Support: No
+
+   <a href="https://streamable.com/7vo61k">
+    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
+   </a>
+
+#### Hybrid
+
+   Widget system: EWW | Support: No
+   
+   <a href="https://streamable.com/4oogot">
+    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
+   </a>
+
+#### Windoes
+
+   Widget system: EWW | Support: No
+   
+   <a href="https://streamable.com/5qx614">
+    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
+   </a>
+

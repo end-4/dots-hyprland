@@ -209,6 +209,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         else {
             Ai.sendUserMessage(inputText);
         }
+        
+        // Always scroll to bottom when user sends a message
+        messageListView.positionViewAtEnd()
     }
 
     Process {
@@ -257,7 +260,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         }
 
         StyledToolTip {
-            content: statusItem.description
+            text: statusItem.description
             extraVisibleCondition: false
             alternativeVisibleCondition: statusItem.containsMouse
         }
@@ -305,6 +308,20 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         Item { // Messages
             Layout.fillWidth: true
             Layout.fillHeight: true
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: swipeView.width
+                    height: swipeView.height
+                    radius: Appearance.rounding.small
+                }
+            }
+
+            ScrollEdgeFade {
+                target: messageListView
+                vertical: true
+            }
+
             StyledListView { // Message list
                 id: messageListView
                 anchors.fill: parent
@@ -315,15 +332,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
+                property bool shouldAutoScroll: true
 
-                clip: true
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Rectangle {
-                        width: swipeView.width
-                        height: swipeView.height
-                        radius: Appearance.rounding.small
-                    }
+                onContentYChanged: shouldAutoScroll = atYEnd
+                onContentHeightChanged: {
+                    if (shouldAutoScroll) positionViewAtEnd();
+                }
+                onCountChanged: { // Auto-scroll when new messages are added
+                    if (shouldAutoScroll) positionViewAtEnd();
                 }
 
                 add: null // Prevent function calls from being janky

@@ -9,7 +9,7 @@ function findSuitableMaterialSymbol(summary = "") {
 
     const keywordsToTypes = {
         'reboot': 'restart_alt',
-        'recording': 'screen_record',
+        'record': 'screen_record',
         'battery': 'power',
         'power': 'power',
         'screenshot': 'screenshot_monitor',
@@ -21,7 +21,7 @@ function findSuitableMaterialSymbol(summary = "") {
         'update': 'update',
         'ai response': 'neurology',
         'control': 'settings',
-        'upscale': 'compare',
+        'upsca': 'compare',
         'install': 'deployed_code_update',
         'startswith:file': 'folder_copy', // Declarative startsWith check
     };

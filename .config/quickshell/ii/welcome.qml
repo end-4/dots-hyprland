@@ -109,6 +109,10 @@ ApplicationWindow {
                         text: "close"
                         iconSize: 20
                     }
+
+                    StyledToolTip {
+                        text: Translation.tr("Tip: Close a window with Super+Q")
+                    }
                 }
             }
         }
@@ -239,20 +243,20 @@ ApplicationWindow {
                             visible: Config.options.policies.weeb === 1
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
-                            materialIcon: "wallpaper"
+                            materialIcon: "ifl"
                             mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                             onClicked: {
                                 console.log(konachanWallProc.command.join(" "));
                                 konachanWallProc.running = true;
                             }
                             StyledToolTip {
-                                content: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
+                                text: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "wallpaper"
                             StyledToolTip {
-                                content: Translation.tr("Pick wallpaper image on your system")
+                                text: Translation.tr("Pick wallpaper image on your system")
                             }
                             onClicked: {
                                 Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`]);

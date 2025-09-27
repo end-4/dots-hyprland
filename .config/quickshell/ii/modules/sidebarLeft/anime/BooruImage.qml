@@ -41,7 +41,7 @@ Button {
     }
 
     StyledToolTip {
-        content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}`
+        text: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}`
     }
 
     padding: 0

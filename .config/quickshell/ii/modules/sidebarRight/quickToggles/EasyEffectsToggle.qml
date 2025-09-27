@@ -21,11 +21,11 @@ QuickToggleButton {
     }
 
     altAction: () => {
-        Quickshell.execDetached(["easyeffects"])
+        Quickshell.execDetached(["bash", "-c", "flatpak run com.github.wwmm.easyeffects || easyeffects"])
         GlobalStates.sidebarRightOpen = false
     }
 
     StyledToolTip {
-        content: Translation.tr("EasyEffects | Right-click to configure")
+        text: Translation.tr("EasyEffects | Right-click to configure")
     }
 }

@@ -215,7 +215,7 @@ MouseArea { // Notification group area
                         altAction: () => { root.toggleExpanded() }
 
                         StyledToolTip {
-                            content: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                            text: Translation.tr("Tip: right-clicking a group\nalso expands it")
                         }
                     }
                 }
