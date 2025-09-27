@@ -11,6 +11,9 @@ Item {
     implicitWidth: gridLayout.implicitWidth
     implicitHeight: gridLayout.implicitHeight
     property bool vertical: false
+    
+    // Tracks parent visibility to manage tray overflow state appropriately
+    property bool parentVisible: true
     property bool invertSide: false
     property bool trayOverflowOpen: false
     property bool showSeparator: true
@@ -59,6 +62,13 @@ Item {
                 root.activeMenu.close();
                 root.activeMenu = null;
             }
+        }
+    }
+
+    // Auto-close tray overflow when parent becomes invisible to prevent orphaned popups
+    onParentVisibleChanged: {
+        if (!parentVisible) {
+            root.trayOverflowOpen = false;
         }
     }
 
