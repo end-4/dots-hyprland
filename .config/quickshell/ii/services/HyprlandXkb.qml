@@ -82,7 +82,7 @@ Singleton {
             id: devicesCollector
             onStreamFinished: {
                 const parsedOutput = JSON.parse(devicesCollector.text);
-                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
+                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true) || parsedOutput.keyboards.find(k => k.main === true);
                 root.layoutCodes = hyprlandKeyboard["layout"].split(",");
                 root.currentLayoutName = hyprlandKeyboard["active_keymap"];
                 // console.log("[HyprlandXkb] Fetched | Layouts (multiple: " + (root.layouts.length > 1) + "): "
