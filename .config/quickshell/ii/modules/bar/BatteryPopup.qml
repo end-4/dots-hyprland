@@ -14,11 +14,12 @@ StyledPopup {
         spacing: 4
 
         // Header
-        RowLayout {
+        Row {
             id: header
             spacing: 5
 
             MaterialSymbol {
+                anchors.verticalCenter: parent.verticalCenter
                 fill: 0
                 font.weight: Font.Medium
                 text: "battery_android_full"
@@ -27,6 +28,7 @@ StyledPopup {
             }
 
             StyledText {
+                anchors.verticalCenter: parent.verticalCenter
                 text: "Battery"
                 font {
                     weight: Font.Medium
