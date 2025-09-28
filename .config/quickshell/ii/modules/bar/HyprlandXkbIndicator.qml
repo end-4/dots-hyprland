@@ -10,11 +10,11 @@ Loader {
     visible: active
 
     function abbreviateLayoutCode(fullCode) {
-        return fullCode.split(':').map(layout => {
-                const baseLayout = layout.split('-')[0];
-                return baseLayout.length > 4 ? baseLayout.slice(0, 4) : baseLayout;
-            }).join('\n');
-        }
+    return fullCode.split(':').map(layout => {
+            const baseLayout = layout.split('-')[0];
+            return baseLayout.slice(0, 4);
+        }).join('\n');
+    }
 
     sourceComponent: Item {
         implicitWidth: root.vertical ? null : layoutCodeText.implicitWidth
