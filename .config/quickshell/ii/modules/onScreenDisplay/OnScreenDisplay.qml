@@ -15,9 +15,21 @@ Scope {
     property string protectionMessage: ""
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
+    property string currentIndicator: "volume"
+    property var indicators: [
+        {
+            id: "volume",
+            sourceUrl: "indicators/VolumeIndicator.qml"
+        },
+        {
+            id: "brightness",
+            sourceUrl: "indicators/BrightnessIndicator.qml"
+        },
+    ]
+
     function triggerOsd() {
-        GlobalStates.osdVolumeOpen = true
-        osdTimeout.restart()
+        GlobalStates.osdVolumeOpen = true;
+        osdTimeout.restart();
     }
 
     Timer {
@@ -26,35 +38,44 @@ Scope {
         repeat: false
         running: false
         onTriggered: {
-            GlobalStates.osdVolumeOpen = false
-            root.protectionMessage = ""
+            GlobalStates.osdVolumeOpen = false;
+            root.protectionMessage = "";
         }
     }
 
     Connections {
         target: Brightness
         function onBrightnessChanged() {
-            GlobalStates.osdVolumeOpen = false
+            root.protectionMessage = "";
+            root.currentIndicator = "brightness";
+            root.triggerOsd();
         }
     }
 
-    Connections { // Listen to volume changes
+    Connections {
+        // Listen to volume changes
         target: Audio.sink?.audio ?? null
         function onVolumeChanged() {
-            if (!Audio.ready) return
-            root.triggerOsd()
+            if (!Audio.ready)
+                return;
+            root.currentIndicator = "volume";
+            root.triggerOsd();
         }
         function onMutedChanged() {
-            if (!Audio.ready) return
-            root.triggerOsd()
+            if (!Audio.ready)
+                return;
+            root.currentIndicator = "volume";
+            root.triggerOsd();
         }
     }
 
-    Connections { // Listen to protection triggers
+    Connections {
+        // Listen to protection triggers
         target: Audio
         function onSinkProtectionTriggered(reason) {
             root.protectionMessage = reason;
-            root.triggerOsd()
+            root.currentIndicator = "volume";
+            root.triggerOsd();
         }
     }
 
@@ -69,7 +90,7 @@ Scope {
             Connections {
                 target: root
                 function onFocusedScreenChanged() {
-                    osdRoot.screen = root.focusedScreen
+                    osdRoot.screen = root.focusedScreen;
                 }
             }
 
@@ -97,10 +118,11 @@ Scope {
             ColumnLayout {
                 id: columnLayout
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 Item {
                     id: osdValuesWrapper
                     // Extra space for shadow
-                    implicitHeight: contentColumnLayout.implicitHeight + Appearance.sizes.elevationMargin * 2
+                    implicitHeight: contentColumnLayout.implicitHeight
                     implicitWidth: contentColumnLayout.implicitWidth
                     clip: true
 
@@ -110,30 +132,25 @@ Scope {
                         onEntered: GlobalStates.osdVolumeOpen = false
                     }
 
-                    ColumnLayout {
+                    Column {
                         id: contentColumnLayout
                         anchors {
                             top: parent.top
                             left: parent.left
                             right: parent.right
-                            leftMargin: Appearance.sizes.elevationMargin
-                            rightMargin: Appearance.sizes.elevationMargin
                         }
                         spacing: 0
 
-                        OsdValueIndicator {
-                            id: osdValues
-                            Layout.fillWidth: true
-                            value: Audio.sink?.audio.volume ?? 0
-                            icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
-                            name: Translation.tr("Volume")
+                        Loader {
+                            id: osdIndicatorLoader
+                            source: root.indicators.find(i => i.id === root.currentIndicator)?.sourceUrl
                         }
 
                         Item {
                             id: protectionMessageWrapper
+                            anchors.horizontalCenter: parent.horizontalCenter
                             implicitHeight: protectionMessageBackground.implicitHeight
                             implicitWidth: protectionMessageBackground.implicitWidth
-                            Layout.alignment: Qt.AlignHCenter
                             opacity: root.protectionMessage !== "" ? 1 : 0
 
                             StyledRectangularShadow {
@@ -174,26 +191,26 @@ Scope {
     }
 
     IpcHandler {
-		target: "osdVolume"
+        target: "osdVolume"
 
-		function trigger() {
-            root.triggerOsd()
+        function trigger() {
+            root.triggerOsd();
         }
 
         function hide() {
-            GlobalStates.osdVolumeOpen = false
+            GlobalStates.osdVolumeOpen = false;
         }
 
         function toggle() {
-            GlobalStates.osdVolumeOpen = !GlobalStates.osdVolumeOpen
+            GlobalStates.osdVolumeOpen = !GlobalStates.osdVolumeOpen;
         }
-	}
+    }
     GlobalShortcut {
         name: "osdVolumeTrigger"
         description: "Triggers volume OSD on press"
 
         onPressed: {
-            root.triggerOsd()
+            root.triggerOsd();
         }
     }
     GlobalShortcut {
@@ -201,8 +218,7 @@ Scope {
         description: "Hides volume OSD on press"
 
         onPressed: {
-            GlobalStates.osdVolumeOpen = false
+            GlobalStates.osdVolumeOpen = false;
         }
     }
-
 }

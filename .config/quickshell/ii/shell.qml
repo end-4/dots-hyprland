@@ -42,8 +42,7 @@ ShellRoot {
     property bool enableLock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
-    property bool enableOnScreenDisplayBrightness: true
-    property bool enableOnScreenDisplayVolume: true
+    property bool enableOnScreenDisplay: true
     property bool enableOnScreenKeyboard: true
     property bool enableOverview: true
     property bool enableReloadPopup: true
@@ -72,8 +71,7 @@ ShellRoot {
     LazyLoader { active: enableLock; component: Lock {} }
     LazyLoader { active: enableMediaControls; component: MediaControls {} }
     LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
-    LazyLoader { active: enableOnScreenDisplayBrightness; component: OnScreenDisplayBrightness {} }
-    LazyLoader { active: enableOnScreenDisplayVolume; component: OnScreenDisplayVolume {} }
+    LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
     LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
     LazyLoader { active: enableOverview; component: Overview {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
