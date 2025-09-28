@@ -155,21 +155,21 @@ MouseArea {
         opacity: root.toolbarOpacity
 
         // Username
-        RowLayout {
+        Row {
             spacing: 6
             Layout.leftMargin: 8
             Layout.fillHeight: true
 
             MaterialSymbol {
                 id: userIcon
-                Layout.alignment: Qt.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
                 fill: 1
                 text: "account_circle"
                 iconSize: Appearance.font.pixelSize.huge
                 color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {
-                Layout.alignment: Qt.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
                 text: SystemInfo.username
                 color: Appearance.colors.colOnSurfaceVariant
             }
@@ -184,18 +184,19 @@ MouseArea {
             active: true
             visible: active
 
-            sourceComponent: RowLayout {
+            sourceComponent: Row {
                 spacing: 8
 
                 MaterialSymbol {
                     id: keyboardIcon
-                    Layout.alignment: Qt.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     fill: 1
                     text: "keyboard_alt"
                     iconSize: Appearance.font.pixelSize.huge
                     color: Appearance.colors.colOnSurfaceVariant
                 }
                 Loader {
+                    anchors.verticalCenter: parent.verticalCenter
                     sourceComponent: StyledText {
                         text: HyprlandXkb.currentLayoutCode
                         color: Appearance.colors.colOnSurfaceVariant
@@ -229,18 +230,18 @@ MouseArea {
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
 
-        RowLayout {
+        Row {
             visible: UPower.displayDevice.isLaptopBattery
-            spacing: 6
+            spacing: 4
             Layout.fillHeight: true
             Layout.leftMargin: 10
             Layout.rightMargin: 10
 
             MaterialSymbol {
                 id: boltIcon
-                Layout.alignment: Qt.AlignVCenter
-                Layout.leftMargin: -2
-                Layout.rightMargin: -2
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
                 fill: 1
                 text: Battery.isCharging ? "bolt" : "battery_android_full"
                 iconSize: Appearance.font.pixelSize.huge
@@ -248,7 +249,7 @@ MouseArea {
                 color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
             }
             StyledText {
-                Layout.alignment: Qt.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
                 text: Math.round(Battery.percentage * 100)
                 color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
             }
