@@ -1,0 +1,8 @@
+module Components
+ConfirmationDialog 1.0 ConfirmationDialog.qml
+EditDialog 1.0 EditDialog.qml
+KeyCaptureDialog 1.0 KeyCaptureDialog.qml
+MaterialSymbol 1.0 MaterialSymbol.qml
+AutostartEditDialog 1.0 AutostartEditDialog.qml
+WindowRuleEditDialog 1.0 WindowRuleEditDialog.qml
+NavigationButton 1.0 NavigationButton.qml

@@ -1,0 +1,43 @@
+# Maintainer: Your Name <your@email.com>
+
+pkgname=hyprland-settings-git
+_pkgname=hyprland-settings
+# This pkgver will be updated by the pkgver() function
+pkgver=0.1.0.r0.gdeadbeef
+pkgrel=1
+pkgdesc="A GUI for managing Hyprland settings"
+arch=('any')
+url=''
+license=('MIT')
+depends=(
+    'pyside6'
+    'python-numpy'
+    'python-pillow'
+    'python-materialyoucolor-git' # From AUR
+    'shiboken6'
+)
+makedepends=(
+    'git'
+    'python-build'
+    'python-installer'
+)
+source=("$_pkgname::git+file://$PWD")
+sha256sums=('SKIP')
+
+# This function automatically generates the version from git history
+pkgver() {
+  cd "$_pkgname"
+  printf "0.1.0.r%s.g%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "$_pkgname"
+  # Use modern python build tools
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "$_pkgname"
+  # Install the built wheel into the package directory
+  python -m installer --destdir="$pkgdir" dist/*.whl
+}

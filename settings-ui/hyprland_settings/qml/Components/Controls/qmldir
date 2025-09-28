@@ -1,0 +1,4 @@
+module Controls
+StyledButton 1.0 StyledButton.qml
+StyledTextField 1.0 StyledTextField.qml
+StyledComboBox 1.0 StyledComboBox.qml

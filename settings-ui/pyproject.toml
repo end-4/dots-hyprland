@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hyprland-settings"
+version = "0.1.0"
+description = "A GUI for managing Hyprland settings."
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "materialyoucolor==2.0.10",
+    "numpy==2.3.3",
+    "pillow==11.3.0",
+    "PySide6==6.9.2",
+    "PySide6_Addons==6.9.2",
+    "PySide6_Essentials==6.9.2",
+    "shiboken6==6.9.2"
+]
+
+[project.scripts]
+hyprland-settings = "hyprland_settings.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hyprland_settings*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+hyprland_settings = ["qml/**/*", "i18n/**/*"]

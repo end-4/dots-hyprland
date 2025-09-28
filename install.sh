@@ -119,6 +119,9 @@ for i in "${metapkgs[@]}"; do
 	v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
+printf "\e[36m[$0]: Installing Hyprland Settings UI...\e[0m"
+v "cd '$base/settings-ui' && makepkg -sri --noconfirm"
+
 # These python packages are installed using uv, not pacman.
 showfun install-python-packages
 v install-python-packages
