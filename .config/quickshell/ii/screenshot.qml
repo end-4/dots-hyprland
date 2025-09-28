@@ -35,7 +35,11 @@ ShellRoot {
     property color imageFillColor: "#33f1d1ff"
     property color onBorderColor: "#ff000000"
     property real standardRounding: 4
-    readonly property var windows: HyprlandData.windowList
+    readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
+        // Sort floating=true windows before others
+        if (a.floating === b.floating) return 0;
+        return a.floating ? -1 : 1;
+    })
     readonly property var layers: HyprlandData.layers
     readonly property real falsePositivePreventionRatio: 0.5
 
