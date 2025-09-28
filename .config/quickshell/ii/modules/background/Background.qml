@@ -294,9 +294,7 @@ Variants {
                         easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                     }
                 }
-                sourceComponent: ColumnLayout {
-                    spacing: 8
-
+                sourceComponent: Column {
                     Loader {
                         id: digitalClockLoader
                         visible: root.clockStyle === "digital"
@@ -334,7 +332,6 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
-                        Layout.alignment: Qt.AlignHCenter
                         visible: root.clockStyle === "cookie"
                         active: visible
                         sourceComponent: CookieClock {}
@@ -426,7 +423,7 @@ Variants {
         styleColor: Appearance.colors.colShadow
         animateChange: true
     }
-    component ClockStatusText: RowLayout {
+    component ClockStatusText: Row {
         id: statusTextRow
         property alias statusIcon: statusIconWidget.text
         property alias statusText: statusTextWidget.text
@@ -437,10 +434,10 @@ Variants {
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
-        Layout.fillWidth: false
+        spacing: 4
         MaterialSymbol {
             id: statusIconWidget
-            Layout.fillWidth: false
+            anchors.verticalCenter: statusTextRow.verticalCenter
             iconSize: Appearance.font.pixelSize.huge
             color: statusTextRow.textColor
             style: Text.Raised
@@ -448,8 +445,8 @@ Variants {
         }
         ClockText {
             id: statusTextWidget
-            Layout.fillWidth: false
             color: statusTextRow.textColor
+            anchors.verticalCenter: statusTextRow.verticalCenter
             font {
                 family: Appearance.font.family.main
                 pixelSize: Appearance.font.pixelSize.large
