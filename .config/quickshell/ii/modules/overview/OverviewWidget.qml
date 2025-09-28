@@ -63,7 +63,7 @@ Item {
         border.width: 1
         border.color: Appearance.colors.colLayer0Border
 
-        ColumnLayout { // Workspaces
+        Column { // Workspaces
             id: workspaceColumnLayout
 
             z: root.workspaceZ
@@ -71,7 +71,7 @@ Item {
             spacing: workspaceSpacing
             Repeater {
                 model: Config.options.overview.rows
-                delegate: RowLayout {
+                delegate: Row {
                     id: row
                     property int rowIndex: index
                     spacing: workspaceSpacing
