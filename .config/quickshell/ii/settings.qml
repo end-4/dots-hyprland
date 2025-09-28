@@ -224,10 +224,8 @@ ApplicationWindow {
                     Connections {
                         target: root
                         function onCurrentPageChanged() {
-                            if (pageLoader.sourceComponent !== root.pages[root.currentPage].component) {
-                                switchAnim.complete();
-                                switchAnim.start();
-                            }
+                            switchAnim.complete();
+                            switchAnim.start();
                         }
                     }
 
