@@ -20,20 +20,10 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
-
-    function disableExpandAnimation() {
-        searchWidthBehavior.enabled = false;
-    }
-
-    function cancelSearch() {
-        searchInput.selectAll();
-        root.searchingText = "";
-        searchWidthBehavior.enabled = true;
-    }
-
-    function setSearchingText(text) {
-        searchInput.text = text;
-        root.searchingText = text;
+    property bool clipboardWorkSafetyActive: {
+        const enabled = Config.options.workSafety.enable.clipboard;
+        const sensitiveNetwork = (StringUtils.stringListContainsSubstring(Network.networkName.toLowerCase(), Config.options.workSafety.triggerCondition.networkNameKeywords))
+        return enabled && sensitiveNetwork;
     }
 
     property var searchActions: [
@@ -95,6 +85,27 @@ Item { // Wrapper
 
     function focusFirstItem() {
         appResults.currentIndex = 0;
+    }
+
+    function disableExpandAnimation() {
+        searchWidthBehavior.enabled = false;
+    }
+
+    function cancelSearch() {
+        searchInput.selectAll();
+        root.searchingText = "";
+        searchWidthBehavior.enabled = true;
+    }
+
+    function setSearchingText(text) {
+        searchInput.text = text;
+        root.searchingText = text;
+    }
+
+    function containsUnsafeLink(entry) {
+        if (entry == undefined) return false;
+        const unsafeKeywords = Config.options.workSafety.triggerCondition.linkKeywords;
+        return StringUtils.stringListContainsSubstring(entry.toLowerCase(), unsafeKeywords);
     }
 
     Timer {
@@ -311,7 +322,12 @@ Item { // Wrapper
                         if (root.searchingText.startsWith(Config.options.search.prefix.clipboard)) {
                             // Clipboard
                             const searchString = root.searchingText.slice(Config.options.search.prefix.clipboard.length);
-                            return Cliphist.fuzzyQuery(searchString).map(entry => {
+                            return Cliphist.fuzzyQuery(searchString).map((entry, index, array) => {
+                                const mightBlurImage = Cliphist.entryIsImage(entry) && root.clipboardWorkSafetyActive;
+                                let shouldBlurImage = mightBlurImage;
+                                if (mightBlurImage) {
+                                    shouldBlurImage = shouldBlurImage && (containsUnsafeLink(array[index - 1]) || containsUnsafeLink(array[index + 1]));
+                                }
                                 return {
                                     cliphistRawString: entry,
                                     name: StringUtils.cleanCliphistEntry(entry),
@@ -335,7 +351,9 @@ Item { // Wrapper
                                                 Cliphist.deleteEntry(entry);
                                             }
                                         }
-                                    ]
+                                    ],
+                                    blurImage: shouldBlurImage,
+                                    blurImageText: Translation.tr("Work safety")
                                 };
                             }).filter(Boolean);
                         }

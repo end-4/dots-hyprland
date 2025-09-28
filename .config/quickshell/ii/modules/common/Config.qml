@@ -141,13 +141,6 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
-                property JsonObject wallpaperSafety: JsonObject {
-                    property bool enable: true
-                    property JsonObject triggerCondition: JsonObject {
-                        property list<string> wallpaperKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
-                        property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
-                    }
-                }
             }
 
             property JsonObject bar: JsonObject {
@@ -378,6 +371,18 @@ Singleton {
 
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
+            }
+
+            property JsonObject workSafety: JsonObject {
+                property JsonObject enable: JsonObject {
+                    property bool wallpaper: true
+                    property bool clipboard: true
+                }
+                property JsonObject triggerCondition: JsonObject {
+                    property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
+                    property list<string> fileKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
+                    property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
+                }
             }
         }
     }
