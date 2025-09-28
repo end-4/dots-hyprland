@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.widgets
@@ -233,16 +234,41 @@ Item { // Player instance
                         Item {
                             id: progressBarContainer
                             Layout.fillWidth: true
-                            implicitHeight: progressBar.implicitHeight
+                            implicitHeight: Math.max(sliderLoader.implicitHeight, progressBarLoader.implicitHeight)
 
-                            StyledProgressBar { 
-                                id: progressBar
+                            Loader {
+                                id: sliderLoader
                                 anchors.fill: parent
-                                highlightColor: blendedColors.colPrimary
-                                trackColor: blendedColors.colSecondaryContainer
-                                value: playerController.player?.position / playerController.player?.length
-                                sperm: playerController.player?.isPlaying
+                                active: playerController.player?.canSeek ?? false
+                                sourceComponent: StyledSlider { 
+                                    configuration: StyledSlider.Configuration.Wavy
+                                    highlightColor: blendedColors.colPrimary
+                                    trackColor: blendedColors.colSecondaryContainer
+                                    handleColor: blendedColors.colPrimary
+                                    value: playerController.player?.position / playerController.player?.length
+                                    onMoved: {
+                                        playerController.player.position = value * playerController.player.length;
+                                    }
+                                }
                             }
+
+                            Loader {
+                                id: progressBarLoader
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    left: parent.left
+                                    right: parent.right
+                                }
+                                active: !(playerController.player?.canSeek ?? false)
+                                sourceComponent: StyledProgressBar { 
+                                    wavy: playerController.player?.isPlaying
+                                    highlightColor: blendedColors.colPrimary
+                                    trackColor: blendedColors.colSecondaryContainer
+                                    value: playerController.player?.position / playerController.player?.length
+                                }
+                            }
+
+                            
                         }
                         TrackChangeButton {
                             iconName: "skip_next"
