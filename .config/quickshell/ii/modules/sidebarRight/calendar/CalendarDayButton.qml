@@ -131,7 +131,7 @@ RippleButton {
                                                        
                                         text: modelData.isTodo
                                             ? Qt.formatDate(modelData.date, Config.options.time.longDateFormat)
-                                            : (Qt.formatDateTime(modelData.endDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 0, 0, 0, 0),  Config.options.time.format) 
+                                            : (Qt.formatDateTime(modelData.startDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 0, 0, 0, 0),  Config.options.time.format) &&Qt.formatDateTime(modelData.endDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 23, 59, 0, 0),  Config.options.time.format) 
                                                 ? Qt.formatDate(modelData.startDate, Config.options.time.longDateFormat)  + " : " + Qt.formatDateTime(modelData.startDate,  Config.options.time.format) + " - " + Qt.formatDateTime(modelData.endDate,  Config.options.time.format)
                                                 : Qt.formatDate(modelData.startDate, Config.options.time.longDateFormat) )
 

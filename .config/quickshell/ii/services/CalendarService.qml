@@ -170,7 +170,7 @@ Singleton {
 
                   let endTimeParts = event['end-time'] 
                       ? event['end-time'].split(':').map(Number) 
-                      : [0, 0];
+                      : [23, 59]; // event is the whole day if start and end time are not set
              
                   
                   let startDate = new Date(parseInt(startDateParts[2]),
