@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 
@@ -18,7 +19,7 @@ RippleButton {
             topMargin: 4
             leftMargin: 4
         }
-        color: Appearance.colors.colLayer2
+        color: ColorUtils.transparentize(Appearance.colors.colLayer2)
         radius: Appearance.rounding.full
         implicitWidth: Math.max(20, elementNumber.implicitWidth)
         implicitHeight: Math.max(20, elementNumber.implicitHeight)
@@ -40,7 +41,7 @@ RippleButton {
             topMargin: 4
             rightMargin: 4
         }
-        color: Appearance.colors.colLayer2
+        color: ColorUtils.transparentize(Appearance.colors.colLayer2)
         radius: Appearance.rounding.full
         implicitWidth: Math.max(20, elementWeight.implicitWidth)
         implicitHeight: Math.max(20, elementWeight.implicitHeight)
