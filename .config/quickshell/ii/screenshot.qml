@@ -74,10 +74,10 @@ ShellRoot {
             }
             implicitWidth: regionInfoRow.implicitWidth + horizontalPadding * 2
             implicitHeight: regionInfoRow.implicitHeight + verticalPadding * 2
-            RowLayout {
+            Row {
                 id: regionInfoRow
                 anchors.centerIn: parent
-                spacing: 8
+                spacing: 4
 
                 Loader {
                     id: regionIconLoader
@@ -430,21 +430,19 @@ ShellRoot {
                         implicitWidth: instructionsRow.implicitWidth + 10 * 2
                         implicitHeight: instructionsRow.implicitHeight + 5 * 2
 
-                        RowLayout {
+                        Row {
                             id: instructionsRow
                             anchors.centerIn: parent
-                            Item {
-                                Layout.fillHeight: true
-                                implicitWidth: screenshotRegionIcon.implicitWidth
-                                MaterialSymbol {
-                                    id: screenshotRegionIcon
-                                    anchors.centerIn: parent
-                                    iconSize: Appearance.font.pixelSize.larger
-                                    text: "screenshot_region"
-                                    color: root.genericContentForeground
-                                }
+                            spacing: 4
+                            MaterialSymbol {
+                                id: screenshotRegionIcon
+                                // anchors.centerIn: parent
+                                iconSize: Appearance.font.pixelSize.larger
+                                text: "screenshot_region"
+                                color: root.genericContentForeground
                             }
                             StyledText {
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: Translation.tr("Drag or click a region • LMB: Copy • RMB: Edit")
                                 color: root.genericContentForeground
                             }

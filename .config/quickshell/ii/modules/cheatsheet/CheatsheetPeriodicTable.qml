@@ -15,14 +15,14 @@ Item {
     implicitWidth: mainLayout.implicitWidth
     implicitHeight: mainLayout.implicitHeight
 
-    ColumnLayout {
+    Column {
         id: mainLayout
         spacing: root.spacing
 
         Repeater { // Main table rows
             model: root.elements
             
-            delegate: RowLayout { // Table cells
+            delegate: Row { // Table cells
                 id: tableRow
                 spacing: root.spacing
                 required property var modelData
@@ -47,7 +47,7 @@ Item {
         Repeater { // Main table rows
             model: root.series
             
-            delegate: RowLayout { // Table cells
+            delegate: Row { // Table cells
                 id: seriesTableRow
                 spacing: root.spacing
                 required property var modelData
