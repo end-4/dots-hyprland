@@ -218,8 +218,13 @@ Item {
                                 updateWindowPosition.restart()
                             }
                             else {
-                                window.x = window.initX
-                                window.y = window.initY
+                                if (!window.windowData.floating) {
+                                    updateWindowPosition.restart()
+                                    return
+                                }
+                                const percentageX = Math.round((window.x - xOffset) / root.workspaceImplicitWidth * 100)
+                                const percentageY = Math.round((window.y - yOffset) / root.workspaceImplicitHeight * 100)
+                                Hyprland.dispatch(`movewindowpixel exact ${percentageX}% ${percentageY}%, address:${window.windowData?.address}`)
                             }
                         }
                         onClicked: (event) => {
