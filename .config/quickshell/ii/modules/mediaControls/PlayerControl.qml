@@ -161,7 +161,7 @@ Item { // Player instance
                     }
                 }
 
-                Image { // Art image
+                StyledImage { // Art image
                     id: mediaArt
                     property int size: parent.height
                     anchors.fill: parent
@@ -170,7 +170,6 @@ Item { // Player instance
                     fillMode: Image.PreserveAspectCrop
                     cache: false
                     antialiasing: true
-                    asynchronous: true
 
                     width: size
                     height: size
