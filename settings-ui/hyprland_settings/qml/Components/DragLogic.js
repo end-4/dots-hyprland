@@ -124,53 +124,52 @@ function findBestSnap(item, repeater, snapThreshold, canvas) {
 }
 
 // Вычисляет позицию с учетом привязок
-function calculateConstrainedPosition(item, mouseDrivenPos, constraintX, constraintY, repeater) {
+function calculateConstrainedPosition(item, mouseDrivenPos, constraintX, constraintY, wasJustSnapped, repeater) {
     let finalPos = Qt.point(mouseDrivenPos.x, mouseDrivenPos.y);
-    
-    // Применяем привязку по X
-    if (constraintX) {
+
+    if (constraintX && constraintY) { // Привязка к углу
         finalPos.x = constraintX.snapPos;
-        
-        // Если это привязка к грани (не центр-центр), разрешаем движение по Y вдоль грани
-        if (constraintX.edge !== "center-center") {
+        finalPos.y = constraintY.snapPos;
+    } else if (constraintX) { // Привязка к вертикальной грани
+        finalPos.x = constraintX.snapPos;
+        if (wasJustSnapped || constraintX.edge === "center-center") {
+            finalPos.y = constraintX.centerY; // Центрируем при первой привязке
+        } else {
+            // Разрешаем скольжение по оси Y
             const targetMonitor = findDelegateById(repeater, constraintX.id);
             if (targetMonitor) {
-                // Ограничиваем движение по Y в пределах грани целевого монитора
                 const targetTop = targetMonitor.y;
                 const targetBottom = targetMonitor.y + targetMonitor.visualHeight;
                 const itemHeight = item.visualHeight;
-                
-                // Позволяем элементу двигаться так, чтобы он хотя бы частично перекрывался с гранью
-                const minY = targetTop - itemHeight + 10; // Минимальное перекрытие 10px
+                // Ограничиваем скольжение границами целевого монитора с небольшим запасом
+                const minY = targetTop - itemHeight + 10;
                 const maxY = targetBottom - 10;
-                
                 finalPos.y = Math.max(minY, Math.min(maxY, mouseDrivenPos.y));
+            } else {
+                finalPos.y = mouseDrivenPos.y; // Резервный вариант
             }
         }
-    }
-    
-    // Применяем привязку по Y
-    if (constraintY) {
+    } else if (constraintY) { // Привязка к горизонтальной грани
         finalPos.y = constraintY.snapPos;
-        
-        // Если это привязка к грани (не центр-центр), разрешаем движение по X вдоль грани
-        if (constraintY.edge !== "center-center") {
+        if (wasJustSnapped || constraintY.edge === "center-center") {
+            finalPos.x = constraintY.centerX; // Центрируем при первой привязке
+        } else {
+            // Разрешаем скольжение по оси X
             const targetMonitor = findDelegateById(repeater, constraintY.id);
             if (targetMonitor) {
-                // Ограничиваем движение по X в пределах грани целевого монитора
                 const targetLeft = targetMonitor.x;
                 const targetRight = targetMonitor.x + targetMonitor.visualWidth;
                 const itemWidth = item.visualWidth;
-                
-                // Позволяем элементу двигаться так, чтобы он хотя бы частично перекрывался с гранью
-                const minX = targetLeft - itemWidth + 10; // Минимальное перекрытие 10px
+                // Ограничиваем скольжение границами целевого монитора с небольшим запасом
+                const minX = targetLeft - itemWidth + 10;
                 const maxX = targetRight - 10;
-                
                 finalPos.x = Math.max(minX, Math.min(maxX, mouseDrivenPos.x));
+            } else {
+                finalPos.x = mouseDrivenPos.x; // Резервный вариант
             }
         }
     }
-    
+
     return finalPos;
 }
 

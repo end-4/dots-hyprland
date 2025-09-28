@@ -383,7 +383,6 @@ Rectangle {
                             property var constraintY: null
                             property point dragStartPos: Qt.point(0,0)
                             property point initialMousePos: Qt.point(0, 0)
-                            property bool wasJustSnapped: false
                             
                             readonly property bool isSideways: (modelData.transform % 4) % 2 !== 0
                             readonly property real visualWidth: isSideways ? height : width
@@ -431,7 +430,6 @@ Rectangle {
 
                                 onPressed: function(mouse) {
                                     isDragging = true;
-                                    wasJustSnapped = false;
                                     dragStartPos = Qt.point(parent.x, parent.y);
                                     initialMousePos = Qt.point(mouse.x, mouse.y);
                                     monitorDelegate.constraintX = null;
@@ -441,20 +439,16 @@ Rectangle {
                                 onPositionChanged: function(mouse) {
                                     if (!drag.active) return;
 
-                                    // Вычисляем позицию, куда хочет переместить мышь
                                     const mouseDrivenPos = Qt.point(
                                         dragStartPos.x + mouse.x - initialMousePos.x,
                                         dragStartPos.y + mouse.y - initialMousePos.y
                                     );
 
-                                    // Сохраняем текущие привязки
                                     const prevConstraintX = monitorDelegate.constraintX;
                                     const prevConstraintY = monitorDelegate.constraintY;
 
-                                    // Находим потенциальные точки прилипания
                                     const snapInfo = DragLogic.findBestSnap(parent, monitorRepeater, snapThreshold, canvas);
 
-                                    // Логика отрыва от привязки
                                     if (prevConstraintX && DragLogic.shouldBreakConstraint(mouseDrivenPos.x, prevConstraintX.snapPos, breakawayThreshold)) {
                                         monitorDelegate.constraintX = null;
                                     }
@@ -462,30 +456,30 @@ Rectangle {
                                         monitorDelegate.constraintY = null;
                                     }
 
-                                    // Новые привязки (только если нет текущих)
                                     if (!monitorDelegate.constraintX && snapInfo.constraintX) {
                                         monitorDelegate.constraintX = snapInfo.constraintX;
-                                        wasJustSnapped = true;
                                     }
                                     if (!monitorDelegate.constraintY && snapInfo.constraintY) {
                                         monitorDelegate.constraintY = snapInfo.constraintY;
-                                        wasJustSnapped = true;
                                     }
 
-                                    // Вычисляем финальную позицию с учетом привязок
+                                    const justSnappedX = monitorDelegate.constraintX && !prevConstraintX;
+                                    const justSnappedY = monitorDelegate.constraintY && !prevConstraintY;
+                                    const wasJustSnapped = justSnappedX || justSnappedY;
+
                                     const finalPos = DragLogic.calculateConstrainedPosition(
-                                        parent, mouseDrivenPos, 
-                                        monitorDelegate.constraintX, 
-                                        monitorDelegate.constraintY, 
+                                        parent, mouseDrivenPos,
+                                        monitorDelegate.constraintX,
+                                        monitorDelegate.constraintY,
+                                        wasJustSnapped,
                                         monitorRepeater
                                     );
 
-                                    // Проверяем коллизии и применяем позицию
                                     if (!checkCollisionJS(parent, finalPos.x, finalPos.y)) {
                                         parent.x = finalPos.x;
                                         parent.y = finalPos.y;
                                     }
-                                    
+
                                     updateSnapLines();
                                 }
 
