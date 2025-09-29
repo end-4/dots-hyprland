@@ -36,6 +36,9 @@ Item {
                 event.accepted = true
             }
         }
+        if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O) {
+            Ai.clearMessages();
+        }
     }
 
     property var allCommands: [
