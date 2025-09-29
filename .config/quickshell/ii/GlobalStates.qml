@@ -27,6 +27,15 @@ Singleton {
     property bool superReleaseMightTrigger: true
     property bool workspaceShowNumbers: false
 
+    Connections {
+        target: Config
+        function onReadyChanged() {
+            if (Config.ready && Config.options.lock.launchOnStartup) {
+                GlobalStates.screenLocked = true;
+            }
+        }
+    }
+
     property real screenZoom: 1
     onScreenZoomChanged: {
         Quickshell.execDetached(["hyprctl", "keyword", "cursor:zoom_factor", root.screenZoom.toString()]);

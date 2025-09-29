@@ -167,6 +167,14 @@ ContentPage {
         icon: "lock"
         title: Translation.tr("Lock screen")
 
+        ConfigSwitch {
+            text: Translation.tr('Launch on startup')
+            checked: Config.options.lock.launchOnStartup
+            onCheckedChanged: {
+                Config.options.lock.launchOnStartup = checked;
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Blurred style")
 
