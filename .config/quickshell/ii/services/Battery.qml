@@ -1,6 +1,7 @@
 pragma Singleton
 
 import qs
+import qs.services
 import qs.modules.common
 import Quickshell
 import Quickshell.Services.UPower
@@ -27,6 +28,8 @@ Singleton {
     property real timeToEmpty: UPower.displayDevice.timeToEmpty
     property real timeToFull: UPower.displayDevice.timeToFull
 
+    property bool fullNotificationPlayed: false
+
     onIsLowAndNotChargingChanged: {
         if (available && isLowAndNotCharging) Quickshell.execDetached([
             "notify-send", 
@@ -35,6 +38,12 @@ Singleton {
             "-u", "critical",
             "-a", "Shell"
         ])
+
+        if (available && Config.options.audio.alertSound.battery) {
+            if (isLowAndNotCharging) {
+                Audio.playSystemSound("dialog-warning")
+            }
+        }
     }
 
     onIsCriticalAndNotChargingChanged: {
@@ -45,12 +54,49 @@ Singleton {
             "-u", "critical",
             "-a", "Shell"
         ]);
-            
+
+        if (available && Config.options.audio.alertSound.battery) {
+            if (isCriticalAndNotCharging) {
+                Audio.playSystemSound("suspend-error")
+            }
+        }
     }
 
     onIsSuspendingAndNotChargingChanged: {
         if (available && isSuspendingAndNotCharging) {
             Quickshell.execDetached(["bash", "-c", `systemctl suspend || loginctl suspend`]);
+        }
+    }
+
+    // Plugin / Unplug sound
+    onIsPluggedInChanged: {
+        if (available && Config.options.audio.alertSound.battery) {
+            if (isPluggedIn) {
+                fullNotificationPlayed = false;
+                Audio.playSystemSound("power-plug")
+            } else {
+                fullNotificationPlayed = false;
+                Audio.playSystemSound("power-unplug")
+            }
+        }
+    }
+
+    onPercentageChanged: {
+        if (percentage >= Config.options.battery.full / 100 && !fullNotificationPlayed) {
+            if (available && Config.options.audio.alertSound.battery) {
+                Audio.playSystemSound("complete")
+            }
+            fullNotificationPlayed = true;
+            Quickshell.execDetached([
+                "notify-send",
+                Translation.tr("Battery full"),
+                Translation.tr("Please unplug the charger"),
+                "-u", "critical",
+                "-a", "Shell"
+            ]);
+        }
+        else if (percentage < Config.options.battery.full / 100 && fullNotificationPlayed) {
+            fullNotificationPlayed = false;
         }
     }
 }

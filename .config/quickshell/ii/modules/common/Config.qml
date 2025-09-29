@@ -111,6 +111,11 @@ Singleton {
                     property real maxAllowedIncrease: 10
                     property real maxAllowed: 99
                 }
+                property JsonObject alertSound: JsonObject {
+                    property bool battery: false
+                    property bool pomodoro: false
+                    property string theme: "freedesktop"
+                }
             }
 
             property JsonObject apps: JsonObject {
@@ -201,6 +206,7 @@ Singleton {
             }
 
             property JsonObject battery: JsonObject {
+                property int full: 101
                 property int low: 20
                 property int critical: 5
                 property bool automaticSuspend: true
@@ -348,7 +354,6 @@ Singleton {
                 property string shortDateFormat: "dd/MM"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
-                    property string alertSound: ""
                     property int breakTime: 300
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500

@@ -395,5 +395,9 @@
   "Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json": "Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json",
   "Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks.": "Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks.",
   "EasyEffects | Right-click to configure": "EasyEffects | Right-click to configure",
-  "Automatically hide": "Automatically hide"
+  "Automatically hide": "Automatically hide",
+  "Alert sounds": "Alert sounds",
+  "Battery full": "Battery full",
+  "Please unplug the charger": "Please unplug the charger",
+  "Full warning": "Full warning"
 }

@@ -47,11 +47,47 @@ ContentPage {
                 }
             }
         }
+        ContentSubsection {
+            title: Translation.tr("Alert sounds")
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "battery_android_full"
+                    text: Translation.tr("Battery")
+                    checked: Config.options.audio.alertSound.battery
+                    onCheckedChanged: {
+                        Config.options.audio.alertSound.battery = checked;
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "av_timer"
+                    text: Translation.tr("Pomodoro")
+                    checked: Config.options.audio.alertSound.pomodoro
+                    onCheckedChanged: {
+                        Config.options.audio.alertSound.pomodoro = checked;
+                    }
+                }
+            }
+        }
     }
 
     ContentSection {
         icon: "battery_android_full"
         title: Translation.tr("Battery")
+
+        ConfigRow {
+            uniform: true
+            ConfigSpinBox {
+                text: Translation.tr("Full warning")
+                value: Config.options.battery.full
+                from: 0
+                to: 100
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.battery.full = value;
+                }
+            }
+        }
 
         ConfigRow {
             uniform: true

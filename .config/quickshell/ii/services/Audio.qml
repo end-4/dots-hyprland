@@ -15,6 +15,8 @@ Singleton {
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
 
+    property string audioTheme: Config.options.audio.alertSound.theme
+
     signal sinkProtectionTriggered(string reason);
 
     PwObjectTracker {
@@ -48,7 +50,17 @@ Singleton {
             }
             lastVolume = sink.audio.volume;
         }
-        
+    }
+
+    function playSystemSound(soundName) {
+        const fullPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.oga`;
+        const command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            fullPath
+        ];
+        Quickshell.execDetached(command);
     }
 
 }
