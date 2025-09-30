@@ -173,7 +173,7 @@ Item { // Notification item area
                 implicitHeight: summaryText.implicitHeight
                 StyledText {
                     id: summaryText
-                    Layout.fillWidth: summaryTextMetrics.width >= summaryRow.width * root.summaryElideRatio
+                    Layout.fillWidth: summaryTextMetrics.width >= summaryRow.implicitWidth * root.summaryElideRatio
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colOnLayer3

@@ -36,6 +36,9 @@ Item {
                 event.accepted = true
             }
         }
+        if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O) {
+            Ai.clearMessages();
+        }
     }
 
     property var allCommands: [
@@ -332,14 +335,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
-                property bool shouldAutoScroll: true
-
-                onContentYChanged: shouldAutoScroll = atYEnd
                 onContentHeightChanged: {
-                    if (shouldAutoScroll) positionViewAtEnd();
+                    if (atYEnd) positionViewAtEnd();
                 }
                 onCountChanged: { // Auto-scroll when new messages are added
-                    if (shouldAutoScroll) positionViewAtEnd();
+                    if (atYEnd) positionViewAtEnd();
                 }
 
                 add: null // Prevent function calls from being janky
@@ -647,11 +647,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 root.handleInput(inputText)
                                 event.accepted = true
                             }
-                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image pasting
+                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image/file pasting
+                            if (event.modifiers & Qt.ShiftModifier) { // Let Shift+Ctrl+V = plain paste
+                                messageInputField.text += Quickshell.clipboardText
+                                event.accepted = true;
+                                return;
+                            }
                             // Try image paste first
                             const currentClipboardEntry = Cliphist.entries[0]
+                            const cleanCliphistEntry = StringUtils.cleanCliphistEntry(currentClipboardEntry)
                             if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) { // First entry = currently copied entry = image?
                                 decodeImageAndAttachProc.handleEntry(currentClipboardEntry)
+                                event.accepted = true;
+                                return;
+                            } else if (cleanCliphistEntry.startsWith("file://")) { // First entry = currently copied entry = image?
+                                const fileName = decodeURIComponent(cleanCliphistEntry)
+                                Ai.attachFile(fileName);
                                 event.accepted = true;
                                 return;
                             }

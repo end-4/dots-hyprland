@@ -12,7 +12,6 @@ import Quickshell.Io
  */
 Singleton {
     id: root
-    property var manualActive
     property string from: Config.options?.light?.night?.from ?? "19:00" 
     property string to: Config.options?.light?.night?.to ?? "06:30"
     property bool automatic: Config.options?.light?.night?.automatic && (Config?.ready ?? true)
@@ -29,6 +28,9 @@ Singleton {
     property int clockHour: DateTime.clock.hours
     property int clockMinute: DateTime.clock.minutes
 
+    property var manualActive
+    property int manualActiveHour
+    property int manualActiveMinute
 
     onClockMinuteChanged: reEvaluate()
     onAutomaticChanged: {
@@ -36,17 +38,26 @@ Singleton {
         root.firstEvaluation = true;
         reEvaluate();
     }
+
+    function inBetween(t, from, to) {
+        if (from < to) {
+            return (t >= from && t <= to);
+        } else {
+            // Wrapped around midnight
+            return (t >= from || t <= to);
+        }
+    }
+
     function reEvaluate() {
         const t = clockHour * 60 + clockMinute;
         const from = fromHour * 60 + fromMinute;
         const to = toHour * 60 + toMinute;
+        const manualActive = manualActiveHour * 60 + manualActiveMinute;
 
-        if (from < to) {
-            root.shouldBeOn = t >= from && t <= to;
-        } else {
-            // Wrapped around midnight
-            root.shouldBeOn = t >= from || t <= to;
+        if (root.manualActive !== undefined && (inBetween(from, manualActive, t) || inBetween(to, manualActive, t))) {
+            root.manualActive = undefined;
         }
+        root.shouldBeOn = inBetween(t, from, to);
         if (firstEvaluation) {
             firstEvaluation = false;
             root.ensureState();
@@ -94,15 +105,18 @@ Singleton {
                 if (output.length == 0 || output.startsWith("Couldn't"))
                     root.active = false;
                 else
-                    root.active = (output != "6500");
+                    root.active = (output != "6500"); // 6500 is the default when off
                 // console.log("[Hyprsunset] Fetched state:", output, "->", root.active);
             }
         }
     }
 
     function toggle() {
-        if (root.manualActive === undefined)
+        if (root.manualActive === undefined) {
             root.manualActive = root.active;
+            root.manualActiveHour = root.clockHour;
+            root.manualActiveMinute = root.clockMinute;
+        }
 
         root.manualActive = !root.manualActive;
         if (root.manualActive) {

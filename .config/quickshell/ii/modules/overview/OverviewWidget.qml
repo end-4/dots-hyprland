@@ -63,7 +63,7 @@ Item {
         border.width: 1
         border.color: Appearance.colors.colLayer0Border
 
-        ColumnLayout { // Workspaces
+        Column { // Workspaces
             id: workspaceColumnLayout
 
             z: root.workspaceZ
@@ -71,7 +71,7 @@ Item {
             spacing: workspaceSpacing
             Repeater {
                 model: Config.options.overview.rows
-                delegate: RowLayout {
+                delegate: Row {
                     id: row
                     property int rowIndex: index
                     spacing: workspaceSpacing
@@ -148,27 +148,27 @@ Item {
                 model: ScriptModel {
                     values: {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
-                        return ToplevelManager.toplevels.values.filter((toplevel) => {
+                        return [...ToplevelManager.toplevels.values.filter((toplevel) => {
                             const address = `0x${toplevel.HyprlandToplevel?.address}`
                             var win = windowByAddress[address]
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
                             return inWorkspaceGroup;
-                        })
+                        })].reverse()
                     }
                 }
                 delegate: OverviewWindow {
                     id: window
                     required property var modelData
                     property int monitorId: windowData?.monitor
-                    property var monitor: HyprlandData.monitors[monitorId]
+                    property var monitor: HyprlandData.monitors.find(m => m.id == monitorId)
                     property var address: `0x${modelData.HyprlandToplevel.address}`
-                    windowData: windowByAddress[address]
                     toplevel: modelData
-                    monitorData: HyprlandData.monitors[monitorId]
+                    monitorData: this.monitor
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
                     widgetMonitorId: root.monitor.id
+                    windowData: windowByAddress[address]
 
                     property bool atInitPosition: (initX == x && initY == y)
 
@@ -188,7 +188,7 @@ Item {
                         }
                     }
 
-                    z: atInitPosition ? root.windowZ : root.windowDraggingZ
+                    z: atInitPosition ? (root.windowZ + windowData?.floating) : root.windowDraggingZ
                     Drag.hotSpot.x: targetWindowWidth / 2
                     Drag.hotSpot.y: targetWindowHeight / 2
                     MouseArea {
@@ -218,8 +218,13 @@ Item {
                                 updateWindowPosition.restart()
                             }
                             else {
-                                window.x = window.initX
-                                window.y = window.initY
+                                if (!window.windowData.floating) {
+                                    updateWindowPosition.restart()
+                                    return
+                                }
+                                const percentageX = Math.round((window.x - xOffset) / root.workspaceImplicitWidth * 100)
+                                const percentageY = Math.round((window.y - yOffset) / root.workspaceImplicitHeight * 100)
+                                Hyprland.dispatch(`movewindowpixel exact ${percentageX}% ${percentageY}%, address:${window.windowData?.address}`)
                             }
                         }
                         onClicked: (event) => {

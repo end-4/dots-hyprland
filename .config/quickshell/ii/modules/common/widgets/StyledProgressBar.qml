@@ -1,12 +1,9 @@
-import qs.services
+pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Widgets
-import Qt5Compat.GraphicalEffects
+
 
 /**
  * Material 3 progress bar. See https://m3.material.io/components/progress-indicators/overview
@@ -18,13 +15,13 @@ ProgressBar {
     property real valueBarGap: 4
     property color highlightColor: Appearance?.colors.colPrimary ?? "#685496"
     property color trackColor: Appearance?.m3colors.m3secondaryContainer ?? "#F1D3F9"
-    property bool sperm: false // If true, the progress bar will have a wavy fill effect
-    property bool animateSperm: true
-    property real spermAmplitudeMultiplier: sperm ? 0.5 : 0
-    property real spermFrequency: 6
-    property real spermFps: 60
+    property bool wavy: false // If true, the progress bar will have a wavy fill effect
+    property bool animateWave: true
+    property real waveAmplitudeMultiplier: wavy ? 0.5 : 0
+    property real waveFrequency: 6
+    property real waveFps: 60
 
-    Behavior on spermAmplitudeMultiplier {
+    Behavior on waveAmplitudeMultiplier {
         animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
@@ -38,64 +35,62 @@ ProgressBar {
     }
 
     contentItem: Item {
+        id: contentItem
         anchors.fill: parent
 
-        Canvas {
-            id: wavyFill
+        Loader {
             anchors {
                 left: parent.left
-                right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            height: parent.height * 6
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-
-                var progress = root.visualPosition;
-                var fillWidth = progress * width;
-                var amplitude = parent.height * root.spermAmplitudeMultiplier;
-                var frequency = root.spermFrequency;
-                var phase = Date.now() / 400.0;
-                var centerY = height / 2;
-
-                ctx.strokeStyle = root.highlightColor;
-                ctx.lineWidth = parent.height;
-                ctx.lineCap = "round";
-                ctx.beginPath();
-                for (var x = ctx.lineWidth / 2; x <= fillWidth; x += 1) {
-                    var waveY = centerY + amplitude * Math.sin(frequency * 2 * Math.PI * x / width + phase);
-                    if (x === 0)
-                        ctx.moveTo(x, waveY);
-                    else
-                        ctx.lineTo(x, waveY);
+            active: root.wavy
+            sourceComponent: WavyLine {
+                id: wavyFill
+                frequency: root.waveFrequency
+                color: root.highlightColor
+                amplitudeMultiplier: root.wavy ? 0.5 : 0
+                height: contentItem.height * 6
+                width: contentItem.width * root.visualPosition
+                lineWidth: contentItem.height
+                fullLength: root.width
+                Connections {
+                    target: root
+                    function onValueChanged() { wavyFill.requestPaint(); }
+                    function onHighlightColorChanged() { wavyFill.requestPaint(); }
                 }
-                ctx.stroke();
-            }
-            Connections {
-                target: root
-                function onValueChanged() { wavyFill.requestPaint(); }
-                function onHighlightColorChanged() { wavyFill.requestPaint(); }
-            }
-            Timer {
-                interval: 1000 / root.spermFps
-                running: root.animateSperm
-                repeat: root.sperm
-                onTriggered: wavyFill.requestPaint()
+                FrameAnimation {
+                    running: root.animateWave
+                    onTriggered: {
+                        wavyFill.requestPaint()
+                    }
+                }
             }
         }
+
+        Loader {
+            active: !root.wavy
+            sourceComponent: Rectangle {
+                anchors.left: parent.left
+                width: contentItem.width * root.visualPosition
+                height: contentItem.height
+                radius: height / 2
+                color: root.highlightColor
+            }
+        }
+        
         Rectangle { // Right remaining part fill
             anchors.right: parent.right
             width: (1 - root.visualPosition) * parent.width - valueBarGap
             height: parent.height
-            radius: Appearance?.rounding.full ?? 9999
+            radius: height / 2
             color: root.trackColor
         }
+        
         Rectangle { // Stop point
             anchors.right: parent.right
             width: valueBarGap
             height: valueBarGap
-            radius: Appearance?.rounding.full ?? 9999
+            radius: height / 2
             color: root.highlightColor
         }
     }

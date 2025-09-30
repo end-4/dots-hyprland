@@ -1,4 +1,5 @@
 import qs
+import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pam
@@ -55,6 +56,7 @@ Scope {
         onCompleted: result => {
             if (result == PamResult.Success) {
                 root.unlocked();
+                if (Config.options.lock.unlockKeyring) root.unlockKeyring();
             } else {
                 root.showFailure = true;
                 GlobalStates.screenUnlockFailed = true;
@@ -63,5 +65,14 @@ Scope {
             root.currentText = "";
             root.unlockInProgress = false;
         }
+    }
+
+    function unlockKeyring() {
+        Quickshell.execDetached({
+            environment: ({
+                UNLOCK_PASSWORD: root.currentText
+            }),
+            command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
+        })
     }
 }

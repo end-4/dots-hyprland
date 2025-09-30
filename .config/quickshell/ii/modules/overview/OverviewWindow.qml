@@ -81,35 +81,29 @@ Item { // Window
             border.width : 1
         }
 
-        ColumnLayout {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: Appearance.font.pixelSize.smaller * 0.5
+        Image {
+            id: windowIcon
+            anchors.centerIn: parent
+            property var iconSize: {
+                // console.log("-=-=-", root.toplevel.title, "-=-=-")
+                // console.log("Target window size:", targetWindowWidth, targetWindowHeight)
+                // console.log("Icon ratio:", root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+                // console.log("Scale:", root.monitorData.scale)
+                // console.log("Final:", Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale)
+                return Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale;
+            }
+            // mipmap: true
+            Layout.alignment: Qt.AlignHCenter
+            source: root.iconPath
+            width: iconSize
+            height: iconSize
+            sourceSize: Qt.size(iconSize, iconSize)
 
-            Image {
-                id: windowIcon
-                property var iconSize: {
-                    // console.log("-=-=-", root.toplevel.title, "-=-=-")
-                    // console.log("Target window size:", targetWindowWidth, targetWindowHeight)
-                    // console.log("Icon ratio:", root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
-                    // console.log("Scale:", root.monitorData.scale)
-                    // console.log("Final:", Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale)
-                    return Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale;
-                }
-                // mipmap: true
-                Layout.alignment: Qt.AlignHCenter
-                source: root.iconPath
-                width: iconSize
-                height: iconSize
-                sourceSize: Qt.size(iconSize, iconSize)
-
-                Behavior on width {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
-                Behavior on height {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
+            Behavior on width {
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+            }
+            Behavior on height {
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
         }
     }

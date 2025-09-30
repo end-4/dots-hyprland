@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import qs
 import qs.services
 import qs.modules.common
@@ -11,8 +12,9 @@ Item {
     readonly property var keybinds: HyprlandKeybinds.keybinds
     property real spacing: 20
     property real titleSpacing: 7
-    implicitWidth: rowLayout.implicitWidth
-    implicitHeight: rowLayout.implicitHeight
+    property real padding: 4
+    implicitWidth: row.implicitWidth + padding * 2
+    implicitHeight: row.implicitHeight + padding * 2
 
     property var keyBlacklist: ["Super_L"]
     property var keySubstitutions: ({
@@ -28,43 +30,51 @@ Item {
         // "Shift": "",
     })
 
-    RowLayout { // Keybind columns
-        id: rowLayout
+    Row { // Keybind columns
+        id: row
         spacing: root.spacing
+        
         Repeater {
             model: keybinds.children
             
-            delegate: ColumnLayout { // Keybind sections
+            delegate: Column { // Keybind sections
                 spacing: root.spacing
                 required property var modelData
-                Layout.alignment: Qt.AlignTop
+                anchors.top: row.top
+
                 Repeater {
                     model: modelData.children
 
                     delegate: Item { // Section with real keybinds
+                        id: keybindSection
                         required property var modelData
-                        implicitWidth: sectionColumnLayout.implicitWidth
-                        implicitHeight: sectionColumnLayout.implicitHeight
-                        ColumnLayout {
-                            id: sectionColumnLayout
+                        implicitWidth: sectionColumn.implicitWidth
+                        implicitHeight: sectionColumn.implicitHeight
+
+                        Column {
+                            id: sectionColumn
                             anchors.centerIn: parent
                             spacing: root.titleSpacing
+                            
                             StyledText {
                                 id: sectionTitle
                                 font.family: Appearance.font.family.title
                                 font.pixelSize: Appearance.font.pixelSize.huge
                                 color: Appearance.colors.colOnLayer0
-                                text: modelData.name
+                                text: keybindSection.modelData.name
                             }
 
-                            GridLayout {
+                            Grid {
                                 id: keybindGrid
                                 columns: 2
+                                columnSpacing: 4
+                                rowSpacing: 4
+
                                 Repeater {
                                     model: {
                                         var result = [];
-                                        for (var i = 0; i < modelData.keybinds.length; i++) {
-                                            const keybind = modelData.keybinds[i];
+                                        for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
+                                            const keybind = keybindSection.modelData.keybinds[i];
                                             result.push({
                                                 "type": "keys",
                                                 "mods": keybind.mods,
@@ -89,7 +99,7 @@ Item {
 
                                         Component {
                                             id: keysComponent
-                                            RowLayout {
+                                            Row {
                                                 spacing: 4
                                                 Repeater {
                                                     model: modelData.mods
@@ -101,7 +111,6 @@ Item {
                                                 StyledText {
                                                     id: keybindPlus
                                                     visible: !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
-                                                    Layout.alignment: Qt.AlignVCenter
                                                     text: "+"
                                                 }
                                                 KeyboardKey {

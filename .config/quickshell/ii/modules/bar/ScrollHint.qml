@@ -2,7 +2,6 @@ import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
-import QtQuick.Layouts
 
 Revealer { // Scroll hint
     id: root
@@ -11,10 +10,11 @@ Revealer { // Scroll hint
     property string tooltipText: ""
     
     MouseArea {
+        id: mouseArea
         anchors.right: root.side === "left" ? parent.right : undefined
         anchors.left: root.side === "right" ? parent.left : undefined
-        implicitWidth: contentColumnLayout.implicitWidth
-        implicitHeight: contentColumnLayout.implicitHeight
+        implicitWidth: contentColumn.implicitWidth
+        implicitHeight: contentColumn.implicitHeight
         property bool hovered: false
 
         hoverEnabled: true
@@ -22,32 +22,36 @@ Revealer { // Scroll hint
         onExited: hovered = false
         acceptedButtons: Qt.NoButton
 
-        // StyledToolTip {
-        //     extraVisibleCondition: tooltipText.length > 0
-        //     text: tooltipText
-        // }
+        property bool showHintTimedOut: false
+        onHoveredChanged: showHintTimedOut = false
+        Timer {
+            running: mouseArea.hovered
+            interval: 500
+            onTriggered: mouseArea.showHintTimedOut = true
+        }
 
-        ColumnLayout {
-            id: contentColumnLayout
-            anchors.centerIn: parent
+        PopupToolTip {
+            extraVisibleCondition: (tooltipText.length > 0 && mouseArea.showHintTimedOut)
+            text: tooltipText
+        }
+
+        Column {
+            id: contentColumn
+            anchors {
+                fill: parent
+            }
             spacing: -5
             MaterialSymbol {
-                Layout.leftMargin: 5
-                Layout.rightMargin: 5
                 text: "keyboard_arrow_up"
                 iconSize: 14
                 color: Appearance.colors.colSubtext
             }
             MaterialSymbol {
-                Layout.leftMargin: 5
-                Layout.rightMargin: 5
                 text: root.icon
                 iconSize: 14
                 color: Appearance.colors.colSubtext
             }
             MaterialSymbol {
-                Layout.leftMargin: 5
-                Layout.rightMargin: 5
                 text: "keyboard_arrow_down"
                 iconSize: 14
                 color: Appearance.colors.colSubtext

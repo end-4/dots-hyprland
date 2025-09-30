@@ -77,7 +77,7 @@ Rectangle {
         }
     }
 
-    Image {
+    StyledImage {
         id: image
         anchors.fill: parent
 

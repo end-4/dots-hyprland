@@ -20,7 +20,6 @@ StyledPopup {
         required property string label
         required property string value
         spacing: 4
-        Layout.fillWidth: true
 
         MaterialSymbol {
             text: resourceItem.icon
@@ -40,13 +39,14 @@ StyledPopup {
         }
     }
 
-    component ResourceHeaderItem: RowLayout {
+    component ResourceHeaderItem: Row {
         id: headerItem
         required property var icon
         required property var label
         spacing: 5
 
         MaterialSymbol {
+            anchors.verticalCenter: parent.verticalCenter
             fill: 0
             font.weight: Font.Medium
             text: headerItem.icon
@@ -55,6 +55,7 @@ StyledPopup {
         }
 
         StyledText {
+            anchors.verticalCenter: parent.verticalCenter
             text: headerItem.label
             font {
                 weight: Font.Medium
@@ -64,19 +65,20 @@ StyledPopup {
         }
     }
 
-    RowLayout {
+    Row {
         anchors.centerIn: parent
         spacing: 12
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignTop
+        Column {
+            anchors.top: parent.top
             spacing: 8
 
             ResourceHeaderItem {
                 icon: "memory"
                 label: "RAM"
             }
-            ColumnLayout {
+            Column {
+                spacing: 4
                 ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("Used:")
@@ -95,16 +97,17 @@ StyledPopup {
             }
         }
 
-        ColumnLayout {
+        Column {
             visible: ResourceUsage.swapTotal > 0
-            Layout.alignment: Qt.AlignTop
+            anchors.top: parent.top
             spacing: 8
 
             ResourceHeaderItem {
                 icon: "swap_horiz"
                 label: "Swap"
             }
-            ColumnLayout {
+            Column {
+                spacing: 4
                 ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("Used:")
@@ -123,15 +126,16 @@ StyledPopup {
             }
         }
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignTop
+        Column {
+            anchors.top: parent.top
             spacing: 8
 
             ResourceHeaderItem {
                 icon: "planner_review"
                 label: "CPU"
             }
-            ColumnLayout {
+            Column {
+                spacing: 4
                 ResourceItem {
                     icon: "bolt"
                     label: Translation.tr("Load:")

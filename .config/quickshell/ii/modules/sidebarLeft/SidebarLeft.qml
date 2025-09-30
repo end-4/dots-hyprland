@@ -127,8 +127,12 @@ Scope { // Scope
 
         sourceComponent: FloatingWindow {
             id: detachedSidebarRoot
-            visible: GlobalStates.sidebarLeftOpen
             property var contentParent: detachedSidebarBackground
+
+            visible: GlobalStates.sidebarLeftOpen
+            onVisibleChanged: {
+                if (!visible) GlobalStates.sidebarLeftOpen = false;
+            }
             
             Rectangle {
                 id: detachedSidebarBackground

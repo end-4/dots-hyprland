@@ -58,7 +58,7 @@ Button {
     contentItem: Item {
         anchors.fill: parent
 
-        Image {
+        StyledImage {
             id: imageObject
             anchors.fill: parent
             width: root.rowHeight * modelData.aspect_ratio
@@ -67,12 +67,6 @@ Button {
             source: modelData.preview_url
             sourceSize.width: root.rowHeight * modelData.aspect_ratio
             sourceSize.height: root.rowHeight
-
-            visible: opacity > 0
-            opacity: status === Image.Ready ? 1 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-            }
 
             layer.enabled: true
             layer.effect: OpacityMask {
