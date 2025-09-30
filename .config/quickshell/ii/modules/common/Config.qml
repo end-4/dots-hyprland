@@ -268,6 +268,7 @@ Singleton {
                 }
                 property bool centerClock: true
                 property bool showLockedText: true
+                property bool unlockKeyring: true
             }
 
             property JsonObject media: JsonObject {
