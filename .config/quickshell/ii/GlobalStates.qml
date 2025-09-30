@@ -30,7 +30,15 @@ Singleton {
     Connections {
         target: Config
         function onReadyChanged() {
-            if (Config.ready && Config.options.lock.launchOnStartup) {
+            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
+                GlobalStates.screenLocked = true;
+            }
+        }
+    }
+    Connections {
+        target: Persistent
+        function onReadyChanged() {
+            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
                 GlobalStates.screenLocked = true;
             }
         }
