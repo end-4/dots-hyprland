@@ -100,7 +100,35 @@ ContentPage {
             }
         }
     }
-    
+
+    ContentSection {
+        icon: "graph_5"
+        title: Translation.tr("System")
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                text: Translation.tr("Show updates")
+                checked: Config.options.systemControls.showUpdates
+                onCheckedChanged: {
+                    Config.options.systemControls.showUpdates = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Show number of availabe system packages for update")
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Updates check interval")
+                value: Config.options.systemControls.fetchInterval
+                from: 10
+                to: 200
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.systemControls.fetchInterval = value;
+                }
+            }
+        }
+    }
+
     ContentSection {
         icon: "language"
         title: Translation.tr("Language")
