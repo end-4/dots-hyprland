@@ -265,6 +265,7 @@ Singleton {
             }
 
             property JsonObject lock: JsonObject {
+                property bool launchOnStartup: false
                 property JsonObject blur: JsonObject {
                     property bool enable: false
                     property real radius: 100
