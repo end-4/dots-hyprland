@@ -43,4 +43,4 @@ case "$scheme_variant_str" in
         ;;
 esac
 
-kde-material-you-colors "$mode_flag" --color "$color" -sv "$sv_num"
+kde-material-you-colors "$mode_flag" --color "$color" -sv "$sv_num" --iconsdark Papirus --iconslight Papirus

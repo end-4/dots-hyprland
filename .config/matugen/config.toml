@@ -32,3 +32,8 @@ output_path = '~/.local/state/quickshell/user/generated/color.txt'
 [templates.wallpaper]
 input_path = '~/.config/matugen/templates/wallpaper.txt'
 output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
+
+[templates.folder]
+input_path = '~/.config/matugen/templates/colors-papirus.txt'
+output_path = '~/.config/matugen/papirus-folders/colors-papirus.txt'
+post_hook = '~/.config/matugen/papirus-folders/change-icons.sh'

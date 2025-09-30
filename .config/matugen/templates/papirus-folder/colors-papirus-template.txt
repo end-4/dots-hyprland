@@ -1,0 +1,2 @@
+{{colors.primary.default.hex}}
+
