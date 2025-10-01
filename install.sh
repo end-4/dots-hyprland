@@ -13,12 +13,12 @@ set -e
 # 0. Before we start
 source ./scriptdata/install-greeting ;;
 #####################################################################################
-printf "\e[36m[$0]: 1. Install dependencies\n\e[0m"
+printf "${COLOR_CYAN}[$0]: 1. Install dependencies\n${COLOR_RESET}"
 # TODO: if `--via-nix` is specified, source `install-deps-nix` instead.
 source ./scriptdata/install-deps-arch
 #####################################################################################
-printf "\e[36m[$0]: 2. Setup for user groups/services etc\n\e[0m"
+printf "${COLOR_CYAN}[$0]: 2. Setup for user groups/services etc\n${COLOR_RESET}"
 source ./scriptdata/install-setups
 #####################################################################################
-printf "\e[36m[$0]: 3. Copying + Configuring\e[0m\n"
+printf "${COLOR_CYAN}[$0]: 3. Copying + Configuring\n${COLOR_RESET}"
 source ./scriptdata/install-files
