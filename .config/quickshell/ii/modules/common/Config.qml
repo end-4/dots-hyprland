@@ -354,6 +354,7 @@ Singleton {
                 property string shortDateFormat: "dd/MM"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
+                    property string breakSound: ""
                     property int breakTime: 300
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500

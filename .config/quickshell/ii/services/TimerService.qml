@@ -18,7 +18,7 @@ Singleton {
     property int breakTime: Config.options.time.pomodoro.breakTime
     property int longBreakTime: Config.options.time.pomodoro.longBreak
     property int cyclesBeforeLongBreak: Config.options.time.pomodoro.cyclesBeforeLongBreak
-    property string alertSound: Config.options.time.pomodoro.alertSound
+    property string breakSound: Config.options.time.pomodoro.breakSound
 
     property bool pomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool pomodoroBreak: Persistent.states.timer.pomodoro.isBreak
@@ -67,6 +67,9 @@ Singleton {
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"]);
             if (Config.options.audio.alertSound.pomodoro) {
                 Audio.playSystemSound("alarm-clock-elapsed")
+            }
+            if (breakSound) {
+                Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", breakSound]);
             }
 
             if (!pomodoroBreak) {
