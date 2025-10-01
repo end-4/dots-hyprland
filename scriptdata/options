@@ -12,7 +12,7 @@ If no option is specified, run default install process.
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
-  -s, --skip-sysupdate      Skip \"sudo pacman -Syu\"
+  -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
       --skip-plasmaintg     Skip installing plasma-browser-integration
