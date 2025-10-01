@@ -17,3 +17,4 @@ COLOR_RESET='\e[00m'
 
 STYLE_UNDERLINE='\e[4m'
 BG_COLOR_CYAN='\e[30m\e[46m'
+BG_COLOR_RED='\e[30m\e[41m'

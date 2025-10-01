@@ -2,7 +2,7 @@
 # It's not for directly running.
 
 # TODO: make function backup_configs only cover the possibly overwritten ones.
-function backup_configs() {
+function backup_configs(){
   local backup_dir="$BACKUP_DIR"
   mkdir -p "$backup_dir"
   echo "Backing up $XDG_CONFIG_HOME to $backup_dir/config_backup"
@@ -12,7 +12,7 @@ function backup_configs() {
   rsync -av --progress "$HOME/.local/" "$backup_dir/local_backup/"
 }
 
-function ask_backup_configs() {
+function ask_backup_configs(){
   printf "${COLOR_RED}"
   printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
   read -p " " backup_confirm

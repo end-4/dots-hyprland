@@ -6,7 +6,7 @@
 # export base="$(pwd)"
 
 function try { "$@" || sleep 0; }
-function v() {
+function v(){
   echo -e "####################################################"
   echo -e "${COLOR_BLUE}[$0]: Next command:${COLOR_RESET}"
   echo -e "${COLOR_GREEN}$@${COLOR_RESET}"
@@ -33,7 +33,7 @@ function v() {
   fi
 }
 # When use v() for a defined function, use x() INSIDE its definition to catch errors.
-function x() {
+function x(){
   if "$@";then cmdstatus=0;else cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
   while [ $cmdstatus == 1 ] ;do
     echo -e "${COLOR_RED}[$0]: Command \"${COLOR_GREEN}$@${COLOR_RED}\" has failed."
@@ -57,7 +57,7 @@ function x() {
     2) echo -e "${COLOR_RED}[$0]: Command \"${COLOR_GREEN}$@${COLOR_RED}\" has failed but ignored by user.${COLOR_RESET}";;
   esac
 }
-function showfun() {
+function showfun(){
   echo -e "${COLOR_BLUE}[$0]: The definition of function \"$1\" is as follows:${COLOR_RESET}"
   printf "${COLOR_GREEN}"
   type -a $1

@@ -8,7 +8,7 @@
 # cd "$(dirname "$0")"
 # export base="$(pwd)"
 
-install-agsv1 (){
+install-agsv1(){
   x mkdir -p $base/cache/agsv1
   x cd $base/cache/agsv1
   try git init -b main
@@ -23,7 +23,7 @@ install-agsv1 (){
   x cd $base
 }
 
-install-Rubik (){
+install-Rubik(){
   x mkdir -p $base/cache/Rubik
   x cd $base/cache/Rubik
   try git init -b main
@@ -38,7 +38,7 @@ install-Rubik (){
   x cd $base
 }
 
-install-Gabarito (){
+install-Gabarito(){
   x mkdir -p $base/cache/Gabarito
   x cd $base/cache/Gabarito
   try git init -b main
@@ -52,7 +52,7 @@ install-Gabarito (){
   x cd $base
 }
 
-install-OneUI (){
+install-OneUI(){
   x mkdir -p $base/cache/OneUI4-Icons
   x cd $base/cache/OneUI4-Icons
   try git init -b main
@@ -66,7 +66,7 @@ install-OneUI (){
   x cd $base
 }
 
-install-bibata (){
+install-bibata(){
   x mkdir -p $base/cache/bibata-cursor
   x cd $base/cache/bibata-cursor
   name="Bibata-Modern-Classic"
@@ -79,7 +79,7 @@ install-bibata (){
   x cd $base
 }
 
-install-MicroTeX (){
+install-MicroTeX(){
   x mkdir -p $base/cache/MicroTeX
   x cd $base/cache/MicroTeX
   try git init -b master
@@ -95,11 +95,11 @@ install-MicroTeX (){
   x cd $base
 }
 
-install-uv (){
+install-uv(){
   x bash <(curl -LJs "https://astral.sh/uv/install.sh")
 }
 
-install-python-packages (){
+install-python-packages(){
   UV_NO_MODIFY_PATH=1
   ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/quickshell/.venv
   x mkdir -p $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)

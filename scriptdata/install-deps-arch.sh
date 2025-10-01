@@ -1,7 +1,7 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-install-yay() {
+install-yay(){
   x sudo pacman -S --needed --noconfirm base-devel
   x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
   x cd /tmp/buildyay
@@ -12,7 +12,7 @@ install-yay() {
   rm -rf /tmp/buildyay
 }
 
-handle-deprecated-dependencies (){
+handle-deprecated-dependencies(){
   printf "${COLOR_CYAN}[$0]: Removing deprecated dependencies:${COLOR_RESET}\n"
   for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
