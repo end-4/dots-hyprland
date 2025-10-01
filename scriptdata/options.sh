@@ -13,7 +13,7 @@ If no option is specified, run default install process.
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
       --skip-alldeps        Skip the whole process installing dependency
-      --skip-allsetups      Skip the whole process setting up user groups/services etc
+      --skip-allsetups      Skip the whole process setting up permissions/services etc
       --skip-allfiles       Skip the whole process copying configuration files
   -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland

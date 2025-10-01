@@ -19,11 +19,11 @@ if [[ "${SKIP_ALLDEPS}" != true ]]; then
 fi
 #####################################################################################
 if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-  printf "${STY_CYAN}[$0]: 2. Setup for user groups/services etc\n${STY_RESET}"
+  printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RESET}"
   source ./scriptdata/install-setups.sh
 fi
 #####################################################################################
 if [[ "${SKIP_ALLFILES}" != true ]]; then
-  printf "${STY_CYAN}[$0]: 3. Copying + Configuring\n${STY_RESET}"
+  printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RESET}"
   source ./scriptdata/install-files.sh
 fi
