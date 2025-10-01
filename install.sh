@@ -15,13 +15,7 @@ source ./scriptdata/install-greeting.sh
 #####################################################################################
 if [[ "${SKIP_ALLDEPS}" != true ]]; then
   printf "${COLOR_CYAN}[$0]: 1. Install dependencies\n${COLOR_RESET}"
-  if [[ "${INSTALL_VIA_NIX}" == "true" ]]; then
-    source ./scriptdata/install-deps-nix.sh
-  elif [[ "${OS_DISTRO_ID}" == "arch" || "${OS_DISTRO_ID_LIKE}" == "arch" ]]; then
-    source ./scriptdata/install-deps-arch.sh
-  else
-    source ./scriptdata/install-deps-any.sh
-  fi
+  source ./scriptdata/install-deps.sh
 fi
 #####################################################################################
 if [[ "${SKIP_ALLSETUPS}" != true ]]; then

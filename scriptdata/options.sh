@@ -58,7 +58,7 @@ while true ; do
     -c|--clean) shift;;
     ## Ones without parameter
     -f|--force) ask=false;shift;;
-    --skip-alldeps) SKIP_PLASMAINTG=true;shift;;
+    --skip-alldeps) SKIP_ALLDEPS=true;shift;;
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
     --skip-allfiles) SKIP_ALLFILES=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;

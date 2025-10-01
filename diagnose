@@ -32,6 +32,17 @@ ii_exec() {
   "$@"
   err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
 }
+ii_check_distro_id() {
+  OS_RELEASE_FILE=/etc/os-release
+  if [[ -f "$OS_RELEASE_FILE" ]]; then
+    OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
+    OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
+    echo "distro ID: $OS_DISTRO_ID"
+    echo "distro ID_LIKE: $OS_DISTRO_ID_LIKE"
+  else
+    echo "$OS_RELEASE_FILE does not exist."
+  fi
+}
 ii_check_distro() {
   lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
 }
@@ -46,6 +57,7 @@ x git remote get-url origin
 x git rev-parse HEAD
 
 e "Checking distro"
+x ii_check_distro_id
 x ii_check_distro 
 
 e "Checking variables"
