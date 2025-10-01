@@ -95,7 +95,8 @@ else
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
   printf "./scriptdata/install-deps-${OS_DISTRO_ID}.sh not found.\n"
   printf "./scriptdata/install-deps-fallback.sh will be used.\n"
-  printf "It may disrupt your system and will likely fail without your manual intervention.\n"
+  printf "1. It may disrupt your system and will likely fail without your manual intervention.\n"
+  printf "2. It's WIP and only contains small number of dependencies far from enough.\n"
   printf "Proceed only at your own risk.\n"
   printf "${STY_RESET}"
   pause
