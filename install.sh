@@ -11,7 +11,7 @@ set -e
 
 #####################################################################################
 # 0. Before we start
-source ./scriptdata/install-greeting ;;
+source ./scriptdata/install-greeting
 #####################################################################################
 printf "${COLOR_CYAN}[$0]: 1. Install dependencies\n${COLOR_RESET}"
 # TODO: if `--via-nix` is specified, source `install-deps-nix` instead.
