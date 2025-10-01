@@ -48,13 +48,14 @@ elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
   printf "${COLOR_GREEN}"
   printf "===INFO===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
+  printf "./scriptdata/install-deps-arch.sh will be used.\n"
   printf "\n"
   printf "${COLOR_RESET}"
   source ./scriptdata/install-deps-arch.sh
 
 elif [[ -f "./scriptdata/install-deps-${OS_DISTRO_ID}.sh" ]]; then
 
-  printf "${COLOR_BLUE}"
+  printf "${COLOR_PURPLE}"
   printf "===NOTICE===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "./scriptdata/install-deps-${OS_DISTRO_ID}.sh detected and will be used.\n"
@@ -70,7 +71,8 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" ]]; then
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "This script supports Arch Linux, so it should also work for your distro ideally.\n"
+  printf "./scriptdata/install-deps-arch.sh will be used.\n"
+  printf "Ideally, it should also work for your distro.\n"
   printf "Still, there is a chance that it not works as expected or even fails.\n"
   printf "Use it only at your own risk.\n"
   printf "\n"
