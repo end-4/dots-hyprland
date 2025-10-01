@@ -82,7 +82,7 @@ Singleton {
     }
 
     onPercentageChanged: {
-        if (percentage >= Config.options.battery.full / 100 && !fullNotificationPlayed) {
+        if (percentage >= Config.options.battery.full / 100 && !fullNotificationPlayed && isCharging) {
             if (available && Config.options.audio.alertSound.battery) {
                 Audio.playSystemSound("complete")
             }
