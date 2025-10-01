@@ -17,6 +17,7 @@
 # 3. Sync (copy) `iiqs-hm` folder to `~/.config/iiqs-hm` using `rsync`.
 # 4. Use something like `home-manager switch --flake .#iiqs` to install the dependencies.
 # 5. Install screen lock using system package manager of the current distro.
+# Note that this script must be idempotent.
 #
 # TODO:
 # Write guide for people already use nix, so they can manually grab things from this repo to their own Nix/home-manager configurations to install the dependencies.
