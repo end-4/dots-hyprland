@@ -63,6 +63,9 @@ function showfun(){
   type -a $1
   printf "${STY_RESET}"
 }
+function pause(){
+  if [ ! "$ask" == "false" ];then printf "${STY_FAINT}${STY_SLANT}";read -p "(Ctrl-C to abort, others to proceed)" p;printf "${STY_RESET}";fi
+}
 function remove_bashcomments_emptylines(){
   mkdir -p $(dirname $2)
   cat $1 | sed -e '/^[[:blank:]]*#/d;s/#.*//' -e '/^[[:space:]]*$/d' > $2

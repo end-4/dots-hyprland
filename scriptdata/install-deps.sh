@@ -41,6 +41,7 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RESET}"
+  pause
   source ./scriptdata/install-deps-nix.sh
 
 elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
@@ -51,6 +52,7 @@ elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
   printf "./scriptdata/install-deps-arch.sh will be used.\n"
   printf "\n"
   printf "${STY_RESET}"
+  pause
   source ./scriptdata/install-deps-arch.sh
 
 elif [[ -f "./scriptdata/install-deps-${OS_DISTRO_ID}.sh" ]]; then
@@ -67,6 +69,7 @@ elif [[ -f "./scriptdata/install-deps-${OS_DISTRO_ID}.sh" ]]; then
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RESET}"
+  pause
   source ./scriptdata/install-deps-${OS_DISTRO_ID}.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" ]]; then
@@ -81,12 +84,13 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" ]]; then
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RESET}"
+  pause
   source ./scriptdata/install-deps-arch.sh
 
 else
 
   printf "${STY_RED}"
-  printf "===URGENT===\n"
+  printf "${STY_BOLD}===URGENT===${STY_RED}\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
   printf "./scriptdata/install-deps-${OS_DISTRO_ID}.sh not found.\n"
@@ -94,13 +98,7 @@ else
   printf "It may disrupt your system and will likely fail without your manual intervention.\n"
   printf "Proceed only at your own risk.\n"
   printf "${STY_RESET}"
-  printf "${STY_BG_RED}"
-  printf "To tell you the truth, it is completely not worky at this time. The prompt here is only for testing and WIP. PLEASE JUST QUIT IMMEDIATELY.${STY_RESET}\n"
-  read -p "Still continue? [y/N] ====> " p
-  case $p in
-    [yY]) sleep 0 ;;
-    *) exit 1 ;;
-  esac
+  pause
   source ./scriptdata/install-deps-fallback.sh
 
 fi
