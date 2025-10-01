@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./scriptdata/environment-variables
-source ./scriptdata/functions
+source ./scriptdata/environment-variables.sh
+source ./scriptdata/functions.sh
 prevent_sudo_or_root
 
 function v() {

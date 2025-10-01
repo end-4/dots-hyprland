@@ -5,9 +5,9 @@
 
 cd "$(dirname "$0")"
 export base="$(pwd)"
-source ./scriptdata/environment-variables
-source ./scriptdata/functions
-source ./scriptdata/installers
+source ./scriptdata/environment-variables.sh
+source ./scriptdata/functions.sh
+source ./scriptdata/installers.sh
 prevent_sudo_or_root
 
 if command -v pacman >/dev/null 2>&1;then printf "${COLOR_RED}[$0]: pacman found, it seems that the system is ArchLinux or Arch-based distro. Aborting...${COLOR_RESET}\n";exit 1;fi
