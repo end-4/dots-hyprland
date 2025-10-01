@@ -54,7 +54,7 @@ elif [[ -f "./scriptdata/install-setups-${OS_DISTRO_ID}.sh" ]]; then
   pause
   source ./scriptdata/install-setups-${OS_DISTRO_ID}.sh
 
-elif [[ "$OS_DISTRO_ID_LIKE" == "arch" ]]; then
+elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
 
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
