@@ -5,8 +5,8 @@ source ./scriptdata/functions.sh
 prevent_sudo_or_root
 
 function v() {
-  echo -e "[$0]: ${COLOR_GREEN}Now executing:${COLOR_RESET}"
-  echo -e "${COLOR_GREEN}$@${COLOR_RESET}"
+  echo -e "[$0]: ${STY_GREEN}Now executing:${STY_RESET}"
+  echo -e "${STY_GREEN}$@${STY_RESET}"
   "$@"
 }
 
@@ -21,7 +21,7 @@ set -e
 ##############################################################################################################################
 
 # Undo Step 3: Removing copied config and local folders
-printf "${COLOR_CYAN}Removing copied config and local folders...\n${COLOR_RESET}"
+printf "${STY_CYAN}Removing copied config and local folders...\n${STY_RESET}"
 
 for i in ags fish fontconfig foot fuzzel hypr mpv wlogout "starship.toml" rubyshot
   do v rm -rf "$XDG_CONFIG_HOME/$i"
@@ -43,7 +43,7 @@ v sudo rm -rf "$XDG_STATE_HOME/ags"
 ##############################################################################################################################
 
 # Undo Step 1: Remove added user from video, i2c, and input groups and remove yay packages
-printf "${COLOR_CYAN}Removing user from video, i2c, and input groups and removing packages...\n${COLOR_RESET}"
+printf "${STY_CYAN}Removing user from video, i2c, and input groups and removing packages...\n${STY_RESET}"
 user=$(whoami)
 v sudo gpasswd -d "$user" video
 v sudo gpasswd -d "$user" i2c
@@ -57,4 +57,4 @@ Ctrl+C to exit, or press Enter to proceed"
 # Removing installed yay packages and dependencies
 v yay -Rns illogical-impulse-{agsv1,audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,gnome,gtk,hyprland,microtex-git,oneui4-icons-git,portal,python,screencapture,widgets} plasma-browser-integration
 
-printf "${COLOR_CYAN}Uninstall Complete.\n${COLOR_RESET}"
+printf "${STY_CYAN}Uninstall Complete.\n${STY_RESET}"

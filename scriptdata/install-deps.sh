@@ -9,13 +9,13 @@ export MACHINE_ARCH=$(uname -m)
 case $MACHINE_ARCH in
   "x86_64") sleep 0;;
   *)
-     printf "${COLOR_YELLOW}"
+     printf "${STY_YELLOW}"
      printf "===WARNING===\n"
      printf "Detected machine architecture: ${MACHINE_ARCH}\n"
      printf "This script only supports x86_64.\n"
      printf "It is very likely to fail when installing dependencies on your machine.\n"
      printf "\n"
-     printf "${COLOR_RESET}"
+     printf "${STY_RESET}"
      ;;
  esac
 
@@ -34,64 +34,68 @@ export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolo
 
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
 
-  printf "${COLOR_YELLOW}"
+  printf "${STY_YELLOW}"
   printf "===WARNING===\n"
   printf "Nix will be used to install dependencies.\n"
   printf "The process is still WIP.\n"
-  printf "Only continue at your own risk.\n"
+  printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${COLOR_RESET}"
+  printf "${STY_RESET}"
   source ./scriptdata/install-deps-nix.sh
 
 elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
 
-  printf "${COLOR_GREEN}"
+  printf "${STY_GREEN}"
   printf "===INFO===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "./scriptdata/install-deps-arch.sh will be used.\n"
   printf "\n"
-  printf "${COLOR_RESET}"
+  printf "${STY_RESET}"
   source ./scriptdata/install-deps-arch.sh
 
 elif [[ -f "./scriptdata/install-deps-${OS_DISTRO_ID}.sh" ]]; then
 
-  printf "${COLOR_PURPLE}"
+  printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "./scriptdata/install-deps-${OS_DISTRO_ID}.sh detected and will be used.\n"
+  printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
-  printf "Use it only at your own risk.\n"
+  printf "${STY_BG_PURPLE}"
+  printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RESET}\n"
+  printf "${STY_PURPLE}"
+  printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${COLOR_RESET}"
+  printf "${STY_RESET}"
   source ./scriptdata/install-deps-${OS_DISTRO_ID}.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" ]]; then
 
-  printf "${COLOR_YELLOW}"
+  printf "${STY_YELLOW}"
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
   printf "./scriptdata/install-deps-arch.sh will be used.\n"
   printf "Ideally, it should also work for your distro.\n"
   printf "Still, there is a chance that it not works as expected or even fails.\n"
-  printf "Use it only at your own risk.\n"
+  printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${COLOR_RESET}"
+  printf "${STY_RESET}"
   source ./scriptdata/install-deps-arch.sh
 
 else
 
-  printf "${COLOR_RED}"
+  printf "${STY_RED}"
   printf "===URGENT===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "No suitable dependency installation script found.\n"
+  printf "./scriptdata/install-deps-${OS_DISTRO_ID}.sh not found.\n"
   printf "./scriptdata/install-deps-fallback.sh will be used.\n"
   printf "It may disrupt your system and will likely fail without your manual intervention.\n"
-  printf "Only continue at your own risk.\n"
-  printf "${COLOR_RESET}"
-  printf "${BG_COLOR_RED}"
-  printf "To tell you the truth, it is completely not worky at this time. The prompt here is only for testing and WIP. PLEASE JUST QUIT IMMEDIATELY.${COLOR_RESET}\n"
+  printf "Proceed only at your own risk.\n"
+  printf "${STY_RESET}"
+  printf "${STY_BG_RED}"
+  printf "To tell you the truth, it is completely not worky at this time. The prompt here is only for testing and WIP. PLEASE JUST QUIT IMMEDIATELY.${STY_RESET}\n"
   read -p "Still continue? [y/N] ====> " p
   case $p in
     [yY]) sleep 0 ;;

@@ -13,14 +13,14 @@ function backup_configs(){
 }
 
 function ask_backup_configs(){
-  printf "${COLOR_RED}"
+  printf "${STY_RED}"
   printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
   read -p " " backup_confirm
   case $backup_confirm in
     [yY][eE][sS]|[yY]) backup_configs ;;
     *) echo "Skipping backup..." ;;
   esac
-  printf "${COLOR_RESET}"
+  printf "${STY_RESET}"
 }
 
 #####################################################################################
@@ -65,40 +65,40 @@ case $SKIP_HYPRLAND in
     v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
-      echo -e "${COLOR_BLUE}[$0]: \"$t\" already exists.${COLOR_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
       v mv $t $t.old
       v cp -f .config/hypr/hyprland.conf $t
       existed_hypr_conf_firstrun=y
     else
-      echo -e "${COLOR_YELLOW}[$0]: \"$t\" does not exist yet.${COLOR_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
       v cp .config/hypr/hyprland.conf $t
       existed_hypr_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [ -f $t ];then
-      echo -e "${COLOR_BLUE}[$0]: \"$t\" already exists.${COLOR_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
       v cp -f .config/hypr/hypridle.conf $t.new
       existed_hypridle_conf=y
     else
-      echo -e "${COLOR_YELLOW}[$0]: \"$t\" does not exist yet.${COLOR_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
       v cp .config/hypr/hypridle.conf $t
       existed_hypridle_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
     if [ -f $t ];then
-      echo -e "${COLOR_BLUE}[$0]: \"$t\" already exists.${COLOR_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
       v cp -f .config/hypr/hyprlock.conf $t.new
       existed_hyprlock_conf=y
     else
-      echo -e "${COLOR_YELLOW}[$0]: \"$t\" does not exist yet.${COLOR_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
       v cp .config/hypr/hyprlock.conf $t
       existed_hyprlock_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/custom"
     if [ -d $t ];then
-      echo -e "${COLOR_BLUE}[$0]: \"$t\" already exists, will not do anything.${COLOR_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RESET}"
     else
-      echo -e "${COLOR_YELLOW}[$0]: \"$t\" does not exist yet.${COLOR_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
       v rsync -av --delete .config/hypr/custom/ $t/
     fi
     ;;
@@ -138,39 +138,39 @@ done
 printf "\n"
 printf "\n"
 printf "\n"
-printf "${COLOR_CYAN}[$0]: Finished${COLOR_RESET}\n"
+printf "${STY_CYAN}[$0]: Finished${STY_RESET}\n"
 printf "\n"
-printf "${COLOR_CYAN}When starting Hyprland from your display manager (login screen) ${COLOR_RED} DO NOT SELECT UWSM ${COLOR_RESET}\n"
+printf "${STY_CYAN}When starting Hyprland from your display manager (login screen) ${STY_RED} DO NOT SELECT UWSM ${STY_RESET}\n"
 printf "\n"
-printf "${COLOR_CYAN}If you are already running Hyprland,${COLOR_RESET}\n"
-printf "${COLOR_CYAN}Press ${BG_COLOR_CYAN} Ctrl+Super+T ${BG_COLOR_CYAN} to select a wallpaper${COLOR_RESET}\n"
-printf "${COLOR_CYAN}Press ${BG_COLOR_CYAN} Super+/ ${COLOR_CYAN} for a list of keybinds${COLOR_RESET}\n"
+printf "${STY_CYAN}If you are already running Hyprland,${STY_RESET}\n"
+printf "${STY_CYAN}Press ${STY_BG_CYAN} Ctrl+Super+T ${STY_BG_CYAN} to select a wallpaper${STY_RESET}\n"
+printf "${STY_CYAN}Press ${STY_BG_CYAN} Super+/ ${STY_CYAN} for a list of keybinds${STY_RESET}\n"
 printf "\n"
-printf "${COLOR_CYAN}For suggestions/hints after installation:${COLOR_RESET}\n"
-printf "${COLOR_CYAN}${STYLE_UNDERLINE} https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation ${COLOR_RESET}\n"
+printf "${STY_CYAN}For suggestions/hints after installation:${STY_RESET}\n"
+printf "${STY_CYAN}${STY_UNDERLINE} https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in
-  y) printf "\n${COLOR_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. ${COLOR_RESET}\n"
-     printf "${COLOR_YELLOW}As it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".${COLOR_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. ${STY_RESET}\n"
+     printf "${STY_YELLOW}As it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".${STY_RESET}\n"
 ;;esac
 case $existed_hypr_conf in
-  y) printf "\n${COLOR_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. ${COLOR_RESET}\n"
-     printf "${COLOR_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.${COLOR_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.${STY_RESET}\n"
 ;;esac
 case $existed_hypridle_conf in
-  y) printf "\n${COLOR_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. ${COLOR_RESET}\n"
-     printf "${COLOR_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hypridle.conf.new\" as a reference for a proper format.${COLOR_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hypridle.conf.new\" as a reference for a proper format.${STY_RESET}\n"
 ;;esac
 case $existed_hyprlock_conf in
-  y) printf "\n${COLOR_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprlock.conf\" already existed before and we didn't overwrite it. ${COLOR_RESET}\n"
-     printf "${COLOR_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprlock.conf.new\" as a reference for a proper format.${COLOR_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprlock.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprlock.conf.new\" as a reference for a proper format.${STY_RESET}\n"
 ;;esac
 
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
-  printf "\n${COLOR_RED}[$0]: \!! Important \!! : Please ensure environment variable ${COLOR_RESET} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${COLOR_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${COLOR_RESET}\n"
+  printf "\n${STY_RED}[$0]: \!! Important \!! : Please ensure environment variable ${STY_RESET} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${STY_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${STY_RESET}\n"
 fi
 
 if [[ ! -z "${warn_files[@]}" ]]; then
-  printf "\n${COLOR_RED}[$0]: \!! Important \!! : Please delete ${COLOR_RESET} ${warn_files[*]} ${COLOR_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${COLOR_RESET}\n"
+  printf "\n${STY_RED}[$0]: \!! Important \!! : Please delete ${STY_RESET} ${warn_files[*]} ${STY_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${STY_RESET}\n"
 fi

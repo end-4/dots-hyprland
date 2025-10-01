@@ -7,14 +7,19 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 BACKUP_DIR=${BACKUP_DIR:-$HOME/backup}
 
 
-COLOR_RED='\e[00m\e[31m'
-COLOR_GREEN='\e[00m\e[32m'
-COLOR_YELLOW='\e[00m\e[33m'
-COLOR_BLUE='\e[00m\e[34m'
-COLOR_PURPLE='\e[00m\e[35m'
-COLOR_CYAN='\e[00m\e[36m'
-COLOR_RESET='\e[00m'
+STY_RED='\e[00m\e[31m'
+STY_GREEN='\e[00m\e[32m'
+STY_YELLOW='\e[00m\e[33m'
+STY_BLUE='\e[00m\e[34m'
+STY_PURPLE='\e[00m\e[35m'
+STY_CYAN='\e[00m\e[36m'
 
-STYLE_UNDERLINE='\e[4m'
-BG_COLOR_CYAN='\e[30m\e[46m'
-BG_COLOR_RED='\e[30m\e[41m'
+STY_BG_RED='\e[30m\e[41m'
+STY_BG_GREEN='\e[30m\e[42m'
+STY_BG_YELLOW='\e[30m\e[43m'
+STY_BG_BLUE='\e[30m\e[44m'
+STY_BG_PURPLE='\e[30m\e[45m'
+STY_BG_CYAN='\e[30m\e[46m'
+
+STY_UNDERLINE='\e[4m'
+STY_RESET='\e[00m'

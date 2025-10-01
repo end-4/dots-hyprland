@@ -14,16 +14,16 @@ set -e
 source ./scriptdata/install-greeting.sh
 #####################################################################################
 if [[ "${SKIP_ALLDEPS}" != true ]]; then
-  printf "${COLOR_CYAN}[$0]: 1. Install dependencies\n${COLOR_RESET}"
+  printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RESET}"
   source ./scriptdata/install-deps.sh
 fi
 #####################################################################################
 if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-  printf "${COLOR_CYAN}[$0]: 2. Setup for user groups/services etc\n${COLOR_RESET}"
+  printf "${STY_CYAN}[$0]: 2. Setup for user groups/services etc\n${STY_RESET}"
   source ./scriptdata/install-setups.sh
 fi
 #####################################################################################
 if [[ "${SKIP_ALLFILES}" != true ]]; then
-  printf "${COLOR_CYAN}[$0]: 3. Copying + Configuring\n${COLOR_RESET}"
+  printf "${STY_CYAN}[$0]: 3. Copying + Configuring\n${STY_RESET}"
   source ./scriptdata/install-files.sh
 fi
