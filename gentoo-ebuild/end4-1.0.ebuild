@@ -35,22 +35,45 @@ RDEPEND="
 	dev-libs/libdbusmenu[gtk3]
 	media-sound/playerctl
 
-	app-misc/brightnessctl
 	app-misc/geoclue
+	app-misc/brightnessctl
 	app-misc/ddcutil
 
-	sys-apps/coreutils
 	net-misc/axel
 	sys-devel/bc
+	sys-apps/coreutils
 	app-misc/cliphist
-	net-misc/curl
 	dev-build/cmake
+	net-misc/curl
 	net-misc/rsync
 	net-misc/wget
 	sys-apps/ripgrep
 	dev-python/jq
 	dev-build/meson
 	x11-misc/xdg-user-dirs
+
+	kde-plasma/breeze
+	sys-apps/eza
+	app-shells/fish
+	media-libs/fontconfig
+	x11-terms/kitty
+	x11-misc/matugen
+	app-shells/starship
+	media-fonts/jetbrains-mono
+	media-fonts/twemoji
+
+	gui-apps/hypridle
+	gui-libs/hyprcursor
+	gui-wm/hyprland
+	gui-libs/hyprland-qtutils
+	gui-libs/hyprland-qt-support
+	dev-libs/hyprlang
+	gui-apps/hyprlock
+	gui-apps/hyprpicker
+	gui-apps/hyprsunset
+	gui-libs/hyprutils
+	dev-util/hyprwayland-scanner
+	gui-apps/wl-clipboard
 
 	kde-plasma/bluedevil
 	gnome-base/gnome-keyring
@@ -68,10 +91,7 @@ RDEPEND="
 	dev-python/clang
 	dev-python/uv
 	gui-libs/gtk
-	gui-libs/libadwaita
-	net-libs/libsoup
 	dev-libs/gobject-introspection
-	dev-lang/sassc
 	media-libs/opencv
 
 	gui-apps/hyprshot
@@ -104,16 +124,6 @@ RDEPEND="
 	gui-apps/quickshell
 	app-i18n/translate-shell
 	gui-apps/wlogout
-
-	kde-plasma/breeze
-	app-shells/fish
-	sys-apps/eza
-	media-libs/fontconfig
-	x11-terms/kitty
-	x11-misc/matugen
-	app-shells/starship
-	media-fonts/twemoji
-	media-fonts/jetbrains-mono
 "
 
 # Source directories
