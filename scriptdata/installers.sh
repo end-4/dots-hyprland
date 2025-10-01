@@ -1,29 +1,14 @@
-# This file is provided for non-Arch(based) distros.
-# As for Arch Linux, we use local PKGBUILDs or AUR packages, which is the "right" way compared to copying files directly into /usr/local/* .
-# P.S. install-yay() should be kept for Arch(based) distros.
-
-# This script depends on `functions' .
+# This script depends on `functions.sh' .
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
+
+# This file is provided for any distros, mainly non-Arch(based) distros.
 
 # The script that use this file should have two lines on its top as follows:
 # cd "$(dirname "$0")"
 # export base="$(pwd)"
 
-# Only for Arch(based) distro.
-install-yay() {
-  x sudo pacman -S --needed --noconfirm base-devel
-  x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
-  x cd /tmp/buildyay
-  x makepkg -o
-  x makepkg -se
-  x makepkg -i --noconfirm
-  x cd $base
-  rm -rf /tmp/buildyay
-}
-
-# Not for Arch(based) distro.
-install-agsv1 (){
+install-agsv1(){
   x mkdir -p $base/cache/agsv1
   x cd $base/cache/agsv1
   try git init -b main
@@ -38,8 +23,7 @@ install-agsv1 (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-Rubik (){
+install-Rubik(){
   x mkdir -p $base/cache/Rubik
   x cd $base/cache/Rubik
   try git init -b main
@@ -54,8 +38,7 @@ install-Rubik (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-Gabarito (){
+install-Gabarito(){
   x mkdir -p $base/cache/Gabarito
   x cd $base/cache/Gabarito
   try git init -b main
@@ -69,8 +52,7 @@ install-Gabarito (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-OneUI (){
+install-OneUI(){
   x mkdir -p $base/cache/OneUI4-Icons
   x cd $base/cache/OneUI4-Icons
   try git init -b main
@@ -84,8 +66,7 @@ install-OneUI (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-bibata (){
+install-bibata(){
   x mkdir -p $base/cache/bibata-cursor
   x cd $base/cache/bibata-cursor
   name="Bibata-Modern-Classic"
@@ -98,8 +79,7 @@ install-bibata (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-MicroTeX (){
+install-MicroTeX(){
   x mkdir -p $base/cache/MicroTeX
   x cd $base/cache/MicroTeX
   try git init -b master
@@ -115,13 +95,11 @@ install-MicroTeX (){
   x cd $base
 }
 
-# Not for Arch(based) distro.
-install-uv (){
+install-uv(){
   x bash <(curl -LJs "https://astral.sh/uv/install.sh")
 }
 
-# Both for Arch(based) and other distros.
-install-python-packages (){
+install-python-packages(){
   UV_NO_MODIFY_PATH=1
   ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/quickshell/.venv
   x mkdir -p $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)
@@ -130,22 +108,4 @@ install-python-packages (){
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   x uv pip install -r scriptdata/requirements.txt
   x deactivate # We don't need the virtual environment anymore
-}
-
-# Only for Arch(based) distro.
-handle-deprecated-dependencies (){
-  printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
-  for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
-# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-	pacman -Qeq > ./cache/pacman_explicit_packages
-	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-
-	echo "Attempting to set previously explicitly installed deps as implicit..."
-	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && yay -D --asdeps "$i"
-	done; done
-
-	return 0
 }
