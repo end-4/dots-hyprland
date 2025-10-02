@@ -272,22 +272,6 @@ MouseArea {
         }
 
         ToolbarButton {
-            id: rebootButton
-            implicitWidth: height
-
-            onClicked: Session.reboot()
-
-            contentItem: MaterialSymbol {
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                iconSize: 24
-                text: "restart_alt"
-                color: Appearance.colors.colOnSurfaceVariant
-            }
-        }
-
-        ToolbarButton {
             id: powerButton
             implicitWidth: height
 
@@ -299,6 +283,22 @@ MouseArea {
                 verticalAlignment: Text.AlignVCenter
                 iconSize: 24
                 text: "power_settings_new"
+                color: Appearance.colors.colOnSurfaceVariant
+            }
+        }
+
+        ToolbarButton {
+            id: rebootButton
+            implicitWidth: height
+
+            onClicked: Session.reboot()
+
+            contentItem: MaterialSymbol {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                iconSize: 24
+                text: "restart_alt"
                 color: Appearance.colors.colOnSurfaceVariant
             }
         }
