@@ -82,10 +82,11 @@ function git_unshallow(){
     git fetch --unshallow
   fi
 }
-function latest_commit_hash(){
+function latest_commit_timestamp(){
   local target_path="$1"
   if [[ ! -e "$target_path" ]]; then
-    echo "[latest_commit_hash] '$target_path' does not exist. Aborting...";exit 1
+    echo "[latest_commit_timestamp] '$target_path' does not exist. Aborting..."
+    return 1
   fi
-  echo $(git log -1 --format="%H" -- "$target_path" 2>/dev/null)
+  echo $(git log -1 --format="%ct" -- "$target_path" 2>/dev/null)
 }
