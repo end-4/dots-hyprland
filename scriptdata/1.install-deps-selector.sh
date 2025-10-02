@@ -2,6 +2,24 @@
 # It's not for directly running.
 
 ####################
+# Detect architecture
+# Helpful link(s):
+# http://stackoverflow.com/questions/45125516
+export MACHINE_ARCH=$(uname -m)
+case $MACHINE_ARCH in
+  "x86_64") sleep 0;;
+  *)
+     printf "${STY_YELLOW}"
+     printf "===WARNING===\n"
+     printf "Detected machine architecture: ${MACHINE_ARCH}\n"
+     printf "This script only supports x86_64.\n"
+     printf "It is very likely to fail when installing dependencies on your machine.\n"
+     printf "\n"
+     printf "${STY_RESET}"
+     ;;
+ esac
+
+####################
 # Detect distro
 # Helpful link(s):
 # http://stackoverflow.com/questions/29581754
@@ -16,33 +34,36 @@ export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolo
 
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
 
+  TARGET_ID=nix
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
-  printf "Nix will be used to do setups.\n"
+  printf "Nix will be used to install dependencies.\n"
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RESET}"
   pause
-  source ./scriptdata/install-setups-nix.sh
+  source ./dist-${TARGET_ID}/install-deps.sh
 
-elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
+elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
 
+  TARGET_ID=arch
   printf "${STY_GREEN}"
   printf "===INFO===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./scriptdata/install-setups-arch.sh will be used.\n"
+  printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "\n"
   printf "${STY_RESET}"
   pause
-  source ./scriptdata/install-setups-arch.sh
+  source ./dist-${TARGET_ID}/install-deps.sh
 
-elif [[ -f "./scriptdata/install-setups-${OS_DISTRO_ID}.sh" ]]; then
+elif [[ -f "./dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
 
+  TARGET_ID=${OS_DISTRO_ID}
   printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./scriptdata/install-setups-${OS_DISTRO_ID}.sh detected and will be used.\n"
+  printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
   printf "${STY_BG_PURPLE}"
@@ -52,36 +73,38 @@ elif [[ -f "./scriptdata/install-setups-${OS_DISTRO_ID}.sh" ]]; then
   printf "\n"
   printf "${STY_RESET}"
   pause
-  source ./scriptdata/install-setups-${OS_DISTRO_ID}.sh
+  source ./dist-${TARGET_ID}/install-deps.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
 
+  TARGET_ID=arch
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./scriptdata/install-setups-arch.sh will be used.\n"
+  printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "Ideally, it should also work for your distro.\n"
   printf "Still, there is a chance that it not works as expected or even fails.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RESET}"
   pause
-  source ./scriptdata/install-setups-arch.sh
+  source ./dist-${TARGET_ID}/install-deps.sh
 
 else
 
+  TARGET_ID=fallback
   printf "${STY_RED}"
-  printf "===WARNING===\n"
+  printf "${STY_BOLD}===URGENT===${STY_RED}\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./scriptdata/install-setups-${OS_DISTRO_ID}.sh not found.\n"
-  printf "./scriptdata/install-setups-fallback.sh will be used.\n"
-  printf "It might fail or disrupt your system.\n"
+  printf "./dist-${OS_DISTRO_ID}/install-deps.sh not found.\n"
+  printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "1. It may disrupt your system and will likely fail without your manual intervention.\n"
+  printf "2. It's WIP and only contains small number of dependencies far from enough.\n"
   printf "Proceed only at your own risk.\n"
-  printf "\n"
   printf "${STY_RESET}"
   pause
-  source ./scriptdata/install-setups-fallback.sh
+  source ./dist-${TARGET_ID}/install-deps.sh
 
 fi
