@@ -3,6 +3,7 @@
 
 # This file is currently WIP.
 #
+# NOTE: The dist-nix is not for NixOS but every distro, using Nix and home-manager.
 #
 # TODO:
 # Write a proper `flake.nix` and optionally `home.nix` and other files under ./dist-nix/iiqs-hm/ to install all dependencies that `./dist-arch/install-deps.sh` does. (**excluding** the screenlock)
