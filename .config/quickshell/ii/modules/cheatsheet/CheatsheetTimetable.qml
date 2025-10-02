@@ -3,6 +3,7 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import QtQuick.Controls.Material
 
 Item {
@@ -25,11 +26,38 @@ Item {
     property real maxHeight: 700
     property real headerHeight: 64 // Material 3 standard header height
     property real currentTimeY: -1
+    property bool initialScrollApplied: false
     readonly property real dayColumnWidth: Math.min(180, (maxContentWidth - timeColumnWidth - (days.length + 1) * spacing) / days.length)
+    readonly property int currentDayIndex: DateTime.clock.date.getDay()
 
     implicitWidth: Math.min(maxContentWidth, timeColumnWidth + (dayColumnWidth * days.length) + ((days.length + 1) * spacing))
     implicitHeight: Math.min(headerHeight + contentHeight, maxHeight)
     property var days: CalendarService.eventsInWeek
+    readonly property int allDayChipHeight: 36
+    readonly property int allDayChipSpacing: 6
+    readonly property int maxAllDayEventCount: {
+        if (!root.days || root.days.length === 0)
+            return 0;
+
+        var maxCount = 0;
+        for (var i = 0; i < root.days.length; i++) {
+            var day = root.days[i];
+            if (!day || !day.events)
+                continue;
+
+            var count = 0;
+            for (var j = 0; j < day.events.length; j++) {
+                if (root.isAllDayEvent(day.events[j]))
+                    count++;
+            }
+            if (count > maxCount)
+                maxCount = count;
+        }
+        return maxCount;
+    }
+    readonly property bool hasAllDayEvents: maxAllDayEventCount > 0
+    readonly property color todayHighlightFill: withOpacity(Appearance.colors.colPrimary, 0.12)
+    readonly property color todayHighlightBorder: withOpacity(Appearance.colors.colPrimary, 0.28)
 
     function updateCurrentTimeLine() {
         let time = DateTime.clock.date;
@@ -59,6 +87,138 @@ Item {
         return luminance < 0.5 ? "#FFFFFF" : "#000000";
     }
 
+    function withOpacity(colorValue, alpha) {
+        if (!colorValue)
+            return Qt.rgba(0, 0, 0, alpha);
+
+        let color = Qt.color(colorValue);
+        return Qt.rgba(color.r, color.g, color.b, alpha);
+    }
+
+    function isAllDayEvent(event) {
+        if (!event)
+            return false;
+
+        let start = event.start || "";
+        let end = event.end || "";
+
+        return (start === "00:00" && end === "23:59") ||
+               (start === "00:00" && end === "00:00") ||
+               (!event.start && !event.end);
+    }
+
+    function getAllDayEvents(events) {
+        if (!events || !events.length)
+            return [];
+
+        return events.filter(function(evt) { return root.isAllDayEvent(evt); });
+    }
+
+    function getTimedEvents(events) {
+        if (!events || !events.length)
+            return [];
+
+        return events.filter(function(evt) { return !root.isAllDayEvent(evt); });
+    }
+
+    function formatEventTooltip(event) {
+        if (!event)
+            return "";
+
+        let title = event.title || qsTr("Event");
+        if (root.isAllDayEvent(event))
+            return title + "\n" + qsTr("All day");
+
+        let startTotal = root.parseTimeToMinutes(event.start);
+        let endTotal = root.parseTimeToMinutes(event.end);
+
+        let formatTime = (totalMinutes) => {
+            if (totalMinutes === null)
+                return "";
+            let hour = Math.floor(totalMinutes / 60);
+            let minute = totalMinutes % 60;
+            let date = new Date();
+            date.setHours(hour, minute, 0, 0);
+            return Qt.formatTime(date, Config.options?.time.format ?? "hh:mm");
+        };
+
+        let startStr = formatTime(startTotal) || event.start || "";
+        let endStr = formatTime(endTotal) || event.end || "";
+        let range = startStr && endStr ? startStr + " - " + endStr : startStr || endStr;
+        return range ? title + "\n" + range : title;
+    }
+
+    function parseTimeToMinutes(timeStr) {
+        if (!timeStr)
+            return null;
+        let parts = timeStr.split(":");
+        if (parts.length < 2)
+            return null;
+        let hour = parseInt(parts[0]);
+        let minute = parseInt(parts[1]);
+        if (isNaN(hour) || isNaN(minute))
+            return null;
+        return hour * 60 + minute;
+    }
+
+    function earliestEventStartMinutes() {
+        if (!root.days || root.days.length === 0)
+            return -1;
+
+        var earliest = -1;
+        for (var i = 0; i < root.days.length; i++) {
+            var timed = root.getTimedEvents(root.days[i]?.events);
+            for (var j = 0; j < timed.length; j++) {
+                var start = root.parseTimeToMinutes(timed[j].start);
+                if (start === null)
+                    continue;
+                if (earliest === -1 || start < earliest)
+                    earliest = start;
+            }
+        }
+        return earliest;
+    }
+
+    function scrollToFirstEvent() {
+        if (!styledFlickable)
+            return;
+
+        let earliest = root.earliestEventStartMinutes();
+        let minOfDay = earliest;
+
+        if (minOfDay === -1 || minOfDay <= (root.startHour * 60 + root.startMinute)) {
+            styledFlickable.contentY = 0;
+            return;
+        }
+
+        let diff = minOfDay - (root.startHour * 60 + root.startMinute);
+        if (diff < 0)
+            diff = 0;
+
+        let targetY = diff * root.pixelsPerMinute - root.slotHeight;
+        targetY = Math.max(0, targetY);
+
+        let maxScroll = Math.max(0, styledFlickable.contentHeight - styledFlickable.height);
+        if (styledFlickable.height <= 0) {
+            Qt.callLater(root.scrollToFirstEvent);
+            return;
+        }
+        styledFlickable.contentY = Math.min(targetY, maxScroll);
+    }
+
+    function maybeApplyInitialScroll() {
+        if (root.initialScrollApplied)
+            return;
+
+        if (!styledFlickable || styledFlickable.height <= 0 || !root.days || root.days.length === 0) {
+            Qt.callLater(root.maybeApplyInitialScroll);
+            return;
+        }
+
+        root.scrollToFirstEvent();
+        root.initialScrollApplied = true;
+    }
+
     Connections {
         target: DateTime.clock
         function onDateChanged() {
@@ -66,8 +226,16 @@ Item {
         }
     }
 
+    Connections {
+        target: CalendarService
+        function onEventsInWeekChanged() {
+            Qt.callLater(root.maybeApplyInitialScroll);
+        }
+    }
+
     Component.onCompleted: {
         root.updateCurrentTimeLine();
+        Qt.callLater(root.maybeApplyInitialScroll);
     }
 
     // Material 3 surface container
@@ -123,15 +291,84 @@ Item {
                         width: parent.width - 4
                         height: 40
                         radius: Appearance.rounding.large
-                        color: Appearance.colors.colPrimaryContainer
+                        color: Appearance.colors.colSurfaceContainerHigh
 
                         StyledText {
                             id: dayTitle
                             anchors.centerIn: parent
                             font.weight: Font.Medium
-                            color: Appearance.colors.colOnPrimaryContainer
+                            color: Appearance.colors.colOnSurfaceVariant
                             text: modelData.name
                             elide: Text.ElideRight
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: allDayContainer
+            Layout.fillWidth: true
+            Layout.preferredHeight: implicitHeight
+            Layout.topMargin: root.hasAllDayEvents ? root.spacing : 0
+            visible: root.hasAllDayEvents
+            implicitHeight: root.hasAllDayEvents ? Math.max(0, (root.maxAllDayEventCount * root.allDayChipHeight) + (Math.max(0, root.maxAllDayEventCount - 1) * root.allDayChipSpacing)) : 0
+
+            Row {
+                id: allDayRow
+                anchors.fill: parent
+                spacing: root.spacing
+
+                Item {
+                    width: root.timeColumnWidth
+                    height: parent.height
+                }
+
+                Repeater {
+                    model: root.days
+                    delegate: Item {
+                        width: root.dayColumnWidth
+                        height: parent.height
+                        property var allDayEvents: root.getAllDayEvents(modelData.events)
+
+                        Column {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: parent.width - 4
+                            spacing: root.allDayChipSpacing
+
+                            Repeater {
+                                model: allDayEvents
+                                delegate: Rectangle {
+                                    width: parent.width
+                                    height: root.allDayChipHeight
+                                    radius: Appearance.rounding.large
+                                    color: modelData.color || Appearance.colors.colSecondaryContainer
+                                    border.width: 1
+                                    border.color: Appearance.colors.colOutlineVariant
+                                    clip: true
+
+                                    HoverHandler {
+                                        id: allDayHover
+                                    }
+
+                                    ToolTip {
+                                        visible: allDayHover.hovered
+                                        delay: 250
+                                        timeout: 0
+                                        text: root.formatEventTooltip(modelData)
+                                    }
+
+                                    StyledText {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
+                                        verticalAlignment: Text.AlignVCenter
+                                        text: modelData.title || qsTr("All day event")
+                                        color: getContrastingTextColor(modelData.color)
+                                        elide: Text.ElideRight
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -205,13 +442,25 @@ Item {
                             width: root.dayColumnWidth
                             height: parent.height
                             clip: true
+                            property bool isToday: index === root.currentDayIndex
+                            property var timedEvents: root.getTimedEvents(modelData.events)
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: Appearance.rounding.large
+                                color: isToday ? root.todayHighlightFill : Qt.rgba(0, 0, 0, 0)
+                                border.width: isToday ? 1 : 0
+                                border.color: isToday ? root.todayHighlightBorder : Qt.rgba(0, 0, 0, 0)
+                                z: -1
+                            }
 
                             Repeater {
-                                model: modelData.events
+                                model: timedEvents
                                 Rectangle {
                                     width: parent.width - 10
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     radius: Appearance.rounding.large
+                                    clip: true
                                     y: {
                                         let startHr = parseInt(modelData.start.split(":")[0]);
                                         let startMin = parseInt(modelData.start.split(":")[1]);
@@ -230,6 +479,17 @@ Item {
                                     }
 
                                     color: modelData.color || Appearance.colors.colTertiaryContainer
+
+                                    HoverHandler {
+                                        id: eventHover
+                                    }
+
+                                    ToolTip {
+                                        visible: eventHover.hovered
+                                        delay: 200
+                                        timeout: 0
+                                        text: root.formatEventTooltip(modelData)
+                                    }
 
                                     Column {
                                         anchors.fill: parent
@@ -254,17 +514,22 @@ Item {
                                             font.weight: Font.Medium
                                             color: getContrastingTextColor(modelData.color)
                                             width: parent.width
-                                            wrapMode: Text.WordWrap
+                                            wrapMode: Text.NoWrap
+                                            elide: Text.ElideRight
                                             lineHeight: 1.2
                                         }
 
                                         Text {
+                                            id: eventTitle
                                             text: modelData.title
                                             font.weight: Font.Medium
                                             wrapMode: Text.WordWrap
+                                            elide: Text.ElideRight
+                                            maximumLineCount: 2
                                             width: parent.width
                                             color: getContrastingTextColor(modelData.color)
                                             lineHeight: 1.1
+                                            visible: !truncated
                                         }
                                     }
                                 }
@@ -306,3 +571,4 @@ Item {
         }
     }
 }
+
