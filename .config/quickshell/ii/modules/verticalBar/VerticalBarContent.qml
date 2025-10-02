@@ -271,6 +271,7 @@ Item { // Bar content region
                         vertical: true
                         Layout.alignment: Qt.AlignHCenter
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing
+                        color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing
