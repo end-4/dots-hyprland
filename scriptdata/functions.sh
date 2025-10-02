@@ -75,3 +75,17 @@ function prevent_sudo_or_root(){
     root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RESET}";exit 1;;
   esac
 }
+function git_unshallow(){
+# We need this function for latest_commit_hash to work properly
+  if [[ -f "$(git rev-parse --git-dir)/shallow" ]]; then
+    echo "Shallow clone detected. Unshallowing..."
+    git fetch --unshallow
+  fi
+}
+function latest_commit_hash(){
+  local target_path="$1"
+  if [[ ! -e "$target_path" ]]; then
+    echo "[latest_commit_hash] '$target_path' does not exist. Aborting...";exit 1
+  fi
+  echo $(git log -1 --format="%H" -- "$target_path" 2>/dev/null)
+}
