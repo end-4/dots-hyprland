@@ -52,7 +52,7 @@ v sudo rm /etc/modules-load.d/i2c-dev.conf
 
 ##############################################################################################################################
 read -p "Do you want to uninstall the illogical-impulse-* meta packages (Arch Linux only)?
-Ctrl+C to exit, or press Enter to proceed"
+Ctrl+C to exit, or press Enter to proceed" p
 
 # Removing installed yay packages and dependencies
 v yay -Rns illogical-impulse-{agsv1,audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,gnome,gtk,hyprland,microtex-git,oneui4-icons-git,portal,python,screencapture,widgets} plasma-browser-integration

@@ -10,7 +10,7 @@ function v(){
   echo -e "####################################################"
   echo -e "${STY_BLUE}[$0]: Next command:${STY_RESET}"
   echo -e "${STY_GREEN}$@${STY_RESET}"
-  execute=true
+  local execute=true
   if $ask;then
     while true;do
       echo -e "${STY_BLUE}Execute? ${STY_RESET}"
@@ -18,7 +18,7 @@ function v(){
       echo "  e = Exit now"
       echo "  s = Skip this command (NOT recommended - your setup might not work correctly)"
       echo "  yesforall = Yes and don't ask again; NOT recommended unless you really sure"
-      read -p "====> " p
+      local p; read -p "====> " p
       case $p in
         [yY]) echo -e "${STY_BLUE}OK, executing...${STY_RESET}" ;break ;;
         [eE]) echo -e "${STY_BLUE}Exiting...${STY_RESET}" ;exit ;break ;;
@@ -34,7 +34,7 @@ function v(){
 }
 # When use v() for a defined function, use x() INSIDE its definition to catch errors.
 function x(){
-  if "$@";then cmdstatus=0;else cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
+  if "$@";then local cmdstatus=0;else local cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
   while [ $cmdstatus == 1 ] ;do
     echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed."
     echo -e "You may need to resolve the problem manually BEFORE repeating this command."
@@ -42,7 +42,7 @@ function x(){
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
     echo "  i = Ignore this error and continue (your setup might not work correctly)"
-    read -p " [R/e/i]: " p
+    local p; read -p " [R/e/i]: " p
     case $p in
       [iI]) echo -e "${STY_BLUE}Alright, ignore and continue...${STY_RESET}";cmdstatus=2;;
       [eE]) echo -e "${STY_BLUE}Alright, will exit.${STY_RESET}";break;;
@@ -64,7 +64,11 @@ function showfun(){
   printf "${STY_RESET}"
 }
 function pause(){
-  if [ ! "$ask" == "false" ];then printf "${STY_FAINT}${STY_SLANT}";read -p "(Ctrl-C to abort, others to proceed)" p;printf "${STY_RESET}";fi
+  if [ ! "$ask" == "false" ];then
+    printf "${STY_FAINT}${STY_SLANT}"
+    local p; read -p "(Ctrl-C to abort, others to proceed)" p
+    printf "${STY_RESET}"
+  fi
 }
 function remove_bashcomments_emptylines(){
   mkdir -p $(dirname $2)
@@ -75,7 +79,7 @@ function prevent_sudo_or_root(){
     root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RESET}";exit 1;;
   esac
 }
-function git_unshallow(){
+function git_auto_unshallow(){
 # We need this function for latest_commit_hash to work properly
   if [[ -f "$(git rev-parse --git-dir)/shallow" ]]; then
     echo "Shallow clone detected. Unshallowing..."
@@ -84,9 +88,10 @@ function git_unshallow(){
 }
 function latest_commit_timestamp(){
   local target_path="$1"
-  if [[ ! -e "$target_path" ]]; then
-    echo "[latest_commit_timestamp] '$target_path' does not exist. Aborting..."
+  local result=$(git log -1 --format="%ct" -- "$target_path" 2>/dev/null)
+  if [[ -z "$result" ]]; then
+    echo "[latest_commit_timestamp] The timestamp of \"$target_path\" is empty. Aborting..." >&2
     return 1
   fi
-  echo $(git log -1 --format="%ct" -- "$target_path" 2>/dev/null)
+  echo $result
 }
