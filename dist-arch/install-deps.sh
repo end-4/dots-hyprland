@@ -12,6 +12,8 @@ install-yay(){
   rm -rf /tmp/buildyay
 }
 
+# NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
+# However, let's just keep it as references for other distros writing their `dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 handle-deprecated-dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RESET}\n"
   for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
