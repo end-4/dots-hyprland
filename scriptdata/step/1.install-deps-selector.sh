@@ -62,7 +62,7 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   TARGET_ID=nix
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
-  printf "Nix will be used to install dependencies.\n"
+  printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"

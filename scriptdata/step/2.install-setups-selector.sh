@@ -16,10 +16,10 @@ export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolo
 
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
 
-  TARGET_ID=nix
+  TARGET_ID=fallback
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
-  printf "Nix will be used to do setups.\n"
+  printf "./dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
