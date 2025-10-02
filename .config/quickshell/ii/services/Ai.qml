@@ -357,6 +357,30 @@ Singleton {
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
+    //Fetch API keys if needed
+    //Timer to beat race-condition for lock/launchOnStartup
+    Timer {
+        id: initTimer
+        interval: 2000 // Wait 2000ms for system to initialize
+        running: true
+        repeat: false
+        onTriggered: {
+            if (!GlobalStates.screenLocked) {
+                KeyringStorage.fetchKeyringData();
+            }
+        }
+    }
+
+    // Unlock keyring when lockscreen is unlocked
+    Connections {
+        target: GlobalStates
+        function onScreenLockedChanged() {
+            if (!GlobalStates.screenLocked) {
+                KeyringStorage.fetchKeyringData();
+            }
+        }
+    }
+
     Connections {
         target: Config
         function onReadyChanged() {
@@ -533,8 +557,6 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
-            // Fetch API keys if needed
-            if (model?.requires_key) KeyringStorage.fetchKeyringData();
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(
