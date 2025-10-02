@@ -813,12 +813,6 @@ fi
 # Step 4: Update script permissions
 log_header "Updating Script Permissions"
 
-if [[ -d "${REPO_DIR}/scriptdata" ]]; then
-  find "${REPO_DIR}/scriptdata" -type f -name "*.sh" -exec chmod +x {} \;
-  find "${REPO_DIR}/scriptdata" -type f -executable -exec chmod +x {} \;
-  log_success "Updated script permissions"
-fi
-
 # Make sure local bin scripts are executable
 if [[ -d "${HOME}/.local/bin" ]]; then
   find "${HOME}/.local/bin" -type f -exec chmod +x {} \; 2>/dev/null || true

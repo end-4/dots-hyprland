@@ -12,21 +12,23 @@ install-yay(){
   rm -rf /tmp/buildyay
 }
 
+# NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
+# However, let's just keep it as references for other distros writing their `dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 handle-deprecated-dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RESET}\n"
   for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-	pacman -Qeq > ./cache/pacman_explicit_packages
-	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
+  remove_bashcomments_emptylines ./dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
+  readarray -t old_deps_list < ./cache/old_deps_stripped.conf
+  pacman -Qeq > ./cache/pacman_explicit_packages
+  readarray -t explicitly_installed < ./cache/pacman_explicit_packages
 
-	echo "Attempting to set previously explicitly installed deps as implicit..."
-	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && yay -D --asdeps "$i"
-	done; done
+  echo "Attempting to set previously explicitly installed deps as implicit..."
+  for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
+    [ "$i" = "$j" ] && yay -D --asdeps "$i"
+  done; done
 
-	return 0
+  return 0
 }
 
 #####################################################################################
@@ -55,16 +57,16 @@ v handle-deprecated-dependencies
 # https://github.com/end-4/dots-hyprland/issues/581
 # yay -Bi is kinda hit or miss, instead cd into the relevant directory and manually source and install deps
 install-local-pkgbuild() {
-	local location=$1
-	local installflags=$2
+  local location=$1
+  local installflags=$2
 
-	x pushd $location
+  x pushd $location
 
-	source ./PKGBUILD
-	x yay -S $installflags --asdeps "${depends[@]}"
-	x makepkg -Asi --noconfirm
+  source ./PKGBUILD
+  x yay -S $installflags --asdeps "${depends[@]}"
+  x makepkg -Asi --noconfirm
 
-	x popd
+  x popd
 }
 
 # Install core dependencies from the meta-packages
@@ -76,9 +78,9 @@ metapkgs+=(./dist-arch/illogical-impulse-microtex-git)
   metapkgs+=(./dist-arch/illogical-impulse-bibata-modern-classic-bin)
 
 for i in "${metapkgs[@]}"; do
-	metainstallflags="--needed"
-	$ask && showfun install-local-pkgbuild || metainstallflags="$metainstallflags --noconfirm"
-	v install-local-pkgbuild "$i" "$metainstallflags"
+  metainstallflags="--needed"
+  $ask && showfun install-local-pkgbuild || metainstallflags="$metainstallflags --noconfirm"
+  v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
 ## Optional dependencies
