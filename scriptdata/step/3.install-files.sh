@@ -33,6 +33,12 @@ case $ask in
   *) ask_backup_configs ;;
 esac
 
+# TODO: A better method for users to choose their customization,
+# for example some users may prefer ZSH over FISH, and foot over kitty.
+# But the dot files are using FISH and kitty as the default software, e.g. `.local/share/Konsole` has `Command=/bin/fish`.
+# It may be possible that we provide options for users to make their decision.
+
+
 # `--delete' for rsync to make sure that
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
