@@ -64,7 +64,7 @@ kde-plasma/systemsettings -handbook
 ################### PORTAL ################### 
 sys-apps/xdg-desktop-portal seccomp
 #sys-plasma/xdg-desktop-portal-kde (nothing needed)
-sys-apps/xdg--desktop-portal-gtk X wayland
+sys-apps/xdg-desktop-portal-gtk X wayland
 #gui-libs/xdg-desktop-portal-hyprland (elogiind maybe)
 
 ################### PYTHON ################### 
@@ -111,4 +111,3 @@ dev-libs/glib dbus elf introspection mime xattr
 gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-grab hyprland-global-shortcuts jemalloc layer-shell mpris pam pipewire screencopy session-lock sockets toplevel-management tray wayland
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
-
