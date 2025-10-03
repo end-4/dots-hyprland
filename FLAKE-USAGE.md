@@ -4,7 +4,44 @@ This flake provides a comprehensive Home Manager configuration for the Illogical
 
 ## Quick Start
 
-### Using the Flake in Your Configuration
+### 1. Copy the Template
+
+The easiest way to get started is to copy the template flake:
+
+```bash
+# Create a new directory for your configuration
+mkdir -p ~/.config/home-manager
+cd ~/.config/home-manager
+
+# Copy the template
+curl -o flake.nix https://raw.githubusercontent.com/Version33/dots-hyprland/main/flake-template.nix
+
+# Edit the template with your username and preferences
+nano flake.nix
+```
+
+Or copy the [`flake-template.nix`](./flake-template.nix) file from this repository and rename it to `flake.nix`.
+
+### 2. Customize the Configuration
+
+Edit the `flake.nix` file and:
+- Replace `"yourusername"` with your actual username
+- Set your `homeDirectory` path
+- Enable/disable components based on your needs
+- Configure your monitors if using multiple displays
+- Add any additional packages you want
+
+### 3. Build and Apply
+
+```bash
+# First time setup - this will generate flake.lock
+home-manager switch --flake .#yourusername
+
+# Future updates
+home-manager switch --flake .#yourusername
+```
+
+## Using the Flake in Your Configuration
 
 Add this flake as an input to your own `flake.nix`:
 
