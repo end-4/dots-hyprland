@@ -27,7 +27,7 @@ Item {
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
     property color colHourHand: Appearance.colors.colPrimary
-    property color colMinuteHand: Appearance.colors.colSecondary
+    property color colMinuteHand: Appearance.colors.colSecondaryActive
     property color colOnHourHand: Appearance.colors.colOnPrimary
 
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
@@ -58,7 +58,6 @@ Item {
 
         // 12 dots around the cookie
         Repeater {
-            
             model: 12
             Item {
                 visible: clockStyle === "simpler-cookie" ? false : true
@@ -86,7 +85,7 @@ Item {
         z: 1
         anchors.centerIn: cookie
         spacing: -16
-        visible: false // LOOK
+        visible: clockStyle === "simpler-cookie" ? false : true
 
         // Numbers
         Repeater {

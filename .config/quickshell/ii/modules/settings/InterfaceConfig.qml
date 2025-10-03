@@ -63,7 +63,7 @@ ContentPage {
                     },
                     {
                         displayName: Translation.tr("Material simpler cookie"),
-                        icon: "cookie",
+                        icon: "circle",
                         value: "simpler-cookie"
                     },
                 ]
