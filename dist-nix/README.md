@@ -1,10 +1,10 @@
 # Nix Package Definitions for Illogical Impulse Dotfiles
 
-This directory contains Nix package definitions that correspond to the Arch Linux PKGBUILD files in `dist-arch/`.
+This directory contains Nix module definitions that correspond to the Arch Linux PKGBUILD files in `dist-arch/`.
 
 ## Files
 
-Each `.nix` file defines a list of packages that can be installed using Nix package manager or home-manager:
+Each `.nix` file is a home-manager module that can be imported and enabled:
 
 - `illogical-impulse-audio.nix` - Audio-related dependencies
 - `illogical-impulse-backlight.nix` - Backlight control dependencies
@@ -25,28 +25,82 @@ Each `.nix` file defines a list of packages that can be installed using Nix pack
 
 ### With home-manager
 
-You can import these files in your home-manager configuration:
+Import these modules in your home-manager configuration and enable as needed:
 
 ```nix
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
-  home.packages = 
-    (import ./dist-nix/illogical-impulse-audio.nix { inherit pkgs; })
-    ++ (import ./dist-nix/illogical-impulse-basic.nix { inherit pkgs; })
-    ++ (import ./dist-nix/illogical-impulse-hyprland.nix { inherit pkgs; });
+  imports = [
+    ./dist-nix/illogical-impulse-audio.nix
+    ./dist-nix/illogical-impulse-basic.nix
+    ./dist-nix/illogical-impulse-hyprland.nix
+    # Add other modules as needed
+  ];
+
+  # Enable the modules you want
+  illogical-impulse = {
+    audio.enable = true;
+    basic.enable = true;
+    hyprland.enable = true;
+  };
 }
 ```
 
-### With NixOS configuration
+### With flake.nix
+
+In a flake-based configuration:
 
 ```nix
-{ pkgs, ... }:
 {
-  environment.systemPackages = 
-    (import ./dist-nix/illogical-impulse-audio.nix { inherit pkgs; })
-    ++ (import ./dist-nix/illogical-impulse-basic.nix { inherit pkgs; });
+  description = "My home configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixpkgs/nixpkgs-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { nixpkgs, home-manager, ... }: {
+    homeConfigurations."username" = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      modules = [
+        ./dist-nix/illogical-impulse-audio.nix
+        ./dist-nix/illogical-impulse-basic.nix
+        # Import other modules as needed
+        {
+          illogical-impulse = {
+            audio.enable = true;
+            basic.enable = true;
+            # Enable other modules as needed
+          };
+        }
+      ];
+    };
+  };
 }
 ```
+
+## Module Structure
+
+Each module follows the standard Nix module pattern:
+
+```nix
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+{
+  options.illogical-impulse.<name>.enable = mkEnableOption "description";
+
+  config = mkIf config.illogical-impulse.<name>.enable {
+    home.packages = [ /* packages */ ];
+  };
+}
+```
+
+This allows you to selectively enable only the dependency groups you need.
 
 ## Notes
 
@@ -56,4 +110,4 @@ You can import these files in your home-manager configuration:
 
 ## Status
 
-This is a work in progress. The `install-deps.sh` script is currently WIP and will be updated to automate the installation process using these Nix files.
+This is a work in progress. The `install-deps.sh` script is currently WIP and will be updated to automate the installation process using these Nix modules.
