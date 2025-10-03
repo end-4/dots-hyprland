@@ -14,6 +14,7 @@ Each `.nix` file defines a list of packages that can be installed using Nix pack
 - `illogical-impulse-hyprland.nix` - Hyprland-related packages
 - `illogical-impulse-kde.nix` - KDE-related dependencies
 - `illogical-impulse-microtex-git.nix` - MicroTeX dependencies
+- `illogical-impulse-oneui4-icons-git.nix` - OneUI4 Icons (optional, not installed by default)
 - `illogical-impulse-portal.nix` - XDG Desktop Portal dependencies
 - `illogical-impulse-python.nix` - Python development dependencies
 - `illogical-impulse-screencapture.nix` - Screenshot and recording tools
