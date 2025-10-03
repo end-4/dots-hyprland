@@ -2,12 +2,13 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import qs.modules.common
 
 Singleton {
     id: root
 
     property bool hasExternalMonitor: false
-    property bool autoInhibitEnabled: true
+    property bool extMonitorInhibit: Config.options?.monitors?.externalMonitorInhibit ?? false
 
     Timer {
         id: monitorChangeTimer
@@ -15,7 +16,7 @@ Singleton {
         repeat: false
         onTriggered: {
             const newHasExternal = root.checkForExternalMonitor();
-            console.log("Inhibit Status: " + autoInhibitEnabled);
+            console.log("Inhibit Status: " + extMonitorInhibit);
             console.log("Monitors Connected: " + Quickshell.screens.length);
             console.log("External Monitor Detected: " + newHasExternal);
             if (newHasExternal !== root.hasExternalMonitor) {
@@ -44,7 +45,7 @@ Singleton {
     }
 
     function handleMonitorChange() {
-        if (!root.autoInhibitEnabled) return;
+        if (!root.extMonitorInhibit) return;
 
         if (root.hasExternalMonitor && !Idle.inhibit) {
             Idle.toggleInhibit();
