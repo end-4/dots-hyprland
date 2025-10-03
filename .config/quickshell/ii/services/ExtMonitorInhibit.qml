@@ -66,6 +66,15 @@ Singleton {
         if (root.extMonitorInhibit) {
             const shouldInhibit = root.hasExternalMonitor;
             if(Idle.inhibit !== shouldInhibit) {
+                Quickshell.execDetached([
+                "notify-send",
+                "Keep system awake",
+                "External monitor detected",
+                "-a", "Shell",
+                "-i", "video-display",
+                "-t", "3000"
+                ]);
+
                 // Use a short timer to allow the UI to update, then override
                 Qt.callLater(() => {
                     root.handleMonitorChange();
