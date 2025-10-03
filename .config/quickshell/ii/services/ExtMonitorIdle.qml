@@ -1,0 +1,68 @@
+pragma Singleton
+
+import QtQuick
+import Quickshell
+
+Singleton {
+    id: root
+
+    property bool hasExternalMonitor: false
+    property bool autoInhibitEnabled: true
+
+    Timer {
+        id: monitorChangeTimer
+        interval: 250
+        repeat: false
+        onTriggered: {
+            const newHasExternal = root.checkForExternalMonitor();
+            console.log("Inhibit Status: " + autoInhibitEnabled);
+            console.log("Monitors Connected: " + Quickshell.screens.length);
+            console.log("External Monitor Detected: " + newHasExternal);
+            if (newHasExternal !== root.hasExternalMonitor) {
+                root.hasExternalMonitor = newHasExternal;
+                root.handleMonitorChange();
+            }
+        }
+    }
+
+    function checkForExternalMonitor() {
+        const monitors = HyprlandData.monitors;
+
+        // Look for common laptop screen patterns
+        const builtInPatterns = [
+        /^eDP/,     // Most common (eDP-1, eDP-2, etc.)
+        /^LVDS/,    // Older laptops
+        /^DSI/,     // Some newer laptops
+        /^DP-\d+-\d+$/, // Some integrated displays
+        ];
+
+        const externalMonitors = monitors.filter(monitor => {
+            return !builtInPatterns.some(pattern => pattern.test(monitor.name));
+        });
+
+        return externalMonitors.length > 0;
+    }
+
+    function handleMonitorChange() {
+        if (!root.autoInhibitEnabled) return;
+
+        if (root.hasExternalMonitor && !Idle.inhibit) {
+            Idle.toggleInhibit();
+            console.log("[MonitorDetector] External monitor connected, enabling idle inhibitor");
+        } else if (!root.hasExternalMonitor && Idle.inhibit) {
+            Idle.toggleInhibit();
+            console.log("[MonitorDetector] No external monitors, disabling idle inhibitor");
+        }
+    }
+
+    property int monitorCount: Quickshell.screens.length
+    onMonitorCountChanged: {
+        monitorChangeTimer.restart();
+    }
+
+    Component.onCompleted: {
+        root.hasExternalMonitor = root.checkForExternalMonitor();
+    }
+
+    function load() { }
+}

@@ -61,6 +61,7 @@ ShellRoot {
         ConflictKiller.load()
         Cliphist.refresh()
         Wallpapers.load()
+        ExtMonitorIdle.load()
     }
 
     LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
