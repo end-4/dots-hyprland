@@ -127,8 +127,9 @@ Singleton {
                     property real x: -500
                     property real y: -500
                     property bool show: true
-                    property string style: "cookie" // Options: "cookie", "digital"
+                    property string style: "cookie" // Options: "cookie", "digital", "simpler-cookie"
                     property real scale: 1
+                    property int clockSides: 12
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""

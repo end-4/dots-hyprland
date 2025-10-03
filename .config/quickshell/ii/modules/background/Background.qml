@@ -332,7 +332,7 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
-                        visible: root.clockStyle === "cookie"
+                        visible: root.clockStyle === "cookie" || root.clockStyle === "simpler-cookie"
                         active: visible
                         sourceComponent: CookieClock {}
                     }

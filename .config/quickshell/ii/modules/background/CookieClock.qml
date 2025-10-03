@@ -13,11 +13,13 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
 
+    readonly property string clockStyle: Config.options.background.clock.style
+
     property real implicitSize: 230
     property real hourHandLength: 72
-    property real hourHandWidth: 16
+    property real hourHandWidth: 20
     property real minuteHandLength: 95
-    property real minuteHandWidth: 8
+    property real minuteHandWidth: clockStyle === "simpler-cookie" ? hourHandWidth : 12
     property real centerDotSize: 10
     property real hourDotSize: minuteHandWidth
 
@@ -31,6 +33,7 @@ Item {
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
     readonly property int clockMinute: parseInt(clockNumbers[1])
+    
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
@@ -50,15 +53,17 @@ Item {
         z: 0
         implicitSize: root.implicitSize
         amplitude: implicitSize / 70
-        sides: 12
+        sides: Config.options.background.clock.clockSides
         color: root.colBackground
 
         // 12 dots around the cookie
         Repeater {
+            
             model: 12
             Item {
+                visible: clockStyle === "simpler-cookie" ? false : true
                 required property int index
-                rotation: 360 / 12 * index
+                rotation: 360 / 12 * index 
                 anchors.fill: parent
                 Rectangle {
                     anchors {
@@ -81,6 +86,7 @@ Item {
         z: 1
         anchors.centerIn: cookie
         spacing: -16
+        visible: false // LOOK
 
         // Numbers
         Repeater {
@@ -132,6 +138,7 @@ Item {
 
     // Center dot
     Rectangle {
+        visible: clockStyle === "simpler-cookie" ? false : true
         z: 4
         color: root.colOnHourHand
         anchors.centerIn: parent

@@ -20,6 +20,7 @@ ContentPage {
             }
         }
 
+
         ConfigSpinBox {
             text: Translation.tr("Scale (%)")
             value: Config.options.background.clock.scale * 100
@@ -28,6 +29,17 @@ ContentPage {
             stepSize: 2
             onValueChanged: {
                 Config.options.background.clock.scale = value / 100;
+            }
+        }
+
+        ConfigSpinBox {
+            text: Translation.tr("Clock sides")
+            value: Config.options.background.clock.clockSides
+            from: 1
+            to: 36
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.clock.clockSides = value;
             }
         }
 
@@ -48,6 +60,11 @@ ContentPage {
                         displayName: Translation.tr("Material cookie"),
                         icon: "cookie",
                         value: "cookie"
+                    },
+                    {
+                        displayName: Translation.tr("Material simpler cookie"),
+                        icon: "cookie",
+                        value: "simpler-cookie"
                     },
                 ]
             }
