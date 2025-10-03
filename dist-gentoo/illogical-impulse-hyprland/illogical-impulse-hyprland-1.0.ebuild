@@ -8,14 +8,13 @@ HOMEPAGE=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="amd64 arm64 x86"
 RESTRICT="strip"
 
 DEPEND=""
 RDEPEND="
 	gui-apps/hypridle
 	gui-libs/hyprcursor
-	gui-wm/hyprland
 	gui-libs/hyprland-qtutils
 	gui-libs/hyprland-qt-support
 	dev-libs/hyprlang
@@ -23,6 +22,10 @@ RDEPEND="
 	gui-apps/hyprpicker
 	gui-apps/hyprsunset
 	gui-libs/hyprutils
+	dev-libs/hyprland-protocols
+	dev-libs/hyprgraphics
+	gui-libs/aquamarine
+	gui-wm/hyprland
 	dev-util/hyprwayland-scanner
 	gui-libs/xdg-desktop-portal-hyprland
 	gui-apps/wl-clipboard

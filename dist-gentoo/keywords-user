@@ -23,6 +23,16 @@ gui-apps/hyprshot ~amd64
 gui-apps/wf-recorder ~amd64
 gui-apps/wtype ~amd64
 gui-apps/fuzzel ~amd64
-gui-apps/quickshell ~amd64
+gui-apps/quickshell ** ~amd64
 gui-apps/wlogout ~amd64
 dev-cpp/sdbus-c++ ~amd64
+dev-libs/hyprland-protocols ** ~amd64
+gui-libs/aquamarine ** ~amd64
+gui-libs/hyprutils ** ~amd64
+dev-util/hyprwayland-scanner ** ~amd64
+dev-libs/hyprlang ** ~amd64
+dev-libs/hyprgraphicss ** ~amd64
+gui-libs/hyprcursor ** ~amd64
+gui-libs/hyprland-qt-support ** ~amd64
+gui-libs/hyprland-qtutils ** ~amd64
+gui-wm/hyprland ** ~amd64

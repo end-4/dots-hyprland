@@ -9,9 +9,10 @@ fi
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
+# Exclude hyprland, will deal with that separately
 metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,screencapture,toolkit,widgets})
 
-ebuild_dir="/var/db/repos/localrepo/app-misc"
+ebuild_dir="/var/db/repos/localrepo"
 
 # Unmasks
 x cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
@@ -22,24 +23,42 @@ v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/end4
 v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/end4
 
 # Update system
-#v sudo emerge --sync
-#v sudo emerge --ask --verbose --newuse --update --deep @world
-#v sudo emerge --depclean
+v sudo emerge --sync
+v sudo emerge --ask --verbose --newuse --update --deep @world
+v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
-x sudo rm -r ${ebuild_dir}/illogical-impulse-*
+x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
+
+###### LIVE EBUILDS START
+HYPR_DIR="illogical-impulse-hyprland"
+x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprgraphics/
+x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qt-support
+x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qtutils
+x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
+x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
+x sudo mkdir -p ${ebuild_dir}/dev-util/hyprwayland-scanner
+
+v sudo cp ./dist-gentoo/${HYPR_DIR}/hyprgraphics*.ebuild ${ebuild_dir}/dev-libs/hyprgraphics
+v sudo cp ./dist-gentoo/${HYPR_DIR}/hyprland-qt-support*.ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support
+v sudo cp ./dist-gentoo/${HYPR_DIR}/hyprland-qtutils*.ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils
+v sudo cp ./dist-gentoo/${HYPR_DIR}/hyprlang*.ebuild ${ebuild_dir}/dev-libs/hyprlang
+v sudo cp ./dist-gentoo/${HYPR_DIR}/hyprwayland-scanner*.ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner
+
+v sudo ebuild ${ebuild_dir}/dev-libs/hyprgraphics/hyprgraphics*9999.ebuild digest
+v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support/hyprland-qt-support*9999.ebuild digest
+v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils/hyprland-qtutils*9999.ebuild digest
+v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
+v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
+###### LIVE EBUILDS END
+
 
 # Install dependencies
-to_install=""
 for i in "${metapkgs[@]}"; do
-	x sudo mkdir -p ${ebuild_dir}/${i}
-	v sudo cp ./dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/${i}/
-	v sudo ebuild ${ebuild_dir}/${i}/*.ebuild digest
-	to_install+="app-misc/${i} "
+	x sudo mkdir -p ${ebuild_dir}/app-misc/${i}
+	v sudo cp ./dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
+	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
+	v sudo emerge --quiet app-misc/${i}
 done
-
-# Easier to debug when it's all installed at once
-#v sudo emerge --quiet ${to_install}
-
 
 

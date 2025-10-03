@@ -25,8 +25,10 @@ else
 	echo "test"
 fi
 
-v sudo chown $(whoami):$(whoami) ~/.local/share/icons
-v sudo chown $(whoami):$(whoami) ~/.local/share/konsole
+v sudo chown -R $(whoami):$(whoami) ~/.local/share/icons/
+v sudo chown -R $(whoami):$(whoami) ~/.local/share/konsole/
+v sudo chown -R $(whoami):$(whoami) ~/.config/hypr/
+v sudo chown -R $(whoami):$(whoami) ~/.config/quickshell/
 
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'

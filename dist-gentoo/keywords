@@ -23,6 +23,16 @@ gui-apps/hyprshot
 gui-apps/wf-recorder
 gui-apps/wtype
 gui-apps/fuzzel
-gui-apps/quickshell
+gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
+dev-libs/hyprland-protocols **
+gui-libs/aquamarine **
+gui-libs/hyprutils **
+dev-util/hyprwayland-scanner **
+dev-libs/hyprlang **
+dev-libs/hyprgraphicss **
+gui-libs/hyprcursor **
+gui-libs/hyprland-qt-support **
+gui-libs/hyprland-qtutils **
+gui-wm/hyprland **
