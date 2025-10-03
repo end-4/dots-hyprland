@@ -14,12 +14,13 @@ ContentPage {
     forceWidth: true
 
     Process {
-        id: konachanWallProc
+        id: randomWallProc
         property string status: ""
-        command: ["bash", "-c", FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/random_konachan_wall.sh`)]
+        property string scriptPath: `${Directories.scriptPath}/colors/random/random_konachan_wall.sh`
+        command: ["bash", "-c", FileUtils.trimFileProtocol(randomWallProc.scriptPath)]
         stdout: SplitParser {
             onRead: data => {
-                konachanWallProc.status = data.trim();
+                randomWallProc.status = data.trim();
             }
         }
     }
@@ -76,6 +77,7 @@ ContentPage {
                     sourceSize.height: parent.implicitHeight
                     fillMode: Image.PreserveAspectCrop
                     source: Config.options.background.wallpaperPath
+                    cache: false
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: Rectangle {
@@ -89,17 +91,33 @@ ContentPage {
 
             ColumnLayout {
                 RippleButtonWithIcon {
-                    id: rndWallBtn
+                    enabled: !randomWallProc.running
                     visible: Config.options.policies.weeb === 1
                     Layout.fillWidth: true
                     buttonRadius: Appearance.rounding.small
-                    materialIcon: "wallpaper"
-                    mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
+                    materialIcon: "ifl"
+                    mainText: randomWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                     onClicked: {
-                        konachanWallProc.running = true;
+                        randomWallProc.scriptPath = `${Directories.scriptPath}/colors/random/random_konachan_wall.sh`;
+                        randomWallProc.running = true;
                     }
                     StyledToolTip {
                         text: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
+                    }
+                }
+                RippleButtonWithIcon {
+                    enabled: !randomWallProc.running
+                    visible: Config.options.policies.weeb === 1
+                    Layout.fillWidth: true
+                    buttonRadius: Appearance.rounding.small
+                    materialIcon: "ifl"
+                    mainText: randomWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: osu! seasonal")
+                    onClicked: {
+                        randomWallProc.scriptPath = `${Directories.scriptPath}/colors/random/random_osu_wall.sh`;
+                        randomWallProc.running = true;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Random osu! seasonal background\nImage is saved to ~/Pictures/Wallpapers")
                     }
                 }
                 RippleButtonWithIcon {
@@ -153,17 +171,6 @@ ContentPage {
                         dark: true
                     }
                 }
-
-                ConfigSwitch {
-                    text: Translation.tr("Transparency")
-                    checked: Config.options.appearance.transparency.enable
-                    onCheckedChanged: {
-                        Config.options.appearance.transparency.enable = checked;
-                    }
-                    StyledToolTip {
-                        text: Translation.tr("Might look ass. Unsupported.")
-                    }
-                }
             }
         }
 
@@ -211,6 +218,17 @@ ContentPage {
                     "displayName": Translation.tr("Tonal Spot")
                 }
             ]
+        }
+
+        ConfigSwitch {
+            text: Translation.tr("Transparency")
+            checked: Config.options.appearance.transparency.enable
+            onCheckedChanged: {
+                Config.options.appearance.transparency.enable = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Might look ass. Unsupported.")
+            }
         }
     }
 

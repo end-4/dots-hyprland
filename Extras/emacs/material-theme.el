@@ -23,7 +23,7 @@
 ;; Define function to read SCSS variables
 (defun material-get-color-from-scss (var-name)
   "Extract color value for VAR-NAME from material_colors.scss file."
-  (let* ((scss-file (expand-file-name "~/.cache/ags/user/generated/material_colors.scss"))
+  (let* ((scss-file (expand-file-name "~/.local/state/quickshell/user/generated/material_colors.scss"))
          (scss-content (with-temp-buffer
                          (insert-file-contents scss-file)
                          (buffer-string)))

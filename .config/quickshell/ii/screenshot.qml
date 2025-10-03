@@ -15,6 +15,7 @@ import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
@@ -35,7 +36,11 @@ ShellRoot {
     property color imageFillColor: "#33f1d1ff"
     property color onBorderColor: "#ff000000"
     property real standardRounding: 4
-    readonly property var windows: HyprlandData.windowList
+    readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
+        // Sort floating=true windows before others
+        if (a.floating === b.floating) return 0;
+        return a.floating ? -1 : 1;
+    })
     readonly property var layers: HyprlandData.layers
     readonly property real falsePositivePreventionRatio: 0.5
 
@@ -74,10 +79,10 @@ ShellRoot {
             }
             implicitWidth: regionInfoRow.implicitWidth + horizontalPadding * 2
             implicitHeight: regionInfoRow.implicitHeight + verticalPadding * 2
-            RowLayout {
+            Row {
                 id: regionInfoRow
                 anchors.centerIn: parent
-                spacing: 8
+                spacing: 4
 
                 Loader {
                     id: regionIconLoader
@@ -133,7 +138,8 @@ ShellRoot {
             })
             readonly property list<var> layerRegions: {
                 const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
-                const topLayers = layersOfThisMonitor.levels["2"]
+                const topLayers = layersOfThisMonitor?.levels["2"]
+                if (!topLayers) return [];
                 const nonBarTopLayers = topLayers
                     .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":verticalBar") || layer.namespace.includes(":dock")))
                     .map(layer => {
@@ -386,14 +392,24 @@ ShellRoot {
 
                     // Overlay to darken screen
                     Rectangle { // Base
-                        id: overlayRect
-                        z: 0
-                        anchors.fill: parent
-                        color: root.overlayColor
-                        layer.enabled: true
+                        id: darkenOverlay
+                        z: 1
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            leftMargin: panelWindow.regionX - darkenOverlay.border.width
+                            topMargin: panelWindow.regionY - darkenOverlay.border.width
+                        }
+                        width: panelWindow.regionWidth + darkenOverlay.border.width * 2
+                        height: panelWindow.regionHeight + darkenOverlay.border.width * 2
+                        color: "transparent"
+                        // border.color: root.selectionBorderColor
+                        border.color: root.overlayColor
+                        border.width: Math.max(panelWindow.width, panelWindow.height)
+                        radius: root.standardRounding
                     }
                     Rectangle {
-                        // TODO: Make this mask the base instead of just overlaying a border
+                        id: selectionBorder
                         z: 1
                         anchors {
                             left: parent.left
@@ -406,11 +422,21 @@ ShellRoot {
                         color: "transparent"
                         border.color: root.selectionBorderColor
                         border.width: 2
-                        radius: root.standardRounding
+                        // radius: root.standardRounding
+                        radius: 0 // TODO: figure out how to make the overlay thing work with rounding
+                    }
+                    StyledText {
+                        anchors {
+                            bottom: selectionBorder.bottom
+                            right: selectionBorder.right
+                            margins: 8
+                        }
+                        text: `${Math.round(panelWindow.regionWidth)} x ${Math.round(panelWindow.regionHeight)}`
                     }
 
                     // Instructions
                     Rectangle {
+                        z: 9999
                         anchors {
                             top: parent.top
                             horizontalCenter: parent.horizontalCenter
@@ -430,21 +456,19 @@ ShellRoot {
                         implicitWidth: instructionsRow.implicitWidth + 10 * 2
                         implicitHeight: instructionsRow.implicitHeight + 5 * 2
 
-                        RowLayout {
+                        Row {
                             id: instructionsRow
                             anchors.centerIn: parent
-                            Item {
-                                Layout.fillHeight: true
-                                implicitWidth: screenshotRegionIcon.implicitWidth
-                                MaterialSymbol {
-                                    id: screenshotRegionIcon
-                                    anchors.centerIn: parent
-                                    iconSize: Appearance.font.pixelSize.larger
-                                    text: "screenshot_region"
-                                    color: root.genericContentForeground
-                                }
+                            spacing: 4
+                            MaterialSymbol {
+                                id: screenshotRegionIcon
+                                // anchors.centerIn: parent
+                                iconSize: Appearance.font.pixelSize.larger
+                                text: "screenshot_region"
+                                color: root.genericContentForeground
                             }
                             StyledText {
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: Translation.tr("Drag or click a region • LMB: Copy • RMB: Edit")
                                 color: root.genericContentForeground
                             }

@@ -14,9 +14,42 @@ ContentPage {
 
         ConfigSwitch {
             text: Translation.tr("Show clock")
-            checked: Config.options.background.showClock
+            checked: Config.options.background.clock.show
             onCheckedChanged: {
-                Config.options.background.showClock = checked;
+                Config.options.background.clock.show = checked;
+            }
+        }
+
+        ConfigSpinBox {
+            text: Translation.tr("Scale (%)")
+            value: Config.options.background.clock.scale * 100
+            from: 1
+            to: 200
+            stepSize: 2
+            onValueChanged: {
+                Config.options.background.clock.scale = value / 100;
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Clock style")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.style
+                onSelected: newValue => {
+                    Config.options.background.clock.style = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Simple digital"),
+                        icon: "timer_10",
+                        value: "digital"
+                    },
+                    {
+                        displayName: Translation.tr("Material cookie"),
+                        icon: "cookie",
+                        value: "cookie"
+                    },
+                ]
             }
         }
 
@@ -56,6 +89,37 @@ ContentPage {
                 stepSize: 1
                 onValueChanged: {
                     Config.options.background.parallax.workspaceZoom = value / 100;
+                }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "point_scan"
+        title: Translation.tr("Crosshair")
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Crosshair code (in Valorant's format)")
+            text: Config.options.crosshair.code
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.crosshair.code = text;
+            }
+        }
+
+        RowLayout {
+            Item { Layout.fillWidth: true }
+            RippleButtonWithIcon {
+                id: editorButton
+                buttonRadius: Appearance.rounding.full
+                materialIcon: "open_in_new"
+                mainText: Translation.tr("Open editor")
+                onClicked: {
+                    Qt.openUrlExternally(`https://www.vcrdb.net/builder?c=${Config.options.crosshair.code}`);
+                }
+                StyledToolTip {
+                    text: "www.vcrdb.net"
                 }
             }
         }
@@ -103,40 +167,52 @@ ContentPage {
         icon: "lock"
         title: Translation.tr("Lock screen")
 
+        ConfigSwitch {
+            text: Translation.tr('Launch on startup')
+            checked: Config.options.lock.launchOnStartup
+            onCheckedChanged: {
+                Config.options.lock.launchOnStartup = checked;
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Blurred style")
 
             ConfigSwitch {
-                font.pixelSize: Appearance.font.pixelSize.large
                 text: Translation.tr('Enable blur')
-                checked: Config.options.background.lockBlur.enable
+                checked: Config.options.lock.blur.enable
                 onCheckedChanged: {
-                    Config.options.background.lockBlur.enable = checked;
+                    Config.options.lock.blur.enable = checked;
                 }
             }
 
-            ConfigRow {
-                uniform: true
-
-                ConfigSwitch {
-                    enabled: Config.options.background.lockBlur.enable
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    text: Translation.tr('Center clock')
-                    checked: Config.options.background.lockBlur.centerClock
-                    onCheckedChanged: {
-                        Config.options.background.lockBlur.centerClock = checked;
-                    }
-                }
-                ConfigSwitch {
-                    enabled: Config.options.background.lockBlur.enable
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    text: Translation.tr('Show "Locked" text')
-                    checked: Config.options.background.lockBlur.showLockedText
-                    onCheckedChanged: {
-                        Config.options.background.lockBlur.showLockedText = checked;
-                    }
+            ConfigSpinBox {
+                text: Translation.tr("Blur: Extra zoom (%)")
+                value: Config.options.lock.blur.extraZoom * 100
+                from: 1
+                to: 150
+                stepSize: 2
+                onValueChanged: {
+                    Config.options.lock.blur.extraZoom = value / 100;
                 }
             }
+
+            ConfigSwitch {
+                text: Translation.tr('Center clock')
+                checked: Config.options.lock.centerClock
+                onCheckedChanged: {
+                    Config.options.lock.centerClock = checked;
+                }
+            }
+            
+            ConfigSwitch {
+                text: Translation.tr('Show "Locked" text')
+                checked: Config.options.lock.showLockedText
+                onCheckedChanged: {
+                    Config.options.lock.showLockedText = checked;
+                }
+            }
+            
 
         }
     }

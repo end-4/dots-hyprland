@@ -11,6 +11,7 @@ import "./modules/common/"
 import "./modules/background/"
 import "./modules/bar/"
 import "./modules/cheatsheet/"
+import "./modules/crosshair/"
 import "./modules/dock/"
 import "./modules/lock/"
 import "./modules/mediaControls/"
@@ -36,12 +37,12 @@ ShellRoot {
     property bool enableBar: true
     property bool enableBackground: true
     property bool enableCheatsheet: true
+    property bool enableCrosshair: true
     property bool enableDock: true
     property bool enableLock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
-    property bool enableOnScreenDisplayBrightness: true
-    property bool enableOnScreenDisplayVolume: true
+    property bool enableOnScreenDisplay: true
     property bool enableOnScreenKeyboard: true
     property bool enableOverview: true
     property bool enableReloadPopup: true
@@ -59,17 +60,18 @@ ShellRoot {
         FirstRunExperience.load()
         ConflictKiller.load()
         Cliphist.refresh()
+        Wallpapers.load()
     }
 
     LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
     LazyLoader { active: enableBackground; component: Background {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
+    LazyLoader { active: enableCrosshair; component: Crosshair {} }
     LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
     LazyLoader { active: enableLock; component: Lock {} }
     LazyLoader { active: enableMediaControls; component: MediaControls {} }
     LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
-    LazyLoader { active: enableOnScreenDisplayBrightness; component: OnScreenDisplayBrightness {} }
-    LazyLoader { active: enableOnScreenDisplayVolume; component: OnScreenDisplayVolume {} }
+    LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
     LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
     LazyLoader { active: enableOverview; component: Overview {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }

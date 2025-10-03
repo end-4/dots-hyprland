@@ -101,7 +101,7 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        Flickable {
+        StyledFlickable {
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentHeight: contentColumn.implicitHeight

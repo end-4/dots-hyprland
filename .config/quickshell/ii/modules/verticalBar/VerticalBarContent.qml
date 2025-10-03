@@ -80,7 +80,7 @@ Item { // Bar content region
         }
     }
 
-    ColumnLayout { // Middle section
+    Column { // Middle section
         id: middleSection
         anchors.centerIn: parent
         spacing: 4
@@ -156,8 +156,6 @@ Item { // Bar content region
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }
-
-
             
         }
     }
@@ -273,6 +271,7 @@ Item { // Bar content region
                         vertical: true
                         Layout.alignment: Qt.AlignHCenter
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing
+                        color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing

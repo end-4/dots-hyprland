@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./scriptdata/environment-variables
-source ./scriptdata/functions
+source ./scriptdata/lib/environment-variables.sh
+source ./scriptdata/lib/functions.sh
 prevent_sudo_or_root
 
 function v() {
-  echo -e "[$0]: \e[32mNow executing:\e[0m"
-  echo -e "\e[32m$@\e[0m"
+  echo -e "[$0]: ${STY_GREEN}Now executing:${STY_RESET}"
+  echo -e "${STY_GREEN}$@${STY_RESET}"
   "$@"
 }
 
@@ -21,7 +21,7 @@ set -e
 ##############################################################################################################################
 
 # Undo Step 3: Removing copied config and local folders
-printf '\e[36mRemoving copied config and local folders...\n\e[97m'
+printf "${STY_CYAN}Removing copied config and local folders...\n${STY_RESET}"
 
 for i in ags fish fontconfig foot fuzzel hypr mpv wlogout "starship.toml" rubyshot
   do v rm -rf "$XDG_CONFIG_HOME/$i"
@@ -43,7 +43,7 @@ v sudo rm -rf "$XDG_STATE_HOME/ags"
 ##############################################################################################################################
 
 # Undo Step 1: Remove added user from video, i2c, and input groups and remove yay packages
-printf '\e[36mRemoving user from video, i2c, and input groups and removing packages...\n\e[97m'
+printf "${STY_CYAN}Removing user from video, i2c, and input groups and removing packages...\n${STY_RESET}"
 user=$(whoami)
 v sudo gpasswd -d "$user" video
 v sudo gpasswd -d "$user" i2c
@@ -51,9 +51,10 @@ v sudo gpasswd -d "$user" input
 v sudo rm /etc/modules-load.d/i2c-dev.conf
 
 ##############################################################################################################################
-read -p "Do you want to uninstall packages used by the dotfiles?\nCtrl+C to exit, or press Enter to proceed"
+read -p "Do you want to uninstall the illogical-impulse-* meta packages (Arch Linux only)?
+Ctrl+C to exit, or press Enter to proceed" p
 
 # Removing installed yay packages and dependencies
 v yay -Rns illogical-impulse-{agsv1,audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,gnome,gtk,hyprland,microtex-git,oneui4-icons-git,portal,python,screencapture,widgets} plasma-browser-integration
 
-printf '\e[36mUninstall Complete.\n\e[97m'
+printf "${STY_CYAN}Uninstall Complete.\n${STY_RESET}"

@@ -4,6 +4,7 @@ import qs.services
 import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Services.Notifications
@@ -15,6 +16,7 @@ Item { // Notification item area
     property bool onlyNotification: false
     property real fontSize: Appearance.font.pixelSize.small
     property real padding: onlyNotification ? 0 : 8
+    property real summaryElideRatio: 0.85
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: notificationIcon.implicitWidth + 20 // Account for gaps and bouncy animations
@@ -55,6 +57,12 @@ Item { // Notification item area
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.running = true;
+    }
+
+    TextMetrics {
+        id: summaryTextMetrics
+        font.pixelSize: root.fontSize
+        text: root.notificationObject.summary || ""
     }
 
     SequentialAnimation { // Drag finish animation
@@ -163,9 +171,9 @@ Item { // Notification item area
                 visible: !root.onlyNotification || !root.expanded
                 Layout.fillWidth: true
                 implicitHeight: summaryText.implicitHeight
-                // Layout.fillWidth: true
                 StyledText {
                     id: summaryText
+                    Layout.fillWidth: summaryTextMetrics.width >= summaryRow.implicitWidth * root.summaryElideRatio
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colOnLayer3
@@ -220,91 +228,110 @@ Item { // Notification item area
                     PointingHandLinkHover {}
                 }
 
-                StyledFlickable { // Notification actions
-                    id: actionsFlickable
+                Item {
                     Layout.fillWidth: true
-                    implicitHeight: actionRowLayout.implicitHeight
-                    contentWidth: actionRowLayout.implicitWidth
-                    clip: !onlyNotification
+                    implicitWidth: actionsFlickable.implicitWidth
+                    implicitHeight: actionsFlickable.implicitHeight
 
-                    Behavior on opacity {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-                    Behavior on height {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-                    Behavior on implicitHeight {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: actionsFlickable.width
+                            height: actionsFlickable.height
+                            radius: Appearance.rounding.small
+                        }
                     }
 
-                    RowLayout {
-                        id: actionRowLayout
-                        Layout.alignment: Qt.AlignBottom
+                    ScrollEdgeFade {
+                        target: actionsFlickable
+                        vertical: false
+                    }
 
-                        NotificationActionButton {
-                            Layout.fillWidth: true
-                            buttonText: Translation.tr("Close")
-                            urgency: notificationObject.urgency
-                            implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
-                                (contentItem.implicitWidth + leftPadding + rightPadding)
+                    StyledFlickable { // Notification actions
+                        id: actionsFlickable
+                        anchors.fill: parent
+                        implicitHeight: actionRowLayout.implicitHeight
+                        contentWidth: actionRowLayout.implicitWidth
 
-                            onClicked: {
-                                root.destroyWithAnimation()
-                            }
-
-                            contentItem: MaterialSymbol {
-                                iconSize: Appearance.font.pixelSize.large
-                                horizontalAlignment: Text.AlignHCenter
-                                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                    Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
-                                text: "close"
-                            }
+                        Behavior on opacity {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Behavior on height {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Behavior on implicitHeight {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
-                        Repeater {
-                            id: actionRepeater
-                            model: notificationObject.actions
+                        RowLayout {
+                            id: actionRowLayout
+                            Layout.alignment: Qt.AlignBottom
+
                             NotificationActionButton {
                                 Layout.fillWidth: true
-                                buttonText: modelData.text
+                                buttonText: Translation.tr("Close")
                                 urgency: notificationObject.urgency
+                                implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
+                                    (contentItem.implicitWidth + leftPadding + rightPadding)
+
                                 onClicked: {
-                                    Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
+                                    root.destroyWithAnimation()
                                 }
-                            }
-                        }
 
-                        NotificationActionButton {
-                            Layout.fillWidth: true
-                            urgency: notificationObject.urgency
-                            implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
-                                (contentItem.implicitWidth + leftPadding + rightPadding)
-
-                            onClicked: {
-                                Quickshell.clipboardText = notificationObject.body
-                                copyIcon.text = "inventory"
-                                copyIconTimer.restart()
-                            }
-
-                            Timer {
-                                id: copyIconTimer
-                                interval: 1500
-                                repeat: false
-                                onTriggered: {
-                                    copyIcon.text = "content_copy"
+                                contentItem: MaterialSymbol {
+                                    iconSize: Appearance.font.pixelSize.large
+                                    horizontalAlignment: Text.AlignHCenter
+                                    color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                        Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
+                                    text: "close"
                                 }
                             }
 
-                            contentItem: MaterialSymbol {
-                                id: copyIcon
-                                iconSize: Appearance.font.pixelSize.large
-                                horizontalAlignment: Text.AlignHCenter
-                                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                    Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
-                                text: "content_copy"
+                            Repeater {
+                                id: actionRepeater
+                                model: notificationObject.actions
+                                NotificationActionButton {
+                                    Layout.fillWidth: true
+                                    buttonText: modelData.text
+                                    urgency: notificationObject.urgency
+                                    onClicked: {
+                                        Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
+                                    }
+                                }
                             }
+
+                            NotificationActionButton {
+                                Layout.fillWidth: true
+                                urgency: notificationObject.urgency
+                                implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
+                                    (contentItem.implicitWidth + leftPadding + rightPadding)
+
+                                onClicked: {
+                                    Quickshell.clipboardText = notificationObject.body
+                                    copyIcon.text = "inventory"
+                                    copyIconTimer.restart()
+                                }
+
+                                Timer {
+                                    id: copyIconTimer
+                                    interval: 1500
+                                    repeat: false
+                                    onTriggered: {
+                                        copyIcon.text = "content_copy"
+                                    }
+                                }
+
+                                contentItem: MaterialSymbol {
+                                    id: copyIcon
+                                    iconSize: Appearance.font.pixelSize.large
+                                    horizontalAlignment: Text.AlignHCenter
+                                    color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                        Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
+                                    text: "content_copy"
+                                }
+                            }
+                            
                         }
-                        
                     }
                 }
             }

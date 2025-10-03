@@ -122,12 +122,18 @@ Singleton {
             }
 
             property JsonObject background: JsonObject {
-                property bool fixedClockPosition: false
-                property real clockX: -500
-                property real clockY: -500
-                property bool showClock: true
+                property JsonObject clock: JsonObject {
+                    property bool fixedPosition: false
+                    property real x: -500
+                    property real y: -500
+                    property bool show: true
+                    property string style: "cookie" // Options: "cookie", "digital"
+                    property real scale: 1
+                }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
+                property string quote: ""
+                property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
@@ -135,15 +141,6 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                 }
-                property JsonObject lockBlur: JsonObject {
-                    property bool enable: false
-                    property int radius: 100
-                    property bool centerClock: true
-                    property bool showLockedText: true
-                    property real extraZoom: 1.1
-                }
-                property string quote: ""
-                property bool hideWhenFullscreen: true
             }
 
             property JsonObject bar: JsonObject {
@@ -215,6 +212,11 @@ Singleton {
                 property bool autoKillTrays: false
             }
 
+            property JsonObject crosshair: JsonObject {
+                // Valorant crosshair format. Use https://www.vcrdb.net/builder
+                property string code: "0;P;d;1;0l;10;0o;2;1b;0"
+            }
+
             property JsonObject dock: JsonObject {
                 property bool enable: false
                 property bool monochromeIcons: true
@@ -254,6 +256,21 @@ Singleton {
                     property string from: "19:00" // Format: "HH:mm", 24-hour time
                     property string to: "06:30"   // Format: "HH:mm", 24-hour time
                     property int colorTemperature: 5000
+                }
+            }
+
+            property JsonObject lock: JsonObject {
+                property bool launchOnStartup: false
+                property JsonObject blur: JsonObject {
+                    property bool enable: false
+                    property real radius: 100
+                    property real extraZoom: 1.1
+                }
+                property bool centerClock: true
+                property bool showLockedText: true
+                property JsonObject security: JsonObject {
+                    property bool unlockKeyring: true
+                    property bool requirePasswordToPower: false
                 }
             }
 
@@ -359,6 +376,18 @@ Singleton {
 
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
+            }
+
+            property JsonObject workSafety: JsonObject {
+                property JsonObject enable: JsonObject {
+                    property bool wallpaper: true
+                    property bool clipboard: true
+                }
+                property JsonObject triggerCondition: JsonObject {
+                    property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
+                    property list<string> fileKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
+                    property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
+                }
             }
         }
     }

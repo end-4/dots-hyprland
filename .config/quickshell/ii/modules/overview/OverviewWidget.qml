@@ -32,7 +32,7 @@ Item {
         ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
 
     property real workspaceNumberMargin: 80
-    property real workspaceNumberSize: Math.min(workspaceImplicitHeight, workspaceImplicitWidth) * monitor.scale
+    property real workspaceNumberSize: 250 * monitor.scale
     property int workspaceZ: 0
     property int windowZ: 1
     property int windowDraggingZ: 99999
@@ -63,7 +63,7 @@ Item {
         border.width: 1
         border.color: Appearance.colors.colLayer0Border
 
-        ColumnLayout { // Workspaces
+        Column { // Workspaces
             id: workspaceColumnLayout
 
             z: root.workspaceZ
@@ -71,7 +71,7 @@ Item {
             spacing: workspaceSpacing
             Repeater {
                 model: Config.options.overview.rows
-                delegate: RowLayout {
+                delegate: Row {
                     id: row
                     property int rowIndex: index
                     spacing: workspaceSpacing
@@ -97,8 +97,11 @@ Item {
                             StyledText {
                                 anchors.centerIn: parent
                                 text: workspaceValue
-                                font.pixelSize: root.workspaceNumberSize * root.scale
-                                font.weight: Font.DemiBold
+                                font {
+                                    pixelSize: root.workspaceNumberSize * root.scale
+                                    weight: Font.DemiBold
+                                    family: Appearance.font.family.expressive
+                                }
                                 color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, 0.8)
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
@@ -145,27 +148,27 @@ Item {
                 model: ScriptModel {
                     values: {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
-                        return ToplevelManager.toplevels.values.filter((toplevel) => {
-                            const address = `0x${toplevel.HyprlandToplevel.address}`
+                        return [...ToplevelManager.toplevels.values.filter((toplevel) => {
+                            const address = `0x${toplevel.HyprlandToplevel?.address}`
                             var win = windowByAddress[address]
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
                             return inWorkspaceGroup;
-                        })
+                        })].reverse()
                     }
                 }
                 delegate: OverviewWindow {
                     id: window
                     required property var modelData
                     property int monitorId: windowData?.monitor
-                    property var monitor: HyprlandData.monitors[monitorId]
+                    property var monitor: HyprlandData.monitors.find(m => m.id == monitorId)
                     property var address: `0x${modelData.HyprlandToplevel.address}`
-                    windowData: windowByAddress[address]
                     toplevel: modelData
-                    monitorData: HyprlandData.monitors[monitorId]
+                    monitorData: this.monitor
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
                     widgetMonitorId: root.monitor.id
+                    windowData: windowByAddress[address]
 
                     property bool atInitPosition: (initX == x && initY == y)
 
@@ -185,7 +188,7 @@ Item {
                         }
                     }
 
-                    z: atInitPosition ? root.windowZ : root.windowDraggingZ
+                    z: atInitPosition ? (root.windowZ + windowData?.floating) : root.windowDraggingZ
                     Drag.hotSpot.x: targetWindowWidth / 2
                     Drag.hotSpot.y: targetWindowHeight / 2
                     MouseArea {
@@ -215,8 +218,13 @@ Item {
                                 updateWindowPosition.restart()
                             }
                             else {
-                                window.x = window.initX
-                                window.y = window.initY
+                                if (!window.windowData.floating) {
+                                    updateWindowPosition.restart()
+                                    return
+                                }
+                                const percentageX = Math.round((window.x - xOffset) / root.workspaceImplicitWidth * 100)
+                                const percentageY = Math.round((window.y - yOffset) / root.workspaceImplicitHeight * 100)
+                                Hyprland.dispatch(`movewindowpixel exact ${percentageX}% ${percentageY}%, address:${window.windowData?.address}`)
                             }
                         }
                         onClicked: (event) => {
@@ -235,7 +243,7 @@ Item {
                         StyledToolTip {
                             extraVisibleCondition: false
                             alternativeVisibleCondition: dragArea.containsMouse && !window.Drag.active
-                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}\n`
+                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}`
                         }
                     }
                 }
