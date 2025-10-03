@@ -39,6 +39,41 @@
 </details>
 
 <details>
+  <summary>Installation with Nix Flakes (NixOS/Home Manager)</summary>
+
+   - **New!** This repository now provides a Nix flake for easy installation on NixOS and with Home Manager
+   - See [FLAKE-USAGE.md](./FLAKE-USAGE.md) for detailed documentation
+   - Quick start: Add this flake as an input to your configuration:
+     ```nix
+     {
+       inputs = {
+         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+         home-manager.url = "github:nix-community/home-manager";
+         illogical-impulse = {
+           url = "github:Version33/dots-hyprland";
+           inputs.nixpkgs.follows = "nixpkgs";
+         };
+       };
+     }
+     ```
+   - Then enable components as needed:
+     ```nix
+     illogical-impulse = {
+       enable = true;
+       hyprland.enable = true;
+       # ... configure other components
+     };
+     ```
+   - **Features**:
+     - Modular design - enable only what you need
+     - Declarative configuration with sensible defaults
+     - Monitor and workspace configuration
+     - Automatic config file deployment
+     - Full integration with Home Manager
+
+</details>
+
+<details>
   <summary>Software overview</summary>
 
 

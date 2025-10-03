@@ -4,3 +4,9 @@
 __pycache__/
 *.py[cod]
 .config/quickshell/ii/.qmlls.ini
+
+# Nix build artifacts
+result
+result-*
+.direnv/
+flake.lock

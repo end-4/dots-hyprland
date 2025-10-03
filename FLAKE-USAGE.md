@@ -58,11 +58,19 @@ Add this flake as an input to your own `flake.nix`:
             
             # Configure Hyprland
             hyprland = {
+              enable = true;
               monitors = [
                 ",preferred,auto,1"  # Auto-configure all monitors
                 # "DP-1,1920x1080@60,0x0,1"  # Example: specific monitor config
               ];
-              autostart = true;  # Auto-start Hyprland on tty1
+              # autostart is configured via fish.autostart.hyprland
+            };
+            
+            # Configure Fish shell
+            fish = {
+              enable = true;
+              enableStarship = true;
+              autostart.hyprland = true;  # Auto-start Hyprland on tty1
             };
           };
         }
@@ -130,14 +138,17 @@ illogical-impulse.hyprland = {
     # "2, monitor:HDMI-A-1"
   ];
   
-  # Auto-start Hyprland on tty1
-  autostart = true;
-  
-  # Extra configuration to append
+  # Extra configuration to append to custom/env.conf
   extraConfig = '''
     # Your custom Hyprland config here
   ''';
+  
+  # Use a specific Hyprland package (optional)
+  # package = pkgs.hyprland;
 };
+
+# Auto-start Hyprland on tty1 (configured via fish)
+illogical-impulse.fish.autostart.hyprland = true;
 ```
 
 ### Fish Shell Configuration
@@ -173,7 +184,8 @@ illogical-impulse.terminal = {
 ### Theme Configuration
 
 ```nix
-illogical-impulse.theme = {
+illogical-impulse.fonts-themes = {
+  enable = true;
   cursorTheme = "Bibata-Modern-Classic";
   gtkTheme = "adw-gtk3-dark";
   iconTheme = "breeze-dark";

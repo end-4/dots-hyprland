@@ -26,47 +26,6 @@ in
   options.illogical-impulse = {
     enable = mkEnableOption "Illogical Impulse dotfiles configuration";
 
-    # Hyprland-specific options
-    hyprland = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable Hyprland window manager and related packages";
-      };
-
-      monitors = mkOption {
-        type = types.listOf types.str;
-        default = [ ",preferred,auto,1" ];
-        description = ''
-          Monitor configuration for Hyprland.
-          Each string should be in the format: name,resolution,position,scale
-          Example: "DP-1,1920x1080@60,0x0,1"
-          Use ",preferred,auto,1" for automatic configuration.
-        '';
-      };
-
-      workspaces = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = ''
-          Workspace configuration for Hyprland.
-          Example: "1, monitor:DP-1, default:true"
-        '';
-      };
-
-      autostart = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Automatically start Hyprland on tty1";
-      };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Extra configuration to append to hyprland.conf";
-      };
-    };
-
     # Fish shell configuration
     fish = {
       enable = mkOption {
@@ -91,6 +50,14 @@ in
         };
         description = "Fish shell aliases";
       };
+
+      autostart = {
+        hyprland = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Automatically start Hyprland on tty1";
+        };
+      };
     };
 
     # Terminal configuration
@@ -110,27 +77,6 @@ in
       };
     };
 
-    # Theming options
-    theme = {
-      cursorTheme = mkOption {
-        type = types.str;
-        default = "Bibata-Modern-Classic";
-        description = "Cursor theme name";
-      };
-
-      gtkTheme = mkOption {
-        type = types.str;
-        default = "adw-gtk3-dark";
-        description = "GTK theme name";
-      };
-
-      iconTheme = mkOption {
-        type = types.str;
-        default = "breeze-dark";
-        description = "Icon theme name";
-      };
-    };
-
     # Configuration file deployment
     configFiles = {
       enable = mkOption {
@@ -144,7 +90,7 @@ in
   config = mkIf cfg.enable {
     # Deploy Hyprland configuration files
     xdg.configFile = mkMerge [
-      (mkIf (cfg.hyprland.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.hyprland.enable && cfg.configFiles.enable) {
         "hypr/hyprland.conf".source = ./.config/hypr/hyprland.conf;
         "hypr/hypridle.conf".source = ./.config/hypr/hypridle.conf;
         "hypr/hyprlock.conf".source = ./.config/hypr/hyprlock.conf;
@@ -158,7 +104,7 @@ in
         "hypr/hyprland/rules.conf".source = ./.config/hypr/hyprland/rules.conf;
         
         # Custom configs (empty by default for user customization)
-        "hypr/custom/env.conf".text = "";
+        "hypr/custom/env.conf".text = config.illogical-impulse.hyprland.extraConfig;
         "hypr/custom/execs.conf".text = "";
         "hypr/custom/general.conf".text = "";
         "hypr/custom/keybinds.conf".text = "";
@@ -167,13 +113,13 @@ in
         # Monitor configuration
         "hypr/monitors.conf".text = ''
           # Monitor configuration
-          ${concatMapStrings (monitor: "monitor=${monitor}\n") cfg.hyprland.monitors}
+          ${concatMapStrings (monitor: "monitor=${monitor}\n") config.illogical-impulse.hyprland.monitors}
         '';
         
         # Workspace configuration
         "hypr/workspaces.conf".text = ''
           # Workspace configuration
-          ${concatMapStrings (workspace: "workspace=${workspace}\n") cfg.hyprland.workspaces}
+          ${concatMapStrings (workspace: "workspace=${workspace}\n") config.illogical-impulse.hyprland.workspaces}
         '';
       })
 
@@ -207,7 +153,7 @@ in
           end
         '';
 
-        "fish/auto-Hypr.fish" = mkIf cfg.hyprland.autostart {
+        "fish/auto-Hypr.fish" = mkIf cfg.fish.autostart.hyprland {
           text = ''
             # Auto start Hyprland on tty1
             if test -z "$DISPLAY" ;and test "$XDG_VTNR" -eq 1
@@ -231,12 +177,12 @@ in
       })
 
       # Deploy fuzzel configuration
-      (mkIf (cfg.widgets.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.widgets.enable && cfg.configFiles.enable) {
         "fuzzel".source = ./.config/fuzzel;
       })
 
       # Deploy wlogout configuration
-      (mkIf (cfg.widgets.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.widgets.enable && cfg.configFiles.enable) {
         "wlogout".source = ./.config/wlogout;
       })
 
@@ -246,19 +192,19 @@ in
       })
 
       # Deploy fontconfig
-      (mkIf (cfg.fonts-themes.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.fonts-themes.enable && cfg.configFiles.enable) {
         "fontconfig".source = ./.config/fontconfig;
       })
 
       # Deploy Qt configuration
-      (mkIf (cfg.toolkit.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.toolkit.enable && cfg.configFiles.enable) {
         "qt5ct".source = ./.config/qt5ct;
         "qt6ct".source = ./.config/qt6ct;
         "Kvantum".source = ./.config/Kvantum;
       })
 
       # Deploy KDE configuration files
-      (mkIf (cfg.kde.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.kde.enable && cfg.configFiles.enable) {
         "kdeglobals".source = ./.config/kdeglobals;
         "dolphinrc".source = ./.config/dolphinrc;
         "konsolerc".source = ./.config/konsolerc;
@@ -272,16 +218,17 @@ in
       })
 
       # Deploy XDG portal configuration
-      (mkIf (cfg.portal.enable && cfg.configFiles.enable) {
+      (mkIf (config.illogical-impulse.portal.enable && cfg.configFiles.enable) {
         "xdg-desktop-portal".source = ./.config/xdg-desktop-portal;
       })
     ];
 
     # Enable Hyprland through home-manager if requested
-    wayland.windowManager.hyprland = mkIf cfg.hyprland.enable {
+    wayland.windowManager.hyprland = mkIf config.illogical-impulse.hyprland.enable {
       enable = true;
       xwayland.enable = true;
       systemd.enable = true;
+      package = config.illogical-impulse.hyprland.package;
     };
 
     # Enable Fish shell through home-manager

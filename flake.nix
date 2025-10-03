@@ -56,7 +56,12 @@
             backlight.enable = true;
             basic.enable = true;
             fonts-themes.enable = true;
-            hyprland.enable = true;
+            hyprland = {
+              enable = true;
+              # Configure monitors (optional)
+              monitors = [ ",preferred,auto,1" ];
+              # workspaces = [ ];
+            };
             portal.enable = true;
             screencapture.enable = true;
             toolkit.enable = true;
@@ -68,6 +73,19 @@
             microtex.enable = false;
             oneui4-icons.enable = false;
             python.enable = false;
+            
+            # Fish shell configuration
+            fish = {
+              enable = true;
+              enableStarship = true;
+              autostart.hyprland = true;
+            };
+            
+            # Terminal configuration
+            terminal = {
+              default = "kitty";
+              kitty.enable = true;
+            };
           };
         }
       ];
