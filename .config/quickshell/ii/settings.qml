@@ -10,6 +10,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import Quickshell
 import qs
 import qs.services
 import qs.modules.common
@@ -173,7 +174,11 @@ ApplicationWindow {
                         buttonText: Translation.tr("Config file")
                         expanded: navRail.expanded
                         onClicked: {
-                            Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
+                            Quickshell.execDetached([
+                                "bash", "-c",
+                                'file="$0"; ~/.config/hypr/hyprland/scripts/launch_first_available.sh "code \"$file\"" "codium \"$file\"" "cursor \"$file\"" "zed \"$file\"" "zedit \"$file\"" "zeditor \"$file\"" "kate \"$file\"" "gnome-text-editor \"$file\"" "emacs \"$file\"" "command -v nvim && kitty -1 nvim \"$file\"" "command -v micro && kitty -1 micro \"$file\""',
+                                CF.FileUtils.trimFileProtocol(Directories.config + "/illogical-impulse/config.json")
+                            ])
                         }
 
                         StyledToolTip {
