@@ -61,6 +61,19 @@ Singleton {
         monitorChangeTimer.restart();
     }
 
+    property bool idleInhibitState: Idle.inhibit
+    onIdleInhibitStateChanged: {
+        if (root.extMonitorInhibit) {
+            const shouldInhibit = root.hasExternalMonitor;
+            if(Idle.inhibit !== shouldInhibit) {
+                // Use a short timer to allow the UI to update, then override
+                Qt.callLater(() => {
+                    root.handleMonitorChange();
+                });
+            }
+        }
+    }
+
     Component.onCompleted: {
         root.hasExternalMonitor = root.checkForExternalMonitor();
     }
