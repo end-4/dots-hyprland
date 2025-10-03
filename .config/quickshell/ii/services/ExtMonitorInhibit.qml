@@ -31,10 +31,10 @@ Singleton {
 
         // Look for common laptop screen patterns
         const builtInPatterns = [
-        /^eDP/,     // Most common (eDP-1, eDP-2, etc.)
-        /^LVDS/,    // Older laptops
-        /^DSI/,     // Some newer laptops
-        /^DP-\d+-\d+$/, // Some integrated displays
+            /^eDP/,     // Most common (eDP-1, eDP-2, etc.)
+            /^LVDS/,    // Older laptops
+            /^DSI/,     // Some newer laptops
+            /^DP-\d+-\d+$/, // Some integrated displays
         ];
 
         const externalMonitors = monitors.filter(monitor => {
@@ -46,13 +46,9 @@ Singleton {
 
     function handleMonitorChange() {
         if (!root.extMonitorInhibit) return;
-
         if (root.hasExternalMonitor && !Idle.inhibit) {
             Idle.toggleInhibit();
             console.log("[MonitorDetector] External monitor connected, enabling idle inhibitor");
-        } else if (!root.hasExternalMonitor && Idle.inhibit) {
-            Idle.toggleInhibit();
-            console.log("[MonitorDetector] No external monitors, disabling idle inhibitor");
         }
     }
 
@@ -63,23 +59,20 @@ Singleton {
 
     property bool idleInhibitState: Idle.inhibit
     onIdleInhibitStateChanged: {
-        if (root.extMonitorInhibit) {
-            const shouldInhibit = root.hasExternalMonitor;
-            if(Idle.inhibit !== shouldInhibit) {
-                Quickshell.execDetached([
+        if (root.extMonitorInhibit && root.hasExternalMonitor) {
+            Quickshell.execDetached([
                 "notify-send",
                 "Keep system awake",
                 "External monitor detected",
                 "-a", "Shell",
                 "-i", "video-display",
                 "-t", "3000"
-                ]);
+            ]);
 
-                // Use a short timer to allow the UI to update, then override
-                Qt.callLater(() => {
-                    root.handleMonitorChange();
-                });
-            }
+            // Use a short timer to allow the UI to update, then override
+            Qt.callLater(() => {
+                root.handleMonitorChange();
+            });
         }
     }
 
