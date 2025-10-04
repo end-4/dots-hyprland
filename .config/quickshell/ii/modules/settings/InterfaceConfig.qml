@@ -69,6 +69,93 @@ ContentPage {
             }
         }
 
+
+        ConfigRow{
+            ContentSubsection {
+                enabled: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Dial number style")
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.clock.cookie.dialNumberStyle
+                    onSelected: newValue => {
+                        Config.options.background.clock.cookie.dialNumberStyle = newValue;
+                        if (newValue !== "dots") {
+                            Config.options.background.clock.cookie.centerGlow = false;
+                        }
+                        if (newValue === "numbers") {
+                            Config.options.background.clock.cookie.timeIndicators  = false;
+                        }
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("None"),
+                            icon: "deselect",
+                            value: "none"
+                        },
+                        {
+                            displayName: Translation.tr("Dots"),
+                            icon: "graph_6",
+                            value: "dots"
+                        },
+                        {
+                            displayName: Translation.tr("Numbers"),
+                            icon: "123",
+                            value: "numbers"
+                        }
+                    ]
+                }
+            }
+            ContentSubsection {
+                enabled: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Seconds indicator style")
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.clock.cookie.secondHandStyle
+                    onSelected: newValue => {
+                        Config.options.background.clock.cookie.secondHandStyle = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("None"),
+                            icon: "deselect",
+                            value: "none"
+                        },
+                        {
+                            displayName: Translation.tr("Dot"),
+                            icon: "adjust",
+                            value: "dot"
+                        },
+                        {
+                            displayName: Translation.tr("Line"),
+                            icon: "line_end",
+                            value: "line"
+                        }
+                    ]
+                }
+            }
+        }
+
+        ContentSubsection {
+        enabled: Config.options.background.clock.style === "cookie"
+        title: Translation.tr("Minute hand style")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.minuteHandStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.minuteHandStyle = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Medium"),
+                        icon: "pen_size_1",
+                        value: "medium"
+                    },
+                    {
+                        displayName: Translation.tr("Bold"),
+                        icon: "pen_size_5",
+                        value: "bold"
+                    },
+                ]
+            }
+        }
+
         ConfigSpinBox {
             enabled: Config.options.background.clock.style === "cookie"
             icon: "support"
@@ -81,20 +168,23 @@ ContentPage {
                 Config.options.background.clock.clockSides = value;
             }
         }
+        ConfigSwitch {
+            enabled: Config.options.background.clock.style === "cookie"
+            buttonIcon: "waves"
+            text: Translation.tr("Wave animation")
+            checked: Config.options.background.clock.cookie.waveAnimation
+            onCheckedChanged: {
+                Config.options.background.clock.cookie.waveAnimation = checked;
+            }
+            StyledToolTip {
+                text: "It may effect performance"
+            }
+        }
 
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
             ConfigSwitch {
-                buttonIcon: "graph_6"
-                text: Translation.tr("Hour dots")
-                checked: Config.options.background.clock.cookie.hourDots
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.hourDots = checked;
-                    Config.options.background.clock.cookie.centerGlow = checked ? Config.options.background.clock.cookie.centerGlow : false;
-                }
-            }
-            ConfigSwitch {
-                enabled: Config.options.background.clock.cookie.hourDots
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots"
                 buttonIcon: "brightness_7"
                 text: Translation.tr("Center glow")
                 checked: Config.options.background.clock.cookie.centerGlow
@@ -104,50 +194,28 @@ ContentPage {
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.centerGlow = checked;
                 }
+                StyledToolTip {
+                    text: "Can only be turned on using the 'Dots' dial style for aesthetic reasons"
+                }
             }
-        }
 
-        ConfigRow{
-            enabled: Config.options.background.clock.style === "cookie"
-            
             ConfigSwitch {
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
                 checked: Config.options.background.clock.cookie.timeIndicators
+                onEnabledChanged: {
+                    checked = Config.options.background.clock.cookie.timeIndicators
+                }
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.timeIndicators = checked;
                 }
-            }
-            ConfigSwitch {
-                buttonIcon: "line_end"
-                text: Translation.tr("Minute hand adjust")
-                checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
-                }
-            }
-        }
-        ConfigRow{
-            enabled: Config.options.background.clock.style === "cookie"
-            ConfigSwitch {
-                buttonIcon: "pace"
-                text: Translation.tr("Second dot")
-                checked: Config.options.background.clock.cookie.secondDot
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.secondDot = checked;
-                }
-            }
-            ConfigSwitch {
-                buttonIcon: "waves"
-                text: Translation.tr("Wave animation")
-                checked: Config.options.background.clock.cookie.waveAnimation
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.waveAnimation = checked;
-                }
                 StyledToolTip {
-                    text: "It may effect performance"
+                    text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
                 }
             }
+
+            
         }
         
 

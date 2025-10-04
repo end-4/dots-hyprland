@@ -131,12 +131,12 @@ Singleton {
                     property real scale: 1
                     property int clockSides: 12
                     property JsonObject cookie: JsonObject {
-                        property bool hourDots: true
+                        property string dialNumberStyle: "dots" // Options: "dots" , "numbers", "none"
+                        property string minuteHandStyle: "medium" // Options: "medium", "bold"
+                        property string secondHandStyle: "dot" // Options: "dot", "line" , "none" 
                         property bool timeIndicators: true
-                        property bool minuteHandSizeAdjust: true
                         property bool centerGlow: true
                         property bool waveAnimation: true
-                        property bool secondDot: true
                     }
                     
                 }

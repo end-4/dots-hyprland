@@ -21,11 +21,15 @@ Item {
     property real hourHandLength: 72
     property real hourHandWidth: 20
     property real minuteHandLength: 95
-    property real minuteHandWidth: Config.options.background.clock.cookie.minuteHandSizeAdjust ? hourHandWidth : 12
+    property real minuteHandWidth: Config.options.background.clock.cookie.minuteHandStyle === "bold" ? hourHandWidth : 12
     property real centerDotSize: 10
     property real hourDotSize: 12
     property real centerGlowSize: 135
     property real secondDotSize: 20
+    property real secondsHandWidth: 2
+    property real secondsHandLength: 100
+
+    property real hourNumberSize: 36
     
 
     property color colShadow: Appearance.colors.colShadow
@@ -35,7 +39,7 @@ Item {
     property color colMinuteHand: Appearance.colors.colSecondaryActive
     property color colOnHourHand: Appearance.colors.colOnPrimary
     property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
-    property color colSecondDot: Appearance.colors.colTertiary
+    property color colSeconds: Appearance.colors.colTertiary
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
     readonly property int clockMinute: parseInt(clockNumbers[1])
@@ -92,7 +96,7 @@ Item {
         Repeater {
             model: 12
             Item {
-                opacity: Config.options.background.clock.cookie.hourDots ? 1.0 : 0 // Not using visible to allow smooth transition
+                opacity: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 1.0 : 0 // Not using visible to allow smooth transition
                 Behavior on opacity {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
@@ -113,7 +117,6 @@ Item {
                 }
             }
         }
-        
     }
 
     // Center glow behind the cookie
@@ -223,7 +226,7 @@ Item {
 
     // Center dot
     Rectangle {
-        opacity: !Config.options.background.clock.cookie.minuteHandSizeAdjust ? 1.0 : 0 // Not using visible to allow smooth transition
+        opacity: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 1.0 : 0 // Not using visible to allow smooth transition
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
@@ -247,31 +250,77 @@ Item {
     }
 
 
-    // Second dot
+    // Second hand/ dot
     Item {
-        opacity: Config.options.background.clock.cookie.secondDot ? 1.0 : 0
+        z:3
+        opacity: Config.options.background.clock.cookie.secondHandStyle === "dot" || Config.options.background.clock.cookie.secondHandStyle === "line" ? 1.0 : 0 // Not using visible to allow smooth transition
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
         Behavior on rotation{
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
         rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
         anchors.fill: parent
         Rectangle {
+            Behavior on implicitHeight {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
+            Behavior on implicitWidth {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
                 leftMargin: 10
             }
-            implicitWidth: root.secondDotSize
-            implicitHeight: implicitWidth
-            radius: implicitWidth / 2
-            color: colSecondDot
-            opacity: 1.0
+            implicitWidth: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandLength
+            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth : root.secondsHandWidth
+            radius: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth / 2 : root.secondsHandWidth / 2
+            color: colSeconds
         }
     }
+
     
+    
+    // Hour Indicator numbers
+    Repeater {
+        model: 4
+        Item {
+            opacity: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 1.0 : 0 // Not using visible to allow smooth transition
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+            required property int index
+            rotation: 360 / 4 * index 
+            anchors.fill: parent
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: 25
+                }
+                implicitWidth: root.hourNumberSize
+                implicitHeight: implicitWidth
+                //radius: implicitWidth / 2
+                color: "transparent"
+                //opacity: 0.5
+                StyledText{
+                    
+                    color: root.colOnBackground
+                    anchors.centerIn: parent
+                    text: index === 0 ? "9" : index === 1 ? "12" : index === 2 ? "3" : "6"
+                    rotation: index % 2 === 0 ? index * 90 : -index * 90 //A better way can be found to show texts on right angle
+                    font {
+                        family: Appearance.font.family.reading
+                        pixelSize: 80
+                        weight: 1000
+                    }
+                }
+            }
+        }
+    }
+
 
     // Quote
     Rectangle{
