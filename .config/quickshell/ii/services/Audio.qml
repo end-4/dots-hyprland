@@ -2,6 +2,7 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
+
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -14,6 +15,7 @@ Singleton {
     property bool ready: Pipewire.defaultAudioSink?.ready ?? false
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
+    property string audioTheme: Config.options.audio.alertSound.theme
 
     signal sinkProtectionTriggered(string reason);
 
@@ -48,7 +50,27 @@ Singleton {
             }
             lastVolume = sink.audio.volume;
         }
-        
+    }
+
+    function playSystemSound(soundName) {
+        const ogaPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.oga`;
+        const oggPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.ogg`;
+
+        let command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            ogaPath
+        ];
+        Quickshell.execDetached(command);
+
+        command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            oggPath
+        ];
+        Quickshell.execDetached(command);
     }
 
 }
