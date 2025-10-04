@@ -14,6 +14,7 @@ ContentPage {
 
         ConfigRow{
             ConfigSwitch {
+                buttonIcon: "nest_clock_farsight_analog"
                 text: Translation.tr("Show clock")
                 checked: Config.options.background.clock.show
                 onCheckedChanged: {
@@ -21,6 +22,7 @@ ContentPage {
                 }
             }
             ConfigSwitch {
+                buttonIcon: "format_quote"
                 text: Translation.tr("Show quote")
                 checked: Config.options.background.showQuote
                 onCheckedChanged: {
@@ -31,6 +33,7 @@ ContentPage {
 
         ConfigRow{
             ConfigSpinBox {
+                icon: "loupe"
                 text: Translation.tr("Scale (%)")
                 value: Config.options.background.clock.scale * 100
                 from: 1
@@ -42,6 +45,7 @@ ContentPage {
             }
 
             ConfigSpinBox {
+                icon: "support"
                 text: Translation.tr("Clock sides")
                 value: Config.options.background.clock.clockSides
                 from: 1
@@ -79,7 +83,9 @@ ContentPage {
         ContentSubsection {
             title: Translation.tr("Cookie clock options")
             ConfigRow{
+                enabled: Config.options.background.clock.style === "cookie"
                 ConfigSwitch {
+                    buttonIcon: "graph_6"
                     text: Translation.tr("Hour dots")
                     checked: Config.options.background.clock.cookie.hourDots
                     onCheckedChanged: {
@@ -87,13 +93,15 @@ ContentPage {
                     }
                 }
                 ConfigSwitch {
-                    text: Translation.tr("Time indicator")
+                    buttonIcon: "farsight_digital"
+                    text: Translation.tr("Clock indicator")
                     checked: Config.options.background.clock.cookie.timeIndicators
                     onCheckedChanged: {
                         Config.options.background.clock.cookie.timeIndicators = checked;
                     }
                 }
                 ConfigSwitch {
+                    buttonIcon: "line_end"
                     text: Translation.tr("Minute hand adjust")
                     checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
                     onCheckedChanged: {
