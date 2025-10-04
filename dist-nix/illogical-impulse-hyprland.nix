@@ -54,7 +54,7 @@ in
       pkgs.hyprcursor
       cfg.package
       pkgs.hyprland-qtutils
-      pgks.hyprland-qt-support
+      pkgs.hyprland-qt-support
       pkgs.hyprlang
       pkgs.hyprlock
       pkgs.hyprpicker
@@ -66,4 +66,3 @@ in
     ];
   };
 }
-

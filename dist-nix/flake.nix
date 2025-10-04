@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,11 +11,14 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: {
-    # Home Manager module for the dotfiles
-    homeManagerModules.default = import ./module.nix;
-    
-    # Convenience outputs for all individual modules
+    # Home Manager modules for the dotfiles
+    # Note: 'homeManagerModules' is a conventional output used by Home Manager users,
+    # but it's not a standard Nix flake output, so Nix will warn about it being unknown.
+    # That warning is harmless and can be safely ignored.
     homeManagerModules = {
+      default = import ./module.nix;
+
+      # Convenience outputs for all individual modules
       illogical-impulse = import ./module.nix;
       audio = import ./illogical-impulse-audio.nix;
       backlight = import ./illogical-impulse-backlight.nix;
@@ -37,7 +40,7 @@
     # Users can use this as a template for their own configuration
     # homeConfigurations."example-user" = home-manager.lib.homeManagerConfiguration {
     #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      
+    #
     #   modules = [
     #     self.homeManagerModules.default
     #     {
@@ -46,11 +49,11 @@
     #         homeDirectory = "/home/example-user";
     #         stateVersion = "25.05";
     #       };
-
+    #
     #       # Enable the components you want
     #       illogical-impulse = {
     #         enable = true; # Master enable switch
-            
+    #
     #         # Component enables
     #         audio.enable = true;
     #         backlight.enable = true;
@@ -66,21 +69,21 @@
     #         screencapture.enable = true;
     #         toolkit.enable = true;
     #         widgets.enable = true;
-            
+    #
     #         # Optional components
     #         bibata-cursor.enable = false;
     #         kde.enable = false;
     #         microtex.enable = false;
     #         oneui4-icons.enable = false;
     #         python.enable = false;
-            
+    #
     #         # Fish shell configuration
     #         fish = {
     #           enable = true;
     #           enableStarship = true;
     #           autostart.hyprland = true;
     #         };
-            
+    #
     #         # Terminal configuration
     #         terminal = {
     #           default = "kitty";
