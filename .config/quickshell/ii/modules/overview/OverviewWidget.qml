@@ -188,7 +188,7 @@ Item {
                         }
                     }
 
-                    z: atInitPosition ? (root.windowZ + windowData?.floating) : root.windowDraggingZ
+                    z: Drag.active ? root.windowDraggingZ : (root.windowZ + windowData?.floating)
                     Drag.hotSpot.x: targetWindowWidth / 2
                     Drag.hotSpot.y: targetWindowHeight / 2
                     MouseArea {
