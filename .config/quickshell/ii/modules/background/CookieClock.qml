@@ -170,12 +170,17 @@ Item {
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
         
+        Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+
         RowLayout{
             anchors.centerIn: parent
             spacing: 4
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
+            
             MaterialSymbol{
                 id: quoteIcon
                 visible: showQuote > 0
