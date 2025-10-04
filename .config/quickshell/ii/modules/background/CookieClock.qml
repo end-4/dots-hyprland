@@ -13,29 +13,64 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
 
+    readonly property string clockStyle: Config.options.background.clock.style
+    readonly property bool showQuote: Config.options.background.showQuote && Config.options.background.quote.length > 0 && !GlobalStates.screenLocked
+
+
     property real implicitSize: 230
     property real hourHandLength: 72
-    property real hourHandWidth: 16
+    property real hourHandWidth: 20
     property real minuteHandLength: 95
-    property real minuteHandWidth: 8
+    property real minuteHandWidth: Config.options.background.clock.cookie.minuteHandSizeAdjust ? hourHandWidth : 12
     property real centerDotSize: 10
-    property real hourDotSize: minuteHandWidth
+    property real hourDotSize: 12
+    property real centerGlowSize: 135
+    property real secondDotSize: 20
+    
 
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
     property color colHourHand: Appearance.colors.colPrimary
-    property color colMinuteHand: Appearance.colors.colSecondary
+    property color colMinuteHand: Appearance.colors.colSecondaryActive
     property color colOnHourHand: Appearance.colors.colOnPrimary
-
+    property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
+    property color colSecondDot: Appearance.colors.colTertiary
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
     readonly property int clockMinute: parseInt(clockNumbers[1])
+
+    property int clockSecond: 0
+
+    Loader{
+        active: Config.option.background.clock.cookie.secondDot
+        sourceComponent: Timer {
+            interval: 1000 
+            running: true;repeat: true
+            onTriggered: {
+                var now = new Date()
+                clockSecond = now.getSeconds()
+            }
+        }
+    }
+
+
+
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
     DropShadow {
-        source: cookie
+        source: cookie 
+        anchors.fill: source
+        horizontalOffset: 0
+        verticalOffset: 2
+        radius: 12
+        samples: radius * 2 + 1
+        color: root.colShadow
+        transparentBorder: true
+    }
+    DropShadow {
+        source: quoteBox 
         anchors.fill: source
         horizontalOffset: 0
         verticalOffset: 2
@@ -50,15 +85,19 @@ Item {
         z: 0
         implicitSize: root.implicitSize
         amplitude: implicitSize / 70
-        sides: 12
+        sides: Config.options.background.clock.clockSides
         color: root.colBackground
 
         // 12 dots around the cookie
         Repeater {
             model: 12
             Item {
+                opacity: Config.options.background.clock.cookie.hourDots ? 1.0 : 0 // Not using visible to allow smooth transition
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
                 required property int index
-                rotation: 360 / 12 * index
+                rotation: 360 / 12 * index 
                 anchors.fill: parent
                 Rectangle {
                     anchors {
@@ -74,8 +113,44 @@ Item {
                 }
             }
         }
+        
     }
 
+    // Center glow behind the cookie
+    Rectangle {
+        id: glowLines
+        z: 1
+        anchors.centerIn: cookie
+        Repeater {
+            model: 12
+            Item {
+                opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 // Not using visible to allow smooth transition
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                required property int index
+                rotation: 360 / 12 * index 
+                anchors.fill: parent
+                Rectangle {
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                        leftMargin: 50
+                    }
+                    implicitWidth: root.hourDotSize
+                    implicitHeight: implicitWidth / 2 
+                    radius: implicitWidth / 2
+                    color: root.colOnBackground
+                    opacity: Config.options.background.clock.cookie.centerGlow ? 0.5 : 0 
+                    Behavior on opacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                }
+            }
+        }
+    }
+
+    // Numbers column
     Column {
         id: timeIndicators
         z: 1
@@ -88,9 +163,19 @@ Item {
             delegate: StyledText {
                 required property string modelData
 
+                opacity: Config.options.background.clock.cookie.timeIndicators ? 1.0 : 0 // Not using visible to allow smooth transition
+                Behavior on opacity { // LOOK
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
                 anchors.horizontalCenter: parent?.horizontalCenter
                 font {
-                    pixelSize: modelData.match(/am|pm/i) ? 26 : 68
+                    // A better way to do this? probably yes, do i know : no
+                    property real numberSizeWithoutGlow: modelData.match(/am|pm/i) ? 26 : 68
+                    property real numberSizeWithGlow: modelData.match(/am|pm/i) ? 10 : 40
+                    pixelSize: Config.options.background.clock.cookie.centerGlow ? numberSizeWithGlow : numberSizeWithoutGlow 
+                    Behavior on pixelSize {
+                        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                    }
                     family: Appearance.font.family.expressive
                     weight: Font.Bold
                 }
@@ -119,8 +204,14 @@ Item {
     Item {
         anchors.fill: parent
         z: 3
+        Behavior on rotation{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
         rotation: -90 + (360 / 60) * root.clockMinute
         Rectangle {
+            Behavior on height {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 - minuteHandWidth / 2
             width: minuteHandLength
@@ -132,11 +223,101 @@ Item {
 
     // Center dot
     Rectangle {
+        opacity: !Config.options.background.clock.cookie.minuteHandSizeAdjust ? 1.0 : 0 // Not using visible to allow smooth transition
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
         z: 4
         color: root.colOnHourHand
         anchors.centerIn: parent
         implicitWidth: centerDotSize
         implicitHeight: implicitWidth
         radius: implicitWidth / 2
+    }
+
+    // Center glow
+    Rectangle {
+        visible: Config.options.background.clock.cookie.centerGlow
+        z: 0
+        color: root.colTimeIndicators
+        anchors.centerIn: parent
+        implicitWidth: centerGlowSize
+        implicitHeight: centerGlowSize
+        radius: implicitWidth / 2
+    }
+
+
+    // Second dot
+    Item {
+        opacity: Config.options.background.clock.cookie.secondDot ? 1.0 : 0
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on rotation{
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+        rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
+        anchors.fill: parent
+        Rectangle {
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                leftMargin: 10
+            }
+            implicitWidth: root.secondDotSize
+            implicitHeight: implicitWidth
+            radius: implicitWidth / 2
+            color: colSecondDot
+            opacity: 1.0
+        }
+    }
+    
+
+    // Quote
+    Rectangle{
+        id: quoteBox
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.bottom
+        anchors.topMargin: 24
+        
+        implicitWidth: quoteText.width + quoteIcon.width + 16 // for spacing on both sides
+        implicitHeight: showQuote ? quoteText.height + 8 : 0
+        radius: Appearance.rounding.small
+        color: Appearance.colors.colSecondaryContainer
+        
+        Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+
+        RowLayout{
+            anchors.centerIn: parent
+            spacing: 4
+            
+            MaterialSymbol{
+                id: quoteIcon
+                visible: showQuote > 0
+                iconSize: Appearance.font.pixelSize.huge
+                text: "comic_bubble"
+            }
+            StyledText{
+                id: quoteText
+                visible : showQuote > 0
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                text: Config.options.background.quote
+                font {
+                    family: Appearance.font.family.main
+                    pixelSize: Appearance.font.pixelSize.large
+                    weight: Font.Normal
+                    italic: true
+                }
+            }
+        }
     }
 }

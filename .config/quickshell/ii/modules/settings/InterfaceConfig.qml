@@ -12,12 +12,22 @@ ContentPage {
         icon: "wallpaper"
         title: Translation.tr("Background")
 
-        ConfigSwitch {
-            buttonIcon: "nest_clock_farsight_analog"
-            text: Translation.tr("Show clock")
-            checked: Config.options.background.clock.show
-            onCheckedChanged: {
-                Config.options.background.clock.show = checked;
+        ConfigRow{
+            ConfigSwitch {
+                buttonIcon: "nest_clock_farsight_analog"
+                text: Translation.tr("Show clock")
+                checked: Config.options.background.clock.show
+                onCheckedChanged: {
+                    Config.options.background.clock.show = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "format_quote"
+                text: Translation.tr("Show quote")
+                checked: Config.options.background.showQuote
+                onCheckedChanged: {
+                    Config.options.background.showQuote = checked;
+                }
             }
         }
 
@@ -33,6 +43,10 @@ ContentPage {
             }
         }
 
+            
+
+        
+    
         ContentSubsection {
             title: Translation.tr("Clock style")
             ConfigSelectionArray {
@@ -50,8 +64,103 @@ ContentPage {
                         displayName: Translation.tr("Material cookie"),
                         icon: "cookie",
                         value: "cookie"
-                    },
+                    }
                 ]
+            }
+        }
+
+        ConfigSpinBox {
+            enabled: Config.options.background.clock.style === "cookie"
+            icon: "support"
+            text: Translation.tr("Clock sides")
+            value: Config.options.background.clock.clockSides
+            from: 1
+            to: 36
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.clock.clockSides = value;
+            }
+        }
+
+        ConfigRow{
+            enabled: Config.options.background.clock.style === "cookie"
+            ConfigSwitch {
+                buttonIcon: "graph_6"
+                text: Translation.tr("Hour dots")
+                checked: Config.options.background.clock.cookie.hourDots
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.hourDots = checked;
+                    Config.options.background.clock.cookie.centerGlow = checked ? Config.options.background.clock.cookie.centerGlow : false;
+                }
+            }
+            ConfigSwitch {
+                enabled: Config.options.background.clock.cookie.hourDots
+                buttonIcon: "brightness_7"
+                text: Translation.tr("Center glow")
+                checked: Config.options.background.clock.cookie.centerGlow
+                onEnabledChanged: {
+                    checked = Config.options.background.clock.cookie.centerGlow
+                }
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.centerGlow = checked;
+                }
+            }
+        }
+
+        ConfigRow{
+            enabled: Config.options.background.clock.style === "cookie"
+            
+            ConfigSwitch {
+                buttonIcon: "farsight_digital"
+                text: Translation.tr("Clock indicator")
+                checked: Config.options.background.clock.cookie.timeIndicators
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.timeIndicators = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "line_end"
+                text: Translation.tr("Minute hand adjust")
+                checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
+                }
+            }
+        }
+        ConfigRow{
+            enabled: Config.options.background.clock.style === "cookie"
+            ConfigSwitch {
+                buttonIcon: "pace"
+                text: Translation.tr("Second dot")
+                checked: Config.options.background.clock.cookie.secondDot
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.secondDot = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "waves"
+                text: Translation.tr("Wave animation")
+                checked: Config.options.background.clock.cookie.waveAnimation
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.waveAnimation = checked;
+                }
+                StyledToolTip {
+                    text: "It may effect performance"
+                }
+            }
+        }
+        
+
+        ContentSubsection {
+            title: Translation.tr("Quote settings")
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Quote")
+                text: Config.options.background.quote
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.background.quote = text;
+                }
             }
         }
 

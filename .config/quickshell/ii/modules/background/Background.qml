@@ -314,7 +314,7 @@ Variants {
                             }
                             StyledText {
                                 // Somehow gets fucked up if made a ClockText???
-                                visible: Config.options.background.quote.length > 0
+                                visible: Config.options.background.showQuote && Config.options.background.quote.length > 0
                                 Layout.fillWidth: true
                                 horizontalAlignment: bgRoot.textHorizontalAlignment
                                 font {
@@ -333,10 +333,11 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
-                        visible: root.clockStyle === "cookie"
+                        visible: root.clockStyle === "cookie" 
                         active: visible
                         sourceComponent: CookieClock {}
                     }
+                    
                 }
 
                 Item {
@@ -410,7 +411,7 @@ Variants {
         }
     }
 
-    // Components
+    // ComponentsCookieClock {}
     component ClockText: StyledText {
         Layout.fillWidth: true
         horizontalAlignment: bgRoot.textHorizontalAlignment
