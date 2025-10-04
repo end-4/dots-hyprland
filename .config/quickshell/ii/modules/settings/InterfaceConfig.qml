@@ -69,17 +69,28 @@ ContentPage {
             }
         }
 
+        ConfigSpinBox {
+            enabled: Config.options.background.clock.style === "cookie"
+            icon: "support"
+            text: Translation.tr("Clock sides")
+            value: Config.options.background.clock.clockSides
+            from: 1
+            to: 36
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.clock.clockSides = value;
+            }
+        }
+
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
-            ConfigSpinBox {
-                icon: "support"
-                text: Translation.tr("Clock sides")
-                value: Config.options.background.clock.clockSides
-                from: 1
-                to: 36
-                stepSize: 1
-                onValueChanged: {
-                    Config.options.background.clock.clockSides = value;
+            ConfigSwitch {
+                buttonIcon: "graph_6"
+                text: Translation.tr("Hour dots")
+                checked: Config.options.background.clock.cookie.hourDots
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.hourDots = checked;
+                    Config.options.background.clock.cookie.centerGlow = checked ? Config.options.background.clock.cookie.centerGlow : false;
                 }
             }
             ConfigSwitch {
@@ -94,29 +105,11 @@ ContentPage {
                     Config.options.background.clock.cookie.centerGlow = checked;
                 }
             }
-            ConfigSwitch {
-                buttonIcon: "waves"
-                text: Translation.tr("Wave animation")
-                checked: Config.options.background.clock.cookie.waveAnimation
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.waveAnimation = checked;
-                }
-                StyledToolTip {
-                    text: "It may effect performance"
-                }
-            }
         }
+        
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
-            ConfigSwitch {
-                buttonIcon: "graph_6"
-                text: Translation.tr("Hour dots")
-                checked: Config.options.background.clock.cookie.hourDots
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.hourDots = checked;
-                    Config.options.background.clock.cookie.centerGlow = checked ? Config.options.background.clock.cookie.centerGlow : false;
-                }
-            }
+            
             ConfigSwitch {
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
@@ -131,6 +124,17 @@ ContentPage {
                 checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "waves"
+                text: Translation.tr("Wave animation")
+                checked: Config.options.background.clock.cookie.waveAnimation
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.waveAnimation = checked;
+                }
+                StyledToolTip {
+                    text: "It may effect performance"
                 }
             }
         }
