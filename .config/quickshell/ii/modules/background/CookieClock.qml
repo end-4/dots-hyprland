@@ -25,7 +25,7 @@ Item {
     property real centerDotSize: 10
     property real hourDotSize: 12
     property real centerGlowSize: 135
-
+    property real secondDotSize: 20
     
 
     property color colShadow: Appearance.colors.colShadow
@@ -35,11 +35,27 @@ Item {
     property color colMinuteHand: Appearance.colors.colSecondaryActive
     property color colOnHourHand: Appearance.colors.colOnPrimary
     property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
+    property color colSecondDot: Appearance.colors.colTertiary
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
     readonly property int clockMinute: parseInt(clockNumbers[1])
 
-    
+    property int clockSecond: 0
+
+    Loader{
+        active: Config.option.background.clock.cookie.secondDot
+        sourceComponent: Timer {
+            interval: 1000 
+            running: true;repeat: true
+            onTriggered: {
+                var now = new Date()
+                clockSecond = now.getSeconds()
+            }
+        }
+    }
+
+
+
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
@@ -134,6 +150,7 @@ Item {
         }
     }
 
+    // Numbers column
     Column {
         id: timeIndicators
         z: 1
@@ -187,6 +204,9 @@ Item {
     Item {
         anchors.fill: parent
         z: 3
+        Behavior on rotation{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
         rotation: -90 + (360 / 60) * root.clockMinute
         Rectangle {
             Behavior on height {
@@ -225,6 +245,33 @@ Item {
         implicitHeight: centerGlowSize
         radius: implicitWidth / 2
     }
+
+
+    // Second dot
+    Item {
+        opacity: Config.options.background.clock.cookie.secondDot ? 1.0 : 0
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on rotation{
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+        rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
+        anchors.fill: parent
+        Rectangle {
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                leftMargin: 10
+            }
+            implicitWidth: root.secondDotSize
+            implicitHeight: implicitWidth
+            radius: implicitWidth / 2
+            color: colSecondDot
+            opacity: 1.0
+        }
+    }
+    
 
     // Quote
     Rectangle{

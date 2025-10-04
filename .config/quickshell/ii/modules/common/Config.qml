@@ -136,6 +136,7 @@ Singleton {
                         property bool minuteHandSizeAdjust: true
                         property bool centerGlow: true
                         property bool waveAnimation: true
+                        property bool secondDot: true
                     }
                     
                 }

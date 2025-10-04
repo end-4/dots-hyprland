@@ -106,7 +106,7 @@ ContentPage {
                 }
             }
         }
-        
+
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
             
@@ -124,6 +124,17 @@ ContentPage {
                 checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
+                }
+            }
+        }
+        ConfigRow{
+            enabled: Config.options.background.clock.style === "cookie"
+            ConfigSwitch {
+                buttonIcon: "pace"
+                text: Translation.tr("Second dot")
+                checked: Config.options.background.clock.cookie.secondDot
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.secondDot = checked;
                 }
             }
             ConfigSwitch {

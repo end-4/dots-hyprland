@@ -53,7 +53,7 @@ Item {
                     var radius = root.implicitSize / 2 - root.amplitude
                     for (var i = 0; i <= steps; i++) {
                         var angle = (i / steps) * 2 * Math.PI
-                        var wave = waveAnimation ? Math.sin(angle * root.sides + Math.PI/2 + root.waveTime) * root.amplitude : Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
+                        var wave = waveAnimation ? Math.sin(angle * root.sides + Math.PI/2 - root.waveTime) * root.amplitude : Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
                         var x = Math.cos(angle) * (radius + wave) + cx
                         var y = Math.sin(angle) * (radius + wave) + cy
                         points.push(Qt.point(x, y))
