@@ -96,7 +96,7 @@ ContentPage {
 
     ContentSection {
         icon: "point_scan"
-        title: Translation.tr("Crosshair")
+        title: Translation.tr("Crosshair overlay")
 
         MaterialTextArea {
             Layout.fillWidth: true
@@ -109,6 +109,12 @@ ContentPage {
         }
 
         RowLayout {
+            StyledText {
+                Layout.leftMargin: 10
+                color: Appearance.colors.colSubtext
+                font.pixelSize: Appearance.font.pixelSize.smallie
+                text: Translation.tr("Press Super+G to toggle appearance")
+            }
             Item { Layout.fillWidth: true }
             RippleButtonWithIcon {
                 id: editorButton
@@ -176,26 +182,33 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: Translation.tr("Blurred style")
+            title: Translation.tr("Security")
 
             ConfigSwitch {
-                text: Translation.tr('Enable blur')
-                checked: Config.options.lock.blur.enable
+                text: Translation.tr('Require password to power off/restart')
+                checked: Config.options.lock.security.requirePasswordToPower
                 onCheckedChanged: {
-                    Config.options.lock.blur.enable = checked;
+                    Config.options.lock.security.requirePasswordToPower = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Remember that on most devices one can always hold the power button to force shutdown\nThis only makes it a tiny bit harder for accidents to happen")
                 }
             }
 
-            ConfigSpinBox {
-                text: Translation.tr("Blur: Extra zoom (%)")
-                value: Config.options.lock.blur.extraZoom * 100
-                from: 1
-                to: 150
-                stepSize: 2
-                onValueChanged: {
-                    Config.options.lock.blur.extraZoom = value / 100;
+            ConfigSwitch {
+                text: Translation.tr('Also unlock keyring')
+                checked: Config.options.lock.security.unlockKeyring
+                onCheckedChanged: {
+                    Config.options.lock.security.unlockKeyring = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("This is usually safe and needed for your browser and AI sidebar anyway\nMostly useful for those who use lock on startup instead of a display manager that does it (GDM, SDDM, etc.)")
                 }
             }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Style: general")
 
             ConfigSwitch {
                 text: Translation.tr('Center clock')
@@ -210,6 +223,28 @@ ContentPage {
                 checked: Config.options.lock.showLockedText
                 onCheckedChanged: {
                     Config.options.lock.showLockedText = checked;
+                }
+            }
+        }
+        ContentSubsection {
+            title: Translation.tr("Style: Blurred")
+
+            ConfigSwitch {
+                text: Translation.tr('Enable blur')
+                checked: Config.options.lock.blur.enable
+                onCheckedChanged: {
+                    Config.options.lock.blur.enable = checked;
+                }
+            }
+
+            ConfigSpinBox {
+                text: Translation.tr("Extra wallpaper zoom (%)")
+                value: Config.options.lock.blur.extraZoom * 100
+                from: 1
+                to: 150
+                stepSize: 2
+                onValueChanged: {
+                    Config.options.lock.blur.extraZoom = value / 100;
                 }
             }
             
