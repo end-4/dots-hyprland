@@ -4,10 +4,34 @@
 
 with lib;
 
+let
+  cfg = config.illogical-impulse.fonts-themes;
+in
 {
-  options.illogical-impulse.fonts-themes.enable = mkEnableOption "Illogical Impulse fonts and theming dependencies";
+  options.illogical-impulse.fonts-themes = {
+    enable = mkEnableOption "Illogical Impulse fonts and theming dependencies";
 
-  config = mkIf config.illogical-impulse.fonts-themes.enable {
+    # Theme options
+    gtkTheme = mkOption {
+      type = types.str;
+      default = "adw-gtk3-dark";
+      description = "GTK theme name";
+    };
+
+    iconTheme = mkOption {
+      type = types.str;
+      default = "breeze-dark";
+      description = "Icon theme name";
+    };
+
+    cursorTheme = mkOption {
+      type = types.str;
+      default = "Bibata-Modern-Classic";
+      description = "Cursor theme name";
+    };
+  };
+
+  config = mkIf cfg.enable {
     home.packages = [
       # adw-gtk-theme-git - Not in stable nixpkgs, using alternative
       pkgs.adw-gtk3
