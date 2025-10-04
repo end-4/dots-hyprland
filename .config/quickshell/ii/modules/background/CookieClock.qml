@@ -280,7 +280,7 @@ Item {
         anchors.top: parent.bottom
         anchors.topMargin: 24
         
-        implicitWidth: quoteText.width + quoteIcon.width + 16 // 12 for spacing on both sides
+        implicitWidth: quoteText.width + quoteIcon.width + 16 // for spacing on both sides
         implicitHeight: showQuote ? quoteText.height + 8 : 0
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
@@ -315,6 +315,7 @@ Item {
                     family: Appearance.font.family.main
                     pixelSize: Appearance.font.pixelSize.large
                     weight: Font.Normal
+                    italic: true
                 }
             }
         }
