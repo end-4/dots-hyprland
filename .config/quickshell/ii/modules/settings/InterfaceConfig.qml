@@ -31,31 +31,20 @@ ContentPage {
             }
         }
 
-        ConfigRow{
-            ConfigSpinBox {
-                icon: "loupe"
-                text: Translation.tr("Scale (%)")
-                value: Config.options.background.clock.scale * 100
-                from: 1
-                to: 200
-                stepSize: 2
-                onValueChanged: {
-                    Config.options.background.clock.scale = value / 100;
-                }
-            }
-
-            ConfigSpinBox {
-                icon: "support"
-                text: Translation.tr("Clock sides")
-                value: Config.options.background.clock.clockSides
-                from: 1
-                to: 36
-                stepSize: 1
-                onValueChanged: {
-                    Config.options.background.clock.clockSides = value;
-                }
+        ConfigSpinBox {
+            icon: "loupe"
+            text: Translation.tr("Scale (%)")
+            value: Config.options.background.clock.scale * 100
+            from: 1
+            to: 200
+            stepSize: 2
+            onValueChanged: {
+                Config.options.background.clock.scale = value / 100;
             }
         }
+
+            
+
         
     
         ContentSubsection {
@@ -80,36 +69,46 @@ ContentPage {
             }
         }
 
-        ContentSubsection {
-            title: Translation.tr("Cookie clock options")
-            ConfigRow{
-                enabled: Config.options.background.clock.style === "cookie"
-                ConfigSwitch {
-                    buttonIcon: "graph_6"
-                    text: Translation.tr("Hour dots")
-                    checked: Config.options.background.clock.cookie.hourDots
-                    onCheckedChanged: {
-                        Config.options.background.clock.cookie.hourDots = checked;
-                    }
+        ConfigSpinBox {
+            enabled: Config.options.background.clock.style === "cookie"
+            icon: "support"
+            text: Translation.tr("Clock sides")
+            value: Config.options.background.clock.clockSides
+            from: 1
+            to: 36
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.clock.clockSides = value;
+            }
+        }
+        ConfigRow{
+            enabled: Config.options.background.clock.style === "cookie"
+            ConfigSwitch {
+                buttonIcon: "graph_6"
+                text: Translation.tr("Hour dots")
+                checked: Config.options.background.clock.cookie.hourDots
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.hourDots = checked;
                 }
-                ConfigSwitch {
-                    buttonIcon: "farsight_digital"
-                    text: Translation.tr("Clock indicator")
-                    checked: Config.options.background.clock.cookie.timeIndicators
-                    onCheckedChanged: {
-                        Config.options.background.clock.cookie.timeIndicators = checked;
-                    }
+            }
+            ConfigSwitch {
+                buttonIcon: "farsight_digital"
+                text: Translation.tr("Clock indicator")
+                checked: Config.options.background.clock.cookie.timeIndicators
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.timeIndicators = checked;
                 }
-                ConfigSwitch {
-                    buttonIcon: "line_end"
-                    text: Translation.tr("Minute hand adjust")
-                    checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
-                    onCheckedChanged: {
-                        Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
-                    }
+            }
+            ConfigSwitch {
+                buttonIcon: "line_end"
+                text: Translation.tr("Minute hand adjust")
+                checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
                 }
             }
         }
+        
 
         ContentSubsection {
             title: Translation.tr("Quote settings")
