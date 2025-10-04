@@ -6,6 +6,7 @@ import qs.modules.common.widgets
 Loader {
     id: root
     property bool vertical: false
+    property color color: Appearance.colors.colOnSurfaceVariant
     active: HyprlandXkb.layoutCodes.length > 1
     visible: active
 
@@ -26,7 +27,7 @@ Loader {
             horizontalAlignment: Text.AlignHCenter
             text: abbreviateLayoutCode(HyprlandXkb.currentLayoutCode)
             font.pixelSize: text.includes("\n") ? Appearance.font.pixelSize.smallie : Appearance.font.pixelSize.small
-            color: rightSidebarButton.colText
+            color: root.color
             animateChange: true
         }
     }

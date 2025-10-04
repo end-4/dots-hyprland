@@ -10,18 +10,50 @@ import Quickshell.Hyprland
 
 Scope {
 	id: root
+
+	function unlockKeyring() {
+        Quickshell.execDetached({
+            environment: ({
+                UNLOCK_PASSWORD: root.currentText
+            }),
+            command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
+        })
+    }
+
 	// This stores all the information shared between the lock surfaces on each screen.
 	// https://github.com/quickshell-mirror/quickshell-examples/tree/master/lockscreen
 	LockContext {
 		id: lockContext
 
-		onUnlocked: {
+		Connections {
+			target: GlobalStates
+			function onScreenLockedChanged() {
+				if (GlobalStates.screenLocked) lockContext.reset();
+			}
+		}
+
+		onUnlocked: (targetAction) => {
+			// Perform the target action if it's not just unlocking
+			if (targetAction == LockContext.ActionEnum.Poweroff) {
+				Session.poweroff();
+				return;
+			} else if (targetAction == LockContext.ActionEnum.Reboot) {
+				Session.reboot();
+				return;
+			}
+
+			// Unlock the keyring if configured to do so
+			if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
+
 			// Unlock the screen before exiting, or the compositor will display a
 			// fallback lock you can't interact with.
 			GlobalStates.screenLocked = false;
 			
 			// Refocus last focused window on unlock (hack)
 			Quickshell.execDetached(["bash", "-c", `sleep 0.2; hyprctl --batch "dispatch togglespecialworkspace; dispatch togglespecialworkspace"`])
+
+            // Reset
+            lockContext.reset();
 		}
 	}
 
@@ -90,7 +122,6 @@ Scope {
 			+ "decides to keyboard-unfocus the lock screen"
 
         onPressed: {
-			// console.log("I BEG FOR PLEAS REFOCUZ")
             lockContext.shouldReFocus();
         }
     }
