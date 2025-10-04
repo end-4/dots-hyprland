@@ -252,6 +252,7 @@ Item {
 
     // Second hand/ dot
     Item {
+        id: secondHand
         z:3
         opacity: Config.options.background.clock.cookie.secondHandStyle === "dot" || Config.options.background.clock.cookie.secondHandStyle === "line" ? 1.0 : 0 // Not using visible to allow smooth transition
         Behavior on opacity {
@@ -281,7 +282,43 @@ Item {
         }
     }
 
-    
+    // Date
+    Canvas {
+        width: cookie.width
+        height: cookie.height
+        rotation: secondHand.rotation + 45  // +45 degrees to align with minute hand
+        opacity: Config.options.background.clock.cookie.dateInClock ? 1.0 : 0
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.clearRect(0,0,width,height);
+            ctx.font = "700 30px gabarito";
+
+            var text = DateTime.date.substring(0,3) + " " + DateTime.date.substring(4,7);
+            var radius = 78;
+            var angleStep = Math.PI / 2.35 / text.length;
+
+            for (var i=0; i<text.length; i++) {
+                var angle = i * angleStep - Math.PI/2;
+                var x = width/2 + radius * Math.cos(angle);
+                var y = height/2 + radius * Math.sin(angle);
+
+                ctx.save();
+                ctx.translate(x,y);
+                ctx.rotate(angle + Math.PI/2);
+
+                if (i >= 3)
+                    ctx.fillStyle = root.colOnBackground;
+                else
+                    ctx.fillStyle = Appearance.colors.colSecondaryHover;
+
+                ctx.fillText(text[i], 0, 0);
+                ctx.restore();
+            }
+        }
+    }
     
     // Hour Indicator numbers
     Repeater {

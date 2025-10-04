@@ -136,6 +136,7 @@ Singleton {
                         property string secondHandStyle: "dot" // Options: "dot", "line" , "none" 
                         property bool timeIndicators: true
                         property bool centerGlow: true
+                        property bool dateInClock: true
                         property bool waveAnimation: true
                     }
                     

@@ -84,6 +84,9 @@ ContentPage {
                         if (newValue === "numbers") {
                             Config.options.background.clock.cookie.timeIndicators  = false;
                         }
+                        if (newValue != "none"){
+                            Config.options.background.clock.cookie.dateInClock = false;
+                        }
                     }
                     options: [
                         {
@@ -214,7 +217,21 @@ ContentPage {
                     text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
                 }
             }
-
+            ConfigSwitch {
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
+                buttonIcon: "farsight_digital"
+                text: Translation.tr("Date inside clock")
+                checked: Config.options.background.clock.cookie.dateInClock
+                onEnabledChanged: {
+                    checked = Config.options.background.clock.cookie.dateInClock
+                }
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.dateInClock = checked;
+                }
+                StyledToolTip {
+                    text: "Can only be turned on when not using any dial style for aesthetic reasons"
+                }
+            }
             
         }
         
