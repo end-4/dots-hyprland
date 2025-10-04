@@ -59,7 +59,7 @@ Singleton {
 
     property bool idleInhibitState: Idle.inhibit
     onIdleInhibitStateChanged: {
-        if (root.extMonitorInhibit && root.hasExternalMonitor) {
+        if (root.extMonitorInhibit && (Idle.inhibit !== root.hasExternalMonitor)) {
             Quickshell.execDetached([
                 "notify-send",
                 "Keep system awake",
