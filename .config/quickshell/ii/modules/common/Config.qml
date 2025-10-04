@@ -207,6 +207,11 @@ Singleton {
                 property int suspend: 3
             }
 
+            property JsonObject systemControls: JsonObject {
+                property bool showUpdates: false
+                property int fetchInterval: 30
+            }
+
             property JsonObject conflictKiller: JsonObject {
                 property bool autoKillNotificationDaemons: false
                 property bool autoKillTrays: false
