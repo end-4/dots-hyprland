@@ -11,7 +11,9 @@ set -e
 
 #####################################################################################
 # 0. Before we start
-source ./scriptdata/step/0.install-greeting.sh
+if [[ "${SKIP_ALLGREETING}" != true ]]; then
+  source ./scriptdata/step/0.install-greeting.sh
+fi
 #####################################################################################
 if [[ "${SKIP_ALLDEPS}" != true ]]; then
   printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RESET}"
