@@ -71,6 +71,7 @@ ContentPage {
 
 
         ConfigRow{
+            visible: Config.options.background.clock.style === "cookie"
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Dial number style")
@@ -110,6 +111,7 @@ ContentPage {
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Seconds indicator style")
+                visible: Config.options.background.clock.style === "cookie"
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.secondHandStyle
                     onSelected: newValue => {
@@ -138,6 +140,7 @@ ContentPage {
 
         ContentSubsection {
         enabled: Config.options.background.clock.style === "cookie"
+        visible: Config.options.background.clock.style === "cookie"
         title: Translation.tr("Minute hand style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.minuteHandStyle
@@ -161,6 +164,7 @@ ContentPage {
 
         ConfigSpinBox {
             enabled: Config.options.background.clock.style === "cookie"
+            visible: Config.options.background.clock.style === "cookie"
             icon: "support"
             text: Translation.tr("Clock sides")
             value: Config.options.background.clock.clockSides
@@ -173,6 +177,7 @@ ContentPage {
         }
         ConfigSwitch {
             enabled: Config.options.background.clock.style === "cookie"
+            visible: Config.options.background.clock.style === "cookie"
             buttonIcon: "waves"
             text: Translation.tr("Wave animation")
             checked: Config.options.background.clock.cookie.waveAnimation
@@ -186,6 +191,7 @@ ContentPage {
 
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
+            visible: Config.options.background.clock.style === "cookie"
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots"
                 buttonIcon: "brightness_7"
@@ -204,6 +210,7 @@ ContentPage {
 
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
+                visible: Config.options.background.clock.style === "cookie"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
                 checked: Config.options.background.clock.cookie.timeIndicators
@@ -219,6 +226,7 @@ ContentPage {
             }
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
+                visible: Config.options.background.clock.style === "cookie"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Date inside clock")
                 checked: Config.options.background.clock.cookie.dateInClock
