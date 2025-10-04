@@ -12,11 +12,20 @@ ContentPage {
         icon: "wallpaper"
         title: Translation.tr("Background")
 
-        ConfigSwitch {
-            text: Translation.tr("Show clock")
-            checked: Config.options.background.clock.show
-            onCheckedChanged: {
-                Config.options.background.clock.show = checked;
+        ConfigRow{
+            ConfigSwitch {
+                text: Translation.tr("Show clock")
+                checked: Config.options.background.clock.show
+                onCheckedChanged: {
+                    Config.options.background.clock.show = checked;
+                }
+            }
+            ConfigSwitch {
+                text: Translation.tr("Show quote")
+                checked: Config.options.background.showQuote
+                onCheckedChanged: {
+                    Config.options.background.showQuote = checked;
+                }
             }
         }
 
@@ -43,7 +52,8 @@ ContentPage {
                 }
             }
         }
-
+        
+    
         ContentSubsection {
             title: Translation.tr("Clock style")
             ConfigSelectionArray {
@@ -61,13 +71,48 @@ ContentPage {
                         displayName: Translation.tr("Material cookie"),
                         icon: "cookie",
                         value: "cookie"
-                    },
-                    {
-                        displayName: Translation.tr("Material simpler cookie"),
-                        icon: "circle",
-                        value: "simpler-cookie"
-                    },
+                    }
                 ]
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Cookie clock options")
+            ConfigRow{
+                ConfigSwitch {
+                    text: Translation.tr("Hour dots")
+                    checked: Config.options.background.clock.cookie.hourDots
+                    onCheckedChanged: {
+                        Config.options.background.clock.cookie.hourDots = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Time indicator")
+                    checked: Config.options.background.clock.cookie.timeIndicators
+                    onCheckedChanged: {
+                        Config.options.background.clock.cookie.timeIndicators = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Minute hand adjust")
+                    checked: Config.options.background.clock.cookie.minuteHandSizeAdjust
+                    onCheckedChanged: {
+                        Config.options.background.clock.cookie.minuteHandSizeAdjust = checked;
+                    }
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Quote settings")
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Quote")
+                text: Config.options.background.quote
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.background.quote = text;
+                }
             }
         }
 

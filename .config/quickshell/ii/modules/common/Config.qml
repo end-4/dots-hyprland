@@ -127,13 +127,20 @@ Singleton {
                     property real x: -500
                     property real y: -500
                     property bool show: true
-                    property string style: "cookie" // Options: "cookie", "digital", "simpler-cookie"
+                    property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
                     property int clockSides: 12
+                    property JsonObject cookie: JsonObject {
+                        property bool hourDots: true
+                        property bool timeIndicators: true
+                        property bool minuteHandSizeAdjust: true
+                    }
+                    
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
+                property bool showQuote: true
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
