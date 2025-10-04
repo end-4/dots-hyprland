@@ -7,20 +7,20 @@ let
 in
 {
   imports = [
-    ./dist-nix/illogical-impulse-audio.nix
-    ./dist-nix/illogical-impulse-backlight.nix
-    ./dist-nix/illogical-impulse-basic.nix
-    ./dist-nix/illogical-impulse-bibata-modern-classic-bin.nix
-    ./dist-nix/illogical-impulse-fonts-themes.nix
-    ./dist-nix/illogical-impulse-hyprland.nix
-    ./dist-nix/illogical-impulse-kde.nix
-    ./dist-nix/illogical-impulse-microtex-git.nix
-    ./dist-nix/illogical-impulse-oneui4-icons-git.nix
-    ./dist-nix/illogical-impulse-portal.nix
-    ./dist-nix/illogical-impulse-python.nix
-    ./dist-nix/illogical-impulse-screencapture.nix
-    ./dist-nix/illogical-impulse-toolkit.nix
-    ./dist-nix/illogical-impulse-widgets.nix
+    ./illogical-impulse-audio.nix
+    ./illogical-impulse-backlight.nix
+    ./illogical-impulse-basic.nix
+    ./illogical-impulse-bibata-modern-classic-bin.nix
+    ./illogical-impulse-fonts-themes.nix
+    ./illogical-impulse-hyprland.nix
+    ./illogical-impulse-kde.nix
+    ./illogical-impulse-microtex-git.nix
+    ./illogical-impulse-oneui4-icons-git.nix
+    ./illogical-impulse-portal.nix
+    ./illogical-impulse-python.nix
+    ./illogical-impulse-screencapture.nix
+    ./illogical-impulse-toolkit.nix
+    ./illogical-impulse-widgets.nix
   ];
 
   options.illogical-impulse = {

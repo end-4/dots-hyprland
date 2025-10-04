@@ -31,9 +31,9 @@ Import these modules in your home-manager configuration and enable as needed:
 { config, pkgs, ... }:
 {
   imports = [
-    ./dist-nix/illogical-impulse-audio.nix
-    ./dist-nix/illogical-impulse-basic.nix
-    ./dist-nix/illogical-impulse-hyprland.nix
+    ./illogical-impulse-audio.nix
+    ./illogical-impulse-basic.nix
+    ./illogical-impulse-hyprland.nix
     # Add other modules as needed
   ];
 
@@ -66,8 +66,8 @@ In a flake-based configuration:
     homeConfigurations."username" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       modules = [
-        ./dist-nix/illogical-impulse-audio.nix
-        ./dist-nix/illogical-impulse-basic.nix
+        ./illogical-impulse-audio.nix
+        ./illogical-impulse-basic.nix
         # Import other modules as needed
         {
           illogical-impulse = {

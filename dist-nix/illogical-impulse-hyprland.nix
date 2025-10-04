@@ -54,7 +54,7 @@ in
       pkgs.hyprcursor
       cfg.package
       pkgs.hyprland-qtutils
-      # hyprland-qt-support - Not available in nixpkgs
+      pgks.hyprland-qt-support
       pkgs.hyprlang
       pkgs.hyprlock
       pkgs.hyprpicker
