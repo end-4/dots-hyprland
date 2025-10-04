@@ -280,12 +280,15 @@ Item {
         anchors.top: parent.bottom
         anchors.topMargin: 24
         
-        implicitWidth: quoteText.width + quoteIcon.width + 12 // 12 for spacing on both sides
-        implicitHeight: showQuote ? 30 : 0 // A better way to hide can be found
+        implicitWidth: quoteText.width + quoteIcon.width + 16 // 12 for spacing on both sides
+        implicitHeight: showQuote ? quoteText.height + 8 : 0
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
         
         Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitWidth {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
         Behavior on opacity {
