@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Shapes
 import Quickshell
+import qs.modules.common
+
 
 Item {
     id: root
@@ -12,8 +14,24 @@ Item {
     property color color: "#605790"
     property alias strokeWidth: shapePath.strokeWidth
 
+    property bool waveAnimation: Config.options.background.clock.cookie.waveAnimation
+
+
     implicitWidth: implicitSize
     implicitHeight: implicitSize
+
+    property real waveTime: 0
+    Loader{
+        active: waveAnimation
+        sourceComponent: Timer{
+            interval: 16  // Does it effect performance, probably, is it noticeable, not really
+            running: true; repeat: true
+            onTriggered: {
+                root.waveTime += 0.05
+            }
+        }
+    }
+
 
     Shape {
         id: shape
@@ -35,7 +53,7 @@ Item {
                     var radius = root.implicitSize / 2 - root.amplitude
                     for (var i = 0; i <= steps; i++) {
                         var angle = (i / steps) * 2 * Math.PI
-                        var wave = Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
+                        var wave = waveAnimation ? Math.sin(angle * root.sides + Math.PI/2 + root.waveTime) * root.amplitude : Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
                         var x = Math.cos(angle) * (radius + wave) + cx
                         var y = Math.sin(angle) * (radius + wave) + cy
                         points.push(Qt.point(x, y))
@@ -45,6 +63,7 @@ Item {
 
                 path: pointsList
             }
+            
         }
     }
 }

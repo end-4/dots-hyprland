@@ -69,16 +69,41 @@ ContentPage {
             }
         }
 
-        ConfigSpinBox {
+        ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
-            icon: "support"
-            text: Translation.tr("Clock sides")
-            value: Config.options.background.clock.clockSides
-            from: 1
-            to: 36
-            stepSize: 1
-            onValueChanged: {
-                Config.options.background.clock.clockSides = value;
+            ConfigSpinBox {
+                icon: "support"
+                text: Translation.tr("Clock sides")
+                value: Config.options.background.clock.clockSides
+                from: 1
+                to: 36
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.background.clock.clockSides = value;
+                }
+            }
+            ConfigSwitch {
+                enabled: Config.options.background.clock.cookie.hourDots
+                buttonIcon: "brightness_7"
+                text: Translation.tr("Center glow")
+                checked: Config.options.background.clock.cookie.centerGlow
+                onEnabledChanged: {
+                    checked = Config.options.background.clock.cookie.centerGlow
+                }
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.centerGlow = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "waves"
+                text: Translation.tr("Wave animation")
+                checked: Config.options.background.clock.cookie.waveAnimation
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.waveAnimation = checked;
+                }
+                StyledToolTip {
+                    text: "It may effect performance"
+                }
             }
         }
         ConfigRow{
@@ -89,6 +114,7 @@ ContentPage {
                 checked: Config.options.background.clock.cookie.hourDots
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.hourDots = checked;
+                    Config.options.background.clock.cookie.centerGlow = checked ? Config.options.background.clock.cookie.centerGlow : false;
                 }
             }
             ConfigSwitch {
