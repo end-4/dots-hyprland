@@ -22,3 +22,20 @@
 ## Making the dot-files work
 - pipewire, pipewire-pulse, and wireplumber must be started after a dbus-session is created and before Hyprland is launched.
 
+If you want to start after logging into tty1 you can do something like this.
+```fish
+if status --is-interactive; and [ (tty) = "/dev/tty1" ]
+    # Start DBus session if not running
+    if not set -q DBUS_SESSION_BUS_ADDRESS
+        dbus-launch --sh-syntax | sed 's/^/set -gx /; s/=/ /' | source
+    end
+
+    # Start PipeWire if not running
+    pgrep -x pipewire >/dev/null; or pipewire &
+    pgrep -x pipewire-pulse >/dev/null; or pipewire-pulse &
+    pgrep -x wireplumber >/dev/null; or wireplumber &
+
+    # Launch Hyprland with DBus session
+    exec Hyprland
+end
+```
