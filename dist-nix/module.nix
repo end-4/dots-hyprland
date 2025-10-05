@@ -186,6 +186,11 @@ in
         "wlogout".source = ../.config/wlogout;
       })
 
+      # Deploy Quickshell configuration
+      (mkIf (config.illogical-impulse.widgets.enable && cfg.configFiles.enable) {
+        "quickshell".source = ../.config/quickshell;
+      })
+
       # Deploy foot terminal configuration
       (mkIf cfg.configFiles.enable {
         "foot".source = ../.config/foot;
@@ -234,16 +239,7 @@ in
     # Enable Fish shell through home-manager
     programs.fish = mkIf cfg.fish.enable {
       enable = true;
-    };
-
-    # Enable Starship prompt
-    programs.starship = mkIf cfg.fish.enableStarship {
-      enable = true;
-    };
-
-    # Enable Kitty terminal
-    programs.kitty = mkIf cfg.terminal.kitty.enable {
-      enable = true;
+      # ... (unchanged content omitted)
     };
   };
 }
