@@ -25,8 +25,8 @@ Item {
     property real hourDotSize: 12
     property real centerGlowSize: 135
     property real secondDotSize: 20
-    property real secondsHandWidth: 2
-    property real secondsHandLength: 100
+    property real secondHandWidth: 2
+    property real secondHandLength: 100
     property real hourLineSize: 5
     property real minuteLineSize: 2
     property real hourNumberSize: 36
@@ -35,11 +35,11 @@ Item {
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
-    property color colMinuteHand: Appearance.colors.colSecondary
     property color colHourHand: Appearance.colors.colPrimary
+    property color colMinuteHand: Appearance.colors.colSecondary
+    property color colSecondHand: Appearance.colors.colTertiary
     property color colOnHourHand: Appearance.colors.colOnPrimary
     property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
-    property color colSeconds: Appearance.colors.colTertiary
 
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
@@ -181,9 +181,22 @@ Item {
     // Minute hand
     MinuteHand {
         anchors.fill: parent
+        handWidth: root.minuteHandWidth
         clockMinute: root.clockMinute
         style: Config.options.background.clock.cookie.minuteHandStyle
         color: root.colMinuteHand
+    }
+
+    // Second hand
+    SecondHand {
+        id: secondHand
+        anchors.fill: parent
+        handWidth: root.secondHandWidth
+        handLength: root.secondHandLength
+        dotSize: root.secondDotSize
+        clockSecond: root.clockSecond
+        style: Config.options.background.clock.cookie.secondHandStyle
+        color: root.colSecondHand
     }
 
     // Center dot
@@ -218,55 +231,6 @@ Item {
         }
         Behavior on implicitHeight {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-    }
-
-
-    // Second hand/dot
-    Item {
-        id: secondHand
-        z: Config.options.background.clock.cookie.secondHandStyle === "line" ? 2 : 3
-        opacity: Config.options.background.clock.cookie.secondHandStyle !== "hide" ? 1.0 : 0
-        rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
-        anchors.fill: parent
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-        Behavior on rotation{
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-        Rectangle {
-            implicitWidth: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandLength
-            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandWidth
-            radius: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth / 2 : root.secondsHandWidth / 2
-            color: colSeconds
-            Behavior on implicitHeight {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-            Behavior on implicitWidth {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-            anchors {
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-                leftMargin: 10
-            }
-        }
-        Rectangle{
-            // Dot on the classic style
-            opacity: Config.options.background.clock.cookie.secondHandStyle === "classic" ? 1.0 : 0.0
-            implicitHeight: 14
-            implicitWidth: 14
-            color: root.colSeconds
-            radius: Appearance.rounding.small
-            anchors {
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-                leftMargin: 40
-            }
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
         }
     }
 
@@ -313,7 +277,7 @@ Item {
     Rectangle{
         z: 1
         implicitWidth: 45
-        implicitHeight: Config.options.background.clock.cookie.dateStyle === "square" ? 30 : 0
+        implicitHeight: Config.options.background.clock.cookie.dateStyle === "rect" ? 30 : 0
         color: root.colOnBackground
         radius: Appearance.rounding.small
         anchors{
@@ -325,7 +289,7 @@ Item {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
         StyledText{
-            opacity: Config.options.background.clock.cookie.dateStyle === "square" ? 1.0 : 0
+            opacity: Config.options.background.clock.cookie.dateStyle === "rect" ? 1.0 : 0
             Behavior on opacity{
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }

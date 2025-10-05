@@ -233,9 +233,9 @@ ContentPage {
                         value: "rotating"
                     },
                     {
-                        displayName: Translation.tr("Square"),
+                        displayName: Translation.tr("Rect"),
                         icon: "square",
-                        value: "square"
+                        value: "rect"
                     }
                 ]
             }
