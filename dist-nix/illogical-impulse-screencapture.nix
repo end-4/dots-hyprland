@@ -12,8 +12,8 @@ with lib;
       pkgs.hyprshot
       pkgs.slurp
       pkgs.swappy
-      pkgs.tesseract
-      pkgs.tesseract.languages.eng
+      # pkgs.tesseract # enable again later maybe idk
+      # pkgs.tesseract.languages.eng
       pkgs.wf-recorder
     ];
   };
