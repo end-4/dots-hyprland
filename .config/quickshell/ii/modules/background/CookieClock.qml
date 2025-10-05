@@ -22,7 +22,7 @@ Item {
     property real hourHandWidth: 20
     property real minuteHandLength: 95
     property real minuteHandWidth: Config.options.background.clock.cookie.minuteHandStyle === "bold" ? hourHandWidth :
-                                    Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 12 : 6
+                                    Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 12 : 5
     property real centerDotSize: 10
     property real hourDotSize: 12
     property real centerGlowSize: 135
@@ -204,7 +204,7 @@ Item {
     // Hour hand
     Item {
         anchors.fill: parent
-        z: 3
+        z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
         rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
@@ -212,7 +212,9 @@ Item {
             width: hourHandLength
             height: hourHandWidth
             radius: hourHandWidth / 2
-            color: root.colHourHand
+            color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
+            border.color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? root.colHourHand : "transparent"
+            border.width: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? 4 : 0
         }
     }
 
@@ -239,12 +241,12 @@ Item {
 
     // Center dot
     Rectangle {
-        opacity: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 1.0 : 0 // Not using visible to allow smooth transition
+        opacity: Config.options.background.clock.cookie.minuteHandStyle !== "bold" ? 1.0 : 0 // Not using visible to allow smooth transition
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
         z: 4
-        color: root.colOnHourHand
+        color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
         anchors.centerIn: parent
         implicitWidth: centerDotSize
         implicitHeight: implicitWidth
