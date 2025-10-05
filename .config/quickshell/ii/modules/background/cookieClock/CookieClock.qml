@@ -188,15 +188,18 @@ Item {
     }
 
     // Second hand
-    SecondHand {
-        id: secondHand
+    Loader {
+        active: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
         anchors.fill: parent
-        handWidth: root.secondHandWidth
-        handLength: root.secondHandLength
-        dotSize: root.secondDotSize
-        clockSecond: root.clockSecond
-        style: Config.options.background.clock.cookie.secondHandStyle
-        color: root.colSecondHand
+        sourceComponent: SecondHand {
+            id: secondHand
+            handWidth: root.secondHandWidth
+            handLength: root.secondHandLength
+            dotSize: root.secondDotSize
+            clockSecond: root.clockSecond
+            style: Config.options.background.clock.cookie.secondHandStyle
+            color: root.colSecondHand
+        }
     }
 
     // Center dot
@@ -234,142 +237,10 @@ Item {
         }
     }
 
-    // Date (the rotating one with the second hand)
-    Canvas {
-        z: 0
-        width: cookie.width
-        height: cookie.height
-        rotation: secondHand.rotation + 45  // +45 degrees to align with minute hand
-        opacity: Config.options.background.clock.cookie.dateStyle === "rotating" ? 1.0 : 0
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0,0,width,height);
-            ctx.font = "700 30px " + Appearance.font.family.title;
-
-            var text = DateTime.date.substring(0,3) + " " + DateTime.date.substring(4,7);
-            var radius = 78;
-            var angleStep = Math.PI / 2.35 / text.length;
-
-            for (var i=0; i<text.length; i++) {
-                var angle = i * angleStep - Math.PI/2;
-                var x = width/2 + radius * Math.cos(angle);
-                var y = height/2 + radius * Math.sin(angle);
-
-                ctx.save();
-                ctx.translate(x,y);
-                ctx.rotate(angle + Math.PI/2);
-
-                if (i >= 3)
-                    ctx.fillStyle = root.colOnBackground;
-                else
-                    ctx.fillStyle = Appearance.colors.colSecondaryHover;
-
-                ctx.fillText(text[i], 0, 0);
-                ctx.restore();
-            }
-        }
-    }
-
-    // Date(only today's number) in right side of the clock
-    Rectangle{
-        z: 1
-        implicitWidth: 45
-        implicitHeight: Config.options.background.clock.cookie.dateStyle === "rect" ? 30 : 0
-        color: root.colOnBackground
-        radius: Appearance.rounding.small
-        anchors{
-            verticalCenter: cookie.verticalCenter
-            right: cookie.right
-            rightMargin: 10
-        }
-        Behavior on implicitHeight{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        StyledText{
-            opacity: Config.options.background.clock.cookie.dateStyle === "rect" ? 1.0 : 0
-            Behavior on opacity{
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            anchors.centerIn: parent
-            color: Appearance.colors.colSecondaryHover
-            text: DateTime.date.substring(5,7)
-            font {
-                family: Appearance.font.family.expressive
-                pixelSize: 20
-                weight: 1000
-            }
-        }
-    }
-
-    // Date bubble style left side
-    Rectangle{
-        z: 5
-        implicitWidth: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
-        implicitHeight: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
-        color: Appearance.colors.colPrimaryContainer
-        radius: Appearance.rounding.large
-        anchors{
-            left: cookie.left
-            bottom: cookie.bottom
-            bottomMargin: 5
-        }
-        Behavior on implicitWidth{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitHeight{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        StyledText{
-            anchors.centerIn: parent
-            text: DateTime.date.substring(5,7)
-            color: Appearance.colors.colOnPrimaryContainer
-            opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
-            font {
-                family: Appearance.font.family.reading
-                pixelSize: 30
-                weight: 1000
-            }
-            Behavior on opacity{
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-        }
-    }
-
-    // Date bubble style right side
-    Rectangle{
-        z: 5
-        implicitWidth: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
-        implicitHeight: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
-        color: Appearance.colors.colTertiaryContainer
-        radius: Appearance.rounding.verylarge
-        anchors{
-            right: cookie.right
-            top: cookie.top
-            topMargin: 5
-        }
-        Behavior on implicitWidth{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitHeight{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        StyledText{
-            anchors.centerIn: parent
-            text: DateTime.date.substring(8,10)
-            color: Appearance.colors.colOnPrimaryContainer
-            opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
-            font {
-                family: Appearance.font.family.reading
-                pixelSize: 30
-                weight: 1000
-            }
-            Behavior on opacity{
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-        }
+    DateIndicator {
+        anchors.fill: parent
+        colOnBackground: root.colOnBackground
+        style: Config.options.background.clock.cookie.dateStyle
     }
     
     // Hour Indicator numbers (3-6-9-12)
