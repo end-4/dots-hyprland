@@ -373,6 +373,7 @@ Singleton {
                     property int focus: 1500
                     property int longBreak: 900
                 }
+                property bool secondPrecision: false
             }
             
             property JsonObject wallpaperSelector: JsonObject {
