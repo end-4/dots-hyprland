@@ -42,23 +42,8 @@ Item {
     property color colSeconds: Appearance.colors.colTertiary
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
-    readonly property int clockMinute: parseInt(clockNumbers[1])
-
-    property int clockSecond: 0
-
-    // Loader to set root.clockSecond
-    Loader{
-        active: Config.option.background.clock.cookie.secondDot
-        sourceComponent: Timer {
-            interval: 1000 
-            running: true;repeat: true
-            onTriggered: {
-                var now = new Date()
-                clockSecond = now.getSeconds()
-            }
-        }
-    }
-
+    readonly property int clockMinute: DateTime.clock.minutes
+    readonly property int clockSecond: DateTime.clock.seconds
 
 
     implicitWidth: implicitSize
