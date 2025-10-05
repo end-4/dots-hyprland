@@ -246,13 +246,6 @@ ContentPage {
             }
         }
 
-        StyledText {
-            visible: Config.options.background.clock.style === "cookie"
-            Layout.leftMargin: 10
-            color: Appearance.colors.colSubtext
-            font.pixelSize: Appearance.font.pixelSize.smallie
-        }
-
         ConfigSpinBox {
             visible: Config.options.background.clock.style === "cookie"
             icon: "support"
@@ -275,7 +268,7 @@ ContentPage {
                 Config.options.background.clock.cookie.constantlyRotate = checked;
             }
             StyledToolTip {
-                text: "Makes the clock always rotate. This is extremely expensive (expect 50% usage on Intel UHD Graphics) and thus impractical."
+                text: "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical."
             }
         }
 
@@ -299,7 +292,7 @@ ContentPage {
             }
 
             ConfigSwitch {
-                visible: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
                 checked: Config.options.background.clock.cookie.timeIndicators
