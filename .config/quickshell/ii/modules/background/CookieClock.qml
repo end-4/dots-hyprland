@@ -190,7 +190,7 @@ Item {
                     Behavior on pixelSize {
                         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                     }
-                    family: Appearance.font.family.expressive
+                    family: Appearance.font.family.main
                     weight: Font.Bold
                 }
                 color: root.colOnBackground
