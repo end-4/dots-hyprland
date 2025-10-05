@@ -1,6 +1,8 @@
 printf "${STY_YELLOW}"
 printf "============WARNING/NOTE============\n"
-printf "Your GCC version is: $(gcc --version | grep gcc | awk '{print $3}')\n"
+printf "GCC in use: $(which gcc)\n"
+printf "GCC version info: $(gcc --version | grep gcc)\n"
+printf "GCC version number: $(gcc --version | grep gcc | awk '{print $3}')\n"
 printf "GCC-15>= is required for Hyprland\n"
 printf "If you have GCC-15>= and it's currently set then you can safely ignore this\n"
 printf "If not, you must ensure you are using the correct GCC version and set it (gcc-config <number>), then emerge re-emerge @world with an empty tree (emerge -e @world)\n"
@@ -26,10 +28,10 @@ ebuild_dir="/var/db/repos/localrepo"
 # Unmasks
 x cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./dist-gentoo/keywords-user
-v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/end4
+v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
 # Use Flags
-v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/end4
+v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
 
 # Update system
 v sudo emerge --sync
