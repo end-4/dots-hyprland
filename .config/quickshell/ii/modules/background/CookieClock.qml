@@ -348,7 +348,7 @@ Item {
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0,0,width,height);
-            ctx.font = "700 30px gabarito";
+            ctx.font = "700 30px " + Appearance.font.family.title;
 
             var text = DateTime.date.substring(0,3) + " " + DateTime.date.substring(4,7);
             var radius = 78;
