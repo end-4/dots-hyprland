@@ -14,6 +14,8 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
+import "./cookieClock"
+
 Variants {
     id: root
     readonly property bool fixedClockPosition: Config.options.background.clock.fixedPosition

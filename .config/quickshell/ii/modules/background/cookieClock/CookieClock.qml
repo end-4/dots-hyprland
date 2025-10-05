@@ -35,16 +35,16 @@ Item {
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
-    property color colMinuteHand: Appearance.colors.colPrimary
-    property color colHourHand: Appearance.colors.colSecondaryActive
+    property color colMinuteHand: Appearance.colors.colSecondary
+    property color colHourHand: Appearance.colors.colPrimary
     property color colOnHourHand: Appearance.colors.colOnPrimary
     property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
     property color colSeconds: Appearance.colors.colTertiary
+
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
     readonly property int clockMinute: DateTime.clock.minutes
     readonly property int clockSecond: DateTime.clock.seconds
-
 
     implicitWidth: implicitSize
     implicitHeight: implicitSize
@@ -169,59 +169,21 @@ Item {
     }
 
     // Hour hand
-    Item {
-        opacity: Config.options.background.clock.cookie.hourHandStyle === "hide" ? 0.0 : 1.0
+    HourHand {
         anchors.fill: parent
-        z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
-        rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-        Rectangle {
-            opacity: Config.options.background.clock.cookie.hourHandStyle !== "hide" ? 1.0 : 0
-            anchors.verticalCenter: parent.verticalCenter
-            x: Config.options.background.clock.cookie.hourHandStyle === "classic" ? (parent.width / 2 - minuteHandWidth / 2) - 15 : parent.width / 2 - minuteHandWidth / 2
-            width: hourHandLength
-            height: Config.options.background.clock.cookie.hourHandStyle === "classic" ? 8 : hourHandWidth
-            radius: Config.options.background.clock.cookie.hourHandStyle === "classic" ? 2 : hourHandWidth / 2
-            color : Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
-            border.color: root.colHourHand
-            border.width: 4
-            Behavior on opacity {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-            Behavior on x{
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-        }
+        handWidth: root.hourHandWidth
+        clockHour: root.clockHour
+        clockMinute: root.clockMinute
+        style: Config.options.background.clock.cookie.hourHandStyle
+        color: root.colHourHand
     }
 
     // Minute hand
-    Item {
-        opacity: Config.options.background.clock.cookie.minuteHandStyle === "hide" ? 0.0 : 1.0
+    MinuteHand {
         anchors.fill: parent
-        z: Config.options.background.clock.cookie.minuteHandStyle === "thin" ? 1 : 3
-        rotation: -90 + (360 / 60) * root.clockMinute
-        Behavior on rotation{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on opacity {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Rectangle {
-            anchors.verticalCenter: parent.verticalCenter
-            x: Config.options.background.clock.cookie.minuteHandStyle === "classic" ? (parent.width / 2 - minuteHandWidth / 2) - 15 : parent.width / 2 - minuteHandWidth / 2
-            width: minuteHandLength
-            height: minuteHandWidth
-            radius: Config.options.background.clock.cookie.minuteHandStyle === "classic" ? 2 : minuteHandWidth / 2
-            color: root.colMinuteHand
-            Behavior on height {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-            Behavior on x{
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-        }
+        clockMinute: root.clockMinute
+        style: Config.options.background.clock.cookie.minuteHandStyle
+        color: root.colMinuteHand
     }
 
     // Center dot
