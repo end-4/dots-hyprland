@@ -65,10 +65,15 @@ case $SKIP_FISH in
 esac
 
 # For Hyprland
+declare -a arg_excludes=()
+arg_excludes+=(--exclude '/custom')
+arg_excludes+=(--exclude '/hyprlock.conf')
+arg_excludes+=(--exclude '/hypridle.conf')
+arg_excludes+=(--exclude '/hyprland.conf')
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    v rsync -av --delete "${arg_excludes[@]}" .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
@@ -109,6 +114,7 @@ case $SKIP_HYPRLAND in
     fi
     ;;
 esac
+declare -a arg_excludes=()
 
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
