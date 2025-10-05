@@ -14,8 +14,6 @@ Item {
     id: root
 
     readonly property string clockStyle: Config.options.background.clock.style
-    readonly property bool showQuote: Config.options.background.showQuote && Config.options.background.quote.length > 0 && !GlobalStates.screenLocked
-
 
     property real implicitSize: 230
     property real hourHandLength: 72
@@ -68,16 +66,6 @@ Item {
 
     DropShadow {
         source: cookie 
-        anchors.fill: source
-        horizontalOffset: 0
-        verticalOffset: 2
-        radius: 12
-        samples: radius * 2 + 1
-        color: root.colShadow
-        transparentBorder: true
-    }
-    DropShadow {
-        source: quoteBox 
         anchors.fill: source
         horizontalOffset: 0
         verticalOffset: 2
@@ -564,57 +552,6 @@ Item {
                 }
                 Behavior on anchors.leftMargin{
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-            }
-        }
-    }
-
-
-
-    // Quote
-    Rectangle{
-        id: quoteBox
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.bottom
-        anchors.topMargin: 24
-        
-        implicitWidth: quoteText.width + quoteIcon.width + 16 // for spacing on both sides
-        implicitHeight: showQuote ? quoteText.height + 8 : 0
-        radius: Appearance.rounding.small
-        color: Appearance.colors.colSecondaryContainer
-
-
-        Behavior on implicitHeight {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitWidth {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-
-        RowLayout{
-            anchors.centerIn: parent
-            spacing: 4
-            
-            MaterialSymbol{
-                id: quoteIcon
-                visible: showQuote > 0
-                iconSize: Appearance.font.pixelSize.huge
-                text: "comic_bubble"
-            }
-            StyledText{
-                id: quoteText
-                visible : showQuote > 0
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                text: Config.options.background.quote
-                font {
-                    family: Appearance.font.family.main
-                    pixelSize: Appearance.font.pixelSize.large
-                    weight: Font.Normal
-                    italic: true
                 }
             }
         }
