@@ -12,7 +12,7 @@ ContentPage {
         icon: "wallpaper"
         title: Translation.tr("Background")
 
-        ConfigRow{
+        ConfigRow {
             ConfigSwitch {
                 buttonIcon: "nest_clock_farsight_analog"
                 text: Translation.tr("Show clock")
@@ -43,10 +43,6 @@ ContentPage {
             }
         }
 
-            
-
-        
-    
         ContentSubsection {
             title: Translation.tr("Clock style")
             ConfigSelectionArray {
@@ -69,217 +65,205 @@ ContentPage {
             }
         }
 
-
-        ConfigRow{
+        ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Dial number style")
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.dialNumberStyle
-                    onSelected: newValue => {
-                        Config.options.background.clock.cookie.dialNumberStyle = newValue;
-                        if (newValue !== "dots" && newValue !== "full") {
-                            Config.options.background.clock.cookie.centerGlow = false;
-                        }
-                        if (newValue === "numbers") {
-                            Config.options.background.clock.cookie.timeIndicators  = false;
-                        }
-                        if (newValue != "none"){
-                            Config.options.background.clock.cookie.dateInClock = false;
-                            if (Config.options.background.clock.cookie.dateStyle !== "bubble"){
-                                Config.options.background.clock.cookie.dateStyle = "none";
-                            }
+            title: Translation.tr("Dial number style")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.dialNumberStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.dialNumberStyle = newValue;
+                    if (newValue !== "dots" && newValue !== "full") {
+                        Config.options.background.clock.cookie.centerGlow = false;
+                    }
+                    if (newValue === "numbers") {
+                        Config.options.background.clock.cookie.timeIndicators = false;
+                    }
+                    if (newValue != "none") {
+                        Config.options.background.clock.cookie.dateInClock = false;
+                        if (Config.options.background.clock.cookie.dateStyle !== "bubble") {
+                            Config.options.background.clock.cookie.dateStyle = "none";
                         }
                     }
-                    options: [
-                        {
-                            displayName: Translation.tr("None"),
-                            icon: "deselect",
-                            value: "none"
-                        },
-                        {
-                            displayName: Translation.tr("Dots"),
-                            icon: "graph_6",
-                            value: "dots"
-                        },
-                        {
-                            displayName: Translation.tr("Full"),
-                            icon: "avg_pace",
-                            value: "full"
-                        },
-                        {
-                            displayName: Translation.tr("Numbers"),
-                            icon: "123",
-                            value: "numbers"
-                        }
-                        
-                    ]
                 }
+                options: [
+                    {
+                        displayName: Translation.tr("None"),
+                        icon: "deselect",
+                        value: "none"
+                    },
+                    {
+                        displayName: Translation.tr("Dots"),
+                        icon: "graph_6",
+                        value: "dots"
+                    },
+                    {
+                        displayName: Translation.tr("Full"),
+                        icon: "avg_pace",
+                        value: "full"
+                    },
+                    {
+                        displayName: Translation.tr("Numbers"),
+                        icon: "123",
+                        value: "numbers"
+                    }
+                ]
             }
-            
         }
 
-        
-            ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie"
-                visible: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Hour hand style")
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.hourHandStyle
-                    onSelected: newValue => {
-                        Config.options.background.clock.cookie.hourHandStyle = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Classic"),
-                            icon: "radio",
-                            value: "classic"
-                        },
-                        {
-                            displayName: Translation.tr("Stroke"),
-                            icon: "stroke_partial",
-                            value: "stroke"
-                        },
-                        {
-                            displayName: Translation.tr("Fill"),
-                            icon: "stroke_full",
-                            value: "fill"
-                        },
-                        {
-                            displayName: Translation.tr("Hide"),
-                            icon: "deselect",
-                            value: "hide"
-                        }
-                    ]
-                }
-            }
-       
-            ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie"
-                visible: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Minute hand style")
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.minuteHandStyle
-                    onSelected: newValue => {
-                        Config.options.background.clock.cookie.minuteHandStyle = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Classic"),
-                            icon: "radio",
-                            value: "classic"
-                        },
-                        {
-                            displayName: Translation.tr("Thin"),
-                            icon: "pen_size_1",
-                            value: "thin"
-                        },
-                        {
-                            displayName: Translation.tr("Medium"),
-                            icon: "pen_size_3",
-                            value: "medium"
-                        },
-                        {
-                            displayName: Translation.tr("Bold"),
-                            icon: "pen_size_5",
-                            value: "bold"
-                        },
-                        {
-                            displayName: Translation.tr("Hide"),
-                            icon: "deselect",
-                            value: "hide"
-                        }
-                    ]
-                }
-            }
-            ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Seconds hand style")
-                visible: Config.options.background.clock.style === "cookie"
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.secondHandStyle
-                    onSelected: newValue => {
-                        Config.options.background.clock.cookie.secondHandStyle = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Classic"),
-                            icon: "radio",
-                            value: "classic"
-                        },
-                        {
-                            displayName: Translation.tr("Line"),
-                            icon: "line_end",
-                            value: "line"
-                        },
-                        {
-                            displayName: Translation.tr("Dot"),
-                            icon: "adjust",
-                            value: "dot"
-                        },
-                        {
-                            displayName: Translation.tr("Hide"),
-                            icon: "deselect",
-                            value: "hide"
-                        }
+        ContentSubsection {
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Hour hand style")
 
-                    ]
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.hourHandStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.hourHandStyle = newValue;
                 }
-            }
-        
-
-        
-            
-            ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie" 
-                visible: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Date style")
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.dateStyle
-                    onSelected: newValue => {
-                        if (newValue !== "bubble" && Config.options.background.clock.cookie.dialNumberStyle === "none"){
-                            Config.options.background.clock.cookie.dateStyle = newValue;
-                        }
-                        if (newValue === "bubble" || newValue === "none"){
-                            Config.options.background.clock.cookie.dateStyle = newValue;
-                        }
+                options: [
+                    {
+                        displayName: Translation.tr("Classic"),
+                        icon: "radio",
+                        value: "classic"
+                    },
+                    {
+                        displayName: Translation.tr("Stroke"),
+                        icon: "stroke_partial",
+                        value: "stroke"
+                    },
+                    {
+                        displayName: Translation.tr("Fill"),
+                        icon: "stroke_full",
+                        value: "fill"
+                    },
+                    {
+                        displayName: Translation.tr("Hide"),
+                        icon: "deselect",
+                        value: "hide"
                     }
-                    options: [
-                        {
-                            displayName: Translation.tr("None"),
-                            icon: "deselect",
-                            value: "none"
-                        },
-                        {
-                            displayName: Translation.tr("Bubble"),
-                            icon: "bubble_chart",
-                            value: "bubble"
-                        },
-                        {
-                            displayName: Translation.tr("Rotating"),
-                            icon: "rotate_right",
-                            value: "rotating"
-                        },
-                        {
-                            displayName: Translation.tr("Square"),
-                            icon: "square",
-                            value: "square"
-                        }
-                    ]
+                ]
+            }
+        }
+
+        ContentSubsection {
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Minute hand style")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.minuteHandStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.minuteHandStyle = newValue;
                 }
+                options: [
+                    {
+                        displayName: Translation.tr("Classic"),
+                        icon: "radio",
+                        value: "classic"
+                    },
+                    {
+                        displayName: Translation.tr("Thin"),
+                        icon: "pen_size_1",
+                        value: "thin"
+                    },
+                    {
+                        displayName: Translation.tr("Medium"),
+                        icon: "pen_size_3",
+                        value: "medium"
+                    },
+                    {
+                        displayName: Translation.tr("Bold"),
+                        icon: "pen_size_5",
+                        value: "bold"
+                    },
+                    {
+                        displayName: Translation.tr("Hide"),
+                        icon: "deselect",
+                        value: "hide"
+                    }
+                ]
             }
-            StyledText {
-                visible: Config.options.background.clock.style === "cookie" 
-                Layout.leftMargin: 10
-                color: Appearance.colors.colSubtext
-                font.pixelSize: Appearance.font.pixelSize.smallie
-                text: Translation.tr("'Rotating' and 'Square' styles are not compatible with dial styles for aesthetic reasons")
+        }
+
+        ContentSubsection {
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Seconds hand style")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.secondHandStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.secondHandStyle = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Classic"),
+                        icon: "radio",
+                        value: "classic"
+                    },
+                    {
+                        displayName: Translation.tr("Line"),
+                        icon: "line_end",
+                        value: "line"
+                    },
+                    {
+                        displayName: Translation.tr("Dot"),
+                        icon: "adjust",
+                        value: "dot"
+                    },
+                    {
+                        displayName: Translation.tr("Hide"),
+                        icon: "deselect",
+                        value: "hide"
+                    }
+                ]
             }
-        
+        }
+
+        ContentSubsection {
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Date style")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.dateStyle
+                onSelected: newValue => {
+                    if (newValue !== "bubble" && Config.options.background.clock.cookie.dialNumberStyle === "none") {
+                        Config.options.background.clock.cookie.dateStyle = newValue;
+                    }
+                    if (newValue === "bubble" || newValue === "none") {
+                        Config.options.background.clock.cookie.dateStyle = newValue;
+                    }
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("None"),
+                        icon: "deselect",
+                        value: "none"
+                    },
+                    {
+                        displayName: Translation.tr("Bubble"),
+                        icon: "bubble_chart",
+                        value: "bubble"
+                    },
+                    {
+                        displayName: Translation.tr("Rotating"),
+                        icon: "rotate_right",
+                        value: "rotating"
+                    },
+                    {
+                        displayName: Translation.tr("Square"),
+                        icon: "square",
+                        value: "square"
+                    }
+                ]
+            }
+        }
+
+        StyledText {
+            visible: Config.options.background.clock.style === "cookie"
+            Layout.leftMargin: 10
+            color: Appearance.colors.colSubtext
+            font.pixelSize: Appearance.font.pixelSize.smallie
+        }
 
         ConfigSpinBox {
-            enabled: Config.options.background.clock.style === "cookie"
             visible: Config.options.background.clock.style === "cookie"
             icon: "support"
             text: Translation.tr("Clock sides")
@@ -291,11 +275,10 @@ ContentPage {
                 Config.options.background.clock.clockSides = value;
             }
         }
-        
+
         ConfigSwitch {
-            enabled: Config.options.background.clock.style === "cookie"
             visible: Config.options.background.clock.style === "cookie"
-            buttonIcon: "waves"
+            buttonIcon: "autoplay"
             text: Translation.tr("Constantly rotate")
             checked: Config.options.background.clock.cookie.constantlyRotate
             onCheckedChanged: {
@@ -306,16 +289,16 @@ ContentPage {
             }
         }
 
-        ConfigRow{
-            enabled: Config.options.background.clock.style === "cookie"
+        ConfigRow {
             visible: Config.options.background.clock.style === "cookie"
+
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
                 buttonIcon: "brightness_7"
                 text: Translation.tr("Center glow")
                 checked: Config.options.background.clock.cookie.centerGlow
                 onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.centerGlow
+                    checked = Config.options.background.clock.cookie.centerGlow;
                 }
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.centerGlow = checked;
@@ -326,13 +309,12 @@ ContentPage {
             }
 
             ConfigSwitch {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
-                visible: Config.options.background.clock.style === "cookie"
+                visible: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
                 checked: Config.options.background.clock.cookie.timeIndicators
                 onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.timeIndicators
+                    checked = Config.options.background.clock.cookie.timeIndicators;
                 }
                 onCheckedChanged: {
                     Config.options.background.clock.cookie.timeIndicators = checked;
@@ -341,9 +323,7 @@ ContentPage {
                     text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
                 }
             }
-            
         }
-        
 
         ContentSubsection {
             title: Translation.tr("Quote settings")
@@ -424,7 +404,9 @@ ContentPage {
                 font.pixelSize: Appearance.font.pixelSize.smallie
                 text: Translation.tr("Press Super+G to toggle appearance")
             }
-            Item { Layout.fillWidth: true }
+            Item {
+                Layout.fillWidth: true
+            }
             RippleButtonWithIcon {
                 id: editorButton
                 buttonRadius: Appearance.rounding.full
@@ -534,7 +516,7 @@ ContentPage {
                     Config.options.lock.centerClock = checked;
                 }
             }
-            
+
             ConfigSwitch {
                 buttonIcon: "info"
                 text: Translation.tr('Show "Locked" text')
@@ -567,8 +549,6 @@ ContentPage {
                     Config.options.lock.blur.extraZoom = value / 100;
                 }
             }
-            
-
         }
     }
 
@@ -776,5 +756,4 @@ ContentPage {
             }
         }
     }
-
 }
