@@ -10,7 +10,7 @@ with lib;
   config = mkIf config.illogical-impulse.audio.enable {
     home.packages = [
       pkgs.cava
-      pkgs.pavucontrol-qt
+      pkgs.lxqt.pavucontrol-qt
       pkgs.wireplumber
       pkgs.libdbusmenu-gtk3
       pkgs.playerctl
