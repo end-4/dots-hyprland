@@ -440,7 +440,7 @@
   "Also unlock keyring": "同时解锁密钥环",
   "Tip: Close a window with Super+Q": "提示: 使用 Super+Q 关闭窗口",
   "Remember that on most devices one can always hold the power button to force shutdown\nThis only makes it a tiny bit harder for accidents to happen": "请记住，大多数设备仍可以长按电源键进行强制关机\n此选项只会降低误触的可能性而已",
-  "This is usually safe and needed for your browser and AI sidebar anyway\nMostly useful for those who use lock on startup instead of a display manager that does it (GDM, SDDM, etc.)": "这通常是安全的，并且对浏览器和AI侧边栏也是必要的\n主要对那些使用“开机自动锁屏”而不是显示管理器（如 GDM、SDDM 等）执行锁屏的用户有用",
+  "This is usually safe and needed for your browser and AI sidebar anyway\nMostly useful for those who use lock on startup instead of a display manager that does it (GDM, SDDM, etc.)": "这通常是安全的，并且对浏览器和 AI 侧边栏也是必要的\n主要对那些使用“开机自动锁屏”而不是显示管理器（如 GDM、SDDM 等）执行锁屏的用户有用",
   "Show \"Locked\" text": "显示「已锁定」文字",
   "at": "在",
   "Simple digital": "简洁数字",
