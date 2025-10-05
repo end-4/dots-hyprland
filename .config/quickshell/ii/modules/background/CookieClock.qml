@@ -335,7 +335,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: 25
+                    leftMargin: 32
                 }
                 implicitWidth: root.hourNumberSize
                 implicitHeight: implicitWidth
@@ -351,7 +351,7 @@ Item {
                     font {
                         family: Appearance.font.family.reading
                         pixelSize: 80
-                        weight: 1000
+                        weight: 5000
                     }
                 }
             }
