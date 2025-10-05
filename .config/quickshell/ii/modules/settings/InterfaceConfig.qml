@@ -270,7 +270,7 @@ ContentPage {
                     Config.options.background.clock.cookie.centerGlow = checked;
                 }
                 StyledToolTip {
-                    text: "Can only be turned on using the 'Dots' dial style for aesthetic reasons"
+                    text: "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons"
                 }
             }
 

@@ -14,8 +14,7 @@ Item {
     property int renderPoints: 360
     property color color: "#605790"
     property alias strokeWidth: shapePath.strokeWidth
-
-    property bool waveAnimation: Config.options.background.clock.cookie.waveAnimation
+    property bool waveAnimation: false
 
 
     implicitWidth: implicitSize

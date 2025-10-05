@@ -94,7 +94,7 @@ Item {
         amplitude: implicitSize / 70
         sides: Config.options.background.clock.clockSides
         color: root.colBackground
-
+        waveAnimation: Config.options.background.clock.cookie.waveAnimation
         
     }
 
@@ -491,6 +491,7 @@ Item {
     }
 
 
+
     // Quote
     Rectangle{
         id: quoteBox
@@ -502,7 +503,8 @@ Item {
         implicitHeight: showQuote ? quoteText.height + 8 : 0
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
-        
+
+
         Behavior on implicitHeight {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
