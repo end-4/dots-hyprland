@@ -79,7 +79,7 @@ ContentPage {
                     currentValue: Config.options.background.clock.cookie.dialNumberStyle
                     onSelected: newValue => {
                         Config.options.background.clock.cookie.dialNumberStyle = newValue;
-                        if (newValue !== "dots") {
+                        if (newValue !== "dots" && newValue !== "full") {
                             Config.options.background.clock.cookie.centerGlow = false;
                         }
                         if (newValue === "numbers") {
@@ -259,7 +259,7 @@ ContentPage {
             enabled: Config.options.background.clock.style === "cookie"
             visible: Config.options.background.clock.style === "cookie"
             ConfigSwitch {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots"
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
                 buttonIcon: "brightness_7"
                 text: Translation.tr("Center glow")
                 checked: Config.options.background.clock.cookie.centerGlow
