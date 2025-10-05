@@ -368,7 +368,7 @@ Item {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
             anchors.centerIn: parent
-            color: root.colHourHand
+            color: Appearance.colors.colSecondaryHover
             text: DateTime.date.substring(5,7)
             font {
                 family: Appearance.font.family.expressive
