@@ -351,7 +351,7 @@ Item {
                     font {
                         family: Appearance.font.family.reading
                         pixelSize: 80
-                        weight: 5000
+                        weight: 1000
                     }
                 }
             }

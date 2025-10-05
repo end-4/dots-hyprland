@@ -227,7 +227,7 @@ ContentPage {
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
                 visible: Config.options.background.clock.style === "cookie"
-                buttonIcon: "farsight_digital"
+                buttonIcon: "date_range"
                 text: Translation.tr("Date inside clock")
                 checked: Config.options.background.clock.cookie.dateInClock
                 onEnabledChanged: {
