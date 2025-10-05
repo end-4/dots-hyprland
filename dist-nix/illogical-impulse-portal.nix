@@ -9,10 +9,10 @@ with lib;
 
   config = mkIf config.illogical-impulse.portal.enable {
     home.packages = [
-      pkgs.xdg-desktop-portal
-      pkgs.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
+      pkgs.kdePackages.xdg-desktop-portal
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.kdePackages.xdg-desktop-portal-gtk
+      pkgs.kdePackages.xdg-desktop-portal-hyprland
     ];
   };
 }
