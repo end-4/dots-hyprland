@@ -270,6 +270,7 @@ ContentPage {
                 }
             }
             StyledText {
+                visible: Config.options.background.clock.style === "cookie" 
                 Layout.leftMargin: 10
                 color: Appearance.colors.colSubtext
                 font.pixelSize: Appearance.font.pixelSize.smallie
