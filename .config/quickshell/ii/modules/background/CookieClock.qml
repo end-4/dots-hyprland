@@ -49,6 +49,7 @@ Item {
 
     property int clockSecond: 0
 
+    // Loader to set root.clockSecond
     Loader{
         active: Config.option.background.clock.cookie.secondDot
         sourceComponent: Timer {
@@ -95,22 +96,21 @@ Item {
         sides: Config.options.background.clock.clockSides
         color: root.colBackground
         waveAnimation: Config.options.background.clock.cookie.waveAnimation
-        
     }
 
-    // 12 dots around the cookie
+    // Hour dots dial style
     Repeater {
         model: 12
         Item {
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 1.0 : 0 // Not using visible to allow smooth transition
+            required property int index
+            opacity: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 1.0 : 0
+            rotation: 360 / 12 * index 
+            anchors.fill: parent
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            required property int index
-            rotation: 360 / 12 * index 
-            anchors.fill: parent
             Rectangle {
-                anchors {
+                anchors{
                     left: parent.left
                     verticalCenter: parent.verticalCenter
                     leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 10 : 50
@@ -135,13 +135,13 @@ Item {
         Repeater {
             model: 12
             Item {
-                opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 // Not using visible to allow smooth transition
+                required property int index
+                opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0
+                rotation: 360 / 12 * index 
+                anchors.fill: parent
                 Behavior on opacity {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                required property int index
-                rotation: 360 / 12 * index 
-                anchors.fill: parent
                 Rectangle {
                     anchors {
                         left: parent.left
@@ -170,33 +170,28 @@ Item {
         z: 1
         anchors.centerIn: cookie
         spacing: -16
-
-        // Numbers
         Repeater {
             model: root.clockNumbers
             delegate: StyledText {
                 required property string modelData
-
                 opacity: Config.options.background.clock.cookie.timeIndicators ? 1.0 : 0 // Not using visible to allow smooth transition
-                Behavior on opacity { 
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
                 anchors.horizontalCenter: parent?.horizontalCenter
+                color: root.colOnBackground
+                text: modelData.padStart(2, "0")
                 font {
-                    // A better way to do this? probably yes, do i know : no
-                    // (changing size based on am/pm selected or not)
                     property real numberSizeWithoutGlow: modelData.match(/am|pm/i) ? 26 : 68
                     property real numberSizeWithGlow: modelData.match(/am|pm/i) ? 10 : 40
-                    pixelSize: !Config.options.background.clock.cookie.timeIndicators ? 100 : // for open/close animation
-                                Config.options.background.clock.cookie.centerGlow ? numberSizeWithGlow : numberSizeWithoutGlow 
+                    pixelSize: !Config.options.background.clock.cookie.timeIndicators ? 100 : // open/close animation
+                                Config.options.background.clock.cookie.centerGlow ? numberSizeWithGlow : numberSizeWithoutGlow // changing size according to center glow
                     Behavior on pixelSize {
                         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                     }
                     family: Appearance.font.family.main
                     weight: Font.Bold
                 }
-                color: root.colOnBackground
-                text: modelData.padStart(2, "0")
+                Behavior on opacity { 
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
             }
         }
     }
@@ -210,16 +205,15 @@ Item {
         Rectangle {
             // fill
             opacity: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 1.0 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 - hourHandWidth / 2
             width: hourHandLength
             height: hourHandWidth
             radius: hourHandWidth / 2
-            //color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
             color : root.colHourHand
+            Behavior on opacity {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
         }
         Rectangle {
             // border
@@ -238,54 +232,54 @@ Item {
     Item {
         anchors.fill: parent
         z: Config.options.background.clock.cookie.minuteHandStyle === "thin" ? 1 : 3
+        rotation: -90 + (360 / 60) * root.clockMinute
         Behavior on rotation{
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
-        rotation: -90 + (360 / 60) * root.clockMinute
         Rectangle {
-            Behavior on height {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 - minuteHandWidth / 2
             width: minuteHandLength
             height: minuteHandWidth
             radius: minuteHandWidth / 2
             color: root.colMinuteHand
+            Behavior on height {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
         }
     }
 
     // Center dot
     Rectangle {
-        opacity: Config.options.background.clock.cookie.minuteHandStyle !== "bold" ? 1.0 : 0 // Not using visible to allow smooth transition
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
         z: 4
+        opacity: Config.options.background.clock.cookie.minuteHandStyle !== "bold" ? 1.0 : 0 
         color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
         anchors.centerIn: parent
         implicitWidth: centerDotSize
         implicitHeight: implicitWidth
         radius: implicitWidth / 2
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
     }
 
     // Center glow
     Rectangle {
-        opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 // Not using visible to allow smooth transition
-        Behavior on opacity {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitWidth { // Not using two animations because it looks weird
-            ParallelAnimation {
-                NumberAnimation { properties: "implicitWidth,implicitHeight"; duration: 100; easing.type: Easing.InOutQuad }
-            }
-        }
+        opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 
         z: 0
         color: root.colTimeIndicators
         anchors.centerIn: parent
         implicitWidth: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75
         implicitHeight: implicitWidth
         radius: implicitWidth / 2
+        Behavior on opacity {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitWidth { // Not using two animations (one for width and one for height) because it looks weird
+            ParallelAnimation {
+                NumberAnimation { properties: "implicitWidth,implicitHeight"; duration: 100; easing.type: Easing.InOutQuad }
+            }
+        }
     }
 
 
@@ -294,16 +288,19 @@ Item {
         id: secondHand
         z: Config.options.background.clock.cookie.secondHandStyle === "line" ? 2 : 3
         opacity: Config.options.background.clock.cookie.secondHandStyle === "dot" || Config.options.background.clock.cookie.secondHandStyle === "line" ? 1.0 : 0 // Not using visible to allow smooth transition
+        rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
+        anchors.fill: parent
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
         Behavior on rotation{
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
-        rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
-        anchors.fill: parent
         Rectangle {
-            
+            implicitWidth: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandLength
+            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth : root.secondsHandWidth
+            radius: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth / 2 : root.secondsHandWidth / 2
+            color: colSeconds
             Behavior on implicitHeight {
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
@@ -315,10 +312,6 @@ Item {
                 verticalCenter: parent.verticalCenter
                 leftMargin: 10
             }
-            implicitWidth: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandLength
-            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth : root.secondsHandWidth
-            radius: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth / 2 : root.secondsHandWidth / 2
-            color: colSeconds
         }
     }
 
@@ -329,7 +322,6 @@ Item {
         height: cookie.height
         rotation: secondHand.rotation + 45  // +45 degrees to align with minute hand
         opacity: Config.options.background.clock.cookie.dateStyle === "rotating" ? 1.0 : 0
-
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
@@ -367,17 +359,16 @@ Item {
         z: 1
         implicitWidth: 45
         implicitHeight: Config.options.background.clock.cookie.dateStyle === "square" ? 30 : 0
-        Behavior on implicitHeight{
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        opacity: 1.0
+        color: root.colOnBackground
+        radius: Appearance.rounding.small
         anchors{
             verticalCenter: cookie.verticalCenter
             right: cookie.right
             rightMargin: 10
         }
-        color: root.colOnBackground
-        radius: Appearance.rounding.small // LOOK
+        Behavior on implicitHeight{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
         StyledText{
             opacity: Config.options.background.clock.cookie.dateStyle === "square" ? 1.0 : 0
             Behavior on opacity{
@@ -398,14 +389,17 @@ Item {
     Repeater {
         model: 4
         Item {
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 1.0 : 0 // Not using visible to allow smooth transition
+            required property int index
+            opacity: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 1.0 : 0 
+            rotation: 360 / 4 * index 
+            anchors.fill: parent
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            required property int index
-            rotation: 360 / 4 * index 
-            anchors.fill: parent
             Rectangle {
+                color: "transparent"
+                implicitWidth: root.hourNumberSize
+                implicitHeight: implicitWidth
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
@@ -414,14 +408,12 @@ Item {
                 Behavior on anchors.leftMargin{
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                implicitWidth: root.hourNumberSize
-                implicitHeight: implicitWidth
-                color: "transparent"
                 StyledText{
-                    
                     color: root.colOnBackground
                     anchors.centerIn: parent
-                    text: index === 0 ? "9" : index === 1 ? "12" : index === 2 ? "3" : "6"
+                    text: index === 0 ? "9" : 
+                          index === 1 ? "12" : 
+                          index === 2 ? "3" : "6"
                     rotation: index % 2 === 0 ? index * 90 : -index * 90 //A better way can be found to show texts on right angle
                     font {
                         family: Appearance.font.family.reading
@@ -437,14 +429,18 @@ Item {
     Repeater {
         model: 12
         Item {
+            required property int index
+            rotation: 360 / 12 * index 
+            anchors.fill: parent
             opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            required property int index
-            rotation: 360 / 12 * index 
-            anchors.fill: parent
             Rectangle {
+                implicitWidth: root.hourLineSize * 3.5
+                implicitHeight: root.hourLineSize
+                radius: implicitWidth / 2
+                color: root.colOnBackground
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
@@ -453,11 +449,6 @@ Item {
                 Behavior on anchors.leftMargin{
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                implicitWidth: root.hourLineSize * 3.5
-                implicitHeight: root.hourLineSize
-                radius: implicitWidth / 2
-                color: root.colOnBackground
-                opacity: 1.0
             }
         }
     }
@@ -465,14 +456,19 @@ Item {
     Repeater {
         model: 60
         Item {
+            required property int index
+            rotation: 360 / 60 * index 
+            anchors.fill: parent
             opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
-            required property int index
-            rotation: 360 / 60 * index 
-            anchors.fill: parent
             Rectangle {
+                implicitWidth: root.minuteLineSize * 3.5
+                implicitHeight: root.minuteLineSize
+                radius: implicitWidth / 2
+                color: root.colOnBackground
+                opacity: 0.5
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
@@ -481,11 +477,6 @@ Item {
                 Behavior on anchors.leftMargin{
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                implicitWidth: root.minuteLineSize * 3.5
-                implicitHeight: root.minuteLineSize
-                radius: implicitWidth / 2
-                color: root.colOnBackground
-                opacity: 0.5
             }
         }
     }

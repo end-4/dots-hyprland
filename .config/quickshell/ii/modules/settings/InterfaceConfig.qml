@@ -205,28 +205,28 @@ ContentPage {
         }
 
         ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie"
-                visible: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Hour hand style")
-                ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.hourHandStyle
-                    onSelected: newValue => {
-                        Config.options.background.clock.cookie.hourHandStyle = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Fill"),
-                            icon: "stroke_full",
-                            value: "fill"
-                        },
-                        {
-                            displayName: Translation.tr("Stroke"),
-                            icon: "stroke_partial",
-                            value: "stroke"
-                        }
-                    ]
+            enabled: Config.options.background.clock.style === "cookie"
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Hour hand style")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.cookie.hourHandStyle
+                onSelected: newValue => {
+                    Config.options.background.clock.cookie.hourHandStyle = newValue;
                 }
+                options: [
+                    {
+                        displayName: Translation.tr("Fill"),
+                        icon: "stroke_full",
+                        value: "fill"
+                    },
+                    {
+                        displayName: Translation.tr("Stroke"),
+                        icon: "stroke_partial",
+                        value: "stroke"
+                    }
+                ]
             }
+        }
 
         ConfigSpinBox {
             enabled: Config.options.background.clock.style === "cookie"
@@ -241,6 +241,7 @@ ContentPage {
                 Config.options.background.clock.clockSides = value;
             }
         }
+        
         ConfigSwitch {
             enabled: Config.options.background.clock.style === "cookie"
             visible: Config.options.background.clock.style === "cookie"
