@@ -12,24 +12,15 @@ ContentPage {
         icon: "wallpaper"
         title: Translation.tr("Background")
 
-        ConfigRow{
-            ConfigSwitch {
-                buttonIcon: "nest_clock_farsight_analog"
-                text: Translation.tr("Show clock")
-                checked: Config.options.background.clock.show
-                onCheckedChanged: {
-                    Config.options.background.clock.show = checked;
-                }
-            }
-            ConfigSwitch {
-                buttonIcon: "format_quote"
-                text: Translation.tr("Show quote")
-                checked: Config.options.background.showQuote
-                onCheckedChanged: {
-                    Config.options.background.showQuote = checked;
-                }
+        ConfigSwitch {
+            buttonIcon: "nest_clock_farsight_analog"
+            text: Translation.tr("Show clock")
+            checked: Config.options.background.clock.show
+            onCheckedChanged: {
+                Config.options.background.clock.show = checked;
             }
         }
+            
 
         ConfigSpinBox {
             icon: "loupe"
@@ -337,6 +328,14 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Quote settings")
+            ConfigSwitch {
+                buttonIcon: "format_quote"
+                text: Translation.tr("Show quote")
+                checked: Config.options.background.showQuote
+                onCheckedChanged: {
+                    Config.options.background.showQuote = checked;
+                }
+            }
             MaterialTextArea {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("Quote")
