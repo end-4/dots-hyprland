@@ -206,15 +206,31 @@ Item {
         anchors.fill: parent
         z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
         rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
+        // Using two different rectangle for animation. Can be used only one with border.color && border.width
         Rectangle {
+            // fill
+            opacity: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 1.0 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 - hourHandWidth / 2
             width: hourHandLength
             height: hourHandWidth
             radius: hourHandWidth / 2
-            color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
-            border.color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? root.colHourHand : "transparent"
-            border.width: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? 4 : 0
+            //color: Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
+            color : root.colHourHand
+        }
+        Rectangle {
+            // border
+            anchors.verticalCenter: parent.verticalCenter
+            x: parent.width / 2 - hourHandWidth / 2
+            width: hourHandLength
+            height: hourHandWidth
+            radius: hourHandWidth / 2
+            color: "transparent"
+            border.color: root.colHourHand
+            border.width: 4 
         }
     }
 
