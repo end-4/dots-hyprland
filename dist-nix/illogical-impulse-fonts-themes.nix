@@ -47,7 +47,7 @@ in
       # otf-space-grotesk - Not available in nixpkgs with this name
       pkgs.starship
       # ttf-gabarito-git - Not available in nixpkgs
-      pkgs.nerdfonts.jetbrains-mono
+      pkgs.nerd-fonts.jetbrains-mono # Contains jetbrains-mono
       # ttf-material-symbols-variable-git - Not available in stable nixpkgs
       # ttf-readex-pro - Not available in nixpkgs
       # ttf-rubik-vf - Not available in nixpkgs
