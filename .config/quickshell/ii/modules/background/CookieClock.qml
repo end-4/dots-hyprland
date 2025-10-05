@@ -31,9 +31,8 @@ Item {
     property real secondsHandLength: 100
     property real hourLineSize: 5
     property real minuteLineSize: 2
-
     property real hourNumberSize: 36
-    
+    property real dateSquareSize: 64
 
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
@@ -402,6 +401,74 @@ Item {
                 family: Appearance.font.family.expressive
                 pixelSize: 20
                 weight: 1000
+            }
+        }
+    }
+
+    // Date bubble style left side
+    Rectangle{
+        z: 5
+        implicitWidth: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
+        implicitHeight: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
+        color: Appearance.colors.colPrimaryContainerHover
+        radius: Appearance.rounding.large
+        anchors{
+            left: cookie.left
+            bottom: cookie.bottom
+            bottomMargin: 5
+        }
+        Behavior on implicitWidth{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitHeight{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        StyledText{
+            anchors.centerIn: parent
+            text: DateTime.date.substring(5,7)
+            color: Appearance.colors.colPrimary
+            opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
+            font {
+                family: Appearance.font.family.reading
+                pixelSize: 30
+                weight: 1000
+            }
+            Behavior on opacity{
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+        }
+    }
+
+    // Date bubble style right side
+    Rectangle{
+        z: 5
+        implicitWidth: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
+        implicitHeight: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
+        color: Appearance.colors.colTertiaryContainer
+        radius: Appearance.rounding.verylarge
+        anchors{
+            right: cookie.right
+            top: cookie.top
+            topMargin: 5
+        }
+        Behavior on implicitWidth{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitHeight{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        StyledText{
+            anchors.centerIn: parent
+            text: DateTime.date.substring(8,10)
+            color: Appearance.colors.colTertiary
+            opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
+            font {
+                family: Appearance.font.family.reading
+                pixelSize: 30
+                weight: 1000
+            }
+            Behavior on opacity{
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
         }
     }

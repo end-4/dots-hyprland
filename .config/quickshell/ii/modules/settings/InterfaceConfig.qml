@@ -253,6 +253,11 @@ ContentPage {
                             displayName: Translation.tr("Square"),
                             icon: "square",
                             value: "square"
+                        },
+                        {
+                            displayName: Translation.tr("Bubble"),
+                            icon: "bubble_chart",
+                            value: "bubble"
                         }
                     ]
                 }
