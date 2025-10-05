@@ -198,6 +198,7 @@ Item {
 
     // Hour hand
     Item {
+        visible: Config.options.background.clock.cookie.hourHandStyle === "hide" ? false : true
         anchors.fill: parent
         z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
         rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
@@ -230,6 +231,7 @@ Item {
 
     // Minute hand
     Item {
+        visible: Config.options.background.clock.cookie.minuteHandStyle === "hide" ? false : true
         anchors.fill: parent
         z: Config.options.background.clock.cookie.minuteHandStyle === "thin" ? 1 : 3
         rotation: -90 + (360 / 60) * root.clockMinute
@@ -251,6 +253,7 @@ Item {
 
     // Center dot
     Rectangle {
+        visible: Config.options.background.clock.cookie.minuteHandStyle === "hide" && Config.options.background.clock.cookie.hourHandStyle === "hide" ? false : true
         z: 4
         opacity: Config.options.background.clock.cookie.minuteHandStyle !== "bold" ? 1.0 : 0 
         color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand

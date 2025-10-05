@@ -170,6 +170,11 @@ ContentPage {
                             displayName: Translation.tr("Bold"),
                             icon: "pen_size_5",
                             value: "bold"
+                        },
+                        {
+                            displayName: Translation.tr("Hide"),
+                            icon: "hide_image",
+                            value: "hide"
                         }
                     ]
                 }
@@ -223,6 +228,11 @@ ContentPage {
                         displayName: Translation.tr("Stroke"),
                         icon: "stroke_partial",
                         value: "stroke"
+                    },
+                    {
+                        displayName: Translation.tr("Hide"),
+                        icon: "hide_image",
+                        value: "hide"
                     }
                 ]
             }
