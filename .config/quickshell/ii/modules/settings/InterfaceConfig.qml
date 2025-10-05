@@ -87,7 +87,9 @@ ContentPage {
                         }
                         if (newValue != "none"){
                             Config.options.background.clock.cookie.dateInClock = false;
-                            Config.options.background.clock.cookie.dateStyle = "none";
+                            if (Config.options.background.clock.cookie.dateStyle !== "bubble"){
+                                Config.options.background.clock.cookie.dateStyle = "none";
+                            }
                         }
                     }
                     options: [
@@ -230,13 +232,18 @@ ContentPage {
         
             
             ContentSubsection {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
+                enabled: Config.options.background.clock.style === "cookie" 
                 visible: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Date style")
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.dateStyle
                     onSelected: newValue => {
-                        Config.options.background.clock.cookie.dateStyle = newValue;
+                        if (newValue !== "bubble" && Config.options.background.clock.cookie.dialNumberStyle === "none"){
+                            Config.options.background.clock.cookie.dateStyle = newValue;
+                        }
+                        if (newValue === "bubble" || newValue === "none"){
+                            Config.options.background.clock.cookie.dateStyle = newValue;
+                        }
                     }
                     options: [
                         {
