@@ -1,3 +1,12 @@
+printf "${STY_YELLOW}"
+printf "============WARNING/NOTE============\n"
+printf "Your GCC version is: $(gcc --version | grep gcc | awk '{print $3}')\n"
+printf "GCC-15>= is required for Hyprland\n"
+printf "If you have GCC-15>= and it's currently set then you can safely ignore this\n"
+printf "If not, you must ensure you are using the correct GCC version and set it (gcc-config <number>), then emerge re-emerge @world with an empty tree (emerge -e @world)\n"
+printf "${STY_RESET}"
+pause
+
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
 	v sudo eselect repository enable localrepo 
