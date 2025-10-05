@@ -252,6 +252,11 @@ ContentPage {
                             value: "none"
                         },
                         {
+                            displayName: Translation.tr("Bubble"),
+                            icon: "bubble_chart",
+                            value: "bubble"
+                        },
+                        {
                             displayName: Translation.tr("Rotating"),
                             icon: "rotate_right",
                             value: "rotating"
@@ -260,14 +265,15 @@ ContentPage {
                             displayName: Translation.tr("Square"),
                             icon: "square",
                             value: "square"
-                        },
-                        {
-                            displayName: Translation.tr("Bubble"),
-                            icon: "bubble_chart",
-                            value: "bubble"
                         }
                     ]
                 }
+            }
+            StyledText {
+                Layout.leftMargin: 10
+                color: Appearance.colors.colSubtext
+                font.pixelSize: Appearance.font.pixelSize.smallie
+                text: Translation.tr("'Rotating' and 'Square' styles are not compatible with dial styles for aesthetic reasons")
             }
         
 
