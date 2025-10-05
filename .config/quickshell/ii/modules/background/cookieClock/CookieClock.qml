@@ -345,7 +345,7 @@ Item {
         z: 5
         implicitWidth: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
         implicitHeight: Config.options.background.clock.cookie.dateStyle === "bubble" ? dateSquareSize : 0
-        color: Appearance.colors.colPrimaryContainerHover
+        color: Appearance.colors.colPrimaryContainer
         radius: Appearance.rounding.large
         anchors{
             left: cookie.left
@@ -361,7 +361,7 @@ Item {
         StyledText{
             anchors.centerIn: parent
             text: DateTime.date.substring(5,7)
-            color: Appearance.colors.colPrimary
+            color: Appearance.colors.colOnPrimaryContainer
             opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
             font {
                 family: Appearance.font.family.reading
@@ -395,7 +395,7 @@ Item {
         StyledText{
             anchors.centerIn: parent
             text: DateTime.date.substring(8,10)
-            color: Appearance.colors.colTertiary
+            color: Appearance.colors.colOnPrimaryContainer
             opacity: Config.options.background.clock.cookie.dateStyle === "bubble" ? 1.0 : 0
             font {
                 family: Appearance.font.family.reading
