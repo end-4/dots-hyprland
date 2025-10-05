@@ -71,7 +71,6 @@ ContentPage {
 
 
         ConfigRow{
-            visible: Config.options.background.clock.style === "cookie"
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Dial number style")
@@ -123,7 +122,6 @@ ContentPage {
         
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
-                visible: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Hour hand style")
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.hourHandStyle
@@ -157,7 +155,6 @@ ContentPage {
        
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
-                visible: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Minute hand style")
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.minuteHandStyle
@@ -196,7 +193,6 @@ ContentPage {
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Seconds hand style")
-                visible: Config.options.background.clock.style === "cookie"
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.secondHandStyle
                     onSelected: newValue => {
@@ -233,7 +229,6 @@ ContentPage {
             
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie" 
-                visible: Config.options.background.clock.style === "cookie"
                 title: Translation.tr("Date style")
                 ConfigSelectionArray {
                     currentValue: Config.options.background.clock.cookie.dateStyle
@@ -270,7 +265,6 @@ ContentPage {
                 }
             }
             StyledText {
-                visible: Config.options.background.clock.style === "cookie" 
                 Layout.leftMargin: 10
                 color: Appearance.colors.colSubtext
                 font.pixelSize: Appearance.font.pixelSize.smallie
@@ -280,7 +274,6 @@ ContentPage {
 
         ConfigSpinBox {
             enabled: Config.options.background.clock.style === "cookie"
-            visible: Config.options.background.clock.style === "cookie"
             icon: "support"
             text: Translation.tr("Clock sides")
             value: Config.options.background.clock.clockSides
@@ -294,7 +287,6 @@ ContentPage {
         
         ConfigSwitch {
             enabled: Config.options.background.clock.style === "cookie"
-            visible: Config.options.background.clock.style === "cookie"
             buttonIcon: "waves"
             text: Translation.tr("Constantly rotate")
             checked: Config.options.background.clock.cookie.constantlyRotate
@@ -308,7 +300,6 @@ ContentPage {
 
         ConfigRow{
             enabled: Config.options.background.clock.style === "cookie"
-            visible: Config.options.background.clock.style === "cookie"
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
                 buttonIcon: "brightness_7"
@@ -327,7 +318,6 @@ ContentPage {
 
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
-                visible: Config.options.background.clock.style === "cookie"
                 buttonIcon: "farsight_digital"
                 text: Translation.tr("Clock indicator")
                 checked: Config.options.background.clock.cookie.timeIndicators
