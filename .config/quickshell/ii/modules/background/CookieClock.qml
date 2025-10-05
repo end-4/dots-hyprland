@@ -298,7 +298,7 @@ Item {
         }
         Rectangle {
             implicitWidth: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandLength
-            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth : root.secondsHandWidth
+            implicitHeight: Config.options.background.clock.cookie.secondHandStyle === "dot" ? root.secondDotSize : root.secondsHandWidth
             radius: Config.options.background.clock.cookie.secondHandStyle === "dot" ? implicitWidth / 2 : root.secondsHandWidth / 2
             color: colSeconds
             Behavior on implicitHeight {
@@ -307,6 +307,7 @@ Item {
             Behavior on implicitWidth {
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
+            
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
