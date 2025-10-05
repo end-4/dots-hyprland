@@ -29,6 +29,8 @@ Item {
     property real secondDotSize: 20
     property real secondsHandWidth: 2
     property real secondsHandLength: 100
+    property real hourLineSize: 5
+    property real minuteLineSize: 2
 
     property real hourNumberSize: 36
     
@@ -409,6 +411,63 @@ Item {
                         weight: 1000
                     }
                 }
+            }
+        }
+    }
+
+    // Full dial style hour lines
+    Repeater {
+        model: 12
+        Item {
+            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+            required property int index
+            rotation: 360 / 12 * index 
+            anchors.fill: parent
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
+                }
+                Behavior on anchors.leftMargin{
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                implicitWidth: root.hourLineSize * 3.5
+                implicitHeight: root.hourLineSize
+                radius: implicitWidth / 2
+                color: root.colOnBackground
+                opacity: 1.0
+            }
+        }
+    }
+    // Full dial style minute lines
+    Repeater {
+        model: 60
+        Item {
+            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+            required property int index
+            rotation: 360 / 60 * index 
+            anchors.fill: parent
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
+                }
+                Behavior on anchors.leftMargin{
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                implicitWidth: root.minuteLineSize * 3.5
+                implicitHeight: root.minuteLineSize
+                radius: implicitWidth / 2
+                color: root.colOnBackground
+                opacity: 0.5
             }
         }
     }

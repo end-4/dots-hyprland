@@ -131,7 +131,7 @@ Singleton {
                     property real scale: 1
                     property int clockSides: 12
                     property JsonObject cookie: JsonObject {
-                        property string dialNumberStyle: "dots" // Options: "dots" , "numbers", "none"
+                        property string dialNumberStyle: "dots" // Options: "dots" , "numbers", "full" , "none"
                         property string minuteHandStyle: "medium" // Options: "medium", "bold"
                         property string secondHandStyle: "dot" // Options: "dot", "line" , "none" 
                         property string dateStyle: "rotating" // Options: "rotating", "square", "none"

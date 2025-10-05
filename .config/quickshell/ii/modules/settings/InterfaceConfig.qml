@@ -102,10 +102,16 @@ ContentPage {
                             value: "dots"
                         },
                         {
+                            displayName: Translation.tr("Full"),
+                            icon: "avg_pace",
+                            value: "full"
+                        },
+                        {
                             displayName: Translation.tr("Numbers"),
                             icon: "123",
                             value: "numbers"
                         }
+                        
                     ]
                 }
             }
