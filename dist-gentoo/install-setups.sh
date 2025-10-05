@@ -22,7 +22,10 @@ elif [[ ! -z $(openrc --version) ]]; then
 	x sudo rc-service ydotool start
 	x sudo rc-service bluetooth start
 else
-	x echo "init system not detected" && false
+	printf "${STY_RED}"
+	printf "====================INIT SYSTEM NOT FOUND====================\n"
+	printf "${STY_RESET}"
+	pause
 fi
 
 v sudo chown -R $(whoami):$(whoami) ~/.local/share/icons/
