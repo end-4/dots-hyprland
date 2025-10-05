@@ -14,6 +14,7 @@ Singleton {
     property bool ready: Pipewire.defaultAudioSink?.ready ?? false
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
+    property string audioTheme: Config.options.sounds.theme
 
     signal sinkProtectionTriggered(string reason);
 
@@ -48,7 +49,28 @@ Singleton {
             }
             lastVolume = sink.audio.volume;
         }
-        
     }
 
+    function playSystemSound(soundName) {
+        const ogaPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.oga`;
+        const oggPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.ogg`;
+
+        // Try playing .oga first
+        let command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            ogaPath
+        ];
+        Quickshell.execDetached(command);
+
+        // Also try playing .ogg (ffplay will just fail silently if file doesn't exist)
+        command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            oggPath
+        ];
+        Quickshell.execDetached(command);
+    }
 }

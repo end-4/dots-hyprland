@@ -18,10 +18,12 @@ Singleton {
     property bool isLow: available && (percentage <= Config.options.battery.low / 100)
     property bool isCritical: available && (percentage <= Config.options.battery.critical / 100)
     property bool isSuspending: available && (percentage <= Config.options.battery.suspend / 100)
+    property bool isFull: available && (percentage >= Config.options.battery.full / 100)
 
     property bool isLowAndNotCharging: isLow && !isCharging
     property bool isCriticalAndNotCharging: isCritical && !isCharging
     property bool isSuspendingAndNotCharging: allowAutomaticSuspend && isSuspending && !isCharging
+    property bool isFullAndCharging: isFull && isCharging
 
     property real energyRate: UPower.displayDevice.changeRate
     property real timeToEmpty: UPower.displayDevice.timeToEmpty
@@ -35,22 +37,58 @@ Singleton {
             "-u", "critical",
             "-a", "Shell"
         ])
+
+        if (available && Config.options.sounds.battery) {
+            if (isLowAndNotCharging) {
+                Audio.playSystemSound("dialog-warning")
+            }
+        }
     }
 
     onIsCriticalAndNotChargingChanged: {
         if (available && isCriticalAndNotCharging) Quickshell.execDetached([
             "notify-send", 
             Translation.tr("Critically low battery"), 
-            Translation.tr("Please charge!\nAutomatic suspend triggers at %1").arg(Config.options.battery.suspend), 
+            Translation.tr("Please charge!\nAutomatic suspend triggers at %1%").arg(Config.options.battery.suspend), 
             "-u", "critical",
             "-a", "Shell"
         ]);
-            
+
+        if (available && Config.options.sounds.battery) {
+            if (isCriticalAndNotCharging) {
+                Audio.playSystemSound("suspend-error")
+            }
+        }
     }
 
     onIsSuspendingAndNotChargingChanged: {
         if (available && isSuspendingAndNotCharging) {
             Quickshell.execDetached(["bash", "-c", `systemctl suspend || loginctl suspend`]);
+        }
+    }
+
+    onIsFullAndChargingChanged: {
+        if (available && isFullAndCharging) Quickshell.execDetached([
+            "notify-send",
+            Translation.tr("Battery full"),
+            Translation.tr("Please unplug the charger"),
+            "-a", "Shell"
+        ]);
+
+        if (available && Config.options.sounds.battery) {
+            if (isFullAndCharging) {
+                Audio.playSystemSound("complete")
+            }
+        }
+    }
+
+    onIsPluggedInChanged: {
+        if (available && Config.options.sounds.battery) {
+            if (isPluggedIn) {
+                Audio.playSystemSound("power-plug")
+            } else {
+                Audio.playSystemSound("power-unplug")
+            }
         }
     }
 }
