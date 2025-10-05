@@ -270,15 +270,16 @@ Item {
         color: root.colTimeIndicators
         anchors.centerIn: parent
         implicitWidth: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75
-        implicitHeight: implicitWidth
+        implicitHeight: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75 // Not using implicitHeight to allow smooth transition
         radius: implicitWidth / 2
         Behavior on opacity {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
-        Behavior on implicitWidth { // Not using two animations (one for width and one for height) because it looks weird
-            ParallelAnimation {
-                NumberAnimation { properties: "implicitWidth,implicitHeight"; duration: 100; easing.type: Easing.InOutQuad }
-            }
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
     }
 
@@ -307,7 +308,6 @@ Item {
             Behavior on implicitWidth {
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
-            
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
