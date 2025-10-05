@@ -296,13 +296,13 @@ ContentPage {
             enabled: Config.options.background.clock.style === "cookie"
             visible: Config.options.background.clock.style === "cookie"
             buttonIcon: "waves"
-            text: Translation.tr("Wave animation")
-            checked: Config.options.background.clock.cookie.waveAnimation
+            text: Translation.tr("Constantly rotate")
+            checked: Config.options.background.clock.cookie.constantlyRotate
             onCheckedChanged: {
-                Config.options.background.clock.cookie.waveAnimation = checked;
+                Config.options.background.clock.cookie.constantlyRotate = checked;
             }
             StyledToolTip {
-                text: "It may effect performance"
+                text: "Makes the clock always rotate. This is extremely expensive (expect 50% usage on Intel UHD Graphics) and thus impractical."
             }
         }
 

@@ -139,7 +139,7 @@ Singleton {
                         property bool timeIndicators: true
                         property bool centerGlow: true
                         property bool dateInClock: true
-                        property bool waveAnimation: true
+                        property bool constantlyRotate: false
                     }
                     
                 }

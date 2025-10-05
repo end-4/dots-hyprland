@@ -94,7 +94,7 @@ Item {
         amplitude: implicitSize / 70
         sides: Config.options.background.clock.clockSides
         color: root.colBackground
-        waveAnimation: Config.options.background.clock.cookie.waveAnimation
+        constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
 
     // Hour dots dial style

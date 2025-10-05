@@ -14,15 +14,14 @@ Item {
     property int renderPoints: 360
     property color color: "#605790"
     property alias strokeWidth: shapePath.strokeWidth
-    property bool waveAnimation: false
-
+    property bool constantlyRotate: false
 
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
     property real waveTime: 0
     Loader{
-        active: waveAnimation
+        active: constantlyRotate
         sourceComponent: Timer{
             interval: 16  // Does it effect performance, probably, is it noticeable, not really
             running: true; repeat: true
@@ -60,7 +59,7 @@ Item {
                     var radius = root.implicitSize / 2 - root.amplitude
                     for (var i = 0; i <= steps; i++) {
                         var angle = (i / steps) * 2 * Math.PI
-                        var wave = waveAnimation ? Math.sin(angle * root.animatedSides + Math.PI/2 - root.waveTime) * root.amplitude : Math.sin(angle * root.animatedSides + Math.PI/2) * root.amplitude
+                        var wave = constantlyRotate ? Math.sin(angle * root.animatedSides + Math.PI/2 - root.waveTime) * root.amplitude : Math.sin(angle * root.animatedSides + Math.PI/2) * root.amplitude
                         var x = Math.cos(angle) * (radius + wave) + cx
                         var y = Math.sin(angle) * (radius + wave) + cy
                         points.push(Qt.point(x, y))
