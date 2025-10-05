@@ -135,14 +135,14 @@ ContentPage {
                             value: "classic"
                         },
                         {
-                            displayName: Translation.tr("Fill"),
-                            icon: "stroke_full",
-                            value: "fill"
-                        },
-                        {
                             displayName: Translation.tr("Stroke"),
                             icon: "stroke_partial",
                             value: "stroke"
+                        },
+                        {
+                            displayName: Translation.tr("Fill"),
+                            icon: "stroke_full",
+                            value: "fill"
                         },
                         {
                             displayName: Translation.tr("Hide"),

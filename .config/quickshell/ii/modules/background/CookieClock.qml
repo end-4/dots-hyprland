@@ -198,10 +198,13 @@ Item {
 
     // Hour hand
     Item {
-        visible: Config.options.background.clock.cookie.hourHandStyle === "hide" ? false : true
+        opacity: Config.options.background.clock.cookie.hourHandStyle === "hide" ? 0.0 : 1.0
         anchors.fill: parent
         z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
         rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
         Rectangle {
             opacity: Config.options.background.clock.cookie.hourHandStyle !== "hide" ? 1.0 : 0
             anchors.verticalCenter: parent.verticalCenter
@@ -223,11 +226,14 @@ Item {
 
     // Minute hand
     Item {
-        visible: Config.options.background.clock.cookie.minuteHandStyle === "hide" ? false : true
+        opacity: Config.options.background.clock.cookie.minuteHandStyle === "hide" ? 0.0 : 1.0
         anchors.fill: parent
         z: Config.options.background.clock.cookie.minuteHandStyle === "thin" ? 1 : 3
         rotation: -90 + (360 / 60) * root.clockMinute
         Behavior on rotation{
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on opacity {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
         Rectangle {
