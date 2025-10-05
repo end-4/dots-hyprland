@@ -16,7 +16,7 @@ with lib;
       pkgs.hyprlock
       pkgs.hyprpicker
       pkgs.networkmanagerapplet
-      # quickshell-git - Not available in stable nixpkgs, may need overlay
+      pkgs.quickshell
       pkgs.translate-shell
       pkgs.wlogout
     ];
