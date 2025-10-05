@@ -1,4 +1,4 @@
-# End-4 dot-files for Gentoo
+# End-4 dot-files for Gentoo by [@jwihardi](https://github.com/jwihardi)
 
 
 ## install-deps.sh
