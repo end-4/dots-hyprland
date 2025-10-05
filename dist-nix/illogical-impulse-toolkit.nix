@@ -9,7 +9,7 @@ with lib;
 
   config = mkIf config.illogical-impulse.toolkit.enable {
     home.packages = [
-      pkgs.kdialog
+      pkgs.kdePackages.kdialog
       pkgs.qt6.qt5compat
       # qt6-avif-image-plugin - May be available through qt6.qtimageformats
       pkgs.qt6.qtbase
