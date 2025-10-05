@@ -146,7 +146,7 @@ Singleton {
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
-                property bool showQuote: true
+                property bool showQuote: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
