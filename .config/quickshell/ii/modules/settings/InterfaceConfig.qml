@@ -115,37 +115,44 @@ ContentPage {
                     ]
                 }
             }
+            
+        }
+
+        
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
-                title: Translation.tr("Seconds indicator style")
                 visible: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Hour hand style")
                 ConfigSelectionArray {
-                    currentValue: Config.options.background.clock.cookie.secondHandStyle
+                    currentValue: Config.options.background.clock.cookie.hourHandStyle
                     onSelected: newValue => {
-                        Config.options.background.clock.cookie.secondHandStyle = newValue;
+                        Config.options.background.clock.cookie.hourHandStyle = newValue;
                     }
                     options: [
                         {
-                            displayName: Translation.tr("None"),
+                            displayName: Translation.tr("Classic"),
+                            icon: "radio",
+                            value: "classic"
+                        },
+                        {
+                            displayName: Translation.tr("Fill"),
+                            icon: "stroke_full",
+                            value: "fill"
+                        },
+                        {
+                            displayName: Translation.tr("Stroke"),
+                            icon: "stroke_partial",
+                            value: "stroke"
+                        },
+                        {
+                            displayName: Translation.tr("Hide"),
                             icon: "deselect",
-                            value: "none"
-                        },
-                        {
-                            displayName: Translation.tr("Dot"),
-                            icon: "adjust",
-                            value: "dot"
-                        },
-                        {
-                            displayName: Translation.tr("Line"),
-                            icon: "line_end",
-                            value: "line"
+                            value: "hide"
                         }
                     ]
                 }
             }
-        }
-
-        ConfigRow{
+       
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie"
                 visible: Config.options.background.clock.style === "cookie"
@@ -156,6 +163,11 @@ ContentPage {
                         Config.options.background.clock.cookie.minuteHandStyle = newValue;
                     }
                     options: [
+                        {
+                            displayName: Translation.tr("Classic"),
+                            icon: "radio",
+                            value: "classic"
+                        },
                         {
                             displayName: Translation.tr("Thin"),
                             icon: "pen_size_1",
@@ -173,12 +185,50 @@ ContentPage {
                         },
                         {
                             displayName: Translation.tr("Hide"),
-                            icon: "hide_image",
+                            icon: "deselect",
                             value: "hide"
                         }
                     ]
                 }
             }
+            ContentSubsection {
+                enabled: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Seconds hand style")
+                visible: Config.options.background.clock.style === "cookie"
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.clock.cookie.secondHandStyle
+                    onSelected: newValue => {
+                        Config.options.background.clock.cookie.secondHandStyle = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Classic"),
+                            icon: "radio",
+                            value: "classic"
+                        },
+                        {
+                            displayName: Translation.tr("Line"),
+                            icon: "line_end",
+                            value: "line"
+                        },
+                        {
+                            displayName: Translation.tr("Dot"),
+                            icon: "adjust",
+                            value: "dot"
+                        },
+                        {
+                            displayName: Translation.tr("Hide"),
+                            icon: "deselect",
+                            value: "hide"
+                        }
+
+                    ]
+                }
+            }
+        
+
+        
+            
             ContentSubsection {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
                 visible: Config.options.background.clock.style === "cookie"
@@ -207,36 +257,7 @@ ContentPage {
                     ]
                 }
             }
-        }
-
-        ContentSubsection {
-            enabled: Config.options.background.clock.style === "cookie"
-            visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Hour hand style")
-            ConfigSelectionArray {
-                currentValue: Config.options.background.clock.cookie.hourHandStyle
-                onSelected: newValue => {
-                    Config.options.background.clock.cookie.hourHandStyle = newValue;
-                }
-                options: [
-                    {
-                        displayName: Translation.tr("Fill"),
-                        icon: "stroke_full",
-                        value: "fill"
-                    },
-                    {
-                        displayName: Translation.tr("Stroke"),
-                        icon: "stroke_partial",
-                        value: "stroke"
-                    },
-                    {
-                        displayName: Translation.tr("Hide"),
-                        icon: "hide_image",
-                        value: "hide"
-                    }
-                ]
-            }
-        }
+        
 
         ConfigSpinBox {
             enabled: Config.options.background.clock.style === "cookie"

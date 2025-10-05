@@ -202,30 +202,22 @@ Item {
         anchors.fill: parent
         z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
         rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
-        // Using two different rectangle for animation. Can be used only one with border.color && border.width
         Rectangle {
-            // fill
-            opacity: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 1.0 : 0
+            opacity: Config.options.background.clock.cookie.hourHandStyle !== "hide" ? 1.0 : 0
             anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 2 - hourHandWidth / 2
+            x: Config.options.background.clock.cookie.hourHandStyle === "classic" ? (parent.width / 2 - minuteHandWidth / 2) - 15 : parent.width / 2 - minuteHandWidth / 2
             width: hourHandLength
-            height: hourHandWidth
-            radius: hourHandWidth / 2
-            color : root.colHourHand
+            height: Config.options.background.clock.cookie.hourHandStyle === "classic" ? 8 : hourHandWidth
+            radius: Config.options.background.clock.cookie.hourHandStyle === "classic" ? 2 : hourHandWidth / 2
+            color : Config.options.background.clock.cookie.hourHandStyle === "stroke" ? "transparent" : root.colHourHand
+            border.color: root.colHourHand
+            border.width: 4
             Behavior on opacity {
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
-        }
-        Rectangle {
-            // border
-            anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 2 - hourHandWidth / 2
-            width: hourHandLength
-            height: hourHandWidth
-            radius: hourHandWidth / 2
-            color: "transparent"
-            border.color: root.colHourHand
-            border.width: 4 
+            Behavior on x{
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
         }
     }
 
@@ -240,12 +232,15 @@ Item {
         }
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 2 - minuteHandWidth / 2
+            x: Config.options.background.clock.cookie.minuteHandStyle === "classic" ? (parent.width / 2 - minuteHandWidth / 2) - 15 : parent.width / 2 - minuteHandWidth / 2
             width: minuteHandLength
             height: minuteHandWidth
-            radius: minuteHandWidth / 2
+            radius: Config.options.background.clock.cookie.minuteHandStyle === "classic" ? 2 : minuteHandWidth / 2
             color: root.colMinuteHand
             Behavior on height {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
+            Behavior on x{
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
         }
@@ -291,7 +286,7 @@ Item {
     Item {
         id: secondHand
         z: Config.options.background.clock.cookie.secondHandStyle === "line" ? 2 : 3
-        opacity: Config.options.background.clock.cookie.secondHandStyle === "dot" || Config.options.background.clock.cookie.secondHandStyle === "line" ? 1.0 : 0 // Not using visible to allow smooth transition
+        opacity: Config.options.background.clock.cookie.secondHandStyle !== "hide" ? 1.0 : 0
         rotation: (360 / 60 * clockSecond) + 90 // +90 degrees to align with minute hand
         anchors.fill: parent
         Behavior on opacity {
@@ -315,6 +310,22 @@ Item {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
                 leftMargin: 10
+            }
+        }
+        Rectangle{
+            // Dot on the classic style
+            opacity: Config.options.background.clock.cookie.secondHandStyle === "classic" ? 1.0 : 0.0
+            implicitHeight: 14
+            implicitWidth: 14
+            color: root.colSeconds
+            radius: Appearance.rounding.small
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                leftMargin: 40
+            }
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
         }
     }
