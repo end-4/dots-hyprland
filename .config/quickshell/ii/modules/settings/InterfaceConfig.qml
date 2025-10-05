@@ -87,6 +87,7 @@ ContentPage {
                         }
                         if (newValue != "none"){
                             Config.options.background.clock.cookie.dateInClock = false;
+                            Config.options.background.clock.cookie.dateStyle = "none";
                         }
                     }
                     options: [
@@ -138,27 +139,62 @@ ContentPage {
             }
         }
 
-        ContentSubsection {
-        enabled: Config.options.background.clock.style === "cookie"
-        visible: Config.options.background.clock.style === "cookie"
-        title: Translation.tr("Minute hand style")
-            ConfigSelectionArray {
-                currentValue: Config.options.background.clock.cookie.minuteHandStyle
-                onSelected: newValue => {
-                    Config.options.background.clock.cookie.minuteHandStyle = newValue;
+        ConfigRow{
+            ContentSubsection {
+                enabled: Config.options.background.clock.style === "cookie"
+                visible: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Minute hand style")
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.clock.cookie.minuteHandStyle
+                    onSelected: newValue => {
+                        Config.options.background.clock.cookie.minuteHandStyle = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Thin"),
+                            icon: "pen_size_1",
+                            value: "thin"
+                        },
+                        {
+                            displayName: Translation.tr("Medium"),
+                            icon: "pen_size_3",
+                            value: "medium"
+                        },
+                        {
+                            displayName: Translation.tr("Bold"),
+                            icon: "pen_size_5",
+                            value: "bold"
+                        }
+                    ]
                 }
-                options: [
-                    {
-                        displayName: Translation.tr("Medium"),
-                        icon: "pen_size_1",
-                        value: "medium"
-                    },
-                    {
-                        displayName: Translation.tr("Bold"),
-                        icon: "pen_size_5",
-                        value: "bold"
-                    },
-                ]
+            }
+            ContentSubsection {
+                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
+                visible: Config.options.background.clock.style === "cookie"
+                title: Translation.tr("Date style")
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.clock.cookie.dateStyle
+                    onSelected: newValue => {
+                        Config.options.background.clock.cookie.dateStyle = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("None"),
+                            icon: "deselect",
+                            value: "none"
+                        },
+                        {
+                            displayName: Translation.tr("Rotating"),
+                            icon: "rotate_right",
+                            value: "rotating"
+                        },
+                        {
+                            displayName: Translation.tr("Square"),
+                            icon: "square",
+                            value: "square"
+                        }
+                    ]
+                }
             }
         }
 
@@ -222,22 +258,6 @@ ContentPage {
                 }
                 StyledToolTip {
                     text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
-                }
-            }
-            ConfigSwitch {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "none"
-                visible: Config.options.background.clock.style === "cookie"
-                buttonIcon: "date_range"
-                text: Translation.tr("Date inside clock")
-                checked: Config.options.background.clock.cookie.dateInClock
-                onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.dateInClock
-                }
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.dateInClock = checked;
-                }
-                StyledToolTip {
-                    text: "Can only be turned on when not using any dial style for aesthetic reasons"
                 }
             }
             

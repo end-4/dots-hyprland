@@ -134,6 +134,7 @@ Singleton {
                         property string dialNumberStyle: "dots" // Options: "dots" , "numbers", "none"
                         property string minuteHandStyle: "medium" // Options: "medium", "bold"
                         property string secondHandStyle: "dot" // Options: "dot", "line" , "none" 
+                        property string dateStyle: "rotating" // Options: "rotating", "square", "none"
                         property bool timeIndicators: true
                         property bool centerGlow: true
                         property bool dateInClock: true
