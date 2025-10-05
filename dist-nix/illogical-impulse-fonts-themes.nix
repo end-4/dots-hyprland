@@ -35,7 +35,7 @@ in
     home.packages = [
       # adw-gtk-theme-git - Not in stable nixpkgs, using alternative
       pkgs.adw-gtk3
-      pkgs.breeze-gtk
+      pkgs.kdePackages.breeze-gtk
       # breeze-plus - May not be available in nixpkgs
       # darkly-bin - Not available in nixpkgs
       pkgs.eza
