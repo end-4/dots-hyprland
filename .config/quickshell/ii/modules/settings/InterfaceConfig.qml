@@ -214,12 +214,7 @@ ContentPage {
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dateStyle
                 onSelected: newValue => {
-                    if (newValue !== "bubble" && Config.options.background.clock.cookie.dialNumberStyle === "none") {
-                        Config.options.background.clock.cookie.dateStyle = newValue;
-                    }
-                    if (newValue === "bubble" || newValue === "none") {
-                        Config.options.background.clock.cookie.dateStyle = newValue;
-                    }
+                    Config.options.background.clock.cookie.dateStyle = newValue;
                 }
                 options: [
                     {
