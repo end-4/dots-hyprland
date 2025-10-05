@@ -158,7 +158,7 @@ Item {
                     Behavior on pixelSize {
                         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                     }
-                    family: Appearance.font.family.main
+                    family: Appearance.font.family.expressive
                     weight: Font.Bold
                 }
                 Behavior on opacity { 
