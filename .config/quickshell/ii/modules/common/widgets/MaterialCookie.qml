@@ -7,7 +7,7 @@ import qs.modules.common
 Item {
     id: root
     
-    property int sides: 12  
+    property real sides: 12  
     property int implicitSize: 100
     property real amplitude: implicitSize / 50
     property int renderPoints: 360
@@ -30,6 +30,9 @@ Item {
         }
     }
 
+    Behavior on sides {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     Shape {
         id: shape
