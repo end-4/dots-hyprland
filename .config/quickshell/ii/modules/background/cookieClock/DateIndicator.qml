@@ -20,7 +20,7 @@ Item {
         height: parent.height
         rotation: {
             if (!Config.options.time.secondPrecision) return 0;
-            return secondHandLoader.item.rotation + 45  // +45 degrees to align with minute hand
+            return (secondHandLoader.item.rotation + 45) + (opacity * 360);  // +45 degrees to align text's center // (opacity * 360) for open/close anim
         }
         
         opacity: root.style === "rotating" ? 1.0 : 0
