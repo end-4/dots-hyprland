@@ -27,13 +27,10 @@ Singleton {
           todoFileView.setText(JSON.stringify(root.list))
     }
 
-    function addTask(desc, durationDate) {
-        const iem = {
+    function addTask(desc) {
+        const item = {
             "content": desc,
-            "date": durationDate,
             "done": false,
-            "color": ColorUtils.stringToColor(desc),  
-            "isTodo": true
         }
         addItem(item)
       }

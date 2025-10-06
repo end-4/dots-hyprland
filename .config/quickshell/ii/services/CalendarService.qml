@@ -173,7 +173,6 @@ Singleton {
                       "startDate": startDate,
                       "endDate": endDate,
                       "color": ColorUtils.stringToColor(event['title']),  
-                      "isTodo":false
                   })
                 }
               }

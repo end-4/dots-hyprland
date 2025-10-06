@@ -13,7 +13,7 @@ RippleButton {
     property int isToday
     property bool bold
     property var taskList
-    readonly property int todoMargin: 5
+    readonly property int taskMargin: 5
 
     Layout.fillWidth: false
     Layout.fillHeight: false
@@ -63,7 +63,7 @@ RippleButton {
                 id: dayPopRect
 
                 width: 240
-                height: Math.min(columnLayout.implicitHeight + 2 * todoMargin, 1000)
+                height: Math.min(columnLayout.implicitHeight + 2 * taskMargin, 1000)
                 color: Appearance.m3colors.m3background
                 radius: Appearance.rounding.small
 
@@ -76,8 +76,8 @@ RippleButton {
                     ColumnLayout {
                         id: columnLayout
 
-                        width: parent.width - 2 * todoMargin
-                        height: parent.height - 2 * todoMargin
+                        width: parent.width - 2 * taskMargin
+                        height: parent.height - 2 * taskMargin
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 8
@@ -129,9 +129,7 @@ RippleButton {
                                         Layout.rightMargin: 10
                                         Layout.topMargin: 4
                                                        
-                                        text: modelData.isTodo
-                                            ? Qt.formatDate(modelData.date, Config.options.time.longDateFormat)
-                                            : (Qt.formatDateTime(modelData.startDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 0, 0, 0, 0),  Config.options.time.format) &&Qt.formatDateTime(modelData.endDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 23, 59, 0, 0),  Config.options.time.format) 
+                                        text: (Qt.formatDateTime(modelData.startDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 0, 0, 0, 0),  Config.options.time.format) &&Qt.formatDateTime(modelData.endDate,  Config.options.time.format) !== Qt.formatDateTime(new Date(0, 0, 0, 23, 59, 0, 0),  Config.options.time.format) 
                                                 ? Qt.formatDate(modelData.startDate, Config.options.time.longDateFormat)  + " : " + Qt.formatDateTime(modelData.startDate,  Config.options.time.format) + " - " + Qt.formatDateTime(modelData.endDate,  Config.options.time.format)
                                                 : Qt.formatDate(modelData.startDate, Config.options.time.longDateFormat) )
 
@@ -146,13 +144,6 @@ RippleButton {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-
-                                        MaterialSymbol {
-                                          text:  modelData.isTodo?  modelData.done ? "check" : "remove_done": ""
-                                            iconSize: Appearance.font.pixelSize.larger
-                                            color: Appearance.colors.colOnLayer1
-                                        }
-
 
                                }
 

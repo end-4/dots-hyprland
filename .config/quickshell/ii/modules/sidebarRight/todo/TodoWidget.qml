@@ -240,11 +240,8 @@ Item {
 
             function addTask() {
                 if (todoInput.text.length > 0) {
-                    const d = new Date();
-                    d.setDate(d.getDate() + (todoDayWheel.currentIndex - 1));
-                    Todo.addTask(todoInput.text, d);
+                    Todo.addTask(todoInput.text);
                     todoInput.text = "";
-                    todoDayWheel.currentIndex = 0;
                     root.showAddDialog = false;
                     root.currentTab = 0; // Show unfinished tasks
                 }
@@ -306,55 +303,6 @@ Item {
 
                 }
 
-                Item {
-                    height: 40
-                    Layout.fillWidth: true
-                    Layout.leftMargin: 16
-                    Layout.rightMargin: 16
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: Appearance.rounding.verysmall
-                        border.width: 2
-                        border.color: todoInput.activeFocus ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
-                        color: "transparent"
-
-                        ListView {
-                            id: todoDayWheel
-
-                            anchors.fill: parent
-                            model: 365
-                            clip: true
-                            interactive: true
-                            currentIndex: 0
-                            snapMode: ListView.SnapOneItem
-                            highlightFollowsCurrentItem: true
-                            highlightRangeMode: ListView.StrictlyEnforceRange
-
-                            delegate: Text {
-                                height: 40
-                                padding: 20
-                                color: Appearance.m3colors.m3onSecondaryContainer
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                                text: {
-                                    if (index == 0) {
-                                        // show placeholder value
-                                        this.color = Appearance.m3colors.m3outline;
-                                        return Translation.tr("Select Deadline");
-                                    }
-                                    var d = new Date();
-                                    d.setDate(d.getDate() + (index - 1));
-                                    return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
-                                }
-                            }
-
-                        }
-
-                    }
-
-                }
-
                 RowLayout {
                     Layout.bottomMargin: 16
                     Layout.leftMargin: 16
@@ -366,13 +314,12 @@ Item {
                         buttonText: Translation.tr("Cancel")
                         onClicked: {
                             root.showAddDialog = false;
-                            todoDayWheel.currentIndex = 0;
                         }
                     }
 
                     DialogButton {
                         buttonText: Translation.tr("Add")
-                        enabled: todoInput.text.length > 0 && todoDayWheel.currentIndex > 0
+                        enabled: todoInput.text.length > 0
                         onClicked: dialog.addTask()
                     }
 
