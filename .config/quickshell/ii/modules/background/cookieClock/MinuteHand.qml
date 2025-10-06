@@ -38,7 +38,8 @@ Item {
         height: root.handWidth
         
         radius: root.style === "classic" ? 2 : root.handWidth / 2
-        color: root.color
+        color: Appearance.colors.colSecondary
+        opacity: 0.9
 
         Behavior on height {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)

@@ -34,7 +34,7 @@ Item {
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
-    property color colHourHand: Appearance.colors.colPrimary
+    property color colHourHand: Appearance.colors.colPrimaryContainer
     property color colMinuteHand: Appearance.colors.colSecondary
     property color colSecondHand: Appearance.colors.colTertiary
     property color colOnHourHand: Appearance.colors.colOnPrimary

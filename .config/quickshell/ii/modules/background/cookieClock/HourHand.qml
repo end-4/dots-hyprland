@@ -40,7 +40,7 @@ Item {
 
         border.color: root.color
         border.width: 4
-        opacity: 0.5
+        
 
         Behavior on x {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
