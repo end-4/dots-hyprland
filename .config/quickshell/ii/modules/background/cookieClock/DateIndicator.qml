@@ -92,24 +92,33 @@ Item {
     }
 
     // Date bubble style left side
-    Rectangle {
-        z: 5
-        implicitWidth: root.style === "bubble" ? dateSquareSize : 0
-        implicitHeight: root.style === "bubble" ? dateSquareSize : 0
-        color: Appearance.colors.colPrimaryContainer
-        radius: Appearance.rounding.large
+    Item {
+        width: root.style === "bubble" ? dateSquareSize : 0
+        height: root.style === "bubble" ? dateSquareSize : 0
         anchors {
             left: parent.left
             bottom: parent.bottom
-            bottomMargin: 5
+            topMargin: 50
         }
-        Behavior on implicitWidth {
+        Behavior on width {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
-        Behavior on implicitHeight {
+        Behavior on height {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        MaterialCookie {
+            z: 5
+            sides: 4
+            anchors.centerIn: parent
+            color: Appearance.colors.colPrimaryContainer
+            implicitSize: root.style === "bubble" ? dateSquareSize : 0
+            constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
+            Behavior on implicitSize {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
         }
         StyledText {
+            z: 6
             anchors.centerIn: parent
             text: DateTime.date.substring(5, 7)
             color: Appearance.colors.colPrimary
@@ -126,26 +135,35 @@ Item {
     }
 
     // Date bubble style right side
-    Rectangle {
-        z: 5
-        implicitWidth: root.style === "bubble" ? dateSquareSize : 0
-        implicitHeight: root.style === "bubble" ? dateSquareSize : 0
-        color: Appearance.colors.colTertiaryContainer
-        radius: Appearance.rounding.verylarge
+    Item {
+        width: root.style === "bubble" ? dateSquareSize : 0
+        height: root.style === "bubble" ? dateSquareSize : 0
         anchors {
             right: parent.right
             top: parent.top
-            topMargin: 5
+            bottomMargin: 50
         }
-        Behavior on implicitWidth {
+        Behavior on width {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
-        Behavior on implicitHeight {
+        Behavior on height {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        MaterialCookie {
+            z: 5
+            sides: 1
+            anchors.centerIn: parent
+            color: Appearance.colors.colTertiaryContainer
+            implicitSize: root.style === "bubble" ? dateSquareSize : 0
+            constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
+            Behavior on implicitSize {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
         }
         StyledText {
+            z: 6
             anchors.centerIn: parent
-            text: DateTime.date.substring(8, 10)
+            text: DateTime.date.substring(5, 7)
             color: Appearance.colors.colTertiary
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
