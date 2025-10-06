@@ -3,6 +3,7 @@ Note:
 - The scripts here are **not** meant to be executed directly.
 - This folder should reflect the equivalents of `/dist-arch/` but under Gentoo.
   - **When `/dist-arch/` is newer than this folder, an update on this folder is very likely needed.**
+  - Useful link: [Commit history on dist-arch/](https://github.com/end-4/dots-hyprland/commits/main/dist-arch)
 
 ## Contributors
 - Author: [jwihardi](https://github.com/jwihardi)

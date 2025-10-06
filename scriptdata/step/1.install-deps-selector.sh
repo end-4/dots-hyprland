@@ -107,7 +107,9 @@ elif [[ -f "./dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
     printf "The community provided ./dist-${TARGET_ID}/ is not updated (update status: ${tmp_update_status}),\n"
     printf "which means it does not fully reflect the latest changes of ./dist-arch/ .\n"
     printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./dist-${TARGET_ID}/ to fully reflect the latest changes in ./dist-arch/ . PR is welcomed.\n"
-    printf "${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RESET}\n"
+    printf "For commit history on ./dist-arch/, see\n"
+    printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/dist-arch${STY_RESET}\n"
+    printf "${STY_RED}${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RESET}\n"
     printf "${STY_RED}Still proceed?${STY_RESET}\n"
     read -p "[y/N]: " p
     case "$p" in
