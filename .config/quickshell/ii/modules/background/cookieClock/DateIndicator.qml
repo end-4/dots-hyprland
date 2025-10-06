@@ -20,10 +20,12 @@ Item {
             if (!Config.options.time.secondPrecision) return 0;
             return secondHand.rotation + 45  // +45 degrees to align with minute hand
         }
+
         opacity: root.style === "rotating" ? 1.0 : 0
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
+
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
@@ -53,7 +55,7 @@ Item {
         }
     }
 
-    // Date(only today's number) in right side of the clock
+    // Date (only today's number) in right side of the clock
     Rectangle {
         z: 1
         implicitWidth: 45
@@ -108,7 +110,7 @@ Item {
             color: Appearance.colors.colOnPrimaryContainer
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
-                family: Appearance.font.family.reading
+                family: Appearance.font.family.expressive
                 pixelSize: 30
                 weight: 1000
             }
@@ -142,7 +144,7 @@ Item {
             color: Appearance.colors.colOnPrimaryContainer
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
-                family: Appearance.font.family.reading
+                family: Appearance.font.family.expressive
                 pixelSize: 30
                 weight: 1000
             }
