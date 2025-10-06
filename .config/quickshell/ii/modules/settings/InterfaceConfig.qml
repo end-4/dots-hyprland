@@ -69,12 +69,6 @@ ContentPage {
                     if (newValue === "numbers") {
                         Config.options.background.clock.cookie.timeIndicators = false;
                     }
-                    if (newValue != "none") {
-                        Config.options.background.clock.cookie.dateInClock = false;
-                        if (Config.options.background.clock.cookie.dateStyle !== "bubble") {
-                            Config.options.background.clock.cookie.dateStyle = "none";
-                        }
-                    }
                 }
                 options: [
                     {

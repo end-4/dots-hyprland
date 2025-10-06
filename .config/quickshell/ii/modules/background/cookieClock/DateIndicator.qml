@@ -22,7 +22,7 @@ Item {
             if (!Config.options.time.secondPrecision) return 0;
             return secondHandLoader.item.rotation + 45  // +45 degrees to align with minute hand
         }
-
+        
         opacity: root.style === "rotating" ? 1.0 : 0
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
