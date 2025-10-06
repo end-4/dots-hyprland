@@ -50,8 +50,8 @@ Item {
     Rectangle {
         // Dot on the classic style
         opacity: root.style === "classic" ? 1.0 : 0.0
-        implicitHeight: 14
-        implicitWidth: 14
+        implicitHeight: root.style === "classic" ? 14 : 0
+        implicitWidth: root.style === "classic" ? 14 : 0
         color: root.color
         radius: Appearance.rounding.small
         anchors {
@@ -61,6 +61,12 @@ Item {
         }
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
     }
 }
