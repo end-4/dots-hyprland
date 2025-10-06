@@ -290,7 +290,10 @@ Item {
                             text: modelData.name
                             elide: Text.ElideRight
                           }
-
+                            
+                         HoverHandler {
+                                        id: allDayHover
+                          }
         
 
                          Column {
@@ -303,13 +306,9 @@ Item {
                                 delegate: Rectangle {
                                     width: parent.width
                                     height: root.allDayChipHeight
-                                    radius: Appearance.rounding.large
                                     color: 'transparent' 
-                                    clip: true
 
-                                    HoverHandler {
-                                        id: allDayHover
-                                    }
+                                   
 
                                     ToolTip {
                                         visible: allDayHover.hovered
