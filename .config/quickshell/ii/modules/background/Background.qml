@@ -178,6 +178,7 @@ Variants {
             StyledImage {
                 id: wallpaper
                 visible: opacity > 0 && !blurLoader.active
+                opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
                 cache: false
                 smooth: false
                 // Range = groups that workspaces span on
@@ -390,13 +391,13 @@ Variants {
                                 id: safetyStatusText
                                 shown: bgRoot.wallpaperSafetyTriggered
                                 statusIcon: "hide_image"
-                                statusText: qsTr("Wallpaper safety enforced")
+                                statusText: Translation.tr("Wallpaper safety enforced")
                             }
                             ClockStatusText {
                                 id: lockStatusText
                                 shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
                                 statusIcon: "lock"
-                                statusText: qsTr("Locked")
+                                statusText: Translation.tr("Locked")
                             }
                             Item {
                                 Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight

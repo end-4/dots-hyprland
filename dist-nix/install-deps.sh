@@ -15,9 +15,8 @@
 #    1. install nix via [DeterminateSystems/nix-installer](https://github.com/DeterminateSystems/nix-installer).
 #    2. Enable nix (probably in `.zshrc` or `~/.config/fish`).
 #    3. Ensure the experimental feature, Nix Flake, is enabled.
-# 3. Sync (copy) `./dist-nix/iiqs-hm/` folder to `~/.config/iiqs-hm/` using `rsync`.
-# 4. Use something like `home-manager switch --flake .#iiqs` to install the dependencies.
-# 5. Install screen lock using system package manager of the current distro.
+# 3. cd to `iiqs-hm` and use something like `home-manager switch --flake .#iiqs` to install the dependencies.
+# 4. Install screen lock using system package manager of the current distro.
 # Note that this script must be idempotent.
 #
 # TODO:
