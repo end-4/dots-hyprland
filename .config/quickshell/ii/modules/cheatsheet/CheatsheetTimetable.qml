@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import qs.modules.common.functions
 
 Item {
     id: root
@@ -71,21 +72,7 @@ Item {
         currentTimeY = diffMinutes * root.pixelsPerMinute;
     }
 
-    //TODO: add to color util later
-    function getContrastingTextColor(bgColor) {
-        if (!bgColor)
-            return Appearance.colors.colOnSurface;
-
-        let color = Qt.color(bgColor);
-        // Calculate relative luminance using WCAG formula
-        let r = color.r <= 0.03928 ? color.r / 12.92 : Math.pow((color.r + 0.055) / 1.055, 2.4);
-        let g = color.g <= 0.03928 ? color.g / 12.92 : Math.pow((color.g + 0.055) / 1.055, 2.4);
-        let b = color.b <= 0.03928 ? color.b / 12.92 : Math.pow((color.b + 0.055) / 1.055, 2.4);
-        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-        // Return high contrast color
-        return luminance < 0.5 ? "#FFFFFF" : "#000000";
-    }
+  
 
     function withOpacity(colorValue, alpha) {
         if (!colorValue)
@@ -364,7 +351,7 @@ Item {
                                         anchors.rightMargin: 12
                                         verticalAlignment: Text.AlignVCenter
                                         text: modelData.title || qsTr("All day event")
-                                        color: getContrastingTextColor(modelData.color)
+                                        color: ColorUtils.getContrastingTextColor(modelData.color)
                                         elide: Text.ElideRight
                                     }
                                 }
@@ -512,7 +499,7 @@ Item {
                                                 return formatTime(startHr, startMin) + " - " + formatTime(endHr, endMin);
                                             }
                                             font.weight: Font.Medium
-                                            color: getContrastingTextColor(modelData.color)
+                                            color: ColorUtils.getContrastingTextColor(modelData.color)
                                             width: parent.width
                                             wrapMode: Text.NoWrap
                                             elide: Text.ElideRight
@@ -527,7 +514,7 @@ Item {
                                             elide: Text.ElideRight
                                             maximumLineCount: 2
                                             width: parent.width
-                                            color: getContrastingTextColor(modelData.color)
+                                            color: ColorUtils.getContrastingTextColor(modelData.color)
                                             lineHeight: 1.1
                                             visible: !truncated
                                         }

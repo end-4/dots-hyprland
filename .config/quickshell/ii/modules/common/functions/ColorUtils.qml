@@ -143,4 +143,21 @@ Singleton {
         return color;
     }
 
+    /**
+     * Determines a contrasting text color (black or white) based on the background color's luminance.
+     *
+     * @param {string} bgColor - The background color (any Qt.color-compatible string).
+     * @returns {string} The hex color ("#FFFFFF" or "#000000") that ensures high contrast.
+     */
+    function getContrastingTextColor(bgColor) {
+        let color = Qt.color(bgColor);
+        // Calculate relative luminance using WCAG formula
+        let r = color.r <= 0.03928 ? color.r / 12.92 : Math.pow((color.r + 0.055) / 1.055, 2.4);
+        let g = color.g <= 0.03928 ? color.g / 12.92 : Math.pow((color.g + 0.055) / 1.055, 2.4);
+        let b = color.b <= 0.03928 ? color.b / 12.92 : Math.pow((color.b + 0.055) / 1.055, 2.4);
+        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        // Return high contrast color
+        return luminance < 0.5 ? "#FFFFFF" : "#000000";
+    }
+
 }
