@@ -12,6 +12,7 @@ Loader {
     visible: active
 
     property var iconMap: ({
+        "virtual-machine": "interactive_space",
         "resize": "aspect_ratio"
     })
 
