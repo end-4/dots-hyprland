@@ -64,7 +64,7 @@ ContentPage {
                 onSelected: newValue => {
                     Config.options.background.clock.cookie.dialNumberStyle = newValue;
                     if (newValue !== "dots" && newValue !== "full") {
-                        Config.options.background.clock.cookie.centerGlow = false;
+                        Config.options.background.clock.cookie.hourMarks = false;
                     }
                     if (newValue === "numbers") {
                         Config.options.background.clock.cookie.timeIndicators = false;
@@ -184,6 +184,11 @@ ContentPage {
                 }
                 options: [
                     {
+                        displayName: "",
+                        icon: "block",
+                        value: "hide"
+                    },
+                    {
                         displayName: Translation.tr("Classic"),
                         icon: "radio",
                         value: "classic"
@@ -198,11 +203,6 @@ ContentPage {
                         icon: "adjust",
                         value: "dot"
                     },
-                    {
-                        displayName: Translation.tr("Hide"),
-                        icon: "deselect",
-                        value: "hide"
-                    }
                 ]
             }
         }
@@ -218,8 +218,8 @@ ContentPage {
                 }
                 options: [
                     {
-                        displayName: Translation.tr("None"),
-                        icon: "deselect",
+                        displayName: "",
+                        icon: "block",
                         value: "none"
                     },
                     {
@@ -273,13 +273,13 @@ ContentPage {
             ConfigSwitch {
                 enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
                 buttonIcon: "brightness_7"
-                text: Translation.tr("Center glow")
-                checked: Config.options.background.clock.cookie.centerGlow
+                text: Translation.tr("Hour marks")
+                checked: Config.options.background.clock.cookie.hourMarks
                 onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.centerGlow;
+                    checked = Config.options.background.clock.cookie.hourMarks;
                 }
                 onCheckedChanged: {
-                    Config.options.background.clock.cookie.centerGlow = checked;
+                    Config.options.background.clock.cookie.hourMarks = checked;
                 }
                 StyledToolTip {
                     text: "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons"

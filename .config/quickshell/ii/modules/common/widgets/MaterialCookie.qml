@@ -20,8 +20,7 @@ Item {
 
     property real shapeRotation: 0
 
-
-    Loader{
+    Loader {
         active: constantlyRotate
         sourceComponent: FrameAnimation{
             running: true
@@ -52,7 +51,8 @@ Item {
                     var radius = root.implicitSize / 2 - root.amplitude
                     for (var i = 0; i <= steps; i++) {
                         var angle = (i / steps) * 2 * Math.PI
-                        var wave = constantlyRotate ? Math.sin(angle * root.sides + Math.PI/2 - root.shapeRotation) * root.amplitude : Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
+                        var rotatedAngle = angle * root.sides + Math.PI/2 + (root.shapeRotation * root.constantlyRotate)
+                        var wave = Math.sin(rotatedAngle) * root.amplitude
                         var x = Math.cos(angle) * (radius + wave) + cx
                         var y = Math.sin(angle) * (radius + wave) + cy
                         points.push(Qt.point(x, y))

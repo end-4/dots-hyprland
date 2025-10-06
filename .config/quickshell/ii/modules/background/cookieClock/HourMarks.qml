@@ -8,13 +8,21 @@ import qs.modules.common.functions
 import QtQuick
 
 Item {
+    id: root
+    property real implicitSize: 135
+    property real markLength: 10
+    property color color: Appearance.colors.colOnSecondaryContainer
+    property color colOnBackground: Appearance.colors.colSecondaryContainer
+
+    property bool isEnabled: Config.options.background.clock.cookie.hourMarks
+
     Rectangle {
-        opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 
+        opacity: root.isEnabled ? 1.0 : 0 
         z: 0
-        color: root.colTimeIndicators
+        color: root.color
         anchors.centerIn: parent
-        implicitWidth: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75
-        implicitHeight: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75 // Not using implicitHeight to allow smooth transition
+        implicitWidth: root.isEnabled ? root.implicitSize : root.implicitSize * 1.75
+        implicitHeight: root.isEnabled ? root.implicitSize : root.implicitSize * 1.75 // Not using implicitHeight to allow smooth transition
         radius: implicitWidth / 2
         Behavior on opacity {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
@@ -27,7 +35,7 @@ Item {
         }
     }
 
-    // Center glow lines
+    // Hour mark lines
     Rectangle {
         id: glowLines
         z: 1
@@ -36,23 +44,28 @@ Item {
             model: 12
             Item {
                 required property int index
-                opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0
-                rotation: 360 / 12 * index 
                 anchors.fill: parent
+
+                rotation: 360 / 12 * index 
+                opacity: root.isEnabled ? 1.0 : 0
+
                 Behavior on opacity {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
+
                 Rectangle {
                     anchors {
                         left: parent.left
                         verticalCenter: parent.verticalCenter
-                        leftMargin: Config.options.background.clock.cookie.centerGlow ? 50 : 75
+                        leftMargin: root.isEnabled ? 50 : 75
                     }
-                    implicitWidth: root.hourDotSize
+                    implicitWidth: root.markLength
                     implicitHeight: implicitWidth / 2 
+
                     radius: implicitWidth / 2
                     color: root.colOnBackground
-                    opacity: Config.options.background.clock.cookie.centerGlow ? 0.5 : 0 
+                    opacity: root.isEnabled ? 0.5 : 0
+
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }

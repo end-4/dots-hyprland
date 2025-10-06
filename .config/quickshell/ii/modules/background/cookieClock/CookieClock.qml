@@ -7,7 +7,6 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Qt5Compat.GraphicalEffects
 
 Item {
@@ -23,7 +22,7 @@ Item {
                                     Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 12 : 5
     property real centerDotSize: 10
     property real hourDotSize: 12
-    property real centerGlowSize: 135
+    property real hourMarkSize: 135
     property real secondDotSize: 20
     property real secondHandWidth: 2
     property real secondHandLength: 100
@@ -75,12 +74,18 @@ Item {
         anchors.fill: parent
     }
     HourMarks {
-        anchors.fill: parent
+        anchors.centerIn: parent
+        implicitSize: root.hourMarkSize
+        markLength: root.hourDotSize
+        color: root.colTimeIndicators
+        colOnBackground: root.colOnBackground
     }
 
     // Number column in the middle
     TimeColumn {
         anchors.centerIn: parent
+        color: root.colOnBackground
+        clockNumbers: root.clockNumbers
     }
 
     // Hour hand
@@ -132,6 +137,7 @@ Item {
         }
     }
 
+    // Date
     DateIndicator {
         anchors.fill: parent
         colOnBackground: root.colOnBackground

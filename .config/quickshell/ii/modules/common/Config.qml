@@ -137,7 +137,7 @@ Singleton {
                         property string secondHandStyle: "dot" // Options:    "dot", "line" , "none" 
                         property string dateStyle: "rotating" // Options:     "rotating", "rect", "bubble" , "none"
                         property bool timeIndicators: true
-                        property bool centerGlow: true
+                        property bool hourMarks: true
                         property bool dateInClock: true
                         property bool constantlyRotate: false
                     }

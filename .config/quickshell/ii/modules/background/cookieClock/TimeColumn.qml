@@ -8,30 +8,43 @@ import qs.modules.common.functions
 import QtQuick
 
 Column {
-    id: timeIndicators
+    id: root
+    required property list<string> clockNumbers
+    property bool isEnabled: Config.options.background.clock.cookie.timeIndicators
+    property color color: Appearance.colors.colOnSecondaryContainer
+
     z: 1
     spacing: -16
+
     Repeater {
         model: root.clockNumbers
+
         delegate: StyledText {
             required property string modelData
-            opacity: Config.options.background.clock.cookie.timeIndicators ? 1.0 : 0 // Not using visible to allow smooth transition
-            anchors.horizontalCenter: parent?.horizontalCenter
-            color: root.colOnBackground
+            property bool hourMarksEnabled: Config.options.background.clock.cookie.hourMarks
+            property bool isAmPm: !!modelData.match(/am|pm/i)
+            property real numberSizeWithoutGlow: isAmPm ? 26 : 68
+            property real numberSizeWithGlow: isAmPm ? 10 : 40
+            property real numberSize: root.isEnabled ? (hourMarksEnabled ? numberSizeWithGlow : numberSizeWithoutGlow) : 100 // open/close animation
+
+            anchors.horizontalCenter: root.horizontalCenter
+            visible: opacity > 0
+            color: root.color
+            opacity: root.isEnabled ? 1.0 : 0
+
+            Behavior on opacity { 
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+
             text: modelData.padStart(2, "0")
+
             font {
-                property real numberSizeWithoutGlow: modelData.match(/am|pm/i) ? 26 : 68
-                property real numberSizeWithGlow: modelData.match(/am|pm/i) ? 10 : 40
-                pixelSize: !Config.options.background.clock.cookie.timeIndicators ? 100 : // open/close animation
-                            Config.options.background.clock.cookie.centerGlow ? numberSizeWithGlow : numberSizeWithoutGlow // changing size according to center glow
+                family: Appearance.font.family.expressive
+                weight: Font.Bold
+                pixelSize: numberSize
                 Behavior on pixelSize {
                     animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                 }
-                family: Appearance.font.family.expressive
-                weight: Font.Bold
-            }
-            Behavior on opacity { 
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
         }
     }
