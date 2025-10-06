@@ -1,4 +1,4 @@
-# install scripts for Gentoo
+# Install scripts for Gentoo
 
 ## Contributors
 - Author: [@jwihardi](https://github.com/jwihardi)

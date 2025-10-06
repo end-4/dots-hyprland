@@ -91,7 +91,9 @@ elif [[ -f "./dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
   printf "./dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
-  printf "${STY_BG_PURPLE}"
+  test -f "./dist-${TARGET_ID}/README.md" && \
+    printf "Read ${STY_INVERT} ./dist-${TARGET_ID}/README.md ${STY_PURPLE} for more information.\n"
+  printf "${STY_BOLD}"
   printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RESET}\n"
   printf "${STY_PURPLE}"
   printf "Proceed only at your own risk.\n"

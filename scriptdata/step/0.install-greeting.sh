@@ -9,7 +9,7 @@ printf "${STY_PURPLE}${STY_BOLD}[NEW] illogical-impulse is now powered by Quicks
 printf '# If you were using the old version with AGS and would like to keep it, do not run this script.\n'
 printf '# The AGS version, although uses less memory, has much worse performance (it uses Gtk3). \n'
 printf '# If you aren'\''t running on ewaste, the Quickshell version is recommended. \n'
-printf "# If you would like the AGS version anyway, run the script in its branch instead:\n ${STY_INVERT} git checkout ii-ags && ./install.sh ${STY_RESET}\n"
+printf "# If you would like the AGS version anyway, run the following to switch to its branch first:\n ${STY_INVERT} git checkout ii-ags && ./install.sh ${STY_RESET}\n"
 printf "\n"
 pause
 printf "${STY_CYAN}${STY_BOLD}Quick overview about what this script does:${STY_CYAN}\n"
@@ -21,7 +21,7 @@ printf "${STY_CYAN}${STY_BOLD}Tips:${STY_CYAN}\n"
 printf "  a) It has been designed to be idempotent which means you can run it multiple times.\n"
 printf "  b) Use ${STY_INVERT} --help ${STY_CYAN} for more options.${STY_RESET}\n"
 printf "${STY_YELLOW}${STY_BOLD}Note: ${STY_YELLOW}"
-printf "It does not handle system-level/hardware stuff like Nvidia drivers.\n"
+printf "It does not handle system-level/hardware stuff like Nvidia drivers. Please do it by yourself.\n"
 printf "${STY_RESET}"
 printf "\n"
 pause
