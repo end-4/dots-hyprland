@@ -16,7 +16,13 @@ Item {
     property real handWidth: 16
     property string style: "fill"
     property color color: Appearance.colors.colPrimary
+
+    property real fillColorAlpha: root.style === "stroke" ? 0.0 : 1.0 // for animation
+    Behavior on fillColorAlpha {
+        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+    }
     
+
     rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
     z: root.style === "fill" ? 3 : 1
 
@@ -36,7 +42,7 @@ Item {
         height: root.style === "classic" ? 8 : handWidth
 
         radius: root.style === "classic" ? 2 : handWidth / 2
-        color : root.style === "stroke" ? "transparent" : root.color
+        color : Qt.rgba(root.color.r, root.color.g, root.color.b, fillColorAlpha)
 
         border.color: root.color
         border.width: 4
