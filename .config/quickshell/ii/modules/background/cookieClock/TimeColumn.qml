@@ -13,7 +13,7 @@ Column {
     property bool isEnabled: Config.options.background.clock.cookie.timeIndicators
     property color color: Appearance.colors.colOnSecondaryContainer
 
-    z: 1
+    z: 0
     spacing: -16
 
     Repeater {
