@@ -42,7 +42,7 @@ Scope { // Scope
             }
 
             function hide() {
-                oskLoader.active = false
+                GlobalStates.oskOpen = false
             }
             exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.hyprlandGapsOut : 0
             implicitWidth: oskBackground.width + Appearance.sizes.elevationMargin * 2
