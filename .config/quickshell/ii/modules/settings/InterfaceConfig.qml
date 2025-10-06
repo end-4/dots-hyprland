@@ -78,8 +78,8 @@ ContentPage {
                 }
                 options: [
                     {
-                        displayName: Translation.tr("None"),
-                        icon: "deselect",
+                        displayName: "",
+                        icon: "block",
                         value: "none"
                     },
                     {
@@ -111,6 +111,11 @@ ContentPage {
                 }
                 options: [
                     {
+                        displayName: "",
+                        icon: "block",
+                        value: "hide"
+                    },
+                    {
                         displayName: Translation.tr("Classic"),
                         icon: "radio",
                         value: "classic"
@@ -125,11 +130,6 @@ ContentPage {
                         icon: "stroke_full",
                         value: "fill"
                     },
-                    {
-                        displayName: Translation.tr("Hide"),
-                        icon: "deselect",
-                        value: "hide"
-                    }
                 ]
             }
         }
@@ -144,6 +144,11 @@ ContentPage {
                     Config.options.background.clock.cookie.minuteHandStyle = newValue;
                 }
                 options: [
+                    {
+                        displayName: "",
+                        icon: "block",
+                        value: "hide"
+                    },
                     {
                         displayName: Translation.tr("Classic"),
                         icon: "radio",
@@ -164,11 +169,6 @@ ContentPage {
                         icon: "pen_size_5",
                         value: "bold"
                     },
-                    {
-                        displayName: Translation.tr("Hide"),
-                        icon: "deselect",
-                        value: "hide"
-                    }
                 ]
             }
         }

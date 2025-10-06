@@ -70,102 +70,17 @@ Item {
         constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
 
-    // Hour dots dial style
-    Repeater {
-        model: 12
-        Item {
-            required property int index
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 1.0 : 0
-            rotation: 360 / 12 * index 
-            anchors.fill: parent
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            Rectangle {
-                anchors{
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 10 : 50
-                }
-                Behavior on anchors.leftMargin{
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                implicitWidth: root.hourDotSize
-                implicitHeight: implicitWidth
-                radius: implicitWidth / 2
-                color: root.colOnBackground
-                opacity: 0.5
-            }
-        }
+    // Hour/minutes numbers/dots/lines
+    MinuteMarks {
+        anchors.fill: parent
+    }
+    HourMarks {
+        anchors.fill: parent
     }
 
-    // Center glow lines
-    Rectangle {
-        id: glowLines
-        z: 1
-        anchors.centerIn: cookie
-        Repeater {
-            model: 12
-            Item {
-                required property int index
-                opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0
-                rotation: 360 / 12 * index 
-                anchors.fill: parent
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                Rectangle {
-                    anchors {
-                        left: parent.left
-                        verticalCenter: parent.verticalCenter
-                        leftMargin: Config.options.background.clock.cookie.centerGlow ? 50 : 75
-                    }
-                    implicitWidth: root.hourDotSize
-                    implicitHeight: implicitWidth / 2 
-                    radius: implicitWidth / 2
-                    color: root.colOnBackground
-                    opacity: Config.options.background.clock.cookie.centerGlow ? 0.5 : 0 
-                    Behavior on opacity {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-                    Behavior on anchors.leftMargin{
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-                }
-            }
-        }
-    }
-
-    // Numbers column
-    Column {
-        id: timeIndicators
-        z: 1
-        anchors.centerIn: cookie
-        spacing: -16
-        Repeater {
-            model: root.clockNumbers
-            delegate: StyledText {
-                required property string modelData
-                opacity: Config.options.background.clock.cookie.timeIndicators ? 1.0 : 0 // Not using visible to allow smooth transition
-                anchors.horizontalCenter: parent?.horizontalCenter
-                color: root.colOnBackground
-                text: modelData.padStart(2, "0")
-                font {
-                    property real numberSizeWithoutGlow: modelData.match(/am|pm/i) ? 26 : 68
-                    property real numberSizeWithGlow: modelData.match(/am|pm/i) ? 10 : 40
-                    pixelSize: !Config.options.background.clock.cookie.timeIndicators ? 100 : // open/close animation
-                                Config.options.background.clock.cookie.centerGlow ? numberSizeWithGlow : numberSizeWithoutGlow // changing size according to center glow
-                    Behavior on pixelSize {
-                        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-                    }
-                    family: Appearance.font.family.expressive
-                    weight: Font.Bold
-                }
-                Behavior on opacity { 
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-            }
-        }
+    // Number column in the middle
+    TimeColumn {
+        anchors.centerIn: parent
     }
 
     // Hour hand
@@ -217,125 +132,10 @@ Item {
         }
     }
 
-    // Center glow
-    Rectangle {
-        opacity: Config.options.background.clock.cookie.centerGlow ? 1.0 : 0 
-        z: 0
-        color: root.colTimeIndicators
-        anchors.centerIn: parent
-        implicitWidth: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75
-        implicitHeight: Config.options.background.clock.cookie.centerGlow ? centerGlowSize : centerGlowSize * 1.75 // Not using implicitHeight to allow smooth transition
-        radius: implicitWidth / 2
-        Behavior on opacity {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitWidth {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on implicitHeight {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-    }
-
     DateIndicator {
         anchors.fill: parent
         colOnBackground: root.colOnBackground
         style: Config.options.background.clock.cookie.dateStyle
     }
-    
-    // Hour Indicator numbers (3-6-9-12)
-    Repeater {
-        model: 4
-        Item {
-            required property int index
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 1.0 : 0 
-            rotation: 360 / 4 * index 
-            anchors.fill: parent
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            Rectangle {
-                color: "transparent"
-                implicitWidth: root.hourNumberSize
-                implicitHeight: implicitWidth
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 32 : 96
-                }
-                Behavior on anchors.leftMargin{
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                StyledText{
-                    color: root.colOnBackground
-                    anchors.centerIn: parent
-                    text: index === 0 ? "9" : 
-                          index === 1 ? "12" : 
-                          index === 2 ? "3" : "6"
-                    rotation: index % 2 === 0 ? index * 90 : -index * 90 //A better way can be found to show texts on right angle
-                    font {
-                        family: Appearance.font.family.reading
-                        pixelSize: 80
-                        weight: 1000
-                    }
-                }
-            }
-        }
-    }
 
-    // Full dial style hour lines
-    Repeater {
-        model: 12
-        Item {
-            required property int index
-            rotation: 360 / 12 * index 
-            anchors.fill: parent
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            Rectangle {
-                implicitWidth: root.hourLineSize * 3.5
-                implicitHeight: root.hourLineSize
-                radius: implicitWidth / 2
-                color: root.colOnBackground
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
-                }
-                Behavior on anchors.leftMargin{
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-            }
-        }
-    }
-    // Full dial style minute lines
-    Repeater {
-        model: 60
-        Item {
-            required property int index
-            rotation: 360 / 60 * index 
-            anchors.fill: parent
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-            Rectangle {
-                implicitWidth: root.minuteLineSize * 3.5
-                implicitHeight: root.minuteLineSize
-                radius: implicitWidth / 2
-                color: root.colOnBackground
-                opacity: 0.5
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
-                }
-                Behavior on anchors.leftMargin{
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-            }
-        }
-    }
 }
