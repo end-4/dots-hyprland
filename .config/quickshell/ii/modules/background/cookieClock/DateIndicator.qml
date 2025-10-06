@@ -11,7 +11,8 @@ Item {
     id: root
     property string style: "rotating"
     property color colOnBackground: Appearance.colors.colOnSecondaryContainer
-    
+    property color colOnSecondary: Appearance.colors.colOnSecondaryContainer
+
     Canvas {
         z: 0
         width: parent.width
@@ -55,12 +56,12 @@ Item {
         }
     }
 
-    // Date (only today's number) in right side of the clock
+    // Square date (only today's number) in right side of the clock
     Rectangle {
         z: 1
-        implicitWidth: 45
+        implicitWidth: root.style === "rect" ? 45 : 0
         implicitHeight: root.style === "rect" ? 30 : 0
-        color: root.colOnBackground
+        color: root.colOnSecondary
         radius: Appearance.rounding.small
         anchors {
             verticalCenter: parent.verticalCenter
@@ -68,6 +69,9 @@ Item {
             rightMargin: 10
         }
         Behavior on implicitHeight {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        Behavior on implicitWidth {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
         StyledText {
