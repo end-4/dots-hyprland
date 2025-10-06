@@ -273,12 +273,14 @@ Item {
                     width: root.dayColumnWidth
                     height: root.headerHeight
 
+                    property var allDayEvents: root.getAllDayEvents(modelData.events) 
+
                     Rectangle {
                         anchors.centerIn: parent
                         width: parent.width - 4
                         height: 40
                         radius: Appearance.rounding.large
-                        color: Appearance.colors.colSurfaceContainerHigh
+                        color: allDayEvents.length >0 ? Appearance.colors.colPrimaryContainer :Appearance.colors.colSurfaceContainerHigh
 
                         StyledText {
                             id: dayTitle
@@ -287,38 +289,11 @@ Item {
                             color: Appearance.colors.colOnSurfaceVariant
                             text: modelData.name
                             elide: Text.ElideRight
-                        }
-                    }
-                }
-            }
-        }
+                          }
 
-        Item {
-            id: allDayContainer
-            Layout.fillWidth: true
-            Layout.preferredHeight: implicitHeight
-            Layout.topMargin: root.hasAllDayEvents ? root.spacing : 0
-            visible: root.hasAllDayEvents
-            implicitHeight: root.hasAllDayEvents ? Math.max(0, (root.maxAllDayEventCount * root.allDayChipHeight) + (Math.max(0, root.maxAllDayEventCount - 1) * root.allDayChipSpacing)) : 0
+        
 
-            Row {
-                id: allDayRow
-                anchors.fill: parent
-                spacing: root.spacing
-
-                Item {
-                    width: root.timeColumnWidth
-                    height: parent.height
-                }
-
-                Repeater {
-                    model: root.days
-                    delegate: Item {
-                        width: root.dayColumnWidth
-                        height: parent.height
-                        property var allDayEvents: root.getAllDayEvents(modelData.events)
-
-                        Column {
+                         Column {
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: parent.width - 4
                             spacing: root.allDayChipSpacing
@@ -329,9 +304,7 @@ Item {
                                     width: parent.width
                                     height: root.allDayChipHeight
                                     radius: Appearance.rounding.large
-                                    color: modelData.color || Appearance.colors.colSecondaryContainer
-                                    border.width: 1
-                                    border.color: Appearance.colors.colOutlineVariant
+                                    color: 'transparent' 
                                     clip: true
 
                                     HoverHandler {
@@ -345,22 +318,15 @@ Item {
                                         text: root.formatEventTooltip(modelData)
                                     }
 
-                                    StyledText {
-                                        anchors.fill: parent
-                                        anchors.leftMargin: 12
-                                        anchors.rightMargin: 12
-                                        verticalAlignment: Text.AlignVCenter
-                                        text: modelData.title || qsTr("All day event")
-                                        color: ColorUtils.getContrastingTextColor(modelData.color)
-                                        elide: Text.ElideRight
-                                    }
                                 }
                             }
                         }
                     }
-                }
+                    }
             }
         }
+
+     
 
         // Subtle separator
         Rectangle {
