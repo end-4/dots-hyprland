@@ -12,6 +12,7 @@ Item {
     property string style: "rotating"
     property color colOnBackground: Appearance.colors.colOnSecondaryContainer
     property color colOnSecondary: Appearance.colors.colOnSecondaryContainer
+    
 
     Canvas {
         z: 0
@@ -19,14 +20,14 @@ Item {
         height: parent.height
         rotation: {
             if (!Config.options.time.secondPrecision) return 0;
-            return secondHand.rotation + 45  // +45 degrees to align with minute hand
+            return secondHandLoader.item.rotation + 45  // +45 degrees to align with minute hand
         }
 
         opacity: root.style === "rotating" ? 1.0 : 0
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
-
+        
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);

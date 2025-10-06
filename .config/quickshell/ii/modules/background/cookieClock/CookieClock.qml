@@ -109,6 +109,7 @@ Item {
 
     // Second hand
     Loader {
+        id: secondHandLoader
         active: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
         anchors.fill: parent
         sourceComponent: SecondHand {
