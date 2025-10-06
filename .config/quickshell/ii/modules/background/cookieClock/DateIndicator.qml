@@ -107,7 +107,7 @@ Item {
         StyledText {
             anchors.centerIn: parent
             text: DateTime.date.substring(5, 7)
-            color: Appearance.colors.colOnPrimaryContainer
+            color: Appearance.colors.colPrimary
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
                 family: Appearance.font.family.expressive
@@ -141,7 +141,7 @@ Item {
         StyledText {
             anchors.centerIn: parent
             text: DateTime.date.substring(8, 10)
-            color: Appearance.colors.colOnPrimaryContainer
+            color: Appearance.colors.colTertiary
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
                 family: Appearance.font.family.expressive
