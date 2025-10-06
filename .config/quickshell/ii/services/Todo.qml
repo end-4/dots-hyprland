@@ -6,6 +6,8 @@ import Quickshell;
 import qs.services
 import Quickshell.Io;
 import QtQuick;
+import qs.modules.common.functions
+
 
 /**
  * Simple to-do list manager.
@@ -26,10 +28,11 @@ Singleton {
     }
 
     function addTask(desc, durationDate) {
-        const item = {
+        const iem = {
             "content": desc,
             "date": durationDate,
             "done": false,
+            "color": ColorUtils.stringToColor(desc),  
             "isTodo": true
         }
         addItem(item)

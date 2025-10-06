@@ -119,7 +119,7 @@ Singleton {
                     "start": start_time,
                     "end": end_time,
                     "title": title,
-                    "color": stringToColor(title)  
+                    "color": evt['color'] 
                 });
               });
               result.push(obj)
@@ -128,23 +128,6 @@ Singleton {
         
         return result;
       }
-
-      function stringToColor(str) { //https://gist.github.com/0x263b/2bdd90886c2036a1ad5bcf06d6e6fb37
-        let hash = 0
-         if (str.length === 0) return hash;
-        for (var i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            hash = hash & hash;
-        }
-        let color = '#';
-        for (var i = 0; i < 3; i++) {
-        let value = (hash >> (i * 8)) & 255;
-            color += ('00' + value.toString(16)).substr(-2);
-        }
-        return color;
-    }
-
-
 
     // Process for loading events
     Process {
@@ -189,6 +172,7 @@ Singleton {
                       "content": event['title'],
                       "startDate": startDate,
                       "endDate": endDate,
+                      "color": ColorUtils.stringToColor(event['title']),  
                       "isTodo":false
                   })
                 }

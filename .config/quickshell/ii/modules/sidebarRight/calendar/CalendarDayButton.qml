@@ -117,7 +117,7 @@ RippleButton {
                                             width: 12
                                             height: 12
                                             radius: 6
-                                            color:  modelData.isTodo? Appearance.m3colors.m3primary  :Appearance.m3colors.m3tertiary 
+                                            color:  modelData.color
                                           }
                                       }
 
