@@ -1,7 +1,7 @@
 # Install scripts for Gentoo
 
 ## Contributors
-- Author: [@jwihardi](https://github.com/jwihardi)
+- Author: [jwihardi](https://github.com/jwihardi)
 
 
 ## install-deps.sh
