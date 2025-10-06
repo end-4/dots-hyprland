@@ -26,7 +26,7 @@ RippleButton {
         width: 6
         height: 6
         radius: 3
-        color: (taskList.length > 0 && isToday !== -1 && !bold) ? Appearance.m3colors.m3error : "transparent"
+        color: (taskList.length > 0 && isToday !== -1 && !bold) ? Appearance.m3colors.m3primary : "transparent"
         anchors.top: parent.top
         anchors.left: parent.left
     }
