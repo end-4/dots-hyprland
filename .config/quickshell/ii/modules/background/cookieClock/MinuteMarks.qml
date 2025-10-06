@@ -19,12 +19,12 @@ Item {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
             Rectangle {
-                anchors{
+                anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
                     leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 10 : 50
                 }
-                Behavior on anchors.leftMargin{
+                Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 implicitWidth: root.hourDotSize
@@ -56,10 +56,10 @@ Item {
                     verticalCenter: parent.verticalCenter
                     leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 32 : 96
                 }
-                Behavior on anchors.leftMargin{
+                Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                StyledText{
+                StyledText {
                     color: root.colOnBackground
                     anchors.centerIn: parent
                     text: index === 0 ? "9" : 
@@ -97,7 +97,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
                 }
-                Behavior on anchors.leftMargin{
+                Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
             }
@@ -125,7 +125,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
                 }
-                Behavior on anchors.leftMargin{
+                Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
             }

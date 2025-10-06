@@ -20,7 +20,7 @@ Item {
     rotation: -90 + (360 / 60) * root.clockMinute
     opacity: root.style === "hide" ? 0.0 : 1.0
 
-    Behavior on rotation{
+    Behavior on rotation {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }
     Behavior on opacity {

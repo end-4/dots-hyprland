@@ -22,7 +22,7 @@ Item {
 
     Loader {
         active: constantlyRotate
-        sourceComponent: FrameAnimation{
+        sourceComponent: FrameAnimation {
             running: true
             onTriggered: {
                 shapeRotation += 0.05

@@ -47,7 +47,7 @@ Item {
             leftMargin: 10
         }
     }
-    Rectangle{
+    Rectangle {
         // Dot on the classic style
         opacity: root.style === "classic" ? 1.0 : 0.0
         implicitHeight: 14

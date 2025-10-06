@@ -69,7 +69,7 @@ Item {
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
-                    Behavior on anchors.leftMargin{
+                    Behavior on anchors.leftMargin {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                 }
