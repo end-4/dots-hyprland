@@ -64,7 +64,7 @@ Item {
                                 text: keybindSection.modelData.name
                             }
 
-                            Grid {
+                            GridLayout {
                                 id: keybindGrid
                                 columns: 2
                                 columnSpacing: 4
