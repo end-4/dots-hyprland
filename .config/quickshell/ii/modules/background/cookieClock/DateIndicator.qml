@@ -163,7 +163,7 @@ Item {
         StyledText {
             z: 6
             anchors.centerIn: parent
-            text: DateTime.date.substring(5, 7)
+            text: DateTime.date.substring(8, 10)
             color: Appearance.colors.colTertiary
             opacity: root.style === "bubble" ? 1.0 : 0
             font {
