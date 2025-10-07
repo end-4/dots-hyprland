@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# TODO: https://github.com/end-4/dots-hyprland/issues/2137
+
 # TODO: make function backup_configs only cover the possibly overwritten ones.
 function backup_configs(){
   local backup_dir="$BACKUP_DIR"
