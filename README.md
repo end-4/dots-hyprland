@@ -28,14 +28,8 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - The clone-and-run way
-```bash
-cd ~/Downloads # whereever you want
-git clone https://github.com/end-4/dots-hyprland
-cd dots-hyprland
-./install.sh
-```
-   - The one-line way: [Wiki currently down, use the above] See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
+   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
+   - In case you can't access the wiki, you can always manually clone this repo and run `install.sh`
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
