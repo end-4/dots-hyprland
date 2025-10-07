@@ -12,7 +12,7 @@
   - Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^1]
 - See the function `install-python-packages()` defined in `/scriptdata/lib/package-installers.sh` for details.
 
-[^1]: Hyprland seems to have weird problem dealing with recursive variable, so we can not use `$XDG_STATE_HOME/quickshell/.venv`, else `$XDG_STATE_HOME` will possibly not expanded but recognised as literally `$XDG_STATE_HOME`. This problem never happens for some users, but according to some issues when we were using recursive variable setting in the past, it's possible to happen for other users. Reason unknown.
+[^1]: Hyprland seems to have weird problem dealing with recursive variable, so we can not use `$XDG_STATE_HOME/quickshell/.venv` even if we had set `$XDG_STATE_HOME` to `~/.local/state` explicitly, else `$XDG_STATE_HOME` will possibly not get expanded but get recognised as literally `$XDG_STATE_HOME`. This problem never happens for some users, but according to some issues when we were using recursive variable setting in the past, it's possible to happen for other users. Reason unknown.
 
 ## How to use the python packages installed through here?
 
