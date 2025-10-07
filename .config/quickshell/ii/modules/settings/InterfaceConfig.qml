@@ -58,7 +58,7 @@ ContentPage {
         
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Dial number style")
+            title: Translation.tr("Dial numbers style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dialNumberStyle
                 onSelected: newValue => {

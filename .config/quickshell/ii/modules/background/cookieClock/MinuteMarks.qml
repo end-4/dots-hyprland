@@ -8,11 +8,20 @@ import qs.modules.common.functions
 import QtQuick
 
 Item {
+    id: root
+
+    property int hourDotSize: 16
+    property int hourNumberSize: 80
+    property int hourLineSize: 8
+    property int minuteLineSize: 4
+    property color color: Appearance.colors.colOnSecondaryContainer
+    property string style: Config.options.background.clock.cookie.dialNumberStyle // "dots", "numbers", "full", "hide"
+
     Repeater {
         model: 12
         Item {
             required property int index
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 1.0 : 0
+            opacity: root.style === "dots" ? 1.0 : 0
             rotation: 360 / 12 * index 
             anchors.fill: parent
             Behavior on opacity {
@@ -22,7 +31,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "dots" ? 10 : 50
+                    leftMargin: root.style === "dots" ? 10 : 50
                 }
                 Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -30,7 +39,7 @@ Item {
                 implicitWidth: root.hourDotSize
                 implicitHeight: implicitWidth
                 radius: implicitWidth / 2
-                color: root.colOnBackground
+                color: root.color
                 opacity: 0.5
             }
         }
@@ -41,7 +50,7 @@ Item {
         model: 4
         Item {
             required property int index
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 1.0 : 0 
+            opacity: root.style === "numbers" ? 1.0 : 0 
             rotation: 360 / 4 * index 
             anchors.fill: parent
             Behavior on opacity {
@@ -54,13 +63,13 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "numbers" ? 32 : 96
+                    leftMargin: root.style === "numbers" ? 32 : 96
                 }
                 Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 StyledText {
-                    color: root.colOnBackground
+                    color: root.color
                     anchors.centerIn: parent
                     text: index === 0 ? "9" : 
                         index === 1 ? "12" : 
@@ -83,7 +92,7 @@ Item {
             required property int index
             rotation: 360 / 12 * index 
             anchors.fill: parent
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
+            opacity: root.style === "full" ? 1.0 : 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
@@ -91,11 +100,11 @@ Item {
                 implicitWidth: root.hourLineSize * 3.5
                 implicitHeight: root.hourLineSize
                 radius: implicitWidth / 2
-                color: root.colOnBackground
+                color: root.color
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
+                    leftMargin: root.style === "full" ? 10 : 50
                 }
                 Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -110,7 +119,7 @@ Item {
             required property int index
             rotation: 360 / 60 * index 
             anchors.fill: parent
-            opacity: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 1.0 : 0
+            opacity: root.style === "full" ? 1.0 : 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
             }
@@ -118,12 +127,12 @@ Item {
                 implicitWidth: root.minuteLineSize * 3.5
                 implicitHeight: root.minuteLineSize
                 radius: implicitWidth / 2
-                color: root.colOnBackground
+                color: root.color
                 opacity: 0.5
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: Config.options.background.clock.cookie.dialNumberStyle === "full" ? 10 : 50
+                    leftMargin: root.style === "full" ? 10 : 50
                 }
                 Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

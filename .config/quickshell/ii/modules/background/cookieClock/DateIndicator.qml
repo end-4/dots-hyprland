@@ -16,8 +16,7 @@ Item {
 
     Canvas {
         z: 0
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         rotation: {
             if (!Config.options.time.secondPrecision) return 0;
             return (secondHandLoader.item.rotation + 45);  // +45 degrees to align text's center

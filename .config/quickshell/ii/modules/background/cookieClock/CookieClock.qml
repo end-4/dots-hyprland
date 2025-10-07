@@ -72,6 +72,11 @@ Item {
     // Hour/minutes numbers/dots/lines
     MinuteMarks {
         anchors.fill: parent
+        property int hourDotSize: root.hourDotSize
+        property int hourNumberSize: root.hourNumberSize
+        property int hourLineSize: root.hourLineSize
+        property int minuteLineSize: root.minuteLineSize
+        color: root.colOnBackground
     }
     HourMarks {
         anchors.centerIn: parent
