@@ -22,7 +22,7 @@ Singleton {
     Process {
         id: khalCheckProcess
 
-        command: ["khal", "list", "today"]
+        command: ["kha", "list", "today"]
         running: true
         onExited: (exitCode) => {
           root.khalAvailable = (exitCode === 0);
@@ -60,23 +60,21 @@ Singleton {
 
       function getEventsInWeek() {
         const weekdays = [
+          Translation.tr("Sunday"), 
           Translation.tr("Monday"), 
           Translation.tr("Tuesday"), 
           Translation.tr("Wednesday"), 
           Translation.tr("Thursday"), 
           Translation.tr("Friday"), 
           Translation.tr("Saturday"),
-          Translation.tr("Sunday"), 
 
         ];
 
-        let firstDayOfWeek = 1
-        let sortedWeekdays= weekdays.map((_, i) => weekdays[(i+Config.options.time.firstDayOfWeek)%7]);
-
+        let sortedWeekdays= weekdays.map((_, i) => weekdays[(i+Config.options.time.firstDayOfWeek+1)%7]);
 
 
         if(!khalAvailable){
-          return [
+          const res= [
             {
               name:  sortedWeekdays[0],
               events: [
@@ -112,16 +110,17 @@ Singleton {
               name: sortedWeekdays[6],
               events: []
             }
-          ]; 
+          ];
+          return res
         }
-
         const d = new Date();
         const num_day_today = d.getDay();
         let result = [];
         for (let i = 0; i < sortedWeekdays.length; i++) {
-            d.setDate(d.getDate() - d.getDay() + i);
+            const dayOffset = (i + Config.options.time.firstDayOfWeek+1); 
+            d.setDate(d.getDate() - d.getDay() + dayOffset %7);
             const events = this.getTasksByDate(d);
-            const name_weekday = sortedWeekdays[d.getDay()];
+            const name_weekday = weekdays[d.getDay()];
             let obj = {
                 "name": name_weekday,
                 "events": []
