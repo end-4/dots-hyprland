@@ -28,7 +28,7 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
+   - See the [Wiki](https://ii.clsty.link/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
    - In case you can't access the wiki, you can always manually clone this repo and run `install.sh`
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
