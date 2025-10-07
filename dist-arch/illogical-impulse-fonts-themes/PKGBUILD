@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-fonts-themes
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
@@ -12,7 +12,6 @@ depends=(
   eza
   fish
   fontconfig
-  kde-material-you-colors
   kitty
   matugen-bin
   otf-space-grotesk
