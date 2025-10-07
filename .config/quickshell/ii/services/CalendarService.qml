@@ -22,7 +22,7 @@ Singleton {
     Process {
         id: khalCheckProcess
 
-        command: ["kha", "list", "today"]
+        command: ["khal", "list", "today"]
         running: true
         onExited: (exitCode) => {
           root.khalAvailable = (exitCode === 0);
