@@ -28,48 +28,13 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(both install script and manual installation available)</sub>
+   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
      - If for whatever reason the keybind list widget does not work, here's an image:
      <img width="1412" height="828" alt="image" src="https://github.com/user-attachments/assets/8f7bd216-9e03-47e3-8709-0008772a4133" />
 
-
-</details>
-
-<details>
-  <summary>Installation with Nix Flakes (NixOS/Home Manager)</summary>
-
-   - **New!** This repository now provides a Nix flake for easy installation on NixOS and with Home Manager
-   - See [FLAKE-USAGE.md](./FLAKE-USAGE.md) for detailed documentation
-   - Quick start: Add this flake as an input to your configuration:
-     ```nix
-     {
-       inputs = {
-         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-         home-manager.url = "github:nix-community/home-manager";
-         illogical-impulse = {
-           url = "github:Version33/dots-hyprland";
-           inputs.nixpkgs.follows = "nixpkgs";
-         };
-       };
-     }
-     ```
-   - Then enable components as needed:
-     ```nix
-     illogical-impulse = {
-       enable = true;
-       hyprland.enable = true;
-       # ... configure other components
-     };
-     ```
-   - **Features**:
-     - Modular design - enable only what you need
-     - Declarative configuration with sensible defaults
-     - Monitor and workspace configuration
-     - Automatic config file deployment
-     - Full integration with Home Manager
 
 </details>
 
@@ -202,4 +167,3 @@ Widget system: AGS | Support: No
    <a href="https://streamable.com/5qx614">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
    </a>
-
