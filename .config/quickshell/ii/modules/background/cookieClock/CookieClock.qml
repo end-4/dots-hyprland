@@ -149,6 +149,7 @@ Item {
         anchors.fill: parent
         colOnBackground: root.colOnBackground
         style: Config.options.background.clock.cookie.dateStyle
+        dateSquareSize: root.dateSquareSize
     }
 
 }
