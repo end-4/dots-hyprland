@@ -9,7 +9,6 @@ HOMEPAGE=""
 SRC_URI="
 https://github.com/Bali10050/Darkly/archive/refs/heads/main.tar.gz -> ${P}-darkly.tar.gz
 https://github.com/naipefoundry/gabarito/archive/refs/heads/main.tar.gz -> ${P}-gabarito.tar.gz
-https://github.com/luisbocanegra/kde-material-you-colors/archive/refs/heads/main.tar.gz -> ${P}-kde-material-you-colors.tar.gz
 https://github.com/googlefonts/rubik/archive/refs/heads/main.tar.gz -> ${P}-rubik.tar.gz
 https://github.com/ThomasJockin/readexpro/archive/refs/heads/master.tar.gz -> ${P}-readexpro.tar.gz
 https://github.com/google/material-design-icons/archive/refs/heads/main.tar.gz -> ${P}-material-design-icons.tar.gz
@@ -39,7 +38,6 @@ RDEPEND="
 S="${WORKDIR}"
 S_DARKLY="${S}/Darkly-main"
 S_GABARITO="${S}/gabarito-main"
-S_KDE_MATERIAL_YOU_COLORS="${S}/kde-material-you-colors-main"
 S_RUBIK="${S}/rubik-main"
 S_READEXPRO="${S}/readexpro-master"
 S_MATERIAL_DESIGN_ICONS="${S}/material-design-icons-main"
@@ -70,13 +68,6 @@ src_install() {
 
 	insinto /usr/share/fonts/ttf-gabarito
 	doins "${S_GABARITO}"/fonts/ttf/*.ttf
-
-	cd "${S_KDE_MATERIAL_YOU_COLORS}"
-	mkdir -p build
-	cd build
-	cmake ..
-	cmake --build . --parallel=$(nproc)
-	cmake --install . --destdir="${D}"
 
 	insinto /usr/share/fonts/ttf-readex-pro
 	doins "${S_READEXPRO}"/fonts/ttf/*.ttf
