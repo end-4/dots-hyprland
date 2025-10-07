@@ -26,7 +26,7 @@ metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fon
 ebuild_dir="/var/db/repos/localrepo"
 
 # Unmasks
-x cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
+x sudo cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./dist-gentoo/keywords-user
 v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
