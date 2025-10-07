@@ -28,7 +28,8 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/) <sub>(both install script and manual installation available)</sub>
+   - See the [Wiki](https://ii.clsty.link/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
+   - In case you can't access the wiki, you can always manually clone this repo and run `install.sh`
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
@@ -47,7 +48,7 @@
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-  - For the full list of dependencies, see the [arch-packages folder](https://github.com/end-4/dots-hyprland/tree/main/arch-packages)
+  - For the full list of dependencies, see the [dist-arch folder](https://github.com/end-4/dots-hyprland/tree/main/dist-arch)
   - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
 </details>
 

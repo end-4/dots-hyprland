@@ -12,15 +12,18 @@ If no option is specified, run default install process.
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
-  -s, --skip-sysupdate      Skip \"sudo pacman -Syu\"
+      --skip-allgreeting    Skip the whole process greeting
+      --skip-alldeps        Skip the whole process installing dependency
+      --skip-allsetups      Skip the whole process setting up permissions/services etc
+      --skip-allfiles       Skip the whole process copying configuration files
+  -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
       --skip-plasmaintg     Skip installing plasma-browser-integration
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             AGS, Fish and Hyprland
-      --deplistfile <path>  Specify a dependency list file. By default
-                            \"./scriptdata/dependencies.conf\"
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
+      --via-nix             (Unavailable yet) Use Nix to install dependencies
 "
 }
 
@@ -31,7 +34,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf \
+       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,via-nix \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -48,7 +51,6 @@ while true ; do
 done
 #####################################################################################
 ## getopt Phase 2
-DEPLISTFILE=./scriptdata/dependencies.conf
 
 eval set -- "$para"
 while true ; do
@@ -57,21 +59,18 @@ while true ; do
     -c|--clean) shift;;
     ## Ones without parameter
     -f|--force) ask=false;shift;;
+    --skip-allgreeting) SKIP_ALLGREETING=true;shift;;
+    --skip-alldeps) SKIP_ALLDEPS=true;shift;;
+    --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
+    --skip-allfiles) SKIP_ALLFILES=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
     --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
+    --via-nix) INSTALL_VIA_NIX=true;shift;;
     ## Ones with parameter
     
-    --deplistfile)
-    if [ -f "$2" ];then
-      DEPLISTFILE="$2"
-    else
-      echo -e "Deplist file \"$2\" does not exist.";exit 1
-    fi
-    shift 2 ;;
-
     --fontset)
     case $2 in
       "default"|"zh-CN"|"vi") fontset="$2";;

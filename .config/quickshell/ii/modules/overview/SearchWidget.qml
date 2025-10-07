@@ -81,6 +81,12 @@ Item { // Wrapper
                 GlobalStates.wallpaperSelectorOpen = true;
             }
         },
+        {
+            action: "wipeclipboard",
+            execute: () => {
+                Cliphist.wipe();
+            }
+        },
     ]
 
     function focusFirstItem() {

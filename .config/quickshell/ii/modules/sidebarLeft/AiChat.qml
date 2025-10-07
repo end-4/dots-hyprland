@@ -647,11 +647,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 root.handleInput(inputText)
                                 event.accepted = true
                             }
-                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image pasting
+                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image/file pasting
+                            if (event.modifiers & Qt.ShiftModifier) { // Let Shift+Ctrl+V = plain paste
+                                messageInputField.text += Quickshell.clipboardText
+                                event.accepted = true;
+                                return;
+                            }
                             // Try image paste first
                             const currentClipboardEntry = Cliphist.entries[0]
+                            const cleanCliphistEntry = StringUtils.cleanCliphistEntry(currentClipboardEntry)
                             if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) { // First entry = currently copied entry = image?
                                 decodeImageAndAttachProc.handleEntry(currentClipboardEntry)
+                                event.accepted = true;
+                                return;
+                            } else if (cleanCliphistEntry.startsWith("file://")) { // First entry = currently copied entry = image?
+                                const fileName = decodeURIComponent(cleanCliphistEntry)
+                                Ai.attachFile(fileName);
                                 event.accepted = true;
                                 return;
                             }
