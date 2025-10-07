@@ -73,9 +73,6 @@ Concrete dependencies inferred from repository scripts
 - glib2 (gsettings) + dconf
   - Used by: switchwall.sh to set GNOME interface color-scheme and GTK theme.
   - Purpose: System settings manipulation.
-- kde-material-you-colors (wrapper script path under $XDG_CONFIG_HOME/matugen/templates/kde/)
-  - Used by: switchwall.sh handle_kde_material_you_colors to sync KDE color scheme.
-  - Purpose: KDE scheme generation/synchronization.
 - yay (or yay-bin from AUR)
   - Used by: dist-arch/install-deps.sh to build/install local PKGBUILDs and dependencies.
   - Purpose: AUR helper used by installer.
