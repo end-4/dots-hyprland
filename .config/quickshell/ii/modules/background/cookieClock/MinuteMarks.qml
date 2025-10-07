@@ -49,6 +49,7 @@ Item {
     Repeater {
         model: 4
         Item {
+            id: numberItem
             required property int index
             opacity: root.style === "numbers" ? 1.0 : 0 
             rotation: 360 / 4 * index 
@@ -71,10 +72,10 @@ Item {
                 StyledText {
                     color: root.color
                     anchors.centerIn: parent
-                    text: index === 0 ? "9" : 
-                        index === 1 ? "12" : 
-                        index === 2 ? "3" : "6"
-                    rotation: index % 2 === 0 ? index * 90 : -index * 90 //A better way can be found to show texts on right angle
+                    text: numberItem.index === 0 ? "9" : 
+                        numberItem.index === 1 ? "12" : 
+                        numberItem.index === 2 ? "3" : "6"
+                    rotation: numberItem.index % 2 === 0 ? numberItem.index * 90 : -numberItem.index * 90 //A better way can be found to show texts on right angle
                     font {
                         family: Appearance.font.family.reading
                         pixelSize: 80
