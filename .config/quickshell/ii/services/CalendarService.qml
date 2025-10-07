@@ -16,50 +16,7 @@ Singleton {
 
     property bool khalAvailable: false
     property var events: []
-    property var eventsInWeek:[]
-
-    // Process for checking khal configuration
-    Process {
-        id: khalCheckProcess
-
-        command: ["khal", "list", "today"]
-        running: true
-        onExited: (exitCode) => {
-          root.khalAvailable = (exitCode === 0);
-          if(root.khalAvailable){
-            interval.running = true
-          }
-        }
-      }
-
-
-      function getTasksByDate(currentDate) {
-        if(!khalAvailable){
-          return []
-        }
-        const res = [];
-        
-        const currentDay = currentDate.getDate();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-
-        for (let i = 0; i < root.events.length; i++) {
-            const taskDate = new Date(root.events[i]['startDate']);
-            if (
-                taskDate.getDate() === currentDay &&
-                taskDate.getMonth() === currentMonth &&
-                taskDate.getFullYear() === currentYear
-              ) {
-                res.push(root.events[i]);
-              }
-        }
-
-        return res;
-      }
-
-
-      function getEventsInWeek() {
-        const weekdays = [
+    property var weekdays: [
           Translation.tr("Sunday"), 
           Translation.tr("Monday"), 
           Translation.tr("Tuesday"), 
@@ -69,12 +26,8 @@ Singleton {
           Translation.tr("Saturday"),
 
         ];
-
-        let sortedWeekdays= weekdays.map((_, i) => weekdays[(i+Config.options.time.firstDayOfWeek+1)%7]);
-
-
-        if(!khalAvailable){
-          const res= [
+    property var sortedWeekdays: root.weekdays.map((_, i) => weekdays[(i+Config.options.time.firstDayOfWeek+1)%7]);
+    property var eventsInWeek: [
             {
               name:  sortedWeekdays[0],
               events: [
@@ -110,17 +63,62 @@ Singleton {
               name: sortedWeekdays[6],
               events: []
             }
-          ];
-          return res
+          ]
+ 
+
+    // Process for checking khal configuration
+    Process {
+        id: khalCheckProcess
+
+        command: ["khal", "list", "today"]
+        running: true
+        onExited: (exitCode) => {
+          root.khalAvailable = (exitCode === 0);
+          if(root.khalAvailable){
+            interval.running = true
+          }       
         }
+      }
+
+
+      function getTasksByDate(currentDate) {
+        if(!khalAvailable){
+          return []
+        }
+        const res = [];
+        
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        for (let i = 0; i < root.events.length; i++) {
+            const taskDate = new Date(root.events[i]['startDate']);
+            if (
+                taskDate.getDate() === currentDay &&
+                taskDate.getMonth() === currentMonth &&
+                taskDate.getFullYear() === currentYear
+              ) {
+                res.push(root.events[i]);
+              }
+        }
+
+        return res;
+      }
+
+
+      function getEventsInWeek() {
+        
+
+
+
         const d = new Date();
         const num_day_today = d.getDay();
         let result = [];
-        for (let i = 0; i < sortedWeekdays.length; i++) {
+        for (let i = 0; i < root.weekdays.length; i++) {
             const dayOffset = (i + Config.options.time.firstDayOfWeek+1); 
             d.setDate(d.getDate() - d.getDay() + dayOffset %7);
             const events = this.getTasksByDate(d);
-            const name_weekday = weekdays[d.getDay()];
+            const name_weekday = root.weekdays[d.getDay()];
             let obj = {
                 "name": name_weekday,
                 "events": []
