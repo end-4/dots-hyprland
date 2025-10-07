@@ -16,11 +16,6 @@ Item {
 
     // Rotating date
     Loader {
-        opacity: root.style === "rotating" ? 1.0 : 0
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-
         anchors.fill: parent
         active: opacity > 0
         sourceComponent: RotatingDate {}
@@ -39,17 +34,19 @@ Item {
         }
 
         active: height > 0
-        sourceComponent: RectangleDate {}
-
         anchors {
             verticalCenter: parent.verticalCenter
             right: parent.right
             rightMargin: 10
         }
-        
+
+        sourceComponent: RectangleDate {
+            color: root.colBackground
+            radius: Appearance.rounding.small
+        }
     }
 
-    // Date bubble style day
+    // Date bubble / day
     Loader {
         property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
         Behavior on targetSize {
@@ -70,7 +67,7 @@ Item {
         }
     }
 
-    // Date bubble month
+    // Date bubble / month
     Loader {
         property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
         Behavior on targetSize {
@@ -80,7 +77,6 @@ Item {
         width: targetSize
         height: targetSize
         active: targetSize > 0
-
         
         anchors {
             right: parent.right

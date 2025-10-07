@@ -8,8 +8,6 @@ import QtQuick
 
 Rectangle {
     z: 1
-    color: root.colBackground
-    radius: Appearance.rounding.small
     StyledText {
         opacity: root.style === "rect" ? 1.0 : 0
         Behavior on opacity {

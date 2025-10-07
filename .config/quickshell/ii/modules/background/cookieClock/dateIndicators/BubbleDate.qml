@@ -11,7 +11,7 @@ Item {
 
     MaterialCookie {
         z: 5
-        sides: 4
+        sides: bubbleIndex === 0 ? 4 : 1
         anchors.centerIn: parent
         color: bubbleIndex === 0.0 ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
         implicitSize: root.style === "bubble" ? root.dateSquareSize : 0
