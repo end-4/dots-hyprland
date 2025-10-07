@@ -113,11 +113,9 @@ gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-g
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
 
-
-
-# Additional needed useflags
+############ Additional needed useflags
 x11-libs/cairo X
-liibglvnd X
+media-libs/libglvnd X
 x11-libs/libxkbcommon X
 media-libs/libpulse X
-media-libs/alsa-plplugins pulseaudio
+media-plugins/alsa-plugins pulseaudio
