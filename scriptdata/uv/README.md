@@ -1,3 +1,8 @@
+## Why is this important?
+Instead of installing python packages via system package manager, we should install them into virtual environment.
+
+This is important because there has been so many complaints about the failure installing/updating python packages via system package manager, see [#1017](https://github.com/end-4/dots-hyprland/issues/1017).
+
 ## How to add/remove python package?
 
 1. Edit `requirements.in`. You may refer to [PyPI](https://pypi.org/) for possible package names.
