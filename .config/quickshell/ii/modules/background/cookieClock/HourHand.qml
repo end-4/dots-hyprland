@@ -34,14 +34,14 @@ Item {
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         x: {
-            let position = parent.width / 2 - handWidth / 2;
+            let position = parent.width / 2 - root.handWidth / 2;
             if (root.style === "classic") position -= 15;
             return position;
         }
         width: hourHandLength
-        height: root.style === "classic" ? 8 : handWidth
+        height: root.style === "classic" ? 8 : root.handWidth
 
-        radius: root.style === "classic" ? 2 : handWidth / 2
+        radius: root.style === "classic" ? 2 : root.handWidth / 2
         color : Qt.rgba(root.color.r, root.color.g, root.color.b, fillColorAlpha)
 
         border.color: root.color
