@@ -9,7 +9,11 @@ function backup_configs(){
   rsync -av --progress "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
   
   echo "Backing up $HOME/.local to $backup_dir/local_backup"
-  rsync -av --progress "$HOME/.local/" "$backup_dir/local_backup/"
+  declare -a arg_excludes=()
+  arg_excludes+=(--exclude "$HOME/.local/share/Steam")
+  arg_excludes+=(--exclude "$HOME/.local/share/steam")
+  rsync -av --progress "${arg_excludes[@]}" "$HOME/.local/" "$backup_dir/local_backup/"
+  declare -a arg_excludes=()
 }
 
 function warning_rsync(){
