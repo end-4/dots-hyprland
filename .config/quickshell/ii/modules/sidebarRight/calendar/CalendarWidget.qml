@@ -10,7 +10,7 @@ import qs.services
 Item {
     property int monthShift: 0
     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
-    property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
+    property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0, Config.options.time.firstDayOfWeek)
 
     // Layout.topMargin: 10
     anchors.topMargin: 10
@@ -102,7 +102,9 @@ Item {
             spacing: 5
 
             Repeater {
-                model: CalendarLayout.weekDays
+                model: CalendarLayout.weekDays.map((_, i) => {
+                    return CalendarLayout.weekDays[(i + Config.options.time.firstDayOfWeek) % 7];
+                })
 
                 delegate: CalendarDayButton {
                     day: Translation.tr(modelData.day)

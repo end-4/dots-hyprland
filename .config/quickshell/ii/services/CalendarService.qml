@@ -59,11 +59,26 @@ Singleton {
 
 
       function getEventsInWeek() {
-        const weekdays = [Translation.tr("Sunday"), Translation.tr("Monday"), Translation.tr("Tuesday"), Translation.tr("Wednesday"), Translation.tr("Thursday"), Translation.tr("Friday"), Translation.tr("Saturday")];
+        const weekdays = [
+          Translation.tr("Monday"), 
+          Translation.tr("Tuesday"), 
+          Translation.tr("Wednesday"), 
+          Translation.tr("Thursday"), 
+          Translation.tr("Friday"), 
+          Translation.tr("Saturday"),
+          Translation.tr("Sunday"), 
+
+        ];
+
+        let firstDayOfWeek = 1
+        let sortedWeekdays= weekdays.map((_, i) => weekdays[(i+Config.options.time.firstDayOfWeek)%7]);
+
+
+
         if(!khalAvailable){
           return [
             {
-              name:  weekdays[0],
+              name:  sortedWeekdays[0],
               events: [
                 {
                   title: "Example: You need to install khal to view events",
@@ -74,27 +89,27 @@ Singleton {
               ]
             },
             {
-              name: weekdays[1],
+              name: sortedWeekdays[1],
               events: []
             },
             {
-              name: weekdays[2],
+              name: sortedWeekdays[2],
               events: []
             },
             {
-              name: weekdays[3],
+              name: sortedWeekdays[3],
               events: []
             },
             {
-              name: weekdays[4],
+              name: sortedWeekdays[4],
               events: []
             },
             {
-              name: weekdays[5],
+              name: sortedWeekdays[5],
               events: []
             },
             {
-              name: weekdays[6],
+              name: sortedWeekdays[6],
               events: []
             }
           ]; 
@@ -103,10 +118,10 @@ Singleton {
         const d = new Date();
         const num_day_today = d.getDay();
         let result = [];
-        for (let i = 0; i < weekdays.length; i++) {
+        for (let i = 0; i < sortedWeekdays.length; i++) {
             d.setDate(d.getDate() - d.getDay() + i);
             const events = this.getTasksByDate(d);
-            const name_weekday = weekdays[d.getDay()];
+            const name_weekday = sortedWeekdays[d.getDay()];
             let obj = {
                 "name": name_weekday,
                 "events": []
