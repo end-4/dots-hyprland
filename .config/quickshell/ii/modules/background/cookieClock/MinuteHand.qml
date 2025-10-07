@@ -13,6 +13,7 @@ Item {
 
     required property int clockMinute
     property real handWidth: 16
+    property real handLength: 95
     property string style: "medium"
     property color color: Appearance.colors.colSecondary
 
@@ -34,7 +35,7 @@ Item {
             if (root.style === "classic") position -= 15;
             return position;
         }
-        width: minuteHandLength
+        width: root.handLength
         height: root.handWidth
         
         radius: root.style === "classic" ? 2 : root.handWidth / 2

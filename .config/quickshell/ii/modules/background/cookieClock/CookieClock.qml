@@ -107,6 +107,7 @@ Item {
     MinuteHand {
         anchors.fill: parent
         handWidth: root.minuteHandWidth
+        handLength: root.minuteHandLength
         clockMinute: root.clockMinute
         style: Config.options.background.clock.cookie.minuteHandStyle
         color: root.colMinuteHand
