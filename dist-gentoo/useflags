@@ -112,3 +112,12 @@ dev-libs/glib dbus elf introspection mime xattr
 gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-grab hyprland-global-shortcuts jemalloc layer-shell mpris pam pipewire screencopy session-lock sockets toplevel-management tray wayland
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
+
+
+
+# Additional needed useflags
+x11-libs/cairo X
+liibglvnd X
+x11-libs/libxkbcommon X
+media-libs/libpulse X
+media-libs/alsa-plplugins pulseaudio
