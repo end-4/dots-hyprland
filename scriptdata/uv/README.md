@@ -6,10 +6,13 @@ This is important because there has been so many complaints about the failure in
 ## How to add/remove python package?
 
 1. Edit `requirements.in`. You may refer to [PyPI](https://pypi.org/) for possible package names.
-   - See also [uv doc](https://docs.astral.sh/uv/pip/dependencies/#using-requirementsin).
-2. Run `uv pip compile requirements.in -o requirements.txt` in this folder.[^1]
+2. Run `uv pip compile requirements.in -o requirements.txt` in this folder.
 
-[^1]: `requirements.txt` is included in git repo. It's for locking package versions to enhance stability and reproducibility. In fact, including package version lock file in git repo is also common in other places, for example the `package-lock.json` of Node.js projects. See [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore) for a deeper explanation.
+**Notes:**
+- See also [uv doc](https://docs.astral.sh/uv/pip/dependencies/#using-requirementsin).
+- `requirements.txt` is included in git repo. It's for locking package versions to enhance stability and reproducibility.
+  - In fact, including package version lock file in git repo is also common in other places, for example the `package-lock.json` of Node.js projects (see also [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore)).
+  - However, it's not always recommended to include package version lock file in Git, for example [the poetry document](https://python-poetry.org/docs/basic-usage/#committing-your-poetrylock-file-to-version-control) recommend application developers to include package version lock file in Git, but library developers should consider more, such as not inluding the lock file or including it but refreshing regularly.
 
 ## How will the python packages get installed?
 
