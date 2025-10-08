@@ -345,8 +345,8 @@ Variants {
                         id: cookieQuoteLoader
                         visible: root.showQuote
                         active: visible
-                        anchors.horizontalCenter: parent.horizontalCenter
                         sourceComponent: CookieQuote {}
+                        anchors.horizontalCenter: cookieClockLoader.horizontalCenter
                     }
                     
                 }
