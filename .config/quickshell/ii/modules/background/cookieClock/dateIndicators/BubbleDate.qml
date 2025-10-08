@@ -8,17 +8,15 @@ import QtQuick
 
 Item {
     property int bubbleIndex: 0
+    property real targetSize: 0
 
     MaterialCookie {
         z: 5
         sides: bubbleIndex === 0 ? 4 : 1
         anchors.centerIn: parent
         color: bubbleIndex === 0.0 ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
-        implicitSize: root.style === "bubble" ? root.dateSquareSize : 0
+        implicitSize: targetSize
         constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
-        Behavior on implicitSize {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
     }
     StyledText {
         z: 6

@@ -47,6 +47,7 @@ Item {
 
     // Date bubble / day
     Loader {
+        id: dayBubbleLoader
         property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
         Behavior on targetSize {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
@@ -63,11 +64,13 @@ Item {
         }
         sourceComponent: BubbleDate {
             bubbleIndex: 0
+            targetSize: dayBubbleLoader.targetSize
         }
     }
 
     // Date bubble / month
     Loader {
+        id: monthBubbleLoader
         property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
         Behavior on targetSize {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
@@ -84,6 +87,7 @@ Item {
         }
         sourceComponent: BubbleDate {
             bubbleIndex: 1
+            targetSize: monthBubbleLoader.targetSize
         }
     }
 }
