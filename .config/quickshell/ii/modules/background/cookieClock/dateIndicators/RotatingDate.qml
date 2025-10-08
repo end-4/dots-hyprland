@@ -9,13 +9,24 @@ import QtQuick
 Item {
     id: root
 
-    property real radius: 65
+    property string style: Config.options.background.clock.cookie.dateStyle
+    readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
+
+    property real radius: style === "rotating" ? dialStyle === "numbers" ? 90 : 65 : 0
+    Behavior on radius {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     property string dateText: Qt.locale().toString(DateTime.clock.date, "ddd dd")
     property real angleStep: Math.PI / 2.35 / dateText.length
 
     property color dayColor: Appearance.colors.colSecondary
     property color monthColor: Appearance.colors.colSecondaryHover
+
+    opacity: style === "rotating" ? 1.0 : 0.0
+    Behavior on opacity {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     rotation: {
         if (!Config.options.time.secondPrecision) return 0

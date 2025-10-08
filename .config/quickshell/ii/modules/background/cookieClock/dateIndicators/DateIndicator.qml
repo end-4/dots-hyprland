@@ -18,7 +18,9 @@ Item {
     Loader {
         anchors.fill: parent
         active: opacity > 0
-        sourceComponent: RotatingDate {}
+        sourceComponent: RotatingDate {
+            style: root.style
+        }
     }
 
     // Square date (only today's number) in right side of the clock
