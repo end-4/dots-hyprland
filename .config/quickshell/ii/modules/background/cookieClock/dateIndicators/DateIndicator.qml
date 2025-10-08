@@ -9,6 +9,7 @@ import QtQuick
 
 Item {
     id: root
+    readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
     property string style: "rotating"
     property color colOnBackground: Appearance.colors.colOnSecondaryContainer
     property color colBackground: Appearance.colors.colOnSecondaryContainer
@@ -23,28 +24,22 @@ Item {
         }
     }
 
-    // Square date (only today's number) in right side of the clock
+    // Rectangle date (only today's number) in right side of the clock
     Loader {
-        width: root.style === "rect" ? 45 : 0
-        height: root.style === "rect" ? 30 : 0
-
-        Behavior on height {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-        Behavior on width {
+        id: rectLoader
+        z: 0
+        
+        property real animIndex: root.style === "rect" ? 1.0 : 0.0
+        Behavior on animIndex {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
 
-        active: height > 0
-        anchors {
-            verticalCenter: parent.verticalCenter
-            right: parent.right
-            rightMargin: 10
-        }
+        active: animIndex > 0
 
         sourceComponent: RectangleDate {
             color: root.colBackground
             radius: Appearance.rounding.small
+            animIndex: rectLoader.animIndex
         }
     }
 
