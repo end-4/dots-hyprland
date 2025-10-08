@@ -1,4 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env python3
 
 import argparse
 import cv2
