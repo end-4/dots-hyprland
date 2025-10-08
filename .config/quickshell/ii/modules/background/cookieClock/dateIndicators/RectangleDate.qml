@@ -6,15 +6,16 @@ import qs.modules.common.widgets
 import QtQuick
 
 Rectangle {
+    id: rect
     readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
     property real animIndex: 0
-    opacity: animIndex 
+    opacity: animIndex
 
-    width: 45
-    height: 30
-
-    x: dialStyle === "numbers" ? 155 : 150
-    y: dialStyle === "numbers" ? 155 : 100 
+    width: 45 * animIndex
+    height: 30 * animIndex
+    
+    x: root.dialStyle === "numbers" ? -40 : -10
+    y: root.dialStyle === "numbers" ? 55 : 0
 
     Behavior on x {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

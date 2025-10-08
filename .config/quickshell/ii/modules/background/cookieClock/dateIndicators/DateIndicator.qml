@@ -27,13 +27,16 @@ Item {
     // Rectangle date (only today's number) in right side of the clock
     Loader {
         id: rectLoader
-        
+
         property real animIndex: root.style === "rect" ? 1.0 : 0.0
         Behavior on animIndex {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
 
         active: animIndex > 0
+
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
 
         sourceComponent: RectangleDate {
             color: Appearance.colors.colSecondaryContainerHover
