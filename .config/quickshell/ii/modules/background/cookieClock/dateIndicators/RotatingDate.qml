@@ -11,10 +11,11 @@ Item {
 
     property string style: Config.options.background.clock.cookie.dateStyle
     readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
+    readonly property bool timeIndicators: Config.options.background.clock.cookie.timeIndicators
 
-    property real radius: style === "rotating" ? dialStyle === "numbers" ? 90 : 65 : 0
+    property real radius: style === "rotating" ? dialStyle === "numbers" || timeIndicators ? 90 : 75 : 0
     Behavior on radius {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }
 
     property string dateText: Qt.locale().toString(DateTime.clock.date, "ddd dd")
