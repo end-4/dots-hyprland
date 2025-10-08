@@ -24,6 +24,7 @@ Variants {
     readonly property real clockSizePadding: 20
     readonly property real screenSizePadding: 50
     readonly property string clockStyle: Config.options.background.clock.style
+    readonly property bool showQuote: Config.options.background.showQuote && Config.options.background.quote !== ""
     model: Quickshell.screens
 
     PanelWindow {
@@ -338,6 +339,14 @@ Variants {
                         visible: root.clockStyle === "cookie" 
                         active: visible
                         sourceComponent: CookieClock {}
+                    }
+
+                    Loader {
+                        id: cookieQuoteLoader
+                        visible: root.showQuote
+                        active: visible
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        sourceComponent: CookieQuote {}
                     }
                     
                 }
