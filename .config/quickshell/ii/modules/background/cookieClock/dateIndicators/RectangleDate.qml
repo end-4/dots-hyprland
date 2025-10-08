@@ -1,4 +1,3 @@
-pragma ComponentBehavior: Bound
 
 import qs
 import qs.services
@@ -7,17 +6,14 @@ import qs.modules.common.widgets
 import QtQuick
 
 Rectangle {
-    z: 1
-
     readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
-
     property real animIndex: 0
     opacity: animIndex 
 
     width: 45
     height: 30
 
-    x: dialStyle === "numbers" ? 155 : 175
+    x: dialStyle === "numbers" ? 155 : 150
     y: dialStyle === "numbers" ? 155 : 100 
 
     Behavior on x {

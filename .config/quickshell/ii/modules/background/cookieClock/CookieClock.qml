@@ -120,6 +120,7 @@ Item {
         id: secondHandLoader
         active: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
         anchors.fill: parent
+        z: 2
         sourceComponent: SecondHand {
             id: secondHand
             handWidth: root.secondHandWidth
