@@ -22,8 +22,12 @@ materialyoucolor==2.0.10
     #   kde-material-you-colors
 numpy==2.2.2
     # via
+    #   -r scriptdata/uv/requirements.in
     #   kde-material-you-colors
     #   material-color-utilities
+    #   opencv-contrib-python
+opencv-contrib-python==4.12.0.88
+    # via -r scriptdata/uv/requirements.in
 packaging==24.2
     # via
     #   build
