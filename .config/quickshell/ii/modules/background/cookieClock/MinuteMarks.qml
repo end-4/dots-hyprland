@@ -16,6 +16,7 @@ Item {
     property int minuteLineSize: 4
     property color color: Appearance.colors.colOnSecondaryContainer
     property string style: Config.options.background.clock.cookie.dialNumberStyle // "dots", "numbers", "full", "hide"
+    property string dateStyle : Config.options.background.clock.cookie.dateStyle 
 
     Repeater {
         model: 12
@@ -64,7 +65,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    leftMargin: root.style === "numbers" ? 32 : 96
+                    leftMargin: root.style === "numbers" ? root.dateStyle === "rotating" ? 48 : 32 : 96
                 }
                 Behavior on anchors.leftMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -78,8 +79,11 @@ Item {
                     rotation: numberItem.index % 2 === 0 ? numberItem.index * 90 : -numberItem.index * 90 //A better way can be found to show texts on right angle
                     font {
                         family: Appearance.font.family.reading
-                        pixelSize: 80
+                        pixelSize: root.dateStyle === "rotating" ? 70 : 80
                         weight: 1000
+                    }
+                    Behavior on font.pixelSize {
+                        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
                     }
                 }
             }
