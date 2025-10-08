@@ -49,12 +49,11 @@ Example: In `~/‎.config/quickshell/ii/screenshot.qml`:
 Process {
 id: imageDetectionProcess
                 command: ["bash", "-c", `${Directories.scriptPath}/images/find_regions.py ` 
-                command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
 + `--hyprctl ` 
 + `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}' ` 
 + `--max-width ${Math.round(panelWindow.screen.width * root.falsePositivePreventionRatio)} ` 
 ```
-In this example, python script `${Directories.scriptPath}/images/find_regions.py` is called and receives some arguments.
+In this example, python script `find_regions.py` is called and receives some arguments.
 
 #### Solution A: shebang
 
@@ -73,20 +72,30 @@ However:
 
 #### Solution B: bash script as wrapper
 
-For this solution, first make sure the python script is using the shebang `#!/usr/bin/env python3`.
+First make sure the python script is using the shebang `#!/usr/bin/env python3`, instead of `#!/usr/bin/python3` or something else.
 
-Write a wrapper script in bash.
-(Take `find_regions.py` as example, write `find-regions-venv.sh` in the same directory.)
+Then write a wrapper script in bash.
+Let's continue the `screenshot.qml` example, in the same directory as `find_regions.py`, write a `find-regions-venv.sh`:
 ```bash
 #!/usr/bin/env bash
 
 # Specify the path of the python script.
-# The example below only applies when `find_regions.py` and the wrapper script are under the same folder.
+# The example below only applies when `find_regions.py` and this wrapper script are under the same folder.
 PY_SCRIPT="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)/find_regions.py"
 
 source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
 "$PY_SCRIPT" "$@"
 deactivate
+```
+**Not done yet!** Do not forget to update the code calling the original python script.
+In this example, in `~/‎.config/quickshell/ii/screenshot.qml` we should modify `find_regions.py` to the wrapper script `find-regions-venv.sh`:
+```qml
+Process {
+id: imageDetectionProcess
+                command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
++ `--hyprctl ` 
++ `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}' ` 
++ `--max-width ${Math.round(panelWindow.screen.width * root.falsePositivePreventionRatio)} ` 
 ```
 
 ### Situation 2: Inside a bash script
