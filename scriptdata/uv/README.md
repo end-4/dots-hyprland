@@ -7,17 +7,19 @@ This is important because there has been so many complaints about the failure in
 
 1. Edit `requirements.in`. You may refer to [PyPI](https://pypi.org/) for possible package names.
    - See also [uv doc](https://docs.astral.sh/uv/pip/dependencies/#using-requirementsin).
-2. Run `uv pip compile requirements.in -o requirements.txt` in this folder.
+2. Run `uv pip compile requirements.in -o requirements.txt` in this folder.[^1]
+
+[^1]: `requirements.txt` is included in git repo. It's for locking package versions to enhance stability and reproducibility. In fact, including package version lock file in git repo is also common in other places, for example the `package-lock.json` of Node.js projects. See [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore) for a deeper explanation.
 
 ## How will the python packages get installed?
 
 - They will be installed to the virtual environment `$ILLOGICAL_IMPULSE_VIRTUAL_ENV`.
 - The default value of `$ILLOGICAL_IMPULSE_VIRTUAL_ENV` is `$XDG_STATE_HOME/quickshell/.venv`.
   - The default value of `$XDG_STATE_HOME` is `$HOME/.local/state`.
-  - Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^1]
+  - Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^2]
 - See the function `install-python-packages()` defined in `/scriptdata/lib/package-installers.sh` for details.
 
-[^1]: Hyprland seems to have weird problem dealing with recursive variable, so we can not use `$XDG_STATE_HOME/quickshell/.venv` even if we had set `$XDG_STATE_HOME` to `~/.local/state` explicitly, else `$XDG_STATE_HOME` will possibly not get expanded but get recognised as literally `$XDG_STATE_HOME`. This problem never happens for some users, but according to some issues when we were using recursive variable setting in the past, it's possible to happen for other users. Reason unknown.
+[^2]: Hyprland seems to have weird problem dealing with recursive variable, so we can not use `$XDG_STATE_HOME/quickshell/.venv` even if we had set `$XDG_STATE_HOME` to `~/.local/state` explicitly, else `$XDG_STATE_HOME` will possibly not get expanded but get recognised as literally `$XDG_STATE_HOME`. This problem never happens for some users, but according to some issues when we were using recursive variable setting in the past, it's possible to happen for other users. Reason unknown.
 
 ## How to use the python packages installed through here?
 
@@ -25,21 +27,84 @@ Basically you'll need to activate the virtual environment first:
 ```bash
 source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
 ```
-then use the python package inside it;
+
+It will add the python executable located in the venv to `$PATH` and give it the highest priority.
+Run `which python` and you'll understand.
+
+This python executable will also search and use the python package inside the venv,
+which enables running any python script or running command provided via python package using the venv.
+
 After that you probably need to deactivate it:
 ```bash
 deactivate
 ```
-### Situation 1: Call the command directly
-Take `kde-material-you-colors` as example.
+
+### Situation 1: As a single command
+**Description:** At someplace which accept a single command,
+- run a python script,
+- or run a command provided by python package.
+
+Example: In `~/‎.config/quickshell/ii/screenshot.qml`:
+```qml
+Process {
+id: imageDetectionProcess
+                command: ["bash", "-c", `${Directories.scriptPath}/images/find_regions.py ` 
+                command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
++ `--hyprctl ` 
++ `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}' ` 
++ `--max-width ${Math.round(panelWindow.screen.width * root.falsePositivePreventionRatio)} ` 
+```
+In this example, python script `${Directories.scriptPath}/images/find_regions.py` is called and receives some arguments.
+
+#### Solution A: shebang
+
+Add the shebang below to the beginning of python script:
+```python
+#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+```
+And that's it!
+
+**Note:** This is the simplest solution as it only modifies the shebang of python script.
+However:
+- It's only for python script, not the command provided by python package.
+  - P.S. Run the script directly, eg. `./foo.py`, not `python3 foo.py`, or the shebang will be ignored.
+- It can not deal with complex argument (e.g. filaname containing spaces) passed to the python script.
+  - The example above is actually unstable, considering that `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}'` could be a rather complex argument.
+
+#### Solution B: bash script as wrapper
+
+For this solution, first make sure the python script is using the shebang `#!/usr/bin/env python3`.
+
+Write a wrapper script in bash.
+(Take `find_regions.py` as example, write `find-regions-venv.sh` in the same directory.)
 ```bash
-source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
-kde-material-you-colors "$mode_flag" --color "$color" -sv "$sv_num"
+#!/usr/bin/env bash
+
+# Specify the path of the python script.
+# The example below only applies when `find_regions.py` and the wrapper script are under the same folder.
+PY_SCRIPT="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)/find_regions.py"
+
+source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+"$PY_SCRIPT" "$@"
 deactivate
 ```
 
-### Situation 2: Use python script (wrapped)
-Take `generate_colors_material.py` as example:
+### Situation 2: Inside a bash script
+Note: the solutions for `Situation 1: As a single command` also apply here; but **not** vice versa.
+
+**Description:**
+Inside a bash script,
+- run a python script,
+- or run a command provided by python package.
+
+**Solution:**
+- Add "activation command" before the target line,
+- Also add "deactivation command" after the target line.
+
+**Example:**
+
+For running a python script,
+take `generate_colors_material.py` as example:
 ```bash
 source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
 python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
@@ -47,12 +112,13 @@ python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_ar
 "$SCRIPT_DIR"/applycolor.sh
 ```
 
-### Situation 3: Use python script (shebang)
-**Note**: This method is only for simple situation.
-It can not deal with complex arguments (e.g. filaname containing spaces) passed to the python script.
-
-Take `generate_colors_material.py` as example, add the shebang below to its beginning:
-```python
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+For running a python script provided by python package,
+take `kde-material-you-colors` as example:
+```bash
+source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
+kde-material-you-colors "$mode_flag" --color "$color" -sv "$sv_num"
+deactivate
 ```
-Then you should run the script directly, i.e. `./generate_colors_material.py`, **not** `python3 generate_colors_material.py`.
+
+
+
