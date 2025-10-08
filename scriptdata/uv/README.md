@@ -11,8 +11,7 @@ This is important because there has been so many complaints about the failure in
 **Notes:**
 - See also [uv doc](https://docs.astral.sh/uv/pip/dependencies/#using-requirementsin).
 - `requirements.txt` is included in Git. It's for locking package versions to enhance stability and reproducibility.
-  - In fact, including package version lock file in Git is also the most common way for similar situations, for example the `package-lock.json` of Node.js projects (see also [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore)).
-  - However, it's not always recommended to include package version lock file in Git, for example [the poetry document](https://python-poetry.org/docs/basic-usage/#committing-your-poetrylock-file-to-version-control) recommend application developers to include package version lock file in Git, but library developers should consider more, such as not inluding the lock file or including it but refreshing regularly.
+  - In fact, including package version lock file in Git is also the most common way for similar situations, for example the `package-lock.json` of Node.js projects (see also [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore)). Although there are some situations when it's not suitable to include the lock file, for example [the poetry document](https://python-poetry.org/docs/basic-usage/#committing-your-poetrylock-file-to-version-control) recommend application developers to include package version lock file in Git, but library developers should consider more, such as not inluding the lock file or including it but refreshing regularly.
 
 ## How will the python packages get installed?
 
