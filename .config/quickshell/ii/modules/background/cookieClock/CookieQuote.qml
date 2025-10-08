@@ -25,7 +25,7 @@ Item {
         verticalOffset: 2
         radius: 12
         samples: radius * 2 + 1
-        color: root.colShadow
+        color: Appearance.colors.colShadow
         transparentBorder: true
     }
     
