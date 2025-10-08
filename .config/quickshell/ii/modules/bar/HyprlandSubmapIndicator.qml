@@ -1,8 +1,8 @@
-import QtQuick
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import QtQuick.Layouts // For RowLayout
+import QtQuick
+import QtQuick.Layouts
 
 Loader {
     id: root
@@ -11,17 +11,23 @@ Loader {
     active: HyprlandSubmap.currentSubmap !== "global"
     visible: active
 
-    property var iconMap: ({
-        "virtual-machine": "interactive_space",
-        "resize": "aspect_ratio"
-    })
+    property list<string> submapNames: []
+    property list<string> submapIcons: []
+
+    onActiveChanged: {
+        if (active) {
+            root.submapIcons = Config.options.submaps.icons;
+            root.submapNames = Config.options.submaps.names;
+        }
+    }
 
     function getSubmapText(submapName) {
         if (submapName === "global") {
             return "";
         }
-        if (root.iconMap[submapName]) {
-            return root.iconMap[submapName] + " " + submapName;
+        let index = root.submapNames.indexOf(submapName);
+        if (index !== -1) {
+            return root.submapIcons[index] + " " + submapName;
         }
         return submapName;
     }
@@ -37,8 +43,9 @@ Loader {
 
             MaterialSymbol {
                 id: iconItem
-                visible: root.iconMap[HyprlandSubmap.currentSubmap] !== undefined && HyprlandSubmap.currentSubmap !== "global"
-                text: root.iconMap[HyprlandSubmap.currentSubmap] || ""
+                property int currentIndex: root.submapNames.indexOf(HyprlandSubmap.currentSubmap)
+                visible: currentIndex !== -1 && HyprlandSubmap.currentSubmap !== "global"
+                text: currentIndex !== -1 ? root.submapIcons[currentIndex] : ""
                 color: root.color
                 iconSize: Appearance.font.pixelSize.small
                 animateChange: true
@@ -46,7 +53,8 @@ Loader {
 
             StyledText {
                 id: submapText
-                visible: HyprlandSubmap.currentSubmap !== "global" && !root.iconMap[HyprlandSubmap.currentSubmap]
+                property int currentIndex: root.submapNames.indexOf(HyprlandSubmap.currentSubmap)
+                visible: HyprlandSubmap.currentSubmap !== "global" && currentIndex === -1
                 text: HyprlandSubmap.currentSubmap
                 font.pixelSize: Appearance.font.pixelSize.small
                 color: root.color
