@@ -9,12 +9,14 @@ printf "If not, you must ensure you are using the correct GCC version and set it
 printf "${STY_RESET}"
 pause
 
+x sudo emerge --noreplace app-eselect/eselect-repository
+
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
 	v sudo eselect repository enable localrepo 
 fi
 
-if [[ -z $(eselect repository list | grep guru) ]]; then
+if [[ ! $(eselect repository list | grep guru) =~ "guru \*" ]]; then
 	v sudo eselect repository enable guru
 fi
 
