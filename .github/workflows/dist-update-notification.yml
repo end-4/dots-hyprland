@@ -18,7 +18,8 @@ jobs:
           curl -X POST \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{"query": "query { repository(owner: "end-4", name: "dots-hyprland") { discussion(number: 2140) { id } } }"}'
+            -d '{"query": "query { repository(owner: "end-4", name: "dots-hyprland") { discussion(number: 2140) { id } } }"}' \
+            https://api.github.com/graphql
        #  gh api graphql -f query='
        #    mutation {
        #      addDiscussionComment(input:{
