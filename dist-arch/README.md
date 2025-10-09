@@ -1,5 +1,4 @@
 # Install scripts for Arch Linux
-
 ## Old Dependency Installation Method
 The old deps install method mainly involved `./scriptdata/dependencies.conf` (which has been removed now).
 
