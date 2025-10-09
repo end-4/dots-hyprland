@@ -24,7 +24,7 @@ Variants {
     readonly property real clockSizePadding: 20
     readonly property real screenSizePadding: 50
     readonly property string clockStyle: Config.options.background.clock.style
-    readonly property bool showQuote: Config.options.background.showQuote && Config.options.background.quote !== ""
+    readonly property bool showQuote: Config.options.background.showQuote && Config.options.background.quote !== "" && !GlobalStates.screenLocked
     model: Quickshell.screens
 
     PanelWindow {
