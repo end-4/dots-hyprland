@@ -10,16 +10,19 @@ This is important because there has been so many complaints about the failure in
 
 **Notes:**
 - See also [uv doc](https://docs.astral.sh/uv/pip/dependencies/#using-requirementsin).
-- `requirements.txt` is included in Git. It's for locking package versions to enhance stability and reproducibility.
-  - In fact, including package version lock file in Git is also the most common way for similar situations, for example the `package-lock.json` of Node.js projects (see also [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore)). Although there are some situations when it's not suitable to include the lock file, for example [the poetry document](https://python-poetry.org/docs/basic-usage/#committing-your-poetrylock-file-to-version-control) recommend application developers to include package version lock file in Git, but library developers should consider more, such as not inluding the lock file or including it but refreshing regularly.
+- `requirements.txt` is included in Git. It's for locking package versions to enhance stability and reproducibility.[^1]
+
+[^1]: In fact, including package version lock file in Git is also the most common way for similar situations, for example the `package-lock.json` of Node.js projects (see also [this stackoverflow question](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore)). Although there are some situations when it's not suitable to include the lock file, for example [the poetry document](https://python-poetry.org/docs/basic-usage/#committing-your-poetrylock-file-to-version-control) recommend application developers to include package version lock file in Git, but library developers should consider more, such as not inluding the lock file or including it but refreshing regularly.
 
 ## How will the python packages get installed?
 
+For summary:
 - They will be installed to the virtual environment `$ILLOGICAL_IMPULSE_VIRTUAL_ENV`.
 - The default value of `$ILLOGICAL_IMPULSE_VIRTUAL_ENV` is `$XDG_STATE_HOME/quickshell/.venv`.
   - The default value of `$XDG_STATE_HOME` is `$HOME/.local/state`.
-  - Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^2]
-- See the function `install-python-packages()` defined in `/scriptdata/lib/package-installers.sh` for details.
+- Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^2]
+
+For details: see the function `install-python-packages()` defined in `/scriptdata/lib/package-installers.sh`.
 
 [^2]: Hyprland seems to have weird problem dealing with recursive variable, so we can not use `$XDG_STATE_HOME/quickshell/.venv` even if we had set `$XDG_STATE_HOME` to `~/.local/state` explicitly, else `$XDG_STATE_HOME` will possibly not get expanded but get recognised as literally `$XDG_STATE_HOME`. This problem never happens for some users, but according to some issues when we were using recursive variable setting in the past, it's possible to happen for other users. Reason unknown.
 
@@ -65,16 +68,19 @@ Add the shebang below to the beginning of python script:
 ```
 And that's it!
 
+(Warning: The shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.)
+
 **Note:** This is the simplest solution as it only modifies the shebang of python script.
 However:
 - It's only for python script, not the command provided by python package.
-  - P.S. Run the script directly, eg. `./foo.py`, not `python3 foo.py`, or the shebang will be ignored.
-- It can not deal with complex argument (e.g. filaname containing spaces) passed to the python script.
+- It can not deal with complex argument (e.g. filename containing spaces) passed to the python script.
   - The example above is actually unstable, considering that `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}'` could be a rather complex argument.
 
 #### Solution B: bash script as wrapper
 
 First make sure the python script is using the shebang `#!/usr/bin/env python3`, instead of `#!/usr/bin/python3` or something else.
+
+(Warning: The shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.)
 
 Then write a wrapper script in bash.
 Let's continue the `screenshot.qml` example, in the same directory as `find_regions.py`, write a `find-regions-venv.sh`:
