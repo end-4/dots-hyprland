@@ -20,8 +20,9 @@ jobs:
           MESSAGE="Directory \`dist-arch\` has been updated.\n"
           MESSAGE+="Commit HASH: ${{ github.sha }}\n"
           MESSAGE+="Commit message: ${{ github.event.head_commit.message }}\n"
-          REPO_OWNER="${{ github.repository.owner }}"
-          REPO_NAME="${{ github.repository.name }}"
+          REPO="${{ github.repository }}"
+          REPO_OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${REPO#$REPO_OWNER/}"
 
           DISCUSSION_NODE_ID=$(gh api graphql -f query='
             query {
