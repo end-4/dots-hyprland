@@ -1,4 +1,4 @@
-name: Notify Discussion on dist-arch Change
+name: Comment on Discussion When dist-arch/ Changes
 
 on:
   push:
@@ -6,33 +6,14 @@ on:
       - 'dist-arch/**'
 
 jobs:
-  notify-discussion:
+  comment_on_discussion:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Add comment to discussion as notification
-        id: notify
+      - name: Create comment on discussion #2140
         env:
-          DISCUSSION_NUMBER: 2140
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          MESSAGE="🔔 Directory \`dist-arch/\` has changed.\n"
-          MESSAGE+="🔗 Commit message: ${{ github.event.head_commit.message }}\n"
-          MESSAGE+="🔗 Commit hash: ${{ github.sha }}"
-
-          RESPONSE=$(curl -s -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/discussions/${DISCUSSION_NUMBER}/comments \
-            -d "{\"body\": \"$MESSAGE\"}")
-
-          if echo "$RESPONSE" | grep -q '"id":'; then
-            echo "Succeed in creating comment under discussion ${DISCUSSION_NUMBER}."
-            echo "response=$RESPONSE" >> $GITHUB_OUTPUT
-          else
-            echo "Failed in creating comment under discussion ${DISCUSSION_NUMBER}."
-            echo "$RESPONSE" >&2
-            exit 1
-          fi
+          gh api \
+            --method POST \
+            /repos/end-4/dots-hyprland/discussions/2140/comments \
+            -F body="dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}."
