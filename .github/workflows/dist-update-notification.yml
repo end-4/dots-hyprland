@@ -4,8 +4,7 @@ on:
   push:
     paths:
       - 'dist-arch/**'
-      - '.github/workflows/**'
-  workflow_dispatch:
+#  workflow_dispatch:
 
 jobs:
   comment_on_discussion:
@@ -14,20 +13,25 @@ jobs:
       - name: Create comment on discussion #2140
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
+          DISCUSSION_NUMBER: 2140
+        # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
         run: |
+          MESSAGE="**Auto notification:**\n"
+          MESSAGE="Directory \`dist-arch\` has been updated.\n"
+          MESSAGE+="Commit HASH: ${{ github.sha }}\n"
+          MESSAGE+="Commit message: ${{ github.event.head_commit.message }}\n"
+
           DISCUSSION_NODE_ID=$(gh api graphql -f query='
             query {
-              repository( owner: "end-4", name: "dots-hyprland" )
-                { discussion(number: 2140) { id } } 
+              repository( owner: "${{ github.repository.owner }}", name: "${{ github.repository.name }}" )
+                { discussion(number: '${DISCUSSION_NUMBER}') { id } } 
               }' | \
             jq -r '.data.repository.discussion.id')
-          echo "The value of DISCUSSION_NODE_ID is ${DISCUSSION_NODE_ID}."
           gh api graphql -f query='
             mutation {
               addDiscussionComment(input:{
-                discussionId: "$DISCUSSION_NODE_ID",
-                body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}.",
+                discussionId: "'$DISCUSSION_NODE_ID'",
+                body: "'$MESSAGE'",
               }) {
                 clientMutationId
                 comment {
