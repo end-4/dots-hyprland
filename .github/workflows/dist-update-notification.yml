@@ -15,22 +15,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
         run: |
-          curl -X POST \
+          DISCUSSION_NODE_ID=$(curl -X POST \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{"query": "query { repository(owner: \"end-4\", name: \"dots-hyprland\") { discussion(number: 2140) { id } } }"}' \
-            https://api.github.com/graphql
-       #  gh api graphql -f query='
-       #    mutation {
-       #      addDiscussionComment(input:{
-       #        discussionId: "2140",
-       #        body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}.",
-       #      }) {
-       #        clientMutationId
-       #        comment {
-       #          id
-       #          body
-       #        }
-       #      }
-       #    }
-       #  '
+            https://api.github.com/graphql | \
+            jq -r '.data.repository.discussion.id')
+         gh api graphql -f query='
+           mutation {
+             addDiscussionComment(input:{
+               discussionId: "$DISCUSSION_NODE_ID",
+               body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}.",
+             }) {
+               clientMutationId
+               comment {
+                 id
+                 body
+               }
+             }
+           }
+         '
