@@ -18,7 +18,7 @@ jobs:
             mutation {
               addDiscussionComment(
                 input: {
-                  discussionId: "DISCUSSION_ID",
+                  discussionId: "2140",
                   body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}."
                 }
               ) {
