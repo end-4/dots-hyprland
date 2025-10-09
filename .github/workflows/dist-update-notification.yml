@@ -13,7 +13,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api \
-            --method POST \
-            /repos/end-4/dots-hyprland/discussions/2140/comments \
-            -F body="dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}."
+          gh discussion comment 2140 --body "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}."
