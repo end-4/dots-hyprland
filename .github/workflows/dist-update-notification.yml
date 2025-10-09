@@ -25,7 +25,7 @@ jobs:
 
           DISCUSSION_NODE_ID=$(gh api graphql -f query='
             query {
-              repository( owner: '${REPO_OWNER}', name: '${REPO_NAME}' )
+              repository( owner: "'${REPO_OWNER}'", name: "'${REPO_NAME}'" )
                 { discussion(number: '${DISCUSSION_NUMBER}') { id } } 
               }' | \
             jq -r '.data.repository.discussion.id')
