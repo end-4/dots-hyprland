@@ -23,7 +23,7 @@ jobs:
 
           DISCUSSION_NODE_ID=$(gh api graphql -f query='
             query {
-              repository( owner: "${{ github.repository.owner }}", name: "${{ github.repository.name }}" )
+              repository( owner: "'${{ github.repository.owner }}'", name: "'${{ github.repository.name }}'" )
                 { discussion(number: '${DISCUSSION_NUMBER}') { id } } 
               }' | \
             jq -r '.data.repository.discussion.id')
