@@ -17,7 +17,7 @@ jobs:
         # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
         run: |
           MESSAGE="**Auto notification:**\n"
-          MESSAGE="Directory \`dist-arch\` has been updated.\n"
+          MESSAGE+="Directory \`dist-arch\` has been updated.\n"
           MESSAGE+="Commit HASH: ${{ github.sha }}\n"
           MESSAGE+="Commit message: ${{ github.event.head_commit.message }}"
           REPO_OWNER="${{ github.repository_owner }}"
