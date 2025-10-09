@@ -74,7 +74,7 @@ gui-libs/libadwaita introspection
 net-libs/libsoup brotli introspection ssl
 #dev-libs/gobject-introspection (nothing needed)
 # dart-sassc handled in the ebuild
-media-libs/opencv eigen ffmpeg jpeg opencl opengl python wayland gtk3 webp
+eigen ffmpeg jpeg opencl opengl python wayland gtk3 webp
 
 
 ################### SCREENCAPTURE ################### 
