@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'dist-arch/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -15,23 +16,24 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
         run: |
-          DISCUSSION_NODE_ID=$(curl -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{"query": "query { repository(owner: \"end-4\", name: \"dots-hyprland\") { discussion(number: 2140) { id } } }"}' \
-            https://api.github.com/graphql | \
+          DISCUSSION_NODE_ID=$(gh api graphql -f query='
+            query {
+              repository( owner: "end-4", name: "dots-hyprland" )
+                { discussion(number: 2140) { id } } 
+              }' | \
             jq -r '.data.repository.discussion.id')
-         gh api graphql -f query='
-           mutation {
-             addDiscussionComment(input:{
-               discussionId: "$DISCUSSION_NODE_ID",
-               body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}.",
-             }) {
-               clientMutationId
-               comment {
-                 id
-                 body
-               }
-             }
-           }
-         '
+          echo "The value of DISCUSSION_NODE_ID is ${DISCUSSION_NODE_ID}."
+          gh api graphql -f query='
+            mutation {
+              addDiscussionComment(input:{
+                discussionId: "$DISCUSSION_NODE_ID",
+                body: "dist-arch/ directory has changed in commit ${{ github.sha }} by ${{ github.actor }}.",
+              }) {
+                clientMutationId
+                comment {
+                  id
+                  body
+                }
+              }
+            }
+          '
