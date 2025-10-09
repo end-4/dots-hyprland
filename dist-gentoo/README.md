@@ -1,4 +1,5 @@
 # Install scripts for Gentoo
+
 Note:
 - The scripts here are **not** meant to be executed directly.
 - This folder should reflect the equivalents of `/dist-arch/` but under Gentoo.
