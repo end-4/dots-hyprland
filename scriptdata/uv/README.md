@@ -68,19 +68,16 @@ Add the shebang below to the beginning of python script:
 ```
 And that's it!
 
-(Warning: The shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.)
-
 **Note:** This is the simplest solution as it only modifies the shebang of python script.
 However:
 - It's only for python script, not the command provided by python package.
 - It can not deal with complex argument (e.g. filename containing spaces) passed to the python script.
   - The example above is actually unstable, considering that `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}'` could be a rather complex argument.
+- This solution rely on shebang to activate the correct python venv, but the shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.
 
 #### Solution B: bash script as wrapper
 
 First make sure the python script is using the shebang `#!/usr/bin/env python3`, instead of `#!/usr/bin/python3` or something else.
-
-(Warning: The shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.)
 
 Then write a wrapper script in bash.
 Let's continue the `screenshot.qml` example, in the same directory as `find_regions.py`, write a `find-regions-venv.sh`:
