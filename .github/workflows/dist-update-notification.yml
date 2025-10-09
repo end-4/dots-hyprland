@@ -19,7 +19,7 @@ jobs:
           MESSAGE="**Auto notification:**\n"
           MESSAGE="Directory \`dist-arch\` has been updated.\n"
           MESSAGE+="Commit HASH: ${{ github.sha }}\n"
-          MESSAGE+="Commit message: ${{ github.event.head_commit.message }}\n"
+          MESSAGE+="Commit message: ${{ github.event.head_commit.message }}"
           REPO_OWNER="${{ github.repository_owner }}"
           REPO_NAME="${{ github.event.repository.name }}"
 
@@ -33,7 +33,7 @@ jobs:
             mutation {
               addDiscussionComment(input:{
                 discussionId: "'$DISCUSSION_NODE_ID'",
-                body: "'$MESSAGE'",
+                body: "'"$MESSAGE"'",
               }) {
                 clientMutationId
                 comment {
