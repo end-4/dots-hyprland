@@ -7,6 +7,7 @@ license=(None)
 depends=(
 	fuzzel
 	glib2 # for `gsettings` it seems?
+	imagemagick
 	hypridle
     hyprutils
 	hyprlock
