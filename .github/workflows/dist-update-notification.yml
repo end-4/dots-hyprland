@@ -14,6 +14,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCUSSION_NUMBER: 2140
+        # https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions
         # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
         run: |
           MESSAGE="**Auto notification:**\n"
