@@ -140,6 +140,7 @@ Item {
                 IdleInhibitor {}
                 EasyEffectsToggle {}
                 CloudflareWarp {}
+                VPNToggle {}
             }
 
             CenterWidgetGroup {
