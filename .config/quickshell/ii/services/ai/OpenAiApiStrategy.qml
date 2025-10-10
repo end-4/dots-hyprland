@@ -21,9 +21,14 @@ ApiStrategy {
                 }),
             ],
             "stream": true,
-            "tools": tools,
             "temperature": temperature,
         };
+        
+        // Only include tools if they are not empty (DeepSeek doesn't accept empty tools array)
+        if (tools && tools.length > 0) {
+            baseData.tools = tools;
+        }
+        
         return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
     }
 

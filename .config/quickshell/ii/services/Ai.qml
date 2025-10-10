@@ -346,6 +346,19 @@ Singleton {
             "key_get_link": "https://openrouter.ai/settings/keys",
             "key_get_description": Translation.tr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
         }),
+        "deepseek-chat": aiModelComponent.createObject(this, {
+            "name": "DeepSeek Chat",
+            "icon": "deepseek-symbolic",
+            "description": Translation.tr("Online | %1's model | Fast and capable model with 128K context length").arg("DeepSeek"),
+            "homepage": "https://www.deepseek.com",
+            "endpoint": "https://api.deepseek.com/chat/completions",
+            "model": "deepseek-chat",
+            "requires_key": true,
+            "key_id": "deepseek",
+            "key_get_link": "https://platform.deepseek.com/api_keys",
+            "key_get_description": Translation.tr("**Pricing**: Free tier available with limited rates. See https://www.deepseek.com/pricing for details.\n\n**Instructions**: Log into DeepSeek account, go to API Keys section, click Create new API key"),
+            "api_format": "openai",
+        }),
     }
     property var modelList: Object.keys(root.models)
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
@@ -642,17 +655,17 @@ Singleton {
 
         function makeRequest() {
             const model = models[currentModelId];
-            requester.currentStrategy = root.currentApiStrategy;
+            requester.currentStrategy = apiStrategies[model.api_format || "openai"];
             requester.currentStrategy.reset(); // Reset strategy state
 
             /* Put API key in environment variable */
             if (model.requires_key) requester.environment[`${root.apiKeyEnvVarName}`] = root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : ""
 
             /* Build endpoint, request data */
-            const endpoint = root.currentApiStrategy.buildEndpoint(model);
+            const endpoint = requester.currentStrategy.buildEndpoint(model);
             const messageArray = root.messageIDs.map(id => root.messageByID[id]);
             const filteredMessageArray = messageArray.filter(message => message.role !== Ai.interfaceRole);
-            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool], root.pendingFilePath);
+            const data = requester.currentStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool], root.pendingFilePath);
             // console.log("[Ai] Request data: ", JSON.stringify(data, null, 2));
 
             let requestHeaders = {
