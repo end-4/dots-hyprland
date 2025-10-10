@@ -29,7 +29,7 @@ Scope {
 
         exclusionMode: ExclusionMode.Ignore
         mask: Region {
-            item: (sidebarCornerOpenInteractionLoader.active && Config.options.sidebar.cornerOpen.bottom != Config.options.bar.bottom) ? sidebarCornerOpenInteractionLoader : null
+            item: sidebarCornerOpenInteractionLoader.active ? sidebarCornerOpenInteractionLoader : null
         }
         WlrLayershell.namespace: "quickshell:screenCorners"
         WlrLayershell.layer: WlrLayer.Overlay
@@ -62,7 +62,12 @@ Scope {
 
             Loader {
                 id: sidebarCornerOpenInteractionLoader
-                active: (!cornerPanelWindow.fullscreen && Config.options.sidebar.cornerOpen.enable && (Config.options.sidebar.cornerOpen.bottom == cornerWidget.isBottom))
+                active: {
+                    if (!Config.options.sidebar.cornerOpen.enable) return false;
+                    if (!Config.options.bar.vertical && Config.options.sidebar.cornerOpen.bottom == Config.options.bar.bottom) return false;
+                    if (cornerPanelWindow.fullscreen) return false;
+                    return (Config.options.sidebar.cornerOpen.bottom == cornerWidget.isBottom);
+                }
                 anchors {
                     top: (cornerWidget.isTopLeft || cornerWidget.isTopRight) ? parent.top : undefined
                     bottom: (cornerWidget.isBottomLeft || cornerWidget.isBottomRight) ? parent.bottom : undefined
