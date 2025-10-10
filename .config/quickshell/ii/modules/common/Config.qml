@@ -315,6 +315,7 @@ Singleton {
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"
+                    property string app: ">"
                     property string clipboard: ";"
                     property string emojis: ":"
                     property string math: "="

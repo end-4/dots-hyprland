@@ -327,7 +327,7 @@ Item { // Wrapper
                         ///////////// Special cases ///////////////
                         if (root.searchingText.startsWith(Config.options.search.prefix.clipboard)) {
                             // Clipboard
-                            const searchString = root.searchingText.slice(Config.options.search.prefix.clipboard.length);
+                            const searchString = StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.clipboard);
                             return Cliphist.fuzzyQuery(searchString).map((entry, index, array) => {
                                 const mightBlurImage = Cliphist.entryIsImage(entry) && root.clipboardWorkSafetyActive;
                                 let shouldBlurImage = mightBlurImage;
@@ -365,7 +365,7 @@ Item { // Wrapper
                         }
                         else if (root.searchingText.startsWith(Config.options.search.prefix.emojis)) {
                             // Clipboard
-                            const searchString = root.searchingText.slice(Config.options.search.prefix.emojis.length);
+                            const searchString = StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.emojis);
                             return Emojis.fuzzyQuery(searchString).map(entry => {
                                 return {
                                     cliphistRawString: entry,
@@ -392,14 +392,20 @@ Item { // Wrapper
                                 Quickshell.clipboardText = root.mathResult;
                             }
                         };
+                        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.app)).map(entry => {
+                            entry.clickActionName = Translation.tr("Launch");
+                            entry.type = Translation.tr("App");
+                            return entry;
+                        })
                         const commandResultObject = {
-                            name: searchingText.replace("file://", ""),
+                            name: StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.shellCommand).replace("file://", ""),
                             clickActionName: Translation.tr("Run"),
                             type: Translation.tr("Run command"),
                             fontType: "monospace",
                             materialSymbol: 'terminal',
                             execute: () => {
                                 let cleanedCommand = root.searchingText.replace("file://", "");
+                                cleanedCommand = StringUtils.cleanPrefix(cleanedCommand, Config.options.search.prefix.shellCommand);
                                 if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
                                     cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
                                 }
@@ -407,15 +413,12 @@ Item { // Wrapper
                             }
                         };
                         const webSearchResultObject = {
-                            name: root.searchingText,
+                            name: StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.webSearch),
                             clickActionName: Translation.tr("Search"),
                             type: Translation.tr("Search the web"),
                             materialSymbol: 'travel_explore',
                             execute: () => {
-                                let query = root.searchingText;
-                                if (query.startsWith(Config.options.search.prefix.webSearch)) {
-                                    query = query.slice(Config.options.search.prefix.webSearch.length);
-                                }
+                                let query = StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.webSearch);
                                 let url = Config.options.search.engineBaseUrl + query;
                                 for (let site of Config.options.search.excludedSites) {
                                     url += ` -site:${site}`;
@@ -454,11 +457,7 @@ Item { // Wrapper
                         }
 
                         //////////////// Apps //////////////////
-                        result = result.concat(AppSearch.fuzzyQuery(root.searchingText).map(entry => {
-                            entry.clickActionName = Translation.tr("Launch");
-                            entry.type = Translation.tr("App");
-                            return entry;
-                        }));
+                        result = result.concat(appResultObjects);
 
                         ////////// Launcher actions ////////////
                         result = result.concat(launcherActionObjects);
@@ -480,7 +479,15 @@ Item { // Wrapper
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData
-                    query: root.searchingText.startsWith(Config.options.search.prefix.clipboard) ? root.searchingText.slice(Config.options.search.prefix.clipboard.length) : root.searchingText
+                    query: StringUtils.cleanOnePrefix(root.searchingText, [
+                        Config.options.search.prefix.action,
+                        Config.options.search.prefix.app,
+                        Config.options.search.prefix.clipboard,
+                        Config.options.search.prefix.emojis,
+                        Config.options.search.prefix.math,
+                        Config.options.search.prefix.shellCommand,
+                        Config.options.search.prefix.webSearch
+                    ])
                 }
             }
         }
