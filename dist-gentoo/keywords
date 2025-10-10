@@ -36,3 +36,4 @@ gui-libs/hyprcursor **
 gui-libs/hyprland-qt-support **
 gui-libs/hyprland-qtutils **
 gui-wm/hyprland **
+x11-libs/libxkbcommon ~amd64
