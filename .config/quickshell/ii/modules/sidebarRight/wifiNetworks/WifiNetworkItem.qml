@@ -9,6 +9,7 @@ import QtQuick.Layouts
 DialogListItem {
     id: root
     required property WifiAccessPoint wifiNetwork
+    enabled: !(Network.wifiConnectTarget === root.wifiNetwork && !wifiNetwork?.active)
 
     active: (wifiNetwork?.askingPassword || wifiNetwork?.active) ?? false
     onClicked: {

@@ -21,5 +21,4 @@ RDEPEND="
 	net-libs/libsoup
 	dev-libs/libportal
 	dev-libs/gobject-introspection
-	media-libs/opencv
 "
