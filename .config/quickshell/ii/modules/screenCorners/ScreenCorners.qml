@@ -29,7 +29,7 @@ Scope {
 
         exclusionMode: ExclusionMode.Ignore
         mask: Region {
-            item: sidebarCornerOpenInteractionLoader.active ? sidebarCornerOpenInteractionLoader : null
+            item: (sidebarCornerOpenInteractionLoader.active && Config.options.sidebar.cornerOpen.bottom != Config.options.bar.bottom) ? sidebarCornerOpenInteractionLoader : null
         }
         WlrLayershell.namespace: "quickshell:screenCorners"
         WlrLayershell.layer: WlrLayer.Overlay
