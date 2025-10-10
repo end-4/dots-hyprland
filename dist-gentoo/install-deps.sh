@@ -37,7 +37,7 @@ v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
 
 # Update system
 v sudo emerge --sync
-v sudo emerge --ask --verbose --newuse --update --deep @world
+v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
