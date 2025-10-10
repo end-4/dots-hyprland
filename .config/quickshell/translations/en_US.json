@@ -265,7 +265,7 @@
   "Elements": "Elements",
   "%1   •   %2 tasks": "%1   •   %2 tasks",
   "Download complete": "Download complete",
-  "Please charge!\nAutomatic suspend triggers at %1": "Please charge!\nAutomatic suspend triggers at %1",
+  "Please charge!\nAutomatic suspend triggers at %1%": "Please charge!\nAutomatic suspend triggers at %1%",
   "Cloudflare WARP": "Cloudflare WARP",
   "Cloudflare WARP (1.1.1.1)": "Cloudflare WARP (1.1.1.1)",
   "Scroll to change brightness": "Scroll to change brightness",
@@ -468,5 +468,9 @@
   "This is usually safe and needed for your browser and AI sidebar anyway\nMostly useful for those who use lock on startup instead of a display manager that does it (GDM, SDDM, etc.)": "This is usually safe and needed for your browser and AI sidebar anyway\nMostly useful for those who use lock on startup instead of a display manager that does it (GDM, SDDM, etc.)",
   "Bottom": "Bottom",
   "Locked": "Locked",
-  "Wallpaper safety enforced": "Wallpaper safety enforced"
+  "Wallpaper safety enforced": "Wallpaper safety enforced",
+  "Sounds": "Sounds",
+  "Battery full": "Battery full",
+  "Please unplug the charger": "Please unplug the charger",
+  "Full warning": "Full warning"
 }
