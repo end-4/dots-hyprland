@@ -77,7 +77,8 @@ Item {
         anchors.fill: parent
         color: root.colOnBackground
     }
-
+    
+    // Stupid extra hour marks in the middle
     FadeLoader {
         id: hourMarksLoader
         anchors.centerIn: parent
@@ -90,11 +91,20 @@ Item {
     }
 
     // Number column in the middle
-    TimeColumn {
+    FadeLoader {
+        id: timeColumnLoader
         anchors.centerIn: parent
-        color: root.colOnBackground
-        clockNumbers: root.clockNumbers
+        shown: Config.options.background.clock.cookie.timeIndicators
+        scale: 1.4 - 0.4 * timeColumnLoader.shown
+        Behavior on scale {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        }
+        
+        sourceComponent: TimeColumn {
+            color: root.colOnBackground
+        }
     }
+    
 
     // Hour hand
     HourHand {
