@@ -9,7 +9,7 @@ import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
-import "./dateIndicators"
+import "./dateIndicator"
 import "./minuteMarks"
 
 Item {
@@ -79,6 +79,7 @@ Item {
         hourNumberSize: root.hourNumberSize
         color: root.colOnBackground
     }
+
     HourMarks {
         anchors.centerIn: parent
         implicitSize: root.hourMarkSize
