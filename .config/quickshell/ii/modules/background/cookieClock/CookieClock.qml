@@ -10,6 +10,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 import "./dateIndicators"
+import "./minuteMarks"
 
 Item {
     id: root
@@ -74,10 +75,8 @@ Item {
     // Hour/minutes numbers/dots/lines
     MinuteMarks {
         anchors.fill: parent
-        property int hourDotSize: root.hourDotSize
-        property int hourNumberSize: root.hourNumberSize
-        property int hourLineSize: root.hourLineSize
-        property int minuteLineSize: root.minuteLineSize
+        hourDotSize: root.hourDotSize
+        hourNumberSize: root.hourNumberSize
         color: root.colOnBackground
     }
     HourMarks {
