@@ -69,11 +69,17 @@ Item {
         return data;
     }
 
-    property var rowModels: splitRows(combinedData)
+
+    property int tileSize: Config.options.quickToggles.material.mode === "compact" ? 5 : 4
+    property var rowModels: splitRows(combinedData, tileSize)
 
     onCombinedDataChanged: {
         console.log("Material quick toggles panel layout changed in config file. Reloading sidebar layout automatically")
-        rowModels = splitRows(combinedData)
+        rowModels = splitRows(combinedData, tileSize)
+    }
+    onTileSizeChanged: {
+        console.log("Material quick toggles panel mode changed in config file. Reloading sidebar layout automatically")
+        rowModels = splitRows(combinedData, tileSize)
     }
     
 
@@ -82,7 +88,9 @@ Item {
 
     Column {
         id: mainColumn
-        
+        spacing: 10
+        rightPadding: -10
+
         Loader {
             active: Config.options.quickToggles.material.showBrightness && Config.options.quickToggles.material.showVolume
             sourceComponent: MaterialTopWidgets {}
@@ -92,8 +100,9 @@ Item {
             model: root.rowModels
             ButtonGroup {
                 id: mainButtonGroup
-                spacing: 5
-                padding: 5
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                //spacing: 0
                 Repeater {
                     model: modelData
 

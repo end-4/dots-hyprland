@@ -41,7 +41,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         configuration: StyledSlider.Configuration.M
-        value: topWidgetsRoot.brightnessMonitor?.brightness
+        value: topWidgetsRoot.brightnessMonitor.brightness
         onValueChanged: {
             topWidgetsRoot.brightnessMonitor.setBrightness(value)
         }

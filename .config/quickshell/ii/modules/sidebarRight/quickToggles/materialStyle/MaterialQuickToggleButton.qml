@@ -22,7 +22,7 @@ GroupButton {
     property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
 
 
-    property int baseSize: 50
+    property int baseSize: Config.options.quickToggles.material.mode === "compact" ? 50 : 65
     property string buttonIcon
     property int buttonSize: 1 // Must be 1, 2 
     property string titleText
