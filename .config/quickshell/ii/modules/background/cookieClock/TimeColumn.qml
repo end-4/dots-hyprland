@@ -21,7 +21,8 @@ Column {
 
         delegate: StyledText {
             required property string modelData
-            property bool isAmPm: !modelData.match(/\d{2}/i)
+            text: modelData.padStart(2, "0")
+            property bool isAmPm: !text.match(/\d{2}/i)
             property real numberSizeWithoutGlow: isAmPm ? 26 : 68
             property real numberSizeWithGlow: isAmPm ? 20 : 40
             property real numberSize: root.hourMarksEnabled ? numberSizeWithGlow : numberSizeWithoutGlow
@@ -37,8 +38,6 @@ Column {
             Behavior on numberSize {
                 animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
-
-            text: modelData.padStart(2, "0")
         }
     }
 }
