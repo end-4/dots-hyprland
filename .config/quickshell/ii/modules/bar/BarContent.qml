@@ -295,6 +295,40 @@ Item { // Bar content region
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         color: rightSidebarButton.colText
                     }
+                    Revealer {
+                        reveal: Notifications.silent || Notifications.list.length > 0
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        implicitHeight: reveal ? notificationIcon.implicitHeight : 0
+                        implicitWidth: reveal ? notificationIcon.implicitWidth : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Rectangle {
+                            visible: !Notifications.silent
+                            anchors.right: parent.right
+                            radius: Appearance.rounding.full
+                            color: Appearance.colors.colLayer0
+                            z: 1
+
+                            implicitHeight: Math.max(notificationCounterText.implicitWidth, notificationCounterText.implicitHeight)
+                            implicitWidth: Math.max(notificationCounterText.implicitWidth, notificationCounterText.implicitHeight)
+
+                            StyledText {
+                                id: notificationCounterText
+                                anchors.centerIn: parent
+                                font.pixelSize: Appearance.font.pixelSize.smallest
+                                color: Appearance.colors.colOnLayer1
+                                text: Notifications.list.length
+                            }
+                        }
+                        MaterialSymbol {
+                            id: notificationIcon
+                            text: Notifications.silent ? "notifications_paused" : "notifications"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                        }
+                    }
                     MaterialSymbol {
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         text: Network.materialSymbol
