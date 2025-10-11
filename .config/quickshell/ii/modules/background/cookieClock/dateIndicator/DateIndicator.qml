@@ -10,8 +10,7 @@ import QtQuick
 Item {
     id: root
     property string style: "rotating"
-    property color colOnBackground: Appearance.colors.colOnSecondaryContainer
-    property color colBackground: Appearance.colors.colOnSecondaryContainer
+    property color color: Appearance.colors.colOnSecondaryContainer
     property real dateSquareSize: 64
 
     // Rotating date
@@ -19,7 +18,7 @@ Item {
         anchors.fill: parent
         shown: Config.options.background.clock.cookie.dateStyle === "rotating"
         sourceComponent: RotatingDate {
-            color: root.colOnBackground
+            color: root.color
         }
     }
 
@@ -34,7 +33,7 @@ Item {
         }
 
         sourceComponent: RectangleDate {
-            color: Appearance.colors.colSecondaryContainerHover
+            color: ColorUtils.mix(root.color, Appearance.colors.colSecondaryContainerHover, 0.5)
             radius: Appearance.rounding.small
             implicitWidth: 45 * rectLoader.opacity
             implicitHeight: 30 * rectLoader.opacity
@@ -50,7 +49,7 @@ Item {
             left: parent.left
             top: parent.top
         }
-        
+
         sourceComponent: BubbleDate {
             implicitWidth: dayBubbleLoader.targetSize
             implicitHeight: dayBubbleLoader.targetSize

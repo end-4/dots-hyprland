@@ -13,7 +13,7 @@ Item {
     property string style: "fill"
     property color color: Appearance.colors.colPrimary
 
-    property real fillColorAlpha: root.style === "stroke" ? 0 : 1
+    property real fillColorAlpha: root.style === "hollow" ? 0 : 1
     Behavior on fillColorAlpha {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }

@@ -26,7 +26,7 @@ Item {
 
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
-    property color colOnBackground: ColorUtils.mix(Appearance.colors.colSecondary, Appearance.colors.colSecondaryContainer, 0.3)
+    property color colOnBackground: ColorUtils.mix(Appearance.colors.colSecondary, Appearance.colors.colSecondaryContainer, 0.15)
     property color colBackgroundInfo: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.55)
     property color colHourHand: Appearance.colors.colPrimary
     property color colMinuteHand: Appearance.colors.colSecondary
@@ -58,7 +58,7 @@ Item {
         z: 0
         implicitSize: root.implicitSize
         amplitude: implicitSize / 70
-        sides: Config.options.background.clock.clockSides
+        sides: Config.options.background.clock.cookie.sides
         color: root.colBackground
         constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
@@ -150,10 +150,14 @@ Item {
     }
 
     // Date
-    DateIndicator {
+    FadeLoader {
         anchors.fill: parent
-        colOnBackground: root.colBackgroundInfo
-        style: Config.options.background.clock.cookie.dateStyle
-        dateSquareSize: root.dateSquareSize
+        shown: Config.options.background.clock.cookie.dateStyle !== "hide"
+
+        sourceComponent: DateIndicator {
+            color: root.colBackgroundInfo
+            style: Config.options.background.clock.cookie.dateStyle
+            dateSquareSize: root.dateSquareSize
+        }
     }
 }

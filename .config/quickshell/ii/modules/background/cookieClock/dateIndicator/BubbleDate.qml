@@ -14,7 +14,7 @@ Item {
         z: 5
         sides: bubbleIndex === 0 ? 4 : 1
         anchors.centerIn: parent
-        color: bubbleIndex === 0.0 ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
+        color: bubbleIndex === 0.0 ? Appearance.colors.colTertiaryContainer : Appearance.colors.colPrimaryContainer
         implicitSize: targetSize
         constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
@@ -22,7 +22,7 @@ Item {
         z: 6
         anchors.centerIn: parent
         text: bubbleIndex === 0.0 ? DateTime.date.substring(5, 7) : DateTime.date.substring(8, 10)
-        color: bubbleIndex === 0.0 ? Appearance.colors.colPrimary : Appearance.colors.colTertiary
+        color: bubbleIndex === 0.0 ? Appearance.colors.colTertiary : Appearance.colors.colPrimary
         opacity: root.style === "bubble" ? 1.0 : 0
         font {
             family: Appearance.font.family.expressive

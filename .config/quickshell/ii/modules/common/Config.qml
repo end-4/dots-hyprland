@@ -129,13 +129,13 @@ Singleton {
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
-                    property int clockSides: 12
                     property JsonObject cookie: JsonObject {
-                        property string dialNumberStyle: "dots"          // Options: "dots" , "numbers", "full" , "none"
-                        property string hourHandStyle: "fill"      // Options: "classic", "fill", "stroke", "hide"
-                        property string minuteHandStyle: "medium"  // Options "classic", "thin", "medium", "bold", "hide"
-                        property string secondHandStyle: "dot"     // Options: "dot", "line" , "none" 
-                        property string dateStyle: "rotating"      // Options: "rotating", "rect", "bubble" , "none"
+                        property int sides: 14
+                        property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
+                        property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
+                        property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
+                        property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
+                        property string dateStyle: "bubble"       // Options: "rotating", "rect", "bubble" , "hide"
                         property bool timeIndicators: true
                         property bool hourMarks: true
                         property bool dateInClock: true

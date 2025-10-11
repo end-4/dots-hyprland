@@ -115,9 +115,9 @@ ContentPage {
                         value: "classic"
                     },
                     {
-                        displayName: Translation.tr("Stroke"),
+                        displayName: Translation.tr("Hollow"),
                         icon: "stroke_partial",
-                        value: "stroke"
+                        value: "hollow"
                     },
                     {
                         displayName: Translation.tr("Fill"),
@@ -214,7 +214,7 @@ ContentPage {
                     {
                         displayName: "",
                         icon: "block",
-                        value: "none"
+                        value: "hide"
                     },
                     {
                         displayName: Translation.tr("Bubble"),
@@ -239,12 +239,12 @@ ContentPage {
             visible: Config.options.background.clock.style === "cookie"
             icon: "support"
             text: Translation.tr("Clock sides")
-            value: Config.options.background.clock.clockSides
+            value: Config.options.background.clock.cookie.sides
             from: 1
             to: 36
             stepSize: 1
             onValueChanged: {
-                Config.options.background.clock.clockSides = value;
+                Config.options.background.clock.cookie.sides = value;
             }
         }
 
