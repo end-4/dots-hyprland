@@ -16,7 +16,6 @@ Item {
 
     property int heightSize: mainColumn.height
 
-    Layout.fillWidth: true
     height: mainColumn.height
 
     
@@ -79,28 +78,29 @@ Item {
     
 
 
+
+
     Column {
         id: mainColumn
-        leftPadding: 7
         
         Loader {
             active: Config.options.quickToggles.material.showBrightness && Config.options.quickToggles.material.showVolume
             sourceComponent: MaterialTopWidgets {}
         }
-        
+
         Repeater {
             model: root.rowModels
-
             ButtonGroup {
+                id: mainButtonGroup
                 spacing: 5
                 padding: 5
                 Repeater {
                     model: modelData
-                    Loader {
-                        active: true
-                        sourceComponent: getComponentByName(modelData[1])
-                        onLoaded: {
-                            item.buttonSize = modelData[0]
+
+                    delegate: Item {
+                        Component.onCompleted: {
+                            var comp = getComponentByName(modelData[1]);
+                            var obj = comp.createObject(parent, {buttonSize: modelData[0]});
                         }
                     }
                 }

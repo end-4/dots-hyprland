@@ -118,9 +118,7 @@ Item {
 
             Item {
                 id: quickPanelItem
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.alignLeft && Qt.alignRight && Qt.alignHCenter
                 implicitHeight: Config.options.quickToggles.type === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
 
                 Loader { 
