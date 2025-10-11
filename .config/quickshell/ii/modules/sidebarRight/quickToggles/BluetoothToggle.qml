@@ -11,6 +11,7 @@ import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
+    visible: BluetoothStatus.available
     toggled: BluetoothStatus.enabled
     buttonIcon: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
     onClicked: {
