@@ -6,11 +6,13 @@ import QtQuick.Layouts
 import "./classicStyle"
 
 ButtonGroup {
+
+    property real heightSize: 50
+
     spacing: 5
     padding: 5
     color: Appearance.colors.colLayer1
     
-
     NetworkToggle {
         altAction: () => {
             Network.enableWifi();

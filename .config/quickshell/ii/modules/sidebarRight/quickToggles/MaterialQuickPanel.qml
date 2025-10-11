@@ -14,8 +14,9 @@ import "./materialStyle/utilButtons"
 Item {
     id: root
 
+    property int heightSize: mainColumn.height
+
     Layout.fillWidth: true
-    //width: mainColumn.width
     height: mainColumn.height
 
     

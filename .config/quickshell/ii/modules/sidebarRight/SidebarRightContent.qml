@@ -116,18 +116,22 @@ Item {
                 }
             }
 
-            ColumnLayout {
-                //Layout.alignment: Qt.AlignHCenter
+            Item {
+                id: quickPanelItem
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.horizontalCenter: parent.horizontalCenter
+                implicitHeight: Config.options.quickToggles.type === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
+
                 Loader { 
-                    id: materilQTLoader
+                    id: materialQTLoader
                     active: Config.options.quickToggles.type === "material"
                     sourceComponent: MaterialQuickPanel {}
                 }
                 Loader { 
                     id: classicQTLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    //active: Config.options.quickToggles.type === "classic"
-                    active: true
+                    active: Config.options.quickToggles.type === "classic"
                     sourceComponent: ClassicQuickPanel {}
                 }
             }
