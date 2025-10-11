@@ -13,7 +13,6 @@ Item {
     property real handWidth: style === "bold" ? 18 : style === "medium" ? 12 : 5
     property color color: Appearance.colors.colSecondary
 
-    z: root.style === "thin" ? 1 : 3
     rotation: -90 + (360 / 60) * root.clockMinute
 
     Behavior on rotation {

@@ -26,7 +26,8 @@ Item {
 
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
-    property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
+    property color colOnBackground: ColorUtils.mix(Appearance.colors.colSecondary, Appearance.colors.colSecondaryContainer, 0.3)
+    property color colBackgroundInfo: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.55)
     property color colHourHand: Appearance.colors.colPrimary
     property color colMinuteHand: Appearance.colors.colSecondary
     property color colSecondHand: Appearance.colors.colTertiary
@@ -75,8 +76,8 @@ Item {
         shown: Config.options.background.clock.cookie.hourMarks
         sourceComponent: HourMarks {
             implicitSize: 135 * (1.75 - 0.75 * hourMarksLoader.opacity)
-            color: root.colTimeIndicators
-            colOnBackground: root.colOnBackground
+            color: root.colOnBackground
+            colOnBackground: ColorUtils.mix(root.colBackgroundInfo, root.colOnBackground, 0.5)
         }
     }
 
@@ -91,14 +92,14 @@ Item {
         }
 
         sourceComponent: TimeColumn {
-            color: root.colOnBackground
+            color: root.colBackgroundInfo
         }
     }
 
     // Hour hand
     FadeLoader {
         anchors.fill: parent
-        z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
+        z: 1
         shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
         sourceComponent: HourHand {
             clockHour: root.clockHour
@@ -111,6 +112,7 @@ Item {
     // Minute hand
     FadeLoader {
         anchors.fill: parent
+        z: 2
         shown: Config.options.background.clock.cookie.minuteHandStyle !== "hide"
         sourceComponent: MinuteHand {
             anchors.fill: parent
@@ -124,7 +126,7 @@ Item {
     FadeLoader {
         id: secondHandLoader
         z: (Config.options.background.clock.cookie.secondHandStyle === "line") ? 2 : 3
-        shown: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
+        shown: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "hide"
         anchors.fill: parent
         sourceComponent: SecondHand {
             id: secondHand
@@ -141,7 +143,7 @@ Item {
         shown: Config.options.background.clock.cookie.minuteHandStyle !== "bold"
         sourceComponent: Rectangle {
             color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
-            implicitWidth: 8
+            implicitWidth: 6
             implicitHeight: implicitWidth
             radius: width / 2
         }
@@ -150,7 +152,7 @@ Item {
     // Date
     DateIndicator {
         anchors.fill: parent
-        colOnBackground: root.colOnBackground
+        colOnBackground: root.colBackgroundInfo
         style: Config.options.background.clock.cookie.dateStyle
         dateSquareSize: root.dateSquareSize
     }

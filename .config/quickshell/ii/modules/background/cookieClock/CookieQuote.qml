@@ -50,6 +50,7 @@ Item {
                 id: quoteStyledText
                 horizontalAlignment: Text.AlignLeft
                 text: Config.options.background.quote
+                color: Appearance.colors.colOnSecondaryContainer
                 font {
                     family: Appearance.font.family.reading
                     pixelSize: Appearance.font.pixelSize.large

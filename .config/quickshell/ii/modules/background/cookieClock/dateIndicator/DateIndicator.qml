@@ -9,83 +9,69 @@ import QtQuick
 
 Item {
     id: root
-    readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
     property string style: "rotating"
     property color colOnBackground: Appearance.colors.colOnSecondaryContainer
     property color colBackground: Appearance.colors.colOnSecondaryContainer
     property real dateSquareSize: 64
 
     // Rotating date
-    Loader {
+    FadeLoader {
         anchors.fill: parent
-        active: opacity > 0
+        shown: Config.options.background.clock.cookie.dateStyle === "rotating"
         sourceComponent: RotatingDate {
-            style: root.style
+            color: root.colOnBackground
         }
     }
 
     // Rectangle date (only today's number) in right side of the clock
-    Loader {
+    FadeLoader {
         id: rectLoader
-
-        property real animIndex: root.style === "rect" ? 1.0 : 0.0
-        Behavior on animIndex {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        shown: root.style === "rect"
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: 40 - rectLoader.opacity * 30
         }
-
-        active: animIndex > 0
-
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
 
         sourceComponent: RectangleDate {
             color: Appearance.colors.colSecondaryContainerHover
             radius: Appearance.rounding.small
-            animIndex: rectLoader.animIndex
+            implicitWidth: 45 * rectLoader.opacity
+            implicitHeight: 30 * rectLoader.opacity
         }
     }
 
-    // Date bubble / day
-    Loader {
+    // Bubble style: day of month
+    FadeLoader {
         id: dayBubbleLoader
-        property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
-        Behavior on targetSize {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-
-        active: targetSize > 0
-        width: targetSize
-        height: targetSize
-        
+        shown: root.style === "bubble"
+        property real targetSize: root.dateSquareSize * opacity
         anchors {
             left: parent.left
-            bottom: parent.bottom
-            topMargin: 50
+            top: parent.top
         }
+        
         sourceComponent: BubbleDate {
+            implicitWidth: dayBubbleLoader.targetSize
+            implicitHeight: dayBubbleLoader.targetSize
             bubbleIndex: 0
             targetSize: dayBubbleLoader.targetSize
         }
     }
 
-    // Date bubble / month
-    Loader {
+    // Bubble style: month
+    FadeLoader {
         id: monthBubbleLoader
-        property real targetSize: root.style === "bubble" ? root.dateSquareSize : 0
-        Behavior on targetSize {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-        }
-
-        width: targetSize
-        height: targetSize
-        active: targetSize > 0
-        
+        shown: root.style === "bubble"
+        property real targetSize: root.dateSquareSize * opacity
         anchors {
             right: parent.right
-            top: parent.top
-            bottomMargin: 50
+            bottom: parent.bottom
         }
+
         sourceComponent: BubbleDate {
+            implicitWidth: monthBubbleLoader.targetSize
+            implicitHeight: monthBubbleLoader.targetSize
             bubbleIndex: 1
             targetSize: monthBubbleLoader.targetSize
         }
