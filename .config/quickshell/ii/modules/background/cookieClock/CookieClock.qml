@@ -96,6 +96,7 @@ Item {
     // Hour hand
     HourHand {
         anchors.fill: parent
+        handLength: root.hourHandLength
         handWidth: root.hourHandWidth
         clockHour: root.clockHour
         clockMinute: root.clockMinute

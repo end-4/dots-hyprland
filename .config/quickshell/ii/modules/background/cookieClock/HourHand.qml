@@ -1,10 +1,6 @@
 pragma ComponentBehavior: Bound
 
-import qs
-import qs.services
 import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 
 Item {
@@ -13,6 +9,7 @@ Item {
 
     required property int clockHour
     required property int clockMinute
+    property real handLength: 72
     property real handWidth: 16
     property string style: "fill"
     property color color: Appearance.colors.colPrimary
@@ -38,7 +35,7 @@ Item {
             if (root.style === "classic") position -= 15;
             return position;
         }
-        width: hourHandLength
+        width: root.handLength
         height: root.style === "classic" ? 8 : root.handWidth
 
         radius: root.style === "classic" ? 2 : root.handWidth / 2
