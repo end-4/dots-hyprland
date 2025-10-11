@@ -55,10 +55,76 @@ ContentPage {
                 ]
             }
         }
+
+        ContentSubsection {
+            visible: Config.options.background.clock.style === "cookie"
+            title: Translation.tr("Cookie clock settings")
+            ConfigSpinBox {
+                visible: Config.options.background.clock.style === "cookie"
+                icon: "support"
+                text: Translation.tr("Sides")
+                value: Config.options.background.clock.cookie.sides
+                from: 1
+                to: 36
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.background.clock.cookie.sides = value;
+                }
+            }
+
+            ConfigSwitch {
+                visible: Config.options.background.clock.style === "cookie"
+                buttonIcon: "autoplay"
+                text: Translation.tr("Constantly rotate")
+                checked: Config.options.background.clock.cookie.constantlyRotate
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.constantlyRotate = checked;
+                }
+                StyledToolTip {
+                    text: "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical."
+                }
+            }
+
+            ConfigRow {
+                visible: Config.options.background.clock.style === "cookie"
+
+                ConfigSwitch {
+                    enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
+                    buttonIcon: "brightness_7"
+                    text: Translation.tr("Hour marks")
+                    checked: Config.options.background.clock.cookie.hourMarks
+                    onEnabledChanged: {
+                        checked = Config.options.background.clock.cookie.hourMarks;
+                    }
+                    onCheckedChanged: {
+                        Config.options.background.clock.cookie.hourMarks = checked;
+                    }
+                    StyledToolTip {
+                        text: "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons"
+                    }
+                }
+
+                ConfigSwitch {
+                    enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
+                    buttonIcon: "farsight_digital"
+                    text: Translation.tr("Clock indicator")
+                    checked: Config.options.background.clock.cookie.timeIndicators
+                    onEnabledChanged: {
+                        checked = Config.options.background.clock.cookie.timeIndicators;
+                    }
+                    onCheckedChanged: {
+                        Config.options.background.clock.cookie.timeIndicators = checked;
+                    }
+                    StyledToolTip {
+                        text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
+                    }
+                }
+            }
+        }
         
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Dial numbers style")
+            title: Translation.tr("Dial style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dialNumberStyle
                 onSelected: newValue => {
@@ -97,7 +163,7 @@ ContentPage {
 
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Hour hand style")
+            title: Translation.tr("Hour hand")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.hourHandStyle
                 onSelected: newValue => {
@@ -130,7 +196,7 @@ ContentPage {
 
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Minute hand style")
+            title: Translation.tr("Minute hand")
 
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.minuteHandStyle
@@ -169,7 +235,7 @@ ContentPage {
 
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
-            title: Translation.tr("Seconds hand style")
+            title: Translation.tr("Second hand")
 
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.secondHandStyle
@@ -232,68 +298,6 @@ ContentPage {
                         value: "rect"
                     }
                 ]
-            }
-        }
-
-        ConfigSpinBox {
-            visible: Config.options.background.clock.style === "cookie"
-            icon: "support"
-            text: Translation.tr("Clock sides")
-            value: Config.options.background.clock.cookie.sides
-            from: 1
-            to: 36
-            stepSize: 1
-            onValueChanged: {
-                Config.options.background.clock.cookie.sides = value;
-            }
-        }
-
-        ConfigSwitch {
-            visible: Config.options.background.clock.style === "cookie"
-            buttonIcon: "autoplay"
-            text: Translation.tr("Constantly rotate")
-            checked: Config.options.background.clock.cookie.constantlyRotate
-            onCheckedChanged: {
-                Config.options.background.clock.cookie.constantlyRotate = checked;
-            }
-            StyledToolTip {
-                text: "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical."
-            }
-        }
-
-        ConfigRow {
-            visible: Config.options.background.clock.style === "cookie"
-
-            ConfigSwitch {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
-                buttonIcon: "brightness_7"
-                text: Translation.tr("Hour marks")
-                checked: Config.options.background.clock.cookie.hourMarks
-                onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.hourMarks;
-                }
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.hourMarks = checked;
-                }
-                StyledToolTip {
-                    text: "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons"
-                }
-            }
-
-            ConfigSwitch {
-                enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
-                buttonIcon: "farsight_digital"
-                text: Translation.tr("Clock indicator")
-                checked: Config.options.background.clock.cookie.timeIndicators
-                onEnabledChanged: {
-                    checked = Config.options.background.clock.cookie.timeIndicators;
-                }
-                onCheckedChanged: {
-                    Config.options.background.clock.cookie.timeIndicators = checked;
-                }
-                StyledToolTip {
-                    text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
-                }
             }
         }
 
