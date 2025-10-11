@@ -129,10 +129,24 @@ Singleton {
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
+                    property JsonObject cookie: JsonObject {
+                        property int sides: 14
+                        property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
+                        property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
+                        property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
+                        property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
+                        property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
+                        property bool timeIndicators: true
+                        property bool hourMarks: true
+                        property bool dateInClock: true
+                        property bool constantlyRotate: false
+                    }
+                    
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
+                property bool showQuote: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
@@ -360,6 +374,7 @@ Singleton {
                     property int focus: 1500
                     property int longBreak: 900
                 }
+                property bool secondPrecision: false
             }
             
             property JsonObject wallpaperSelector: JsonObject {
