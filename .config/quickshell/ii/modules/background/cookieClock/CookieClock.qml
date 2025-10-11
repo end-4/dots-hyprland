@@ -9,6 +9,8 @@ import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
+import "./dateIndicators"
+
 Item {
     id: root
 
@@ -119,6 +121,7 @@ Item {
         id: secondHandLoader
         active: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
         anchors.fill: parent
+        z: 2
         sourceComponent: SecondHand {
             id: secondHand
             handWidth: root.secondHandWidth
