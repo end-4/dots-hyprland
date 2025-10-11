@@ -181,8 +181,8 @@ ContentPage {
                         value: "classic"
                     },
                     {
-                        displayName: Translation.tr("circle"),
-                        icon: "stroke_partial",
+                        displayName: Translation.tr("Hollow"),
+                        icon: "circle",
                         value: "hollow"
                     },
                     {
