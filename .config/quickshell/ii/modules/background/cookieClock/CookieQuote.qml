@@ -3,7 +3,6 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
-import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 
@@ -36,25 +35,25 @@ Item {
         implicitHeight: quoteStyledText.height + 8 
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
-        RowLayout {
+
+        Row {
             anchors.centerIn: parent
             spacing: 4
             MaterialSymbol {
                 id: quoteIcon
+                anchors.top: parent.top
                 iconSize: Appearance.font.pixelSize.huge
-                text: "comic_bubble"
+                text: "format_quote"
                 color: Appearance.colors.colOnSecondaryContainer
             }
             StyledText {
                 id: quoteStyledText
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 text: Config.options.background.quote
                 font {
-                    family: Appearance.font.family.main
+                    family: Appearance.font.family.reading
                     pixelSize: Appearance.font.pixelSize.large
                     weight: Font.Normal
-                    italic: true
                 }
             }
         }
