@@ -6,8 +6,9 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
+import QtQuick.Layouts
 
-Column {
+ColumnLayout {
     id: root
     required property list<string> clockNumbers
     property bool isEnabled: Config.options.background.clock.cookie.timeIndicators
@@ -24,7 +25,7 @@ Column {
             property bool hourMarksEnabled: Config.options.background.clock.cookie.hourMarks
             property bool isAmPm: !modelData.match(/\d{2}/i)
             property real numberSizeWithoutGlow: isAmPm ? 26 : 68
-            property real numberSizeWithGlow: isAmPm ? 10 : 40
+            property real numberSizeWithGlow: isAmPm ? 20 : 40
             property real numberSize: root.isEnabled ? (hourMarksEnabled ? numberSizeWithGlow : numberSizeWithoutGlow) : 100 // open/close animation
 
             anchors.horizontalCenter: root.horizontalCenter
