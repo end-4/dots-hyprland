@@ -7,8 +7,6 @@ import QtQuick
 Item {
     id: root
 
-    property int hourDotSize: 16
-    property int hourNumberSize: 80
     property color color: Appearance.colors.colOnSecondaryContainer
     property string style: Config.options.background.clock.cookie.dialNumberStyle // "dots", "numbers", "full", "hide"
     property string dateStyle : Config.options.background.clock.cookie.dateStyle
@@ -30,7 +28,7 @@ Item {
         anchors.fill: parent
         shown: root.style === "numbers"
         sourceComponent: BigHourNumbers {
-            numberSize: root.hourNumberSize
+            numberSize: 80
             color: root.color
             margins: 70 - bigHourNumbersLoader.opacity * 40
         }

@@ -29,7 +29,7 @@ Item {
     property real secondDotSize: 20
     property real secondHandWidth: 2
     property real secondHandLength: 100
-    property real hourLineSize: 5
+    property real hourLineSize: 4
     property real minuteLineSize: 2
     property real hourNumberSize: 36
     property real dateSquareSize: 64
@@ -75,17 +75,18 @@ Item {
     // Hour/minutes numbers/dots/lines
     MinuteMarks {
         anchors.fill: parent
-        hourDotSize: root.hourDotSize
-        hourNumberSize: root.hourNumberSize
         color: root.colOnBackground
     }
 
-    HourMarks {
+    FadeLoader {
+        id: hourMarksLoader
         anchors.centerIn: parent
-        implicitSize: root.hourMarkSize
-        markLength: root.hourDotSize
-        color: root.colTimeIndicators
-        colOnBackground: root.colOnBackground
+        shown: Config.options.background.clock.cookie.hourMarks
+        sourceComponent: HourMarks {
+            implicitSize: root.hourMarkSize * (1.75 - 0.75 * hourMarksLoader.opacity)
+            color: root.colTimeIndicators
+            colOnBackground: root.colOnBackground
+        }
     }
 
     // Number column in the middle
