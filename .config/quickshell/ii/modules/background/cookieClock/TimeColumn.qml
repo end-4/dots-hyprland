@@ -6,9 +6,8 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
-import QtQuick.Layouts
 
-ColumnLayout {
+Column {
     id: root
     property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     property bool isEnabled: Config.options.background.clock.cookie.timeIndicators
