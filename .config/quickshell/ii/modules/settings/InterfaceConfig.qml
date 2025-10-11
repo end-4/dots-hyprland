@@ -61,7 +61,7 @@ ContentPage {
             title: Translation.tr("Cookie clock settings")
             ConfigSpinBox {
                 visible: Config.options.background.clock.style === "cookie"
-                icon: "support"
+                icon: "add_triangle"
                 text: Translation.tr("Sides")
                 value: Config.options.background.clock.cookie.sides
                 from: 1
@@ -106,8 +106,8 @@ ContentPage {
 
                 ConfigSwitch {
                     enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle !== "numbers"
-                    buttonIcon: "farsight_digital"
-                    text: Translation.tr("Clock indicator")
+                    buttonIcon: "timer_10"
+                    text: Translation.tr("Digits in the middle")
                     checked: Config.options.background.clock.cookie.timeIndicators
                     onEnabledChanged: {
                         checked = Config.options.background.clock.cookie.timeIndicators;
@@ -149,12 +149,12 @@ ContentPage {
                     },
                     {
                         displayName: Translation.tr("Full"),
-                        icon: "avg_pace",
+                        icon: "history_toggle_off",
                         value: "full"
                     },
                     {
                         displayName: Translation.tr("Numbers"),
-                        icon: "123",
+                        icon: "counter_1",
                         value: "numbers"
                     }
                 ]
@@ -181,13 +181,13 @@ ContentPage {
                         value: "classic"
                     },
                     {
-                        displayName: Translation.tr("Hollow"),
+                        displayName: Translation.tr("circle"),
                         icon: "stroke_partial",
                         value: "hollow"
                     },
                     {
                         displayName: Translation.tr("Fill"),
-                        icon: "stroke_full",
+                        icon: "eraser_size_5",
                         value: "fill"
                     },
                 ]
@@ -216,17 +216,17 @@ ContentPage {
                     },
                     {
                         displayName: Translation.tr("Thin"),
-                        icon: "pen_size_1",
+                        icon: "line_end",
                         value: "thin"
                     },
                     {
                         displayName: Translation.tr("Medium"),
-                        icon: "pen_size_3",
+                        icon: "eraser_size_2",
                         value: "medium"
                     },
                     {
                         displayName: Translation.tr("Bold"),
-                        icon: "pen_size_5",
+                        icon: "eraser_size_4",
                         value: "bold"
                     },
                 ]
@@ -288,13 +288,13 @@ ContentPage {
                         value: "bubble"
                     },
                     {
-                        displayName: Translation.tr("Rotating"),
+                        displayName: Translation.tr("Border"),
                         icon: "rotate_right",
-                        value: "rotating"
+                        value: "border"
                     },
                     {
                         displayName: Translation.tr("Rect"),
-                        icon: "square",
+                        icon: "rectangle",
                         value: "rect"
                     }
                 ]

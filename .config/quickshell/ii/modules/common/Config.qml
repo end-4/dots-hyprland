@@ -135,7 +135,7 @@ Singleton {
                         property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
                         property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
                         property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
-                        property string dateStyle: "bubble"       // Options: "rotating", "rect", "bubble" , "hide"
+                        property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
                         property bool timeIndicators: true
                         property bool hourMarks: true
                         property bool dateInClock: true

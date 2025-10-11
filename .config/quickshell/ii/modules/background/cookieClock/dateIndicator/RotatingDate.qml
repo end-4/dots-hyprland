@@ -18,7 +18,7 @@ Item {
     readonly property string dialStyle: Config.options.background.clock.cookie.dialNumberStyle
     readonly property bool timeIndicators: Config.options.background.clock.cookie.timeIndicators
 
-    property real radius: style === "rotating" ? 90 : 0
+    property real radius: style === "border" ? 90 : 0
     Behavior on radius {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }

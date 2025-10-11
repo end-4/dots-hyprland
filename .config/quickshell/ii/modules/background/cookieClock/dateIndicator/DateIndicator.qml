@@ -9,14 +9,14 @@ import QtQuick
 
 Item {
     id: root
-    property string style: "rotating"
+    property string style: "bubble"
     property color color: Appearance.colors.colOnSecondaryContainer
     property real dateSquareSize: 64
 
     // Rotating date
     FadeLoader {
         anchors.fill: parent
-        shown: Config.options.background.clock.cookie.dateStyle === "rotating"
+        shown: Config.options.background.clock.cookie.dateStyle === "border"
         sourceComponent: RotatingDate {
             color: root.color
         }

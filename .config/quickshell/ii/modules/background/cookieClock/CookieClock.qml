@@ -18,11 +18,6 @@ Item {
     readonly property string clockStyle: Config.options.background.clock.style
 
     property real implicitSize: 230
-    property real hourDotSize: 12
-    property real hourLineSize: 4
-    property real minuteLineSize: 2
-    property real hourNumberSize: 36
-    property real dateSquareSize: 64
 
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
@@ -31,8 +26,6 @@ Item {
     property color colHourHand: Appearance.colors.colPrimary
     property color colMinuteHand: Appearance.colors.colSecondary
     property color colSecondHand: Appearance.colors.colTertiary
-    property color colOnHourHand: Appearance.colors.colOnPrimary
-    property color colTimeIndicators: Appearance.colors.colSecondaryContainerHover
 
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
@@ -157,7 +150,6 @@ Item {
         sourceComponent: DateIndicator {
             color: root.colBackgroundInfo
             style: Config.options.background.clock.cookie.dateStyle
-            dateSquareSize: root.dateSquareSize
         }
     }
 }
