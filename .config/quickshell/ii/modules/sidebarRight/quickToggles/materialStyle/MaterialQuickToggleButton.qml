@@ -22,7 +22,7 @@ GroupButton {
     property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
 
 
-    property int baseSize: Config.options.quickToggles.material.mode === "compact" ? 50 : 65
+    property int baseSize: Config.options.quickToggles.material.mode === "compact" ? 50 : Config.options.quickToggles.material.mode === "medium" ? 60 : 65 
     property string buttonIcon
     property int buttonSize: 1 // Must be 1, 2 
     property string titleText
@@ -40,9 +40,10 @@ GroupButton {
 
     property bool halfToggled: false
     toggled: false
+
+    property string panelType: Config.options.quickToggles.material.mode
     
-    Rectangle {
-        // Border
+    Rectangle { // Border
         anchors.fill: parent
         border.width: Config.options.quickToggles.material.border ? 2 : 0
         border.color: toggled ? "transparent" : colBackgroundHover
@@ -80,7 +81,7 @@ GroupButton {
         // maybe put this to a loader?
         visible: buttonSize === 2 
         anchors.left: parent.left
-        anchors.leftMargin: 60
+        anchors.leftMargin: panelType === "compact" ? 50 : 60
         anchors.verticalCenter: parent.verticalCenter
         height: baseSize
         width: baseSize * 3 - baseSize
@@ -92,7 +93,7 @@ GroupButton {
             color: button.colText
             font {
                 family: Appearance.font.family.title
-                pixelSize: 16
+                pixelSize: panelType === "compact" ? 14 : 16
                 weight: 500
             }
         }
@@ -104,7 +105,7 @@ GroupButton {
             color: button.colText
             font {
                 family: Appearance.font.family.main
-                pixelSize: 14
+                pixelSize: panelType === "compact" ? 13 : 14
                 weight: 250
             }
         }

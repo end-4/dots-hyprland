@@ -368,6 +368,89 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "bottom_panel_close"
+        title: Translation.tr("Quick Panel")
+        
+        ContentSubsection {
+            title: Translation.tr("Quick panel style")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.quickToggles.type
+                onSelected: newValue => {
+                    Config.options.quickToggles.type = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Classic"),
+                        icon: "radio",
+                        value: "classic"
+                    },
+                    {
+                        displayName: Translation.tr("Material"),
+                        icon: "texture",
+                        value: "material"
+                    }
+                ]
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Material panel mode")
+            ConfigSelectionArray {
+                currentValue: Config.options.quickToggles.material.mode
+                onSelected: newValue => {
+                    Config.options.quickToggles.material.mode = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Compact"),
+                        icon: "tile_small",
+                        value: "compact"
+                    },
+                    {
+                        displayName: Translation.tr("Medium"),
+                        icon: "tile_medium",
+                        value: "medium"
+                    },
+                    {
+                        displayName: Translation.tr("Large"),
+                        icon: "tile_large",
+                        value: "large"
+                    }
+                ]
+            }
+        }
+
+        ConfigRow {
+            ConfigSwitch {
+                buttonIcon: "volume_up"
+                text: Translation.tr("Show Volume")
+                checked: Config.options.quickToggles.material.showVolume
+                onCheckedChanged: {
+                    Config.options.quickToggles.material.showVolume = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "brightness_6"
+                text: Translation.tr("Show Brightness")
+                checked: Config.options.quickToggles.material.showBrightness
+                onCheckedChanged: {
+                    Config.options.quickToggles.material.showBrightness = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "panorama_wide_angle"
+                text: Translation.tr("Border")
+                checked: Config.options.quickToggles.material.border
+                onCheckedChanged: {
+                    Config.options.quickToggles.material.border = checked;
+                }
+            }
+        }
+        
+    }
+
+    ContentSection {
         icon: "point_scan"
         title: Translation.tr("Crosshair overlay")
 
@@ -552,6 +635,8 @@ ContentPage {
             }
         }
     }
+
+    
 
     ContentSection {
         icon: "side_navigation"

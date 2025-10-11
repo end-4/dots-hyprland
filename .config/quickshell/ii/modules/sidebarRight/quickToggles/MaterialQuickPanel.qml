@@ -15,11 +15,74 @@ Item {
     id: root
 
     property int heightSize: mainColumn.height
+    property string panelType: Config.options.quickToggles.material.mode
 
     height: mainColumn.height
 
+    property var sizesData: []
+    property var togglesData: []
+
+    property var combinedData: {
+        let data = [];
+        let sizes = Config?.options.quickToggles.material.sizes ?? [];
+        let toggles = Config?.options.quickToggles.material.toggles ?? [];
+
+        for (let i = 0; i < toggles.length; i++) {
+            data.push([parseInt(sizes[i]), toggles[i]]);
+        }
+        return data;
+    }
+
+
+    property int tileSize: panelType === "compact" ? 5 : 4
+    property var rowModels: splitRows(combinedData, tileSize)
+
+    onCombinedDataChanged: {
+        console.log("Material quick toggles panel layout changed in config file. Reloading sidebar layout automatically")
+        rowModels = splitRows(combinedData, tileSize)
+    }
+    onTileSizeChanged: {
+        console.log("Material quick toggles panel mode changed in config file. Reloading sidebar layout automatically")
+        rowModels = splitRows(combinedData, tileSize)
+    }
     
-    function getComponentByName(name) {
+
+
+
+
+    Column {
+        id: mainColumn
+        spacing: 10
+
+        rightPadding: panelType === "large" ? -25 : panelType === "medium" ? -60 : -10 // TODO: Better way to do this
+
+        MaterialTopWidgets {} // TODO: put this to a loader
+        
+
+        Repeater {
+            model: root.rowModels
+            ButtonGroup {
+                id: mainButtonGroup
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                spacing: panelType === "medium" ? 10 : 5
+                Repeater {
+                    model: modelData
+
+                    delegate: Item {
+                        Component.onCompleted: {
+                            var comp = getComponentByName(modelData[1]);
+                            var obj = comp.createObject(parent, {buttonSize: modelData[0]});
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+     function getComponentByName(name) {
         switch(name) {
             case "network": return networkComp;
             case "bluetooth": return bluetoothComp;
@@ -52,69 +115,6 @@ Item {
         }
         if (currentRow.length) rows.push(currentRow)
         return rows
-    }
-
-
-    property var sizesData: []
-    property var togglesData: []
-
-    property var combinedData: {
-        let data = [];
-        let sizes = Config?.options.quickToggles.material.sizes ?? [];
-        let toggles = Config?.options.quickToggles.material.toggles ?? [];
-
-        for (let i = 0; i < toggles.length; i++) {
-            data.push([parseInt(sizes[i]), toggles[i]]);
-        }
-        return data;
-    }
-
-
-    property int tileSize: Config.options.quickToggles.material.mode === "compact" ? 5 : 4
-    property var rowModels: splitRows(combinedData, tileSize)
-
-    onCombinedDataChanged: {
-        console.log("Material quick toggles panel layout changed in config file. Reloading sidebar layout automatically")
-        rowModels = splitRows(combinedData, tileSize)
-    }
-    onTileSizeChanged: {
-        console.log("Material quick toggles panel mode changed in config file. Reloading sidebar layout automatically")
-        rowModels = splitRows(combinedData, tileSize)
-    }
-    
-
-
-
-
-    Column {
-        id: mainColumn
-        spacing: 10
-        rightPadding: -10
-
-        Loader {
-            active: Config.options.quickToggles.material.showBrightness && Config.options.quickToggles.material.showVolume
-            sourceComponent: MaterialTopWidgets {}
-        }
-
-        Repeater {
-            model: root.rowModels
-            ButtonGroup {
-                id: mainButtonGroup
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                //spacing: 0
-                Repeater {
-                    model: modelData
-
-                    delegate: Item {
-                        Component.onCompleted: {
-                            var comp = getComponentByName(modelData[1]);
-                            var obj = comp.createObject(parent, {buttonSize: modelData[0]});
-                        }
-                    }
-                }
-            }
-        }
     }
 
     Component {
