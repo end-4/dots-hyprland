@@ -5,25 +5,14 @@ import QtQuick
 import Quickshell.Io
 import Quickshell
 
-QuickToggleButton {
+MaterialQuickToggleButton {
     id: root
     toggled: false
     visible: false
-    
-    contentItem: CustomIcon {
-        id: distroIcon
-        source: 'cloudflare-dns-symbolic'
-
-        anchors.centerIn: parent
-        width: 16
-        height: 16
-        colorize: true
-        color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
-
-        Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-        }
-    }
+    buttonSize: 2
+    buttonIcon: toggled ? "shield_lock" : "shield"
+    titleText: "WARP (1.1.1.1)"
+    altText: toggled ? "On" : "Off"
 
     onClicked: {
         if (toggled) {

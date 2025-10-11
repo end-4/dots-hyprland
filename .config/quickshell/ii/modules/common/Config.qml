@@ -405,6 +405,18 @@ Singleton {
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
                 }
             }
+
+            property JsonObject quickToggles: JsonObject {
+                property string type: "material"
+                property JsonObject material: JsonObject {
+                    property bool border: false
+                    property bool showVolume: true
+                    property bool showBrightness: true
+                    property list<string> sizes: []
+                    property list<string> toggles: []
+                }
+            }
+            
         }
     }
 }

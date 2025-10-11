@@ -1,11 +1,15 @@
-import qs.modules.common.widgets
 import qs
+import qs.modules.common.widgets
+import qs.modules.common
 import qs.services
 
-QuickToggleButton {
+MaterialQuickToggleButton {
     id: root
+    buttonSize: 2
     toggled: Idle.inhibit
     buttonIcon: "coffee"
+    titleText: "Idle Inhibitor"
+    altText: toggled ? "On" : "Off"
     onClicked: {
         Idle.toggleInhibit()
     }

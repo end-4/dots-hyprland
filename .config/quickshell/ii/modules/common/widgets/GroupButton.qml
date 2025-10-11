@@ -24,6 +24,7 @@ Button {
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
     property real clickedWidth: baseWidth + 20
     property real clickedHeight: baseHeight
+    property real clickedRadius: 0
     property var parentGroup: root.parent
     property int clickIndex: parentGroup?.clickIndex ?? -1
 
@@ -39,9 +40,9 @@ Button {
     property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
     property color colBackgroundToggledActive: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
-    property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
-    property real leftRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
-    property real rightRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
+    property real radius: root.clickedRadius > 0 && root.toggled ? root.clickedRadius :  root.down ? root.buttonRadiusPressed : root.buttonRadius  
+    property real leftRadius: root.clickedRadius > 0 && root.toggled ? root.clickedRadius :  root.down ? root.buttonRadiusPressed : root.buttonRadius
+    property real rightRadius: root.clickedRadius > 0 && root.toggled ? root.clickedRadius :  root.down ? root.buttonRadiusPressed : root.buttonRadius
     property color color: root.enabled ? (root.toggled ? 
         (root.down ? colBackgroundToggledActive : 
             root.hovered ? colBackgroundToggledHover : 

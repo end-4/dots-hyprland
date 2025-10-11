@@ -6,12 +6,14 @@ import Quickshell.Io
 import Quickshell
 import Quickshell.Hyprland
 
-QuickToggleButton {
+MaterialQuickToggleButton {
     id: root
+    buttonSize: 2
     toggled: EasyEffects.active
     visible: EasyEffects.available
     buttonIcon: "instant_mix"
-
+    titleText: "Easy Effects"
+    altText: toggled ? "On" : "Off"
     Component.onCompleted: {
         EasyEffects.fetchActiveState()
     }

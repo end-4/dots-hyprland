@@ -5,6 +5,8 @@ import qs
 import qs.services
 import Quickshell.Io
 
+import "../"
+
 QuickToggleButton {
     id: nightLightButton
     property bool enabled: Hyprsunset.active

@@ -4,6 +4,8 @@ import qs
 import Quickshell
 import Quickshell.Io
 
+import "../"
+
 QuickToggleButton {
     id: root
     buttonIcon: "gamepad"

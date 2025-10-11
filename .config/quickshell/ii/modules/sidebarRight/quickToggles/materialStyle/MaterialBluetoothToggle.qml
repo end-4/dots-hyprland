@@ -9,9 +9,13 @@ import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Hyprland
 
-QuickToggleButton {
+MaterialQuickToggleButton {
     id: root
-    toggled: BluetoothStatus.enabled
+    buttonSize: 2
+    toggled: BluetoothStatus.connected
+    halfToggled: BluetoothStatus.enabled
+    titleText: "Bluethoot"
+    altText: toggled ? BluetoothStatus.firstActiveDevice.name : halfToggled ? "Not Connected" : "Off"
     buttonIcon: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
     onClicked: {
         Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter?.enabled

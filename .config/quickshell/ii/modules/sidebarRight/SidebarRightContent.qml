@@ -3,6 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import "./quickToggles/"
+import "./quickToggles/materialStyle/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
 import QtQuick
@@ -115,32 +116,26 @@ Item {
                 }
             }
 
-            ButtonGroup {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 5
-                padding: 5
-                color: Appearance.colors.colLayer1
-
-                NetworkToggle {
-                    altAction: () => {
-                        Network.enableWifi();
-                        Network.rescanWifi();
-                        root.showWifiDialog = true;
-                    }
+            ColumnLayout {
+                //Layout.alignment: Qt.AlignHCenter
+                Loader { 
+                    id: materilQTLoader
+                    active: Config.options.quickToggles.type === "material"
+                    sourceComponent: MaterialQuickPanel {}
                 }
-                BluetoothToggle {
-                    altAction: () => {
-                        Bluetooth.defaultAdapter.enabled = true;
-                        Bluetooth.defaultAdapter.discovering = true;
-                        root.showBluetoothDialog = true;
-                    }
+                Loader { 
+                    id: classicQTLoader
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    //active: Config.options.quickToggles.type === "classic"
+                    active: true
+                    sourceComponent: ClassicQuickPanel {}
                 }
-                NightLight {}
-                GameMode {}
-                IdleInhibitor {}
-                EasyEffectsToggle {}
-                CloudflareWarp {}
             }
+            
+            
+            
+
+        
 
             CenterWidgetGroup {
                 Layout.alignment: Qt.AlignHCenter
