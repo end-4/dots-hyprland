@@ -22,7 +22,7 @@ Column {
         delegate: StyledText {
             required property string modelData
             property bool hourMarksEnabled: Config.options.background.clock.cookie.hourMarks
-            property bool isAmPm: !!modelData.match(/am|pm/i)
+            property bool isAmPm: !modelData.match(/\d{2}/i)
             property real numberSizeWithoutGlow: isAmPm ? 26 : 68
             property real numberSizeWithGlow: isAmPm ? 10 : 40
             property real numberSize: root.isEnabled ? (hourMarksEnabled ? numberSizeWithGlow : numberSizeWithoutGlow) : 100 // open/close animation
