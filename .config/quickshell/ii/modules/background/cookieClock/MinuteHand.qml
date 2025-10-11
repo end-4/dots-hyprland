@@ -8,19 +8,15 @@ Item {
     anchors.fill: parent
 
     required property int clockMinute
-    property real handWidth: 16
-    property real handLength: 95
     property string style: "medium"
+    property real handLength: 95
+    property real handWidth: style === "bold" ? 18 : style === "medium" ? 12 : 5
     property color color: Appearance.colors.colSecondary
 
     z: root.style === "thin" ? 1 : 3
     rotation: -90 + (360 / 60) * root.clockMinute
-    opacity: root.style === "hide" ? 0.0 : 1.0
 
     Behavior on rotation {
-        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-    }
-    Behavior on opacity {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }
 

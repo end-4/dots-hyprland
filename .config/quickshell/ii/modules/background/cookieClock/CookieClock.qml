@@ -18,17 +18,7 @@ Item {
     readonly property string clockStyle: Config.options.background.clock.style
 
     property real implicitSize: 230
-    property real hourHandLength: 72
-    property real hourHandWidth: 20
-    property real minuteHandLength: 95
-    property real minuteHandWidth: Config.options.background.clock.cookie.minuteHandStyle === "bold" ? hourHandWidth :
-                                    Config.options.background.clock.cookie.minuteHandStyle === "medium" ? 12 : 5
-    property real centerDotSize: 10
     property real hourDotSize: 12
-    property real hourMarkSize: 135
-    property real secondDotSize: 20
-    property real secondHandWidth: 2
-    property real secondHandLength: 100
     property real hourLineSize: 4
     property real minuteLineSize: 2
     property real hourNumberSize: 36
@@ -37,7 +27,7 @@ Item {
     property color colShadow: Appearance.colors.colShadow
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colOnBackground: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.5)
-    property color colHourHand: Appearance.colors.colPrimaryContainer
+    property color colHourHand: Appearance.colors.colPrimary
     property color colMinuteHand: Appearance.colors.colSecondary
     property color colSecondHand: Appearance.colors.colTertiary
     property color colOnHourHand: Appearance.colors.colOnPrimary
@@ -52,7 +42,7 @@ Item {
     implicitHeight: implicitSize
 
     DropShadow {
-        source: cookie 
+        source: cookie
         anchors.fill: source
         horizontalOffset: 0
         verticalOffset: 2
@@ -77,14 +67,14 @@ Item {
         anchors.fill: parent
         color: root.colOnBackground
     }
-    
+
     // Stupid extra hour marks in the middle
     FadeLoader {
         id: hourMarksLoader
         anchors.centerIn: parent
         shown: Config.options.background.clock.cookie.hourMarks
         sourceComponent: HourMarks {
-            implicitSize: root.hourMarkSize * (1.75 - 0.75 * hourMarksLoader.opacity)
+            implicitSize: 135 * (1.75 - 0.75 * hourMarksLoader.opacity)
             color: root.colTimeIndicators
             colOnBackground: root.colOnBackground
         }
@@ -99,45 +89,45 @@ Item {
         Behavior on scale {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
-        
+
         sourceComponent: TimeColumn {
             color: root.colOnBackground
         }
     }
-    
 
     // Hour hand
-    HourHand {
+    FadeLoader {
         anchors.fill: parent
-        handLength: root.hourHandLength
-        handWidth: root.hourHandWidth
-        clockHour: root.clockHour
-        clockMinute: root.clockMinute
-        style: Config.options.background.clock.cookie.hourHandStyle
-        color: root.colHourHand
+        z: Config.options.background.clock.cookie.hourHandStyle === "fill" ? 3 : 1
+        shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
+        sourceComponent: HourHand {
+            clockHour: root.clockHour
+            clockMinute: root.clockMinute
+            style: Config.options.background.clock.cookie.hourHandStyle
+            color: root.colHourHand
+        }
     }
 
     // Minute hand
-    MinuteHand {
+    FadeLoader {
         anchors.fill: parent
-        handWidth: root.minuteHandWidth
-        handLength: root.minuteHandLength
-        clockMinute: root.clockMinute
-        style: Config.options.background.clock.cookie.minuteHandStyle
-        color: root.colMinuteHand
+        shown: Config.options.background.clock.cookie.minuteHandStyle !== "hide"
+        sourceComponent: MinuteHand {
+            anchors.fill: parent
+            clockMinute: root.clockMinute
+            style: Config.options.background.clock.cookie.minuteHandStyle
+            color: root.colMinuteHand
+        }
     }
 
     // Second hand
-    Loader {
+    FadeLoader {
         id: secondHandLoader
-        active: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
+        z: (Config.options.background.clock.cookie.secondHandStyle === "line") ? 2 : 3
+        shown: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "none"
         anchors.fill: parent
-        z: 2
         sourceComponent: SecondHand {
             id: secondHand
-            handWidth: root.secondHandWidth
-            handLength: root.secondHandLength
-            dotSize: root.secondDotSize
             clockSecond: root.clockSecond
             style: Config.options.background.clock.cookie.secondHandStyle
             color: root.colSecondHand
@@ -145,17 +135,15 @@ Item {
     }
 
     // Center dot
-    Rectangle {
-        visible: Config.options.background.clock.cookie.minuteHandStyle === "hide" && Config.options.background.clock.cookie.hourHandStyle === "hide" ? false : true
+    FadeLoader {
         z: 4
-        opacity: Config.options.background.clock.cookie.minuteHandStyle !== "bold" ? 1.0 : 0 
-        color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
         anchors.centerIn: parent
-        implicitWidth: centerDotSize
-        implicitHeight: implicitWidth
-        radius: implicitWidth / 2
-        Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        shown: Config.options.background.clock.cookie.minuteHandStyle !== "bold"
+        sourceComponent: Rectangle {
+            color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
+            implicitWidth: 8
+            implicitHeight: implicitWidth
+            radius: width / 2
         }
     }
 
@@ -166,5 +154,4 @@ Item {
         style: Config.options.background.clock.cookie.dateStyle
         dateSquareSize: root.dateSquareSize
     }
-
 }

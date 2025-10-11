@@ -30,7 +30,7 @@ Item {
         sourceComponent: BigHourNumbers {
             numberSize: 80
             color: root.color
-            margins: 70 - bigHourNumbersLoader.opacity * 40
+            margins: 20 - 10 * bigHourNumbersLoader.opacity
         }
     }
 
