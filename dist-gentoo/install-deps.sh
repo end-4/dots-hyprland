@@ -9,13 +9,15 @@ printf "If not, you must ensure you are using the correct GCC version and set it
 printf "${STY_RESET}"
 pause
 
+x sudo emerge --noreplace app-eselect/eselect-repository
+
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
 	v sudo eselect repository enable localrepo 
 fi
 
-if [[ -z $(eselect repository list | grep guru) ]]; then
-	v sudo eselect repository enable guru
+if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
+        v sudo eselect repository enable guru
 fi
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
@@ -26,7 +28,7 @@ metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fon
 ebuild_dir="/var/db/repos/localrepo"
 
 # Unmasks
-x cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
+x sudo cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./dist-gentoo/keywords-user
 v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 

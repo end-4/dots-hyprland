@@ -31,7 +31,7 @@ gui-libs/aquamarine **
 gui-libs/hyprutils **
 dev-util/hyprwayland-scanner **
 dev-libs/hyprlang **
-dev-libs/hyprgraphicss **
+dev-libs/hyprgraphics **
 gui-libs/hyprcursor **
 gui-libs/hyprland-qt-support **
 gui-libs/hyprland-qtutils **

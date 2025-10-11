@@ -18,4 +18,5 @@ RDEPEND="
 	gui-apps/quickshell
 	app-i18n/translate-shell
 	gui-apps/wlogout
+	media-gfx/imagemagick
 "

@@ -74,7 +74,6 @@ gui-libs/libadwaita introspection
 net-libs/libsoup brotli introspection ssl
 #dev-libs/gobject-introspection (nothing needed)
 # dart-sassc handled in the ebuild
-eigen ffmpeg jpeg opencl opengl python wayland gtk3 webp
 
 
 ################### SCREENCAPTURE ################### 
@@ -112,3 +111,12 @@ dev-libs/glib dbus elf introspection mime xattr
 gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-grab hyprland-global-shortcuts jemalloc layer-shell mpris pam pipewire screencopy session-lock sockets toplevel-management tray wayland
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
+media-gfx/imagemagick xml
+
+############ Additional needed useflags
+x11-libs/cairo X
+media-libs/libglvnd X
+x11-libs/libxkbcommon X
+media-libs/libpulse X
+media-plugins/alsa-plugins pulseaudio
+
