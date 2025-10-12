@@ -1,5 +1,6 @@
-import qs.modules.common
 import qs
+import qs.modules.common
+import qs.services
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -42,6 +43,10 @@ Singleton {
                 GlobalStates.screenLocked = true;
             }
         }
+    }
+
+    onSidebarRightOpenChanged: {
+        if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
     }
 
     property real screenZoom: 1
