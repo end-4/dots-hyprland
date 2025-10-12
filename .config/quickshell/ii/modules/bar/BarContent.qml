@@ -305,10 +305,10 @@ Item { // Bar content region
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
                         Rectangle {
-                            visible: !Notifications.silent
+                            visible: !Notifications.silent && Notifications.unread > 0
                             anchors.right: parent.right
                             radius: Appearance.rounding.full
-                            color: Appearance.colors.colLayer0
+                            color: Appearance.colors.colOnLayer0
                             z: 1
 
                             implicitHeight: Math.max(notificationCounterText.implicitWidth, notificationCounterText.implicitHeight)
@@ -318,7 +318,7 @@ Item { // Bar content region
                                 id: notificationCounterText
                                 anchors.centerIn: parent
                                 font.pixelSize: Appearance.font.pixelSize.smallest
-                                color: Appearance.colors.colOnLayer1
+                                color: Appearance.colors.colLayer0
                                 text: Notifications.unread
                             }
                         }
