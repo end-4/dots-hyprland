@@ -9,7 +9,7 @@ RippleButton {
     implicitWidth: 40
     implicitHeight: 40
     Layout.leftMargin: 8
-    onClicked: {
+    downAction: () => {
         parent.expanded = !parent.expanded;
     }
     buttonRadius: Appearance.rounding.full

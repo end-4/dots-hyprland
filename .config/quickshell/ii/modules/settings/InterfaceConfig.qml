@@ -64,8 +64,8 @@ ContentPage {
                 icon: "add_triangle"
                 text: Translation.tr("Sides")
                 value: Config.options.background.clock.cookie.sides
-                from: 1
-                to: 36
+                from: 0
+                to: 40
                 stepSize: 1
                 onValueChanged: {
                     Config.options.background.clock.cookie.sides = value;
@@ -566,6 +566,15 @@ ContentPage {
             }
             StyledToolTip {
                 text: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "translate"
+            text: Translation.tr('Enable translator')
+            checked: Config.options.sidebar.translator.enable
+            onCheckedChanged: {
+                Config.options.sidebar.translator.enable = checked;
             }
         }
 

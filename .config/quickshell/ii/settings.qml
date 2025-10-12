@@ -172,7 +172,7 @@ ApplicationWindow {
                         iconText: "edit"
                         buttonText: Translation.tr("Config file")
                         expanded: navRail.expanded
-                        onClicked: {
+                        downAction: () => {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
                         }
 
@@ -190,7 +190,7 @@ ApplicationWindow {
                                 required property var index
                                 required property var modelData
                                 toggled: root.currentPage === index
-                                onClicked: root.currentPage = index;
+                                onPressed: root.currentPage = index;
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
                                 buttonIconRotation: modelData.iconRotation || 0

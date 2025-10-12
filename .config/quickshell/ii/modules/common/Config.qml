@@ -137,7 +137,7 @@ Singleton {
                         property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
                         property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
                         property bool timeIndicators: true
-                        property bool hourMarks: true
+                        property bool hourMarks: false
                         property bool dateInClock: true
                         property bool constantlyRotate: false
                     }
@@ -211,6 +211,11 @@ Singleton {
                     property string city: "" // When 'enableGPS' is false
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
+                }
+                property JsonObject indicators: JsonObject {
+                    property JsonObject notifications: JsonObject {
+                        property bool showUnreadCount: false
+                    }
                 }
             }
 
@@ -341,7 +346,11 @@ Singleton {
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
                 property JsonObject translator: JsonObject {
+                    property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
+                }
+                property JsonObject ai: JsonObject {
+                    property bool textFadeIn: true
                 }
                 property JsonObject booru: JsonObject {
                     property bool allowNsfw: false
