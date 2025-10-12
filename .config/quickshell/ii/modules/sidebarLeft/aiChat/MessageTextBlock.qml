@@ -24,7 +24,8 @@ ColumnLayout {
 
     property string renderedSegmentContent: ""
     property string shownText: ""
-    property bool fadeChunkSplitting: !editing && !/\n\|/.test(shownText) && Config.options.sidebar.ai.textFadeIn
+    property bool forceDisableChunkSplitting: parent?.forceDisableChunkSplitting ?? false
+    property bool fadeChunkSplitting: !forceDisableChunkSplitting && !editing && !/\n\|/.test(shownText) && Config.options.sidebar.ai.textFadeIn
 
     Layout.fillWidth: true
 

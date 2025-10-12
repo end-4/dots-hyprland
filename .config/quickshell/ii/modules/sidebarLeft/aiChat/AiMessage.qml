@@ -271,6 +271,8 @@ Rectangle {
                     property bool thinking: root.messageData?.thinking ?? true
                     property bool done: root.messageData?.done ?? false
                     property bool completed: thisBlock.completed ?? false
+
+                    property bool forceDisableChunkSplitting: root.messageData.content.includes("```")
                     
                     source: thisBlock.type === "code" ? "MessageCodeBlock.qml" : 
                         thisBlock.type === "think" ? "MessageThinkBlock.qml" :
