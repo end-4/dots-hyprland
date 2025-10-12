@@ -102,7 +102,7 @@ Flow {
     function handleOverflow() {
         // checks the layout and searches for any empty tile
         // if there is any, puts it into overflowedIndices then we color the settings button to indicate there is a problem
-        // i don't want to automatically sort the layout (full control should be on the user and also it can cause a lots of trouble) but it can be added
+        // i don't want to automatically sort the layout (full control should be on the user and also it can cause a lots of trouble) but it can be added (or we can just scrap this)
         var currentSizes = Config.options.quickToggles.material.sizes
         var length = Config.options.quickToggles.material.toggles.length
         var overflowIndices = []
