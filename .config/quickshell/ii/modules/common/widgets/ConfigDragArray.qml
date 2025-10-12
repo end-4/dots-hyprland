@@ -36,19 +36,18 @@ Flow {
 		return arr
 	}
 
-    function reorderLists() { // reordering options and sizes lists
+    function reorderLists() {
         var selectedOptions = []
         var unselectedOptions = []
         var selectedSizes = []
         var unselectedSizes = []
-
         var currentSizes = Config.options.quickToggles.material.sizes
-        
+    
         for (var i = 0; i < options.length; i++) {
             var opt = options[i]
             var key = opt.value.toString()
-            var size = currentSizes[i]
-            
+            var size = currentSizes[i] 
+        
             if (root.selectedSet[key]) {
                 selectedOptions.push(opt)
                 if (size !== undefined) selectedSizes.push(size)
@@ -57,23 +56,37 @@ Flow {
                 if (size !== undefined) unselectedSizes.push(size)
             }
         }
-        
+
+
         var newOptions = selectedOptions.concat(unselectedOptions)
         var newSizes = selectedSizes.concat(unselectedSizes)
-        
+    
         root.options = newOptions
+    
         Config.options.quickToggles.material.sizes = newSizes
     }
 
-	onInitialChanged: {
+    onInitialChanged: {
         var newSelectedSet = {}
         for (var i = 0; i < initial.length; i++) {
             newSelectedSet[initial[i].toString()] = true
         }
         root.selectedSet = newSelectedSet
 
-        // must be reordering for sync
-        root.reorderLists() 
+        var newOptions = []
+    
+        for (var i = 0; i < initial.length; i++) {
+            var val = initial[i]
+            var opt = options.find(o => o.value === val)
+            if (opt) newOptions.push(opt)
+        }
+
+        for (var i = 0; i < options.length; i++) {
+            if (initial.indexOf(options[i].value) === -1)
+                newOptions.push(options[i])
+        }
+
+        root.options = newOptions
     }
 
     signal selected(var newValue)
@@ -142,6 +155,8 @@ Flow {
         Config.options.quickToggles.material.sizes = currentList
     }
 
+
+
 	Repeater {
 		model: root.options
 		delegate: SelectionGroupButton {
@@ -168,12 +183,14 @@ Flow {
 			}
 			onClicked: {
 				root.moveOption(index, -1)
+                
 			}
 			altAction: function() {
 				root.moveOption(index, +1)
 			}
             clickAndHold: function() {
                 if (toggled) root.toggleSize(index) // maybe check the toggle state in the function for cleaner code?
+                
             }
 		}
 	}
