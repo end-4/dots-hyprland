@@ -34,7 +34,7 @@ MaterialCookie { // App icon
                 const defaultIcon = NotificationUtils.findSuitableMaterialSymbol("")
                 const guessedIcon = NotificationUtils.findSuitableMaterialSymbol(root.summary)
                 return (root.urgency == NotificationUrgency.Critical && guessedIcon === defaultIcon) ?
-                    "release_alert" : guessedIcon
+                    "priority_high" : guessedIcon
             }
             anchors.fill: parent
             color: isUrgent ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
