@@ -14,6 +14,7 @@ GroupButton {
     verticalPadding: 8
     bounce: false
     property string buttonIcon
+    property color textColor: toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
     property bool leftmost: false
     property bool rightmost: false
     leftRadius: (toggled || leftmost) ? (height / 2) : Appearance.rounding.unsharpenmore
@@ -36,7 +37,7 @@ GroupButton {
                     anchors.centerIn: parent
                     text: root.buttonIcon
                     iconSize: Appearance.font.pixelSize.larger
-                    color: root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                    color: textColor
                 }
             }
         }
@@ -54,7 +55,7 @@ GroupButton {
             StyledText {
                 id: textItem
                 anchors.centerIn: parent
-                color: root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                color: textColor
                 text: root.buttonText
             }
         }

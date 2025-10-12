@@ -24,6 +24,8 @@ Flow {
 	property var initial: [] // array that we have to get when we open settings (maybe change name?)
 	property var selectedSet: ({}) 
 
+    // TODO: ERROR: LOOK: URGENT: MOVE ALL THIS FUNCTIONS TO A NEW FILE
+
 	readonly property var currentValues: {
 		var arr = []
 		for (var i = 0; i < options.length; i++) {
@@ -87,6 +89,37 @@ Flow {
         }
 
         root.options = newOptions
+        root.handleOverflow()
+    }
+
+    property list<var> overflowedIndices : []
+    property int maxTile: Config.options.quickToggles.material.mode === "compact" ? 5 : 4
+
+    onMaxTileChanged: {
+        root.handleOverflow()
+    }
+
+    function handleOverflow() {
+        // checks the layout and searches for any empty tile
+        // if there is any, puts it into overflowedIndices then we color the settings button to indicate there is a problem
+        // i don't want to automatically sort the layout (full control should be on the user and also it can cause a lots of trouble) but it can be added
+        var currentSizes = Config.options.quickToggles.material.sizes
+        var length = Config.options.quickToggles.material.toggles.length
+        var overflowIndices = []
+        var leftSpace = root.maxTile
+        for (var i = 0; i < length; i++){
+            if (leftSpace === 0){
+                leftSpace = root.maxTile
+            }
+            if (leftSpace >= currentSizes[i]){
+                leftSpace -= currentSizes[i]
+            }else {
+                overflowIndices.push(i)
+                leftSpace = root.maxTile
+                leftSpace -= currentSizes[i]
+            }
+        }
+        root.overflowedIndices = overflowIndices
     }
 
     signal selected(var newValue)
@@ -177,19 +210,25 @@ Flow {
 			rightmost: index === root.options.length - 1
 			buttonIcon: modelData.icon || ""
 			buttonText: modelData.displayName + " | " + Config.options.quickToggles.material.sizes[index]
+            textColor: overflowedIndices.includes(index) ? Appearance.m3colors.m3errorContainer : toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
 			toggled: !!root.selectedSet[modelData.value.toString()] 
 			middleClickAction: function() {
 				root.toggleValue(modelData.value)
+                root.handleOverflow() // maybe put these to each function instead of here
 			}
 			onClicked: {
 				root.moveOption(index, -1)
+                root.handleOverflow()
                 
 			}
 			altAction: function() {
 				root.moveOption(index, +1)
+                root.handleOverflow()
+                
 			}
             clickAndHold: function() {
-                if (toggled) root.toggleSize(index) // maybe check the toggle state in the function for cleaner code?
+                if (toggled) root.toggleSize(index)
+                root.handleOverflow()
                 
             }
 		}
