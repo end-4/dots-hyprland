@@ -296,7 +296,7 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     Revealer {
-                        reveal: Notifications.silent || Notifications.list.length > 0
+                        reveal: Notifications.silent || Notifications.unread > 0
                         Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         implicitHeight: reveal ? notificationIcon.implicitHeight : 0
@@ -319,7 +319,7 @@ Item { // Bar content region
                                 anchors.centerIn: parent
                                 font.pixelSize: Appearance.font.pixelSize.smallest
                                 color: Appearance.colors.colOnLayer1
-                                text: Notifications.list.length
+                                text: Notifications.unread
                             }
                         }
                         MaterialSymbol {

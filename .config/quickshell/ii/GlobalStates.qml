@@ -46,7 +46,10 @@ Singleton {
     }
 
     onSidebarRightOpenChanged: {
-        if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
+        if (GlobalStates.sidebarRightOpen) {
+            Notifications.timeoutAll();
+            Notifications.markAllRead();
+        }
     }
 
     property real screenZoom: 1
