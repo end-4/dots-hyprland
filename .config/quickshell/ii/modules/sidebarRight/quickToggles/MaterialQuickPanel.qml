@@ -71,11 +71,6 @@ Item {
                     if (alignment === "right") Layout.alignment = Qt.AlignRight
                     if (alignment === "center") Layout.alignment = Qt.AlignCenter
                 }
-                
-                //anchors.horizontalCenter: alignment === "center" ? parent.horizontalCenter : undefined
-                
-                //anchors.right: alignment === "right" ? parent.right : undefined
-                //anchors.right: parent.right // it looks good only on right anchor no matter what i try
                 Repeater {
                     model: modelData
 

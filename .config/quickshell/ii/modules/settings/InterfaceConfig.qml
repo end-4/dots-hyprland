@@ -424,6 +424,7 @@ ContentPage {
             }
             ContentSubsection {
                 title: Translation.tr("Leftover alignment")
+                tooltip: Translation.tr("Left alignment may have some problems")
                 ConfigSelectionArray {
                     currentValue: Config.options.quickToggles.material.align
                     onSelected: newValue => {
