@@ -210,6 +210,18 @@ ContentPage {
         icon: "nest_clock_farsight_analog"
         title: Translation.tr("Time")
 
+        ConfigSwitch {
+            buttonIcon: "pace"
+            text: Translation.tr("Second precision")
+            checked: Config.options.time.secondPrecision
+            onCheckedChanged: {
+                Config.options.time.secondPrecision = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Enable if you want clocks to show seconds accurately")
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Format")
             tooltip: ""
