@@ -305,7 +305,7 @@ Singleton {
         }
 
         property QtObject elementResize: QtObject {
-            property int duration: 400
+            property int duration: 300
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650
