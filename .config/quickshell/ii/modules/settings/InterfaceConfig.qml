@@ -64,8 +64,8 @@ ContentPage {
                 icon: "add_triangle"
                 text: Translation.tr("Sides")
                 value: Config.options.background.clock.cookie.sides
-                from: 1
-                to: 36
+                from: 0
+                to: 40
                 stepSize: 1
                 onValueChanged: {
                     Config.options.background.clock.cookie.sides = value;
