@@ -15,7 +15,7 @@ Column {
 
     anchors.left: parent.left
     anchors.leftMargin: 20
-    width: parent.width - 23 // TODO: fuck this 3 pixel
+    width: Math.max(parent.width - 23,375) // TODO: fuck this 3 pixel
 
     property var screen: topWidgetsRoot.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)

@@ -19,6 +19,7 @@ Button {
     property var releaseAction // When left clicking (release)
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
+    property var clickAndHold // When clicked and hold
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
@@ -104,9 +105,8 @@ Button {
         }
 
         onPressAndHold: () => {
-            altAction(); 
+            clickAndHold(); 
             root.down = false; 
-            root.clicked = false;
         };
     }
 
