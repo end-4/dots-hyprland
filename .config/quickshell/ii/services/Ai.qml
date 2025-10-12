@@ -357,30 +357,6 @@ Singleton {
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
-    //Fetch API keys if needed
-    //Timer to beat race-condition for lock/launchOnStartup
-    Timer {
-        id: initTimer
-        interval: 2000 // Wait 2000ms for system to initialize
-        running: true
-        repeat: false
-        onTriggered: {
-            if (!GlobalStates.screenLocked) {
-                KeyringStorage.fetchKeyringData();
-            }
-        }
-    }
-
-    // Unlock keyring when lockscreen is unlocked
-    Connections {
-        target: GlobalStates
-        function onScreenLockedChanged() {
-            if (!GlobalStates.screenLocked) {
-                KeyringStorage.fetchKeyringData();
-            }
-        }
-    }
-
     Connections {
         target: Config
         function onReadyChanged() {

@@ -18,6 +18,7 @@ Scope {
             }),
             command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
         })
+		GlobalStates.keyringUnlocked();
     }
 
 	// This stores all the information shared between the lock surfaces on each screen.
