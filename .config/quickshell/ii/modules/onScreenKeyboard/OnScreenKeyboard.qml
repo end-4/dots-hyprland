@@ -18,7 +18,7 @@ Scope { // Scope
         baseWidth: 40
         baseHeight: 40
         clickedWidth: baseWidth
-        clickedHeight: baseHeight + 20
+        clickedHeight: baseHeight + 10
         buttonRadius: Appearance.rounding.normal
     }
 
@@ -84,7 +84,7 @@ Scope { // Scope
                     VerticalButtonGroup {
                         OskControlButton { // Pin button
                             toggled: root.pinned
-                            onClicked: root.pinned = !root.pinned
+                            downAction: () => root.pinned = !root.pinned
                             contentItem: MaterialSymbol {
                                 text: "keep"
                                 horizontalAlignment: Text.AlignHCenter

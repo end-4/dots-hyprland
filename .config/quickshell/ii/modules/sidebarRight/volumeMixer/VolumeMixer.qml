@@ -109,12 +109,12 @@ Item {
             AudioDeviceSelectorButton {
                 Layout.fillWidth: true
                 input: false
-                onClicked: root.showDeviceSelectorDialog(input)
+                downAction: () => root.showDeviceSelectorDialog(input)
             }
             AudioDeviceSelectorButton {
                 Layout.fillWidth: true
                 input: true
-                onClicked: root.showDeviceSelectorDialog(input)
+                downAction: () => root.showDeviceSelectorDialog(input)
             }
         }
     }

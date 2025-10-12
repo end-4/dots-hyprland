@@ -10,7 +10,7 @@ GroupButton {
     verticalPadding: 6
 
     baseWidth: contentItem.implicitWidth + horizontalPadding * 2
-    clickedWidth: baseWidth + 20
+    clickedWidth: baseWidth + 14
     baseHeight: contentItem.implicitHeight + verticalPadding * 2
     buttonRadius: down ? Appearance.rounding.verysmall : Appearance.rounding.small
 

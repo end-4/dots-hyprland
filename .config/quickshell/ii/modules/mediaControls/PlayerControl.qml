@@ -234,7 +234,7 @@ Item { // Player instance
                         }
                         TrackChangeButton {
                             iconName: "skip_previous"
-                            onClicked: root.player?.previous()
+                            downAction: () => root.player?.previous()
                         }
                         Item {
                             id: progressBarContainer
@@ -277,7 +277,7 @@ Item { // Player instance
                         }
                         TrackChangeButton {
                             iconName: "skip_next"
-                            onClicked: root.player?.next()
+                            downAction: () => root.player?.next()
                         }
                     }
 
@@ -289,7 +289,7 @@ Item { // Player instance
                         property real size: 44
                         implicitWidth: size
                         implicitHeight: size
-                        onClicked: root.player.togglePlaying();
+                        downAction: () => root.player.togglePlaying();
 
                         buttonRadius: root.player?.isPlaying ? Appearance?.rounding.normal : size / 2
                         colBackground: root.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer

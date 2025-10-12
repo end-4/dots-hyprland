@@ -50,7 +50,7 @@ Item {
                 clip: true
                 buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
                 tooltipText: (monthShift === 0) ? "" : Translation.tr("Jump to current month")
-                onClicked: {
+                downAction: () => {
                     monthShift = 0;
                 }
             }
@@ -60,7 +60,7 @@ Item {
             }
             CalendarHeaderButton {
                 forceCircle: true
-                onClicked: {
+                downAction: () => {
                     monthShift--;
                 }
                 contentItem: MaterialSymbol {
@@ -72,7 +72,7 @@ Item {
             }
             CalendarHeaderButton {
                 forceCircle: true
-                onClicked: {
+                downAction: () => {
                     monthShift++;
                 }
                 contentItem: MaterialSymbol {
