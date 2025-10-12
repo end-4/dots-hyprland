@@ -16,6 +16,7 @@ Item {
 
     property int heightSize: mainColumn.height
     property string panelType: Config.options.quickToggles.material.mode
+    
 
     height: mainColumn.height
 
@@ -50,18 +51,31 @@ Item {
 
 
 
-    Column {
+    ColumnLayout {
         id: mainColumn
         spacing: 10
 
-        MaterialTopWidgets {} // TODO: put this to a loader
+        MaterialTopWidgets {} // TODO: put this or the items inside to a loader
         
 
         Repeater {
             model: root.rowModels
             ButtonGroup {
                 id: mainButtonGroup
-                anchors.right: parent.right // it looks right only on right anchor no matter what i try
+                
+
+                property string alignment: Config.options.quickToggles.material.align
+
+                onAlignmentChanged: {
+                    if (alignment === "left") Layout.alignment = Qt.AlignLeft
+                    if (alignment === "right") Layout.alignment = Qt.AlignRight
+                    if (alignment === "center") Layout.alignment = Qt.AlignCenter
+                }
+                
+                //anchors.horizontalCenter: alignment === "center" ? parent.horizontalCenter : undefined
+                
+                //anchors.right: alignment === "right" ? parent.right : undefined
+                //anchors.right: parent.right // it looks good only on right anchor no matter what i try
                 Repeater {
                     model: modelData
 
@@ -98,6 +112,7 @@ Item {
         }
     }
 
+    // TODO: maybe detect the empty tile and give an error? or autofill it?
     function splitRows(data, maxTiles=4) {
         let rows = [], currentRow = [], currentCount = 0
         for (let item of data) {

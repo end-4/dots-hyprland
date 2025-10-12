@@ -407,13 +407,13 @@ Singleton {
             }
 
             property JsonObject quickToggles: JsonObject {
-                property list<string> test: []
                 property string type: "material"
                 property JsonObject material: JsonObject {
                     property bool border: false
                     property bool showVolume: true
                     property bool showBrightness: true
                     property string mode: "large" // Options: compact, medium, large
+                    property string align: "left" // Options: left, center, right
                     property list<string> sizes: []
                     property list<string> toggles: []
                 }

@@ -394,31 +394,59 @@ ContentPage {
             }
         }
 
-        ContentSubsection {
+        ConfigRow{
             visible: Config.options.quickToggles.type === "material"
-            title: Translation.tr("Mode")
-            ConfigSelectionArray {
-                currentValue: Config.options.quickToggles.material.mode
-                onSelected: newValue => {
-                    Config.options.quickToggles.material.mode = newValue;
-                }
-                options: [
-                    {
-                        displayName: Translation.tr("Compact"),
-                        icon: "tile_small",
-                        value: "compact"
-                    },
-                    {
-                        displayName: Translation.tr("Medium"),
-                        icon: "tile_medium",
-                        value: "medium"
-                    },
-                    {
-                        displayName: Translation.tr("Large"),
-                        icon: "tile_large",
-                        value: "large"
+            ContentSubsection {
+                title: Translation.tr("Mode")
+                ConfigSelectionArray {
+                    currentValue: Config.options.quickToggles.material.mode
+                    onSelected: newValue => {
+                        Config.options.quickToggles.material.mode = newValue;
                     }
-                ]
+                    options: [
+                        {
+                            displayName: Translation.tr("Compact"),
+                            icon: "tile_small",
+                            value: "compact"
+                        },
+                        {
+                            displayName: Translation.tr("Medium"),
+                            icon: "tile_medium",
+                            value: "medium"
+                        },
+                        {
+                            displayName: Translation.tr("Large"),
+                            icon: "tile_large",
+                            value: "large"
+                        }
+                    ]
+                }
+            }
+            ContentSubsection {
+                title: Translation.tr("Leftover alignment")
+                ConfigSelectionArray {
+                    currentValue: Config.options.quickToggles.material.align
+                    onSelected: newValue => {
+                        Config.options.quickToggles.material.align = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Left"),
+                            icon: "align_horizontal_left",
+                            value: "left"
+                        },
+                        {
+                            displayName: Translation.tr("Center"),
+                            icon: "align_horizontal_center",
+                            value: "center"
+                        },
+                        {
+                            displayName: Translation.tr("Right"),
+                            icon: "align_horizontal_right",
+                            value: "right"
+                        }
+                    ]
+                }
             }
         }
 

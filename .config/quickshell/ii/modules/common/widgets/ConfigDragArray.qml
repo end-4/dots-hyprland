@@ -21,7 +21,7 @@ Flow {
 			"value": 2
 		},
 	]
-	property var initial: []
+	property var initial: [] // array that we have to get when we open settings (maybe change name?)
 	property var selectedSet: ({}) 
 
 	readonly property var currentValues: {
@@ -36,45 +36,63 @@ Flow {
 		return arr
 	}
 
-	onInitialChanged: { // first starting
-		var newSelectedSet = {}
-		for (var i = 0; i < initial.length; i++) {
-			var val = initial[i].toString()   
-			newSelectedSet[val] = true
-		}
-		root.selectedSet = newSelectedSet
+    function reorderLists() { // reordering options and sizes lists
+        var selectedOptions = []
+        var unselectedOptions = []
+        var selectedSizes = []
+        var unselectedSizes = []
 
-		var newOptions = []
-		for (var i = 0; i < initial.length; i++) {
-			var val = initial[i]
-			var opt = options.find(o => o.value === val)
-			if (opt) newOptions.push(opt)
-		}
+        var currentSizes = Config.options.quickToggles.material.sizes
+        
+        for (var i = 0; i < options.length; i++) {
+            var opt = options[i]
+            var key = opt.value.toString()
+            var size = currentSizes[i]
+            
+            if (root.selectedSet[key]) {
+                selectedOptions.push(opt)
+                if (size !== undefined) selectedSizes.push(size)
+            } else {
+                unselectedOptions.push(opt)
+                if (size !== undefined) unselectedSizes.push(size)
+            }
+        }
+        
+        var newOptions = selectedOptions.concat(unselectedOptions)
+        var newSizes = selectedSizes.concat(unselectedSizes)
+        
+        root.options = newOptions
+        Config.options.quickToggles.material.sizes = newSizes
+    }
 
-		for (var i = 0; i < options.length; i++) {
-			if (initial.indexOf(options[i].value) === -1)
-				newOptions.push(options[i])
-		}
+	onInitialChanged: {
+        var newSelectedSet = {}
+        for (var i = 0; i < initial.length; i++) {
+            newSelectedSet[initial[i].toString()] = true
+        }
+        root.selectedSet = newSelectedSet
 
-		options = newOptions
-	}
+        // must be reordering for sync
+        root.reorderLists() 
+    }
 
     signal selected(var newValue)
 
 	function toggleValue(value) {
-		var key = value.toString() 
-		
-		var tempSet = Object.assign({}, root.selectedSet) 
+        var key = value.toString()
+        
+        var tempSet = Object.assign({}, root.selectedSet) 
+        if (tempSet[key])
+            delete tempSet[key]
+        else
+            tempSet[key] = true
+        root.selectedSet = tempSet 
 
-		if (tempSet[key])
-			delete tempSet[key]
-		else
-			tempSet[key] = true
-		
-		root.selectedSet = tempSet 
+        // must be reordering for sync
+        root.reorderLists()
 
-		selected(currentValues)
-	}
+        selected(currentValues)
+    }
 	
 	function moveOption(index, offset) {
         var targetIndex = index + offset
@@ -82,28 +100,30 @@ Flow {
         
         var sourceKey = options[index].value.toString()
         var targetKey = options[targetIndex].value.toString()
-        var isSourceToggled = !!root.selectedSet[sourceKey]
-        var isTargetToggled = !!root.selectedSet[targetKey]
+        var isSourceToggled = !!root.selectedSet[sourceKey] // item that we are going to move has to be toggled
+        var isTargetToggled = !!root.selectedSet[targetKey] // item that we are going to swap with also has to be toggled (to look good in the settings)
 
         if (!isSourceToggled || !isTargetToggled) {
             return
         }
         
+        // updating toggles list
         var newList = options.slice()
         var temp = newList[index]
         newList[index] = newList[targetIndex]
         newList[targetIndex] = temp
         options = newList
         
+        // udpating sizes list
         var sizesList = Config.options.quickToggles.material.sizes.slice()
         var tempSize = sizesList[index]
         sizesList[index] = sizesList[targetIndex]
         sizesList[targetIndex] = tempSize
         
         Config.options.quickToggles.material.sizes = sizesList
-
         selected(currentValues)
     }
+
 
 	function moveValues(index, rotation) { // rotation must be -1 or +1
 		if (index < root.options.length + rotation) {
@@ -153,7 +173,7 @@ Flow {
 				root.moveOption(index, +1)
 			}
             clickAndHold: function() {
-                if (toggled) root.toggleSize(index)
+                if (toggled) root.toggleSize(index) // maybe check the toggle state in the function for cleaner code?
             }
 		}
 	}
