@@ -14,6 +14,7 @@ Singleton {
     property bool ready: Pipewire.defaultAudioSink?.ready ?? false
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
+    readonly property real hardMaxValue: 2.00 // People keep joking about setting volume to 5172% so...
 
     signal sinkProtectionTriggered(string reason);
 
@@ -38,9 +39,9 @@ Singleton {
 
             if (newVolume - lastVolume > maxAllowedIncrease) {
                 sink.audio.volume = lastVolume;
-                root.sinkProtectionTriggered("Illegal increment");
-            } else if (newVolume > maxAllowed) {
-                root.sinkProtectionTriggered("Exceeded max allowed");
+                root.sinkProtectionTriggered(Translation.tr("Illegal increment"));
+            } else if (newVolume > maxAllowed || newVolume > root.hardMaxValue) {
+                root.sinkProtectionTriggered(Translation.tr("Exceeded max allowed"));
                 sink.audio.volume = Math.min(lastVolume, maxAllowed);
             }
             if (sink.ready && (isNaN(sink.audio.volume) || sink.audio.volume === undefined || sink.audio.volume === null)) {

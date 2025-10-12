@@ -172,7 +172,7 @@ printf "${STY_CYAN}Press ${STY_BG_CYAN} Ctrl+Super+T ${STY_BG_CYAN} to select a 
 printf "${STY_CYAN}Press ${STY_BG_CYAN} Super+/ ${STY_CYAN} for a list of keybinds${STY_RESET}\n"
 printf "\n"
 printf "${STY_CYAN}For suggestions/hints after installation:${STY_RESET}\n"
-printf "${STY_CYAN}${STY_UNDERLINE} https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
+printf "${STY_CYAN}${STY_UNDERLINE} https://ii.clsty.link/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in
