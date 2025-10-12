@@ -19,7 +19,10 @@ Item {
 
     Behavior on rotation {
         enabled: Config.options.background.clock.cookie.constantlyRotate // Animating every second is expensive...
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        animation: NumberAnimation {
+            duration: 1000 // 1 second
+            easing.type: Easing.InOutQuad
+        }
     }
 
     Rectangle {
