@@ -6,6 +6,10 @@ cffi==1.17.1
     # via pywayland
 click==8.2.1
     # via -r scriptdata/uv/requirements.in
+dbus-python==1.4.0
+    # via kde-material-you-colors
+kde-material-you-colors==1.10.1
+    # via -r scriptdata/uv/requirements.in
 libsass==0.23.0
     # via -r scriptdata/uv/requirements.in
 loguru==0.7.3
@@ -13,9 +17,17 @@ loguru==0.7.3
 material-color-utilities==0.2.1
     # via -r scriptdata/uv/requirements.in
 materialyoucolor==2.0.10
-    # via -r scriptdata/uv/requirements.in
+    # via
+    #   -r scriptdata/uv/requirements.in
+    #   kde-material-you-colors
 numpy==2.2.2
-    # via material-color-utilities
+    # via
+    #   -r scriptdata/uv/requirements.in
+    #   kde-material-you-colors
+    #   material-color-utilities
+    #   opencv-contrib-python
+opencv-contrib-python==4.12.0.88
+    # via -r scriptdata/uv/requirements.in
 packaging==24.2
     # via
     #   build
@@ -23,6 +35,7 @@ packaging==24.2
 pillow==11.1.0
     # via
     #   -r scriptdata/uv/requirements.in
+    #   kde-material-you-colors
     #   material-color-utilities
 psutil==6.1.1
     # via -r scriptdata/uv/requirements.in

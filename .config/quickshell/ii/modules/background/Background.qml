@@ -14,6 +14,8 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
+import "./cookieClock"
+
 Variants {
     id: root
     readonly property bool fixedClockPosition: Config.options.background.clock.fixedPosition
@@ -22,6 +24,7 @@ Variants {
     readonly property real clockSizePadding: 20
     readonly property real screenSizePadding: 50
     readonly property string clockStyle: Config.options.background.clock.style
+    readonly property bool showCookieQuote: Config.options.background.showQuote && Config.options.background.quote !== "" && !GlobalStates.screenLocked && Config.options.background.clock.style === "cookie"
     model: Quickshell.screens
 
     PanelWindow {
@@ -152,7 +155,7 @@ Variants {
             property int contentHeight: 300
             property int horizontalPadding: bgRoot.movableXSpace
             property int verticalPadding: bgRoot.movableYSpace
-            command: [Quickshell.shellPath("scripts/images/least_busy_region.py"), "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale), "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale), "--width", contentWidth, "--height", contentHeight, "--horizontal-padding", horizontalPadding, "--vertical-padding", verticalPadding, path
+            command: [Quickshell.shellPath("scripts/images/least-busy-region-venv.sh"), "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale), "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale), "--width", contentWidth, "--height", contentHeight, "--horizontal-padding", horizontalPadding, "--vertical-padding", verticalPadding, path
                 // "--visual-output",
                 ,]
             stdout: StdioCollector {
@@ -314,7 +317,7 @@ Variants {
                             }
                             StyledText {
                                 // Somehow gets fucked up if made a ClockText???
-                                visible: Config.options.background.quote.length > 0
+                                visible: Config.options.background.showQuote && Config.options.background.quote.length > 0
                                 Layout.fillWidth: true
                                 horizontalAlignment: bgRoot.textHorizontalAlignment
                                 font {
@@ -333,10 +336,19 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
-                        visible: root.clockStyle === "cookie"
+                        visible: root.clockStyle === "cookie" 
                         active: visible
                         sourceComponent: CookieClock {}
                     }
+
+                    Loader {
+                        id: cookieQuoteLoader
+                        visible: root.showCookieQuote
+                        active: visible
+                        sourceComponent: CookieQuote {}
+                        anchors.horizontalCenter: cookieClockLoader.horizontalCenter
+                    }
+                    
                 }
 
                 Item {
@@ -410,7 +422,7 @@ Variants {
         }
     }
 
-    // Components
+    // ComponentsCookieClock {}
     component ClockText: StyledText {
         Layout.fillWidth: true
         horizontalAlignment: bgRoot.textHorizontalAlignment

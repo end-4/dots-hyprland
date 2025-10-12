@@ -15,7 +15,7 @@ MouseArea {
 
     hoverEnabled: true
 
-    onClicked: {
+    onPressed: {
         Weather.getData();
         Quickshell.execDetached(["notify-send", 
             Translation.tr("Weather"), 

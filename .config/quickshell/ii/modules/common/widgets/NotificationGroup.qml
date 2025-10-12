@@ -6,6 +6,7 @@ import "./notification_utils.js" as NotificationUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Services.Notifications
 
 /**
  * A group of notifications from the same app.
@@ -154,6 +155,8 @@ MouseArea { // Notification group area
                 image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
                 appIcon: notificationGroup?.appIcon
                 summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
+                urgency: root.notifications.some(n => n.urgency === NotificationUrgency.Critical.toString()) ? 
+                    NotificationUrgency.Critical : NotificationUrgency.Normal
             }
 
             ColumnLayout { // Content

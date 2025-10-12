@@ -8,8 +8,9 @@ GroupButton {
     property string buttonIcon
     property bool activated: false
     toggled: activated
-
     baseWidth: height
+    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+    colBackgroundActive: Appearance.colors.colSecondaryContainerActive
 
     contentItem: MaterialSymbol {
         horizontalAlignment: Text.AlignHCenter

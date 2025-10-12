@@ -1,19 +1,38 @@
 import QtQuick
 import QtQuick.Shapes
 import Quickshell
+import qs.modules.common
+
 
 Item {
     id: root
     
-    property int sides: 12
+    property real sides: 12  
     property int implicitSize: 100
     property real amplitude: implicitSize / 50
     property int renderPoints: 360
     property color color: "#605790"
     property alias strokeWidth: shapePath.strokeWidth
+    property bool constantlyRotate: false
 
     implicitWidth: implicitSize
     implicitHeight: implicitSize
+
+    property real shapeRotation: 0
+
+    Loader {
+        active: constantlyRotate
+        sourceComponent: FrameAnimation {
+            running: true
+            onTriggered: {
+                shapeRotation += 0.05
+            }
+        }
+    }
+
+    Behavior on sides {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     Shape {
         id: shape
@@ -35,7 +54,8 @@ Item {
                     var radius = root.implicitSize / 2 - root.amplitude
                     for (var i = 0; i <= steps; i++) {
                         var angle = (i / steps) * 2 * Math.PI
-                        var wave = Math.sin(angle * root.sides + Math.PI/2) * root.amplitude
+                        var rotatedAngle = angle * root.sides + Math.PI/2 + (root.shapeRotation * root.constantlyRotate)
+                        var wave = Math.sin(rotatedAngle) * root.amplitude
                         var x = Math.cos(angle) * (radius + wave) + cx
                         var y = Math.sin(angle) * (radius + wave) + cy
                         points.push(Qt.point(x, y))
@@ -45,6 +65,7 @@ Item {
 
                 path: pointsList
             }
+            
         }
     }
 }

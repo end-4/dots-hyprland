@@ -129,10 +129,24 @@ Singleton {
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
+                    property JsonObject cookie: JsonObject {
+                        property int sides: 14
+                        property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
+                        property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
+                        property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
+                        property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
+                        property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
+                        property bool timeIndicators: true
+                        property bool hourMarks: false
+                        property bool dateInClock: true
+                        property bool constantlyRotate: false
+                    }
+                    
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
+                property bool showQuote: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
@@ -197,6 +211,11 @@ Singleton {
                     property string city: "" // When 'enableGPS' is false
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
+                }
+                property JsonObject indicators: JsonObject {
+                    property JsonObject notifications: JsonObject {
+                        property bool showUnreadCount: false
+                    }
                 }
             }
 
@@ -316,6 +335,7 @@ Singleton {
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"
+                    property string app: ">"
                     property string clipboard: ";"
                     property string emojis: ":"
                     property string math: "="
@@ -327,7 +347,11 @@ Singleton {
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
                 property JsonObject translator: JsonObject {
+                    property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
+                }
+                property JsonObject ai: JsonObject {
+                    property bool textFadeIn: true
                 }
                 property JsonObject booru: JsonObject {
                     property bool allowNsfw: false
@@ -365,6 +389,7 @@ Singleton {
                     property int focus: 1500
                     property int longBreak: 900
                 }
+                property bool secondPrecision: false
             }
             
             property JsonObject wallpaperSelector: JsonObject {

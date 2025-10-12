@@ -1,10 +1,10 @@
+pragma Singleton
+pragma ComponentBehavior: Bound
 import qs
 import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Io
-pragma Singleton
-pragma ComponentBehavior: Bound
 
 /**
  * A nice wrapper for date and time strings.
@@ -12,7 +12,11 @@ pragma ComponentBehavior: Bound
 Singleton {
     property var clock: SystemClock {
         id: clock
-        precision: GlobalStates.screenLocked ? SystemClock.Seconds : SystemClock.Minutes // Hack to ensure clock is correct after waking up from suspend
+        precision: {
+            if (Config.options.time.secondPrecision || GlobalStates.screenLocked)
+                return SystemClock.Seconds;
+            return SystemClock.Minutes;
+        }
     }
     property string time: Qt.locale().toString(clock.date, Config.options?.time.format ?? "hh:mm")
     property string shortDate: Qt.locale().toString(clock.date, Config.options?.time.shortDateFormat ?? "dd/MM")
@@ -25,22 +29,25 @@ Singleton {
         running: true
         repeat: true
         onTriggered: {
-            fileUptime.reload()
-            const textUptime = fileUptime.text()
-            const uptimeSeconds = Number(textUptime.split(" ")[0] ?? 0)
+            fileUptime.reload();
+            const textUptime = fileUptime.text();
+            const uptimeSeconds = Number(textUptime.split(" ")[0] ?? 0);
 
             // Convert seconds to days, hours, and minutes
-            const days = Math.floor(uptimeSeconds / 86400)
-            const hours = Math.floor((uptimeSeconds % 86400) / 3600)
-            const minutes = Math.floor((uptimeSeconds % 3600) / 60)
+            const days = Math.floor(uptimeSeconds / 86400);
+            const hours = Math.floor((uptimeSeconds % 86400) / 3600);
+            const minutes = Math.floor((uptimeSeconds % 3600) / 60);
 
             // Build the formatted uptime string
-            let formatted = ""
-            if (days > 0) formatted += `${days}d`
-            if (hours > 0) formatted += `${formatted ? ", " : ""}${hours}h`
-            if (minutes > 0 || !formatted) formatted += `${formatted ? ", " : ""}${minutes}m`
-            uptime = formatted
-            interval = Config.options?.resources?.updateInterval ?? 3000
+            let formatted = "";
+            if (days > 0)
+                formatted += `${days}d`;
+            if (hours > 0)
+                formatted += `${formatted ? ", " : ""}${hours}h`;
+            if (minutes > 0 || !formatted)
+                formatted += `${formatted ? ", " : ""}${minutes}m`;
+            uptime = formatted;
+            interval = Config.options?.resources?.updateInterval ?? 3000;
         }
     }
 
@@ -49,5 +56,4 @@ Singleton {
 
         path: "/proc/uptime"
     }
-
 }

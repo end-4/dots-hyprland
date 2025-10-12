@@ -158,41 +158,13 @@ ContentPage {
         title: Translation.tr("Policies")
 
         ConfigRow {
-            ColumnLayout {
-                // Weeb policy
-                ContentSubsectionLabel {
-                    text: Translation.tr("Weeb")
-                }
-                ConfigSelectionArray {
-                    currentValue: Config.options.policies.weeb
-                    onSelected: newValue => {
-                        Config.options.policies.weeb = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("No"),
-                            icon: "close",
-                            value: 0
-                        },
-                        {
-                            displayName: Translation.tr("Yes"),
-                            icon: "check",
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Closet"),
-                            icon: "ev_shadow",
-                            value: 2
-                        }
-                    ]
-                }
-            }
 
+            // AI policy
             ColumnLayout {
-                // AI policy
                 ContentSubsectionLabel {
                     text: Translation.tr("AI")
                 }
+                
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
                     onSelected: newValue => {
@@ -212,6 +184,38 @@ ContentPage {
                         {
                             displayName: Translation.tr("Local only"),
                             icon: "sync_saved_locally",
+                            value: 2
+                        }
+                    ]
+                }
+            }
+
+            // Weeb policy
+            ColumnLayout {
+
+                ContentSubsectionLabel {
+                    text: Translation.tr("Weeb")
+                }
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.policies.weeb
+                    onSelected: newValue => {
+                        Config.options.policies.weeb = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("No"),
+                            icon: "close",
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Yes"),
+                            icon: "check",
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Closet"),
+                            icon: "ev_shadow",
                             value: 2
                         }
                     ]
@@ -247,6 +251,18 @@ ContentPage {
     ContentSection {
         icon: "nest_clock_farsight_analog"
         title: Translation.tr("Time")
+
+        ConfigSwitch {
+            buttonIcon: "pace"
+            text: Translation.tr("Second precision")
+            checked: Config.options.time.secondPrecision
+            onCheckedChanged: {
+                Config.options.time.secondPrecision = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Enable if you want clocks to show seconds accurately")
+            }
+        }
 
         ContentSubsection {
             title: Translation.tr("Format")

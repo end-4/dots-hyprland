@@ -83,7 +83,7 @@ Rectangle {
             Layout.margins: 10
             Layout.rightMargin: 0
             forceCircle: true
-            onClicked: {
+            downAction: () => {
                 root.setCollapsed(false)
             }
             contentItem: MaterialSymbol {
@@ -146,7 +146,7 @@ Rectangle {
                         toggled: root.selectedTab == index
                         buttonText: modelData.name
                         buttonIcon: modelData.icon
-                        onClicked: {
+                        onPressed: {
                             root.selectedTab = index
                             Persistent.states.sidebar.bottomGroup.tab = index
                         }
@@ -158,7 +158,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 forceCircle: true
-                onClicked: {
+                downAction: () => {
                     root.setCollapsed(true)
                 }
                 contentItem: MaterialSymbol {

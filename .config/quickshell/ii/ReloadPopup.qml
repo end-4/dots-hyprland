@@ -58,7 +58,7 @@ Scope {
 				MouseArea {
 					id: mouseArea
 					anchors.fill: parent
-					onClicked: {
+					onPressed: {
 						popupLoader.active = false
 					}
 

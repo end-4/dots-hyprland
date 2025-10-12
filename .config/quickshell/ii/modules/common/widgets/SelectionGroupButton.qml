@@ -23,7 +23,7 @@ GroupButton {
     colBackgroundActive: Appearance.colors.colSecondaryContainerActive
 
     contentItem: RowLayout {
-        spacing: 4
+        spacing: 4 * (root.buttonText?.length > 0)
 
         Loader {
             Layout.alignment: Qt.AlignVCenter
@@ -42,7 +42,7 @@ GroupButton {
         }
 
         Item {
-            implicitWidth: textItem.implicitWidth
+            implicitWidth: root.buttonText?.length > 0 ? textItem.implicitWidth : 0
             implicitHeight: textMetrics.height // Force height to that of regular text
 
             TextMetrics {

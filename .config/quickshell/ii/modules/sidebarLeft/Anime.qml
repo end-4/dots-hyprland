@@ -198,10 +198,9 @@ Item {
                     anchors.centerIn: parent
                     spacing: 5
 
-                    MaterialSymbol {
+                    CookieWrappedMaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
                         iconSize: 60
-                        color: Appearance.m3colors.m3outline
                         text: "bookmark_heart"
                     }
                     StyledText {
@@ -525,9 +524,10 @@ Item {
                         anchors.centerIn: parent
 
                         MouseArea {
+                            anchors.fill: parent
                             hoverEnabled: true
                             PointingHandInteraction {}
-                            onClicked: {
+                            onPressed: {
                                 nsfwSwitch.checked = !nsfwSwitch.checked
                             }
                         }
@@ -566,8 +566,8 @@ Item {
                             buttonText: commandRepresentation
                             colBackground: Appearance.colors.colLayer2
 
-                            onClicked: {
-                                if(modelData.sendDirectly) {
+                            downAction: () => {
+                                if (modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
                                     tagInputField.text = commandRepresentation + " "

@@ -4,6 +4,7 @@ setuptools-scm
 wheel
 pywayland
 psutil
+kde-material-you-colors
 materialyoucolor
 libsass
 material-color-utilities
@@ -13,3 +14,5 @@ loguru
 pycairo
 pygobject
 tqdm
+numpy
+opencv-contrib-python
