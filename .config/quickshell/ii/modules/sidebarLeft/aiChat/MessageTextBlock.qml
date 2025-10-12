@@ -113,7 +113,7 @@ ColumnLayout {
         property list<real> textLineOpacities: []
         model: ScriptModel {
             // Split by either double newlines or single newlines in a list
-            values: root.fadeChunkSplitting ? root.shownText.split(/\n\n|\n(?= {0,2}[-\*])/g).filter(line => line.trim() !== "") : [root.shownText]
+            values: root.fadeChunkSplitting ? root.shownText.split(/\n\n(?= {0,2})|\n(?= {0,2}[-\*])/g).filter(line => line.trim() !== "") : [root.shownText]
             onValuesChanged: {
                 while (textLinesRepeater.textLineOpacities.length < values.length) {
                     textLinesRepeater.textLineOpacities.push(root.messageData.done ? 1 : 0);
