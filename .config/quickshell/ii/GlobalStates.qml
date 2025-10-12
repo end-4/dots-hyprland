@@ -1,5 +1,6 @@
-import qs.modules.common
 import qs
+import qs.modules.common
+import qs.services
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -41,6 +42,13 @@ Singleton {
             if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
                 GlobalStates.screenLocked = true;
             }
+        }
+    }
+
+    onSidebarRightOpenChanged: {
+        if (GlobalStates.sidebarRightOpen) {
+            Notifications.timeoutAll();
+            Notifications.markAllRead();
         }
     }
 

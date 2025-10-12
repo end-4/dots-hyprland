@@ -295,6 +295,48 @@ Item { // Bar content region
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         color: rightSidebarButton.colText
                     }
+                    Revealer {
+                        reveal: Notifications.silent || Notifications.unread > 0
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        implicitHeight: reveal ? notificationIcon.implicitHeight : 0
+                        implicitWidth: reveal ? notificationIcon.implicitWidth : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Rectangle {
+                            id: notifPing
+                            visible: !Notifications.silent && Notifications.unread > 0
+                            property bool showUnreadCount: Config.options.bar.indicators.notifications.showUnreadCount
+                            anchors {
+                                right: parent.right
+                                top: parent.top
+                                rightMargin: showUnreadCount ? 0 : 1
+                                topMargin: showUnreadCount ? 0 : 3
+                            }
+                            radius: Appearance.rounding.full
+                            color: Appearance.colors.colOnLayer0
+                            z: 1
+
+                            implicitHeight: showUnreadCount ? Math.max(notificationCounterText.implicitWidth, notificationCounterText.implicitHeight) : 8
+                            implicitWidth: implicitHeight
+
+                            StyledText {
+                                id: notificationCounterText
+                                visible: notifPing.showUnreadCount
+                                anchors.centerIn: parent
+                                font.pixelSize: Appearance.font.pixelSize.smallest
+                                color: Appearance.colors.colLayer0
+                                text: Notifications.unread
+                            }
+                        }
+                        MaterialSymbol {
+                            id: notificationIcon
+                            text: Notifications.silent ? "notifications_paused" : "notifications"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                        }
+                    }
                     MaterialSymbol {
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         text: Network.materialSymbol
