@@ -49,7 +49,7 @@ Column {
             topWidgetsRoot.brightnessMonitor.setBrightness(value)
         }
         MaterialSymbol {
-            text: "brightness_7"
+            text: "brightness_6"
             iconSize: 20
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left

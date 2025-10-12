@@ -1,6 +1,7 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
+import Qt5Compat.GraphicalEffects
 
 GroupButton {
     id: button
@@ -44,12 +45,14 @@ GroupButton {
 
     
     Rectangle { // Border
+        id: borderRect
         anchors.fill: parent
         border.width: Config.options.quickToggles.material.border ? 2 : 0
         border.color: toggled ? "transparent" : colBackgroundHover
         radius: root.radius
         color: "transparent"
     }
+
     
 
     Rectangle {
