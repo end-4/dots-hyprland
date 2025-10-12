@@ -21,8 +21,7 @@ GroupButton {
 
     property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
 
-
-    property int baseSize: Config.options.quickToggles.material.mode === "compact" ? 50 : Config.options.quickToggles.material.mode === "medium" ? 60 : 65 
+    property string panelType: Config.options.quickToggles.material.mode
     property string buttonIcon
     property int buttonSize: 1 // Must be 1, 2 
     property string titleText
@@ -34,14 +33,15 @@ GroupButton {
     buttonRadiusPressed: buttonClickedRadius
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
 
-    baseWidth: baseSize * 1.5 * buttonSize
+    property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
+    property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
+    baseWidth: baseSize * buttonSize * widthMultiplier - 5  // -5 for spacing (default)
     baseHeight: baseSize
     clickedWidth: baseWidth + 20
 
     property bool halfToggled: false
     toggled: false
 
-    property string panelType: Config.options.quickToggles.material.mode
     
     Rectangle { // Border
         anchors.fill: parent

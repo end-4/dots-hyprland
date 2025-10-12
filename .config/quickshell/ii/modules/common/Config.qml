@@ -412,7 +412,7 @@ Singleton {
                     property bool border: false
                     property bool showVolume: true
                     property bool showBrightness: true
-                    property string mode: "medium" // Options: compact, medium, large
+                    property string mode: "large" // Options: compact, medium, large
                     property list<string> sizes: []
                     property list<string> toggles: []
                 }

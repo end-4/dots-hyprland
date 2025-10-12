@@ -12,7 +12,10 @@ import Quickshell.Services.UPower
 
 Column {
     id: topWidgetsRoot
-    width: 405
+
+    anchors.left: parent.left
+    anchors.leftMargin: 20
+    width: parent.width - 23 // TODO: fuck this 3 pixel
 
     property var screen: topWidgetsRoot.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)

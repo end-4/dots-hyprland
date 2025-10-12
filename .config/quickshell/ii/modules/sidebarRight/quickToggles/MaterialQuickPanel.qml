@@ -54,8 +54,6 @@ Item {
         id: mainColumn
         spacing: 10
 
-        rightPadding: panelType === "large" ? -25 : panelType === "medium" ? -60 : -10 // TODO: Better way to do this
-
         MaterialTopWidgets {} // TODO: put this to a loader
         
 
@@ -63,9 +61,7 @@ Item {
             model: root.rowModels
             ButtonGroup {
                 id: mainButtonGroup
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                spacing: panelType === "medium" ? 10 : 5
+                anchors.right: parent.right // it looks right only on right anchor no matter what i try
                 Repeater {
                     model: modelData
 
