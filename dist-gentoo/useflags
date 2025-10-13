@@ -127,6 +127,7 @@ kde-frameworks/kguiaddons X dbus wayland
 kde-frameworks/kidletime X wayland
 kde-frameworks/kwindowsystem X wayland
 kde-frameworks/kconfig dbus qml
+kde-frameworks/sonnet qml
 x11-base/xwayland libei
 sys-apps/dbus X
 sys-libs/zlib minizip
