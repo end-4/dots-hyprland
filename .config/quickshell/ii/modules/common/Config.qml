@@ -9,6 +9,7 @@ Singleton {
     property string filePath: Directories.shellConfigPath
     property alias options: configOptionsJsonAdapter
     property bool ready: false
+    property int readWriteDelay: 50 // milliseconds
 
     function setNestedValue(nestedKey, value) {
         let keys = nestedKey.split(".");
@@ -42,7 +43,7 @@ Singleton {
 
     Timer {
         id: fileReloadTimer
-        interval: 50
+        interval: root.readWriteDelay
         repeat: false
         onTriggered: {
             configFileView.reload()
@@ -51,7 +52,7 @@ Singleton {
 
     Timer {
         id: fileWriteTimer
-        interval: 50
+        interval: root.readWriteDelay
         repeat: false
         onTriggered: {
             configFileView.writeAdapter()
