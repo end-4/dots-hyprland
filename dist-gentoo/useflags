@@ -137,3 +137,5 @@ media-libs/leptonica jpeg png zlib tiff webp
 media-libs/libva X wayland
 app-text/xmlto text
 app-crypt/gcr gtk
+media-video/vlc wayland ogg dbus mp3 
+dev-libs/qcoro dbus3vl qml
