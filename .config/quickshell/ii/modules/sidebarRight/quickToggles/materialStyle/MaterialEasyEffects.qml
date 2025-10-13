@@ -8,7 +8,7 @@ import Quickshell.Hyprland
 
 MaterialQuickToggleButton {
     id: root
-    buttonSize: 2
+    buttonSize: 1
     toggled: EasyEffects.active
     visible: EasyEffects.available
     buttonIcon: "instant_mix"
@@ -19,10 +19,12 @@ MaterialQuickToggleButton {
     }
 
     onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
         EasyEffects.toggle()
     }
 
     altAction: () => {
+        if (GlobalStates.quickTogglesEditMode) return;
         Quickshell.execDetached(["bash", "-c", "flatpak run com.github.wwmm.easyeffects || easyeffects"])
         GlobalStates.sidebarRightOpen = false
     }

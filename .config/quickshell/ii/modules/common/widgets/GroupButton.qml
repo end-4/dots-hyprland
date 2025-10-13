@@ -17,6 +17,7 @@ Button {
     property real buttonRadiusPressed: Appearance?.rounding?.small ?? 6
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
+    property var rightReleaseAction // When right clicking (release)
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
     property var clickAndHold // When clicked and hold
@@ -93,8 +94,13 @@ Button {
         }
         onReleased: (event) => {
             root.down = false
-            if (event.button != Qt.LeftButton) return;
-            if (root.releaseAction) root.releaseAction();
+            if (event.button === Qt.LeftButton) {
+                if (root.releaseAction) root.releaseAction();
+            }
+            if (event.button === Qt.RightButton) {
+                if (root.rightReleaseAction) root.rightReleaseAction();
+            }
+            
         }
         onClicked: (event) => {
             if (event.button != Qt.LeftButton) return;
@@ -103,7 +109,6 @@ Button {
         onCanceled: (event) => {
             root.down = false
         }
-
         onPressAndHold: () => {
             clickAndHold(); 
             root.down = false; 

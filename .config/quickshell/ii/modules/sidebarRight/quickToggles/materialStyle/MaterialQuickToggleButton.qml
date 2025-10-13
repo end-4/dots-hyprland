@@ -2,6 +2,8 @@ import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import Qt5Compat.GraphicalEffects
+import qs
+
 
 GroupButton {
     id: button
@@ -28,22 +30,47 @@ GroupButton {
     property string titleText
     property string altText
     
-    
+    property int buttonIndex
+
+    property string unusedName: ""
+
     property int buttonClickedRadius : Appearance.rounding.normal
     clickedRadius: buttonClickedRadius
     buttonRadiusPressed: buttonClickedRadius
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
 
+    // TODO: fix these
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
     property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
-    baseWidth: baseSize * buttonSize * widthMultiplier - 5  // -5 for spacing (default)
-    baseHeight: baseSize
+    property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5  // -5 for spacing (default)
+    baseWidth: unusedName === "" ? calculatedWidth : 50 * widthMultiplier
+    baseHeight: unusedName === "" ? baseSize : 50
     clickedWidth: baseWidth + 20
 
     property bool halfToggled: false
     toggled: false
 
-    
+    onClicked: event => {
+        // left click, moves to left
+        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        QuickTogglesUtils.moveOption(buttonIndex, -1)
+    }
+    rightReleaseAction: function() {
+        // right click, moves to right
+        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        QuickTogglesUtils.moveOption(buttonIndex, +1)
+    }
+    clickAndHold: function() {
+        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        QuickTogglesUtils.toggleOptionSize(buttonIndex)
+    }
+    middleClickAction: function() {
+        if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
+        else QuickTogglesUtils.addOption(unusedName)
+    }
+
+
+
     Rectangle { // Border
         id: borderRect
         anchors.fill: parent
@@ -52,8 +79,6 @@ GroupButton {
         radius: root.radius
         color: "transparent"
     }
-
-    
 
     Rectangle {
         anchors.centerIn: buttonSize === 1 ? parent : undefined
@@ -68,7 +93,7 @@ GroupButton {
         color: (buttonSize === 1 || toggled) ? "transparent" : halfToggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer2
         MaterialSymbol {
             anchors.centerIn: parent
-            iconSize: buttonSize === 1 ? baseSize / 2.5 : baseSize / 3
+            iconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
             fill: toggled ? 1 : 0
             color: toggled || halfToggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
             horizontalAlignment: Text.AlignHCenter

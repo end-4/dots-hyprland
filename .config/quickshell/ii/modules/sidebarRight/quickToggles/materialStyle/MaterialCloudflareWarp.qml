@@ -15,6 +15,7 @@ MaterialQuickToggleButton {
     altText: toggled ? "On" : "Off"
 
     onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
         if (toggled) {
             root.toggled = false
             Quickshell.execDetached(["warp-cli", "disconnect"])

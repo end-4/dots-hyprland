@@ -14,6 +14,7 @@ MaterialQuickToggleButton {
     titleText: "Color Picker"
     altText: "Click me"
     onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         delayedActionTimer.start() // Using a timer to wait sidebarRight close
         

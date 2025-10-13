@@ -13,6 +13,7 @@ MaterialQuickToggleButton {
     titleText: "Keyboard"
     altText: "Click me"
     onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         onClicked: GlobalStates.oskOpen = !GlobalStates.oskOpen
     }

@@ -12,7 +12,10 @@ MaterialQuickToggleButton {
     buttonIcon: toggled ? "notifications_paused" : "notifications_active"
     titleText: "Notifications"
     altText: toggled ? "Silent" : "On" 
-    onClicked: Notifications.silent = !Notifications.silent;
+    onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
+        Notifications.silent = !Notifications.silent;
+    }
     StyledToolTip {
         text: "Do Not Disturb"
     }

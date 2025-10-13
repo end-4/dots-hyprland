@@ -14,6 +14,7 @@ MaterialQuickToggleButton {
     titleText: "Dark Mode"
     altText: toggled ? "On" : "Off"
     onClicked: event => {
+        if (GlobalStates.quickTogglesEditMode) return;
         if (Appearance.m3colors.darkmode) {
             Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`);
         } else {

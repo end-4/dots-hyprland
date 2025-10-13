@@ -23,6 +23,10 @@ Item {
     property var sizesData: []
     property var togglesData: []
 
+    property list<string> fullItemList: ["network","bluetooth","cloudflarewarp","easyeffects","gamemode","idleinhibitor","nightlight","screensnip",
+    "colorpicker","showkeyboard","togglemic","darkmode","performanceprofile","silent"]
+    property list<string> filteredList: fullItemList.filter(item => !Config.options.quickToggles.material.toggles.includes(item))
+
     property var combinedData: {
         let data = [];
         let sizes = Config?.options.quickToggles.material.sizes ?? [];
@@ -38,54 +42,95 @@ Item {
     property int tileSize: panelType === "compact" ? 5 : 4
     property var rowModels: splitRows(combinedData, tileSize)
 
-    onCombinedDataChanged: {
-        console.log("Material quick toggles panel layout changed in config file. Reloading sidebar layout automatically")
-        rowModels = splitRows(combinedData, tileSize)
-    }
-    onTileSizeChanged: {
-        console.log("Material quick toggles panel mode changed in config file. Reloading sidebar layout automatically")
-        rowModels = splitRows(combinedData, tileSize)
-    }
+    property list<var> getIndex : []
+
+    onCombinedDataChanged: updateData() // FIXME: it is being called 4 times in one update
+    onTileSizeChanged: updateData()
     
-
-
-
+    function updateData() {
+        //console.log("Material quick toggles panel mode changed in config file. Reloading sidebar layout automatically")
+        root.getIndex = [] 
+        rowModels = splitRows(combinedData, tileSize)
+        filteredList = fullItemList.filter(item => !Config.options.quickToggles.material.toggles.includes(item))
+        console.log(root.filteredList)
+    }
 
     ColumnLayout {
         id: mainColumn
         spacing: 10
-
+        
+       
         MaterialTopWidgets {} // TODO: put this or the items inside to a loader
         
-
+        // TODO: Seperate these if you can
         Repeater {
+            id: rowRepeater
             model: root.rowModels
             ButtonGroup {
                 id: mainButtonGroup
-                
 
+                readonly property var rowIndex: rowRepeater.index
                 property string alignment: Config.options.quickToggles.material.align
-
                 onAlignmentChanged: {
                     if (alignment === "left") Layout.alignment = Qt.AlignLeft
                     if (alignment === "right") Layout.alignment = Qt.AlignRight
                     if (alignment === "center") Layout.alignment = Qt.AlignCenter
                 }
+
                 Repeater {
                     model: modelData
-
                     delegate: Item {
                         Component.onCompleted: {
+                            var optionIndex = root.getIndex.length
+                            root.getIndex.push("0")
                             var comp = getComponentByName(modelData[1]);
-                            var obj = comp.createObject(parent, {buttonSize: modelData[0]});
+                            var obj = comp.createObject(parent, {
+                                buttonSize: modelData[0],
+                                buttonIndex: optionIndex
+                                });
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // TODO: put this to a new file
+        Item {
+            anchors.horizontalCenter: parent.horizontalCenter
+            implicitHeight: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitHeight : 0
+            Loader {
+                id: unusedButtonsLoader
+                active: GlobalStates.quickTogglesEditMode
+                anchors.centerIn: parent
+                sourceComponent: Rectangle{ // change the looking a little
+                    property int padding: 30
+                    implicitHeight: grid.implicitHeight + padding  
+                    implicitWidth: grid.implicitWidth + padding
+                    color: Appearance.colors.colLayer1
+                    radius: Appearance.rounding.normal
+                    GridLayout {
+                        id: grid
+                        columns: 4
+                        anchors.centerIn: parent
+                        Repeater {
+                        model: root.filteredList
+                        delegate: Loader {
+                            sourceComponent:  getComponentByName(root.filteredList[index])
+                                onLoaded: {
+                                    item.buttonSize = 1
+                                    item.unusedName = root.filteredList[index]
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
-
-
+    
+    
+    
 
      function getComponentByName(name) {
         switch(name) {
@@ -107,7 +152,8 @@ Item {
         }
     }
 
-    // TODO: maybe detect the empty tile and give an error? or autofill it?
+    
+
     function splitRows(data, maxTiles=4) {
         let rows = [], currentRow = [], currentCount = 0
         for (let item of data) {

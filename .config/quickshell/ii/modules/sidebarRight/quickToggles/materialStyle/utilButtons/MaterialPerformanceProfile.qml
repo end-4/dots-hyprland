@@ -23,6 +23,7 @@ MaterialQuickToggleButton {
                     }
     
     onClicked: event => {
+        if (GlobalStates.quickTogglesEditMode) return;
         if (PowerProfiles.hasPerformanceProfile) {
             switch(PowerProfiles.profile) {
                 case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced

@@ -17,8 +17,12 @@ MaterialQuickToggleButton {
     buttonIcon: Network.materialSymbol
     titleText: Network.wifiEnabled ? "Wifi" : Network.ethernet ? "Ethernet" : "Network"
     altText: toggled ? Network.networkName : halfToggled ?  "On" : "Off"
-    onClicked: Network.toggleWifi()
+    onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
+        Network.toggleWifi()
+    }
     altAction: () => {
+        if (GlobalStates.quickTogglesEditMode) return;
         Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`])
         GlobalStates.sidebarRightOpen = false
     }

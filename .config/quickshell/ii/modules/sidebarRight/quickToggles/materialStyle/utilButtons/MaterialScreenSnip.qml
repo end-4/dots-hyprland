@@ -13,6 +13,7 @@ MaterialQuickToggleButton {
     titleText: "Screenshot"
     altText: "Click me"
     onClicked: {
+        if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("screenshot.qml")])
     }
