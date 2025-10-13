@@ -30,7 +30,7 @@ Note:
 - Init system is not assumed or considered so disabling systemd should be done in make.conf, same with session managers (elogind is recommended).
 
 ## Making the dot-files work
-- elogind is expected to be installed and run as a service on OpenRC to set _$XDG_RUNTIME_DIR_
+- elogind is expected to be installed and run as a service on OpenRC to set ```XDG_RUNTIME_DIR```
   - NOT recommended: seatd will require more manual setup
 - pipewire, pipewire-pulse, and wireplumber must be started after a dbus-session is created and before Hyprland is launched.
 
@@ -54,4 +54,4 @@ end
 
 ## Known Issues
 - ```Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory```
-  - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from _/usr/bin/_ and then re-emerging usually fixes this.
+  - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from ```/usr/bin/``` and then re-emerging usually fixes this.
