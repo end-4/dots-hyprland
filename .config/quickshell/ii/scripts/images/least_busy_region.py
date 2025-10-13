@@ -294,7 +294,8 @@ def get_dominant_color(image_path, x, y, w, h, screen_width=None, screen_height=
     _, labels, centers = cv2.kmeans(region, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
     counts = np.bincount(labels.flatten())
     dominant = centers[np.argmax(counts)]
-    return [int(x) for x in dominant]
+    # Reverse from BGR to RGB
+    return [int(x) for x in reversed(dominant)]
 
 def main():
     parser = argparse.ArgumentParser(description="Find least busy region in an image and output a JSON. Made for determining a suitable position for a wallpaper widget.")
