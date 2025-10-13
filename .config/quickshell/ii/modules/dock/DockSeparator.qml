@@ -1,7 +1,5 @@
-import qs
 import qs.modules.common
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 Rectangle {

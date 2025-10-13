@@ -39,7 +39,7 @@ Scope {
     }
 
     IpcHandler {
-        target: "sidebarRight"
+        target: "crosshair"
 
         function toggle(): void {
             GlobalStates.crosshairOpen = !GlobalStates.crosshairOpen;

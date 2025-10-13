@@ -1,5 +1,5 @@
-import qs
-import qs.modules.common
+pragma ComponentBehavior: Bound
+
 import qs.modules.common.widgets
 import qs.services
 import QtQuick

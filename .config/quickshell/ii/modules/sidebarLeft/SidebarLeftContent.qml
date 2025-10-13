@@ -1,8 +1,6 @@
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.services
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

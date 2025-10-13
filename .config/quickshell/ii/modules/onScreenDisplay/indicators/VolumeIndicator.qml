@@ -1,4 +1,3 @@
-import qs
 import qs.services
 import QtQuick
 import "../"

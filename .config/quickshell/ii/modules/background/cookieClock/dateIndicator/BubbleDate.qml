@@ -1,6 +1,5 @@
 pragma ComponentBehavior: Bound
 
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -15,9 +14,9 @@ Item {
 
     MaterialCookie {
         z: 5
-        sides: isMonth ? 1 : 4
+        sides: root.isMonth ? 1 : 4
         anchors.centerIn: parent
-        color: isMonth ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
+        color: root.isMonth ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
         implicitSize: targetSize
         constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
@@ -26,7 +25,7 @@ Item {
         id: bubbleText
         z: 6
         anchors.centerIn: parent
-        color: isMonth ? Appearance.colors.colPrimary : Appearance.colors.colTertiary
+        color: root.isMonth ? Appearance.colors.colPrimary : Appearance.colors.colTertiary
         opacity: root.style === "bubble" ? 1 : 0
         font {
             family: Appearance.font.family.expressive

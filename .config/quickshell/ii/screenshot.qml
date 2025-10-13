@@ -7,7 +7,6 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 pragma ComponentBehavior: "Bound"
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
