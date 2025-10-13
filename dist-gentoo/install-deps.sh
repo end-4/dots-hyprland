@@ -24,9 +24,9 @@ if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository enable localrepo 
 fi
 
-if [[ ! $(eselect repository list | grep guru) =~ "guru \*" ]]; then
-	v sudo eselect repository enable guru
-fi
+if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
+        v sudo eselect repository enable guru
+fia
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
