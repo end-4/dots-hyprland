@@ -28,23 +28,6 @@ Singleton {
     property bool superReleaseMightTrigger: true
     property bool workspaceShowNumbers: false
 
-    Connections {
-        target: Config
-        function onReadyChanged() {
-            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
-                GlobalStates.screenLocked = true;
-            }
-        }
-    }
-    Connections {
-        target: Persistent
-        function onReadyChanged() {
-            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
-                GlobalStates.screenLocked = true;
-            }
-        }
-    }
-
     onSidebarRightOpenChanged: {
         if (GlobalStates.sidebarRightOpen) {
             Notifications.timeoutAll();

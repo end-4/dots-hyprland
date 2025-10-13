@@ -463,6 +463,18 @@ ContentPage {
         title: Translation.tr("Lock screen")
 
         ConfigSwitch {
+            buttonIcon: "water_drop"
+            text: Translation.tr('Use Hyprlock (instead of Quickshell)')
+            checked: Config.options.lock.useHyprlock
+            onCheckedChanged: {
+                Config.options.lock.useHyprlock = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("If you want to somehow use fingerprint unlock...")
+            }
+        }
+
+        ConfigSwitch {
             buttonIcon: "account_circle"
             text: Translation.tr('Launch on startup')
             checked: Config.options.lock.launchOnStartup
