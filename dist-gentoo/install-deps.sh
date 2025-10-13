@@ -26,7 +26,7 @@ fi
 
 if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
         v sudo eselect repository enable guru
-fia
+fi
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
