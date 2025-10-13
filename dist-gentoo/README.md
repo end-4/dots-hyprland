@@ -56,4 +56,4 @@ end
 ```
 Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory
 ```
-The Hyprland live ebuild sometimes has linage issues, deleteing _Hyprland_ and _hyprland_ from _/usr/bin/_ and then re-emerging.
+The Hyprland live ebuild sometimes has linkage issues, deleteing _Hyprland_ and _hyprland_ from _/usr/bin/_ and then re-emerging.
