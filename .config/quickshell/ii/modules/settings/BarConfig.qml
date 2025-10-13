@@ -7,6 +7,19 @@ import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
+
+    ContentSection {
+        icon: "notifications"
+        title: Translation.tr("Notifications")
+        ConfigSwitch {
+            buttonIcon: "counter_2"
+            text: Translation.tr("Unread indicator: show count")
+            checked: Config.options.bar.indicators.notifications.showUnreadCount
+            onCheckedChanged: {
+                Config.options.bar.indicators.notifications.showUnreadCount = checked;
+            }
+        }
+    }
     
     ContentSection {
         icon: "spoke"
@@ -130,57 +143,24 @@ ContentPage {
     }
 
     ContentSection {
-        icon: "workspaces"
-        title: Translation.tr("Workspaces")
+        icon: "shelf_auto_hide"
+        title: Translation.tr("Tray")
 
         ConfigSwitch {
-            buttonIcon: "counter_1"
-            text: Translation.tr('Always show numbers')
-            checked: Config.options.bar.workspaces.alwaysShowNumbers
+            buttonIcon: "keep"
+            text: Translation.tr('Make icons pinned by default')
+            checked: Config.options.bar.tray.invertPinnedItems
             onCheckedChanged: {
-                Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                Config.options.bar.tray.invertPinnedItems = checked;
             }
         }
-
-        ConfigSwitch {
-            buttonIcon: "award_star"
-            text: Translation.tr('Show app icons')
-            checked: Config.options.bar.workspaces.showAppIcons
-            onCheckedChanged: {
-                Config.options.bar.workspaces.showAppIcons = checked;
-            }
-        }
-
+        
         ConfigSwitch {
             buttonIcon: "colors"
-            text: Translation.tr('Tint app icons')
-            checked: Config.options.bar.workspaces.monochromeIcons
+            text: Translation.tr('Tint icons')
+            checked: Config.options.bar.tray.monochromeIcons
             onCheckedChanged: {
-                Config.options.bar.workspaces.monochromeIcons = checked;
-            }
-        }
-
-        ConfigSpinBox {
-            icon: "view_column"
-            text: Translation.tr("Workspaces shown")
-            value: Config.options.bar.workspaces.shown
-            from: 1
-            to: 30
-            stepSize: 1
-            onValueChanged: {
-                Config.options.bar.workspaces.shown = value;
-            }
-        }
-
-        ConfigSpinBox {
-            icon: "touch_long"
-            text: Translation.tr("Number show delay when pressing Super (ms)")
-            value: Config.options.bar.workspaces.showNumberDelay
-            from: 0
-            to: 1000
-            stepSize: 50
-            onValueChanged: {
-                Config.options.bar.workspaces.showNumberDelay = value;
+                Config.options.bar.tray.monochromeIcons = checked;
             }
         }
     }
@@ -249,29 +229,6 @@ ContentPage {
     }
 
     ContentSection {
-        icon: "shelf_auto_hide"
-        title: Translation.tr("Tray")
-
-        ConfigSwitch {
-            buttonIcon: "keep"
-            text: Translation.tr('Make icons pinned by default')
-            checked: Config.options.bar.tray.invertPinnedItems
-            onCheckedChanged: {
-                Config.options.bar.tray.invertPinnedItems = checked;
-            }
-        }
-        
-        ConfigSwitch {
-            buttonIcon: "colors"
-            text: Translation.tr('Tint icons')
-            checked: Config.options.bar.tray.monochromeIcons
-            onCheckedChanged: {
-                Config.options.bar.tray.monochromeIcons = checked;
-            }
-        }
-    }
-
-    ContentSection {
         icon: "cloud"
         title: Translation.tr("Weather")
         ConfigSwitch {
@@ -280,6 +237,62 @@ ContentPage {
             checked: Config.options.bar.weather.enable
             onCheckedChanged: {
                 Config.options.bar.weather.enable = checked;
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "workspaces"
+        title: Translation.tr("Workspaces")
+
+        ConfigSwitch {
+            buttonIcon: "counter_1"
+            text: Translation.tr('Always show numbers')
+            checked: Config.options.bar.workspaces.alwaysShowNumbers
+            onCheckedChanged: {
+                Config.options.bar.workspaces.alwaysShowNumbers = checked;
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "award_star"
+            text: Translation.tr('Show app icons')
+            checked: Config.options.bar.workspaces.showAppIcons
+            onCheckedChanged: {
+                Config.options.bar.workspaces.showAppIcons = checked;
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "colors"
+            text: Translation.tr('Tint app icons')
+            checked: Config.options.bar.workspaces.monochromeIcons
+            onCheckedChanged: {
+                Config.options.bar.workspaces.monochromeIcons = checked;
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "view_column"
+            text: Translation.tr("Workspaces shown")
+            value: Config.options.bar.workspaces.shown
+            from: 1
+            to: 30
+            stepSize: 1
+            onValueChanged: {
+                Config.options.bar.workspaces.shown = value;
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "touch_long"
+            text: Translation.tr("Number show delay when pressing Super (ms)")
+            value: Config.options.bar.workspaces.showNumberDelay
+            from: 0
+            to: 1000
+            stepSize: 50
+            onValueChanged: {
+                Config.options.bar.workspaces.showNumberDelay = value;
             }
         }
     }
