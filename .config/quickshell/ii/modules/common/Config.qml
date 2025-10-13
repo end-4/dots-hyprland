@@ -40,11 +40,30 @@ Singleton {
         obj[keys[keys.length - 1]] = convertedValue;
     }
 
+    Timer {
+        id: fileReloadTimer
+        interval: 100
+        repeat: false
+        onTriggered: {
+            configFileView.reload()
+        }
+    }
+
+    Timer {
+        id: fileWriteTimer
+        interval: 100
+        repeat: false
+        onTriggered: {
+            configFileView.writeAdapter()
+        }
+    }
+
     FileView {
+        id: configFileView
         path: root.filePath
         watchChanges: true
-        onFileChanged: reload()
-        onAdapterUpdated: writeAdapter()
+        onFileChanged: fileReloadTimer.restart()
+        onAdapterUpdated: fileWriteTimer.restart()
         onLoaded: root.ready = true
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
@@ -130,11 +149,12 @@ Singleton {
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
                     property JsonObject cookie: JsonObject {
+                        property bool aiStyling: false
                         property int sides: 14
                         property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
                         property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
                         property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
-                        property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
+                        property string secondHandStyle: "dot"    // Options: "dot", "line", "classic", "hide"
                         property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
                         property bool timeIndicators: true
                         property bool hourMarks: false

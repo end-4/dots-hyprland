@@ -59,8 +59,20 @@ ContentPage {
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
+
+            ConfigSwitch {
+                buttonIcon: "wand_stars"
+                text: Translation.tr("Auto styling with Gemini")
+                checked: Config.options.background.clock.cookie.aiStyling
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.aiStyling = checked;
+                }
+                StyledToolTip {
+                    text: "Uses Gemini to categorize the wallpaper then picks a preset based on it.\nYou'll need to set Gemini API key on the left sidebar first.\nImages are downscaled for performance, but just to be safe,\ndo not select wallpapers with sensitive information."
+                }
+            }
+
             ConfigSpinBox {
-                visible: Config.options.background.clock.style === "cookie"
                 icon: "add_triangle"
                 text: Translation.tr("Sides")
                 value: Config.options.background.clock.cookie.sides
@@ -73,7 +85,6 @@ ContentPage {
             }
 
             ConfigSwitch {
-                visible: Config.options.background.clock.style === "cookie"
                 buttonIcon: "autoplay"
                 text: Translation.tr("Constantly rotate")
                 checked: Config.options.background.clock.cookie.constantlyRotate
@@ -86,7 +97,6 @@ ContentPage {
             }
 
             ConfigRow {
-                visible: Config.options.background.clock.style === "cookie"
 
                 ConfigSwitch {
                     enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
