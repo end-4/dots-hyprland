@@ -69,6 +69,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
+        Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
     }
 
     minimumWidth: 750

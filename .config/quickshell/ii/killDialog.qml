@@ -36,7 +36,7 @@ ApplicationWindow {
     title: Translation.tr("Shell conflicts killer")
 
     Component.onCompleted: {
-        Config.ready // Just read to force init
+        Config.readWriteDelay = 0;
         MaterialThemeLoader.reapplyTheme();
     }
 
