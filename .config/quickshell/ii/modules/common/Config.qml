@@ -42,7 +42,7 @@ Singleton {
 
     Timer {
         id: fileReloadTimer
-        interval: 30
+        interval: 50
         repeat: false
         onTriggered: {
             configFileView.reload()
@@ -51,7 +51,7 @@ Singleton {
 
     Timer {
         id: fileWriteTimer
-        interval: 30
+        interval: 50
         repeat: false
         onTriggered: {
             configFileView.writeAdapter()
