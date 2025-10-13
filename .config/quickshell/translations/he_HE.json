@@ -410,7 +410,7 @@
   "Thin": "דק",
   "Sides": "צדדים",
   "Hollow": "חלול",
-  "Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries": "Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries",
+  "Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries":   "שימוש: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nהוסף <tt>i</tt> כאשר תרצה תמונות\nדוגמאות:\n<tt>%1superpaste 4i</tt> עבור 4 התמונות האחרונות\n<tt>%1superpaste 7</tt> עבור 7 הערכים האחרונים",
   "Center clock": "מרכוז השעון",
   "Tip: Close a window with Super+Q": "Tip: Close a window with Super+Q",
   "Clock style": "סגנון השעון",
