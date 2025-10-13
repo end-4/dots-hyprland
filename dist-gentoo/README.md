@@ -53,5 +53,6 @@ end
 ```
 
 ## Known Issues
+- If Hyprland is just blank, rebuild Quickshell (emerge -q gui-apps/quickshell)
 - ```Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory```
   - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from ```/usr/bin/``` and then re-emerging usually fixes this.
