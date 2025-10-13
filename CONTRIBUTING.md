@@ -6,6 +6,10 @@
 
 # Code details
 
+## Contributing to i18n
+
+For contributing in translation (i18n) for Quickshell, see also `.config/quickshell/translations/tools`.
+
 ## Dynamic loading
 
 - If something's not always necessary, especially when guarded by a config option to enable/disable, put it in a `Loader`. One tip with `Loader`s is sometimes you will need to declare positioning properties (like `anchors`) in the `Loader`, not the `sourceComponent`.

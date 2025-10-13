@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 #
 # This script is for quickly generate helpful info
+#
 # It should be as independent as possible and should not source other files unless it has to
+#
+# TODO: Add quickshell and Qt version check.
+# Pay attention to the version of Qt which quickshell built against.
+
 STY_RED='\e[31m'
 STY_RESET='\e[00m'
 
