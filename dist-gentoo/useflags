@@ -60,6 +60,9 @@ net-misc/networkmanager concheck introspection nss ppp tools wifi -wext -modemma
 kde-apps/dolphin -handbook
 kde-plasma/systemsettings -handbook
 
+################### MICROTEX-GIT ################### 
+dev-cpp/gtkmm X wayland
+
 ################### PORTAL ################### 
 sys-apps/xdg-desktop-portal seccomp
 #sys-plasma/xdg-desktop-portal-kde (nothing needed)
