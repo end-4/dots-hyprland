@@ -125,6 +125,8 @@ kde-frameworks/kcoreaddons dbus
 kde-frameworks/prison qml
 kde-frameworks/kguiaddons X dbus wayland
 kde-frameworks/kidletime X wayland
+kde-frameworks/kwindowsystem X wayland
+kde-frameowrks/kconfig dbus qml
 x11-base/xwayland libei
 sys-apps/dbus X
 sys-libs/zlib minizip
@@ -133,3 +135,4 @@ media-video/ffmpeg X bzip2 dav1d drm fontconfig gnutls gpl libass opencl opengl 
 media-libs/leptonica jpeg png zlib tiff webp
 media-libs/libva X wayland
 app-text/xmlto text
+app-crypt/gcr gtk
