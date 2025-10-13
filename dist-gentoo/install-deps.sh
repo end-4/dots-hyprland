@@ -42,6 +42,7 @@ v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illog
 
 # Use Flags
 v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
+v sudo sh -c 'cat ./dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
 
 # Update system
 v sudo emerge --sync
