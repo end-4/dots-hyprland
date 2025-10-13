@@ -1,6 +1,8 @@
 pragma Singleton
 import Quickshell
 import qs.modules.common
+import "./utilButtons"
+import QtQuick
 
 Singleton {
     id: root
@@ -52,12 +54,136 @@ Singleton {
         else Config.options.quickToggles.material.sizes[index] = "1"
     }
 
+    /*
+        Updates the toggles list in config.json
+        Removes the item in the given index
+    */
 
     function removeOption(index) {
-        Config.options.quickToggles.material.toggles.splice(index, 1)
+        // there is sync problems with splice (i have no idea why)
+        var togglesStart = Config.options.quickToggles.material.toggles.slice(0, index)
+        var togglesEnd = Config.options.quickToggles.material.toggles.slice(index + 1, Config.options.quickToggles.material.toggles.length)
+        Config.options.quickToggles.material.toggles = togglesStart.concat(togglesEnd)
     }
 
+    /*
+        Updates the toggles list in config.json
+        Adds a new entry to toggles list in the given name
+    */
     function addOption(name) {
         Config.options.quickToggles.material.toggles.push(name)
+    }
+
+    /*
+        Fixes the given 'data' according to given 'maxTiles' and returns a list
+    */
+    function splitRows(data, maxTiles=4) {
+        let rows = [], currentRow = [], currentCount = 0
+        for (let item of data) {
+            if (currentCount + item[0] > maxTiles) {
+                rows.push(currentRow)
+                currentRow = []
+                currentCount = 0
+            }
+            currentRow.push(item)
+            currentCount += item[0]
+        }
+        if (currentRow.length) rows.push(currentRow)
+        return rows
+    }
+
+    /*
+        Returns the related component based on the name
+    */
+    function getComponentByName(name) {
+        switch(name) {
+            case "network": return networkComp;
+            case "bluetooth": return bluetoothComp;
+            case "cloudflarewarp": return warpComp;
+            case "easyeffects": return easyEffectsComp;
+            case "gamemode": return gameModeComp;
+            case "idleinhibitor": return idleComp;
+            case "nightlight": return nightLightComp;
+            case "screensnip": return screenSnipComp;
+            case "colorpicker": return colorPickerComp;
+            case "showkeyboard": return keyboardComp;
+            case "togglemic": return micComp;
+            case "darkmode": return darkModeComp;
+            case "performanceprofile": return performanceProfileComp;
+            case "silent": return silentComp;
+            default: return null;
+        }
+    }
+
+    /*
+        Components that has the material quick toggles
+    */
+    Component {
+        id: networkComp
+        MaterialNetworkToggle {
+            altAction: () => {
+                Network.enableWifi();
+                Network.rescanWifi();
+                root.showWifiDialog = true;
+            }
+        }
+    }
+    Component {
+        id: bluetoothComp
+        MaterialBluetoothToggle {
+            altAction: () => {
+                Bluetooth.defaultAdapter.enabled = true;
+                Bluetooth.defaultAdapter.discovering = true;
+                root.showBluetoothDialog = true;
+            }
+        }
+    }
+    Component {
+        id: warpComp
+        MaterialCloudflareWarp {}
+    }
+    Component {
+        id: easyEffectsComp
+        MaterialEasyEffects {}
+    }
+    Component {
+        id: gameModeComp
+        MaterialGameMode {}
+    }
+    Component {
+        id: idleComp
+        MaterialIdleInhibitor {}
+    }
+    Component {
+        id: nightLightComp
+        MaterialNightLight {}
+    }
+    Component {
+        id: screenSnipComp
+        MaterialScreenSnip {}
+    }
+    Component {
+        id: colorPickerComp
+        MaterialColorPicker {}
+    }
+    Component {
+        id: keyboardComp
+        MaterialKeyboard {}
+    }
+    Component {
+        id: micComp
+        MaterialMic {}
+    }
+    Component {
+        id: darkModeComp
+        MaterialDarkMode {}
+    }
+    Component {
+        id: performanceProfileComp
+        MaterialPerformanceProfile {}
+    }
+    Component {
+        id: silentComp
+        MaterialSilentToggle {}
     }
 }

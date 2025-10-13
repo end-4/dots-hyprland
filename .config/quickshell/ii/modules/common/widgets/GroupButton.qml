@@ -18,6 +18,7 @@ Button {
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
     property var rightReleaseAction // When right clicking (release)
+    property var middleReleaseAction // When middle clicking (release)
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
     property var clickAndHold // When clicked and hold
@@ -100,7 +101,9 @@ Button {
             if (event.button === Qt.RightButton) {
                 if (root.rightReleaseAction) root.rightReleaseAction();
             }
-            
+            if (event.button === Qt.MiddleButton) {
+                if (root.rightReleaseAction) root.middleReleaseAction();
+            }
         }
         onClicked: (event) => {
             if (event.button != Qt.LeftButton) return;

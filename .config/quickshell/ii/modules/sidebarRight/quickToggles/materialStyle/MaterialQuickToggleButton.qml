@@ -22,22 +22,20 @@ GroupButton {
             root.hovered ? colBackgroundHover : 
             colBackground)) : colBackground
 
-    property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
-
-    property string panelType: Config.options.quickToggles.material.mode
-    property string buttonIcon
-    property int buttonSize: 1 // Must be 1, 2 
-    property string titleText
-    property string altText
-    
-    property int buttonIndex
-
-    property string unusedName: ""
-
     property int buttonClickedRadius : Appearance.rounding.normal
     clickedRadius: buttonClickedRadius
     buttonRadiusPressed: buttonClickedRadius
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
+
+    property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
+    property string panelType: Config.options.quickToggles.material.mode
+
+    property string buttonIcon
+    property int buttonSize: 1 // Must be 1, 2 
+    property string titleText
+    property string altText
+    property int buttonIndex
+    property string unusedName: ""
 
     // TODO: fix these
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
@@ -51,12 +49,10 @@ GroupButton {
     toggled: false
 
     onClicked: event => {
-        // left click, moves to left
         if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
     }
     rightReleaseAction: function() {
-        // right click, moves to right
         if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, +1)
     }
@@ -64,12 +60,11 @@ GroupButton {
         if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
-    middleClickAction: function() {
+    middleReleaseAction: function() {
+        if (!GlobalStates.quickTogglesEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
         else QuickTogglesUtils.addOption(unusedName)
     }
-
-
 
     Rectangle { // Border
         id: borderRect
