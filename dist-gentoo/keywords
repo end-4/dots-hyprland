@@ -14,6 +14,7 @@ app-misc/illogical-impulse-toolkit
 app-misc/illogical-impulse-widgets
 x11-misc/matugen
 media-fonts/twemoji
+app-misc/brightnessctl
 gui-apps/hypridle
 gui-apps/hyprlock
 gui-apps/hyprpicker
@@ -36,4 +37,4 @@ gui-libs/hyprcursor **
 gui-libs/hyprland-qt-support **
 gui-libs/hyprland-qtutils **
 gui-wm/hyprland **
-x11-libs/libxkbcommon ~amd64
+x11-libs/libxkbcommon
