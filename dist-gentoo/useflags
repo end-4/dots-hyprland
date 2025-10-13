@@ -143,3 +143,5 @@ app-crypt/gcr gtk
 media-video/vlc wayland ogg dbus mp3 
 dev-libs/qcoro dbus qml
 media-libs/freetype harfbuzz
+media-libs/mesa wayland 
+x11-libs/gtk+ wayland
