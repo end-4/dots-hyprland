@@ -15,6 +15,7 @@ app-misc/illogical-impulse-widgets
 x11-misc/matugen
 media-fonts/twemoji
 app-misc/brightnessctl
+app-misc/cliphist
 gui-apps/hypridle
 gui-apps/hyprlock
 gui-apps/hyprpicker
