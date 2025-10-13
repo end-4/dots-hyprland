@@ -513,24 +513,21 @@ Item {
                     text: "•"
                 }
 
-                Item { // NSFW toggle
+                MouseArea { // NSFW toggle
                     visible: width > 0
                     implicitWidth: switchesRow.implicitWidth
                     Layout.fillHeight: true
+
+                    hoverEnabled: true
+                    PointingHandInteraction {}
+                    onPressed: {
+                        nsfwSwitch.checked = !nsfwSwitch.checked
+                    }
 
                     RowLayout {
                         id: switchesRow
                         spacing: 5
                         anchors.centerIn: parent
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            PointingHandInteraction {}
-                            onPressed: {
-                                nsfwSwitch.checked = !nsfwSwitch.checked
-                            }
-                        }
 
                         StyledText {
                             Layout.fillHeight: true
@@ -552,6 +549,7 @@ Item {
                             }
                         }
                     }
+
                 }
 
                 Item { Layout.fillWidth: true }
