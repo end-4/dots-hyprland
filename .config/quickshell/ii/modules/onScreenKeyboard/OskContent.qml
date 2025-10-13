@@ -1,15 +1,7 @@
-import qs
-import qs.services
 import qs.modules.common
-import qs.modules.common.widgets
 import "layouts.js" as Layouts
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
-import Quickshell.Hyprland
 
 Item {
     id: root    

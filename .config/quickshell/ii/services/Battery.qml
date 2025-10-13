@@ -1,6 +1,6 @@
 pragma Singleton
 
-import qs
+import qs.services
 import qs.modules.common
 import Quickshell
 import Quickshell.Services.UPower
