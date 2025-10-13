@@ -45,6 +45,8 @@ GroupButton {
     baseHeight: unusedName === "" ? baseSize : 50
     clickedWidth: baseWidth + 20
 
+    Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) } // can be removed if you want less behaviors. but this reduces the bounciness
+
     property bool halfToggled: false
     toggled: false
 

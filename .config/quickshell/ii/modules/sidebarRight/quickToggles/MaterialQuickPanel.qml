@@ -49,6 +49,8 @@ Item {
         id: mainColumn
         spacing: 10
         
+        Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
+
         MaterialTopWidgets {}
         
         ColumnLayout { // i have used another column to reset the animation coming from unused button in edit mode
