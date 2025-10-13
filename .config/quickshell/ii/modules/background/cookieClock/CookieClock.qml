@@ -55,7 +55,7 @@ Item {
         } else if (category == "anime") {
             applyStyle(12, "dots", "fill", "bold", "dot", "bubble")
         } else if (category == "city" || category == "space") {
-            applyStyle(23, "full", "hollow", "medium", "classic", "bubble")
+            applyStyle(23, "full", "hollow", "thin", "classic", "bubble")
         } else if (category == "minimalist") {
             applyStyle(6, "none", "fill", "bold", "dot", "hide")
         } else if (category == "landscape") {
