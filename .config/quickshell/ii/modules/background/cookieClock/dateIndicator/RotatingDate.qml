@@ -1,6 +1,5 @@
 pragma ComponentBehavior: Bound
 
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -31,7 +30,7 @@ Item {
     Repeater {
         model: root.dateText.length 
 
-        delegate: Text {
+        delegate: StyledText {
             required property int index
             property real angle: index * root.angleStep - Math.PI / 2
             x: root.width / 2 + root.radius * Math.cos(angle) - width / 2

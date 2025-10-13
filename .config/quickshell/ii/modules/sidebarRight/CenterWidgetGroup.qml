@@ -3,7 +3,6 @@ import qs.modules.common.widgets
 import qs.services
 import "./notifications"
 import "./volumeMixer"
-import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls

@@ -12,7 +12,6 @@ import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
 import Quickshell.Io
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets

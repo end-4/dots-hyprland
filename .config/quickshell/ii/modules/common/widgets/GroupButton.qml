@@ -27,8 +27,8 @@ Button {
     property var parentGroup: root.parent
     property int clickIndex: parentGroup?.clickIndex ?? -1
 
-    Layout.fillWidth: (clickIndex - 1 <= parentGroup.children.indexOf(root) && parentGroup.children.indexOf(root) <= clickIndex + 1)
-    Layout.fillHeight: (clickIndex - 1 <= parentGroup.children.indexOf(root) && parentGroup.children.indexOf(root) <= clickIndex + 1)
+    Layout.fillWidth: (clickIndex - 1 <= parentGroup?.children.indexOf(root) && parentGroup?.children.indexOf(root) <= clickIndex + 1)
+    Layout.fillHeight: (clickIndex - 1 <= parentGroup?.children.indexOf(root) && parentGroup?.children.indexOf(root) <= clickIndex + 1)
     implicitWidth: (root.down && bounce) ? clickedWidth : baseWidth
     implicitHeight: (root.down && bounce) ? clickedHeight : baseHeight
 
