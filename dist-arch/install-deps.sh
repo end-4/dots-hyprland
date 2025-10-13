@@ -63,7 +63,7 @@ install-local-pkgbuild() {
   x pushd $location
 
   source ./PKGBUILD
-  x yay -S $installflags --asdeps "${depends[@]}"
+  x yay -S --sudoloop $installflags --asdeps "${depends[@]}"
   x makepkg -Asi --noconfirm
 
   x popd

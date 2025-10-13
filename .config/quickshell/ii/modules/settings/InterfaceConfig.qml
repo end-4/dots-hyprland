@@ -59,13 +59,25 @@ ContentPage {
         ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
+
+            ConfigSwitch {
+                buttonIcon: "wand_stars"
+                text: Translation.tr("Auto styling with Gemini")
+                checked: Config.options.background.clock.cookie.aiStyling
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.aiStyling = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Uses Gemini to categorize the wallpaper then picks a preset based on it.\nYou'll need to set Gemini API key on the left sidebar first.\nImages are downscaled for performance, but just to be safe,\ndo not select wallpapers with sensitive information.")
+                }
+            }
+
             ConfigSpinBox {
-                visible: Config.options.background.clock.style === "cookie"
                 icon: "add_triangle"
                 text: Translation.tr("Sides")
                 value: Config.options.background.clock.cookie.sides
-                from: 1
-                to: 36
+                from: 0
+                to: 40
                 stepSize: 1
                 onValueChanged: {
                     Config.options.background.clock.cookie.sides = value;
@@ -73,7 +85,6 @@ ContentPage {
             }
 
             ConfigSwitch {
-                visible: Config.options.background.clock.style === "cookie"
                 buttonIcon: "autoplay"
                 text: Translation.tr("Constantly rotate")
                 checked: Config.options.background.clock.cookie.constantlyRotate
@@ -86,7 +97,6 @@ ContentPage {
             }
 
             ConfigRow {
-                visible: Config.options.background.clock.style === "cookie"
 
                 ConfigSwitch {
                     enabled: Config.options.background.clock.style === "cookie" && Config.options.background.clock.cookie.dialNumberStyle === "dots" || Config.options.background.clock.cookie.dialNumberStyle === "full"
@@ -453,6 +463,18 @@ ContentPage {
         title: Translation.tr("Lock screen")
 
         ConfigSwitch {
+            buttonIcon: "water_drop"
+            text: Translation.tr('Use Hyprlock (instead of Quickshell)')
+            checked: Config.options.lock.useHyprlock
+            onCheckedChanged: {
+                Config.options.lock.useHyprlock = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("If you want to somehow use fingerprint unlock...")
+            }
+        }
+
+        ConfigSwitch {
             buttonIcon: "account_circle"
             text: Translation.tr('Launch on startup')
             checked: Config.options.lock.launchOnStartup
@@ -566,6 +588,15 @@ ContentPage {
             }
             StyledToolTip {
                 text: Translation.tr("When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help")
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "translate"
+            text: Translation.tr('Enable translator')
+            checked: Config.options.sidebar.translator.enable
+            onCheckedChanged: {
+                Config.options.sidebar.translator.enable = checked;
             }
         }
 

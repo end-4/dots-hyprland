@@ -198,10 +198,9 @@ Item {
                     anchors.centerIn: parent
                     spacing: 5
 
-                    MaterialSymbol {
+                    CookieWrappedMaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
                         iconSize: 60
-                        color: Appearance.m3colors.m3outline
                         text: "bookmark_heart"
                     }
                     StyledText {
@@ -514,23 +513,21 @@ Item {
                     text: "•"
                 }
 
-                Item { // NSFW toggle
+                MouseArea { // NSFW toggle
                     visible: width > 0
                     implicitWidth: switchesRow.implicitWidth
                     Layout.fillHeight: true
+
+                    hoverEnabled: true
+                    PointingHandInteraction {}
+                    onPressed: {
+                        nsfwSwitch.checked = !nsfwSwitch.checked
+                    }
 
                     RowLayout {
                         id: switchesRow
                         spacing: 5
                         anchors.centerIn: parent
-
-                        MouseArea {
-                            hoverEnabled: true
-                            PointingHandInteraction {}
-                            onClicked: {
-                                nsfwSwitch.checked = !nsfwSwitch.checked
-                            }
-                        }
 
                         StyledText {
                             Layout.fillHeight: true
@@ -552,6 +549,7 @@ Item {
                             }
                         }
                     }
+
                 }
 
                 Item { Layout.fillWidth: true }
@@ -566,8 +564,8 @@ Item {
                             buttonText: commandRepresentation
                             colBackground: Appearance.colors.colLayer2
 
-                            onClicked: {
-                                if(modelData.sendDirectly) {
+                            downAction: () => {
+                                if (modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
                                     tagInputField.text = commandRepresentation + " "

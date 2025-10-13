@@ -33,6 +33,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme();
+        Config.readWriteDelay = 0 // Welcome app always only sets one var at a time so delay isn't needed
     }
 
     minimumWidth: 600

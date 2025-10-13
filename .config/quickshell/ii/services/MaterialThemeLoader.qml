@@ -40,7 +40,7 @@ Singleton {
         id: resetFilePathNextWallpaperChange
         enabled: false
         target: Config.options.background
-        onWallpaperPathChanged: {
+        function onWallpaperPathChanged() {
             root.filePath = ""
             root.filePath = Directories.generatedMaterialThemePath
             resetFilePathNextWallpaperChange.enabled = false

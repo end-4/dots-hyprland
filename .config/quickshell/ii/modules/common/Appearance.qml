@@ -18,7 +18,9 @@ Singleton {
     // Transparency. The quadratic functions were derived from analysis of hand-picked transparency values.
     ColorQuantizer {
         id: wallColorQuant
-        source: Qt.resolvedUrl(Config.options.background.wallpaperPath)
+        property string wallpaperPath: Config.options.background.wallpaperPath
+        property bool wallpaperIsVideo: wallpaperPath.endsWith(".mp4") || wallpaperPath.endsWith(".webm") || wallpaperPath.endsWith(".mkv") || wallpaperPath.endsWith(".avi") || wallpaperPath.endsWith(".mov")
+        source: Qt.resolvedUrl(wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath)
         depth: 0 // 2^0 = 1 color
         rescaleSize: 10
     }
@@ -303,7 +305,7 @@ Singleton {
         }
 
         property QtObject elementResize: QtObject {
-            property int duration: 400
+            property int duration: 300
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650

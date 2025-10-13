@@ -111,7 +111,7 @@ Item {
                                 id: workspaceArea
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton
-                                onClicked: {
+                                onPressed: {
                                     if (root.draggingTargetWorkspace === -1) {
                                         GlobalStates.overviewOpen = false
                                         Hyprland.dispatch(`workspace ${workspaceValue}`)

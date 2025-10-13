@@ -9,6 +9,7 @@ Singleton {
     property string filePath: Directories.shellConfigPath
     property alias options: configOptionsJsonAdapter
     property bool ready: false
+    property int readWriteDelay: 50 // milliseconds
 
     function setNestedValue(nestedKey, value) {
         let keys = nestedKey.split(".");
@@ -40,11 +41,30 @@ Singleton {
         obj[keys[keys.length - 1]] = convertedValue;
     }
 
+    Timer {
+        id: fileReloadTimer
+        interval: root.readWriteDelay
+        repeat: false
+        onTriggered: {
+            configFileView.reload()
+        }
+    }
+
+    Timer {
+        id: fileWriteTimer
+        interval: root.readWriteDelay
+        repeat: false
+        onTriggered: {
+            configFileView.writeAdapter()
+        }
+    }
+
     FileView {
+        id: configFileView
         path: root.filePath
         watchChanges: true
-        onFileChanged: reload()
-        onAdapterUpdated: writeAdapter()
+        onFileChanged: fileReloadTimer.restart()
+        onAdapterUpdated: fileWriteTimer.restart()
         onLoaded: root.ready = true
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
@@ -130,14 +150,15 @@ Singleton {
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
                     property JsonObject cookie: JsonObject {
+                        property bool aiStyling: false
                         property int sides: 14
                         property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
                         property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
                         property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
-                        property string secondHandStyle: "dot"    // Options: "dot", "line" , "hide" 
+                        property string secondHandStyle: "dot"    // Options: "dot", "line", "classic", "hide"
                         property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
                         property bool timeIndicators: true
-                        property bool hourMarks: true
+                        property bool hourMarks: false
                         property bool dateInClock: true
                         property bool constantlyRotate: false
                     }
@@ -212,6 +233,11 @@ Singleton {
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
+                property JsonObject indicators: JsonObject {
+                    property JsonObject notifications: JsonObject {
+                        property bool showUnreadCount: false
+                    }
+                }
             }
 
             property JsonObject battery: JsonObject {
@@ -274,6 +300,7 @@ Singleton {
             }
 
             property JsonObject lock: JsonObject {
+                property bool useHyprlock: false
                 property bool launchOnStartup: false
                 property JsonObject blur: JsonObject {
                     property bool enable: false
@@ -341,7 +368,11 @@ Singleton {
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
                 property JsonObject translator: JsonObject {
+                    property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
+                }
+                property JsonObject ai: JsonObject {
+                    property bool textFadeIn: true
                 }
                 property JsonObject booru: JsonObject {
                     property bool allowNsfw: false
@@ -401,7 +432,7 @@ Singleton {
                 }
                 property JsonObject triggerCondition: JsonObject {
                     property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
-                    property list<string> fileKeywords: ["anime", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
+                    property list<string> fileKeywords: ["anime", "booru", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
                 }
             }

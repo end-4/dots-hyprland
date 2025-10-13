@@ -336,10 +336,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                 property int lastResponseLength: 0
                 onContentHeightChanged: {
-                    if (atYEnd) positionViewAtEnd();
+                    if (atYEnd) Qt.callLater(positionViewAtEnd);
                 }
                 onCountChanged: { // Auto-scroll when new messages are added
-                    if (atYEnd) positionViewAtEnd();
+                    if (atYEnd) Qt.callLater(positionViewAtEnd);
                 }
 
                 add: null // Prevent function calls from being janky
@@ -374,10 +374,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     anchors.centerIn: parent
                     spacing: 5
 
-                    MaterialSymbol {
+                    CookieWrappedMaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
                         iconSize: 60
-                        color: Appearance.m3colors.m3outline
                         text: "neurology"
                     }
                     StyledText {
@@ -757,8 +756,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         delegate: ApiCommandButton {
                             property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                             buttonText: commandRepresentation
-                            onClicked: {
-                                if(modelData.sendDirectly) {
+                            downAction: () => {
+                                if (modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
                                     messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ")

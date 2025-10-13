@@ -6,25 +6,25 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
 
-Rectangle { // App icon
+MaterialCookie { // App icon
     id: root
     property var appIcon: ""
     property var summary: ""
     property var urgency: NotificationUrgency.Normal
+    property bool isUrgent: urgency === NotificationUrgency.Critical
     property var image: ""
-    property real scale: 1
-    property real size: 38 * scale
     property real materialIconScale: 0.57
     property real appIconScale: 0.8
     property real smallAppIconScale: 0.49
-    property real materialIconSize: size * materialIconScale
-    property real appIconSize: size * appIconScale
-    property real smallAppIconSize: size * smallAppIconScale
+    property real materialIconSize: implicitSize * materialIconScale
+    property real appIconSize: implicitSize * appIconScale
+    property real smallAppIconSize: implicitSize * smallAppIconScale
 
-    implicitWidth: size
-    implicitHeight: size
-    radius: Appearance.rounding.full
-    color: Appearance.colors.colSecondaryContainer
+    implicitSize: 38 * scale
+    sides: isUrgent ? 10 : 0
+    amplitude: implicitSize / 24
+
+    color: isUrgent ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
     Loader {
         id: materialSymbolLoader
         active: root.appIcon == ""
@@ -34,12 +34,10 @@ Rectangle { // App icon
                 const defaultIcon = NotificationUtils.findSuitableMaterialSymbol("")
                 const guessedIcon = NotificationUtils.findSuitableMaterialSymbol(root.summary)
                 return (root.urgency == NotificationUrgency.Critical && guessedIcon === defaultIcon) ?
-                    "release_alert" : guessedIcon
+                    "priority_high" : guessedIcon
             }
             anchors.fill: parent
-            color: (root.urgency == NotificationUrgency.Critical) ? 
-                ColorUtils.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
-                Appearance.m3colors.m3onSecondaryContainer
+            color: isUrgent ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
             iconSize: root.materialIconSize
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
