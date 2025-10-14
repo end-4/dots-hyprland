@@ -15,6 +15,8 @@ GroupButton {
     buttonRadiusPressed: buttonClickedRadius
 
     readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
+    readonly property real titleTextSize: panelType === "compact" ? 14 : 16
+    readonly property real descTextSize: panelType === "compact" ? 13 : 14
 
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
     property string panelType: Config.options.quickToggles.material.mode
@@ -30,7 +32,7 @@ GroupButton {
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
     property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
     property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
-    baseWidth: unusedName === "" ? calculatedWidth : unusedButtonSize * widthMultiplier
+    baseWidth: unusedName === "" ? calculatedWidth : unusedButtonSize * 1.6
     baseHeight: unusedName === "" ? baseSize : unusedButtonSize
     
     // can be removed if you want less behaviors. but this reduces the bounciness so it helps
@@ -50,6 +52,7 @@ GroupButton {
     }
     clickAndHold: function() {
         if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
     middleReleaseAction: function() {
@@ -64,6 +67,7 @@ GroupButton {
         border.width: Config.options.quickToggles.material.border ? 2 : 0
         border.color: toggled ? "transparent" : colBackgroundHover
         radius: root.radius
+        Behavior on radius {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
         color: "transparent"
     }
 
@@ -109,28 +113,34 @@ GroupButton {
             height: baseSize
             width: baseSize * 3 - baseSize
             StyledText {
-                anchors.top: parent.top
-                anchors.topMargin: 10
+                anchors.bottom: parent.verticalCenter
                 anchors.left: parent.left
                 text: titleText
                 color: button.colText
                 font {
                     family: Appearance.font.family.title
-                    pixelSize: panelType === "compact" ? 14 : 16
+                    pixelSize: {
+                        if (root.down) titleTextSize * 0.85
+                        else titleTextSize
+                    }
                     weight: 500
                 }
+                Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
             }
             StyledText {
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
+                anchors.top: parent.verticalCenter
                 anchors.left: parent.left
                 text: descText
                 color: button.colText
                 font {
                     family: Appearance.font.family.main
-                    pixelSize: panelType === "compact" ? 13 : 14
+                    pixelSize: {
+                        if (root.down) descTextSize * 0.85
+                        else descTextSize
+                    }
                     weight: 250
                 }
+                Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
             }
         }
     }

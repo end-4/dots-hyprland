@@ -14,7 +14,6 @@ PrimaryTabBar {
 */
 
 Item {
-
     anchors.horizontalCenter: parent.horizontalCenter
     implicitHeight: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitHeight : 0
     implicitWidth: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitWidth : 0
@@ -28,44 +27,27 @@ Item {
             property int padding: 10
             implicitHeight: mainColumn.implicitHeight + padding  
             implicitWidth: 421
-            color: Appearance.colors.colLayer1
+            color: "transparent"
             radius: Appearance.rounding.normal
-
+            anchors.horizontalCenter: parent.horizontalCenter
             ColumnLayout {
+                spacing: 10
                 id: mainColumn
                 anchors.horizontalCenter: parent.horizontalCenter
-                Row { // Text Indicator
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
 
-                    MaterialSymbol {
-                        iconSize: 20
-                        text: "toggle_off"
-                        color: Appearance.colors.colPrimary
-                        anchors.verticalCenter: text.verticalCenter
-                    }   
-                    StyledText {
-                        id: text
-                        font.pixelSize: 16
-                        text: "  Unused Buttons"
-                        color: Appearance.colors.colPrimary
+                RowLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Rectangle {
+                        id: outline
+                        implicitHeight: 1
+                        Layout.fillWidth: true
+                        implicitWidth: GlobalStates.quickTogglesEditMode ? 100 : 0
+                        Behavior on implicitWidth { animation: Appearance.animation.elemetResize.numberAnimation.createObject(this) }
+                        color: Appearance.colors.colOutlineVariant
                     }
+                }
+                
 
-                }
-                Rectangle { // line indicator
-                    height: 2
-                    width: 150
-                    radius: Appearance.rounding.full
-                    color: Appearance.colors.colPrimary
-                    anchors.horizontalCenter: parent.horizontalCenter
-                } 
-                Rectangle { // border
-                    implicitHeight: 1
-                    id: tabBarBottomBorder
-                    Layout.fillWidth: true
-                    color: Appearance.colors.colOutlineVariant
-                }
                 GridLayout {
                     id: grid
                     columns: 5

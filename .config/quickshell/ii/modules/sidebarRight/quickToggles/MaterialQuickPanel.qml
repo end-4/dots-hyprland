@@ -15,6 +15,7 @@ Item {
     id: root
 
     height: mainColumn.height
+    width: mainColumn.width
     property int heightSize: mainColumn.height // used by the parent
     property string panelType: Config.options.quickToggles.material.mode
     property int tileSize: panelType === "compact" ? 5 : 4
@@ -88,5 +89,7 @@ Item {
         }
 
         MaterialUnusedButtons {}
+        
+        
     }
 }
