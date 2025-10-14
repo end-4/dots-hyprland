@@ -21,7 +21,7 @@ translation_manager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(translation_manager)
 TranslationManager = translation_manager.TranslationManager
 
-def clean_translation_files(translations_dir: str, source_dir: str, backup: bool = True):
+def clean_translation_files(translations_dir: str, source_dir: str, backup: bool = True, yes_mode: bool = False):
     """Clean translation files by removing unused keys"""
     print("Starting translation file cleanup...")
     
@@ -66,7 +66,11 @@ def clean_translation_files(translations_dir: str, source_dir: str, backup: bool
             if len(unused_keys) > 10:
                 print(f"  ... and {len(unused_keys) - 10} more keys")
 
-            response = input(f"Delete these {len(unused_keys)} unused keys? (y/n): ")
+            if yes_mode:
+                response = 'y'
+                print(f"Delete these {len(unused_keys)} unused keys? (auto-confirmed by --yes)")
+            else:
+                response = input(f"Delete these {len(unused_keys)} unused keys? (y/n): ")
             if response.lower().strip() in ['y', 'yes']:
                 if backup:
                     # Create backup only when user confirms deletion
@@ -93,7 +97,7 @@ def clean_translation_files(translations_dir: str, source_dir: str, backup: bool
     
     print(f"\nCleanup completed! Total deleted {total_removed} unused keys.")
 
-def sync_translations(translations_dir: str, source_lang: str = "en_US", target_langs: List[str] = None):
+def sync_translations(translations_dir: str, source_lang: str = "en_US", target_langs: List[str] = None, yes_mode: bool = False):
     """Sync translation keys to ensure all language files have the same keys"""
     print(f"Starting translation key sync using {source_lang} as reference...")
     
@@ -153,7 +157,11 @@ def sync_translations(translations_dir: str, source_lang: str = "en_US", target_
         
         # Ask whether to delete extra keys
         if extra_keys:
-            response = input(f"  Delete {len(extra_keys)} extra keys? (y/n): ")
+            if yes_mode:
+                response = 'y'
+                print(f"  Delete {len(extra_keys)} extra keys? (auto-confirmed by --yes)")
+            else:
+                response = input(f"  Delete {len(extra_keys)} extra keys? (y/n): ")
             if response.lower().strip() in ['y', 'yes']:
                 for key in extra_keys:
                     del target_translations[key]
@@ -180,6 +188,8 @@ def main():
                        help="Source language for syncing (default: en_US)")
     parser.add_argument("--no-backup", action="store_true",
                        help="Do not create backup files when cleaning")
+    parser.add_argument("-y", "--yes", action="store_true",
+                       help="Skip all confirmation prompts (auto-confirm)")
     
     args = parser.parse_args()
     
@@ -188,9 +198,9 @@ def main():
     source_dir = os.path.abspath(args.source_dir)
     
     if args.clean:
-        clean_translation_files(translations_dir, source_dir, backup=not args.no_backup)
+        clean_translation_files(translations_dir, source_dir, backup=not args.no_backup, yes_mode=args.yes)
     elif args.sync:
-        sync_translations(translations_dir, args.source_lang)
+        sync_translations(translations_dir, args.source_lang, yes_mode=args.yes)
     else:
         print("Please specify an operation:")
         print("  --clean: Clean unused translation keys")
