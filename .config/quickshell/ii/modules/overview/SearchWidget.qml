@@ -403,7 +403,7 @@ Item { // Wrapper
                             return entry;
                         })
                         const commandResultObject = {
-                            key: `cmd /${root.searchingText}`,
+                            key: `cmd ${root.searchingText}`,
                             name: StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.shellCommand).replace("file://", ""),
                             clickActionName: Translation.tr("Run"),
                             type: Translation.tr("Run command"),
