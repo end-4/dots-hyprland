@@ -12,8 +12,8 @@
 # In this script, implement the process below:
 # 1. Warning user about "this script is only experimental and must only use it at your own risks.", and prompt `y/N` (default N) before proceeding.
 # 2. If nix not installed:
-#    1. install nix via [DeterminateSystems/nix-installer](https://github.com/DeterminateSystems/nix-installer).
-#    2. Enable nix (probably in `.zshrc` or `~/.config/fish`).
+#    1. install nix via https://github.com/NixOS/experimental-nix-installer
+#    2. Enable nix for shell (Update: Skip this step cuz the nix-installer will handle it automatically e.g. in /etc/zsh/zshrc)
 #    3. Ensure the experimental feature, Nix Flake, is enabled.
 # 3. cd to `iiqs-hm` and use something like `home-manager switch --flake .#iiqs` to install the dependencies.
 # 4. Install screen lock using system package manager of the current distro.
