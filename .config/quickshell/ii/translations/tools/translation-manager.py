@@ -216,8 +216,8 @@ def main():
                        default=".config/quickshell/translations",
                        help="Translation files directory (default: .config/quickshell/translations)")
     parser.add_argument("--source-dir", "-s", 
-                       default=".config/quickshell",
-                       help="Source code directory (default: .config/quickshell)")
+                       default=".config/quickshell/ii",
+                       help="Source code directory (default: .config/quickshell/ii)")
     parser.add_argument("--language", "-l", 
                        help="Specify language code to process (e.g., zh_CN)")
     parser.add_argument("--extract-only", "-e", action="store_true",
