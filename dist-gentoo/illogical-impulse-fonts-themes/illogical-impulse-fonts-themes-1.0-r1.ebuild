@@ -74,8 +74,6 @@ src_install() {
 
 	insinto /usr/share/fonts/ttf-material-design-icons
 	doins "${S_MATERIAL_DESIGN_ICONS}"/font/*.ttf
-	insinto ~/.local/share/fonts/ttf-material-symbols
-	doins "${S_MATERIAL_DESIGN_ICONS}"/variablefont/*.ttf
 
 	insinto /usr/share/themes
 	doins -r "${S_BREEZE_PLUS}"/src/breeze-plus*
