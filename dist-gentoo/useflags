@@ -115,4 +115,3 @@ gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-g
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
 media-gfx/imagemagick xml
-
