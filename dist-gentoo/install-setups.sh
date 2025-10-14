@@ -31,8 +31,6 @@ else
 	pause
 fi
 
-v sudo chown -R $(whoami):$(whoami) ~/.local/share/icons/
-v sudo chown -R $(whoami):$(whoami) ~/.local/share/konsole/
 v sudo chown -R $(whoami):$(whoami) ~/.config/hypr/
 v sudo chown -R $(whoami):$(whoami) ~/.config/quickshell/
 
