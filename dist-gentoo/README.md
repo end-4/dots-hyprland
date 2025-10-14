@@ -5,6 +5,7 @@ Note:
 - This folder should reflect the equivalents of `/dist-arch/` but under Gentoo.
   - **When `/dist-arch/` is newer than this folder, an update on this folder is very likely needed.**
   - Useful link: [Commit history on dist-arch/](https://github.com/end-4/dots-hyprland/commits/main/dist-arch)
+- See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 
 ## Contributors
 - Author: [jwihardi](https://github.com/jwihardi)
