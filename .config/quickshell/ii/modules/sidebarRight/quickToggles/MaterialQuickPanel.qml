@@ -89,7 +89,6 @@ Item {
         }
 
         MaterialUnusedButtons {}
-        
-        
+
     }
 }

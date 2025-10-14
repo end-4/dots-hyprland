@@ -9,6 +9,8 @@ import qs
 GroupButton {
     id: button
 
+    colBackground: Appearance.colors.colLayer1
+
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
     property int buttonClickedRadius : Appearance.rounding.normal
     clickedRadius: buttonClickedRadius
@@ -126,6 +128,7 @@ GroupButton {
                     weight: 500
                 }
                 Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
+                
             }
             StyledText {
                 anchors.top: parent.verticalCenter

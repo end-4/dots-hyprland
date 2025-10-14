@@ -6,13 +6,6 @@ import qs.modules.common.widgets
 
 import "./materialStyle"
 
-/*
-PrimaryTabBar {
-            tabButtonList: [{"icon": "notifications", "name": Translation.tr("Notifications")}]
-            externalTrackedTab: "notifications"
-        }
-*/
-
 Item {
     anchors.horizontalCenter: parent.horizontalCenter
     implicitHeight: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitHeight : 0
