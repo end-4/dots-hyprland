@@ -40,7 +40,7 @@ GroupButton {
     // TODO: fix these
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
     property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
-    property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5  // -5 for spacing (default)
+    property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
     baseWidth: unusedName === "" ? calculatedWidth : 50 * widthMultiplier
     baseHeight: unusedName === "" ? baseSize : 50
     clickedWidth: baseWidth + 20
@@ -68,7 +68,7 @@ GroupButton {
         else QuickTogglesUtils.addOption(unusedName)
     }
 
-    Rectangle { // Border
+    Rectangle {
         id: borderRect
         anchors.fill: parent
         border.width: Config.options.quickToggles.material.border ? 2 : 0
@@ -102,39 +102,39 @@ GroupButton {
             }
         }
     }
-    Item {
-        // maybe put this to a loader?
-        visible: buttonSize === 2 
-        anchors.left: parent.left
-        anchors.leftMargin: panelType === "compact" ? 50 : 60
-        anchors.verticalCenter: parent.verticalCenter
-        height: baseSize
-        width: baseSize * 3 - baseSize
-        StyledText {
-            anchors.top: parent.top
-            anchors.topMargin: 10
+    
+    Loader {
+        active: buttonSize === 2
+        sourceComponent: Item {
             anchors.left: parent.left
-            text: titleText
-            color: button.colText
-            font {
-                family: Appearance.font.family.title
-                pixelSize: panelType === "compact" ? 14 : 16
-                weight: 500
+            anchors.leftMargin: panelType === "compact" ? 50 : 60
+            anchors.verticalCenter: parent.verticalCenter
+            height: baseSize
+            width: baseSize * 3 - baseSize
+            StyledText {
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                text: titleText
+                color: button.colText
+                font {
+                    family: Appearance.font.family.title
+                    pixelSize: panelType === "compact" ? 14 : 16
+                    weight: 500
+                }
             }
-        }
-        StyledText {
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            anchors.left: parent.left
-            text: altText
-            color: button.colText
-            font {
-                family: Appearance.font.family.main
-                pixelSize: panelType === "compact" ? 13 : 14
-                weight: 250
+            StyledText {
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.left
+                text: altText
+                color: button.colText
+                font {
+                    family: Appearance.font.family.main
+                    pixelSize: panelType === "compact" ? 13 : 14
+                    weight: 250
+                }
             }
         }
     }
-    
-
 }

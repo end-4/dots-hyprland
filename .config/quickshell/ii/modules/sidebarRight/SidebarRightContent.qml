@@ -131,7 +131,7 @@ Item {
                 id: quickPanelItem
                 
                 implicitHeight: Config.options.quickToggles.type === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
-
+                implicitWidth: parent.width
                 Loader { 
                     id: materialQTLoader
                     active: Config.options.quickToggles.type === "material"
@@ -139,8 +139,7 @@ Item {
                 }
                 Loader { 
                     id: classicQTLoader
-                    anchors.left: parent.left  // TODO: there has to be better way
-                    anchors.leftMargin: 50
+                    anchors.horizontalCenter: parent.horizontalCenter
                     active: Config.options.quickToggles.type === "classic"
                     sourceComponent: ClassicQuickPanel {}
                 }
