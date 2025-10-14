@@ -2,7 +2,7 @@
 ## GPU
 - prime-run (https://wiki.garudalinux.org/en/optimus-device)
 - cd /usr/share/applications
-- change Exec=`prime-run appname`
+- change `Exec=prime-run appname`
 - relode hyperland!!!
 
 ## POWERMANAGMENT
