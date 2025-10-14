@@ -1,4 +1,6 @@
 # Install scripts for Arch Linux
+- See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
+
 ## Old Dependency Installation Method
 The old deps install method mainly involved `./scriptdata/dependencies.conf` (which has been removed now).
 
