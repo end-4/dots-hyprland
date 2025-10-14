@@ -14,6 +14,7 @@ Singleton {
     property bool isScanning: scanLanguagesProcess.running
     property bool isLoading: false
     property string translationKeepSuffix: "/*keep*/"
+    property string translationsPath: Quickshell.shellPath("translations")
 
     property string languageCode: {
         var configLang = Config?.options.language.ui ?? "auto";
@@ -26,7 +27,7 @@ Singleton {
 
     Process {
         id: scanLanguagesProcess
-        command: ["find", FileUtils.trimFileProtocol(Qt.resolvedUrl(Directories.config + "/quickshell/translations/").toString()), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
+        command: ["find", root.translationsPath, "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
         running: true
 
         stdout: SplitParser {
@@ -60,7 +61,7 @@ Singleton {
 
     FileView {
         id: translationFileView
-        path: root.languageCode?.length > 0 ? Qt.resolvedUrl(Directories.config + "/quickshell/translations/" + root.languageCode + ".json") : ""
+        path: root.languageCode?.length > 0 ? Qt.resolvedUrl(`${root.translationsPath}/${root.languageCode}.json`) : ""
 
         onLoaded: {
             var textContent = "";
