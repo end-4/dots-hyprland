@@ -436,6 +436,9 @@ Singleton {
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
                 }
             }
+            property JsonObject monitors: JsonObject {
+                property bool externalMonitorInhibit: false
+            }
         }
     }
 }
