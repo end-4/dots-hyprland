@@ -187,6 +187,7 @@ Item { // Wrapper
                 searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition) + event.text + searchInput.text.slice(searchInput.cursorPosition);
                 searchInput.cursorPosition += 1;
                 event.accepted = true;
+                root.focusFirstItem();
             }
         }
     }
@@ -315,9 +316,7 @@ Item { // Wrapper
 
                 model: ScriptModel {
                     id: model
-                    onValuesChanged: {
-                        root.focusFirstItem();
-                    }
+                    objectProp: "key"
                     values: {
                         // Search results are handled here
                         ////////////////// Skip? //////////////////
@@ -334,11 +333,13 @@ Item { // Wrapper
                                 if (mightBlurImage) {
                                     shouldBlurImage = shouldBlurImage && (containsUnsafeLink(array[index - 1]) || containsUnsafeLink(array[index + 1]));
                                 }
+                                const type = `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`
                                 return {
+                                    key: type,
                                     cliphistRawString: entry,
                                     name: StringUtils.cleanCliphistEntry(entry),
                                     clickActionName: "",
-                                    type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
+                                    type: type,
                                     execute: () => {
                                         Cliphist.copy(entry)
                                     },
@@ -367,9 +368,11 @@ Item { // Wrapper
                             // Clipboard
                             const searchString = StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.emojis);
                             return Emojis.fuzzyQuery(searchString).map(entry => {
+                                const emoji = entry.match(/^\s*(\S+)/)?.[1] || ""
                                 return {
+                                    key: emoji,
                                     cliphistRawString: entry,
-                                    bigText: entry.match(/^\s*(\S+)/)?.[1] || "",
+                                    bigText: emoji,
                                     name: entry.replace(/^\s*\S+\s+/, ""),
                                     clickActionName: "",
                                     type: "Emoji",
@@ -383,6 +386,7 @@ Item { // Wrapper
                         ////////////////// Init ///////////////////
                         nonAppResultsTimer.restart();
                         const mathResultObject = {
+                            key: `Math result: ${root.mathResult}`,
                             name: root.mathResult,
                             clickActionName: Translation.tr("Copy"),
                             type: Translation.tr("Math result"),
@@ -395,9 +399,11 @@ Item { // Wrapper
                         const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.app)).map(entry => {
                             entry.clickActionName = Translation.tr("Launch");
                             entry.type = Translation.tr("App");
+                            entry.key = entry.execute
                             return entry;
                         })
                         const commandResultObject = {
+                            key: `cmd /${root.searchingText}`,
                             name: StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.shellCommand).replace("file://", ""),
                             clickActionName: Translation.tr("Run"),
                             type: Translation.tr("Run command"),
@@ -413,6 +419,7 @@ Item { // Wrapper
                             }
                         };
                         const webSearchResultObject = {
+                            key: `website ${root.searchingText}`,
                             name: StringUtils.cleanPrefix(root.searchingText, Config.options.search.prefix.webSearch),
                             clickActionName: Translation.tr("Search"),
                             type: Translation.tr("Search the web"),
@@ -430,6 +437,7 @@ Item { // Wrapper
                             const actionString = `${Config.options.search.prefix.action}${action.action}`;
                             if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
                                 return {
+                                    key: `Action ${actionString}`,
                                     name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
                                     clickActionName: Translation.tr("Run"),
                                     type: Translation.tr("Action"),
