@@ -6,7 +6,10 @@
 showfun install-python-packages
 v install-python-packages
 
-v getent group i2c || sudo groupadd i2c
+if [[ -z $(getent group i2c) ]]; then
+	v sudo groupadd i2c
+fi
+
 v sudo usermod -aG video,i2c,input "$(whoami)"
 
 if [[ ! -z $(systemctl --version) ]]; then
