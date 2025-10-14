@@ -3,13 +3,26 @@
 
 function outdate_detect(){
   # Shallow clone prevent latest_commit_timestamp() from working.
-  git_auto_unshallow
+  v git_auto_unshallow
 
   local source_path="$1"
   local target_path="$2"
   local source_timestamp="$(latest_commit_timestamp $source_path 2>/dev/null)"
   local target_timestamp="$(latest_commit_timestamp $target_path 2>/dev/null)"
   local outdate_detect_mode="$(cat ${target_path}/outdate-detect-mode)"
+
+  # outdate-detect-mode possible modes:
+  # - WIP: Work in progress (should be taken as outdated)
+  # - FORCE_OUTDATED: forcely taken as outdated
+  # - FORCE_UPDATED: forcely taken as updated
+  # - AUTO: Let the script decide automatically
+  #
+  # outdate status possible values:
+  # - WIP,FORCE_OUTDATED,FORCE_UPDATED: Inherited directly from outdate-detect-mode
+  # - EMPTY_SOURCE: source path has empty timestamp, maybe not tracked by git (should be taken as outdated)
+  # - EMPTY_TARGET: target path has empty timestamp, maybe not tracked by git (should be taken as outdated)
+  # - OUTDATED: target path is older than source path.
+  # - UPDATED: target path is not older than source path.
 
   # Does target path have an outdate-detect-mode file which content is special?
   if [[ "${outdate_detect_mode}" =~ ^(WIP|FORCE_OUTDATED|FORCE_UPDATED)$ ]]; then
