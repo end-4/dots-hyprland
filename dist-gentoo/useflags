@@ -60,6 +60,9 @@ net-misc/networkmanager concheck introspection nss ppp tools wifi -wext -modemma
 kde-apps/dolphin -handbook
 kde-plasma/systemsettings -handbook
 
+################### MICROTEX-GIT ################### 
+dev-cpp/gtkmm X wayland
+
 ################### PORTAL ################### 
 sys-apps/xdg-desktop-portal seccomp
 #sys-plasma/xdg-desktop-portal-kde (nothing needed)
@@ -112,11 +115,3 @@ gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-g
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
 media-gfx/imagemagick xml
-
-############ Additional needed useflags
-x11-libs/cairo X
-media-libs/libglvnd X
-x11-libs/libxkbcommon X
-media-libs/libpulse X
-media-plugins/alsa-plugins pulseaudio
-

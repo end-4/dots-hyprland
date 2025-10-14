@@ -6,7 +6,10 @@
 showfun install-python-packages
 v install-python-packages
 
-v getent group i2c || sudo groupadd i2c
+if [[ -z $(getent group i2c) ]]; then
+	v sudo groupadd i2c
+fi
+
 v sudo usermod -aG video,i2c,input "$(whoami)"
 
 if [[ ! -z $(systemctl --version) ]]; then
@@ -28,8 +31,6 @@ else
 	pause
 fi
 
-v sudo chown -R $(whoami):$(whoami) ~/.local/share/icons/
-v sudo chown -R $(whoami):$(whoami) ~/.local/share/konsole/
 v sudo chown -R $(whoami):$(whoami) ~/.config/hypr/
 v sudo chown -R $(whoami):$(whoami) ~/.config/quickshell/
 
