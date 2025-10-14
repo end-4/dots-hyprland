@@ -1,4 +1,10 @@
 # CUSTOM
+## GPU
+- prime-run (https://wiki.garudalinux.org/en/optimus-device)
+- cd /usr/share/applications
+- change Exec=`prime-run appname`
+- relode hyperland!!!
+
 ## POWERMANAGMENT
 - sudo pacman -S power-profiles-daemon
 - sudo systemctl enable --now power-profiles-daemon.service
