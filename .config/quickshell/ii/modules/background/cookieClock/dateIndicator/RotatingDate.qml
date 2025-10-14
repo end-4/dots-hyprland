@@ -30,7 +30,7 @@ Item {
     Repeater {
         model: root.dateText.length 
 
-        delegate: StyledText {
+        delegate: Text {
             required property int index
             property real angle: index * root.angleStep - Math.PI / 2
             x: root.width / 2 + root.radius * Math.cos(angle) - width / 2
