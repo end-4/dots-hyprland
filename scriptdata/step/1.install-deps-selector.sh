@@ -124,6 +124,9 @@ elif [[ -f "./dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
     printf "PR is welcomed. Please see discussion#2140 for details.\n"
     printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RESET}\n"
     printf "${STY_RED}${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RESET}\n"
+    if [ "$ask" = "false" ]; then
+      echo "Urgent problem encountered, aborting...";exit 1
+    fi
     printf "${STY_RED}Still proceed?${STY_RESET}\n"
     read -p "[y/N]: " p
     case "$p" in
