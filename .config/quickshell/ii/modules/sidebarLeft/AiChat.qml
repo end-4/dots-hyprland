@@ -361,43 +361,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
             }
 
-            Item { // Placeholder when list is empty
-                opacity: Ai.messageIDs.length === 0 ? 1 : 0
-                visible: opacity > 0
-                anchors.fill: parent
-
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 5
-
-                    CookieWrappedMaterialSymbol {
-                        Layout.alignment: Qt.AlignHCenter
-                        iconSize: 60
-                        text: "neurology"
-                    }
-                    StyledText {
-                        id: widgetNameText
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
-                        font.family: Appearance.font.family.title
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Translation.tr("Large language models")
-                    }
-                    StyledText {
-                        id: widgetDescriptionText
-                        Layout.fillWidth: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.Wrap
-                        text: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
-                    }
-                }
+            PagePlaceholder {
+                shown: Ai.messageIDs.length === 0
+                icon: "neurology"
+                title: Translation.tr("Large language models")
+                description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
             }
         }
 
