@@ -17,7 +17,7 @@ printf "Or you can manually add the use flags for each package that requires it\
 printf "${STY_RESET}"
 pause
 
-x sudo emerge --noreplace app-eselect/eselect-repository
+x sudo emerge --noreplace --quiet app-eselect/eselect-repository
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
@@ -83,4 +83,5 @@ for i in "${metapkgs[@]}"; do
 	v sudo emerge --quiet app-misc/${i}
 done
 
-
+# Currently using 3.12 python, this doesn't need to be default though
+v sudo emerge --noreplace --quiet dev-lang/python:3.12
