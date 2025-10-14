@@ -12,7 +12,7 @@ MaterialQuickToggleButton {
     buttonSize: 2
     buttonIcon: toggled ? "shield_lock" : "shield"
     titleText: "WARP (1.1.1.1)"
-    altText: toggled ? "On" : "Off"
+    descText: toggled ? "On" : "Off"
 
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;

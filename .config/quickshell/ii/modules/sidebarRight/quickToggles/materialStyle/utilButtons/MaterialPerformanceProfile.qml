@@ -16,7 +16,7 @@ MaterialQuickToggleButton {
                         case PowerProfile.Performance: return "local_fire_department"
                     }
     titleText: "Profile"
-    altText: switch(PowerProfiles.profile) {
+    descText: switch(PowerProfiles.profile) {
                         case PowerProfile.PowerSaver: return "Power Saver"
                         case PowerProfile.Balanced: return "Balanced"
                         case PowerProfile.Performance: return "Performance"

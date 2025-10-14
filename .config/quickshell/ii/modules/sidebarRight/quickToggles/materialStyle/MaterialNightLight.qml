@@ -12,7 +12,7 @@ MaterialQuickToggleButton {
     toggled: enabled
     buttonIcon: Config.options.light.night.automatic ? "night_sight_auto" : "bedtime"
     titleText: "Night Light"
-    altText: toggled ? Config.options.light.night.automatic ? "Automatic" : "On" : "Off"
+    descText: toggled ? Config.options.light.night.automatic ? "Automatic" : "On" : "Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         Hyprsunset.toggle()

@@ -10,7 +10,7 @@ MaterialQuickToggleButton {
     buttonIcon: "gamepad"
     toggled: toggled
     titleText: "Game Mode"
-    altText: toggled ? "On" : "Off"
+    descText: toggled ? "On" : "Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         root.toggled = !root.toggled

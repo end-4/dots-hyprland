@@ -12,7 +12,7 @@ MaterialQuickToggleButton {
     toggled: Appearance.m3colors.darkmode
     buttonIcon: Appearance.m3colors.darkmode ? "contrast" : "light_mode"
     titleText: "Dark Mode"
-    altText: toggled ? "On" : "Off"
+    descText: toggled ? "On" : "Off"
     onClicked: event => {
         if (GlobalStates.quickTogglesEditMode) return;
         if (Appearance.m3colors.darkmode) {

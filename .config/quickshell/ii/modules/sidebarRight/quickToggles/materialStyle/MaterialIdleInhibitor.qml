@@ -9,7 +9,7 @@ MaterialQuickToggleButton {
     toggled: Idle.inhibit
     buttonIcon: "coffee"
     titleText: "Idle Inhibitor"
-    altText: toggled ? "On" : "Off"
+    descText: toggled ? "On" : "Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         Idle.toggleInhibit()

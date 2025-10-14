@@ -13,7 +13,7 @@ MaterialQuickToggleButton {
     toggled: !Pipewire.defaultAudioSource?.audio?.muted
     buttonIcon: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
     titleText: "Toggle Mic"
-    altText: toggled? "Mic On" : "Mic Off"
+    descText: toggled? "Mic On" : "Mic Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])

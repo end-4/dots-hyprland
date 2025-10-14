@@ -8,36 +8,21 @@ import qs
 GroupButton {
     id: button
 
-    property color colBackground: Appearance.colors.colLayer2
-    property color colBackgroundHover: Appearance.colors.colLayer2Hover 
-    property color colBackgroundActive: Appearance.colors.colLayer2Active 
-    property color colBackgroundToggled: Appearance.colors.colPrimary 
-    property color colBackgroundToggledHover: Appearance.colors.colPrimaryHover 
-    property color colBackgroundToggledActive: Appearance.colors.colPrimaryActive 
-    color: root.enabled ? (root.toggled ? 
-        (root.down ? colBackgroundToggledActive : 
-            root.hovered ? colBackgroundToggledHover : 
-            colBackgroundToggled) :
-        (root.down ? colBackgroundActive : 
-            root.hovered ? colBackgroundHover : 
-            colBackground)) : colBackground
-
+    buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
     property int buttonClickedRadius : Appearance.rounding.normal
     clickedRadius: buttonClickedRadius
     buttonRadiusPressed: buttonClickedRadius
-    buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
-
-    property color colText: root.toggled ? colBackground : Appearance.colors.colOnLayer1
+    
+    property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
     property string panelType: Config.options.quickToggles.material.mode
 
     property string buttonIcon
     property int buttonSize: 1 // Must be 1, 2 
     property string titleText
-    property string altText
+    property string descText
     property int buttonIndex
     property string unusedName: ""
 
-    // TODO: fix these
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
     property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
     property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
@@ -45,11 +30,13 @@ GroupButton {
     baseHeight: unusedName === "" ? baseSize : 50
     clickedWidth: baseWidth + 20
 
-    Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) } // can be removed if you want less behaviors. but this reduces the bounciness
+    // can be removed if you want less behaviors. but this reduces the bounciness so it helps
+    Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) } 
 
     property bool halfToggled: false
     toggled: false
 
+    // There is probably better ways of changing these, but i think these makes sense
     onClicked: event => {
         if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
@@ -102,7 +89,7 @@ GroupButton {
             }
         }
     }
-    
+
     Loader {
         active: buttonSize === 2
         sourceComponent: Item {
@@ -127,7 +114,7 @@ GroupButton {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
-                text: altText
+                text: descText
                 color: button.colText
                 font {
                     family: Appearance.font.family.main

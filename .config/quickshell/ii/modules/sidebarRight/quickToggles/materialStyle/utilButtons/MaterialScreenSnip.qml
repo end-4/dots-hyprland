@@ -11,7 +11,7 @@ MaterialQuickToggleButton {
     toggled: false
     buttonIcon: "screenshot_region"
     titleText: "Screenshot"
-    altText: "Click me"
+    descText: "Click me"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;

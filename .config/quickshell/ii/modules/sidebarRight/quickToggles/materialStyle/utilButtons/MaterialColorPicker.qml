@@ -12,7 +12,7 @@ MaterialQuickToggleButton {
     toggled: false
     buttonIcon: "colorize"
     titleText: "Color Picker"
-    altText: "Click me"
+    descText: "Click me"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;
