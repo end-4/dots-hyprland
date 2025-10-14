@@ -145,11 +145,6 @@ Item {
                 }
             }
             
-            
-            
-
-        
-
             CenterWidgetGroup {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true

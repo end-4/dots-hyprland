@@ -87,6 +87,6 @@ Item {
             }
         }
 
-        MaterialBottomWidgets {}
+        MaterialUnusedButtons {}
     }
 }

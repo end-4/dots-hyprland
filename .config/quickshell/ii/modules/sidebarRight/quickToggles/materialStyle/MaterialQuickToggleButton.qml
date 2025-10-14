@@ -1,6 +1,7 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
+import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import qs
 
@@ -12,7 +13,9 @@ GroupButton {
     property int buttonClickedRadius : Appearance.rounding.normal
     clickedRadius: buttonClickedRadius
     buttonRadiusPressed: buttonClickedRadius
-    
+
+    readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
+
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
     property string panelType: Config.options.quickToggles.material.mode
 
@@ -22,14 +25,14 @@ GroupButton {
     property string descText
     property int buttonIndex
     property string unusedName: ""
-
+    
+    property int unusedButtonSize: 48
     property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
     property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
     property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
-    baseWidth: unusedName === "" ? calculatedWidth : 50 * widthMultiplier
-    baseHeight: unusedName === "" ? baseSize : 50
-    clickedWidth: baseWidth + 20
-
+    baseWidth: unusedName === "" ? calculatedWidth : unusedButtonSize * widthMultiplier
+    baseHeight: unusedName === "" ? baseSize : unusedButtonSize
+    
     // can be removed if you want less behaviors. but this reduces the bounciness so it helps
     Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) } 
 
@@ -64,6 +67,8 @@ GroupButton {
         color: "transparent"
     }
 
+    
+
     Rectangle {
         anchors.centerIn: buttonSize === 1 ? parent : undefined
 
@@ -77,7 +82,11 @@ GroupButton {
         color: (buttonSize === 1 || toggled) ? "transparent" : halfToggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer2
         MaterialSymbol {
             anchors.centerIn: parent
-            iconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
+            iconSize: {
+                if (root.down) buttonIconSize * 0.75
+                else buttonIconSize
+            }
+            Behavior on iconSize { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
             fill: toggled ? 1 : 0
             color: toggled || halfToggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
             horizontalAlignment: Text.AlignHCenter
@@ -89,6 +98,7 @@ GroupButton {
             }
         }
     }
+
 
     Loader {
         active: buttonSize === 2

@@ -38,6 +38,6 @@ MaterialQuickToggleButton {
         }
     }
     StyledToolTip {
-        text: altText
+        text: descText
     }
 }
