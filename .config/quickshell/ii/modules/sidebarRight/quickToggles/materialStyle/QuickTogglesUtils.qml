@@ -90,6 +90,7 @@ Singleton {
 
     /*
         Fixes the given 'data' according to given 'maxTiles' and returns a list
+        And then this list is being used by the repeaters
     */
     function splitRows(data, maxTiles=4) {
         let rows = [], currentRow = [], currentCount = 0
