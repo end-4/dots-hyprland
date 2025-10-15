@@ -23,8 +23,6 @@ printf "Checkout the above README for potential bug fixes or additional informat
 printf "${STY_RESET}"
 pause
 
-
-
 x sudo emerge --noreplace --quiet app-eselect/eselect-repository
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
