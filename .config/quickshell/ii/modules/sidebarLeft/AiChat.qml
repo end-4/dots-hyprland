@@ -486,7 +486,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                             return
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}model`)) {
                             root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
-                            const modelResults = Fuzzy.go(root.suggestionQuery, Ai.modelList.map(model => {
+                            const modelResults = Fuzzy.go(root.suggestionQuery, Ai.filteredModelList.map(model => {
                                 return {
                                     name: Fuzzy.prepare(model),
                                     obj: model,
