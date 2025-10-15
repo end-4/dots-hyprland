@@ -39,6 +39,8 @@ Singleton {
         Config.options.quickToggles.material.sizes = newSizesList
     }
 
+    //------------------------------------------------------------------------------------------//
+
     /*
         Updates the sizes list in config.json
         Toggles the size of the button in the given index
@@ -54,17 +56,25 @@ Singleton {
         else Config.options.quickToggles.material.sizes[index] = "1"
     }
 
+    //------------------------------------------------------------------------------------------//
+
     /*
         Updates the toggles list in config.json
         Removes the item in the given index
     */
 
     function removeOption(index) {
-        // there is sync problems with splice (i have no idea why)
+        // there is sync problems with splice when moving items fast (i have no idea why)
         var togglesStart = Config.options.quickToggles.material.toggles.slice(0, index)
         var togglesEnd = Config.options.quickToggles.material.toggles.slice(index + 1, Config.options.quickToggles.material.toggles.length)
         Config.options.quickToggles.material.toggles = togglesStart.concat(togglesEnd)
+
+        var sizesStart = Config.options.quickToggles.material.sizes.slice(0, index)
+        var sizesEnd = Config.options.quickToggles.material.sizes.slice(index + 1, Config.options.quickToggles.material.sizes.length)
+        Config.options.quickToggles.material.sizes = sizesStart.concat(sizesEnd)
     }
+
+    //------------------------------------------------------------------------------------------//
 
     /*
         Updates the toggles list in config.json
@@ -72,7 +82,11 @@ Singleton {
     */
     function addOption(name) {
         Config.options.quickToggles.material.toggles.push(name)
+        //Config.options.quickToggles.material.sizes.push("1") // i have no fucking idea why this pushes only ""
+        Config.options.quickToggles.material.sizes = Config.options.quickToggles.material.sizes.concat(["1"])
     }
+
+    //------------------------------------------------------------------------------------------//
 
     /*
         Fixes the given 'data' according to given 'maxTiles' and returns a list
@@ -91,6 +105,8 @@ Singleton {
         if (currentRow.length) rows.push(currentRow)
         return rows
     }
+
+    //------------------------------------------------------------------------------------------//
 
     /*
         Returns the related component based on the name
@@ -114,6 +130,8 @@ Singleton {
             default: return null;
         }
     }
+
+    //------------------------------------------------------------------------------------------//
 
     /*
         Components that has the material quick toggles

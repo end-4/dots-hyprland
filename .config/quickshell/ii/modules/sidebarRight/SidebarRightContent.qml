@@ -82,7 +82,7 @@ Item {
 
                 ButtonGroup {
                     QuickToggleButton {
-                        visible: Config.options.quickToggles.type === "material"
+                        visible: Config.options.quickToggles.style === "material"
                         toggled: GlobalStates.quickTogglesEditMode
                         buttonIcon: "edit"
                         onClicked: {
@@ -130,17 +130,17 @@ Item {
             Item {
                 id: quickPanelItem
                 
-                implicitHeight: Config.options.quickToggles.type === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
+                implicitHeight: Config.options.quickToggles.style === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
                 implicitWidth: parent.width
                 Loader { 
                     id: materialQTLoader
-                    active: Config.options.quickToggles.type === "material"
+                    active: Config.options.quickToggles.style === "material"
                     sourceComponent: MaterialQuickPanel {}
                 }
                 Loader { 
                     id: classicQTLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    active: Config.options.quickToggles.type === "classic"
+                    active: Config.options.quickToggles.style === "classic"
                     sourceComponent: ClassicQuickPanel {}
                 }
             }

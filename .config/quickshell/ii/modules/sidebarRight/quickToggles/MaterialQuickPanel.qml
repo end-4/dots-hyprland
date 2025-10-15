@@ -46,49 +46,16 @@ Item {
         filteredList = fullItemList.filter(item => !Config.options.quickToggles.material.toggles.includes(item)) // recalculate unused buttons
     }
 
+
     ColumnLayout {
         id: mainColumn
         spacing: 10
         
-        Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
-
-        MaterialTopWidgets {}
+        MaterialTopWidgets {} // volume and brightness
         
-        ColumnLayout { // i have used another column to reset the animation coming from unused button in edit mode
-            id: buttonsLayout
-            Repeater {
-                id: rowRepeater
-                model: root.rowModels
-                ButtonGroup {
-                    id: mainButtonGroup
+        MaterialToggles {} // toggle buttons
 
-                    readonly property var rowIndex: rowRepeater.index
-                    property string alignment: Config.options.quickToggles.material.align
-                    onAlignmentChanged: {
-                        if (alignment === "left") Layout.alignment = Qt.AlignLeft
-                        if (alignment === "right") Layout.alignment = Qt.AlignRight
-                        if (alignment === "center") Layout.alignment = Qt.AlignCenter
-                    }
-
-                    Repeater {
-                        model: modelData
-                        delegate: Item {
-                            Component.onCompleted: {
-                                var optionIndex = root.getIndex.length
-                                root.getIndex.push("0")
-                                var comp = QuickTogglesUtils.getComponentByName(modelData[1]);
-                                var obj = comp.createObject(parent, {
-                                    buttonSize: modelData[0],
-                                    buttonIndex: optionIndex
-                                    });
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        MaterialUnusedButtons {}
+        MaterialUnusedButtons {} // unused buttons
 
     }
 }

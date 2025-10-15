@@ -7,18 +7,19 @@ import qs.modules.common.widgets
 import "./materialStyle"
 
 Item {
+    visible: implicitHeight > 0
     anchors.horizontalCenter: parent.horizontalCenter
     implicitHeight: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitHeight : 0
     implicitWidth: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitWidth : 0
     Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
-
+    
     Loader {
         id: unusedButtonsLoader
         active: GlobalStates.quickTogglesEditMode
         
         sourceComponent: Rectangle{ 
             property int padding: 10
-            implicitHeight: mainColumn.implicitHeight + padding  
+            implicitHeight: mainColumn.implicitHeight + padding
             implicitWidth: 421
             color: "transparent"
             radius: Appearance.rounding.normal
