@@ -185,35 +185,12 @@ Item {
                 }
             }
 
-            Item { // Placeholder when list is empty
-                opacity: root.responses.length === 0 ? 1 : 0
-                visible: opacity > 0
-                anchors.fill: parent
-
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 5
-
-                    MaterialSymbol {
-                        Layout.alignment: Qt.AlignHCenter
-                        iconSize: 60
-                        color: Appearance.m3colors.m3outline
-                        text: "bookmark_heart"
-                    }
-                    StyledText {
-                        id: widgetNameText
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
-                        font.family: Appearance.font.family.title
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Translation.tr("Anime boorus")
-                    }
-                }
+            PagePlaceholder {
+                id: placeholderItem
+                shown: root.responses.length === 0
+                icon: "bookmark_heart"
+                title: Translation.tr("Anime boorus")
+                description: ""
             }
 
             Item { // Queries awaiting response
@@ -514,23 +491,21 @@ Item {
                     text: "•"
                 }
 
-                Item { // NSFW toggle
+                MouseArea { // NSFW toggle
                     visible: width > 0
                     implicitWidth: switchesRow.implicitWidth
                     Layout.fillHeight: true
+
+                    hoverEnabled: true
+                    PointingHandInteraction {}
+                    onPressed: {
+                        nsfwSwitch.checked = !nsfwSwitch.checked
+                    }
 
                     RowLayout {
                         id: switchesRow
                         spacing: 5
                         anchors.centerIn: parent
-
-                        MouseArea {
-                            hoverEnabled: true
-                            PointingHandInteraction {}
-                            onClicked: {
-                                nsfwSwitch.checked = !nsfwSwitch.checked
-                            }
-                        }
 
                         StyledText {
                             Layout.fillHeight: true
@@ -552,6 +527,7 @@ Item {
                             }
                         }
                     }
+
                 }
 
                 Item { Layout.fillWidth: true }
@@ -566,8 +542,8 @@ Item {
                             buttonText: commandRepresentation
                             colBackground: Appearance.colors.colLayer2
 
-                            onClicked: {
-                                if(modelData.sendDirectly) {
+                            downAction: () => {
+                                if (modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
                                     tagInputField.text = commandRepresentation + " "

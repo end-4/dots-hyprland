@@ -1,8 +1,8 @@
 pragma ComponentBehavior: Bound
+
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
-import qs
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
@@ -15,7 +15,7 @@ MouseArea {
 
     hoverEnabled: true
 
-    onClicked: {
+    onPressed: {
         Weather.getData();
         Quickshell.execDetached(["notify-send", 
             Translation.tr("Weather"), 

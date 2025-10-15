@@ -13,11 +13,11 @@ import Quickshell.Io
 import Quickshell.Services.Mpris
 
 Item { // Player instance
-    id: playerController
+    id: root
     required property MprisPlayer player
     property var artUrl: player?.trackArtUrl
     property string artDownloadLocation: Directories.coverArt
-    property string artFileName: Qt.md5(artUrl) + ".jpg"
+    property string artFileName: Qt.md5(artUrl)
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
@@ -25,6 +25,8 @@ Item { // Player instance
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
+
+    property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -49,37 +51,41 @@ Item { // Player instance
     }
 
     Timer { // Force update for revision
-        running: playerController.player?.playbackState == MprisPlaybackState.Playing
+        running: root.player?.playbackState == MprisPlaybackState.Playing
         interval: Config.options.resources.updateInterval
         repeat: true
         onTriggered: {
-            playerController.player.positionChanged()
+            root.player.positionChanged()
         }
     }
 
-    onArtUrlChanged: {
-        if (playerController.artUrl.length == 0) {
-            playerController.artDominantColor = Appearance.m3colors.m3secondaryContainer
+    onArtFilePathChanged: {
+        if (root.artUrl.length == 0) {
+            root.artDominantColor = Appearance.m3colors.m3secondaryContainer
             return;
         }
-        // console.log("PlayerControl: Art URL changed to", playerController.artUrl)
-        // console.log("Download cmd:", coverArtDownloader.command.join(" "))
-        playerController.downloaded = false
+
+        // Binding does not work in Process
+        coverArtDownloader.targetFile = root.artUrl 
+        coverArtDownloader.artFilePath = root.artFilePath
+        // Download
+        root.downloaded = false
         coverArtDownloader.running = true
     }
 
     Process { // Cover art downloader
         id: coverArtDownloader
-        property string targetFile: playerController.artUrl
+        property string targetFile: root.artUrl
+        property string artFilePath: root.artFilePath
         command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -sSL '${targetFile}' -o '${artFilePath}'` ]
         onExited: (exitCode, exitStatus) => {
-            playerController.downloaded = true
+            root.downloaded = true
         }
     }
 
     ColorQuantizer {
         id: colorQuantizer
-        source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+        source: root.displayedArtFilePath
         depth: 0 // 2^0 = 1 color
         rescaleSize: 1 // Rescale to 1x1 pixel for faster processing
     }
@@ -96,7 +102,7 @@ Item { // Player instance
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
         color: blendedColors.colLayer0
-        radius: playerController.radius
+        radius: root.radius
 
         layer.enabled: true
         layer.effect: OpacityMask {
@@ -110,7 +116,7 @@ Item { // Player instance
         Image {
             id: blurredArt
             anchors.fill: parent
-            source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+            source: root.displayedArtFilePath
             sourceSize.width: background.width
             sourceSize.height: background.height
             fillMode: Image.PreserveAspectCrop
@@ -126,30 +132,30 @@ Item { // Player instance
             Rectangle {
                 anchors.fill: parent
                 color: ColorUtils.transparentize(blendedColors.colLayer0, 0.3)
-                radius: playerController.radius
+                radius: root.radius
             }
         }
 
         WaveVisualizer {
             id: visualizerCanvas
             anchors.fill: parent
-            live: playerController.player?.isPlaying
-            points: playerController.visualizerPoints
-            maxVisualizerValue: playerController.maxVisualizerValue
-            smoothing: playerController.visualizerSmoothing
+            live: root.player?.isPlaying
+            points: root.visualizerPoints
+            maxVisualizerValue: root.maxVisualizerValue
+            smoothing: root.visualizerSmoothing
             color: blendedColors.colPrimary
         }
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: root.contentPadding
+            anchors.margins: 13
             spacing: 15
 
             Rectangle { // Art background
                 id: artBackground
                 Layout.fillHeight: true
                 implicitWidth: height
-                radius: root.artRounding
+                radius: Appearance.rounding.verysmall
                 color: ColorUtils.transparentize(blendedColors.colLayer1, 0.5)
 
                 layer.enabled: true
@@ -166,7 +172,7 @@ Item { // Player instance
                     property int size: parent.height
                     anchors.fill: parent
 
-                    source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+                    source: root.displayedArtFilePath
                     fillMode: Image.PreserveAspectCrop
                     cache: false
                     antialiasing: true
@@ -188,7 +194,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: blendedColors.colOnLayer0
                     elide: Text.ElideRight
-                    text: StringUtils.cleanMusicTitle(playerController.player?.trackTitle) || "Untitled"
+                    text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
@@ -199,7 +205,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
-                    text: playerController.player?.trackArtist
+                    text: root.player?.trackArtist
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
@@ -217,7 +223,7 @@ Item { // Player instance
                         font.pixelSize: Appearance.font.pixelSize.small
                         color: blendedColors.colSubtext
                         elide: Text.ElideRight
-                        text: `${StringUtils.friendlyTimeForSeconds(playerController.player?.position)} / ${StringUtils.friendlyTimeForSeconds(playerController.player?.length)}`
+                        text: `${StringUtils.friendlyTimeForSeconds(root.player?.position)} / ${StringUtils.friendlyTimeForSeconds(root.player?.length)}`
                     }
                     RowLayout {
                         id: sliderRow
@@ -228,7 +234,7 @@ Item { // Player instance
                         }
                         TrackChangeButton {
                             iconName: "skip_previous"
-                            onClicked: playerController.player?.previous()
+                            downAction: () => root.player?.previous()
                         }
                         Item {
                             id: progressBarContainer
@@ -238,15 +244,15 @@ Item { // Player instance
                             Loader {
                                 id: sliderLoader
                                 anchors.fill: parent
-                                active: playerController.player?.canSeek ?? false
+                                active: root.player?.canSeek ?? false
                                 sourceComponent: StyledSlider { 
                                     configuration: StyledSlider.Configuration.Wavy
                                     highlightColor: blendedColors.colPrimary
                                     trackColor: blendedColors.colSecondaryContainer
                                     handleColor: blendedColors.colPrimary
-                                    value: playerController.player?.position / playerController.player?.length
+                                    value: root.player?.position / root.player?.length
                                     onMoved: {
-                                        playerController.player.position = value * playerController.player.length;
+                                        root.player.position = value * root.player.length;
                                     }
                                 }
                             }
@@ -258,12 +264,12 @@ Item { // Player instance
                                     left: parent.left
                                     right: parent.right
                                 }
-                                active: !(playerController.player?.canSeek ?? false)
+                                active: !(root.player?.canSeek ?? false)
                                 sourceComponent: StyledProgressBar { 
-                                    wavy: playerController.player?.isPlaying
+                                    wavy: root.player?.isPlaying
                                     highlightColor: blendedColors.colPrimary
                                     trackColor: blendedColors.colSecondaryContainer
-                                    value: playerController.player?.position / playerController.player?.length
+                                    value: root.player?.position / root.player?.length
                                 }
                             }
 
@@ -271,7 +277,7 @@ Item { // Player instance
                         }
                         TrackChangeButton {
                             iconName: "skip_next"
-                            onClicked: playerController.player?.next()
+                            downAction: () => root.player?.next()
                         }
                     }
 
@@ -283,19 +289,19 @@ Item { // Player instance
                         property real size: 44
                         implicitWidth: size
                         implicitHeight: size
-                        onClicked: playerController.player.togglePlaying();
+                        downAction: () => root.player.togglePlaying();
 
-                        buttonRadius: playerController.player?.isPlaying ? Appearance?.rounding.normal : size / 2
-                        colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
-                        colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
-                        colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
+                        buttonRadius: root.player?.isPlaying ? Appearance?.rounding.normal : size / 2
+                        colBackground: root.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
+                        colBackgroundHover: root.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
+                        colRipple: root.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
 
                         contentItem: MaterialSymbol {
                             iconSize: Appearance.font.pixelSize.huge
                             fill: 1
                             horizontalAlignment: Text.AlignHCenter
-                            color: playerController.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
-                            text: playerController.player?.isPlaying ? "pause" : "play_arrow"
+                            color: root.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
+                            text: root.player?.isPlaying ? "pause" : "play_arrow"
 
                             Behavior on color {
                                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

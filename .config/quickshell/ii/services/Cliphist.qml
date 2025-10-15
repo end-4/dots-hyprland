@@ -21,6 +21,9 @@ Singleton {
         entry: a
     }))
     function fuzzyQuery(search: string): var {
+        if (search.trim() === "") {
+            return entries;
+        }
         if (root.sloppySearch) {
             const results = entries.slice(0, 100).map(str => ({
                 entry: str,

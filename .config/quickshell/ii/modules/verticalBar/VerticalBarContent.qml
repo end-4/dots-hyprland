@@ -273,6 +273,20 @@ Item { // Bar content region
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing
                         color: rightSidebarButton.colText
                     }
+                    Revealer {
+                        vertical: true
+                        reveal: Notifications.silent || Notifications.unread > 0
+                        Layout.fillWidth: true
+                        Layout.bottomMargin: reveal ? indicatorsColumnLayout.realSpacing : 0
+                        implicitHeight: reveal ? notificationUnreadCount.implicitHeight : 0
+                        implicitWidth: reveal ? notificationUnreadCount.implicitWidth : 0
+                        Behavior on Layout.bottomMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Bar.NotificationUnreadCount {
+                            id: notificationUnreadCount
+                        }
+                    }
                     MaterialSymbol {
                         Layout.bottomMargin: indicatorsColumnLayout.realSpacing
                         text: Network.materialSymbol
@@ -280,6 +294,7 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
+                        visible: BluetoothStatus.available
                         text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText

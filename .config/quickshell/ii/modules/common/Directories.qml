@@ -34,12 +34,14 @@ Singleton {
     property string todoPath: FileUtils.trimFileProtocol(`${Directories.state}/user/todo.json`)
     property string notificationsPath: FileUtils.trimFileProtocol(`${Directories.cache}/notifications/notifications.json`)
     property string generatedMaterialThemePath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/colors.json`)
+    property string generatedWallpaperCategoryPath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/wallpaper/category.txt`)
     property string cliphistDecode: FileUtils.trimFileProtocol(`/tmp/quickshell/media/cliphist`)
     property string screenshotTemp: "/tmp/quickshell/media/screenshot"
     property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/switchwall.sh`)
     property string defaultAiPrompts: Quickshell.shellPath("defaults/ai/prompts")
     property string userAiPrompts: FileUtils.trimFileProtocol(`${Directories.shellConfig}/ai/prompts`)
     property string aiChats: FileUtils.trimFileProtocol(`${Directories.state}/user/ai/chats`)
+    property string aiTranslationScriptPath: FileUtils.trimFileProtocol(`${Directories.scriptPath}/ai/gemini-translate.sh`)
     // Cleanup on init
     Component.onCompleted: {
         Quickshell.execDetached(["mkdir", "-p", `${shellConfig}`])

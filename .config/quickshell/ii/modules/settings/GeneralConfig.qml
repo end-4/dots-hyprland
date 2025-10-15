@@ -1,14 +1,19 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import QtQuick.Layouts
-import qs
 import qs.services
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
+
+    Process {
+        id: translationProc
+        property string locale: ""
+        command: [Directories.aiTranslationScriptPath, translationProc.locale]
+    }
 
     ContentSection {
         icon: "volume_up"
@@ -128,13 +133,37 @@ ContentPage {
                         displayName: Translation.tr("Auto (System)"),
                         value: "auto"
                     },
-                    ...Translation.availableLanguages.map(lang => {
+                    ...Translation.allAvailableLanguages.map(lang => {
                         return {
-                            displayName: lang.replace('_', '-'),
+                            displayName: lang,
                             value: lang
                         };
                     })
                 ]
+            }
+        }
+        ContentSubsection {
+            title: Translation.tr("Generate translation with Gemini")
+            
+            ConfigRow {
+                MaterialTextArea {
+                    id: localeInput
+                    Layout.fillWidth: true
+                    placeholderText: Translation.tr("Locale code, e.g. fr_FR, de_DE, zh_CN...")
+                    text: Config.options.language.ui === "auto" ? Qt.locale().name : Config.options.language.ui
+                }
+                RippleButtonWithIcon {
+                    id: generateTranslationBtn
+                    Layout.fillHeight: true
+                    nerdIcon: ""
+                    enabled: !translationProc.running || (translationProc.locale !== localeInput.text.trim())
+                    mainText: enabled ? Translation.tr("Generate\nTypically takes 2 minutes") : Translation.tr("Generating...\nDon't close this window!")
+                    onClicked: {
+                        translationProc.locale = localeInput.text.trim();
+                        translationProc.running = false;
+                        translationProc.running = true;
+                    }
+                }
             }
         }
     }
@@ -144,41 +173,13 @@ ContentPage {
         title: Translation.tr("Policies")
 
         ConfigRow {
-            ColumnLayout {
-                // Weeb policy
-                ContentSubsectionLabel {
-                    text: Translation.tr("Weeb")
-                }
-                ConfigSelectionArray {
-                    currentValue: Config.options.policies.weeb
-                    onSelected: newValue => {
-                        Config.options.policies.weeb = newValue;
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("No"),
-                            icon: "close",
-                            value: 0
-                        },
-                        {
-                            displayName: Translation.tr("Yes"),
-                            icon: "check",
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Closet"),
-                            icon: "ev_shadow",
-                            value: 2
-                        }
-                    ]
-                }
-            }
 
+            // AI policy
             ColumnLayout {
-                // AI policy
                 ContentSubsectionLabel {
                     text: Translation.tr("AI")
                 }
+                
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
                     onSelected: newValue => {
@@ -203,12 +204,56 @@ ContentPage {
                     ]
                 }
             }
+
+            // Weeb policy
+            ColumnLayout {
+
+                ContentSubsectionLabel {
+                    text: Translation.tr("Weeb")
+                }
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.policies.weeb
+                    onSelected: newValue => {
+                        Config.options.policies.weeb = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("No"),
+                            icon: "close",
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Yes"),
+                            icon: "check",
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Closet"),
+                            icon: "ev_shadow",
+                            value: 2
+                        }
+                    ]
+                }
+            }
         }
     }
 
     ContentSection {
         icon: "nest_clock_farsight_analog"
         title: Translation.tr("Time")
+
+        ConfigSwitch {
+            buttonIcon: "pace"
+            text: Translation.tr("Second precision")
+            checked: Config.options.time.secondPrecision
+            onCheckedChanged: {
+                Config.options.time.secondPrecision = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Enable if you want clocks to show seconds accurately")
+            }
+        }
 
         ContentSubsection {
             title: Translation.tr("Format")

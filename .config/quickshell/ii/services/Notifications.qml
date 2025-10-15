@@ -69,6 +69,7 @@ Singleton {
     }
 
     property bool silent: false
+    property int unread: 0
     property var filePath: Directories.notificationsPath
     property list<Notif> list: []
     property var popupList: list.filter((notif) => notif.popup);
@@ -171,12 +172,16 @@ Singleton {
                         "interval": notification.expireTimeout < 0 ? (Config?.options.notifications.timeout ?? 7000) : notification.expireTimeout,
                     });
                 }
+                root.unread++;
             }
-
             root.notify(newNotifObject);
             // console.log(notifToString(newNotifObject));
             notifFileView.setText(stringifyList(root.list));
         }
+    }
+
+    function markAllRead() {
+        root.unread = 0;
     }
 
     function discardNotification(id) {

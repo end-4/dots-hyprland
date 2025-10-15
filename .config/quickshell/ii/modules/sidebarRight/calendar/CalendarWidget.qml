@@ -1,9 +1,8 @@
+import qs.services
 import qs.modules.common
-import qs
 import qs.modules.common.widgets
 import "./calendar_layout.js" as CalendarLayout
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 Item {
@@ -50,7 +49,7 @@ Item {
                 clip: true
                 buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
                 tooltipText: (monthShift === 0) ? "" : Translation.tr("Jump to current month")
-                onClicked: {
+                downAction: () => {
                     monthShift = 0;
                 }
             }
@@ -60,7 +59,7 @@ Item {
             }
             CalendarHeaderButton {
                 forceCircle: true
-                onClicked: {
+                downAction: () => {
                     monthShift--;
                 }
                 contentItem: MaterialSymbol {
@@ -72,7 +71,7 @@ Item {
             }
             CalendarHeaderButton {
                 forceCircle: true
-                onClicked: {
+                downAction: () => {
                     monthShift++;
                 }
                 contentItem: MaterialSymbol {

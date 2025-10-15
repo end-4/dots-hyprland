@@ -112,6 +112,10 @@ Scope {
         description: "Locks the screen"
 
         onPressed: {
+			if (Config.options.lock.useHyprlock) {
+				Quickshell.execDetached(["hyprlock"])
+				return;
+			}
             GlobalStates.screenLocked = true;
         }
     }
@@ -123,6 +127,23 @@ Scope {
 
         onPressed: {
             lockContext.shouldReFocus();
+        }
+    }
+
+	Connections {
+        target: Config
+        function onReadyChanged() {
+            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
+                Hyprland.dispatch("global quickshell:lock")
+            }
+        }
+    }
+    Connections {
+        target: Persistent
+        function onReadyChanged() {
+            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
+                Hyprland.dispatch("global quickshell:lock")
+            }
         }
     }
 }

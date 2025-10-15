@@ -171,6 +171,13 @@ switch() {
     type_flag="$3"
     color_flag="$4"
     color="$5"
+
+    # Start Gemini auto-categorization if enabled
+    aiStylingEnabled=$(jq -r '.background.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
+    if [[ "$aiStylingEnabled" == "true" ]]; then
+        "$SCRIPT_DIR/../ai/gemini-categorize-wallpaper.sh" "$imgpath" > "$STATE_DIR/user/generated/wallpaper/category.txt" &
+    fi
+
     read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
     cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
     cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
@@ -325,7 +332,9 @@ main() {
 
     detect_scheme_type_from_image() {
         local img="$1"
+        source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
         "$SCRIPT_DIR"/scheme_for_image.py "$img" 2>/dev/null | tr -d '\n'
+        deactivate
     }
 
     while [[ $# -gt 0 ]]; do

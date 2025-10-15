@@ -75,7 +75,7 @@ Item {
             toggled: root.trayOverflowOpen
             property bool containsMouse: hovered
 
-            onClicked: root.trayOverflowOpen = !root.trayOverflowOpen
+            downAction: () => root.trayOverflowOpen = !root.trayOverflowOpen
 
             Layout.fillHeight: !root.vertical
             Layout.fillWidth: root.vertical
@@ -101,7 +101,7 @@ Item {
             StyledPopup {
                 id: overflowPopup
                 hoverTarget: trayOverflowButton
-                active: root.trayOverflowOpen
+                active: root.trayOverflowOpen && root.unpinnedItems.length > 0
                 popupBackgroundMargin: 300 // This should be plenty... makes sure tooltips don't get cutoff (easily)
 
                 GridLayout {

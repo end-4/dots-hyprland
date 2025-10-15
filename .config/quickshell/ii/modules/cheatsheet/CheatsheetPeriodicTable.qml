@@ -1,11 +1,5 @@
-import qs
-import qs.services
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import "periodic_table.js" as PTable
 import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root

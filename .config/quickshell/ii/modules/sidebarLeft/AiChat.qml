@@ -336,10 +336,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                 property int lastResponseLength: 0
                 onContentHeightChanged: {
-                    if (atYEnd) positionViewAtEnd();
+                    if (atYEnd) Qt.callLater(positionViewAtEnd);
                 }
                 onCountChanged: { // Auto-scroll when new messages are added
-                    if (atYEnd) positionViewAtEnd();
+                    if (atYEnd) Qt.callLater(positionViewAtEnd);
                 }
 
                 add: null // Prevent function calls from being janky
@@ -361,44 +361,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
             }
 
-            Item { // Placeholder when list is empty
-                opacity: Ai.messageIDs.length === 0 ? 1 : 0
-                visible: opacity > 0
-                anchors.fill: parent
-
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 5
-
-                    MaterialSymbol {
-                        Layout.alignment: Qt.AlignHCenter
-                        iconSize: 60
-                        color: Appearance.m3colors.m3outline
-                        text: "neurology"
-                    }
-                    StyledText {
-                        id: widgetNameText
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
-                        font.family: Appearance.font.family.title
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Translation.tr("Large language models")
-                    }
-                    StyledText {
-                        id: widgetDescriptionText
-                        Layout.fillWidth: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.Wrap
-                        text: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
-                    }
-                }
+            PagePlaceholder {
+                shown: Ai.messageIDs.length === 0
+                icon: "neurology"
+                title: Translation.tr("Large language models")
+                description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
             }
         }
 
@@ -757,8 +724,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         delegate: ApiCommandButton {
                             property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                             buttonText: commandRepresentation
-                            onClicked: {
-                                if(modelData.sendDirectly) {
+                            downAction: () => {
+                                if (modelData.sendDirectly) {
                                     root.handleInput(commandRepresentation)
                                 } else {
                                     messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ")

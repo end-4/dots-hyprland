@@ -2,14 +2,27 @@
 # It's not for directly running.
 
 function outdate_detect(){
-  # Shallow clone makes latest_commit_timestamp() not worky.
-  git_auto_unshallow
+  # Shallow clone prevent latest_commit_timestamp() from working.
+  v git_auto_unshallow
 
   local source_path="$1"
   local target_path="$2"
   local source_timestamp="$(latest_commit_timestamp $source_path 2>/dev/null)"
   local target_timestamp="$(latest_commit_timestamp $target_path 2>/dev/null)"
   local outdate_detect_mode="$(cat ${target_path}/outdate-detect-mode)"
+
+  # outdate-detect-mode possible modes:
+  # - WIP: Work in progress (should be taken as outdated)
+  # - FORCE_OUTDATED: forcely taken as outdated
+  # - FORCE_UPDATED: forcely taken as updated
+  # - AUTO: Let the script decide automatically
+  #
+  # outdate status possible values:
+  # - WIP,FORCE_OUTDATED,FORCE_UPDATED: Inherited directly from outdate-detect-mode
+  # - EMPTY_SOURCE: source path has empty timestamp, maybe not tracked by git (should be taken as outdated)
+  # - EMPTY_TARGET: target path has empty timestamp, maybe not tracked by git (should be taken as outdated)
+  # - OUTDATED: target path is older than source path.
+  # - UPDATED: target path is not older than source path.
 
   # Does target path have an outdate-detect-mode file which content is special?
   if [[ "${outdate_detect_mode}" =~ ^(WIP|FORCE_OUTDATED|FORCE_UPDATED)$ ]]; then
@@ -42,6 +55,7 @@ case $MACHINE_ARCH in
     printf "It is very likely to fail when installing dependencies on your machine.\n"
     printf "\n"
     printf "${STY_RESET}"
+    pause
     ;;
 esac
 
@@ -106,8 +120,13 @@ elif [[ -f "./dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
     printf "${STY_BOLD}===URGENT===${STY_RED}\n"
     printf "The community provided ./dist-${TARGET_ID}/ is not updated (update status: ${tmp_update_status}),\n"
     printf "which means it does not fully reflect the latest changes of ./dist-arch/ .\n"
-    printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./dist-${TARGET_ID}/ to fully reflect the latest changes in ./dist-arch/ . PR is welcomed.\n"
-    printf "${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RESET}\n"
+    printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./dist-${TARGET_ID}/ to fully reflect the latest changes in ./dist-arch/ .\n"
+    printf "PR is welcomed. Please see discussion#2140 for details.\n"
+    printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RESET}\n"
+    printf "${STY_RED}${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RESET}\n"
+    if [ "$ask" = "false" ]; then
+      echo "Urgent problem encountered, aborting...";exit 1
+    fi
     printf "${STY_RED}Still proceed?${STY_RESET}\n"
     read -p "[y/N]: " p
     case "$p" in

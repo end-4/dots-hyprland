@@ -1,11 +1,10 @@
-import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 
 PopupWindow {
     id: root
@@ -48,7 +47,7 @@ PopupWindow {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.BackButton | Qt.RightButton
-        onClicked: event => {
+        onPressed: event => {
             if ((event.button === Qt.BackButton || event.button === Qt.RightButton) && stackView.depth > 1)
                 stackView.pop();
         }
@@ -152,7 +151,7 @@ PopupWindow {
                 implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
                 implicitHeight: 36
 
-                onClicked: stackView.pop()
+                downAction: () => stackView.pop()
 
                 contentItem: RowLayout {
                     anchors {

@@ -1,7 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
-import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -109,12 +108,12 @@ Item {
             AudioDeviceSelectorButton {
                 Layout.fillWidth: true
                 input: false
-                onClicked: root.showDeviceSelectorDialog(input)
+                downAction: () => root.showDeviceSelectorDialog(input)
             }
             AudioDeviceSelectorButton {
                 Layout.fillWidth: true
                 input: true
-                onClicked: root.showDeviceSelectorDialog(input)
+                downAction: () => root.showDeviceSelectorDialog(input)
             }
         }
     }

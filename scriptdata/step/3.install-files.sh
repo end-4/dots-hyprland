@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# TODO: https://github.com/end-4/dots-hyprland/issues/2137
+
 # TODO: make function backup_configs only cover the possibly overwritten ones.
 function backup_configs(){
   local backup_dir="$BACKUP_DIR"
@@ -9,7 +11,17 @@ function backup_configs(){
   rsync -av --progress "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
   
   echo "Backing up $HOME/.local to $backup_dir/local_backup"
-  rsync -av --progress "$HOME/.local/" "$backup_dir/local_backup/"
+  declare -a arg_excludes=()
+  arg_excludes+=(--exclude "$HOME/.local/share/Steam")
+  arg_excludes+=(--exclude "$HOME/.local/share/steam")
+  rsync -av --progress "${arg_excludes[@]}" "$HOME/.local/" "$backup_dir/local_backup/"
+  declare -a arg_excludes=()
+}
+
+function warning_rsync(){
+  printf "${STY_YELLOW}"
+  printf "The commands using rsync will overwrite the destination when it exists already.\n"
+  printf "${STY_RESET}"
 }
 
 function ask_backup_configs(){
@@ -50,8 +62,8 @@ case $SKIP_MISCCONF in
     for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
-      if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
-      elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
+      if [ -d ".config/$i" ];then warning_rsync; v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
+      elif [ -f ".config/$i" ];then warning_rsync; v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
     ;;
@@ -60,7 +72,7 @@ esac
 case $SKIP_FISH in
   true) sleep 0;;
   *)
-    v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
+    warning_rsync; v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
     ;;
 esac
 
@@ -73,7 +85,7 @@ arg_excludes+=(--exclude '/hyprland.conf')
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    v rsync -av --delete "${arg_excludes[@]}" .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    warning_rsync; v rsync -av --delete "${arg_excludes[@]}" .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
@@ -110,7 +122,7 @@ case $SKIP_HYPRLAND in
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RESET}"
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
-      v rsync -av --delete .config/hypr/custom/ $t/
+      warning_rsync; v rsync -av --delete .config/hypr/custom/ $t/
     fi
     ;;
 esac
@@ -120,8 +132,8 @@ declare -a arg_excludes=()
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
 # v rsync -av ".local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
-v rsync -av ".local/share/icons/" "${XDG_DATA_HOME:-$HOME/.local/share}"/icons/
-v rsync -av ".local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
+warning_rsync; v rsync -av ".local/share/icons/" "${XDG_DATA_HOME:-$HOME/.local/share}"/icons/
+warning_rsync; v rsync -av ".local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
 
 # Prevent hyprland from not fully loaded
 sleep 1
@@ -160,7 +172,7 @@ printf "${STY_CYAN}Press ${STY_BG_CYAN} Ctrl+Super+T ${STY_BG_CYAN} to select a 
 printf "${STY_CYAN}Press ${STY_BG_CYAN} Super+/ ${STY_CYAN} for a list of keybinds${STY_RESET}\n"
 printf "\n"
 printf "${STY_CYAN}For suggestions/hints after installation:${STY_RESET}\n"
-printf "${STY_CYAN}${STY_UNDERLINE} https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
+printf "${STY_CYAN}${STY_UNDERLINE} https://ii.clsty.link/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in

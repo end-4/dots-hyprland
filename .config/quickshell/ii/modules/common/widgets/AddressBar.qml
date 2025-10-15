@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
@@ -35,7 +35,7 @@ Rectangle {
 
         RippleButton {
             id: parentDirButton
-            onClicked: root.navigateToDirectory(FileUtils.parentDirectory(root.directory))
+            downAction: () => root.navigateToDirectory(FileUtils.parentDirectory(root.directory))
             contentItem: MaterialSymbol {
                 text: "drive_folder_upload"
                 iconSize: Appearance.font.pixelSize.larger
@@ -105,7 +105,7 @@ Rectangle {
         RippleButton {
             id: dirEditButton
             toggled: !root.showBreadcrumb
-            onClicked: root.showBreadcrumb = !root.showBreadcrumb
+            downAction: () => root.showBreadcrumb = !root.showBreadcrumb
             contentItem: MaterialSymbol {
                 text: "edit"
                 iconSize: Appearance.font.pixelSize.larger

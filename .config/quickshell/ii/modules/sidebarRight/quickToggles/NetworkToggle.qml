@@ -10,7 +10,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 QuickToggleButton {
-    toggled: Network.wifiEnabled
+    toggled: Network.wifiStatus !== "disabled"
     buttonIcon: Network.materialSymbol
     onClicked: Network.toggleWifi()
     altAction: () => {

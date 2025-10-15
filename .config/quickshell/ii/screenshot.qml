@@ -7,7 +7,6 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 pragma ComponentBehavior: "Bound"
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -307,7 +306,7 @@ ShellRoot {
 
             Process {
                 id: imageDetectionProcess
-                command: ["bash", "-c", `${Directories.scriptPath}/images/find_regions.py ` 
+                command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
                     + `--hyprctl ` 
                     + `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}' ` 
                     + `--max-width ${Math.round(panelWindow.screen.width * root.falsePositivePreventionRatio)} ` 

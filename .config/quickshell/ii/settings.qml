@@ -10,7 +10,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -69,6 +68,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
+        Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
     }
 
     minimumWidth: 750
@@ -172,7 +172,7 @@ ApplicationWindow {
                         iconText: "edit"
                         buttonText: Translation.tr("Config file")
                         expanded: navRail.expanded
-                        onClicked: {
+                        downAction: () => {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
                         }
 
@@ -190,7 +190,7 @@ ApplicationWindow {
                                 required property var index
                                 required property var modelData
                                 toggled: root.currentPage === index
-                                onClicked: root.currentPage = index;
+                                onPressed: root.currentPage = index;
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
                                 buttonIconRotation: modelData.iconRotation || 0

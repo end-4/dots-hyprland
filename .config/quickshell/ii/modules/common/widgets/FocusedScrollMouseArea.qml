@@ -1,12 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Services.UPower
-import qs
-import qs.services
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 
 MouseArea { // Right side | scroll to change volume
     id: root

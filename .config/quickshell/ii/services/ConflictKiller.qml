@@ -1,6 +1,5 @@
 pragma Singleton
 
-import qs
 import qs.modules.common
 import qs.modules.common.functions
 import QtQuick

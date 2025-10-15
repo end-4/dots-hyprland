@@ -70,7 +70,6 @@ Scope {
 
         function toggle(): void {
             GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
         }
 
         function close(): void {
@@ -79,7 +78,6 @@ Scope {
 
         function open(): void {
             GlobalStates.sidebarRightOpen = true;
-            Notifications.timeoutAll();
         }
     }
 
@@ -89,7 +87,6 @@ Scope {
 
         onPressed: {
             GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
         }
     }
     GlobalShortcut {
@@ -98,7 +95,6 @@ Scope {
 
         onPressed: {
             GlobalStates.sidebarRightOpen = true;
-            Notifications.timeoutAll();
         }
     }
     GlobalShortcut {

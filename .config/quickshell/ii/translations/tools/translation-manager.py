@@ -16,10 +16,11 @@ import tempfile
 import subprocess
 
 class TranslationManager:
-    def __init__(self, translations_dir: str, source_dir: str):
+    def __init__(self, translations_dir: str, source_dir: str, yes_mode: bool = False):
         self.translations_dir = Path(translations_dir)
         self.source_dir = Path(source_dir)
         self.temp_extracted_file = None
+        self.yes_mode = yes_mode
         
         # Ensure translation directory exists
         self.translations_dir.mkdir(parents=True, exist_ok=True)
@@ -191,7 +192,10 @@ class TranslationManager:
             print("No changes made")
     
     def ask_yes_no(self, question: str) -> bool:
-        """Ask user for confirmation"""
+        """Ask user for confirmation, auto-confirm if yes_mode is True"""
+        if getattr(self, "yes_mode", False):
+            print(f"{question} (auto-confirmed by --yes)")
+            return True
         while True:
             response = input(f"{question} (y/n): ").lower().strip()
             if response in ['y', 'yes']:
@@ -212,14 +216,16 @@ def main():
                        default=".config/quickshell/translations",
                        help="Translation files directory (default: .config/quickshell/translations)")
     parser.add_argument("--source-dir", "-s", 
-                       default=".config/quickshell",
-                       help="Source code directory (default: .config/quickshell)")
+                       default=".config/quickshell/ii",
+                       help="Source code directory (default: .config/quickshell/ii)")
     parser.add_argument("--language", "-l", 
                        help="Specify language code to process (e.g., zh_CN)")
     parser.add_argument("--extract-only", "-e", action="store_true",
                        help="Only extract translatable texts to temporary file")
     parser.add_argument("--show-temp", action="store_true",
                        help="Show temporary extracted file content")
+    parser.add_argument("-y", "--yes", action="store_true",
+                       help="Skip all confirmation prompts (auto-confirm)")
     
     args = parser.parse_args()
     
@@ -236,7 +242,7 @@ def main():
         sys.exit(1)
     
     # Create manager
-    manager = TranslationManager(translations_dir, source_dir)
+    manager = TranslationManager(translations_dir, source_dir, yes_mode=args.yes)
     
     try:
         # Extract translatable texts
@@ -264,9 +270,10 @@ def main():
             target_languages = [args.language]
         else:
             print(f"\nAvailable languages: {', '.join(available_languages) if available_languages else 'None'}")
-            
             if not available_languages:
-                print("No existing translation files found")
+                if manager.yes_mode:
+                    print("No existing translation files found, auto-skipping language creation due to --yes")
+                    return
                 lang_input = input("Enter language code to create (e.g.: zh_CN): ").strip()
                 if lang_input:
                     target_languages = [lang_input]
@@ -278,8 +285,11 @@ def main():
                 for i, lang in enumerate(available_languages, 1):
                     print(f"{i}. {lang}")
                 print("a. Process all languages")
-                
-                choice = input("Please choose (enter number, language code, or 'a'): ").strip()
+                if manager.yes_mode:
+                    choice = 'a'
+                    print("Auto-selecting all languages due to --yes")
+                else:
+                    choice = input("Please choose (enter number, language code, or 'a'): ").strip()
                 
                 if choice.lower() == 'a':
                     target_languages = available_languages

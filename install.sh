@@ -27,5 +27,9 @@ fi
 #####################################################################################
 if [[ "${SKIP_ALLFILES}" != true ]]; then
   printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RESET}"
-  source ./scriptdata/step/3.install-files.sh
+  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" != true ]]; then
+    source ./scriptdata/step/3.install-files.sh
+  else
+    source ./scriptdata/step/3.install-files.experimental.sh
+  fi
 fi

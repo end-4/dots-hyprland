@@ -1,9 +1,8 @@
 pragma ComponentBehavior: Bound
-import qs
+
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
@@ -64,7 +63,7 @@ Item {
                                 text: keybindSection.modelData.name
                             }
 
-                            Grid {
+                            GridLayout {
                                 id: keybindGrid
                                 columns: 2
                                 columnSpacing: 4
