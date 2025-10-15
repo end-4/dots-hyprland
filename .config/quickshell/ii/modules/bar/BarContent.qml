@@ -82,7 +82,8 @@ Item { // Bar content region
             anchors.fill: parent
             spacing: 10
 
-            LeftSidebarButton { // Left sidebar button
+            LeftSidebarButton {
+                // Left sidebar button
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
@@ -207,7 +208,7 @@ Item { // Bar content region
             const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
             Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
         }
-        onMovedAway: GlobalStates.osdVolumeOpen = false;
+        onMovedAway: GlobalStates.osdVolumeOpen = false
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -322,28 +323,90 @@ Item { // Bar content region
                     }
                 }
             }
-
-            SysTray {
-                visible: root.useShortenedForm === 0
-                Layout.fillWidth: false
+            Revealer {
+                reveal: Audio.sink?.audio?.muted ?? false
                 Layout.fillHeight: true
-                invertSide: Config?.options.bar.bottom
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-
-            // Weather
-            Loader {
-                Layout.leftMargin: 4
-                active: Config.options.bar.weather.enable
-
-                sourceComponent: BarGroup {
-                    WeatherBar {}
+                Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                Behavior on Layout.rightMargin {
+                    NumberAnimation {
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                    }
+                }
+                MaterialSymbol {
+                    text: "volume_off"
+                    iconSize: Appearance.font.pixelSize.larger
+                    color: rightSidebarButton.colText
                 }
             }
+            Revealer {
+                reveal: Audio.source?.audio?.muted ?? false
+                Layout.fillHeight: true
+                Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                Behavior on Layout.rightMargin {
+                    NumberAnimation {
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                    }
+                }
+                MaterialSymbol {
+                    text: "mic_off"
+                    iconSize: Appearance.font.pixelSize.larger
+                    color: rightSidebarButton.colText
+                }
+            }
+            Loader {
+                active: HyprlandXkb.layoutCodes.length > 1
+                visible: active
+                Layout.rightMargin: indicatorsRowLayout.realSpacing
+                sourceComponent: StyledText {
+                    text: HyprlandXkb.currentLayoutCode
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    color: rightSidebarButton.colText
+                }
+            }
+            MaterialSymbol {
+                Layout.rightMargin: indicatorsRowLayout.realSpacing
+                text: Network.materialSymbol
+                iconSize: Appearance.font.pixelSize.larger
+                color: rightSidebarButton.colText
+            }
+            MaterialSymbol {
+                Layout.rightMargin: indicatorsRowLayout.realSpacing
+                text: VPN.materialSymbol
+                iconSize: Appearance.font.pixelSize.larger
+                color: rightSidebarButton.colText
+                visible: VPN.available
+            }
+            MaterialSymbol {
+                text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                iconSize: Appearance.font.pixelSize.larger
+                color: rightSidebarButton.colText
+            }
+        }
+    }
+
+    SysTray {
+        visible: root.useShortenedForm === 0
+        Layout.fillWidth: false
+        Layout.fillHeight: true
+        invertSide: Config?.options.bar.bottom
+    }
+
+    Item {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+
+    // Weather
+    Loader {
+        Layout.leftMargin: 4
+        active: Config.options.bar.weather.enable
+
+        sourceComponent: BarGroup {
+            WeatherBar {}
         }
     }
 }
