@@ -3,6 +3,7 @@
 
 EAPI=8
 DART_SASS_VER=1.78.0
+SPACE_GROTESK_VER=1.1.4
 
 DESCRIPTION="Illogical Impulse Fonts and Theming Dependencies"
 HOMEPAGE=""
@@ -11,11 +12,13 @@ https://github.com/Bali10050/Darkly/archive/refs/heads/main.tar.gz -> ${P}-darkl
 https://github.com/naipefoundry/gabarito/archive/refs/heads/main.tar.gz -> ${P}-gabarito.tar.gz
 https://github.com/googlefonts/rubik/archive/refs/heads/main.tar.gz -> ${P}-rubik.tar.gz
 https://github.com/ThomasJockin/readexpro/archive/refs/heads/master.tar.gz -> ${P}-readexpro.tar.gz
-https://github.com/google/material-design-icons/archive/refs/heads/main.tar.gz -> ${P}-material-design-icons.tar.gz
 https://github.com/mjkim0727/breeze-plus/archive/refs/heads/main.tar.gz -> ${P}-breeze-plus.tar.gz
 https://github.com/lassekongo83/adw-gtk3/archive/refs/heads/main.tar.gz -> ${P}-adw-gtk3.tar.gz
+https://github.com/google/material-design-icons/raw/refs/heads/master/variablefont/MaterialSymbolsOutlined%5BFILL,GRAD,opsz,wght%5D.ttf -> MaterialSymbolsOutlined.ttf
+    https://github.com/google/material-design-icons/raw/refs/heads/master/variablefont/MaterialSymbolsRounded%5BFILL,GRAD,opsz,wght%5D.ttf -> MaterialSymbolsRounded.ttf
+    https://github.com/google/material-design-icons/raw/refs/heads/master/variablefont/MaterialSymbolsSharp%5BFILL,GRAD,opsz,wght%5D.ttf -> MaterialSymbolsSharp.ttf
+https://github.com/floriankarsten/space-grotesk/archive/refs/tags/${SPACE_GROTESK_VER}.tar.gz -> ${P}-space-grotesk-${SPACE_GROTESK_VER}.tar.gz
 "
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
@@ -40,9 +43,9 @@ S_DARKLY="${S}/Darkly-main"
 S_GABARITO="${S}/gabarito-main"
 S_RUBIK="${S}/rubik-main"
 S_READEXPRO="${S}/readexpro-master"
-S_MATERIAL_DESIGN_ICONS="${S}/material-design-icons-main"
 S_ADW_GTK3="${S}/adw-gtk3-main"
 S_BREEZE_PLUS="${S}/breeze-plus-main"
+S_SPACE_GROTESK="${S}/space-grotesk-${SPACE_GROTESK_VER}"
 
 src_unpack() {
 	default
@@ -72,8 +75,11 @@ src_install() {
 	insinto /usr/share/fonts/ttf-readex-pro
 	doins "${S_READEXPRO}"/fonts/ttf/*.ttf
 
-	insinto /usr/share/fonts/ttf-material-design-icons
-	doins "${S_MATERIAL_DESIGN_ICONS}"/font/*.ttf
+	insinto /usr/share/fonts/material-symbols
+	doins "${DISTDIR}"/MaterialSymbols*.ttf
+
+	insinto /usr/share/fonts/OTF
+	doins "${S_SPACE_GROTESK}"/fonts/otf/*.otf
 
 	insinto /usr/share/themes
 	doins -r "${S_BREEZE_PLUS}"/src/breeze-plus*
