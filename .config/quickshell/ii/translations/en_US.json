@@ -501,5 +501,11 @@
   "Numbers": "Numbers",
   "Intelligence": "Intelligence",
   "Open network portal": "Open network portal",
-  "<i>No further instruction provided</i>": "<i>No further instruction provided</i>"
+  "<i>No further instruction provided</i>": "<i>No further instruction provided</i>",
+  "Language not listed or incomplete translations?\nYou can choose to generate translations for it with Gemini.\n1. Open the left sidebar with Super+A, set model to Gemini (if it isn't already)\n2. Type /key, hit Enter and follow the instructions\n3. Type /key YOUR_API_KEY\n4. Type the locale of your language below and press Generate": "Language not listed or incomplete translations?\nYou can choose to generate translations for it with Gemini.\n1. Open the left sidebar with Super+A, set model to Gemini (if it isn't already)\n2. Type /key, hit Enter and follow the instructions\n3. Type /key YOUR_API_KEY\n4. Type the locale of your language below and press Generate",
+  "Locale code, e.g. fr_FR, de_DE, zh_CN...": "Locale code, e.g. fr_FR, de_DE, zh_CN...",
+  "Select language": "Select language",
+  "Generate translation with Gemini": "Generate translation with Gemini",
+  "Generating...\nDon't close this window!": "Generating...\nDon't close this window!",
+  "Generate\nTypically takes 2 minutes": "Generate\nTypically takes 2 minutes"
 }
