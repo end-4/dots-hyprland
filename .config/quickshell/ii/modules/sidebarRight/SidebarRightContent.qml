@@ -38,6 +38,7 @@ Item {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
                 root.showBluetoothDialog = false;
+                GlobalStates.quickTogglesEditMode = false;
             }
         }
     }
