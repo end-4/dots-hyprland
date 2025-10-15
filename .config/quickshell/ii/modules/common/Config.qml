@@ -412,8 +412,8 @@ Singleton {
                     property bool border: false
                     property bool showVolume: true
                     property bool showBrightness: true
-                    property string mode: "large" // Options: compact, medium, large
-                    property string align: "right" // Options: left, center, right
+                    property string mode: "compact" // Options: compact, medium, large
+                    property string align: "center" // Options: left, center, right
                     property list<string> sizes: ["2","2"]
                     property list<string> toggles: ["network","bluetooth"]
                 }
