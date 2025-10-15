@@ -26,6 +26,7 @@ Singleton {
     property bool superDown: false
     property bool superReleaseMightTrigger: true
     property bool workspaceShowNumbers: false
+    signal keyringUnlocked()
 
     onSidebarRightOpenChanged: {
         if (GlobalStates.sidebarRightOpen) {
