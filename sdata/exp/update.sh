@@ -19,7 +19,7 @@ UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
 # Directories to monitor for changes
-MONITOR_DIRS=(".config" ".local/bin")
+MONITOR_DIRS=("dots/.config" "dots/.local/bin")
 
 # === Color Codes ===
 RED='\033[0;31m'
