@@ -17,6 +17,14 @@ printf "Or you can manually add the use flags for each package that requires it\
 printf "${STY_RESET}"
 pause
 
+printf "${STY_YELLOW}"
+printf "https://github.com/end-4/dots-hyprland/blob/main/dist-gentoo/README.md"
+printf "Checkout the above README for potential bug fixes or additional information"
+printf "${STY_RESET}"
+pause
+
+
+
 x sudo emerge --noreplace --quiet app-eselect/eselect-repository
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
