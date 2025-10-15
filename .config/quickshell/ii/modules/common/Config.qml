@@ -407,7 +407,7 @@ Singleton {
             }
 
             property JsonObject quickToggles: JsonObject {
-                property string type: "material"
+                property string style: "material"
                 property JsonObject material: JsonObject {
                     property bool border: false
                     property bool showVolume: true

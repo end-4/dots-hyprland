@@ -375,9 +375,9 @@ ContentPage {
             title: Translation.tr("Quick panel style")
 
             ConfigSelectionArray {
-                currentValue: Config.options.quickToggles.type
+                currentValue: Config.options.quickToggles.style
                 onSelected: newValue => {
-                    Config.options.quickToggles.type = newValue;
+                    Config.options.quickToggles.style = newValue;
                 }
                 options: [
                     {
@@ -395,7 +395,7 @@ ContentPage {
         }
 
         ConfigRow{
-            visible: Config.options.quickToggles.type === "material"
+            visible: Config.options.quickToggles.style === "material"
             ContentSubsection {
                 title: Translation.tr("Mode")
                 ConfigSelectionArray {
@@ -453,7 +453,7 @@ ContentPage {
 
 
         ConfigRow {
-            visible: Config.options.quickToggles.type === "material"
+            visible: Config.options.quickToggles.style === "material"
             ConfigSwitch {
                 buttonIcon: "volume_up"
                 text: Translation.tr("Show Volume")
