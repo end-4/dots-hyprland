@@ -23,6 +23,7 @@ show_help() {
     echo "  -l, --lang LANG     Specify language (e.g.: zh_CN)"
     echo "  -t, --trans-dir DIR Translation files directory (default: $TRANSLATIONS_DIR)"
     echo "  -s, --source-dir DIR Source code directory (default: $SOURCE_DIR)"
+    echo "  -y, --yes           Skip all confirmation prompts (auto-confirm)"
     echo "  -h, --help          Show this help message"
     echo ""
     echo "Examples:"
@@ -63,6 +64,7 @@ show_status() {
 # Parse command line arguments
 LANG_CODE=""
 COMMAND=""
+YES_FLAG=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -77,6 +79,10 @@ while [[ $# -gt 0 ]]; do
         -s|--source-dir)
             SOURCE_DIR="$2"
             shift 2
+            ;;
+        -y|--yes)
+            YES_FLAG="-y"
+            shift
             ;;
         -h|--help)
             show_help
@@ -120,23 +126,23 @@ BASE_ARGS="--translations-dir $TRANSLATIONS_DIR --source-dir $SOURCE_DIR"
 case $COMMAND in
     extract)
         echo "Extracting translatable texts..."
-        python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS --extract-only --show-temp
+        python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS $YES_FLAG --extract-only --show-temp
         ;;
     update)
         echo "Updating translation files..."
         if [ -n "$LANG_CODE" ]; then
-            python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS --language "$LANG_CODE"
+            python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS $YES_FLAG --language "$LANG_CODE"
         else
-            python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS
+            python3 "$SCRIPT_DIR/translation-manager.py" $BASE_ARGS $YES_FLAG
         fi
         ;;
     clean)
         echo "Cleaning unused translation keys..."
-        python3 "$SCRIPT_DIR/translation-cleaner.py" $BASE_ARGS --clean
+        python3 "$SCRIPT_DIR/translation-cleaner.py" $BASE_ARGS $YES_FLAG --clean
         ;;
     sync)
         echo "Syncing translation keys..."
-        python3 "$SCRIPT_DIR/translation-cleaner.py" $BASE_ARGS --sync
+        python3 "$SCRIPT_DIR/translation-cleaner.py" $BASE_ARGS $YES_FLAG --sync
         ;;
     status)
         show_status

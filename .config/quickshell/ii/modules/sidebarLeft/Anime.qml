@@ -185,34 +185,12 @@ Item {
                 }
             }
 
-            Item { // Placeholder when list is empty
-                opacity: root.responses.length === 0 ? 1 : 0
-                visible: opacity > 0
-                anchors.fill: parent
-
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 5
-
-                    CookieWrappedMaterialSymbol {
-                        Layout.alignment: Qt.AlignHCenter
-                        iconSize: 60
-                        text: "bookmark_heart"
-                    }
-                    StyledText {
-                        id: widgetNameText
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
-                        font.family: Appearance.font.family.title
-                        color: Appearance.m3colors.m3outline
-                        horizontalAlignment: Text.AlignHCenter
-                        text: Translation.tr("Anime boorus")
-                    }
-                }
+            PagePlaceholder {
+                id: placeholderItem
+                shown: root.responses.length === 0
+                icon: "bookmark_heart"
+                title: Translation.tr("Anime boorus")
+                description: ""
             }
 
             Item { // Queries awaiting response

@@ -10,10 +10,18 @@ Singleton {
     id: root
 
     property var translations: ({})
+    property var generatedTranslations: ({})
     property var availableLanguages: ["en_US"]
+    property var availableGeneratedLanguages: []
+    property var allAvailableLanguages: {
+        const combined = new Set([...root.availableLanguages, ...root.availableGeneratedLanguages]);
+        return Array.from(combined).sort();
+    }
     property bool isScanning: scanLanguagesProcess.running
     property bool isLoading: false
     property string translationKeepSuffix: "/*keep*/"
+    property string translationsDir: Quickshell.shellPath("translations")
+    property string generatedTranslationsDir: Directories.shellConfig + "/translations"
 
     property string languageCode: {
         var configLang = Config?.options.language.ui ?? "auto";
@@ -24,80 +32,117 @@ Singleton {
         return Qt.locale().name;
     }
 
-    Process {
+    TranslationScanner {
         id: scanLanguagesProcess
-        command: ["find", FileUtils.trimFileProtocol(Qt.resolvedUrl(Directories.config + "/quickshell/translations/").toString()), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
-        running: true
-
-        stdout: SplitParser {
-            onRead: data => {
-                if (data.trim().length === 0)
-                    return;
-                var files = data.trim().split('\n');
-
-                for (var i = 0; i < files.length; i++) {
-                    var lang = files[i].trim();
-                    if (lang.length > 0 && root.availableLanguages.indexOf(lang) === -1) {
-                        root.availableLanguages.push(lang);
-                    }
-                }
-            }
+        translationsDir: root.translationsDir
+        onLanguagesScanned: (languages) => {
+            root.availableLanguages = [...languages];
         }
+    }
 
-        onExited: (exitCode, exitStatus) => {
-            root.availableLanguages = [...root.availableLanguages] // Forcibly emit change
-
-            if (exitCode !== 0) {
-                root.availableLanguages = ["en_US"];
-            }
-            // TODO: notify and offer to translate when translation not available
+    TranslationScanner {
+        id: scanGeneratedLanguagesProcess
+        translationsDir: root.generatedTranslationsDir
+        onLanguagesScanned: (languages) => {
+            root.availableGeneratedLanguages = [...languages];
         }
     }
 
     onLanguageCodeChanged: {
-        translationFileView.reload();
+        print("[Translation] Language changed to", root.languageCode);
+        translationFileView.languageCode = root.languageCode;
+        generatedTranslationFileView.languageCode = root.languageCode;
+        translationFileView.reread();
+        generatedTranslationFileView.reread();
     }
 
-    FileView {
+    TranslationReader {
         id: translationFileView
-        path: root.languageCode?.length > 0 ? Qt.resolvedUrl(Directories.config + "/quickshell/translations/" + root.languageCode + ".json") : ""
+        translationsDir: root.translationsDir
+        languageCode: root.languageCode
+        onContentLoaded: (data) => {
+            root.translations = data;
+            root.isLoading = false;
+        }
+    }
+
+    TranslationReader {
+        id: generatedTranslationFileView
+        translationsDir: root.generatedTranslationsDir
+        languageCode: root.languageCode
+        onContentLoaded: (data) => {
+            root.generatedTranslations = data;
+            root.isLoading = false;
+        }
+    }
+
+    function tr(text) {
+        // Special cases
+        if (!text) return "";
+        var key = text.toString();
+        if (root.isLoading || (!root.translations.hasOwnProperty(key) && !root.generatedTranslations.hasOwnProperty(key)))
+            return key;
+        
+        // Normal cases
+        var translation = root.translations[key] || root.generatedTranslations[key] || key;
+        // print(key, "-> [", root.translations[key], root.generatedTranslations[key], key, "] ->", translation);
+        if (translation.endsWith(root.translationKeepSuffix)) {
+            translation = translation.substring(0, translation.length - root.translationKeepSuffix.length).trim();
+        }
+        return translation;
+    }
+
+    component TranslationScanner: Process {
+        id: translationScanner
+        required property string translationsDir
+        signal languagesScanned(var languages)
+
+        command: ["find", translationScanner.translationsDir, "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
+        running: true
+
+        stdout: StdioCollector {
+            id: languagesCollector
+            onStreamFinished: {
+                const output = languagesCollector.text;
+                const files = output.trim().split('\n').map(f => f.trim());
+                translationScanner.languagesScanned(files);
+            }
+        }
+
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                translationScanner.languagesScanned(["en_US"]);
+            }
+        }
+    }
+
+    component TranslationReader: FileView {
+        id: translationReader
+        required property string translationsDir
+        property string languageCode: root.languageCode
+        signal contentLoaded(var data)
+
+        function reread() { // Proper reload in case the file was incorrect before
+            print("rereading translations for", translationReader.languageCode);
+            translationReader.path = "";
+            translationReader.path = `${translationReader.translationsDir}/${translationReader.languageCode}.json`;
+            translationReader.reload();
+        }
+        path: ""
 
         onLoaded: {
             var textContent = "";
             try {
                 textContent = text();
                 var jsonData = JSON.parse(textContent);
-                root.translations = jsonData;
+                translationReader.contentLoaded(jsonData);
             } catch (e) {
                 console.log("[Translation] Failed to load translations:", e);
-                root.translations = {};
+                translationReader.contentLoaded({});
             }
-            root.isLoading = false;
         }
         onLoadFailed: error => {
-            root.translations = {};
-            root.isLoading = false;
+            translationReader.contentLoaded({});
         }
-    }
-
-    function tr(text) {
-        if (!text)
-            return "";
-        var key = text.toString();
-        if (root.isLoading)
-            return key;
-
-        if (root.translations.hasOwnProperty(key)) {
-            var translation = root.translations[key].toString().trim();
-            if (translation.length === 0)
-                return key;
-
-            if (translation.endsWith(root.translationKeepSuffix)) {
-                translation = translation.substring(0, translation.length - root.translationKeepSuffix.length).trim();
-            }
-            return translation;
-        }
-
-        return key; // Fallback to key name
     }
 }
