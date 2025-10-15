@@ -147,6 +147,7 @@ Singleton {
         id: networkComp
         MaterialNetworkToggle {
             altAction: () => {
+                if (GlobalStates.quickTogglesEditMode) return
                 Network.enableWifi();
                 Network.rescanWifi();
                 root.showWifiDialog = true;
@@ -157,6 +158,7 @@ Singleton {
         id: bluetoothComp
         MaterialBluetoothToggle {
             altAction: () => {
+                if (GlobalStates.quickTogglesEditMode) return
                 Bluetooth.defaultAdapter.enabled = true;
                 Bluetooth.defaultAdapter.discovering = true;
                 root.showBluetoothDialog = true;
