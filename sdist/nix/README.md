@@ -3,10 +3,10 @@
 - See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 - See also [#1061](https://github.com/end-4/dots-hyprland/issues/1061)
 
-NOTE: The dist-nix is not for NixOS but every distro, using Nix and home-manager.
+NOTE: The sdist/nix is not for NixOS but every distro, using Nix and home-manager.
 
 TODO:
-Write a proper `flake.nix` and optionally `home.nix` and other files under `./dist-nix/iiqs-hm/` to install all dependencies that `./dist-arch/install-deps.sh` does. (**excluding** the screenlock)
+Write a proper `flake.nix` and optionally `home.nix` and other files under `./sdist/nix/iiqs-hm/` to install all dependencies that `./sdist/arch/install-deps.sh` does. (**excluding** the screenlock)
 
 TODO:
 In this script, implement the process below:

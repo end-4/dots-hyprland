@@ -55,15 +55,15 @@ esac
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# MISC (For .config/* but not fish, not Hyprland)
+# MISC (For dots/.config/* but not fish, not Hyprland)
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
-#      i=".config/$i"
-      echo "[$0]: Found target: .config/$i"
-      if [ -d ".config/$i" ];then warning_rsync; v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
-      elif [ -f ".config/$i" ];then warning_rsync; v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
+    for i in $(find dots/.config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+#      i="dots/.config/$i"
+      echo "[$0]: Found target: dots/.config/$i"
+      if [ -d "dots/.config/$i" ];then warning_rsync; v rsync -av --delete "dots/.config/$i/" "$XDG_CONFIG_HOME/$i/"
+      elif [ -f "dots/.config/$i" ];then warning_rsync; v rsync -av "dots/.config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
     ;;
@@ -72,7 +72,7 @@ esac
 case $SKIP_FISH in
   true) sleep 0;;
   *)
-    warning_rsync; v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
+    warning_rsync; v rsync -av --delete dots/.config/fish/ "$XDG_CONFIG_HOME"/fish/
     ;;
 esac
 
@@ -85,36 +85,36 @@ arg_excludes+=(--exclude '/hyprland.conf')
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    warning_rsync; v rsync -av --delete "${arg_excludes[@]}" .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    warning_rsync; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
       v mv $t $t.old
-      v cp -f .config/hypr/hyprland.conf $t
+      v cp -f dots/.config/hypr/hyprland.conf $t
       existed_hypr_conf_firstrun=y
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
-      v cp .config/hypr/hyprland.conf $t
+      v cp dots/.config/hypr/hyprland.conf $t
       existed_hypr_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
-      v cp -f .config/hypr/hypridle.conf $t.new
+      v cp -f dots/.config/hypr/hypridle.conf $t.new
       existed_hypridle_conf=y
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
-      v cp .config/hypr/hypridle.conf $t
+      v cp dots/.config/hypr/hypridle.conf $t
       existed_hypridle_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
-      v cp -f .config/hypr/hyprlock.conf $t.new
+      v cp -f dots/.config/hypr/hyprlock.conf $t.new
       existed_hyprlock_conf=y
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
-      v cp .config/hypr/hyprlock.conf $t
+      v cp dots/.config/hypr/hyprlock.conf $t
       existed_hyprlock_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/custom"
@@ -122,7 +122,7 @@ case $SKIP_HYPRLAND in
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RESET}"
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
-      warning_rsync; v rsync -av --delete .config/hypr/custom/ $t/
+      warning_rsync; v rsync -av --delete dots/.config/hypr/custom/ $t/
     fi
     ;;
 esac

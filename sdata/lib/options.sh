@@ -22,9 +22,10 @@ If no option is specified, run default install process.
       --skip-plasmaintg     Skip installing plasma-browser-integration
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             AGS, Fish and Hyprland
-      --exp-files            Use experimental script for the third step copying files
+      --exp-files           Use experimental script for the third step copying files
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
       --via-nix             (Unavailable yet) Use Nix to install dependencies
+      --exp-uninstall       Use experimental uninstall script
 "
 }
 
@@ -35,7 +36,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix \
+       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -71,6 +72,7 @@ while true ; do
     --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
+    --exp-uninstall) EXPERIMENTAL_UNINSTALL_SCRIPT=true;shift;;
     ## Ones with parameter
     
     --fontset)

@@ -106,6 +106,6 @@ install-python-packages(){
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
   x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
-  x uv pip install -r scriptdata/uv/requirements.txt
+  x uv pip install -r sdata/uv/requirements.txt
   x deactivate # We don't need the virtual environment anymore
 }

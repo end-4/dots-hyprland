@@ -13,8 +13,8 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
-REPO_DIR="$(cd "$(dirname $0)" &>/dev/null && pwd)"
-ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
+REPO_DIR="$(cd $(dirname $(dirname $(dirname $0))) &>/dev/null && pwd)"
+ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
@@ -333,7 +333,7 @@ list_packages() {
   local changed_packages=()
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No dist-arch directory found"
+    log_warning "No sdist/arch directory found"
     return 1
   fi
 
@@ -349,7 +349,7 @@ list_packages() {
   done
 
   if [[ ${#available_packages[@]} -eq 0 ]]; then
-    log_info "No packages found in dist-arch directory"
+    log_info "No packages found in sdist/arch directory"
     return 1
   fi
 
@@ -635,7 +635,7 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
   log_header "Package Management"
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No dist-arch directory found. Skipping package management."
+    log_warning "No sdist/arch directory found. Skipping package management."
   else
     # Check if any PKGBUILDs have changed
     changed_pkgbuilds=()
