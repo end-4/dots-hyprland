@@ -41,7 +41,6 @@ Item {
                     }
                 }
                 
-
                 GridLayout {
                     id: grid
                     columns: 5

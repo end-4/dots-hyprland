@@ -38,7 +38,7 @@ GroupButton {
     baseHeight: unusedName === "" ? baseSize : unusedButtonSize
     
     // can be removed if you want less behaviors. but this reduces the bounciness so it helps
-    Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) } 
+    Behavior on implicitWidth { animation: Appearance.animation.elementResize.numberAnimation.createObject(this) } 
 
     property bool halfToggled: false
     toggled: false

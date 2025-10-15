@@ -89,7 +89,7 @@ Item {
                             GlobalStates.quickTogglesEditMode = !GlobalStates.quickTogglesEditMode;
                         }
                         StyledToolTip {
-                            text: Translation.tr("Edit Material Panel Layout")
+                            text: GlobalStates.quickTogglesEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
                         }
                     }
                     QuickToggleButton {
