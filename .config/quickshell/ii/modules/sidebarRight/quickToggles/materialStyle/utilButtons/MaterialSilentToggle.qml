@@ -10,8 +10,8 @@ MaterialQuickToggleButton {
     buttonSize: 2
     toggled: Notifications.silent
     buttonIcon: toggled ? "notifications_paused" : "notifications_active"
-    titleText: "Notifications"
-    descText: toggled ? "Silent" : "On" 
+    titleText: "Do Not Disturb"
+    descText: toggled ? "Silent" : "Noisy" 
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         Notifications.silent = !Notifications.silent;

@@ -18,8 +18,19 @@ Item {
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 12
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
+    property string quickPanelStyle: Config.options.quickToggles.style
     property bool showWifiDialog: false
     property bool showBluetoothDialog: false
+    
+    property bool wifiDialogMaterial: QuickTogglesUtils.showWifiDialog
+    property bool bluetoothDialogMaterial: QuickTogglesUtils.showBluetoothDialog
+
+    onWifiDialogMaterialChanged: {
+        root.showWifiDialog = wifiDialogMaterial
+    }
+    onBluetoothDialogMaterialChanged: {
+        root.showBluetoothDialog = bluetoothDialogMaterial
+    }
 
     Connections {
         target: GlobalStates
@@ -82,7 +93,7 @@ Item {
 
                 ButtonGroup {
                     QuickToggleButton {
-                        visible: Config.options.quickToggles.style === "material"
+                        visible: quickPanelStyle === "material"
                         toggled: GlobalStates.quickTogglesEditMode
                         buttonIcon: "edit"
                         onClicked: {
@@ -130,17 +141,17 @@ Item {
             Item {
                 id: quickPanelItem
                 
-                implicitHeight: Config.options.quickToggles.style === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
+                implicitHeight: quickPanelStyle === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
                 implicitWidth: parent.width
                 Loader { 
                     id: materialQTLoader
-                    active: Config.options.quickToggles.style === "material"
+                    active: quickPanelStyle === "material"
                     sourceComponent: MaterialQuickPanel {}
                 }
                 Loader { 
                     id: classicQTLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    active: Config.options.quickToggles.style === "classic"
+                    active: quickPanelStyle === "classic"
                     sourceComponent: ClassicQuickPanel {}
                 }
             }
@@ -177,6 +188,7 @@ Item {
             onDismiss: {
                 show = false
                 root.showWifiDialog = false
+                QuickTogglesUtils.showWifiDialog = false
             }
             onVisibleChanged: {
                 if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
@@ -204,6 +216,7 @@ Item {
             onDismiss: {
                 show = false
                 root.showBluetoothDialog = false
+                QuickTogglesUtils.showBluetoothDialog = false
             }
             onVisibleChanged: {
                 if (!visible && !root.showBluetoothDialog) bluetoothDialogLoader.active = false;

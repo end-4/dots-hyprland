@@ -7,7 +7,7 @@ MaterialQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: Idle.inhibit
-    buttonIcon: "coffee"
+    buttonIcon: toggled ? "kettle" : "coffee"
     titleText: "Idle Inhibitor"
     descText: toggled ? "On" : "Off"
     onClicked: {

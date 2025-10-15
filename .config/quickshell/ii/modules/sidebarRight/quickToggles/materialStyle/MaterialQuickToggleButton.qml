@@ -73,8 +73,6 @@ GroupButton {
         color: "transparent"
     }
 
-    
-
     Rectangle {
         anchors.centerIn: buttonSize === 1 ? parent : undefined
 

@@ -1,11 +1,17 @@
 pragma Singleton
-import Quickshell
+import qs
+import qs.services
 import qs.modules.common
-import "./utilButtons"
 import QtQuick
+import Quickshell
+
+import "./utilButtons"
 
 Singleton {
     id: root
+
+    property bool showWifiDialog: false
+    property bool showBluetoothDialog: false
 
     /*
         Updates the sizes and toggles lists in config.json

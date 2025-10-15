@@ -9,9 +9,9 @@ MaterialQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: GlobalStates.oskOpen
-    buttonIcon: "keyboard"
+    buttonIcon: toggled ? "keyboard_hide" : "keyboard"
     titleText: "Keyboard"
-    descText: "Click me"
+    descText: toggled ? "On" : "Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         GlobalStates.sidebarRightOpen = false;

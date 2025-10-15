@@ -7,7 +7,7 @@ import Quickshell.Io
 MaterialQuickToggleButton {
     id: root
     buttonSize: 2
-    buttonIcon: "gamepad"
+    buttonIcon: toggled ? "sports_esports" : "gamepad"
     toggled: toggled
     titleText: "Game Mode"
     descText: toggled ? "On" : "Off"

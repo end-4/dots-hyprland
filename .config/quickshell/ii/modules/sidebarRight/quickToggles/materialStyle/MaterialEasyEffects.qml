@@ -11,7 +11,7 @@ MaterialQuickToggleButton {
     buttonSize: 1
     toggled: EasyEffects.active
     visible: EasyEffects.available
-    buttonIcon: "instant_mix"
+    buttonIcon: toggled ? "tune" : "instant_mix"
     titleText: "Easy Effects"
     descText: toggled ? "On" : "Off"
     Component.onCompleted: {

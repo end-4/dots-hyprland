@@ -10,7 +10,7 @@ MaterialQuickToggleButton {
     toggled: false
     visible: false
     buttonSize: 2
-    buttonIcon: toggled ? "shield_lock" : "shield"
+    buttonIcon: toggled ? "security" : "shield"
     titleText: "WARP (1.1.1.1)"
     descText: toggled ? "On" : "Off"
 

@@ -16,7 +16,7 @@ MaterialQuickToggleButton {
     halfToggled: Network.wifiEnabled
     buttonIcon: Network.materialSymbol
     titleText: Network.wifiEnabled ? "Wifi" : Network.ethernet ? "Ethernet" : "Network"
-    descText: toggled ? Network.networkName : halfToggled ?  "On" : "Off"
+    descText: toggled ? Network.networkName : halfToggled ? Network.wifiScanning ? "Scanning" :  Network.wifiConnecting ? "Connecting" : "On" : "Off"
     onClicked: {
         if (GlobalStates.quickTogglesEditMode) return;
         Network.toggleWifi()
