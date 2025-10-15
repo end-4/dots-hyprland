@@ -1,21 +1,37 @@
 printf "${STY_YELLOW}"
-printf "============WARNING/NOTE============\n"
+printf "============WARNING/NOTE (1)============\n"
 printf "GCC in use: $(which gcc)\n"
 printf "GCC version info: $(gcc --version | grep gcc)\n"
 printf "GCC version number: $(gcc --version | grep gcc | awk '{print $3}')\n"
 printf "GCC-15>= is required for Hyprland\n"
 printf "If you have GCC-15>= and it's currently set then you can safely ignore this\n"
-printf "If not, you must ensure you are using the correct GCC version and set it (gcc-config <number>), then emerge re-emerge @world with an empty tree (emerge -e @world)\n"
+printf "If not, you must ensure you are using the correct GCC version and set it (gcc-config <number>)\n"
+printf "It is heavily recommended to re-emerge @world with an empty tree after changing GCC version (emerge -e @world)\n\n"
 printf "${STY_RESET}"
 pause
+
+printf "${STY_YELLOW}"
+printf "============WARNING/NOTE (2)============\n"
+printf "Ensure you have a global use flag for elogind or systemd in your make.conf for simplicity\n"
+printf "Or you can manually add the use flags for each package that requires it\n"
+printf "${STY_RESET}"
+pause
+
+printf "${STY_YELLOW}"
+printf "https://github.com/end-4/dots-hyprland/blob/main/dist-gentoo/README.md"
+printf "Checkout the above README for potential bug fixes or additional information"
+printf "${STY_RESET}"
+pause
+
+x sudo emerge --noreplace --quiet app-eselect/eselect-repository
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
 	v sudo eselect repository enable localrepo 
 fi
 
-if [[ -z $(eselect repository list | grep guru) ]]; then
-	v sudo eselect repository enable guru
+if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
+        v sudo eselect repository enable guru
 fi
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
@@ -26,16 +42,17 @@ metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fon
 ebuild_dir="/var/db/repos/localrepo"
 
 # Unmasks
-x cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
+x sudo cp ./dist-gentoo/keywords ./dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./dist-gentoo/keywords-user
 v sudo cp ./dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
 # Use Flags
 v sudo cp ./dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
+v sudo sh -c 'cat ./dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
 
 # Update system
 v sudo emerge --sync
-v sudo emerge --ask --verbose --newuse --update --deep @world
+v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
@@ -72,4 +89,5 @@ for i in "${metapkgs[@]}"; do
 	v sudo emerge --quiet app-misc/${i}
 done
 
-
+# Currently using 3.12 python, this doesn't need to be default though
+v sudo emerge --noreplace --quiet dev-lang/python:3.12
