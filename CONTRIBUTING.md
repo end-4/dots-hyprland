@@ -8,7 +8,7 @@
 
 ## Contributing to i18n
 
-For contributing in translation (i18n) for Quickshell, see also `dots/.config/quickshell/translations/tools`.
+For contributing in translation (i18n) for Quickshell, see also `dots/.config/quickshell/ii/translations/tools`.
 
 ## Dynamic loading
 
