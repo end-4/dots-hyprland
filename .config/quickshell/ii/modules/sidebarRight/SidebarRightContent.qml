@@ -2,16 +2,18 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import "./quickToggles/"
-import "./quickToggles/materialStyle/"
-import "./wifiNetworks/"
-import "./bluetoothDevices/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
+
+import "./quickToggles/"
+import "./quickToggles/classicStyle"
+import "./quickToggles/materialStyle/"
+import "./wifiNetworks/"
+import "./bluetoothDevices/"
 
 Item {
     id: root
