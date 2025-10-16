@@ -18,7 +18,7 @@ Item {
     width: mainColumn.width
     property int heightSize: mainColumn.height // used by the parent
     property string panelType: Config.options.quickToggles.material.mode
-    property int tileSize: panelType == 0 ? 5 : 4
+    property int tileSize: panelType == 2 ? 4 : 5
     property var rowModels: QuickTogglesUtils.splitRows(combinedData, tileSize)    
 
     property list<string> fullItemList: ["network","bluetooth","cloudflarewarp","easyeffects","gamemode","idleinhibitor","nightlight","screensnip",
