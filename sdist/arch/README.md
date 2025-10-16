@@ -1,12 +1,9 @@
 # Install scripts for Arch Linux
+
 - See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 
 ## Old Dependency Installation Method
 The old deps install method mainly involved `./sdata/dependencies.conf` (which has been removed now).
-
-There was also a `checkdeps.sh`:
-  - It checks the existence of pkgs listed in `./sdata/dependencies.conf`.
-  - It somehow fixes [the problem caused by yay](https://github.com/end-4/dots-hyprland/discussions/204).
 
 ## Current Dependency Installation
 Local PKGBUILDs under `./sdist/arch/` are used to install dependencies.
