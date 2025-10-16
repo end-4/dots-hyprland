@@ -612,6 +612,8 @@ ContentPage {
                         Config.options.sidebar.cornerOpen.enable = checked;
                     }
                 }
+            }
+            Row {
                 ConfigSwitch {
                     buttonIcon: "highlight_mouse_cursor"
                     text: Translation.tr("Hover to trigger")
@@ -622,6 +624,18 @@ ContentPage {
 
                     StyledToolTip {
                         text: Translation.tr("When this is off you'll have to click")
+                    }
+                }
+                ConfigSwitch {
+                    enabled: !Config.options.sidebar.cornerOpen.clickless
+                    text: Translation.tr("but force at absolute corner")
+                    checked: Config.options.sidebar.cornerOpen.clicklessCornerEnd
+                    onCheckedChanged: {
+                        Config.options.sidebar.cornerOpen.clicklessCornerEnd = checked;
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("When the previous option is off and this is on,\nyou can still hover the corner's end to open sidebar,\nand the remaining area can be used for volume/brightness scroll")
                     }
                 }
             }
