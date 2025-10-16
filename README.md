@@ -28,8 +28,9 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://ii.clsty.link/en/ii-qs/01setup/) <sub>(idempotent script provided)</sub>
-   - In case you can't access the wiki, you can always manually clone this repo and run `install.sh`
+   - Just run `bash <(curl -s https://ii.clsty.link/setup)`
+     - Or, clone this repo and run `./install.sh`
+     - See [document](https://ii.clsty.link/en/ii-qs/01setup/) for details.
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
@@ -48,7 +49,7 @@
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-  - For the full list of dependencies, see the [dist-arch folder](https://github.com/end-4/dots-hyprland/tree/main/dist-arch)
+  - For the full list of dependencies, see the [sdist/arch folder](https://github.com/end-4/dots-hyprland/tree/main/sdist/arch)
   - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
 </details>
 
@@ -77,7 +78,7 @@ Widget system: Quickshell | Support: Yes
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/22aa335a-0a23-4789-8ce9-c601b9f95858" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50009d7f-e456-4200-bc41-49b29abbafe3" /> |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7b98a354-4489-4a46-aa6a-d08616e77399" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50009d7f-e456-4200-bc41-49b29abbafe3" /> |
 | Window management | Weeb power |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 
