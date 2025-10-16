@@ -9,8 +9,8 @@ function warning_rsync(){
   printf "${STY_RESET}"
 }
 
-function backup_clashing_dirs(){
-  # For folders/files under target_dir, only backup those which clashes with the ones under source_dir
+function backup_clashing_targets(){
+  # For dirs/files under target_dir, only backup those which clashes with the ones under source_dir
   local source_dir="$1"
   local target_dir="$2"
   local backup_dir="$3"
@@ -46,13 +46,13 @@ function backup_clashing_dirs(){
 
 function ask_backup_configs(){
   printf "${STY_RED}"
-  printf "Would you like to backup clashing dirs under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
+  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
   read -p "[y/N] " backup_confirm
   case $backup_confirm in
     [yY][eE][sS]|[yY]) 
-      showfun backup_clashing_dirs
-      v backup_clashing_dirs dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-      v backup_clashing_dirs dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+      showfun backup_clashing_targets
+      v backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+      v backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
       ;;
     *) echo "Skipping backup..." ;;
   esac
@@ -61,7 +61,7 @@ function ask_backup_configs(){
 
 #####################################################################################
 
-# In case some folders does not exists
+# In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 
 case $ask in
