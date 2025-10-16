@@ -1,0 +1,29 @@
+############ Additional needed useflags
+x11-libs/cairo X
+dev-cpp/cairomm X
+dev-python/pycairo X
+media-libs/libglvnd X
+x11-libs/libxkbcommon X
+media-libs/libpulse X
+media-plugins/alsa-plugins pulseaudio
+kde-frameworks/kcoreaddons dbus
+kde-frameworks/prison qml
+kde-frameworks/kguiaddons X dbus wayland
+kde-frameworks/kidletime X wayland
+kde-frameworks/kwindowsystem X wayland
+kde-frameworks/kconfig dbus qml
+kde-frameworks/sonnet qml
+x11-base/xwayland libei
+sys-apps/dbus X
+sys-libs/zlib minizip
+dev-qt/qtquick3d opengl
+media-video/ffmpeg X bzip2 dav1d drm fontconfig gnutls gpl libass opencl opengl openh264 opus postproc svg truetype vaapi vpx vulkan x264 x265 xml zlib
+media-libs/leptonica jpeg png zlib tiff webp
+media-libs/libva X wayland
+app-text/xmlto text
+app-crypt/gcr gtk
+media-video/vlc wayland ogg dbus mp3
+dev-libs/qcoro dbus qml
+media-libs/freetype harfbuzz
+media-libs/mesa wayland 
+x11-libs/gtk+ wayland
