@@ -179,7 +179,7 @@ Item { // Wrapper
         }
 
         // Only handle visible printable characters (ignore control chars, arrows, etc.)
-        if (event.text && event.text.length === 1 && event.key !== Qt.Key_Enter && event.key !== Qt.Key_Return && event.text.charCodeAt(0) >= 0x20) // ignore control chars like Backspace, Tab, etc.
+        if (event.text && event.text.length === 1 && event.key !== Qt.Key_Enter && event.key !== Qt.Key_Return && event.key !== Qt.Key_Delete && event.text.charCodeAt(0) >= 0x20) // ignore control chars like Backspace, Tab, etc.
         {
             if (!searchInput.activeFocus) {
                 searchInput.forceActiveFocus();
