@@ -12,9 +12,9 @@ GroupButton {
     colBackground: Appearance.colors.colLayer1
 
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
-    property int buttonClickedRadius : Appearance.rounding.normal
-    clickedRadius: buttonClickedRadius
-    buttonRadiusPressed: buttonClickedRadius
+    property int buttonToggledRadius : Appearance.rounding.normal
+    toggledRadius: buttonToggledRadius
+    buttonRadiusPressed: buttonToggledRadius
 
     readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
     readonly property real titleTextSize: panelType === "compact" ? 14 : 16
