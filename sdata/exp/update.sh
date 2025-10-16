@@ -3,6 +3,7 @@
 # update.sh - Enhanced dotfiles update script
 #
 # Features:
+# - Auto-detect repository structure (dots/ prefix or direct config)
 # - Pull latest commits from remote
 # - Rebuild packages if PKGBUILD files changed (user choice)
 # - Handle config file conflicts with user choices
@@ -13,13 +14,58 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
+DRY_RUN=false
+VERBOSE=false
 REPO_DIR="$(cd $(dirname $(dirname $(dirname $0))) &>/dev/null && pwd)"
-ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
+# Try to find the packages directory (different names in different versions)
+if [[ -d "${REPO_DIR}/dist-arch" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
+elif [[ -d "${REPO_DIR}/arch-packages" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
+elif [[ -d "${REPO_DIR}/sdist/arch" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
+else
+  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"  # Default fallback
+fi
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
-# Directories to monitor for changes
-MONITOR_DIRS=("dots/.config" "dots/.local/bin")
+# Auto-detect repository structure
+detect_repo_structure() {
+  local found_dirs=()
+  
+  # Check for dots/ prefixed structure
+  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
+    found_dirs+=("dots/.config")
+    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
+    [[ -d "${REPO_DIR}/dots/.local/share" ]] && found_dirs+=("dots/.local/share")
+  # Check for flat structure
+  elif [[ -d "${REPO_DIR}/.config" ]]; then
+    found_dirs+=(".config")
+    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
+    [[ -d "${REPO_DIR}/.local/share" ]] && found_dirs+=(".local/share")
+  else
+    # Manual detection of common directories
+    for candidate in "dots/.config" ".config" "config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
+      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
+        # Avoid duplicates
+        if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
+          found_dirs+=("${candidate}")
+        fi
+      fi
+    done
+  fi
+  
+  if [[ ${#found_dirs[@]} -eq 0 ]]; then
+    echo "ERROR: Could not detect repository structure" >&2
+    return 1
+  fi
+  
+  echo "${found_dirs[@]}"
+}
+
+# Directories to monitor for changes (will be auto-detected)
+MONITOR_DIRS=()
 
 # === Color Codes ===
 RED='\033[0;31m'
@@ -62,16 +108,13 @@ safe_read() {
   local varname="$2"
   local default="${3:-}"
 
-  # Simple approach: just use read with /dev/tty and handle errors
   local input_value=""
 
-  # Display prompt and read from terminal
   echo -n "$prompt"
   if read input_value </dev/tty 2>/dev/null || read input_value 2>/dev/null; then
     eval "$varname='$input_value'"
     return 0
   else
-    # If read failed and we have a default, use it
     if [[ -n "$default" ]]; then
       echo
       log_warning "Using default: $default"
@@ -106,7 +149,6 @@ should_ignore() {
         pattern=$(echo "$pattern" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
         [[ -z "$pattern" ]] && continue
 
-        # Handle different gitignore-style patterns
         local should_skip=false
 
         # Exact match
@@ -141,7 +183,6 @@ should_ignore() {
           if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
             should_skip=true
           fi
-          # Also check if any parent directory matches
           local temp_path="$relative_path"
           while [[ "$temp_path" == */* ]]; do
             temp_path="${temp_path%/*}"
@@ -168,7 +209,7 @@ should_ignore() {
   return 1
 }
 
-# Function to show file diff with syntax highlighting if possible
+# Function to show file diff
 show_diff() {
   local file1="$1"
   local file2="$2"
@@ -215,8 +256,12 @@ handle_file_conflict() {
 
     case $choice in
     1)
-      cp -p "$repo_file" "$home_file"
-      log_success "Replaced $home_file with repository version"
+      if [[ "$DRY_RUN" == true ]]; then
+        log_info "[DRY-RUN] Would replace $home_file with repository version"
+      else
+        cp -p "$repo_file" "$home_file"
+        log_success "Replaced $home_file with repository version"
+      fi
       break
       ;;
     2)
@@ -224,14 +269,22 @@ handle_file_conflict() {
       break
       ;;
     3)
-      mv "$home_file" "${dirname}/${filename}.old"
-      cp -p "$repo_file" "$home_file"
-      log_success "Backed up local file to ${filename}.old and updated with repository version"
+      if [[ "$DRY_RUN" == true ]]; then
+        log_info "[DRY-RUN] Would backup local file to ${filename}.old and update with repository version"
+      else
+        mv "$home_file" "${dirname}/${filename}.old"
+        cp -p "$repo_file" "$home_file"
+        log_success "Backed up local file to ${filename}.old and updated with repository version"
+      fi
       break
       ;;
     4)
-      cp -p "$repo_file" "${dirname}/${filename}.new"
-      log_success "Saved repository version as ${filename}.new, kept local file"
+      if [[ "$DRY_RUN" == true ]]; then
+        log_info "[DRY-RUN] Would save repository version as ${filename}.new, keep local file"
+      else
+        cp -p "$repo_file" "${dirname}/${filename}.new"
+        log_success "Saved repository version as ${filename}.new, kept local file"
+      fi
       break
       ;;
     5)
@@ -253,8 +306,12 @@ handle_file_conflict() {
 
       case $subchoice in
       r)
-        cp -p "$repo_file" "$home_file"
-        log_success "Replaced $home_file with repository version"
+        if [[ "$DRY_RUN" == true ]]; then
+          log_info "[DRY-RUN] Would replace $home_file with repository version"
+        else
+          cp -p "$repo_file" "$home_file"
+          log_success "Replaced $home_file with repository version"
+        fi
         break
         ;;
       k)
@@ -262,14 +319,22 @@ handle_file_conflict() {
         break
         ;;
       b)
-        mv "$home_file" "${dirname}/${filename}.old"
-        cp -p "$repo_file" "$home_file"
-        log_success "Backed up local file to ${filename}.old and updated"
+        if [[ "$DRY_RUN" == true ]]; then
+          log_info "[DRY-RUN] Would backup local file to ${filename}.old and update"
+        else
+          mv "$home_file" "${dirname}/${filename}.old"
+          cp -p "$repo_file" "$home_file"
+          log_success "Backed up local file to ${filename}.old and updated"
+        fi
         break
         ;;
       n)
-        cp -p "$repo_file" "${dirname}/${filename}.new"
-        log_success "Saved repository version as ${filename}.new"
+        if [[ "$DRY_RUN" == true ]]; then
+          log_info "[DRY-RUN] Would save repository version as ${filename}.new"
+        else
+          cp -p "$repo_file" "${dirname}/${filename}.new"
+          log_success "Saved repository version as ${filename}.new"
+        fi
         break
         ;;
       s)
@@ -311,15 +376,18 @@ check_pkgbuild_changed() {
 
   [[ ! -f "$pkgbuild_path" ]] && return 1
 
-  # Get the path relative to repo
   local relative_path="${pkgbuild_path#$REPO_DIR/}"
 
-  # If force check is enabled, always return true
   if [[ "$FORCE_CHECK" == true ]]; then
     return 0
   fi
 
-  # Check if file changed in the last pull
+  # Check if HEAD@{1} exists before trying to use it
+  if ! git rev-parse --verify HEAD@{1} &>/dev/null; then
+    # Fresh clone, assume all PKGBUILDs need checking
+    return 0
+  fi
+
   if git diff --name-only HEAD@{1} HEAD 2>/dev/null | grep -q "^${relative_path}$"; then
     return 0
   fi
@@ -371,7 +439,7 @@ list_packages() {
 
 # Function to build selected packages
 build_packages() {
-  local build_mode="$1" # "changed", "all", or "select"
+  local build_mode="$1"
   local packages_to_build=()
   local rebuilt_packages=0
 
@@ -459,44 +527,62 @@ build_packages() {
   fi
 }
 
-# Function to get list of changed files since last pull or all files if force check
+# Function to get list of changed files
 get_changed_files() {
   local dir_path="$1"
 
   if [[ "$FORCE_CHECK" == true ]]; then
-    # Return all files in the directory
     find "$dir_path" -type f -print0 2>/dev/null
   else
-    # Get files that changed in the last pull
-    local changed_files=()
-    while IFS= read -r file; do
-      local full_path="${REPO_DIR}/${file}"
-      # Check if file is in the directory we're processing
-      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-        printf '%s\0' "$full_path"
+    # Check if we can use git diff (HEAD@{1} exists)
+    if git rev-parse --verify HEAD@{1} &>/dev/null; then
+      # Get files that changed in the last pull
+      local has_changes=false
+      while IFS= read -r file; do
+        local full_path="${REPO_DIR}/${file}"
+        if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
+          printf '%s\0' "$full_path"
+          has_changes=true
+        fi
+      done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+      
+      # If git diff found changes, we're done
+      if [[ "$has_changes" == true ]]; then
+        return
       fi
-    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
-
-    # If no files changed via git, but force_check is false, still check all files
-    # This handles the case where there were no new commits but files might differ
-    if ! git diff --quiet HEAD@{1} HEAD 2>/dev/null; then
-      : # Files were found via git diff
-    else
-      # No git changes detected, check all files anyway for local differences
-      find "$dir_path" -type f -print0 2>/dev/null
     fi
+    
+    # Fallback: check all files (fresh clone or no git changes)
+    find "$dir_path" -type f -print0 2>/dev/null
   fi
 }
 
 # Function to check if we have new commits
 has_new_commits() {
-  # Check if HEAD@{1} exists (meaning there was a previous commit)
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
-    # Check if HEAD and HEAD@{1} are different
     [[ "$(git rev-parse HEAD)" != "$(git rev-parse HEAD@{1})" ]]
   else
-    # No previous commit reference, assume we have commits
     return 0
+  fi
+}
+
+# Function to strip repo prefix and get target home path
+get_home_target_path() {
+  local repo_file="$1"
+  local repo_prefix="$2"  # e.g., "dots/.config" or ".config"
+  
+  # Remove repo directory from path
+  local rel_from_repo="${repo_file#$REPO_DIR/}"
+  
+  # Remove the dots/ prefix if it exists
+  if [[ "$repo_prefix" == dots/* ]]; then
+    local stripped_prefix="${repo_prefix#dots/}"
+    # Remove "dots/XXX" from path and prepend HOME/XXX
+    local rel_path="${rel_from_repo#dots/}"
+    echo "${HOME}/${rel_path}"
+  else
+    # Direct structure: just prepend HOME
+    echo "${HOME}/${rel_from_repo}"
   fi
 }
 
@@ -518,24 +604,32 @@ while [[ $# -gt 0 ]]; do
     log_info "Package checking enabled"
     shift
     ;;
+  -n | --dry-run)
+    DRY_RUN=true
+    log_info "Dry-run mode enabled - no changes will be made"
+    shift
+    ;;
+  -v | --verbose)
+    VERBOSE=true
+    log_info "Verbose mode enabled"
+    shift
+    ;;
   -h | --help)
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
     echo "  -f, --force      Force check all files even if no new commits"
     echo "  -p, --packages   Enable package checking and building"
+    echo "  -n, --dry-run    Show what would be done without making changes"
+    echo "  -v, --verbose    Enable verbose output"
     echo "  -h, --help       Show this help message"
     echo ""
     echo "This script updates your dotfiles by:"
-    echo "  1. Pulling latest changes from git remote"
-    echo "  2. Optionally rebuilding packages (if -p flag is used)"
-    echo "  3. Syncing configuration files"
-    echo "  4. Updating script permissions"
-    echo ""
-    echo "Package modes (when -p is used):"
-    echo "  - If no PKGBUILDs changed: asks if you want to check packages anyway"
-    echo "  - If PKGBUILDs changed: offers to build changed packages"
-    echo "  - Interactive selection of packages to build"
+    echo "  1. Auto-detecting repository structure (dots/ prefix or direct)"
+    echo "  2. Pulling latest changes from git remote"
+    echo "  3. Optionally rebuilding packages (if -p flag is used)"
+    echo "  4. Syncing configuration files to home directory"
+    echo "  5. Updating script permissions"
     exit 0
     ;;
   --skip-notice)
@@ -554,8 +648,8 @@ done
 if [[ "$check" == true ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
   log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
-  log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
-  log_warning "In general, prefer install.sh for updates."
+  log_warning "  but this can cause partial updates and therefore unexpected behavior."
+  log_warning "In general, prefer install.sh for updates if available."
   safe_read "Continue? (y/N): " response "N"
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
@@ -574,10 +668,21 @@ else
   exit 1
 fi
 
+# Auto-detect repository structure
+log_header "Detecting Repository Structure"
+if detected_dirs=$(detect_repo_structure); then
+  read -ra MONITOR_DIRS <<<"$detected_dirs"
+  log_success "Detected repository structure:"
+  for dir in "${MONITOR_DIRS[@]}"; do
+    log_info "  - ${REPO_DIR}/${dir}"
+  done
+else
+  die "Failed to detect repository structure"
+fi
+
 # Step 1: Pull latest commits
 log_header "Pulling Latest Changes"
 
-# Check current branch
 current_branch=$(git branch --show-current)
 if [[ -z "$current_branch" ]]; then
   log_warning "In detached HEAD state. Checking out main/master branch..."
@@ -594,7 +699,6 @@ fi
 
 log_info "Current branch: $current_branch"
 
-# Check for uncommitted changes
 if ! git diff --quiet || ! git diff --cached --quiet; then
   log_warning "You have uncommitted changes:"
   git status --short
@@ -613,9 +717,7 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   log_info "Changes stashed"
 fi
 
-# Check if remote exists
 if git remote get-url origin &>/dev/null; then
-  # Pull changes
   log_info "Pulling changes from origin/$current_branch..."
   if git pull; then
     log_success "Successfully pulled latest changes"
@@ -628,7 +730,7 @@ else
   log_info "This appears to be a local-only repository."
 fi
 
-# Step 2: Handle package building (only if requested)
+# Step 2: Handle package building
 rebuilt_packages=0
 
 if [[ "$CHECK_PACKAGES" == true ]]; then
@@ -637,7 +739,6 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
     log_warning "No sdist/arch directory found. Skipping package management."
   else
-    # Check if any PKGBUILDs have changed
     changed_pkgbuilds=()
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
       if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
@@ -660,20 +761,14 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
       if safe_read "Choose an option (1-4): " pkg_choice "1"; then
         case $pkg_choice in
-        1)
-          build_packages "changed"
-          ;;
+        1) build_packages "changed" ;;
         2)
           if list_packages; then
             build_packages "select"
           fi
           ;;
-        3)
-          build_packages "all"
-          ;;
-        4 | *)
-          log_info "Skipping package building"
-          ;;
+        3) build_packages "all" ;;
+        4 | *) log_info "Skipping package building" ;;
         esac
       else
         log_warning "Failed to read input. Skipping package building."
@@ -692,15 +787,9 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
             if safe_read "Choose an option (1-3): " build_choice "3"; then
               case $build_choice in
-              1)
-                build_packages "select"
-                ;;
-              2)
-                build_packages "all"
-                ;;
-              3 | *)
-                log_info "Skipping package building"
-                ;;
+              1) build_packages "select" ;;
+              2) build_packages "all" ;;
+              3 | *) log_info "Skipping package building" ;;
               esac
             else
               log_info "Skipping package building"
@@ -718,7 +807,6 @@ else
   log_header "Package Management"
   log_info "Package checking disabled. Use -p or --packages flag to enable package management."
 
-  # Still show a hint if there are changed PKGBUILDs
   if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
     changed_count=0
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
@@ -736,7 +824,6 @@ fi
 # Step 3: Update configuration files
 log_header "Updating Configuration Files"
 
-# Check if we should process files
 process_files=false
 if [[ "$FORCE_CHECK" == true ]]; then
   process_files=true
@@ -746,7 +833,7 @@ elif has_new_commits; then
   log_info "New commits detected: checking changed configuration files"
 else
   log_info "No new commits found: checking for local file differences"
-  process_files=true # Always check for differences even without commits
+  process_files=true
 fi
 
 if [[ "$process_files" == true ]]; then
@@ -756,43 +843,46 @@ if [[ "$process_files" == true ]]; then
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
-    home_dir_path="${HOME}/${dir_name}"
+    
+    # Calculate the target home directory properly
+    if [[ "$dir_name" == dots/* ]]; then
+      # Strip "dots/" prefix for home directory
+      home_subdir="${dir_name#dots/}"
+      home_dir_path="${HOME}/${home_subdir}"
+    else
+      # Direct structure
+      home_dir_path="${HOME}/${dir_name}"
+    fi
 
     if [[ ! -d "$repo_dir_path" ]]; then
       log_warning "Repository directory not found: $repo_dir_path"
       continue
     fi
 
-    log_info "Processing directory: $dir_name"
+    log_info "Processing directory: $dir_name → ${home_dir_path}"
 
-    # Create home directory if it doesn't exist
     mkdir -p "$home_dir_path"
 
-    # Get files to process (changed files or all files based on mode)
     while IFS= read -r -d '' repo_file; do
-      # Calculate relative path and corresponding home file path
+      # Calculate relative path from the repo source directory
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
 
-      # Check if file should be ignored
       if should_ignore "$home_file"; then
         continue
       fi
 
       ((files_processed++))
 
-      # Create directory structure if needed
       mkdir -p "$(dirname "$home_file")"
 
       if [[ -f "$home_file" ]]; then
-        # File exists, check if different
         if ! cmp -s "$repo_file" "$home_file"; then
           log_info "Found difference in: $rel_path"
           handle_file_conflict "$repo_file" "$home_file"
           ((files_updated++))
         fi
       else
-        # New file, copy it
         cp -p "$repo_file" "$home_file"
         log_success "Created new file: $home_file"
         ((files_created++))
@@ -800,7 +890,6 @@ if [[ "$process_files" == true ]]; then
     done < <(get_changed_files "$repo_dir_path")
   done
 
-  # Show processing summary
   echo
   log_info "File processing summary:"
   log_info "- Files processed: $files_processed"
@@ -813,7 +902,6 @@ fi
 # Step 4: Update script permissions
 log_header "Updating Script Permissions"
 
-# Make sure local bin scripts are executable
 if [[ -d "${HOME}/.local/bin" ]]; then
   find "${HOME}/.local/bin" -type f -exec chmod +x {} \; 2>/dev/null || true
   log_success "Updated ~/.local/bin script permissions"
@@ -822,11 +910,11 @@ fi
 log_header "Update Complete"
 log_success "Dotfiles update completed successfully!"
 
-# Show summary
 echo
 echo -e "${CYAN}Summary:${NC}"
 echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)')"
 echo "- Branch: $current_branch"
+echo "- Structure: ${MONITOR_DIRS[*]}"
 echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
 echo "- Package checking: $([ "$CHECK_PACKAGES" == true ] && echo "Enabled" || echo "Disabled")"
 
@@ -840,9 +928,6 @@ if [[ "$process_files" == true ]]; then
   echo "- New files created: $files_created"
 fi
 
-echo "- Configuration directories: ${MONITOR_DIRS[*]}"
-
-# Remind about ignore files and show examples
 if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
