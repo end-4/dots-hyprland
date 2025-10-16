@@ -26,10 +26,12 @@
   - **Transparent installation**: Every command is shown before it's run
 </details>
 <details> 
-  <summary>Installation (illogical-impulse<sup>Quickshell</sup>)</summary>
+  <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
-   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. 
+   - Just run `bash <(curl -s https://ii.clsty.link/setup)`
+     - Or, clone this repo and run `./install.sh`
+     - See [document](https://ii.clsty.link/en/ii-qs/01setup/) for details.
+   - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
      - If for whatever reason the keybind list widget does not work, here's an image:
@@ -44,12 +46,11 @@
 
   | Software | Purpose |
   | ------------- | ------------- |
-  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
-  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, responsible for the status bar, sidebars, etc. |
+  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
+  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-
-
-  - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
+  - For the full list of dependencies, see the [sdist/arch folder](https://github.com/end-4/dots-hyprland/tree/main/sdist/arch)
+  - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
 </details>
 
 <details>
@@ -58,27 +59,18 @@
 
 </details>
 
-_Note: **THERE IS NO FUCKING WAYBAR**_
-
-
 <div align="center">
     <h2>• screenshots •</h2>
     <h3></h3>
 </div>
 
-<table style="border-collapse: collapse;">
-  <tr>
-    <td width="25%">
-      <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:100%;">
-    </td>
-    <td width="75%">
-      <i>latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below.</i>
-    </td>
-  </tr>
-</table>
-
+<div align="center">
+    <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:400;">
+</div>
 
 ### illogical-impulse<sup>Quickshell</sup>
+
+This is the latest and only supported style. Other stuff are still there mostly for viewing pleasure and not actual use, but code is still available, see below.
 
 Widget system: Quickshell | Support: Yes
 
@@ -86,11 +78,57 @@ Widget system: Quickshell | Support: Yes
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/4d45e860-ae60-418a-a564-309b4939f5c4) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7b98a354-4489-4a46-aa6a-d08616e77399" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50009d7f-e456-4200-bc41-49b29abbafe3" /> |
 | Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/292259fc-57d3-4663-a583-2ce2faad13fb) |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 
-### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
+### Other styles: Available at the end of the readme.
+
+<div align="center">
+    <h2>• thank you •</h2>
+    <h3></h3>
+</div>
+
+ - [@clsty](https://github.com/clsty) for making the dotfiles accessible by taking care of the install script and many other things
+ - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
+ - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
+ - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
+ - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
+ - EWW: [fufexan](https://github.com/fufexan/dotfiles)
+
+<div align="center">
+    <h2>• stonks •</h2>
+    <h3></h3>
+</div>
+
+- If you would like to give me some milk😳 (i dont drink coffee): https://github.com/sponsors/end-4
+- Virtual tentacle cat website points chart
+
+[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
+
+
+<div align="center">
+    <h2>• inspirations/copying •</h2>
+    <h3></h3>
+</div>
+
+ - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
+ - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (maybe unless you loudly do weird stuff and violate the license) <sub>(some people actually had to ask smh)</sub>
+
+---
+
+---
+
+<div align="center">
+    <h2>• old, UNSUPPORTED stuff •</h2>
+    <h3></h3>
+</div>
+
+- Source for illogical-impulse AGS available in the `ii-ags` branch, others in the `archive` branch.
+- The list goes from newest to the oldest, and the code quality is worse the older a style is
+- No bug fix or official support will be provided.
+
+### illogical-impulse<sup>AGS</sup>
 
 Widget system: AGS | Support: No
 
@@ -99,11 +137,6 @@ Widget system: AGS | Support: No
 | ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
 | Window management | Weeb power |
 | ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
-
-### Very old stuff
-
-- Source code not likely to work but still available in the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch. Extremely spaghetti.
-- Click image for a presentation video
 
 #### m3ww
 
@@ -115,7 +148,7 @@ Widget system: AGS | Support: No
 
 #### NovelKnock
 
-   Widget system: EWW | Support: No, dead
+   Widget system: EWW | Support: No
 
    <a href="https://streamable.com/7vo61k">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
@@ -123,7 +156,7 @@ Widget system: AGS | Support: No
 
 #### Hybrid
 
-   Widget system: EWW | Support: No, dead
+   Widget system: EWW | Support: No
    
    <a href="https://streamable.com/4oogot">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
@@ -131,44 +164,9 @@ Widget system: AGS | Support: No
 
 #### Windoes
 
-   Widget system: EWW | Support: No, dead
+   Widget system: EWW | Support: No
    
    <a href="https://streamable.com/5qx614">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
    </a>
 
-<div align="center">
-    <h2>• thank you •</h2>
-    <h3></h3>
-</div>
-
- - [@clsty](https://github.com/clsty) for making my work accessible by taking care of the install script and many other things
- - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
- - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
- - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
- - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
- - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
- - AI bots for providing useful examples
-
- <sup><sup><sup><sup><sup>[@tokyobot](https://github.com/tokyob0t) for saying hi</sup></sup></sup></sup></sup>
-
-<div align="center">
-    <h2>• stonks •</h2>
-    <h3></h3>
-</div>
-
-- Funny useful number: https://github.com/sponsors/end-4
-- Funny useless number:
-
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
-
-- *Jokes aside i do appreciate both*
-
-
-<div align="center">
-    <h2>• inspirations/copying •</h2>
-    <h3></h3>
-</div>
-
- - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
- - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (unless you do weird stuff and violate the license). (this note is here because some people actually asked)

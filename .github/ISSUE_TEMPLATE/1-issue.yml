@@ -10,9 +10,9 @@ body:
       label: "Step 1. Before you submit"
       description: "Hint: The 2nd and 3rd checkbox is **not** forcely required as you may have failed to do so."
       options:
-        - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/) pages.
+        - label: I have read the [Troubleshooting](https://ii.clsty.link/en/ii-qs/04troubleshooting/) and [Usage](https://ii.clsty.link/en/ii-qs/02usage/) pages.
           required: true
-        - label: I've successfully updated to the latest version following the [guidance](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/#updating).
+        - label: I've successfully updated to the latest version following the [guidance](https://ii.clsty.link/en/ii-qs/01setup/#updating).
           required: false # Not required cuz user may have failed to do so
         - label: I've successfully updated the system packages to the latest.
           required: false # Not required cuz user may have failed to do so
