@@ -9,14 +9,14 @@
 # - Handle config file conflicts with user choices
 # - Respect .updateignore file for exclusions
 #
-set -uo pipefail
+set -euo pipefail
 
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
 DRY_RUN=false
 VERBOSE=false
-REPO_DIR="$(cd $(dirname $(dirname $(dirname $0))) &>/dev/null && pwd)"
+REPO_DIR="$(cd "$(dirname "$(dirname "$(dirname "$0")")")" &>/dev/null && pwd)"
 # Try to find the packages directory (different names in different versions)
 if [[ -d "${REPO_DIR}/dist-arch" ]]; then
   ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
@@ -111,14 +111,15 @@ safe_read() {
   local input_value=""
 
   echo -n "$prompt"
-  if read input_value </dev/tty 2>/dev/null || read input_value 2>/dev/null; then
-    eval "$varname='$input_value'"
+  if read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
+    # Use printf instead of eval for security
+    printf -v "$varname" '%s' "$input_value"
     return 0
   else
     if [[ -n "$default" ]]; then
       echo
       log_warning "Using default: $default"
-      eval "$varname='$default'"
+      printf -v "$varname" '%s' "$default"
       return 0
     else
       echo
@@ -183,6 +184,7 @@ should_ignore() {
           if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
             should_skip=true
           fi
+          # Check parent directories against pattern
           local temp_path="$relative_path"
           while [[ "$temp_path" == */* ]]; do
             temp_path="${temp_path%/*}"
@@ -343,8 +345,12 @@ handle_file_conflict() {
         ;;
       i)
         local relative_path_to_home="${home_file#$HOME/}"
-        echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-        log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+        if [[ "$DRY_RUN" == true ]]; then
+          log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
+        else
+          echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
+          log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+        fi
         break
         ;;
       *)
@@ -358,8 +364,12 @@ handle_file_conflict() {
       ;;
     7)
       local relative_path_to_home="${home_file#$HOME/}"
-      echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-      log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+      if [[ "$DRY_RUN" == true ]]; then
+        log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
+      else
+        echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
+        log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+      fi
       break
       ;;
     *)
@@ -401,7 +411,7 @@ list_packages() {
   local changed_packages=()
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No sdist/arch directory found"
+    log_warning "No package directory found"
     return 1
   fi
 
@@ -417,7 +427,7 @@ list_packages() {
   done
 
   if [[ ${#available_packages[@]} -eq 0 ]]; then
-    log_info "No packages found in sdist/arch directory"
+    log_info "No packages found in package directory"
     return 1
   fi
 
@@ -508,6 +518,12 @@ build_packages() {
     fi
 
     log_info "Building package: $pkg_name"
+    
+    if [[ "$DRY_RUN" == true ]]; then
+      log_info "[DRY-RUN] Would build package in directory: $pkg_dir"
+      continue
+    fi
+
     cd "$pkg_dir" || continue
 
     if makepkg -si --noconfirm; then
@@ -562,27 +578,8 @@ has_new_commits() {
   if git rev-parse --verify HEAD@{1} &>/dev/null; then
     [[ "$(git rev-parse HEAD)" != "$(git rev-parse HEAD@{1})" ]]
   else
+    # Fresh clone or no reflog - assume we want to process files
     return 0
-  fi
-}
-
-# Function to strip repo prefix and get target home path
-get_home_target_path() {
-  local repo_file="$1"
-  local repo_prefix="$2"  # e.g., "dots/.config" or ".config"
-  
-  # Remove repo directory from path
-  local rel_from_repo="${repo_file#$REPO_DIR/}"
-  
-  # Remove the dots/ prefix if it exists
-  if [[ "$repo_prefix" == dots/* ]]; then
-    local stripped_prefix="${repo_prefix#dots/}"
-    # Remove "dots/XXX" from path and prepend HOME/XXX
-    local rel_path="${rel_from_repo#dots/}"
-    echo "${HOME}/${rel_path}"
-  else
-    # Direct structure: just prepend HOME
-    echo "${HOME}/${rel_from_repo}"
   fi
 }
 
@@ -717,17 +714,25 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
     die "Aborted by user"
   fi
-  git stash push -m "Auto-stash before update $(date)"
-  log_info "Changes stashed"
+  if [[ "$DRY_RUN" == true ]]; then
+    log_info "[DRY-RUN] Would stash changes"
+  else
+    git stash push -m "Auto-stash before update $(date)"
+    log_info "Changes stashed"
+  fi
 fi
 
 if git remote get-url origin &>/dev/null; then
   log_info "Pulling changes from origin/$current_branch..."
-  if git pull; then
-    log_success "Successfully pulled latest changes"
+  if [[ "$DRY_RUN" == true ]]; then
+    log_info "[DRY-RUN] Would run: git pull --ff-only"
   else
-    log_warning "Failed to pull changes from remote. Continuing with local repository..."
-    log_info "You may need to resolve conflicts manually later."
+    if git pull --ff-only; then
+      log_success "Successfully pulled latest changes"
+    else
+      log_warning "Failed to pull changes from remote. Continuing with local repository..."
+      log_info "You may need to resolve conflicts manually later."
+    fi
   fi
 else
   log_warning "No remote 'origin' configured. Skipping pull operation."
@@ -855,9 +860,9 @@ if [[ "$process_files" == true ]]; then
       continue
     fi
     
-    # Calculate the target home directory properly
+    # FIX: Properly handle dots/ prefix mapping
     if [[ "$dir_name" == dots/* ]]; then
-      # Strip "dots/" prefix for home directory
+      # Strip "dots/" prefix for home directory mapping
       home_subdir="${dir_name#dots/}"
       home_dir_path="${HOME}/${home_subdir}"
     else
@@ -867,7 +872,11 @@ if [[ "$process_files" == true ]]; then
 
     log_info "Processing directory: $dir_name → ${home_dir_path}"
 
-    mkdir -p "$home_dir_path"
+    if [[ "$DRY_RUN" != true ]]; then
+      mkdir -p "$home_dir_path"
+    else
+      log_info "[DRY-RUN] Would create directory: $home_dir_path"
+    fi
 
     while IFS= read -r -d '' repo_file; do
       # Calculate relative path from the repo source directory
@@ -880,7 +889,9 @@ if [[ "$process_files" == true ]]; then
 
       ((files_processed++))
 
-      mkdir -p "$(dirname "$home_file")"
+      if [[ "$DRY_RUN" != true ]]; then
+        mkdir -p "$(dirname "$home_file")"
+      fi
 
       if [[ -f "$home_file" ]]; then
         if ! cmp -s "$repo_file" "$home_file"; then
@@ -918,8 +929,12 @@ fi
 log_header "Updating Script Permissions"
 
 if [[ -d "${HOME}/.local/bin" ]]; then
-  find "${HOME}/.local/bin" -type f -exec chmod +x {} \; 2>/dev/null || true
-  log_success "Updated ~/.local/bin script permissions"
+  if [[ "$DRY_RUN" == true ]]; then
+    log_info "[DRY-RUN] Would update script permissions in ~/.local/bin"
+  else
+    find "${HOME}/.local/bin" -type f -exec chmod +x {} \; 2>/dev/null || true
+    log_success "Updated ~/.local/bin script permissions"
+  fi
 fi
 
 log_header "Update Complete"
@@ -932,8 +947,12 @@ fi
 
 echo
 echo -e "${CYAN}Summary:${NC}"
-echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)')"
-echo "- Branch: $current_branch"
+if command -v git >/dev/null && git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)' 2>/dev/null || echo 'Unknown')"
+else
+  echo "- Repository: Unknown (git not available)"
+fi
+echo "- Branch: ${current_branch:-Unknown}"
 echo "- Structure: ${MONITOR_DIRS[*]}"
 echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
 echo "- Package checking: $([ "$CHECK_PACKAGES" == true ] && echo "Enabled" || echo "Disabled")"
