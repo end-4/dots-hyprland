@@ -95,17 +95,20 @@ Item {
                 }
 
                 ButtonGroup {
-                    QuickToggleButton {
-                        visible: quickPanelStyle === "material"
-                        toggled: GlobalStates.quickTogglesEditMode
-                        buttonIcon: "edit"
-                        onClicked: {
-                            GlobalStates.quickTogglesEditMode = !GlobalStates.quickTogglesEditMode;
-                        }
-                        StyledToolTip {
-                            text: GlobalStates.quickTogglesEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
+                    Loader {
+                        active: Config.options.quickToggles.style === "material"
+                        sourceComponent: QuickToggleButton {
+                            toggled: GlobalStates.quickTogglesEditMode
+                            buttonIcon: "edit"
+                            onClicked: {
+                                GlobalStates.quickTogglesEditMode = !GlobalStates.quickTogglesEditMode;
+                            }
+                            StyledToolTip {
+                                text: GlobalStates.quickTogglesEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
+                            }
                         }
                     }
+                    
                     QuickToggleButton {
                         toggled: false
                         buttonIcon: "restart_alt"
