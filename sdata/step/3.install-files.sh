@@ -3,33 +3,57 @@
 
 # TODO: https://github.com/end-4/dots-hyprland/issues/2137
 
-# TODO: make function backup_configs only cover the possibly overwritten ones.
-function backup_configs(){
-  local backup_dir="$BACKUP_DIR"
-  mkdir -p "$backup_dir"
-  echo "Backing up $XDG_CONFIG_HOME to $backup_dir/config_backup"
-  rsync -av --progress "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
-  
-  echo "Backing up $HOME/.local to $backup_dir/local_backup"
-  declare -a arg_excludes=()
-  arg_excludes+=(--exclude "$HOME/.local/share/Steam")
-  arg_excludes+=(--exclude "$HOME/.local/share/steam")
-  rsync -av --progress "${arg_excludes[@]}" "$HOME/.local/" "$backup_dir/local_backup/"
-  declare -a arg_excludes=()
-}
-
 function warning_rsync(){
   printf "${STY_YELLOW}"
   printf "The commands using rsync will overwrite the destination when it exists already.\n"
   printf "${STY_RESET}"
 }
 
+function backup_clashing_dirs(){
+  # For folders/files under target_dir, only backup those which clashes with the ones under source_dir
+  local source_dir="$1"
+  local target_dir="$2"
+  local backup_dir="$3"
+  x mkdir -p $backup_dir
+
+  local source_list=($(ls -A "$source_dir"))
+  local target_list=($(ls -A "$target_dir"))
+
+  local clash_list=()
+  declare -A target_map
+  for i in "${target_list[@]}"; do
+    target_map["$i"]=1
+  done
+  for i in "${source_list[@]}"; do
+    if [[ -n "${target_map[$i]}" ]]; then
+      clash_list+=("$i")
+    fi
+  done
+
+  for i in "${clash_list[@]}"; do
+    current_target=$target_dir/$i
+    if [[ -d $current_target ]]; do
+      args_includes+=(--include="$current_target/")
+      args_includes+=(--include="$current_target/**")
+    else
+      args_includes+=(--include="$current_target")
+    fi
+  done
+  args_includes+=(--exclude="*")
+
+  x rsync -av --progress "${arg_includes[@]}" "$target_dir/" "$backup_dir/"
+}
+
 function ask_backup_configs(){
   printf "${STY_RED}"
-  printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
-  read -p " " backup_confirm
+  printf "Would you like to backup clashing dirs under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
+  read -p "[y/N] " backup_confirm
   case $backup_confirm in
-    [yY][eE][sS]|[yY]) backup_configs ;;
+    [yY][eE][sS]|[yY]) 
+      showfun backup_clashing_dirs
+      v backup_clashing_dirs dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+      v backup_clashing_dirs dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+      ;;
     *) echo "Skipping backup..." ;;
   esac
   printf "${STY_RESET}"
