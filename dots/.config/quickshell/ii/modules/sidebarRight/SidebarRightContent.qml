@@ -40,7 +40,7 @@ Item {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
                 root.showBluetoothDialog = false;
-                GlobalStates.quickTogglesEditMode = false;
+                Config.options.quickToggles.material.inEditMode = false;
             }
         }
     }
@@ -98,13 +98,13 @@ Item {
                     Loader {
                         active: Config.options.quickToggles.style === "material"
                         sourceComponent: QuickToggleButton {
-                            toggled: GlobalStates.quickTogglesEditMode
+                            toggled: Config.options.quickToggles.material.inEditMode
                             buttonIcon: "edit"
                             onClicked: {
-                                GlobalStates.quickTogglesEditMode = !GlobalStates.quickTogglesEditMode;
+                                Config.options.quickToggles.material.inEditMode = !Config.options.quickToggles.material.inEditMode;
                             }
                             StyledToolTip {
-                                text: GlobalStates.quickTogglesEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
+                                text: Config.options.quickToggles.material.inEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
                             }
                         }
                     }

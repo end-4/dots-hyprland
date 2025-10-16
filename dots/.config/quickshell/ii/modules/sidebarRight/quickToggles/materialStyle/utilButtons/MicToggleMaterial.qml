@@ -15,7 +15,7 @@ MaterialQuickToggleButton {
     titleText: "Toggle Mic"
     descText: toggled? "Mic On" : "Mic Off"
     onClicked: {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
     }
     StyledToolTip {

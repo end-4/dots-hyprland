@@ -13,7 +13,7 @@ MaterialQuickToggleButton {
     titleText: "Keyboard"
     descText: toggled ? "On" : "Off"
     onClicked: {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         onClicked: GlobalStates.oskOpen = !GlobalStates.oskOpen
     }

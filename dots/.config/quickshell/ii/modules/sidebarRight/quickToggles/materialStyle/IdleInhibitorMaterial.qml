@@ -11,7 +11,7 @@ MaterialQuickToggleButton {
     titleText: "Idle Inhibitor"
     descText: toggled ? "On" : "Off"
     onClicked: {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         Idle.toggleInhibit()
     }
     StyledToolTip {

@@ -45,20 +45,20 @@ GroupButton {
 
     // There is probably better ways of changing these, but i think these makes sense
     onClicked: event => {
-        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
     }
     rightReleaseAction: function() {
-        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, +1)
     }
     clickAndHold: function() {
-        if (!GlobalStates.quickTogglesEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
         
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
     middleReleaseAction: function() {
-        if (!GlobalStates.quickTogglesEditMode) return
+        if (!Config.options.quickToggles.material.inEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
         else QuickTogglesUtils.addOption(unusedName)
     }

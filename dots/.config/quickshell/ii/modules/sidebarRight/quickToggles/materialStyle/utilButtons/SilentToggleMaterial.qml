@@ -13,7 +13,7 @@ MaterialQuickToggleButton {
     titleText: "Do Not Disturb"
     descText: toggled ? "Silent" : "Noisy" 
     onClicked: {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         Notifications.silent = !Notifications.silent;
     }
     StyledToolTip {

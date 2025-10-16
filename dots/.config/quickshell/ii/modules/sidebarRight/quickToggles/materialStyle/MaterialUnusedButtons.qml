@@ -7,13 +7,13 @@ import qs.modules.common.widgets
 Item {
     visible: implicitHeight > 0
     anchors.horizontalCenter: parent.horizontalCenter
-    implicitHeight: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitHeight : 0
-    implicitWidth: GlobalStates.quickTogglesEditMode ? unusedButtonsLoader.item.implicitWidth : 0
+    implicitHeight: Config.options.quickToggles.material.inEditMode ? unusedButtonsLoader.item.implicitHeight : 0
+    implicitWidth: Config.options.quickToggles.material.inEditMode ? unusedButtonsLoader.item.implicitWidth : 0
     Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
     
     Loader {
         id: unusedButtonsLoader
-        active: GlobalStates.quickTogglesEditMode
+        active: Config.options.quickToggles.material.inEditMode
         
         sourceComponent: Rectangle{ 
             property int padding: 10
@@ -33,7 +33,7 @@ Item {
                         id: outline
                         implicitHeight: 1
                         Layout.fillWidth: true
-                        implicitWidth: GlobalStates.quickTogglesEditMode ? 100 : 0
+                        implicitWidth: Config.options.quickToggles.material.inEditMode ? 100 : 0
                         Behavior on implicitWidth { animation: Appearance.animation.elementResize.numberAnimation.createObject(this) }
                         color: Appearance.colors.colOutlineVariant
                     }

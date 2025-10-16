@@ -14,12 +14,12 @@ MaterialQuickToggleButton {
     titleText: "Night Light"
     descText: toggled ? Config.options.light.night.automatic ? "Automatic" : "On" : "Off"
     onClicked: {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         Hyprsunset.toggle()
     }
 
     altAction: () => {
-        if (GlobalStates.quickTogglesEditMode) return;
+        if (Config.options.quickToggles.material.inEditMode) return;
         Config.options.light.night.automatic = !Config.options.light.night.automatic
     }
 
