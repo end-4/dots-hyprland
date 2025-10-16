@@ -23,7 +23,7 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
   pause
   source ./sdist/${TARGET_ID}/install-setups.sh
 
@@ -35,7 +35,7 @@ elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
   printf "\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
   pause
   source ./sdist/${TARGET_ID}/install-setups.sh
 
@@ -48,12 +48,12 @@ elif [[ -f "./sdist/${OS_DISTRO_ID}/install-setups.sh" ]]; then
   printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
   printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
-  printf "${STY_BG_PURPLE}"
-  printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RESET}\n"
+  printf "${STY_INVERT}"
+  printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RST}\n"
   printf "${STY_PURPLE}"
   printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
   pause
   source ./sdist/${TARGET_ID}/install-setups.sh
 
@@ -69,7 +69,7 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
   printf "Still, there is a chance that it not works as expected or even fails.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
   pause
   source ./sdist/${TARGET_ID}/install-setups.sh
 
@@ -85,7 +85,7 @@ else
   printf "It might fail or disrupt your system.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
   pause
   source ./sdist/${TARGET_ID}/install-setups.sh
 

@@ -27,7 +27,7 @@ elif [[ ! -z $(openrc --version) ]]; then
 else
 	printf "${STY_RED}"
 	printf "====================INIT SYSTEM NOT FOUND====================\n"
-	printf "${STY_RESET}"
+	printf "${STY_RST}"
 	pause
 fi
 

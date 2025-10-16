@@ -8,28 +8,28 @@
 function try { "$@" || sleep 0; }
 function v(){
   echo -e "####################################################"
-  echo -e "${STY_BLUE}[$0]: Next command:${STY_RESET}"
-  echo -e "${STY_GREEN}$@${STY_RESET}"
+  echo -e "${STY_BLUE}[$0]: Next command:${STY_RST}"
+  echo -e "${STY_GREEN}$@${STY_RST}"
   local execute=true
   if $ask;then
     while true;do
-      echo -e "${STY_BLUE}Execute? ${STY_RESET}"
+      echo -e "${STY_BLUE}Execute? ${STY_RST}"
       echo "  y = Yes"
       echo "  e = Exit now"
       echo "  s = Skip this command (NOT recommended - your setup might not work correctly)"
       echo "  yesforall = Yes and don't ask again; NOT recommended unless you really sure"
       local p; read -p "====> " p
       case $p in
-        [yY]) echo -e "${STY_BLUE}OK, executing...${STY_RESET}" ;break ;;
-        [eE]) echo -e "${STY_BLUE}Exiting...${STY_RESET}" ;exit ;break ;;
-        [sS]) echo -e "${STY_BLUE}Alright, skipping this one...${STY_RESET}" ;execute=false ;break ;;
-        "yesforall") echo -e "${STY_BLUE}Alright, won't ask again. Executing...${STY_RESET}"; ask=false ;break ;;
-        *) echo -e "${STY_RED}Please enter [y/e/s/yesforall].${STY_RESET}";;
+        [yY]) echo -e "${STY_BLUE}OK, executing...${STY_RST}" ;break ;;
+        [eE]) echo -e "${STY_BLUE}Exiting...${STY_RST}" ;exit ;break ;;
+        [sS]) echo -e "${STY_BLUE}Alright, skipping this one...${STY_RST}" ;execute=false ;break ;;
+        "yesforall") echo -e "${STY_BLUE}Alright, won't ask again. Executing...${STY_RST}"; ask=false ;break ;;
+        *) echo -e "${STY_RED}Please enter [y/e/s/yesforall].${STY_RST}";;
       esac
     done
   fi
   if $execute;then x "$@";else
-    echo -e "${STY_YELLOW}[$0]: Skipped \"$@\"${STY_RESET}"
+    echo -e "${STY_YELLOW}[$0]: Skipped \"$@\"${STY_RST}"
   fi
 }
 # When use v() for a defined function, use x() INSIDE its definition to catch errors.
@@ -38,36 +38,36 @@ function x(){
   while [ $cmdstatus == 1 ] ;do
     echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed."
     echo -e "You may need to resolve the problem manually BEFORE repeating this command."
-    echo -e "[Tip] If a certain package is failing to install, try installing it separately in another terminal.${STY_RESET}"
+    echo -e "[Tip] If a certain package is failing to install, try installing it separately in another terminal.${STY_RST}"
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
     echo "  i = Ignore this error and continue (your setup might not work correctly)"
     local p; read -p " [R/e/i]: " p
     case $p in
-      [iI]) echo -e "${STY_BLUE}Alright, ignore and continue...${STY_RESET}";cmdstatus=2;;
-      [eE]) echo -e "${STY_BLUE}Alright, will exit.${STY_RESET}";break;;
-      *) echo -e "${STY_BLUE}OK, repeating...${STY_RESET}"
+      [iI]) echo -e "${STY_BLUE}Alright, ignore and continue...${STY_RST}";cmdstatus=2;;
+      [eE]) echo -e "${STY_BLUE}Alright, will exit.${STY_RST}";break;;
+      *) echo -e "${STY_BLUE}OK, repeating...${STY_RST}"
          if "$@";then cmdstatus=0;else cmdstatus=1;fi
          ;;
     esac
   done
   case $cmdstatus in
-    0) echo -e "${STY_BLUE}[$0]: Command \"${STY_GREEN}$@${STY_BLUE}\" finished.${STY_RESET}";;
-    1) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed. Exiting...${STY_RESET}";exit 1;;
-    2) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed but ignored by user.${STY_RESET}";;
+    0) echo -e "${STY_BLUE}[$0]: Command \"${STY_GREEN}$@${STY_BLUE}\" finished.${STY_RST}";;
+    1) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed. Exiting...${STY_RST}";exit 1;;
+    2) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed but ignored by user.${STY_RST}";;
   esac
 }
 function showfun(){
-  echo -e "${STY_BLUE}[$0]: The definition of function \"$1\" is as follows:${STY_RESET}"
+  echo -e "${STY_BLUE}[$0]: The definition of function \"$1\" is as follows:${STY_RST}"
   printf "${STY_GREEN}"
   type -a $1
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
 }
 function pause(){
   if [ ! "$ask" == "false" ];then
     printf "${STY_FAINT}${STY_SLANT}"
     local p; read -p "(Ctrl-C to abort, others to proceed)" p
-    printf "${STY_RESET}"
+    printf "${STY_RST}"
   fi
 }
 function remove_bashcomments_emptylines(){
@@ -76,7 +76,7 @@ function remove_bashcomments_emptylines(){
 }
 function prevent_sudo_or_root(){
   case $(whoami) in
-    root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RESET}";exit 1;;
+    root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RST}";exit 1;;
   esac
 }
 function git_auto_unshallow(){

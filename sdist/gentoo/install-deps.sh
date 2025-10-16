@@ -7,20 +7,20 @@ printf "GCC-15>= is required for Hyprland\n"
 printf "If you have GCC-15>= and it's currently set then you can safely ignore this\n"
 printf "If not, you must ensure you are using the correct GCC version and set it (gcc-config <number>)\n"
 printf "It is heavily recommended to re-emerge @world with an empty tree after changing GCC version (emerge -e @world)\n\n"
-printf "${STY_RESET}"
+printf "${STY_RST}"
 pause
 
 printf "${STY_YELLOW}"
 printf "============WARNING/NOTE (2)============\n"
 printf "Ensure you have a global use flag for elogind or systemd in your make.conf for simplicity\n"
 printf "Or you can manually add the use flags for each package that requires it\n"
-printf "${STY_RESET}"
+printf "${STY_RST}"
 pause
 
 printf "${STY_YELLOW}"
 printf "https://github.com/end-4/dots-hyprland/blob/main/sdist/gentoo/README.md"
 printf "Checkout the above README for potential bug fixes or additional information"
-printf "${STY_RESET}"
+printf "${STY_RST}"
 pause
 
 x sudo emerge --noreplace --quiet app-eselect/eselect-repository

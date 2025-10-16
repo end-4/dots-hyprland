@@ -6,20 +6,21 @@
 function warning_rsync(){
   printf "${STY_YELLOW}"
   printf "The commands using rsync will overwrite the destination when it exists already.\n"
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
 }
 
 function backup_clashing_targets(){
   # For dirs/files under target_dir, only backup those which clashes with the ones under source_dir
+
+  # Deal with arguments
   local source_dir="$1"
   local target_dir="$2"
   local backup_dir="$3"
-  x mkdir -p $backup_dir
 
+  # Find clash dirs/files, save as clash_list
+  local clash_list=()
   local source_list=($(ls -A "$source_dir"))
   local target_list=($(ls -A "$target_dir"))
-
-  local clash_list=()
   declare -A target_map
   for i in "${target_list[@]}"; do
     target_map["$i"]=1
@@ -30,6 +31,7 @@ function backup_clashing_targets(){
     fi
   done
 
+  # Construct args_includes for rsync
   for i in "${clash_list[@]}"; do
     current_target=$target_dir/$i
     if [[ -d $current_target ]]; then
@@ -41,6 +43,7 @@ function backup_clashing_targets(){
   done
   args_includes+=(--exclude="*")
 
+  x mkdir -p $backup_dir
   x rsync -av --progress "${arg_includes[@]}" "$target_dir/" "$backup_dir/"
 }
 
@@ -56,7 +59,7 @@ function ask_backup_configs(){
       ;;
     *) echo "Skipping backup..." ;;
   esac
-  printf "${STY_RESET}"
+  printf "${STY_RST}"
 }
 
 #####################################################################################
@@ -112,40 +115,40 @@ case $SKIP_HYPRLAND in
     warning_rsync; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
       v mv $t $t.old
       v cp -f dots/.config/hypr/hyprland.conf $t
       existed_hypr_conf_firstrun=y
     else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       v cp dots/.config/hypr/hyprland.conf $t
       existed_hypr_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
       v cp -f dots/.config/hypr/hypridle.conf $t.new
       existed_hypridle_conf=y
     else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       v cp dots/.config/hypr/hypridle.conf $t
       existed_hypridle_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
     if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
       v cp -f dots/.config/hypr/hyprlock.conf $t.new
       existed_hyprlock_conf=y
     else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       v cp dots/.config/hypr/hyprlock.conf $t
       existed_hyprlock_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/custom"
     if [ -d $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RESET}"
+      echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RST}"
     else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RESET}"
+      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       warning_rsync; v rsync -av --delete dots/.config/hypr/custom/ $t/
     fi
     ;;
@@ -187,39 +190,39 @@ done
 printf "\n"
 printf "\n"
 printf "\n"
-printf "${STY_CYAN}[$0]: Finished${STY_RESET}\n"
+printf "${STY_CYAN}[$0]: Finished${STY_RST}\n"
 printf "\n"
-printf "${STY_CYAN}When starting Hyprland from your display manager (login screen) ${STY_RED} DO NOT SELECT UWSM ${STY_RESET}\n"
+printf "${STY_CYAN}When starting Hyprland from your display manager (login screen) ${STY_RED} DO NOT SELECT UWSM ${STY_RST}\n"
 printf "\n"
-printf "${STY_CYAN}If you are already running Hyprland,${STY_RESET}\n"
-printf "${STY_CYAN}Press ${STY_BG_CYAN} Ctrl+Super+T ${STY_BG_CYAN} to select a wallpaper${STY_RESET}\n"
-printf "${STY_CYAN}Press ${STY_BG_CYAN} Super+/ ${STY_CYAN} for a list of keybinds${STY_RESET}\n"
+printf "${STY_CYAN}If you are already running Hyprland,${STY_RST}\n"
+printf "${STY_CYAN}Press ${STY_INVERT} Ctrl+Super+T ${STY_RST}${STY_CYAN} to select a wallpaper${STY_RST}\n"
+printf "${STY_CYAN}Press ${STY_INVERT} Super+/ ${STY_RST}${STY_CYAN} for a list of keybinds${STY_RST}\n"
 printf "\n"
-printf "${STY_CYAN}For suggestions/hints after installation:${STY_RESET}\n"
-printf "${STY_CYAN}${STY_UNDERLINE} https://ii.clsty.link/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
+printf "${STY_CYAN}For suggestions/hints after installation:${STY_RST}\n"
+printf "${STY_CYAN}${STY_UNDERLINE} https://ii.clsty.link/en/ii-qs/01setup/#post-installation ${STY_RST}\n"
 printf "\n"
 
 case $existed_hypr_conf_firstrun in
-  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. ${STY_RESET}\n"
-     printf "${STY_YELLOW}As it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".${STY_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. ${STY_RST}\n"
+     printf "${STY_YELLOW}As it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".${STY_RST}\n"
 ;;esac
 case $existed_hypr_conf in
-  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
-     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.${STY_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. ${STY_RST}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.${STY_RST}\n"
 ;;esac
 case $existed_hypridle_conf in
-  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
-     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hypridle.conf.new\" as a reference for a proper format.${STY_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. ${STY_RST}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hypridle.conf.new\" as a reference for a proper format.${STY_RST}\n"
 ;;esac
 case $existed_hyprlock_conf in
-  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprlock.conf\" already existed before and we didn't overwrite it. ${STY_RESET}\n"
-     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprlock.conf.new\" as a reference for a proper format.${STY_RESET}\n"
+  y) printf "\n${STY_YELLOW}[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprlock.conf\" already existed before and we didn't overwrite it. ${STY_RST}\n"
+     printf "${STY_YELLOW}Please use \"$XDG_CONFIG_HOME/hypr/hyprlock.conf.new\" as a reference for a proper format.${STY_RST}\n"
 ;;esac
 
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
-  printf "\n${STY_RED}[$0]: \!! Important \!! : Please ensure environment variable ${STY_RESET} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${STY_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${STY_RESET}\n"
+  printf "\n${STY_RED}[$0]: \!! Important \!! : Please ensure environment variable ${STY_RST} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${STY_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${STY_RST}\n"
 fi
 
 if [[ ! -z "${warn_files[@]}" ]]; then
-  printf "\n${STY_RED}[$0]: \!! Important \!! : Please delete ${STY_RESET} ${warn_files[*]} ${STY_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${STY_RESET}\n"
+  printf "\n${STY_RED}[$0]: \!! Important \!! : Please delete ${STY_RST} ${warn_files[*]} ${STY_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${STY_RST}\n"
 fi

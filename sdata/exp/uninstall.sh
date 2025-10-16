@@ -11,7 +11,7 @@ read -r
 ##############################################################################################################################
 
 # Undo Step 3: Removing copied config and local folders
-printf "${STY_CYAN}Removing copied config and local folders...\n${STY_RESET}"
+printf "${STY_CYAN}Removing copied config and local folders...\n${STY_RST}"
 
 dirs=(
 Kvantum/
@@ -60,7 +60,7 @@ v sudo rm -rf "$XDG_STATE_HOME/quickshell"
 ##############################################################################################################################
 
 # Undo Step 1: Remove added user from video, i2c, and input groups and remove yay packages
-printf "${STY_CYAN}Removing user from video, i2c, and input groups and removing packages...\n${STY_RESET}"
+printf "${STY_CYAN}Removing user from video, i2c, and input groups and removing packages...\n${STY_RST}"
 user=$(whoami)
 v sudo gpasswd -d "$user" video
 v sudo gpasswd -d "$user" i2c
@@ -74,5 +74,5 @@ Ctrl+C to exit, or press Enter to proceed" p
 # Removing installed yay packages and dependencies
 v yay -Rns illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,screencapture,toolkit,widgets} plasma-browser-integration
 
-printf "${STY_CYAN}Uninstall Complete.\n${STY_RESET}"
-printf "${STY_CYAN}Hint: If you had agreed to backup when you ran \"install.sh\", you should be able to find it under \"$BACKUP_DIR\".\n${STY_RESET}"
+printf "${STY_CYAN}Uninstall Complete.\n${STY_RST}"
+printf "${STY_CYAN}Hint: If you had agreed to backup when you ran \"install.sh\", you should be able to find it under \"$BACKUP_DIR\".\n${STY_RST}"
