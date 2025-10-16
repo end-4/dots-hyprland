@@ -75,3 +75,4 @@ Ctrl+C to exit, or press Enter to proceed" p
 v yay -Rns illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,screencapture,toolkit,widgets} plasma-browser-integration
 
 printf "${STY_CYAN}Uninstall Complete.\n${STY_RESET}"
+printf "${STY_CYAN}Hint: If you had agreed to backup when you ran \"install.sh\", you should be able to find it under \"$BACKUP_DIR\".\n${STY_RESET}"
