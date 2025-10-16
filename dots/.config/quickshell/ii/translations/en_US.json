@@ -507,5 +507,9 @@
   "Select language": "Select language",
   "Generate translation with Gemini": "Generate translation with Gemini",
   "Generating...\nDon't close this window!": "Generating...\nDon't close this window!",
-  "Generate\nTypically takes 2 minutes": "Generate\nTypically takes 2 minutes"
+  "Generate\nTypically takes 2 minutes": "Generate\nTypically takes 2 minutes",
+  "Use system file picker": "Use system file picker",
+  "Wallpaper selector": "Wallpaper selector",
+  "but force at absolute corner": "but force at absolute corner",
+  "When the previous option is off and this is on,\nyou can still hover the corner's end to open sidebar,\nand the remaining area can be used for volume/brightness scroll": "When the previous option is off and this is on,\nyou can still hover the corner's end to open sidebar,\nand the remaining area can be used for volume/brightness scroll"
 }

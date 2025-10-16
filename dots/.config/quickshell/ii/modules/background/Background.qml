@@ -271,12 +271,12 @@ Variants {
                     leftMargin: {
                         const clockXOnWallpaper = bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
                         const extraMove = (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (root.clockParallaxFactor - 1);
-                        return clockXOnWallpaper + extraMove;
+                        return clockXOnWallpaper - extraMove;
                     }
                     topMargin: {
                         const clockYOnWallpaper = bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
                         const extraMove = (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (root.clockParallaxFactor - 1);
-                        return clockYOnWallpaper + extraMove;
+                        return clockYOnWallpaper - extraMove;
                     }
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
