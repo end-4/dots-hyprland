@@ -416,17 +416,17 @@ ContentPage {
                         {
                             displayName: Translation.tr("Compact"),
                             icon: "tile_small",
-                            value: "compact"
+                            value: 0
                         },
                         {
                             displayName: Translation.tr("Medium"),
                             icon: "tile_medium",
-                            value: "medium"
+                            value: 1
                         },
                         {
                             displayName: Translation.tr("Large"),
                             icon: "tile_large",
-                            value: "large"
+                            value: 2
                         }
                     ]
                 }

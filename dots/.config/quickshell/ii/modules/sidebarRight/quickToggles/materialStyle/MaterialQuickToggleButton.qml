@@ -17,8 +17,8 @@ GroupButton {
     buttonRadiusPressed: buttonToggledRadius
 
     readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
-    readonly property real titleTextSize: panelType === "compact" ? 14 : 16
-    readonly property real descTextSize: panelType === "compact" ? 13 : 14
+    readonly property real titleTextSize: panelType == 0 ? 14 : 16
+    readonly property real descTextSize: panelType == 0 ? 13 : 14
 
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
     property string panelType: Config.options.quickToggles.material.mode
@@ -31,8 +31,8 @@ GroupButton {
     property string unusedName: ""
     
     property int unusedButtonSize: 48
-    property int baseSize: panelType === "compact" ? 50 : panelType === "medium" ? 57 : 65
-    property real widthMultiplier: panelType === "compact" ? 1.55 : panelType === "medium" ? 1.7 : 1.5
+    property int baseSize: panelType == 0 ? 50 : panelType == 1 ? 57 : 65
+    property real widthMultiplier: panelType == 0 ? 1.55 : panelType == 1 ? 1.7 : 1.5
     property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
     baseWidth: unusedName === "" ? calculatedWidth : unusedButtonSize * 1.6
     baseHeight: unusedName === "" ? baseSize : unusedButtonSize
@@ -108,7 +108,7 @@ GroupButton {
         active: buttonSize === 2
         sourceComponent: Item {
             anchors.left: parent.left
-            anchors.leftMargin: panelType === "compact" ? 50 : 60
+            anchors.leftMargin: panelType === 0 ? 50 : 60
             anchors.verticalCenter: parent.verticalCenter
             height: baseSize
             width: baseSize * 3 - baseSize

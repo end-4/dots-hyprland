@@ -18,7 +18,6 @@ Rectangle {
         spacing: 10
         id: mainColumn
         anchors.horizontalCenter: parent.horizontalCenter
-
         Repeater {
             model: root.rowModels
             delegate: ColumnLayout { 
@@ -28,10 +27,10 @@ Rectangle {
                     if (alignment === "right") Layout.alignment = Qt.AlignRight
                     if (alignment === "center") Layout.alignment = Qt.AlignCenter
                 }
-                
-                
                 ButtonGroup {
                     id: grid
+                    
+                    
                     
                     Repeater {
                         model: modelData
