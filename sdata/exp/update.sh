@@ -500,7 +500,7 @@ build_packages() {
   fi
 
   for pkg_name in "${packages_to_build[@]}"; do
-    local pkg_dir="${ARCH_PACKAGES_DIR}/${pkg_name}"
+    pkg_dir="${ARCH_PACKAGES_DIR}/${pkg_name}"
 
     if [[ ! -d "$pkg_dir" || ! -f "${pkg_dir}/PKGBUILD" ]]; then
       log_error "Package not found or missing PKGBUILD: $pkg_name"
@@ -674,10 +674,14 @@ if detected_dirs=$(detect_repo_structure); then
   read -ra MONITOR_DIRS <<<"$detected_dirs"
   log_success "Detected repository structure:"
   for dir in "${MONITOR_DIRS[@]}"; do
-    log_info "  - ${REPO_DIR}/${dir}"
+    if [[ -d "${REPO_DIR}/${dir}" ]]; then
+      log_info "  ✓ ${REPO_DIR}/${dir}"
+    else
+      log_warning "  ✗ ${REPO_DIR}/${dir} (not found, will skip)"
+    fi
   done
 else
-  die "Failed to detect repository structure"
+  die "Failed to detect repository structure. Make sure you're in the correct directory."
 fi
 
 # Step 1: Pull latest commits
@@ -737,12 +741,12 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
   log_header "Package Management"
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No sdist/arch directory found. Skipping package management."
+    log_warning "No packages directory found (tried: dist-arch, arch-packages, sdist/arch). Skipping package management."
   else
     changed_pkgbuilds=()
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
       if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
-        local pkg_name=$(basename "$pkg_dir")
+        pkg_name=$(basename "$pkg_dir")
         if check_pkgbuild_changed "$pkg_dir"; then
           changed_pkgbuilds+=("$pkg_name")
         fi
@@ -844,6 +848,13 @@ if [[ "$process_files" == true ]]; then
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
     
+    if [[ ! -d "$repo_dir_path" ]]; then
+      if [[ "$VERBOSE" == true ]]; then
+        log_warning "Skipping non-existent directory: $repo_dir_path"
+      fi
+      continue
+    fi
+    
     # Calculate the target home directory properly
     if [[ "$dir_name" == dots/* ]]; then
       # Strip "dots/" prefix for home directory
@@ -852,11 +863,6 @@ if [[ "$process_files" == true ]]; then
     else
       # Direct structure
       home_dir_path="${HOME}/${dir_name}"
-    fi
-
-    if [[ ! -d "$repo_dir_path" ]]; then
-      log_warning "Repository directory not found: $repo_dir_path"
-      continue
     fi
 
     log_info "Processing directory: $dir_name → ${home_dir_path}"
@@ -879,12 +885,21 @@ if [[ "$process_files" == true ]]; then
       if [[ -f "$home_file" ]]; then
         if ! cmp -s "$repo_file" "$home_file"; then
           log_info "Found difference in: $rel_path"
-          handle_file_conflict "$repo_file" "$home_file"
-          ((files_updated++))
+          if [[ "$DRY_RUN" == true ]]; then
+            log_warning "[DRY-RUN] Conflict detected (would prompt): $home_file"
+            ((files_updated++))
+          else
+            handle_file_conflict "$repo_file" "$home_file"
+            ((files_updated++))
+          fi
         fi
       else
-        cp -p "$repo_file" "$home_file"
-        log_success "Created new file: $home_file"
+        if [[ "$DRY_RUN" == true ]]; then
+          log_info "[DRY-RUN] Would create new file: $home_file"
+        else
+          cp -p "$repo_file" "$home_file"
+          log_success "Created new file: $home_file"
+        fi
         ((files_created++))
       fi
     done < <(get_changed_files "$repo_dir_path")
@@ -908,7 +923,12 @@ if [[ -d "${HOME}/.local/bin" ]]; then
 fi
 
 log_header "Update Complete"
-log_success "Dotfiles update completed successfully!"
+if [[ "$DRY_RUN" == true ]]; then
+  log_warning "DRY-RUN MODE: No changes were actually made"
+  log_info "Run without -n/--dry-run to apply changes"
+else
+  log_success "Dotfiles update completed successfully!"
+fi
 
 echo
 echo -e "${CYAN}Summary:${NC}"
