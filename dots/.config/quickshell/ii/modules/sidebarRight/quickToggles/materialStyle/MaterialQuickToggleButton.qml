@@ -119,10 +119,7 @@ GroupButton {
                 color: button.colText
                 font {
                     family: Appearance.font.family.title
-                    pixelSize: {
-                        if (root.down) titleTextSize * 0.85
-                        else titleTextSize
-                    }
+                    pixelSize: titleTextSize
                     weight: 500
                 }
                 Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
@@ -135,10 +132,7 @@ GroupButton {
                 color: button.colText
                 font {
                     family: Appearance.font.family.main
-                    pixelSize: {
-                        if (root.down) descTextSize * 0.85
-                        else descTextSize
-                    }
+                    pixelSize: descTextSize
                     weight: 250
                 }
                 Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
