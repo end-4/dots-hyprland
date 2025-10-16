@@ -147,8 +147,8 @@ Item {
             Item {
                 id: quickPanelItem
                 
-                implicitHeight: quickPanelStyle === "material" ? materialQTLoader.item.heightSize : classicQTLoader.item.heightSize
-                implicitWidth: parent.width
+                implicitHeight: quickPanelStyle === "material" ? materialQTLoader.implicitHeight : classicQTLoader.implicitHeight
+                width: parent.width
                 Loader { 
                     id: materialQTLoader
                     active: quickPanelStyle === "material"
