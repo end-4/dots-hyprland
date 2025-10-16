@@ -14,7 +14,7 @@ MaterialQuickToggleButton {
     buttonSize: 2
     toggled: BluetoothStatus.connected
     halfToggled: BluetoothStatus.enabled
-    titleText: "Bluethoot"
+    titleText: "Bluetooth"
     descText: toggled ? BluetoothStatus.firstActiveDevice.name : halfToggled ? "Not Connected" : "Off"
     buttonIcon: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
     onClicked: {
