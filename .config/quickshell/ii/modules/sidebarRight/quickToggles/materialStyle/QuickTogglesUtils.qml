@@ -145,7 +145,7 @@ Singleton {
     */
     Component {
         id: networkComp
-        MaterialNetworkToggle {
+        NetworkToggleMaterial {
             altAction: () => {
                 if (GlobalStates.quickTogglesEditMode) return
                 Network.enableWifi();
@@ -156,7 +156,7 @@ Singleton {
     }
     Component {
         id: bluetoothComp
-        MaterialBluetoothToggle {
+        BluetoothToggleMaterial {
             altAction: () => {
                 if (GlobalStates.quickTogglesEditMode) return
                 Bluetooth.defaultAdapter.enabled = true;
@@ -167,50 +167,50 @@ Singleton {
     }
     Component {
         id: warpComp
-        MaterialCloudflareWarp {}
+        CloudflareWarpMaterial {}
     }
     Component {
         id: easyEffectsComp
-        MaterialEasyEffects {}
+        EasyEffectsMaterial {}
     }
     Component {
         id: gameModeComp
-        MaterialGameMode {}
+        GameModeMaterial {}
     }
     Component {
         id: idleComp
-        MaterialIdleInhibitor {}
+        IdleInhibitorMaterial {}
     }
     Component {
         id: nightLightComp
-        MaterialNightLight {}
+        NightLightMaterial {}
     }
     Component {
         id: screenSnipComp
-        MaterialScreenSnip {}
+        ScreenSnipMaterial {}
     }
     Component {
         id: colorPickerComp
-        MaterialColorPicker {}
+        ColorPickerMaterial {}
     }
     Component {
         id: keyboardComp
-        MaterialKeyboard {}
+        KeyboardToggleMaterial {}
     }
     Component {
         id: micComp
-        MaterialMic {}
+        MicToggleMaterial {}
     }
     Component {
         id: darkModeComp
-        MaterialDarkMode {}
+        DarkModeMaterial {}
     }
     Component {
         id: performanceProfileComp
-        MaterialPerformanceProfile {}
+        PerformanceProfileMaterial {}
     }
     Component {
         id: silentComp
-        MaterialSilentToggle {}
+        SilentToggleMaterial {}
     }
 }

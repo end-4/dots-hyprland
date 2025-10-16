@@ -4,8 +4,6 @@ import qs
 import qs.modules.common
 import qs.modules.common.widgets
 
-import "./materialStyle"
-
 Item {
     visible: implicitHeight > 0
     anchors.horizontalCenter: parent.horizontalCenter
@@ -36,7 +34,7 @@ Item {
                         implicitHeight: 1
                         Layout.fillWidth: true
                         implicitWidth: GlobalStates.quickTogglesEditMode ? 100 : 0
-                        Behavior on implicitWidth { animation: Appearance.animation.elemetResize.numberAnimation.createObject(this) }
+                        Behavior on implicitWidth { animation: Appearance.animation.elementResize.numberAnimation.createObject(this) }
                         color: Appearance.colors.colOutlineVariant
                     }
                 }
