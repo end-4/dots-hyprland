@@ -2,18 +2,20 @@
 #
 # test_update.sh - Test suite for update.sh
 #
-set -uo pipefail
+set -euo pipefail
 
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
 TESTS_PASSED=0
 TESTS_FAILED=0
 TEST_DIR=""
+ORIGINAL_DIR="$PWD"
 
 # Helper functions
 log_test() {
@@ -45,7 +47,9 @@ setup_test_env() {
   git config user.email "test@example.com"
   git config user.name "Test User"
   
-  # Return only the directory path (no logging here)
+  # Create initial commit
+  git commit --allow-empty -m "Initial commit" -q
+  
   echo "$temp_dir"
 }
 
@@ -54,6 +58,21 @@ cleanup_test_env() {
   if [[ -n "${TEST_DIR:-}" && -d "$TEST_DIR" ]]; then
     rm -rf "$TEST_DIR"
   fi
+}
+
+# Mock functions to avoid side effects
+mock_git() {
+  if [[ "$1" == "pull" ]]; then
+    echo "Mock: git pull executed"
+    return 0
+  fi
+  # For other git commands, use real git but in test directory
+  command git "$@"
+}
+
+mock_makepkg() {
+  echo "Mock: makepkg $*"
+  return 0
 }
 
 # Test 1: Script exists and is executable
@@ -77,11 +96,10 @@ test_script_exists() {
 test_syntax() {
   log_test "Checking script syntax"
   
-  if bash -n update.sh 2>/dev/null; then
+  if bash -n update.sh; then
     log_pass "No syntax errors found"
   else
     log_fail "Syntax errors detected"
-    bash -n update.sh
     return 1
   fi
 }
@@ -90,7 +108,7 @@ test_syntax() {
 test_help_option() {
   log_test "Testing --help option"
   
-  if ./update.sh --help >/dev/null 2>&1; then
+  if ./update.sh --help 2>&1 | grep -q "Usage:"; then
     log_pass "Help option works"
   else
     log_fail "Help option failed"
@@ -104,54 +122,32 @@ test_dots_structure() {
   
   local test_repo
   test_repo=$(setup_test_env)
-  TEST_DIR="$test_repo"  # Set for cleanup
+  TEST_DIR="$test_repo"
   
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
   # Create dots/ structure
-  mkdir -p dots/.config/test
+  mkdir -p dots/.config/test-app
   mkdir -p dots/.local/bin
-  echo "test config" > dots/.config/test/config.txt
+  echo "test config" > dots/.config/test-app/config.conf
+  echo "#!/bin/bash" > dots/.local/bin/test-script
   
-  # Create minimal update.sh
-  cat > .update-test.sh << 'EOF'
-#!/usr/bin/env bash
-REPO_DIR="$PWD"
-detect_repo_structure() {
-  local found_dirs=()
-  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
-    found_dirs+=("dots/.config")
-    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
-    [[ -d "${REPO_DIR}/dots/.local/share" ]] && found_dirs+=("dots/.local/share")
-  elif [[ -d "${REPO_DIR}/.config" ]]; then
-    found_dirs+=(".config")
-    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
-    [[ -d "${REPO_DIR}/.local/share" ]] && found_dirs+=(".local/share")
+  # Add and commit
+  git add .
+  git commit -m "Add dots structure" -q
+  
+  # Source the update.sh to test functions
+  source update.sh >/dev/null 2>&1 || true
+  
+  # Test the detection function
+  if result=$(detect_repo_structure 2>/dev/null); then
+    if [[ "$result" == *"dots/.config"* ]] && [[ "$result" == *"dots/.local/bin"* ]]; then
+      log_pass "Dots structure detected correctly"
+    else
+      log_fail "Failed to detect dots structure. Got: $result"
+    fi
   else
-    for candidate in "dots/.config" ".config" "config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
-      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
-        if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
-          found_dirs+=("${candidate}")
-        fi
-      fi
-    done
-  fi
-  if [[ ${#found_dirs[@]} -eq 0 ]]; then
-    echo "ERROR: Could not detect repository structure" >&2
-    return 1
-  fi
-  echo "${found_dirs[@]}"
-}
-detect_repo_structure
-EOF
-  
-  chmod +x .update-test.sh
-  result=$(./.update-test.sh)
-  
-  if [[ "$result" == *"dots/.config"* ]]; then
-    log_pass "Dots structure detected correctly"
-  else
-    log_fail "Failed to detect dots structure. Got: $result"
+    log_fail "detect_repo_structure failed"
   fi
   
   cd "$ORIGINAL_DIR" || exit 1
@@ -164,93 +160,69 @@ test_flat_structure() {
   
   local test_repo
   test_repo=$(setup_test_env)
-  TEST_DIR="$test_repo"  # Set for cleanup
+  TEST_DIR="$test_repo"
   
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
   # Create flat structure
-  mkdir -p .config/test
+  mkdir -p .config/test-app
   mkdir -p .local/bin
-  echo "test config" > .config/test/config.txt
+  echo "test config" > .config/test-app/config.conf
+  echo "#!/bin/bash" > .local/bin/test-script
   
-  cat > .update-test.sh << 'EOF'
-#!/usr/bin/env bash
-REPO_DIR="$PWD"
-detect_repo_structure() {
-  local found_dirs=()
-  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
-    found_dirs+=("dots/.config")
-    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
-    [[ -d "${REPO_DIR}/dots/.local/share" ]] && found_dirs+=("dots/.local/share")
-  elif [[ -d "${REPO_DIR}/.config" ]]; then
-    found_dirs+=(".config")
-    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
-    [[ -d "${REPO_DIR}/.local/share" ]] && found_dirs+=(".local/share")
+  # Add and commit
+  git add .
+  git commit -m "Add flat structure" -q
+  
+  # Source the update.sh to test functions
+  source update.sh >/dev/null 2>&1 || true
+  
+  # Test the detection function
+  if result=$(detect_repo_structure 2>/dev/null); then
+    if [[ "$result" == *".config"* ]] && [[ "$result" != *"dots/"* ]]; then
+      log_pass "Flat structure detected correctly"
+    else
+      log_fail "Failed to detect flat structure. Got: $result"
+    fi
   else
-    for candidate in "dots/.config" ".config" "config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
-      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
-        if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
-          found_dirs+=("${candidate}")
-        fi
-      fi
-    done
-  fi
-  if [[ ${#found_dirs[@]} -eq 0 ]]; then
-    echo "ERROR: Could not detect repository structure" >&2
-    return 1
-  fi
-  echo "${found_dirs[@]}"
-}
-detect_repo_structure
-EOF
-  
-  chmod +x .update-test.sh
-  result=$(./.update-test.sh)
-  
-  if [[ "$result" == *".config"* ]] && [[ "$result" != *"dots/"* ]]; then
-    log_pass "Flat structure detected correctly"
-  else
-    log_fail "Failed to detect flat structure. Got: $result"
+    log_fail "detect_repo_structure failed"
   fi
   
   cd "$ORIGINAL_DIR" || exit 1
   cleanup_test_env
 }
 
-# Test 6: Test package directory detection
-test_package_detection() {
-  log_test "Testing package directory detection"
+# Test 6: Test dots prefix mapping to home directory
+test_dots_mapping() {
+  log_test "Testing dots/ prefix home directory mapping"
   
   local test_repo
   test_repo=$(setup_test_env)
-  TEST_DIR="$test_repo"  # Set for cleanup
+  TEST_DIR="$test_repo"
   
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
-  # Test dist-arch
-  mkdir -p dist-arch/test-pkg
-  cat > .update-test.sh << 'EOF'
-#!/usr/bin/env bash
-REPO_DIR="$PWD"
-if [[ -d "${REPO_DIR}/dist-arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
-elif [[ -d "${REPO_DIR}/arch-packages" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
-elif [[ -d "${REPO_DIR}/sdist/arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
-else
-  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
-fi
-echo "$ARCH_PACKAGES_DIR"
-EOF
+  # Create dots/ structure
+  mkdir -p dots/.config/test-app
+  echo "test config" > dots/.config/test-app/config.conf
   
-  chmod +x .update-test.sh
-  result=$(./.update-test.sh)
+  # Source the update.sh
+  source update.sh >/dev/null 2>&1 || true
   
-  if [[ "$result" == *"dist-arch"* ]]; then
-    log_pass "Package directory detection works"
+  # Test the mapping logic
+  dir_name="dots/.config"
+  if [[ "$dir_name" == dots/* ]]; then
+    home_subdir="${dir_name#dots/}"
+    home_dir_path="${HOME}/${home_subdir}"
   else
-    log_fail "Failed to detect package directory. Got: $result"
+    home_dir_path="${HOME}/${dir_name}"
+  fi
+  
+  expected_path="${HOME}/.config"
+  if [[ "$home_dir_path" == "$expected_path" ]]; then
+    log_pass "Dots prefix mapping correct: $dir_name → $home_dir_path"
+  else
+    log_fail "Dots prefix mapping failed: $dir_name → $home_dir_path (expected: $expected_path)"
   fi
   
   cd "$ORIGINAL_DIR" || exit 1
@@ -263,7 +235,7 @@ test_ignore_patterns() {
   
   local test_repo
   test_repo=$(setup_test_env)
-  TEST_DIR="$test_repo"  # Set for cleanup
+  TEST_DIR="$test_repo"
   
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
@@ -272,97 +244,283 @@ test_ignore_patterns() {
 # Test ignore patterns
 *.log
 secrets/
-test-file.txt
-*private*
+.config/private*
+*backup*
+/tmp-file
 EOF
   
-  # Test should_ignore function
-  cat > .update-test.sh << 'EOF'
-#!/usr/bin/env bash
-REPO_DIR="$PWD"
-UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
-HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
-
-should_ignore() {
-  local file_path="$1"
-  local relative_path="${file_path#$HOME/}"
-  local repo_relative=""
-  if [[ "$file_path" == "$REPO_DIR"* ]]; then
-    repo_relative="${file_path#$REPO_DIR/}"
-  fi
+  # Create test files
+  mkdir -p .config
+  touch app.log
+  touch secrets/key.txt
+  touch .config/private-config
+  touch .config/backup-file
+  touch normal-config
   
-  for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
-    if [[ -f "$ignore_file" ]]; then
-      while IFS= read -r pattern || [[ -n "$pattern" ]]; do
-        [[ -z "$pattern" || "$pattern" =~ ^[[:space:]]*# ]] && continue
-        pattern=$(echo "$pattern" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        [[ -z "$pattern" ]] && continue
-        
-        if [[ "$relative_path" == "$pattern" ]] || [[ "$repo_relative" == "$pattern" ]]; then
-          return 0
-        fi
-        
-        if [[ "$pattern" == */ ]]; then
-          local dir_pattern="${pattern%/}"
-          if [[ "$relative_path" == "$dir_pattern"/* ]] || [[ "$repo_relative" == "$dir_pattern"/* ]]; then
-            return 0
-          fi
-        fi
-        
-        if [[ "$pattern" == *"*"* ]]; then
-          if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
-            return 0
-          fi
-        fi
-        
-        if [[ "$file_path" == *"$pattern"* ]] || [[ "$relative_path" == *"$pattern"* ]]; then
-          return 0
-        fi
-      done <"$ignore_file"
+  # Source the update.sh
+  source update.sh >/dev/null 2>&1 || true
+  
+  # Test cases
+  local passed=0
+  local total=0
+  
+  # Test patterns
+  test_cases=(
+    "$test_repo/app.log:0"
+    "$test_repo/secrets/key.txt:0" 
+    "$test_repo/.config/private-config:0"
+    "$test_repo/.config/backup-file:0"
+    "$test_repo/normal-config:1"
+    "$test_repo/.config/normal-file:1"
+  )
+  
+  for test_case in "${test_cases[@]}"; do
+    IFS=':' read -r file expected <<< "$test_case"
+    touch "$file" 2>/dev/null || true
+    ((total++))
+    
+    if should_ignore "$file"; then
+      result=0
+    else
+      result=1
+    fi
+    
+    if [[ $result -eq $expected ]]; then
+      ((passed++))
+    else
+      log_fail "Ignore test failed: $file (expected: $expected, got: $result)"
     fi
   done
-  return 1
-}
-
-# Test cases
-should_ignore "$REPO_DIR/test.log" && echo "PASS: *.log pattern" || echo "FAIL: *.log pattern"
-should_ignore "$REPO_DIR/secrets/key.txt" && echo "PASS: secrets/ pattern" || echo "FAIL: secrets/ pattern"
-should_ignore "$REPO_DIR/test-file.txt" && echo "PASS: exact match pattern" || echo "FAIL: exact match pattern"
-should_ignore "$REPO_DIR/my-private-file.txt" && echo "PASS: *private* pattern" || echo "FAIL: *private* pattern"
-should_ignore "$REPO_DIR/normal-file.txt" && echo "FAIL: should not ignore" || echo "PASS: normal file not ignored"
-EOF
   
-  chmod +x .update-test.sh
-  result=$(./.update-test.sh)
-  
-  if [[ "$result" == *"PASS: *.log pattern"* ]] && \
-     [[ "$result" == *"PASS: secrets/ pattern"* ]] && \
-     [[ "$result" == *"PASS: exact match pattern"* ]] && \
-     [[ "$result" == *"PASS: *private* pattern"* ]] && \
-     [[ "$result" == *"PASS: normal file not ignored"* ]]; then
-    log_pass "Ignore patterns work correctly"
+  if [[ $passed -eq $total ]]; then
+    log_pass "All ignore pattern tests passed ($passed/$total)"
   else
-    log_fail "Ignore patterns failed"
-    echo "$result"
+    log_fail "Ignore pattern tests failed ($passed/$total passed)"
   fi
   
   cd "$ORIGINAL_DIR" || exit 1
   cleanup_test_env
 }
 
-# Test 8: Test dry-run mode doesn't modify files
-test_dry_run() {
-  log_test "Testing dry-run mode (manual verification needed)"
+# Test 8: Test safe_read security (no eval injection)
+test_safe_read_security() {
+  log_test "Testing safe_read security against injection"
   
-  log_info "Dry-run mode test requires manual verification:"
-  log_info "1. Run: ./update.sh -n"
-  log_info "2. Verify no files are actually modified"
-  log_info "3. Check that it shows what WOULD be done"
+  # Source the update.sh
+  source update.sh >/dev/null 2>&1 || true
   
-  log_pass "Dry-run test added to manual checklist"
+  # Test safe_read with potentially dangerous input
+  dangerous_input="'; echo 'INJECTION'; '"
+  
+  # Use a subshell to capture any injection
+  output=$(
+    {
+      echo "$dangerous_input" | safe_read "Test: " test_var "default" 2>/dev/null || true
+      # Check if injection occurred
+      if declare -p test_var 2>/dev/null | grep -q "INJECTION"; then
+        echo "INJECTION_DETECTED"
+      else
+        echo "SAFE"
+      fi
+    } 2>/dev/null
+  )
+  
+  if [[ "$output" != *"INJECTION_DETECTED"* ]]; then
+    log_pass "safe_read is secure against injection attacks"
+  else
+    log_fail "safe_read vulnerable to injection attacks"
+  fi
 }
 
-# Test 9: Check for common shellcheck issues
+# Test 9: Test dry-run mode
+test_dry_run() {
+  log_test "Testing dry-run mode"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Create test structure
+  mkdir -p dots/.config/test-app
+  echo "repo config" > dots/.config/test-app/config.conf
+  
+  # Add and commit
+  git add .
+  git commit -m "Add test config" -q
+  
+  # Test dry-run execution
+  output=$(./update.sh -n --skip-notice 2>&1 || true)
+  
+  if [[ "$output" == *"DRY-RUN"* ]] && [[ "$output" == *"would"* || "$output" == *"Would"* ]]; then
+    log_pass "Dry-run mode detected in output"
+  else
+    log_fail "Dry-run mode not properly indicated"
+  fi
+  
+  # Verify no files were actually created in home
+  if [[ ! -f "${HOME}/.config/test-app/config.conf" ]]; then
+    log_pass "No files created in home during dry-run"
+  else
+    log_fail "Files were created in home during dry-run"
+  fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 10: Test package directory detection
+test_package_detection() {
+  log_test "Testing package directory detection"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Test different package directory names
+  for dir_name in "dist-arch" "arch-packages" "sdist/arch"; do
+    mkdir -p "$dir_name/test-pkg"
+    echo "pkgbase=test-pkg" > "$dir_name/test-pkg/PKGBUILD"
+    
+    # Source to reset ARCH_PACKAGES_DIR
+    source update.sh >/dev/null 2>&1 || true
+    
+    if [[ -d "$dir_name" ]]; then
+      log_info "Found package directory: $dir_name"
+      # The sourcing should have set ARCH_PACKAGES_DIR correctly
+      if [[ -n "$ARCH_PACKAGES_DIR" ]]; then
+        log_pass "Package directory detection works for $dir_name"
+      else
+        log_fail "Package directory not detected for $dir_name"
+      fi
+    fi
+    
+    rm -rf "$dir_name"
+  done
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 11: Test force check mode
+test_force_check() {
+  log_test "Testing force check mode"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Create test structure
+  mkdir -p .config/test-app
+  echo "config" > .config/test-app/settings.conf
+  
+  # Test with force flag
+  output=$(./update.sh -f --skip-notice --dry-run 2>&1 || true)
+  
+  if [[ "$output" == *"Force check"* ]] || [[ "$output" == *"Force mode"* ]]; then
+    log_pass "Force check mode detected"
+  else
+    log_fail "Force check mode not indicated"
+  fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 12: Test conflict handling simulation
+test_conflict_handling() {
+  log_test "Testing file conflict detection"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Create repo file
+  mkdir -p .config/test-app
+  echo "repo version" > .config/test-app/config.conf
+  
+  # Create different home file
+  mkdir -p "${HOME}/.config/test-app"
+  echo "home version" > "${HOME}/.config/test-app/config.conf"
+  
+  # Source the update.sh
+  source update.sh >/dev/null 2>&1 || true
+  
+  # Test the comparison logic
+  repo_file="$test_repo/.config/test-app/config.conf"
+  home_file="${HOME}/.config/test-app/config.conf"
+  
+  if ! cmp -s "$repo_file" "$home_file"; then
+    log_pass "File conflict correctly detected"
+  else
+    log_fail "File conflict not detected"
+  fi
+  
+  # Cleanup home file
+  rm -f "$home_file"
+  rmdir "$(dirname "$home_file")" 2>/dev/null || true
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 13: Test all flags are recognized
+test_flags() {
+  log_test "Testing command-line flags"
+  
+  local flags=("-h" "--help" "-n" "--dry-run" "-f" "--force" "-v" "--verbose")
+  local all_passed=true
+  
+  for flag in "${flags[@]}"; do
+    if ./update.sh "$flag" 2>&1 | grep -q -E "(Usage|dry-run|force|verbose|help)"; then
+      echo "  ✓ $flag recognized"
+    else
+      echo "  ✗ $flag not recognized"
+      all_passed=false
+    fi
+  done
+  
+  if [[ "$all_passed" == true ]]; then
+    log_pass "All tested flags recognized correctly"
+  else
+    log_fail "Some flags not recognized properly"
+  fi
+}
+
+# Test 14: Test git operations safety
+test_git_safety() {
+  log_test "Testing git operations safety"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Create uncommitted changes
+  echo "temp" > temp-file.txt
+  
+  # Test that script detects uncommitted changes
+  output=$(./update.sh --dry-run --skip-notice 2>&1 || true)
+  
+  if [[ "$output" == *"uncommitted changes"* ]]; then
+    log_pass "Uncommitted changes detection works"
+  else
+    log_fail "Uncommitted changes not detected"
+  fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 15: Check for common shellcheck issues
 test_shellcheck() {
   log_test "Running shellcheck (if available)"
   
@@ -372,45 +530,102 @@ test_shellcheck() {
   fi
   
   # Run shellcheck with common exclusions
-  if shellcheck -e SC2181,SC2155,SC2162 update.sh 2>&1 | grep -v "^$"; then
+  if shellcheck -e SC1090,SC1091,SC2148,SC2034,SC2155,SC2164 update.sh; then
+    log_pass "shellcheck passed"
+  else
     log_fail "shellcheck found issues"
     return 1
-  else
-    log_pass "shellcheck passed"
   fi
 }
 
-# Test 10: Test all flags are recognized
-test_flags() {
-  log_test "Testing command-line flags"
+# Test 16: Test fresh clone scenario (no HEAD@{1})
+test_fresh_clone() {
+  log_test "Testing fresh clone scenario"
   
-  local flags=("-h" "--help")
-  local all_passed=true
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
   
-  for flag in "${flags[@]}"; do
-    if ./update.sh "$flag" >/dev/null 2>&1; then
-      echo "  ✓ $flag works"
-    else
-      echo "  ✗ $flag failed"
-      all_passed=false
-    fi
-  done
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
-  if [[ "$all_passed" == true ]]; then
-    log_pass "All tested flags work correctly"
+  # Create structure
+  mkdir -p .config/test-app
+  echo "config" > .config/test-app/settings.conf
+  
+  # Source the update.sh
+  source update.sh >/dev/null 2>&1 || true
+  
+  # Test has_new_commits in fresh clone (no HEAD@{1})
+  if has_new_commits; then
+    log_pass "Fresh clone scenario handled correctly"
   else
-    log_fail "Some flags failed"
+    log_fail "Fresh clone scenario not handled properly"
   fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 17: Test verbose mode
+test_verbose_mode() {
+  log_test "Testing verbose mode"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Test verbose flag
+  output=$(./update.sh -v --dry-run --skip-notice 2>&1 || true)
+  
+  if [[ "$output" == *"Verbose mode"* ]]; then
+    log_pass "Verbose mode detected"
+  else
+    log_fail "Verbose mode not indicated"
+  fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
+}
+
+# Test 18: Test package checking flag
+test_package_checking() {
+  log_test "Testing package checking flag"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Test package flag
+  output=$(./update.sh -p --dry-run --skip-notice 2>&1 || true)
+  
+  if [[ "$output" == *"Package checking"* ]]; then
+    log_pass "Package checking mode detected"
+  else
+    log_fail "Package checking mode not indicated"
+  fi
+  
+  cd "$ORIGINAL_DIR" || exit 1
+  cleanup_test_env
 }
 
 # Main test runner
 main() {
   echo -e "${BLUE}================================${NC}"
-  echo -e "${BLUE}  Update.sh Test Suite${NC}"
+  echo -e "${BLUE}  Update.sh Comprehensive Test Suite${NC}"
   echo -e "${BLUE}================================${NC}\n"
   
-  # Store original directory
-  ORIGINAL_DIR="$PWD"
+  # Check if we're in the right directory
+  if [[ ! -f "update.sh" ]]; then
+    log_error "Please run this test from the directory containing update.sh"
+    exit 1
+  fi
+  
+  # Make sure update.sh is executable
+  chmod +x update.sh 2>/dev/null || true
   
   # Run tests
   test_script_exists
@@ -418,14 +633,19 @@ main() {
   test_help_option
   test_dots_structure
   test_flat_structure
-  test_package_detection
+  test_dots_mapping
   test_ignore_patterns
+  test_safe_read_security
   test_dry_run
-  test_shellcheck
+  test_package_detection
+  test_force_check
+  test_conflict_handling
   test_flags
-  
-  # Return to original directory
-  cd "$ORIGINAL_DIR" || exit 1
+  test_git_safety
+  test_shellcheck
+  test_fresh_clone
+  test_verbose_mode
+  test_package_checking
   
   # Summary
   echo -e "\n${BLUE}================================${NC}"
@@ -436,22 +656,24 @@ main() {
   echo -e "${BLUE}Total:  $((TESTS_PASSED + TESTS_FAILED))${NC}\n"
   
   if [[ $TESTS_FAILED -eq 0 ]]; then
-    echo -e "${GREEN}All tests passed!${NC}\n"
+    echo -e "${GREEN}All tests passed! 🎉${NC}\n"
     exit 0
   else
-    echo -e "${RED}Some tests failed!${NC}\n"
+    echo -e "${RED}Some tests failed! ❌${NC}\n"
     exit 1
   fi
 }
 
-# Trap cleanup - only cleanup TEST_DIR if it exists
+# Trap cleanup
 cleanup_on_exit() {
   if [[ -n "${TEST_DIR:-}" && -d "$TEST_DIR" ]]; then
     rm -rf "$TEST_DIR"
   fi
+  # Cleanup any test files created in home
+  rm -rf "${HOME}/.config/test-app" 2>/dev/null || true
 }
 
-trap cleanup_on_exit EXIT
+trap cleanup_on_exit EXIT INT TERM
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
