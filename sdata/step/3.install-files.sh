@@ -32,7 +32,7 @@ function backup_clashing_targets(){
 
   for i in "${clash_list[@]}"; do
     current_target=$target_dir/$i
-    if [[ -d $current_target ]]; do
+    if [[ -d $current_target ]]; then
       args_includes+=(--include="$current_target/")
       args_includes+=(--include="$current_target/**")
     else
