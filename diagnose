@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 #
 # This script is for quickly generate helpful info
+#
 # It should be as independent as possible and should not source other files unless it has to
+#
+# TODO: How to get the Qt version which Quickshell was built against?
+
 STY_RED='\e[31m'
-STY_RESET='\e[00m'
+STY_RST='\e[00m'
 
 cd "$(dirname "$0")";export base="$(pwd)"
 output_file=diagnose.result;rm $output_file
 export LANG=C;export LC_ALL=C
 case $(whoami) in
-  root)echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RESET}";exit 1;;
+  root)echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RST}";exit 1;;
 esac
 
 
@@ -80,6 +84,7 @@ commands+=(ags agsv1)
 
 e "Checking versions"
 x Hyprland --version
+x pacman -Q | grep -E 'quickshell|qt6-base'
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
