@@ -9,7 +9,7 @@ import qs
 GroupButton {
     id: button
 
-    colBackground: Appearance.colors.colLayer1
+    colBackground: Appearance.colors.colLayer2
 
     buttonRadius: (altAction && toggled) ? Appearance.rounding.normal : Math.min(baseHeight, baseWidth) / 2
     property int buttonToggledRadius : Appearance.rounding.normal

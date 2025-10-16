@@ -11,11 +11,13 @@ import Quickshell.Bluetooth
 import "./materialStyle"
 import "./materialStyle/utilButtons"
 
-Item {
+Rectangle {
     id: root
 
-    height: mainColumn.height
-    width: mainColumn.width
+    radius: Appearance.rounding.normal
+    color: Appearance.colors.colLayer1
+    implicitHeight: mainColumn.implicitHeight
+    implicitWidth: mainColumn.implicitWidth
     property int heightSize: mainColumn.height // used by the parent
     property string panelType: Config.options.quickToggles.material.mode
     property int tileSize: panelType == 2 ? 4 : 5
