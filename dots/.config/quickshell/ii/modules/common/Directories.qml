@@ -32,6 +32,8 @@ Singleton {
     property string shellConfigName: "config.json"
     property string shellConfigPath: `${Directories.shellConfig}/${Directories.shellConfigName}`
     property string todoPath: FileUtils.trimFileProtocol(`${Directories.state}/user/todo.json`)
+    property string scratchpadPath: FileUtils.trimFileProtocol(`${Directories.state}/user/scratchpad.txt`)
+    property string scratchpadMetaPath: FileUtils.trimFileProtocol(`${Directories.state}/user/scratchpad.meta.json`)
     property string notificationsPath: FileUtils.trimFileProtocol(`${Directories.cache}/notifications/notifications.json`)
     property string generatedMaterialThemePath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/colors.json`)
     property string generatedWallpaperCategoryPath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/wallpaper/category.txt`)
