@@ -70,11 +70,11 @@ Add the shebang below to the beginning of python script:
 And that's it!
 
 **Note:** This is the simplest solution as it only modifies the shebang of python script.
-However:
+**However:**
 - It's only for python script, not the command provided by python package.
 - It can not deal with complex argument (e.g. filename containing spaces) passed to the python script.
   - If we apply this solution to the example above, it may cause problem, considering that `--image '${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)}'` could be a rather complex argument passed to `find_regions.py`.
-- This solution rely on shebang to activate the correct python venv, but the shebang will be ignored if the script is passed as a parameter to python, e.g. `python3 foo.py`.
+- This solution rely on shebang to activate the correct python venv, but the shebang will be ignored if the script is directly passed to the interpreter, e.g. `python3 foo.py`.
 
 #### Solution B: bash script as wrapper
 
