@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+#Check if dGPU is sleeping ...
+
+POWER_STATE_FILE="/sys/class/drm/card0/device/power_state"
+
+if [[ -f "$POWER_STATE_FILE" ]]; then
+    state=$(cat "$POWER_STATE_FILE")
+    if [[ "$state" == "d3cold" ]]; then
+        echo "dGPU is suspended"
+        exit 1
+    fi
+else
+fi
+
 # NVIDIA dGPU
 if command -v nvidia-smi &> /dev/null; then
     echo "[NVIDIA GPU]"
