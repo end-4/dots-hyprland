@@ -24,7 +24,7 @@ Variants {
     readonly property real screenSizePadding: 50
     readonly property string clockStyle: Config.options.background.clock.style
     readonly property bool showCookieQuote: Config.options.background.showQuote && Config.options.background.quote !== "" && !GlobalStates.screenLocked && Config.options.background.clock.style === "cookie"
-    readonly property real clockParallaxFactor: Math.max(0, Math.min(1, Config.options.background.parallax.clockFactor)) // 0 = full parallax, 1 = no parallax
+    readonly property real clockParallaxFactor: Config.options.background.parallax.clockFactor // 0 = full parallax, 1 = no parallax
     model: Quickshell.screens
 
     PanelWindow {
@@ -270,13 +270,13 @@ Variants {
                     verticalCenter: undefined
                     leftMargin: {
                         const clockXOnWallpaper = bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                        const moveBack = (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (1 - root.clockParallaxFactor);
-                        return clockXOnWallpaper + moveBack;
+                        const extraMove = (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (root.clockParallaxFactor - 1);
+                        return clockXOnWallpaper + extraMove;
                     }
                     topMargin: {
                         const clockYOnWallpaper = bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
-                        const moveBack = (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (1 - root.clockParallaxFactor);
-                        return clockYOnWallpaper + moveBack;
+                        const extraMove = (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (root.clockParallaxFactor - 1);
+                        return clockYOnWallpaper + extraMove;
                     }
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
