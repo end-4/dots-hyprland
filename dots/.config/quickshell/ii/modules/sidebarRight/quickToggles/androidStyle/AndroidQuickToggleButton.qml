@@ -135,6 +135,7 @@ GroupButton {
                 }
 
                 StyledText {
+                    visible: descText !== ""
                     anchors {
                         left: parent.left
                         right: parent.right
