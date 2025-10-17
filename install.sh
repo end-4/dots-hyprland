@@ -15,6 +15,10 @@ set -e
     source ./sdata/exp/uninstall.sh
     exit
   fi
+  if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
+    source ./sdata/exp/update.sh
+    exit
+  fi
 #####################################################################################
 # 0. Before we start
 if [[ "${SKIP_ALLGREETING}" != true ]]; then
