@@ -146,14 +146,14 @@ Item {
 
             Item {
                 id: quickPanelItem
-                
                 implicitHeight: quickPanelStyle === "android" ? androidPanelLoader.implicitHeight : classicPanelLoader.implicitHeight
-                width: parent.width
+
                 Loader { 
                     id: androidPanelLoader
                     active: quickPanelStyle === "android"
                     sourceComponent: AndroidQuickPanel {}
                 }
+                
                 Loader { 
                     id: classicPanelLoader
                     anchors.horizontalCenter: parent.horizontalCenter
