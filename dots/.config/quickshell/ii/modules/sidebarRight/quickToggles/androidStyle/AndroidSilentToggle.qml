@@ -7,7 +7,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: Notifications.silent
     buttonIcon: toggled ? "notifications_paused" : "notifications_active"
     titleText: "Do Not Disturb"

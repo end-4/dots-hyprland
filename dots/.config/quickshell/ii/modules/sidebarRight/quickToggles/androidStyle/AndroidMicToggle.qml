@@ -9,7 +9,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: !Pipewire.defaultAudioSource?.audio?.muted
     buttonIcon: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
     titleText: "Toggle Mic"

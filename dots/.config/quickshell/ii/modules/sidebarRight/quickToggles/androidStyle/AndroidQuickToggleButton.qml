@@ -24,7 +24,7 @@ GroupButton {
     property string panelType: Config.options.quickToggles.android.mode
 
     property string buttonIcon
-    property int buttonSize: 1 // Must be 1, 2 
+    property real buttonSize: 0.75 // Must be 1, 2 
     property string titleText
     property string descText
     property int buttonIndex

@@ -7,7 +7,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: GlobalStates.oskOpen
     buttonIcon: toggled ? "keyboard_hide" : "keyboard"
     titleText: "Keyboard"

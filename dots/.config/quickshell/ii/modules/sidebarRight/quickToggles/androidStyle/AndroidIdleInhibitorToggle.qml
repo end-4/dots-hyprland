@@ -5,7 +5,6 @@ import qs.services
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: Idle.inhibit
     buttonIcon: toggled ? "kettle" : "coffee"
     titleText: "Idle Inhibitor"

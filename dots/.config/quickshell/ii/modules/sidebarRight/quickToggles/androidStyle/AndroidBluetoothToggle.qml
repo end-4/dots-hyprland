@@ -11,7 +11,6 @@ import Quickshell.Hyprland
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: BluetoothStatus.connected
     halfToggled: BluetoothStatus.enabled
     titleText: "Bluetooth"

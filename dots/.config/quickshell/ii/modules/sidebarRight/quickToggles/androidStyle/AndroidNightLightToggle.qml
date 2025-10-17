@@ -7,7 +7,6 @@ import Quickshell.Io
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     property bool enabled: Hyprsunset.active
     toggled: enabled
     buttonIcon: toggled ? Config.options.light.night.automatic ? "night_sight_auto" : "bedtime" : "bedtime_off"

@@ -7,7 +7,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: false
     buttonIcon: "screenshot_region"
     titleText: "Screenshot"

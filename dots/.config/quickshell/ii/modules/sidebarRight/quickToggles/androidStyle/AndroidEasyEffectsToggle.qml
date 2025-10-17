@@ -8,7 +8,6 @@ import Quickshell.Hyprland
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 1
     toggled: EasyEffects.active
     visible: EasyEffects.available
     buttonIcon: toggled ? "tune" : "instant_mix"

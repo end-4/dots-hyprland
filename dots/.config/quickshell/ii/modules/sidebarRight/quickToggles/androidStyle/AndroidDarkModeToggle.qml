@@ -8,7 +8,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: Appearance.m3colors.darkmode
     buttonIcon: Appearance.m3colors.darkmode ? "contrast" : "light_mode"
     titleText: "Dark Mode"

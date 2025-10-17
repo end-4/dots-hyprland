@@ -8,7 +8,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: true
     buttonIcon: switch(PowerProfiles.profile) {
                         case PowerProfile.PowerSaver: return "energy_savings_leaf"

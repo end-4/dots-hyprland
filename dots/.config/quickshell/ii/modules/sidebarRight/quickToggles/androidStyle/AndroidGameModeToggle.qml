@@ -7,7 +7,6 @@ import Quickshell.Io
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     buttonIcon: toggled ? "sports_esports" : "gamepad"
     toggled: toggled
     titleText: "Game Mode"

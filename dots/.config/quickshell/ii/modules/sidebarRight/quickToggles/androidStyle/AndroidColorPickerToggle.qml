@@ -8,7 +8,6 @@ import "../"
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: false
     buttonIcon: "colorize"
     titleText: "Color Picker"

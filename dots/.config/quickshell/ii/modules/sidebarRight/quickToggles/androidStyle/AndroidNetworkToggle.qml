@@ -11,7 +11,6 @@ import Quickshell.Hyprland
 
 AndroidQuickToggleButton {
     id: root
-    buttonSize: 2
     toggled: Network.networkName.length > 0 && Network.networkName != "lo"
     halfToggled: Network.wifiEnabled
     buttonIcon: Network.materialSymbol
