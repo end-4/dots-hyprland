@@ -16,28 +16,26 @@ GroupButton {
     toggledRadius: buttonToggledRadius
     buttonRadiusPressed: buttonToggledRadius
 
-    readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
-    readonly property real titleTextSize: maxColumn == 4 ? 15 : 13
-    readonly property real descTextSize: maxColumn == 4 ? 13 : 12
+    readonly property real buttonIconSize: Appearance.font.pixelSize.hugeass
+    readonly property real titleTextSize: columns == 4 ? 15 : 13
+    readonly property real descTextSize: columns == 4 ? 13 : 12
 
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
-    property int maxColumn: Config.options.quickToggles.android.maxColumn
+    property int columns: Config.options.quickToggles.android.columns
 
     property string buttonIcon
-    property real buttonSize: 0.75 // Must be 1, 2 
+    property real buttonSize: 1
+    property bool expandedSize: buttonSize === 2
     property string titleText
     property string descText
     property int buttonIndex
     property string unusedName: ""
     
     property int unusedButtonSize: 48
-    property int calculatedWidth: maxColumn == 4 ? 95 : 75
+    property int calculatedWidth: columns == 4 ? 95 : 75
     property int calculatedHeight: 55
     baseWidth: unusedName === "" ? calculatedWidth * buttonSize - 5 : unusedButtonSize * 1.6
     baseHeight: unusedName === "" ? calculatedHeight : unusedButtonSize
-    
-    // can be removed if you want less behaviors. but this reduces the bounciness so it helps
-    Behavior on implicitWidth { animation: Appearance.animation.elementResize.numberAnimation.createObject(this) } 
 
     property bool halfToggled: false
     toggled: false
@@ -47,57 +45,50 @@ GroupButton {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
     }
+
     scrollDownAction: () => {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, +1)
     }
+
     altAction: () => {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
+    
     releaseAction: () => {
         if (!Config.options.quickToggles.android.inEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
         else QuickTogglesUtils.addOption(unusedName)
     }
+
     mouseForwardAction: () => {
         if (!Config.options.quickToggles.android.inEditMode) return
         if (unusedName !== "") QuickTogglesUtils.addOption(unusedName)
     }
+
     mouseBackAction: () => {
         if (!Config.options.quickToggles.android.inEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
     }
 
     Rectangle {
-        id: borderRect
-        anchors.fill: parent
-        border.width: Config.options.quickToggles.android.border ? 2 : 0
-        border.color: toggled ? "transparent" : colBackgroundHover
-        radius: root.radius
-        Behavior on radius {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
-        color: "transparent"
-    }
-
-    Rectangle {
-        anchors.centerIn: buttonSize === 1 ? parent : undefined
-
-        anchors.leftMargin: buttonSize === 2 ? 10 : 0
-        anchors.left: buttonSize === 2 ? parent.left : undefined
-        anchors.verticalCenter: buttonSize === 2 ? parent.verticalCenter : undefined
+        anchors {
+            centerIn: buttonSize === 1 ? parent : undefined
+            leftMargin: 10
+            left: root.expandedSize ? parent.left : undefined
+            verticalCenter: parent.verticalCenter
+        }
 
         height: calculatedHeight - (calculatedHeight / 3)
         width: height
         radius: buttonRadius
         color: (buttonSize === 1 || toggled) ? "transparent" : halfToggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer2
+
         MaterialSymbol {
             anchors.centerIn: parent
-            iconSize: {
-                if (root.down) buttonIconSize * 0.75
-                else buttonIconSize
-            }
-            Behavior on iconSize { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }
+            iconSize: buttonIconSize
             fill: toggled ? 1 : 0
             color: toggled || halfToggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
             horizontalAlignment: Text.AlignHCenter
@@ -110,9 +101,8 @@ GroupButton {
         }
     }
 
-
     Loader {
-        active: buttonSize === 2
+        active: root.expandedSize
         sourceComponent: Item {
             anchors.left: parent.left
             anchors.leftMargin: 50

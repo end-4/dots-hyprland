@@ -18,7 +18,7 @@ Rectangle {
     implicitHeight: mainColumn.implicitHeight
     implicitWidth: mainColumn.implicitWidth
     property int heightSize: mainColumn.height // used by the parent
-    property int tileSize: Config.options.quickToggles.android.maxColumn
+    property int tileSize: Config.options.quickToggles.android.columns
     property var rowModels: QuickTogglesUtils.splitRows(combinedData, tileSize)    
 
     property list<string> fullItemList: ["network","bluetooth","cloudflarewarp","easyeffects","gamemode","idleinhibitor","nightlight","screensnip",

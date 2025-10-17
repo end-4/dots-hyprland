@@ -409,9 +409,9 @@ ContentPage {
                 visible: Config.options.quickToggles.style === "android"
                 title: Translation.tr("Max column")
                 ConfigSelectionArray {
-                    currentValue: Config.options.quickToggles.android.maxColumn
+                    currentValue: Config.options.quickToggles.android.columns
                     onSelected: newValue => {
-                        Config.options.quickToggles.android.maxColumn = newValue;
+                        Config.options.quickToggles.android.columns = newValue;
                     }
                     options: [
                         {
