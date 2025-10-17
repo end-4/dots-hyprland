@@ -41,10 +41,10 @@ function backup_clashing_targets(){
       args_includes+=(--include="$current_target")
     fi
   done
-  args_includes+=(--exclude="*")
+  args_includes+=(--exclude='*')
 
   x mkdir -p $backup_dir
-  x rsync -av --progress "${arg_includes[@]}" "$target_dir/" "$backup_dir/"
+  x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
 }
 
 function ask_backup_configs(){
