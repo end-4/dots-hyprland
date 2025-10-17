@@ -28,7 +28,6 @@ Options for install:
       --exp-files           Use experimental script for the third step copying files
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
       --via-nix             (Unavailable yet) Use Nix to install dependencies
-      --exp-uninstall       Use experimental uninstall script
 
 Subcommand:
       exp-uninstall         Using experimental uninstall script.
@@ -51,6 +50,10 @@ case $1 in
     SCRIPT_SUBCOMMAND=$1
     shift
     ;;
+  # Global help
+  help|--help|-h)
+    showhelp_global;exit
+    ;;
   # no subcommand (has options: -* ; no options: "")
   -*|"")
     SCRIPT_SUBCOMMAND=install
@@ -63,9 +66,6 @@ esac
 case ${SCRIPT_SUBCOMMAND} in
   install)
     source ./sdata/lib/options-install.sh
-    ;;
-  exp-uninstall)
-    #source ./sdata/lib/options-exp-uninstall.sh
     ;;
   exp-update)
     source ./sdata/lib/options-exp-update.sh
