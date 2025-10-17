@@ -17,11 +17,11 @@ Button {
     property real buttonRadiusPressed: Appearance?.rounding?.small ?? 6
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
-    property var rightReleaseAction // When right clicking (release)
-    property var middleReleaseAction // When middle clicking (release)
-    property var altAction // When right clicking
-    property var middleClickAction // When middle clicking
-    property var clickAndHold // When clicked and hold
+    property var altAction // Right click or hold
+    property var scrollUpAction
+    property var scrollDownAction
+    property var mouseBackAction // Mouse4
+    property var mouseForwardAction // Mouse5
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
@@ -80,30 +80,25 @@ Button {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton
         onPressed: (event) => { 
-            if(event.button === Qt.RightButton) {
+            if (event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction();
                 return;
-            }
-            if(event.button === Qt.MiddleButton) {
-                if (root.middleClickAction) root.middleClickAction();
+            } else if (event.button === Qt.ForwardButton) {
+                if (root.mouseForwardAction) root.mouseForwardAction();
+                return;
+            } else if (event.button === Qt.BackButton) {
+                if (root.mouseBackAction) root.mouseBackAction();
                 return;
             }
-            root.down = true
+            root.down = true;
             if (root.downAction) root.downAction();
         }
         onReleased: (event) => {
             root.down = false
-            if (event.button === Qt.LeftButton) {
-                if (root.releaseAction) root.releaseAction();
-            }
-            if (event.button === Qt.RightButton) {
-                if (root.rightReleaseAction) root.rightReleaseAction();
-            }
-            if (event.button === Qt.MiddleButton) {
-                if (root.rightReleaseAction) root.middleReleaseAction();
-            }
+            if (event.button != Qt.LeftButton) return;
+            if (root.releaseAction) root.releaseAction();
         }
         onClicked: (event) => {
             if (event.button != Qt.LeftButton) return;
@@ -113,9 +108,17 @@ Button {
             root.down = false
         }
         onPressAndHold: () => {
-            clickAndHold(); 
+            altAction(); 
             root.down = false; 
-        };
+            root.clicked = false;
+        }
+        onWheel: (event) => {
+            if (event.angleDelta.y > 0) {
+                if (root.scrollUpAction) root.scrollUpAction();
+            } else if (event.angleDelta.y < 0) {
+                if (root.scrollDownAction) root.scrollDownAction();
+            }
+        }
     }
 
 

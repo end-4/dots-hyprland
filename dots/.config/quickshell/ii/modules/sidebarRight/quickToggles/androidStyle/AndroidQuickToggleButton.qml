@@ -43,23 +43,31 @@ GroupButton {
     toggled: false
 
     // There is probably better ways of changing these, but i think these makes sense
-    onClicked: event => {
+    scrollUpAction: () => {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
     }
-    rightReleaseAction: function() {
+    scrollDownAction: () => {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, +1)
     }
-    clickAndHold: function() {
+    altAction: () => {
         if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
-    middleReleaseAction: function() {
+    releaseAction: () => {
         if (!Config.options.quickToggles.android.inEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
         else QuickTogglesUtils.addOption(unusedName)
+    }
+    mouseForwardAction: () => {
+        if (!Config.options.quickToggles.android.inEditMode) return
+        if (unusedName !== "") QuickTogglesUtils.addOption(unusedName)
+    }
+    mouseBackAction: () => {
+        if (!Config.options.quickToggles.android.inEditMode) return
+        if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
     }
 
     Rectangle {
