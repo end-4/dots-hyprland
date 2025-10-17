@@ -32,6 +32,7 @@ function backup_clashing_targets(){
   done
 
   # Construct args_includes for rsync
+  local args_includes=()
   for i in "${clash_list[@]}"; do
     if [[ -d "$target_dir/$i" ]]; then
       args_includes+=(--include="/$i/")
