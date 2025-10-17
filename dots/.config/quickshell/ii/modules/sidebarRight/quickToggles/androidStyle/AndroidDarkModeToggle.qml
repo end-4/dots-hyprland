@@ -6,7 +6,7 @@ import Quickshell
 import Quickshell.Hyprland
 import "../"
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: Appearance.m3colors.darkmode

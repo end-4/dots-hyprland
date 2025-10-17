@@ -6,7 +6,7 @@ import QtQuick
 import Quickshell.Io
 import Quickshell
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     toggled: false
     visible: false

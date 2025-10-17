@@ -52,11 +52,11 @@ Rectangle {
         id: mainColumn
         spacing: 10
         
-        MaterialTopWidgets {} // volume and brightness
+        AndroidTopWidgets {} // volume and brightness
         
-        MaterialToggles {} // toggle buttons
+        AndroidToggles {} // toggle buttons
 
-        MaterialUnusedButtons {} // unused buttons
+        AndroidUnusedButtons {} // unused buttons
 
     }
 }

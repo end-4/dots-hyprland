@@ -9,7 +9,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: Network.networkName.length > 0 && Network.networkName != "lo"

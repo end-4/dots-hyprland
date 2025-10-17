@@ -147,15 +147,15 @@ Item {
             Item {
                 id: quickPanelItem
                 
-                implicitHeight: quickPanelStyle === "android" ? materialQTLoader.implicitHeight : classicQTLoader.implicitHeight
+                implicitHeight: quickPanelStyle === "android" ? androidPanelLoader.implicitHeight : classicPanelLoader.implicitHeight
                 width: parent.width
                 Loader { 
-                    id: materialQTLoader
+                    id: androidPanelLoader
                     active: quickPanelStyle === "android"
-                    sourceComponent: MaterialQuickPanel {}
+                    sourceComponent: AndroidQuickPanel {}
                 }
                 Loader { 
-                    id: classicQTLoader
+                    id: classicPanelLoader
                     anchors.horizontalCenter: parent.horizontalCenter
                     active: quickPanelStyle === "classic"
                     sourceComponent: ClassicQuickPanel {}

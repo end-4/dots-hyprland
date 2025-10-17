@@ -6,7 +6,7 @@ import Quickshell
 import Quickshell.Services.UPower
 import "../"
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: true

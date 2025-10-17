@@ -6,7 +6,7 @@ import Quickshell.Io
 import Quickshell
 import Quickshell.Hyprland
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 1
     toggled: EasyEffects.active

@@ -3,7 +3,7 @@ import qs.modules.common.widgets
 import qs.modules.common
 import qs.services
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: Idle.inhibit

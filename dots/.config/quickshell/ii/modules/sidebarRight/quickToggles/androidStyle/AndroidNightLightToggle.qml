@@ -5,7 +5,7 @@ import qs
 import qs.services
 import Quickshell.Io
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     property bool enabled: Hyprsunset.active

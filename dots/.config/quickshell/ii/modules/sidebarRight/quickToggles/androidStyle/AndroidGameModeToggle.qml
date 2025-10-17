@@ -5,7 +5,7 @@ import qs.modules.common.widgets
 import Quickshell
 import Quickshell.Io
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     buttonIcon: toggled ? "sports_esports" : "gamepad"

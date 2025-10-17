@@ -7,7 +7,7 @@ import Quickshell.Services.Pipewire
 
 import "../"
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: !Pipewire.defaultAudioSource?.audio?.muted

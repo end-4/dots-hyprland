@@ -5,7 +5,7 @@ import qs.services
 import Quickshell
 import "../"
 
-MaterialQuickToggleButton {
+AndroidQuickToggleButton {
     id: root
     buttonSize: 2
     toggled: GlobalStates.oskOpen
