@@ -245,6 +245,7 @@ Singleton {
             property JsonObject battery: JsonObject {
                 property int low: 20
                 property int critical: 5
+                property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
             }
@@ -418,6 +419,12 @@ Singleton {
                 }
             }
 
+            property JsonObject sounds: JsonObject {
+                property bool battery: false
+                property bool pomodoro: false
+                property string theme: "freedesktop"
+            }
+
             property JsonObject time: JsonObject {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
@@ -427,7 +434,6 @@ Singleton {
                 property int firstDayOfWeek: 0 // 0: Monday, 1: Tuesday, 2: Wednesday, 3: Thursday, 4: Friday, 5: Saturday, 6: Sunday
 
                 property JsonObject pomodoro: JsonObject {
-                    property string alertSound: ""
                     property int breakTime: 300
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
