@@ -152,12 +152,14 @@ Item {
             }
 
             ScrollEdgeFade {
+                z: 1
                 target: booruResponseListView
                 vertical: true
             }
 
             StyledListView { // Booru responses
                 id: booruResponseListView
+                z: 0
                 anchors.fill: parent
                 spacing: 10
                 
@@ -187,13 +189,20 @@ Item {
 
             PagePlaceholder {
                 id: placeholderItem
+                z: 2
                 shown: root.responses.length === 0
                 icon: "bookmark_heart"
                 title: Translation.tr("Anime boorus")
                 description: ""
             }
 
+            ScrollToBottomButton {
+                z: 3
+                target: booruResponseListView
+            }
+
             Item { // Queries awaiting response
+                z: 4
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
