@@ -104,9 +104,11 @@ GroupButton {
     Loader {
         active: root.expandedSize
         sourceComponent: Item {
-            anchors.left: parent.left
-            anchors.leftMargin: 50
-            anchors.verticalCenter: parent.verticalCenter
+            anchors {
+                left: parent.left
+                leftMargin: 50
+                verticalCenter: parent.verticalCenter
+            }
             height: calculatedHeight
             width: calculatedWidth * 3 - calculatedWidth
             StyledText {
@@ -117,9 +119,8 @@ GroupButton {
                 font {
                     family: Appearance.font.family.title
                     pixelSize: titleTextSize
-                    weight: 500
+                    weight: Font.Medium
                 }
-                Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
                 
             }
             StyledText {
@@ -130,9 +131,8 @@ GroupButton {
                 font {
                     family: Appearance.font.family.main
                     pixelSize: descTextSize
-                    weight: 250
+                    weight: Font.Thin
                 }
-                Behavior on font.pixelSize {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}
             }
         }
     }
