@@ -913,7 +913,7 @@ if [[ "$process_files" == true ]]; then
         fi
         ((files_created++))
       fi
-    done < <(get_changed_files "$repo_dir_path")
+    done < <(get_changed_files "$repo_dir_path") || true
   done
 
   echo
