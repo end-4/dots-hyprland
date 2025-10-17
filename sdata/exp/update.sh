@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# This script is meant to be sourced.
+# It's not for directly running.
+
+#####################################################################################
 #
 # update.sh - Enhanced dotfiles update script
 #
@@ -11,12 +14,11 @@
 #
 set -euo pipefail
 
-# === Configuration ===
-FORCE_CHECK=false
-CHECK_PACKAGES=false
-DRY_RUN=false
-VERBOSE=false
-REPO_DIR="$(cd "$(dirname "$(dirname "$(dirname "$0")")")" &>/dev/null && pwd)"
+REPO_DIR="$(pwd)"
+
+# TODO: For Arch(-Linux) specific part please check if pacman exists first, if not it should be skipped.
+
+# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Try to find the packages directory (different names in different versions)
 if [[ -d "${REPO_DIR}/dist-arch" ]]; then
   ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
@@ -30,6 +32,7 @@ fi
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
+# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Auto-detect repository structure
 detect_repo_structure() {
   local found_dirs=()
@@ -66,41 +69,6 @@ detect_repo_structure() {
 
 # Directories to monitor for changes (will be auto-detected)
 MONITOR_DIRS=()
-
-# === Color Codes ===
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-PURPLE='\033[0;35m'
-NC='\033[0m' # No Color
-
-# === Helper Functions ===
-log_info() {
-  echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-  echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-  echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-  echo -e "${RED}[ERROR]${NC} $1" >&2
-}
-
-log_header() {
-  echo -e "\n${PURPLE}=== $1 ===${NC}"
-}
-
-die() {
-  log_error "$1"
-  exit 1
-}
 
 # Function to safely read input with terminal compatibility
 safe_read() {
@@ -216,9 +184,9 @@ show_diff() {
   local file1="$1"
   local file2="$2"
 
-  echo -e "\n${CYAN}Showing differences:${NC}"
-  echo -e "${CYAN}Old file: $file1${NC}"
-  echo -e "${CYAN}New file: $file2${NC}"
+  echo -e "\n${STY_CYAN}Showing differences:${STY_RST}"
+  echo -e "${STY_CYAN}Old file: $file1${STY_RST}"
+  echo -e "${STY_CYAN}New file: $file2${STY_RST}"
   echo "----------------------------------------"
 
   if command -v diff &>/dev/null; then
@@ -236,7 +204,7 @@ handle_file_conflict() {
   local filename=$(basename "$home_file")
   local dirname=$(dirname "$home_file")
 
-  echo -e "\n${YELLOW}Conflict detected:${NC} $home_file"
+  echo -e "\n${STY_YELLOW}Conflict detected:${STY_RST} $home_file"
   echo "Repository version differs from your local version."
   echo
   echo "Choose an action:"
@@ -431,17 +399,17 @@ list_packages() {
     return 1
   fi
 
-  echo -e "\n${CYAN}Available packages:${NC}"
+  echo -e "\n${STY_CYAN}Available packages:${STY_RST}"
   for pkg in "${available_packages[@]}"; do
     if [[ " ${changed_packages[*]} " =~ " ${pkg} " ]]; then
-      echo -e "  ${GREEN}● ${pkg}${NC} (PKGBUILD changed)"
+      echo -e "  ${STY_GREEN}● ${pkg}${STY_RST} (PKGBUILD changed)"
     else
       echo -e "  ○ ${pkg}"
     fi
   done
 
   if [[ ${#changed_packages[@]} -gt 0 ]]; then
-    echo -e "\n${YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
+    echo -e "\n${STY_YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${STY_RST}"
   fi
 
   return 0
@@ -497,7 +465,7 @@ build_packages() {
     return
   fi
 
-  echo -e "\n${CYAN}Packages to build: ${packages_to_build[*]}${NC}"
+  echo -e "\n${STY_CYAN}Packages to build: ${packages_to_build[*]}${STY_RST}"
 
   if ! safe_read "Proceed with building these packages? (Y/n): " confirm "Y"; then
     log_warning "Failed to read input. Skipping package builds."
@@ -533,7 +501,7 @@ build_packages() {
       log_error "Failed to build package $pkg_name"
     fi
 
-    cd "$REPO_DIR" || die "Failed to return to repository directory"
+    cd "$REPO_DIR" || log_die "Failed to return to repository directory"
   done
 
   if [[ $rebuilt_packages -eq 0 ]]; then
@@ -586,63 +554,7 @@ has_new_commits() {
 # Main script starts here
 log_header "Dotfiles Update Script"
 
-check=true
-
-# Parse command line arguments
-while [[ $# -gt 0 ]]; do
-  case $1 in
-  -f | --force)
-    FORCE_CHECK=true
-    log_info "Force check mode enabled - will check all files regardless of git changes"
-    shift
-    ;;
-  -p | --packages)
-    CHECK_PACKAGES=true
-    log_info "Package checking enabled"
-    shift
-    ;;
-  -n | --dry-run)
-    DRY_RUN=true
-    log_info "Dry-run mode enabled - no changes will be made"
-    shift
-    ;;
-  -v | --verbose)
-    VERBOSE=true
-    log_info "Verbose mode enabled"
-    shift
-    ;;
-  -h | --help)
-    echo "Usage: $0 [OPTIONS]"
-    echo ""
-    echo "Options:"
-    echo "  -f, --force      Force check all files even if no new commits"
-    echo "  -p, --packages   Enable package checking and building"
-    echo "  -n, --dry-run    Show what would be done without making changes"
-    echo "  -v, --verbose    Enable verbose output"
-    echo "  -h, --help       Show this help message"
-    echo ""
-    echo "This script updates your dotfiles by:"
-    echo "  1. Auto-detecting repository structure (dots/ prefix or direct)"
-    echo "  2. Pulling latest changes from git remote"
-    echo "  3. Optionally rebuilding packages (if -p flag is used)"
-    echo "  4. Syncing configuration files to home directory"
-    echo "  5. Updating script permissions"
-    exit 0
-    ;;
-  --skip-notice)
-    log_warning "Skipping notice about script being untested"
-    check=false
-    shift
-    ;;
-  *)
-    log_error "Unknown option: $1"
-    echo "Use --help for usage information"
-    exit 1
-    ;;
-  esac
-done
-
-if [[ "$check" == true ]]; then
+if [[ "$SKIP_NOTICE" != true ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
   log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
   log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
@@ -656,7 +568,7 @@ if [[ "$check" == true ]]; then
 fi
 
 # Check if we're in a git repository
-cd "$REPO_DIR" || die "Failed to change to repository directory"
+cd "$REPO_DIR" || log_die "Failed to change to repository directory"
 
 if git rev-parse --is-inside-work-tree &>/dev/null; then
   log_info "Running in git repository: $(git rev-parse --show-toplevel)"
@@ -678,7 +590,7 @@ if detected_dirs=$(detect_repo_structure); then
     fi
   done
 else
-  die "Failed to detect repository structure. Make sure you're in the correct directory."
+  log_die "Failed to detect repository structure. Make sure you're in the correct directory."
 fi
 
 # Step 1: Pull latest commits
@@ -694,7 +606,7 @@ if [[ -z "$current_branch" ]]; then
     git checkout master
     current_branch="master"
   else
-    die "Could not find main or master branch"
+    log_die "Could not find main or master branch"
   fi
 fi
 
@@ -712,7 +624,7 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   fi
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
-    die "Aborted by user"
+    log_die "Aborted by user"
   fi
   if [[ "$DRY_RUN" == true ]]; then
     log_info "[DRY-RUN] Would stash changes"
@@ -946,7 +858,7 @@ else
 fi
 
 echo
-echo -e "${CYAN}Summary:${NC}"
+echo -e "${STY_CYAN}Summary:${STY_RST}"
 if command -v git >/dev/null && git rev-parse --git-dir >/dev/null 2>&1; then
   echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)' 2>/dev/null || echo 'Unknown')"
 else
