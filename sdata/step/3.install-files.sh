@@ -32,13 +32,13 @@ function backup_clashing_targets(){
   done
 
   # Construct args_includes for rsync
+  local args_includes=()
   for i in "${clash_list[@]}"; do
-    current_target=$target_dir/$i
-    if [[ -d $current_target ]]; then
-      args_includes+=(--include="$current_target/")
-      args_includes+=(--include="$current_target/**")
+    if [[ -d "$target_dir/$i" ]]; then
+      args_includes+=(--include="/$i/")
+      args_includes+=(--include="/$i/**")
     else
-      args_includes+=(--include="$current_target")
+      args_includes+=(--include="/$i")
     fi
   done
   args_includes+=(--exclude='*')
