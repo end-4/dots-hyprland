@@ -33,7 +33,7 @@ Rectangle {
         let toggles = Config?.options.quickToggles.android.toggles ?? [];
 
         for (let i = 0; i < toggles.length; i++) {
-            data.push([parseInt(sizes[i]), toggles[i]]);
+            data.push([sizes[i], toggles[i]]);
         }
         return data;
     }

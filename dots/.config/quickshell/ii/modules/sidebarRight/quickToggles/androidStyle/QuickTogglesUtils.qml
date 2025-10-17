@@ -52,12 +52,7 @@ Singleton {
 
     function toggleOptionSize(index) {
         var sizes = Config.options.quickToggles.android.sizes
-
-        if (Config.options.quickToggles.android.sizes[index] === "1") {
-            Config.options.quickToggles.android.sizes[index] = "2"
-            return
-        }
-        else Config.options.quickToggles.android.sizes[index] = "1"
+        Config.options.quickToggles.android.sizes[index] = 3 - sizes[index] // 1 to 2, 2 to 1
     }
 
     //------------------------------------------------------------------------------------------//
@@ -87,7 +82,7 @@ Singleton {
     function addOption(name) {
         Config.options.quickToggles.android.toggles.push(name)
         //Config.options.quickToggles.android.sizes.push("1") // i have no fucking idea why this pushes only ""
-        Config.options.quickToggles.android.sizes = Config.options.quickToggles.android.sizes.concat(["1"])
+        Config.options.quickToggles.android.sizes = Config.options.quickToggles.android.sizes.concat([1])
     }
 
     //------------------------------------------------------------------------------------------//
@@ -139,7 +134,7 @@ Singleton {
     //------------------------------------------------------------------------------------------//
 
     /*
-        Components that has the material quick toggles
+        Components that has the android quick toggles
     */
     Component {
         id: networkComp

@@ -448,7 +448,7 @@ Singleton {
                     property bool showBrightness: false
                     property int mode: 0 // Options: 0: compact, 1: medium, 2: large
                     property string align: "center" // Options: left, center, right
-                    property list<string> sizes: ["2", "2", "1", "1", "2", "2"]
+                    property list<var> sizes: ["2", "2", "1", "1", "2", "2"]
                     property list<string> toggles: ["network", "bluetooth", "idleinhibitor", "easyeffects", "nightlight", "darkmode"]
                 }
             }
