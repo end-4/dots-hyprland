@@ -10,8 +10,8 @@ import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
 import "./quickToggles/"
-import "./quickToggles/classicStyle"
-import "./quickToggles/materialStyle/"
+import "./quickToggles/classicStyle/"
+import "./quickToggles/androidStyle/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
 
@@ -40,7 +40,7 @@ Item {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
                 root.showBluetoothDialog = false;
-                Config.options.quickToggles.material.inEditMode = false;
+                Config.options.quickToggles.android.inEditMode = false;
             }
         }
     }
@@ -96,15 +96,15 @@ Item {
 
                 ButtonGroup {
                     Loader {
-                        active: Config.options.quickToggles.style === "material"
+                        active: Config.options.quickToggles.style === "android"
                         sourceComponent: QuickToggleButton {
-                            toggled: Config.options.quickToggles.material.inEditMode
+                            toggled: Config.options.quickToggles.android.inEditMode
                             buttonIcon: "edit"
                             onClicked: {
-                                Config.options.quickToggles.material.inEditMode = !Config.options.quickToggles.material.inEditMode;
+                                Config.options.quickToggles.android.inEditMode = !Config.options.quickToggles.android.inEditMode;
                             }
                             StyledToolTip {
-                                text: Config.options.quickToggles.material.inEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
+                                text: Config.options.quickToggles.android.inEditMode ? Translation.tr("Middle Click: Toggle\nLeft/Right Click: Move\nHold: Toggle Size") : Translation.tr("Edit Material Panel Layout")
                             }
                         }
                     }
@@ -147,11 +147,11 @@ Item {
             Item {
                 id: quickPanelItem
                 
-                implicitHeight: quickPanelStyle === "material" ? materialQTLoader.implicitHeight : classicQTLoader.implicitHeight
+                implicitHeight: quickPanelStyle === "android" ? materialQTLoader.implicitHeight : classicQTLoader.implicitHeight
                 width: parent.width
                 Loader { 
                     id: materialQTLoader
-                    active: quickPanelStyle === "material"
+                    active: quickPanelStyle === "android"
                     sourceComponent: MaterialQuickPanel {}
                 }
                 Loader { 

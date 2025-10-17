@@ -21,7 +21,7 @@ GroupButton {
     readonly property real descTextSize: panelType == 2 ? 14 : 12
 
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
-    property string panelType: Config.options.quickToggles.material.mode
+    property string panelType: Config.options.quickToggles.android.mode
 
     property string buttonIcon
     property int buttonSize: 1 // Must be 1, 2 
@@ -45,20 +45,20 @@ GroupButton {
 
     // There is probably better ways of changing these, but i think these makes sense
     onClicked: event => {
-        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, -1)
     }
     rightReleaseAction: function() {
-        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         QuickTogglesUtils.moveOption(buttonIndex, +1)
     }
     clickAndHold: function() {
-        if (!Config.options.quickToggles.material.inEditMode || unusedName !== "") return;
+        if (!Config.options.quickToggles.android.inEditMode || unusedName !== "") return;
         
         QuickTogglesUtils.toggleOptionSize(buttonIndex)
     }
     middleReleaseAction: function() {
-        if (!Config.options.quickToggles.material.inEditMode) return
+        if (!Config.options.quickToggles.android.inEditMode) return
         if (unusedName === "") QuickTogglesUtils.removeOption(buttonIndex)
         else QuickTogglesUtils.addOption(unusedName)
     }
@@ -66,7 +66,7 @@ GroupButton {
     Rectangle {
         id: borderRect
         anchors.fill: parent
-        border.width: Config.options.quickToggles.material.border ? 2 : 0
+        border.width: Config.options.quickToggles.android.border ? 2 : 0
         border.color: toggled ? "transparent" : colBackgroundHover
         radius: root.radius
         Behavior on radius {animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)}

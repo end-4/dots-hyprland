@@ -18,11 +18,11 @@ MaterialQuickToggleButton {
     descText: toggled ? BluetoothStatus.firstActiveDevice.name : halfToggled ? "Not Connected" : "Off"
     buttonIcon: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
     onClicked: {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter?.enabled
     }
     altAction: () => {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         Quickshell.execDetached(["bash", "-c", `${Config.options.apps.bluetooth}`])
         GlobalStates.sidebarRightOpen = false
     }

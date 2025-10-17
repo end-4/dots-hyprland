@@ -5,8 +5,6 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 
-import "./utilButtons"
-
 Singleton {
     id: root
 
@@ -21,8 +19,8 @@ Singleton {
     function moveOption(index, offset) {
         var targetIndex = index + offset
 
-        var toggles = Config.options.quickToggles.material.toggles
-        var sizes = Config.options.quickToggles.material.sizes
+        var toggles = Config.options.quickToggles.android.toggles
+        var sizes = Config.options.quickToggles.android.sizes
 
         if (targetIndex < 0 || targetIndex >= toggles.length) return
 
@@ -41,8 +39,8 @@ Singleton {
         newSizesList[index] = newSizesList[targetIndex]
         newSizesList[targetIndex] = temp
 
-        Config.options.quickToggles.material.toggles = newTogglesList
-        Config.options.quickToggles.material.sizes = newSizesList
+        Config.options.quickToggles.android.toggles = newTogglesList
+        Config.options.quickToggles.android.sizes = newSizesList
     }
 
     //------------------------------------------------------------------------------------------//
@@ -53,13 +51,13 @@ Singleton {
     */
 
     function toggleOptionSize(index) {
-        var sizes = Config.options.quickToggles.material.sizes
+        var sizes = Config.options.quickToggles.android.sizes
 
-        if (Config.options.quickToggles.material.sizes[index] === "1") {
-            Config.options.quickToggles.material.sizes[index] = "2"
+        if (Config.options.quickToggles.android.sizes[index] === "1") {
+            Config.options.quickToggles.android.sizes[index] = "2"
             return
         }
-        else Config.options.quickToggles.material.sizes[index] = "1"
+        else Config.options.quickToggles.android.sizes[index] = "1"
     }
 
     //------------------------------------------------------------------------------------------//
@@ -71,13 +69,13 @@ Singleton {
 
     function removeOption(index) {
         // there is sync problems with splice when moving items fast (i have no idea why)
-        var togglesStart = Config.options.quickToggles.material.toggles.slice(0, index)
-        var togglesEnd = Config.options.quickToggles.material.toggles.slice(index + 1, Config.options.quickToggles.material.toggles.length)
-        Config.options.quickToggles.material.toggles = togglesStart.concat(togglesEnd)
+        var togglesStart = Config.options.quickToggles.android.toggles.slice(0, index)
+        var togglesEnd = Config.options.quickToggles.android.toggles.slice(index + 1, Config.options.quickToggles.android.toggles.length)
+        Config.options.quickToggles.android.toggles = togglesStart.concat(togglesEnd)
 
-        var sizesStart = Config.options.quickToggles.material.sizes.slice(0, index)
-        var sizesEnd = Config.options.quickToggles.material.sizes.slice(index + 1, Config.options.quickToggles.material.sizes.length)
-        Config.options.quickToggles.material.sizes = sizesStart.concat(sizesEnd)
+        var sizesStart = Config.options.quickToggles.android.sizes.slice(0, index)
+        var sizesEnd = Config.options.quickToggles.android.sizes.slice(index + 1, Config.options.quickToggles.android.sizes.length)
+        Config.options.quickToggles.android.sizes = sizesStart.concat(sizesEnd)
     }
 
     //------------------------------------------------------------------------------------------//
@@ -87,9 +85,9 @@ Singleton {
         Adds a new entry to toggles list in the given name
     */
     function addOption(name) {
-        Config.options.quickToggles.material.toggles.push(name)
-        //Config.options.quickToggles.material.sizes.push("1") // i have no fucking idea why this pushes only ""
-        Config.options.quickToggles.material.sizes = Config.options.quickToggles.material.sizes.concat(["1"])
+        Config.options.quickToggles.android.toggles.push(name)
+        //Config.options.quickToggles.android.sizes.push("1") // i have no fucking idea why this pushes only ""
+        Config.options.quickToggles.android.sizes = Config.options.quickToggles.android.sizes.concat(["1"])
     }
 
     //------------------------------------------------------------------------------------------//
@@ -145,9 +143,9 @@ Singleton {
     */
     Component {
         id: networkComp
-        NetworkToggleMaterial {
+        AndroidNetworkToggle {
             altAction: () => {
-                if (Config.options.quickToggles.material.inEditMode) return
+                if (Config.options.quickToggles.android.inEditMode) return
                 Network.enableWifi();
                 Network.rescanWifi();
                 root.showWifiDialog = true;
@@ -156,9 +154,9 @@ Singleton {
     }
     Component {
         id: bluetoothComp
-        BluetoothToggleMaterial {
+        AndroidBluetoothToggle {
             altAction: () => {
-                if (Config.options.quickToggles.material.inEditMode) return
+                if (Config.options.quickToggles.android.inEditMode) return
                 Bluetooth.defaultAdapter.enabled = true;
                 Bluetooth.defaultAdapter.discovering = true;
                 root.showBluetoothDialog = true;
@@ -167,50 +165,50 @@ Singleton {
     }
     Component {
         id: warpComp
-        CloudflareWarpMaterial {}
+        AndroidCloudflareWarpToggle {}
     }
     Component {
         id: easyEffectsComp
-        EasyEffectsMaterial {}
+        AndroidEasyEffectsToggle {}
     }
     Component {
         id: gameModeComp
-        GameModeMaterial {}
+        AndroidGameModeToggle {}
     }
     Component {
         id: idleComp
-        IdleInhibitorMaterial {}
+        AndroidIdleInhibitorToggle {}
     }
     Component {
         id: nightLightComp
-        NightLightMaterial {}
+        AndroidNightLightToggle {}
     }
     Component {
         id: screenSnipComp
-        ScreenSnipMaterial {}
+        AndroidScreenSnipToggle {}
     }
     Component {
         id: colorPickerComp
-        ColorPickerMaterial {}
+        AndroidColorPickerToggle {}
     }
     Component {
         id: keyboardComp
-        KeyboardToggleMaterial {}
+        AndroidKeyboardToggle {}
     }
     Component {
         id: micComp
-        MicToggleMaterial {}
+        AndroidMicToggle {}
     }
     Component {
         id: darkModeComp
-        DarkModeMaterial {}
+        AndroidDarkModeToggle {}
     }
     Component {
         id: performanceProfileComp
-        PerformanceProfileMaterial {}
+        AndroidPerformanceProfileToggle {}
     }
     Component {
         id: silentComp
-        SilentToggleMaterial {}
+        AndroidSilentToggle {}
     }
 }

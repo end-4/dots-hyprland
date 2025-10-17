@@ -23,7 +23,7 @@ MaterialQuickToggleButton {
                     }
     
     onClicked: event => {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         if (PowerProfiles.hasPerformanceProfile) {
             switch(PowerProfiles.profile) {
                 case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced

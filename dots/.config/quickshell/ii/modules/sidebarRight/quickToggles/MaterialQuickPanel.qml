@@ -8,8 +8,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 
-import "./materialStyle"
-import "./materialStyle/utilButtons"
+import "./androidStyle"
 
 Rectangle {
     id: root
@@ -19,19 +18,19 @@ Rectangle {
     implicitHeight: mainColumn.implicitHeight
     implicitWidth: mainColumn.implicitWidth
     property int heightSize: mainColumn.height // used by the parent
-    property string panelType: Config.options.quickToggles.material.mode
+    property string panelType: Config.options.quickToggles.android.mode
     property int tileSize: panelType == 2 ? 4 : 5
     property var rowModels: QuickTogglesUtils.splitRows(combinedData, tileSize)    
 
     property list<string> fullItemList: ["network","bluetooth","cloudflarewarp","easyeffects","gamemode","idleinhibitor","nightlight","screensnip",
     "colorpicker","showkeyboard","togglemic","darkmode","performanceprofile","silent"]
-    property list<string> filteredList: fullItemList.filter(item => !Config.options.quickToggles.material.toggles.includes(item))
+    property list<string> filteredList: fullItemList.filter(item => !Config.options.quickToggles.android.toggles.includes(item))
 
 
     property var combinedData: {
         let data = [];
-        let sizes = Config?.options.quickToggles.material.sizes ?? [];
-        let toggles = Config?.options.quickToggles.material.toggles ?? [];
+        let sizes = Config?.options.quickToggles.android.sizes ?? [];
+        let toggles = Config?.options.quickToggles.android.toggles ?? [];
 
         for (let i = 0; i < toggles.length; i++) {
             data.push([parseInt(sizes[i]), toggles[i]]);
@@ -45,7 +44,7 @@ Rectangle {
     function updateData() {
         root.getIndex = [] // reset the list so they dont get added up
         rowModels = QuickTogglesUtils.splitRows(combinedData, tileSize) // recalculate widgets position 
-        filteredList = fullItemList.filter(item => !Config.options.quickToggles.material.toggles.includes(item)) // recalculate unused buttons
+        filteredList = fullItemList.filter(item => !Config.options.quickToggles.android.toggles.includes(item)) // recalculate unused buttons
     }
 
 

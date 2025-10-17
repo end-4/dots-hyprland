@@ -18,11 +18,11 @@ MaterialQuickToggleButton {
     titleText: Network.wifiEnabled ? "Wifi" : Network.ethernet ? "Ethernet" : "Network"
     descText: toggled ? Network.networkName : halfToggled ? Network.wifiScanning ? "Scanning" :  Network.wifiConnecting ? "Connecting" : "On" : "Off"
     onClicked: {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         Network.toggleWifi()
     }
     altAction: () => {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`])
         GlobalStates.sidebarRightOpen = false
     }

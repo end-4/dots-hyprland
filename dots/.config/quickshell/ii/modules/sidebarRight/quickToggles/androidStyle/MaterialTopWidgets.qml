@@ -20,7 +20,7 @@ Column {
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
 
     StyledSlider { 
-        visible: Config.options.quickToggles.material.showVolume
+        visible: Config.options.quickToggles.android.showVolume
         anchors.left: parent.left
         anchors.right: parent.right
         configuration: StyledSlider.Configuration.M
@@ -39,7 +39,7 @@ Column {
     }
 
     StyledSlider { 
-        visible: Config.options.quickToggles.material.showBrightness
+        visible: Config.options.quickToggles.android.showBrightness
         anchors.left: parent.left
         anchors.right: parent.right
         configuration: StyledSlider.Configuration.M

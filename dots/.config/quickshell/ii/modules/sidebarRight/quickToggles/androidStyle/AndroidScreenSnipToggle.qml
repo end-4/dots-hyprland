@@ -13,7 +13,7 @@ MaterialQuickToggleButton {
     titleText: "Screenshot"
     descText: "Click me"
     onClicked: {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("screenshot.qml")])
     }

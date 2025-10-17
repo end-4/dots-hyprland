@@ -4,7 +4,7 @@ import qs
 import qs.modules.common
 import qs.modules.common.widgets
 
-import "./materialStyle"
+import "./androidStyle"
 
 
 Rectangle { 
@@ -21,7 +21,7 @@ Rectangle {
         Repeater {
             model: root.rowModels
             delegate: ColumnLayout { 
-                property string alignment: Config.options.quickToggles.material.align
+                property string alignment: Config.options.quickToggles.android.align
                 onAlignmentChanged: {
                     if (alignment === "left") Layout.alignment = Qt.AlignLeft
                     if (alignment === "right") Layout.alignment = Qt.AlignRight

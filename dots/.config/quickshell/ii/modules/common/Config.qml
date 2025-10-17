@@ -440,16 +440,16 @@ Singleton {
             }
 
             property JsonObject quickToggles: JsonObject {
-                property string style: "material"
-                property JsonObject material: JsonObject {
+                property string style: "android"
+                property JsonObject android: JsonObject {
                     property bool inEditMode: false
                     property bool border: false
-                    property bool showVolume: true
-                    property bool showBrightness: true
+                    property bool showVolume: false
+                    property bool showBrightness: false
                     property int mode: 0 // Options: 0: compact, 1: medium, 2: large
                     property string align: "center" // Options: left, center, right
-                    property list<string> sizes: ["2","2"]
-                    property list<string> toggles: ["network","bluetooth"]
+                    property list<string> sizes: ["2", "2", "1", "1", "2", "2"]
+                    property list<string> toggles: ["network", "bluetooth", "idleinhibitor", "easyeffects", "nightlight", "darkmode"]
                 }
             }
             

@@ -391,26 +391,26 @@ ContentPage {
                 options: [
                     {
                         displayName: Translation.tr("Classic"),
-                        icon: "radio",
+                        icon: "password_2",
                         value: "classic"
                     },
                     {
-                        displayName: Translation.tr("Material"),
-                        icon: "texture",
-                        value: "material"
+                        displayName: Translation.tr("Android"),
+                        icon: "action_key",
+                        value: "android"
                     }
                 ]
             }
         }
 
         ConfigRow{
-            visible: Config.options.quickToggles.style === "material"
+            visible: Config.options.quickToggles.style === "android"
             ContentSubsection {
                 title: Translation.tr("Mode")
                 ConfigSelectionArray {
-                    currentValue: Config.options.quickToggles.material.mode
+                    currentValue: Config.options.quickToggles.android.mode
                     onSelected: newValue => {
-                        Config.options.quickToggles.material.mode = newValue;
+                        Config.options.quickToggles.android.mode = newValue;
                     }
                     options: [
                         {
@@ -434,9 +434,9 @@ ContentPage {
             ContentSubsection {
                 title: Translation.tr("Leftover alignment")
                 ConfigSelectionArray {
-                    currentValue: Config.options.quickToggles.material.align
+                    currentValue: Config.options.quickToggles.android.align
                     onSelected: newValue => {
-                        Config.options.quickToggles.material.align = newValue;
+                        Config.options.quickToggles.android.align = newValue;
                     }
                     options: [
                         {
@@ -461,29 +461,29 @@ ContentPage {
 
 
         ConfigRow {
-            visible: Config.options.quickToggles.style === "material"
+            visible: Config.options.quickToggles.style === "android"
             ConfigSwitch {
                 buttonIcon: "volume_up"
                 text: Translation.tr("Show Volume")
-                checked: Config.options.quickToggles.material.showVolume
+                checked: Config.options.quickToggles.android.showVolume
                 onCheckedChanged: {
-                    Config.options.quickToggles.material.showVolume = checked;
+                    Config.options.quickToggles.android.showVolume = checked;
                 }
             }
             ConfigSwitch {
                 buttonIcon: "brightness_6"
                 text: Translation.tr("Show Brightness")
-                checked: Config.options.quickToggles.material.showBrightness
+                checked: Config.options.quickToggles.android.showBrightness
                 onCheckedChanged: {
-                    Config.options.quickToggles.material.showBrightness = checked;
+                    Config.options.quickToggles.android.showBrightness = checked;
                 }
             }
             ConfigSwitch {
                 buttonIcon: "panorama_wide_angle"
                 text: Translation.tr("Border")
-                checked: Config.options.quickToggles.material.border
+                checked: Config.options.quickToggles.android.border
                 onCheckedChanged: {
-                    Config.options.quickToggles.material.border = checked;
+                    Config.options.quickToggles.android.border = checked;
                 }
             }
         }

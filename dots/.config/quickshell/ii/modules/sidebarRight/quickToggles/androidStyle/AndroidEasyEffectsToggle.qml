@@ -19,12 +19,12 @@ MaterialQuickToggleButton {
     }
 
     onClicked: {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         EasyEffects.toggle()
     }
 
     altAction: () => {
-        if (Config.options.quickToggles.material.inEditMode) return;
+        if (Config.options.quickToggles.android.inEditMode) return;
         Quickshell.execDetached(["bash", "-c", "flatpak run com.github.wwmm.easyeffects || easyeffects"])
         GlobalStates.sidebarRightOpen = false
     }
