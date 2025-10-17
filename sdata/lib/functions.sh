@@ -95,3 +95,23 @@ function latest_commit_timestamp(){
   fi
   echo $result
 }
+
+function log_info() {
+  echo -e "${STY_BLUE}[INFO]${STY_RST} $1"
+}
+function log_success() {
+  echo -e "${STY_GREEN}[SUCCESS]${STY_RST} $1"
+}
+function log_warning() {
+  echo -e "${STY_YELLOW}[WARNING]${STY_RST} $1"
+}
+function log_error() {
+  echo -e "${STY_RED}[ERROR]${STY_RST} $1" >&2
+}
+function log_header() {
+  echo -e "\n${STY_PURPLE}=== $1 ===${STY_RST}"
+}
+function log_die() {
+  log_error "$1"
+  exit 1
+}

@@ -3,12 +3,15 @@
 
 # The script that use this file should have two lines on its top as follows:
 # cd "$(dirname "$0")" export base="$(pwd)"
-showhelp(){
-echo -e "Syntax: $0 [Options]...
+showhelp_global(){
+echo -e "Syntax: $0 [subcommand] [options]...
 
 Idempotent installation script for dotfiles.
-If no option is specified, run default install process.
+If no option nor subcommand is specified, run default install process.
 
+Subcommand:
+      install               The default subcommand which can be omitted.
+Options for install:
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
@@ -26,9 +29,13 @@ If no option is specified, run default install process.
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
       --via-nix             (Unavailable yet) Use Nix to install dependencies
       --exp-uninstall       Use experimental uninstall script
-      --exp-update          Use experimental update script
-  
-Update Script Options (only with --exp-update):
+
+Subcommand:
+      exp-uninstall         Using experimental uninstall script.
+
+Subcommand:
+      exp-update            Using experimental update script.
+Options for exp-update:
   -u, --update-force        Force check all files even if no new commits (update script)
   -p, --packages            Enable package checking and building (update script)  
   -n, --dry-run             Show what would be done without making changes (update script)
@@ -37,68 +44,30 @@ Update Script Options (only with --exp-update):
 "
 }
 
-cleancache(){
-  rm -rf "$base/cache"
-}
+# Handle subcommand
+case $1 in
+  # subcommand specified
+  install|exp-uninstall|exp-update)
+    SCRIPT_SUBCOMMAND=$1
+    shift
+    ;;
+  # no subcommand (has options: -* ; no options: "")
+  -*|"")
+    SCRIPT_SUBCOMMAND=install
+    ;;
+  # wrong subcommand
+  *)echo "Unknown subcommand \"$1\", aborting...";exit 1;;
+esac
 
-# `man getopt` to see more
-para=$(getopt \
-       -o hfk:csu:p:n:v \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update,update-force,packages,dry-run,verbose,skip-notice \
-       -n "$0" -- "$@")
-[ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
-#####################################################################################
-## getopt Phase 1
-# ignore parameter's order, execute options below first
-eval set -- "$para"
-while true ; do
-  case "$1" in
-    -h|--help) showhelp;exit;;
-    -c|--clean) cleancache;shift;;
-    --) break ;;
-    *) shift ;;
-  esac
-done
-#####################################################################################
-## getopt Phase 2
-
-eval set -- "$para"
-while true ; do
-  case "$1" in
-    ## Already processed in phase 1, but not exited
-    -c|--clean) shift;;
-    ## Ones without parameter
-    -f|--force) ask=false;shift;;
-    --skip-allgreeting) SKIP_ALLGREETING=true;shift;;
-    --skip-alldeps) SKIP_ALLDEPS=true;shift;;
-    --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
-    --skip-allfiles) SKIP_ALLFILES=true;shift;;
-    -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
-    --skip-hyprland) SKIP_HYPRLAND=true;shift;;
-    --skip-fish) SKIP_FISH=true;shift;;
-    --skip-miscconf) SKIP_MISCCONF=true;shift;;
-    --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
-    --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
-    --via-nix) INSTALL_VIA_NIX=true;shift;;
-    --exp-uninstall) EXPERIMENTAL_UNINSTALL_SCRIPT=true;shift;;
-    --exp-update) EXPERIMENTAL_UPDATE_SCRIPT=true;shift;;
-    
-    ## Update script specific options
-    -u|--update-force) UPDATE_FORCE=true;shift;;
-    -p|--packages) UPDATE_PACKAGES=true;shift;;
-    -n|--dry-run) UPDATE_DRY_RUN=true;shift;;
-    -v|--verbose) UPDATE_VERBOSE=true;shift;;
-    --skip-notice) SKIP_NOTICE=true;shift;;
-    
-    ## Ones with parameter
-    --fontset)
-    case $2 in
-      "default"|"zh-CN"|"vi") fontset="$2";;
-      *) echo -e "Wrong argument for $1.";exit 1;;
-    esac;echo "The fontset is ${fontset}.";shift 2;;
-
-    ## Ending
-    --) break ;;
-    *) echo -e "$0: Wrong parameters.";exit 1;;
-  esac
-done
+# Handle options for subcommand
+case ${SCRIPT_SUBCOMMAND} in
+  install)
+    source ./sdata/lib/options-install.sh
+    ;;
+  exp-uninstall)
+    #source ./sdata/lib/options-exp-uninstall.sh
+    ;;
+  exp-update)
+    source ./sdata/lib/options-exp-update.sh
+    ;;
+esac

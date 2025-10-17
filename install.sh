@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 export base="$(pwd)"
-
-# Store original arguments for experimental scripts
-ORIGINAL_ARGS=("$@")
-
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
@@ -14,28 +10,17 @@ prevent_sudo_or_root
 set -e
 
 #####################################################################################
-# For uninstall script
-if [[ "${EXPERIMENTAL_UNINSTALL_SCRIPT}" = true ]]; then
-  source ./sdata/exp/uninstall.sh
-  exit
-fi
-# For update script
-if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
-  export SOURCED_FROM_INSTALL=true
-  # Pass only update-specific arguments
-  UPDATE_ARGS=()
-  for arg in "${ORIGINAL_ARGS[@]}"; do
-    case "$arg" in
-      -u|--update-force|-p|--packages|-n|--dry-run|-v|--verbose|--skip-notice)
-        UPDATE_ARGS+=("$arg")
-        ;;
-      *)
-        ;;
-    esac
-  done
-  bash ./sdata/exp/update.sh "${UPDATE_ARGS[@]}"
-  exit
-fi
+# For subcommands
+case ${SCRIPT_SUBCOMMAND} in
+  exp-uninstall)
+    source ./sdata/exp/uninstall.sh
+    exit
+    ;;
+  exp-update)
+    source ./sdata/exp/update.sh
+    exit
+    ;;
+esac
 #####################################################################################
 # 0. Before we start
 if [[ "${SKIP_ALLGREETING}" != true ]]; then
@@ -54,9 +39,9 @@ fi
 #####################################################################################
 if [[ "${SKIP_ALLFILES}" != true ]]; then
   printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
-  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" != true ]]; then
-    source ./sdata/step/3.install-files.sh
-  else
+  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
     source ./sdata/step/3.install-files.experimental.sh
+  else
+    source ./sdata/step/3.install-files.sh
   fi
 fi
