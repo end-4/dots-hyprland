@@ -14,10 +14,12 @@ Rectangle {
     color: "transparent"
     radius: Appearance.rounding.normal
     anchors.horizontalCenter: parent.horizontalCenter
+
     ColumnLayout {
         spacing: 10
         id: mainColumn
         anchors.horizontalCenter: parent.horizontalCenter
+
         Repeater {
             model: root.rowModels
             delegate: ColumnLayout { 
@@ -29,8 +31,6 @@ Rectangle {
                 }
                 ButtonGroup {
                     id: grid
-                    
-                    
                     
                     Repeater {
                         model: modelData
