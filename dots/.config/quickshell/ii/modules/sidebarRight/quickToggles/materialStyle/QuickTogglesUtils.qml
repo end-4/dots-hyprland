@@ -55,11 +55,11 @@ Singleton {
     function toggleOptionSize(index) {
         var sizes = Config.options.quickToggles.material.sizes
 
-        if (Config.options.quickToggles.material.sizes[index] === "1") {
-            Config.options.quickToggles.material.sizes[index] = "2"
+        if (Config.options.quickToggles.material.sizes[index] == 1) {
+            Config.options.quickToggles.material.sizes[index] = 2
             return
         }
-        else Config.options.quickToggles.material.sizes[index] = "1"
+        else Config.options.quickToggles.material.sizes[index] = 1
     }
 
     //------------------------------------------------------------------------------------------//
@@ -89,7 +89,7 @@ Singleton {
     function addOption(name) {
         Config.options.quickToggles.material.toggles.push(name)
         //Config.options.quickToggles.material.sizes.push("1") // i have no fucking idea why this pushes only ""
-        Config.options.quickToggles.material.sizes = Config.options.quickToggles.material.sizes.concat(["1"])
+        Config.options.quickToggles.material.sizes = Config.options.quickToggles.material.sizes.concat([1])
     }
 
     //------------------------------------------------------------------------------------------//
