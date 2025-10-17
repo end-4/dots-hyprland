@@ -17,6 +17,7 @@ Column {
     property var screen: topWidgetsRoot.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
 
+    anchors.horizontalCenter: parent.horizontalCenter
     StyledSlider { 
         visible: Config.options.quickToggles.android.showVolume
         anchors.left: parent.left
