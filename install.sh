@@ -11,14 +11,21 @@ set -e
 
 #####################################################################################
 # For uninstall script
-  if [[ "${EXPERIMENTAL_UNINSTALL_SCRIPT}" = true ]]; then
-    source ./sdata/exp/uninstall.sh
-    exit
-  fi
-  if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
-    source ./sdata/exp/update.sh
-    exit
-  fi
+if [[ "${EXPERIMENTAL_UNINSTALL_SCRIPT}" = true ]]; then
+  source ./sdata/exp/uninstall.sh
+  exit
+fi
+# For update script
+if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
+  export SOURCED_FROM_INSTALL=true
+  FILTERED_ARGS=()
+  for arg in "${ORIGINAL_ARGS[@]}"; do
+    [[ "$arg" != "--exp-update" ]] && FILTERED_ARGS+=("$arg")
+  done
+  set -- "${FILTERED_ARGS[@]}"
+  source ./sdata/exp/update.sh
+  exit
+fi
 #####################################################################################
 # 0. Before we start
 if [[ "${SKIP_ALLGREETING}" != true ]]; then
