@@ -957,6 +957,7 @@ else
   log_info "Skipping file updates (no changes detected and not in force mode)"
 fi
 
+set +x
 # Step 4: Update script permissions
 log_header "Updating Script Permissions"
 
