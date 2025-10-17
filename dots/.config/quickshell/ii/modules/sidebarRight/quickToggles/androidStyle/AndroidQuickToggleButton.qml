@@ -5,7 +5,6 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import qs
 
-
 GroupButton {
     id: button
 
