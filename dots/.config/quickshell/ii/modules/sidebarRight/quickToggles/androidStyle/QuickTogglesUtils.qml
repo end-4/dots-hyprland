@@ -52,7 +52,7 @@ Singleton {
 
     function toggleOptionSize(index) {
         var sizes = Config.options.quickToggles.android.sizes
-        Config.options.quickToggles.android.sizes[index] = 3 - sizes[index] // 1 to 2, 2 to 1
+        sizes[index] = 3 - sizes[index] // 1 to 2, 2 to 1
     }
 
     //------------------------------------------------------------------------------------------//
