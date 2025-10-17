@@ -26,8 +26,6 @@ if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
   UPDATE_ARGS=()
   for arg in "${ORIGINAL_ARGS[@]}"; do
     case "$arg" in
-      --exp-update|--force|-f|--clean|-c|--skip-allgreeting|--skip-alldeps|--skip-allsetups|--skip-allfiles|--skip-sysupdate|-s|--skip-hyprland|--skip-fish|--skip-miscconf|--skip-plasmaintg|--exp-files|--via-nix|--fontset)
-        ;;
       -u|--update-force|-p|--packages|-n|--dry-run|-v|--verbose|--skip-notice)
         UPDATE_ARGS+=("$arg")
         ;;
