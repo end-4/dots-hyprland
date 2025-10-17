@@ -26,6 +26,7 @@ If no option is specified, run default install process.
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
       --via-nix             (Unavailable yet) Use Nix to install dependencies
       --exp-uninstall       Use experimental uninstall script
+      --exp-update          Use experimental update script
 "
 }
 
@@ -36,7 +37,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall \
+       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -73,6 +74,7 @@ while true ; do
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     --exp-uninstall) EXPERIMENTAL_UNINSTALL_SCRIPT=true;shift;;
+    --exp-update) EXPERIMENTAL_UPDATE_SCRIPT=true;shift;;
     ## Ones with parameter
     
     --fontset)
