@@ -111,8 +111,7 @@ safe_read() {
   local input_value=""
 
   echo -n "$prompt"
-  # Try to read from tty only if it's an interactive session
-  if [[ -t 0 ]] && read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
+  if read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
     # Use printf instead of eval for security
     printf -v "$varname" '%s' "$input_value"
     return 0
@@ -549,7 +548,7 @@ get_changed_files() {
   local dir_path="$1"
 
   if [[ "$FORCE_CHECK" == true ]]; then
-    find "$dir_path" -type f -print0
+    find "$dir_path" -type f -print0 2>/dev/null
   else
     # Check if we can use git diff (HEAD@{1} exists)
     if git rev-parse --verify HEAD@{1} &>/dev/null; then
@@ -561,7 +560,7 @@ get_changed_files() {
           printf '%s\0' "$full_path"
           has_changes=true
         fi
-      done < <(git diff --name-only HEAD@{1} HEAD || true)
+      done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
       
       # If git diff found changes, we're done
       if [[ "$has_changes" == true ]]; then
@@ -570,7 +569,7 @@ get_changed_files() {
     fi
     
     # Fallback: check all files (fresh clone or no git changes)
-    find "$dir_path" -type f -print0
+    find "$dir_path" -type f -print0 2>/dev/null
   fi
 }
 
@@ -621,7 +620,6 @@ while [[ $# -gt 0 ]]; do
     echo "  -n, --dry-run    Show what would be done without making changes"
     echo "  -v, --verbose    Enable verbose output"
     echo "  -h, --help       Show this help message"
-    echo "  --skip-notice    Skip warning notice about script being untested"
     echo ""
     echo "This script updates your dotfiles by:"
     echo "  1. Auto-detecting repository structure (dots/ prefix or direct)"
@@ -707,17 +705,10 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   git status --short
   echo
 
-  response="n"
-  # The 'check' variable is set to false when --skip-notice is used, which we use to detect non-interactive mode.
-  if [[ "$check" == false ]]; then
-    log_info "Non-interactive mode detected, automatically stashing changes."
-    response="y"
-  else
-    if ! safe_read "Do you want to continue? This will stash your changes. (y/N): " response "N"; then
-      echo
-      log_error "Failed to read input. Aborting."
-      exit 1
-    fi
+  if ! safe_read "Do you want to continue? This will stash your changes. (y/N): " response "N"; then
+    echo
+    log_error "Failed to read input. Aborting."
+    exit 1
   fi
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
@@ -858,13 +849,14 @@ if [[ "$process_files" == true ]]; then
   files_processed=0
   files_updated=0
   files_created=0
-  files_skipped=0
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
     
     if [[ ! -d "$repo_dir_path" ]]; then
-      log_warning "Skipping non-existent directory: $repo_dir_path"
+      if [[ "$VERBOSE" == true ]]; then
+        log_warning "Skipping non-existent directory: $repo_dir_path"
+      fi
       continue
     fi
     
@@ -886,35 +878,19 @@ if [[ "$process_files" == true ]]; then
       log_info "[DRY-RUN] Would create directory: $home_dir_path"
     fi
 
-    # Debug: Check what files are found
-    if [[ "$VERBOSE" == true ]]; then
-      log_info "Looking for files in: $repo_dir_path"
-    fi
-
     while IFS= read -r -d '' repo_file; do
       # Calculate relative path from the repo source directory
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
 
-      if [[ "$VERBOSE" == true ]]; then
-        log_info "Checking file: $rel_path"
-      fi
-
       if should_ignore "$home_file"; then
-        if [[ "$VERBOSE" == true ]]; then
-          log_info "Skipping ignored file: $home_file"
-        fi
-        ((files_skipped++))
         continue
       fi
 
       ((files_processed++))
 
-      # Ensure parent directory exists
       if [[ "$DRY_RUN" != true ]]; then
         mkdir -p "$(dirname "$home_file")"
-      else
-        log_info "[DRY-RUN] Would create directory: $(dirname "$home_file")"
       fi
 
       if [[ -f "$home_file" ]]; then
@@ -924,20 +900,14 @@ if [[ "$process_files" == true ]]; then
             log_warning "[DRY-RUN] Conflict detected (would prompt): $home_file"
             ((files_updated++))
           else
-            log_info "Handling conflict for: $home_file"
             handle_file_conflict "$repo_file" "$home_file"
             ((files_updated++))
-          fi
-        else
-          if [[ "$VERBOSE" == true ]]; then
-            log_info "No changes in: $rel_path"
           fi
         fi
       else
         if [[ "$DRY_RUN" == true ]]; then
           log_info "[DRY-RUN] Would create new file: $home_file"
         else
-          log_info "Creating new file: $home_file"
           cp -p "$repo_file" "$home_file"
           log_success "Created new file: $home_file"
         fi
@@ -951,7 +921,6 @@ if [[ "$process_files" == true ]]; then
   log_info "- Files processed: $files_processed"
   log_info "- Files with conflicts: $files_updated"
   log_info "- New files created: $files_created"
-  log_info "- Files skipped (ignored): $files_skipped"
 else
   log_info "Skipping file updates (no changes detected and not in force mode)"
 fi
