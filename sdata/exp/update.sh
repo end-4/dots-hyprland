@@ -548,7 +548,7 @@ get_changed_files() {
   local dir_path="$1"
 
   if [[ "$FORCE_CHECK" == true ]]; then
-    find "$dir_path" -type f -print0 2>/dev/null
+    find "$dir_path" -type f -print0
   else
     # Check if we can use git diff (HEAD@{1} exists)
     if git rev-parse --verify HEAD@{1} &>/dev/null; then
@@ -560,7 +560,7 @@ get_changed_files() {
           printf '%s\0' "$full_path"
           has_changes=true
         fi
-      done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+      done < <(git diff --name-only HEAD@{1} HEAD || true)
       
       # If git diff found changes, we're done
       if [[ "$has_changes" == true ]]; then
@@ -569,7 +569,7 @@ get_changed_files() {
     fi
     
     # Fallback: check all files (fresh clone or no git changes)
-    find "$dir_path" -type f -print0 2>/dev/null
+    find "$dir_path" -type f -print0
   fi
 }
 
