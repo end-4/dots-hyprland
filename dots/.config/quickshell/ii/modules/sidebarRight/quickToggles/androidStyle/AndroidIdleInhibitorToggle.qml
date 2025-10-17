@@ -7,14 +7,13 @@ AndroidQuickToggleButton {
     id: root
     toggled: Idle.inhibit
     buttonIcon: toggled ? "kettle" : "coffee"
-    titleText: "Idle Inhibitor"
-    descText: toggled ? "On" : "Off"
+    titleText: Translation.tr("Idle Inhibitor")
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         Idle.toggleInhibit()
     }
     StyledToolTip {
-        text: Translation.tr("Keep system awake")
+        text: Translation.tr("Keeps system awake")
     }
 
 }

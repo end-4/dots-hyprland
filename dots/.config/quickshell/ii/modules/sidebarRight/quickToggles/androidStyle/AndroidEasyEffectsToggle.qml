@@ -12,8 +12,7 @@ AndroidQuickToggleButton {
     toggled: EasyEffects.active
     visible: EasyEffects.available
     buttonIcon: toggled ? "tune" : "instant_mix"
-    titleText: "Easy Effects"
-    descText: toggled ? "On" : "Off"
+    titleText: Translation.tr("Easy Effects")
     Component.onCompleted: {
         EasyEffects.fetchActiveState()
     }

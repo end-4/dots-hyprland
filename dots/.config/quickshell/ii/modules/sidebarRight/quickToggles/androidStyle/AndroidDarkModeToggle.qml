@@ -10,8 +10,7 @@ AndroidQuickToggleButton {
     id: root
     toggled: Appearance.m3colors.darkmode
     buttonIcon: Appearance.m3colors.darkmode ? "contrast" : "light_mode"
-    titleText: "Dark Mode"
-    descText: toggled ? "On" : "Off"
+    titleText: Translation.tr("Dark Mode")
     onClicked: event => {
         if (Config.options.quickToggles.android.inEditMode) return;
         if (Appearance.m3colors.darkmode) {
@@ -21,6 +20,6 @@ AndroidQuickToggleButton {
         }
     }
     StyledToolTip {
-        text: "Dark Mode"
+        text: titleText
     }
 }

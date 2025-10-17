@@ -14,7 +14,7 @@ AndroidQuickToggleButton {
                         case PowerProfile.Balanced: return "settings_slow_motion"
                         case PowerProfile.Performance: return "local_fire_department"
                     }
-    titleText: "Profile"
+    titleText: Translation.tr("Performance Profile")
     descText: switch(PowerProfiles.profile) {
                         case PowerProfile.PowerSaver: return "Power Saver"
                         case PowerProfile.Balanced: return "Balanced"

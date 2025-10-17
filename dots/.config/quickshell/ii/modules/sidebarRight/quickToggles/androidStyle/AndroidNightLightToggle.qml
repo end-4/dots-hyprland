@@ -10,7 +10,7 @@ AndroidQuickToggleButton {
     property bool enabled: Hyprsunset.active
     toggled: enabled
     buttonIcon: toggled ? Config.options.light.night.automatic ? "night_sight_auto" : "bedtime" : "bedtime_off"
-    titleText: "Night Light"
+    titleText: Translation.tr("Night Light")
     descText: toggled ? Config.options.light.night.automatic ? "Automatic" : "On" : "Off"
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;

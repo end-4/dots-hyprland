@@ -10,8 +10,7 @@ AndroidQuickToggleButton {
     id: root
     toggled: false
     buttonIcon: "colorize"
-    titleText: "Color Picker"
-    descText: "Click me"
+    titleText: Translation.tr("Color Picker")
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         GlobalStates.sidebarRightOpen = false;
@@ -27,6 +26,6 @@ AndroidQuickToggleButton {
         }
     }
     StyledToolTip {
-        text: "Color Picker"
+        text: titleText
     }
 }

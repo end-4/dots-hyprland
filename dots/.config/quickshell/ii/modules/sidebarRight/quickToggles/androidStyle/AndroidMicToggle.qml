@@ -11,8 +11,7 @@ AndroidQuickToggleButton {
     id: root
     toggled: !Pipewire.defaultAudioSource?.audio?.muted
     buttonIcon: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
-    titleText: "Toggle Mic"
-    descText: toggled? "Mic On" : "Mic Off"
+    titleText: Translation.tr("Toggle Microphone")
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])

@@ -9,14 +9,13 @@ AndroidQuickToggleButton {
     id: root
     toggled: GlobalStates.oskOpen
     buttonIcon: toggled ? "keyboard_hide" : "keyboard"
-    titleText: "Keyboard"
-    descText: toggled ? "On" : "Off"
+    titleText: Translation.tr("Keyboard")
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         GlobalStates.sidebarRightOpen = false;
         onClicked: GlobalStates.oskOpen = !GlobalStates.oskOpen
     }
     StyledToolTip {
-        text: "Toggle Keyboard"
+        text: titleText
     }
 }

@@ -9,8 +9,7 @@ AndroidQuickToggleButton {
     id: root
     buttonIcon: toggled ? "sports_esports" : "gamepad"
     toggled: toggled
-    titleText: "Game Mode"
-    descText: toggled ? "On" : "Off"
+    titleText: Translation.tr("Game Mode")
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         root.toggled = !root.toggled
@@ -29,6 +28,6 @@ AndroidQuickToggleButton {
         }
     }
     StyledToolTip {
-        text: Translation.tr("Game mode")
+        text: titleText
     }
 }
