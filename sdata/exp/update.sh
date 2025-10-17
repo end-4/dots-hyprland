@@ -839,6 +839,7 @@ else
   fi
 fi
 
+set -x
 # Step 3: Update configuration files
 log_header "Updating Configuration Files"
 
