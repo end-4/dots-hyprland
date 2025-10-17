@@ -17,11 +17,11 @@ GroupButton {
     buttonRadiusPressed: buttonToggledRadius
 
     readonly property real buttonIconSize: unusedName === "" || buttonSize === 2 ? baseSize / 2.5 : baseSize / 3
-    readonly property real titleTextSize: panelType == 2 ? 16 : 13
-    readonly property real descTextSize: panelType == 2 ? 14 : 12
+    readonly property real titleTextSize: maxColumn == 4 ? 15 : 13
+    readonly property real descTextSize: maxColumn == 4 ? 13 : 12
 
     property color colText: root.toggled ? Appearance.colors.colLayer2 : Appearance.colors.colOnLayer1
-    property string panelType: Config.options.quickToggles.android.mode
+    property int maxColumn: Config.options.quickToggles.android.maxColumn
 
     property string buttonIcon
     property real buttonSize: 0.75 // Must be 1, 2 
@@ -31,11 +31,10 @@ GroupButton {
     property string unusedName: ""
     
     property int unusedButtonSize: 48
-    property int baseSize: panelType == 0 ? 50 : panelType == 1 ? 56 : 62
-    property real widthMultiplier: panelType == 0 ? 1.55 : panelType == 1 ? 1.4 : 1.6
-    property real calculatedWidth: baseSize * buttonSize * widthMultiplier - 5 
-    baseWidth: unusedName === "" ? calculatedWidth : unusedButtonSize * 1.6
-    baseHeight: unusedName === "" ? baseSize : unusedButtonSize
+    property int calculatedWidth: maxColumn == 4 ? 95 : 75
+    property int calculatedHeight: 55
+    baseWidth: unusedName === "" ? calculatedWidth * buttonSize - 5 : unusedButtonSize * 1.6
+    baseHeight: unusedName === "" ? calculatedHeight : unusedButtonSize
     
     // can be removed if you want less behaviors. but this reduces the bounciness so it helps
     Behavior on implicitWidth { animation: Appearance.animation.elementResize.numberAnimation.createObject(this) } 
@@ -80,7 +79,7 @@ GroupButton {
         anchors.left: buttonSize === 2 ? parent.left : undefined
         anchors.verticalCenter: buttonSize === 2 ? parent.verticalCenter : undefined
 
-        height: baseSize - (baseSize / 3)
+        height: calculatedHeight - (calculatedHeight / 3)
         width: height
         radius: buttonRadius
         color: (buttonSize === 1 || toggled) ? "transparent" : halfToggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer2
@@ -108,10 +107,10 @@ GroupButton {
         active: buttonSize === 2
         sourceComponent: Item {
             anchors.left: parent.left
-            anchors.leftMargin: panelType === 0 ? 50 : 60
+            anchors.leftMargin: 50
             anchors.verticalCenter: parent.verticalCenter
-            height: baseSize
-            width: baseSize * 3 - baseSize
+            height: calculatedHeight
+            width: calculatedWidth * 3 - calculatedWidth
             StyledText {
                 anchors.bottom: parent.verticalCenter
                 anchors.left: parent.left

@@ -446,6 +446,7 @@ Singleton {
                     property bool border: false
                     property bool showVolume: false
                     property bool showBrightness: false
+                    property int maxColumn: 4 // Options: 4, 5
                     property int mode: 0 // Options: 0: compact, 1: medium, 2: large
                     property string align: "center" // Options: left, center, right
                     property list<var> sizes: [2, 2, 1, 1, 2, 2]

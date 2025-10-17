@@ -406,27 +406,23 @@ ContentPage {
         ConfigRow{
             visible: Config.options.quickToggles.style === "android"
             ContentSubsection {
-                title: Translation.tr("Mode")
+                visible: Config.options.quickToggles.style === "android"
+                title: Translation.tr("Max column")
                 ConfigSelectionArray {
-                    currentValue: Config.options.quickToggles.android.mode
+                    currentValue: Config.options.quickToggles.android.maxColumn
                     onSelected: newValue => {
-                        Config.options.quickToggles.android.mode = newValue;
+                        Config.options.quickToggles.android.maxColumn = newValue;
                     }
                     options: [
                         {
-                            displayName: Translation.tr("Compact"),
-                            icon: "tile_small",
-                            value: 0
+                            displayName: Translation.tr("4 Column"),
+                            icon: "android_cell_4_bar",
+                            value: 4
                         },
                         {
-                            displayName: Translation.tr("Medium"),
-                            icon: "tile_medium",
-                            value: 1
-                        },
-                        {
-                            displayName: Translation.tr("Large"),
-                            icon: "tile_large",
-                            value: 2
+                            displayName: Translation.tr("5 Column"),
+                            icon: "android_cell_5_bar",
+                            value: 5
                         }
                     ]
                 }
@@ -458,6 +454,8 @@ ContentPage {
                 }
             }
         }
+        
+        
 
 
         ConfigRow {
