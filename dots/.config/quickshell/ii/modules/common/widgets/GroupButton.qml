@@ -15,6 +15,7 @@ Button {
     property string buttonText
     property real buttonRadius: Appearance?.rounding?.small ?? 8
     property real buttonRadiusPressed: Appearance?.rounding?.small ?? 6
+    property real toggledRadius: buttonRadius
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
     property var altAction // Right click or hold
@@ -27,7 +28,6 @@ Button {
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
     property real clickedWidth: baseWidth + 20
     property real clickedHeight: baseHeight
-    property real toggledRadius: 0
     property var parentGroup: root.parent
     property int clickIndex: parentGroup?.clickIndex ?? -1
 
