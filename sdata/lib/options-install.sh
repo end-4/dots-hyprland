@@ -1,4 +1,29 @@
 # Handle args for subcmd: install
+showhelp(){
+echo -e "Syntax: $0 [OPTIONS]...
+
+Idempotent installation script for dotfiles.
+
+Options for install:
+  -h, --help                Print this help message and exit
+  -f, --force               (Dangerous) Force mode without any confirm
+  -c, --clean               Clean the build cache first
+      --skip-allgreeting    Skip the whole process greeting
+      --skip-alldeps        Skip the whole process installing dependency
+      --skip-allsetups      Skip the whole process setting up permissions/services etc
+      --skip-allfiles       Skip the whole process copying configuration files
+  -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
+      --skip-hyprland       Skip installing the config for Hyprland
+      --skip-fish           Skip installing the config for Fish
+      --skip-plasmaintg     Skip installing plasma-browser-integration
+      --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
+                            AGS, Fish and Hyprland
+      --exp-files           Use experimental script for the third step copying files
+      --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
+      --via-nix             (Unavailable yet) Use Nix to install dependencies
+"
+}
+
 cleancache(){
   rm -rf "$base/cache"
 }
@@ -15,7 +40,7 @@ para=$(getopt \
 eval set -- "$para"
 while true ; do
   case "$1" in
-    -h|--help) showhelp_global;exit;;
+    -h|--help) showhelp;exit;;
     -c|--clean) cleancache;shift;;
     --) break ;;
     *) shift ;;

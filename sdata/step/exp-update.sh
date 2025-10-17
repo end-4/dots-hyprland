@@ -564,7 +564,6 @@ if [[ "$SKIP_NOTICE" == false ]]; then
     exit 1
   fi
 fi
-exit
 
 # Check if we're in a git repository
 cd "$REPO_ROOT" || log_die "Failed to change to repository directory"
