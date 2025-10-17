@@ -111,7 +111,7 @@ safe_read() {
   local input_value=""
 
   echo -n "$prompt"
-  if read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
+  if { read -r input_value </dev/tty; } 2>/dev/null || read -r input_value 2>/dev/null; then
     # Use printf instead of eval for security
     printf -v "$varname" '%s' "$input_value"
     return 0
