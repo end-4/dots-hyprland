@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
+# TODO: Use REPO_ROOT instead of base
+# Also, when scripts are sourced they do not need export to inherit vars
 export base="$(pwd)"
+REPO_ROOT="$(pwd)"
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
@@ -13,11 +16,11 @@ set -e
 # For subcommands
 case ${SCRIPT_SUBCOMMAND} in
   exp-uninstall)
-    source ./sdata/exp/uninstall.sh
+    source ./sdata/step/exp-uninstall.sh
     exit
     ;;
   exp-update)
-    source ./sdata/exp/update.sh
+    source ./sdata/step/exp-update.sh
     exit
     ;;
 esac

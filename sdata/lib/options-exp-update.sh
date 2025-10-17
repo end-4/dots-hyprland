@@ -17,17 +17,6 @@ This script updates your dotfiles by:
   5. Updating script permissions
 "
 }
-    0
-    ;;
-    shift
-    ;;
-  *)
-    log_error "Unknown option: $1"
-    echo "Use --help for usage information"
-    exit 1
-    ;;
-  esac
-done
 # `man getopt` to see more
 para=$(getopt \
   -o hfpnv \
@@ -52,6 +41,7 @@ FORCE_CHECK=false
 CHECK_PACKAGES=false
 DRY_RUN=false
 VERBOSE=false
+SKIP_NOTICE=false
 
 eval set -- "$para"
 while true ; do
