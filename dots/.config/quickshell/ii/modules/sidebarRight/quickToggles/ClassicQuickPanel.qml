@@ -1,3 +1,4 @@
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
@@ -6,9 +7,6 @@ import QtQuick.Layouts
 import "./classicStyle"
 
 ButtonGroup {
-
-    property real heightSize: 50
-
     spacing: 5
     padding: 5
     color: Appearance.colors.colLayer1

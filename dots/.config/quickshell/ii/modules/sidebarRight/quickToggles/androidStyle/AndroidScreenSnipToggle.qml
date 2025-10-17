@@ -10,7 +10,7 @@ AndroidQuickToggleButton {
     toggled: false
     buttonIcon: "screenshot_region"
     titleText: "Screenshot"
-    descText: "Click me"
+    descText: ""
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
         GlobalStates.sidebarRightOpen = false;
