@@ -55,6 +55,9 @@ ii_check_venv() {
   which python
   deactivate
 }
+ii_check_quickshell_version() {
+  pacman -Q | grep -E 'quickshell|qt6-base'
+}
 
 e "Checking git repo info"
 x git remote get-url origin
@@ -84,7 +87,7 @@ commands+=(ags agsv1)
 
 e "Checking versions"
 x Hyprland --version
-x pacman -Q | grep -E 'quickshell|qt6-base'
+x ii_check_quickshell_version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
