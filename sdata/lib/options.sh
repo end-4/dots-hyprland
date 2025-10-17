@@ -16,7 +16,6 @@ If no option is specified, run default install process.
       --skip-alldeps        Skip the whole process installing dependency
       --skip-allsetups      Skip the whole process setting up permissions/services etc
       --skip-allfiles       Skip the whole process copying configuration files
-      --skip-notice         Skip warning notice (for experimental scripts)
   -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
@@ -28,6 +27,13 @@ If no option is specified, run default install process.
       --via-nix             (Unavailable yet) Use Nix to install dependencies
       --exp-uninstall       Use experimental uninstall script
       --exp-update          Use experimental update script
+  
+Update Script Options (only with --exp-update):
+  -u, --update-force        Force check all files even if no new commits (update script)
+  -p, --packages            Enable package checking and building (update script)  
+  -n, --dry-run             Show what would be done without making changes (update script)
+  -v, --verbose             Enable verbose output (update script)
+      --skip-notice         Skip warning notice (for experimental scripts)
 "
 }
 
@@ -37,8 +43,8 @@ cleancache(){
 
 # `man getopt` to see more
 para=$(getopt \
-       -o hfk:cs \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-notice,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update \
+       -o hfk:csu:p:n:v \
+       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update,update-force,packages,dry-run,verbose,skip-notice \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -67,7 +73,6 @@ while true ; do
     --skip-alldeps) SKIP_ALLDEPS=true;shift;;
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
     --skip-allfiles) SKIP_ALLFILES=true;shift;;
-    --skip-notice) SKIP_NOTICE=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
@@ -77,8 +82,15 @@ while true ; do
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     --exp-uninstall) EXPERIMENTAL_UNINSTALL_SCRIPT=true;shift;;
     --exp-update) EXPERIMENTAL_UPDATE_SCRIPT=true;shift;;
-    ## Ones with parameter
     
+    ## Update script specific options
+    -u|--update-force) UPDATE_FORCE=true;shift;;
+    -p|--packages) UPDATE_PACKAGES=true;shift;;
+    -n|--dry-run) UPDATE_DRY_RUN=true;shift;;
+    -v|--verbose) UPDATE_VERBOSE=true;shift;;
+    --skip-notice) SKIP_NOTICE=true;shift;;
+    
+    ## Ones with parameter
     --fontset)
     case $2 in
       "default"|"zh-CN"|"vi") fontset="$2";;
