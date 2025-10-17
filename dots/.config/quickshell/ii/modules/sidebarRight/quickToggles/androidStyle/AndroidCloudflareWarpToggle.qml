@@ -12,7 +12,6 @@ AndroidQuickToggleButton {
     visible: false
     buttonIcon: toggled ? "security" : "shield"
     titleText: "WARP (1.1.1.1)"
-    descText: toggled ? "On" : "Off"
 
     onClicked: {
         if (Config.options.quickToggles.android.inEditMode) return;
