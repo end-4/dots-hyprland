@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 export base="$(pwd)"
+
+# Store original arguments for experimental scripts
+ORIGINAL_ARGS=("$@")
+
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
@@ -18,12 +22,20 @@ fi
 # For update script
 if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
   export SOURCED_FROM_INSTALL=true
-  FILTERED_ARGS=()
+  # Pass only update-specific arguments
+  UPDATE_ARGS=()
   for arg in "${ORIGINAL_ARGS[@]}"; do
-    [[ "$arg" != "--exp-update" ]] && FILTERED_ARGS+=("$arg")
+    case "$arg" in
+      --exp-update|--force|-f|--clean|-c|--skip-allgreeting|--skip-alldeps|--skip-allsetups|--skip-allfiles|--skip-sysupdate|-s|--skip-hyprland|--skip-fish|--skip-miscconf|--skip-plasmaintg|--exp-files|--via-nix|--fontset)
+        # These are install script args, skip them
+        ;;
+      *)
+        UPDATE_ARGS+=("$arg")
+        ;;
+    esac
   done
-  set -- "${FILTERED_ARGS[@]}"
-  source ./sdata/exp/update.sh
+  # Execute update.sh with update-specific arguments
+  bash ./sdata/exp/update.sh "${UPDATE_ARGS[@]}"
   exit
 fi
 #####################################################################################
