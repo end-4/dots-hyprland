@@ -111,7 +111,8 @@ safe_read() {
   local input_value=""
 
   echo -n "$prompt"
-  if read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
+  # Try to read from tty only if it's an interactive session
+  if [[ -t 0 ]] && read -r input_value </dev/tty 2>/dev/null || read -r input_value 2>/dev/null; then
     # Use printf instead of eval for security
     printf -v "$varname" '%s' "$input_value"
     return 0
@@ -706,10 +707,17 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   git status --short
   echo
 
-  if ! safe_read "Do you want to continue? This will stash your changes. (y/N): " response "N"; then
-    echo
-    log_error "Failed to read input. Aborting."
-    exit 1
+  response="n"
+  # The 'check' variable is set to false when --skip-notice is used, which we use to detect non-interactive mode.
+  if [[ "$check" == false ]]; then
+    log_info "Non-interactive mode detected, automatically stashing changes."
+    response="y"
+  else
+    if ! safe_read "Do you want to continue? This will stash your changes. (y/N): " response "N"; then
+      echo
+      log_error "Failed to read input. Aborting."
+      exit 1
+    fi
   fi
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
