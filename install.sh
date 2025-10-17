@@ -27,14 +27,14 @@ if [[ "${EXPERIMENTAL_UPDATE_SCRIPT}" = true ]]; then
   for arg in "${ORIGINAL_ARGS[@]}"; do
     case "$arg" in
       --exp-update|--force|-f|--clean|-c|--skip-allgreeting|--skip-alldeps|--skip-allsetups|--skip-allfiles|--skip-sysupdate|-s|--skip-hyprland|--skip-fish|--skip-miscconf|--skip-plasmaintg|--exp-files|--via-nix|--fontset)
-        # These are install script args, skip them
+        ;;
+      -u|--update-force|-p|--packages|-n|--dry-run|-v|--verbose|--skip-notice)
+        UPDATE_ARGS+=("$arg")
         ;;
       *)
-        UPDATE_ARGS+=("$arg")
         ;;
     esac
   done
-  # Execute update.sh with update-specific arguments
   bash ./sdata/exp/update.sh "${UPDATE_ARGS[@]}"
   exit
 fi
