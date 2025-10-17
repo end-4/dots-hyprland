@@ -4,6 +4,7 @@ import qs.services
 import qs.modules.common
 import QtQuick
 import Quickshell
+import Quickshell.Bluetooth
 
 Singleton {
     id: root
