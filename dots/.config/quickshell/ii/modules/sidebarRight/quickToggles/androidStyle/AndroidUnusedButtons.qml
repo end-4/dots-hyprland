@@ -6,7 +6,6 @@ import qs.modules.common.widgets
 
 Item {
     visible: implicitHeight > 0
-    anchors.horizontalCenter: parent.horizontalCenter
     implicitHeight: Config.options.quickToggles.android.inEditMode ? unusedButtonsLoader.item.implicitHeight : 0
     implicitWidth: Config.options.quickToggles.android.inEditMode ? unusedButtonsLoader.item.implicitWidth : 0
     Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) }

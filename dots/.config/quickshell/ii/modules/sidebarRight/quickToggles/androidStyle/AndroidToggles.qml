@@ -13,7 +13,6 @@ Rectangle {
     implicitWidth: 421
     color: "transparent"
     radius: Appearance.rounding.normal
-    anchors.horizontalCenter: parent.horizontalCenter
 
     ColumnLayout {
         spacing: 10

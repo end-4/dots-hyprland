@@ -52,9 +52,7 @@ Rectangle {
         spacing: 10
         
         AndroidTopWidgets {} // volume and brightness
-        
         AndroidToggles {} // toggle buttons
-
         AndroidUnusedButtons {} // unused buttons
 
     }

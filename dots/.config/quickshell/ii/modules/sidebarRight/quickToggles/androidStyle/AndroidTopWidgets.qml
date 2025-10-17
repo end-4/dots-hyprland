@@ -12,8 +12,6 @@ import Quickshell.Services.UPower
 
 Column {
     id: topWidgetsRoot
-    anchors.left: parent.left
-    anchors.leftMargin: 22
     width: 380 
 
     property var screen: topWidgetsRoot.QsWindow.window?.screen
