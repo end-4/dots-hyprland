@@ -14,22 +14,20 @@
 #
 set -euo pipefail
 
-REPO_DIR="$(pwd)"
-
 # TODO: For Arch(-Linux) specific part please check if pacman exists first, if not it should be skipped.
 
 # TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Try to find the packages directory (different names in different versions)
-if [[ -d "${REPO_DIR}/dist-arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"
-elif [[ -d "${REPO_DIR}/arch-packages" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
-elif [[ -d "${REPO_DIR}/sdist/arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
+if [[ -d "${REPO_ROOT}/dist-arch" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"
+elif [[ -d "${REPO_ROOT}/arch-packages" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_ROOT}/arch-packages"
+elif [[ -d "${REPO_ROOT}/sdist/arch" ]]; then
+  ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
 else
-  ARCH_PACKAGES_DIR="${REPO_DIR}/dist-arch"  # Default fallback
+  ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"  # Default fallback
 fi
-UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
+UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
 # TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
@@ -38,19 +36,19 @@ detect_repo_structure() {
   local found_dirs=()
   
   # Check for dots/ prefixed structure
-  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
+  if [[ -d "${REPO_ROOT}/dots/.config" ]]; then
     found_dirs+=("dots/.config")
-    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
-    [[ -d "${REPO_DIR}/dots/.local/share" ]] && found_dirs+=("dots/.local/share")
+    [[ -d "${REPO_ROOT}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
+    [[ -d "${REPO_ROOT}/dots/.local/share" ]] && found_dirs+=("dots/.local/share")
   # Check for flat structure
-  elif [[ -d "${REPO_DIR}/.config" ]]; then
+  elif [[ -d "${REPO_ROOT}/.config" ]]; then
     found_dirs+=(".config")
-    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
-    [[ -d "${REPO_DIR}/.local/share" ]] && found_dirs+=(".local/share")
+    [[ -d "${REPO_ROOT}/.local/bin" ]] && found_dirs+=(".local/bin")
+    [[ -d "${REPO_ROOT}/.local/share" ]] && found_dirs+=(".local/share")
   else
     # Manual detection of common directories
     for candidate in "dots/.config" ".config" "config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
-      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
+      if [[ -d "${REPO_ROOT}/${candidate}" ]]; then
         # Avoid duplicates
         if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
           found_dirs+=("${candidate}")
@@ -104,8 +102,8 @@ should_ignore() {
 
   # Also get path relative to repo for repo-level ignores
   local repo_relative=""
-  if [[ "$file_path" == "$REPO_DIR"* ]]; then
-    repo_relative="${file_path#$REPO_DIR/}"
+  if [[ "$file_path" == "$REPO_ROOT"* ]]; then
+    repo_relative="${file_path#$REPO_ROOT/}"
   fi
 
   # Check both repo and home ignore files
@@ -354,7 +352,7 @@ check_pkgbuild_changed() {
 
   [[ ! -f "$pkgbuild_path" ]] && return 1
 
-  local relative_path="${pkgbuild_path#$REPO_DIR/}"
+  local relative_path="${pkgbuild_path#$REPO_ROOT/}"
 
   if [[ "$FORCE_CHECK" == true ]]; then
     return 0
@@ -501,7 +499,7 @@ build_packages() {
       log_error "Failed to build package $pkg_name"
     fi
 
-    cd "$REPO_DIR" || log_die "Failed to return to repository directory"
+    cd "$REPO_ROOT" || log_die "Failed to return to repository directory"
   done
 
   if [[ $rebuilt_packages -eq 0 ]]; then
@@ -523,7 +521,7 @@ get_changed_files() {
       # Get files that changed in the last pull
       local has_changes=false
       while IFS= read -r file; do
-        local full_path="${REPO_DIR}/${file}"
+        local full_path="${REPO_ROOT}/${file}"
         if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
           printf '%s\0' "$full_path"
           has_changes=true
@@ -554,7 +552,7 @@ has_new_commits() {
 # Main script starts here
 log_header "Dotfiles Update Script"
 
-if [[ "$SKIP_NOTICE" != true ]]; then
+if [[ "$SKIP_NOTICE" == false ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
   log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
   log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."
@@ -566,9 +564,10 @@ if [[ "$SKIP_NOTICE" != true ]]; then
     exit 1
   fi
 fi
+exit
 
 # Check if we're in a git repository
-cd "$REPO_DIR" || log_die "Failed to change to repository directory"
+cd "$REPO_ROOT" || log_die "Failed to change to repository directory"
 
 if git rev-parse --is-inside-work-tree &>/dev/null; then
   log_info "Running in git repository: $(git rev-parse --show-toplevel)"
@@ -583,10 +582,10 @@ if detected_dirs=$(detect_repo_structure); then
   read -ra MONITOR_DIRS <<<"$detected_dirs"
   log_success "Detected repository structure:"
   for dir in "${MONITOR_DIRS[@]}"; do
-    if [[ -d "${REPO_DIR}/${dir}" ]]; then
-      log_info "  ✓ ${REPO_DIR}/${dir}"
+    if [[ -d "${REPO_ROOT}/${dir}" ]]; then
+      log_info "  ✓ ${REPO_ROOT}/${dir}"
     else
-      log_warning "  ✗ ${REPO_DIR}/${dir} (not found, will skip)"
+      log_warning "  ✗ ${REPO_ROOT}/${dir} (not found, will skip)"
     fi
   done
 else
@@ -763,7 +762,7 @@ if [[ "$process_files" == true ]]; then
   files_created=0
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
-    repo_dir_path="${REPO_DIR}/${dir_name}"
+    repo_dir_path="${REPO_ROOT}/${dir_name}"
     
     if [[ ! -d "$repo_dir_path" ]]; then
       if [[ "$VERBOSE" == true ]]; then
@@ -882,7 +881,7 @@ fi
 if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
-  echo "  - Repository ignore: ${REPO_DIR}/.updateignore"
+  echo "  - Repository ignore: ${REPO_ROOT}/.updateignore"
   echo "  - User ignore: ~/.updateignore"
   echo
   echo "Example patterns:"

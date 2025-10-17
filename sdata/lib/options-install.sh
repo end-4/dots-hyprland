@@ -43,13 +43,6 @@ while true ; do
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     
-    ## Update script specific options
-    -u|--update-force) UPDATE_FORCE=true;shift;;
-    -p|--packages) UPDATE_PACKAGES=true;shift;;
-    -n|--dry-run) UPDATE_DRY_RUN=true;shift;;
-    -v|--verbose) UPDATE_VERBOSE=true;shift;;
-    --skip-notice) SKIP_NOTICE=true;shift;;
-    
     ## Ones with parameter
     --fontset)
     case $2 in

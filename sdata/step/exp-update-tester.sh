@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# test_update.sh - Test suite for update.sh
+# exp-update-tester.sh - Test suite for update.sh
 #
 set -euo pipefail
 
@@ -140,18 +140,18 @@ test_dots_structure() {
   
   cat > test_detection.sh << 'EOF'
 #!/bin/bash
-REPO_DIR="$1"
+REPO_ROOT="$1"
 detect_repo_structure() {
   local found_dirs=()
-  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
+  if [[ -d "${REPO_ROOT}/dots/.config" ]]; then
     found_dirs+=("dots/.config")
-    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
-  elif [[ -d "${REPO_DIR}/.config" ]]; then
+    [[ -d "${REPO_ROOT}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
+  elif [[ -d "${REPO_ROOT}/.config" ]]; then
     found_dirs+=(".config")
-    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
+    [[ -d "${REPO_ROOT}/.local/bin" ]] && found_dirs+=(".local/bin")
   else
     for candidate in "dots/.config" ".config" "dots/.local/bin" ".local/bin"; do
-      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
+      if [[ -d "${REPO_ROOT}/${candidate}" ]]; then
         if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
           found_dirs+=("${candidate}")
         fi
@@ -200,18 +200,18 @@ test_flat_structure() {
   
   cat > test_detection.sh << 'EOF'
 #!/bin/bash
-REPO_DIR="$1"
+REPO_ROOT="$1"
 detect_repo_structure() {
   local found_dirs=()
-  if [[ -d "${REPO_DIR}/dots/.config" ]]; then
+  if [[ -d "${REPO_ROOT}/dots/.config" ]]; then
     found_dirs+=("dots/.config")
-    [[ -d "${REPO_DIR}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
-  elif [[ -d "${REPO_DIR}/.config" ]]; then
+    [[ -d "${REPO_ROOT}/dots/.local/bin" ]] && found_dirs+=("dots/.local/bin")
+  elif [[ -d "${REPO_ROOT}/.config" ]]; then
     found_dirs+=(".config")
-    [[ -d "${REPO_DIR}/.local/bin" ]] && found_dirs+=(".local/bin")
+    [[ -d "${REPO_ROOT}/.local/bin" ]] && found_dirs+=(".local/bin")
   else
     for candidate in "dots/.config" ".config" "dots/.local/bin" ".local/bin"; do
-      if [[ -d "${REPO_DIR}/${candidate}" ]]; then
+      if [[ -d "${REPO_ROOT}/${candidate}" ]]; then
         if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
           found_dirs+=("${candidate}")
         fi
@@ -285,16 +285,16 @@ EOF
   
   cat > test_ignore.sh << 'EOF'
 #!/bin/bash
-REPO_DIR="$1"
-UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
+REPO_ROOT="$1"
+UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="/dev/null"
 
 should_ignore() {
   local file_path="$1"
   local relative_path="${file_path#$HOME/}"
   local repo_relative=""
-  if [[ "$file_path" == "$REPO_DIR"* ]]; then
-    repo_relative="${file_path#$REPO_DIR/}"
+  if [[ "$file_path" == "$REPO_ROOT"* ]]; then
+    repo_relative="${file_path#$REPO_ROOT/}"
   fi
 
   for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
@@ -326,11 +326,11 @@ should_ignore() {
 }
 
 test_cases=(
-  "$REPO_DIR/app.log:0"
-  "$REPO_DIR/secrets/key.txt:0" 
-  "$REPO_DIR/.config/private-config:0"
-  "$REPO_DIR/.config/backup-file:0"
-  "$REPO_DIR/normal-config:1"
+  "$REPO_ROOT/app.log:0"
+  "$REPO_ROOT/secrets/key.txt:0" 
+  "$REPO_ROOT/.config/private-config:0"
+  "$REPO_ROOT/.config/backup-file:0"
+  "$REPO_ROOT/normal-config:1"
 )
 
 all_passed=true
