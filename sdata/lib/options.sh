@@ -16,6 +16,7 @@ If no option is specified, run default install process.
       --skip-alldeps        Skip the whole process installing dependency
       --skip-allsetups      Skip the whole process setting up permissions/services etc
       --skip-allfiles       Skip the whole process copying configuration files
+      --skip-notice         Skip warning notice (for experimental scripts)
   -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
@@ -37,7 +38,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update \
+       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-notice,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall,exp-update \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -66,6 +67,7 @@ while true ; do
     --skip-alldeps) SKIP_ALLDEPS=true;shift;;
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
     --skip-allfiles) SKIP_ALLFILES=true;shift;;
+    --skip-notice) SKIP_NOTICE=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;

@@ -620,6 +620,7 @@ while [[ $# -gt 0 ]]; do
     echo "  -n, --dry-run    Show what would be done without making changes"
     echo "  -v, --verbose    Enable verbose output"
     echo "  -h, --help       Show this help message"
+    echo "  --skip-notice    Skip warning notice about script being untested"
     echo ""
     echo "This script updates your dotfiles by:"
     echo "  1. Auto-detecting repository structure (dots/ prefix or direct)"
