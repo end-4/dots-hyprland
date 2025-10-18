@@ -15,4 +15,8 @@ AndroidQuickToggleButton {
     onClicked: {
         Audio.source.audio.muted = !Audio.source.audio.muted
     }
+
+    StyledToolTip {
+        text: Translation.tr("Microphone")
+    }
 }

@@ -15,4 +15,8 @@ AndroidQuickToggleButton {
     onClicked: {
         Audio.sink.audio.muted = !Audio.sink.audio.muted
     }
+
+    StyledToolTip {
+        text: Translation.tr("Audio")
+    }
 }

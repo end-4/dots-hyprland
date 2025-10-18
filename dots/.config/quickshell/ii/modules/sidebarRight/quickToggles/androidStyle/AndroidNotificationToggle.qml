@@ -1,5 +1,6 @@
 import qs
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import Quickshell
@@ -14,5 +15,9 @@ AndroidQuickToggleButton {
 
     onClicked: {
         Notifications.silent = !Notifications.silent;
+    }
+
+    StyledToolTip {
+        text: Translation.tr("Show notifications")
     }
 }
