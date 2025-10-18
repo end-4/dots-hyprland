@@ -85,8 +85,8 @@ GroupButton {
         anchors {
             centerIn: root.expandedSize ? undefined : parent
             fill: root.expandedSize ? parent : undefined
-            leftMargin: 12
-            rightMargin: 12
+            leftMargin: 8
+            rightMargin: 8
         }
 
         Rectangle {
