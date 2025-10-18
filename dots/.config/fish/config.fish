@@ -13,9 +13,12 @@ if status is-interactive # Commands to run in interactive sessions can go here
 
     # Use starship
     starship init fish | source
-    if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
-        cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
-    end
+    #if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    #    cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    #end
+
+    # Fastfetch
+    fastfetch
 
     # Aliases
     alias pamcan pacman
@@ -23,4 +26,17 @@ if status is-interactive # Commands to run in interactive sessions can go here
     alias clear "printf '\033[2J\033[3J\033[1;1H'"
     alias q 'qs -c ii'
     
+end
+
+function update 
+  if test $argv[1] = "nixos"
+    sudo nixos-rebuild switch --flake ~/NixOS\#mou
+  else if test $argv[1] = "home"
+    home-manager switch --flake ~/NixOS\#mou@mou 
+  else if test $argv[1] = "flake"
+    nix flake update --flake ~/NixOS
+  else 
+    update flake && update nixos 
+  end 
+
 end

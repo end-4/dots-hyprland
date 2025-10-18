@@ -34,9 +34,3 @@ map ctrl+underscore       change_font_size all -1
 map ctrl+kp_subtract       change_font_size all -1
 map ctrl+0 change_font_size all 0
 map ctrl+kp_0 change_font_size all 0
-
-
-# BEGIN_KITTY_THEME
-# Nord
-include current-theme.conf
-# END_KITTY_THEME
