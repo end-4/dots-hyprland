@@ -28,15 +28,14 @@ if status is-interactive # Commands to run in interactive sessions can go here
     
 end
 
-function update 
-  if test $argv[1] = "nixos"
+function update
+  if test (count $argv) -eq 0
+    update flake && update nixos
+  else if test "$argv[1]" = "nixos"
     sudo nixos-rebuild switch --flake ~/NixOS\#mou
-  else if test $argv[1] = "home"
-    home-manager switch --flake ~/NixOS\#mou@mou 
-  else if test $argv[1] = "flake"
+  else if test "$argv[1]" = "home"
+    home-manager switch --flake ~/NixOS\#mou@mou
+  else if test "$argv[1]" = "flake"
     nix flake update --flake ~/NixOS
-  else 
-    update flake && update nixos 
-  end 
-
+  end
 end
