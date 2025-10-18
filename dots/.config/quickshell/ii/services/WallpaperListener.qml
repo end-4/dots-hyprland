@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import qs.modules.common
 import qs.services
 
@@ -12,46 +13,30 @@ Singleton {
 
     // Bindings to watch config toggles for refresh
     readonly property bool multiMonitorEnabled: Config.options.background?.multiMonitor?.enable || false
-    onMultiMonitorEnabledChanged: scheduleRefresh()
+    onMultiMonitorEnabledChanged: refresh()
     readonly property string globalWallpaperPath: Config.options.background?.wallpaperPath || ""
-    onGlobalWallpaperPathChanged: scheduleRefresh()
+    onGlobalWallpaperPathChanged: refresh()
     readonly property var wallpapersByMonitorRef: Config.options.background?.wallpapersByMonitor || []
-    onWallpapersByMonitorRefChanged: scheduleRefresh()
-    readonly property var hyprlandMonitorsRef: HyprlandData.monitors
-    onHyprlandMonitorsRefChanged: scheduleRefresh()
-
-    signal changed()
-
-    Timer {
-        id: debounce
-        interval: 80
-        repeat: false
-        onTriggered: root.refresh()
-    }
-
-    function scheduleRefresh() {
-        debounce.restart()
-    }
+    onWallpapersByMonitorRefChanged: refresh()
+    // Quickshell.screens seem to load images faster and does not compromise memory usage, can be reviewed further
+    readonly property var screensRef: Quickshell.screens
+    onScreensRefChanged: refresh()
 
     function refresh() {
         const result = {}
         const globalPath = globalWallpaperPath
         const byMonitorList = wallpapersByMonitorRef || []
-        const monitors = HyprlandData.monitors || []
+        const screens = Quickshell.screens || []
 
         if (!root.multiMonitorEnabled) {
-            for (let i = 0; i < monitors.length; ++i) {
-                const mon = monitors[i]
-                if (globalPath && globalPath.length > 0) {
-                    result[mon.name] = globalPath
+            for (let i = 0; i < screens.length; ++i) {
+                const screen = screens[i]
+                const monitor = Hyprland.monitorFor(screen)
+                if (monitor && globalPath && globalPath.length > 0) {
+                    result[monitor.name] = globalPath
                 }
             }
-            const oldJson = JSON.stringify(root.effectivePerMonitor)
-            const newJson = JSON.stringify(result)
-            if (oldJson !== newJson) {
-                root.effectivePerMonitor = result
-                root.changed()
-            }
+            root.effectivePerMonitor = result
             return
         }
 
@@ -63,20 +48,18 @@ Singleton {
             }
         }
 
-        for (let i = 0; i < monitors.length; ++i) {
-            const mon = monitors[i]
-            const path = byMonitorMap[mon.name] || globalPath
-            if (path && path.length > 0) {
-                result[mon.name] = path
+        for (let i = 0; i < screens.length; ++i) {
+            const screen = screens[i]
+            const monitor = Hyprland.monitorFor(screen)
+            if (monitor) {
+                const path = byMonitorMap[monitor.name] || globalPath
+                if (path && path.length > 0) {
+                    result[monitor.name] = path
+                }
             }
         }
 
-        const oldJson = JSON.stringify(root.effectivePerMonitor)
-        const newJson = JSON.stringify(result)
-        if (oldJson !== newJson) {
-            root.effectivePerMonitor = result
-            root.changed()
-        }
+        root.effectivePerMonitor = result
     }
 
     Component.onCompleted: refresh()

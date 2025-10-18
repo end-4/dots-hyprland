@@ -143,8 +143,16 @@ EOF
 
 set_wallpaper_path() {
     local path="$1"
+    local monitor="${2:-}"
     if [ -f "$SHELL_CONFIG_FILE" ]; then
-        jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        if [ -n "$monitor" ]; then
+            jq --arg name "$monitor" --arg path "$path" '
+                .background.wallpapersByMonitor = (
+                    (.background.wallpapersByMonitor // []) | map(select(.monitor != $name)) + [{"monitor": $name, "path": $path}]
+                )' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        else
+            jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        fi
     fi
 }
 
@@ -161,6 +169,7 @@ switch() {
     type_flag="$3"
     color_flag="$4"
     color="$5"
+    target_monitor="$6"
 
     # Start Gemini auto-categorization if enabled
     aiStylingEnabled=$(jq -r '.background.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
@@ -216,11 +225,14 @@ switch() {
             fi
 
             # Set wallpaper path
-            set_wallpaper_path "$imgpath"
+            set_wallpaper_path "$imgpath" "$target_monitor"
 
             # Set video wallpaper
             local video_path="$imgpath"
             monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
+            if [ -n "$target_monitor" ]; then
+                monitors="$target_monitor"
+            fi
             for monitor in $monitors; do
                 mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
                 sleep 0.1
@@ -246,7 +258,7 @@ switch() {
             matugen_args=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
-            set_wallpaper_path "$imgpath"
+            set_wallpaper_path "$imgpath" "$target_monitor"
             remove_restore
         fi
     fi
@@ -315,6 +327,7 @@ main() {
     color_flag=""
     color=""
     noswitch_flag=""
+    target_monitor=""
 
     get_type_from_config() {
         jq -r '.appearance.palette.type' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "auto"
@@ -360,9 +373,17 @@ main() {
                 imgpath="$2"
                 shift 2
                 ;;
+            --monitor)
+                target_monitor="$2"
+                shift 2
+                ;;
             --noswitch)
                 noswitch_flag="1"
-                imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                if [ -n "$target_monitor" ]; then
+                    imgpath=$(jq -r --arg mon "$target_monitor" '(.background.wallpapersByMonitor // [] | map(select(.monitor == $mon)) | .[0].path) // .background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                else
+                    imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                fi
                 shift
                 ;;
             *)
@@ -430,7 +451,7 @@ main() {
         fi
     fi
 
-    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
+    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color" "$target_monitor"
 }
 
 main "$@"

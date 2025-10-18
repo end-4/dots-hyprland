@@ -5,6 +5,7 @@ import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -39,21 +40,34 @@ Singleton {
     Process {
         id: applyProc
     }
-    
+
     function openFallbackPicker(darkMode = Appearance.m3colors.darkmode) {
-        applyProc.exec([
+        const args = [
             Directories.wallpaperSwitchScriptPath,
             "--mode", (darkMode ? "dark" : "light")
-        ])
+        ]
+
+        if (Config.options.background?.multiMonitor?.enable) {
+            const focusedMonitor = Hyprland.focusedMonitor?.name
+            if (focusedMonitor) {
+                args.push("--monitor", focusedMonitor)
+            }
+        }
+
+        applyProc.exec(args)
     }
 
-    function apply(path, darkMode = Appearance.m3colors.darkmode) {
+    function apply(path, darkMode = Appearance.m3colors.darkmode, monitorName = "") {
         if (!path || path.length === 0) return
-        applyProc.exec([
+        const args = [
             Directories.wallpaperSwitchScriptPath,
             "--image", path,
             "--mode", (darkMode ? "dark" : "light")
-        ])
+        ]
+        if (monitorName !== "") {
+            args.push("--monitor", monitorName)
+        }
+        applyProc.exec(args)
         root.changed()
     }
 
@@ -61,9 +75,11 @@ Singleton {
         id: selectProc
         property string filePath: ""
         property bool darkMode: Appearance.m3colors.darkmode
-        function select(filePath, darkMode = Appearance.m3colors.darkmode) {
+        property string monitorName: ""
+        function select(filePath, darkMode = Appearance.m3colors.darkmode, monitorName = "") {
             selectProc.filePath = filePath
             selectProc.darkMode = darkMode
+            selectProc.monitorName = monitorName
             selectProc.exec(["test", "-d", FileUtils.trimFileProtocol(filePath)])
         }
         onExited: (exitCode, exitStatus) => {
@@ -71,12 +87,12 @@ Singleton {
                 setDirectory(selectProc.filePath);
                 return;
             }
-            root.apply(selectProc.filePath, selectProc.darkMode);
+            root.apply(selectProc.filePath, selectProc.darkMode, selectProc.monitorName);
         }
     }
 
-    function select(filePath, darkMode = Appearance.m3colors.darkmode) {
-        selectProc.select(filePath, darkMode);
+    function select(filePath, darkMode = Appearance.m3colors.darkmode, monitorName = "") {
+        selectProc.select(filePath, darkMode, monitorName);
     }
 
     function randomFromCurrentFolder(darkMode = Appearance.m3colors.darkmode) {
