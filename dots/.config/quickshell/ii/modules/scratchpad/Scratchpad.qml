@@ -13,9 +13,17 @@ import Quickshell.Hyprland
 Scope {
     id: root
 
-    property real panelWidth: ScratchpadStore.width
-    property real panelHeight: ScratchpadStore.height
+    readonly property real panelWidth: 440
+    readonly property real panelHeight: 340
     readonly property real panelPadding: 20
+    property string scratchpadContents: ""
+
+    Component.onCompleted: scratchpadFile.reload()
+
+    function saveScratchpad(text) {
+        scratchpadContents = text
+        scratchpadFile.setText(scratchpadContents)
+    }
 
     PanelWindow {
         id: scratchpadWindow
@@ -141,73 +149,20 @@ Scope {
                 }
             }
 
-            Rectangle {
-                id: resizeHandle
-                anchors {
-                    right: parent.right
-                    bottom: parent.bottom
-                    rightMargin: 6
-                    bottomMargin: 6
-                }
-                width: 18
-                height: 18
-                color: "transparent"
-                border.width: 0
-                property real startWidth: 0
-                property real startHeight: 0
-
-                HoverHandler {
-                    cursorShape: Qt.SizeFDiagCursor
-                }
-
-                DragHandler {
-                    id: resizeDrag
-                    target: null
-                    onActiveChanged: {
-                        if (active) {
-                            resizeHandle.startWidth = ScratchpadStore.width
-                            resizeHandle.startHeight = ScratchpadStore.height
-                        } else {
-                            ScratchpadStore.saveGeometry(ScratchpadStore.width, ScratchpadStore.height)
-                        }
-                    }
-                    onTranslationChanged: {
-                        if (!active)
-                            return
-                        const proposedWidth = resizeHandle.startWidth + translation.x
-                        const proposedHeight = resizeHandle.startHeight + translation.y
-                        ScratchpadStore.updateGeometry(proposedWidth, proposedHeight, false)
-                    }
-                }
-            }
         }
 
         Timer {
             id: saveDebounce
             interval: 500
             repeat: false
-            onTriggered: ScratchpadStore.save(scratchpadInput.text)
-        }
-
-        Connections {
-            target: ScratchpadStore
-            function onContentsChanged() {
-                if (scratchpadInput.text === ScratchpadStore.contents)
-                    return
-                const previousCursor = scratchpadInput.cursorPosition
-                const previousAnchor = scratchpadInput.selectionStart
-                scratchpadInput.text = ScratchpadStore.contents
-                const maxPos = scratchpadInput.text.length
-                scratchpadInput.cursorPosition = Math.min(previousCursor, maxPos)
-                scratchpadInput.selectionStart = Math.min(previousAnchor, maxPos)
-                scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
-            }
+            onTriggered: saveScratchpad(scratchpadInput.text)
         }
 
         Connections {
             target: GlobalStates
             function onScratchpadOpenChanged() {
                 if (GlobalStates.scratchpadOpen) {
+                    scratchpadFile.reload()
                     Qt.callLater(() => {
                         scratchpadInput.forceActiveFocus()
                         scratchpadInput.cursorPosition = scratchpadInput.text.length
@@ -218,8 +173,38 @@ Scope {
                     if (saveDebounce.running) {
                         saveDebounce.stop()
                     }
-                    ScratchpadStore.save(scratchpadInput.text)
+                    saveScratchpad(scratchpadInput.text)
                 }
+            }
+        }
+
+    }
+
+    FileView {
+        id: scratchpadFile
+        path: Qt.resolvedUrl(Directories.scratchpadPath)
+        onLoaded: {
+            scratchpadContents = scratchpadFile.text()
+            if (!scratchpadInput)
+                return
+            if (scratchpadInput.text === scratchpadContents)
+                return
+            const previousCursor = scratchpadInput.cursorPosition
+            const previousAnchor = scratchpadInput.selectionStart
+            scratchpadInput.text = scratchpadContents
+            const maxPos = scratchpadInput.text.length
+            scratchpadInput.cursorPosition = Math.min(previousCursor, maxPos)
+            scratchpadInput.selectionStart = Math.min(previousAnchor, maxPos)
+            scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
+        }
+        onLoadFailed: (error) => {
+            if (error === FileViewError.FileNotFound) {
+                scratchpadContents = ""
+                scratchpadFile.setText(scratchpadContents)
+                if (scratchpadInput)
+                    scratchpadInput.text = scratchpadContents
+            } else {
+                console.log("[Scratchpad] Error loading file: " + error)
             }
         }
     }
@@ -258,4 +243,3 @@ Scope {
         onPressed: GlobalStates.scratchpadOpen = false
     }
 }
-
