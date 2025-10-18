@@ -199,13 +199,14 @@ test_flat_structure() {
   cat > test_detection.sh << EOF
 #!/bin/bash
 # Mock logging and style functions/variables
+source "$ORIGINAL_DIR/sdata/lib/environment-variables.sh"
+source "$ORIGINAL_DIR/sdata/lib/functions.sh"
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1"; exit 1; }
-STY_CYAN="" STY_RST="" STY_YELLOW=""
 
 # Set required environment variables for exp-update.sh
 SKIP_NOTICE=true
@@ -284,13 +285,14 @@ EOF
   cat > test_ignore.sh << EOF
 #!/bin/bash
 # Suppress all output from sourced script
+source "$ORIGINAL_DIR/sdata/lib/environment-variables.sh"
+source "$ORIGINAL_DIR/sdata/lib/functions.sh"
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1" >&2; exit 1; }
-STY_CYAN="" STY_RST="" STY_YELLOW=""
 
 # FIXED: Set REPO_ROOT before sourcing exp-update.sh
 REPO_ROOT="\$1"
@@ -554,13 +556,14 @@ EOF
   cat > test_substring_ignore.sh << EOF
 #!/bin/bash
 # Suppress all output from sourced script
+source "$ORIGINAL_DIR/sdata/lib/environment-variables.sh"
+source "$ORIGINAL_DIR/sdata/lib/functions.sh"
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1" >&2; exit 1; }
-STY_CYAN="" STY_RST="" STY_YELLOW=""
 
 # FIXED: Set REPO_ROOT before sourcing exp-update.sh
 REPO_ROOT="\$1"
@@ -644,13 +647,14 @@ test_directory_caching() {
   
   cat > test_dir_cache.sh << EOF
 #!/bin/bash
+source "$ORIGINAL_DIR/sdata/lib/environment-variables.sh"
+source "$ORIGINAL_DIR/sdata/lib/functions.sh"
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1" >&2; exit 1; }
-STY_CYAN="" STY_RST="" STY_YELLOW="" STY_PURPLE=""
 
 REPO_ROOT="\$1"
 export REPO_ROOT
@@ -704,6 +708,8 @@ test_safe_read_noninteractive() {
   
   cat > test_safe_read.sh << 'EOF'
 #!/bin/bash
+source "$ORIGINAL_DIR/sdata/lib/environment-variables.sh"
+source "$ORIGINAL_DIR/sdata/lib/functions.sh"
 log_warning() { :; }
 log_error() { :; }
 
