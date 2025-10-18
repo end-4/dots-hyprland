@@ -401,10 +401,10 @@ Singleton {
                         property list<var> toggles: [
                             { type: "network", size: 2 },
                             { type: "bluetooth", size: 2 },
-                            { type: "idleinhibitor", size: 1 },
-                            { type: "easyeffects", size: 1 },
-                            { type: "nightlight", size: 2 },
-                            { type: "darkmode", size: 2 }
+                            { type: "idleInhibitor", size: 1 },
+                            { type: "easyEffects", size: 1 },
+                            { type: "nightLight", size: 2 },
+                            { type: "darkMode", size: 2 }
                         ]
                     }
                 }
