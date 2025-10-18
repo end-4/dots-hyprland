@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# shellcheck shell=bash
+
 printf 'Hi there!\n'
 printf 'This script 1. will uninstall [end-4/dots-hyprland > illogical-impulse] dotfiles\n'
 printf '            2. will try to revert *mostly everything* installed using install.sh, so it'\''s pretty destructive\n'
@@ -40,7 +42,7 @@ starship.toml
 thorium-flags.conf
 )
 
-for i in ${dirs[@]}
+for i in "${dirs[@]}"
   do v rm -rf "$XDG_CONFIG_HOME/$i"
 done
 
