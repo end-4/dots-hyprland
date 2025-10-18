@@ -5,6 +5,7 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Qt5Compat.GraphicalEffects
 
 import "../"
 
@@ -14,6 +15,7 @@ BackgroundWidget {
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colText: Appearance.colors.colOnLayer1
     property int widgetRotation: 45
+    
 
     x: Config.options.background.widgets.weatherX
     y: Config.options.background.widgets.weatherY
@@ -23,50 +25,60 @@ BackgroundWidget {
         Config.options.background.widgets.weatherY = newY
     }
 
-    implicitWidth: 200
-    implicitHeight: 160
-
     Loader {
+        id: weatherLoader
         active: true
-        sourceComponent: Rectangle {
-            id: cookieClock
-            rotation: -widget.widgetRotation
-            color: colBackground
-            implicitWidth: widget.implicitWidth
-            implicitHeight: widget.implicitHeight
-            radius: Appearance.rounding.full
-            StyledText {
-                visible: true
-                font.pixelSize: 70
-                rotation: widget.widgetRotation
-                color: widget.colText
-                text: Weather.data?.temp.substring(0,Weather.data?.temp.length - 1) ?? "--°"
-                Layout.alignment: Qt.AlignVCenter
-                anchors {
-                    right: parent.right
-                    rightMargin: 15
-                    top: parent.top
-                    topMargin: 35
-                }
+        sourceComponent: Item {
+            implicitWidth: 175
+            implicitHeight: 140
+            Component.onCompleted: {
+                widget.implicitHeight = implicitHeight
+                widget.implicitWidth = implicitWidth
             }
-            MaterialSymbol {
-                id: icon
-                fill: 0
-                text: codeToName[Weather.data.wCode]
-                iconSize: 75
-                rotation: widget.widgetRotation
-                color: widget.colText
-                Layout.alignment: Qt.AlignVCenter
-                anchors {
-                    left: parent.left
-                    leftMargin: 15
-                    top: parent.top
-                    topMargin: 35
-                }
+            DropShadow {
+                source: weatherRect
+                anchors.fill: weatherRect
+                horizontalOffset: 0
+                verticalOffset: 1
+                radius: 12
+                samples: radius * 2 + 1
+                color: Appearance.colors.colShadow
+                rotation: -widget.widgetRotation
             }
-
-                
-            
+            Rectangle {
+                id: weatherRect
+                anchors.fill:parent
+                radius: Appearance.rounding.full
+                color: widget.colBackground
+                rotation: -widget.widgetRotation
+                StyledText {
+                    visible: true
+                    font.pixelSize: 60
+                    rotation: widget.widgetRotation
+                    color: widget.colText
+                    text: Weather.data?.temp.substring(0,Weather.data?.temp.length - 1) ?? "--°"
+                    Layout.alignment: Qt.AlignVCenter
+                    anchors {
+                        right: parent.right
+                        rightMargin: 15
+                        top: parent.top
+                        topMargin: 35
+                    }
+                }
+                MaterialSymbol {
+                    text: widget.codeToName[Weather.data.wCode]
+                    iconSize: 65
+                    rotation: widget.widgetRotation
+                    color: widget.colText
+                    Layout.alignment: Qt.AlignVCenter
+                    anchors {
+                        left: parent.left
+                        leftMargin: 15
+                        top: parent.top
+                        topMargin: 35
+                    }   
+                }  
+            }  
         }
     }
 

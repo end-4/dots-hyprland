@@ -39,6 +39,10 @@ Item {
         anchors.fill: parent
         drag.target: parent
 
+        property bool down: false
+
+        cursorShape: down ? Qt.ClosedHandCursor : undefined
+
         // better way??
         drag.minimumX: - implicitWidth / 2 - wallpaper.x
         drag.maximumX: monitor.width - widgetRoot.implicitWidth - wallpaper.x
@@ -51,10 +55,12 @@ Item {
         onPressed: {
             widgetRoot.scale = scaleMultiplier * 1.07
             widgetRoot.opacity = 0.8
+            down = true
         }
         onReleased: {
             widgetRoot.scale = scaleMultiplier * 1.0
             widgetRoot.opacity = 1.0
+            down = false
         }
         onDragActiveChanged: {
             if (!dragActive) widgetRoot.positionChanged(widgetRoot.x, widgetRoot.y)
