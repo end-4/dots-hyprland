@@ -6,10 +6,6 @@
 
 # This file is provided for any distros, mainly non-Arch(based) distros.
 
-# The script that use this file should have two lines on its top as follows:
-# cd "$(dirname "$0")"
-# export base="$(pwd)"
-
 install-agsv1(){
   x mkdir -p $REPO_ROOT/cache/agsv1
   x cd $REPO_ROOT/cache/agsv1

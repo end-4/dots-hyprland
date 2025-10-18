@@ -26,7 +26,7 @@ Options for install:
 }
 
 cleancache(){
-  rm -rf "$base/cache"
+  rm -rf "${REPO_ROOT}/cache"
 }
 
 # `man getopt` to see more
