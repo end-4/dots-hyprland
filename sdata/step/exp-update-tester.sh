@@ -155,13 +155,14 @@ DRY_RUN=false
 FORCE_CHECK=false
 VERBOSE=false
 NON_INTERACTIVE=true
+SOURCE_ONLY=true
 
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
-detected_dirs=$(detect_repo_structure)
-if [[ -n "$detected_dirs" ]]; then
-  read -ra MONITOR_DIRS <<<"$detected_dirs"
+detected_dirs=\$(detect_repo_structure)
+if [[ -n "\$detected_dirs" ]]; then
+  read -ra MONITOR_DIRS <<<"\$detected_dirs"
 fi
-echo "Structure: ${MONITOR_DIRS[*]}"
+echo "Structure: \${MONITOR_DIRS[*]}"
 EOF
 
   chmod +x test_detection.sh
@@ -214,13 +215,14 @@ DRY_RUN=false
 FORCE_CHECK=false
 VERBOSE=false
 NON_INTERACTIVE=true
+SOURCE_ONLY=true
 
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
-detected_dirs=$(detect_repo_structure)
-if [[ -n "$detected_dirs" ]]; then
-  read -ra MONITOR_DIRS <<<"$detected_dirs"
+detected_dirs=\$(detect_repo_structure)
+if [[ -n "\$detected_dirs" ]]; then
+  read -ra MONITOR_DIRS <<<"\$detected_dirs"
 fi
-echo "Structure: ${MONITOR_DIRS[*]}"
+echo "Structure: \${MONITOR_DIRS[*]}"
 EOF
 
   chmod +x test_detection.sh
@@ -515,15 +517,17 @@ test_lock_file() {
   echo "99999" > .update-lock
   
   # Try to run update - should fail due to lock
-  if ./install.sh exp-update --skip-notice --non-interactive 2>&1 | grep -q "stale lock"; then
-    log_pass "Lock file mechanism works (detected stale lock)"
-    cd "$ORIGINAL_DIR"
-    return 0
-  else
-    log_fail "Lock file mechanism did not work as expected"
-    cd "$ORIGINAL_DIR"
-    return 1
+  if ./install.sh exp-update --skip-notice --non-interactive > lock_test_output.txt 2>&1; then
+    if grep -q "stale lock" lock_test_output.txt; then
+      log_pass "Lock file mechanism works (detected stale lock)"
+      cd "$ORIGINAL_DIR"
+      return 0
+    fi
   fi
+  log_fail "Lock file mechanism did not work as expected"
+  cat lock_test_output.txt  # Show output for debugging
+  cd "$ORIGINAL_DIR"
+  return 1
 }
 
 # Test 13: Test ** substring ignore patterns - FIXED
@@ -657,6 +661,7 @@ DRY_RUN=false
 FORCE_CHECK=false
 VERBOSE=false
 NON_INTERACTIVE=true
+SOURCE_ONLY=true
 
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
 
@@ -825,6 +830,7 @@ cleanup() {
   cleanup_test_env
   rm -f test_detection.sh test_ignore.sh test_safe_read.sh test_fresh_clone.sh test_substring_ignore.sh dry_run_output.txt 2>/dev/null || true
   rm -f test_caching.sh test_dir_cache.sh 2>/dev/null || true
+  rm -f lock_test_output.txt 2>/dev/null || true
   rm -rf "${HOME}/.config/test-app" 2>/dev/null || true
 }
 

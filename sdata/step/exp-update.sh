@@ -160,10 +160,16 @@ load_ignore_patterns() {
       [[ -z "$pattern" ]] && continue
       
       # Separate substring patterns from regular patterns
-      if [[ "$pattern" == \*\** ]]; then
+      if [[ "${pattern:0:2}" == "**" ]]; then
         local cleaned_pattern="${pattern#\*\*}"
-        cleaned_pattern="${cleaned_pattern%%*}"
-        IGNORE_SUBSTRING_PATTERNS+=("$cleaned_pattern")
+        # Strip trailing asterisks
+        while [[ "$cleaned_pattern" == *"*" ]] && [[ "${cleaned_pattern: -1}" == "*" ]]; do
+          cleaned_pattern="${cleaned_pattern%\*}"
+        done
+        # Ensure we have a non-empty pattern
+        if [[ -n "$cleaned_pattern" ]]; then
+          IGNORE_SUBSTRING_PATTERNS+=("$cleaned_pattern")
+        fi
       else
         IGNORE_PATTERNS+=("$pattern")
       fi
@@ -716,12 +722,13 @@ cleanup_on_exit() {
 }
 
 # Set up signal handling and lock file
+if [[ "${SOURCE_ONLY:-false}" != true ]]; then
 trap cleanup_on_exit EXIT INT TERM
 
 # Check for concurrent runs
 if [[ -f "${REPO_ROOT}/.update-lock" ]]; then
   # Check if the process is still running
-  if kill -0 $(cat "${REPO_ROOT}/.update-lock" 2>/dev/null) 2>/dev/null; then
+  if kill -0 "$(cat "${REPO_ROOT}/.update-lock" 2>/dev/null)" 2>/dev/null; then
     log_die "Another update is already running (PID: $(cat "${REPO_ROOT}/.update-lock"))"
   else
     log_warning "Found stale lock file, removing..."
@@ -1136,6 +1143,8 @@ fi
 if [[ -d "${REPO_ROOT}/.update-backups" ]] && [[ "$DRY_RUN" != true ]]; then
   echo
   log_info "Backups stored in: ${REPO_ROOT}/.update-backups/"
+fi
+
 fi
 
 echo
