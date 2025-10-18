@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import qs.services
 import qs.modules.common
 
 import Quickshell
@@ -17,7 +18,6 @@ Singleton {
     property int breakTime: Config.options.time.pomodoro.breakTime
     property int longBreakTime: Config.options.time.pomodoro.longBreak
     property int cyclesBeforeLongBreak: Config.options.time.pomodoro.cyclesBeforeLongBreak
-    property string alertSound: Config.options.time.pomodoro.alertSound
 
     property bool pomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool pomodoroBreak: Persistent.states.timer.pomodoro.isBreak
@@ -64,8 +64,9 @@ Singleton {
             }
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"]);
-            if (alertSound)
-                Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", alertSound]);
+            if (Config.options.sounds.pomodoro) {
+                Audio.playSystemSound("alarm-clock-elapsed")
+            }
 
             if (!pomodoroBreak) {
                 Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
