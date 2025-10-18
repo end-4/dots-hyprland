@@ -19,8 +19,8 @@ BackgroundWidget {
     property bool screenLocked: GlobalStates.screenLocked
     onScreenLockedChanged: {
         if (screenLocked) {
-            x = 960 - implicitWidth / 2 - wallpaper.x
-            y = 540 - implicitHeight / 2 - wallpaper.y
+            x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
+            y = bgRoot.monitor.height / 2 - implicitHeight / 2 - wallpaper.y
         }
         else {
             x = Config.options.background.clock.x
