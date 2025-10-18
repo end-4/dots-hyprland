@@ -1,4 +1,5 @@
 # Handle args for subcmd: install
+# shellcheck shell=bash
 showhelp(){
 echo -e "Syntax: $0 [OPTIONS]...
 

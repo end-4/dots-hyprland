@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-# TODO: Use REPO_ROOT instead of base
-# Also, when scripts are sourced they do not need export to inherit vars
-export base="$(pwd)"
+# Use REPO_ROOT instead of base - when scripts are sourced they do not need export to inherit vars
 REPO_ROOT="$(pwd)"
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
