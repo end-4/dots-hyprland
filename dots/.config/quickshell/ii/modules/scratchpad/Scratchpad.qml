@@ -17,6 +17,7 @@ Scope {
     readonly property real panelHeight: 340
     readonly property real panelPadding: 20
     property string scratchpadContents: ""
+    property bool pendingReload: false
 
     Component.onCompleted: scratchpadFile.reload()
 
@@ -162,13 +163,8 @@ Scope {
             target: GlobalStates
             function onScratchpadOpenChanged() {
                 if (GlobalStates.scratchpadOpen) {
+                    pendingReload = true
                     scratchpadFile.reload()
-                    Qt.callLater(() => {
-                        scratchpadInput.forceActiveFocus()
-                        scratchpadInput.cursorPosition = scratchpadInput.text.length
-                        scratchpadInput.selectionStart = scratchpadInput.cursorPosition
-                        scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
-                    })
                 } else {
                     if (saveDebounce.running) {
                         saveDebounce.stop()
@@ -196,6 +192,15 @@ Scope {
             scratchpadInput.cursorPosition = Math.min(previousCursor, maxPos)
             scratchpadInput.selectionStart = Math.min(previousAnchor, maxPos)
             scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
+            if (pendingReload && GlobalStates.scratchpadOpen) {
+                pendingReload = false
+                Qt.callLater(() => {
+                    scratchpadInput.forceActiveFocus()
+                    scratchpadInput.cursorPosition = scratchpadInput.text.length
+                    scratchpadInput.selectionStart = scratchpadInput.cursorPosition
+                    scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
+                })
+            }
         }
         onLoadFailed: (error) => {
             if (error === FileViewError.FileNotFound) {
@@ -203,6 +208,15 @@ Scope {
                 scratchpadFile.setText(scratchpadContents)
                 if (scratchpadInput)
                     scratchpadInput.text = scratchpadContents
+                if (pendingReload && GlobalStates.scratchpadOpen) {
+                    pendingReload = false
+                    Qt.callLater(() => {
+                        scratchpadInput.forceActiveFocus()
+                        scratchpadInput.cursorPosition = scratchpadInput.text.length
+                        scratchpadInput.selectionStart = scratchpadInput.cursorPosition
+                        scratchpadInput.selectionEnd = scratchpadInput.cursorPosition
+                    })
+                }
             } else {
                 console.log("[Scratchpad] Error loading file: " + error)
             }
