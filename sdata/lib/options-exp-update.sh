@@ -1,13 +1,20 @@
 # Handle args for subcmd: exp-update
+# shellcheck shell=bash
 
 showhelp(){
-echo -e "Syntax: $0 exp-update [OPTIONS]...
+echo -e "Usage: install.sh exp-update [OPTIONS]...
+
+Experimental updating without full reinstall.
+Updates dotfiles by syncing configuration files to home directory.
+
 Options:
   -f, --force      Force check all files even if no new commits
   -p, --packages   Enable package checking and building
   -n, --dry-run    Show what would be done without making changes
   -v, --verbose    Enable verbose output
   -h, --help       Show this help message
+  -s, --skip-notice Skip notice about script being untested
+      --non-interactive Run without prompting for user input
 
 This script updates your dotfiles by:
   1. Auto-detecting repository structure (dots/ prefix or direct)
@@ -15,12 +22,19 @@ This script updates your dotfiles by:
   3. Optionally rebuilding packages (if -p flag is used)
   4. Syncing configuration files to home directory
   5. Updating script permissions
+
+Ignore file patterns support:
+  - Exact matches (e.g., 'path/to/file')
+  - Directory patterns (e.g., 'path/to/dir/')
+  - Wildcards (e.g., '*.log', 'path/*/file')
+  - Root-relative patterns (e.g., '/.config')
+  - Substring matching (prefix with '**', e.g., '**temp' matches any path containing 'temp')
 "
 }
 # `man getopt` to see more
 para=$(getopt \
   -o hfpnv \
-  -l help,force,packages,dry-run,verbose,skip-notice \
+  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -42,6 +56,7 @@ CHECK_PACKAGES=false
 DRY_RUN=false
 VERBOSE=false
 SKIP_NOTICE=false
+NON_INTERACTIVE=false
 
 eval set -- "$para"
 while true ; do
@@ -57,6 +72,8 @@ while true ; do
     # log_info "Verbose mode enabled"
     --skip-notice) SKIP_NOTICE=true;shift;;
     # log_warning "Skipping notice about script being untested"
+    --non-interactive) NON_INTERACTIVE=true;shift;;
+    # log_info "Non-interactive mode enabled"
     
     ## Ending
     --) break ;;

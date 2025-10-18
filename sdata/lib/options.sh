@@ -1,6 +1,8 @@
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
+# shellcheck shell=bash
+
 # The script that use this file should have two lines on its top as follows:
 # cd "$(dirname "$0")" export base="$(pwd)"
 showhelp_global(){
@@ -35,11 +37,12 @@ Subcommand:
 Subcommand:
       exp-update            Using experimental update script.
 Options for exp-update:
-  -u, --update-force        Force check all files even if no new commits (update script)
+  -f, --force               Force check all files even if no new commits (update script)
   -p, --packages            Enable package checking and building (update script)  
   -n, --dry-run             Show what would be done without making changes (update script)
   -v, --verbose             Enable verbose output (update script)
       --skip-notice         Skip warning notice (for experimental scripts)
+      --non-interactive     Run without prompting for user input
 "
 }
 

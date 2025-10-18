@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# shellcheck shell=bash
+
 #####################################################################################
 #
 # update.sh - Enhanced dotfiles update script
@@ -10,7 +12,12 @@
 # - Pull latest commits from remote
 # - Rebuild packages if PKGBUILD files changed (user choice)
 # - Handle config file conflicts with user choices
-# - Respect .updateignore file for exclusions
+# - Respect .updateignore file for exclusions with flexible pattern matching:
+#   - Exact matches (e.g., "path/to/file")
+#   - Directory patterns (e.g., "path/to/dir/")
+#   - Wildcards (e.g., "*.log", "path/*/file")
+#   - Root-relative patterns (e.g., "/.config")
+#   - Substring matching (prefix with "**", e.g., "**temp" matches any path containing "temp")
 #
 set -euo pipefail
 
@@ -47,7 +54,7 @@ detect_repo_structure() {
     [[ -d "${REPO_ROOT}/.local/share" ]] && found_dirs+=(".local/share")
   else
     # Manual detection of common directories
-    for candidate in "dots/.config" ".config" "config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
+    for candidate in "dots/.config" ".config" "dots/.local/bin" ".local/bin" "dots/.local/share" ".local/share"; do
       if [[ -d "${REPO_ROOT}/${candidate}" ]]; then
         # Avoid duplicates
         if [[ ! " ${found_dirs[*]} " =~ " ${candidate} " ]]; then
@@ -94,8 +101,6 @@ safe_read() {
     fi
   fi
 }
-
-# Function to check if a file should be ignored
 should_ignore() {
   local file_path="$1"
   local relative_path="${file_path#$HOME/}"
@@ -161,9 +166,10 @@ should_ignore() {
           done
         fi
 
-        # Simple substring matching (for backward compatibility)
-        if [[ ! "$should_skip" == true ]]; then
-          if [[ "$file_path" == *"$pattern"* ]] || [[ "$relative_path" == *"$pattern"* ]]; then
+        # Substring matching (only if pattern starts with '**')
+        if [[ ! "$should_skip" == true && "$pattern" == \*\** ]]; then
+          local substring_pattern="${pattern#\*\*}"  # Remove the leading '**'
+          if [[ -n "$substring_pattern" && ("$file_path" == *"$substring_pattern"* || "$relative_path" == *"$substring_pattern"*) ]]; then
             should_skip=true
           fi
         fi
@@ -417,7 +423,6 @@ list_packages() {
 build_packages() {
   local build_mode="$1"
   local packages_to_build=()
-  local rebuilt_packages=0
 
   case "$build_mode" in
   "changed")
@@ -474,7 +479,6 @@ build_packages() {
     log_info "Package building cancelled by user"
     return
   fi
-
   for pkg_name in "${packages_to_build[@]}"; do
     pkg_dir="${ARCH_PACKAGES_DIR}/${pkg_name}"
 
@@ -490,7 +494,10 @@ build_packages() {
       continue
     fi
 
-    cd "$pkg_dir" || continue
+    cd "$pkg_dir" || {
+      log_error "Failed to change to package directory: $pkg_dir"
+      continue
+    }
 
     if makepkg -si --noconfirm; then
       log_success "Successfully built and installed $pkg_name"
@@ -655,9 +662,20 @@ rebuilt_packages=0
 if [[ "$CHECK_PACKAGES" == true ]]; then
   log_header "Package Management"
 
-  if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No packages directory found (tried: dist-arch, arch-packages, sdist/arch). Skipping package management."
+  # Check if required Arch Linux tools are available
+  if ! command -v pacman &>/dev/null || ! command -v makepkg &>/dev/null; then
+    log_warning "Arch Linux package management tools (pacman/makepkg) not found."
+    log_warning "Skipping package management as this appears to be a non-Arch Linux system."
+    log_warning "Use -p/--packages flag only on Arch Linux systems."
+    PKG_TOOLS_AVAILABLE=false
   else
+    PKG_TOOLS_AVAILABLE=true
+  fi
+
+  if [[ "$PKG_TOOLS_AVAILABLE" == true ]]; then
+    if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
+      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdist/arch). Skipping package management."
+    else
     changed_pkgbuilds=()
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
       if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
@@ -678,7 +696,19 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
       echo "4) Skip package building"
       echo
 
-      if safe_read "Choose an option (1-4): " pkg_choice "1"; then
+      if [[ "$NON_INTERACTIVE" == true ]]; then
+        pkg_choice="1"
+        log_info "Non-interactive mode: Using default package option: $pkg_choice"
+      elif safe_read "Choose an option (1-4): " pkg_choice "1"; then
+        if [[ "$VERBOSE" == true ]]; then
+          log_info "User selected package option: $pkg_choice"
+        fi
+      else
+        log_warning "Failed to read input. Skipping package building."
+        pkg_choice=""
+      fi
+
+      if [[ -n "$pkg_choice" ]]; then
         case $pkg_choice in
         1) build_packages "changed" ;;
         2)
@@ -689,14 +719,23 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
         3) build_packages "all" ;;
         4 | *) log_info "Skipping package building" ;;
         esac
-      else
-        log_warning "Failed to read input. Skipping package building."
       fi
     else
       log_info "No PKGBUILDs have changed since last update."
       echo
-      if safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
-        if [[ "$check_anyway" =~ ^[Yy]$ ]]; then
+      if [[ "$NON_INTERACTIVE" == true ]]; then
+        check_anyway="N"
+        log_info "Non-interactive mode: Using default for check packages anyway: $check_anyway"
+      elif safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
+        if [[ "$VERBOSE" == true ]]; then
+          log_info "User chose to check packages anyway: $check_anyway"
+        fi
+      else
+        log_warning "Failed to read input. Skipping package management."
+        check_anyway=""
+      fi
+
+      if [[ -n "$check_anyway" && "$check_anyway" =~ ^[Yy]$ ]]; then
           if list_packages; then
             echo
             echo "Package build options:"
@@ -717,26 +756,11 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
         else
           log_info "Skipping package management"
         fi
-      else
-        log_info "Skipping package management"
       fi
     fi
-  fi
-else
-  log_header "Package Management"
-  log_info "Package checking disabled. Use -p or --packages flag to enable package management."
-
-  if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
-    changed_count=0
-    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
-      if [[ -f "${pkg_dir}/PKGBUILD" ]] && check_pkgbuild_changed "$pkg_dir"; then
-        ((changed_count++))
-      fi
-    done
-
-    if [[ $changed_count -gt 0 ]]; then
-      log_warning "Note: $changed_count package(s) have changed PKGBUILDs. Use -p flag to manage packages."
-    fi
+  else
+    log_header "Package Management"
+    log_info "Package checking disabled. Use -p or --packages flag to enable package management."
   fi
 fi
 
@@ -794,7 +818,14 @@ if [[ "$process_files" == true ]]; then
       home_file="${home_dir_path}/${rel_path}"
 
       if should_ignore "$home_file"; then
+        if [[ "$VERBOSE" == true ]]; then
+          log_info "Ignored: $rel_path (matches ignore pattern)"
+        fi
         continue
+      fi
+
+      if [[ "$VERBOSE" == true ]]; then
+        log_info "Processing: $rel_path"
       fi
 
       ((files_processed++))

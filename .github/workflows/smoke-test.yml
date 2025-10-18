@@ -1,0 +1,66 @@
+name: Smoke Test - exp-update
+
+on:
+  push:
+    paths:
+      - 'install.sh'
+      - 'sdata/step/exp-update.sh'
+      - 'sdata/lib/options-exp-update.sh'
+  pull_request:
+    paths:
+      - 'install.sh'
+      - 'sdata/step/exp-update.sh'
+      - 'sdata/lib/options-exp-update.sh'
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Make install.sh executable
+        run: chmod +x install.sh
+
+      - name: Run smoke test
+        run: |
+          echo "Running: ./install.sh exp-update --non-interactive --skip-notice --dry-run -v"
+
+          # Capture output and exit code
+          OUTPUT=$(./install.sh exp-update --non-interactive --skip-notice --dry-run -v 2>&1)
+          EXIT_CODE=$?
+
+          echo "Exit code: $EXIT_CODE"
+          echo "Output:"
+          echo "$OUTPUT"
+
+          # Check exit code
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ Smoke test failed: Non-zero exit code"
+            exit 1
+          fi
+
+          # Check for expected strings in output
+          if ! echo "$OUTPUT" | grep -q "DRY-RUN MODE"; then
+            echo "❌ Smoke test failed: Missing 'DRY-RUN MODE' in output"
+            exit 1
+          fi
+
+          if ! echo "$OUTPUT" | grep -q "Detecting Repository Structure"; then
+            echo "❌ Smoke test failed: Missing 'Detecting Repository Structure' in output"
+            exit 1
+          fi
+
+          # Check for non-empty Structure line (should contain detected directories)
+          STRUCTURE_LINE=$(echo "$OUTPUT" | grep "Structure:" | head -1)
+          if [[ -z "$STRUCTURE_LINE" ]] || [[ "$STRUCTURE_LINE" == "Structure:" ]]; then
+            echo "❌ Smoke test failed: Structure line is empty or malformed"
+            echo "Found: $STRUCTURE_LINE"
+            exit 1
+          fi
+
+          echo "✅ Smoke test passed: All checks successful"
+          echo "Detected structure: $STRUCTURE_LINE"

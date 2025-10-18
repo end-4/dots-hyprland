@@ -1,6 +1,8 @@
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
+# shellcheck shell=bash
+
 # The script that use this file should have two lines on its top as follows:
 # cd "$(dirname "$0")"
 # export base="$(pwd)"
@@ -9,7 +11,7 @@ function try { "$@" || sleep 0; }
 function v(){
   echo -e "####################################################"
   echo -e "${STY_BLUE}[$0]: Next command:${STY_RST}"
-  echo -e "${STY_GREEN}$@${STY_RST}"
+  echo -e "${STY_GREEN}$*${STY_RST}"
   local execute=true
   if $ask;then
     while true;do
@@ -29,14 +31,14 @@ function v(){
     done
   fi
   if $execute;then x "$@";else
-    echo -e "${STY_YELLOW}[$0]: Skipped \"$@\"${STY_RST}"
+    echo -e "${STY_YELLOW}[$0]: Skipped \"$*\"${STY_RST}"
   fi
 }
 # When use v() for a defined function, use x() INSIDE its definition to catch errors.
 function x(){
   if "$@";then local cmdstatus=0;else local cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
   while [ $cmdstatus == 1 ] ;do
-    echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed."
+    echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$*${STY_RED}\" has failed."
     echo -e "You may need to resolve the problem manually BEFORE repeating this command."
     echo -e "[Tip] If a certain package is failing to install, try installing it separately in another terminal.${STY_RST}"
     echo "  r = Repeat this command (DEFAULT)"
@@ -52,9 +54,9 @@ function x(){
     esac
   done
   case $cmdstatus in
-    0) echo -e "${STY_BLUE}[$0]: Command \"${STY_GREEN}$@${STY_BLUE}\" finished.${STY_RST}";;
-    1) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed. Exiting...${STY_RST}";exit 1;;
-    2) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$@${STY_RED}\" has failed but ignored by user.${STY_RST}";;
+    0) echo -e "${STY_BLUE}[$0]: Command \"${STY_GREEN}$*${STY_BLUE}\" finished.${STY_RST}";;
+    1) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$*${STY_RED}\" has failed. Exiting...${STY_RST}";exit 1;;
+    2) echo -e "${STY_RED}[$0]: Command \"${STY_GREEN}$*${STY_RED}\" has failed but ignored by user.${STY_RST}";;
   esac
 }
 function showfun(){
