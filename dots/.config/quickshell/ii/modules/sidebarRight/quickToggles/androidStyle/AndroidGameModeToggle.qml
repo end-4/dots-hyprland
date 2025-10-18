@@ -9,6 +9,7 @@ AndroidQuickToggleButton {
     id: root
 
     name: Translation.tr("Game mode")
+    statusText: ""
     toggled: toggled
     buttonIcon: "gamepad"
 

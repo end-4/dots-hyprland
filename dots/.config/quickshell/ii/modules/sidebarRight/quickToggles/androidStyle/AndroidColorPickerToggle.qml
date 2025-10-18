@@ -8,6 +8,7 @@ AndroidQuickToggleButton {
     id: root
 
     name: Translation.tr("Color Picker")
+    statusText: ""
     toggled: false
     buttonIcon: "colorize"
 

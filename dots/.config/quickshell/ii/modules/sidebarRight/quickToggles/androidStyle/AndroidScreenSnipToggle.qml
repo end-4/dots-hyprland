@@ -9,6 +9,7 @@ AndroidQuickToggleButton {
     id: root
 
     name: Translation.tr("Screen snip")
+    statusText: ""
     toggled: false
     buttonIcon: "screenshot_region"
 
