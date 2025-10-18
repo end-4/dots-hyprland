@@ -12,9 +12,15 @@ Item {
 
     signal positionChanged(int newX, int newY)
 
+    property real scaleMultiplier: 1
+    onScaleMultiplierChanged: {
+        scale = scaleMultiplier
+    }
     property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
 
     Drag.active: dragArea.drag.active
+
+    
 
     Behavior on x {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -44,11 +50,11 @@ Item {
         property bool dragActive: drag.active
 
         onPressed: {
-            widgetRoot.scale = 1.07
+            widgetRoot.scale = scaleMultiplier * 1.07
             widgetRoot.opacity = 0.8
         }
         onReleased: {
-            widgetRoot.scale = 1.0
+            widgetRoot.scale = scaleMultiplier * 1.0
             widgetRoot.opacity = 1.0
         }
         onDragActiveChanged: {

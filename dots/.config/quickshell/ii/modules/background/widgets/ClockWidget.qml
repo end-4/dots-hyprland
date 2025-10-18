@@ -14,7 +14,7 @@ BackgroundWidget {
     x: Config.options.background.widgets.clockX
     y: Config.options.background.widgets.clockY
 
-    scale: Config.options.background.clock.scale
+    scaleMultiplier: Config.options.background.clock.scale
 
     property bool screenLocked: GlobalStates.screenLocked
     onScreenLockedChanged: {
@@ -56,6 +56,7 @@ BackgroundWidget {
     Loader {
         active: Config.options.background.clock.style === "digital"
         sourceComponent:  ColumnLayout {
+            scale: Config.options.background.clock.scale
             id: clockColumn
             spacing: 6
             Component.onCompleted: {
