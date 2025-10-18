@@ -143,9 +143,6 @@ Singleton {
 
             property JsonObject background: JsonObject {
                 property JsonObject clock: JsonObject {
-                    property bool fixedPosition: false
-                    property real x: -500
-                    property real y: -500
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
@@ -162,7 +159,6 @@ Singleton {
                         property bool dateInClock: true
                         property bool constantlyRotate: false
                     }
-                    
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
@@ -176,6 +172,10 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
                     property real clockFactor: 1.2
+                }
+                property JsonObject widgets: JsonObject {
+                    property int clockX: 500
+                    property int clockY: 500
                 }
             }
 

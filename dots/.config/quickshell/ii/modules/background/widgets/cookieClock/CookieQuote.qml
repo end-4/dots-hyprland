@@ -2,6 +2,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import Qt5Compat.GraphicalEffects
+import qs
 
 
 Item {
@@ -41,13 +42,15 @@ Item {
                 id: quoteIcon
                 anchors.top: parent.top
                 iconSize: Appearance.font.pixelSize.huge
-                text: "format_quote"
+                text: GlobalStates.screenLocked ? "lock" : "format_quote"
                 color: Appearance.colors.colOnSecondaryContainer
             }
             StyledText {
                 id: quoteStyledText
                 horizontalAlignment: Text.AlignLeft
-                text: Config.options.background.quote
+                anchors.top: parent.top
+                anchors.topMargin: 2
+                text: GlobalStates.screenLocked ? "Locked" : Config.options.background.quote
                 color: Appearance.colors.colOnSecondaryContainer
                 font {
                     family: Appearance.font.family.reading

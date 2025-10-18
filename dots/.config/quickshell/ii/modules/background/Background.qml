@@ -13,7 +13,8 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-import "./cookieClock"
+import "./widgets"
+import "./widgets/cookieClock"
 
 Variants {
     id: root
@@ -131,47 +132,12 @@ Variants {
                         // Oversized = can be zoomed for parallax, yay
                         bgRoot.effectiveWallpaperScale = Math.min(bgRoot.preferredWallpaperScale, width / screenWidth, height / screenHeight);
                     }
-
-                    bgRoot.updateClockPosition();
                 }
             }
         }
 
-        // Clock positioning
-        function updateClockPosition() {
-            // Somehow all this manual setting is needed to make the proc correctly use the new values
-            leastBusyRegionProc.path = bgRoot.wallpaperPath;
-            leastBusyRegionProc.contentWidth = clockLoader.implicitWidth + root.clockSizePadding * 2;
-            leastBusyRegionProc.contentHeight = clockLoader.implicitHeight + root.clockSizePadding * 2;
-            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2;
-            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2;
-            leastBusyRegionProc.running = false;
-            leastBusyRegionProc.running = true;
-        }
-        Process {
-            id: leastBusyRegionProc
-            property string path: bgRoot.wallpaperPath
-            property int contentWidth: 300
-            property int contentHeight: 300
-            property int horizontalPadding: bgRoot.movableXSpace
-            property int verticalPadding: bgRoot.movableYSpace
-            command: [Quickshell.shellPath("scripts/images/least-busy-region-venv.sh"), "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale), "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale), "--width", contentWidth, "--height", contentHeight, "--horizontal-padding", horizontalPadding, "--vertical-padding", verticalPadding, path
-                // "--visual-output",
-                ,]
-            stdout: StdioCollector {
-                id: leastBusyRegionOutputCollector
-                onStreamFinished: {
-                    const output = leastBusyRegionOutputCollector.text;
-                    // console.log("[Background] Least busy region output:", output)
-                    if (output.length === 0)
-                        return;
-                    const parsedContent = JSON.parse(output);
-                    bgRoot.clockX = parsedContent.center_x * bgRoot.effectiveWallpaperScale;
-                    bgRoot.clockY = parsedContent.center_y * bgRoot.effectiveWallpaperScale;
-                    bgRoot.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary;
-                }
-            }
-        }
+
+        BackgroundWidgetContainer {}
 
         // Wallpaper
         Item {
@@ -254,176 +220,6 @@ Variants {
                         opacity: GlobalStates.screenLocked ? 1 : 0
                         anchors.fill: parent
                         color: CF.ColorUtils.transparentize(Appearance.colors.colLayer0, 0.7)
-                    }
-                }
-            }
-
-            // The clock
-            Loader {
-                id: clockLoader
-                scale: Config.options.background.clock.scale
-                active: Config.options.background.clock.show
-                anchors {
-                    left: wallpaper.left
-                    top: wallpaper.top
-                    horizontalCenter: undefined
-                    verticalCenter: undefined
-                    leftMargin: {
-                        const clockXOnWallpaper = bgRoot.movableXSpace + ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
-                        const extraMove = (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (root.clockParallaxFactor - 1);
-                        return clockXOnWallpaper - extraMove;
-                    }
-                    topMargin: {
-                        const clockYOnWallpaper = bgRoot.movableYSpace + ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
-                        const extraMove = (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (root.clockParallaxFactor - 1);
-                        return clockYOnWallpaper - extraMove;
-                    }
-                    Behavior on leftMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-                    Behavior on topMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-                }
-                states: State {
-                    name: "centered"
-                    when: (GlobalStates.screenLocked && Config.options.lock.centerClock) || bgRoot.wallpaperSafetyTriggered
-                    AnchorChanges {
-                        target: clockLoader
-                        anchors {
-                            left: undefined
-                            right: undefined
-                            top: undefined
-                            verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
-                        }
-                    }
-                }
-                transitions: Transition {
-                    AnchorAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
-                }
-                sourceComponent: Column {
-                    Loader {
-                        id: digitalClockLoader
-                        visible: root.clockStyle === "digital"
-                        active: visible
-                        sourceComponent: ColumnLayout {
-                            id: clockColumn
-                            spacing: 6
-
-                            ClockText {
-                                font.pixelSize: 90
-                                text: DateTime.time
-                            }
-                            ClockText {
-                                Layout.topMargin: -5
-                                text: DateTime.date
-                            }
-                            StyledText {
-                                // Somehow gets fucked up if made a ClockText???
-                                visible: Config.options.background.showQuote && Config.options.background.quote.length > 0
-                                Layout.fillWidth: true
-                                horizontalAlignment: bgRoot.textHorizontalAlignment
-                                font {
-                                    family: Appearance.font.family.main
-                                    pixelSize: Appearance.font.pixelSize.normal
-                                    weight: 350
-                                    italic: true
-                                }
-                                color: bgRoot.colText
-                                style: Text.Raised
-                                styleColor: Appearance.colors.colShadow
-                                text: Config.options.background.quote
-                            }
-                        }
-                    }
-
-                    Loader {
-                        id: cookieClockLoader
-                        visible: root.clockStyle === "cookie" 
-                        active: visible
-                        sourceComponent: CookieClock {}
-                    }
-
-                    Loader {
-                        id: cookieQuoteLoader
-                        visible: root.showCookieQuote
-                        active: visible
-                        sourceComponent: CookieQuote {}
-                        anchors.horizontalCenter: cookieClockLoader.horizontalCenter
-                    }
-                    
-                }
-
-                Item {
-                    anchors {
-                        top: clockLoader.bottom
-                        topMargin: 8
-                        horizontalCenter: (bgRoot.textHorizontalAlignment === Text.AlignHCenter || root.clockStyle === "cookie") ? clockLoader.horizontalCenter : undefined
-                        left: (bgRoot.textHorizontalAlignment === Text.AlignLeft) ? clockLoader.left : undefined
-                        right: (bgRoot.textHorizontalAlignment === Text.AlignRight) ? clockLoader.right : undefined
-                        leftMargin: -26
-                        rightMargin: -26
-                    }
-                    implicitWidth: statusTextBg.implicitWidth
-                    implicitHeight: statusTextBg.implicitHeight
-
-                    StyledRectangularShadow {
-                        target: statusTextBg
-                        visible: statusTextBg.visible && root.clockStyle === "cookie"
-                        opacity: statusTextBg.opacity
-                    }
-
-                    Rectangle {
-                        id: statusTextBg
-                        anchors.centerIn: parent
-                        clip: true
-                        opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
-                        visible: opacity > 0
-                        implicitHeight: statusTextRow.implicitHeight + 5 * 2
-                        implicitWidth: statusTextRow.implicitWidth + 5 * 2
-                        radius: Appearance.rounding.small
-                        color: CF.ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, root.clockStyle === "cookie" ? 0 : 1)
-
-                        Behavior on implicitWidth {
-                            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-                        }
-                        Behavior on implicitHeight {
-                            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-                        }
-                        Behavior on opacity {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-
-                        RowLayout {
-                            id: statusTextRow
-                            anchors.centerIn: parent
-                            spacing: 14
-                            Item {
-                                Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft
-                                implicitWidth: 1
-                            }
-                            ClockStatusText {
-                                id: safetyStatusText
-                                shown: bgRoot.wallpaperSafetyTriggered
-                                statusIcon: "hide_image"
-                                statusText: Translation.tr("Wallpaper safety enforced")
-                            }
-                            ClockStatusText {
-                                id: lockStatusText
-                                shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
-                                statusIcon: "lock"
-                                statusText: Translation.tr("Locked")
-                            }
-                            Item {
-                                Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight
-                                implicitWidth: 1
-                            }
-                        }
                     }
                 }
             }
