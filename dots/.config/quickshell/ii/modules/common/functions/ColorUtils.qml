@@ -1,5 +1,5 @@
-pragma Singleton
 import Quickshell
+pragma Singleton
 
 Singleton {
     id: root
@@ -14,13 +14,11 @@ Singleton {
     function colorWithHueOf(color1, color2) {
         var c1 = Qt.color(color1);
         var c2 = Qt.color(color2);
-
         // Qt.color hsvHue/hsvSaturation/hsvValue/alpha return 0-1
         var hue = c2.hsvHue;
         var sat = c1.hsvSaturation;
         var val = c1.hsvValue;
         var alpha = c1.a;
-
         return Qt.hsva(hue, sat, val, alpha);
     }
 
@@ -34,12 +32,10 @@ Singleton {
     function colorWithSaturationOf(color1, color2) {
         var c1 = Qt.color(color1);
         var c2 = Qt.color(color2);
-
         var hue = c1.hsvHue;
         var sat = c2.hsvSaturation;
         var val = c1.hsvValue;
         var alpha = c1.a;
-
         return Qt.hsva(hue, sat, val, alpha);
     }
 
@@ -77,12 +73,10 @@ Singleton {
     function adaptToAccent(color1, color2) {
         var c1 = Qt.color(color1);
         var c2 = Qt.color(color2);
-
         var hue = c2.hslHue;
         var sat = c2.hslSaturation;
         var light = c1.hslLightness;
         var alpha = c1.a;
-
         return Qt.hsla(hue, sat, light, alpha);
     }
 
@@ -124,4 +118,46 @@ Singleton {
         var a = Math.max(0, Math.min(1, alpha));
         return Qt.rgba(c.r, c.g, c.b, a);
     }
+
+    /**
+     * Generates a hex color code from a string in a deterministic way.
+     *
+     * @param {string} str - The input string used to generate the color.
+     * @returns {string} The resulting hex color in the format "#rrggbb".
+     */
+    function stringToColor(str) {
+        //https://gist.github.com/0x263b/2bdd90886c2036a1ad5bcf06d6e6fb37
+        let hash = 0;
+        if (str.length === 0)
+            return hash;
+
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            hash = hash & hash;
+        }
+        let color = '#';
+        for (var i = 0; i < 3; i++) {
+            let value = (hash >> (i * 8)) & 255;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+        return color;
+    }
+
+    /**
+     * Determines a contrasting text color (black or white) based on the background color's luminance.
+     *
+     * @param {string} bgColor - The background color (any Qt.color-compatible string).
+     * @returns {string} The hex color ("#FFFFFF" or "#000000") that ensures high contrast.
+     */
+    function getContrastingTextColor(bgColor) {
+        let color = Qt.color(bgColor);
+        // Calculate relative luminance using WCAG formula
+        let r = color.r <= 0.03928 ? color.r / 12.92 : Math.pow((color.r + 0.055) / 1.055, 2.4);
+        let g = color.g <= 0.03928 ? color.g / 12.92 : Math.pow((color.g + 0.055) / 1.055, 2.4);
+        let b = color.b <= 0.03928 ? color.b / 12.92 : Math.pow((color.b + 0.055) / 1.055, 2.4);
+        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        // Return high contrast color
+        return luminance < 0.5 ? "#FFFFFF" : "#000000";
+    }
+
 }

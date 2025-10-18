@@ -1,4 +1,4 @@
-const weekDays = [ // MONDAY IS THE FIRST DAY OF THE WEEK :HESRIGHTYOUKNOW:
+const weekDays = [ 
     { day: 'Mo', today: 0 },
     { day: 'Tu', today: 0 },
     { day: 'We', today: 0 },
@@ -60,9 +60,9 @@ function getDateInXMonthsTime(x) {
     return targetDate;
 }
 
-function getCalendarLayout(dateObject, highlight) {
+function getCalendarLayout(dateObject, highlight, firstDayOfWeek) {
     if (!dateObject) dateObject = new Date();
-    const weekday = (dateObject.getDay() + 6) % 7; // MONDAY IS THE FIRST DAY OF THE WEEK
+    const weekday = (dateObject.getDay() +6 - firstDayOfWeek ) % 7; 
     const day = dateObject.getDate();
     const month = dateObject.getMonth() + 1;
     const year = dateObject.getFullYear();
@@ -87,6 +87,8 @@ function getCalendarLayout(dateObject, highlight) {
     while (i < 6 && j < 7) {
         calendar[i][j] = {
             "day": toFill,
+            "month": month - 1,
+            "year": year,
             "today": ((toFill == day && monthDiff == 0 && highlight) ? 1 : (
                 monthDiff == 0 ? 0 :
                     -1
