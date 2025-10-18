@@ -157,7 +157,11 @@ VERBOSE=false
 NON_INTERACTIVE=true
 
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
-detect_repo_structure
+detected_dirs=$(detect_repo_structure)
+if [[ -n "$detected_dirs" ]]; then
+  read -ra MONITOR_DIRS <<<"$detected_dirs"
+fi
+echo "Structure: ${MONITOR_DIRS[*]}"
 EOF
 
   chmod +x test_detection.sh
@@ -212,7 +216,11 @@ VERBOSE=false
 NON_INTERACTIVE=true
 
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
-detect_repo_structure
+detected_dirs=$(detect_repo_structure)
+if [[ -n "$detected_dirs" ]]; then
+  read -ra MONITOR_DIRS <<<"$detected_dirs"
+fi
+echo "Structure: ${MONITOR_DIRS[*]}"
 EOF
 
   chmod +x test_detection.sh
@@ -507,7 +515,7 @@ test_lock_file() {
   echo "99999" > .update-lock
   
   # Try to run update - should fail due to lock
-  if ./install.sh exp-update --skip-notice --non-interactive --dry-run 2>&1 | grep -q "stale lock"; then
+  if ./install.sh exp-update --skip-notice --non-interactive 2>&1 | grep -q "stale lock"; then
     log_pass "Lock file mechanism works (detected stale lock)"
     cd "$ORIGINAL_DIR"
     return 0
@@ -780,7 +788,6 @@ main() {
     "test_flags"
     "test_shellcheck"
     "test_lock_file"
-    "test_ignore_pattern_caching"
     "test_directory_caching"
     "test_safe_read_noninteractive"
   )

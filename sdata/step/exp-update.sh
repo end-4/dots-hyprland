@@ -49,9 +49,6 @@ declare -A CREATED_DIRS
 # TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Auto-detect repository structure
 detect_repo_structure() {
-  if which pacman &>/dev/null; then
-    return
-  fi
   local found_dirs=()
   
   # Check for dots/ prefixed structure
@@ -164,7 +161,9 @@ load_ignore_patterns() {
       
       # Separate substring patterns from regular patterns
       if [[ "$pattern" == \*\** ]]; then
-        IGNORE_SUBSTRING_PATTERNS+=("${pattern#\*\*}")
+        local cleaned_pattern="${pattern#\*\*}"
+        cleaned_pattern="${cleaned_pattern%%*}"
+        IGNORE_SUBSTRING_PATTERNS+=("$cleaned_pattern")
       else
         IGNORE_PATTERNS+=("$pattern")
       fi
@@ -720,7 +719,7 @@ cleanup_on_exit() {
 trap cleanup_on_exit EXIT INT TERM
 
 # Check for concurrent runs
-if [[ -f "${REPO_ROOT}/.update-lock" ]] && [[ "$DRY_RUN" != true ]]; then
+if [[ -f "${REPO_ROOT}/.update-lock" ]]; then
   # Check if the process is still running
   if kill -0 $(cat "${REPO_ROOT}/.update-lock" 2>/dev/null) 2>/dev/null; then
     log_die "Another update is already running (PID: $(cat "${REPO_ROOT}/.update-lock"))"
@@ -963,8 +962,8 @@ elif has_new_commits; then
   process_files=true
   log_info "New commits detected: checking changed configuration files"
 else
-  log_info "No new commits found: checking for local file differences"
-  process_files=true
+  log_info "No new commits found and force mode not enabled: skipping file updates"
+  process_files=false
 fi
 
 if [[ "$process_files" == true ]]; then
