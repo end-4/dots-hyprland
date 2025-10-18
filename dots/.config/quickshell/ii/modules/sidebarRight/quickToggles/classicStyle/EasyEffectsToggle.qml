@@ -8,8 +8,8 @@ import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
-    toggled: EasyEffects.active
     visible: EasyEffects.available
+    toggled: EasyEffects.active
     buttonIcon: "instant_mix"
 
     Component.onCompleted: {

@@ -22,13 +22,15 @@ Button {
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
-    property real clickedWidth: baseWidth + 20
+    property real clickedWidth: baseWidth + (isAtSide ? 10 : 20)
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
+    property int indexInParent: parentGroup?.children.indexOf(root) ?? 0
     property int clickIndex: parentGroup?.clickIndex ?? -1
+    property bool isAtSide: indexInParent === 0 || indexInParent === (parentGroup?.childrenCount - 1)
 
-    Layout.fillWidth: (clickIndex - 1 <= parentGroup?.children.indexOf(root) && parentGroup?.children.indexOf(root) <= clickIndex + 1)
-    Layout.fillHeight: (clickIndex - 1 <= parentGroup?.children.indexOf(root) && parentGroup?.children.indexOf(root) <= clickIndex + 1)
+    Layout.fillWidth: (clickIndex - 1 <= indexInParent && indexInParent <= clickIndex + 1)
+    Layout.fillHeight: (clickIndex - 1 <= indexInParent && indexInParent <= clickIndex + 1)
     implicitWidth: (root.down && bounce) ? clickedWidth : baseWidth
     implicitHeight: (root.down && bounce) ? clickedHeight : baseHeight
 
