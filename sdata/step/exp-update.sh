@@ -1067,6 +1067,7 @@ if [[ "$process_files" == true ]]; then
         ((files_created++))
       fi
     done < <(get_changed_files "$repo_dir_path") || true
+    echo
   done
 
   # Clear progress line if it was shown
