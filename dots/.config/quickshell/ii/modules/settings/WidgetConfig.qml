@@ -56,7 +56,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
 
             ConfigSwitch {
@@ -132,7 +132,7 @@ ContentPage {
         }
         
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Dial style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dialNumberStyle
@@ -171,7 +171,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Hour hand")
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.hourHandStyle
@@ -204,7 +204,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Minute hand")
 
             ConfigSelectionArray {
@@ -243,7 +243,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Second hand")
 
             ConfigSelectionArray {
@@ -277,7 +277,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
+            enabled: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Date style")
 
             ConfigSelectionArray {

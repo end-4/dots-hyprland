@@ -44,6 +44,7 @@ BackgroundWidget {
                 }
             }
             CookieQuote {
+                visible: Config.options.background.showQuote
                 anchors {
                     top: cookieClock.bottom
                     topMargin: 20
@@ -72,6 +73,7 @@ BackgroundWidget {
                 text: DateTime.date
             }
             ClockText {
+                visible: Config.options.background.showQuote
                 font {
                     family: Appearance.font.family.main
                     pixelSize: Appearance.font.pixelSize.normal
