@@ -20,7 +20,6 @@ Item {
 
     Drag.active: dragArea.drag.active
 
-    
 
     Behavior on x {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -42,10 +41,11 @@ Item {
 
         // helpwanted
         // Not ideal, but keeps coordinates safe for now.
-        drag.minimumX: 0
-        drag.maximumX: monitor.width - parent.implicitWidth
-        drag.minimumY: 0
-        drag.maximumY: monitor.height - parent.implicitHeight 
+        drag.minimumX: - implicitWidth / 2 - wallpaper.x
+        drag.maximumX: monitor.width - widgetRoot.implicitWidth - wallpaper.x
+
+        drag.minimumY: - implicitHeight / 2 - wallpaper.y
+        drag.maximumY: monitor.height - widgetRoot.implicitHeight - wallpaper.y
 
         property bool dragActive: drag.active
 
