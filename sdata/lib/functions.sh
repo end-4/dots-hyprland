@@ -3,10 +3,6 @@
 
 # shellcheck shell=bash
 
-# The script that use this file should have two lines on its top as follows:
-# cd "$(dirname "$0")"
-# export base="$(pwd)"
-
 function try { "$@" || sleep 0; }
 function v(){
   echo -e "####################################################"
@@ -253,9 +249,9 @@ function show_progress() {
   fi
 }
 
-# Enhanced: Cleanup temporary files on exit
-declare -a TEMP_FILES_TO_CLEANUP=()
 
+# Enhanced: Cleanup temporary files on exit
+#declare -a TEMP_FILES_TO_CLEANUP=()
 function register_temp_file() {
   local temp_file="$1"
   TEMP_FILES_TO_CLEANUP+=("$temp_file")

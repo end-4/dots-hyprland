@@ -3,8 +3,6 @@
 
 # shellcheck shell=bash
 
-# The script that use this file should have two lines on its top as follows:
-# cd "$(dirname "$0")" export base="$(pwd)"
 showhelp_global(){
 echo -e "Syntax: $0 [subcommand] [options]...
 

@@ -8,7 +8,7 @@ install-yay(){
   x makepkg -o
   x makepkg -se
   x makepkg -i --noconfirm
-  x cd $base
+  x cd ${REPO_ROOT}
   rm -rf /tmp/buildyay
 }
 
