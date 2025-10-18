@@ -62,7 +62,7 @@ function x(){
 function showfun(){
   echo -e "${STY_BLUE}[$0]: The definition of function \"$1\" is as follows:${STY_RST}"
   printf "${STY_GREEN}"
-  type -a "$1" 2>/dev/null || type -a "$1".sh 2>/dev/null || return 1
+  type -a "$1" 2>/dev/null || return 1
   printf "${STY_RST}"
 }
 function pause(){
