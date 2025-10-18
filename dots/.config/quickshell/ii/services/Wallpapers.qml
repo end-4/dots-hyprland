@@ -1,3 +1,4 @@
+import qs.services
 import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
@@ -95,12 +96,12 @@ Singleton {
         selectProc.select(filePath, darkMode, monitorName);
     }
 
-    function randomFromCurrentFolder(darkMode = Appearance.m3colors.darkmode) {
+    function randomFromCurrentFolder(darkMode = Appearance.m3colors.darkmode, monitorName = "") {
         if (folderModel.count === 0) return;
         const randomIndex = Math.floor(Math.random() * folderModel.count);
         const filePath = folderModel.get(randomIndex, "filePath");
         print("Randomly selected wallpaper:", filePath);
-        root.select(filePath, darkMode);
+        root.select(filePath, darkMode, monitorName);
     }
 
     Process {

@@ -41,4 +41,17 @@ if [ "$downloadPath" == "$currentWallpaperPath" ]; then
     downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper-1.$ext"
 fi
 curl "$link" -o "$downloadPath"
-"$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath"
+
+SHELL_CONFIG_FILE="$HOME/.config/illogical-impulse/config.json"
+multiMonitorEnabled=$(jq -r '.background.multiMonitor.enable' "$SHELL_CONFIG_FILE" 2>/dev/null)
+
+if [ "$multiMonitorEnabled" == "true" ]; then
+    focusedMonitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name' 2>/dev/null)
+    if [ -n "$focusedMonitor" ]; then
+        "$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath" --monitor "$focusedMonitor"
+    else
+        "$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath"
+    fi
+else
+    "$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath"
+fi

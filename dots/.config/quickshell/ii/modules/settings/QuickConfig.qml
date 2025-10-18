@@ -79,7 +79,8 @@ ContentPage {
                     source: {
                         // Show appropriate wallpaper based on mode and monitor
                         if (Config.options.background.multiMonitor.enable) {
-                            return WallpaperListener.effectivePerMonitor[currentScreenName]
+                            const wallpaperData = WallpaperListener.effectivePerMonitor[currentScreenName]
+                            return wallpaperData?.path
                         } else {
                             return Config.options.background.wallpaperPath
                         }

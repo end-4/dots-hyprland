@@ -33,7 +33,9 @@ Singleton {
                 const screen = screens[i]
                 const monitor = Hyprland.monitorFor(screen)
                 if (monitor && globalPath && globalPath.length > 0) {
-                    result[monitor.name] = globalPath
+                    result[monitor.name] = {
+                        path: globalPath
+                    }
                 }
             }
             root.effectivePerMonitor = result
@@ -44,7 +46,13 @@ Singleton {
         for (let i = 0; i < byMonitorList.length; ++i) {
             const entry = byMonitorList[i]
             if (entry && entry.monitor && entry.path) {
-                byMonitorMap[entry.monitor] = entry.path
+                const data = { path: entry.path }
+                if (entry.startWorkspace !== undefined && entry.endWorkspace !== undefined) {
+                    data.startWorkspace = entry.startWorkspace
+                    data.endWorkspace = entry.endWorkspace
+                }
+
+                byMonitorMap[entry.monitor] = data
             }
         }
 
@@ -52,9 +60,11 @@ Singleton {
             const screen = screens[i]
             const monitor = Hyprland.monitorFor(screen)
             if (monitor) {
-                const path = byMonitorMap[monitor.name] || globalPath
-                if (path && path.length > 0) {
-                    result[monitor.name] = path
+                const wallpaperData = byMonitorMap[monitor.name] || {
+                    path: globalPath
+                }
+                if (wallpaperData.path && wallpaperData.path.length > 0) {
+                    result[monitor.name] = wallpaperData
                 }
             }
         }
