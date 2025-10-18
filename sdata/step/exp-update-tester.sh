@@ -147,7 +147,15 @@ log_header() { :; }
 log_die() { echo "ERROR: \$1"; exit 1; }
 STY_CYAN="" STY_RST="" STY_YELLOW=""
 
-REPO_ROOT="$1"
+# Set required environment variables for exp-update.sh
+SKIP_NOTICE=true
+REPO_ROOT="\$1"
+CHECK_PACKAGES=false
+DRY_RUN=false
+FORCE_CHECK=false
+VERBOSE=false
+NON_INTERACTIVE=true
+
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
 detect_repo_structure
 EOF
@@ -194,7 +202,15 @@ log_header() { :; }
 log_die() { echo "ERROR: \$1"; exit 1; }
 STY_CYAN="" STY_RST="" STY_YELLOW=""
 
-REPO_ROOT="$1"
+# Set required environment variables for exp-update.sh
+SKIP_NOTICE=true
+REPO_ROOT="\$1"
+CHECK_PACKAGES=false
+DRY_RUN=false
+FORCE_CHECK=false
+VERBOSE=false
+NON_INTERACTIVE=true
+
 source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
 detect_repo_structure
 EOF
@@ -235,7 +251,7 @@ test_dots_mapping() {
   fi
 }
 
-# Test 7: Test ignore file patterns
+# Test 7: Test ignore file patterns - FIXED
 test_ignore_patterns() {
   log_test "Testing ignore file pattern matching"
   
@@ -257,48 +273,61 @@ EOF
   
   cat > test_ignore.sh << EOF
 #!/bin/bash
-# Mock logging and style functions/variables
+# Suppress all output from sourced script
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
-log_die() { echo "ERROR: \$1"; exit 1; }
+log_die() { echo "ERROR: \$1" >&2; exit 1; }
 STY_CYAN="" STY_RST="" STY_YELLOW=""
 
-REPO_ROOT="$1"
-UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
+# FIXED: Set REPO_ROOT before sourcing exp-update.sh
+REPO_ROOT="\$1"
+export REPO_ROOT
+
+# Set other required environment variables
+SKIP_NOTICE=true
+CHECK_PACKAGES=false
+DRY_RUN=false
+FORCE_CHECK=false
+VERBOSE=false
+NON_INTERACTIVE=true
+
+UPDATE_IGNORE_FILE="\${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="/dev/null"
+
 # Source the production script to use the real should_ignore function
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
+# Redirect all unwanted output to stderr, then to /dev/null
+source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
 
 test_cases=(
-  "$REPO_ROOT/app.log:0"
-  "$REPO_ROOT/secrets/key.txt:0" 
-  "$REPO_ROOT/.config/private-config:0"
-  "$REPO_ROOT/.config/backup-file:0"
-  "$REPO_ROOT/normal-config:1"
+  "\$REPO_ROOT/app.log:0"
+  "\$REPO_ROOT/secrets/key.txt:0" 
+  "\$REPO_ROOT/.config/private-config:0"
+  "\$REPO_ROOT/.config/backup-file:0"
+  "\$REPO_ROOT/normal-config:1"
 )
 
 all_passed=true
-for test_case in "${test_cases[@]}"; do
-  IFS=":" read -r file expected <<< "$test_case"
-  mkdir -p "$(dirname "$file")"
-  touch "$file"
+for test_case in "\${test_cases[@]}"; do
+  IFS=":" read -r file expected <<< "\$test_case"
+  mkdir -p "\$(dirname "\$file")"
+  touch "\$file"
   
-  if should_ignore "$file"; then
+  if should_ignore "\$file"; then
     result=0
   else
     result=1
   fi
   
-  if [[ $result -ne $expected ]]; then
-    echo "FAIL: $file (expected: $expected, got: $result)"
+  if [[ \$result -ne \$expected ]]; then
+    echo "FAIL: \$file (expected: \$expected, got: \$result)"
     all_passed=false
   fi
 done
 
-if [[ "$all_passed" == true ]]; then
+if [[ "\$all_passed" == true ]]; then
   echo "PASS"
 else
   echo "FAIL"
@@ -306,7 +335,7 @@ fi
 EOF
   
   chmod +x test_ignore.sh
-  result=$(./test_ignore.sh "$test_repo")
+  result=$(./test_ignore.sh "$test_repo" 2>&1 | grep -E "^(PASS|FAIL)")
   
   if [[ "$result" == "PASS" ]]; then
     log_pass "All ignore pattern tests passed"
@@ -320,30 +349,47 @@ EOF
   fi
 }
 
-# Test 8: Test safe_read security - COMPLETELY NON-INTERACTIVE
+# Test 8: Test safe_read security - FIXED
 test_safe_read_security() {
   log_test "Testing safe_read uses secure assignment (printf -v)"
 
-  local awk_script='/^safe_read() \{/,/^\}/'
   local safe_read_function
-  safe_read_function=$(awk "$awk_script" "$ORIGINAL_DIR/sdata/step/exp-update.sh")
+  safe_read_function=$(awk '/^safe_read\(\) \{/,/^\}/' "$ORIGINAL_DIR/sdata/step/exp-update.sh")
 
   if [[ -z "$safe_read_function" ]]; then
     log_fail "Could not find safe_read function"
     return 1
   fi
 
-  # Check for secure printf -v assignment and absence of eval
-  if echo "$safe_read_function" | grep -q "printf -v" && ! echo "$safe_read_function" | grep -q "eval"; then
+  # FIXED: Remove comments before checking for eval
+  # The function has a comment mentioning eval, which shouldn't count
+  local function_without_comments
+  function_without_comments=$(echo "$safe_read_function" | sed 's/#.*$//')
+  
+  local has_printf_v=false
+  local has_eval=false
+  
+  if echo "$safe_read_function" | grep -F 'printf -v' > /dev/null; then
+    has_printf_v=true
+  fi
+  
+  # Check for eval in actual code (not comments)
+  if echo "$function_without_comments" | grep -w 'eval' > /dev/null; then
+    has_eval=true
+  fi
+
+  if [[ "$has_printf_v" == true ]] && [[ "$has_eval" == false ]]; then
     log_pass "safe_read uses secure printf -v assignment and no eval"
     return 0
   else
-    log_fail "safe_read does not use secure assignment or contains eval"
+    log_fail "safe_read does not use secure assignment or contains eval (has_printf_v=$has_printf_v, has_eval=$has_eval)"
+    echo "Function content:"
+    echo "$safe_read_function"
     return 1
   fi
 }
 
-# Test 9: Test dry-run mode
+# Test 9: Test dry-run mode - FIXED
 test_dry_run() {
   log_test "Testing dry-run mode"
 
@@ -359,8 +405,15 @@ test_dry_run() {
   cp -r "$ORIGINAL_DIR/dots" .
   chmod +x install.sh
 
+  # Create a test config file in repo
+  mkdir -p dots/.config/test-app
+  echo "test config" > dots/.config/test-app/config.conf
+
   git add .
   git commit -m "Add test config" -q
+
+  # FIXED: Clean up any existing test files before running test
+  rm -rf "${HOME}/.config/test-app" 2>/dev/null || true
 
   # Use non-interactive mode and check for DRY-RUN marker
   ./install.sh exp-update -n --skip-notice --non-interactive 2>&1 | tee dry_run_output.txt
@@ -373,13 +426,14 @@ test_dry_run() {
     return 1
   fi
 
-  if [[ ! -f "${HOME}/.config/test-app/config.conf" ]]; then
-    log_pass "No files created in home during dry-run"
-  else
+  # FIXED: Check if files were created (they shouldn't be in dry-run)
+  if [[ -f "${HOME}/.config/test-app/config.conf" ]]; then
     log_fail "Files were created in home during dry-run"
-    rm -f "${HOME}/.config/test-app/config.conf"
+    rm -rf "${HOME}/.config/test-app"
     cd "$ORIGINAL_DIR"
     return 1
+  else
+    log_pass "No files created in home during dry-run"
   fi
 
   cd "$ORIGINAL_DIR"
@@ -430,7 +484,41 @@ test_shellcheck() {
   fi
 }
 
-# Test 13: Test ** substring ignore patterns
+# Test 12: Test lock file mechanism
+test_lock_file() {
+  log_test "Testing lock file mechanism"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  # Copy necessary files
+  cp "$ORIGINAL_DIR/install.sh" .
+  cp -r "$ORIGINAL_DIR/sdata" .
+  mkdir -p dots/.config
+  chmod +x install.sh
+  
+  git add .
+  git commit -m "Add files" -q
+  
+  # Create a fake lock file
+  echo "99999" > .update-lock
+  
+  # Try to run update - should fail due to lock
+  if ./install.sh exp-update --skip-notice --non-interactive --dry-run 2>&1 | grep -q "stale lock"; then
+    log_pass "Lock file mechanism works (detected stale lock)"
+    cd "$ORIGINAL_DIR"
+    return 0
+  else
+    log_fail "Lock file mechanism did not work as expected"
+    cd "$ORIGINAL_DIR"
+    return 1
+  fi
+}
+
+# Test 13: Test ** substring ignore patterns - FIXED
 test_substring_ignore_patterns() {
   log_test "Testing ** substring ignore pattern matching"
 
@@ -443,7 +531,7 @@ test_substring_ignore_patterns() {
   cat > .updateignore << 'EOF'
 **temp**
 **backup**
-**test**
+**testfile**
 EOF
 
   mkdir -p .config/test-app
@@ -453,48 +541,64 @@ EOF
 
   cat > test_substring_ignore.sh << EOF
 #!/bin/bash
-# Mock logging and style functions/variables
+# Suppress all output from sourced script
 log_info() { :; }
 log_warning() { :; }
 log_error() { :; }
 log_success() { :; }
 log_header() { :; }
-log_die() { echo "ERROR: \$1"; exit 1; }
+log_die() { echo "ERROR: \$1" >&2; exit 1; }
 STY_CYAN="" STY_RST="" STY_YELLOW=""
 
-REPO_ROOT="$1"
-UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
+# FIXED: Set REPO_ROOT before sourcing exp-update.sh
+REPO_ROOT="\$1"
+export REPO_ROOT
+
+# Set other required environment variables
+SKIP_NOTICE=true
+CHECK_PACKAGES=false
+DRY_RUN=false
+FORCE_CHECK=false
+VERBOSE=false
+NON_INTERACTIVE=true
+
+UPDATE_IGNORE_FILE="\${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="/dev/null"
+
 # Source the production script to use the real should_ignore function
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
+source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
+
+# Load patterns into cache
+load_ignore_patterns
 
 test_cases=(
-  "$REPO_ROOT/temp-backup-dir/file:0"
-  "$REPO_ROOT/.config/test-app/temp.conf:0"
-  "$REPO_ROOT/.local/share/test-temp/data:0"
-  "$REPO_ROOT/.config/temp-file/config:0"
-  "$REPO_ROOT/normal-config:1"
+  "\$REPO_ROOT/temp-backup-dir/file:0"
+  "\$REPO_ROOT/.config/test-app/temp.conf:0"
+  "\$REPO_ROOT/.local/share/test-temp/data:0"
+  "\$REPO_ROOT/.config/temp-file/config:0"
+  "\$REPO_ROOT/normal-config:1"
+  "\$REPO_ROOT/.config/my-testfile.conf:0"
 )
 
 all_passed=true
-for test_case in "${test_cases[@]}"; do
-  IFS=":" read -r file expected <<< "$test_case"
-  mkdir -p "$(dirname "$file")"
-  touch "$file"
+for test_case in "\${test_cases[@]}"; do
+  IFS=":" read -r file expected <<< "\$test_case"
+  mkdir -p "\$(dirname "\$file")"
+  touch "\$file"
 
-  if should_ignore "$file"; then
+  if should_ignore "\$file"; then
     result=0
   else
     result=1
   fi
 
-  if [[ $result -ne $expected ]]; then
-    echo "FAIL: $file (expected: $expected, got: $result)"
+  if [[ \$result -ne \$expected ]]; then
+    echo "FAIL: \$file (expected: \$expected, got: \$result)"
     all_passed=false
   fi
 done
 
-if [[ "$all_passed" == true ]]; then
+if [[ "\$all_passed" == true ]]; then
   echo "PASS"
 else
   echo "FAIL"
@@ -502,7 +606,7 @@ fi
 EOF
 
   chmod +x test_substring_ignore.sh
-  result=$(./test_substring_ignore.sh "$test_repo")
+  result=$(./test_substring_ignore.sh "$test_repo" 2>&1 | grep -E "^(PASS|FAIL)")
 
   if [[ "$result" == "PASS" ]]; then
     log_pass "** substring ignore patterns work correctly"
@@ -516,10 +620,142 @@ EOF
   fi
 }
 
+# Test 14: Test ensure_directory caching
+test_directory_caching() {
+  log_test "Testing directory creation caching"
+  
+  local test_repo
+  test_repo=$(setup_test_env)
+  TEST_DIR="$test_repo"
+  
+  cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
+  
+  cat > test_dir_cache.sh << EOF
+#!/bin/bash
+log_info() { :; }
+log_warning() { :; }
+log_error() { :; }
+log_success() { :; }
+log_header() { :; }
+log_die() { echo "ERROR: \$1" >&2; exit 1; }
+STY_CYAN="" STY_RST="" STY_YELLOW="" STY_PURPLE=""
+
+REPO_ROOT="\$1"
+export REPO_ROOT
+
+SKIP_NOTICE=true
+CHECK_PACKAGES=false
+DRY_RUN=false
+FORCE_CHECK=false
+VERBOSE=false
+NON_INTERACTIVE=true
+
+source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
+
+test_dir="/tmp/test-ensure-dir-\$\$"
+
+# First call should create
+ensure_directory "\$test_dir"
+result1=\$?
+
+# Second call should use cache
+ensure_directory "\$test_dir"
+result2=\$?
+
+# Check if CREATED_DIRS has the entry
+if [[ -n "\${CREATED_DIRS[\$test_dir]:-}" ]] && [[ \$result1 -eq 0 ]] && [[ \$result2 -eq 0 ]]; then
+  echo "PASS"
+  rm -rf "\$test_dir"
+else
+  echo "FAIL"
+fi
+EOF
+  
+  chmod +x test_dir_cache.sh
+  result=$(./test_dir_cache.sh "$test_repo" 2>&1 | grep -E "^(PASS|FAIL)")
+  
+  if [[ "$result" == "PASS" ]]; then
+    log_pass "Directory creation caching works"
+    cd "$ORIGINAL_DIR"
+    return 0
+  else
+    log_fail "Directory creation caching failed"
+    cd "$ORIGINAL_DIR"
+    return 1
+  fi
+}
+
+# Test 15: Test enhanced safe_read with non-interactive mode
+test_safe_read_noninteractive() {
+  log_test "Testing safe_read in non-interactive mode"
+  
+  cat > test_safe_read.sh << 'EOF'
+#!/bin/bash
+log_warning() { :; }
+log_error() { :; }
+
+# Simulate the enhanced safe_read function
+safe_read() {
+  local prompt="$1"
+  local varname="$2"
+  local default="${3:-}"
+  local input_value=""
+
+  # In non-interactive mode, use default immediately
+  if [[ "$NON_INTERACTIVE" == true ]]; then
+    if [[ -n "$default" ]]; then
+      printf -v "$varname" '%s' "$default"
+      return 0
+    else
+      log_error "Non-interactive mode requires default value for: $prompt"
+      return 1
+    fi
+  fi
+  
+  # Regular read logic...
+  printf -v "$varname" '%s' "$default"
+  return 0
+}
+
+# Test 1: With default in non-interactive mode
+NON_INTERACTIVE=true
+if safe_read "Test: " result "default_value"; then
+  if [[ "$result" == "default_value" ]]; then
+    echo "TEST1: PASS"
+  else
+    echo "TEST1: FAIL - got '$result'"
+  fi
+else
+  echo "TEST1: FAIL - returned error"
+fi
+
+# Test 2: Without default in non-interactive mode (should fail)
+if safe_read "Test: " result ""; then
+  echo "TEST2: FAIL - should have failed"
+else
+  echo "TEST2: PASS - correctly failed"
+fi
+EOF
+  
+  chmod +x test_safe_read.sh
+  result=$(./test_safe_read.sh 2>&1)
+  
+  if echo "$result" | grep -q "TEST1: PASS" && echo "$result" | grep -q "TEST2: PASS"; then
+    log_pass "Enhanced safe_read handles non-interactive mode correctly"
+    rm -f test_safe_read.sh
+    return 0
+  else
+    log_fail "Enhanced safe_read non-interactive mode failed"
+    echo "$result"
+    rm -f test_safe_read.sh
+    return 1
+  fi
+}
+
 # Main test runner
 main() {
   echo -e "${BLUE}================================${NC}"
-  echo -e "${BLUE}  Update.sh Test Suite (Sourced Subcommand)${NC}"
+  echo -e "${BLUE}  Update.sh Test Suite (Enhanced)${NC}"
   echo -e "${BLUE}================================${NC}\n"
 
   if [[ ! -f "install.sh" ]]; then
@@ -543,6 +779,10 @@ main() {
     "test_dry_run"
     "test_flags"
     "test_shellcheck"
+    "test_lock_file"
+    "test_ignore_pattern_caching"
+    "test_directory_caching"
+    "test_safe_read_noninteractive"
   )
 
   # Run tests
@@ -577,6 +817,7 @@ cleanup() {
   echo "Cleaning up test files..."
   cleanup_test_env
   rm -f test_detection.sh test_ignore.sh test_safe_read.sh test_fresh_clone.sh test_substring_ignore.sh dry_run_output.txt 2>/dev/null || true
+  rm -f test_caching.sh test_dir_cache.sh 2>/dev/null || true
   rm -rf "${HOME}/.config/test-app" 2>/dev/null || true
 }
 

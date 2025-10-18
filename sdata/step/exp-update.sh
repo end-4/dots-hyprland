@@ -25,21 +25,33 @@ set -euo pipefail
 
 # TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Try to find the packages directory (different names in different versions)
-if [[ -d "${REPO_ROOT}/dist-arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"
-elif [[ -d "${REPO_ROOT}/arch-packages" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_ROOT}/arch-packages"
-elif [[ -d "${REPO_ROOT}/sdist/arch" ]]; then
-  ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
-else
-  ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"  # Default fallback
+if which pacman &>/dev/null; then
+  if [[ -d "${REPO_ROOT}/dist-arch" ]]; then
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"
+  elif [[ -d "${REPO_ROOT}/arch-packages" ]]; then
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/arch-packages"
+  elif [[ -d "${REPO_ROOT}/sdist/arch" ]]; then
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
+  else
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"  # Default fallback
+  fi
 fi
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
+# Global arrays for cached ignore patterns (performance optimization)
+declare -a IGNORE_PATTERNS=()
+declare -a IGNORE_SUBSTRING_PATTERNS=()
+
+# Track created directories to avoid redundant mkdir calls
+declare -A CREATED_DIRS
+
 # TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Auto-detect repository structure
 detect_repo_structure() {
+  if which pacman &>/dev/null; then
+    return
+  fi
   local found_dirs=()
   
   # Check for dots/ prefixed structure
@@ -75,112 +87,186 @@ detect_repo_structure() {
 # Directories to monitor for changes (will be auto-detected)
 MONITOR_DIRS=()
 
-# Function to safely read input with terminal compatibility
+# Enhanced safe_read with better terminal handling
 safe_read() {
   local prompt="$1"
   local varname="$2"
   local default="${3:-}"
-
   local input_value=""
 
+  # In non-interactive mode, use default immediately
+  if [[ "$NON_INTERACTIVE" == true ]]; then
+    if [[ -n "$default" ]]; then
+      printf -v "$varname" '%s' "$default"
+      return 0
+    else
+      log_error "Non-interactive mode requires default value for: $prompt"
+      return 1
+    fi
+  fi
+
   echo -n "$prompt"
-  if { read -r input_value </dev/tty; } 2>/dev/null || read -r input_value 2>/dev/null; then
-    # Use printf instead of eval for security
-    printf -v "$varname" '%s' "$input_value"
-    return 0
+  
+  # Try to read from terminal with better detection
+  if [[ -t 0 ]]; then
+    # stdin is a terminal
+    read -r input_value
+  elif [[ -r /dev/tty ]]; then
+    # Try reading from tty
+    if read -r input_value </dev/tty 2>/dev/null; then
+      : # Success
+    else
+      input_value=""
+    fi
   else
+    # No interactive terminal available
     if [[ -n "$default" ]]; then
       echo
-      log_warning "Using default: $default"
+      log_warning "No terminal available. Using default: $default"
       printf -v "$varname" '%s' "$default"
       return 0
     else
       echo
-      log_error "Failed to read input"
+      log_error "No terminal available and no default provided"
       return 1
     fi
   fi
+
+  if [[ -n "$input_value" ]]; then
+    printf -v "$varname" '%s' "$input_value"
+    return 0
+  elif [[ -n "$default" ]]; then
+    echo
+    log_warning "Empty input. Using default: $default"
+    printf -v "$varname" '%s' "$default"
+    return 0
+  else
+    echo
+    log_error "Input required but not provided"
+    return 1
+  fi
 }
+
+# Load and cache ignore patterns for performance
+load_ignore_patterns() {
+  IGNORE_PATTERNS=()
+  IGNORE_SUBSTRING_PATTERNS=()
+  
+  for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
+    [[ ! -f "$ignore_file" ]] && continue
+    
+    while IFS= read -r pattern || [[ -n "$pattern" ]]; do
+      # Skip empty lines and comments
+      [[ -z "$pattern" || "$pattern" =~ ^[[:space:]]*# ]] && continue
+      # Remove whitespace
+      pattern=$(echo "$pattern" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+      [[ -z "$pattern" ]] && continue
+      
+      # Separate substring patterns from regular patterns
+      if [[ "$pattern" == \*\** ]]; then
+        IGNORE_SUBSTRING_PATTERNS+=("${pattern#\*\*}")
+      else
+        IGNORE_PATTERNS+=("$pattern")
+      fi
+    done < "$ignore_file"
+  done
+  
+  if [[ "$VERBOSE" == true ]]; then
+    log_info "Loaded ${#IGNORE_PATTERNS[@]} ignore patterns and ${#IGNORE_SUBSTRING_PATTERNS[@]} substring patterns"
+  fi
+}
+
+# Optimized should_ignore using cached patterns
 should_ignore() {
   local file_path="$1"
   local relative_path="${file_path#$HOME/}"
-
-  # Also get path relative to repo for repo-level ignores
   local repo_relative=""
+  
   if [[ "$file_path" == "$REPO_ROOT"* ]]; then
     repo_relative="${file_path#$REPO_ROOT/}"
   fi
 
-  # Check both repo and home ignore files
-  for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
-    if [[ -f "$ignore_file" ]]; then
-      while IFS= read -r pattern || [[ -n "$pattern" ]]; do
-        # Skip empty lines and comments
-        [[ -z "$pattern" || "$pattern" =~ ^[[:space:]]*# ]] && continue
-        # Remove leading/trailing whitespace
-        pattern=$(echo "$pattern" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        [[ -z "$pattern" ]] && continue
+  # Check regular patterns
+  for pattern in "${IGNORE_PATTERNS[@]}"; do
+    # Exact match
+    if [[ "$relative_path" == "$pattern" ]] || [[ "$repo_relative" == "$pattern" ]]; then
+      return 0
+    fi
 
-        local should_skip=false
+    # Wildcard patterns (basic glob matching)
+    if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
+      return 0
+    fi
 
-        # Exact match
-        if [[ "$relative_path" == "$pattern" ]] || [[ "$repo_relative" == "$pattern" ]]; then
-          should_skip=true
-        fi
+    # Directory patterns (ending with /)
+    if [[ "$pattern" == */ ]]; then
+      local dir_pattern="${pattern%/}"
+      if [[ "$relative_path" == "$dir_pattern"/* ]] || [[ "$repo_relative" == "$dir_pattern"/* ]]; then
+        return 0
+      fi
+    fi
 
-        # Wildcard patterns (basic glob matching)
-        if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
-          should_skip=true
-        fi
+    # Root-relative patterns (starting with /)
+    if [[ "$pattern" == /* ]]; then
+      local root_pattern="${pattern#/}"
+      if [[ "$relative_path" == "$root_pattern" ]] || [[ "$relative_path" == "$root_pattern"/* ]] ||
+         [[ "$repo_relative" == "$root_pattern" ]] || [[ "$repo_relative" == "$root_pattern"/* ]]; then
+        return 0
+      fi
+    fi
 
-        # Directory patterns (ending with /)
-        if [[ "$pattern" == */ ]]; then
-          local dir_pattern="${pattern%/}"
-          if [[ "$relative_path" == "$dir_pattern"/* ]] || [[ "$repo_relative" == "$dir_pattern"/* ]]; then
-            should_skip=true
-          fi
-        fi
-
-        # Patterns starting with / (from root)
-        if [[ "$pattern" == /* ]]; then
-          local root_pattern="${pattern#/}"
-          if [[ "$relative_path" == "$root_pattern" ]] || [[ "$relative_path" == "$root_pattern"/* ]] ||
-            [[ "$repo_relative" == "$root_pattern" ]] || [[ "$repo_relative" == "$root_pattern"/* ]]; then
-            should_skip=true
-          fi
-        fi
-
-        # Patterns with wildcards
-        if [[ "$pattern" == *"*"* ]]; then
-          if [[ "$relative_path" == $pattern ]] || [[ "$repo_relative" == $pattern ]]; then
-            should_skip=true
-          fi
-          # Check parent directories against pattern
-          local temp_path="$relative_path"
-          while [[ "$temp_path" == */* ]]; do
-            temp_path="${temp_path%/*}"
-            if [[ "$temp_path" == $pattern ]]; then
-              should_skip=true
-              break
-            fi
-          done
-        fi
-
-        # Substring matching (only if pattern starts with '**')
-        if [[ ! "$should_skip" == true && "$pattern" == \*\** ]]; then
-          local substring_pattern="${pattern#\*\*}"  # Remove the leading '**'
-          if [[ -n "$substring_pattern" && ("$file_path" == *"$substring_pattern"* || "$relative_path" == *"$substring_pattern"*) ]]; then
-            should_skip=true
-          fi
-        fi
-
-        if [[ "$should_skip" == true ]]; then
+    # Patterns with wildcards - check parent directories
+    if [[ "$pattern" == *"*"* ]]; then
+      local temp_path="$relative_path"
+      while [[ "$temp_path" == */* ]]; do
+        temp_path="${temp_path%/*}"
+        if [[ "$temp_path" == $pattern ]]; then
           return 0
         fi
-      done <"$ignore_file"
+      done
     fi
   done
+
+  # Check substring patterns
+  for substring in "${IGNORE_SUBSTRING_PATTERNS[@]}"; do
+    if [[ -n "$substring" && ("$file_path" == *"$substring"* || "$relative_path" == *"$substring"*) ]]; then
+      return 0
+    fi
+  done
+
   return 1
+}
+
+# Efficient directory creation with caching
+ensure_directory() {
+  local dir="$1"
+  
+  # Check if already created in this run
+  if [[ -n "${CREATED_DIRS[$dir]:-}" ]]; then
+    return 0
+  fi
+  
+  if [[ "$DRY_RUN" != true ]]; then
+    if [[ ! -d "$dir" ]]; then
+      if mkdir -p "$dir" 2>/dev/null; then
+        CREATED_DIRS[$dir]=1
+        if [[ "$VERBOSE" == true ]]; then
+          log_info "Created directory: $dir"
+        fi
+      else
+        log_error "Failed to create directory: $dir"
+        return 1
+      fi
+    else
+      CREATED_DIRS[$dir]=1
+    fi
+  else
+    if [[ "$VERBOSE" == true ]] || [[ -z "${CREATED_DIRS[$dir]:-}" ]]; then
+      log_info "[DRY-RUN] Would create directory: $dir"
+    fi
+    CREATED_DIRS[$dir]=1
+  fi
+  return 0
 }
 
 # Function to show file diff
@@ -201,6 +287,38 @@ show_diff() {
   echo "----------------------------------------"
 }
 
+# Backup file before replacing
+backup_file() {
+  local file="$1"
+  local backup_dir="${REPO_ROOT}/.update-backups"
+  local timestamp
+  timestamp=$(date +%Y%m%d-%H%M%S)
+  
+  if [[ "$DRY_RUN" == true ]]; then
+    log_info "[DRY-RUN] Would backup: $file"
+    return 0
+  fi
+  
+  if [[ ! -f "$file" ]]; then
+    log_warning "File does not exist, cannot backup: $file"
+    return 1
+  fi
+  
+  ensure_directory "$backup_dir" || return 1
+  
+  local backup_name
+  local relative_name="${file#$HOME/}"
+  backup_name="${relative_name//\//_}.${timestamp}.bak"
+  
+  if cp -p "$file" "${backup_dir}/${backup_name}" 2>/dev/null; then
+    log_info "Backed up to: .update-backups/${backup_name}"
+    return 0
+  else
+    log_error "Failed to create backup"
+    return 1
+  fi
+}
+
 # Function to handle file conflicts
 handle_file_conflict() {
   local repo_file="$1"
@@ -219,10 +337,11 @@ handle_file_conflict() {
   echo "5) Show diff and decide"
   echo "6) Skip this file"
   echo "7) Add to ignore and skip"
+  echo "8) Backup to .update-backups/ and replace with repository version"
   echo
 
   while true; do
-    if ! safe_read "Enter your choice (1-7): " choice "6"; then
+    if ! safe_read "Enter your choice (1-8): " choice "6"; then
       echo
       log_warning "Failed to read input. Skipping file."
       return
@@ -271,8 +390,9 @@ handle_file_conflict() {
       echo "n) Save repository version as .new"
       echo "s) Skip this file"
       echo "i) Add to ignore and skip"
+      echo "B) Backup to .update-backups/ and replace"
 
-      if ! safe_read "Enter your choice (r/k/b/n/s/i): " subchoice "s"; then
+      if ! safe_read "Enter your choice (r/k/b/n/s/i/B): " subchoice "s"; then
         echo
         log_warning "Failed to read input. Skipping file."
         return
@@ -325,6 +445,15 @@ handle_file_conflict() {
         fi
         break
         ;;
+      B)
+        if backup_file "$home_file"; then
+          if [[ "$DRY_RUN" != true ]]; then
+            cp -p "$repo_file" "$home_file"
+            log_success "Replaced $home_file with repository version"
+          fi
+        fi
+        break
+        ;;
       *)
         echo "Invalid choice. Please try again."
         ;;
@@ -344,8 +473,17 @@ handle_file_conflict() {
       fi
       break
       ;;
+    8)
+      if backup_file "$home_file"; then
+        if [[ "$DRY_RUN" != true ]]; then
+          cp -p "$repo_file" "$home_file"
+          log_success "Replaced $home_file with repository version"
+        fi
+      fi
+      break
+      ;;
     *)
-      echo "Invalid choice. Please enter 1-7."
+      echo "Invalid choice. Please enter 1-8."
       ;;
     esac
   done
@@ -479,6 +617,7 @@ build_packages() {
     log_info "Package building cancelled by user"
     return
   fi
+  
   for pkg_name in "${packages_to_build[@]}"; do
     pkg_dir="${ARCH_PACKAGES_DIR}/${pkg_name}"
 
@@ -516,34 +655,40 @@ build_packages() {
   fi
 }
 
-# Function to get list of changed files
+# Optimized function to get list of changed files
 get_changed_files() {
   local dir_path="$1"
 
   if [[ "$FORCE_CHECK" == true ]]; then
     find "$dir_path" -type f -print0 2>/dev/null
-  else
-    # Check if we can use git diff (HEAD@{1} exists)
-    if git rev-parse --verify HEAD@{1} &>/dev/null; then
-      # Get files that changed in the last pull
-      local has_changes=false
+    return
+  fi
+  
+  # Try git-based detection first
+  if git rev-parse --verify HEAD@{1} &>/dev/null 2>&1; then
+    local temp_file
+    temp_file=$(mktemp)
+    
+    # Get changed files with specific filters (Added, Copied, Modified, Renamed)
+    git diff --name-only --diff-filter=ACMR HEAD@{1} HEAD 2>/dev/null | \
       while IFS= read -r file; do
         local full_path="${REPO_ROOT}/${file}"
         if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-          printf '%s\0' "$full_path"
-          has_changes=true
+          echo "$full_path"
         fi
-      done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
-      
-      # If git diff found changes, we're done
-      if [[ "$has_changes" == true ]]; then
-        return
-      fi
-    fi
+      done > "$temp_file"
     
-    # Fallback: check all files (fresh clone or no git changes)
-    find "$dir_path" -type f -print0 2>/dev/null
+    if [[ -s "$temp_file" ]]; then
+      # Found changes via git
+      tr '\n' '\0' < "$temp_file"
+      rm -f "$temp_file"
+      return
+    fi
+    rm -f "$temp_file"
   fi
+  
+  # Fallback: check all files
+  find "$dir_path" -type f -print0 2>/dev/null
 }
 
 # Function to check if we have new commits
@@ -555,6 +700,40 @@ has_new_commits() {
     return 0
   fi
 }
+
+# Cleanup function for signal handling
+cleanup_on_exit() {
+  local exit_code=$?
+  
+  # Remove lock file
+  rm -f "${REPO_ROOT}/.update-lock" 2>/dev/null || true
+  
+  if [[ $exit_code -ne 0 ]] && [[ "$DRY_RUN" != true ]]; then
+    echo
+    log_warning "Update interrupted or failed (exit code: $exit_code)"
+    log_info "System may be in an inconsistent state"
+    log_info "Run the update again to complete the process"
+  fi
+}
+
+# Set up signal handling and lock file
+trap cleanup_on_exit EXIT INT TERM
+
+# Check for concurrent runs
+if [[ -f "${REPO_ROOT}/.update-lock" ]] && [[ "$DRY_RUN" != true ]]; then
+  # Check if the process is still running
+  if kill -0 $(cat "${REPO_ROOT}/.update-lock" 2>/dev/null) 2>/dev/null; then
+    log_die "Another update is already running (PID: $(cat "${REPO_ROOT}/.update-lock"))"
+  else
+    log_warning "Found stale lock file, removing..."
+    rm -f "${REPO_ROOT}/.update-lock"
+  fi
+fi
+
+# Create lock file with current PID
+if [[ "$DRY_RUN" != true ]]; then
+  echo $$ > "${REPO_ROOT}/.update-lock"
+fi
 
 # Main script starts here
 log_header "Dotfiles Update Script"
@@ -597,6 +776,9 @@ if detected_dirs=$(detect_repo_structure); then
 else
   log_die "Failed to detect repository structure. Make sure you're in the correct directory."
 fi
+
+# Load ignore patterns once at startup (performance optimization)
+load_ignore_patterns
 
 # Step 1: Pull latest commits
 log_header "Pulling Latest Changes"
@@ -646,6 +828,12 @@ if git remote get-url origin &>/dev/null; then
   else
     if git pull --ff-only; then
       log_success "Successfully pulled latest changes"
+      # Verify we actually got new commits
+      if git rev-parse --verify HEAD@{1} &>/dev/null; then
+        if [[ "$(git rev-parse HEAD)" == "$(git rev-parse HEAD@{1})" ]]; then
+          log_info "Already up to date with remote"
+        fi
+      fi
     else
       log_warning "Failed to pull changes from remote. Continuing with local repository..."
       log_info "You may need to resolve conflicts manually later."
@@ -783,6 +971,16 @@ if [[ "$process_files" == true ]]; then
   files_processed=0
   files_updated=0
   files_created=0
+  
+  # Count total files for progress indication (optional)
+  total_files=0
+  if [[ "$VERBOSE" == false ]] && command -v tput &>/dev/null 2>&1; then
+    for dir_name in "${MONITOR_DIRS[@]}"; do
+      repo_dir_path="${REPO_ROOT}/${dir_name}"
+      [[ ! -d "$repo_dir_path" ]] && continue
+      total_files=$((total_files + $(find "$repo_dir_path" -type f 2>/dev/null | wc -l)))
+    done
+  fi
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_ROOT}/${dir_name}"
@@ -806,11 +1004,7 @@ if [[ "$process_files" == true ]]; then
 
     log_info "Processing directory: $dir_name → ${home_dir_path}"
 
-    if [[ "$DRY_RUN" != true ]]; then
-      mkdir -p "$home_dir_path"
-    else
-      log_info "[DRY-RUN] Would create directory: $home_dir_path"
-    fi
+    ensure_directory "$home_dir_path" || continue
 
     while IFS= read -r -d '' repo_file; do
       # Calculate relative path from the repo source directory
@@ -829,13 +1023,21 @@ if [[ "$process_files" == true ]]; then
       fi
 
       ((files_processed++))
-
-      if [[ "$DRY_RUN" != true ]]; then
-        mkdir -p "$(dirname "$home_file")"
+      
+      # Show progress for non-verbose mode
+      if [[ "$VERBOSE" == false ]] && command -v tput &>/dev/null 2>&1 && [[ $total_files -gt 0 ]]; then
+        printf "\r[INFO] Processing files: %d/%d" "$files_processed" "$total_files" >&2
       fi
+
+      ensure_directory "$(dirname "$home_file")" || continue
 
       if [[ -f "$home_file" ]]; then
         if ! cmp -s "$repo_file" "$home_file"; then
+          # Clear progress line if showing
+          if [[ "$VERBOSE" == false ]] && command -v tput &>/dev/null 2>&1 && [[ $total_files -gt 0 ]]; then
+            printf "\r%*s\r" "80" "" >&2
+          fi
+          
           log_info "Found difference in: $rel_path"
           if [[ "$DRY_RUN" == true ]]; then
             log_warning "[DRY-RUN] Conflict detected (would prompt): $home_file"
@@ -847,15 +1049,24 @@ if [[ "$process_files" == true ]]; then
         fi
       else
         if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would create new file: $home_file"
+          if [[ "$VERBOSE" == true ]]; then
+            log_info "[DRY-RUN] Would create new file: $home_file"
+          fi
         else
           cp -p "$repo_file" "$home_file"
-          log_success "Created new file: $home_file"
+          if [[ "$VERBOSE" == true ]]; then
+            log_success "Created new file: $home_file"
+          fi
         fi
         ((files_created++))
       fi
     done < <(get_changed_files "$repo_dir_path") || true
   done
+
+  # Clear progress line if it was shown
+  if [[ "$VERBOSE" == false ]] && command -v tput &>/dev/null 2>&1 && [[ $total_files -gt 0 ]]; then
+    printf "\r%*s\r" "80" "" >&2
+  fi
 
   echo
   log_info "File processing summary:"
@@ -919,7 +1130,13 @@ if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo "  .config/personal/     # Ignore entire directory"
   echo "  secret-config.conf    # Ignore specific file"
   echo "  /temp-file            # Ignore from root only"
-  echo "  *secret*              # Ignore files containing 'secret'"
+  echo "  **secret**            # Ignore files containing 'secret'"
+fi
+
+# Show backup directory if any backups were created
+if [[ -d "${REPO_ROOT}/.update-backups" ]] && [[ "$DRY_RUN" != true ]]; then
+  echo
+  log_info "Backups stored in: ${REPO_ROOT}/.update-backups/"
 fi
 
 echo
