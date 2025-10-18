@@ -15,5 +15,13 @@ Item {
         active: Config.options.background.clock.show
         sourceComponent: ClockWidget {}
     }
+
+    Loader {
+        x: wallpaper.x; y: wallpaper.y
+        active: true
+        sourceComponent: WeatherWidget {}
+    }
+
+   
     
 }

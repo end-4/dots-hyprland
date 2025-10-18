@@ -39,8 +39,7 @@ Item {
         anchors.fill: parent
         drag.target: parent
 
-        // helpwanted
-        // Not ideal, but keeps coordinates safe for now.
+        // better way??
         drag.minimumX: - implicitWidth / 2 - wallpaper.x
         drag.maximumX: monitor.width - widgetRoot.implicitWidth - wallpaper.x
 

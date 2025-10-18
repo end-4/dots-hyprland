@@ -176,6 +176,8 @@ Singleton {
                 property JsonObject widgets: JsonObject {
                     property int clockX: 500
                     property int clockY: 500
+                    property int weatherX: 750
+                    property int weatherY: 750
                 }
             }
 
