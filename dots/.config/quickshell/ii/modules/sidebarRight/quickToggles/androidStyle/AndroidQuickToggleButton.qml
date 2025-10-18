@@ -22,10 +22,6 @@ GroupButton {
     baseWidth: root.baseCellWidth * cellSize + cellSpacing * (cellSize - 1)
     baseHeight: root.baseCellHeight
 
-    Behavior on baseWidth {
-        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-    }
-
     property bool editMode: false
 
     signal openMenu()
