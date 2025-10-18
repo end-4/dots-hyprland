@@ -14,6 +14,7 @@ Rectangle {
     property real spacing: 5
     property real padding: 0
     property int clickIndex: rowLayout.clickIndex
+    property int childrenCount: rowLayout.children.length
 
     property real contentWidth: {
         let total = 0;
