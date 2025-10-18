@@ -14,4 +14,8 @@ AndroidQuickToggleButton {
     onClicked: {
         GlobalStates.oskOpen = !GlobalStates.oskOpen
     }
+
+    StyledToolTip {
+        text: Translation.tr("On-screen keyboard")
+    }
 }

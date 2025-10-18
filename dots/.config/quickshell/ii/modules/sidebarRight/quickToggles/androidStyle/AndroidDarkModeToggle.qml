@@ -20,4 +20,8 @@ AndroidQuickToggleButton {
             Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", "dark", "--noswitch"]);
         }
     }
+
+    StyledToolTip {
+        text: Translation.tr("Dark Mode")
+    }
 }

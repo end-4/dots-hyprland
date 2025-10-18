@@ -25,4 +25,8 @@ AndroidQuickToggleButton {
             Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("screenshot.qml")])
         }
     }
+
+    StyledToolTip {
+        text: Translation.tr("Screen snip")
+    }
 }
