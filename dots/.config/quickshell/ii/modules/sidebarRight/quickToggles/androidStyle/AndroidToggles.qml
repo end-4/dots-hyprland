@@ -8,9 +8,11 @@ import "./androidStyle"
 
 
 Rectangle { 
-    property int padding: 10
-    implicitHeight: mainColumn.implicitHeight + padding  
-    implicitWidth: 421
+    id: toggleContainer
+    property int containerVPadding: 10
+    property int buttonPadding: 50
+    implicitHeight: mainColumn.implicitHeight + containerVPadding  
+    implicitWidth: 421 // fix? idk
     color: "transparent"
     radius: Appearance.rounding.normal
 
@@ -40,6 +42,7 @@ Rectangle {
                                 root.getIndex.push("0")
                                 item.buttonSize = modelData[0]
                                 item.buttonIndex = optionIndex
+                                item.baseWidth = (toggleContainer.width - buttonPadding) / Config.options.quickToggles.android.columns * item.buttonSize
                             }
                         }
                     }

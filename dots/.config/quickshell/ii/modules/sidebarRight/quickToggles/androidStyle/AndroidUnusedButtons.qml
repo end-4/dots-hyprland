@@ -40,7 +40,7 @@ Item {
                 
                 GridLayout {
                     id: grid
-                    columns: 5
+                    columns: 7
                     Layout.alignment: Qt.AlignCenter
                     Repeater {
                         model: root.filteredList

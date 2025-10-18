@@ -32,11 +32,7 @@ GroupButton {
     property int buttonIndex
     property string unusedName: ""
 
-    property int unusedButtonSize: 48
-    property int calculatedWidth: columns == 4 ? 95 : 75
-    property int calculatedHeight: 55
-    baseWidth: unusedName === "" ? calculatedWidth * buttonSize - 5 : unusedButtonSize * 1.6
-    baseHeight: unusedName === "" ? calculatedHeight : unusedButtonSize
+    baseHeight: unusedName == "" ? columns == 4 ? 55 : 50 : 45
 
     property bool halfToggled: false
     toggled: false
