@@ -310,4 +310,31 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "clear_day"
+        title: Translation.tr("Weather")
+
+        ConfigSwitch {
+            buttonIcon: "nest_farsight_weather"
+            text: Translation.tr("Show Weather")
+            checked: Config.options.background.weather.show
+            onCheckedChanged: {
+                Config.options.background.weather.show = checked;
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "loupe"
+            text: Translation.tr("Scale (%)")
+            value: Config.options.background.weather.scale * 100
+            from: 1
+            to: 200
+            stepSize: 2
+            onValueChanged: {
+                Config.options.background.weather.scale = value / 100;
+            }
+        }
+
+    }
 }

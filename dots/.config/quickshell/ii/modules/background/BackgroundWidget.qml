@@ -11,6 +11,8 @@ Item {
     id: widgetRoot
 
     signal positionChanged(int newX, int newY)
+    signal rightClicked()
+
 
     property real scaleMultiplier: 1
     onScaleMultiplierChanged: {
@@ -40,13 +42,13 @@ Item {
         drag.target: parent
 
         property bool down: false
-
         cursorShape: down ? Qt.ClosedHandCursor : undefined
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         // better way??
         drag.minimumX: - implicitWidth / 2 - wallpaper.x
         drag.maximumX: monitor.width - widgetRoot.implicitWidth - wallpaper.x
-
         drag.minimumY: - implicitHeight / 2 - wallpaper.y
         drag.maximumY: monitor.height - widgetRoot.implicitHeight - wallpaper.y
 
@@ -61,6 +63,11 @@ Item {
             widgetRoot.scale = scaleMultiplier * 1.0
             widgetRoot.opacity = 1.0
             down = false
+        }
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.RightButton){
+                widgetRoot.rightClicked()
+            }
         }
         onDragActiveChanged: {
             if (!dragActive) widgetRoot.positionChanged(widgetRoot.x, widgetRoot.y)

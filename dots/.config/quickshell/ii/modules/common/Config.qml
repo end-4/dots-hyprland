@@ -146,6 +146,8 @@ Singleton {
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
+                    property int x: 500
+                    property int y: 500
                     property JsonObject cookie: JsonObject {
                         property bool aiStyling: false
                         property int sides: 14
@@ -160,11 +162,6 @@ Singleton {
                         property bool constantlyRotate: false
                     }
                 }
-                property string wallpaperPath: ""
-                property string thumbnailPath: ""
-                property string quote: ""
-                property bool showQuote: false
-                property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
@@ -173,12 +170,17 @@ Singleton {
                     property bool enableSidebar: true
                     property real clockFactor: 1.2
                 }
-                property JsonObject widgets: JsonObject {
-                    property int clockX: 500
-                    property int clockY: 500
-                    property int weatherX: 750
-                    property int weatherY: 750
+                property JsonObject weather: JsonObject {
+                    property bool show: true
+                    property real scale: 1
+                    property int x: 750
+                    property int y: 750
                 }
+                property string wallpaperPath: ""
+                property string thumbnailPath: ""
+                property string quote: ""
+                property bool showQuote: false
+                property bool hideWhenFullscreen: true
             }
 
             property JsonObject bar: JsonObject {

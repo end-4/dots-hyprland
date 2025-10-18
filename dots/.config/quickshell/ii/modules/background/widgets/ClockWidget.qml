@@ -11,8 +11,8 @@ import "./cookieClock"
 BackgroundWidget {
     id: widget
 
-    x: Config.options.background.widgets.clockX
-    y: Config.options.background.widgets.clockY
+    x: Config.options.background.clock.x
+    y: Config.options.background.clock.y
 
     scaleMultiplier: Config.options.background.clock.scale
 
@@ -23,14 +23,14 @@ BackgroundWidget {
             y = 540 - implicitHeight / 2 - wallpaper.y
         }
         else {
-            x = Config.options.background.widgets.clockX
-            y = Config.options.background.widgets.clockY
+            x = Config.options.background.clock.x
+            y = Config.options.background.clock.y
         }
     } 
 
     onPositionChanged: {
-        Config.options.background.widgets.clockX = newX
-        Config.options.background.widgets.clockY = newY
+        Config.options.background.clock.x = newX
+        Config.options.background.clock.y = newY
     }
 
     Loader {

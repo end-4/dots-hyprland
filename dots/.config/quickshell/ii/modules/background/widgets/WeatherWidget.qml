@@ -16,18 +16,28 @@ BackgroundWidget {
     property color colText: Appearance.colors.colOnLayer1
     property int widgetRotation: 45
     
+    scaleMultiplier: Config.options.background.weather.scale
 
-    x: Config.options.background.widgets.weatherX
-    y: Config.options.background.widgets.weatherY
+    x: Config.options.background.weather.x
+    y: Config.options.background.weather.y
 
     onPositionChanged: {
-        Config.options.background.widgets.weatherX = newX
-        Config.options.background.widgets.weatherY = newY
+        Config.options.background.weather.x = newX
+        Config.options.background.weather.y = newY
+    }
+
+    onRightClicked: {
+        Weather.getData();
+        Quickshell.execDetached(["notify-send", 
+            Translation.tr("Weather"), 
+            Translation.tr("Refreshing (manually triggered)")
+            , "-a", "Shell"
+        ])
     }
 
     Loader {
         id: weatherLoader
-        active: true
+        active: Config.options.background.weather.show
         sourceComponent: Item {
             implicitWidth: 175
             implicitHeight: 140
