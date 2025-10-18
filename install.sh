@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-export base="$(pwd)"
+# Use REPO_ROOT instead of base - when scripts are sourced they do not need export to inherit vars
+REPO_ROOT="$(pwd)"
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
@@ -10,11 +11,17 @@ prevent_sudo_or_root
 set -e
 
 #####################################################################################
-# For uninstall script
-  if [[ "${EXPERIMENTAL_UNINSTALL_SCRIPT}" = true ]]; then
-    source ./sdata/exp/uninstall.sh
+# For subcommands
+case ${SCRIPT_SUBCOMMAND} in
+  exp-uninstall)
+    source ./sdata/step/exp-uninstall.sh
     exit
-  fi
+    ;;
+  exp-update)
+    source ./sdata/step/exp-update.sh
+    exit
+    ;;
+esac
 #####################################################################################
 # 0. Before we start
 if [[ "${SKIP_ALLGREETING}" != true ]]; then
@@ -33,9 +40,9 @@ fi
 #####################################################################################
 if [[ "${SKIP_ALLFILES}" != true ]]; then
   printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
-  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" != true ]]; then
-    source ./sdata/step/3.install-files.sh
-  else
+  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
     source ./sdata/step/3.install-files.experimental.sh
+  else
+    source ./sdata/step/3.install-files.sh
   fi
 fi
