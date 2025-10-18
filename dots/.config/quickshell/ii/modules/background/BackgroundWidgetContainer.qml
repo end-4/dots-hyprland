@@ -18,7 +18,7 @@ Item {
 
     Loader {
         x: wallpaper.x; y: wallpaper.y
-        active: true
+        active: Config.options.background.weather.show && !GlobalStates.screenLocked
         sourceComponent: WeatherWidget {}
     }
 
