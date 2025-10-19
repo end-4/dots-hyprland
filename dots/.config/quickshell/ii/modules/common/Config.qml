@@ -352,7 +352,7 @@ Singleton {
             property JsonObject search: JsonObject {
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
-                property list<string> excludedSites: ["quora.com"]
+                property list<string> excludedSites: ["quora.com", "facebook.com"]
                 property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
@@ -392,6 +392,28 @@ Singleton {
                     property real cornerRegionHeight: 2
                     property bool visualize: false
                     property bool clicklessCornerEnd: true
+                }
+
+                property JsonObject quickToggles: JsonObject {
+                    property string style: "android" // Options: classic, android
+                    property JsonObject android: JsonObject {
+                        property int columns: 5
+                        property list<var> toggles: [
+                            { type: "network", size: 2 },
+                            { type: "bluetooth", size: 2 },
+                            { type: "idleInhibitor", size: 1 },
+                            { type: "easyEffects", size: 1 },
+                            { type: "nightLight", size: 2 },
+                            { type: "darkMode", size: 2 }
+                        ]
+                    }
+                }
+
+                property JsonObject quickSliders: JsonObject {
+                    property bool enable: false
+                    property bool showMic: false
+                    property bool showVolume: true
+                    property bool showBrightness: true
                 }
             }
 

@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# shellcheck shell=bash
+
 # TODO: https://github.com/end-4/dots-hyprland/issues/2137
 
 function warning_rsync(){
@@ -48,14 +50,14 @@ function backup_clashing_targets(){
 }
 
 function ask_backup_configs(){
+  showfun backup_clashing_targets
   printf "${STY_RED}"
   printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
   read -p "[y/N] " backup_confirm
   case $backup_confirm in
     [yY][eE][sS]|[yY]) 
-      showfun backup_clashing_targets
-      v backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-      v backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+      backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+      backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
       ;;
     *) echo "Skipping backup..." ;;
   esac
@@ -179,7 +181,7 @@ warn_files_tests+=(/usr/local/share/licenses/ttf-gabarito)
 warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
 warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
 warn_files_tests+=(/usr/local/bin/{LaTeX,res})
-for i in ${warn_files_tests[@]}; do
+for i in "${warn_files_tests[@]}"; do
   echo $i
   test -f $i && warn_files+=($i)
   test -d $i && warn_files+=($i)
@@ -223,6 +225,6 @@ if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
   printf "\n${STY_RED}[$0]: \!! Important \!! : Please ensure environment variable ${STY_RST} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${STY_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${STY_RST}\n"
 fi
 
-if [[ ! -z "${warn_files[@]}" ]]; then
+if [[ ${#warn_files[@]} -gt 0 ]]; then
   printf "\n${STY_RED}[$0]: \!! Important \!! : Please delete ${STY_RST} ${warn_files[*]} ${STY_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${STY_RST}\n"
 fi

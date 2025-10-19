@@ -1,14 +1,19 @@
-import QtQuick
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
-import Quickshell.Io
+import QtQuick
+import Quickshell
 
-QuickToggleButton {
-    id: nightLightButton
-    property bool enabled: Hyprsunset.active
-    toggled: enabled
-    buttonIcon: Config.options.light.night.automatic ? "night_sight_auto" : "bedtime"
+AndroidQuickToggleButton {
+    id: root
+    
+    property bool auto: Config.options.light.night.automatic
+
+    name: Translation.tr("Night Light")
+    statusText: (auto ? Translation.tr("Auto, ") : "") + (toggled ? Translation.tr("Active") : Translation.tr("Inactive"))
+
+    toggled: Hyprsunset.active
+    buttonIcon: auto ? "night_sight_auto" : "bedtime"
     onClicked: {
         Hyprsunset.toggle()
     }
@@ -25,3 +30,4 @@ QuickToggleButton {
         text: Translation.tr("Night Light | Right-click to toggle Auto mode")
     }
 }
+
