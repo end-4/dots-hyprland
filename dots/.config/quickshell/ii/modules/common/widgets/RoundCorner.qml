@@ -45,15 +45,15 @@ Item {
             pathHints: ShapePath.PathSolid & ShapePath.PathNonIntersecting
 
             startX: switch (root.corner) {
-                case RoundCorner.CornerEnum.TopLeft: return 0;
-                case RoundCorner.CornerEnum.TopRight: return root.implicitSize;
+                case RoundCorner.CornerEnum.TopLeft:
                 case RoundCorner.CornerEnum.BottomLeft: return 0;
+                case RoundCorner.CornerEnum.TopRight:
                 case RoundCorner.CornerEnum.BottomRight: return root.implicitSize;
             }
             startY: switch (root.corner) {
-                case RoundCorner.CornerEnum.TopLeft: return 0;
+                case RoundCorner.CornerEnum.TopLeft:
                 case RoundCorner.CornerEnum.TopRight: return 0;
-                case RoundCorner.CornerEnum.BottomLeft: return root.implicitSize;
+                case RoundCorner.CornerEnum.BottomLeft:
                 case RoundCorner.CornerEnum.BottomRight: return root.implicitSize;
             }
             PathAngleArc {
