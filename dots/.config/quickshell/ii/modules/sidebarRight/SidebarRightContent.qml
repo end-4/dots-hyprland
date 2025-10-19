@@ -13,6 +13,7 @@ import "./quickToggles/"
 import "./quickToggles/classicStyle/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
+import "./volumeMixer/"
 
 Item {
     id: root
@@ -21,6 +22,8 @@ Item {
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showWifiDialog: false
     property bool showBluetoothDialog: false
+    property bool showAudioOutputDialog: false
+    property bool showAudioInputDialog: false
     property bool editMode: false
 
     Connections {
@@ -29,6 +32,8 @@ Item {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
                 root.showBluetoothDialog = false;
+                root.showAudioOutputDialog = false;
+                root.showAudioInputDialog = false;
             }
         }
     }
@@ -102,53 +107,71 @@ Item {
         }
     }
 
-    onShowWifiDialogChanged: if (showWifiDialog) wifiDialogLoader.active = true;
-    Loader {
+    ToggleDialog {
         id: wifiDialogLoader
-        anchors.fill: parent
-
-        active: root.showWifiDialog || item.visible
-        onActiveChanged: {
-            if (active) {
-                item.show = true;
-                item.forceActiveFocus();
-            }
-        }
-
-        sourceComponent: WifiDialog {
-            onDismiss: {
-                show = false
-                root.showWifiDialog = false
-            }
-            onVisibleChanged: {
-                if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
-            }
+        shownPropertyString: "showWifiDialog"
+        dialog: WifiDialog {}
+        onShownChanged: {
+            if (!shown) return;
+            Network.enableWifi();
+            Network.rescanWifi();
         }
     }
 
-    onShowBluetoothDialogChanged: {
-        if (showBluetoothDialog) bluetoothDialogLoader.active = true;
-        else Bluetooth.defaultAdapter.discovering = false;
-    }
-    Loader {
+    ToggleDialog {
         id: bluetoothDialogLoader
+        shownPropertyString: "showBluetoothDialog"
+        dialog: BluetoothDialog {}
+        onShownChanged: {
+            if (!shown) {
+                Bluetooth.defaultAdapter.discovering = false;
+            } else {
+                Bluetooth.defaultAdapter.enabled = true;
+                Bluetooth.defaultAdapter.discovering = true;
+            }
+
+        }
+    }
+
+    ToggleDialog {
+        id: audioOutputDialogLoader
+        shownPropertyString: "showAudioOutputDialog"
+        dialog: VolumeDialog {
+            isSink: true
+        }
+    }
+
+    ToggleDialog {
+        id: audioInputDialogLoader
+        shownPropertyString: "showAudioInputDialog"
+        dialog: VolumeDialog {
+            isSink: false
+        }
+    }
+
+    component ToggleDialog: Loader {
+        id: toggleDialogLoader
+        required property string shownPropertyString
+        property alias dialog: toggleDialogLoader.sourceComponent
+        readonly property bool shown: root[shownPropertyString]
         anchors.fill: parent
 
-        active: root.showBluetoothDialog || item.visible
+        onShownChanged: if (shown) toggleDialogLoader.active = true;
+        active: shown
         onActiveChanged: {
             if (active) {
                 item.show = true;
                 item.forceActiveFocus();
             }
         }
-
-        sourceComponent: BluetoothDialog {
-            onDismiss: {
-                show = false
-                root.showBluetoothDialog = false
+        Connections {
+            target: toggleDialogLoader.item
+            function onDismiss() {
+                toggleDialogLoader.item.show = false
+                root[toggleDialogLoader.shownPropertyString] = false;
             }
-            onVisibleChanged: {
-                if (!visible && !root.showBluetoothDialog) bluetoothDialogLoader.active = false;
+            function onVisibleChanged() {
+                if (!toggleDialogLoader.item.visible && !root[toggleDialogLoader.shownPropertyString]) toggleDialogLoader.active = false;
             }
         }
     }
@@ -163,14 +186,16 @@ Item {
         Connections {
             target: quickPanelImplLoader.item
             function onOpenWifiDialog() {
-                Network.enableWifi();
-                Network.rescanWifi();
                 root.showWifiDialog = true;
             }
             function onOpenBluetoothDialog() {
-                Bluetooth.defaultAdapter.enabled = true;
-                Bluetooth.defaultAdapter.discovering = true;
                 root.showBluetoothDialog = true;
+            }
+            function onOpenAudioOutputDialog() {
+                root.showAudioOutputDialog = true;
+            }
+            function onOpenAudioInputDialog() {
+                root.showAudioInputDialog = true;
             }
         }
     }
