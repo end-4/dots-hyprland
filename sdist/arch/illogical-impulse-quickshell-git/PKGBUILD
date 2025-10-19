@@ -1,5 +1,7 @@
-# >>> Pin to a specific commit <<<
 _commit='00858812f25b748d08b075a0d284093685fa3ffd'
+# Useful links:
+# https://git.outfoxxed.me/quickshell/quickshell/commits/branch/master
+# https://aur.archlinux.org/packages/quickshell-git
 
 _prefix='illogical-impulse'
 conflicts=("quickshell-git")
