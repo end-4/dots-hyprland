@@ -29,7 +29,7 @@ MouseArea { // Notification group area
     property var parentDragDistance: qmlParent?.dragDistance
     property var dragIndexDiff: Math.abs(parentDragIndex - index)
     property real xOffset: dragIndexDiff == 0 ? parentDragDistance : 
-        parentDragDistance > dragConfirmThreshold ? 0 :
+        Math.abs(parentDragDistance) > dragConfirmThreshold ? 0 :
         dragIndexDiff == 1 ? (parentDragDistance * 0.3) :
         dragIndexDiff == 2 ? (parentDragDistance * 0.1) : 0
 
