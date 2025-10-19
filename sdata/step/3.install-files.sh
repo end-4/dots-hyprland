@@ -50,14 +50,14 @@ function backup_clashing_targets(){
 }
 
 function ask_backup_configs(){
+  showfun backup_clashing_targets
   printf "${STY_RED}"
   printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
   read -p "[y/N] " backup_confirm
   case $backup_confirm in
     [yY][eE][sS]|[yY]) 
-      showfun backup_clashing_targets
-      v backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-      v backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+      backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+      backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
       ;;
     *) echo "Skipping backup..." ;;
   esac
