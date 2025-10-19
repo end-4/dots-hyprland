@@ -21,10 +21,12 @@ BackgroundWidget {
     onPositionChanged: savePosition(newX, newY)
 
     function centerOnScreen() {
+        // for lock screen
         x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
         y = bgRoot.monitor.height / 2 - implicitHeight / 2 - wallpaper.y
     }
     function restorePosition() {
+        // after unlocking
         x = Config.options.background.clock.x
         y = Config.options.background.clock.y
     }
@@ -72,7 +74,7 @@ BackgroundWidget {
                 font {
                     family: Appearance.font.family.main
                     pixelSize: Appearance.font.pixelSize.normal
-                    weight: 350
+                    weight: Font.Thin
                     italic: true
                 }
             }
