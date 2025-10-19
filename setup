@@ -10,13 +10,31 @@ prevent_sudo_or_root
 set -e
 
 #####################################################################################
+function showhelp_global(){
+printf "[$0]: Handle setup for illogical-impulse.
+
+Syntax:
+  $0 <subcommand> [OPTIONS]...
+
+Subcommands:
+  install        (Default) Install or update illogical-impulse.
+  exp-uninstall  (Experimental) Uninstall illogical-impulse.
+  exp-update     (Experimental) Update illogical-impulse without fully install.
+  help           Show this help message
+
+Please run the following for details:
+  $0 <subcommand> -h
+"
+}
 case $1 in
   # Global help
-  ""|help|--help|-h) showhelp_global;exit;;
+  help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update) SCRIPT_SUBCOMMAND=$1;shift;;
+  install|exp-uninstall|exp-update)SCRIPT_SUBCOMMAND=$1;shift;;
+  # No subcommand
+  -*|"")SCRIPT_SUBCOMMAND=install;;
   # Wrong subcommand
-  *)echo "Unknown subcommand \"$1\", aborting...";exit 1;;
+  *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
 esac
 #####################################################################################
 case ${SCRIPT_SUBCOMMAND} in
