@@ -75,29 +75,11 @@ run_test() {
   fi
 }
 
-# Test 1: Script exists and is executable
-test_script_exists() {
-  log_test "Checking if install.sh exists and is executable"
-
-  if [[ ! -f "install.sh" ]]; then
-    log_fail "install.sh not found"
-    return 1
-  fi
-
-  if [[ ! -x "install.sh" ]]; then
-    log_fail "install.sh is not executable"
-    return 1
-  fi
-
-  log_pass "Script exists and is executable"
-  return 0
-}
-
 # Test 2: Script has no syntax errors
 test_syntax() {
   log_test "Checking script syntax"
 
-  if bash -n install.sh; then
+  if bash -n setup; then
     log_pass "No syntax errors found"
     return 0
   else
@@ -110,7 +92,7 @@ test_syntax() {
 test_help_option() {
   log_test "Testing --help option"
 
-  if ./install.sh exp-update --help 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
+  if ./setup exp-update --help 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
     log_pass "Help option works"
     return 0
   else
@@ -411,11 +393,11 @@ test_dry_run() {
 
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
 
-  # Copy necessary files for install.sh to run
-  cp "$ORIGINAL_DIR/install.sh" .
+  # Copy necessary files for setup to run
+  cp "$ORIGINAL_DIR/setup" .
   cp -r "$ORIGINAL_DIR/sdata" .
   cp -r "$ORIGINAL_DIR/dots" .
-  chmod +x install.sh
+  chmod +x setup
 
   # Create a test config file in repo
   mkdir -p dots/.config/test-app
@@ -428,7 +410,7 @@ test_dry_run() {
   rm -rf "${HOME}/.config/test-app" 2>/dev/null || true
 
   # Use non-interactive mode and check for DRY-RUN marker
-  ./install.sh exp-update -n --skip-notice --non-interactive 2>&1 | tee dry_run_output.txt
+  ./setup exp-update -n --skip-notice --non-interactive 2>&1 | tee dry_run_output.txt
 
   if grep -q "DRY-RUN" dry_run_output.txt; then
     log_pass "Dry-run mode detected in output"
@@ -461,7 +443,7 @@ test_flags() {
   local all_passed=true
 
   for flag in "${flags[@]}"; do
-    if ./install.sh exp-update "$flag" 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
+    if ./setup exp-update "$flag" 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
       log_test "  ✓ $flag recognized"
     else
       log_test "  ✗ $flag not recognized"
@@ -487,7 +469,7 @@ test_shellcheck() {
     return 0
   fi
   
-  if shellcheck -e SC1090,SC1091,SC2148,SC2034,SC2155,SC2164 install.sh; then
+  if shellcheck -e SC1090,SC1091,SC2148,SC2034,SC2155,SC2164 setup then
     log_pass "shellcheck passed"
     return 0
   else
@@ -507,10 +489,10 @@ test_lock_file() {
   cd "$test_repo" || { log_fail "Failed to cd to test directory"; return 1; }
   
   # Copy necessary files
-  cp "$ORIGINAL_DIR/install.sh" .
+  cp "$ORIGINAL_DIR/setup" .
   cp -r "$ORIGINAL_DIR/sdata" .
   mkdir -p dots/.config
-  chmod +x install.sh
+  chmod +x setup
   
   git add .
   git commit -m "Add files" -q
@@ -519,7 +501,7 @@ test_lock_file() {
   echo "99999" > .update-lock
   
   # Try to run update - should fail due to lock
-  if ./install.sh exp-update --skip-notice --non-interactive > lock_test_output.txt 2>&1; then
+  if ./setup exp-update --skip-notice --non-interactive > lock_test_output.txt 2>&1; then
     if grep -q "stale lock" lock_test_output.txt; then
       log_pass "Lock file mechanism works (detected stale lock)"
       cd "$ORIGINAL_DIR"
@@ -777,16 +759,15 @@ main() {
   echo -e "${BLUE}  Update.sh Test Suite (Enhanced)${NC}"
   echo -e "${BLUE}================================${NC}\n"
 
-  if [[ ! -f "install.sh" ]]; then
-    log_error "Please run this test from the directory containing install.sh"
+  if [[ ! -f "setup" ]]; then
+    log_error "Please run this test from the directory containing setup"
     exit 1
   fi
 
-  chmod +x install.sh 2>/dev/null || true
+  chmod +x setup 2>/dev/null || true
 
   # Define tests
   tests=(
-    "test_script_exists"
     "test_syntax"
     "test_help_option"
     "test_dots_structure"

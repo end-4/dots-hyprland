@@ -1,9 +1,9 @@
 # Handle args for subcmd: install
 # shellcheck shell=bash
 showhelp(){
-echo -e "Syntax: $0 [OPTIONS]...
+echo -e "Syntax: $0 install [OPTIONS]...
 
-Idempotent installation script for dotfiles.
+Idempotent installation for dotfiles.
 
 Options for install:
   -h, --help                Print this help message and exit

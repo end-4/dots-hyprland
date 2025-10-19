@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Usage: install.sh exp-update [OPTIONS]...
+echo -e "Usage: $0 exp-update [OPTIONS]...
 
 Experimental updating without full reinstall.
 Updates dotfiles by syncing configuration files to home directory.
@@ -62,18 +62,24 @@ eval set -- "$para"
 while true ; do
   case "$1" in
     ## Ones without parameter
-    -f|--force) FORCE_CHECK=true;shift;;
-    # log_info "Force check mode enabled - will check all files regardless of git changes"
-    -p|--packages) CHECK_PACKAGES=true;shift;;
-    # log_info "Package checking enabled"
-    -n|--dry-run) DRY_RUN=true;shift;;
-    # log_info "Dry-run mode enabled - no changes will be made"
-    -v|--verbose) VERBOSE=true;shift;;
-    # log_info "Verbose mode enabled"
-    --skip-notice) SKIP_NOTICE=true;shift;;
-    # log_warning "Skipping notice about script being untested"
-    --non-interactive) NON_INTERACTIVE=true;shift;;
-    # log_info "Non-interactive mode enabled"
+    -f|--force) FORCE_CHECK=true;shift
+      log_info "Force check mode enabled - will check all files regardless of git changes"
+      ;;
+    -p|--packages) CHECK_PACKAGES=true;shift
+      log_info "Package checking enabled"
+      ;;
+    -n|--dry-run) DRY_RUN=true;shift
+      log_info "Dry-run mode enabled - no changes will be made"
+      ;;
+    -v|--verbose) VERBOSE=true;shift
+      log_info "Verbose mode enabled"
+      ;;
+    --skip-notice) SKIP_NOTICE=true;shift
+      log_warning "Skipping notice about script being untested"
+      ;;
+    --non-interactive) NON_INTERACTIVE=true;shift
+      log_info "Non-interactive mode enabled"
+      ;;
     
     ## Ending
     --) break ;;
