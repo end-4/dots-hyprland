@@ -145,6 +145,7 @@ ContentPage {
         }
         ContentSubsection {
             title: Translation.tr("Generate translation with Gemini")
+            tooltip: Translation.tr("You'll need to enter your Gemini API key first.\nType /key on the sidebar for instructions.")
             
             ConfigRow {
                 MaterialTextArea {
