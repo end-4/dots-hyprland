@@ -14,34 +14,35 @@ BackgroundWidget {
     x: Config.options.background.clock.x
     y: Config.options.background.clock.y
 
-    scaleMultiplier: Config.options.background.clock.scale
-
     property bool screenLocked: GlobalStates.screenLocked
-    onScreenLockedChanged: {
-        if (screenLocked) {
-            x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
-            y = bgRoot.monitor.height / 2 - implicitHeight / 2 - wallpaper.y
-        }
-        else {
-            x = Config.options.background.clock.x
-            y = Config.options.background.clock.y
-        }
-    } 
+    scaleMultiplier: Config.options.background.clock.scale
+    
+    onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
+    onPositionChanged: savePosition(newX, newY)
 
-    onPositionChanged: {
-        Config.options.background.clock.x = newX
-        Config.options.background.clock.y = newY
+    function centerOnScreen() {
+        x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
+        y = bgRoot.monitor.height / 2 - implicitHeight / 2 - wallpaper.y
+    }
+    function restorePosition() {
+        x = Config.options.background.clock.x
+        y = Config.options.background.clock.y
+    }
+    function savePosition(xPos, yPos) {
+        Config.options.background.clock.x = xPos
+        Config.options.background.clock.y = yPos
     }
 
     Loader {
         active: Config.options.background.clock.style === "cookie"
-        sourceComponent: ColumnLayout{
+        sourceComponent: ColumnLayout {
+            Component.onCompleted: {
+                widget.implicitWidth = implicitWidth
+                widget.implicitHeight = implicitHeight
+            }
             CookieClock {
                 id: cookieClock
-                Component.onCompleted: {
-                    widget.implicitWidth = implicitWidth
-                    widget.implicitHeight = implicitHeight
-                }
+                Component.onCompleted: updateImplicitSize()
             }
             CookieQuote {
                 visible: Config.options.background.showQuote
@@ -55,24 +56,18 @@ BackgroundWidget {
     }
     
     Loader {
+        scale: Config.options.background.clock.scale
         active: Config.options.background.clock.style === "digital"
         sourceComponent:  ColumnLayout {
-            scale: Config.options.background.clock.scale
-            id: clockColumn
-            spacing: 6
+            spacing: 5
             Component.onCompleted: {
                 widget.implicitWidth = implicitWidth
                 widget.implicitHeight = implicitHeight
             }
+            ClockText { font.pixelSize: 90; text: DateTime.time }
+            ClockText { Layout.topMargin: -10; text: DateTime.date }
             ClockText {
-                font.pixelSize: 90
-                text: DateTime.time
-            }
-            ClockText {
-                Layout.topMargin: -10
-                text: DateTime.date
-            }
-            ClockText {
+                text: Config.options.background.quote
                 visible: Config.options.background.showQuote
                 font {
                     family: Appearance.font.family.main
@@ -80,12 +75,11 @@ BackgroundWidget {
                     weight: 350
                     italic: true
                 }
-                text: Config.options.background.quote
             }
         }
     }
     
-
+    
 
     component ClockText: StyledText {
         Layout.fillWidth: true

@@ -9,8 +9,6 @@ Item {
     z: 1
     anchors.fill: parent
     
-    
-
     Loader {
         x: wallpaper.x; y: wallpaper.y
         active: Config.options.background.clock.show
@@ -22,7 +20,4 @@ Item {
         active: Config.options.background.weather.show && !GlobalStates.screenLocked
         sourceComponent: WeatherWidget {}
     }
-
-   
-    
 }
