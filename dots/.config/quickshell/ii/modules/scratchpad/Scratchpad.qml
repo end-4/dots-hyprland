@@ -99,26 +99,6 @@ Scope {
                 spacing: 14
                 Layout.fillHeight: true
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 40
-
-                    StyledText {
-                        text: Translation.tr("Scratchpad")
-                        font.pixelSize: Appearance.font.pixelSize.large
-                        font.weight: Font.DemiBold
-                    }
-
-                    Item { Layout.fillWidth: true }
-
-                    StyledText {
-                        id: statusLabel
-                        text: saveDebounce.running ? Translation.tr("Saving...") : Translation.tr("Saved")
-                        color: saveDebounce.running ? Appearance.colors.colSubtext : Appearance.m3colors.m3outline
-                        font.pixelSize: Appearance.font.pixelSize.small
-                    }
-                }
-
                 ScrollView {
                     id: editorScrollView
                     Layout.fillWidth: true
@@ -146,6 +126,22 @@ Scope {
                                 saveDebounce.restart()
                             }
                         }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Appearance.font.pixelSize.small + 8
+
+                    StyledText {
+                        id: statusLabel
+                        anchors {
+                            right: parent.right
+                            bottom: parent.bottom
+                        }
+                        text: saveDebounce.running ? Translation.tr("Saving...") : Translation.tr("Saved")
+                        color: saveDebounce.running ? Appearance.colors.colSubtext : Appearance.m3colors.m3outline
+                        font.pixelSize: Appearance.font.pixelSize.small
                     }
                 }
             }
