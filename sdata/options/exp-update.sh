@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Usage: $0 exp-update [OPTIONS]...
+echo -e "Syntax: $0 exp-update [OPTIONS]...
 
 Experimental updating without full reinstall.
 Updates dotfiles by syncing configuration files to home directory.
