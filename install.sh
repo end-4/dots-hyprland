@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# TODO: Handle TAB completion for ./setup with non-intrusive method
-# TODO: Remove this script (install.sh) after TAB completion of ./setup is handled
+# TODO: Handle TAB completion for ./setup with non-intrusive method,
+# or other shortcut helper like TUI.
+# After that, remove this script (install.sh).
 
 
 #STY_RED='\e[31m'
