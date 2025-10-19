@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# shellcheck shell=bash
+
 ####################
 # Detect distro
 # Helpful link(s):

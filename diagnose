@@ -17,9 +17,9 @@ case $(whoami) in
 esac
 
 
-x() { ii_exec "$@" 2>&1 | tee -a $output_file ; }
-e() { ii_box "$@" | tee -a $output_file ; }
-ii_box() {
+x() { _exec "$@" 2>&1 | tee -a $output_file ; }
+e() { _box "$@" | tee -a $output_file ; }
+_box() {
   length=$(echo "$1" | wc -L);total_width=$((length + 2))
   #line=$(printf "═%.0s" $(seq 1 $total_width))
   #border_up="╔${line}╗";border_down="╚${line}╝"
@@ -31,7 +31,7 @@ ii_box() {
   echo "$border_vertical $1 $border_vertical"
   echo "$border_down"
 }
-ii_exec() {
+_exec() {
   printf "\n[===diagnose===] $*\n"
   "$@"
   err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi

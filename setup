@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+# Use REPO_ROOT instead of base - when scripts are sourced they do not need export to inherit vars
+REPO_ROOT="$(pwd)"
+source ./sdata/lib/environment-variables.sh
+source ./sdata/lib/functions.sh
+source ./sdata/lib/package-installers.sh
+
+prevent_sudo_or_root
+set -e
+
+#####################################################################################
+showhelp_global(){
+printf "[$0]: Handle setup for illogical-impulse.
+
+Syntax:
+  $0 <subcommand> [OPTIONS]...
+
+Subcommands:
+  install        (Default) Install/Reinstall/Update illogical-impulse.
+  exp-uninstall  (Experimental) Uninstall illogical-impulse.
+  exp-update     (Experimental) Update illogical-impulse without fully reinstall.
+  help           Show this help message.
+
+For each <subcommand>, use -h for details:
+  $0 <subcommand> -h
+"
+}
+case $1 in
+  # Global help
+  help|--help|-h)showhelp_global;exit;;
+  # Correct subcommand
+  install|exp-uninstall|exp-update)SCRIPT_SUBCOMMAND=$1;shift;;
+  # No subcommand
+  -*|"")SCRIPT_SUBCOMMAND=install;;
+  # Wrong subcommand
+  *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
+esac
+#####################################################################################
+case ${SCRIPT_SUBCOMMAND} in
+  install)
+    source ./sdata/options/install.sh
+    if [[ "${SKIP_ALLGREETING}" != true ]]; then
+      source ./sdata/step/0.install-greeting.sh
+    fi
+    if [[ "${SKIP_ALLDEPS}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
+      source ./sdata/step/1.install-deps-selector.sh
+    fi
+    if [[ "${SKIP_ALLSETUPS}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RST}"
+      source ./sdata/step/2.install-setups-selector.sh
+    fi
+    if [[ "${SKIP_ALLFILES}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
+      if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
+        source ./sdata/step/3.install-files.experimental.sh
+      else
+        source ./sdata/step/3.install-files.sh
+      fi
+    fi
+    ;;
+  exp-uninstall)
+    source ./sdata/options/exp-uninstall.sh
+    source ./sdata/step/exp-uninstall.sh
+    exit
+    ;;
+  exp-update)
+    source ./sdata/options/exp-update.sh
+    source ./sdata/step/exp-update.sh
+    exit
+    ;;
+esac

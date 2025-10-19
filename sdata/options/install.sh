@@ -1,14 +1,11 @@
-# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
-# NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
-
-# The script that use this file should have two lines on its top as follows:
-# cd "$(dirname "$0")" export base="$(pwd)"
+# Handle args for subcmd: install
+# shellcheck shell=bash
 showhelp(){
-echo -e "Syntax: $0 [Options]...
+echo -e "Syntax: $0 install [OPTIONS]...
 
-Idempotent installation script for dotfiles.
-If no option is specified, run default install process.
+Idempotent installation for dotfiles.
 
+Options for install:
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
@@ -25,19 +22,18 @@ If no option is specified, run default install process.
       --exp-files           Use experimental script for the third step copying files
       --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
       --via-nix             (Unavailable yet) Use Nix to install dependencies
-      --exp-uninstall       Use experimental uninstall script
 "
 }
 
 cleancache(){
-  rm -rf "$base/cache"
+  rm -rf "${REPO_ROOT}/cache"
 }
 
 # `man getopt` to see more
 para=$(getopt \
-       -o hfk:cs \
-       -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix,exp-uninstall \
-       -n "$0" -- "$@")
+  -o hfk:cs \
+  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix \
+  -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
 ## getopt Phase 1
@@ -72,9 +68,8 @@ while true ; do
     --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
-    --exp-uninstall) EXPERIMENTAL_UNINSTALL_SCRIPT=true;shift;;
-    ## Ones with parameter
     
+    ## Ones with parameter
     --fontset)
     case $2 in
       "default"|"zh-CN"|"vi") fontset="$2";;

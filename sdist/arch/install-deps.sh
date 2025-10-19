@@ -8,7 +8,7 @@ install-yay(){
   x makepkg -o
   x makepkg -se
   x makepkg -i --noconfirm
-  x cd $base
+  x cd ${REPO_ROOT}
   rm -rf /tmp/buildyay
 }
 
@@ -16,7 +16,7 @@ install-yay(){
 # However, let's just keep it as references for other distros writing their `sdist/<DISTRO_ID>/install-deps.sh`, if they need it.
 handle-deprecated-dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
-  for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+  for i in illogical-impulse-{microtex,pymyc-aur} {quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
   remove_bashcomments_emptylines ./sdist/arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
   readarray -t old_deps_list < ./cache/old_deps_stripped.conf
@@ -67,9 +67,10 @@ install-local-pkgbuild() {
   # man makepkg:
   # -A, --ignorearch: Ignore a missing or incomplete arch field in the build script.
   # -s, --syncdeps: Install missing dependencies using pacman. When build-time or run-time dependencies are not found, pacman will try to resolve them.
+  # -f, --force: build a package even if it already exists in the PKGDEST
   # -i, --install: Install or upgrade the package after a successful build using pacman(8).
   # In https://github.com/end-4/dots-hyprland/issues/823#issuecomment-3394774645 it's suggested to use `sudo pacman -U --noconfirm *.pkg.tar.zst` instead of `makepkg -i`, however it's possible that multiple *.pkg.tar.zst exist, which makes this command not reliable.
-  x makepkg -Asi --noconfirm
+  x makepkg -Afsi --noconfirm
   x popd
 }
 
@@ -77,6 +78,7 @@ install-local-pkgbuild() {
 metapkgs=(./sdist/arch/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
 metapkgs+=(./sdist/arch/illogical-impulse-hyprland)
 metapkgs+=(./sdist/arch/illogical-impulse-microtex-git)
+metapkgs+=(./sdist/arch/illogical-impulse-quickshell-git)
 # metapkgs+=(./sdist/arch/packages/illogical-impulse-oneui4-icons-git)
 [[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
   metapkgs+=(./sdist/arch/illogical-impulse-bibata-modern-classic-bin)

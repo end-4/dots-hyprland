@@ -29,7 +29,7 @@
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
    - Just run `bash <(curl -s https://ii.clsty.link/setup)`
-     - Or, clone this repo and run `./install.sh`
+     - Or, clone this repo and run `./setup install`
      - See [document](https://ii.clsty.link/en/ii-qs/01setup/) for details.
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
@@ -78,7 +78,7 @@ Widget system: Quickshell | Support: Yes
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7b98a354-4489-4a46-aa6a-d08616e77399" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50009d7f-e456-4200-bc41-49b29abbafe3" /> |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7b98a354-4489-4a46-aa6a-d08616e77399" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eba0d57-2606-4cea-8993-e6f169e82e70" /> |
 | Window management | Weeb power |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 

@@ -4,3 +4,4 @@
 __pycache__/
 *.py[cod]
 dots/.config/quickshell/ii/.qmlls.ini
+.update-lock
