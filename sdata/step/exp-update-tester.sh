@@ -92,7 +92,7 @@ test_syntax() {
 test_help_option() {
   log_test "Testing --help option"
 
-  if ./setup exp-update --help 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
+  if ./setup exp-update --help 2>&1 | grep -qiE "(Syntax|Options|exp-update)"; then
     log_pass "Help option works"
     return 0
   else
@@ -443,7 +443,7 @@ test_flags() {
   local all_passed=true
 
   for flag in "${flags[@]}"; do
-    if ./setup exp-update "$flag" 2>&1 | grep -qiE "(Usage|Options|exp-update)"; then
+    if ./setup exp-update "$flag" 2>&1 | grep -qiE "(Syntax|Options|exp-update)"; then
       log_test "  ✓ $flag recognized"
     else
       log_test "  ✗ $flag not recognized"

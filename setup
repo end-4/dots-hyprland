@@ -17,9 +17,9 @@ Syntax:
   $0 <subcommand> [OPTIONS]...
 
 Subcommands:
-  install        (Default) Install or update illogical-impulse.
+  install        (Default) Install/Reinstall/Update illogical-impulse.
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
-  exp-update     (Experimental) Update illogical-impulse without fully install.
+  exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:

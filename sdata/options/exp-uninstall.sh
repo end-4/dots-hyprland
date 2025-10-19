@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Usage: $0 exp-uninstall [OPTIONS]...
+echo -e "Syntax: $0 exp-uninstall [OPTIONS]...
 
 Experimental unintallation.
 
