@@ -20,6 +20,12 @@ BackgroundWidget {
     onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
     onPositionChanged: savePosition(newX, newY)
 
+    Component.onCompleted: {
+        if (GlobalStates.screenLocked){
+            centerOnScreen() // for first boot (with lock screen 'Launch at start' option enabled)
+        }
+    }
+
     function centerOnScreen() {
         // for lock screen
         x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
