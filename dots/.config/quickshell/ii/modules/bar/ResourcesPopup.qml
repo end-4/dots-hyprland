@@ -80,17 +80,17 @@ StyledPopup {
                 ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("Used:")
-                    value: formatKB(ResourceUsage.memoryUsed)
+                    value: root.formatKB(ResourceUsage.memoryUsed)
                 }
                 ResourceItem {
                     icon: "check_circle"
                     label: Translation.tr("Free:")
-                    value: formatKB(ResourceUsage.memoryFree)
+                    value: root.formatKB(ResourceUsage.memoryFree)
                 }
                 ResourceItem {
                     icon: "empty_dashboard"
                     label: Translation.tr("Total:")
-                    value: formatKB(ResourceUsage.memoryTotal)
+                    value: root.formatKB(ResourceUsage.memoryTotal)
                 }
             }
         }
@@ -109,17 +109,17 @@ StyledPopup {
                 ResourceItem {
                     icon: "clock_loader_60"
                     label: Translation.tr("Used:")
-                    value: formatKB(ResourceUsage.swapUsed)
+                    value: root.formatKB(ResourceUsage.swapUsed)
                 }
                 ResourceItem {
                     icon: "check_circle"
                     label: Translation.tr("Free:")
-                    value: formatKB(ResourceUsage.swapFree)
+                    value: root.formatKB(ResourceUsage.swapFree)
                 }
                 ResourceItem {
                     icon: "empty_dashboard"
                     label: Translation.tr("Total:")
-                    value: formatKB(ResourceUsage.swapTotal)
+                    value: root.formatKB(ResourceUsage.swapTotal)
                 }
             }
         }
