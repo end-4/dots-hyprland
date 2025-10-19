@@ -225,6 +225,17 @@ ContentPage {
                 }
             }
         }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "videocam"
+                text: Translation.tr("Record")
+                checked: Config.options.bar.utilButtons.showScreenRecord
+                onCheckedChanged: {
+                    Config.options.bar.utilButtons.showScreenRecord = checked;
+                }
+            }
+        }
     }
 
     ContentSection {

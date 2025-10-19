@@ -211,6 +211,7 @@ Singleton {
                     property bool showKeyboardToggle: true
                     property bool showDarkModeToggle: true
                     property bool showPerformanceProfileToggle: false
+                    property bool showScreenRecord: false
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
