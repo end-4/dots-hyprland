@@ -20,16 +20,6 @@ case $1 in
 esac
 #####################################################################################
 case ${SCRIPT_SUBCOMMAND} in
-  exp-uninstall)
-    #source ./sdata/options/exp-install.sh
-    source ./sdata/step/exp-uninstall.sh
-    exit
-    ;;
-  exp-update)
-    source ./sdata/options/exp-update.sh
-    source ./sdata/step/exp-update.sh
-    exit
-    ;;
   install)
     source ./sdata/options/install.sh
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
@@ -51,5 +41,15 @@ case ${SCRIPT_SUBCOMMAND} in
         source ./sdata/step/3.install-files.sh
       fi
     fi
+    ;;
+  exp-uninstall)
+    source ./sdata/options/exp-uninstall.sh
+    source ./sdata/step/exp-uninstall.sh
+    exit
+    ;;
+  exp-update)
+    source ./sdata/options/exp-update.sh
+    source ./sdata/step/exp-update.sh
+    exit
     ;;
 esac
