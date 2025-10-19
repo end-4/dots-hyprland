@@ -56,7 +56,7 @@ Item {
         }
 
         MaterialSymbol {
-            text: symbols.codeToName[Weather.data.wCode]
+            text: symbols.codeToName[Weather.data.wCode] ?? "cached"
             iconSize: 65
             rotation: widget.widgetRotation
             color: widget.colText
