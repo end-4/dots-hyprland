@@ -10,7 +10,7 @@ prevent_sudo_or_root
 set -e
 
 #####################################################################################
-function showhelp_global(){
+showhelp_global(){
 printf "[$0]: Handle setup for illogical-impulse.
 
 Syntax:
@@ -20,9 +20,9 @@ Subcommands:
   install        (Default) Install or update illogical-impulse.
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully install.
-  help           Show this help message
+  help           Show this help message.
 
-Please run the following for details:
+For each <subcommand>, use -h for details:
   $0 <subcommand> -h
 "
 }
