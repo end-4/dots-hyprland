@@ -8,12 +8,14 @@ import QtQuick
 import Quickshell.Io
 
 Singleton {
+    id: root
     property bool available: UPower.displayDevice.isLaptopBattery
     property var chargeState: UPower.displayDevice.state
     property bool isCharging: chargeState == UPowerDeviceState.Charging
     property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
     property real percentage: UPower.displayDevice?.percentage ?? 1
     readonly property bool allowAutomaticSuspend: Config.options.battery.automaticSuspend
+    readonly property bool soundEnabled: Config.options.sounds.battery
 
     property bool isLow: available && (percentage <= Config.options.battery.low / 100)
     property bool isCritical: available && (percentage <= Config.options.battery.critical / 100)
@@ -30,7 +32,8 @@ Singleton {
     property real timeToFull: UPower.displayDevice.timeToFull
 
     onIsLowAndNotChargingChanged: {
-        if (available && isLowAndNotCharging) Quickshell.execDetached([
+        if (!root.available || !isLowAndNotCharging) return;
+        Quickshell.execDetached([
             "notify-send", 
             Translation.tr("Low battery"), 
             Translation.tr("Consider plugging in your device"), 
@@ -38,15 +41,12 @@ Singleton {
             "-a", "Shell"
         ])
 
-        if (available && Config.options.sounds.battery) {
-            if (isLowAndNotCharging) {
-                Audio.playSystemSound("dialog-warning")
-            }
-        }
+        if (root.soundEnabled) Audio.playSystemSound("dialog-warning");
     }
 
     onIsCriticalAndNotChargingChanged: {
-        if (available && isCriticalAndNotCharging) Quickshell.execDetached([
+        if (!root.available || !isCriticalAndNotCharging) return;
+        Quickshell.execDetached([
             "notify-send", 
             Translation.tr("Critically low battery"), 
             Translation.tr("Please charge!\nAutomatic suspend triggers at %1%").arg(Config.options.battery.suspend), 
@@ -54,41 +54,33 @@ Singleton {
             "-a", "Shell"
         ]);
 
-        if (available && Config.options.sounds.battery) {
-            if (isCriticalAndNotCharging) {
-                Audio.playSystemSound("suspend-error")
-            }
-        }
+        if (root.soundEnabled) Audio.playSystemSound("suspend-error");
     }
 
     onIsSuspendingAndNotChargingChanged: {
-        if (available && isSuspendingAndNotCharging) {
+        if (root.available && isSuspendingAndNotCharging) {
             Quickshell.execDetached(["bash", "-c", `systemctl suspend || loginctl suspend`]);
         }
     }
 
     onIsFullAndChargingChanged: {
-        if (available && isFullAndCharging) Quickshell.execDetached([
+        if (!root.available || !isFullAndCharging) return;
+        Quickshell.execDetached([
             "notify-send",
             Translation.tr("Battery full"),
             Translation.tr("Please unplug the charger"),
             "-a", "Shell"
         ]);
 
-        if (available && Config.options.sounds.battery) {
-            if (isFullAndCharging) {
-                Audio.playSystemSound("complete")
-            }
-        }
+        if (root.soundEnabled) Audio.playSystemSound("complete");
     }
 
     onIsPluggedInChanged: {
-        if (available && Config.options.sounds.battery) {
-            if (isPluggedIn) {
-                Audio.playSystemSound("power-plug")
-            } else {
-                Audio.playSystemSound("power-unplug")
-            }
+        if (!root.available || !root.soundEnabled) return;
+        if (isPluggedIn) {
+            Audio.playSystemSound("power-plug")
+        } else {
+            Audio.playSystemSound("power-unplug")
         }
     }
 }
