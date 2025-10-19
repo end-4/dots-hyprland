@@ -287,20 +287,3 @@ function check_disk_space() {
   
   return 0
 }
-
-function showhelp_global(){
-echo -e "
-
-Syntax:
-  $0 <subcommand> [OPTIONS]...
-
-Subcommands:
-      install               Idempotent installation for dotfiles.
-      exp-uninstall         Experimental uninstall
-      exp-update            Experimental update
-      help                  Show this help message
-
-Please run the following for details:
-  $0 <subcommand> -h
-"
-}
