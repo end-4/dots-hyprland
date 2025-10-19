@@ -101,6 +101,8 @@ AbstractQuickPanel {
                             spacing: root.spacing
                             onOpenWifiDialog: root.openWifiDialog()
                             onOpenBluetoothDialog: root.openBluetoothDialog()
+                            onOpenAudioOutputDialog: root.openAudioOutputDialog()
+                            onOpenAudioInputDialog: root.openAudioInputDialog()
                         }
                     }
                 }
