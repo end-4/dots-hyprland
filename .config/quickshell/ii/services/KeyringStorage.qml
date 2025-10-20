@@ -71,24 +71,26 @@ Singleton {
         saveData.running = true;
     }
 
-    //Fetch API keys after qs refreshes
-    //Needs a better way to handle retrieving keys on qs refresh
-    Timer {
-        id: initTimer
-        interval: 2000 // Wait 2000ms for system to initialize
-        running: true
-        repeat: false
-        onTriggered: {
-            if (!GlobalStates.screenLocked) {
-                KeyringStorage.fetchKeyringData();
-            }
-        }
-    }
-
     Connections {
         target: GlobalStates
         function onKeyringUnlocked() {
             KeyringStorage.fetchKeyringData();
+        }
+    }
+
+    Component.onCompleted: {
+        lockState.running = true;
+    }
+
+    Process {
+        id: lockState
+        command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
+
+        // Fetch data if keyring is already unlocked
+        onExited: (exitCode) => {
+            if (exitCode === 1) {
+                KeyringStorage.fetchKeyringData();
+            }
         }
     }
 
