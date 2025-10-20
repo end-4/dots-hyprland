@@ -7,8 +7,6 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 
-import "./androidStyle/"
-
 DelegateChooser {
     id: root
     property bool editMode: false
@@ -18,6 +16,8 @@ DelegateChooser {
     required property int startingIndex
     signal openWifiDialog()
     signal openBluetoothDialog()
+    signal openAudioOutputDialog()
+    signal openAudioInputDialog()
 
     role: "type"
 
@@ -32,7 +32,7 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
-        altAction: () => {
+        onOpenMenu: {
             root.openWifiDialog()
         }
     } }
@@ -48,7 +48,7 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
-        altAction: () => {
+        onOpenMenu: {
             root.openBluetoothDialog()
         }
     } }
@@ -181,6 +181,9 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
+        onOpenMenu: {
+            root.openAudioInputDialog()
+        }
     } }
 
     DelegateChoice { roleValue: "audio"; AndroidAudioToggle {
@@ -194,6 +197,9 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
+        onOpenMenu: {
+            root.openAudioOutputDialog()
+        }
     } }
 
     DelegateChoice { roleValue: "notifications"; AndroidNotificationToggle {

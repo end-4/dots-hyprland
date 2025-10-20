@@ -139,6 +139,7 @@ Singleton {
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
                 property string taskManager: "plasma-systemmonitor --page-name Processes"
                 property string terminal: "kitty -1" // This is only for shell actions
+                property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
             property JsonObject background: JsonObject {
@@ -401,12 +402,12 @@ Singleton {
                     property JsonObject android: JsonObject {
                         property int columns: 5
                         property list<var> toggles: [
-                            { type: "network", size: 2 },
-                            { type: "bluetooth", size: 2 },
-                            { type: "idleInhibitor", size: 1 },
-                            { type: "easyEffects", size: 1 },
-                            { type: "nightLight", size: 2 },
-                            { type: "darkMode", size: 2 }
+                            { "size": 2, "type": "network" },
+                            { "size": 2, "type": "bluetooth"  },
+                            { "size": 1, "type": "idleInhibitor" },
+                            { "size": 1, "type": "mic" },
+                            { "size": 2, "type": "audio" },
+                            { "size": 2, "type": "nightLight" }
                         ]
                     }
                 }
