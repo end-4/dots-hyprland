@@ -1,35 +1,10 @@
 #!/usr/bin/env bash
+# Remove this script (install.sh) after 2025.12.01
+
+STY_RED='\e[31m'
+STY_RST='\e[00m'
+printf "${STY_RED}You are using \"./install.sh\" which is kept for compatibility and will be removed in future.\n"
+printf "Please use \"./setup install\" instead.${STY_RST}\n"
+
 cd "$(dirname "$0")"
-export base="$(pwd)"
-source ./scriptdata/lib/environment-variables.sh
-source ./scriptdata/lib/functions.sh
-source ./scriptdata/lib/package-installers.sh
-source ./scriptdata/lib/options.sh
-
-prevent_sudo_or_root
-set -e
-
-#####################################################################################
-# 0. Before we start
-if [[ "${SKIP_ALLGREETING}" != true ]]; then
-  source ./scriptdata/step/0.install-greeting.sh
-fi
-#####################################################################################
-if [[ "${SKIP_ALLDEPS}" != true ]]; then
-  printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RESET}"
-  source ./scriptdata/step/1.install-deps-selector.sh
-fi
-#####################################################################################
-if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-  printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RESET}"
-  source ./scriptdata/step/2.install-setups-selector.sh
-fi
-#####################################################################################
-if [[ "${SKIP_ALLFILES}" != true ]]; then
-  printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RESET}"
-  if [[ "${EXPERIMENTAL_FILES_SCRIPT}" != true ]]; then
-    source ./scriptdata/step/3.install-files.sh
-  else
-    source ./scriptdata/step/3.install-files.experimental.sh
-  fi
-fi
+./setup install "$@"

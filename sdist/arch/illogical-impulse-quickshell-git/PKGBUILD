@@ -1,0 +1,73 @@
+_commit='00858812f25b748d08b075a0d284093685fa3ffd'
+# Useful links:
+# https://git.outfoxxed.me/quickshell/quickshell/commits/branch/master
+# https://aur.archlinux.org/packages/quickshell-git
+
+_prefix='illogical-impulse'
+conflicts=("quickshell-git")
+
+_pkgname=quickshell
+pkgname="$_prefix-$_pkgname-git"
+pkgver=0.1.0.r1
+pkgrel=1
+pkgdesc="$_pkgname-git which version pinned for $_prefix"
+arch=(x86_64 aarch64)
+url='https://git.outfoxxed.me/quickshell/quickshell'
+options=(!strip)
+license=('LGPL-3.0-only')
+depends=(
+  'qt6-declarative'
+  'qt6-base'
+  'jemalloc'
+  'qt6-svg'
+  'libpipewire'
+  'libxcb'
+  'wayland'
+  'libdrm'
+  'mesa'
+  'google-breakpad'
+)
+makedepends=(
+  'spirv-tools'
+  'qt6-shadertools'
+  'wayland'
+  'wayland-protocols'
+  'cli11'
+  'ninja'
+  'cmake'
+  'git'
+)
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+
+_pkgsrc="$_pkgname"
+source=("$_pkgsrc::git+$url.git#commit=$_commit"
+  quickshell-check.hook)
+sha256sums=('SKIP'
+            '8543e21aeaaa5441b73a679160e7601a957f16c433e8d6bd9257e80bd0e94083')
+
+
+pkgver() {
+  cd "$_pkgsrc"
+  git describe --long --tags --abbrev=7 --exclude='*[a-zA-Z][a-zA-Z]*' \
+    | sed -E 's/^[^0-9]*//;s/([^-]*-g)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "$_pkgname"
+  cmake -GNinja -B build \
+    -DCMAKE_BUILD_TYPE="RelWithDebInfo" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DDISTRIBUTOR="AUR (package: quickshell-git)" \
+    -DDISTRIBUTOR_DEBUGINFO_AVAILABLE=NO \
+    -DINSTALL_QML_PREFIX=lib/qt6/qml
+
+  cmake --build build
+}
+
+package() {
+  install -Dm644 "quickshell-check.hook" -t "$pkgdir/usr/share/libalpm/hooks"
+  cd "$_pkgname"
+  DESTDIR="$pkgdir" cmake --install build
+  install -Dm644 "LICENSE" -t "$pkgdir/usr/share/licenses/$_pkgname"
+}

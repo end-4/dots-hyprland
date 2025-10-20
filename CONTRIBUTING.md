@@ -8,7 +8,7 @@
 
 ## Contributing to i18n
 
-For contributing in translation (i18n) for Quickshell, see also `.config/quickshell/translations/tools`.
+For contributing in translation (i18n) for Quickshell, see also `dots/.config/quickshell/ii/translations/tools`.
 
 ## Dynamic loading
 
@@ -35,14 +35,14 @@ _Might not be necessary depending on what you change, but this is recommended._
 _Most stuff in the shell will work but not everything._
 
 - Install Hyprland and the development version of Quickshell (`yay -S hyprland quickshell-git`).
-- Copy `.config/quickshell` folder to your home directory.
+- Copy `dots/.config/quickshell` folder to your home directory.
 
 ## Extra setup for Quickshell
 - Quickshell-specific LSP setup: Run `touch ~/.config/quickshell/ii/.qmlls.ini` for proper LSP support.
 - Hint for VSCode: Get the official "Qt Qml" extension, go to its settings and change custom exe path to `/usr/bin/qmlls6`.
 
 ## Python
-If your changes involves using python package or script, please use the virtual environment created by uv as described in `scriptdata/uv/README.md`.
+If your changes involves using python package or script, please use the virtual environment created by uv as described in `sdata/uv/README.md`.
 
 # Running
 
