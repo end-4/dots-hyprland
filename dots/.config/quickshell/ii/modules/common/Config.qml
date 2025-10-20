@@ -355,6 +355,8 @@ Singleton {
             property JsonObject search: JsonObject {
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
+                property string imageSearchEngineBaseUrl: "https://lens.google.com/uploadbyurl?url="
+                property string fileUploadApiEndpoint: "https://uguu.se/upload"
                 property list<string> excludedSites: ["quora.com", "facebook.com"]
                 property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
                 property JsonObject prefix: JsonObject {
