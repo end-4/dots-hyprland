@@ -23,6 +23,21 @@ GroupButton {
     baseHeight: root.baseCellHeight
 
     property bool editMode: false
+    enableImplicitWidthAnimation: !editMode
+    enableImplicitHeightAnimation: !editMode
+    Behavior on baseWidth {
+        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+    }
+    Behavior on baseHeight {
+        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+    }
+    opacity: 0
+    Component.onCompleted: {
+        opacity = 1
+    }
+    Behavior on opacity {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     signal openMenu()
 
