@@ -36,8 +36,8 @@ PanelWindow {
     signal dismiss()
     
     property string screenshotDir: Directories.screenshotTemp
-    property string imageSearchEngineBaseUrl: Config.options.search.imageSearchEngineBaseUrl
-    property string fileUploadApiEndpoint: Config.options.search.fileUploadApiEndpoint
+    property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
+    property string fileUploadApiEndpoint: Config.options.search.imageSearch.fileUploadApiEndpoint
     property color overlayColor: "#77111111"
     property color genericContentColor: Qt.alpha(root.overlayColor, 0.9)
     property color genericContentForeground: "#ddffffff"
@@ -424,13 +424,13 @@ PanelWindow {
                         iconSize: Appearance.font.pixelSize.larger
                         text: switch(root.selectionMode) {
                             case RegionSelection.SelectionMode.RectCorners:
-                                return "crop_free"
+                                return "activity_zone"
                                 break;
                             case RegionSelection.SelectionMode.Circle:
                                 return "gesture"
                                 break;
                             default:
-                                return "crop_free"
+                                return "activity_zone"
                         }
                         color: root.genericContentForeground
                     }

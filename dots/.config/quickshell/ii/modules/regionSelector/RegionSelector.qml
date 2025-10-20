@@ -48,7 +48,11 @@ Scope {
 
     function search() {
         root.action = RegionSelection.SnipAction.Search
-        root.selectionMode = RegionSelection.SelectionMode.Circle
+        if (Config.options.search.imageSearch.useCircleSelection) {
+            root.selectionMode = RegionSelection.SelectionMode.Circle
+        } else {
+            root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        }
         GlobalStates.regionSelectorOpen = true
     }
 

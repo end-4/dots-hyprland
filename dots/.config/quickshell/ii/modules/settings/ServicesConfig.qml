@@ -147,5 +147,19 @@ ContentPage {
                 }
             }
         }
+        ContentSubsection {
+            title: Translation.tr("Google Lens")
+            
+            ConfigSelectionArray {
+                currentValue: Config.options.search.imageSearch.useCircleSelection ? "circle" : "rectangles"
+                onSelected: newValue => {
+                    Config.options.search.imageSearch.useCircleSelection = (newValue === "circle");
+                }
+                options: [
+                    { icon: "activity_zone", value: "rectangles", displayName: Translation.tr("Rectangular selection") },
+                    { icon: "gesture", value: "circle", displayName: Translation.tr("Circle to Search") }
+                ]
+            }
+        }
     }
 }
