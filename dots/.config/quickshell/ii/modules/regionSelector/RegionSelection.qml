@@ -48,7 +48,6 @@ PanelWindow {
     property color imageBorderColor: "#ddf1d1ff"
     property color imageFillColor: "#33f1d1ff"
     property color onBorderColor: "#ff000000"
-    property real standardRounding: 4
     readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
         // Sort floating=true windows before others
         if (a.floating === b.floating) return 0;
@@ -357,13 +356,13 @@ PanelWindow {
                 root.snip();
             }
             onPositionChanged: (mouse) => {
+                root.updateTargetedRegion(mouse.x, mouse.y);
                 if (!root.dragging) return;
                 root.draggingX = mouse.x;
                 root.draggingY = mouse.y;
                 root.dragDiffX = mouse.x - root.dragStartX;
                 root.dragDiffY = mouse.y - root.dragStartY;
                 root.points.push({ x: mouse.x, y: mouse.y });
-                root.updateTargetedRegion(mouse.x, mouse.y);
             }
             
             Loader {
@@ -478,6 +477,8 @@ PanelWindow {
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
+                    colBackground: root.genericContentColor
+                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : 1
                     visible: opacity > 0
                     Behavior on opacity {
@@ -510,6 +511,8 @@ PanelWindow {
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
+                    colBackground: root.genericContentColor
+                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : 1
                     visible: opacity > 0
                     Behavior on opacity {
@@ -542,6 +545,8 @@ PanelWindow {
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
+                    colBackground: root.genericContentColor
+                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : 1
                     visible: opacity > 0
                     Behavior on opacity {

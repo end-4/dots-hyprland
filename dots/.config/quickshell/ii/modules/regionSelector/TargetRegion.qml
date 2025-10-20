@@ -16,6 +16,8 @@ import Quickshell.Hyprland
 
 Rectangle {
     id: regionRect
+    required property color colBackground
+    required property color colForeground
     property bool showIcon: false
     property bool targeted: false
     property color borderColor
@@ -26,14 +28,14 @@ Rectangle {
     color: fillColor
     border.color: borderColor
     border.width: targeted ? 3 : 1
-    radius: root.standardRounding
+    radius: 4
 
     Rectangle {
         id: regionLabelBackground
         property real verticalPadding: 5
         property real horizontalPadding: 10
         radius: 10
-        color: root.genericContentColor
+        color: regionRect.colBackground
         border.width: 1
         border.color: Appearance.m3colors.m3outlineVariant
         anchors {
@@ -62,7 +64,7 @@ Rectangle {
             StyledText {
                 id: regionText
                 text: regionRect.text
-                color: root.genericContentForeground
+                color: regionRect.colForeground
             }
         }
     }
