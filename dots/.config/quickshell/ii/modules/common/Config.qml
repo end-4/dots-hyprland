@@ -219,6 +219,7 @@ Singleton {
                     property bool showItemId: false
                     property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
                     property list<string> pinnedItems: [ ]
+                    property boot smartTray: true // Filter passive tray icons or not
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
