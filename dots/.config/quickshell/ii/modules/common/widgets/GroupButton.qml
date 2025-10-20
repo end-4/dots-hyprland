@@ -22,6 +22,8 @@ Button {
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
+    property bool enableImplicitWidthAnimation: true
+    property bool enableImplicitHeightAnimation: true
     property real clickedWidth: baseWidth + (isAtSide ? 10 : 20)
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
@@ -61,10 +63,12 @@ Button {
     }
 
     Behavior on implicitWidth {
+        enabled: root.enableImplicitWidthAnimation
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
     }
 
     Behavior on implicitHeight {
+        enabled: root.enableImplicitHeightAnimation
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
     }
 
