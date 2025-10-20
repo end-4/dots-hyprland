@@ -80,7 +80,7 @@ GroupButton {
             MaterialSymbol {
                 anchors.centerIn: parent
                 fill: root.toggled ? 1 : 0
-                iconSize: Appearance.font.pixelSize.huge
+                iconSize: root.expandedSize ? 22 : 24
                 color: root.colIcon
                 text: root.buttonIcon
             }
