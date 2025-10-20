@@ -11,20 +11,14 @@ import "./cookieClock"
 BackgroundWidget {
     id: widget
 
-    x: Config.options.background.clock.x
-    y: Config.options.background.clock.y
+    x: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
+    y: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
 
     property bool screenLocked: GlobalStates.screenLocked
     scaleMultiplier: Config.options.background.clock.scale
     
     onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
     onPositionChanged: savePosition(newX, newY)
-
-    Component.onCompleted: {
-        if (GlobalStates.screenLocked){
-            centerOnScreen() // for first boot (with lock screen 'Launch at start' option enabled)
-        }
-    }
 
     function centerOnScreen() {
         // for lock screen
