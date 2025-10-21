@@ -27,7 +27,7 @@ jobs:
 
           echo "Checking issue #${ISSUE_NUMBER} for the target checked checkbox..."
           # Look for the exact label text in a checked markdown checkbox (case-insensitive).
-          if printf '%s' "$BODY" | grep -Fiq "I've ticked the checkboxes without reading their contents"; then
+          if printf '%s' "$BODY" | grep -Fiq "- [x] I've ticked the checkboxes without reading their contents"; then
             echo "Target checkbox is checked. Proceeding to comment and close the issue."
 
             # --- Get issue node id via GraphQL (logged for debugging) ---
