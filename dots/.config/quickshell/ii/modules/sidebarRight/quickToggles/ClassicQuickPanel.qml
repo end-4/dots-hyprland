@@ -5,7 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Bluetooth
 
-import "./classicStyle/"
+import qs.modules.sidebarRight.quickToggles.classicStyle
 
 AbstractQuickPanel {
     id: root

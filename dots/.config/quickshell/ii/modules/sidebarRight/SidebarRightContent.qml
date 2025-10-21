@@ -9,11 +9,11 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
-import "./quickToggles/"
-import "./quickToggles/classicStyle/"
-import "./wifiNetworks/"
-import "./bluetoothDevices/"
-import "./volumeMixer/"
+import qs.modules.sidebarRight.quickToggles
+import qs.modules.sidebarRight.quickToggles.classicStyle
+import qs.modules.sidebarRight.wifiNetworks
+import qs.modules.sidebarRight.bluetoothDevices
+import qs.modules.sidebarRight.volumeMixer
 
 Item {
     id: root

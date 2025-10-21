@@ -2,7 +2,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "./translator/"
+import qs.modules.sidebarLeft.translator
 import QtQuick
 import QtQuick.Layouts
 import Quickshell

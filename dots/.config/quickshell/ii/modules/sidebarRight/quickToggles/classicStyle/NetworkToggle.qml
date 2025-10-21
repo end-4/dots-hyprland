@@ -2,7 +2,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "../"
+import qs.modules.sidebarRight.quickToggles
 import qs
 import QtQuick
 import Quickshell

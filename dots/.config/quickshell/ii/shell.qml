@@ -7,30 +7,30 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 
-import "./modules/common/"
-import "./modules/background/"
-import "./modules/bar/"
-import "./modules/cheatsheet/"
-import "./modules/crosshair/"
-import "./modules/dock/"
-import "./modules/lock/"
-import "./modules/mediaControls/"
-import "./modules/notificationPopup/"
-import "./modules/onScreenDisplay/"
-import "./modules/onScreenKeyboard/"
-import "./modules/overview/"
-import "./modules/regionSelector/"
-import "./modules/screenCorners/"
-import "./modules/sessionScreen/"
-import "./modules/sidebarLeft/"
-import "./modules/sidebarRight/"
-import "./modules/verticalBar/"
-import "./modules/wallpaperSelector/"
+import qs.modules.common
+import qs.modules.background
+import qs.modules.bar
+import qs.modules.cheatsheet
+import qs.modules.crosshair
+import qs.modules.dock
+import qs.modules.lock
+import qs.modules.mediaControls
+import qs.modules.notificationPopup
+import qs.modules.onScreenDisplay
+import qs.modules.onScreenKeyboard
+import qs.modules.overview
+import qs.modules.regionSelector
+import qs.modules.screenCorners
+import qs.modules.sessionScreen
+import qs.modules.sidebarLeft
+import qs.modules.sidebarRight
+import qs.modules.verticalBar
+import qs.modules.wallpaperSelector
 
 import QtQuick
 import QtQuick.Window
 import Quickshell
-import "./services/"
+import qs.services
 
 ShellRoot {
     // Enable/disable modules here. False = not loaded at all, so rest assured
