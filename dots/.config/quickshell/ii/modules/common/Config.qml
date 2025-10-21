@@ -10,6 +10,7 @@ Singleton {
     property alias options: configOptionsJsonAdapter
     property bool ready: false
     property int readWriteDelay: 50 // milliseconds
+    property bool blockWrites: false
 
     function setNestedValue(nestedKey, value) {
         let keys = nestedKey.split(".");
@@ -63,6 +64,7 @@ Singleton {
         id: configFileView
         path: root.filePath
         watchChanges: true
+        blockWrites: root.blockWrites
         onFileChanged: fileReloadTimer.restart()
         onAdapterUpdated: fileWriteTimer.restart()
         onLoaded: root.ready = true
