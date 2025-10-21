@@ -1,6 +1,6 @@
 import qs.services
 import QtQuick
-import "../"
+import qs.modules.onScreenDisplay
 
 OsdValueIndicator {
     id: osdValues

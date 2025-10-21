@@ -6,7 +6,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "./network"
+import qs.services.network
 
 /**
  * Network service with nmcli.

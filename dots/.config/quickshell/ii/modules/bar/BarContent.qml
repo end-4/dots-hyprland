@@ -1,4 +1,4 @@
-import "./weather"
+import qs.modules.bar.weather
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
