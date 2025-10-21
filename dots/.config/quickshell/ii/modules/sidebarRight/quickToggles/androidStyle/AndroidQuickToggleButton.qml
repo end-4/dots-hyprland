@@ -23,8 +23,8 @@ GroupButton {
     baseHeight: root.baseCellHeight
 
     property bool editMode: false
-    enableImplicitWidthAnimation: !editMode
-    enableImplicitHeightAnimation: !editMode
+    enableImplicitWidthAnimation: !editMode && root.mouseArea.containsMouse
+    enableImplicitHeightAnimation: !editMode && root.mouseArea.containsMouse
     Behavior on baseWidth {
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
