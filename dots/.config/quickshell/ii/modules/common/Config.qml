@@ -356,7 +356,7 @@ Singleton {
                     property bool layers: false
                     property bool content: true
                     property bool showLabel: false
-                    property real opacity: 0.6
+                    property real opacity: 0.3
                 }
                 property JsonObject circle: JsonObject {
                     property int strokeWidth: 6
