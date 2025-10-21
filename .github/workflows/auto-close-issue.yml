@@ -11,7 +11,7 @@ jobs:
   detect-and-close:
     runs-on: ubuntu-latest
     steps:
-      - name: Detect checked "ticked without reading" checkbox and close
+      - name: Detect checked "ticked without reading" checkbox, comment, close and lock
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
@@ -26,11 +26,11 @@ jobs:
           BODY=$(printf '%s' "$ISSUE_BODY" | sed -E 's/^"(.*)"$/\1/' | sed 's/\\"/"/g' | sed 's/\\n/\n/g')
 
           echo "Checking issue #${ISSUE_NUMBER} for the target checked checkbox..."
-          # Look for the exact label text in a checked markdown checkbox (case-insensitive).
+          # Use -- to stop option parsing so the leading - in the pattern isn't treated as an option
           if printf '%s' "$BODY" | grep -Fiq -- "- [x] I've ticked the checkboxes without reading their contents"; then
-            echo "Target checkbox is checked. Proceeding to comment and close the issue."
+            echo "Target checkbox is checked. Proceeding to comment, close and lock the issue."
 
-            # --- Get issue node id via GraphQL (logged for debugging) ---
+            # --- Get issue node id via GraphQL ---
             QUERY='query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) { issue(number: $number) { id } } }'
             GET_ID_PAYLOAD=$(jq -n --arg q "$QUERY" --arg owner "$OWNER" --arg name "$REPO" --argjson number "$ISSUE_NUMBER" '{query:$q, variables:{owner:$owner, name:$name, number:$number}}')
 
@@ -49,7 +49,6 @@ jobs:
 
             # --- Post a comment to the issue ---
             COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3). I will close this issue now (stateReason=NOT_PLANNED). If you update the issue with the required information, we can re-evaluate. Thank you!"
-
             MUT_ADD_COMMENT='mutation($id: ID!, $body: String!) { addComment(input: {subjectId: $id, body: $body}) { clientMutationId } }'
             ADD_COMMENT_PAYLOAD=$(jq -n --arg q "$MUT_ADD_COMMENT" --arg id "$ISSUE_ID" --arg body "$COMMENT_BODY" '{query:$q, variables:{id:$id, body:$body}}')
 
@@ -78,12 +77,15 @@ jobs:
             UPDATED_STATE=$(printf '%s' "$RES_UPDATE" | jq -r '.data.updateIssue.issue.state // empty')
             UPDATED_REASON=$(printf '%s' "$RES_UPDATE" | jq -r '.data.updateIssue.issue.stateReason // empty')
 
+            CLOSED_OK=false
+
             if [ -n "$ERR_UPDATE" ]; then
               echo "GraphQL updateIssue returned errors: $ERR_UPDATE"
             fi
 
-            if [ "$UPDATED_STATE" = "CLOSED" ] && [ -n "$UPDATED_REASON" ]; then
+            if [ "$UPDATED_STATE" = "CLOSED" ]; then
               echo "Issue closed via GraphQL: state=$UPDATED_STATE, stateReason=$UPDATED_REASON"
+              CLOSED_OK=true
             else
               echo "GraphQL update did not confirm the issue is closed. Falling back to REST API PATCH to ensure the issue is closed."
 
@@ -97,7 +99,6 @@ jobs:
                 -d "$REST_PAYLOAD" \
                 "https://api.github.com/repos/$OWNER/$REPO/issues/$ISSUE_NUMBER")
 
-              # separate body and status
               HTTP_STATUS=$(printf '%s' "$RES_REST" | tail -n1)
               RESP_BODY=$(printf '%s' "$RES_REST" | sed '$d')
 
@@ -109,10 +110,56 @@ jobs:
                 CLOSED_STATE=$(printf '%s' "$RESP_BODY" | jq -r '.state // empty')
                 CLOSED_REASON=$(printf '%s' "$RESP_BODY" | jq -r '.state_reason // empty')
                 echo "Issue closed via REST: state=$CLOSED_STATE, state_reason=$CLOSED_REASON"
+                if [ "$CLOSED_STATE" = "closed" ]; then
+                  CLOSED_OK=true
+                fi
               else
                 echo "REST fallback failed to close the issue. See REST response above."
                 exit 1
               fi
+            fi
+
+            # --- Attempt to lock the conversation (GraphQL first, then REST fallback) ---
+            if [ "$CLOSED_OK" = "true" ]; then
+              echo "Attempting to lock the conversation via GraphQL with reason NO_REASON..."
+
+              MUT_LOCK='mutation($id: ID!, $reason: LockReason) { lockLockable(input:{lockableId:$id, lockReason:$reason}) { clientMutationId } }'
+              LOCK_PAYLOAD=$(jq -n --arg q "$MUT_LOCK" --arg id "$ISSUE_ID" --arg reason "NO_REASON" '{query:$q, variables:{id:$id, reason:$reason}}')
+
+              RES_LOCK=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$LOCK_PAYLOAD" https://api.github.com/graphql)
+              echo "GraphQL response (lock):"
+              printf '%s\n' "$RES_LOCK"
+
+              LOCK_ERR=$(printf '%s' "$RES_LOCK" | jq -r '.errors[]?.message // empty')
+
+              if [ -n "$LOCK_ERR" ]; then
+                echo "GraphQL lockLockable returned errors: $LOCK_ERR"
+                echo "Falling back to REST API to lock the conversation (no explicit reason)."
+
+                # REST fallback to lock the issue (no lock_reason to indicate "no reason")
+                RES_REST_LOCK=$(curl -s -w "\n%{http_code}" -X PUT \
+                  -H "Authorization: Bearer $GITHUB_TOKEN" \
+                  -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/repos/$OWNER/$REPO/issues/$ISSUE_NUMBER/lock" -d '{}')
+
+                HTTP_STATUS_LOCK=$(printf '%s' "$RES_REST_LOCK" | tail -n1)
+                RESP_BODY_LOCK=$(printf '%s' "$RES_REST_LOCK" | sed '$d')
+
+                echo "REST lock response body:"
+                printf '%s\n' "$RESP_BODY_LOCK"
+                echo "REST lock HTTP status: $HTTP_STATUS_LOCK"
+
+                if [ "$HTTP_STATUS_LOCK" -ge 200 ] && [ "$HTTP_STATUS_LOCK" -lt 300 ]; then
+                  echo "Issue conversation locked via REST (no explicit reason)."
+                else
+                  echo "REST fallback failed to lock the conversation. See REST response above."
+                  exit 1
+                fi
+              else
+                echo "Lock via GraphQL succeeded (or returned no errors)."
+              fi
+            else
+              echo "Issue was not successfully closed; skipping lock."
             fi
 
           else
