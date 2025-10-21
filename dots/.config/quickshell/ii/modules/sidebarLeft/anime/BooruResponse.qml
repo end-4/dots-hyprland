@@ -3,7 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "../"
+import qs.modules.sidebarLeft
 import qs.services
 import QtQuick
 import QtQuick.Controls

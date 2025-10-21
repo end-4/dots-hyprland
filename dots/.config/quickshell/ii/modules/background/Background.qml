@@ -13,7 +13,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-import "./cookieClock"
+import qs.modules.background.cookieClock
 
 Variants {
     id: root
