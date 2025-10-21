@@ -26,53 +26,95 @@ jobs:
           BODY=$(printf '%s' "$ISSUE_BODY" | sed -E 's/^"(.*)"$/\1/' | sed 's/\\"/"/g' | sed 's/\\n/\n/g')
 
           echo "Checking issue #${ISSUE_NUMBER} for the target checked checkbox..."
-          # Match a checked markdown checkbox followed by the exact label text (case-insensitive).
-          # Example matching line: "- [x] I've ticked the checkboxes without reading their contents"
-          if printf '%s' "$BODY" | grep -Eiq '\[x\].*I'"'"'ve ticked the checkboxes without reading their contents'; then
+          # Look for the exact label text in a checked markdown checkbox (case-insensitive).
+          if printf '%s' "$BODY" | grep -Fiq "I've ticked the checkboxes without reading their contents"; then
             echo "Target checkbox is checked. Proceeding to comment and close the issue."
 
-            # GraphQL query (single-line string to avoid YAML/heredoc quoting issues)
+            # --- Get issue node id via GraphQL (logged for debugging) ---
             QUERY='query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) { issue(number: $number) { id } } }'
             GET_ID_PAYLOAD=$(jq -n --arg q "$QUERY" --arg owner "$OWNER" --arg name "$REPO" --argjson number "$ISSUE_NUMBER" '{query:$q, variables:{owner:$owner, name:$name, number:$number}}')
 
+            echo "GraphQL: fetching issue node id..."
             RES=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$GET_ID_PAYLOAD" https://api.github.com/graphql)
+            echo "GraphQL response (get id):"
+            printf '%s\n' "$RES"
+
             ISSUE_ID=$(printf '%s' "$RES" | jq -r '.data.repository.issue.id // empty')
 
             if [ -z "$ISSUE_ID" ]; then
-              echo "Failed to get issue id from GraphQL response:"
-              printf '%s\n' "$RES"
+              echo "Failed to get issue id from GraphQL response. Aborting."
               exit 1
             fi
             echo "Issue node id: $ISSUE_ID"
 
-            # Prepare the comment body (English) and mention the issue author
+            # --- Post a comment to the issue ---
             COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3). I will close this issue now (stateReason=NOT_PLANNED). If you update the issue with the required information, we can re-evaluate. Thank you!"
 
-            # addComment mutation
             MUT_ADD_COMMENT='mutation($id: ID!, $body: String!) { addComment(input: {subjectId: $id, body: $body}) { clientMutationId } }'
             ADD_COMMENT_PAYLOAD=$(jq -n --arg q "$MUT_ADD_COMMENT" --arg id "$ISSUE_ID" --arg body "$COMMENT_BODY" '{query:$q, variables:{id:$id, body:$body}}')
 
+            echo "GraphQL: adding comment..."
             RES_COMMENT=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$ADD_COMMENT_PAYLOAD" https://api.github.com/graphql)
+            echo "GraphQL response (add comment):"
+            printf '%s\n' "$RES_COMMENT"
+
             ERR_COMMENT=$(printf '%s' "$RES_COMMENT" | jq -r '.errors[]?.message // empty')
             if [ -n "$ERR_COMMENT" ]; then
               echo "addComment error: $ERR_COMMENT"
-              printf '%s\n' "$RES_COMMENT"
               exit 1
             fi
             echo "Comment posted."
 
-            # updateIssue mutation to close with NOT_PLANNED
-            MUT_UPDATE_ISSUE='mutation($id: ID!) { updateIssue(input: {id: $id, state: CLOSED, stateReason: NOT_PLANNED}) { issue { number } } }'
+            # --- Attempt to close via GraphQL updateIssue ---
+            MUT_UPDATE_ISSUE='mutation($id: ID!) { updateIssue(input: {id: $id, state: CLOSED, stateReason: NOT_PLANNED}) { issue { number, state, stateReason } } }'
             UPDATE_PAYLOAD=$(jq -n --arg q "$MUT_UPDATE_ISSUE" --arg id "$ISSUE_ID" '{query:$q, variables:{id:$id}}')
 
+            echo "GraphQL: updating issue (close with NOT_PLANNED)..."
             RES_UPDATE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$UPDATE_PAYLOAD" https://api.github.com/graphql)
+            echo "GraphQL response (update issue):"
+            printf '%s\n' "$RES_UPDATE"
+
             ERR_UPDATE=$(printf '%s' "$RES_UPDATE" | jq -r '.errors[]?.message // empty')
+            UPDATED_STATE=$(printf '%s' "$RES_UPDATE" | jq -r '.data.updateIssue.issue.state // empty')
+            UPDATED_REASON=$(printf '%s' "$RES_UPDATE" | jq -r '.data.updateIssue.issue.stateReason // empty')
+
             if [ -n "$ERR_UPDATE" ]; then
-              echo "updateIssue error: $ERR_UPDATE"
-              printf '%s\n' "$RES_UPDATE"
-              exit 1
+              echo "GraphQL updateIssue returned errors: $ERR_UPDATE"
             fi
-            echo "Issue closed with reason NOT_PLANNED."
+
+            if [ "$UPDATED_STATE" = "CLOSED" ] && [ -n "$UPDATED_REASON" ]; then
+              echo "Issue closed via GraphQL: state=$UPDATED_STATE, stateReason=$UPDATED_REASON"
+            else
+              echo "GraphQL update did not confirm the issue is closed. Falling back to REST API PATCH to ensure the issue is closed."
+
+              # REST fallback to close the issue with state_reason "not_planned"
+              REST_PAYLOAD=$(jq -n --arg state "closed" --arg sr "not_planned" '{state:$state, state_reason:$sr}')
+              echo "REST: PATCH /repos/$OWNER/$REPO/issues/$ISSUE_NUMBER payload: $REST_PAYLOAD"
+              RES_REST=$(curl -s -w "\n%{http_code}" -X PATCH \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "Content-Type: application/json" \
+                -d "$REST_PAYLOAD" \
+                "https://api.github.com/repos/$OWNER/$REPO/issues/$ISSUE_NUMBER")
+
+              # separate body and status
+              HTTP_STATUS=$(printf '%s' "$RES_REST" | tail -n1)
+              RESP_BODY=$(printf '%s' "$RES_REST" | sed '$d')
+
+              echo "REST response body:"
+              printf '%s\n' "$RESP_BODY"
+              echo "REST HTTP status: $HTTP_STATUS"
+
+              if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+                CLOSED_STATE=$(printf '%s' "$RESP_BODY" | jq -r '.state // empty')
+                CLOSED_REASON=$(printf '%s' "$RESP_BODY" | jq -r '.state_reason // empty')
+                echo "Issue closed via REST: state=$CLOSED_STATE, state_reason=$CLOSED_REASON"
+              else
+                echo "REST fallback failed to close the issue. See REST response above."
+                exit 1
+              fi
+            fi
+
           else
             echo "Checkbox not present/checked. Nothing to do."
           fi
