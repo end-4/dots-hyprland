@@ -321,12 +321,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
 
             ScrollEdgeFade {
+                z: 1
                 target: messageListView
                 vertical: true
             }
 
             StyledListView { // Message list
                 id: messageListView
+                z: 0
                 anchors.fill: parent
                 spacing: 10
                 popin: false
@@ -362,10 +364,16 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
 
             PagePlaceholder {
+                z: 2
                 shown: Ai.messageIDs.length === 0
                 icon: "neurology"
                 title: Translation.tr("Large language models")
                 description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
+            }
+
+            ScrollToBottomButton {
+                z: 3
+                target: messageListView
             }
         }
 

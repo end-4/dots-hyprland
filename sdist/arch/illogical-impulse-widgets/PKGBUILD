@@ -1,19 +1,18 @@
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=3
+pkgrel=4
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	fuzzel
-	glib2 # for `gsettings` it seems?
-	imagemagick
-	hypridle
-    hyprutils
-	hyprlock
-	hyprpicker
-	nm-connection-editor
-	quickshell-git
-	translate-shell
-	wlogout
+  fuzzel
+  glib2 # for `gsettings` it seems?
+  imagemagick
+  hypridle
+  hyprutils
+  hyprlock
+  hyprpicker
+  nm-connection-editor
+  translate-shell
+  wlogout
 )

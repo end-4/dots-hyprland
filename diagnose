@@ -17,9 +17,9 @@ case $(whoami) in
 esac
 
 
-x() { ii_exec "$@" 2>&1 | tee -a $output_file ; }
-e() { ii_box "$@" | tee -a $output_file ; }
-ii_box() {
+x() { _exec "$@" 2>&1 | tee -a $output_file ; }
+e() { _box "$@" | tee -a $output_file ; }
+_box() {
   length=$(echo "$1" | wc -L);total_width=$((length + 2))
   #line=$(printf "═%.0s" $(seq 1 $total_width))
   #border_up="╔${line}╗";border_down="╚${line}╝"
@@ -31,7 +31,7 @@ ii_box() {
   echo "$border_vertical $1 $border_vertical"
   echo "$border_down"
 }
-ii_exec() {
+_exec() {
   printf "\n[===diagnose===] $*\n"
   "$@"
   err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
@@ -54,6 +54,9 @@ ii_check_venv() {
   source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   which python
   deactivate
+}
+ii_check_quickshell_version() {
+  pacman -Q | grep -E 'quickshell|qt6-base'
 }
 
 e "Checking git repo info"
@@ -84,7 +87,7 @@ commands+=(ags agsv1)
 
 e "Checking versions"
 x Hyprland --version
-x pacman -Q | grep -E 'quickshell|qt6-base'
+x ii_check_quickshell_version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
