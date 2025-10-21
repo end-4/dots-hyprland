@@ -234,26 +234,26 @@ MouseArea {
             color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
         }
 
-        ActionToolbarIconButton {
+        IconToolbarButton {
             id: sleepButton
             onClicked: Session.suspend()
             text: "dark_mode"
         }
 
-        PasswordGuardedActionToolbarIconButton {
+        PasswordGuardedIconToolbarButton {
             id: powerButton
             text: "power_settings_new"
             targetAction: LockContext.ActionEnum.Poweroff
         }
 
-        PasswordGuardedActionToolbarIconButton {
+        PasswordGuardedIconToolbarButton {
             id: rebootButton
             text: "restart_alt"
             targetAction: LockContext.ActionEnum.Reboot
         }
     }
 
-    component PasswordGuardedActionToolbarIconButton: ActionToolbarIconButton {
+    component PasswordGuardedIconToolbarButton: IconToolbarButton {
         id: guardedBtn
         required property var targetAction
 
@@ -270,24 +270,6 @@ MouseArea {
                 root.context.targetAction = guardedBtn.targetAction;
                 root.context.shouldReFocus();
             }
-        }
-    }
-
-    component ActionToolbarIconButton: ToolbarButton {
-        id: iconBtn
-        implicitWidth: height
-
-        colBackgroundToggled: Appearance.colors.colSecondaryContainer
-        colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-        colRippleToggled: Appearance.colors.colSecondaryContainerActive
-
-        contentItem: MaterialSymbol {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            iconSize: 24
-            text: iconBtn.text
-            color: iconBtn.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnSurfaceVariant
         }
     }
 
