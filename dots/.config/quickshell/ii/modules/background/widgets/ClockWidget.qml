@@ -11,12 +11,12 @@ import "./cookieClock"
 BackgroundWidget {
     id: widget
 
+    property bool screenLocked: GlobalStates.screenLocked
+    scaleMultiplier: Config.options.background.clock.scale
+
     x: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
     y: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
 
-    property bool screenLocked: GlobalStates.screenLocked
-    scaleMultiplier: Config.options.background.clock.scale
-    
     onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
     onPositionChanged: savePosition(newX, newY)
 
@@ -44,7 +44,6 @@ BackgroundWidget {
             }
             CookieClock {
                 id: cookieClock
-                Component.onCompleted: updateImplicitSize()
             }
             CookieQuote {
                 visible: Config.options.background.showQuote
@@ -69,8 +68,7 @@ BackgroundWidget {
             ClockText { font.pixelSize: 90; text: DateTime.time }
             ClockText { Layout.topMargin: -10; text: DateTime.date }
             ClockText {
-                text: Config.options.background.quote
-                visible: Config.options.background.showQuote
+                text: Config.options.background.showQuote ? GlobalStates.screenLocked ? "Locked" : Config.options.background.quote : ""
                 font {
                     family: Appearance.font.family.main
                     pixelSize: Appearance.font.pixelSize.normal

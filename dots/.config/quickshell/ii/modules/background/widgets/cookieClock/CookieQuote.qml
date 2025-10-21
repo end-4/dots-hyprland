@@ -40,7 +40,7 @@ Item {
             spacing: 4
             MaterialSymbol {
                 id: quoteIcon
-                anchors.top: parent.top
+                anchors.verticalCenter: parent.verticalCenter
                 iconSize: Appearance.font.pixelSize.huge
                 text: GlobalStates.screenLocked ? "lock" : "format_quote"
                 color: Appearance.colors.colOnSecondaryContainer
@@ -48,8 +48,7 @@ Item {
             StyledText {
                 id: quoteStyledText
                 horizontalAlignment: Text.AlignLeft
-                anchors.top: parent.top
-                anchors.topMargin: 2
+                anchors.verticalCenter: parent.verticalCenter
                 text: GlobalStates.screenLocked ? "Locked" : Config.options.background.quote
                 color: Appearance.colors.colOnSecondaryContainer
                 font {
