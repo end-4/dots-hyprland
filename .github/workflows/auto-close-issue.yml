@@ -1,6 +1,6 @@
 on:
   issues:
-    types: [edited]
+    types: [opened]
 
 name: Close issues when the "ticked without reading" checkbox is checked
 
