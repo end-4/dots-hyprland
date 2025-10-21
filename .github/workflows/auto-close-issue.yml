@@ -1,6 +1,6 @@
 on:
   issues:
-    types: [opened, edited]
+    types: [edited]
 
 name: Close issues when the "ticked without reading" checkbox is checked
 
@@ -9,10 +9,9 @@ permissions:
 
 jobs:
   detect-and-close:
-    name: Detect checkbox and close
     runs-on: ubuntu-latest
     steps:
-      - name: Check for the "ticked without reading" checkbox and close if present
+      - name: Detect checked "ticked without reading" checkbox and close
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
@@ -29,21 +28,12 @@ jobs:
           echo "Checking issue #${ISSUE_NUMBER} for the target checked checkbox..."
           # Match a checked markdown checkbox followed by the exact label text (case-insensitive).
           # Example matching line: "- [x] I've ticked the checkboxes without reading their contents"
-          if printf '%s' "$BODY" | grep -Eiq '\[x\].*I('"'"'|`)?ve ticked the checkboxes without reading their contents'; then
+          if printf '%s' "$BODY" | grep -Eiq '\[x\].*I'"'"'ve ticked the checkboxes without reading their contents'; then
             echo "Target checkbox is checked. Proceeding to comment and close the issue."
 
-            # GraphQL: get the issue node id
-            read -r -d '' QUERY_GET_ID <<'GRAPHQL'
-query($owner: String!, $name: String!, $number: Int!) {
-  repository(owner: $owner, name: $name) {
-    issue(number: $number) {
-      id
-    }
-  }
-}
-GRAPHQL
-
-            GET_ID_PAYLOAD=$(jq -n --arg q "$QUERY_GET_ID" --arg owner "$OWNER" --arg name "$REPO" --argjson number "$ISSUE_NUMBER" '{query:$q, variables:{owner:$owner, name:$name, number:$number}}')
+            # GraphQL query (single-line string to avoid YAML/heredoc quoting issues)
+            QUERY='query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) { issue(number: $number) { id } } }'
+            GET_ID_PAYLOAD=$(jq -n --arg q "$QUERY" --arg owner "$OWNER" --arg name "$REPO" --argjson number "$ISSUE_NUMBER" '{query:$q, variables:{owner:$owner, name:$name, number:$number}}')
 
             RES=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$GET_ID_PAYLOAD" https://api.github.com/graphql)
             ISSUE_ID=$(printf '%s' "$RES" | jq -r '.data.repository.issue.id // empty')
@@ -56,17 +46,10 @@ GRAPHQL
             echo "Issue node id: $ISSUE_ID"
 
             # Prepare the comment body (English) and mention the issue author
-            COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3) and then reopen or resubmit the issue. I will close this issue now (stateReason=NOT_PLANNED). If you update the issue with the required information, we can re-evaluate. Thank you!"
+            COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3). I will close this issue now (stateReason=NOT_PLANNED). If you update the issue with the required information, we can re-evaluate. Thank you!"
 
             # addComment mutation
-            read -r -d '' MUT_ADD_COMMENT <<'GRAPHQL'
-mutation($id: ID!, $body: String!) {
-  addComment(input: {subjectId: $id, body: $body}) {
-    clientMutationId
-  }
-}
-GRAPHQL
-
+            MUT_ADD_COMMENT='mutation($id: ID!, $body: String!) { addComment(input: {subjectId: $id, body: $body}) { clientMutationId } }'
             ADD_COMMENT_PAYLOAD=$(jq -n --arg q "$MUT_ADD_COMMENT" --arg id "$ISSUE_ID" --arg body "$COMMENT_BODY" '{query:$q, variables:{id:$id, body:$body}}')
 
             RES_COMMENT=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$ADD_COMMENT_PAYLOAD" https://api.github.com/graphql)
@@ -79,16 +62,7 @@ GRAPHQL
             echo "Comment posted."
 
             # updateIssue mutation to close with NOT_PLANNED
-            read -r -d '' MUT_UPDATE_ISSUE <<'GRAPHQL'
-mutation($id: ID!) {
-  updateIssue(input: {id: $id, state: CLOSED, stateReason: NOT_PLANNED}) {
-    issue {
-      number
-    }
-  }
-}
-GRAPHQL
-
+            MUT_UPDATE_ISSUE='mutation($id: ID!) { updateIssue(input: {id: $id, state: CLOSED, stateReason: NOT_PLANNED}) { issue { number } } }'
             UPDATE_PAYLOAD=$(jq -n --arg q "$MUT_UPDATE_ISSUE" --arg id "$ISSUE_ID" '{query:$q, variables:{id:$id}}')
 
             RES_UPDATE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$UPDATE_PAYLOAD" https://api.github.com/graphql)
