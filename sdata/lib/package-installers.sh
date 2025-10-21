@@ -1,6 +1,5 @@
 # This script depends on `functions.sh' .
-# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
-# NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
+# This script is not for direct execution, instead it should be sourced by other script. It does not need execution permission or shebang.
 
 # shellcheck shell=bash
 
@@ -105,5 +104,5 @@ install-python-packages(){
   x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   x uv pip install -r sdata/uv/requirements.txt
-  x deactivate # We don't need the virtual environment anymore
+  x deactivate
 }

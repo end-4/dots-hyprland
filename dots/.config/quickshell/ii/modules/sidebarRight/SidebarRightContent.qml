@@ -13,14 +13,17 @@ import "./quickToggles/"
 import "./quickToggles/classicStyle/"
 import "./wifiNetworks/"
 import "./bluetoothDevices/"
+import "./volumeMixer/"
 
 Item {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 12
+    property int sidebarPadding: 10
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showWifiDialog: false
     property bool showBluetoothDialog: false
+    property bool showAudioOutputDialog: false
+    property bool showAudioInputDialog: false
     property bool editMode: false
 
     Connections {
@@ -29,6 +32,8 @@ Item {
             if (!GlobalStates.sidebarRightOpen) {
                 root.showWifiDialog = false;
                 root.showBluetoothDialog = false;
+                root.showAudioOutputDialog = false;
+                root.showAudioInputDialog = false;
             }
         }
     }
@@ -57,7 +62,8 @@ Item {
 
             SystemButtonRow {
                 Layout.fillHeight: false
-                Layout.margins: 10
+                Layout.fillWidth: true
+                // Layout.margins: 10
                 Layout.topMargin: 5
                 Layout.bottomMargin: 0
             }
@@ -102,53 +108,71 @@ Item {
         }
     }
 
-    onShowWifiDialogChanged: if (showWifiDialog) wifiDialogLoader.active = true;
-    Loader {
+    ToggleDialog {
         id: wifiDialogLoader
-        anchors.fill: parent
-
-        active: root.showWifiDialog || item.visible
-        onActiveChanged: {
-            if (active) {
-                item.show = true;
-                item.forceActiveFocus();
-            }
-        }
-
-        sourceComponent: WifiDialog {
-            onDismiss: {
-                show = false
-                root.showWifiDialog = false
-            }
-            onVisibleChanged: {
-                if (!visible && !root.showWifiDialog) wifiDialogLoader.active = false;
-            }
+        shownPropertyString: "showWifiDialog"
+        dialog: WifiDialog {}
+        onShownChanged: {
+            if (!shown) return;
+            Network.enableWifi();
+            Network.rescanWifi();
         }
     }
 
-    onShowBluetoothDialogChanged: {
-        if (showBluetoothDialog) bluetoothDialogLoader.active = true;
-        else Bluetooth.defaultAdapter.discovering = false;
-    }
-    Loader {
+    ToggleDialog {
         id: bluetoothDialogLoader
+        shownPropertyString: "showBluetoothDialog"
+        dialog: BluetoothDialog {}
+        onShownChanged: {
+            if (!shown) {
+                Bluetooth.defaultAdapter.discovering = false;
+            } else {
+                Bluetooth.defaultAdapter.enabled = true;
+                Bluetooth.defaultAdapter.discovering = true;
+            }
+
+        }
+    }
+
+    ToggleDialog {
+        id: audioOutputDialogLoader
+        shownPropertyString: "showAudioOutputDialog"
+        dialog: VolumeDialog {
+            isSink: true
+        }
+    }
+
+    ToggleDialog {
+        id: audioInputDialogLoader
+        shownPropertyString: "showAudioInputDialog"
+        dialog: VolumeDialog {
+            isSink: false
+        }
+    }
+
+    component ToggleDialog: Loader {
+        id: toggleDialogLoader
+        required property string shownPropertyString
+        property alias dialog: toggleDialogLoader.sourceComponent
+        readonly property bool shown: root[shownPropertyString]
         anchors.fill: parent
 
-        active: root.showBluetoothDialog || item.visible
+        onShownChanged: if (shown) toggleDialogLoader.active = true;
+        active: shown
         onActiveChanged: {
             if (active) {
                 item.show = true;
                 item.forceActiveFocus();
             }
         }
-
-        sourceComponent: BluetoothDialog {
-            onDismiss: {
-                show = false
-                root.showBluetoothDialog = false
+        Connections {
+            target: toggleDialogLoader.item
+            function onDismiss() {
+                toggleDialogLoader.item.show = false
+                root[toggleDialogLoader.shownPropertyString] = false;
             }
-            onVisibleChanged: {
-                if (!visible && !root.showBluetoothDialog) bluetoothDialogLoader.active = false;
+            function onVisibleChanged() {
+                if (!toggleDialogLoader.item.visible && !root[toggleDialogLoader.shownPropertyString]) toggleDialogLoader.active = false;
             }
         }
     }
@@ -163,42 +187,68 @@ Item {
         Connections {
             target: quickPanelImplLoader.item
             function onOpenWifiDialog() {
-                Network.enableWifi();
-                Network.rescanWifi();
                 root.showWifiDialog = true;
             }
             function onOpenBluetoothDialog() {
-                Bluetooth.defaultAdapter.enabled = true;
-                Bluetooth.defaultAdapter.discovering = true;
                 root.showBluetoothDialog = true;
+            }
+            function onOpenAudioOutputDialog() {
+                root.showAudioOutputDialog = true;
+            }
+            function onOpenAudioInputDialog() {
+                root.showAudioInputDialog = true;
             }
         }
     }
 
-    component SystemButtonRow: RowLayout {
-        spacing: 10
+    component SystemButtonRow: Item {
+        implicitHeight: Math.max(uptimeContainer.implicitHeight, systemButtonsRow.implicitHeight)
 
-        CustomIcon {
-            id: distroIcon
-            width: 25
-            height: 25
-            source: SystemInfo.distroIcon
-            colorize: true
-            color: Appearance.colors.colOnLayer0
-        }
-
-        StyledText {
-            font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer0
-            text: Translation.tr("Up %1").arg(DateTime.uptime)
-            textFormat: Text.MarkdownText
-        }
-
-        Item {
-            Layout.fillWidth: true
+        Rectangle {
+            id: uptimeContainer
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
+            color: Appearance.colors.colLayer1
+            radius: height / 2
+            implicitWidth: uptimeRow.implicitWidth + 24
+            implicitHeight: uptimeRow.implicitHeight + 8
+            
+            Row {
+                id: uptimeRow
+                anchors.centerIn: parent
+                spacing: 8
+                CustomIcon {
+                    id: distroIcon
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 25
+                    height: 25
+                    source: SystemInfo.distroIcon
+                    colorize: true
+                    color: Appearance.colors.colOnLayer0
+                }
+                StyledText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    color: Appearance.colors.colOnLayer0
+                    text: Translation.tr("Up %1").arg(DateTime.uptime)
+                    textFormat: Text.MarkdownText
+                }
+            }
         }
 
         ButtonGroup {
+            id: systemButtonsRow
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+            }
+            color: Appearance.colors.colLayer1
+            padding: 4
+
             QuickToggleButton {
                 toggled: root.editMode
                 visible: Config.options.sidebar.quickToggles.style === "android"

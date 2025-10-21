@@ -24,18 +24,19 @@ MouseArea { // Notification group area
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: 20 // Account for gaps and bouncy animations
-    property var qmlParent: root.parent.parent // There's something between this and the parent ListView
-    property var parentDragIndex: qmlParent.dragIndex
-    property var parentDragDistance: qmlParent.dragDistance
+    property var qmlParent: root?.parent?.parent // There's something between this and the parent ListView
+    property var parentDragIndex: qmlParent?.dragIndex
+    property var parentDragDistance: qmlParent?.dragDistance
     property var dragIndexDiff: Math.abs(parentDragIndex - index)
-    property real xOffset: dragIndexDiff == 0 ? Math.max(0, parentDragDistance) : 
-        parentDragDistance > dragConfirmThreshold ? 0 :
-        dragIndexDiff == 1 ? Math.max(0, parentDragDistance * 0.3) :
-        dragIndexDiff == 2 ? Math.max(0, parentDragDistance * 0.1) : 0
+    property real xOffset: dragIndexDiff == 0 ? parentDragDistance : 
+        Math.abs(parentDragDistance) > dragConfirmThreshold ? 0 :
+        dragIndexDiff == 1 ? (parentDragDistance * 0.3) :
+        dragIndexDiff == 2 ? (parentDragDistance * 0.1) : 0
 
-    function destroyWithAnimation() {
+    function destroyWithAnimation(left = false) {
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
+        destroyAnimation.left = left;
         destroyAnimation.running = true;
     }
 
@@ -52,12 +53,13 @@ MouseArea { // Notification group area
 
     SequentialAnimation { // Drag finish animation
         id: destroyAnimation
+        property bool left: true
         running: false
 
         NumberAnimation {
             target: background.anchors
             property: "leftMargin"
-            to: root.width + root.dismissOvershoot
+            to: (root.width + root.dismissOvershoot) * (destroyAnimation.left ? -1 : 1)
             duration: Appearance.animation.elementMove.duration
             easing.type: Appearance.animation.elementMove.type
             easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
@@ -102,8 +104,8 @@ MouseArea { // Notification group area
         }
 
         onDragReleased: (diffX, diffY) => {
-            if (diffX > root.dragConfirmThreshold)
-                root.destroyWithAnimation();
+            if (Math.abs(diffX) > root.dragConfirmThreshold)
+                root.destroyWithAnimation(diffX < 0);
             else 
                 dragManager.resetDrag();
         }

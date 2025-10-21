@@ -21,7 +21,7 @@ Item {
         spacing: 6
 
         Image {
-            property real size: slider.height * 0.9
+            property real size: 36
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             visible: source != ""
             sourceSize.width: size
@@ -57,6 +57,7 @@ Item {
                 id: slider
                 value: root.node.audio.volume
                 onMoved: root.node.audio.volume = value
+                configuration: StyledSlider.Configuration.S
             }
         }
     }

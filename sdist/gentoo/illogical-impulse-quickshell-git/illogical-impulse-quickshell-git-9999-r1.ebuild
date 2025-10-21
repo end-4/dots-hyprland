@@ -3,21 +3,17 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="Toolkit for building desktop widgets using QtQuick"
 HOMEPAGE="https://quickshell.org/"
 
-if [[ "${PV}" = *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/quickshell-mirror/${PN^}.git"
-else
-	SRC_URI="https://github.com/quickshell-mirror/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-fi
+EGIT_REPO_URI="https://github.com/quickshell-mirror/quickshell.git"
+EGIT_COMMIT="00858812f25b748d08b075a0d284093685fa3ffd"
 
+KEYWORDS="~amd64 ~arm64 ~x86"
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
 # Upstream recommends leaving all build options enabled by default
 IUSE="+breakpad +jemalloc +sockets +wayland +layer-shell +session-lock +toplevel-management +screencopy +X +pipewire +tray +mpris +pam +hyprland +hyprland-global-shortcuts +hyprland-focus-grab +i3 +i3-ipc +bluetooth"
 
@@ -38,21 +34,27 @@ RDEPEND="
 	mpris? ( dev-qt/qtdbus )
 	pam? ( sys-libs/pam )
 	bluetooth? ( net-wireless/bluez )
+
+
+
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	|| ( >=sys-devel/gcc-14:* >=llvm-core/clang-17:* )
-	dev-build/cmake
-	dev-build/ninja
-	virtual/pkgconfig
-	dev-cpp/cli11
+
 	dev-util/spirv-tools
 	dev-qt/qtshadertools:6
-	breakpad? ( dev-util/breakpad )
 	wayland? (
 		dev-util/wayland-scanner
 		dev-libs/wayland-protocols
 	)
+	dev-cpp/cli11
+	dev-build/ninja
+	dev-build/cmake
+	dev-vcs/git
+	virtual/pkgconfig
+	breakpad? ( dev-util/breakpad )
+
 "
 
 src_configure(){

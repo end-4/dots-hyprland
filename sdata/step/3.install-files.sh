@@ -84,17 +84,24 @@ esac
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# MISC (For dots/.config/* but not fish, not Hyprland)
+# MISC (For dots/.config/* but not quickshell, not fish, not Hyprland)
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find dots/.config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+    for i in $(find dots/.config/ -mindepth 1 -maxdepth 1 ! -name 'quickshell' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
 #      i="dots/.config/$i"
       echo "[$0]: Found target: dots/.config/$i"
       if [ -d "dots/.config/$i" ];then warning_rsync; v rsync -av --delete "dots/.config/$i/" "$XDG_CONFIG_HOME/$i/"
       elif [ -f "dots/.config/$i" ];then warning_rsync; v rsync -av "dots/.config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
+    ;;
+esac
+
+case $SKIP_QUICKSHELL in
+  true) sleep 0;;
+  *)
+    warning_rsync; v rsync -av --delete dots/.config/quickshell/ "$XDG_CONFIG_HOME"/quickshell/
     ;;
 esac
 
