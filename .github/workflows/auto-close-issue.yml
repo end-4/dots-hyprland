@@ -48,7 +48,7 @@ jobs:
             echo "Issue node id: $ISSUE_ID"
 
             # --- Post a comment to the issue ---
-            COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3). I will close this issue now (stateReason=NOT_PLANNED). If you update the issue with the required information, we can re-evaluate. Thank you!"
+            COMMENT_BODY="Hi @${ISSUE_USER} — I noticed you checked \"I've ticked the checkboxes without reading their contents\" in the issue template. To help others assist you effectively, please read the template and provide the requested diagnostic information (Step 2 & Step 3). I will close this issue now. If you create a new issue with the required information, we can re-evaluate. Thank you!"
             MUT_ADD_COMMENT='mutation($id: ID!, $body: String!) { addComment(input: {subjectId: $id, body: $body}) { clientMutationId } }'
             ADD_COMMENT_PAYLOAD=$(jq -n --arg q "$MUT_ADD_COMMENT" --arg id "$ISSUE_ID" --arg body "$COMMENT_BODY" '{query:$q, variables:{id:$id, body:$body}}')
 
