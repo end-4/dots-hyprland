@@ -1,3 +1,4 @@
+import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Shapes
@@ -8,7 +9,7 @@ Item {
     required property color color
     required property color overlayColor
     required property list<point> points
-    property int strokeWidth: 10
+    property int strokeWidth: Config.options.regionSelector.circle.strokeWidth
 
     function updatePoints() {
         if (!root.dragging) return;

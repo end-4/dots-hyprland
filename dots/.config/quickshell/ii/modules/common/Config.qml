@@ -350,6 +350,20 @@ Singleton {
                 property real columns: 5
             }
 
+            property JsonObject regionSelector: JsonObject {
+                property JsonObject targetRegions: JsonObject {
+                    property bool windows: true
+                    property bool layers: false
+                    property bool content: true
+                    property bool showLabel: false
+                    property real opacity: 0.6
+                }
+                property JsonObject circle: JsonObject {
+                    property int strokeWidth: 6
+                    property int padding: 40
+                }
+            }
+
             property JsonObject resources: JsonObject {
                 property int updateInterval: 3000
             }
@@ -371,7 +385,6 @@ Singleton {
                 }
                 property JsonObject imageSearch: JsonObject {
                     property string imageSearchEngineBaseUrl: "https://lens.google.com/uploadbyurl?url="
-                    property string fileUploadApiEndpoint: "https://uguu.se/upload"
                     property bool useCircleSelection: false
                 }
             }
@@ -458,10 +471,6 @@ Singleton {
 
             property JsonObject hacks: JsonObject {
                 property int arbitraryRaceConditionDelay: 20 // milliseconds
-            }
-
-            property JsonObject screenshotTool: JsonObject {
-                property bool showContentRegions: true
             }
 
             property JsonObject workSafety: JsonObject {
