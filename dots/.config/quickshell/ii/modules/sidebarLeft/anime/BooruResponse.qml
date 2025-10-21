@@ -4,7 +4,6 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.sidebarLeft
-import qs.services
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
