@@ -79,10 +79,7 @@ AbstractQuickPanel {
                 delegate: ButtonGroup {
                     id: toggleRow
                     required property int index
-                    property var modelData: {
-                        print(JSON.stringify(root.toggleRows[index]))
-                        return root.toggleRows[index]
-                    }
+                    property var modelData: root.toggleRows[index]
                     property int startingIndex: {
                         const rows = root.toggleRows;
                         let sum = 0;

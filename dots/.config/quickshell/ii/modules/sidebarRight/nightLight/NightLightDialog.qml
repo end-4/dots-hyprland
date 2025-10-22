@@ -34,7 +34,6 @@ WindowDialog {
         id: nightLightColumn
         Layout.topMargin: -16
         Layout.fillWidth: true
-        Layout.fillHeight: true
 
         ConfigSwitch {
             anchors {
@@ -82,6 +81,39 @@ WindowDialog {
     }
 
     WindowDialogSectionHeader {
+        text: Translation.tr("Anti-flashbang (experimental)")
+    }
+
+    WindowDialogSeparator {
+        Layout.topMargin: -22
+        Layout.leftMargin: 0
+        Layout.rightMargin: 0
+    }
+
+    Column {
+        id: antiFlashbangColumn
+        Layout.topMargin: -16
+        Layout.fillWidth: true
+
+        ConfigSwitch {
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            iconSize: Appearance.font.pixelSize.larger
+            buttonIcon: "destruction"
+            text: Translation.tr("Enable")
+            checked: Config.options.light.antiFlashbang.enable
+            onCheckedChanged: {
+                Config.options.light.antiFlashbang.enable = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Example use case: eroge on one workspace, dark Discord window on another")
+            }
+        }
+    }
+
+    WindowDialogSectionHeader {
         text: Translation.tr("Brightness")
     }
 
@@ -95,7 +127,7 @@ WindowDialog {
         id: brightnessColumn
         Layout.topMargin: -16
         Layout.fillWidth: true
-        // Layout.fillHeight: true
+        Layout.fillHeight: true
 
         WindowDialogSlider {
             anchors {
