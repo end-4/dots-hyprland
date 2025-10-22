@@ -70,6 +70,8 @@ Singleton {
                 case "debian":
                 case "raspbian":
                 case "kali": distroIcon = "debian-symbolic"; break;
+                case "funtoo":
+                case "gentoo": distroIcon = "gentoo-symbolic"; break;
                 default: distroIcon = "linux-symbolic"; break;
             }
             if (textOsRelease.toLowerCase().includes("nyarch")) {
