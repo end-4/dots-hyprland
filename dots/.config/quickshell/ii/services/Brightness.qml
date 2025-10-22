@@ -14,6 +14,7 @@ import QtQuick
  */
 Singleton {
     id: root
+    property real minimumBrightnessAllowed: 0.00001 // Setting to 0 would kind of turn off the screen. We don't want that.
 
     signal brightnessChanged()
 
@@ -125,7 +126,7 @@ Singleton {
         }
 
         function setBrightness(value: real): void {
-            value = Math.max(0.01, Math.min(1, value));
+            value = Math.max(root.minimumBrightnessAllowed, Math.min(1, value));
             monitor.brightness = value;
             setTimer.restart();
         }
