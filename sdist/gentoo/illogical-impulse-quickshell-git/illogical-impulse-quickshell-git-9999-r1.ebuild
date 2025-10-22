@@ -9,7 +9,7 @@ DESCRIPTION="Toolkit for building desktop widgets using QtQuick"
 HOMEPAGE="https://quickshell.org/"
 
 EGIT_REPO_URI="https://github.com/quickshell-mirror/quickshell.git"
-EGIT_COMMIT="00858812f25b748d08b075a0d284093685fa3ffd"
+EGIT_COMMIT="3e2ce40b18af943f9ba370ed73565e9f487663ef"
 
 KEYWORDS="~amd64 ~arm64 ~x86"
 LICENSE="LGPL-3"
