@@ -12,15 +12,23 @@ AbstractQuickPanel {
     id: root
     property bool editMode: false
     Layout.fillWidth: true
-    implicitHeight: (editMode ? contentItem.implicitHeight : usedRows.implicitHeight) + root.padding * 2
 
+    // Sizes
+    implicitHeight: (editMode ? contentItem.implicitHeight : usedRows.implicitHeight) + root.padding * 2
     Behavior on implicitHeight {
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
-
     property real spacing: 6
     property real padding: 6
+    readonly property real baseCellWidth: {
+        // This is the wrong calculation, but it looks correct in reality???
+        // (theoretically spacing should be multiplied by 1 column less)
+        const availableWidth = root.width - (root.padding * 2) - (root.spacing * (root.columns))
+        return availableWidth / root.columns
+    }
+    readonly property real baseCellHeight: 56
 
+    // Toggles
     readonly property list<string> availableToggleTypes: ["network", "bluetooth", "idleInhibitor", "easyEffects", "nightLight", "darkMode", "cloudflareWarp", "gameMode", "screenSnip", "colorPicker", "onScreenKeyboard", "mic", "audio", "notifications", "powerProfile"]
     readonly property int columns: Config.options.sidebar.quickToggles.android.columns
     readonly property list<var> toggles: Config.ready ? Config.options.sidebar.quickToggles.android.toggles : []
@@ -30,13 +38,6 @@ AbstractQuickPanel {
         return types.map(type => { return { type: type, size: 1 } })
     }
     readonly property list<var> unusedToggleRows: toggleRowsForList(unusedToggles)
-    readonly property real baseCellWidth: {
-        // This is the wrong calculation, but it looks correct in reality???
-        // (theoretically spacing should be multiplied by 1 column less)
-        const availableWidth = root.width - (root.padding * 2) - (root.spacing * (root.columns))
-        return availableWidth / root.columns
-    }
-    readonly property real baseCellHeight: 56
 
     function toggleRowsForList(togglesList) {
         var rows = [];
@@ -78,7 +79,10 @@ AbstractQuickPanel {
                 delegate: ButtonGroup {
                     id: toggleRow
                     required property int index
-                    property var modelData: root.toggleRows[index]
+                    property var modelData: {
+                        print(JSON.stringify(root.toggleRows[index]))
+                        return root.toggleRows[index]
+                    }
                     property int startingIndex: {
                         const rows = root.toggleRows;
                         let sum = 0;
@@ -100,10 +104,11 @@ AbstractQuickPanel {
                             baseCellWidth: root.baseCellWidth
                             baseCellHeight: root.baseCellHeight
                             spacing: root.spacing
-                            onOpenWifiDialog: root.openWifiDialog()
-                            onOpenBluetoothDialog: root.openBluetoothDialog()
                             onOpenAudioOutputDialog: root.openAudioOutputDialog()
                             onOpenAudioInputDialog: root.openAudioInputDialog()
+                            onOpenBluetoothDialog: root.openBluetoothDialog()
+                            onOpenNightLightDialog: root.openNightLightDialog()
+                            onOpenWifiDialog: root.openWifiDialog()
                         }
                     }
                 }

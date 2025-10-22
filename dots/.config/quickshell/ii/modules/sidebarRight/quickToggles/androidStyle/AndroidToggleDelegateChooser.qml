@@ -14,10 +14,11 @@ DelegateChooser {
     required property real baseCellHeight
     required property real spacing
     required property int startingIndex
-    signal openWifiDialog()
-    signal openBluetoothDialog()
     signal openAudioOutputDialog()
     signal openAudioInputDialog()
+    signal openBluetoothDialog()
+    signal openNightLightDialog()
+    signal openWifiDialog()
 
     role: "type"
 
@@ -90,6 +91,9 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
+        onOpenMenu: {
+            root.openNightLightDialog()
+        }
     } }
 
     DelegateChoice { roleValue: "darkMode"; AndroidDarkModeToggle {
