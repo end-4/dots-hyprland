@@ -563,6 +563,7 @@ PanelWindow {
                         anchors.centerIn: parent
                         iconSize: 22
                         color: Appearance.colors.colOnPrimary
+                        animateChange: true
                         text: switch (root.action) {
                             case RegionSelection.SnipAction.Copy:
                             case RegionSelection.SnipAction.Edit:
