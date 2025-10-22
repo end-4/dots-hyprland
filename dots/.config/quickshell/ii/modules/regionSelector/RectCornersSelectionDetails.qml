@@ -65,7 +65,7 @@ Item {
     // Coord lines
     Rectangle { // Vertical
         visible: root.showAimLines
-        opacity: 0.5
+        opacity: 0.2
         z: 2
         x: root.mouseX
         anchors {
@@ -77,7 +77,7 @@ Item {
     }
     Rectangle { // Horizontal
         visible: root.showAimLines
-        opacity: 0.5
+        opacity: 0.2
         z: 2
         y: root.mouseY
         anchors {
