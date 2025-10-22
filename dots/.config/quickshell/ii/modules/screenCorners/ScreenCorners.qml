@@ -64,7 +64,6 @@ Scope {
                 id: sidebarCornerOpenInteractionLoader
                 active: {
                     if (!Config.options.sidebar.cornerOpen.enable) return false;
-                    if (!Config.options.bar.vertical && Config.options.sidebar.cornerOpen.bottom == Config.options.bar.bottom) return false;
                     if (cornerPanelWindow.fullscreen) return false;
                     return (Config.options.sidebar.cornerOpen.bottom == cornerWidget.isBottom);
                 }

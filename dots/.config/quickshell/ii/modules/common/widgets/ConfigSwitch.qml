@@ -7,6 +7,7 @@ import QtQuick.Controls
 RippleButton {
     id: root
     property string buttonIcon
+    property alias iconSize: iconWidget.iconSize
 
     Layout.fillWidth: true
     implicitHeight: contentItem.implicitHeight + 8 * 2
@@ -17,6 +18,7 @@ RippleButton {
     contentItem: RowLayout {
         spacing: 10
         OptionalMaterialSymbol {
+            id: iconWidget
             icon: root.buttonIcon
             opacity: root.enabled ? 1 : 0.4
             iconSize: Appearance.font.pixelSize.larger

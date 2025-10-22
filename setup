@@ -18,6 +18,9 @@ Syntax:
 
 Subcommands:
   install        (Default) Install/Reinstall/Update illogical-impulse.
+  install-deps   Run the install step \"1. Install dependencies\"
+  install-setups Run the install step \"2. Setup for permissions/services etc\"
+  install-files  Run the install step \"3. Copying config files\"
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   help           Show this help message.
@@ -30,7 +33,8 @@ case $1 in
   # Global help
   help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update)SCRIPT_SUBCOMMAND=$1;shift;;
+  install|install-deps|install-setups|install-files|exp-uninstall|exp-update)
+    SCRIPT_SUBCOMMAND=$1;shift;;
   # No subcommand
   -*|"")SCRIPT_SUBCOMMAND=install;;
   # Wrong subcommand
@@ -51,6 +55,31 @@ case ${SCRIPT_SUBCOMMAND} in
       printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RST}"
       source ./sdata/step/2.install-setups-selector.sh
     fi
+    if [[ "${SKIP_ALLFILES}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
+      if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
+        source ./sdata/step/3.install-files.experimental.sh
+      else
+        source ./sdata/step/3.install-files.sh
+      fi
+    fi
+    ;;
+  install-deps)
+    source ./sdata/options/install.sh
+    if [[ "${SKIP_ALLDEPS}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
+      source ./sdata/step/1.install-deps-selector.sh
+    fi
+    ;;
+  install-setups)
+    source ./sdata/options/install.sh
+    if [[ "${SKIP_ALLSETUPS}" != true ]]; then
+      printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RST}"
+      source ./sdata/step/2.install-setups-selector.sh
+    fi
+    ;;
+  install-files)
+    source ./sdata/options/install.sh
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
       if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then

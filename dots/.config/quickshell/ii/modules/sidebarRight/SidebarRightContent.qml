@@ -9,21 +9,24 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
-import "./quickToggles/"
-import "./quickToggles/classicStyle/"
-import "./wifiNetworks/"
-import "./bluetoothDevices/"
-import "./volumeMixer/"
+import qs.modules.sidebarRight.quickToggles
+import qs.modules.sidebarRight.quickToggles.classicStyle
+
+import qs.modules.sidebarRight.bluetoothDevices
+import qs.modules.sidebarRight.nightLight
+import qs.modules.sidebarRight.volumeMixer
+import qs.modules.sidebarRight.wifiNetworks
 
 Item {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 12
+    property int sidebarPadding: 10
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
-    property bool showWifiDialog: false
-    property bool showBluetoothDialog: false
     property bool showAudioOutputDialog: false
     property bool showAudioInputDialog: false
+    property bool showBluetoothDialog: false
+    property bool showNightLightDialog: false
+    property bool showWifiDialog: false
     property bool editMode: false
 
     Connections {
@@ -62,7 +65,8 @@ Item {
 
             SystemButtonRow {
                 Layout.fillHeight: false
-                Layout.margins: 10
+                Layout.fillWidth: true
+                // Layout.margins: 10
                 Layout.topMargin: 5
                 Layout.bottomMargin: 0
             }
@@ -108,18 +112,20 @@ Item {
     }
 
     ToggleDialog {
-        id: wifiDialogLoader
-        shownPropertyString: "showWifiDialog"
-        dialog: WifiDialog {}
-        onShownChanged: {
-            if (!shown) return;
-            Network.enableWifi();
-            Network.rescanWifi();
+        shownPropertyString: "showAudioOutputDialog"
+        dialog: VolumeDialog {
+            isSink: true
         }
     }
 
     ToggleDialog {
-        id: bluetoothDialogLoader
+        shownPropertyString: "showAudioInputDialog"
+        dialog: VolumeDialog {
+            isSink: false
+        }
+    }
+
+    ToggleDialog {
         shownPropertyString: "showBluetoothDialog"
         dialog: BluetoothDialog {}
         onShownChanged: {
@@ -129,23 +135,21 @@ Item {
                 Bluetooth.defaultAdapter.enabled = true;
                 Bluetooth.defaultAdapter.discovering = true;
             }
-
         }
     }
 
     ToggleDialog {
-        id: audioOutputDialogLoader
-        shownPropertyString: "showAudioOutputDialog"
-        dialog: VolumeDialog {
-            isSink: true
-        }
+        shownPropertyString: "showNightLightDialog"
+        dialog: NightLightDialog {}
     }
 
     ToggleDialog {
-        id: audioInputDialogLoader
-        shownPropertyString: "showAudioInputDialog"
-        dialog: VolumeDialog {
-            isSink: false
+        shownPropertyString: "showWifiDialog"
+        dialog: WifiDialog {}
+        onShownChanged: {
+            if (!shown) return;
+            Network.enableWifi();
+            Network.rescanWifi();
         }
     }
 
@@ -185,45 +189,72 @@ Item {
         active: Config.options.sidebar.quickToggles.style === styleName
         Connections {
             target: quickPanelImplLoader.item
-            function onOpenWifiDialog() {
-                root.showWifiDialog = true;
-            }
-            function onOpenBluetoothDialog() {
-                root.showBluetoothDialog = true;
-            }
             function onOpenAudioOutputDialog() {
                 root.showAudioOutputDialog = true;
             }
             function onOpenAudioInputDialog() {
                 root.showAudioInputDialog = true;
             }
+            function onOpenBluetoothDialog() {
+                root.showBluetoothDialog = true;
+            }
+            function onOpenNightLightDialog() {
+                root.showNightLightDialog = true;
+            }
+            function onOpenWifiDialog() {
+                root.showWifiDialog = true;
+            }
         }
     }
 
-    component SystemButtonRow: RowLayout {
-        spacing: 10
+    component SystemButtonRow: Item {
+        implicitHeight: Math.max(uptimeContainer.implicitHeight, systemButtonsRow.implicitHeight)
 
-        CustomIcon {
-            id: distroIcon
-            width: 25
-            height: 25
-            source: SystemInfo.distroIcon
-            colorize: true
-            color: Appearance.colors.colOnLayer0
-        }
-
-        StyledText {
-            font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer0
-            text: Translation.tr("Up %1").arg(DateTime.uptime)
-            textFormat: Text.MarkdownText
-        }
-
-        Item {
-            Layout.fillWidth: true
+        Rectangle {
+            id: uptimeContainer
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
+            color: Appearance.colors.colLayer1
+            radius: height / 2
+            implicitWidth: uptimeRow.implicitWidth + 24
+            implicitHeight: uptimeRow.implicitHeight + 8
+            
+            Row {
+                id: uptimeRow
+                anchors.centerIn: parent
+                spacing: 8
+                CustomIcon {
+                    id: distroIcon
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 25
+                    height: 25
+                    source: SystemInfo.distroIcon
+                    colorize: true
+                    color: Appearance.colors.colOnLayer0
+                }
+                StyledText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    color: Appearance.colors.colOnLayer0
+                    text: Translation.tr("Up %1").arg(DateTime.uptime)
+                    textFormat: Text.MarkdownText
+                }
+            }
         }
 
         ButtonGroup {
+            id: systemButtonsRow
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+            }
+            color: Appearance.colors.colLayer1
+            padding: 4
+
             QuickToggleButton {
                 toggled: root.editMode
                 visible: Config.options.sidebar.quickToggles.style === "android"

@@ -36,6 +36,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         Config.readWriteDelay = 0;
+        Config.blockWrites = true;
         MaterialThemeLoader.reapplyTheme();
     }
 
@@ -90,8 +91,8 @@ ApplicationWindow {
                 }
                 onClicked: {
                     Quickshell.execDetached(["killall", ...conflictGroup.programs])
-                    conflictGroup.visible = false
                     conflictGroup.alwaysSelected()
+                    conflictGroup.visible = false
                 }
             }
             RippleButton {

@@ -4,6 +4,8 @@ pragma ComponentBehavior: Bound
 // From https://github.com/caelestia-dots/shell with modifications.
 // License: GPLv3
 
+import qs.modules.common
+import qs.modules.common.functions
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -14,6 +16,7 @@ import QtQuick
  */
 Singleton {
     id: root
+    property real minimumBrightnessAllowed: 0.00001 // Setting to 0 would kind of turn off the screen. We don't want that.
 
     signal brightnessChanged()
 
@@ -84,6 +87,8 @@ Singleton {
         }
         property int rawMaxBrightness: 100
         property real brightness
+        property real brightnessMultiplier: 1.0
+        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * brightnessMultiplier))
         property bool ready: false
 
         onBrightnessChanged: {
@@ -119,14 +124,20 @@ Singleton {
         }
 
         function syncBrightness() {
-            const rounded = Math.round(monitor.brightness * monitor.rawMaxBrightness);
+            const brightnessValue = monitor.multipliedBrightness
+            const rounded = Math.round(brightnessValue * monitor.rawMaxBrightness);
             setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "--class", "backlight", "s", rounded, "--quiet"];
             setProc.startDetached();
         }
 
         function setBrightness(value: real): void {
-            value = Math.max(0.01, Math.min(1, value));
+            value = Math.max(root.minimumBrightnessAllowed, Math.min(1, value));
             monitor.brightness = value;
+            setTimer.restart();
+        }
+
+        function setBrightnessMultiplier(value: real): void {
+            monitor.brightnessMultiplier = value;
             setTimer.restart();
         }
 
@@ -144,6 +155,61 @@ Singleton {
 
         BrightnessMonitor {}
     }
+
+    // Anti-flashbang
+    property string screenshotDir: "/tmp/quickshell/brightness/antiflashbang"
+    function brightnessMultiplierForLightness(x: real): real {
+        // 6.600135 + 216.360356 * e^(-0.0811129189x)
+        // Division by 100 is to normalize to [0, 1]
+        return (6.600135 + 216.360356 * Math.pow(Math.E, -0.0811129189 * x)) / 100.0;
+    }
+    Variants {
+        model: Quickshell.screens
+        Scope {
+            id: screenScope
+            required property var modelData
+            property string screenName: modelData.name
+            property string screenshotPath: `${root.screenshotDir}/screenshot-${screenName}.png`
+            Connections {
+                enabled: Config.options.light.antiFlashbang.enable
+                target: Hyprland
+                function onRawEvent(event) {
+                    if (["workspacev2"].includes(event.name)) {
+                        screenshotTimer.restart();
+                    }
+                }
+            }
+
+            Timer {
+                id: screenshotTimer
+                interval: 700 // This is what I have for a Hyprland ws anim
+                onTriggered: {
+                    screenshotProc.running = false;
+                    screenshotProc.running = true;
+                }
+            }
+
+            Process {
+                id: screenshotProc
+                command: ["bash", "-c", 
+                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
+                    + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' '${StringUtils.shellSingleQuoteEscape(screenScope.screenshotPath)}'`
+                    + ` && magick '${StringUtils.shellSingleQuoteEscape(screenScope.screenshotPath)}' -colorspace Gray -format "%[fx:mean*100]" info:`
+                ]
+                stdout: StdioCollector {
+                    id: lightnessCollector
+                    onStreamFinished: {
+                        Quickshell.execDetached(["rm", screenScope.screenshotPath]); // Cleanup
+                        const lightness = lightnessCollector.text
+                        const newMultiplier = root.brightnessMultiplierForLightness(parseFloat(lightness))
+                        Brightness.getMonitorForScreen(screenScope.modelData).setBrightnessMultiplier(newMultiplier)
+                    }
+                }
+            }
+        }
+    }
+
+    // External trigger points
 
     IpcHandler {
         target: "brightness"

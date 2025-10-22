@@ -9,6 +9,7 @@ app-misc/illogical-impulse-microtex-git
 app-misc/illogical-impulse-oneui4-icons-git
 app-misc/illogical-impulse-portal
 app-misc/illogical-impulse-python
+app-misc/illogical-impulse-quickshell-git
 app-misc/illogical-impulse-screencapture
 app-misc/illogical-impulse-toolkit
 app-misc/illogical-impulse-widgets
@@ -39,3 +40,6 @@ gui-libs/hyprland-qt-support **
 gui-libs/hyprland-qtutils **
 gui-wm/hyprland **
 x11-libs/libxkbcommon
+dev-util/breakpad
+dev-libs/linux-syscall-support
+dev-embedded/libdisasm

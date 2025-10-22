@@ -159,7 +159,13 @@ Scope {
                 }
 
                 Item { // No player placeholder
-                    Layout.fillWidth: true
+                    Layout.alignment: {
+                        if (mediaControlsRoot.anchors.left) return Qt.AlignLeft;
+                        if (mediaControlsRoot.anchors.right) return Qt.AlignRight;
+                        return Qt.AlignHCenter;
+                    }
+                    Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
+                    Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
                     visible: root.meaningfulPlayers.length === 0
                     implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
                     implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
