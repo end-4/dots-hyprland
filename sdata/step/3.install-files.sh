@@ -67,7 +67,7 @@ function ask_backup_configs(){
 #####################################################################################
 
 # In case some dirs does not exists
-v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
+v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME/quickshell $XDG_DATA_HOME
 
 case $ask in
   false) sleep 0 ;;
@@ -101,7 +101,7 @@ esac
 case $SKIP_QUICKSHELL in
   true) sleep 0;;
   *)
-    warning_rsync; v rsync -av --delete dots/.config/quickshell/ "$XDG_CONFIG_HOME"/quickshell/
+    warning_rsync; v rsync -av --delete dots/.config/quickshell/ii/ "$XDG_CONFIG_HOME"/quickshell/ii/
     ;;
 esac
 
