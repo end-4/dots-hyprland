@@ -38,14 +38,17 @@ PanelWindow {
     property string screenshotDir: Directories.screenshotTemp
     property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
     property string fileUploadApiEndpoint: "https://uguu.se/upload"
-    property color overlayColor: "#77111111"
+    property color overlayColor: "#88111111"
     property color genericContentColor: Qt.alpha(root.overlayColor, 0.9)
     property color genericContentForeground: "#ddffffff"
-    property color selectionBorderColor: ColorUtils.mix(Appearance.colors.colOnLayer0, Appearance.colors.colSecondary, 0.5)
+    property color brightText: Appearance.m3colors.darkmode ? Appearance.colors.colOnLayer0 : Appearance.colors.colLayer0
+    property color brightSecondary: Appearance.m3colors.darkmode ? Appearance.colors.colSecondary : Appearance.colors.colOnSecondary
+    property color brightTertiary: Appearance.m3colors.darkmode ? Appearance.colors.colTertiary : Qt.lighter(Appearance.colors.colPrimary)
+    property color selectionBorderColor: ColorUtils.mix(brightText, brightSecondary, 0.5)
     property color selectionFillColor: "#33ffffff"
-    property color windowBorderColor: Appearance.colors.colSecondary
+    property color windowBorderColor: brightSecondary
     property color windowFillColor: ColorUtils.transparentize(windowBorderColor, 0.85)
-    property color imageBorderColor: Appearance.colors.colTertiary
+    property color imageBorderColor: brightTertiary
     property color imageFillColor: ColorUtils.transparentize(imageBorderColor, 0.85)
     property color onBorderColor: "#ff000000"
     readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
@@ -112,6 +115,7 @@ PanelWindow {
     property bool enableLayerRegions: Config.options.regionSelector.targetRegions.layers && !isCircleSelection
     property bool enableContentRegions: Config.options.regionSelector.targetRegions.content
     property real targetRegionOpacity: Config.options.regionSelector.targetRegions.opacity
+    property bool contentRegionOpacity: Config.options.regionSelector.targetRegions.contentRegionOpacity
 
     property real targetedRegionX: -1
     property real targetedRegionY: -1
@@ -505,7 +509,7 @@ PanelWindow {
 
                     colBackground: root.genericContentColor
                     colForeground: root.genericContentForeground
-                    opacity: root.draggedAway ? 0 : root.targetRegionOpacity
+                    opacity: root.draggedAway ? 0 : root.contentRegionOpacity
                     visible: opacity > 0
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
