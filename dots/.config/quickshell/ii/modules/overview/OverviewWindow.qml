@@ -17,14 +17,30 @@ Item { // Window
     property var availableWorkspaceWidth
     property var availableWorkspaceHeight
     property bool restrictToWorkspace: true
-    property real initX: Math.max((windowData?.at[0] - (monitorData?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0) + xOffset
-    property real initY: Math.max((windowData?.at[1] - (monitorData?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0) + yOffset
+    property real widthRatio: {
+        const widgetWidth = widgetMonitor.transform & 1 ? widgetMonitor.height : widgetMonitor.width;
+        const monitorWidth = monitorData.transform & 1 ? monitorData.height : monitorData.width;
+        (widgetWidth * monitorData.scale) / (monitorWidth * widgetMonitor.scale);
+    }
+    property real heightRatio: {
+        const widgetHeight = widgetMonitor.transform & 1 ? widgetMonitor.width : widgetMonitor.height;
+        const monitorHeight = monitorData.transform & 1 ? monitorData.width : monitorData.height;
+        (widgetHeight * monitorData.scale) / (monitorHeight * widgetMonitor.scale);
+    }
+    property real initX: {
+        Math.max((windowData?.at[0] - (monitorData?.x ?? 0) - monitorData?.reserved[0]) * widthRatio * root.scale, 0) + xOffset;
+    }
+
+    property real initY: {
+        Math.max((windowData?.at[1] - (monitorData?.y ?? 0) - monitorData?.reserved[1]) * heightRatio * root.scale, 0) + yOffset;
+    }
     property real xOffset: 0
     property real yOffset: 0
-    property int widgetMonitorId: 0
-    
-    property var targetWindowWidth: windowData?.size[0] * scale
-    property var targetWindowHeight: windowData?.size[1] * scale
+    property var widgetMonitor
+    property int widgetMonitorId: widgetMonitor.id
+
+    property var targetWindowWidth: windowData?.size[0] * scale * widthRatio
+    property var targetWindowHeight: windowData?.size[1] * scale * heightRatio
     property bool hovered: false
     property bool pressed: false
 
@@ -35,11 +51,11 @@ Item { // Window
     property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
 
     property bool indicateXWayland: windowData?.xwayland ?? false
-    
+
     x: initX
     y: initY
-    width: windowData?.size[0] * root.scale
-    height: windowData?.size[1] * root.scale
+    width: targetWindowWidth
+    height: targetWindowHeight
     opacity: windowData.monitor == widgetMonitorId ? 1 : 0.4
 
     layer.enabled: true
@@ -90,7 +106,7 @@ Item { // Window
                 // console.log("Icon ratio:", root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
                 // console.log("Scale:", root.monitorData.scale)
                 // console.log("Final:", Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale)
-                return Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale;
+                return Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio);
             }
             // mipmap: true
             Layout.alignment: Qt.AlignHCenter

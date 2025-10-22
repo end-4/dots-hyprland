@@ -10,7 +10,6 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property int sidebarPadding: 15
     property bool detach: false
     property Component contentComponent: SidebarLeftContent {}
     property Item sidebarContent

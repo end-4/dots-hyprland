@@ -9,6 +9,7 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
     required property var scopeRoot
+    property int sidebarPadding: 10
     anchors.fill: parent
     property bool aiChatEnabled: Config.options.policies.ai !== 0
     property bool translatorEnabled: Config.options.sidebar.translator.enable

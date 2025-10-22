@@ -9,4 +9,6 @@ Rectangle {
 
     signal openWifiDialog()
     signal openBluetoothDialog()
+    signal openAudioOutputDialog()
+    signal openAudioInputDialog()
 }
