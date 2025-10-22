@@ -3,7 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "./aiChat/"
+import qs.modules.sidebarLeft.aiChat
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

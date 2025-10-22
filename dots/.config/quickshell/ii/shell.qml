@@ -6,6 +6,7 @@
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 
+
 import qs.modules.common
 import qs.modules.background
 import qs.modules.bar
@@ -30,7 +31,7 @@ import qs.modules.wallpaperSelector
 import QtQuick
 import QtQuick.Window
 import Quickshell
-import "./services/"
+import qs.services
 
 ShellRoot {
     // Enable/disable modules here. False = not loaded at all, so rest assured
@@ -46,6 +47,7 @@ ShellRoot {
     property bool enableOnScreenDisplay: true
     property bool enableOnScreenKeyboard: true
     property bool enableOverview: true
+    property bool enableRegionSelector: true
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
     property bool enableSessionScreen: true
@@ -76,6 +78,7 @@ ShellRoot {
     LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
     LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
     LazyLoader { active: enableOverview; component: Overview {} }
+    LazyLoader { active: enableRegionSelector; component: RegionSelector {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
     LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
     LazyLoader { active: enableSessionScreen; component: SessionScreen {} }

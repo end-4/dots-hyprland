@@ -1,5 +1,5 @@
 import qs.modules.common
-import "./notification_utils.js" as NotificationUtils
+import "notification_utils.js" as NotificationUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import Quickshell

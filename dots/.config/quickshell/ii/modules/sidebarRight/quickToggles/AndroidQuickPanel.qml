@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 
-import "./androidStyle/"
+import qs.modules.sidebarRight.quickToggles.androidStyle
 
 AbstractQuickPanel {
     id: root
@@ -73,14 +73,14 @@ AbstractQuickPanel {
             Repeater {
                 id: usedRowsRepeater
                 model: ScriptModel {
-                    values: root.toggleRows
+                    values: Array(root.toggleRows.length)
                 }
                 delegate: ButtonGroup {
                     id: toggleRow
-                    required property var modelData
                     required property int index
+                    property var modelData: root.toggleRows[index]
                     property int startingIndex: {
-                        const rows = usedRowsRepeater.model.values;
+                        const rows = root.toggleRows;
                         let sum = 0;
                         for (let i = 0; i < index; i++) {
                             sum += rows[i].length;
@@ -91,7 +91,8 @@ AbstractQuickPanel {
 
                     Repeater {
                         model: ScriptModel {
-                            values: toggleRow.modelData
+                            values: toggleRow?.modelData ?? []
+                            objectProp: "type"
                         }
                         delegate: AndroidToggleDelegateChooser {
                             startingIndex: toggleRow.startingIndex
@@ -131,16 +132,18 @@ AbstractQuickPanel {
 
                 Repeater {
                     model: ScriptModel {
-                        values: root.unusedToggleRows
+                        values: Array(root.unusedToggleRows.length)
                     }
                     delegate: ButtonGroup {
                         id: unusedToggleRow
-                        required property var modelData
+                        required property int index
+                        property var modelData: root.unusedToggleRows[index]
                         spacing: root.spacing
 
                         Repeater {
                             model: ScriptModel {
-                                values: unusedToggleRow.modelData
+                                values: unusedToggleRow?.modelData ?? []
+                                objectProp: "type"
                             }
                             delegate: AndroidToggleDelegateChooser {
                                 startingIndex: -1

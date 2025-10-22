@@ -9,16 +9,16 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
-import "./quickToggles/"
-import "./quickToggles/classicStyle/"
-import "./wifiNetworks/"
-import "./bluetoothDevices/"
-import "./volumeMixer/"
+import qs.modules.sidebarRight.quickToggles
+import qs.modules.sidebarRight.quickToggles.classicStyle
+import qs.modules.sidebarRight.wifiNetworks
+import qs.modules.sidebarRight.bluetoothDevices
+import qs.modules.sidebarRight.volumeMixer
 
 Item {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 12
+    property int sidebarPadding: 10
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showWifiDialog: false
     property bool showBluetoothDialog: false
@@ -62,7 +62,8 @@ Item {
 
             SystemButtonRow {
                 Layout.fillHeight: false
-                Layout.margins: 10
+                Layout.fillWidth: true
+                // Layout.margins: 10
                 Layout.topMargin: 5
                 Layout.bottomMargin: 0
             }
@@ -200,30 +201,54 @@ Item {
         }
     }
 
-    component SystemButtonRow: RowLayout {
-        spacing: 10
+    component SystemButtonRow: Item {
+        implicitHeight: Math.max(uptimeContainer.implicitHeight, systemButtonsRow.implicitHeight)
 
-        CustomIcon {
-            id: distroIcon
-            width: 25
-            height: 25
-            source: SystemInfo.distroIcon
-            colorize: true
-            color: Appearance.colors.colOnLayer0
-        }
-
-        StyledText {
-            font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer0
-            text: Translation.tr("Up %1").arg(DateTime.uptime)
-            textFormat: Text.MarkdownText
-        }
-
-        Item {
-            Layout.fillWidth: true
+        Rectangle {
+            id: uptimeContainer
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
+            color: Appearance.colors.colLayer1
+            radius: height / 2
+            implicitWidth: uptimeRow.implicitWidth + 24
+            implicitHeight: uptimeRow.implicitHeight + 8
+            
+            Row {
+                id: uptimeRow
+                anchors.centerIn: parent
+                spacing: 8
+                CustomIcon {
+                    id: distroIcon
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 25
+                    height: 25
+                    source: SystemInfo.distroIcon
+                    colorize: true
+                    color: Appearance.colors.colOnLayer0
+                }
+                StyledText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    color: Appearance.colors.colOnLayer0
+                    text: Translation.tr("Up %1").arg(DateTime.uptime)
+                    textFormat: Text.MarkdownText
+                }
+            }
         }
 
         ButtonGroup {
+            id: systemButtonsRow
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+            }
+            color: Appearance.colors.colLayer1
+            padding: 4
+
             QuickToggleButton {
                 toggled: root.editMode
                 visible: Config.options.sidebar.quickToggles.style === "android"

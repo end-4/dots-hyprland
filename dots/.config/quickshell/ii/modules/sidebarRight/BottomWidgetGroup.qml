@@ -1,9 +1,9 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
-import "./calendar"
-import "./todo"
-import "./pomodoro"
+import qs.modules.sidebarRight.calendar
+import qs.modules.sidebarRight.todo
+import qs.modules.sidebarRight.pomodoro
 import QtQuick
 import QtQuick.Layouts
 
