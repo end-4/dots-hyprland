@@ -199,9 +199,9 @@ Singleton {
                 stdout: StdioCollector {
                     id: lightnessCollector
                     onStreamFinished: {
+                        Quickshell.execDetached(["rm", screenScope.screenshotPath]); // Cleanup
                         const lightness = lightnessCollector.text
                         const newMultiplier = root.brightnessMultiplierForLightness(parseFloat(lightness))
-                        print(lightness, "->", newMultiplier)
                         Brightness.getMonitorForScreen(screenScope.modelData).setBrightnessMultiplier(newMultiplier)
                     }
                 }
