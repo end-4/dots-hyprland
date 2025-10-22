@@ -362,9 +362,12 @@ Singleton {
                     property real opacity: 0.3
                     property real contentRegionOpacity: 0.8
                 }
+                property JsonObject rect: JsonObject {
+                    property bool showAimLines: true
+                }
                 property JsonObject circle: JsonObject {
                     property int strokeWidth: 6
-                    property int padding: 40
+                    property int padding: 30
                 }
             }
 
