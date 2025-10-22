@@ -627,6 +627,19 @@ ContentPage {
         }
 
         ContentSubsection {
+            title: Translation.tr("Rectangular selection")
+
+            ConfigSwitch {
+                buttonIcon: "point_scan"
+                text: Translation.tr("Show aim lines")
+                checked: Config.options.regionSelector.rect.showAimLines
+                onCheckedChanged: {
+                    Config.options.regionSelector.rect.showAimLines = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
             title: Translation.tr("Circle selection")
             
             ConfigSpinBox {
