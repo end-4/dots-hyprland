@@ -168,8 +168,8 @@ Singleton {
     }
 
     // Anti-flashbang
-    property int workspaceAnimationDelay: 700
-    property int contentSwitchDelay: 20
+    property int workspaceAnimationDelay: 500
+    property int contentSwitchDelay: 30
     property string screenshotDir: "/tmp/quickshell/brightness/antiflashbang"
     function brightnessMultiplierForLightness(x: real): real {
         // I hand picked some values and fitted an exponential curve for this
@@ -188,7 +188,6 @@ Singleton {
                 enabled: Config.options.light.antiFlashbang.enable && Appearance.m3colors.darkmode
                 target: Hyprland
                 function onRawEvent(event) {
-                    print(event.name)
                     if (["activewindowv2", "windowtitlev2"].includes(event.name)) {
                         screenshotTimer.interval = root.contentSwitchDelay;
                         screenshotTimer.restart();
