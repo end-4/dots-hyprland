@@ -312,7 +312,7 @@ PanelWindow {
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
                 break;
             case RegionSelection.SnipAction.Search:
-                snipProc.command = ["bash", "-c", `${cropInPlace} && xdg-open "${root.imageSearchEngineBaseUrl}$(${uploadAndGetUrl(root.screenshotPath)})"`]
+                snipProc.command = ["bash", "-c", `${cropInPlace} && xdg-open "${root.imageSearchEngineBaseUrl}$(${uploadAndGetUrl(root.screenshotPath)})" && ${cleanup}`]
                 break;
             default:
                 console.warn("[Region Selector] Unknown snip action, skipping snip.");
