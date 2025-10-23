@@ -157,8 +157,11 @@ Singleton {
     }
 
     // Anti-flashbang
+    property int workspaceAnimationDelay: 700
+    property int contentSwitchDelay: 20
     property string screenshotDir: "/tmp/quickshell/brightness/antiflashbang"
     function brightnessMultiplierForLightness(x: real): real {
+        // I hand picked some values and fitted an exponential curve for this
         // 6.600135 + 216.360356 * e^(-0.0811129189x)
         // Division by 100 is to normalize to [0, 1]
         return (6.600135 + 216.360356 * Math.pow(Math.E, -0.0811129189 * x)) / 100.0;
@@ -171,10 +174,15 @@ Singleton {
             property string screenName: modelData.name
             property string screenshotPath: `${root.screenshotDir}/screenshot-${screenName}.png`
             Connections {
-                enabled: Config.options.light.antiFlashbang.enable
+                enabled: Config.options.light.antiFlashbang.enable && Appearance.m3colors.darkmode
                 target: Hyprland
                 function onRawEvent(event) {
-                    if (["workspacev2"].includes(event.name)) {
+                    print(event.name)
+                    if (["activewindowv2", "windowtitlev2"].includes(event.name)) {
+                        screenshotTimer.interval = root.contentSwitchDelay;
+                        screenshotTimer.restart();
+                    } else if (["workspacev2"].includes(event.name)) {
+                        screenshotTimer.interval = root.workspaceAnimationDelay;
                         screenshotTimer.restart();
                     }
                 }
@@ -193,8 +201,8 @@ Singleton {
                 id: screenshotProc
                 command: ["bash", "-c", 
                     `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
-                    + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' '${StringUtils.shellSingleQuoteEscape(screenScope.screenshotPath)}'`
-                    + ` && magick '${StringUtils.shellSingleQuoteEscape(screenScope.screenshotPath)}' -colorspace Gray -format "%[fx:mean*100]" info:`
+                    + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
+                    + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`
                 ]
                 stdout: StdioCollector {
                     id: lightnessCollector
