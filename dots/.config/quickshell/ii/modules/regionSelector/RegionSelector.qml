@@ -56,6 +56,12 @@ Scope {
         GlobalStates.regionSelectorOpen = true
     }
 
+    function ocr() {
+        root.action = RegionSelection.SnipAction.CharRecognition
+        root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        GlobalStates.regionSelectorOpen = true
+    }
+
     IpcHandler {
         target: "region"
 
@@ -64,6 +70,10 @@ Scope {
         }
         function search() {
             root.search()
+        }
+
+        function ocr() {
+            root.ocr()
         }
     }
 
@@ -76,5 +86,10 @@ Scope {
         name: "regionSearch"
         description: "Searches the selected region"
         onPressed: root.search()
+    }
+    GlobalShortcut {
+        name: "regionOcr"
+        description: "Recognizes text in the selected region"
+        onPressed: root.ocr()
     }
 }
