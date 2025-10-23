@@ -324,6 +324,11 @@ ContentPage {
                         displayName: Translation.tr("Japanese"),
                         icon: "square_dot",
                         value: '["一","二","三","四","五","六","七","八","九","十"]'
+                    },
+                    {
+                        displayName: Translation.tr("Roman"),
+                        icon: "account_balance",
+                        value: '["I","II","III","IV","V","VI","VII","VIII","IX","X"]'
                     }
                 ]
             }
