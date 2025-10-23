@@ -90,11 +90,24 @@ Singleton {
         property real brightnessMultiplier: 1.0
         property real multipliedBrightness: Math.max(0, Math.min(1, brightness * brightnessMultiplier))
         property bool ready: false
+        property bool animateChanges: !monitor.isDdc
 
         onBrightnessChanged: {
-            if (monitor.ready) {
-                root.brightnessChanged();
+            if (!monitor.ready) return;
+            root.brightnessChanged();
+        }
+
+        Behavior on multipliedBrightness {
+            enabled: monitor.animateChanges
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveEffects
             }
+        }
+        onMultipliedBrightnessChanged: {
+            if (monitor.animationEnabled) syncBrightness();
+            else setTimer.restart();
         }
 
         function initialize() {
@@ -124,7 +137,7 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = monitor.multipliedBrightness
+            const brightnessValue = Math.max(monitor.multipliedBrightness, root.minimumBrightnessAllowed)
             const rounded = Math.round(brightnessValue * monitor.rawMaxBrightness);
             setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "--class", "backlight", "s", rounded, "--quiet"];
             setProc.startDetached();
@@ -133,12 +146,10 @@ Singleton {
         function setBrightness(value: real): void {
             value = Math.max(root.minimumBrightnessAllowed, Math.min(1, value));
             monitor.brightness = value;
-            setTimer.restart();
         }
 
         function setBrightnessMultiplier(value: real): void {
             monitor.brightnessMultiplier = value;
-            setTimer.restart();
         }
 
         Component.onCompleted: {
