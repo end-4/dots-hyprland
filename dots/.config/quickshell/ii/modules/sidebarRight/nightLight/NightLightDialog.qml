@@ -70,10 +70,10 @@ WindowDialog {
                 leftMargin: 4
                 rightMargin: 4
             }
-            text: Translation.tr("Color temperature")
-            from: 1000
-            to: 20000
-            stopIndicatorValues: [6000, to]
+            text: Translation.tr("Intensity")
+            from: 6500
+            to: 1200
+            stopIndicatorValues: [5000, to]
             value: Config.options.light.night.colorTemperature
             onMoved: Config.options.light.night.colorTemperature = value
             tooltipContent: `${Math.round(value)}K`
