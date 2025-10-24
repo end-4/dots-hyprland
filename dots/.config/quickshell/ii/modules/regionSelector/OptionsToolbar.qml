@@ -64,9 +64,4 @@ Toolbar {
         onClicked: root.selectionMode = RegionSelection.SelectionMode.Circle
     }
 
-    IconToolbarButton {
-        text: "close"
-        colBackground: Appearance.colors.colLayer3
-        onClicked: root.dismiss();
-    }
 }
