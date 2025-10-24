@@ -199,7 +199,7 @@ ContentPage {
         ConfigSwitch {
             buttonIcon: "󰍽"
             text: Translation.tr("Use symbols for mouse")
-            checked: Config.options.appearance.keybinds.s
+            checked: Config.options.appearance.keybinds.useMouseSymbol
             onCheckedChanged: {
                 Config.options.appearance.keybinds.useMouseSymbol = checked;
             }
