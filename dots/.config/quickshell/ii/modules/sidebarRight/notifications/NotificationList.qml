@@ -64,53 +64,32 @@ Item {
         }
     }
 
-    Item {
+    ButtonGroup {
         id: statusRow
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        Layout.fillWidth: true
-        implicitHeight: Math.max(
-            controls.implicitHeight,
-            statusText.implicitHeight
-        )
-
-        StyledText {
-            id: statusText
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 10
-            horizontalAlignment: Text.AlignHCenter
-            text: Translation.tr("%1 notifications").arg(Notifications.list.length)
-
-            opacity: Notifications.list.length > 0 ? 1 : 0
-            visible: opacity > 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-            }
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
         }
 
-        ButtonGroup {
-            id: controls
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 5
-
-            NotificationStatusButton {
-                buttonIcon: "notifications_paused"
-                buttonText: Translation.tr("Silent")
-                toggled: Notifications.silent
-                onClicked: () => {
-                    Notifications.silent = !Notifications.silent;
-                }
+        NotificationStatusButton {
+            Layout.fillWidth: false
+            buttonIcon: "notifications_paused"
+            toggled: Notifications.silent
+            onClicked: () => {
+                Notifications.silent = !Notifications.silent;
             }
-            NotificationStatusButton {
-                buttonIcon: "clear_all"
-                buttonText: Translation.tr("Clear")
-                onClicked: () => {
-                    Notifications.discardAllNotifications()
-                }
+        }
+        NotificationStatusButton {
+            enabled: false
+            Layout.fillWidth: true
+            buttonText: Translation.tr("%1 notifications").arg(Notifications.list.length)
+        }
+        NotificationStatusButton {
+            Layout.fillWidth: false
+            buttonIcon: "clear_all"
+            onClicked: () => {
+                Notifications.discardAllNotifications()
             }
         }
     }
