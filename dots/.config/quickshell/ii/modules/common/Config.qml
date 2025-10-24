@@ -123,6 +123,16 @@ Singleton {
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                 }
+                property JsonObject keybinds: JsonObject {
+                    // Use a nerdfont to see the icons
+                    // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
+                    // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
+                    // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
+                    property int superKey: 0
+                    property bool useMacSymbol: false
+                    property bool useMouseSymbol: false
+                    property bool useFnSymbol: false
+                }
             }
 
             property JsonObject audio: JsonObject {

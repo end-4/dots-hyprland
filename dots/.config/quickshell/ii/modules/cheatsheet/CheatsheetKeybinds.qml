@@ -14,18 +14,48 @@ Item {
     property real padding: 4
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
-
+    property list<string> superMap: [
+      "󰖳", "󰌽", "󰘳", "", "󰨡", "", "",
+      "󰣇", "", "", "", "", " ", "", "󱄛"
+    ]
     property var keyBlacklist: ["Super_L"]
     property var keySubstitutions: ({
-        "Super": "󰖳",
-        "mouse_up": "Scroll ↓",    // ikr, weird
-        "mouse_down": "Scroll ↑",  // trust me bro
-        "mouse:272": "LMB",
-        "mouse:273": "RMB",
+        "Super": superMap[Config.options.appearance.keybinds.superKey],
+        "Ctrl": Config.options.appearance.keybinds.useMacSymbol ? "󰘴" : "Ctrl",
+        "Alt": Config.options.appearance.keybinds.useMacSymbol ? "󰘵" : "Alt",
+        "Shift": Config.options.appearance.keybinds.useMacSymbol ? "󰘶" : "Shift",
+        "Space": Config.options.appearance.keybinds.useMacSymbol ? "󱁐" : "Space",
+        "Tab": Config.options.appearance.keybinds.useMacSymbol ? "" : "Tab",
+        "Equal": Config.options.appearance.keybinds.useMacSymbol ? "󰇼" : "Equal",
+        "Minus": Config.options.appearance.keybinds.useMacSymbol ? "" : "Minus",
+        "Print": Config.options.appearance.keybinds.useMacSymbol ? "" : "Print",
+        "Delete": Config.options.appearance.keybinds.useMacSymbol ? "󰭜" : "Delete",
+        "Return": Config.options.appearance.keybinds.useMacSymbol ? "󰌑" : "Enter",
+        "Period": Config.options.appearance.keybinds.useMacSymbol ? "." : "Period",
+
+        // Function keys
+        "Escape": Config.options.appearance.keybinds.useFnSymbol ? "󱊷" : "Escape",
+        "F1": Config.options.appearance.keybinds.useFnSymbol ? "󱊫" : "F1",
+        "F2": Config.options.appearance.keybinds.useFnSymbol ? "󱊬" : "F2",
+        "F3": Config.options.appearance.keybinds.useFnSymbol ? "󱊭" : "F3",
+        "F4": Config.options.appearance.keybinds.useFnSymbol ? "󱊮" : "F4",
+        "F5": Config.options.appearance.keybinds.useFnSymbol ? "󱊯" : "F5",
+        "F6": Config.options.appearance.keybinds.useFnSymbol ? "󱊰" : "F6",
+        "F7": Config.options.appearance.keybinds.useFnSymbol ? "󱊱" : "F7",
+        "F8": Config.options.appearance.keybinds.useFnSymbol ? "󱊲" : "F8",
+        "F9": Config.options.appearance.keybinds.useFnSymbol ? "󱊳" : "F9",
+        "F10": Config.options.appearance.keybinds.useFnSymbol ? "󱊴" : "F10",
+        "F11": Config.options.appearance.keybinds.useFnSymbol ? "󱊵" : "F11",
+        "F12": Config.options.appearance.keybinds.useFnSymbol ? "󱊶" : "F12",
+
+        // Mouse keys
+        "mouse_up": Config.options.appearance.keybinds.useMouseSymbol ? "󱕐" : "Scroll ↓",    // ikr, weird
+        "mouse_down": Config.options.appearance.keybinds.useMouseSymbol ? "󱕑" : "Scroll ↑",  // trust me bro
+        "mouse:272": Config.options.appearance.keybinds.useMouseSymbol ? "L󰍽" : "LMB",
+        "mouse:273": Config.options.appearance.keybinds.useMouseSymbol ? "R󰍽" : "RMB",
         "mouse:275": "MouseBack",
         "Slash": "/",
         "Hash": "#",
-        "Return": "Enter",
         // "Shift": "",
     })
 

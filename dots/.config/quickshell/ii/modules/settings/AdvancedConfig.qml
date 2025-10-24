@@ -90,4 +90,119 @@ ContentPage {
         }
     }
 
+    ContentSection {
+        icon: "keyboard"
+        title: Translation.tr("Keybinds Cheatsheet")
+
+        ContentSubsection {
+            title: Translation.tr("Super Key Symbol")
+            ConfigSelectionArray {
+                currentValue: Config.options.appearance.keybinds.superKey
+                onSelected: newValue => {
+                    Config.options.appearance.keybinds.superKey = newValue;
+                }
+                // Use a nerdfont to see the icons
+                // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
+                // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
+                // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
+                options: [
+                    {
+                        displayName: "󰖳",
+                        icon: "",
+                        value: 0
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 3
+                    },
+                    {
+                        displayName: "󰨡",
+                        icon: "",
+                        value: 4
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 5
+                    },
+                    {
+                        displayName: "󰣇",
+                        icon: "",
+                        value: 7
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 12
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 13
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 11
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 10
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 8
+                    },
+                    {
+                        displayName: "󱄛",
+                        icon: "",
+                        value: 14
+                    },
+                    {
+                       displayName:  "",
+                        icon: "",
+                        value: 9
+                    },
+                    {
+                        displayName: "",
+                        icon: "",
+                        value: 6
+                    },
+                    {
+                        displayName: "󰘳",
+                        icon: "",
+                        value: 2
+                    },
+                ]
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "󰘵"
+            text: Translation.tr("Use macOS-like symbols for mods keys")
+            checked: Config.options.appearance.keybinds.useMacSymbol
+            onCheckedChanged: {
+                Config.options.appearance.keybinds.useMacSymbol = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "󱊶"
+            text: Translation.tr("Use symbols for function keys")
+            checked: Config.options.appearance.keybinds.useFnSymbol
+            onCheckedChanged: {
+                Config.options.appearance.keybinds.useFnSymbol = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "󰍽"
+            text: Translation.tr("Use symbols for mouse")
+            checked: Config.options.appearance.keybinds.s
+            onCheckedChanged: {
+                Config.options.appearance.keybinds.useMouseSymbol = checked;
+            }
+        }
+    }
 }
