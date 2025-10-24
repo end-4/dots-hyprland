@@ -20,6 +20,8 @@ Toolbar {
     // Use a synchronizer on these
     property var action
     property var selectionMode
+    // Signals
+    signal dismiss()
 
     MaterialCookie {
         Layout.fillHeight: true
