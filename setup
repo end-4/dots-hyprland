@@ -23,6 +23,7 @@ Subcommands:
   install-files  Run the install step \"3. Copying config files\"
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
+  exp-update-old (WIP) exp-update but use behaves like old version.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
@@ -33,7 +34,7 @@ case $1 in
   # Global help
   help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|install-deps|install-setups|install-files|exp-uninstall|exp-update)
+  install|install-deps|install-setups|install-files|exp-uninstall|exp-update|exp-update-old)
     SCRIPT_SUBCOMMAND=$1;shift;;
   # No subcommand
   -*|"")SCRIPT_SUBCOMMAND=install;;
@@ -97,6 +98,11 @@ case ${SCRIPT_SUBCOMMAND} in
   exp-update)
     source ./sdata/options/exp-update.sh
     source ./sdata/step/exp-update.sh
+    exit
+    ;;
+  exp-update-old)
+    source ./sdata/options/exp-update-old.sh
+    source ./sdata/step/exp-update-old.sh
     exit
     ;;
 esac
