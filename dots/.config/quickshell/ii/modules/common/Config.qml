@@ -368,7 +368,7 @@ Singleton {
                 }
                 property JsonObject circle: JsonObject {
                     property int strokeWidth: 6
-                    property int padding: 30
+                    property int padding: 10
                 }
             }
 
