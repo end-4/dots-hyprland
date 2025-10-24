@@ -16,50 +16,14 @@
 set -uo pipefail
 
 # === Configuration ===
-FORCE_CHECK=false
-CHECK_PACKAGES=false
-REPO_DIR="$(cd $(dirname $(dirname $(dirname $0))) &>/dev/null && pwd)"
-ARCH_PACKAGES_DIR="${REPO_DIR}/sdist/arch"
-UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
+ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
+UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
 # Directories to monitor for changes
 MONITOR_DIRS=("dots/.config" "dots/.local/bin")
 
 # === Color Codes ===
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-PURPLE='\033[0;35m'
-NC='\033[0m' # No Color
-
-# === Helper Functions ===
-log_info() {
-  echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-  echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-  echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-  echo -e "${RED}[ERROR]${NC} $1" >&2
-}
-
-log_header() {
-  echo -e "\n${PURPLE}=== $1 ===${NC}"
-}
-
-die() {
-  log_error "$1"
-  exit 1
-}
 
 # Function to safely read input with terminal compatibility
 safe_read() {
@@ -97,8 +61,8 @@ should_ignore() {
 
   # Also get path relative to repo for repo-level ignores
   local repo_relative=""
-  if [[ "$file_path" == "$REPO_DIR"* ]]; then
-    repo_relative="${file_path#$REPO_DIR/}"
+  if [[ "$file_path" == "$REPO_ROOT"* ]]; then
+    repo_relative="${file_path#$REPO_ROOT/}"
   fi
 
   # Check both repo and home ignore files
@@ -178,9 +142,9 @@ show_diff() {
   local file1="$1"
   local file2="$2"
 
-  echo -e "\n${CYAN}Showing differences:${NC}"
-  echo -e "${CYAN}Old file: $file1${NC}"
-  echo -e "${CYAN}New file: $file2${NC}"
+  echo -e "\n${STY_CYAN}Showing differences:${STY_RST}"
+  echo -e "${STY_CYAN}Old file: $file1${STY_RST}"
+  echo -e "${STY_CYAN}New file: $file2${STY_RST}"
   echo "----------------------------------------"
 
   if command -v diff &>/dev/null; then
@@ -198,7 +162,7 @@ handle_file_conflict() {
   local filename=$(basename "$home_file")
   local dirname=$(dirname "$home_file")
 
-  echo -e "\n${YELLOW}Conflict detected:${NC} $home_file"
+  echo -e "\n${STY_YELLOW}Conflict detected:${STY_RST} $home_file"
   echo "Repository version differs from your local version."
   echo
   echo "Choose an action:"
@@ -317,7 +281,7 @@ check_pkgbuild_changed() {
   [[ ! -f "$pkgbuild_path" ]] && return 1
 
   # Get the path relative to repo
-  local relative_path="${pkgbuild_path#$REPO_DIR/}"
+  local relative_path="${pkgbuild_path#$REPO_ROOT/}"
 
   # If force check is enabled, always return true
   if [[ "$FORCE_CHECK" == true ]]; then
@@ -358,17 +322,17 @@ list_packages() {
     return 1
   fi
 
-  echo -e "\n${CYAN}Available packages:${NC}"
+  echo -e "\n${STY_CYAN}Available packages:${STY_RST}"
   for pkg in "${available_packages[@]}"; do
     if [[ " ${changed_packages[*]} " =~ " ${pkg} " ]]; then
-      echo -e "  ${GREEN}● ${pkg}${NC} (PKGBUILD changed)"
+      echo -e "  ${STY_GREEN}● ${pkg}${STY_RST} (PKGBUILD changed)"
     else
       echo -e "  ○ ${pkg}"
     fi
   done
 
   if [[ ${#changed_packages[@]} -gt 0 ]]; then
-    echo -e "\n${YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
+    echo -e "\n${STY_YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${STY_RST}"
   fi
 
   return 0
@@ -424,7 +388,7 @@ build_packages() {
     return
   fi
 
-  echo -e "\n${CYAN}Packages to build: ${packages_to_build[*]}${NC}"
+  echo -e "\n${STY_CYAN}Packages to build: ${packages_to_build[*]}${STY_RST}"
 
   if ! safe_read "Proceed with building these packages? (Y/n): " confirm "Y"; then
     log_warning "Failed to read input. Skipping package builds."
@@ -454,7 +418,7 @@ build_packages() {
       log_error "Failed to build package $pkg_name"
     fi
 
-    cd "$REPO_DIR" || die "Failed to return to repository directory"
+    cd "$REPO_ROOT" || log_die "Failed to return to repository directory"
   done
 
   if [[ $rebuilt_packages -eq 0 ]]; then
@@ -475,7 +439,7 @@ get_changed_files() {
     # Get files that changed in the last pull
     local changed_files=()
     while IFS= read -r file; do
-      local full_path="${REPO_DIR}/${file}"
+      local full_path="${REPO_ROOT}/${file}"
       # Check if file is in the directory we're processing
       if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
         printf '%s\0' "$full_path"
@@ -570,7 +534,7 @@ if [[ "$check" == true ]]; then
 fi
 
 # Check if we're in a git repository
-cd "$REPO_DIR" || die "Failed to change to repository directory"
+cd "$REPO_ROOT" || log_die "Failed to change to repository directory"
 
 if git rev-parse --is-inside-work-tree &>/dev/null; then
   log_info "Running in git repository: $(git rev-parse --show-toplevel)"
@@ -593,7 +557,7 @@ if [[ -z "$current_branch" ]]; then
     git checkout master
     current_branch="master"
   else
-    die "Could not find main or master branch"
+    log_die "Could not find main or master branch"
   fi
 fi
 
@@ -612,7 +576,7 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   fi
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
-    die "Aborted by user"
+    log_die "Aborted by user"
   fi
   git stash push -m "Auto-stash before update $(date)"
   log_info "Changes stashed"
@@ -760,7 +724,7 @@ if [[ "$process_files" == true ]]; then
   files_created=0
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
-    repo_dir_path="${REPO_DIR}/${dir_name}"
+    repo_dir_path="${REPO_ROOT}/${dir_name}"
     home_dir_path="${HOME}/${dir_name}"
 
     if [[ ! -d "$repo_dir_path" ]]; then
@@ -829,7 +793,7 @@ log_success "Dotfiles update completed successfully!"
 
 # Show summary
 echo
-echo -e "${CYAN}Summary:${NC}"
+echo -e "${STY_CYAN}Summary:${STY_RST}"
 echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)')"
 echo "- Branch: $current_branch"
 echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
@@ -851,7 +815,7 @@ echo "- Configuration directories: ${MONITOR_DIRS[*]}"
 if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
-  echo "  - Repository ignore: ${REPO_DIR}/.updateignore"
+  echo "  - Repository ignore: ${REPO_ROOT}/.updateignore"
   echo "  - User ignore: ~/.updateignore"
   echo
   echo "Example patterns:"
