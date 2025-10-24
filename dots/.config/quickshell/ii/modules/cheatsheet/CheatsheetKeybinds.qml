@@ -53,6 +53,8 @@ Item {
         "mouse_down": Config.options.appearance.keybinds.useMouseSymbol ? "󱕑" : "Scroll ↑",  // trust me bro
         "mouse:272": Config.options.appearance.keybinds.useMouseSymbol ? "L󰍽" : "LMB",
         "mouse:273": Config.options.appearance.keybinds.useMouseSymbol ? "R󰍽" : "RMB",
+        "Scroll ↑/↓": Config.options.appearance.keybinds.useMouseSymbol ? "󱕒" : "Scroll ↑/↓",
+        "Page_↑/↓": Config.options.appearance.keybinds.useMouseSymbol ? "Page " : "Page_↑/↓",
         "mouse:275": "MouseBack",
         "Slash": "/",
         "Hash": "#",
