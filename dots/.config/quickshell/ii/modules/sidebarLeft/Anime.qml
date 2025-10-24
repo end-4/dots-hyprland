@@ -24,15 +24,6 @@ Item {
     property var suggestionList: []
 
     Connections {
-        target: Config
-        function onReadyChanged() {
-            if (Config.options.policies.weeb !== 0) {
-                Quickshell.execDetached(["bash", "-c", `mkdir -p '${root.downloadPath}' && mkdir -p '${root.nsfwPath}'`])
-            }
-        }
-    }
-
-    Connections {
         target: Booru
         function onTagSuggestion(query, suggestions) {
             root.suggestionQuery = query;
