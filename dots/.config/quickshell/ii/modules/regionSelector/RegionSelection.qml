@@ -104,7 +104,6 @@ PanelWindow {
         });
         return offsetAdjustedLayers;
     }
-    property list<var> textRegions: []
 
     property bool isCircleSelection: (root.selectionMode === RegionSelection.SelectionMode.Circle)
     property bool enableWindowRegions: Config.options.regionSelector.targetRegions.windows && !isCircleSelection
@@ -182,7 +181,6 @@ PanelWindow {
         onExited: (exitCode, exitStatus) => {
             root.visible = true;
             if (root.enableContentRegions) imageDetectionProcess.running = true;
-            // if (root.action === RegionSelection.SnipAction.CharRecognition) ocrProc.running = true;
         }
     }
 
@@ -200,41 +198,6 @@ PanelWindow {
                     JSON.parse(imageDimensionCollector.text),
                     root.windowRegions
                 );
-            }
-        }
-    }
-
-    Process {
-        id: ocrProc
-        command: ["bash", "-c", `tesseract '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}' stdout tsv 2>/dev/null`]
-        stdout: StdioCollector {
-            id: outputCollector
-            onStreamFinished: {
-                // level	page_num	block_num	par_num	line_num	word_num	left	top	width	height	conf	text
-                const output = outputCollector.text
-                const lines = output.split("\n").slice(1) // Skip header
-                const filteredLines = lines.filter(line => (!line.trim().endsWith("-1")))
-                let regions = filteredLines.map(line => {
-                    const parts = line.split("\t")
-                    return ({
-                        "block_num": parseInt(parts[2]),
-                        "line_num": parseInt(parts[4]),
-                        "word_num": parseInt(parts[5]),
-                        "left": parseInt(parts[6]),
-                        "top": parseInt(parts[7]),
-                        "width": parseInt(parts[8]),
-                        "height": parseInt(parts[9]),
-                        "conf": parseInt(parts[10]),
-                        "text": parts.slice(11).join("\t")
-                    })
-                }).filter(region => {
-                    if (region === null) return false;
-                    // if (region.text.length <= 3 && region.text.replace(/[^a-zA-Z0-9]/g, "").length < region.text.length / 2) return false;
-                    // if (region.text.length < 2) return false;
-                    return true;
-                })
-                // print(`[Region Selector] OCR Regions: ${JSON.stringify(regions, null, 2)}`)
-                root.textRegions = regions;
             }
         }
     }
@@ -450,35 +413,9 @@ PanelWindow {
                 }
             }
 
-            // OCR text regions
-            // Repeater {
-            //     model: ScriptModel {
-            //         values: root.textRegions
-            //     }
-            //     delegate: Rectangle {
-            //         id: textRegionItem
-            //         z: 5
-            //         required property var modelData
-            //         property real padding: 4
-            //         color: ColorUtils.transparentize(Appearance.colors.colTooltip, 0.3)
-            //         radius: 6
-            //         x: modelData.left - padding
-            //         y: modelData.top - padding
-            //         width: modelData.width + padding
-            //         height: modelData.height + padding
-
-            //         StyledText {
-            //             font.pixelSize: Appearance.font.pixelSize.smallie
-            //             anchors.centerIn: parent
-            //             text: textRegionItem.modelData.text
-            //             color: ColorUtils.transparentize(Appearance.colors.colOnTooltip, 0.2)
-            //         }
-            //     }
-            // }
-
-            // Options toolbar
-            OptionsToolbar {
-                id: toolbar
+            // Controls
+            Row {
+                id: regionSelectionControls
                 z: 9999
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -490,8 +427,8 @@ PanelWindow {
                     target: root
                     function onVisibleChanged() {
                         if (!visible) return;
-                        toolbar.anchors.bottomMargin = 8;
-                        toolbar.opacity = 1;
+                        regionSelectionControls.anchors.bottomMargin = 8;
+                        regionSelectionControls.opacity = 1;
                     }
                 }
                 Behavior on opacity {
@@ -500,16 +437,42 @@ PanelWindow {
                 Behavior on anchors.bottomMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
+                spacing: 6
 
-                Synchronizer on action {
-                    property alias source: root.action
+                OptionsToolbar {
+                    Synchronizer on action {
+                        property alias source: root.action
+                    }
+                    Synchronizer on selectionMode {
+                        property alias source: root.selectionMode
+                    }
+                    onDismiss: root.dismiss();
                 }
-                Synchronizer on selectionMode {
-                    property alias source: root.selectionMode
+                Item {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    implicitWidth: closeFab.implicitWidth
+                    implicitHeight: closeFab.implicitHeight
+                    StyledRectangularShadow {
+                        target: closeFab
+                        radius: closeFab.buttonRadius
+                    }
+                    FloatingActionButton {
+                        id: closeFab
+                        baseSize: 48
+                        iconText: "close"
+                        onClicked: root.dismiss();
+                        StyledToolTip {
+                            text: Translation.tr("Close")
+                        }
+                        colBackground: Appearance.colors.colTertiaryContainer
+                        colBackgroundHover: Appearance.colors.colTertiaryContainerHover
+                        colRipple: Appearance.colors.colTertiaryContainerActive
+                    }
                 }
-
-                onDismiss: root.dismiss();
             }
+            
         }
     }
 }
