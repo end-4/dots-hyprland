@@ -323,8 +323,14 @@ PanelWindow {
                 root.mouseButton = mouse.button;
             }
             onReleased: (mouse) => {
+                // Detect if it was a click -> Try to select targeted region
+                if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
+                    if (root.targetedRegionValid()) {
+                        root.setRegionToTargeted();
+                    }
+                }
                 // Circle dragging?
-                if (root.selectionMode === RegionSelection.SelectionMode.Circle) {
+                else if (root.selectionMode === RegionSelection.SelectionMode.Circle) {
                     const padding = Config.options.regionSelector.circle.padding + Config.options.regionSelector.circle.strokeWidth / 2;
                     const dragPoints = (root.points.length > 0) ? root.points : [{ x: mouseArea.mouseX, y: mouseArea.mouseY }];
                     const maxX = Math.max(...dragPoints.map(p => p.x));
@@ -335,20 +341,6 @@ PanelWindow {
                     root.regionY = minY - padding;
                     root.regionWidth = maxX - minX + padding * 2;
                     root.regionHeight = maxY - minY + padding * 2;
-                    if (root.targetedRegionValid() && imageRegions.find(region => {
-                        return (region.at[0] === root.targetedRegionX 
-                            && region.at[1] === root.targetedRegionY
-                            && region.size[0] === root.targetedRegionWidth
-                            && region.size[1] === root.targetedRegionHeight)
-                    })) {
-                        root.setRegionToTargeted();
-                    }
-                }
-                // Detect if it was a click -> Try to select targeted region
-                else if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
-                    if (root.targetedRegionValid()) {
-                        root.setRegionToTargeted();
-                    }
                 }
                 root.snip();
             }
