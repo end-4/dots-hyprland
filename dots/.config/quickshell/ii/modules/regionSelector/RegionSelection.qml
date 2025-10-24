@@ -507,6 +507,8 @@ PanelWindow {
                 Synchronizer on selectionMode {
                     property alias source: root.selectionMode
                 }
+
+                onDismiss: root.dismiss();
             }
         }
     }
