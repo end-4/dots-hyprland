@@ -87,7 +87,7 @@ Item {
         }
         NotificationStatusButton {
             Layout.fillWidth: false
-            buttonIcon: "clear_all"
+            buttonIcon: "delete_sweep"
             onClicked: () => {
                 Notifications.discardAllNotifications()
             }
