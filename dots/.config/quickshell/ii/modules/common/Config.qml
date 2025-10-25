@@ -135,8 +135,7 @@ Singleton {
                     property bool useFnSymbol: false
                     property JsonObject pixelSize: JsonObject {
                       property int key: Appearance.font.pixelSize.smaller
-                      property int comment: Appareance.font.pixelSize.smaller
-                    }
+                      property int comment: Appearance.font.pixelSize.smaller                    }
                 }
             }
 
