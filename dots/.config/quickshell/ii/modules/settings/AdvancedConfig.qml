@@ -232,12 +232,12 @@ ContentPage {
         }
         ConfigSpinBox {
             text: Translation.tr("Comment font size")
-            value: Config.options.appearance.commentbinds.pixelSize.comment
+            value: Config.options.appearance.keybinds.pixelSize.comment
             from: Appearance.font.pixelSize.smallest
             to: Appearance.font.pixelSize.large
             stepSize: 1
             onValueChanged: {
-                Config.options.appearance.commentbinds.pixelSize.comment = value;
+                Config.options.appearance.keybinds.pixelSize.comment = value;
             }
         }
     }
