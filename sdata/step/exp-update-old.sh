@@ -16,12 +16,13 @@
 set -uo pipefail
 
 # === Configuration ===
+DOTS_ROOT="${REPO_ROOT}/dots"
 ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
 # Directories to monitor for changes
-MONITOR_DIRS=("dots/.config" "dots/.local/bin")
+MONITOR_DIRS=(".config" ".local/bin")
 
 # === Color Codes ===
 
@@ -676,7 +677,7 @@ if [[ "$process_files" == true ]]; then
   files_created=0
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
-    repo_dir_path="${REPO_ROOT}/${dir_name}"
+    repo_dir_path="${DOTS_ROOT}/${dir_name}"
     home_dir_path="${HOME}/${dir_name}"
 
     if [[ ! -d "$repo_dir_path" ]]; then
