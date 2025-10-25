@@ -49,7 +49,8 @@ Item {
                 id: quoteStyledText
                 horizontalAlignment: Text.AlignLeft
                 anchors.verticalCenter: parent.verticalCenter
-                text: GlobalStates.screenLocked ? "Locked" : Config.options.background.quote
+                text: GlobalStates.screenLocked && Config.options.lock.showLockedText ? "Locked" : 
+                      Config.options.background.showQuote ? Config.options.background.quote : ""
                 color: Appearance.colors.colOnSecondaryContainer
                 font {
                     family: Appearance.font.family.reading

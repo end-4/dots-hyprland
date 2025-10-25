@@ -151,6 +151,7 @@ Singleton {
                     property real scale: 1
                     property int x: 500
                     property int y: 500
+                    property bool lockPosition: false
                     property JsonObject cookie: JsonObject {
                         property bool aiStyling: false
                         property int sides: 14
@@ -178,6 +179,7 @@ Singleton {
                     property real scale: 1
                     property int x: 750
                     property int y: 750
+                    property bool lockPosition: false
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""

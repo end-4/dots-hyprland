@@ -23,9 +23,12 @@ BackgroundWidget {
     x: Config.options.background.weather.x
     y: Config.options.background.weather.y
 
-    onPositionChanged: {
-        Config.options.background.weather.x = newX
-        Config.options.background.weather.y = newY
+    lockPosition: Config.options.background.weather.lockPosition
+    onMiddleClicked: Config.options.background.weather.lockPosition = !Config.options.background.weather.lockPosition
+    
+    function savePosition(xPos, yPos) {
+        Config.options.background.weather.x = xPos
+        Config.options.background.weather.y = yPos
     }
 
     onRightClicked: {

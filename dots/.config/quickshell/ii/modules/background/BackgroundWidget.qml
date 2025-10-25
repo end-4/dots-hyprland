@@ -11,14 +11,16 @@ Item {
     id: widgetRoot
 
     property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
-
-    signal positionChanged(int newX, int newY)
+    
     signal rightClicked()
+    signal middleClicked()
 
     property real scaleMultiplier: 1
     onScaleMultiplierChanged: {
         scale = scaleMultiplier
     }
+
+    property bool lockPosition: false
 
     Drag.active: dragArea.drag.active
 
@@ -30,36 +32,43 @@ Item {
     MouseArea {
         id: dragArea
         anchors.fill: parent
-        drag.target: parent
+        drag.target: lockPosition ? undefined : parent
 
         property bool dragActive: drag.active
         property bool down: false
-
+        
         cursorShape: down ? Qt.ClosedHandCursor : undefined
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
         drag.minimumX: - implicitWidth / 2 - wallpaper.x
         drag.maximumX: monitor.width - widgetRoot.implicitWidth - wallpaper.x
         drag.minimumY: - implicitHeight / 2 - wallpaper.y
         drag.maximumY: monitor.height - widgetRoot.implicitHeight - wallpaper.y
 
-        onPressed: {
+        onPressed: (mouse) => {
+            if (mouse.button == Qt.LeftButton && widgetRoot.lockPosition) return
+            down = true
             widgetRoot.scale = scaleMultiplier * 1.07
             widgetRoot.opacity = 0.8
-            down = true
+            
         }
-        onReleased: {
+        onReleased: (mouse) => {
+            if (mouse.button == Qt.LeftButton && widgetRoot.lockPosition) return
+            down = false
             widgetRoot.scale = scaleMultiplier * 1.0
             widgetRoot.opacity = 1.0
-            down = false
+            
         }
         onClicked: (mouse) => {
             if (mouse.button === Qt.RightButton){
                 widgetRoot.rightClicked()
             }
+            if (mouse.button === Qt.MiddleButton){
+                widgetRoot.middleClicked()
+            }
         }
         onDragActiveChanged: {
-            if (!dragActive) widgetRoot.positionChanged(widgetRoot.x, widgetRoot.y)
+            if (!dragActive) widgetRoot.savePosition(widgetRoot.x, widgetRoot.y) // saving position to config after dragging
         }
     }
 }
