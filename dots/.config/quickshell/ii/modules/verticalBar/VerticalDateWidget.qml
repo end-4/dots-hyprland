@@ -4,7 +4,7 @@ import qs.services
 import QtQuick
 import QtQuick.Shapes
 import QtQuick.Layouts
-import "../bar" as Bar
+import qs.modules.bar as Bar
 
 Item { // Full hitbox
     id: root

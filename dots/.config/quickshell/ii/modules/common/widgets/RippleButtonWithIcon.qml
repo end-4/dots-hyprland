@@ -11,6 +11,7 @@ RippleButton {
     property string mainText: "Button text"
     property Component mainContentComponent: Component {
         StyledText {
+            visible: text !== ""
             text: buttonWithIconRoot.mainText
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnSecondaryContainer

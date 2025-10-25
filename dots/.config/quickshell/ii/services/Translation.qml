@@ -4,7 +4,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.modules.common
-import qs.modules.common.functions
 
 Singleton {
     id: root
@@ -80,7 +79,7 @@ Singleton {
         // Special cases
         if (!text) return "";
         var key = text.toString();
-        if (root.isLoading || (!root.translations.hasOwnProperty(key) && !root.generatedTranslations.hasOwnProperty(key)))
+        if (root.isLoading || (!root?.translations?.hasOwnProperty(key) && !root?.generatedTranslations?.hasOwnProperty(key)))
             return key;
         
         // Normal cases

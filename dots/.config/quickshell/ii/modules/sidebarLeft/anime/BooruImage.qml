@@ -28,7 +28,7 @@ Button {
     Process {
         id: downloadProcess
         running: false
-        command: ["bash", "-c", `[ -f ${root.filePath} ] || curl -sSL '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.filePath}'`]
+        command: ["bash", "-c", `mkdir -p '${root.previewDownloadPath}' && [ -f ${root.filePath} ] || curl -sSL '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.filePath}'`]
         onExited: (exitCode, exitStatus) => {
             imageObject.source = `${previewDownloadPath}/${root.fileName}`
         }
@@ -170,9 +170,10 @@ Button {
                             Layout.fillWidth: true
                             buttonText: Translation.tr("Download")
                             onClicked: {
-                                root.showActions = false
+                                root.showActions = false;
+                                const targetPath = root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath;
                                 Quickshell.execDetached(["bash", "-c", 
-                                    `curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
+                                    `mkdir -p '${targetPath}' && curl '${root.imageData.file_url}' -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
                                 ])
                             }
                         }

@@ -3,7 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "./anime/"
+import qs.modules.sidebarLeft.anime
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -22,15 +22,6 @@ Item {
     property int tagSuggestionDelay: 210
     property var suggestionQuery: ""
     property var suggestionList: []
-
-    Connections {
-        target: Config
-        function onReadyChanged() {
-            if (Config.options.policies.weeb !== 0) {
-                Quickshell.execDetached(["bash", "-c", `mkdir -p '${root.downloadPath}' && mkdir -p '${root.nsfwPath}'`])
-            }
-        }
-    }
 
     Connections {
         target: Booru
@@ -152,12 +143,14 @@ Item {
             }
 
             ScrollEdgeFade {
+                z: 1
                 target: booruResponseListView
                 vertical: true
             }
 
             StyledListView { // Booru responses
                 id: booruResponseListView
+                z: 0
                 anchors.fill: parent
                 spacing: 10
                 
@@ -187,13 +180,20 @@ Item {
 
             PagePlaceholder {
                 id: placeholderItem
+                z: 2
                 shown: root.responses.length === 0
                 icon: "bookmark_heart"
                 title: Translation.tr("Anime boorus")
                 description: ""
             }
 
+            ScrollToBottomButton {
+                z: 3
+                target: booruResponseListView
+            }
+
             Item { // Queries awaiting response
+                z: 4
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
