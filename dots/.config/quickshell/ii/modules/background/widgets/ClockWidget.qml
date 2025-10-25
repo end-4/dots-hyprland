@@ -14,8 +14,8 @@ BackgroundWidget {
     property bool screenLocked: GlobalStates.screenLocked
     scaleMultiplier: Config.options.background.clock.scale
 
-    x: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
-    y: GlobalStates.screenLocked ? centerOnScreen() : restorePosition()
+    x: GlobalStates.screenLocked ? x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x : restorePosition()
+    y: GlobalStates.screenLocked ? y = bgRoot.monitor.height / 2 - implicitHeight / 2 - wallpaper.y : restorePosition()
 
     onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
     onPositionChanged: savePosition(newX, newY)
