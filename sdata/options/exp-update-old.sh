@@ -4,37 +4,28 @@
 showhelp(){
 echo -e "Syntax: $0 exp-update-old [OPTIONS]...
 
-Experimental updating without full reinstall.
-Updates dotfiles by syncing configuration files to home directory.
-
 Options:
-  -f, --force      Force check all files even if no new commits
-  -p, --packages   Enable package checking and building
-  -n, --dry-run    Show what would be done without making changes
-  -v, --verbose    Enable verbose output
-  -h, --help       Show this help message
-  -s, --skip-notice Skip notice about script being untested
-      --non-interactive Run without prompting for user input
+  -f, --force          Force check all files even if no new commits
+  -p, --packages       Enable package checking and building
+  -h, --help           Show this help message
+      --skip-notice    Skip the notice message at the beginning
 
-This script updates your dotfiles by:
-  1. Auto-detecting repository structure (dots/ prefix or direct)
-  2. Pulling latest changes from git remote
-  3. Optionally rebuilding packages (if -p flag is used)
-  4. Syncing configuration files to home directory
-  5. Updating script permissions
+It updates your dotfiles by:
+  1. Pulling latest changes from git remote
+  2. Optionally rebuilding packages (if -p flag is used)
+  3. Syncing configuration files
+  4. Updating script permissions
 
-Ignore file patterns support:
-  - Exact matches (e.g., 'path/to/file')
-  - Directory patterns (e.g., 'path/to/dir/')
-  - Wildcards (e.g., '*.log', 'path/*/file')
-  - Root-relative patterns (e.g., '/.config')
-  - Substring matching (prefix with '**', e.g., '**temp' matches any path containing 'temp')
+Package modes (when -p is used):
+  - If no PKGBUILDs changed: asks if you want to check packages anyway
+  - If PKGBUILDs changed: offers to build changed packages
+  - Interactive selection of packages to build
 "
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hfpnv \
-  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive \
+  -o hfp \
+  -l help,force,packages,skip-notice \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -53,10 +44,7 @@ done
 
 FORCE_CHECK=false
 CHECK_PACKAGES=false
-DRY_RUN=false
-VERBOSE=false
 SKIP_NOTICE=false
-NON_INTERACTIVE=false
 
 eval set -- "$para"
 while true ; do
@@ -68,17 +56,8 @@ while true ; do
     -p|--packages) CHECK_PACKAGES=true;shift
       log_info "Package checking enabled"
       ;;
-    -n|--dry-run) DRY_RUN=true;shift
-      log_info "Dry-run mode enabled - no changes will be made"
-      ;;
-    -v|--verbose) VERBOSE=true;shift
-      log_info "Verbose mode enabled"
-      ;;
     --skip-notice) SKIP_NOTICE=true;shift
       log_warning "Skipping notice about script being untested"
-      ;;
-    --non-interactive) NON_INTERACTIVE=true;shift
-      log_info "Non-interactive mode enabled"
       ;;
     
     ## Ending
