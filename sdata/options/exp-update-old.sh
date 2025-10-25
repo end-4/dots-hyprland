@@ -8,7 +8,7 @@ Options:
   -f, --force          Force check all files even if no new commits
   -p, --packages       Enable package checking and building
   -h, --help           Show this help message
-      --skip-notice    Skip the notice message at the beginning
+  -s, --skip-notice    Skip the notice message at the beginning
 
 It updates your dotfiles by:
   1. Pulling latest changes from git remote
@@ -24,7 +24,7 @@ Package modes (when -p is used):
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hfp \
+  -o hfps \
   -l help,force,packages,skip-notice \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
@@ -56,7 +56,7 @@ while true ; do
     -p|--packages) CHECK_PACKAGES=true;shift
       log_info "Package checking enabled"
       ;;
-    --skip-notice) SKIP_NOTICE=true;shift
+    -s|--skip-notice) SKIP_NOTICE=true;shift
       log_warning "Skipping notice about script being untested"
       ;;
     
