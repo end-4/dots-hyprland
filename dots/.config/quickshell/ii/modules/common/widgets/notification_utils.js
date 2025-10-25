@@ -17,13 +17,16 @@ function findSuitableMaterialSymbol(summary = "") {
         'time': 'scheduleb',
         'installed': 'download',
         'configuration reloaded': 'reset_wrench',
+        'unable': 'indeterminate_question_box',
         'config': 'reset_wrench',
         'update': 'update',
         'ai response': 'neurology',
         'control': 'settings',
         'upsca': 'compare',
+        'music': 'music_note',
         'install': 'deployed_code_update',
         'startswith:file': 'folder_copy', // Declarative startsWith check
+        
     };
 
     const lowerSummary = summary.toLowerCase();

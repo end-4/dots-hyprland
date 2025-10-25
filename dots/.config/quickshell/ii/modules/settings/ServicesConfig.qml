@@ -54,6 +54,17 @@ ContentPage {
                 Config.options.resources.updateInterval = value;
             }
         }
+        ConfigSpinBox {
+            icon: "timer_off"
+            text: Translation.tr("Music recognition timeout (s)")
+            value: Config.options.resources.musicRecognitionTimeout
+            from: 2
+            to: 100
+            stepSize: 2
+            onValueChanged: {
+                Config.options.resources.musicRecognitionTimeout = value;
+            }
+        }
     }
 
     ContentSection {
