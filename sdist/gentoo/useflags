@@ -111,7 +111,7 @@ sys-power/upower introspection
 gui-apps/fuzzel png svg
 dev-libs/glib dbus elf introspection mime xattr
 # ngl idk about nm-connection-editor. Works fine without
-gui-apps/quickshell -X -i3 -i3-ipc -breakpad bluetooth hyprland hyprland-focus-grab hyprland-global-shortcuts jemalloc layer-shell mpris pam pipewire screencopy session-lock sockets toplevel-management tray wayland
+gui-apps/quickshell -X -i3 -i3-ipc breakpad bluetooth hyprland hyprland-focus-grab hyprland-global-shortcuts jemalloc layer-shell mpris pam pipewire screencopy session-lock sockets toplevel-management tray wayland
 #app-i18n/translate-shell (nothing needed)
 #gui-apps/wlogout (no use flags)
 media-gfx/imagemagick xml

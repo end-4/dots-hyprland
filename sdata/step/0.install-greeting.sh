@@ -1,6 +1,8 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+# shellcheck shell=bash
+
 #####################################################################################
 
 printf "${STY_CYAN}[$0]: Hi there! Before we start:${STY_RST}\n"

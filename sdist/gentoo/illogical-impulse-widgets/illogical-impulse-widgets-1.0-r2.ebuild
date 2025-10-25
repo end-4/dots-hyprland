@@ -15,8 +15,11 @@ DEPEND=""
 RDEPEND="
 	gui-apps/fuzzel
 	dev-libs/glib
-	gui-apps/quickshell
+	media-gfx/imagemagick
+	gui-apps/hypridle
+	gui-libs/hyprutils
+	gui-apps/hyprlock
+	gui-apps/hyprpicker
 	app-i18n/translate-shell
 	gui-apps/wlogout
-	media-gfx/imagemagick
 "

@@ -73,12 +73,13 @@ Slider {
 
     component TrackDot: Rectangle {
         required property real value
+        property real normalizedValue: (value - root.from) / (root.to - root.from)
         anchors.verticalCenter: parent.verticalCenter
-        x: root.handleMargins + (value * root.effectiveDraggingWidth) - (root.trackDotSize / 2)
+        x: root.handleMargins + (normalizedValue * root.effectiveDraggingWidth) - (root.trackDotSize / 2)
         width: root.trackDotSize
         height: root.trackDotSize
         radius: Appearance.rounding.full
-        color: value > root.visualPosition ? root.dotColor : root.dotColorHighlighted
+        color: normalizedValue > root.visualPosition ? root.dotColor : root.dotColorHighlighted
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -165,7 +166,7 @@ Slider {
             TrackDot {
                 required property real modelData
                 value: modelData
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent?.verticalCenter
             }
         }
     }

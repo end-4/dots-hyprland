@@ -225,6 +225,17 @@ ContentPage {
                 }
             }
         }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "videocam"
+                text: Translation.tr("Record")
+                checked: Config.options.bar.utilButtons.showScreenRecord
+                onCheckedChanged: {
+                    Config.options.bar.utilButtons.showScreenRecord = checked;
+                }
+            }
+        }
     }
 
     ContentSection {
@@ -292,6 +303,34 @@ ContentPage {
             stepSize: 50
             onValueChanged: {
                 Config.options.bar.workspaces.showNumberDelay = value;
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Number style")
+
+            ConfigSelectionArray {
+                currentValue: JSON.stringify(Config.options.bar.workspaces.numberMap)
+                onSelected: newValue => {
+                    Config.options.bar.workspaces.numberMap = JSON.parse(newValue)
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Normal"),
+                        icon: "timer_10",
+                        value: '["1","2","3","4","5","6","7","8","9","10"]'
+                    },
+                    {
+                        displayName: Translation.tr("Japanese"),
+                        icon: "square_dot",
+                        value: '["一","二","三","四","五","六","七","八","九","十"]'
+                    },
+                    {
+                        displayName: Translation.tr("Roman"),
+                        icon: "account_balance",
+                        value: '["I","II","III","IV","V","VI","VII","VIII","IX","X"]'
+                    }
+                ]
             }
         }
     }

@@ -1,7 +1,7 @@
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import "./calendar_layout.js" as CalendarLayout
+import "calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Layouts
 
