@@ -12,13 +12,14 @@ BackgroundWidget {
     id: widget
 
     property bool screenLocked: GlobalStates.screenLocked
-    onScreenLockedChanged: screenLocked ? centerOnScreen() : restorePosition()
+    property bool centerClock: Config.options.lock.centerClock && screenLocked
+    onScreenLockedChanged: centerClock ? centerOnScreen() : restorePosition()
 
     scaleMultiplier: Config.options.background.clock.scale
     lockPosition: Config.options.background.clock.lockPosition
 
-    x: GlobalStates.screenLocked ? centerOnScreen()[0] : restorePosition()[0]
-    y: GlobalStates.screenLocked ? centerOnScreen()[1] : restorePosition()[1]
+    x: centerClock ? centerOnScreen()[0] : restorePosition()[0]
+    y: centerClock ? centerOnScreen()[1] : restorePosition()[1]
 
     onMiddleClicked: Config.options.background.clock.lockPosition = !Config.options.background.clock.lockPosition
 
