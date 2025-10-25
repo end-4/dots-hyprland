@@ -1,10 +1,12 @@
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import "calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Layouts
 import "calendar_layout.js" as CalendarLayout
 import qs
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.services
+
 
 Item {
     property int monthShift: 0
