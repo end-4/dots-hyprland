@@ -21,6 +21,10 @@ Scope { // Scope
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
+        {
+            "icon": "content_paste",
+            "name": Translation.tr("Copypad")
+        },
     ]
     property int selectedTab: 0
 
@@ -184,6 +188,7 @@ Scope { // Scope
 
                         CheatsheetKeybinds {}
                         CheatsheetPeriodicTable {}
+                        CheatsheetCopypad {}
                     }
                 }
             }
