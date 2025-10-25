@@ -197,14 +197,7 @@ Item {
         anchors.rightMargin: root.fabMargins
         anchors.bottomMargin: root.fabMargins
         onClicked: root.showAddDialog = true
-
-        contentItem: MaterialSymbol {
-            text: "add"
-            horizontalAlignment: Text.AlignHCenter
-            iconSize: Appearance.font.pixelSize.huge
-            color: Appearance.m3colors.m3onPrimaryContainer
-        }
-
+        iconText: "add"
     }
 
     Item {
