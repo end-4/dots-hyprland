@@ -472,55 +472,7 @@ has_new_commits() {
 # Main script starts here
 log_header "Dotfiles Update Script"
 
-check=true
-
-# Parse command line arguments
-while [[ $# -gt 0 ]]; do
-  case $1 in
-  -f | --force)
-    FORCE_CHECK=true
-    log_info "Force check mode enabled - will check all files regardless of git changes"
-    shift
-    ;;
-  -p | --packages)
-    CHECK_PACKAGES=true
-    log_info "Package checking enabled"
-    shift
-    ;;
-  -h | --help)
-    echo "Usage: $0 [OPTIONS]"
-    echo ""
-    echo "Options:"
-    echo "  -f, --force      Force check all files even if no new commits"
-    echo "  -p, --packages   Enable package checking and building"
-    echo "  -h, --help       Show this help message"
-    echo ""
-    echo "This script updates your dotfiles by:"
-    echo "  1. Pulling latest changes from git remote"
-    echo "  2. Optionally rebuilding packages (if -p flag is used)"
-    echo "  3. Syncing configuration files"
-    echo "  4. Updating script permissions"
-    echo ""
-    echo "Package modes (when -p is used):"
-    echo "  - If no PKGBUILDs changed: asks if you want to check packages anyway"
-    echo "  - If PKGBUILDs changed: offers to build changed packages"
-    echo "  - Interactive selection of packages to build"
-    exit 0
-    ;;
-  --skip-notice)
-    log_warning "Skipping notice about script being untested"
-    check=false
-    shift
-    ;;
-  *)
-    log_error "Unknown option: $1"
-    echo "Use --help for usage information"
-    exit 1
-    ;;
-  esac
-done
-
-if [[ "$check" == true ]]; then
+if [[ "${SKIP_NOTICE}" == false ]]; then
   log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
   log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
   log_warning "  but this can cause partial updates and therefore unexpected behavior like in #1856."

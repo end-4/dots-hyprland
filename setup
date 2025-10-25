@@ -23,7 +23,7 @@ Subcommands:
   install-files  Run the install step \"3. Copying config files\"
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
-  exp-update-old (WIP) exp-update but use behaves like old version.
+  exp-update-old (Experimental) exp-update but use behaves like old version.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
