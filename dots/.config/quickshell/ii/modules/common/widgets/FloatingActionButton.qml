@@ -18,7 +18,8 @@ RippleButton {
     colBackground: Appearance.colors.colPrimaryContainer
     colBackgroundHover: Appearance.colors.colPrimaryContainerHover
     colRipple: Appearance.colors.colPrimaryContainerActive
-    contentItem: RowLayout {
+    property color colOnBackground: Appearance.colors.colOnPrimaryContainer
+    contentItem: Row {
         id: contentRowLayout
         property real horizontalMargins: (root.baseSize - icon.width) / 2
         anchors {
@@ -30,13 +31,16 @@ RippleButton {
 
         MaterialSymbol {
             id: icon
-            Layout.fillWidth: true
+            anchors.verticalCenter: parent.verticalCenter
             horizontalAlignment: Text.AlignHCenter
-            iconSize: 24
-            color: Appearance.colors.colOnPrimaryContainer
+            verticalAlignment: Text.AlignVCenter
+            iconSize: 26
+            color: root.colOnBackground
             text: root.iconText
         }
         Loader {
+            anchors.verticalCenter: parent.verticalCenter
+            visible: root.buttonText?.length > 0
             active: true
             sourceComponent: Revealer {
                 visible: root.expanded || implicitWidth > 0
@@ -47,6 +51,7 @@ RippleButton {
                     anchors {
                         left: parent.left
                         leftMargin: root.elementSpacing
+                        verticalCenter: parent.verticalCenter
                     }
                     text: root.buttonText
                     color: Appearance.colors.colOnPrimaryContainer

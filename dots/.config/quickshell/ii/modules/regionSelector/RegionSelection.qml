@@ -469,6 +469,7 @@ PanelWindow {
                         colBackground: Appearance.colors.colTertiaryContainer
                         colBackgroundHover: Appearance.colors.colTertiaryContainerHover
                         colRipple: Appearance.colors.colTertiaryContainerActive
+                        colOnBackground: Appearance.colors.colOnTertiaryContainer
                     }
                 }
             }
