@@ -1,6 +1,10 @@
 import QtQuick
+import Quickshell
+import Quickshell.Io
+import QtQuick.Layouts
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
@@ -90,6 +94,8 @@ ContentPage {
         }
     }
 
+
+
     ContentSection {
         icon: "keyboard"
         title: Translation.tr("Keybinds Cheatsheet")
@@ -108,72 +114,58 @@ ContentPage {
                 options: [
                     {
                         displayName: "󰖳",
-                        icon: "",
                         value: 0
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 3
                     },
                     {
                         displayName: "󰨡",
-                        icon: "",
                         value: 4
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 5
                     },
                     {
                         displayName: "󰣇",
-                        icon: "",
                         value: 7
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 12
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 13
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 11
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 10
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 8
                     },
                     {
                         displayName: "󱄛",
-                        icon: "",
                         value: 14
                     },
                     {
-                       displayName:  "",
-                        icon: "",
+                        displayName:  "",
                         value: 9
                     },
                     {
                         displayName: "",
-                        icon: "",
                         value: 6
                     },
                     {
                         displayName: "󰘳",
-                        icon: "",
                         value: 2
                     },
                 ]
@@ -187,13 +179,20 @@ ContentPage {
             onCheckedChanged: {
                 Config.options.appearance.keybinds.useMacSymbol = checked;
             }
+            StyledToolTip {
+                text: Translation.tr("macOS-style symbols, e.g. 󰘴  for Ctrl, 󰘵  for Alt, 󰘶  for Shift, etc")
+            }
         }
+
         ConfigSwitch {
             buttonIcon: "󱊶"
             text: Translation.tr("Use symbols for function keys")
             checked: Config.options.appearance.keybinds.useFnSymbol
             onCheckedChanged: {
                 Config.options.appearance.keybinds.useFnSymbol = checked;
+            }
+            StyledToolTip {
+              text: Translation.tr("Show 󱊷  instead of Escape, 󱊫  for F1, etc to 󱊶  for F12")
             }
         }
         ConfigSwitch {
@@ -202,6 +201,43 @@ ContentPage {
             checked: Config.options.appearance.keybinds.useMouseSymbol
             onCheckedChanged: {
                 Config.options.appearance.keybinds.useMouseSymbol = checked;
+            }
+            StyledToolTip {
+              text: Translation.tr("Replace 󱕐   for \"Scroll ↓\", 󱕑   \"Scroll ↑\", L󰍽   \"LMB\", R󰍽   \"RMB\", 󱕒   \"Scroll ↑/↓\" and Page  for \"Page_↑/↓\"")
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: ""
+            text: Translation.tr("Use macOS shortcut layout")
+            checked: Config.options.appearance.keybinds.useMacLikeShortcut
+            onCheckedChanged: {
+                Config.options.appearance.keybinds.useMacLikeShortcut = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Show mods and key in the same keycap, look better with symbols")
+            }
+
+        }
+
+        ConfigSpinBox {
+            // text: Translation.tr("Keycap")
+            text: Translation.tr("Key font size")
+            value: Config.options.appearance.keybinds.pixelSize.key
+            from: Appearance.font.pixelSize.smallest
+            to: Appearance.font.pixelSize.large
+            stepSize: 1
+            onValueChanged: {
+                Config.options.appearance.keybinds.pixelSize.key = value;
+            }
+        }
+        ConfigSpinBox {
+            text: Translation.tr("Comment font size")
+            value: Config.options.appearance.commentbinds.pixelSize.comment
+            from: Appearance.font.pixelSize.smallest
+            to: Appearance.font.pixelSize.large
+            stepSize: 1
+            onValueChanged: {
+                Config.options.appearance.commentbinds.pixelSize.comment = value;
             }
         }
     }

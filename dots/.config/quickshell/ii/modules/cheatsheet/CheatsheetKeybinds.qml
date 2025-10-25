@@ -106,6 +106,17 @@ Item {
                                         var result = [];
                                         for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
                                             const keybind = keybindSection.modelData.keybinds[i];
+
+                                            if (Config.options.appearance.keybinds.useMacLikeShortcut) {
+
+                                              for (var j = 0; j < keybind.mods.length; j++) {
+                                                  keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                                              }
+                                              keybind.mods = [keybind.mods.join(' ') ]
+                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
+                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                                            } 
+
                                             result.push({
                                                 "type": "keys",
                                                 "mods": keybind.mods,
@@ -137,17 +148,19 @@ Item {
                                                     delegate: KeyboardKey {
                                                         required property var modelData
                                                         key: keySubstitutions[modelData] || modelData
+                                                        pixelSize: Config.options.appearance.keybinds.pixelSize.key
                                                     }
                                                 }
                                                 StyledText {
                                                     id: keybindPlus
-                                                    visible: !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
+                                                    visible: !Config.options.appearance.keybinds.useMacLikeShortcut && !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
                                                     text: "+"
                                                 }
                                                 KeyboardKey {
                                                     id: keybindKey
-                                                    visible: !keyBlacklist.includes(modelData.key)
+                                                    visible: !Config.options.appearance.keybinds.useMacLikeShortcut && !keyBlacklist.includes(modelData.key)
                                                     key: keySubstitutions[modelData.key] || modelData.key
+                                                    pixelSize: Config.options.appearance.keybinds.pixelSize.key
                                                     color: Appearance.colors.colOnLayer0
                                                 }
                                             }
@@ -163,7 +176,8 @@ Item {
                                                 StyledText {
                                                     id: commentText
                                                     anchors.centerIn: parent
-                                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                                    // font.pixelSize: Appearance.font.pixelSize.smaller
+                                                    font.pixelSize: Config.options.appearance.keybinds.pixelSize.comment
                                                     text: modelData.comment
                                                 }
                                             }

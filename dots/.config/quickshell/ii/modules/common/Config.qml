@@ -130,8 +130,13 @@ Singleton {
                     // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
                     property int superKey: 0
                     property bool useMacSymbol: false
+                    property bool useMacLikeShortcut: false
                     property bool useMouseSymbol: false
                     property bool useFnSymbol: false
+                    property JsonObject pixelSize: JsonObject {
+                      property int key: Appearance.font.pixelSize.smaller
+                      property int comment: Appareance.font.pixelSize.smaller
+                    }
                 }
             }
 
