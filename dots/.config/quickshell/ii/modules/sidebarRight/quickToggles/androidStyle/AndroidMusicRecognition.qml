@@ -49,6 +49,7 @@ AndroidQuickToggleButton {
                 root.recognizedTrackSubtitle = obj.track.subtitle
                 root.recognizedTrackURL = obj.track.url
                 musicReconizedProc.running = true
+                recognizedMusicKiller.running = true
                 toggled = false
             }
         }
@@ -68,10 +69,14 @@ AndroidQuickToggleButton {
         }
     }
 
-
+    Timer {
+        id: recognizedMusicKiller
+        running: false; repeat: false
+        interval: 5000
+        onTriggered: musicReconizedProc.running = false
+    }
 
     StyledToolTip {
-        //text: Translation.tr("Identifies the song that’s playing right now")
-        text: "Identifies the song that’s playing right now"
+        text: Translation.tr("Identifies the song that’s playing right now")
     }
 }
