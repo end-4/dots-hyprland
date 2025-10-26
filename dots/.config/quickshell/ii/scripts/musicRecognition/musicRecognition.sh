@@ -1,10 +1,11 @@
 #!/bin/bash
 
-MONITOR_SOURCE="alsa_output.pci-0000_00_1f.3.analog-stereo.monitor"
+## can be added manually if not chosen automatically with running this on terminal 'pw-cli list-objects | grep node.name'
+MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
 
-# Default değerler
 INTERVAL=5
 TOTAL_DURATION=30
+MIN_VALID_RESULT_LENGTH=300 
 
 while getopts "i:t:" opt; do
   case $opt in
@@ -22,7 +23,7 @@ while true; do
     ELAPSED=$((CURRENT_TIME - START_TIME))
     
     if (( ELAPSED >= TOTAL_DURATION )); then
-        echo "Total duration reached. Exiting."
+        echo "Total duration reached, no music recognized."
         exit 0
     fi
 
@@ -35,7 +36,7 @@ while true; do
     RESULT=$(songrec audio-file-to-recognized-song "$TMP_FILE" 2>/dev/null || true)
     rm -f "$TMP_FILE"
 
-    if [ -n "$RESULT" ] && [ ${#RESULT} -gt 300 ]; then
+    if [ -n "$RESULT" ] && [ ${#RESULT} -gt $MIN_VALID_RESULT_LENGTH ]; then
         echo "$RESULT"
         exit 0
     fi

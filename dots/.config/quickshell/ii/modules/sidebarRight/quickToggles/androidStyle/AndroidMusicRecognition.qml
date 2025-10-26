@@ -12,24 +12,37 @@ AndroidQuickToggleButton {
 
     property int timeoutInterval: 5
     property int timeoutDuration: Config.options.resources.musicRecognitionTimeout
-    property string resultsJSON
-
-    property string recognizedTrackTitle
-    property string recognizedTrackSubtitle
-    property string recognizedTrackURL
-
     name: Translation.tr("Identify Music")
-    statusText: toggled ? Translation.tr("Listening...") : Translation.tr("Inactive") 
+    statusText: toggled ? Translation.tr("Listening...") : Translation.tr("Inactive")  
     toggled: false
     buttonIcon: toggled ? "cadence" : "graphic_eq"
-    onClicked: {
-        if (!toggled){
-            recognizeMusicProc.running = true
-        } else {
-            recognizeMusicProc.running = false
+
+    property var recognizedTrack: ({ title:"", subtitle:"", url:""})
+
+    function handleRecognition(jsonText) {
+        try {
+            var obj = JSON.parse(jsonText)
+            root.recognizedTrack = {
+                title: obj.track.title,
+                subtitle: obj.track.subtitle,
+                url: obj.track.url
+            }
+            musicReconizedProc.running = true
+        } catch(e) {
+            Quickshell.execDetached(["notify-send", "Unable to recognize music", "Please make sure your music is playing and try again", "-a", "Shell"])
+        } finally {
+            root.toggled = false
         }
-        
+    }
+
+    StyledToolTip {
+        text: Translation.tr("Identifies the song that’s currently playing")
+    }
+
+     onClicked: {
         root.toggled = !root.toggled
+        recognizeMusicProc.running = root.toggled
+        musicReconizedProc.running = false
     }
 
     Process {
@@ -38,45 +51,27 @@ AndroidQuickToggleButton {
         command: [`${Directories.scriptPath}/musicRecognition/musicRecognition.sh`, "-i", root.timeoutInterval, "-t", root.timeoutDuration]
         stdout: StdioCollector {
             onStreamFinished: {
-                root.resultsJSON = this.text
-                if (this.text.length < 100) {
-                    Quickshell.execDetached(["notify-send", "Unable to recognize music", "Please make sure your music is playing and try again", "-a", "Shell"])
-                    toggled = false
-                    return
-                }
-                var obj = JSON.parse(root.resultsJSON)
-                root.recognizedTrackTitle = obj.track.title
-                root.recognizedTrackSubtitle = obj.track.subtitle
-                root.recognizedTrackURL = obj.track.url
-                musicReconizedProc.running = true
-                recognizedMusicKiller.running = true
-                toggled = false
+                handleRecognition(this.text)
             }
         }
     }
-
 
     Process {
         id: musicReconizedProc
         running: false
-        command: [ "notify-send" , "Music Recognized" , root.recognizedTrackTitle + " by " + root.recognizedTrackSubtitle , "-A" , "Shazam Link" , "-a" , "Shell"]
+        command: [
+            "notify-send",
+            Translation.tr("Music Recognized"), 
+            root.recognizedTrack.title + " - " + root.recognizedTrack.subtitle, 
+            "-A", "Shazam",
+            "-a", "Shell"
+        ]
         stdout: StdioCollector {
             onStreamFinished: {
                 if (this.text !== ""){
-                    Qt.openUrlExternally(root.recognizedTrackURL);
+                    Qt.openUrlExternally(root.recognizedTrack.url);
                 }
             }
         }
-    }
-
-    Timer {
-        id: recognizedMusicKiller
-        running: false; repeat: false
-        interval: 5000
-        onTriggered: musicReconizedProc.running = false
-    }
-
-    StyledToolTip {
-        text: Translation.tr("Identifies the song that’s playing right now")
     }
 }
