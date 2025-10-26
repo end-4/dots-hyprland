@@ -93,7 +93,7 @@ case ${SUBCMD_NAME} in
       fi
     fi
     ;;
-  exp-*)
+  *)
     source ${SUBCMD_DIR}/0.run.sh
     exit
     ;;
