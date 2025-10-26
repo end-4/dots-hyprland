@@ -83,7 +83,7 @@ function auto_backup_configs(){
 #####################################################################################
 
 # In case some dirs does not exists
-v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME/quickshell $XDG_DATA_HOME
+v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 
 if [[ ! "${SKIP_BACKUP}" == true ]]; then
   case $ask in
@@ -119,7 +119,8 @@ esac
 case $SKIP_QUICKSHELL in
   true) sleep 0;;
   *)
-    warning_rsync; v rsync -av --delete dots/.config/quickshell/ii/ "$XDG_CONFIG_HOME"/quickshell/ii/
+     # Should overwriting the whole directory not only ~/.config/quickshell/ii/ cuz https://github.com/end-4/dots-hyprland/issues/2294#issuecomment-3448671064
+    warning_rsync; v rsync -av --delete dots/.config/quickshell/ "$XDG_CONFIG_HOME"/quickshell/
     ;;
 esac
 
