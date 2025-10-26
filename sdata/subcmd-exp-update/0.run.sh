@@ -4,6 +4,16 @@
 # shellcheck shell=bash
 
 #####################################################################################
+# Notes by @clsty:
+#
+# I'm not the one who developed this script (see issue#2284 which discussed about the history).
+# However it contains many unnecessary logics. This is typically what AI will do.
+# I don't really care if it's AI-generated or not, it's just an extra option in addition to ./setup install, so as long as the users say it works, it should be fine.
+# However, it's not easy to maintain something like this.
+# The redundant logic should be cleaned up someday.
+#
+# This also applies for exp-update.tester.sh, TBH I don't think that file is really needed, and it also looks like AI-generated. Just guessing though.
+#####################################################################################
 #
 # exp-update.sh - Enhanced dotfiles update script
 #

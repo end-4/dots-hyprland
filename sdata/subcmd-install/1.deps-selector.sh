@@ -1,5 +1,6 @@
 # This script is meant to be sourced.
 # It's not for directly running.
+printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
 
 function outdate_detect(){
   # Shallow clone prevent latest_commit_timestamp() from working.
