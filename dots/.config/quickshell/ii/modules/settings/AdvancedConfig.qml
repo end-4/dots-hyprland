@@ -214,14 +214,14 @@ ContentPage {
                 Config.options.appearance.keybinds.useMacLikeShortcut = checked;
             }
             StyledToolTip {
-                text: Translation.tr("Show mods and key in the same keycap, look better with symbols")
+                text: Translation.tr("Display modifiers and keys in a single keycap (e.g., \"Ctrl A\" instead of \"Ctrl + A\" or \"󰘴 A\" instead of \"󰘴 + A\")")
             }
 
         }
 
         ConfigSpinBox {
             // text: Translation.tr("Keycap")
-            text: Translation.tr("Key font size")
+            text: Translation.tr("Keybind font size")
             value: Config.options.appearance.keybinds.pixelSize.key
             from: Appearance.font.pixelSize.smallest
             to: Appearance.font.pixelSize.large
@@ -231,7 +231,7 @@ ContentPage {
             }
         }
         ConfigSpinBox {
-            text: Translation.tr("Comment font size")
+            text: Translation.tr("Description font size")
             value: Config.options.appearance.keybinds.pixelSize.comment
             from: Appearance.font.pixelSize.smallest
             to: Appearance.font.pixelSize.large
