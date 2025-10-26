@@ -21,13 +21,13 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   TARGET_ID=fallback
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
-  printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-setups.sh
+  source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
 elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
 
@@ -35,19 +35,19 @@ elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
   printf "${STY_GREEN}"
   printf "===INFO===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-setups.sh
+  source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
-elif [[ -f "./sdist/${OS_DISTRO_ID}/install-setups.sh" ]]; then
+elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-setups.sh" ]]; then
 
   TARGET_ID=${OS_DISTRO_ID}
   printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
   printf "${STY_INVERT}"
@@ -57,7 +57,7 @@ elif [[ -f "./sdist/${OS_DISTRO_ID}/install-setups.sh" ]]; then
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-setups.sh
+  source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
 
@@ -66,14 +66,14 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "Ideally, it should also work for your distro.\n"
   printf "Still, there is a chance that it not works as expected or even fails.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-setups.sh
+  source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
 else
 
@@ -82,13 +82,13 @@ else
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./sdist/${OS_DISTRO_ID}/install-setups.sh not found.\n"
-  printf "./sdist/${TARGET_ID}/install-setups.sh will be used.\n"
+  printf "./sdata/dist-${OS_DISTRO_ID}/install-setups.sh not found.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
   printf "It might fail or disrupt your system.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-setups.sh
+  source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
 fi

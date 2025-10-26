@@ -17,7 +17,7 @@ set -uo pipefail
 
 # === Configuration ===
 DOTS_ROOT="${REPO_ROOT}/dots"
-ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
+ARCH_PACKAGES_DIR="${REPO_ROOT}/sdata/dist-arch"
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
@@ -303,7 +303,7 @@ list_packages() {
   local changed_packages=()
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No sdist/arch directory found"
+    log_warning "No sdata/dist-arch directory found"
     return 1
   fi
 
@@ -319,7 +319,7 @@ list_packages() {
   done
 
   if [[ ${#available_packages[@]} -eq 0 ]]; then
-    log_info "No packages found in sdist/arch directory"
+    log_info "No packages found in sdata/dist-arch directory"
     return 1
   fi
 
@@ -557,7 +557,7 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
   log_header "Package Management"
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-    log_warning "No sdist/arch directory found. Skipping package management."
+    log_warning "No sdata/dist-arch directory found. Skipping package management."
   else
     # Check if any PKGBUILDs have changed
     changed_pkgbuilds=()

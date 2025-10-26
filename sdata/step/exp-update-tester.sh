@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# exp-update-tester.sh - Test suite for update.sh (sourced subcommand)
+# exp-update-tester.sh - Test suite for exp-update.sh
 #
 set -euo pipefail
 
