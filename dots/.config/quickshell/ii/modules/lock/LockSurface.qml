@@ -99,32 +99,52 @@ MouseArea {
         opacity: root.toolbarOpacity
 
         ToolbarTextField {
-            id: passwordBox
-            placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+    id: passwordBox
+    placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+    clip: true
+    font.pixelSize: Appearance.font.pixelSize.small
+    enabled: !root.context.unlockInProgress
+    echoMode: TextInput.Password
+    inputMethodHints: Qt.ImhSensitiveData
+    onTextChanged: root.context.currentText = this.text
+    onAccepted: root.context.tryUnlock()
+    Connections {
+        target: root.context
+        function onCurrentTextChanged() {
+            passwordBox.text = root.context.currentText;
+        }
+    }
+    Keys.onPressed: event => {
+        root.context.resetClearTimer();
+    }
 
-            // Style
-            clip: true
-            font.pixelSize: Appearance.font.pixelSize.small
+    // Idk but it work lol
+    property bool isShaking: false
+    function startShake() {
+        shakeAnim.running = false; // reset if running
+        x = 0; // reset position
+        shakeAnim.running = true;
+    }
 
-            // Password
-            enabled: !root.context.unlockInProgress
-            echoMode: TextInput.Password
-            inputMethodHints: Qt.ImhSensitiveData
+    SequentialAnimation {
+        id: shakeAnim
+        running: false
+        NumberAnimation { target: passwordBox; property: "x"; to: -40; duration: 50 }
+        NumberAnimation { target: passwordBox; property: "x"; to: 40; duration: 50 }
+        NumberAnimation { target: passwordBox; property: "x"; to: -20; duration: 40 }
+        NumberAnimation { target: passwordBox; property: "x"; to: 20; duration: 40 }
+        NumberAnimation { target: passwordBox; property: "x"; to: 0; duration: 30 }
+    }
 
-            // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
-            onAccepted: root.context.tryUnlock()
-            Connections {
-                target: root.context
-                function onCurrentTextChanged() {
-                    passwordBox.text = root.context.currentText;
-                }
-            }
-
-            Keys.onPressed: event => {
-                root.context.resetClearTimer();
+    Connections {
+        target: GlobalStates
+        function onScreenUnlockFailedChanged() {
+            if (GlobalStates.screenUnlockFailed) {
+                passwordBox.startShake();
             }
         }
+    }
+}
 
         ToolbarButton {
             id: confirmButton
