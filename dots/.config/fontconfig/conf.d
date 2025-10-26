@@ -7,7 +7,7 @@
     </edit>
   </match>
   <match target="pattern">
-    <edit name="family" mode="prepend" binding="strong">
+    <edit name="family" mode="prepend">
       <string>Noto Sans Arabic</string>
     </edit>
   </match>
