@@ -6,11 +6,13 @@
       <const>none</const>
     </edit>
   </match>
+
+  <!-- Fix for: arabic fonts rendering in Noto Nastaliq Urdu | affects Chromium, Discord (maybe all chromium based apps, but not Spotify somehow) -->
   <match target="pattern">
-    <test name="lang">
-      <string>ar</string>
+    <test compare="eq" name="family">
+      <string>sans-serif</string>
     </test>
-    <edit name="family" mode="prepend">
+    <edit name="family" mode="prepend" binding="strong">
       <string>Noto Sans Arabic</string>
     </edit>
   </match>
