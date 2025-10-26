@@ -14,6 +14,7 @@ import Qt.labs.synchronizer
 PanelWindow {
     id: root
     visible: false
+    color: "transparent"
     WlrLayershell.namespace: "quickshell:regionSelector"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
@@ -26,7 +27,7 @@ PanelWindow {
     }
 
     // TODO: Ask: sidebar AI; Ocr: tesseract
-    enum SnipAction { Copy, Edit, Search, CharRecognition } 
+    enum SnipAction { Copy, Edit, Search, CharRecognition, Record, RecordWithSound } 
     enum SelectionMode { RectCorners, Circle }
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
@@ -175,13 +176,34 @@ PanelWindow {
     property real regionY: Math.min(dragStartY, draggingY)
 
     Process {
-        id: screenshotProcess
+        id: screenshotProc
         running: true
         command: ["bash", "-c", `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}' && grim -o '${StringUtils.shellSingleQuoteEscape(root.screen.name)}' '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}'`]
         onExited: (exitCode, exitStatus) => {
-            root.visible = true;
             if (root.enableContentRegions) imageDetectionProcess.running = true;
+            root.preparationDone = !checkRecordingProc.running;
         }
+    }
+    property bool isRecording: root.action === RegionSelection.SnipAction.Record || root.action === RegionSelection.SnipAction.RecordWithSound
+    property bool recordingShouldStop: false
+    Process {
+        id: checkRecordingProc
+        running: isRecording
+        command: ["pidof", "wf-recorder"]
+        onExited: (exitCode, exitStatus) => {
+            root.preparationDone = !screenshotProc.running
+            root.recordingShouldStop = (exitCode === 0);
+        }
+    }
+    property bool preparationDone: false
+    onPreparationDoneChanged: {
+        if (!preparationDone) return;
+        if (root.isRecording && root.recordingShouldStop) {
+            Quickshell.execDetached([Directories.recordScriptPath]);
+            root.dismiss();
+            return;
+        }
+        root.visible = true;
     }
 
     Process {
@@ -221,11 +243,16 @@ PanelWindow {
         }
 
         // Set command for action
+        const rx = Math.round(root.regionX * root.monitorScale);
+        const ry = Math.round(root.regionY * root.monitorScale);
+        const rw = Math.round(root.regionWidth * root.monitorScale);
+        const rh = Math.round(root.regionHeight * root.monitorScale);
         const cropBase = `magick ${StringUtils.shellSingleQuoteEscape(root.screenshotPath)} `
-            + `-crop ${root.regionWidth * root.monitorScale}x${root.regionHeight * root.monitorScale}+${root.regionX * root.monitorScale}+${root.regionY * root.monitorScale}`
+            + `-crop ${rw}x${rh}+${rx}+${ry}`
         const cropToStdout = `${cropBase} -`
         const cropInPlace = `${cropBase} '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}'`
         const cleanup = `rm '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}'`
+        const slurpRegion = `${rx},${ry} ${rw}x${rh}`
         const uploadAndGetUrl = (filePath) => {
             return `curl -sF files[]=@'${StringUtils.shellSingleQuoteEscape(filePath)}' ${root.fileUploadApiEndpoint} | jq -r '.files[0].url'`
         }
@@ -241,6 +268,12 @@ PanelWindow {
                 break;
             case RegionSelection.SnipAction.CharRecognition:
                 snipProc.command = ["bash", "-c", `${cropInPlace} && tesseract '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}' stdout -l $(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\\n' '+' | sed 's/\\+$/\\n/') | wl-copy && ${cleanup}`]
+                break;
+            case RegionSelection.SnipAction.Record:
+                snipProc.command = ["bash", "-c", `${Directories.recordScriptPath} --region '${slurpRegion}'`]
+                break;
+            case RegionSelection.SnipAction.RecordWithSound:
+                snipProc.command = ["bash", "-c", `${Directories.recordScriptPath} --region '${slurpRegion}' --sound`]
                 break;
             default:
                 console.warn("[Region Selector] Unknown snip action, skipping snip.");

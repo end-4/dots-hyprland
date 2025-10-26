@@ -44,6 +44,9 @@ Toolbar {
                     return "image_search";
                 case RegionSelection.SnipAction.CharRecognition:
                     return "document_scanner";
+                case RegionSelection.SnipAction.Record:
+                case RegionSelection.SnipAction.RecordWithSound:
+                    return "videocam";
                 default:
                     return "";
             }
