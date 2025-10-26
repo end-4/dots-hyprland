@@ -1,20 +1,29 @@
 #!/bin/bash
 
-## can be added manually if not chosen automatically with running this on terminal 'pw-cli list-objects | grep node.name' and manually choose the one you want.
-MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
-
 INTERVAL=5
 TOTAL_DURATION=30
-MIN_VALID_RESULT_LENGTH=300 
+MIN_VALID_RESULT_LENGTH=300
+SOURCE_TYPE="monitor"  # default | "monitor" : system_sound , "input" : microphone
 
-while getopts "i:t:" opt; do
+while getopts "i:t:s:" opt; do
   case $opt in
     i) INTERVAL=$OPTARG ;;
     t) TOTAL_DURATION=$OPTARG ;;
-    *) echo "Usage: $0 [-i interval_seconds] [-t total_duration_seconds]"
+    s) SOURCE_TYPE=$OPTARG ;;
+    *) echo "Usage: $0 [-i interval_seconds] [-t total_duration_seconds] [-s monitor|input]"
        exit 1 ;;
   esac
 done
+
+# Kaynağı belirle
+if [ "$SOURCE_TYPE" = "monitor" ]; then
+    MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
+elif [ "$SOURCE_TYPE" = "input" ]; then
+    MONITOR_SOURCE=$(pactl info | grep "Default Source:" | awk '{print $3}' || true)
+else
+    echo "Invalid source type: $SOURCE_TYPE. Use 'monitor' or 'input'."
+    exit 1
+fi
 
 START_TIME=$(date +%s)
 

@@ -12,8 +12,11 @@ AndroidQuickToggleButton {
 
     property int timeoutInterval: 5
     property int timeoutDuration: Config.options.resources.musicRecognitionTimeout
+
+    property string monitorSource: "monitor" // "monitor" (system sound) , "input" (microphone)
+
     name: Translation.tr("Identify Music")
-    statusText: toggled ? Translation.tr("Listening...") : Translation.tr("Inactive")  
+    statusText: toggled ? Translation.tr("Listening...") : monitorSource === "monitor" ? Translation.tr("System sound") : Translation.tr("Microphone")
     toggled: false
     buttonIcon: toggled ? "cadence" : "graphic_eq"
 
@@ -34,9 +37,10 @@ AndroidQuickToggleButton {
             root.toggled = false
         }
     }
+    
 
     StyledToolTip {
-        text: Translation.tr("Identifies the song that’s currently playing")
+        text: Translation.tr("Identifies currently playing song | Right-click to change monitor source")
     }
 
      onClicked: {
@@ -44,11 +48,20 @@ AndroidQuickToggleButton {
         recognizeMusicProc.running = root.toggled
         musicReconizedProc.running = false
     }
+    altAction: () => {
+        if (root.monitorSource === "monitor"){
+            root.monitorSource = "input"
+            return
+        }else {
+            root.monitorSource = "monitor"
+        }
+        
+    }
 
     Process {
         id: recognizeMusicProc
         running: false
-        command: [`${Directories.scriptPath}/musicRecognition/musicRecognition.sh`, "-i", root.timeoutInterval, "-t", root.timeoutDuration]
+        command: [`${Directories.scriptPath}/musicRecognition/musicRecognition.sh`, "-i", root.timeoutInterval, "-t", root.timeoutDuration, "-s", root.monitorSource]
         stdout: StdioCollector {
             onStreamFinished: {
                 handleRecognition(this.text)
