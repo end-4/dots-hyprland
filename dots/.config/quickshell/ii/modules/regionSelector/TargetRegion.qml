@@ -8,8 +8,10 @@ import Quickshell.Widgets
 
 Rectangle {
     id: root
-    required property color colBackground
-    required property color colForeground
+    required property var clientDimensions
+
+    property color colBackground: Qt.alpha("#88111111", 0.9)
+    property color colForeground: "#ddffffff"
     property bool showLabel: Config.options.regionSelector.targetRegions.showLabel
     property bool showIcon: false
     property bool targeted: false
@@ -20,8 +22,17 @@ Rectangle {
     z: 2
     color: fillColor
     border.color: borderColor
-    border.width: targeted ? 3 : 1
+    border.width: targeted ? 4 : 2
     radius: 4
+
+    visible: opacity > 0
+    Behavior on opacity {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+    x: clientDimensions.at[0]
+    y: clientDimensions.at[1]
+    width: clientDimensions.size[0]
+    height: clientDimensions.size[1]
 
     Loader {
         anchors {

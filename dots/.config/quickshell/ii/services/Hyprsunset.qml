@@ -4,6 +4,7 @@ import QtQuick
 import qs.modules.common
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 /**
  * Simple hyprsunset service with automatic mode.
@@ -111,18 +112,28 @@ Singleton {
         }
     }
 
-    function toggle() {
+    function toggle(active = undefined) {
         if (root.manualActive === undefined) {
             root.manualActive = root.active;
             root.manualActiveHour = root.clockHour;
             root.manualActiveMinute = root.clockMinute;
         }
 
-        root.manualActive = !root.manualActive;
+        root.manualActive = active !== undefined ? active : !root.manualActive;
         if (root.manualActive) {
             root.enable();
         } else {
             root.disable();
+        }
+    }
+
+    // Change temp
+    Connections {
+        target: Config.options.light.night
+        function onColorTemperatureChanged() {
+            if (!root.active) return;
+            Hyprland.dispatch(`hyprctl hyprsunset temperature ${Config.options.light.night.colorTemperature}`);
+            Quickshell.execDetached(["hyprctl", "hyprsunset", "temperature", `${Config.options.light.night.colorTemperature}`]);
         }
     }
 }
