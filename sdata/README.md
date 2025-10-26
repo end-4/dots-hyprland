@@ -1,1 +1,1 @@
-This folder mainly contains data for install scripts.
+This folder mainly contains data for the script `setup`.
