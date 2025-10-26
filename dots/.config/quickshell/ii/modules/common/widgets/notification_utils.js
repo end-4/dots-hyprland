@@ -23,7 +23,7 @@ function findSuitableMaterialSymbol(summary = "") {
         'ai response': 'neurology',
         'control': 'settings',
         'upsca': 'compare',
-        'music': 'music_note',
+        'music': 'queue_music',
         'install': 'deployed_code_update',
         'startswith:file': 'folder_copy', // Declarative startsWith check
         

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## can be added manually if not chosen automatically with running this on terminal 'pw-cli list-objects | grep node.name'
+## can be added manually if not chosen automatically with running this on terminal 'pw-cli list-objects | grep node.name' and manually choose the one you want.
 MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
 
 INTERVAL=5

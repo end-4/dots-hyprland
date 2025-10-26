@@ -29,7 +29,7 @@ AndroidQuickToggleButton {
             }
             musicReconizedProc.running = true
         } catch(e) {
-            Quickshell.execDetached(["notify-send", "Unable to recognize music", "Please make sure your music is playing and try again", "-a", "Shell"])
+            Quickshell.execDetached(["notify-send", Translation.tr("Unable to recognize music"), Translation.tr("Please make sure your music is playing and try again"), "-a", "Shell"])
         } finally {
             root.toggled = false
         }
@@ -64,12 +64,16 @@ AndroidQuickToggleButton {
             Translation.tr("Music Recognized"), 
             root.recognizedTrack.title + " - " + root.recognizedTrack.subtitle, 
             "-A", "Shazam",
+            "-A", "YouTube",
             "-a", "Shell"
         ]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (this.text !== ""){
+                if (this.text === "") return
+                if (this.text == 0){
                     Qt.openUrlExternally(root.recognizedTrack.url);
+                } else {
+                    Qt.openUrlExternally("https://www.youtube.com/results?search_query=" + root.recognizedTrack.title + " - " + root.recognizedTrack.subtitle);
                 }
             }
         }
