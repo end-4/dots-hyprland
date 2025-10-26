@@ -30,8 +30,8 @@ if which pacman &>/dev/null; then
     ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"
   elif [[ -d "${REPO_ROOT}/arch-packages" ]]; then
     ARCH_PACKAGES_DIR="${REPO_ROOT}/arch-packages"
-  elif [[ -d "${REPO_ROOT}/sdist/arch" ]]; then
-    ARCH_PACKAGES_DIR="${REPO_ROOT}/sdist/arch"
+  elif [[ -d "${REPO_ROOT}/sdata/dist-arch" ]]; then
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/sdata/dist-arch"
   else
     ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"  # Default fallback
   fi
@@ -868,7 +868,7 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
   if [[ "$PKG_TOOLS_AVAILABLE" == true ]]; then
     if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdist/arch). Skipping package management."
+      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdata/dist-arch). Skipping package management."
     else
     changed_pkgbuilds=()
     for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do

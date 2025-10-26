@@ -49,7 +49,7 @@
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
 
-  - For the full list of dependencies, see the [sdist/arch folder](https://github.com/end-4/dots-hyprland/tree/main/sdist/arch)
+  - For the full list of dependencies, see the [sdata/dist-arch folder](https://github.com/end-4/dots-hyprland/tree/main/sdata/dist-arch)
   - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
 </details>
 

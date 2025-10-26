@@ -6,7 +6,7 @@
 The old deps install method mainly involved `./sdata/dependencies.conf` (which has been removed now).
 
 ## Current Dependency Installation
-Local PKGBUILDs under `./sdist/arch/` are used to install dependencies.
+Local PKGBUILDs under `./sdata/dist-arch/` are used to install dependencies.
 
 The mechanism is introduced by [Makrennel](https://github.com/Makrennel) in [PR#570](https://github.com/end-4/dots-hyprland/pull/570).
 
