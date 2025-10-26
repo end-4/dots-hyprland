@@ -40,7 +40,7 @@ AndroidQuickToggleButton {
             onStreamFinished: {
                 root.resultsJSON = this.text
                 if (this.text.length < 100) {
-                    Quickshell.execDetached(["notify-send", "No music recognized", "Please make sure your music is playing and try again", "-a", "Shell"])
+                    Quickshell.execDetached(["notify-send", "Unable to recognize music", "Please make sure your music is playing and try again", "-a", "Shell"])
                     toggled = false
                     return
                 }

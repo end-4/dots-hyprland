@@ -6,7 +6,6 @@ MONITOR_SOURCE="alsa_output.pci-0000_00_1f.3.analog-stereo.monitor"
 INTERVAL=5
 TOTAL_DURATION=30
 
-# Parametreleri oku
 while getopts "i:t:" opt; do
   case $opt in
     i) INTERVAL=$OPTARG ;;

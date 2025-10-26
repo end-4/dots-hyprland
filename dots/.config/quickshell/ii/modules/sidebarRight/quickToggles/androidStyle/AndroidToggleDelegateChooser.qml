@@ -232,7 +232,7 @@ DelegateChooser {
         cellSize: modelData.size
     } }
 
-    DelegateChoice { roleValue: "musicrecognition"; AndroidMusicRecognition {
+    DelegateChoice { roleValue: "musicRecognition"; AndroidMusicRecognition {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
