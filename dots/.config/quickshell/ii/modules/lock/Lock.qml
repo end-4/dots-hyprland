@@ -32,6 +32,16 @@ Scope {
 			}
 		}
 
+		Connections {
+			target: GlobalStates
+			function onScreenLockedChanged() {
+				if (GlobalStates.screenLocked) {
+					lockContext.reset();
+					lockContext.tryFingerUnlock();
+				}
+			}
+		}
+
 		onUnlocked: (targetAction) => {
 			// Perform the target action if it's not just unlocking
 			if (targetAction == LockContext.ActionEnum.Poweroff) {

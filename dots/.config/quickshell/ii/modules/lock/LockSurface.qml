@@ -98,6 +98,28 @@ MouseArea {
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
 
+        // Fingerprint
+        Loader {
+            Layout.leftMargin: 10
+            Layout.alignment: Qt.AlignVCenter
+            active: root.context.fingerprintsConfigured // Bind to actual fingerprint availability
+            visible: root.context.fingerprintsConfigured
+
+            sourceComponent: Row {
+                spacing: 8
+
+                MaterialSymbol {
+                    id: fingerprintIcon
+                    anchors.verticalCenter: parent.verticalCenter
+                    fill: 1
+                    text: "fingerprint"
+                    iconSize: Appearance.font.pixelSize.huge
+                    color: Appearance.colors.colOnSurfaceVariant
+                    animateChange: true
+                }
+            }
+        }
+
         ToolbarTextField {
             id: passwordBox
             placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
