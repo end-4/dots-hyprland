@@ -8,6 +8,9 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.bar as Bar
 import Quickshell.Services.SystemTray
+import Quickshell.Io
+import Quickshell
+import Quickshell.Services.Mpris
 
 MouseArea {
     id: root
@@ -15,6 +18,9 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
+    readonly property MprisPlayer activePlayer: MprisController.activePlayer
+    readonly property bool mediaPlaying: activePlayer.trackTitle !== ""
+
 
     // Force focus on entry
     function forceFieldFocus() {
@@ -54,6 +60,7 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
+        root.activePlayer = MprisController.activePlayer
     }
 
     // Key presses
@@ -154,6 +161,8 @@ MouseArea {
         }
     }
 
+    
+
     // Left toolbar
     Toolbar {
         id: leftIsland
@@ -165,6 +174,8 @@ MouseArea {
         }
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+
+
 
         // Username
         IconAndTextPair {
@@ -225,7 +236,7 @@ MouseArea {
         }
 
         scale: root.toolbarScale
-        opacity: root.toolbarOpacity
+        opacity: root.toolbarOpacitymediaPlaying
 
         IconAndTextPair {
             visible: UPower.displayDevice.isLaptopBattery
@@ -250,6 +261,40 @@ MouseArea {
             id: rebootButton
             text: "restart_alt"
             targetAction: LockContext.ActionEnum.Reboot
+        }
+    }
+
+    Toolbar {
+        id: musicControlIsland
+        visible: mediaPlaying
+        anchors {
+            left: rightIsland.right
+            top: rightIsland.top
+            bottom: rightIsland.bottom
+            leftMargin: 10
+        }
+        scale: root.toolbarScale
+        opacity: root.toolbarOpacity
+
+        IconAndTextPair {
+            Layout.leftMargin: 8
+            icon: "music_note"
+            text: activePlayer.trackTitle + " - " + activePlayer.trackArtist 
+        }
+        IconToolbarButton {
+            id: skippreviousButton
+            onClicked: activePlayer.previous()
+            text: "skip_previous"
+        }
+        IconToolbarButton {
+            id: playpauseButton
+            onClicked: activePlayer.togglePlaying();
+            text: activePlayer.isPlaying ? "pause" : "play_arrow" 
+        }
+        IconToolbarButton {
+            id: skipnextButton
+            onClicked: activePlayer.next()
+            text: "skip_next"
         }
     }
 
