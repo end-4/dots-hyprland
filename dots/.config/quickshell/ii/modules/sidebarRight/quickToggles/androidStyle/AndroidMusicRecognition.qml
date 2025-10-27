@@ -10,8 +10,9 @@ import qs.services
 AndroidQuickToggleButton {
     id: root
 
-    property int timeoutInterval: 5
+    property int timeoutInterval: Config.options.musicRecognition.interval
     property int timeoutDuration: Config.options.musicRecognition.timeout
+
 
     property string monitorSource: "monitor" // "monitor" (system sound) , "input" (microphone)
 

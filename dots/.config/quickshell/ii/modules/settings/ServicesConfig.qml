@@ -63,13 +63,24 @@ ContentPage {
 
         ConfigSpinBox {
             icon: "timer_off"
-            text: Translation.tr("Music recognition timeout (s)")
+            text: Translation.tr("Total duration timeout (s)")
             value: Config.options.musicRecognition.timeout
-            from: 2
+            from: 10
             to: 100
             stepSize: 2
             onValueChanged: {
                 Config.options.musicRecognition.timeout = value;
+            }
+        }
+        ConfigSpinBox {
+            icon: "av_timer"
+            text: Translation.tr("Polling interval (s)")
+            value: Config.options.musicRecognition.interval
+            from: 2
+            to: 10
+            stepSize: 1
+            onValueChanged: {
+                Config.options.musicRecognition.interval = value;
             }
         }
     }

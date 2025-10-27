@@ -378,6 +378,7 @@ Singleton {
 
             property JsonObject musicRecognition: JsonObject {
                 property int timeout: 16
+                property int interval: 4
             }
 
             property JsonObject search: JsonObject {
