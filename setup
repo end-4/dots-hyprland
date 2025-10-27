@@ -31,29 +31,34 @@ For each <subcommand>, use -h for details:
 "
 }
 case $1 in
-  # Global help
-  help|--help|-h)showhelp_global;exit;;
-  # Correct subcommand
+  help|--help|-h)
+    showhelp_global
+    exit
+    ;;
   install|exp-uninstall|exp-update|exp-update-old)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
-    shift;;
-  # Correct subcommand but not using ./sdata/subcmd-$1
+    shift
+    ;;
   install-deps|install-setups|install-files)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-install
-    shift;;
-  # No subcommand, default to install
+    shift
+    ;;
   -*|"")
     SUBCMD_NAME=install
     SUBCMD_DIR=./sdata/subcmd-install
     ;;
-  # Wrong subcommand
-  *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
+  *)
+    printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global
+    exit 1
+    ;;
 esac
+
 #####################################################################################
-if [[ -f "${SUBCMD_DIR}/options.sh" ]];
-  then source "${SUBCMD_DIR}/options.sh"
+
+if [[ -f "${SUBCMD_DIR}/options.sh" ]]; then
+  source "${SUBCMD_DIR}/options.sh"
 fi
 case ${SUBCMD_NAME} in
   install)
