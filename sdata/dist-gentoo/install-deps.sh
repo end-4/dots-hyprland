@@ -32,13 +32,15 @@ if [[ -z $(eselect repository list | grep localrepo) ]]; then
 fi
 
 if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
-        v sudo eselect repository enable guru
+  v sudo eselect repository enable guru
 fi
 
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
-metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,quickshell-git,screencapture,toolkit,widgets})
+metapkgs=(
+  illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,quickshell-git,screencapture,toolkit,widgets}
+)
 
 ebuild_dir="/var/db/repos/localrepo"
 
@@ -60,7 +62,7 @@ v sudo emerge --depclean
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
 
-###### LIVE EBUILDS START
+# Ebuilds
 HYPR_DIR="illogical-impulse-hyprland"
 x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprgraphics/
 x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qt-support
@@ -80,7 +82,6 @@ v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support/hyprland-qt-support*999
 v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils/hyprland-qtutils*9999.ebuild digest
 v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
 v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
-###### LIVE EBUILDS END
 
 # Install dependencies
 for i in "${metapkgs[@]}"; do

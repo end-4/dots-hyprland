@@ -47,7 +47,9 @@ function outdate_detect(){
 # http://stackoverflow.com/questions/45125516
 export MACHINE_ARCH=$(uname -m)
 case $MACHINE_ARCH in
-  "x86_64") sleep 0;;
+  "x86_64")
+    sleep 0
+    ;;
   *)
     printf "${STY_YELLOW}"
     printf "===WARNING===\n"
@@ -73,7 +75,6 @@ export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolo
 
 
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
-
   TARGET_ID=nix
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
@@ -84,9 +85,7 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
-
 elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
-
   TARGET_ID=arch
   printf "${STY_GREEN}"
   printf "===INFO===\n"
@@ -96,9 +95,7 @@ elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
-
 elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
-
   TARGET_ID=${OS_DISTRO_ID}
   printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
@@ -131,14 +128,18 @@ elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
     printf "${STY_RED}Still proceed?${STY_RST}\n"
     read -p "[y/N]: " p
     case "$p" in
-      [yY])sleep 0;;
-      *)echo "Aborting...";exit 1;;
+      [yY])
+        sleep 0
+        ;;
+      *)
+        echo "Aborting..."
+        exit 1
+        ;;
     esac
   fi
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-
   TARGET_ID=arch
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
@@ -152,9 +153,7 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
-
 else
-
   TARGET_ID=fallback
   printf "${STY_RED}${STY_BOLD}===URGENT===${STY_RST}\n"
   printf "${STY_RED}"
@@ -168,5 +167,4 @@ else
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
-
 fi

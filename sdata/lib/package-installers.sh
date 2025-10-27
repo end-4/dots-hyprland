@@ -54,7 +54,6 @@ install-OneUI(){
   x cd $REPO_ROOT/cache/OneUI4-Icons
   try git init -b main
   try git remote add origin https://github.com/end-4/OneUI4-Icons.git
-# try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
   x git pull origin main && git submodule update --init --recursive
   x sudo mkdir -p /usr/local/share/icons
   x sudo cp -r OneUI /usr/local/share/icons

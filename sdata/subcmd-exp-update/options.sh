@@ -32,23 +32,37 @@ Ignore file patterns support:
   - Substring matching (prefix with '**', e.g., '**temp' matches any path containing 'temp')
 "
 }
+
 # `man getopt` to see more
 para=$(getopt \
   -o hfpnvs \
   -l help,force,packages,dry-run,verbose,skip-notice,non-interactive \
   -n "$0" -- "$@")
-[ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
+if [ $? != 0 ]; then
+  echo "$0: Error when getopt, please recheck parameters."
+  exit 1
+fi
+
 #####################################################################################
 ## getopt Phase 1
 # ignore parameter's order, execute options below first
 eval set -- "$para"
+
 while true ; do
   case "$1" in
-    -h|--help) showhelp;exit;;
-    --) break ;;
-    *) shift ;;
+    -h|--help)
+      showhelp
+      exit
+      ;;
+    --)
+      break
+      ;;
+    *)
+      shift
+      ;;
   esac
 done
+
 #####################################################################################
 ## getopt Phase 2
 
@@ -60,30 +74,46 @@ SKIP_NOTICE=false
 NON_INTERACTIVE=false
 
 eval set -- "$para"
+
 while true ; do
   case "$1" in
     ## Ones without parameter
-    -f|--force) FORCE_CHECK=true;shift
+    -f|--force)
+      FORCE_CHECK=true
+      shift
       log_info "Force check mode enabled - will check all files regardless of git changes"
       ;;
-    -p|--packages) CHECK_PACKAGES=true;shift
+    -p|--packages)
+      CHECK_PACKAGES=true
+      shift
       log_info "Package checking enabled"
       ;;
-    -n|--dry-run) DRY_RUN=true;shift
+    -n|--dry-run)
+      DRY_RUN=true
+      shift
       log_info "Dry-run mode enabled - no changes will be made"
       ;;
-    -v|--verbose) VERBOSE=true;shift
+    -v|--verbose)
+      VERBOSE=true
+      shift
       log_info "Verbose mode enabled"
       ;;
-    -s|--skip-notice) SKIP_NOTICE=true;shift
+    -s|--skip-notice)
+      SKIP_NOTICE=true
+      shift
       log_warning "Skipping notice about script being untested"
       ;;
-    --non-interactive) NON_INTERACTIVE=true;shift
+    --non-interactive)
+      NON_INTERACTIVE=true
+      shift
       log_info "Non-interactive mode enabled"
       ;;
-    
-    ## Ending
-    --) break ;;
-    *) echo -e "$0: Wrong parameters.";exit 1;;
+    --)
+      break
+      ;;
+    *)
+      echo -e "$0: Wrong parameters."
+      exit 1
+      ;;
   esac
 done

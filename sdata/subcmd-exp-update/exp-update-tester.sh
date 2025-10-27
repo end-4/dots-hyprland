@@ -67,10 +67,10 @@ run_test() {
 
   # Run the test
   if $test_func; then
-    echo "✓ $test_name passed"
+    echo "$test_name passed"
     return 0
   else
-    echo "✗ $test_name failed"
+    echo "$test_name failed"
     return 1
   fi
 }

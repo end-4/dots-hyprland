@@ -15,10 +15,7 @@ test -f ${OS_RELEASE_FILE} || \
 export OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
 export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
 
-
-
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
-
   TARGET_ID=fallback
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
@@ -29,9 +26,7 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-setups.sh
-
 elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
-
   TARGET_ID=arch
   printf "${STY_GREEN}"
   printf "===INFO===\n"
@@ -41,9 +36,7 @@ elif [[ "$OS_DISTRO_ID" == "arch" ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-setups.sh
-
 elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-setups.sh" ]]; then
-
   TARGET_ID=${OS_DISTRO_ID}
   printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
@@ -61,7 +54,6 @@ elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-setups.sh" ]]; then
   source ./sdata/dist-${TARGET_ID}/install-setups.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-
   TARGET_ID=arch
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
@@ -75,9 +67,7 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-setups.sh
-
 else
-
   TARGET_ID=fallback
   printf "${STY_RED}"
   printf "===WARNING===\n"
@@ -91,5 +81,4 @@ else
   printf "${STY_RST}"
   pause
   source ./sdata/dist-${TARGET_ID}/install-setups.sh
-
 fi

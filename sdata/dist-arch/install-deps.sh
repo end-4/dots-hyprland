@@ -39,8 +39,12 @@ fi
 
 # Issue #363
 case $SKIP_SYSUPDATE in
-  true) sleep 0;;
-  *) v sudo pacman -Syu;;
+  true)
+    sleep 0
+    ;;
+  *)
+    v sudo pacman -Syu
+    ;;
 esac
 
 # Use yay. Because paru does not support cleanbuild.
@@ -90,9 +94,12 @@ for i in "${metapkgs[@]}"; do
 done
 
 ## Optional dependencies
-if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
+pacman -Qs ^plasma-browser-integration$ && SKIP_PLASMAINTG=true
+
 case $SKIP_PLASMAINTG in
-  true) sleep 0;;
+  true)
+    sleep 0
+    ;;
   *)
     if $ask;then
       echo -e "${STY_YELLOW}[$0]: NOTE: The size of \"plasma-browser-integration\" is about 600 MiB.${STY_RST}"
@@ -102,9 +109,12 @@ case $SKIP_PLASMAINTG in
     else
       p=y
     fi
+
     case $p in
-      y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
-      *) echo "Ok, won't install"
+      y)
+        x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
+      *)
+        echo "Ok, won't install"
     esac
     ;;
 esac

@@ -33,7 +33,9 @@ printf "\n"
 pause
 
 case $ask in
-  false) sleep 0 ;;
+  false)
+    sleep 0
+    ;;
   *) 
     printf "${STY_BLUE}"
     printf "${STY_BOLD}Do you want to confirm every time before a command executes?${STY_RST}\n"
@@ -43,9 +45,15 @@ case $ask in
     printf "  a = Abort.\n"
     read -p "===> [Y/n/a]: " p
     case $p in
-      n) ask=false ;;
-      a) exit 1 ;;
-      *) ask=true ;;
+      n)
+        ask=false
+        ;;
+      a)
+        exit 1
+        ;;
+      *)
+        ask=true
+        ;;
     esac
     printf "${STY_RST}"
     ;;

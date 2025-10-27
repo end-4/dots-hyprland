@@ -43,7 +43,7 @@ if which pacman &>/dev/null; then
   elif [[ -d "${REPO_ROOT}/sdata/dist-arch" ]]; then
     ARCH_PACKAGES_DIR="${REPO_ROOT}/sdata/dist-arch"
   else
-    ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch"  # Default fallback
+    ARCH_PACKAGES_DIR="${REPO_ROOT}/dist-arch" # Default fallback
   fi
 fi
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"

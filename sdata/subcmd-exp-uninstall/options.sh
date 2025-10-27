@@ -15,15 +15,27 @@ para=$(getopt \
   -o h \
   -l help \
   -n "$0" -- "$@")
-[ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
+if [ $? != 0 ]; then
+  echo "$0: Error when getopt, please recheck parameters."
+  exit 1
+fi
+
 #####################################################################################
 ## getopt Phase 1
 # ignore parameter's order, execute options below first
 eval set -- "$para"
+
 while true ; do
   case "$1" in
-    -h|--help) showhelp;exit;;
-    --) break ;;
-    *) shift ;;
+    -h|--help)
+      showhelp
+      exit
+      ;;
+    --)
+      break
+      ;;
+    *)
+      shift
+      ;;
   esac
 done
