@@ -474,6 +474,15 @@ ContentPage {
         }
 
         ConfigSwitch {
+            buttonIcon: "motion_play"
+            text: Translation.tr('Show media player in lock screen')
+            checked: Config.options.lock.showMediaPlayer
+            onCheckedChanged: {
+                Config.options.lock.showMediaPlayer = checked;
+            }
+        }
+
+        ConfigSwitch {
             buttonIcon: "account_circle"
             text: Translation.tr('Launch on startup')
             checked: Config.options.lock.launchOnStartup

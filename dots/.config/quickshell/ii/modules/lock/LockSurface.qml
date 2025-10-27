@@ -265,7 +265,7 @@ MouseArea {
 
     Toolbar {
         id: musicControlIsland
-        visible: activePlayer.trackTitle !== ""
+        visible: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
         anchors {
             left: rightIsland.right
             top: rightIsland.top
