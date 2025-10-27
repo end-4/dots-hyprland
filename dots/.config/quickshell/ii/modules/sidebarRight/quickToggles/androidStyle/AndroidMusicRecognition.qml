@@ -11,14 +11,14 @@ AndroidQuickToggleButton {
     id: root
 
     property int timeoutInterval: 5
-    property int timeoutDuration: Config.options.resources.musicRecognitionTimeout
+    property int timeoutDuration: Config.options.musicRecognition.timeout
 
     property string monitorSource: "monitor" // "monitor" (system sound) , "input" (microphone)
 
     name: Translation.tr("Identify Music")
     statusText: toggled ? Translation.tr("Listening...") : monitorSource === "monitor" ? Translation.tr("System sound") : Translation.tr("Microphone")
     toggled: false
-    buttonIcon: toggled ? "cadence" : "graphic_eq"
+    buttonIcon: toggled ? "music_cast" : "music_note"
 
     property var recognizedTrack: ({ title:"", subtitle:"", url:""})
 

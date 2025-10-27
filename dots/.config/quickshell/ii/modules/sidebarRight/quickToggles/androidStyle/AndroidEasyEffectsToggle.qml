@@ -10,7 +10,7 @@ AndroidQuickToggleButton {
     name: Translation.tr("EasyEffects")
 
     toggled: EasyEffects.active
-    buttonIcon: "instant_mix"
+    buttonIcon: "graphic_eq"
 
     Component.onCompleted: {
         EasyEffects.fetchActiveState()

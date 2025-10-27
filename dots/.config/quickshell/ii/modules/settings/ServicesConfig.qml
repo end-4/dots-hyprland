@@ -54,15 +54,22 @@ ContentPage {
                 Config.options.resources.updateInterval = value;
             }
         }
+        
+    }
+
+    ContentSection {
+        icon: "music_cast"
+        title: Translation.tr("Music Recognition")
+
         ConfigSpinBox {
             icon: "timer_off"
             text: Translation.tr("Music recognition timeout (s)")
-            value: Config.options.resources.musicRecognitionTimeout
+            value: Config.options.musicRecognition.timeout
             from: 2
             to: 100
             stepSize: 2
             onValueChanged: {
-                Config.options.resources.musicRecognitionTimeout = value;
+                Config.options.musicRecognition.timeout = value;
             }
         }
     }

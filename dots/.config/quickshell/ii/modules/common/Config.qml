@@ -374,7 +374,10 @@ Singleton {
 
             property JsonObject resources: JsonObject {
                 property int updateInterval: 3000
-                property int musicRecognitionTimeout: 16
+            }
+
+            property JsonObject musicRecognition: JsonObject {
+                property int timeout: 16
             }
 
             property JsonObject search: JsonObject {
