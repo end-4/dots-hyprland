@@ -28,13 +28,6 @@ Scope {
 		Connections {
 			target: GlobalStates
 			function onScreenLockedChanged() {
-				if (GlobalStates.screenLocked) lockContext.reset();
-			}
-		}
-
-		Connections {
-			target: GlobalStates
-			function onScreenLockedChanged() {
 				if (GlobalStates.screenLocked) {
 					lockContext.reset();
 					lockContext.tryFingerUnlock();
