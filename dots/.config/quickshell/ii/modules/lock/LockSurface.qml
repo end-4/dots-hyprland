@@ -19,7 +19,6 @@ MouseArea {
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
-    readonly property bool mediaPlaying: activePlayer.trackTitle !== ""
 
 
     // Force focus on entry
@@ -236,7 +235,7 @@ MouseArea {
         }
 
         scale: root.toolbarScale
-        opacity: root.toolbarOpacitymediaPlaying
+        opacity: root.toolbarOpacity
 
         IconAndTextPair {
             visible: UPower.displayDevice.isLaptopBattery
@@ -266,7 +265,7 @@ MouseArea {
 
     Toolbar {
         id: musicControlIsland
-        visible: mediaPlaying
+        visible: activePlayer.trackTitle !== ""
         anchors {
             left: rightIsland.right
             top: rightIsland.top
