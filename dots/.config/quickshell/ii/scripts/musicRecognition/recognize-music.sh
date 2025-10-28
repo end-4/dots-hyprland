@@ -4,8 +4,9 @@ INTERVAL=2
 TOTAL_DURATION=30
 MIN_VALID_RESULT_LENGTH=300
 SOURCE_TYPE="monitor"  # monitor | input
-TMP_RAW="/tmp/songrec_recording.raw"
-TMP_MP3="/tmp/songrec_recording.mp3"
+TMP_PATH="/tmp/quickshell/media/songrec"
+TMP_RAW="$TMP_PATH/recording.raw"
+TMP_MP3="$TMP_PATH/recording.mp3"
 
 while getopts "i:t:s:" opt; do
   case $opt in
@@ -20,6 +21,7 @@ if [ "$SOURCE_TYPE" = "monitor" ]; then
 elif [ "$SOURCE_TYPE" = "input" ]; then
     MONITOR_SOURCE=$(pactl info | grep "Default Source:" | awk '{print $3}' || true)
 else
+    echo "Invalid source type"
     exit 1
 fi
 
@@ -33,6 +35,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
+mkdir -p "$TMP_PATH"
 parec --device="$MONITOR_SOURCE" --format=s16le --rate=44100 --channels=2 > "$TMP_RAW" &
 START_TIME=$(date +%s)
 
