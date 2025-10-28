@@ -192,7 +192,7 @@ ContentPage {
                 Config.options.appearance.keybinds.useFnSymbol = checked;
             }
             StyledToolTip {
-              text: Translation.tr("Show 󱊷  instead of Escape, 󱊫  for F1, etc to 󱊶  for F12")
+              text: Translation.tr("Show functions keys as symbols, e.g. 󱊫 for F1, 󱊶  for F12")
             }
         }
         ConfigSwitch {
@@ -203,7 +203,7 @@ ContentPage {
                 Config.options.appearance.keybinds.useMouseSymbol = checked;
             }
             StyledToolTip {
-              text: Translation.tr("Replace 󱕐   for \"Scroll ↓\", 󱕑   \"Scroll ↑\", L󰍽   \"LMB\", R󰍽   \"RMB\", 󱕒   \"Scroll ↑/↓\" and Page  for \"Page_↑/↓\"")
+              text: Translation.tr("Replace 󱕐   for \"Scroll ↓\", 󱕑   \"Scroll ↑\", L󰍽   \"LMB\", R󰍽   \"RMB\", 󱕒   \"Scroll ↑/↓\" and ⇞/⇟ for \"Page_↑/↓\"")
             }
         }
         ConfigSwitch {
