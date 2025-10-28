@@ -33,7 +33,7 @@ AndroidQuickToggleButton {
             }
             musicReconizedProc.running = true
         } catch(e) {
-            Quickshell.execDetached(["notify-send", Translation.tr("Unable to recognize music"), Translation.tr("Please make sure your music is playing and try again"), "-a", "Shell"])
+            Quickshell.execDetached(["notify-send", Translation.tr("Couldn't recognize music"), Translation.tr("Perhaps what you're listening to is too niche"), "-a", "Shell"])
         } finally {
             root.toggled = false
         }
