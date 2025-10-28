@@ -14,6 +14,8 @@ Item {
     property real padding: 4
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
+    // Excellent symbol explaination and source :
+    // http://xahlee.info/comp/unicode_computing_symbols.html
     property list<string> superMap: [
       "󰖳", "󰌽", "⌘", "", "󰨡", "", "",
       "󰣇", "", "", "", "", " ", "", "󱄛"
@@ -68,6 +70,7 @@ Item {
         "mouse:275": "MouseBack",
         "Slash": "/",
         "Hash": "#",
+        "Return": "Enter",
         // "Shift": "",
       },
       Config.options.appearance.keybinds.useMacSymbol ? macSymbolMap : {},
