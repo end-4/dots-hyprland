@@ -58,7 +58,7 @@ Item {
     })
 
     property var keyBlacklist: ["Super_L"]
-    property var keySubstitutions: ({
+    property var keySubstitutions: Object.assign({
         "Super": superMap[Config.options.appearance.keybinds.superKey],
         // Mouse keys
         "mouse_up": "Scroll ↓",    // ikr, weird
