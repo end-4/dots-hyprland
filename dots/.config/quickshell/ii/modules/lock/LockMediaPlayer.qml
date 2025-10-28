@@ -9,12 +9,10 @@ import Quickshell.Services.Mpris
 
 import qs.modules.mediaControls
 
-
 RowLayout {
     id: mediaPlayerRoot
 
     property MprisPlayer activePlayer 
-
     property int maxTitleLength: 30
 
     Layout.fillHeight: true
@@ -31,7 +29,7 @@ RowLayout {
     }
 
     function cycleActivePlayer() {
-        var filteredPlayers = mediaControls.meaningfulPlayers;
+        var filteredPlayers = mediaControls.filterDuplicatePlayers(Mpris.players.values)
         var currentIndex = filteredPlayers.indexOf(activePlayer);
         var nextIndex = (currentIndex + 1) % filteredPlayers.length;
         activePlayer = filteredPlayers[nextIndex];
@@ -73,6 +71,7 @@ RowLayout {
     ColumnLayout {
         RowLayout {
             spacing: 20
+
             ColumnLayout { // Track Info Texts
                 StyledText {
                     text: mediaPlayerRoot.activePlayer.trackTitle.length > maxTitleLength
@@ -126,6 +125,7 @@ RowLayout {
                         iconSize: 18
                     }
                     IconToolbarButton {
+                        visible: mediaControls.filterDuplicatePlayers(Mpris.players.values).length > 1
                         colBackground: Appearance.colors.colTertiaryContainer
                         colBackgroundHover: Appearance.colors.colTertiaryContainerHover
                         id: cycleButton

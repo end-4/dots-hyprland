@@ -265,52 +265,20 @@ MouseArea {
         }
     }
 
-    /* Toolbar {
-        id: simpleMusicControlIsland
-        visible: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            bottom: rightIsland.top
-            bottomMargin: 10
-        }
-        scale: root.toolbarScale
-        opacity: root.toolbarOpacity
-
-        IconAndTextPair {
-            Layout.leftMargin: 8
-            icon: "music_note"
-            text: activePlayer.trackTitle + " - " + activePlayer.trackArtist 
-        }
-        IconToolbarButton {
-            id: skippreviousButton
-            onClicked: activePlayer.previous()
-            text: "skip_previous"
-        }
-        IconToolbarButton {
-            id: playpauseButton
-            onClicked: activePlayer.togglePlaying();
-            text: activePlayer.isPlaying ? "pause" : "play_arrow" 
-        }
-        IconToolbarButton {
-            id: skipnextButton
-            onClicked: activePlayer.next()
-            text: "skip_next"
-        }
-    } */
-
-    Toolbar {
-        visible: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
+    Loader {
+        active: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
             topMargin: 32
         }
-
-        radius: Appearance.rounding.large
-        implicitHeight: 120
-        LockMediaPlayer {}
-        
+        sourceComponent: Toolbar {
+            radius: Appearance.rounding.large
+            implicitHeight: 120
+            LockMediaPlayer {}
+        }
     }
+    
 
     component PasswordGuardedIconToolbarButton: IconToolbarButton {
         id: guardedBtn
