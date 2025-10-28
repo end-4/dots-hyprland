@@ -5,10 +5,15 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import Qt5Compat.GraphicalEffects
+import Quickshell.Services.Mpris
 
+import qs.modules.mediaControls
 
 
 RowLayout {
+    id: mediaPlayerRoot
+
+    property MprisPlayer activePlayer 
 
     property int maxTitleLength: 30
 
@@ -16,6 +21,21 @@ RowLayout {
     Layout.fillWidth: true
     Layout.margins: parent.implicitHeight / 10
     spacing: 20
+
+    MediaControls {
+        id: mediaControls
+    }
+
+    Component.onCompleted: {
+        activePlayer = MprisController.activePlayer
+    }
+
+    function cycleActivePlayer() {
+        var filteredPlayers = mediaControls.meaningfulPlayers;
+        var currentIndex = filteredPlayers.indexOf(activePlayer);
+        var nextIndex = (currentIndex + 1) % filteredPlayers.length;
+        activePlayer = filteredPlayers[nextIndex];
+    }
 
     Rectangle { // Art background
         id: artBackground
@@ -38,7 +58,7 @@ RowLayout {
             property int size: parent.height
             anchors.fill: parent
 
-            source: root.activePlayer.trackArtUrl
+            source: mediaPlayerRoot.activePlayer.trackArtUrl
             fillMode: Image.PreserveAspectCrop
             cache: false
             antialiasing: true
@@ -55,9 +75,9 @@ RowLayout {
             spacing: 20
             ColumnLayout { // Track Info Texts
                 StyledText {
-                    text: root.activePlayer.trackTitle.length > maxTitleLength
-                          ? root.activePlayer.trackTitle.substring(0, maxTitleLength) + "..."
-                          : root.activePlayer.trackTitle
+                    text: mediaPlayerRoot.activePlayer.trackTitle.length > maxTitleLength
+                          ? mediaPlayerRoot.activePlayer.trackTitle.substring(0, maxTitleLength) + "..."
+                          : mediaPlayerRoot.activePlayer.trackTitle
 
                     font {
                         family: Appearance.font.family.reading
@@ -68,7 +88,7 @@ RowLayout {
                     animateChange: true
                 }
                 StyledText {
-                    text: root.activePlayer.trackArtist
+                    text: mediaPlayerRoot.activePlayer.trackArtist
                     color: Appearance.colors.colSubtext
                     font {
                         family: Appearance.font.family.reading
@@ -87,22 +107,30 @@ RowLayout {
                 RowLayout {
                     IconToolbarButton {
                         id: skippreviousButton
-                        onClicked: root.activePlayer.previous()
+                        onClicked: mediaPlayerRoot.activePlayer.previous()
                         text: "skip_previous"
                         iconSize: 18
                     }
                     IconToolbarButton {
-                        colBackground: root.activePlayer.isPlaying ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSecondaryContainer
-                        colBackgroundHover: root.activePlayer.isPlaying ? Appearance.colors.colPrimaryContainerHover : Appearance.colors.colSecondaryContainerHover
+                        colBackground: mediaPlayerRoot.activePlayer.isPlaying ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSecondaryContainer
+                        colBackgroundHover: mediaPlayerRoot.activePlayer.isPlaying ? Appearance.colors.colPrimaryContainerHover : Appearance.colors.colSecondaryContainerHover
                         id: playpauseButton
-                        onClicked: root.activePlayer.togglePlaying();
-                        text: root.activePlayer.isPlaying ? "pause" : "play_arrow" 
+                        onClicked: mediaPlayerRoot.activePlayer.togglePlaying();
+                        text: mediaPlayerRoot.activePlayer.isPlaying ? "pause" : "play_arrow" 
                         iconSize: 18
                     }
                     IconToolbarButton {
                         id: skipnextButton
-                        onClicked: root.activePlayer.next()
+                        onClicked: mediaPlayerRoot.activePlayer.next()
                         text: "skip_next"
+                        iconSize: 18
+                    }
+                    IconToolbarButton {
+                        colBackground: Appearance.colors.colTertiaryContainer
+                        colBackgroundHover: Appearance.colors.colTertiaryContainerHover
+                        id: cycleButton
+                        onClicked: cycleActivePlayer()
+                        text: "360"
                         iconSize: 18
                     }
                 }
@@ -118,10 +146,12 @@ RowLayout {
             highlightColor: Appearance.colors.colPrimary
             trackColor: Appearance.colors.colSecondaryContainer
             handleColor: Appearance.colors.colPrimary
-            value: root.activePlayer.position / root.activePlayer.length
+            value: mediaPlayerRoot.activePlayer.position / mediaPlayerRoot.activePlayer.length
             onMoved: {
-                root.activePlayer.position = value * root.activePlayer.length;
+                mediaPlayerRoot.activePlayer.position = value * mediaPlayerRoot.activePlayer.length;
             }
         }
     }
+
+
 }
