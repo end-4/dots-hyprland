@@ -11,6 +11,8 @@ import Quickshell.Services.SystemTray
 import Quickshell.Io
 import Quickshell
 import Quickshell.Services.Mpris
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
 
 MouseArea {
     id: root
@@ -263,14 +265,13 @@ MouseArea {
         }
     }
 
-    Toolbar {
-        id: musicControlIsland
+    /* Toolbar {
+        id: simpleMusicControlIsland
         visible: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
         anchors {
-            left: rightIsland.right
-            top: rightIsland.top
-            bottom: rightIsland.bottom
-            leftMargin: 10
+            horizontalCenter: parent.horizontalCenter
+            bottom: rightIsland.top
+            bottomMargin: 10
         }
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
@@ -295,6 +296,20 @@ MouseArea {
             onClicked: activePlayer.next()
             text: "skip_next"
         }
+    } */
+
+    Toolbar {
+        visible: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: 32
+        }
+
+        radius: Appearance.rounding.large
+        implicitHeight: 120
+        LockMediaPlayer {}
+        
     }
 
     component PasswordGuardedIconToolbarButton: IconToolbarButton {
