@@ -19,7 +19,7 @@ AndroidQuickToggleButton {
     name: Translation.tr("Identify Music")
     statusText: toggled ? Translation.tr("Listening...") : monitorSource === "monitor" ? Translation.tr("System sound") : Translation.tr("Microphone")
     toggled: false
-    buttonIcon: toggled ? "music_cast" : "music_note"
+    buttonIcon: toggled ? "music_cast" : (monitorSource === "monitor" ? "music_note" : "frame_person_mic")
 
     property var recognizedTrack: ({ title:"", subtitle:"", url:""})
 
