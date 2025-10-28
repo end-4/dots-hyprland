@@ -63,7 +63,7 @@ AndroidQuickToggleButton {
     Process {
         id: recognizeMusicProc
         running: false
-        command: [`${Directories.scriptPath}/musicRecognition/musicRecognition.sh`, "-i", root.timeoutInterval, "-t", root.timeoutDuration, "-s", root.monitorSource]
+        command: [`${Directories.scriptPath}/musicRecognition/recognize-music.sh`, "-i", root.timeoutInterval, "-t", root.timeoutDuration, "-s", root.monitorSource]
         stdout: StdioCollector {
             onStreamFinished: {
                 handleRecognition(this.text)
