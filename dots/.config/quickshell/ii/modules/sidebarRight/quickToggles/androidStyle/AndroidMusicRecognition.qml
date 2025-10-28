@@ -41,14 +41,15 @@ AndroidQuickToggleButton {
     
 
     StyledToolTip {
-        text: Translation.tr("Identifies currently playing song | Right-click to change monitor source")
+        text: Translation.tr("Recognize music | Right-click to toggle source")
     }
 
-     onClicked: {
+    onClicked: {
         root.toggled = !root.toggled
         recognizeMusicProc.running = root.toggled
         musicReconizedProc.running = false
     }
+
     altAction: () => {
         if (root.monitorSource === "monitor"){
             root.monitorSource = "input"
@@ -66,6 +67,12 @@ AndroidQuickToggleButton {
         stdout: StdioCollector {
             onStreamFinished: {
                 handleRecognition(this.text)
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 1) {
+                Quickshell.execDetached(["notify-send", Translation.tr("Couldn't recognize music"), Translation.tr("Make sure you have songrec installed"), "-a", "Shell"])
+                root.toggled = false
             }
         }
     }

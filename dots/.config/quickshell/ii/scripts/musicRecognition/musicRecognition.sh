@@ -23,7 +23,7 @@ else
     exit 1
 fi
 
-if [ -z "$MONITOR_SOURCE" ]; then
+if [ -z "$MONITOR_SOURCE" ] || ! command -v songrec >/dev/null 2>&1; then
     exit 1
 fi
 
@@ -46,7 +46,6 @@ while true; do
     fi
 
     ffmpeg -f s16le -ar 44100 -ac 2 -i "$TMP_RAW" -acodec libmp3lame -y -hide_banner -loglevel error "$TMP_MP3" 2>/dev/null
-
     RESULT=$(songrec audio-file-to-recognized-song "$TMP_MP3" 2>/dev/null || true)
 
     if echo "$RESULT" | grep -q '"matches": \[' && [ ${#RESULT} -gt $MIN_VALID_RESULT_LENGTH ]; then
