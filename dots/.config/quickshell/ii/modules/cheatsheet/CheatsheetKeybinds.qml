@@ -193,8 +193,7 @@ Item {
                                                 StyledText {
                                                     id: commentText
                                                     anchors.centerIn: parent
-                                                    // font.pixelSize: Appearance.font.pixelSize.smaller
-                                                    font.pixelSize: Config.options.appearance.keybinds.pixelSize.comment
+                                                    font.pixelSize: Config.options.appearance.keybinds.pixelSize.comment || Appearance.font.pixelSize.smaller
                                                     text: modelData.comment
                                                 }
                                             }

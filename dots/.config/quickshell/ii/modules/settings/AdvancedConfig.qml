@@ -1,10 +1,6 @@
 import QtQuick
-import Quickshell
-import Quickshell.Io
-import QtQuick.Layouts
 import qs.services
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
@@ -220,7 +216,6 @@ ContentPage {
         }
 
         ConfigSpinBox {
-            // text: Translation.tr("Keycap")
             text: Translation.tr("Keybind font size")
             value: Config.options.appearance.keybinds.pixelSize.key
             from: Appearance.font.pixelSize.smallest
