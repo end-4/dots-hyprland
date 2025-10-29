@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -7,6 +8,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.bar as Bar
+import Quickshell
 import Quickshell.Services.SystemTray
 
 MouseArea {
@@ -123,6 +125,26 @@ MouseArea {
 
             Keys.onPressed: event => {
                 root.context.resetClearTimer();
+            }
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: passwordBox.width - 8
+                    height: passwordBox.height
+                    radius: height / 2
+                }
+            }
+
+            // We're drawing dots manually
+            color: ColorUtils.transparentize(Appearance.colors.colOnLayer1)
+            PasswordChars {
+                anchors {
+                    fill: parent
+                    leftMargin: passwordBox.padding
+                    rightMargin: passwordBox.padding
+                }
+                length: root.context.currentText.length
             }
         }
 
