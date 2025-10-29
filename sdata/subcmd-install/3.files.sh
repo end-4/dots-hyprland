@@ -159,16 +159,24 @@ case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
     warning_rsync_delete; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    # When hypr/custom does not exist, we assume that it's the firstrun.
+    if [ -d "$XDG_CONFIG_HOME/hypr/custom" ];then ii_firstrun=false;else ii_firstrun=true;fi
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
-      v mv $t $t.old
-      v cp -f dots/.config/hypr/hyprland.conf $t
-      existed_hypr_conf_firstrun=y
+      if $ii_firstrun;then
+        echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
+        v mv $t $t.old
+        v cp -f dots/.config/hypr/hyprland.conf $t
+        existed_hypr_conf_firstrun=y
+      else
+        echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
+        v cp -f dots/.config/hypr/hyprland.conf $t.new
+        existed_hypr_conf=y
+      fi
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       v cp dots/.config/hypr/hyprland.conf $t
-      existed_hypr_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [ -f $t ];then
