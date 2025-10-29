@@ -61,8 +61,7 @@ Item {
 
     property var keyBlacklist: ["Super_L"]
     property var keySubstitutions: Object.assign({
-        "Super": superMap[Config.options.appearance.keybinds.superKey],
-        // Mouse keys
+        "Super": "󰖳",
         "mouse_up": "Scroll ↓",    // ikr, weird
         "mouse_down": "Scroll ↑",  // trust me bro
         "mouse:272": "LMB",
@@ -73,6 +72,9 @@ Item {
         "Return": "Enter",
         // "Shift": "",
       },
+      Config.options.appearance.keybinds.superKey > 0 ? {
+          "Super": superMap[Config.options.appearance.keybinds.superKey],
+      }: {},
       Config.options.appearance.keybinds.useMacSymbol ? macSymbolMap : {},
       Config.options.appearance.keybinds.useFnSymbol ? functionSymbolMap : {},
       Config.options.appearance.keybinds.useMouseSymbol ? mouseSymbolMap : {},
