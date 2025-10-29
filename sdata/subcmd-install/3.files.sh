@@ -19,18 +19,20 @@ function warning_rsync_normal(){
 }
 
 function backup_clashing_targets(){
-  # For dirs/files under target_dir, only backup those which clashes with the ones under source_dir
+  # For  dirs/files under target_dir, only backup those which clashes with the ones under source_dir
+  # However, ignore the ones listed in ignored_list
 
   # Deal with arguments
   local source_dir="$1"
   local target_dir="$2"
   local backup_dir="$3"
+  local -a ignored_list=("${@:4}")
 
   # Find clash dirs/files, save as clash_list
   local clash_list=()
   local source_list=($(ls -A "$source_dir"))
   local target_list=($(ls -A "$target_dir"))
-  declare -A target_map
+  local -A target_map
   for i in "${target_list[@]}"; do
     target_map["$i"]=1
   done
@@ -39,6 +41,12 @@ function backup_clashing_targets(){
       clash_list+=("$i")
     fi
   done
+  local -A delk
+  for del in "${ignored_list[@]}" ; do delk[$del]=1 ; done
+  for k in "${!clash_list[@]}" ; do
+    [ "${delk[${clash_list[$k]}]-}" ] && unset 'clash_list[k]'
+  done
+  clash_list=("${clash_list[@]}")
 
   # Construct args_includes for rsync
   local args_includes=()
