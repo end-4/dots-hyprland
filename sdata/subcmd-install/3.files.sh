@@ -115,6 +115,7 @@ case $SKIP_MISCCONF in
       elif [ -f "dots/.config/$i" ];then warning_rsync; v rsync -av "dots/.config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
+    warning_rsync; v rsync -av "dots/.local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
     ;;
 esac
 
@@ -190,7 +191,6 @@ declare -a arg_excludes=()
 # since the files here come from different places, not only about one program.
 # v rsync -av "dots/.local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 warning_rsync; v rsync -av "dots/.local/share/icons/" "${XDG_DATA_HOME:-$HOME/.local/share}"/icons/
-warning_rsync; v rsync -av "dots/.local/share/konsole/" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole/
 
 # Prevent hyprland from not fully loaded
 sleep 1

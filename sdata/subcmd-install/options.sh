@@ -14,11 +14,11 @@ Options for install:
       --skip-allsetups      Skip the whole process setting up permissions/services etc
       --skip-allfiles       Skip the whole process copying configuration files
   -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
+      --skip-plasmaintg     Skip installing plasma-browser-integration
       --skip-backup         Skip backup conflicting files
       --skip-quickshell     Skip installing the config for Quickshell
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
-      --skip-plasmaintg     Skip installing plasma-browser-integration
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             Quickshell, Fish and Hyprland
       --exp-files           Use experimental script for the third step copying files
@@ -34,7 +34,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
   -o hfk:cs \
-  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix \
+  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-miscconf,exp-files,via-nix \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -64,12 +64,12 @@ while true ; do
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
     --skip-allfiles) SKIP_ALLFILES=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
+    --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
     --skip-backup) SKIP_BACKUP=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
     --skip-quickshell) SKIP_QUICKSHELL=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
-    --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     
