@@ -287,3 +287,25 @@ function check_disk_space() {
   
   return 0
 }
+
+function auto_get_git_submodule(){
+  local git_submodules_list=()
+
+  while IFS= read -r path; do
+    [ -z "$path" ] && continue
+    git_submodules_list+=("$path")
+  done < <(git submodule status --recursive 2>/dev/null | awk '{print $2}')
+
+  local missing=0
+
+  for p in "${git_submodules_list[@]}"; do
+    if [ ! -d "$p" ] || [ -z "$(ls -A "$p" 2>/dev/null)" ]; then
+      missing=1
+      break
+    fi
+  done
+
+  if [ "$missing" -eq 1 ]; then
+    x git submodule update --init --recursive
+  fi
+}

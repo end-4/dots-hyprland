@@ -81,6 +81,8 @@ function auto_backup_configs(){
 }
 
 #####################################################################################
+showfun auto_get_git_submodule
+v auto_get_git_submodule
 
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
