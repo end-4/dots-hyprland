@@ -27,7 +27,7 @@ Button {
     property real clickedWidth: baseWidth + (isAtSide ? 10 : 20)
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
-    property int indexInParent: parentGroup?.children.indexOf(root) ?? 0
+    property int indexInParent: parentGroup?.children.indexOf(root) ?? -1
     property int clickIndex: parentGroup?.clickIndex ?? -1
     property bool isAtSide: indexInParent === 0 || indexInParent === (parentGroup?.childrenCount - 1)
 

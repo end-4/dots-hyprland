@@ -1,18 +1,15 @@
 pragma ComponentBehavior: Bound
-import qs
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-import Quickshell.Widgets
 import Quickshell.Hyprland
+import Qt.labs.synchronizer
 
 PanelWindow {
     id: root
@@ -29,7 +26,7 @@ PanelWindow {
     }
 
     // TODO: Ask: sidebar AI; Ocr: tesseract
-    enum SnipAction { Copy, Edit, Search } 
+    enum SnipAction { Copy, Edit, Search, CharRecognition } 
     enum SelectionMode { RectCorners, Circle }
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
@@ -39,8 +36,6 @@ PanelWindow {
     property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
     property string fileUploadApiEndpoint: "https://uguu.se/upload"
     property color overlayColor: "#88111111"
-    property color genericContentColor: Qt.alpha(root.overlayColor, 0.9)
-    property color genericContentForeground: "#ddffffff"
     property color brightText: Appearance.m3colors.darkmode ? Appearance.colors.colOnLayer0 : Appearance.colors.colLayer0
     property color brightSecondary: Appearance.m3colors.darkmode ? Appearance.colors.colSecondary : Appearance.colors.colOnSecondary
     property color brightTertiary: Appearance.m3colors.darkmode ? Appearance.colors.colTertiary : Qt.lighter(Appearance.colors.colPrimary)
@@ -76,7 +71,7 @@ PanelWindow {
     property list<point> points: []
     property var mouseButton: null
     property var imageRegions: []
-    readonly property list<var> windowRegions: filterWindowRegionsByLayers(
+    readonly property list<var> windowRegions: RegionFunctions.filterWindowRegionsByLayers(
         root.windows.filter(w => w.workspace.id === root.activeWorkspaceId),
         root.layerRegions
     ).map(window => {
@@ -129,76 +124,6 @@ PanelWindow {
         root.regionY = root.targetedRegionY;
         root.regionWidth = root.targetedRegionWidth;
         root.regionHeight = root.targetedRegionHeight;
-    }
-
-    function intersectionOverUnion(regionA, regionB) {
-        // region: { at: [x, y], size: [w, h] }
-        const ax1 = regionA.at[0], ay1 = regionA.at[1];
-        const ax2 = ax1 + regionA.size[0], ay2 = ay1 + regionA.size[1];
-        const bx1 = regionB.at[0], by1 = regionB.at[1];
-        const bx2 = bx1 + regionB.size[0], by2 = by1 + regionB.size[1];
-
-        const interX1 = Math.max(ax1, bx1);
-        const interY1 = Math.max(ay1, by1);
-        const interX2 = Math.min(ax2, bx2);
-        const interY2 = Math.min(ay2, by2);
-
-        const interArea = Math.max(0, interX2 - interX1) * Math.max(0, interY2 - interY1);
-        const areaA = (ax2 - ax1) * (ay2 - ay1);
-        const areaB = (bx2 - bx1) * (by2 - by1);
-        const unionArea = areaA + areaB - interArea;
-
-        return unionArea > 0 ? interArea / unionArea : 0;
-    }
-
-    function filterOverlappingImageRegions(regions) {
-        let keep = [];
-        let removed = new Set();
-        for (let i = 0; i < regions.length; ++i) {
-            if (removed.has(i)) continue;
-            let regionA = regions[i];
-            for (let j = i + 1; j < regions.length; ++j) {
-                if (removed.has(j)) continue;
-                let regionB = regions[j];
-                if (intersectionOverUnion(regionA, regionB) > 0) {
-                    // Compare areas
-                    let areaA = regionA.size[0] * regionA.size[1];
-                    let areaB = regionB.size[0] * regionB.size[1];
-                    if (areaA <= areaB) {
-                        removed.add(j);
-                    } else {
-                        removed.add(i);
-                    }
-                }
-            }
-        }
-        for (let i = 0; i < regions.length; ++i) {
-            if (!removed.has(i)) keep.push(regions[i]);
-        }
-        return keep;
-    }
-
-    function filterWindowRegionsByLayers(windowRegions, layerRegions) {
-        return windowRegions.filter(windowRegion => {
-            for (let i = 0; i < layerRegions.length; ++i) {
-                if (intersectionOverUnion(windowRegion, layerRegions[i]) > 0)
-                    return false;
-            }
-            return true;
-        });
-    }
-
-    function filterImageRegions(regions, windowRegions, threshold = 0.1) {
-        // Remove image regions that overlap too much with any window region
-        let filtered = regions.filter(region => {
-            for (let i = 0; i < windowRegions.length; ++i) {
-                if (intersectionOverUnion(region, windowRegions[i]) > threshold)
-                    return false;
-            }
-            return true;
-        });
-        // Remove overlapping image regions, keep only the smaller one
-        return filterOverlappingImageRegions(filtered);
     }
 
     function updateTargetedRegion(x, y) {
@@ -255,7 +180,7 @@ PanelWindow {
         command: ["bash", "-c", `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}' && grim -o '${StringUtils.shellSingleQuoteEscape(root.screen.name)}' '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}'`]
         onExited: (exitCode, exitStatus) => {
             root.visible = true;
-            imageDetectionProcess.running = true;
+            if (root.enableContentRegions) imageDetectionProcess.running = true;
         }
     }
 
@@ -269,7 +194,7 @@ PanelWindow {
         stdout: StdioCollector {
             id: imageDimensionCollector
             onStreamFinished: {
-                imageRegions = filterImageRegions(
+                imageRegions = RegionFunctions.filterImageRegions(
                     JSON.parse(imageDimensionCollector.text),
                     root.windowRegions
                 );
@@ -312,7 +237,10 @@ PanelWindow {
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
                 break;
             case RegionSelection.SnipAction.Search:
-                snipProc.command = ["bash", "-c", `${cropInPlace} && xdg-open "${root.imageSearchEngineBaseUrl}$(${uploadAndGetUrl(root.screenshotPath)})"`]
+                snipProc.command = ["bash", "-c", `${cropInPlace} && xdg-open "${root.imageSearchEngineBaseUrl}$(${uploadAndGetUrl(root.screenshotPath)})" && ${cleanup}`]
+                break;
+            case RegionSelection.SnipAction.CharRecognition:
+                snipProc.command = ["bash", "-c", `${cropInPlace} && tesseract '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}' stdout -l $(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\\n' '+' | sed 's/\\+$/\\n/') | wl-copy && ${cleanup}`]
                 break;
             default:
                 console.warn("[Region Selector] Unknown snip action, skipping snip.");
@@ -358,8 +286,14 @@ PanelWindow {
                 root.mouseButton = mouse.button;
             }
             onReleased: (mouse) => {
+                // Detect if it was a click -> Try to select targeted region
+                if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
+                    if (root.targetedRegionValid()) {
+                        root.setRegionToTargeted();
+                    }
+                }
                 // Circle dragging?
-                if (root.selectionMode === RegionSelection.SelectionMode.Circle) {
+                else if (root.selectionMode === RegionSelection.SelectionMode.Circle) {
                     const padding = Config.options.regionSelector.circle.padding + Config.options.regionSelector.circle.strokeWidth / 2;
                     const dragPoints = (root.points.length > 0) ? root.points : [{ x: mouseArea.mouseX, y: mouseArea.mouseY }];
                     const maxX = Math.max(...dragPoints.map(p => p.x));
@@ -370,20 +304,6 @@ PanelWindow {
                     root.regionY = minY - padding;
                     root.regionWidth = maxX - minX + padding * 2;
                     root.regionHeight = maxY - minY + padding * 2;
-                    if (root.targetedRegionValid() && imageRegions.find(region => {
-                        return (region.at[0] === root.targetedRegionX 
-                            && region.at[1] === root.targetedRegionY
-                            && region.size[0] === root.targetedRegionWidth
-                            && region.size[1] === root.targetedRegionHeight)
-                    })) {
-                        root.setRegionToTargeted();
-                    }
-                }
-                // Detect if it was a click -> Try to select targeted region
-                else if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
-                    if (root.targetedRegionValid()) {
-                        root.setRegionToTargeted();
-                    }
                 }
                 root.snip();
             }
@@ -432,6 +352,7 @@ PanelWindow {
                 delegate: TargetRegion {
                     z: 2
                     required property var modelData
+                    clientDimensions: modelData
                     showIcon: true
                     targeted: !root.draggedAway &&
                         (root.targetedRegionX === modelData.at[0] 
@@ -439,21 +360,9 @@ PanelWindow {
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
-                    colBackground: root.genericContentColor
-                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : root.targetRegionOpacity
-                    visible: opacity > 0
-                    Behavior on opacity {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-
-                    x: modelData.at[0]
-                    y: modelData.at[1]
-                    width: modelData.size[0]
-                    height: modelData.size[1]
                     borderColor: root.windowBorderColor
                     fillColor: targeted ? root.windowFillColor : "transparent"
-                    border.width: targeted ? 4 : 2
                     text: `${modelData.class}`
                     radius: Appearance.rounding.windowRounding
                 }
@@ -467,27 +376,16 @@ PanelWindow {
                 delegate: TargetRegion {
                     z: 3
                     required property var modelData
+                    clientDimensions: modelData
                     targeted: !root.draggedAway &&
                         (root.targetedRegionX === modelData.at[0] 
                         && root.targetedRegionY === modelData.at[1]
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
-                    colBackground: root.genericContentColor
-                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : root.targetRegionOpacity
-                    visible: opacity > 0
-                    Behavior on opacity {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-
-                    x: modelData.at[0]
-                    y: modelData.at[1]
-                    width: modelData.size[0]
-                    height: modelData.size[1]
                     borderColor: root.windowBorderColor
                     fillColor: targeted ? root.windowFillColor : "transparent"
-                    border.width: targeted ? 4 : 2
                     text: `${modelData.namespace}`
                     radius: Appearance.rounding.windowRounding
                 }
@@ -501,34 +399,23 @@ PanelWindow {
                 delegate: TargetRegion {
                     z: 4
                     required property var modelData
+                    clientDimensions: modelData
                     targeted: !root.draggedAway &&
                         (root.targetedRegionX === modelData.at[0] 
                         && root.targetedRegionY === modelData.at[1]
                         && root.targetedRegionWidth === modelData.size[0]
                         && root.targetedRegionHeight === modelData.size[1])
 
-                    colBackground: root.genericContentColor
-                    colForeground: root.genericContentForeground
                     opacity: root.draggedAway ? 0 : root.contentRegionOpacity
-                    visible: opacity > 0
-                    Behavior on opacity {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-
-                    x: modelData.at[0]
-                    y: modelData.at[1]
-                    width: modelData.size[0]
-                    height: modelData.size[1]
                     borderColor: root.imageBorderColor
                     fillColor: targeted ? root.imageFillColor : "transparent"
-                    border.width: targeted ? 4 : 2
                     text: Translation.tr("Content region")
                 }
             }
 
-            // Options toolbar
-            Toolbar {
-                id: toolbar
+            // Controls
+            Row {
+                id: regionSelectionControls
                 z: 9999
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -540,8 +427,8 @@ PanelWindow {
                     target: root
                     function onVisibleChanged() {
                         if (!visible) return;
-                        toolbar.anchors.bottomMargin = 8;
-                        toolbar.opacity = 1;
+                        regionSelectionControls.anchors.bottomMargin = 8;
+                        regionSelectionControls.opacity = 1;
                     }
                 }
                 Behavior on opacity {
@@ -550,51 +437,43 @@ PanelWindow {
                 Behavior on anchors.bottomMargin {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
+                spacing: 6
 
-                MaterialCookie {
-                    Layout.fillHeight: true
-                    Layout.leftMargin: 2
-                    Layout.rightMargin: 2
-                    implicitSize: 36 // Intentionally smaller because this one is brighter than others
-                    sides: 10
-                    amplitude: implicitSize / 44
-                    color: Appearance.colors.colPrimary
-                    MaterialSymbol {
-                        anchors.centerIn: parent
-                        iconSize: 22
-                        color: Appearance.colors.colOnPrimary
-                        text: switch (root.action) {
-                            case RegionSelection.SnipAction.Copy:
-                            case RegionSelection.SnipAction.Edit:
-                                return "content_cut";
-                            case RegionSelection.SnipAction.Search:
-                                return "image_search";
-                            default:
-                                return "";
+                OptionsToolbar {
+                    Synchronizer on action {
+                        property alias source: root.action
+                    }
+                    Synchronizer on selectionMode {
+                        property alias source: root.selectionMode
+                    }
+                    onDismiss: root.dismiss();
+                }
+                Item {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    implicitWidth: closeFab.implicitWidth
+                    implicitHeight: closeFab.implicitHeight
+                    StyledRectangularShadow {
+                        target: closeFab
+                        radius: closeFab.buttonRadius
+                    }
+                    FloatingActionButton {
+                        id: closeFab
+                        baseSize: 48
+                        iconText: "close"
+                        onClicked: root.dismiss();
+                        StyledToolTip {
+                            text: Translation.tr("Close")
                         }
+                        colBackground: Appearance.colors.colTertiaryContainer
+                        colBackgroundHover: Appearance.colors.colTertiaryContainerHover
+                        colRipple: Appearance.colors.colTertiaryContainerActive
+                        colOnBackground: Appearance.colors.colOnTertiaryContainer
                     }
                 }
-
-                IconAndTextToolbarButton {
-                    iconText: "activity_zone"
-                    text: Translation.tr("Rect")
-                    toggled: root.selectionMode === RegionSelection.SelectionMode.RectCorners
-                    onClicked: root.selectionMode = RegionSelection.SelectionMode.RectCorners
-                }
-
-                IconAndTextToolbarButton {
-                    iconText: "gesture"
-                    text: Translation.tr("Circle")
-                    toggled: root.selectionMode === RegionSelection.SelectionMode.Circle
-                    onClicked: root.selectionMode = RegionSelection.SelectionMode.Circle
-                }
-
-                IconToolbarButton {
-                    text: "close"
-                    colBackground: Appearance.colors.colLayer3
-                    onClicked: root.dismiss();
-                }
             }
+            
         }
     }
 }

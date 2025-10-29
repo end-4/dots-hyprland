@@ -8,13 +8,14 @@ Experimental updating without full reinstall.
 Updates dotfiles by syncing configuration files to home directory.
 
 Options:
-  -f, --force      Force check all files even if no new commits
-  -p, --packages   Enable package checking and building
-  -n, --dry-run    Show what would be done without making changes
-  -v, --verbose    Enable verbose output
-  -h, --help       Show this help message
-  -s, --skip-notice Skip notice about script being untested
-      --non-interactive Run without prompting for user input
+  -f, --force        Force check all files even if no new commits
+  -p, --packages     Enable package checking and building
+  -n, --dry-run      Show what would be done without making changes
+  -v, --verbose      Enable verbose output
+  -h, --help         Show this help message
+  -s, --skip-notice  Skip notice about script being untested
+      --non-interactive
+                     Run without prompting for user input
 
 This script updates your dotfiles by:
   1. Auto-detecting repository structure (dots/ prefix or direct)
@@ -33,7 +34,7 @@ Ignore file patterns support:
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hfpnv \
+  -o hfpnvs \
   -l help,force,packages,dry-run,verbose,skip-notice,non-interactive \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
@@ -74,7 +75,7 @@ while true ; do
     -v|--verbose) VERBOSE=true;shift
       log_info "Verbose mode enabled"
       ;;
-    --skip-notice) SKIP_NOTICE=true;shift
+    -s|--skip-notice) SKIP_NOTICE=true;shift
       log_warning "Skipping notice about script being untested"
       ;;
     --non-interactive) NON_INTERACTIVE=true;shift

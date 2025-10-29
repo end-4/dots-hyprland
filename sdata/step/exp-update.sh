@@ -5,7 +5,7 @@
 
 #####################################################################################
 #
-# update.sh - Enhanced dotfiles update script
+# exp-update.sh - Enhanced dotfiles update script
 #
 # Features:
 # - Auto-detect repository structure (dots/ prefix or direct config)

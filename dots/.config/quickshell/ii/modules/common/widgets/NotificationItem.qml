@@ -281,7 +281,7 @@ Item { // Notification item area
                                 }
 
                                 contentItem: MaterialSymbol {
-                                    iconSize: Appearance.font.pixelSize.large
+                                    iconSize: Appearance.font.pixelSize.larger
                                     horizontalAlignment: Text.AlignHCenter
                                     color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                         Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
@@ -325,7 +325,7 @@ Item { // Notification item area
 
                                 contentItem: MaterialSymbol {
                                     id: copyIcon
-                                    iconSize: Appearance.font.pixelSize.large
+                                    iconSize: Appearance.font.pixelSize.larger
                                     horizontalAlignment: Text.AlignHCenter
                                     color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                         Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface

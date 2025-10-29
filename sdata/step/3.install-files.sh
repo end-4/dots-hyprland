@@ -53,21 +53,27 @@ function ask_backup_configs(){
   showfun backup_clashing_targets
   printf "${STY_RED}"
   printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
-  read -p "[y/N] " backup_confirm
-  case $backup_confirm in
-    [yY][eE][sS]|[yY]) 
-      backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-      backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-      ;;
-    *) echo "Skipping backup..." ;;
-  esac
   printf "${STY_RST}"
+  while true;do
+    echo "  y = Yes, backup"
+    echo "  n = No, skip to next"
+    local p; read -p "====> " p
+    case $p in
+      [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}" ;local backup=true;break ;;
+      [nN]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
+      *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
+     esac
+  done
+  if $backup;then
+    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+  fi
 }
 
 #####################################################################################
 
 # In case some dirs does not exists
-v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
+v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME/quickshell $XDG_DATA_HOME
 
 case $ask in
   false) sleep 0 ;;
@@ -101,7 +107,7 @@ esac
 case $SKIP_QUICKSHELL in
   true) sleep 0;;
   *)
-    warning_rsync; v rsync -av --delete dots/.config/quickshell/ "$XDG_CONFIG_HOME"/quickshell/
+    warning_rsync; v rsync -av --delete dots/.config/quickshell/ii/ "$XDG_CONFIG_HOME"/quickshell/ii/
     ;;
 esac
 

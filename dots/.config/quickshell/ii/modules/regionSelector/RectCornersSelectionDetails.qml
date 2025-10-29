@@ -1,3 +1,4 @@
+import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 
@@ -11,6 +12,7 @@ Item {
     required property real mouseY
     required property color color
     required property color overlayColor
+    property bool showAimLines: Config.options.regionSelector.rect.showAimLines
 
     // Overlay to darken screen
     // Base dark overlay around region
@@ -62,6 +64,8 @@ Item {
 
     // Coord lines
     Rectangle { // Vertical
+        visible: root.showAimLines
+        opacity: 0.2
         z: 2
         x: root.mouseX
         anchors {
@@ -72,6 +76,8 @@ Item {
         color: root.color
     }
     Rectangle { // Horizontal
+        visible: root.showAimLines
+        opacity: 0.2
         z: 2
         y: root.mouseY
         anchors {

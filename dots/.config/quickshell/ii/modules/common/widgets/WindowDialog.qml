@@ -50,7 +50,7 @@ Rectangle {
         property real targetY: root.height / 2 - root.backgroundHeight / 2
         y: root.show ? targetY : (targetY - root.backgroundAnimationMovementDistance)
         implicitWidth: 350
-        implicitHeight: 0
+        implicitHeight: contentColumn.implicitHeight + dialogBackground.radius * 2
         Behavior on implicitHeight {
             NumberAnimation {
                 id: dialogBackgroundHeightAnimation

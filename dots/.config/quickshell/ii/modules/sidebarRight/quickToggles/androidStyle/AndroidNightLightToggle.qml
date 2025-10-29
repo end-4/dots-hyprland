@@ -19,7 +19,7 @@ AndroidQuickToggleButton {
     }
 
     altAction: () => {
-        Config.options.light.night.automatic = !Config.options.light.night.automatic
+        root.openMenu()
     }
 
     Component.onCompleted: {
@@ -27,7 +27,7 @@ AndroidQuickToggleButton {
     }
     
     StyledToolTip {
-        text: Translation.tr("Night Light | Right-click to toggle Auto mode")
+        text: Translation.tr("Night Light | Right-click to configure")
     }
 }
 
