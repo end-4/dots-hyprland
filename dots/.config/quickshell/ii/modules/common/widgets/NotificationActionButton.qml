@@ -8,7 +8,7 @@ RippleButton {
     property string buttonText
     property string urgency
 
-    implicitHeight: 30
+    implicitHeight: 34
     leftPadding: 15
     rightPadding: 15
     buttonRadius: Appearance.rounding.small

@@ -153,6 +153,7 @@ GroupButton {
             const toggleList = Config.options.sidebar.quickToggles.android.toggles;
             const buttonType = root.buttonData.type;
             const targetIndex = index + offset;
+            if (!toggleList.find(toggle => toggle.type === buttonType)) return;
             if (targetIndex < 0 || targetIndex >= toggleList.length) return;
             const temp = toggleList[index];
             toggleList[index] = toggleList[targetIndex];

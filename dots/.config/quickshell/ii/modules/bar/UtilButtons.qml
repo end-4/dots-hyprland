@@ -41,7 +41,7 @@ Item {
             visible: Config.options.bar.utilButtons.showScreenRecord
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Quickshell.execDetached(["bash", "-c", "~/.config/hypr/hyprland/scripts/record.sh"])
+                onClicked: Quickshell.execDetached([Directories.recordScriptPath])
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 1

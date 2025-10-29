@@ -159,6 +159,8 @@ Singleton {
         property color colTertiaryContainer: m3colors.m3tertiaryContainer
         property color colTertiaryContainerHover: ColorUtils.mix(m3colors.m3tertiaryContainer, m3colors.m3onTertiaryContainer, 0.90)
         property color colTertiaryContainerActive: ColorUtils.mix(m3colors.m3tertiaryContainer, colLayer1Active, 0.54)
+        property color colOnTertiary: m3colors.m3onTertiary
+        property color colOnTertiaryContainer: m3colors.m3onTertiaryContainer
         property color colOnSecondaryContainer: m3colors.m3onSecondaryContainer
         property color colSurfaceContainerLow: ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency)
         property color colSurfaceContainer: ColorUtils.transparentize(m3colors.m3surfaceContainer, root.contentTransparency)
@@ -315,9 +317,9 @@ Singleton {
         }
 
         property QtObject clickBounce: QtObject {
-            property int duration: 200
+            property int duration: 400
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.expressiveFastSpatial
+            property list<real> bezierCurve: animationCurves.expressiveDefaultSpatial
             property int velocity: 850
             property Component numberAnimation: Component { NumberAnimation {
                     duration: root.animation.clickBounce.duration

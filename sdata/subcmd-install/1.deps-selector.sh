@@ -1,9 +1,10 @@
 # This script is meant to be sourced.
 # It's not for directly running.
+printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
 
 function outdate_detect(){
   # Shallow clone prevent latest_commit_timestamp() from working.
-  v git_auto_unshallow
+  x git_auto_unshallow
 
   local source_path="$1"
   local target_path="$2"
@@ -76,13 +77,13 @@ if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
   TARGET_ID=nix
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
-  printf "./sdist/${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "The process is still WIP.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-deps.sh
+  source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
 
@@ -90,23 +91,23 @@ elif [[ "$OS_DISTRO_ID" =~ ^(arch|endeavouros)$ ]]; then
   printf "${STY_GREEN}"
   printf "===INFO===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./sdist/${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-deps.sh
+  source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
-elif [[ -f "./sdist/${OS_DISTRO_ID}/install-deps.sh" ]]; then
+elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
 
   TARGET_ID=${OS_DISTRO_ID}
   printf "${STY_PURPLE}"
   printf "===NOTICE===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
-  printf "./sdist/${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "This file is provided by the community.\n"
   printf "It is not officially supported by github:end-4/dots-hyprland .\n"
-  test -f "./sdist/${TARGET_ID}/README.md" && \
-    printf "Read ${STY_INVERT} ./sdist/${TARGET_ID}/README.md ${STY_RST}${STY_PURPLE} for more information.\n"
+  test -f "./sdata/dist-${TARGET_ID}/README.md" && \
+    printf "Read ${STY_INVERT} ./sdata/dist-${TARGET_ID}/README.md ${STY_RST}${STY_PURPLE} for more information.\n"
   printf "${STY_BOLD}"
   printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RST}\n"
   printf "${STY_PURPLE}"
@@ -114,13 +115,13 @@ elif [[ -f "./sdist/${OS_DISTRO_ID}/install-deps.sh" ]]; then
   printf "\n"
   printf "${STY_RST}"
   pause
-  tmp_update_status="$(outdate_detect sdist/arch sdist/${TARGET_ID})"
+  tmp_update_status="$(outdate_detect sdata/dist-arch sdata/dist-${TARGET_ID})"
   if [[ "${tmp_update_status}" =~ ^(OUTDATED|EMPTY_TARGET|EMPTY_SOURCE|FORCE_OUTDATED|WIP)$ ]]; then
     printf "${STY_RED}${STY_BOLD}===URGENT===${STY_RST}\n"
     printf "${STY_RED}"
-    printf "The community provided ./sdist/${TARGET_ID}/ is not updated (update status: ${tmp_update_status}),\n"
-    printf "which means it does not fully reflect the latest changes of ./sdist/arch/ .\n"
-    printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./sdist/${TARGET_ID}/ to fully reflect the latest changes in ./sdist/arch/ .\n"
+    printf "The community provided ./sdata/dist-${TARGET_ID}/ is not updated (update status: ${tmp_update_status}),\n"
+    printf "which means it does not fully reflect the latest changes of ./sdata/dist-arch/ .\n"
+    printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./sdata/dist-${TARGET_ID}/ to fully reflect the latest changes in ./sdata/dist-arch/ .\n"
     printf "PR is welcomed. Please see discussion#2140 for details.\n"
     printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RST}\n"
     printf "${STY_RED}${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RST}\n"
@@ -134,7 +135,7 @@ elif [[ -f "./sdist/${OS_DISTRO_ID}/install-deps.sh" ]]; then
       *)echo "Aborting...";exit 1;;
     esac
   fi
-  source ./sdist/${TARGET_ID}/install-deps.sh
+  source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
 
@@ -143,14 +144,14 @@ elif [[ "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
   printf "===WARNING===\n"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./sdist/${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "Ideally, it should also work for your distro.\n"
   printf "Still, there is a chance that it not works as expected or even fails.\n"
   printf "Proceed only at your own risk.\n"
   printf "\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-deps.sh
+  source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 else
 
@@ -159,13 +160,13 @@ else
   printf "${STY_RED}"
   printf "Detected distro ID: ${OS_DISTRO_ID}\n"
   printf "Detected distro ID_LIKE: ${OS_DISTRO_ID_LIKE}\n"
-  printf "./sdist/${OS_DISTRO_ID}/install-deps.sh not found.\n"
-  printf "./sdist/${TARGET_ID}/install-deps.sh will be used.\n"
+  printf "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh not found.\n"
+  printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "1. It may disrupt your system and will likely fail without your manual intervention.\n"
   printf "2. It's WIP and only contains small number of dependencies far from enough.\n"
   printf "Proceed only at your own risk.\n"
   printf "${STY_RST}"
   pause
-  source ./sdist/${TARGET_ID}/install-deps.sh
+  source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 fi

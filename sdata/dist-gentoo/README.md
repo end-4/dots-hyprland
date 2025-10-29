@@ -2,9 +2,9 @@
 
 Note:
 - The scripts here are **not** meant to be executed directly.
-- This folder should reflect the equivalents of `/sdist/arch/` but under Gentoo.
-  - **When `/sdist/arch/` is newer than this folder, an update on this folder is very likely needed.**
-  - Useful link: [Commit history on sdist/arch/](https://github.com/end-4/dots-hyprland/commits/main/sdist/arch)
+- This folder should reflect the equivalents of `/sdata/dist-arch/` but under Gentoo.
+  - **When `/sdata/dist-arch/` is newer than this folder, an update on this folder is very likely needed.**
+  - Useful link: [Commit history on sdata/dist-arch/](https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-arch)
 - See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 
 ## Contributors
@@ -23,7 +23,7 @@ Note:
 1. Creates the _i2c_ group since Gentoo doesn't have this by default, then adds the user to it.
 2. Enables _bluetooth_ and _ydotool_ services (systemd or openrc)
 3. _icons_, _konsole_, _hypr_, and _quickshell_ are are chowned to user since they're emerge in as root by default.
-4. gsettings and kwriteconfig6 are set (same as sdist/arch).
+4. gsettings and kwriteconfig6 are set (same as sdata/dist-arch).
 
 ## Recommended use flags (useflags)
 - **The recommended useflags are not required, this is a more out of the box experience with these**
