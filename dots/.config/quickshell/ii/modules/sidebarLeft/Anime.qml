@@ -206,6 +206,7 @@ Item {
                 icon: "bookmark_heart"
                 title: Translation.tr("Anime boorus")
                 description: ""
+                shape: MaterialShape.Shape.Bun
             }
 
             ScrollToBottomButton {

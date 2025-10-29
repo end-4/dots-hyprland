@@ -7,9 +7,10 @@ Item {
     id: root
 
     property bool shown: true
-    property alias icon: cookieWrappedMaterialSymbol.text
+    property alias icon: shapeWidget.text
     property alias title: widgetNameText.text
     property alias description: widgetDescriptionText.text
+    property alias shape: shapeWidget.shape
 
     opacity: shown ? 1 : 0
     visible: opacity > 0
@@ -27,8 +28,8 @@ Item {
         anchors.centerIn: parent
         spacing: 5
 
-        CookieWrappedMaterialSymbol {
-            id: cookieWrappedMaterialSymbol
+        MaterialShapeWrappedMaterialSymbol {
+            id: shapeWidget
             Layout.alignment: Qt.AlignHCenter
             iconSize: 60
             rotation: -60 * (1 - root.opacity)
