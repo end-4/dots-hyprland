@@ -22,7 +22,6 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
-    readonly property MprisPlayer activePlayer: MprisController.activePlayer
 
 
     // Force focus on entry
@@ -63,7 +62,6 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
-        root.activePlayer = MprisController.activePlayer
     }
 
     // Key presses
