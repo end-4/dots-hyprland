@@ -119,16 +119,17 @@ Item {
         }
     }
 
+    property real pageKeyScrollAmount: booruResponseListView.height / 2
     Keys.onPressed: (event) => {
         tagInputField.forceActiveFocus()
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
                 if (booruResponseListView.atYBeginning) return;
-                booruResponseListView.contentY = Math.max(0, booruResponseListView.contentY - booruResponseListView.height / 2)
+                booruResponseListView.contentY = Math.max(0, booruResponseListView.contentY - root.pageKeyScrollAmount)
                 event.accepted = true
             } else if (event.key === Qt.Key_PageDown) {
                 if (booruResponseListView.atYEnd) return;
-                booruResponseListView.contentY = Math.min(booruResponseListView.contentHeight - booruResponseListView.height / 2, booruResponseListView.contentY + booruResponseListView.height / 2)
+                booruResponseListView.contentY = Math.min(booruResponseListView.contentHeight, booruResponseListView.contentY + root.pageKeyScrollAmount)
                 event.accepted = true
             }
         }
@@ -171,16 +172,19 @@ Item {
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
-
-                model: ScriptModel {
-                    values: {
-                        if(root.responses.length > booruResponseListView.lastResponseLength) {
+                Connections {
+                    target: root
+                    function onResponsesChanged() {
+                        if (root.responses.length > booruResponseListView.lastResponseLength) {
                             if (booruResponseListView.lastResponseLength > 0 && root.responses[booruResponseListView.lastResponseLength].provider != "system")
                                 booruResponseListView.contentY = booruResponseListView.contentY + root.scrollOnNewResponse
                             booruResponseListView.lastResponseLength = root.responses.length
                         }
-                        return root.responses
                     }
+                }
+
+                model: ScriptModel {
+                    values: root.responses
                 }
                 delegate: BooruResponse {
                     responseData: modelData
