@@ -317,9 +317,9 @@ Singleton {
         }
 
         property QtObject clickBounce: QtObject {
-            property int duration: 200
+            property int duration: 400
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.expressiveFastSpatial
+            property list<real> bezierCurve: animationCurves.expressiveDefaultSpatial
             property int velocity: 850
             property Component numberAnimation: Component { NumberAnimation {
                     duration: root.animation.clickBounce.duration
