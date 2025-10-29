@@ -19,7 +19,11 @@ RowLayout {
     spacing: 20
 
     Component.onCompleted: {
-        activePlayer = MprisController.activePlayer
+        if (MprisController.activePlayer.trackTitle !== ""){
+            activePlayer = MprisController.activePlayer
+        }else {
+            activePlayer = mediaControls.meaningfulPlayers[0]
+        }
     }
 
     function cycleActivePlayer() {
