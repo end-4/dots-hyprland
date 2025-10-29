@@ -56,6 +56,20 @@ ContentPage {
         }
 
         ContentSubsection {
+            visible: Config.options.background.clock.style === "digital"
+            title: Translation.tr("Digital clock settings")
+
+            ConfigSwitch {
+                buttonIcon: "animation"
+                text: Translation.tr("Animate time change")
+                checked: Config.options.background.clock.digital.animateChange
+                onCheckedChanged: {
+                    Config.options.background.clock.digital.animateChange = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
 

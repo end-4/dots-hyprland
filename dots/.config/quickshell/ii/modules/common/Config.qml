@@ -165,6 +165,9 @@ Singleton {
                         property bool dateInClock: true
                         property bool constantlyRotate: false
                     }
+                    property JsonObject digital: JsonObject {
+                        property bool animateChange: true
+                    }
                     
                 }
                 property string wallpaperPath: ""
