@@ -3,7 +3,6 @@ import QtQuick.Shapes
 import Quickshell
 import qs.modules.common
 
-
 Item {
     id: root
     

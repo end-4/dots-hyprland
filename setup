@@ -34,75 +34,67 @@ case $1 in
   # Global help
   help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|install-deps|install-setups|install-files|exp-uninstall|exp-update|exp-update-old)
-    SCRIPT_SUBCOMMAND=$1;shift;;
-  # No subcommand
-  -*|"")SCRIPT_SUBCOMMAND=install;;
+  install|exp-uninstall|exp-update|exp-update-old)
+    SUBCMD_NAME=$1
+    SUBCMD_DIR=./sdata/subcmd-$1
+    shift;;
+  # Correct subcommand but not using ./sdata/subcmd-$1
+  install-deps|install-setups|install-files)
+    SUBCMD_NAME=$1
+    SUBCMD_DIR=./sdata/subcmd-install
+    shift;;
+  # No subcommand, default to install
+  -*|"")
+    SUBCMD_NAME=install
+    SUBCMD_DIR=./sdata/subcmd-install
+    ;;
   # Wrong subcommand
   *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
 esac
 #####################################################################################
-case ${SCRIPT_SUBCOMMAND} in
+if [[ -f "${SUBCMD_DIR}/options.sh" ]];
+  then source "${SUBCMD_DIR}/options.sh"
+fi
+case ${SUBCMD_NAME} in
   install)
-    source ./sdata/options/install.sh
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
-      source ./sdata/step/0.install-greeting.sh
+      source ${SUBCMD_DIR}/0.greeting.sh
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
-      source ./sdata/step/1.install-deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-selector.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RST}"
-      source ./sdata/step/2.install-setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups-selector.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
       if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
-        source ./sdata/step/3.install-files.experimental.sh
+        source ${SUBCMD_DIR}/3.files-exp.sh
       else
-        source ./sdata/step/3.install-files.sh
+        source ${SUBCMD_DIR}/3.files.sh
       fi
     fi
     ;;
   install-deps)
-    source ./sdata/options/install.sh
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
-      source ./sdata/step/1.install-deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-selector.sh
     fi
     ;;
   install-setups)
-    source ./sdata/options/install.sh
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RST}"
-      source ./sdata/step/2.install-setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups-selector.sh
     fi
     ;;
   install-files)
-    source ./sdata/options/install.sh
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
       if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
-        source ./sdata/step/3.install-files.experimental.sh
+        source ${SUBCMD_DIR}/3.files-exp.sh
       else
-        source ./sdata/step/3.install-files.sh
+        source ${SUBCMD_DIR}/3.files.sh
       fi
     fi
     ;;
-  exp-uninstall)
-    source ./sdata/options/exp-uninstall.sh
-    source ./sdata/step/exp-uninstall.sh
-    exit
-    ;;
-  exp-update)
-    source ./sdata/options/exp-update.sh
-    source ./sdata/step/exp-update.sh
-    exit
-    ;;
-  exp-update-old)
-    source ./sdata/options/exp-update-old.sh
-    source ./sdata/step/exp-update-old.sh
+  *)
+    source ${SUBCMD_DIR}/0.run.sh
     exit
     ;;
 esac

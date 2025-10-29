@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# exp-update-tester.sh - Test suite for update.sh (sourced subcommand)
+# exp-update-tester.sh - Test suite for exp-update
 #
 set -euo pipefail
 
@@ -129,7 +129,7 @@ log_header() { :; }
 log_die() { echo "ERROR: \$1"; exit 1; }
 STY_CYAN="" STY_RST="" STY_YELLOW=""
 
-# Set required environment variables for exp-update.sh
+# Set required environment variables for exp-update/0.run.sh
 SKIP_NOTICE=true
 REPO_ROOT="\$1"
 CHECK_PACKAGES=false
@@ -139,7 +139,7 @@ VERBOSE=false
 NON_INTERACTIVE=true
 SOURCE_ONLY=true
 
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
+source "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh"
 detected_dirs=\$(detect_repo_structure)
 if [[ -n "\$detected_dirs" ]]; then
   read -ra MONITOR_DIRS <<<"\$detected_dirs"
@@ -190,7 +190,7 @@ log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1"; exit 1; }
 
-# Set required environment variables for exp-update.sh
+# Set required environment variables for exp-update
 SKIP_NOTICE=true
 REPO_ROOT="\$1"
 CHECK_PACKAGES=false
@@ -200,7 +200,7 @@ VERBOSE=false
 NON_INTERACTIVE=true
 SOURCE_ONLY=true
 
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh"
+source "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh"
 detected_dirs=\$(detect_repo_structure)
 if [[ -n "\$detected_dirs" ]]; then
   read -ra MONITOR_DIRS <<<"\$detected_dirs"
@@ -276,7 +276,7 @@ log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1" >&2; exit 1; }
 
-# FIXED: Set REPO_ROOT before sourcing exp-update.sh
+# FIXED: Set REPO_ROOT before sourcing exp-update
 REPO_ROOT="\$1"
 export REPO_ROOT
 
@@ -293,7 +293,7 @@ HOME_UPDATE_IGNORE_FILE="/dev/null"
 
 # Source the production script to use the real should_ignore function
 # Redirect all unwanted output to stderr, then to /dev/null
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
+source "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh" 2>/dev/null
 
 test_cases=(
   "\$REPO_ROOT/app.log:0"
@@ -348,7 +348,7 @@ test_safe_read_security() {
   log_test "Testing safe_read uses secure assignment (printf -v)"
 
   local safe_read_function
-  safe_read_function=$(awk '/^safe_read\(\) \{/,/^\}/' "$ORIGINAL_DIR/sdata/step/exp-update.sh")
+  safe_read_function=$(awk '/^safe_read\(\) \{/,/^\}/' "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh")
 
   if [[ -z "$safe_read_function" ]]; then
     log_fail "Could not find safe_read function"
@@ -547,7 +547,7 @@ log_success() { :; }
 log_header() { :; }
 log_die() { echo "ERROR: \$1" >&2; exit 1; }
 
-# FIXED: Set REPO_ROOT before sourcing exp-update.sh
+# FIXED: Set REPO_ROOT before sourcing exp-update
 REPO_ROOT="\$1"
 export REPO_ROOT
 
@@ -563,7 +563,7 @@ UPDATE_IGNORE_FILE="\${REPO_ROOT}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="/dev/null"
 
 # Source the production script to use the real should_ignore function
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
+source "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh" 2>/dev/null
 
 # Load patterns into cache
 load_ignore_patterns
@@ -649,7 +649,7 @@ VERBOSE=false
 NON_INTERACTIVE=true
 SOURCE_ONLY=true
 
-source "$ORIGINAL_DIR/sdata/step/exp-update.sh" 2>/dev/null
+source "$ORIGINAL_DIR/sdata/subcmd-exp-update/0.run.sh" 2>/dev/null
 
 test_dir="/tmp/test-ensure-dir-\$\$"
 

@@ -18,12 +18,13 @@ printf "${STY_RST}"
 pause
 
 printf "${STY_YELLOW}"
-printf "https://github.com/end-4/dots-hyprland/blob/main/sdist/gentoo/README.md"
+printf "https://github.com/end-4/dots-hyprland/blob/main/sdata/dist-gentoo/README.md"
 printf "Checkout the above README for potential bug fixes or additional information"
 printf "${STY_RST}"
 pause
 
 x sudo emerge --noreplace --quiet app-eselect/eselect-repository
+x sudo emerge --noreplace --quiet app-portage/smart-live-rebuild
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
@@ -42,17 +43,18 @@ metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fon
 ebuild_dir="/var/db/repos/localrepo"
 
 # Unmasks
-x sudo cp ./sdist/gentoo/keywords ./sdist/gentoo/keywords-user
-x sed -i "s/$/ ~${arch}/" ./sdist/gentoo/keywords-user
-v sudo cp ./sdist/gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
+x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
+x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/keywords-user
+v sudo cp ./sdata/dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
 # Use Flags
-v sudo cp ./sdist/gentoo/useflags /etc/portage/package.use/illogical-impulse
-v sudo sh -c 'cat ./sdist/gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
+v sudo cp ./sdata/dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
+v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
 
 # Update system
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
+v sudo emerge --quiet @smart-live-rebuild
 v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
@@ -67,11 +69,11 @@ x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
 x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
 x sudo mkdir -p ${ebuild_dir}/dev-util/hyprwayland-scanner
 
-v sudo cp ./sdist/gentoo/${HYPR_DIR}/hyprgraphics*.ebuild ${ebuild_dir}/dev-libs/hyprgraphics
-v sudo cp ./sdist/gentoo/${HYPR_DIR}/hyprland-qt-support*.ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support
-v sudo cp ./sdist/gentoo/${HYPR_DIR}/hyprland-qtutils*.ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils
-v sudo cp ./sdist/gentoo/${HYPR_DIR}/hyprlang*.ebuild ${ebuild_dir}/dev-libs/hyprlang
-v sudo cp ./sdist/gentoo/${HYPR_DIR}/hyprwayland-scanner*.ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner
+v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprgraphics*.ebuild ${ebuild_dir}/dev-libs/hyprgraphics
+v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qt-support*.ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support
+v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qtutils*.ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils
+v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprlang*.ebuild ${ebuild_dir}/dev-libs/hyprlang
+v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprwayland-scanner*.ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner
 
 v sudo ebuild ${ebuild_dir}/dev-libs/hyprgraphics/hyprgraphics*9999.ebuild digest
 v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support/hyprland-qt-support*9999.ebuild digest
@@ -80,11 +82,10 @@ v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
 v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
 ###### LIVE EBUILDS END
 
-
 # Install dependencies
 for i in "${metapkgs[@]}"; do
 	x sudo mkdir -p ${ebuild_dir}/app-misc/${i}
-	v sudo cp ./sdist/gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
+	v sudo cp ./sdata/dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
 	v sudo emerge --quiet app-misc/${i}
 done

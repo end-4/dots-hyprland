@@ -13,13 +13,14 @@ Item {
 
     text: Qt.locale().toString(DateTime.clock.date, root.isMonth ? "MM" : "d")
 
-    MaterialCookie {
+    MaterialShape {
+        id: bubble
         z: 5
-        sides: root.isMonth ? 1 : 4
+        // sides: root.isMonth ? 1 : 4
+        shape: root.isMonth ? MaterialShape.Shape.Pill : MaterialShape.Shape.Pentagon
         anchors.centerIn: parent
         color: root.isMonth ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
         implicitSize: targetSize
-        constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
     }
 
     StyledText {

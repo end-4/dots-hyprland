@@ -113,7 +113,7 @@ Scope {
 
         onPressed: {
 			if (Config.options.lock.useHyprlock) {
-				Quickshell.execDetached(["hyprlock"])
+				Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
 				return;
 			}
             GlobalStates.screenLocked = true;

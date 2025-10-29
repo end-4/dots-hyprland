@@ -14,14 +14,18 @@ Options for install:
       --skip-allsetups      Skip the whole process setting up permissions/services etc
       --skip-allfiles       Skip the whole process copying configuration files
   -s, --skip-sysupdate      Skip system package upgrade e.g. \"sudo pacman -Syu\"
+      --skip-plasmaintg     Skip installing plasma-browser-integration
+      --skip-backup         Skip backup conflicting files
       --skip-quickshell     Skip installing the config for Quickshell
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-fish           Skip installing the config for Fish
-      --skip-plasmaintg     Skip installing plasma-browser-integration
+      --skip-fontconfig     Skip installing the config for fontconfig
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             Quickshell, Fish and Hyprland
+      --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
       --exp-files           Use experimental script for the third step copying files
-      --fontset <set>       (Unavailable yet) Use a set of pre-defined font and config
+      --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
+                            Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
       --via-nix             (Unavailable yet) Use Nix to install dependencies
 "
 }
@@ -33,7 +37,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
   -o hfk:cs \
-  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-quickshell,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf,exp-files,via-nix \
+  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-fontconfig,skip-miscconf,core,exp-files,via-nix \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -63,20 +67,23 @@ while true ; do
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
     --skip-allfiles) SKIP_ALLFILES=true;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
+    --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
+    --skip-backup) SKIP_BACKUP=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
     --skip-quickshell) SKIP_QUICKSHELL=true;shift;;
+    --skip-fontconfig) SKIP_FONTCONFIG=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
-    --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
+    --core) SKIP_PLASMAINTG=true;SKIP_FISH=true;SKIP_FONTCONFIG=true;SKIP_MISCCONF=true;shift;;
     --exp-files) EXPERIMENTAL_FILES_SCRIPT=true;shift;;
     --via-nix) INSTALL_VIA_NIX=true;shift;;
     
     ## Ones with parameter
     --fontset)
-    case $2 in
-      "default"|"zh-CN"|"vi") fontset="$2";;
-      *) echo -e "Wrong argument for $1.";exit 1;;
-    esac;echo "The fontset is ${fontset}.";shift 2;;
+    if [[ -d "${REPO_ROOT}/dots-extra/fontsets/$2" ]];
+      then echo "Using fontset \"$2\".";II_FONTSET_NAME="$2";shift 2
+      else echo "Wrong argument for $1.";exit 1
+    fi;;
 
     ## Ending
     --) break ;;

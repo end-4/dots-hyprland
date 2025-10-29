@@ -13,12 +13,12 @@ install-yay(){
 }
 
 # NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
-# However, let's just keep it as references for other distros writing their `sdist/<DISTRO_ID>/install-deps.sh`, if they need it.
+# However, let's just keep it as references for other distros writing their `sdata/dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 handle-deprecated-dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
   for i in illogical-impulse-{microtex,pymyc-aur} {quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-  remove_bashcomments_emptylines ./sdist/arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
+  remove_bashcomments_emptylines ./sdata/dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
   readarray -t old_deps_list < ./cache/old_deps_stripped.conf
   pacman -Qeq > ./cache/pacman_explicit_packages
   readarray -t explicitly_installed < ./cache/pacman_explicit_packages
@@ -75,13 +75,13 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./sdist/arch/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
-metapkgs+=(./sdist/arch/illogical-impulse-hyprland)
-metapkgs+=(./sdist/arch/illogical-impulse-microtex-git)
-metapkgs+=(./sdist/arch/illogical-impulse-quickshell-git)
-# metapkgs+=(./sdist/arch/packages/illogical-impulse-oneui4-icons-git)
+metapkgs=(./sdata/dist-arch/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
+metapkgs+=(./sdata/dist-arch/illogical-impulse-hyprland)
+metapkgs+=(./sdata/dist-arch/illogical-impulse-microtex-git)
+metapkgs+=(./sdata/dist-arch/illogical-impulse-quickshell-git)
+# metapkgs+=(./sdata/dist-arch/packages/illogical-impulse-oneui4-icons-git)
 [[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
-  metapkgs+=(./sdist/arch/illogical-impulse-bibata-modern-classic-bin)
+  metapkgs+=(./sdata/dist-arch/illogical-impulse-bibata-modern-classic-bin)
 
 for i in "${metapkgs[@]}"; do
   metainstallflags="--needed"
