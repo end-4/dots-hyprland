@@ -277,6 +277,8 @@ MouseArea {
             topMargin: 32
         }
         sourceComponent: Toolbar {
+            scale: root.toolbarScale
+            opacity: root.toolbarOpacity
             radius: Appearance.rounding.large
             implicitHeight: 120
             LockMediaPlayer {}
