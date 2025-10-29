@@ -148,7 +148,6 @@ Singleton {
 		this.trackedPlayer = targetPlayer;
 	}
 
-
 	IpcHandler {
 		target: "mpris"
 
