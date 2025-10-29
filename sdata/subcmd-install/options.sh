@@ -24,7 +24,7 @@ Options for install:
                             Quickshell, Fish and Hyprland
       --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
       --exp-files           Use experimental script for the third step copying files
-      --fontset <set>       Use a set of pre-defined font and config.
+      --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
       --via-nix             (Unavailable yet) Use Nix to install dependencies
 "
