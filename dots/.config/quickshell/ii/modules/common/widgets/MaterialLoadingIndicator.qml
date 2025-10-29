@@ -16,8 +16,8 @@ Rectangle {
     implicitHeight: implicitSize
     radius: Math.min(width, height) / 2
     color: Appearance.colors.colPrimaryContainer
-    property double baseShapeSize: root.implicitSize * 1.3
-    property double leapZoomSize: root.baseShapeSize * 1.3
+    property double baseShapeSize: root.implicitSize * 0.7
+    property double leapZoomSize: root.baseShapeSize * 1.2
     property double leapZoomProgress: 0
 
     // Shape
@@ -80,7 +80,6 @@ Rectangle {
             const leapZoomDiff = root.leapZoomSize - root.baseShapeSize
             const progressFirstHalf = Math.min(root.leapZoomProgress, 0.5) * 2;
             const progressSecondHalf = Math.max(root.leapZoomProgress - 0.5, 0) * 2;
-            print("progress", root.leapZoomProgress, "zoom", root.baseShapeSize + leapZoomDiff * progressFirstHalf - leapZoomDiff * progressSecondHalf)
             return root.baseShapeSize + leapZoomDiff * progressFirstHalf - leapZoomDiff * progressSecondHalf;
         }
         color: Appearance.colors.colOnPrimaryContainer

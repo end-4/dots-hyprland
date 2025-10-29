@@ -25,7 +25,7 @@ Item {
 
     property bool pullLoading: false
     property int pullLoadingGap: 80
-    property real normalizedPullDistance: Math.max(0, (1 - Math.exp(-booruResponseListView.verticalOvershoot / 50)))
+    property real normalizedPullDistance: Math.max(0, (1 - Math.exp(-booruResponseListView.verticalOvershoot / 50)) * booruResponseListView.dragging)
 
     Connections {
         target: Booru
@@ -96,10 +96,7 @@ Item {
             }
         }
         else if (inputText.trim() == "+") {
-            if (root.responses.length > 0) {
-                const lastResponse = root.responses[root.responses.length - 1]
-                root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
-            }
+            root.handleInput(`${root.commandPrefix}next`);
         }
         else {
             // Create tag list
@@ -126,12 +123,17 @@ Item {
         tagInputField.forceActiveFocus()
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
+                if (booruResponseListView.atYBeginning) return;
                 booruResponseListView.contentY = Math.max(0, booruResponseListView.contentY - booruResponseListView.height / 2)
                 event.accepted = true
             } else if (event.key === Qt.Key_PageDown) {
+                if (booruResponseListView.atYEnd) return;
                 booruResponseListView.contentY = Math.min(booruResponseListView.contentHeight - booruResponseListView.height / 2, booruResponseListView.contentY + booruResponseListView.height / 2)
                 event.accepted = true
             }
+        }
+        if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O) {
+            Booru.clearResponses()
         }
     }
 
@@ -217,7 +219,7 @@ Item {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     bottom: parent.bottom
-                    bottomMargin: 20 + (root.pullLoading ? 0 : Math.max(0, (root.normalizedPullDistance - 0.5) * 36))
+                    bottomMargin: 20 + (root.pullLoading ? 0 : Math.max(0, (root.normalizedPullDistance - 0.5) * 50))
                     Behavior on bottomMargin {
                         NumberAnimation {
                             duration: 200
@@ -227,7 +229,7 @@ Item {
                     }
                 }
                 loading: root.pullLoading || Booru.runningRequests > 0
-                pullProgress: Math.min(1, booruResponseListView.verticalOvershoot / root.pullLoadingGap)
+                pullProgress: Math.min(1, booruResponseListView.verticalOvershoot / root.pullLoadingGap * booruResponseListView.dragging)
                 scale: root.pullLoading ? 1 : Math.min(1, root.normalizedPullDistance * 2)
             }
         }
