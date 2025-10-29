@@ -28,7 +28,7 @@
 <details> 
   <summary>Installation (illogical-impulse Quickshell)</summary>
 
-   - Just run `bash <(curl -s https://ii.clsty.link/setup)`
+   - Just run `bash <(curl -s https://ii.clsty.link/get)`
      - Or, clone this repo and run `./setup install`
      - See [document](https://ii.clsty.link/en/ii-qs/01setup/) for details.
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
