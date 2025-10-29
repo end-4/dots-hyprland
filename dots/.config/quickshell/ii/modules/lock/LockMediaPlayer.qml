@@ -7,8 +7,6 @@ import qs.modules.common.widgets
 import Qt5Compat.GraphicalEffects
 import Quickshell.Services.Mpris
 
-import qs.modules.mediaControls
-
 RowLayout {
     id: mediaPlayerRoot
 
@@ -20,16 +18,12 @@ RowLayout {
     Layout.margins: parent.implicitHeight / 10
     spacing: 20
 
-    MediaControls {
-        id: mediaControls
-    }
-
     Component.onCompleted: {
         activePlayer = MprisController.activePlayer
     }
 
     function cycleActivePlayer() {
-        var filteredPlayers = mediaControls.filterDuplicatePlayers(Mpris.players.values)
+        var filteredPlayers = mediaControls.meaningfulPlayers
         var currentIndex = filteredPlayers.indexOf(activePlayer);
         var nextIndex = (currentIndex + 1) % filteredPlayers.length;
         activePlayer = filteredPlayers[nextIndex];
@@ -125,7 +119,7 @@ RowLayout {
                         iconSize: 18
                     }
                     IconToolbarButton {
-                        visible: mediaControls.filterDuplicatePlayers(Mpris.players.values).length > 1
+                        visible: mediaControls.meaningfulPlayers.length > 1
                         colBackground: Appearance.colors.colTertiaryContainer
                         colBackgroundHover: Appearance.colors.colTertiaryContainerHover
                         id: cycleButton
@@ -133,6 +127,7 @@ RowLayout {
                         text: "360"
                         iconSize: 18
                     }
+                    
                 }
                 Item {
                     Layout.preferredHeight: 2

@@ -14,6 +14,8 @@ import Quickshell.Services.Mpris
 import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 
+import qs.modules.mediaControls
+
 MouseArea {
     id: root
     required property LockContext context
@@ -265,8 +267,12 @@ MouseArea {
         }
     }
 
+    MediaControls {
+        id: mediaControls
+    }
+
     Loader {
-        active: Config.options.lock.showMediaPlayer && activePlayer.trackTitle !== ""
+        active: Config.options.lock.showMediaPlayer && mediaControls.meaningfulPlayers.length != 0
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
