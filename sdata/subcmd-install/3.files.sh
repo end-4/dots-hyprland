@@ -18,50 +18,10 @@ function warning_rsync_normal(){
   printf "${STY_RST}"
 }
 
-function backup_clashing_targets(){
-  # For  dirs/files under target_dir, only backup those which clashes with the ones under source_dir
-  # However, ignore the ones listed in ignored_list
-
-  # Deal with arguments
-  local source_dir="$1"
-  local target_dir="$2"
-  local backup_dir="$3"
-  local -a ignored_list=("${@:4}")
-
-  # Find clash dirs/files, save as clash_list
-  local clash_list=()
-  local source_list=($(ls -A "$source_dir"))
-  local target_list=($(ls -A "$target_dir"))
-  local -A target_map
-  for i in "${target_list[@]}"; do
-    target_map["$i"]=1
-  done
-  for i in "${source_list[@]}"; do
-    if [[ -n "${target_map[$i]}" ]]; then
-      clash_list+=("$i")
-    fi
-  done
-  local -A delk
-  for del in "${ignored_list[@]}" ; do delk[$del]=1 ; done
-  for k in "${!clash_list[@]}" ; do
-    [ "${delk[${clash_list[$k]}]-}" ] && unset 'clash_list[k]'
-  done
-  clash_list=("${clash_list[@]}")
-
-  # Construct args_includes for rsync
-  local args_includes=()
-  for i in "${clash_list[@]}"; do
-    if [[ -d "$target_dir/$i" ]]; then
-      args_includes+=(--include="/$i/")
-      args_includes+=(--include="/$i/**")
-    else
-      args_includes+=(--include="/$i")
-    fi
-  done
-  args_includes+=(--exclude='*')
-
-  x mkdir -p $backup_dir
-  x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
+function backup_configs(){
+  backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+  backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+  printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
 }
 
 function ask_backup_configs(){
@@ -71,27 +31,19 @@ function ask_backup_configs(){
   printf "${STY_RST}"
   while true;do
     echo "  y = Yes, backup"
-    echo "  n = No, skip to next"
+    echo "  n/s = No, skip to next"
     local p; read -p "====> " p
     case $p in
       [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}" ;local backup=true;break ;;
-      [nN]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
+      [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
       *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
      esac
   done
-  if $backup;then
-    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-  fi
+  if $backup;then backup_configs;fi
 }
 function auto_backup_configs(){
   # Backup when $BACKUP_DIR does not exist
-  if [[ ! -d "$BACKUP_DIR" ]]; then
-    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-  fi
+  if [[ ! -d "$BACKUP_DIR" ]]; then backup_configs;fi
 }
 
 #####################################################################################
