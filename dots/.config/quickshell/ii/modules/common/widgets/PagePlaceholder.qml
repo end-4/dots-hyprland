@@ -34,7 +34,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             padding: 12
             iconSize: 56
-            rotation: -60 * (1 - root.opacity)
+            rotation: -30 * (1 - root.opacity)
         }
         StyledText {
             id: widgetNameText
