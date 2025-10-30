@@ -25,4 +25,5 @@ RDEPEND="
 	dev-python/jq
 	dev-build/meson
 	x11-misc/xdg-user-dirs
+	app-misc/yq-go
 "
