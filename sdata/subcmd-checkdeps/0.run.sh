@@ -6,6 +6,15 @@
 pkglistfile=$(mktemp)
 pkglistfile_orig=${LIST_FILE_PATH}
 pkglistfile_orig_s=${REPO_ROOT}/cache/dependencies_stripped.conf
+if ! $(command -v wget);then
+  echo "Please install wget first.";exit 1
+fi
+if ! $(command -v gunzip);then
+  echo "Please install gunzip first.";exit 1
+fi
+if ! $(command -v pacman);then
+  echo "pacman not found, aborting...";exit 1
+fi
 remove_bashcomments_emptylines $pkglistfile_orig $pkglistfile_orig_s
 
 cat $pkglistfile_orig_s | sed "s_\ _\n_g" > $pkglistfile
@@ -15,4 +24,3 @@ echo "The non-existent pkgs in $pkglistfile_orig are listed as follows."
 comm -23 <(sort -u $pkglistfile) <(sort -u <(wget -q -O - https://aur.archlinux.org/packages.gz | gunzip) <(pacman -Ssq))
 echo "End of list. If nothing appears, then all pkgs exist."
 rm $pkglistfile
-
