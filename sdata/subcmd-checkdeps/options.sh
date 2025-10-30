@@ -28,8 +28,16 @@ while true ; do
   esac
 done
 
-if [[ -f "$1" ]]; then
-  echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 2
-else
-  echo "Wrong path of list file.";exit 1
-fi
+eval set -- "$para"
+while true ; do
+  case "$1" in
+    --) break ;;
+    *) 
+      if [[ -f "$1" ]]; then
+        echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 1
+      else
+        echo "Wrong path of list file.";exit 1
+      fi
+      ;;
+  esac
+done
