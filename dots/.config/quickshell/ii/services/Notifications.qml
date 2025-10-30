@@ -238,7 +238,7 @@ Singleton {
         if (notifServerIndex !== -1) {
             const notifServerNotif = notifServer.trackedNotifications.values[notifServerIndex];
             const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
-            console.log("Action found: " + JSON.stringify(action));
+            // console.log("Action found: " + JSON.stringify(action));
             action.invoke()
         } 
         else {
