@@ -24,16 +24,21 @@ Scope {
 
     property var windowData: []
     function saveWindowPositionAndTile() {
-        root.windowData = HyprlandData.windowList.filter(w => w.floating)
+		Hyprland.dispatch(`keyword dwindle:pseudotile true`)
+        root.windowData = HyprlandData.windowList.filter(w => (w.floating && w.workspace.id === HyprlandData.activeWorkspace.id))
         root.windowData.forEach(w => {
+			Hyprland.dispatch(`pseudo address:${w.address}`)
             Hyprland.dispatch(`settiled address:${w.address}`)
+			Hyprland.dispatch(`movetoworkspacesilent ${w.workspace.id},address:${w.address}`)
         })
     }
     function restoreWindowPositionAndTile() {
         root.windowData.forEach(w => {
             Hyprland.dispatch(`setfloating address:${w.address}`)
             Hyprland.dispatch(`movewindowpixel exact ${w.at[0]} ${w.at[1]}, address:${w.address}`)
+			Hyprland.dispatch(`pseudo address:${w.address}`)
         })
+		Hyprland.dispatch(`keyword dwindle:pseudotile false`)
     }
 
     // This stores all the information shared between the lock surfaces on each screen.
