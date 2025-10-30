@@ -16,6 +16,7 @@ Item {
     implicitHeight: row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
     // http://xahlee.info/comp/unicode_computing_symbols.html
+    // https://www.nerdfonts.com/cheat-sheet
     property list<string> superMap: [
       "󰖳", "󰌽", "⌘", "", "󰨡", "", "",
       "󰣇", "", "", "", "", " ", "", 
