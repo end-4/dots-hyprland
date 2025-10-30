@@ -186,7 +186,7 @@ ContentPage {
                     options: [
                         {
                             displayName: Translation.tr("Icon"),
-                            icon: "swap_horiz",
+                            icon: "stroke_full",
                             value: "icon"
                         },
                         {
@@ -212,11 +212,6 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: Translation.tr("CPU"),
-                            icon: "planner_review",
-                            value: "cpu"
-                        },
-                        {
                             displayName: Translation.tr("Memory"),
                             icon: "memory",
                             value: "memory"
@@ -225,7 +220,12 @@ ContentPage {
                             displayName: Translation.tr("Swap"),
                             icon: "swap_horiz",
                             value: "swap"
-                        } 
+                        },
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        }
                     ]   
                 }
             }
