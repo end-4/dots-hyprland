@@ -1,7 +1,7 @@
 # Handle args for subcmd: install
 # shellcheck shell=bash
 showhelp(){
-echo -e "Syntax: $0 install [OPTIONS]...
+printf "Syntax: $0 install [OPTIONS]...
 
 Idempotent installation for dotfiles.
 
@@ -23,11 +23,17 @@ Options for install:
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             Quickshell, Fish and Hyprland
       --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
-      --exp-files           Use experimental script for the third step copying files
       --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
-      --via-nix             (Unavailable yet) Use Nix to install dependencies
-"
+${STY_CYAN}
+New features (experimental):
+      --exp-files           Use yaml-based config for the third step copying files.
+                            This feature is ${STY_YELLOW}still on early stage${STY_CYAN}, feedback and contribution welcomed,
+                            see https://github.com/end-4/dots-hyprland/issues/2137 for details.
+      --via-nix             Use Nix and Home-manager to install dependencies.
+                            This feature is ${STY_RED}working in progress${STY_CYAN}. Contribution is welcomed,
+                            see https://github.com/end-4/dots-hyprland/issues/1061 for details.
+${STY_RST}"
 }
 
 cleancache(){
