@@ -17,27 +17,17 @@ para=$(getopt \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
-## getopt Phase 1
-# ignore parameter's order, execute options below first
 eval set -- "$para"
 while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
-    --) break ;;
-    *) shift ;;
+    --) shift;break ;;
+    *) sleep 0 ;;
   esac
 done
 
-eval set -- "$para"
-while true ; do
-  case "$1" in
-    --) break ;;
-    *) 
-      if [[ -f "$1" ]]; then
-        echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 1
-      else
-        echo "Wrong path of list file.";exit 1
-      fi
-      ;;
-  esac
-done
+if [[ -f "$1" ]]; then
+  echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 1
+else
+  echo "Wrong path \"$1\" of list file.";exit 1
+fi
