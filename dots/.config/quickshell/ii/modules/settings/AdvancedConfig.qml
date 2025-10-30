@@ -107,6 +107,7 @@ ContentPage {
                 // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
                 // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
                 // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
+                // 15: 󰀲 | 16: 󰟍 | 17:  |
                 options: [
                     {
                         displayName: "󰖳",
@@ -164,6 +165,19 @@ ContentPage {
                         displayName: "󰘳",
                         value: 2
                     },
+                    {
+                        displayName: "󰀲",
+                        value: 15
+                    },
+                    {
+                        displayName: "󰟍",
+                        value: 16
+                    },
+                    {
+                        displayName: "",
+                        value: 17
+                    },
+                      
                 ]
             }
         }

@@ -18,7 +18,8 @@ Item {
     // http://xahlee.info/comp/unicode_computing_symbols.html
     property list<string> superMap: [
       "󰖳", "󰌽", "⌘", "", "󰨡", "", "",
-      "󰣇", "", "", "", "", " ", "", "󱄛"
+      "󰣇", "", "", "", "", " ", "", 
+      "󱄛", "󰀲", "󰟍", ""
     ]
     property var macSymbolMap: ({
         "Ctrl": "󰘴" ,
