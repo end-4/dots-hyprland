@@ -844,6 +844,7 @@ if git remote get-url origin &>/dev/null; then
   else
     if git pull --ff-only; then
       log_success "Successfully pulled latest changes"
+      git submodule update --init --recursive
       # Verify we actually got new commits
       if git rev-parse --verify HEAD@{1} &>/dev/null; then
         if [[ "$(git rev-parse HEAD)" == "$(git rev-parse HEAD@{1})" ]]; then

@@ -14,7 +14,10 @@ Item {
     // 12 Dots
     FadeLoader {
         id: dotsLoader
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 10
+        }
         shown: root.style === "dots"
         sourceComponent: Dots {
             color: root.color
@@ -37,7 +40,10 @@ Item {
     // Lines
     FadeLoader {
         id: linesLoader
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 10
+        }
         shown: root.style === "full"
         sourceComponent: Lines {
             color: root.color

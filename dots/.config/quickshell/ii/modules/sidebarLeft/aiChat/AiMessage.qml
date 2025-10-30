@@ -105,7 +105,7 @@ Rectangle {
                         anchors.right: parent.right
                         anchors.leftMargin: 10
                         anchors.rightMargin: 10
-                        spacing: 7
+                        spacing: 12
 
                         Item {
                             Layout.alignment: Qt.AlignVCenter
@@ -176,6 +176,20 @@ Rectangle {
 
                 ButtonGroup {
                     spacing: 5
+
+                    AiMessageControlButton {
+                        id: regenButton
+                        buttonIcon: "refresh"
+                        visible: messageData?.role === 'assistant'
+
+                        onClicked: {
+                            Ai.regenerate(root.messageIndex)
+                        }
+                        
+                        StyledToolTip {
+                            text: Translation.tr("Regenerate")
+                        }
+                    }
 
                     AiMessageControlButton {
                         id: copyButton
@@ -254,28 +268,50 @@ Rectangle {
 
             spacing: 0
             Repeater {
-                model: root.messageBlocks.length
-                delegate: Loader {
-                    required property int index
-                    property var thisBlock: root.messageBlocks[index]
-                    Layout.fillWidth: true
-                    // property var segment: thisBlock
-                    property var segmentContent: thisBlock.content
-                    property var segmentLang: thisBlock.lang
-                    property var messageData: root.messageData
-                    property var editing: root.editing
-                    property var renderMarkdown: root.renderMarkdown
-                    property var enableMouseSelection: root.enableMouseSelection
-                    property bool thinking: root.messageData?.thinking ?? true
-                    property bool done: root.messageData?.done ?? false
-                    property bool completed: thisBlock.completed ?? false
+                model: ScriptModel {
+                    values: Array.from({ length: root.messageBlocks.length }, (msg, i) => {
+                        return ({
+                            type: root.messageBlocks[i].type
+                        })
+                    });
+                }
 
-                    property bool forceDisableChunkSplitting: root.messageData.content.includes("```")
-                    
-                    source: thisBlock.type === "code" ? "MessageCodeBlock.qml" : 
-                        thisBlock.type === "think" ? "MessageThinkBlock.qml" :
-                        "MessageTextBlock.qml"
+                delegate: DelegateChooser {
+                    id: messageDelegate
+                    role: "type"
 
+                    DelegateChoice { roleValue: "code"; MessageCodeBlock {
+                        required property int index
+                        property var thisBlock: root.messageBlocks[index]
+                        editing: root.editing
+                        renderMarkdown: root.renderMarkdown
+                        enableMouseSelection: root.enableMouseSelection
+                        segmentContent: thisBlock.content
+                        segmentLang: thisBlock.lang
+                        messageData: root.messageData
+                    } }
+                    DelegateChoice { roleValue: "think"; MessageThinkBlock {
+                        required property int index
+                        property var thisBlock: root.messageBlocks[index]
+                        editing: root.editing
+                        renderMarkdown: root.renderMarkdown
+                        enableMouseSelection: root.enableMouseSelection
+                        segmentContent: thisBlock.content
+                        messageData: root.messageData
+                        done: root.messageData?.done ?? false
+                        completed: thisBlock.completed ?? false
+                    } }
+                    DelegateChoice { roleValue: "text"; MessageTextBlock {
+                        required property int index
+                        property var thisBlock: root.messageBlocks[index]
+                        editing: root.editing
+                        renderMarkdown: root.renderMarkdown
+                        enableMouseSelection: root.enableMouseSelection
+                        segmentContent: thisBlock.content
+                        messageData: root.messageData
+                        done: root.messageData?.done ?? false
+                        forceDisableChunkSplitting: root.messageData.content.includes("```")
+                    } }
                 }
             }
         }

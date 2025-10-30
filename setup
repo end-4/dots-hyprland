@@ -24,6 +24,7 @@ Subcommands:
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
+  checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
@@ -34,7 +35,7 @@ case $1 in
   # Global help
   help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old)
+  install|exp-uninstall|exp-update|exp-update-old|checkdeps)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;

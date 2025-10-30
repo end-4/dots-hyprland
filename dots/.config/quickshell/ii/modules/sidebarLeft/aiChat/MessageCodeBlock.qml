@@ -13,22 +13,20 @@ import org.kde.syntaxhighlighting
 ColumnLayout {
     id: root
     // These are needed on the parent loader
-    property bool editing: parent?.editing ?? false
-    property bool renderMarkdown: parent?.renderMarkdown ?? true
-    property bool enableMouseSelection: parent?.enableMouseSelection ?? false
-    property var segmentContent: parent?.segmentContent ?? ({})
-    property var segmentLang: parent?.segmentLang ?? "txt"
+    property bool editing: false
+    property bool renderMarkdown: true
+    property bool enableMouseSelection: false
+    property var segmentContent: ({})
+    property var segmentLang: "txt"
+    property var messageData: {}
     property bool isCommandRequest: segmentLang === "command"
     property var displayLang: (isCommandRequest ? "bash" : segmentLang)
-    property var messageData: parent?.messageData ?? {}
 
     property real codeBlockBackgroundRounding: Appearance.rounding.small
     property real codeBlockHeaderPadding: 3
     property real codeBlockComponentSpacing: 2
 
     spacing: codeBlockComponentSpacing
-    anchors.left: parent.left
-    anchors.right: parent.right
 
     Rectangle { // Code background
         Layout.fillWidth: true

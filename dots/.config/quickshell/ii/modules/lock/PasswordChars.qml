@@ -15,7 +15,6 @@ StyledFlickable {
     Behavior on contentX {
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
-    rightMargin: 14
     Row {
         id: dotsRow
         anchors {

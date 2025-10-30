@@ -9,7 +9,7 @@ Item {
     required property int clockHour
     required property int clockMinute
     property real handLength: 72
-    property real handWidth: 18
+    property real handWidth: 20
     property string style: "fill"
     property color color: Appearance.colors.colPrimary
 
@@ -19,6 +19,14 @@ Item {
     }
 
     rotation: -90 + (360 / 12) * (root.clockHour + root.clockMinute / 60)
+    Behavior on rotation {
+        animation: RotationAnimation {
+            direction: RotationAnimation.Clockwise
+            duration: 300
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.animationCurves.emphasized
+        }
+    }
 
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter

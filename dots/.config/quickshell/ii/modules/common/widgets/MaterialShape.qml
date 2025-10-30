@@ -44,6 +44,7 @@ ShapeCanvas {
     property double implicitSize
     implicitHeight: implicitSize
     implicitWidth: implicitSize
+    polygonIsNormalized: true
     roundedPolygon: {
         switch (root.shape) {
             case MaterialShape.Shape.Circle: return MaterialShapes.getCircle();
