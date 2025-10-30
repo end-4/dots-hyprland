@@ -143,13 +143,29 @@ MouseArea {
             Keys.onPressed: event => {
                 root.context.resetClearTimer();
             }
-
+            
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
                     width: passwordBox.width - 8
                     height: passwordBox.height
                     radius: height / 2
+                }
+            }
+
+            // Shake when wrong password
+            SequentialAnimation {
+                id: wrongPasswordShakeAnim
+                NumberAnimation { target: passwordBox; property: "x"; to: -30; duration: 50 }
+                NumberAnimation { target: passwordBox; property: "x"; to: 30; duration: 50 }
+                NumberAnimation { target: passwordBox; property: "x"; to: -15; duration: 40 }
+                NumberAnimation { target: passwordBox; property: "x"; to: 15; duration: 40 }
+                NumberAnimation { target: passwordBox; property: "x"; to: 0; duration: 30 }
+            }
+            Connections {
+                target: GlobalStates
+                function onScreenUnlockFailedChanged() {
+                    if (GlobalStates.screenUnlockFailed) wrongPasswordShakeAnim.restart();
                 }
             }
 
