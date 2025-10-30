@@ -164,6 +164,7 @@ Singleton {
                         property bool hourMarks: false
                         property bool dateInClock: true
                         property bool constantlyRotate: false
+                        property bool useSineCookie: false
                     }
                     property JsonObject digital: JsonObject {
                         property bool animateChange: true

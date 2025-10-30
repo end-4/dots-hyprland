@@ -83,8 +83,9 @@ Item {
         }
     }
 
+    property bool useSineCookie: Config.options.background.clock.cookie.useSineCookie
     DropShadow {
-        source: cookie
+        source: useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
         anchors.fill: source
         radius: 8
         samples: radius * 2 + 1
@@ -100,14 +101,27 @@ Item {
             to: 0
         }
     }
-
-    MaterialCookie {
-        id: cookie
+    Loader {
+        id: sineCookieLoader
         z: 0
         visible: false // The DropShadow already draws it
-        implicitSize: root.implicitSize
-        sides: Config.options.background.clock.cookie.sides
-        color: root.colBackground
+        active: useSineCookie
+        sourceComponent: SineCookie {
+            implicitSize: root.implicitSize
+            sides: Config.options.background.clock.cookie.sides
+            color: root.colBackground
+        }
+    }
+    Loader {
+        id: roundedPolygonCookieLoader
+        z: 0
+        visible: false // The DropShadow already draws it
+        active: !useSineCookie
+        sourceComponent: MaterialCookie {
+            implicitSize: root.implicitSize
+            sides: Config.options.background.clock.cookie.sides
+            color: root.colBackground
+        }
     }
 
     // Hour/minutes numbers/dots/lines

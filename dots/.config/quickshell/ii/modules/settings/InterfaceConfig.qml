@@ -85,6 +85,18 @@ ContentPage {
                 }
             }
 
+            ConfigSwitch {
+                buttonIcon: "airwave"
+                text: Translation.tr("Use old sine wave cookie implementation")
+                checked: Config.options.background.clock.cookie.useSineCookie
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.useSineCookie = checked;
+                }
+                StyledToolTip {
+                    text: "Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing"
+                }
+            }
+
             ConfigSpinBox {
                 icon: "add_triangle"
                 text: Translation.tr("Sides")
