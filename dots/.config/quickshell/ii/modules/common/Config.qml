@@ -133,9 +133,10 @@ Singleton {
                     property bool useMacLikeShortcut: false
                     property bool useMouseSymbol: false
                     property bool useFnSymbol: false
-                    property JsonObject pixelSize: JsonObject {
+                    property JsonObject fontSize: JsonObject {
                       property int key: Appearance.font.pixelSize.smaller
-                      property int comment: Appearance.font.pixelSize.smaller                    }
+                      property int comment: Appearance.font.pixelSize.smaller
+                    }
                 }
             }
 
