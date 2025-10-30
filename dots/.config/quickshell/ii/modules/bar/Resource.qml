@@ -14,6 +14,7 @@ Item {
     implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
     property bool warning: percentage * 100 >= warningThreshold
+    property bool detailed: true
 
     RowLayout {
         id: resourceRowLayout
@@ -50,6 +51,7 @@ Item {
         }
 
         Item {
+            visible: root.detailed
             Layout.alignment: Qt.AlignVCenter
             implicitWidth: fullPercentageTextMetrics.width
             implicitHeight: percentageText.implicitHeight

@@ -5,44 +5,54 @@ import QtQuick.Layouts
 
 MouseArea {
     id: root
+    property bool showFullResources: Config.options.bar.resources.showMemory && Config.options.bar.resources.showSwap && Config.options.bar.resources.showCpu
     property bool borderless: Config.options.bar.borderless
     property bool alwaysShowAllResources: false
-    implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
+    implicitWidth: rowLayout.visible ? rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin : 0
     implicitHeight: Appearance.sizes.barHeight
     hoverEnabled: true
+
+    Behavior on implicitWidth {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     RowLayout {
         id: rowLayout
 
+        visible: memoryResource.shown || swapResource.shown || cpuResource.shown
+    
         spacing: 0
         anchors.fill: parent
         anchors.leftMargin: 4
         anchors.rightMargin: 4
 
         Resource {
+            id: memoryResource
             iconName: "memory"
             percentage: ResourceUsage.memoryUsedPercentage
             warningThreshold: Config.options.bar.resources.memoryWarningThreshold
+            shown: Config.options.bar.resources.collapseResources.includes("memory") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showMemory 
+            detailed: Config.options.bar.resources.style === "detailed"
         }
 
         Resource {
+            id: swapResource
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
-            shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || 
-                (MprisController.activePlayer?.trackTitle == null) ||
-                root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.swapWarningThreshold
+            shown: Config.options.bar.resources.collapseResources.includes("swap") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showSwap
+            detailed: Config.options.bar.resources.style === "detailed"
         }
 
         Resource {
+            id: cpuResource
             iconName: "planner_review"
             percentage: ResourceUsage.cpuUsage
-            shown: Config.options.bar.resources.alwaysShowCpu || 
-                !(MprisController.activePlayer?.trackTitle?.length > 0) ||
-                root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold
+            shown: Config.options.bar.resources.collapseResources.includes("cpu") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showCpu
+            detailed: Config.options.bar.resources.style === "detailed"
         }
 
     }

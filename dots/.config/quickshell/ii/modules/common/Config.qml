@@ -205,8 +205,11 @@ Singleton {
                 property bool verbose: true
                 property bool vertical: false
                 property JsonObject resources: JsonObject {
-                    property bool alwaysShowSwap: true
-                    property bool alwaysShowCpu: true
+                    property bool showCpu: true 
+                    property bool showSwap: true
+                    property bool showMemory: true
+                    property string style: "icon" // Options: "icon", "detailed", "none"
+                    property list<string> collapseResources: ["swap"]
                     property int memoryWarningThreshold: 95
                     property int swapWarningThreshold: 85
                     property int cpuWarningThreshold: 90

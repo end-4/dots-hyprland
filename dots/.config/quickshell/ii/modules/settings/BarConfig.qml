@@ -142,6 +142,97 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "memory"
+        title: Translation.tr("Resources")
+
+        ConfigRow {
+            ConfigSwitch {
+                buttonIcon: "memory"
+                text: Translation.tr("Show Memory")
+                checked: Config.options.bar.resources.showMemory
+                onCheckedChanged: {
+                    Config.options.bar.resources.showMemory = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "swap_horiz"
+                text: Translation.tr("Show Swap")
+                checked: Config.options.bar.resources.showSwap
+                onCheckedChanged: {
+                    Config.options.bar.resources.showSwap = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "planner_review"
+                text: Translation.tr("Show CPU")
+                checked: Config.options.bar.resources.showCpu
+                onCheckedChanged: {
+                    Config.options.bar.resources.showCpu = checked;
+                }
+            }
+            
+        }
+        
+        ConfigRow{
+            ContentSubsection {
+                Layout.fillWidth: true
+                title: Translation.tr("Icon style")
+                ConfigSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.style
+                    onSelected: newValue => {
+                        Config.options.bar.resources.style = newValue; // Update local copy
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Icon"),
+                            icon: "swap_horiz",
+                            value: "icon"
+                        },
+                        {
+                            displayName: Translation.tr("Detailed"),
+                            icon: "notes",
+                            value: "detailed"
+                        }
+                    ]
+                }
+            }
+            ContentSubsection {
+                Layout.fillWidth: false
+                title: Translation.tr("Collapse resources")
+                tooltip: Translation.tr("Collapses the selected resources when a media player is active to save space")
+                ConfigMultiSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.collapseResources
+                    onSelected: newValue => {
+                        if (!Config.options.bar.resources.collapseResources.includes(newValue))
+                            Config.options.bar.resources.collapseResources.push(newValue);
+                        else
+                            Config.options.bar.resources.collapseResources.splice(Config.options.bar.resources.collapseResources.indexOf(newValue), 1);
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        },
+                        {
+                            displayName: Translation.tr("Memory"),
+                            icon: "memory",
+                            value: "memory"
+                        },
+                        {
+                            displayName: Translation.tr("Swap"),
+                            icon: "swap_horiz",
+                            value: "swap"
+                        } 
+                    ]   
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "shelf_auto_hide"
         title: Translation.tr("Tray")
 
