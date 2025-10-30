@@ -192,7 +192,7 @@ ContentPage {
             }
             ConfigSwitch {
                 buttonIcon: "thermometer"
-                text: Translation.tr("Use USCS (°F)")
+                text: Translation.tr("Fahrenheit unit")
                 checked: Config.options.bar.weather.useUSCS
                 onCheckedChanged: {
                     Config.options.bar.weather.useUSCS = checked;
