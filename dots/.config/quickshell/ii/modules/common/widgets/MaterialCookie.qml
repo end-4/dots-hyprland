@@ -17,7 +17,7 @@ Item {
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
-    property var cornerRounding: new CornerRounding.CornerRounding(1.3 / Math.max(sides, 1))
+    property var cornerRounding: new CornerRounding.CornerRounding((sides < 17 ? 1.5 : 1.1) / Math.max(sides, 1))
 
     ShapeCanvas {
         id: shapeCanvas
