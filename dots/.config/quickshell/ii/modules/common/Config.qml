@@ -208,7 +208,7 @@ Singleton {
                     property bool showCpu: true 
                     property bool showSwap: true
                     property bool showMemory: true
-                    property string style: "icon" // Options: "icon", "detailed", "none"
+                    property string style: "icon" // Options: "icon", "detailed"
                     property list<string> collapseResources: ["swap"]
                     property int memoryWarningThreshold: 95
                     property int swapWarningThreshold: 85

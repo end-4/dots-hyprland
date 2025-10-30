@@ -5,7 +5,6 @@ import QtQuick.Layouts
 
 MouseArea {
     id: root
-    property bool showFullResources: Config.options.bar.resources.showMemory && Config.options.bar.resources.showSwap && Config.options.bar.resources.showCpu
     property bool borderless: Config.options.bar.borderless
     property bool alwaysShowAllResources: false
     implicitWidth: rowLayout.visible ? rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin : 0
