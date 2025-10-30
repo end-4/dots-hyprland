@@ -2,7 +2,7 @@ import qs
 import qs.modules.common
 import QtQuick
 import Quickshell
-import Quickshell.Io // Required for StdioCollector
+import Quickshell.Io
 import Quickshell.Services.Pam
 
 Scope {
@@ -21,10 +21,6 @@ Scope {
     property bool showFailure: false
     property bool fingerprintsConfigured: false
     property var targetAction: LockContext.ActionEnum.Unlock
-
-    Component.onCompleted: {
-        fingerprintCheckProcess.running = true;
-    }
 
     function resetTargetAction() {
         root.targetAction = LockContext.ActionEnum.Unlock;
@@ -77,7 +73,8 @@ Scope {
     }
 
     Process {
-        id: fingerprintCheckProcess
+        id: fingerprintCheckProc
+        running: true
         command: ["bash", "-c", "fprintd-list $(whoami)"]
         stdout: StdioCollector {
             id: fingerprintOutputCollector
