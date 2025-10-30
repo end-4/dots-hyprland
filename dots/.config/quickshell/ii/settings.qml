@@ -10,6 +10,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -169,15 +170,29 @@ ApplicationWindow {
 
                     FloatingActionButton {
                         id: fab
-                        iconText: "edit"
-                        buttonText: Translation.tr("Config file")
+                        property bool justCopied: false
+                        iconText: justCopied ? "check" : "edit"
+                        buttonText: justCopied ? Translation.tr("Path copied") : Translation.tr("Config file")
                         expanded: navRail.expanded
                         downAction: () => {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
                         }
+                        altAction: () => {
+                            Quickshell.clipboardText = CF.FileUtils.trimFileProtocol(`${Directories.config}/illogical-impulse/config.json`);
+                            fab.justCopied = true;
+                            revertTextTimer.restart()
+                        }
+
+                        Timer {
+                            id: revertTextTimer
+                            interval: 1500
+                            onTriggered: {
+                                fab.justCopied = false;
+                            }
+                        }
 
                         StyledToolTip {
-                            text: Translation.tr("Open the shell config file.\nIf the button doesn't work or doesn't open in your favorite editor,\nyou can manually open ~/.config/illogical-impulse/config.json")
+                            text: Translation.tr("Open the shell config file\nAlternatively right-click to copy path")
                         }
                     }
 

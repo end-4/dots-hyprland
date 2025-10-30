@@ -31,37 +31,12 @@ Item {
     }
 
     // Placeholder when list is empty
-    Item {
-        anchors.fill: listview
-
-        visible: opacity > 0
-        opacity: (Notifications.list.length === 0) ? 1 : 0
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.menuDecel.duration
-                easing.type: Appearance.animation.menuDecel.type
-            }
-        }
-
-        ColumnLayout {
-            anchors.centerIn: parent
-            spacing: 5
-
-            MaterialSymbol {
-                Layout.alignment: Qt.AlignHCenter
-                iconSize: 55
-                color: Appearance.m3colors.m3outline
-                text: "notifications_active"
-            }
-            StyledText {
-                Layout.alignment: Qt.AlignHCenter
-                font.pixelSize: Appearance.font.pixelSize.normal
-                color: Appearance.m3colors.m3outline
-                horizontalAlignment: Text.AlignHCenter
-                text: Translation.tr("No notifications")
-            }
-        }
+    PagePlaceholder {
+        shown: Notifications.list.length === 0
+        icon: "notifications_active"
+        description: Translation.tr("Nothing")
+        shape: MaterialShape.Shape.Ghostish
+        descriptionHorizontalAlignment: Text.AlignHCenter
     }
 
     ButtonGroup {
