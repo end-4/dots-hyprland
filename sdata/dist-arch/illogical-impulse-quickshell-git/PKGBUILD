@@ -1,4 +1,4 @@
-_commit='3e2ce40b18af943f9ba370ed73565e9f487663ef'
+_commit='db1777c20b936a86528c1095cbcb1ebd92801402'
 # Useful links:
 # https://git.outfoxxed.me/quickshell/quickshell/commits/branch/master
 # https://aur.archlinux.org/packages/quickshell-git
@@ -9,7 +9,7 @@ conflicts=("quickshell-git")
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=2
+pkgrel=3
 pkgdesc="$_pkgname-git which version pinned for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
