@@ -24,6 +24,7 @@ printf "${STY_RST}"
 pause
 
 x sudo emerge --noreplace --quiet app-eselect/eselect-repository
+x sudo emerge --noreplace --quiet app-portage/smart-live-rebuild
 
 if [[ -z $(eselect repository list | grep localrepo) ]]; then
 	v sudo eselect repository create localrepo
@@ -53,6 +54,7 @@ v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/packag
 # Update system
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
+v sudo emerge --quiet @smart-live-rebuild
 v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
@@ -79,7 +81,6 @@ v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils/hyprland-qtutils*9999.ebui
 v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
 v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
 ###### LIVE EBUILDS END
-
 
 # Install dependencies
 for i in "${metapkgs[@]}"; do

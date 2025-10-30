@@ -2,7 +2,7 @@ import QtQuick
 import qs.modules.common
 import qs.modules.common.widgets
 
-MaterialCookie {
+MaterialShape {
     id: root
     property alias text: symbol.text
     property alias iconSize: symbol.iconSize
@@ -13,7 +13,7 @@ MaterialCookie {
     color: Appearance.colors.colSecondaryContainer
     colSymbol: Appearance.colors.colOnSecondaryContainer
 
-    sides: 5
+    shape: MaterialShape.Shape.Clover4Leaf
 
     implicitSize: Math.max(symbol.implicitWidth, symbol.implicitHeight) + padding * 2
 

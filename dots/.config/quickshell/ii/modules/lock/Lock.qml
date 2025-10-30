@@ -28,7 +28,10 @@ Scope {
 		Connections {
 			target: GlobalStates
 			function onScreenLockedChanged() {
-				if (GlobalStates.screenLocked) lockContext.reset();
+				if (GlobalStates.screenLocked) {
+					lockContext.reset();
+					lockContext.tryFingerUnlock();
+				}
 			}
 		}
 
@@ -113,7 +116,7 @@ Scope {
 
         onPressed: {
 			if (Config.options.lock.useHyprlock) {
-				Quickshell.execDetached(["hyprlock"])
+				Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
 				return;
 			}
             GlobalStates.screenLocked = true;

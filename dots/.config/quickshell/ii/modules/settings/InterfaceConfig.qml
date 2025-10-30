@@ -56,6 +56,20 @@ ContentPage {
         }
 
         ContentSubsection {
+            visible: Config.options.background.clock.style === "digital"
+            title: Translation.tr("Digital clock settings")
+
+            ConfigSwitch {
+                buttonIcon: "animation"
+                text: Translation.tr("Animate time change")
+                checked: Config.options.background.clock.digital.animateChange
+                onCheckedChanged: {
+                    Config.options.background.clock.digital.animateChange = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
 
@@ -787,22 +801,22 @@ ContentPage {
                     }
                 }
             }
+            ConfigSwitch {
+                buttonIcon: "highlight_mouse_cursor"
+                text: Translation.tr("Hover to trigger")
+                checked: Config.options.sidebar.cornerOpen.clickless
+                onCheckedChanged: {
+                    Config.options.sidebar.cornerOpen.clickless = checked;
+                }
+
+                StyledToolTip {
+                    text: Translation.tr("When this is off you'll have to click")
+                }
+            }
             Row {
                 ConfigSwitch {
-                    buttonIcon: "highlight_mouse_cursor"
-                    text: Translation.tr("Hover to trigger")
-                    checked: Config.options.sidebar.cornerOpen.clickless
-                    onCheckedChanged: {
-                        Config.options.sidebar.cornerOpen.clickless = checked;
-                    }
-
-                    StyledToolTip {
-                        text: Translation.tr("When this is off you'll have to click")
-                    }
-                }
-                ConfigSwitch {
                     enabled: !Config.options.sidebar.cornerOpen.clickless
-                    text: Translation.tr("but force at absolute corner")
+                    text: Translation.tr("Force hover open at absolute corner")
                     checked: Config.options.sidebar.cornerOpen.clicklessCornerEnd
                     onCheckedChanged: {
                         Config.options.sidebar.cornerOpen.clicklessCornerEnd = checked;
@@ -812,7 +826,29 @@ ContentPage {
                         text: Translation.tr("When the previous option is off and this is on,\nyou can still hover the corner's end to open sidebar,\nand the remaining area can be used for volume/brightness scroll")
                     }
                 }
+                ConfigSpinBox {
+                    icon: "arrow_cool_down"
+                    text: Translation.tr("with vertical offset")
+                    value: Config.options.sidebar.cornerOpen.clicklessCornerVerticalOffset
+                    from: 0
+                    to: 20
+                    stepSize: 1
+                    onValueChanged: {
+                        Config.options.sidebar.cornerOpen.clicklessCornerVerticalOffset = value;
+                    }
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
+                        StyledToolTip {
+                            extraVisibleCondition: mouseArea.containsMouse
+                            text: Translation.tr("Why this is cool:\nFor non-0 values, it won't trigger when you reach the\nscreen corner along the horizontal edge, but it will when\nyou do along the vertical edge")
+                        }
+                    }
+                }
             }
+            
             ConfigRow {
                 uniform: true
                 ConfigSwitch {

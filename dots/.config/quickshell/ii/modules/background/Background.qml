@@ -96,7 +96,10 @@ Variants {
             left: true
             right: true
         }
-        color: CF.ColorUtils.transparentize(CF.ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.75), (bgRoot.wallpaperIsVideo ? 1 : 0))
+        color: {
+            if (!bgRoot.wallpaperSafetyTriggered || bgRoot.wallpaperIsVideo) return "transparent";
+            return CF.ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.75)
+        }
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
@@ -442,7 +445,7 @@ Variants {
         color: bgRoot.colText
         style: Text.Raised
         styleColor: Appearance.colors.colShadow
-        animateChange: true
+        animateChange: Config.options.background.clock.digital.animateChange
     }
     component ClockStatusText: Row {
         id: statusTextRow

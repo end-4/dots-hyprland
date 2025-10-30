@@ -79,10 +79,12 @@ Scope {
                     implicitWidth: Config.options.sidebar.cornerOpen.cornerRegionWidth
                     implicitHeight: Config.options.sidebar.cornerOpen.cornerRegionHeight
                     hoverEnabled: true
-                    onMouseXChanged: {
+                    onPositionChanged: {
                         if (!Config.options.sidebar.cornerOpen.clicklessCornerEnd) return;
-                        if ((cornerWidget.isRight && mouseArea.mouseX >= mouseArea.width - 2)
-                            || (cornerWidget.isLeft && mouseArea.mouseX <= 2))
+                        const verticalOffset = Config.options.sidebar.cornerOpen.clicklessCornerVerticalOffset;
+                        const correctX = (cornerWidget.isRight && mouseArea.mouseX >= mouseArea.width - 2) || (cornerWidget.isLeft && mouseArea.mouseX <= 2);
+                        const correctY = (cornerWidget.isTop && mouseArea.mouseY > verticalOffset || cornerWidget.isBottom && mouseArea.mouseY < mouseArea.height - verticalOffset);
+                        if (correctX && correctY)
                             screenCorners.actionForCorner[cornerPanelWindow.corner]();
                     }
                     onEntered: {
