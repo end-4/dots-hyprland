@@ -27,7 +27,7 @@ function backup_configs(){
 function ask_backup_configs(){
   showfun backup_clashing_targets
   printf "${STY_RED}"
-  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
+  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?\n"
   printf "${STY_RST}"
   while true;do
     echo "  y = Yes, backup"
