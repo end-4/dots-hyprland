@@ -1,20 +1,19 @@
-# Handle args for subcmd: exp-uninstall
+# Handle args for subcmd: checkdeps
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Syntax: $0 checkdeps [OPTIONS]...
+echo -e "Syntax: $0 checkdeps [OPTIONS] <LIST_FILE_PATH>...
 
-Experimental unintallation.
+Check whether pkgs listed in <LIST_FILE_PATH> exist in AUR or repos of Arch.
 
 Options:
   -h, --help       Show this help message
-      --file       A file in plain text containing package names
 "
 }
 # `man getopt` to see more
 para=$(getopt \
   -o h \
-  -l help,file: \
+  -l help \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -28,21 +27,9 @@ while true ; do
     *) shift ;;
   esac
 done
-#####################################################################################
-## getopt Phase 2
 
-eval set -- "$para"
-while true ; do
-  case "$1" in
-    ## Ones with parameter
-    --file)
-    if [[ -f "$2" ]];
-      then echo "Using list file \"$2\".";LIST_FILE_PATH="$2";shift 2
-      else echo "Wrong argument for $1.";exit 1
-    fi;;
-
-    ## Ending
-    --) break ;;
-    *) echo -e "$0: Wrong parameters.";exit 1;;
-  esac
-done
+if [[ -f "$1" ]]; then
+  echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 2
+else
+  echo "Wrong path of list file.";exit 1
+fi

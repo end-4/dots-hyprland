@@ -69,10 +69,10 @@ function pause(){
   fi
 }
 function remove_bashcomments_emptylines(){
-  mkdir -p "$(dirname "$2")"
   echo "pwd=$(pwd)"
   echo "input=$1"
   echo "output=$2"
+  mkdir -p "$(dirname "$2")"
   cat "$1" | sed -e 's/#.*//' -e '/^[[:space:]]*$/d' > "$2"
 }
 function prevent_sudo_or_root(){
