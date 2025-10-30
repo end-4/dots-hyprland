@@ -1,8 +1,6 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-# This file is currently WIP.
-
 function install_home-manager(){
   # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
   local cmd=home-manager
@@ -96,7 +94,7 @@ function hm_deps(){
     --extra-experimental-features nix-command \
     --extra-experimental-features flakes
   cd $REPO_ROOT
-  x git reset "${SETUP_USERNAME_NIXFILE}"
+  x git rm -f "${SETUP_USERNAME_NIXFILE}"
 }
 
 ##################################################

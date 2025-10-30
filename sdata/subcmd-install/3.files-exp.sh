@@ -83,10 +83,10 @@ for pattern in "${patterns[@]}"; do
     condition=$(echo "$pattern" | yq '.condition // "true"')
     
     # Handle fontconfig fontset override
-    # If II_FONTSET_NAME is set and this is the fontconfig pattern, use the fontset instead
-    if [[ "$from" == "dots/.config/fontconfig" ]] && [[ -n "${II_FONTSET_NAME:-}" ]]; then
-        from="dots-extra/fontsets/${II_FONTSET_NAME}"
-        echo "Using fontset \"${II_FONTSET_NAME}\" for fontconfig"
+    # If FONTSET_DIR_NAME is set and this is the fontconfig pattern, use the fontset instead
+    if [[ "$from" == "dots/.config/fontconfig" ]] && [[ -n "${FONTSET_DIR_NAME:-}" ]]; then
+        from="dots-extra/fontsets/${FONTSET_DIR_NAME}"
+        echo "Using fontset \"${FONTSET_DIR_NAME}\" for fontconfig"
     fi
     
     # Check if pattern should be processed

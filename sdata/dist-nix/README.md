@@ -6,24 +6,10 @@
 **NOTE: The sdata/dist-nix is not for NixOS but every distro, using Nix and home-manager.**
 
 ## plan
-TODO:
-Write a proper `flake.nix` and optionally `home.nix` and other files under `./sdata/dist-nix/iiqs-hm/` to install all dependencies that `./sdata/dist-arch/install-deps.sh` does. (**excluding** the screenlock)
-
-TODO:
-In this script, implement the process below:
-1. Warning user about "this script is only experimental and must only use it at your own risks.", and prompt `y/N` (default N) before proceeding.
-2. If nix not installed:
-   1. install nix via [NixOS/experimental-nix-installer](https://github.com/NixOS/experimental-nix-installer)
-   2. Enable nix for shell 
-      - Update: Skip this step cuz the nix-installer will handle it automatically e.g. in `/etc/zsh/zshrc`.
-   3. Ensure the experimental feature, Nix Flake, is enabled.
-3. cd to `iiqs-hm` and use something like `home-manager switch --flake .#iiqs` to install the dependencies.
-4. Install screen lock using system package manager of the current distro.
-
 Note that this script must be idempotent.
 
 TODO:
-Write guide for people already use nix, so they can manually grab things from this repo to their own Nix/home-manager configurations to install the dependencies.
+- [ ] Write a proper `flake.nix` and `home.nix` and other files under `dist-nix/home-manager/` to install all dependencies that `dist-arch/` does. (**excluding** the screenlock)
 
 ## Attentions
 ### PAM
@@ -37,61 +23,4 @@ The problem could be solved by using the system-provided libpam instead.
 See also https://github.com/caelestia-dots/shell/issues/668
 
 ### NixGL
-On non-NixOS distros, packages installed via home-manager have problem accessing GPU, especially Hyprland because it requires GPU acceleration to launch. `nixGL` should be used to address the problem. Example code in `home.nix`:
-```
-{ config, lib, pkgs, nixgl, ... }:
-{
-  nixGL.packages = nixgl.packages;
-  nixGL.defaultWrapper = "mesa";
-  
-  # other lines not showed here ...
-
-  home = {
-    packages = with pkgs; [
-      cowsay           # normal packages that does not need nixGL
-      lolcat
-      # other lines not showed here ...
-    ]
-    ++ [
-    (config.lib.nixGL.wrap pkgs.firefox-bin)
-    (config.lib.nixGL.wrap pkgs.hyprland)
-    # other lines not showed here ...
-    ];
-    # other lines not showed here ...
-  };
-}
-```
-
-And in `flake.nix`:
-```nix
-{
-  inputs = {
-    nixpkgs.url = "nixpkgs/nixos-25.05";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-    };
-    nixgl.url = "github:nix-community/nixGL";
-  };
-  outputs = { nixpkgs, home-manager, nixgl, ... }:
-    let
-      lib = nixpkgs.lib;
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ nixgl.overlay ];
-      };
-    in {
-      homeConfigurations = {
-        mydot = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit nixgl; };
-          modules = [ ./home.nix ];
-          };
-        };
-      };
-}
-```
+On non-NixOS distros, packages installed via home-manager have problem accessing GPU, especially Hyprland because it requires GPU acceleration to launch. `nixGL` should be used to address the problem.
