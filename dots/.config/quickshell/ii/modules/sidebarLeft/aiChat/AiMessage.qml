@@ -269,9 +269,13 @@ Rectangle {
 
             Item {
                 Layout.fillWidth: true
-                implicitHeight: loadingIndicatorLoader.implicitHeight
+                implicitHeight: loadingIndicatorLoader.shown ? loadingIndicatorLoader.implicitHeight : 0
                 implicitWidth: loadingIndicatorLoader.implicitWidth
-                visible: loadingIndicatorLoader.visible 
+                visible: implicitHeight > 0
+
+                Behavior on implicitHeight {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
                 FadeLoader {
                     id: loadingIndicatorLoader
                     anchors.centerIn: parent
