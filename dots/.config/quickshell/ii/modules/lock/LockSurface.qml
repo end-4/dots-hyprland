@@ -101,22 +101,17 @@ MouseArea {
         // Fingerprint
         Loader {
             Layout.leftMargin: 10
+            Layout.rightMargin: 6
             Layout.alignment: Qt.AlignVCenter
-            active: root.context.fingerprintsConfigured // Bind to actual fingerprint availability
-            visible: root.context.fingerprintsConfigured
+            active: root.context.fingerprintsConfigured
+            visible: active
 
-            sourceComponent: Row {
-                spacing: 8
-
-                MaterialSymbol {
-                    id: fingerprintIcon
-                    anchors.verticalCenter: parent.verticalCenter
-                    fill: 1
-                    text: "fingerprint"
-                    iconSize: Appearance.font.pixelSize.huge
-                    color: Appearance.colors.colOnSurfaceVariant
-                    animateChange: true
-                }
+            sourceComponent: MaterialSymbol {
+                id: fingerprintIcon
+                fill: 1
+                text: "fingerprint"
+                iconSize: Appearance.font.pixelSize.hugeass
+                color: Appearance.colors.colOnSurfaceVariant
             }
         }
 
