@@ -38,7 +38,7 @@
       ## libnotify: provides notify-send
       jq rsync inetutils libnotify
       ## Media related
-      brightnessctl playerctl pavucontrol
+      brightnessctl pavucontrol
       ## Clipboard/Emoji
       wl-clipboard cliphist
       ## Terminal and shell
@@ -52,6 +52,20 @@
 
       ##### Not work, to be solved #####
       # swaylock pamtester
+
+      ### illogical-impulse-audio
+      libcava #cava
+      lxqt.pavucontrol-qt #pavucontrol-qt
+      wireplumber #wireplumber (not explicitly used)
+      pipewire #pipewire-pulse
+	    libdbusmenu-gtk3 #libdbusmenu-gtk3 (not explicitly used)
+	    playerctl #playerctl
+
+      ### illogical-impulse-backlight
+      # TODO: geoclue is used in https://github.com/end-4/dots-hyprland/blob/0551c010b586dbf5578c32de2735698cca0801a7/dots/.config/hypr/hyprland/scripts/start_geoclue_agent.sh with hardcoded absolute path to search the agent. Below will not work without futher tweaks in that start_geoclue_agent.sh
+      geoclue2 # geoclue
+      brightnessctl # brightnessctl
+      ddcutil # ddcutil
     ];
   }//home_attrs;
 }
