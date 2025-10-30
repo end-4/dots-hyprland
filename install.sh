@@ -6,6 +6,11 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+printf "\e[31m\n  !!ATTENTION!!\n  illogical-impulse on AGS is no longer supported. You have to deal with any problems by yourself.\e[00m"
+printf "\e[31m\n  It's highly recommended to switch to main branch instead.\e[00m"
+printf "\e[31m\n  To do this, run the following command:\e[00m"
+printf "\e[31m\n      git checkout main\e[00m"
+sleep 10
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then 
   printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
