@@ -16,6 +16,13 @@ Singleton {
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
     property bool gpsActive: Config.options.bar.weather.enableGPS
 
+    onUseUSCSChanged: {
+        root.getData();
+    }
+    onCityChanged: {
+        root.getData();
+    }
+
     property var location: ({
         valid: false,
         lat: 0,
