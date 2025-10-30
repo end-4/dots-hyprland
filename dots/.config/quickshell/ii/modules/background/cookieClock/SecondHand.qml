@@ -10,7 +10,7 @@ Item {
 
     required property int clockSecond
     property real handWidth: 2
-    property real handLength: 100
+    property real handLength: 95
     property real dotSize: 20
     property string style: "hide"
     property color color: Appearance.colors.colSecondary
@@ -29,7 +29,7 @@ Item {
         anchors {
             left: parent.left
             verticalCenter: parent.verticalCenter
-            leftMargin: 10
+            leftMargin: 10 + (root.style === "dot" ? root.dotSize : 0)
         }
         implicitWidth: root.style === "dot" ? root.dotSize : root.handLength
         implicitHeight: root.style === "dot" ? root.dotSize : root.handWidth

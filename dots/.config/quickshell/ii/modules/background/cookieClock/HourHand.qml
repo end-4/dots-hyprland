@@ -9,7 +9,7 @@ Item {
     required property int clockHour
     required property int clockMinute
     property real handLength: 72
-    property real handWidth: 18
+    property real handWidth: 20
     property string style: "fill"
     property color color: Appearance.colors.colPrimary
 

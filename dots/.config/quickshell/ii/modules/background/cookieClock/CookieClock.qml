@@ -50,9 +50,9 @@ Item {
         print("[Cookie clock] Setting clock preset for category: " + category)
         // "abstract", "anime", "city", "minimalist", "landscape", "plants", "person", "space"
         if (category == "abstract") {
-            applyStyle(10, "dots", "fill", "medium", "dot", "bubble")
+            applyStyle(9, "none", "fill", "medium", "dot", "bubble")
         } else if (category == "anime") {
-            applyStyle(12, "dots", "fill", "bold", "dot", "bubble")
+            applyStyle(7, "none", "fill", "bold", "dot", "bubble")
         } else if (category == "city" || category == "space") {
             applyStyle(23, "full", "hollow", "thin", "classic", "bubble")
         } else if (category == "minimalist") {
