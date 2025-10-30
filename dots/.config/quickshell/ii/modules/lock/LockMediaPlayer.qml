@@ -11,7 +11,6 @@ RowLayout {
     id: mediaPlayerRoot
 
     property MprisPlayer activePlayer 
-    property int maxTitleLength: 30
 
     Layout.fillHeight: true
     Layout.fillWidth: true
@@ -22,7 +21,8 @@ RowLayout {
         if (MprisController.activePlayer.trackTitle !== ""){
             activePlayer = MprisController.activePlayer
         }else {
-            activePlayer = mediaControls.meaningfulPlayers[0]
+            if (mediaControls.meaningfulPlayers.length > 0)
+                activePlayer = mediaControls.meaningfulPlayers[0]
         }
     }
 
@@ -68,13 +68,13 @@ RowLayout {
 
     ColumnLayout {
         RowLayout {
-            spacing: 20
-
+            
             ColumnLayout { // Track Info Texts
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width
                 StyledText {
-                    text: mediaPlayerRoot.activePlayer.trackTitle.length > maxTitleLength
-                          ? mediaPlayerRoot.activePlayer.trackTitle.substring(0, maxTitleLength) + "..."
-                          : mediaPlayerRoot.activePlayer.trackTitle
+                    Layout.fillWidth: true
+                    text: mediaPlayerRoot.activePlayer.trackTitle
 
                     font {
                         family: Appearance.font.family.reading
@@ -97,9 +97,13 @@ RowLayout {
                 }
             }   
 
+            Item { Layout.fillWidth: true }
+
+
             ColumnLayout { // Player Controls
+                Layout.alignment: Qt.AlignRight
                 Item {
-                    Layout.preferredHeight: 2
+                    Layout.fillHeight: true
                 }
                 RowLayout {
                     IconToolbarButton {
@@ -134,7 +138,7 @@ RowLayout {
                     
                 }
                 Item {
-                    Layout.preferredHeight: 2
+                    Layout.fillHeight: true
                 }
             }
         }

@@ -281,6 +281,7 @@ MouseArea {
             opacity: root.toolbarOpacity
             radius: Appearance.rounding.large
             implicitHeight: 120
+            implicitWidth: 450
             LockMediaPlayer {}
         }
     }
