@@ -19,6 +19,7 @@ import qs.modules.notificationPopup
 import qs.modules.onScreenDisplay
 import qs.modules.onScreenKeyboard
 import qs.modules.overview
+import qs.modules.polkit
 import qs.modules.regionSelector
 import qs.modules.screenCorners
 import qs.modules.sessionScreen
@@ -43,6 +44,7 @@ ShellRoot {
     property bool enableLock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
+    property bool enablePolkit: true
     property bool enableOnScreenDisplay: true
     property bool enableOnScreenKeyboard: true
     property bool enableOverview: true
@@ -76,6 +78,7 @@ ShellRoot {
     LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
     LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
     LazyLoader { active: enableOverview; component: Overview {} }
+    LazyLoader { active: enablePolkit; component: Polkit {} }
     LazyLoader { active: enableRegionSelector; component: RegionSelector {} }
     LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
     LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
