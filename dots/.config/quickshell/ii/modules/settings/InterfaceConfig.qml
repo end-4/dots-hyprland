@@ -56,6 +56,20 @@ ContentPage {
         }
 
         ContentSubsection {
+            visible: Config.options.background.clock.style === "digital"
+            title: Translation.tr("Digital clock settings")
+
+            ConfigSwitch {
+                buttonIcon: "animation"
+                text: Translation.tr("Animate time change")
+                checked: Config.options.background.clock.digital.animateChange
+                onCheckedChanged: {
+                    Config.options.background.clock.digital.animateChange = checked;
+                }
+            }
+        }
+
+        ContentSubsection {
             visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
 
@@ -68,6 +82,18 @@ ContentPage {
                 }
                 StyledToolTip {
                     text: Translation.tr("Uses Gemini to categorize the wallpaper then picks a preset based on it.\nYou'll need to set Gemini API key on the left sidebar first.\nImages are downscaled for performance, but just to be safe,\ndo not select wallpapers with sensitive information.")
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "airwave"
+                text: Translation.tr("Use old sine wave cookie implementation")
+                checked: Config.options.background.clock.cookie.useSineCookie
+                onCheckedChanged: {
+                    Config.options.background.clock.cookie.useSineCookie = checked;
+                }
+                StyledToolTip {
+                    text: "Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing"
                 }
             }
 
@@ -528,6 +554,15 @@ ContentPage {
                 checked: Config.options.lock.showLockedText
                 onCheckedChanged: {
                     Config.options.lock.showLockedText = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "shapes"
+                text: Translation.tr('Use varying shapes for password characters')
+                checked: Config.options.lock.materialShapeChars
+                onCheckedChanged: {
+                    Config.options.lock.materialShapeChars = checked;
                 }
             }
         }

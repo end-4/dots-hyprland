@@ -769,6 +769,18 @@ Singleton {
         root.pendingFilePath = CF.FileUtils.trimFileProtocol(filePath);
     }
 
+    function regenerate(messageIndex) {
+        if (messageIndex < 0 || messageIndex >= messageIDs.length) return;
+        const id = root.messageIDs[messageIndex];
+        const message = root.messageByID[id];
+        if (message.role !== "assistant") return;
+        // Remove all messages after this one
+        for (let i = root.messageIDs.length - 1; i >= messageIndex; i--) {
+            root.removeMessage(i);
+        }
+        requester.makeRequest();
+    }
+
     function createFunctionOutputMessage(name, output, includeOutputInChat = true) {
         return aiMessageComponent.createObject(root, {
             "role": "user",

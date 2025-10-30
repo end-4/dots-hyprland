@@ -164,6 +164,10 @@ Singleton {
                         property bool hourMarks: false
                         property bool dateInClock: true
                         property bool constantlyRotate: false
+                        property bool useSineCookie: false
+                    }
+                    property JsonObject digital: JsonObject {
+                        property bool animateChange: true
                     }
                     
                 }
@@ -324,6 +328,7 @@ Singleton {
                     property bool unlockKeyring: true
                     property bool requirePasswordToPower: false
                 }
+                property bool materialShapeChars: true
             }
 
             property JsonObject media: JsonObject {

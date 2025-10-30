@@ -3,16 +3,20 @@ import qs.services
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt.labs.synchronizer
 
 ColumnLayout {
     id: root
     spacing: 0
     required property var tabButtonList // Something like [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}]
-    required property var externalTrackedTab
+    property int currentIndex
     property bool enableIndicatorAnimation: false
     property color colIndicator: Appearance?.colors.colPrimary ?? "#65558F"
     property color colBorder: Appearance?.m3colors.m3outlineVariant ?? "#C6C6D0"
-    signal currentIndexChanged(int index)
+
+    onCurrentIndexChanged: {
+        enableIndicatorAnimation = true
+    }
 
     property bool centerTabBar: parent.width > 500
     Layout.fillWidth: !centerTabBar
@@ -22,9 +26,8 @@ ColumnLayout {
     TabBar {
         id: tabBar
         Layout.fillWidth: true
-        currentIndex: root.externalTrackedTab
-        onCurrentIndexChanged: {
-            root.onCurrentIndexChanged(currentIndex)
+        Synchronizer on currentIndex {
+            property alias source: root.currentIndex
         }
 
         background: Item {
@@ -42,10 +45,11 @@ ColumnLayout {
         Repeater {
             model: root.tabButtonList
             delegate: PrimaryTabButton {
-                selected: (index == root.externalTrackedTab)
+                selected: (index == root.currentIndex)
                 buttonText: modelData.name
                 buttonIcon: modelData.icon
                 minimumWidth: 160
+                onClicked: root.currentIndex = index
             }
         }
     }
@@ -54,12 +58,6 @@ ColumnLayout {
         id: tabIndicator
         Layout.fillWidth: true
         height: 3
-        Connections {
-            target: root
-            function onExternalTrackedTabChanged() {
-                root.enableIndicatorAnimation = true
-            }
-        }
 
         Rectangle {
             id: indicator

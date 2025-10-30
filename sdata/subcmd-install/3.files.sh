@@ -18,72 +18,32 @@ function warning_rsync_normal(){
   printf "${STY_RST}"
 }
 
-function backup_clashing_targets(){
-  # For dirs/files under target_dir, only backup those which clashes with the ones under source_dir
-
-  # Deal with arguments
-  local source_dir="$1"
-  local target_dir="$2"
-  local backup_dir="$3"
-
-  # Find clash dirs/files, save as clash_list
-  local clash_list=()
-  local source_list=($(ls -A "$source_dir"))
-  local target_list=($(ls -A "$target_dir"))
-  declare -A target_map
-  for i in "${target_list[@]}"; do
-    target_map["$i"]=1
-  done
-  for i in "${source_list[@]}"; do
-    if [[ -n "${target_map[$i]}" ]]; then
-      clash_list+=("$i")
-    fi
-  done
-
-  # Construct args_includes for rsync
-  local args_includes=()
-  for i in "${clash_list[@]}"; do
-    if [[ -d "$target_dir/$i" ]]; then
-      args_includes+=(--include="/$i/")
-      args_includes+=(--include="/$i/**")
-    else
-      args_includes+=(--include="/$i")
-    fi
-  done
-  args_includes+=(--exclude='*')
-
-  x mkdir -p $backup_dir
-  x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
+function backup_configs(){
+  backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+  backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+  printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
 }
 
 function ask_backup_configs(){
   showfun backup_clashing_targets
   printf "${STY_RED}"
-  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?"
+  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?\n"
   printf "${STY_RST}"
   while true;do
     echo "  y = Yes, backup"
-    echo "  n = No, skip to next"
+    echo "  n/s = No, skip to next"
     local p; read -p "====> " p
     case $p in
       [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}" ;local backup=true;break ;;
-      [nN]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
+      [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
       *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
      esac
   done
-  if $backup;then
-    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-  fi
+  if $backup;then backup_configs;fi
 }
 function auto_backup_configs(){
   # Backup when $BACKUP_DIR does not exist
-  if [[ ! -d "$BACKUP_DIR" ]]; then
-    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-  fi
+  if [[ ! -d "$BACKUP_DIR" ]]; then backup_configs;fi
 }
 
 #####################################################################################
@@ -143,9 +103,9 @@ esac
 case $SKIP_FONTCONFIG in
   true) sleep 0;;
   *)
-    case "$II_FONTSET_NAME" in
+    case "$FONTSET_DIR_NAME" in
       "") warning_rsync_delete; v rsync -av --delete dots/.config/fontconfig/ "$XDG_CONFIG_HOME"/fontconfig/ ;;
-      *) warning_rsync_delete; v rsync -av --delete dots-extra/fontsets/$II_FONTSET_NAME/ "$XDG_CONFIG_HOME"/fontconfig/ ;;
+      *) warning_rsync_delete; v rsync -av --delete dots-extra/fontsets/$FONTSET_DIR_NAME/ "$XDG_CONFIG_HOME"/fontconfig/ ;;
     esac;;
 esac
 
@@ -159,16 +119,24 @@ case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
     warning_rsync_delete; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    # When hypr/custom does not exist, we assume that it's the firstrun.
+    if [ -d "$XDG_CONFIG_HOME/hypr/custom" ];then ii_firstrun=false;else ii_firstrun=true;fi
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
-      v mv $t $t.old
-      v cp -f dots/.config/hypr/hyprland.conf $t
-      existed_hypr_conf_firstrun=y
+      if $ii_firstrun;then
+        echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
+        v mv $t $t.old
+        v cp -f dots/.config/hypr/hyprland.conf $t
+        existed_hypr_conf_firstrun=y
+      else
+        echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
+        v cp -f dots/.config/hypr/hyprland.conf $t.new
+        existed_hypr_conf=y
+      fi
     else
       echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
       v cp dots/.config/hypr/hyprland.conf $t
-      existed_hypr_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [ -f $t ];then

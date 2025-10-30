@@ -50,9 +50,9 @@ Item {
         print("[Cookie clock] Setting clock preset for category: " + category)
         // "abstract", "anime", "city", "minimalist", "landscape", "plants", "person", "space"
         if (category == "abstract") {
-            applyStyle(10, "dots", "fill", "medium", "dot", "bubble")
+            applyStyle(9, "none", "fill", "medium", "dot", "bubble")
         } else if (category == "anime") {
-            applyStyle(12, "dots", "fill", "bold", "dot", "bubble")
+            applyStyle(7, "none", "fill", "bold", "dot", "bubble")
         } else if (category == "city" || category == "space") {
             applyStyle(23, "full", "hollow", "thin", "classic", "bubble")
         } else if (category == "minimalist") {
@@ -83,121 +83,141 @@ Item {
         }
     }
 
+    property bool useSineCookie: Config.options.background.clock.cookie.useSineCookie
     DropShadow {
-        source: cookie
+        source: useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
         anchors.fill: source
-        horizontalOffset: 0
-        verticalOffset: 1
         radius: 8
         samples: radius * 2 + 1
         color: root.colShadow
         transparentBorder: true
+
+        RotationAnimation on rotation {
+            running: Config.options.background.clock.cookie.constantlyRotate
+            duration: 30000
+            easing.type: Easing.Linear
+            loops: Animation.Infinite
+            from: 360
+            to: 0
+        }
+    }
+    Loader {
+        id: sineCookieLoader
+        z: 0
+        visible: false // The DropShadow already draws it
+        active: useSineCookie
+        sourceComponent: SineCookie {
+            implicitSize: root.implicitSize
+            sides: Config.options.background.clock.cookie.sides
+            color: root.colBackground
+        }
+    }
+    Loader {
+        id: roundedPolygonCookieLoader
+        z: 0
+        visible: false // The DropShadow already draws it
+        active: !useSineCookie
+        sourceComponent: MaterialCookie {
+            implicitSize: root.implicitSize
+            sides: Config.options.background.clock.cookie.sides
+            color: root.colBackground
+        }
     }
 
-    MaterialCookie {
-        id: cookie
-        z: 0
-        implicitSize: root.implicitSize
-        amplitude: implicitSize / 70
-        sides: Config.options.background.clock.cookie.sides
-        color: root.colBackground
-        constantlyRotate: Config.options.background.clock.cookie.constantlyRotate
-    
-        // Hour/minutes numbers/dots/lines
-        MinuteMarks {
-            anchors.fill: parent
+    // Hour/minutes numbers/dots/lines
+    MinuteMarks {
+        anchors.fill: parent
+        color: root.colOnBackground
+    }
+
+    // Stupid extra hour marks in the middle
+    FadeLoader {
+        id: hourMarksLoader
+        anchors.centerIn: parent
+        shown: Config.options.background.clock.cookie.hourMarks
+        sourceComponent: HourMarks {
+            implicitSize: 135 * (1.75 - 0.75 * hourMarksLoader.opacity)
             color: root.colOnBackground
+            colOnBackground: ColorUtils.mix(root.colBackgroundInfo, root.colOnBackground, 0.5)
+        }
+    }
+
+    // Number column in the middle
+    FadeLoader {
+        id: timeColumnLoader
+        anchors.centerIn: parent
+        shown: Config.options.background.clock.cookie.timeIndicators
+        scale: 1.4 - 0.4 * timeColumnLoader.shown
+        Behavior on scale {
+            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
         }
 
-        // Stupid extra hour marks in the middle
-        FadeLoader {
-            id: hourMarksLoader
-            anchors.centerIn: parent
-            shown: Config.options.background.clock.cookie.hourMarks
-            sourceComponent: HourMarks {
-                implicitSize: 135 * (1.75 - 0.75 * hourMarksLoader.opacity)
-                color: root.colOnBackground
-                colOnBackground: ColorUtils.mix(root.colBackgroundInfo, root.colOnBackground, 0.5)
-            }
+        sourceComponent: TimeColumn {
+            color: root.colBackgroundInfo
         }
+    }
 
-        // Number column in the middle
-        FadeLoader {
-            id: timeColumnLoader
-            anchors.centerIn: parent
-            shown: Config.options.background.clock.cookie.timeIndicators
-            scale: 1.4 - 0.4 * timeColumnLoader.shown
-            Behavior on scale {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
-            }
-
-            sourceComponent: TimeColumn {
-                color: root.colBackgroundInfo
-            }
+    // Hour hand
+    FadeLoader {
+        anchors.fill: parent
+        z: 1
+        shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
+        sourceComponent: HourHand {
+            clockHour: root.clockHour
+            clockMinute: root.clockMinute
+            style: Config.options.background.clock.cookie.hourHandStyle
+            color: root.colHourHand
         }
+    }
 
-        // Hour hand
-        FadeLoader {
+    // Minute hand
+    FadeLoader {
+        anchors.fill: parent
+        z: 2
+        shown: Config.options.background.clock.cookie.minuteHandStyle !== "hide"
+        sourceComponent: MinuteHand {
             anchors.fill: parent
-            z: 1
-            shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
-            sourceComponent: HourHand {
-                clockHour: root.clockHour
-                clockMinute: root.clockMinute
-                style: Config.options.background.clock.cookie.hourHandStyle
-                color: root.colHourHand
-            }
+            clockMinute: root.clockMinute
+            style: Config.options.background.clock.cookie.minuteHandStyle
+            color: root.colMinuteHand
         }
+    }
 
-        // Minute hand
-        FadeLoader {
-            anchors.fill: parent
-            z: 2
-            shown: Config.options.background.clock.cookie.minuteHandStyle !== "hide"
-            sourceComponent: MinuteHand {
-                anchors.fill: parent
-                clockMinute: root.clockMinute
-                style: Config.options.background.clock.cookie.minuteHandStyle
-                color: root.colMinuteHand
-            }
+    // Second hand
+    FadeLoader {
+        id: secondHandLoader
+        z: (Config.options.background.clock.cookie.secondHandStyle === "line") ? 2 : 3
+        shown: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "hide"
+        anchors.fill: parent
+        sourceComponent: SecondHand {
+            id: secondHand
+            clockSecond: root.clockSecond
+            style: Config.options.background.clock.cookie.secondHandStyle
+            color: root.colSecondHand
         }
+    }
 
-        // Second hand
-        FadeLoader {
-            id: secondHandLoader
-            z: (Config.options.background.clock.cookie.secondHandStyle === "line") ? 2 : 3
-            shown: Config.options.time.secondPrecision && Config.options.background.clock.cookie.secondHandStyle !== "hide"
-            anchors.fill: parent
-            sourceComponent: SecondHand {
-                id: secondHand
-                clockSecond: root.clockSecond
-                style: Config.options.background.clock.cookie.secondHandStyle
-                color: root.colSecondHand
-            }
+    // Center dot
+    FadeLoader {
+        z: 4
+        anchors.centerIn: parent
+        shown: Config.options.background.clock.cookie.minuteHandStyle !== "bold"
+        sourceComponent: Rectangle {
+            color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
+            implicitWidth: 6
+            implicitHeight: implicitWidth
+            radius: width / 2
         }
+    }
 
-        // Center dot
-        FadeLoader {
-            z: 4
-            anchors.centerIn: parent
-            shown: Config.options.background.clock.cookie.minuteHandStyle !== "bold"
-            sourceComponent: Rectangle {
-                color: Config.options.background.clock.cookie.minuteHandStyle === "medium" ? root.colBackground : root.colMinuteHand
-                implicitWidth: 6
-                implicitHeight: implicitWidth
-                radius: width / 2
-            }
-        }
+    // Date
+    FadeLoader {
+        anchors.fill: parent
+        shown: Config.options.background.clock.cookie.dateStyle !== "hide"
 
-        // Date
-        FadeLoader {
-            anchors.fill: parent
-            shown: Config.options.background.clock.cookie.dateStyle !== "hide"
-
-            sourceComponent: DateIndicator {
-                color: root.colBackgroundInfo
-                style: Config.options.background.clock.cookie.dateStyle
-            }
+        sourceComponent: DateIndicator {
+            color: root.colBackgroundInfo
+            style: Config.options.background.clock.cookie.dateStyle
         }
     }
 }

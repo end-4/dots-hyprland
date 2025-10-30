@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import Qt.labs.synchronizer
 import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland
@@ -22,7 +23,6 @@ Scope { // Scope
             "name": Translation.tr("Elements")
         },
     ]
-    property int selectedTab: 0
 
     Loader {
         id: cheatsheetLoader
@@ -31,6 +31,7 @@ Scope { // Scope
         sourceComponent: PanelWindow { // Window
             id: cheatsheetRoot
             visible: cheatsheetLoader.active
+            property int selectedTab: 0
 
             anchors {
                 top: true
@@ -85,16 +86,16 @@ Scope { // Scope
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
-                            root.selectedTab = Math.min(root.selectedTab + 1, root.tabButtonList.length - 1);
+                            cheatsheetRoot.selectedTab = Math.min(cheatsheetRoot.selectedTab + 1, root.tabButtonList.length - 1);
                             event.accepted = true;
                         } else if (event.key === Qt.Key_PageUp) {
-                            root.selectedTab = Math.max(root.selectedTab - 1, 0);
+                            cheatsheetRoot.selectedTab = Math.max(cheatsheetRoot.selectedTab - 1, 0);
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Tab) {
-                            root.selectedTab = (root.selectedTab + 1) % root.tabButtonList.length;
+                            cheatsheetRoot.selectedTab = (cheatsheetRoot.selectedTab + 1) % root.tabButtonList.length;
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Backtab) {
-                            root.selectedTab = (root.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
+                            cheatsheetRoot.selectedTab = (cheatsheetRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
                             event.accepted = true;
                         }
                     }
@@ -140,9 +141,8 @@ Scope { // Scope
                     PrimaryTabBar { // Tab strip
                         id: tabBar
                         tabButtonList: root.tabButtonList
-                        externalTrackedTab: root.selectedTab
-                        function onCurrentIndexChanged(currentIndex) {
-                            root.selectedTab = currentIndex;
+                        Synchronizer on currentIndex {
+                            property alias source: cheatsheetRoot.selectedTab
                         }
                     }
 
@@ -164,12 +164,12 @@ Scope { // Scope
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
-                        currentIndex: tabBar.externalTrackedTab
+                        currentIndex: cheatsheetRoot.selectedTab
                         onCurrentIndexChanged: {
                             contentWidthBehavior.enabled = true;
                             contentHeightBehavior.enabled = true;
                             tabBar.enableIndicatorAnimation = true;
-                            root.selectedTab = currentIndex;
+                            cheatsheetRoot.selectedTab = currentIndex;
                         }
 
                         clip: true
