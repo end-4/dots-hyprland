@@ -14,9 +14,13 @@ Item {
     property color color: Appearance.colors.colSecondary
 
     rotation: -90 + (360 / 60) * root.clockMinute
-
     Behavior on rotation {
-        animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+        animation: RotationAnimation {
+            direction: RotationAnimation.Clockwise
+            duration: 300
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.animationCurves.emphasized
+        }
     }
 
     Rectangle {
