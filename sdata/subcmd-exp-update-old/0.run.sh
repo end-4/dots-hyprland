@@ -541,6 +541,7 @@ if git remote get-url origin &>/dev/null; then
   log_info "Pulling changes from origin/$current_branch..."
   if git pull; then
     log_success "Successfully pulled latest changes"
+    git submodule update --init --recursive
   else
     log_warning "Failed to pull changes from remote. Continuing with local repository..."
     log_info "You may need to resolve conflicts manually later."
