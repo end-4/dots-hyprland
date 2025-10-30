@@ -23,13 +23,25 @@ Toolbar {
     // Signals
     signal dismiss()
 
-    MaterialCookie {
+    MaterialShape {
         Layout.fillHeight: true
         Layout.leftMargin: 2
         Layout.rightMargin: 2
         implicitSize: 36 // Intentionally smaller because this one is brighter than others
-        sides: 10
-        amplitude: implicitSize / 44
+        shape: switch (root.action) {
+            case RegionSelection.SnipAction.Copy:
+            case RegionSelection.SnipAction.Edit:
+                return MaterialShape.Shape.Cookie4Sided;
+            case RegionSelection.SnipAction.Search:
+                return MaterialShape.Shape.Pentagon;
+            case RegionSelection.SnipAction.CharRecognition:
+                return MaterialShape.Shape.Sunny;
+            case RegionSelection.SnipAction.Record:
+            case RegionSelection.SnipAction.RecordWithSound:
+                return MaterialShape.Shape.Gem;
+            default:
+                return MaterialShape.Shape.Cookie12Sided;
+        }
         color: Appearance.colors.colPrimary
         MaterialSymbol {
             anchors.centerIn: parent
