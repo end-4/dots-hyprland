@@ -358,7 +358,7 @@ Singleton {
         property real notificationPopupWidth: 410
         property real osdWidth: 180
         property real searchWidthCollapsed: 260
-        property real searchWidth: 450
+        property real searchWidth: 400
         property real sidebarWidth: 460
         property real sidebarWidthExtended: 750
         property real baseVerticalBarWidth: 46
