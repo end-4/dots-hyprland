@@ -86,6 +86,12 @@ Item {
             }
             echoMode: root.usePasswordChars ? TextInput.Password : TextInput.Normal
             onAccepted: root.submit();
+
+            Keys.onPressed: event => { // Esc to close
+                if (event.key === Qt.Key_Escape) {
+                    PolkitService.cancel();
+                }
+            }
         }
 
         WindowDialogButtonRow {
