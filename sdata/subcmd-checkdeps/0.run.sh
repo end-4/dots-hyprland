@@ -5,8 +5,7 @@
 
 pkglistfile=$(mktemp)
 pkglistfile_orig=${LIST_FILE_PATH}
-mkdir -p ./cache
-pkglistfile_orig_s=./cache/dependencies_stripped.conf
+pkglistfile_orig_s=${REPO_ROOT}/cache/dependencies_stripped.conf
 remove_bashcomments_emptylines $pkglistfile_orig $pkglistfile_orig_s
 
 cat $pkglistfile_orig_s | sed "s_\ _\n_g" > $pkglistfile
