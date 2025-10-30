@@ -170,14 +170,18 @@ MouseArea {
             }
 
             // We're drawing dots manually
-            color: ColorUtils.transparentize(Appearance.colors.colOnLayer1)
-            PasswordChars {
+            property bool materialShapeChars: Config.options.lock.materialShapeChars
+            color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, materialShapeChars ? 1 : 0)
+            Loader {
+                active: passwordBox.materialShapeChars
                 anchors {
                     fill: parent
                     leftMargin: passwordBox.padding
                     rightMargin: passwordBox.padding
                 }
-                length: root.context.currentText.length
+                sourceComponent: PasswordChars {
+                    length: root.context.currentText.length
+                }
             }
         }
 

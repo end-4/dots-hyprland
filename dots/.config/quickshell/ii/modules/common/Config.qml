@@ -328,6 +328,7 @@ Singleton {
                     property bool unlockKeyring: true
                     property bool requirePasswordToPower: false
                 }
+                property bool materialShapeChars: true
             }
 
             property JsonObject media: JsonObject {

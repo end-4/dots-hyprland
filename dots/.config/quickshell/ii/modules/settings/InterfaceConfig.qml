@@ -556,6 +556,15 @@ ContentPage {
                     Config.options.lock.showLockedText = checked;
                 }
             }
+
+            ConfigSwitch {
+                buttonIcon: "shapes"
+                text: Translation.tr('Use varying shapes for password characters')
+                checked: Config.options.lock.materialShapeChars
+                onCheckedChanged: {
+                    Config.options.lock.materialShapeChars = checked;
+                }
+            }
         }
         ContentSubsection {
             title: Translation.tr("Style: Blurred")
