@@ -124,7 +124,7 @@ Scope {
             if (result == PamResult.Success) {
                 root.unlocked(root.targetAction);
                 stopFingerPam();
-            } else if (result == PamResult.Error){ // if timeout or etc..
+            } else if (result == PamResult.Error) { // if timeout or etc..
                 tryFingerUnlock()
             }
         }
