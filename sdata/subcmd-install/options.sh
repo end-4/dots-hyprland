@@ -81,7 +81,7 @@ while true ; do
     ## Ones with parameter
     --fontset)
     if [[ -d "${REPO_ROOT}/dots-extra/fontsets/$2" ]];
-      then echo "Using fontset \"$2\".";II_FONTSET_NAME="$2";shift 2
+      then echo "Using fontset \"$2\".";FONTSET_DIR_NAME="$2";shift 2
       else echo "Wrong argument for $1.";exit 1
     fi;;
 

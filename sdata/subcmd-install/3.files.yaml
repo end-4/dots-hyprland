@@ -57,7 +57,7 @@ patterns:
   - from: "dots/.local/share/konsole"
     to: "$XDG_DATA_HOME/konsole"
     mode: "soft"
-  # Fontconfig (default - fontsets handled separately if II_FONTSET_NAME is set)
+  # Fontconfig (default - fontsets handled separately if FONTSET_DIR_NAME is set)
   - from: "dots/.config/fontconfig"
     to: "$XDG_CONFIG_HOME/fontconfig"
     mode: "sync"
