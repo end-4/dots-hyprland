@@ -54,16 +54,28 @@ ContentPage {
             }
         }
             
-
-        ConfigSpinBox {
-            icon: "loupe"
-            text: Translation.tr("Scale (%)")
-            value: Config.options.background.clock.scale * 100
-            from: 1
-            to: 200
-            stepSize: 2
-            onValueChanged: {
-                Config.options.background.clock.scale = value / 100;
+        ConfigRow {
+            ConfigSpinBox {
+                icon: "loupe"
+                text: Translation.tr("Scale (%)")
+                value: Config.options.background.clock.scale * 100
+                from: 1
+                to: 200
+                stepSize: 2
+                onValueChanged: {
+                    Config.options.background.clock.scale = value / 100;
+                }
+            }
+            RippleButtonWithIcon {
+                materialIcon: "restore"
+                mainText: Translation.tr("Reset position")
+                onClicked: {
+                    Config.options.background.clock.x = 960;
+                    Config.options.background.clock.y = 540;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Use this to reset the widget position if it somehow goes off-screen.")
+                }
             }
         }
 
@@ -358,17 +370,29 @@ ContentPage {
             }
         }
 
-        ConfigSpinBox {
-            icon: "loupe"
-            text: Translation.tr("Scale (%)")
-            value: Config.options.background.weather.scale * 100
-            from: 1
-            to: 200
-            stepSize: 2
-            onValueChanged: {
-                Config.options.background.weather.scale = value / 100;
+        ConfigRow{
+            ConfigSpinBox {
+                icon: "loupe"
+                text: Translation.tr("Scale (%)")
+                value: Config.options.background.weather.scale * 100
+                from: 1
+                to: 200
+                stepSize: 2
+                onValueChanged: {
+                    Config.options.background.weather.scale = value / 100;
+                }
+            }
+            RippleButtonWithIcon {
+                materialIcon: "restore"
+                mainText: Translation.tr("Reset position")
+                onClicked: {
+                    Config.options.background.weather.x = 960;
+                    Config.options.background.weather.y = 540;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Use this to reset the widget position if it somehow goes off-screen.")
+                }
             }
         }
-
     }
 }

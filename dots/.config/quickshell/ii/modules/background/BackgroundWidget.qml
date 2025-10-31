@@ -1,19 +1,30 @@
+import QtQuick
+import Quickshell
+import Quickshell.Hyprland
+import Quickshell.Io
+import Quickshell.Wayland
+
 import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import QtQuick
-import Quickshell
-import Quickshell.Io
-import Quickshell.Wayland
-import Quickshell.Hyprland
-
 import qs.modules.background.widgets.cookieClock
+
 
 Item {
     id: widgetRoot
 
-    property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
+    signal rightClicked()
+    signal middleClicked()
+    signal setPosToLeastBusy()
+
+    property string widgetPrefix: ""
+
+    function isWallpaperVideo(path) {
+        return [".mp4", ".webm", ".mkv", ".avi", ".mov"].some(ext => path.endsWith(ext))
+    }
+
+    property bool wallpaperIsVideo: isWallpaperVideo(Config.options.background.wallpaperPath)
     property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
     property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
     property var collectorData: {
@@ -22,16 +33,19 @@ Item {
         "dominant_color": Appearance.colors.colPrimary
     }
 
-    signal rightClicked()
-    signal middleClicked()
-    signal setPosToLeastBusy()
+    property string leastBusyPlacedWidget: Config.options.background.widgets.leastBusyPlacedWidget
+    onLeastBusyPlacedWidget: {
+        updateLeastBusyRegion()
+    }
+
+    
 
     property real scaleMultiplier: 1
     onScaleMultiplierChanged: {
         scale = scaleMultiplier
     }
 
-    property bool leastBusyMode: false
+    property bool leastBusyMode: Config.options.background.widgets.leastBusyPlacedWidget === widgetPrefix 
     property bool lockPosition: false
     Drag.active: dragArea.drag.active
 
@@ -72,30 +86,28 @@ Item {
         drag.minimumY: - implicitHeight / 2 - wallpaper.y
         drag.maximumY: monitor.height - widgetRoot.implicitHeight - wallpaper.y
 
+        function setDragState(active) {
+            down = active
+            widgetRoot.scale = scaleMultiplier * (active ? 1.07 : 1.0)
+            widgetRoot.opacity = active ? 0.8 : 1.0
+        }
+
         onPressed: (mouse) => {
-            if (mouse.button == Qt.LeftButton && widgetRoot.lockPosition || widgetRoot.leastBusyMode) return
-            down = true
-            widgetRoot.scale = scaleMultiplier * 1.07
-            widgetRoot.opacity = 0.8
-            
+            if (mouse.button !== Qt.LeftButton || widgetRoot.lockPosition || widgetRoot.leastBusyMode) return
+                setDragState(true)
         }
         onReleased: (mouse) => {
-            if (mouse.button == Qt.LeftButton && widgetRoot.lockPosition&& widgetRoot.leastBusyMode) return
-            down = false
-            widgetRoot.scale = scaleMultiplier * 1.0
-            widgetRoot.opacity = 1.0
-            
+            if (mouse.button !== Qt.LeftButton) return
+                setDragState(false)
         }
         onClicked: (mouse) => {
-            if (mouse.button === Qt.RightButton){
+            if (mouse.button === Qt.RightButton)
                 widgetRoot.rightClicked()
-            }
-            if (mouse.button === Qt.MiddleButton){
+            if (mouse.button === Qt.MiddleButton)
                 widgetRoot.middleClicked()
-            }
         }
         onDragActiveChanged: {
-            if (!dragActive) widgetRoot.savePosition(widgetRoot.x, widgetRoot.y) // saving position to config after dragging
+            if (!dragActive) widgetRoot.savePosition()
         }
     }
 }

@@ -12,6 +12,8 @@ import "./weather"
 
 BackgroundWidget {
     id: widget
+    
+    widgetPrefix: "weather"
 
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colText: Appearance.colors.colOnLayer1
@@ -27,17 +29,17 @@ BackgroundWidget {
     lockPosition: Config.options.background.weather.lockPosition
     onMiddleClicked: Config.options.background.weather.lockPosition = !Config.options.background.weather.lockPosition
     
-    leastBusyMode: Config.options.background.widgets.leastBusyPlacedWidget === "weather"
     onSetPosToLeastBusy: {
         Config.options.background.weather.x = collectorData.position_x 
         Config.options.background.weather.y = collectorData.position_y
         restorePosition()
     }
 
-    function savePosition(xPos, yPos) {
-        Config.options.background.weather.x = xPos
-        Config.options.background.weather.y = yPos
+    function savePosition() {
+        Config.options.background.weather.x = x
+        Config.options.background.weather.y = y
     }
+
     onRightClicked: {
         Weather.getData();
         Quickshell.execDetached(["notify-send", 

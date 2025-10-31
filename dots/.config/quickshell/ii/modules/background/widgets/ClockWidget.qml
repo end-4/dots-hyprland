@@ -1,21 +1,25 @@
+import QtQuick
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+import Quickshell.Hyprland
+
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions as CF
-import QtQuick
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import Quickshell
-import Quickshell.Io
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
 import "../"
 import "./cookieClock"
 
 BackgroundWidget {
     id: widget
+
+    widgetPrefix: "clock"
 
     property color dominantColor: widget.collectorData.dominant_color
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
@@ -34,13 +38,11 @@ BackgroundWidget {
     x: centerClock ? centerOnScreen()[0] : restorePosition()[0]
     y: centerClock ? centerOnScreen()[1] : restorePosition()[1]
 
-    leastBusyMode: Config.options.background.widgets.leastBusyPlacedWidget === "clock"
     onSetPosToLeastBusy: {
         Config.options.background.clock.x = collectorData.position_x 
         Config.options.background.clock.y = collectorData.position_y
         restorePosition()
     }
-
     function centerOnScreen() {
         // for lock screen
         x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x
@@ -53,60 +55,60 @@ BackgroundWidget {
         y = Config.options.background.clock.y
         return [Config.options.background.clock.x,Config.options.background.clock.y]
     }
-    function savePosition(xPos, yPos) {
-        Config.options.background.clock.x = xPos
-        Config.options.background.clock.y = yPos
+    function savePosition() {
+        Config.options.background.clock.x = x
+        Config.options.background.clock.y = y
     }
 
     Loader {
         id: cookieClockLoader
         active: Config.options.background.clock.style === "cookie"
-        sourceComponent: ColumnLayout {
-            Component.onCompleted: {
-                widget.implicitWidth = implicitWidth
-                widget.implicitHeight = implicitHeight
-            }
-            CookieClock {
-                id: cookieClock
-            }
-            CookieQuote {
-                visible: GlobalStates.screenLocked && Config.options.lock.showLockedText || Config.options.background.showQuote && Config.options.background.quote !== ""
-                anchors {
-                    top: cookieClock.bottom
-                    topMargin: 20
-                    horizontalCenter: cookieClock.horizontalCenter
-                }
-            }
-        }
+        sourceComponent: CookieClockComponent {}
     }
     
     Loader {
         id: digitalClockLoader
         scale: Config.options.background.clock.scale
         active: Config.options.background.clock.style === "digital"
-        sourceComponent:  ColumnLayout {
-            spacing: 5
-            Component.onCompleted: {
-                widget.implicitWidth = implicitWidth
-                widget.implicitHeight = implicitHeight
-            }
-            ClockText { font.pixelSize: 90; text: DateTime.time }
-            ClockText { Layout.topMargin: -10; text: DateTime.date }
-            ClockText {
-                text: GlobalStates.screenLocked && Config.options.lock.showLockedText ? "Locked" :
-                      Config.options.background.showQuote ? Config.options.background.quote : ""
-                font {
-                    family: Appearance.font.family.main
-                    pixelSize: Appearance.font.pixelSize.normal
-                    weight: Font.Thin
-                    italic: true
-                }
+        sourceComponent: DigitalClock {}
+    }
+    
+    component CookieClockComponent: ColumnLayout {
+        Component.onCompleted: {
+            widget.implicitWidth = implicitWidth
+            widget.implicitHeight = implicitHeight
+        }
+        CookieClock {
+            id: cookieClock
+        }
+        CookieQuote {
+            visible: GlobalStates.screenLocked && Config.options.lock.showLockedText || Config.options.background.showQuote && Config.options.background.quote !== ""
+            anchors {
+                top: cookieClock.bottom
+                topMargin: 20
+                horizontalCenter: cookieClock.horizontalCenter
             }
         }
     }
-    
-    
-
+    component DigitalClock: ColumnLayout {
+        spacing: 5
+        Component.onCompleted: {
+            widget.implicitWidth = implicitWidth
+            widget.implicitHeight = implicitHeight
+        }
+        ClockText { font.pixelSize: 90; text: DateTime.time }
+        ClockText { Layout.topMargin: -10; text: DateTime.date }
+        ClockText {
+            text: GlobalStates.screenLocked && Config.options.lock.showLockedText ? "Locked" :
+                Config.options.background.showQuote ? Config.options.background.quote : ""
+            font {
+                family: Appearance.font.family.main
+                pixelSize: Appearance.font.pixelSize.normal
+                weight: Font.Thin
+                italic: true
+            }
+        }
+    }
     component ClockText: StyledText {
         Layout.fillWidth: true
         font {
@@ -114,7 +116,6 @@ BackgroundWidget {
             pixelSize: 20
             weight: Font.DemiBold
         }
-        //horizontalAlignment: bgRoot.textHorizontalAlignment
         color: widget.colText
         style: Text.Raised
         styleColor: Appearance.colors.colShadow
