@@ -2,7 +2,7 @@
 # It's not for directly running.
 
 install-yay(){
-  x sudo pacman -S yay
+  x sudo pacman -S --no-confirm yay
 }
 
 # NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
