@@ -17,7 +17,7 @@ while getopts "i:t:s:" opt; do
   esac
 done
 if [ "$SOURCE_TYPE" = "monitor" ]; then
-    MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
+    MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep RUNNING | grep -m1 monitor | awk '{print $2}' || true)
 elif [ "$SOURCE_TYPE" = "input" ]; then
     MONITOR_SOURCE=$(pactl info | grep "Default Source:" | awk '{print $3}' || true)
 else
