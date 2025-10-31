@@ -1,0 +1,44 @@
+/*
+* GTK Colors
+* Generated with Matugen
+*/
+
+@media (prefers-color-scheme: light) {
+    @define-color accent_color {{colors.primary.light.hex}};
+    @define-color accent_fg_color {{colors.on_primary.light.hex}};
+    @define-color accent_bg_color {{colors.primary.light.hex}};
+    @define-color window_bg_color {{colors.background.light.hex}};
+    @define-color window_fg_color {{colors.on_background.light.hex}};
+    @define-color headerbar_bg_color {{colors.surface_dim.light.hex}};
+    @define-color headerbar_fg_color {{colors.on_surface.light.hex}};
+    @define-color popover_bg_color {{colors.surface_dim.light.hex}};
+    @define-color popover_fg_color {{colors.on_surface.light.hex}};
+    @define-color view_bg_color {{colors.surface.light.hex}};
+    @define-color view_fg_color {{colors.on_surface.light.hex}};
+    @define-color card_bg_color {{colors.surface.light.hex}};
+    @define-color card_fg_color {{colors.on_surface.light.hex}};
+    @define-color sidebar_bg_color @window_bg_color;
+    @define-color sidebar_fg_color @window_fg_color;
+    @define-color sidebar_border_color @window_bg_color;
+    @define-color sidebar_backdrop_color @window_bg_color;
+}
+
+@media (prefers-color-scheme: dark) {
+    @define-color accent_color {{colors.primary.dark.hex}};
+    @define-color accent_fg_color {{colors.on_primary.dark.hex}};
+    @define-color accent_bg_color {{colors.primary.dark.hex}};
+    @define-color window_bg_color {{colors.background.dark.hex}};
+    @define-color window_fg_color {{colors.on_background.dark.hex}};
+    @define-color headerbar_bg_color {{colors.surface_dim.dark.hex}};
+    @define-color headerbar_fg_color {{colors.on_surface.dark.hex}};
+    @define-color popover_bg_color {{colors.surface_dim.dark.hex}};
+    @define-color popover_fg_color {{colors.on_surface.dark.hex}};
+    @define-color view_bg_color {{colors.surface.dark.hex}};
+    @define-color view_fg_color {{colors.on_surface.dark.hex}};
+    @define-color card_bg_color {{colors.surface.dark.hex}};
+    @define-color card_fg_color {{colors.on_surface.dark.hex}};
+    @define-color sidebar_bg_color @window_bg_color;
+    @define-color sidebar_fg_color @window_fg_color;
+    @define-color sidebar_border_color @window_bg_color;
+    @define-color sidebar_backdrop_color @window_bg_color;
+}
