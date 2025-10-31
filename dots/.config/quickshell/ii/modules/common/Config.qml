@@ -185,11 +185,15 @@ Singleton {
                     property int y: 750
                     property bool lockPosition: false
                 }
+                property JsonObject widgets: JsonObject {
+                    property string leastBusyPositionWidget: "" 
+                }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property string quote: ""
                 property bool showQuote: false
                 property bool hideWhenFullscreen: true
+
             }
 
             property JsonObject bar: JsonObject {

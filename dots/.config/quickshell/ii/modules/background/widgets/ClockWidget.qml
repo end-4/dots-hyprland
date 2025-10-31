@@ -34,13 +34,13 @@ BackgroundWidget {
     x: centerClock ? centerOnScreen()[0] : restorePosition()[0]
     y: centerClock ? centerOnScreen()[1] : restorePosition()[1]
 
-    leastBusyMode: true
-
+    leastBusyMode: Config.options.background.widgets.leastBusyPositionWidget === "clock"
     onSetPosToLeastBusy: {
         Config.options.background.clock.x = collectorData.position_x 
         Config.options.background.clock.y = collectorData.position_y
         restorePosition()
     }
+
     function centerOnScreen() {
         // for lock screen
         x = bgRoot.monitor.width / 2 - implicitWidth / 2 - wallpaper.x

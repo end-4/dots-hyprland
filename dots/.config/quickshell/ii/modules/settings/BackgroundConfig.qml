@@ -8,6 +8,40 @@ ContentPage {
     forceWidth: true
 
     ContentSection {
+        icon: "dashboard"
+        title: Translation.tr("Widgets")
+
+        ContentSubsection {
+            title: Translation.tr("Least busy position widget")
+            tooltip: Translation.tr("Select a widget to use the least busy position feature with.\nThe selected widget will automatically move to the least busy area of the wallpaper.")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.widgets.leastBusyPositionWidget
+                onSelected: newValue => {
+                    Config.options.background.widgets.leastBusyPositionWidget = newValue;
+                }
+                options: [
+                    {
+                        displayName: "",
+                        icon: "block",
+                        value: ""
+                    },
+                    {
+                        displayName: Translation.tr("Clock"),
+                        icon: "clock_loader_40",
+                        value: "clock"
+                    },
+                    {
+                        displayName: Translation.tr("Weather"),
+                        icon: "weather_hail",
+                        value: "weather"
+                    }
+                ]
+            }
+        }
+
+    }
+
+    ContentSection {
         icon: "clock_loader_60"
         title: Translation.tr("Clock")
 

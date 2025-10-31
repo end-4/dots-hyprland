@@ -27,11 +27,17 @@ BackgroundWidget {
     lockPosition: Config.options.background.weather.lockPosition
     onMiddleClicked: Config.options.background.weather.lockPosition = !Config.options.background.weather.lockPosition
     
+    leastBusyMode: Config.options.background.widgets.leastBusyPositionWidget === "weather"
+    onSetPosToLeastBusy: {
+        Config.options.background.weather.x = collectorData.position_x 
+        Config.options.background.weather.y = collectorData.position_y
+        restorePosition()
+    }
+
     function savePosition(xPos, yPos) {
         Config.options.background.weather.x = xPos
         Config.options.background.weather.y = yPos
     }
-
     onRightClicked: {
         Weather.getData();
         Quickshell.execDetached(["notify-send", 
