@@ -2,14 +2,7 @@
 # It's not for directly running.
 
 install-yay(){
-  x sudo pacman -S --needed --noconfirm base-devel
-  x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
-  x cd /tmp/buildyay
-  x makepkg -o
-  x makepkg -se
-  x makepkg -i --noconfirm
-  x cd ${REPO_ROOT}
-  rm -rf /tmp/buildyay
+  x sudo pacman -S yay
 }
 
 # NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
