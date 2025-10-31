@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=4
+pkgrel=5
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
@@ -13,6 +13,7 @@ depends=(
   hyprlock
   hyprpicker
   nm-connection-editor
+  songrec
   translate-shell
   wlogout
 )
