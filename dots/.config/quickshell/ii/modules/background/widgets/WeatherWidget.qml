@@ -15,9 +15,10 @@ BackgroundWidget {
 
     property color colBackground: Appearance.colors.colSecondaryContainer
     property color colText: Appearance.colors.colOnLayer1
-    property int widgetRotation: 45
-    property int widgetWidth: 175
-    property int widgetHeight: 140
+    property int widgetSize: 160
+
+    implicitWidth: widget.widgetSize
+    implicitHeight: widget.widgetSize
     
     scaleMultiplier: Config.options.background.weather.scale
     x: Config.options.background.weather.x
