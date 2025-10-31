@@ -292,8 +292,9 @@ function check_disk_space() {
   return 0
 }
 
-function auto_get_git_submodule(){
+function auto_update_git_submodule(){
   if git submodule status --recursive | grep -E '^[+-U]';then
+    # Note: `git pull --recurse-submodules` cannot substitute `git submodule update --init --recursive` cuz it does not init a submodule when needed.
     x git submodule update --init --recursive
   fi
 }
