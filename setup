@@ -11,7 +11,8 @@ set -e
 
 #####################################################################################
 showhelp_global(){
-printf "${STY_CYAN}NOTE:
+printf "
+${STY_CYAN}NOTE:
   The old \"./install.sh\"   is now \"./setup install\"
   The old \"./update.sh\"    is now \"./setup exp-update\"
   The old \"./uninstall.sh\" is now \"./setup exp-uninstall\"${STY_RST}
@@ -36,6 +37,8 @@ Subcommands:
 
 For each <subcommand>, use -h for details:
   $0 <subcommand> -h
+
+${STY_BOLD}${STY_CYAN}Access ${STY_UNDERLINE}https://ii.clsty.link${STY_RST} ${STY_BOLD}${STY_CYAN}for documentation about illogical-impulse.${STY_RST}
 "
 }
 case $1 in
