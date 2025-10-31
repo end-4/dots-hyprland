@@ -74,6 +74,14 @@ Item {
             }
         }
 
+        WindowDialogParagraph {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            text: PolkitService.flow.supplementaryMessage
+            color: Appearance.colors.colTertiary
+            visible: PolkitService.fingerprintAvailable
+        }
+        
         MaterialSymbol {
             Layout.alignment: Qt.AlignHCenter
             iconSize: 54
