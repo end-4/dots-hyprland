@@ -22,6 +22,10 @@ Scope { // Scope
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
+        {
+            "icon": "toast",
+            "name": Translation.tr("Copypad")
+        }
     ]
 
     Loader {
@@ -184,6 +188,7 @@ Scope { // Scope
 
                         CheatsheetKeybinds {}
                         CheatsheetPeriodicTable {}
+                        CheatsheetCopypad {}
                     }
                 }
             }
