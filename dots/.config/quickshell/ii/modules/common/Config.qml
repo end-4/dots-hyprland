@@ -169,7 +169,7 @@ Singleton {
                     property JsonObject digital: JsonObject {
                         property bool animateChange: true
                     }
-                    
+
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
@@ -234,11 +234,11 @@ Singleton {
                     property bool showAppIcons: true
                     property bool alwaysShowNumbers: false
                     property int showNumberDelay: 300 // milliseconds
-                    property list<string> numberMap: ["1", "2"] // Characters to show instead of numbers on workspace indicator
+                    property list<string> numberMap: [ "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" ]
                     property bool useNerdFont: false
                 }
                 property JsonObject weather: JsonObject {
-                    property bool enable: false
+                    property bool enable: true
                     property bool enableGPS: true // gps based location
                     property string city: "" // When 'enableGPS' is false
                     property bool useUSCS: false // Instead of metric (SI) units
@@ -479,11 +479,11 @@ Singleton {
                 }
                 property bool secondPrecision: false
             }
-            
+
             property JsonObject wallpaperSelector: JsonObject {
                 property bool useSystemFileDialog: false
             }
-            
+
             property JsonObject windows: JsonObject {
                 property bool showTitlebar: true // Client-side decoration for shell apps
                 property bool centerTitle: true

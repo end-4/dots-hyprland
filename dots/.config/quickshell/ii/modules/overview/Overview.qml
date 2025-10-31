@@ -10,6 +10,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import qs.modules.common.functions as CF
 
 Scope {
     id: overviewScope
@@ -29,7 +30,10 @@ Scope {
             WlrLayershell.namespace: "quickshell:overview"
             WlrLayershell.layer: WlrLayer.Overlay
             // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-            color: "transparent"
+
+            color: {
+                return CF.ColorUtils.transparentize(Appearance.colors.colPrimary, 0.5);
+            }
 
             mask: Region {
                 item: GlobalStates.overviewOpen ? columnLayout : null

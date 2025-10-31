@@ -151,6 +151,14 @@ Item { // Bar content region
         VerticalBarSeparator {
             visible: Config.options?.bar.borderless
         }
+        Loader {
+            Layout.leftMargin: 4
+            active: Config.options.bar.weather.enable
+
+            sourceComponent: BarGroup {
+                WeatherBar {}
+            }
+        }
 
         MouseArea {
             id: rightCenterGroup
@@ -335,15 +343,6 @@ Item { // Bar content region
                 Layout.fillHeight: true
             }
 
-            // Weather
-            Loader {
-                Layout.leftMargin: 4
-                active: Config.options.bar.weather.enable
-
-                sourceComponent: BarGroup {
-                    WeatherBar {}
-                }
-            }
         }
     }
 }
