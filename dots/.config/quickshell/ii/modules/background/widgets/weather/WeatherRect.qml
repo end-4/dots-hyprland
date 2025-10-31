@@ -12,10 +12,6 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: widgetRect
 
-    WeatherSymbols {
-        id: symbols
-    }
-
     DropShadow {
         source: weatherRect
         anchors.fill: weatherRect
@@ -51,7 +47,7 @@ Item {
         MaterialSymbol {
             iconSize: 65
             color: widget.colText
-            text: symbols.codeToName[Weather.data.wCode] ?? "cached"
+            text: Icons.getWeatherName(Weather.data.wCode) ?? "cached"
             Layout.alignment: Qt.AlignVCenter
             anchors {
                 left: parent.left
