@@ -65,7 +65,7 @@ Item {
 
         WindowDialogParagraph {
             Layout.fillWidth: true
-            horizontalAlignment: Text.AlignLeft
+            horizontalAlignment: Text.AlignHCenter
             text: {
                 if (!PolkitService.flow) return;
                 return PolkitService.flow.message.endsWith(".")
@@ -74,11 +74,20 @@ Item {
             }
         }
 
+        MaterialSymbol {
+            Layout.alignment: Qt.AlignHCenter
+            iconSize: 54
+            text: "fingerprint"
+            color: Appearance.colors.colSecondary
+            visible: PolkitService.isFingerprintCurrentlyOffered
+        }
+
         MaterialTextField {
             id: inputField
             Layout.fillWidth: true
             focus: true
             enabled: PolkitService.interactionAvailable
+            visible: !PolkitService.isFingerprintCurrentlyOffered
             placeholderText: {
                 const inputPrompt = PolkitService.flow?.inputPrompt.trim() ?? "";
                 const cleanedInputPrompt = inputPrompt.endsWith(":") ? inputPrompt.slice(0, -1) : inputPrompt;
