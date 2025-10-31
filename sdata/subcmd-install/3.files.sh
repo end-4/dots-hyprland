@@ -18,32 +18,33 @@ function warning_rsync_normal(){
   printf "${STY_RST}"
 }
 
-function backup_configs(){
-  backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-  backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-  printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-}
-
-function ask_backup_configs(){
-  showfun backup_clashing_targets
-  printf "${STY_RED}"
-  printf "Would you like to backup clashing dirs/files under \"$XDG_CONFIG_HOME\" and \"$XDG_DATA_HOME\" to \"$BACKUP_DIR\"?\n"
-  printf "${STY_RST}"
-  while true;do
-    echo "  y = Yes, backup"
-    echo "  n/s = No, skip to next"
-    local p; read -p "====> " p
-    case $p in
-      [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}" ;local backup=true;break ;;
-      [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}" ;local backup=false;break ;;
-      *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
-     esac
-  done
-  if $backup;then backup_configs;fi
-}
 function auto_backup_configs(){
-  # Backup when $BACKUP_DIR does not exist
-  if [[ ! -d "$BACKUP_DIR" ]]; then backup_configs;fi
+  local backup=false
+  case $ask in
+    false) if [[ ! -d "$BACKUP_DIR" ]]; then local backup=true;fi;;
+    *)
+      printf "${STY_RED}"
+      printf "Would you like to backup clashing dirs/files to \"$BACKUP_DIR\"?"
+      printf "${STY_RST}"
+      while true;do
+        echo "  y = Yes, backup"
+        echo "  n/s = No, skip to next"
+        local p; read -p "====> " p
+        case $p in
+          [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}"
+            local backup=true;break ;;
+          [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}"
+            local backup=false;break ;;
+          *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
+        esac
+      done
+      ;;
+  esac
+  if $backup;then
+    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
+    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
+    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
+  fi
 }
 
 #####################################################################################
@@ -53,12 +54,8 @@ v auto_get_git_submodule
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
 
-if [[ ! "${SKIP_BACKUP}" == true ]]; then
-  case $ask in
-    false) auto_backup_configs ;;
-    *) ask_backup_configs ;;
-  esac
-fi
+# Backup
+if [[ ! "${SKIP_BACKUP}" == true ]]; then auto_backup_configs; fi
 
 # TODO: A better method for users to choose their customization,
 # for example some users may prefer ZSH over FISH, and foot over kitty.

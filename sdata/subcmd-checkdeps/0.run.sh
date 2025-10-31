@@ -1,6 +1,9 @@
-#!/usr/bin/env bash
+# This script is meant to be sourced.
+# It's not for directly running.
+
+# shellcheck shell=bash
+
 # Check whether pkgs exist in AUR or repos of Arch.
-#
 # Do NOT abuse this since it consumes extra bandwidth from AUR server.
 
 pkglistfile=$(mktemp)
