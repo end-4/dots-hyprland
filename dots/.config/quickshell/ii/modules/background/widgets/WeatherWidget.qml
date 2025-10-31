@@ -27,7 +27,7 @@ BackgroundWidget {
     lockPosition: Config.options.background.weather.lockPosition
     onMiddleClicked: Config.options.background.weather.lockPosition = !Config.options.background.weather.lockPosition
     
-    leastBusyMode: Config.options.background.widgets.leastBusyPositionWidget === "weather"
+    leastBusyMode: Config.options.background.widgets.leastBusyPlacedWidget === "weather"
     onSetPosToLeastBusy: {
         Config.options.background.weather.x = collectorData.position_x 
         Config.options.background.weather.y = collectorData.position_y

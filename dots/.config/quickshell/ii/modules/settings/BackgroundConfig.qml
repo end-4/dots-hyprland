@@ -15,9 +15,9 @@ ContentPage {
             title: Translation.tr("Least busy position widget")
             tooltip: Translation.tr("Select a widget to use the least busy position feature with.\nThe selected widget will automatically move to the least busy area of the wallpaper.")
             ConfigSelectionArray {
-                currentValue: Config.options.background.widgets.leastBusyPositionWidget
+                currentValue: Config.options.background.widgets.leastBusyPlacedWidget
                 onSelected: newValue => {
-                    Config.options.background.widgets.leastBusyPositionWidget = newValue;
+                    Config.options.background.widgets.leastBusyPlacedWidget = newValue;
                 }
                 options: [
                     {

@@ -186,7 +186,7 @@ Singleton {
                     property bool lockPosition: false
                 }
                 property JsonObject widgets: JsonObject {
-                    property string leastBusyPositionWidget: "" 
+                    property string leastBusyPlacedWidget: "" 
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""

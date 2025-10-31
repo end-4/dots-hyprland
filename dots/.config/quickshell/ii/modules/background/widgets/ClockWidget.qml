@@ -34,7 +34,7 @@ BackgroundWidget {
     x: centerClock ? centerOnScreen()[0] : restorePosition()[0]
     y: centerClock ? centerOnScreen()[1] : restorePosition()[1]
 
-    leastBusyMode: Config.options.background.widgets.leastBusyPositionWidget === "clock"
+    leastBusyMode: Config.options.background.widgets.leastBusyPlacedWidget === "clock"
     onSetPosToLeastBusy: {
         Config.options.background.clock.x = collectorData.position_x 
         Config.options.background.clock.y = collectorData.position_y
