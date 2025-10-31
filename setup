@@ -68,11 +68,7 @@ case ${SUBCMD_NAME} in
       source ${SUBCMD_DIR}/2.setups-selector.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
-        source ${SUBCMD_DIR}/3.files-exp.sh
-      else
-        source ${SUBCMD_DIR}/3.files.sh
-      fi
+      source ${SUBCMD_DIR}/3.files.sh
     fi
     ;;
   install-deps)
@@ -87,11 +83,7 @@ case ${SUBCMD_NAME} in
     ;;
   install-files)
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      if [[ "${EXPERIMENTAL_FILES_SCRIPT}" == true ]]; then
-        source ${SUBCMD_DIR}/3.files-exp.sh
-      else
-        source ${SUBCMD_DIR}/3.files.sh
-      fi
+      source ${SUBCMD_DIR}/3.files.sh
     fi
     ;;
   *)

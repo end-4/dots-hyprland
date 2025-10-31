@@ -3,65 +3,137 @@
 
 # TODO: https://github.com/end-4/dots-hyprland/issues/2137
 
-printf "${STY_CYAN}[$0]: 3. Copying config files (experimental YAML-based)${STY_RST}\n"
-
 # Configuration file
 CONFIG_FILE="sdata/subcmd-install/3.files.yaml"
 
 # =============================================================================
-# ORIGINAL FUNCTIONS
+wizard_update_preferences() {
+    echo -e "${STY_CYAN}=== Dotfiles Customization ===${STY_RESET}"
+    
+    # Get current preferences
+    current_shell=$(yq '.user_preferences.shell // "fish"' "$CONFIG_FILE")
+    current_terminal=$(yq '.user_preferences.terminal // "kitty"' "$CONFIG_FILE")
+    current_keybindings=$(yq '.user_preferences.keybindings // "default"' "$CONFIG_FILE")
+    
+    echo "Current preferences:"
+    echo "  Shell: $current_shell"
+    echo "  Terminal: $current_terminal"
+    echo "  Keybindings: $current_keybindings"
+    echo
+    
+    # Shell selection
+    echo "Which shell do you prefer?"
+    echo "1) fish (default)"
+    echo "2) zsh"
+    read -p "Enter choice [1-2]: " shell_choice
+    
+    case "$shell_choice" in
+        1|"") shell="fish" ;;
+        2) shell="zsh" ;;
+        *) echo "Invalid choice, using fish"; shell="fish" ;;
+    esac
+    
+    # Terminal selection
+    echo
+    echo "Which terminal do you prefer?"
+    echo "1) kitty (default)"
+    echo "2) foot"
+    read -p "Enter choice [1-2]: " terminal_choice
+    
+    case "$terminal_choice" in
+        1|"") terminal="kitty" ;;
+        2) terminal="foot" ;;
+        *) echo "Invalid choice, using kitty"; terminal="kitty" ;;
+    esac
+    
+    # Keybindings selection
+    echo
+    echo "Which keybinding style do you prefer?"
+    echo "1) default (arrow keys)"
+    echo "2) vim (H/J/K/L)"
+    read -p "Enter choice [1-2]: " keybind_choice
+    
+    case "$keybind_choice" in
+        1|"") keybindings="default" ;;
+        2) keybindings="vim" ;;
+        *) echo "Invalid choice, using default"; keybindings="default" ;;
+    esac
+    
+    # Update YAML in-place
+    yq -i ".user_preferences.shell = \"$shell\"" "$CONFIG_FILE"
+    yq -i ".user_preferences.terminal = \"$terminal\"" "$CONFIG_FILE"
+    yq -i ".user_preferences.keybindings = \"$keybindings\"" "$CONFIG_FILE"
+    
+    echo
+    echo "Preferences updated!"
+}
+
+# Get user preference
+get_pref() {
+    yq -r ".user_preferences.$1" "$CONFIG_FILE"
+}
+
+# Check if pattern should be processed based on user preferences
+should_process_pattern() {
+    local pattern="$1"
+    local condition=$(echo "$pattern" | yq '.condition // "true"')
+
+    # If no condition or condition is "true", always process
+    if [[ "$condition" == "true" ]]; then
+      return 0
+    fi
+    
+    # Extract the preference type and value from condition
+    local type=$(echo "$condition" | yq '.type')
+    local value=$(echo "$condition" | yq '.value')
+    
+    [[ "$(get_pref "$type")" == "$value" ]]
+    
+}
+
+# Compare hashes of files/directories, return true if they are the same, false otherwise
+files_are_same() {
+    local path1="$1"
+    local path2="$2"
+    
+    # Check if paths exist
+    if [[ ! -e "$path1" || ! -e "$path2" ]]; then
+        return 1
+    fi
+    
+    # For directories, use find + md5sum to compare recursively
+    # For files, use md5sum directly
+    if [[ -d "$path1" && -d "$path2" ]]; then
+        # Compare directory contents using find and md5sum
+        local hash1=$(find "$path1" -type f -exec md5sum {} \; | sort -k 2 | md5sum | awk '{print $1}')
+        local hash2=$(find "$path2" -type f -exec md5sum {} \; | sort -k 2 | md5sum | awk '{print $1}')
+        [[ "$hash1" == "$hash2" ]]
+    elif [[ -f "$path1" && -f "$path2" ]]; then
+        # Compare file hashes
+        local hash1=$(md5sum "$path1" | awk '{print $1}')
+        local hash2=$(md5sum "$path2" | awk '{print $1}')
+        [[ "$hash1" == "$hash2" ]]
+    else
+        # One is a file, one is a directory - different types
+        return 1
+    fi
+}
+
+# Find next backup number
+get_next_backup_number() {
+    local base_path="$1"
+    local counter=1
+
+    while [[ -e "${base_path}.old.${counter}" ]]; do
+        ((counter++))
+    done
+
+    echo $counter
+}
+
 # =============================================================================
-
-function warning_rsync_delete(){
-  printf "${STY_YELLOW}"
-  printf "The command below uses --delete for rsync which overwrites the destination folder.\n"
-  printf "${STY_RST}"
-}
-
-function warning_rsync_normal(){
-  printf "${STY_YELLOW}"
-  printf "The command below uses rsync which overwrites the destination.\n"
-  printf "${STY_RST}"
-}
-
-function auto_backup_configs(){
-  local backup=false
-  case $ask in
-    false) if [[ ! -d "$BACKUP_DIR" ]]; then local backup=true;fi;;
-    *)
-      printf "${STY_RED}"
-      printf "Would you like to backup clashing dirs/files to \"$BACKUP_DIR\"?"
-      printf "${STY_RST}"
-      while true;do
-        echo "  y = Yes, backup"
-        echo "  n/s = No, skip to next"
-        local p; read -p "====> " p
-        case $p in
-          [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}"
-            local backup=true;break ;;
-          [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}"
-            local backup=false;break ;;
-          *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
-        esac
-      done
-      ;;
-  esac
-  if $backup;then
-    backup_clashing_targets dots/.config $XDG_CONFIG_HOME "${BACKUP_DIR}/.config"
-    backup_clashing_targets dots/.local/share $XDG_DATA_HOME "${BACKUP_DIR}/.local/share"
-    printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
-  fi
-}
-
-#####################################################################################
-showfun auto_get_git_submodule
-v auto_get_git_submodule
-
-# In case some dirs does not exists
-v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
-
-# Backup
-if [[ ! "${SKIP_BACKUP}" == true ]]; then auto_backup_configs; fi
+# MAIN EXECUTION
+# =============================================================================
 
 # Run user preference wizard
 case $ask in
@@ -188,50 +260,4 @@ for pattern in "${patterns[@]}"; do
     esac
 done
 
-# Prevent hyprland from not fully loaded
-sleep 1
-try hyprctl reload
-
-# Rest of original script logic...
-# (Keep the existing warning messages and file checks)
-
-warn_files=()
-warn_files_tests=()
-warn_files_tests+=(/usr/local/lib/{GUtils-1.0.typelib,Gvc-1.0.typelib,libgutils.so,libgvc.so})
-warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}'[wght]'.ttf)
-warn_files_tests+=(/usr/local/share/licenses/ttf-rubik)
-warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
-warn_files_tests+=(/usr/local/share/licenses/ttf-gabarito)
-warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
-warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
-warn_files_tests+=(/usr/local/bin/{LaTeX,res})
-for i in ${warn_files_tests[@]}; do
-  echo $i
-  test -f $i && warn_files+=($i)
-  test -d $i && warn_files+=($i)
-done
-
 #####################################################################################
-# TODO: output the logs below to a temp file and cat that file, also show the path of the file so users will be able to read it again.
-printf "\n"
-printf "\n"
-printf "\n"
-printf "${STY_CYAN}[$0]: Finished${STY_RESET}\n"
-printf "\n"
-printf "${STY_CYAN}When starting Hyprland from your display manager (login screen) ${STY_RED} DO NOT SELECT UWSM ${STY_RESET}\n"
-printf "\n"
-printf "${STY_CYAN}If you are already running Hyprland,${STY_RESET}\n"
-printf "${STY_CYAN}Press ${STY_BG_CYAN} Ctrl+Super+T ${STY_BG_CYAN} to select a wallpaper${STY_RESET}\n"
-printf "${STY_CYAN}Press ${STY_BG_CYAN} Super+/ ${STY_CYAN} for a list of keybinds${STY_RESET}\n"
-printf "\n"
-printf "${STY_CYAN}For suggestions/hints after installation:${STY_RESET}\n"
-printf "${STY_CYAN}${STY_UNDERLINE} https://ii.clsty.link/en/ii-qs/01setup/#post-installation ${STY_RESET}\n"
-printf "\n"
-
-if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
-  printf "\n${STY_RED}[$0]: \!! Important \!! : Please ensure environment variable ${STY_RESET} \$ILLOGICAL_IMPULSE_VIRTUAL_ENV ${STY_RED} is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.${STY_RESET}\n"
-fi
-
-if [[ ! -z "${warn_files[@]}" ]]; then
-  printf "\n${STY_RED}[$0]: \!! Important \!! : Please delete ${STY_RESET} ${warn_files[*]} ${STY_RED} manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.${STY_RESET}\n"
-fi
