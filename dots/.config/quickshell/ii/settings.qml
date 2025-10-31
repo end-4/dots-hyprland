@@ -46,9 +46,9 @@ ApplicationWindow {
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
-            name: Translation.tr("Widgets"),
+            name: Translation.tr("Background"),
             icon: "widgets",
-            component: "modules/settings/WidgetConfig.qml"
+            component: "modules/settings/BackgroundConfig.qml"
         },
         {
             name: Translation.tr("Services"),
