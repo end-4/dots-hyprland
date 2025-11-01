@@ -7,17 +7,13 @@ import Quickshell
 import Quickshell.Io
 
 /**
- * Simple polled resource usage service with RAM, Swap, and CPU usage.
+ * Simple polled resource usage service with RAM and CPU usage.
  */
 Singleton {
 	property double memoryTotal: 1
 	property double memoryFree: 1
 	property double memoryUsed: memoryTotal - memoryFree
     property double memoryUsedPercentage: memoryUsed / memoryTotal
-    property double swapTotal: 1
-	property double swapFree: 1
-	property double swapUsed: swapTotal - swapFree
-    property double swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property double cpuUsage: 0
     property var previousCpuStats
 
@@ -30,12 +26,10 @@ Singleton {
             fileMeminfo.reload()
             fileStat.reload()
 
-            // Parse memory and swap usage
+            // Parse memory usage
             const textMeminfo = fileMeminfo.text()
             memoryTotal = Number(textMeminfo.match(/MemTotal: *(\d+)/)?.[1] ?? 1)
             memoryFree = Number(textMeminfo.match(/MemAvailable: *(\d+)/)?.[1] ?? 0)
-            swapTotal = Number(textMeminfo.match(/SwapTotal: *(\d+)/)?.[1] ?? 1)
-            swapFree = Number(textMeminfo.match(/SwapFree: *(\d+)/)?.[1] ?? 0)
 
             // Parse CPU usage
             const textStat = fileStat.text()
