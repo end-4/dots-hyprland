@@ -52,7 +52,7 @@ Item {
         MaterialSymbol {
             Layout.alignment: Qt.AlignHCenter
             iconSize: 26
-            text: "shield_locked"
+            text: "security"
             color: Appearance.colors.colSecondary
         }
 

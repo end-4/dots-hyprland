@@ -36,11 +36,11 @@ RippleButton {
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
-    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colSecondaryContainerActive : 
-        ((root.hovered || root.focus) ? Appearance.colors.colSecondaryContainer : 
-        ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, 1))
-    colBackgroundHover: Appearance.colors.colSecondaryContainer
-    colRipple: Appearance.colors.colSecondaryContainerActive
+    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colPrimaryContainerActive : 
+        ((root.hovered || root.focus) ? Appearance.colors.colPrimaryContainer : 
+        ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1))
+    colBackgroundHover: Appearance.colors.colPrimaryContainer
+    colRipple: Appearance.colors.colPrimaryContainerActive
 
     property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
     property string highlightSuffix: `</font></u>`
@@ -228,7 +228,7 @@ RippleButton {
             visible: (root.hovered || root.focus)
             id: clickAction
             font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colSubtext
+            color: Appearance.colors.colOnPrimaryContainer
             horizontalAlignment: Text.AlignRight
             text: root.itemClickActionName
         }

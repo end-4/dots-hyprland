@@ -17,7 +17,7 @@ Item { // Wrapper
     property string searchingText: ""
     property bool showResults: searchingText != ""
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
-    implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
+    implicitHeight: searchBar.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
@@ -94,7 +94,7 @@ Item { // Wrapper
     }
 
     function focusSearchInput() {
-        searchBar.focus();
+        searchBar.forceFocus();
     }
 
     function disableExpandAnimation() {
@@ -201,15 +201,29 @@ Item { // Wrapper
     }
     Rectangle { // Background
         id: searchWidgetContent
-        anchors.centerIn: parent
+        anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+            topMargin: Appearance.sizes.elevationMargin
+        }
+        clip: true
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
         radius: searchBar.height / 2 + searchBar.verticalPadding
         color: Appearance.colors.colBackgroundSurfaceContainer
 
+        Behavior on implicitHeight {
+            id: searchHeightBehavior
+            enabled: GlobalStates.overviewOpen && root.showResults
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+
         ColumnLayout {
             id: columnLayout
-            anchors.centerIn: parent
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
             spacing: 0
 
             // clip: true
