@@ -86,6 +86,25 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "screen_record"
+        title: Translation.tr("Screen Recording")
+
+        ContentSubsection {
+            title: Translation.tr("Save path") + " (example: /home/user/Videos)"
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Path")
+                text: Config.options.screenRecord.savePath
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.screenRecord.savePath = text;
+                }
+            }
+        }
+        
+    }
+
+    ContentSection {
         icon: "search"
         title: Translation.tr("Search")
 

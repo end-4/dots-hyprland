@@ -460,6 +460,10 @@ Singleton {
                 }
             }
 
+            property JsonObject screenRecord: JsonObject {
+                property string savePath: Directories.videos
+            }
+
             property JsonObject sounds: JsonObject {
                 property bool battery: false
                 property bool pomodoro: false
