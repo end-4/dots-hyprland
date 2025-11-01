@@ -9,7 +9,8 @@ StyledText {
     color: Appearance.colors.colOnSurface
     wrapMode: Text.Wrap
     font {
-        pixelSize: Appearance.font.pixelSize.title
         family: Appearance.font.family.title
+        pixelSize: Appearance.font.pixelSize.title
+        variableAxes: Appearance.font.variableAxes.title
     }
 }

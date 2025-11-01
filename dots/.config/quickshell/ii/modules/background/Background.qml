@@ -332,7 +332,6 @@ Variants {
                                 Layout.fillWidth: true
                                 horizontalAlignment: bgRoot.textHorizontalAlignment
                                 font {
-                                    family: Appearance.font.family.main
                                     pixelSize: Appearance.font.pixelSize.normal
                                     weight: 350
                                     italic: true
@@ -472,7 +471,6 @@ Variants {
             color: statusTextRow.textColor
             anchors.verticalCenter: statusTextRow.verticalCenter
             font {
-                family: Appearance.font.family.main
                 pixelSize: Appearance.font.pixelSize.large
                 weight: Font.Normal
             }
