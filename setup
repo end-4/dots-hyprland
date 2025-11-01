@@ -22,7 +22,7 @@ Syntax:
   $0 <subcommand> [OPTIONS]...
 
 Subcommands:
-  install        (Re)Install/Update illogical-impulse.
+  install        (Re)Install/Update end4dots.
                  Note: To update to the latest, manually run \"git pull\" first.
   install-deps   Run the install step \"1. Install dependencies\"
   install-setups Run the install step \"2. Setup for permissions/services etc\"
