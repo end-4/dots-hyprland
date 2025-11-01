@@ -146,12 +146,12 @@ Singleton {
 
             property JsonObject background: JsonObject {
                 property JsonObject clock: JsonObject {
-                    property bool fixedPosition: false
-                    property real x: -500
-                    property real y: -500
                     property bool show: true
                     property string style: "cookie" // Options: "cookie", "digital"
                     property real scale: 1
+                    property int x: 500
+                    property int y: 500
+                    property bool lockPosition: false
                     property JsonObject cookie: JsonObject {
                         property bool aiStyling: false
                         property int sides: 14
@@ -169,13 +169,7 @@ Singleton {
                     property JsonObject digital: JsonObject {
                         property bool animateChange: true
                     }
-                    
                 }
-                property string wallpaperPath: ""
-                property string thumbnailPath: ""
-                property string quote: ""
-                property bool showQuote: false
-                property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
@@ -184,6 +178,22 @@ Singleton {
                     property bool enableSidebar: true
                     property real clockFactor: 1.2
                 }
+                property JsonObject weather: JsonObject {
+                    property bool show: true
+                    property real scale: 1
+                    property int x: 750
+                    property int y: 750
+                    property bool lockPosition: false
+                }
+                property JsonObject widgets: JsonObject {
+                    property string leastBusyPlacedWidget: "" 
+                }
+                property string wallpaperPath: ""
+                property string thumbnailPath: ""
+                property string quote: ""
+                property bool showQuote: false
+                property bool hideWhenFullscreen: true
+
             }
 
             property JsonObject bar: JsonObject {
