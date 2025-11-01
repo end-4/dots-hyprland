@@ -154,14 +154,6 @@ ContentPage {
             }
         }
         
-        ConfigSwitch {
-            buttonIcon: "colors"
-            text: Translation.tr('Tint icons')
-            checked: Config.options.bar.tray.monochromeIcons
-            onCheckedChanged: {
-                Config.options.bar.tray.monochromeIcons = checked;
-            }
-        }
     }
 
     ContentSection {
@@ -270,15 +262,6 @@ ContentPage {
             checked: Config.options.bar.workspaces.showAppIcons
             onCheckedChanged: {
                 Config.options.bar.workspaces.showAppIcons = checked;
-            }
-        }
-
-        ConfigSwitch {
-            buttonIcon: "colors"
-            text: Translation.tr('Tint app icons')
-            checked: Config.options.bar.workspaces.monochromeIcons
-            onCheckedChanged: {
-                Config.options.bar.workspaces.monochromeIcons = checked;
             }
         }
 
