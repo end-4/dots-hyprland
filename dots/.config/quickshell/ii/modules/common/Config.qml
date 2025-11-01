@@ -257,7 +257,7 @@ Singleton {
                 property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
-                property bool showHealth: true
+                property bool showHealth: false
             }
 
             property JsonObject conflictKiller: JsonObject {
