@@ -63,7 +63,28 @@ StyledPopup {
                 text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:")
                 color: Appearance.colors.colOnSurfaceVariant
             }
-            RowLayout {
+            StyledText {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignRight
+                color: Appearance.colors.colOnSurfaceVariant
+                text: {
+                    function formatTime(seconds) {
+                        var h = Math.floor(seconds / 3600);
+                        var m = Math.floor((seconds % 3600) / 60);
+                        if (h > 0)
+                            return `${h}h, ${m}m`;
+                        else
+                            return `${m}m`;
+                    }
+                    if (Battery.isCharging)
+                        return formatTime(Battery.timeToFull);
+                    else
+                        return formatTime(Battery.timeToEmpty);
+                }
+            }
+        }
+
+        RowLayout {
                 spacing: 5
                 visible: Config.options.battery.showHealth
                 Layout.fillWidth: true
@@ -86,26 +107,6 @@ StyledPopup {
                     text: `${(Battery.health).toFixed(1)}%`
                 }
             }
-            StyledText {
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignRight
-                color: Appearance.colors.colOnSurfaceVariant
-                text: {
-                    function formatTime(seconds) {
-                        var h = Math.floor(seconds / 3600);
-                        var m = Math.floor((seconds % 3600) / 60);
-                        if (h > 0)
-                            return `${h}h, ${m}m`;
-                        else
-                            return `${m}m`;
-                    }
-                    if (Battery.isCharging)
-                        return formatTime(Battery.timeToFull);
-                    else
-                        return formatTime(Battery.timeToEmpty);
-                }
-            }
-        }
 
         RowLayout {
             spacing: 5
