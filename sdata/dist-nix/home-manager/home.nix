@@ -52,7 +52,9 @@
 
       ##### Not work, to be solved #####
       # swaylock pamtester
+      
 
+      # TODO: migrate all packages from dist-arch. Note that for each package, must know why it's needed and how it's used specifically, cuz things may be need tweak to properly use the package installed by Nix, especially those have hardcoded path /usr/* .
       ### illogical-impulse-audio
       libcava #cava
       lxqt.pavucontrol-qt #pavucontrol-qt
