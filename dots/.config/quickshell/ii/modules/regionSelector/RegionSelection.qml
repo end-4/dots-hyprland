@@ -88,7 +88,7 @@ PanelWindow {
         const topLayers = layersOfThisMonitor?.levels["2"]
         if (!topLayers) return [];
         const nonBarTopLayers = topLayers
-            .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":verticalBar") || layer.namespace.includes(":dock")))
+            .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":verticalBar")))
             .map(layer => {
             return {
                 at: [layer.x, layer.y],

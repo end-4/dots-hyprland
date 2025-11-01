@@ -12,7 +12,6 @@ import qs.modules.background
 import qs.modules.bar
 import qs.modules.cheatsheet
 import qs.modules.crosshair
-import qs.modules.dock
 import qs.modules.lock
 import qs.modules.mediaControls
 import qs.modules.notificationPopup
@@ -40,7 +39,6 @@ ShellRoot {
     property bool enableBackground: true
     property bool enableCheatsheet: true
     property bool enableCrosshair: true
-    property bool enableDock: true
     property bool enableLock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
@@ -71,7 +69,6 @@ ShellRoot {
     LazyLoader { active: enableBackground; component: Background {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
     LazyLoader { active: enableCrosshair; component: Crosshair {} }
-    LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
     LazyLoader { active: enableLock; component: Lock {} }
     LazyLoader { active: enableMediaControls; component: MediaControls {} }
     LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
@@ -88,4 +85,3 @@ ShellRoot {
     LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
     LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
 }
-
