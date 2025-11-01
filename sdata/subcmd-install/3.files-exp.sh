@@ -10,7 +10,7 @@
 # TODO: add --exp-files-no-strict     Ignore error when minor version number is not the same
 #
 # Stage 2 todos:
-# TODO: Implement symlink (readable or non-readable) as sync mode
+# TODO: Implement symlink (both read-write and read-only) as sync mode
 # TODO: add --exp-file-reset-symlink  Try to remove all symlink in .config and .local, which point to the local repo
 # TODO: Update help and doc about `--exp-files` and the yaml config, including the possible values of mode.
 #
@@ -167,113 +167,111 @@ for pattern in "${patterns[@]}"; do
   mode=$(echo "$pattern" | yq '.mode' - | envsubst)
   condition=$(echo "$pattern" | yq '.condition // "true"')
 
-    # Handle fontconfig fontset override
-    # If FONTSET_DIR_NAME is set and this is the fontconfig pattern, use the fontset instead
-    if [[ "$from" == "dots/.config/fontconfig" ]] && [[ -n "${FONTSET_DIR_NAME:-}" ]]; then
-      from="dots-extra/fontsets/${FONTSET_DIR_NAME}"
-      echo "Using fontset \"${FONTSET_DIR_NAME}\" for fontconfig"
-    fi
+  # Handle fontconfig fontset override
+  # If FONTSET_DIR_NAME is set and this is the fontconfig pattern, use the fontset instead
+  if [[ "$from" == "dots/.config/fontconfig" ]] && [[ -n "${FONTSET_DIR_NAME:-}" ]]; then
+    from="dots-extra/fontsets/${FONTSET_DIR_NAME}"
+    echo "Using fontset \"${FONTSET_DIR_NAME}\" for fontconfig"
+  fi
 
-    # Check if pattern should be processed
-    if ! should_process_pattern "$pattern"; then
-      # Format condition message nicely
-      if [[ "$condition" != "true" ]]; then
-        cond_type=$(echo "$condition" | yq -r '.type // ""')
-        cond_value=$(echo "$condition" | yq -r '.value // ""')
-        if [[ -n "$cond_type" && -n "$cond_value" ]]; then
-          echo "Skipping $from -> $to (condition not met: $cond_type == '$cond_value')"
-        else
-          echo "Skipping $from -> $to (condition not met)"
-        fi
+  # Check if pattern should be processed
+  if ! should_process_pattern "$pattern"; then
+    # Format condition message nicely
+    if [[ "$condition" != "true" ]]; then
+      cond_type=$(echo "$condition" | yq -r '.type // ""')
+      cond_value=$(echo "$condition" | yq -r '.value // ""')
+      if [[ -n "$cond_type" && -n "$cond_value" ]]; then
+        echo "Skipping $from -> $to (condition not met: $cond_type == '$cond_value')"
       else
         echo "Skipping $from -> $to (condition not met)"
       fi
-      continue
+    else
+      echo "Skipping $from -> $to (condition not met)"
     fi
+    continue
+  fi
 
-    echo "Processing: $from -> $to (mode: $mode)"
+  echo "Processing: $from -> $to (mode: $mode)"
 
-    # Build exclude arguments for rsync
-    excludes=()
-    if echo "$pattern" | yq -e '.excludes' >/dev/null 2>&1; then
-      while IFS= read -r exclude; do
-        excludes+=(--exclude "$exclude")
-      done < <(echo "$pattern" | yq -r '.excludes[]')
-    fi
+  # Build exclude arguments for rsync
+  excludes=()
+  if echo "$pattern" | yq -e '.excludes' >/dev/null 2>&1; then
+    while IFS= read -r exclude; do
+      excludes+=(--exclude "$exclude")
+    done < <(echo "$pattern" | yq -r '.excludes[]')
+  fi
 
-    # Check if source exists
-    if [[ ! -e "$from" ]]; then
-      echo "Warning: Source does not exist: $from (skipping)"
-      continue
-    fi
+  # Check if source exists
+  if [[ ! -e "$from" ]]; then
+    echo "Warning: Source does not exist: $from (skipping)"
+    continue
+  fi
 
-    # Ensure destination directory exists for files
-    if [[ -f "$from" ]]; then
-      v mkdir -p "$(dirname "$to")"
-    fi
+  # Ensure destination directory exists for files
+  if [[ -f "$from" ]]; then
+    v mkdir -p "$(dirname "$to")"
+  fi
 
-    # Execute based on mode
-    case $mode in
-      "sync")
-        if [[ -d "$from" ]]; then
-          warning_rsync_delete
-          v rsync -av --delete "${excludes[@]}" "$from/" "$to/"
-        else
-          warning_rsync_normal
-          # For files, don't use trailing slash and don't use --delete
-          v rsync -av "${excludes[@]}" "$from" "$to"
-        fi
-        ;;
-      "soft")
+  # Execute based on mode
+  case $mode in
+    "sync")
+      if [[ -d "$from" ]]; then
+        warning_rsync_delete
+        v rsync -av --delete "${excludes[@]}" "$from/" "$to/"
+      else
         warning_rsync_normal
-        if [[ -d "$from" ]]; then
-          v rsync -av "${excludes[@]}" "$from/" "$to/"
+        # For files, don't use trailing slash and don't use --delete
+        v rsync -av "${excludes[@]}" "$from" "$to"
+      fi
+      ;;
+    "soft")
+      warning_rsync_normal
+      if [[ -d "$from" ]]; then
+        v rsync -av "${excludes[@]}" "$from/" "$to/"
+      else
+        # For files, don't use trailing slash
+        v rsync -av "${excludes[@]}" "$from" "$to"
+      fi
+      ;;
+    "hard")
+      v cp -r "$from" "$to"
+      ;;
+    "hard-backup")
+      if [[ -e "$to" ]]; then
+        if files_are_same "$from" "$to"; then
+          echo "Files are identical, skipping backup"
         else
-          # For files, don't use trailing slash
-          v rsync -av "${excludes[@]}" "$from" "$to"
+          backup_number=$(get_next_backup_number "$to")
+          v mv "$to" "$to.old.$backup_number"
+          v cp -r "$from" "$to"
         fi
-        ;;
-      "hard")
+      else
         v cp -r "$from" "$to"
-        ;;
-      "hard-backup")
-        if [[ -e "$to" ]]; then
-          if files_are_same "$from" "$to"; then
-            echo "Files are identical, skipping backup"
-          else
-            backup_number=$(get_next_backup_number "$to")
-            v mv "$to" "$to.old.$backup_number"
-            v cp -r "$from" "$to"
-          fi
+      fi
+      ;;
+    "soft-backup")
+      if [[ -e "$to" ]]; then
+        if files_are_same "$from" "$to"; then
+          echo "Files are identical, skipping backup"
         else
-          v cp -r "$from" "$to"
+          v cp -r "$from" "$to.new"
         fi
-        ;;
-      "soft-backup")
-        if [[ -e "$to" ]]; then
-          if files_are_same "$from" "$to"; then
-            echo "Files are identical, skipping backup"
-          else
-            v cp -r "$from" "$to.new"
-          fi
-        else
-          v cp -r "$from" "$to"
-        fi
-        ;;
-      "skip")
-        echo "Skipping $from"
-        ;;
-      "skip-if-exists")
-        if [[ -e "$to" ]]; then
-          echo "Skipping $from (destination exists)"
-        else
-          v cp -r "$from" "$to"
-        fi
-        ;;
-      *)
-        echo "Unknown mode: $mode"
-        ;;
-    esac
-  done
-
-#####################################################################################
+      else
+        v cp -r "$from" "$to"
+      fi
+      ;;
+    "skip")
+      echo "Skipping $from"
+      ;;
+    "skip-if-exists")
+      if [[ -e "$to" ]]; then
+        echo "Skipping $from (destination exists)"
+      else
+        v cp -r "$from" "$to"
+      fi
+      ;;
+    *)
+      echo "Unknown mode: $mode"
+      ;;
+  esac
+done
