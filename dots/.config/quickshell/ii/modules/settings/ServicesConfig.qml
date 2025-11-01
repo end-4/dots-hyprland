@@ -86,11 +86,11 @@ ContentPage {
     }
 
     ContentSection {
-        icon: "screen_record"
-        title: Translation.tr("Screen Recording")
+        icon: "file_open"
+        title: Translation.tr("Save paths")
 
         ContentSubsection {
-            title: Translation.tr("Save path") + " (example: /home/user/Videos)"
+            title: Translation.tr("Video save path")
             MaterialTextArea {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("Path")
@@ -98,6 +98,19 @@ ContentPage {
                 wrapMode: TextEdit.Wrap
                 onTextChanged: {
                     Config.options.screenRecord.savePath = text;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Screenshot save path") + " (leave empty to just copy)"
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Path")
+                text: Config.options.screenSnip.savePath
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.screenSnip.savePath = text;
                 }
             }
         }

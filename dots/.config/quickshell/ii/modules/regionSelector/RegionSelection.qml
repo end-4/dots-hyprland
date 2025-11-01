@@ -33,6 +33,10 @@ PanelWindow {
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
     signal dismiss()
     
+    property string permanentScreenshotDir: Config.options.screenSnip.savePath && Config.options.screenSnip.savePath !== ""
+        ? Config.options.screenSnip.savePath
+        : ""
+
     property string screenshotDir: Directories.screenshotTemp
     property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
     property string fileUploadApiEndpoint: "https://uguu.se/upload"
@@ -258,8 +262,24 @@ PanelWindow {
         }
         switch (root.action) {
             case RegionSelection.SnipAction.Copy:
-                snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                if (permanentScreenshotDir === "") {
+                    // no permanent dir, just copy to clipboard
+                    snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                    break;
+                }
+                const saveFileName = 'screenshot-' + DateTime.fileDateTime + '.png'
+                const savePath = `${root.permanentScreenshotDir}/${saveFileName}`
+
+                snipProc.command = [
+                    "bash", "-c", 
+                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.permanentScreenshotDir)}' ` + 
+                    `&& ${cropToStdout} | tee >(wl-copy) > '${StringUtils.shellSingleQuoteEscape(savePath)}' ` + 
+                    `&& ${cleanup}`
+                ]
                 break;
+
+                //snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                //break;
             case RegionSelection.SnipAction.Edit:
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
                 break;

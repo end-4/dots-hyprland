@@ -464,6 +464,10 @@ Singleton {
                 property string savePath: Directories.videos
             }
 
+            property JsonObject screenSnip: JsonObject {
+                property string savePath: "/home/vaguesyntax/Pictures"
+            }
+
             property JsonObject sounds: JsonObject {
                 property bool battery: false
                 property bool pomodoro: false
