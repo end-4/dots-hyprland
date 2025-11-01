@@ -74,7 +74,7 @@ Singleton {
     Connections {
         target: GlobalStates
         function onKeyringUnlocked() {
-            KeyringStorage.fetchKeyringData();
+            fetchKeyringData();
         }
     }
 
@@ -84,12 +84,14 @@ Singleton {
 
     Process {
         id: lockState
-        command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
-
-        // Fetch data if keyring is already unlocked
-        onExited: (exitCode) => {
-            if (exitCode === 1) {
-                KeyringStorage.fetchKeyringData();
+        command: ["bash", "-c", "busctl --user get-property org.freedesktop.secrets /org/freedesktop/secrets/collection/login org.freedesktop.Secret.Collection Locked"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                // Fetch data if keyring is already unlocked
+                if (this.text.trim() === "b false"){
+                    console.log("Keyring is already unlocked.");
+                    KeyringStorage.fetchKeyringData();
+                }
             }
         }
     }
