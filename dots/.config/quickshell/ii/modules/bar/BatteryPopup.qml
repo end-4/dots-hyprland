@@ -63,6 +63,29 @@ StyledPopup {
                 text: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:")
                 color: Appearance.colors.colOnSurfaceVariant
             }
+            RowLayout {
+                spacing: 5
+                visible: Config.options.battery.showHealth
+                Layout.fillWidth: true
+
+                MaterialSymbol {
+                    text: "healing"
+                    color: Appearance.colors.colOnSurfaceVariant
+                    iconSize: Appearance.font.pixelSize.large
+                }
+
+                StyledText {
+                    text: Translation.tr("Health:")
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: `${(Battery.health).toFixed(1)}%`
+                }
+            }
             StyledText {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignRight

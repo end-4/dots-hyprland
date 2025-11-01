@@ -31,6 +31,29 @@ Singleton {
     property real timeToEmpty: UPower.displayDevice.timeToEmpty
     property real timeToFull: UPower.displayDevice.timeToFull
 
+    property real health: 0
+    Process {
+        id: batteryProcess
+        running: Config.options.battery.showHealth
+        command: [
+            "bash",
+            `${FileUtils.trimFileProtocol(Directories.scriptPath)}/battery/calculate-health.sh`
+        ]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const output = text.trim()
+                const value = Number(output)
+                if (!isNaN(value)) {
+                    root.health = value
+                    console.log("Battery health:", value)
+                } else {
+                    console.warn("Battery script output invalid:", output)
+                }
+            }
+        }
+    }
+
     onIsLowAndNotChargingChanged: {
         if (!root.available || !isLowAndNotCharging) return;
         Quickshell.execDetached([
