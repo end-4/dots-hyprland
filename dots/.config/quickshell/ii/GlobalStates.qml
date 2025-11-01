@@ -27,6 +27,7 @@ Singleton {
     property bool superReleaseMightTrigger: true
     property bool wallpaperSelectorOpen: false
     property bool workspaceShowNumbers: false
+    property bool fpsLimiterOpen: false
 
     onSidebarRightOpenChanged: {
         if (GlobalStates.sidebarRightOpen) {

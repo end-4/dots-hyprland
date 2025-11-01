@@ -27,6 +27,7 @@ import qs.modules.sidebarLeft
 import qs.modules.sidebarRight
 import qs.modules.verticalBar
 import qs.modules.wallpaperSelector
+import qs.modules.fpsLimiter
 
 import QtQuick
 import QtQuick.Window
@@ -56,6 +57,7 @@ ShellRoot {
     property bool enableSidebarRight: true
     property bool enableVerticalBar: true
     property bool enableWallpaperSelector: true
+    property bool enableFpsLimiter: true
 
     // Force initialization of some singletons
     Component.onCompleted: {
@@ -87,5 +89,7 @@ ShellRoot {
     LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
     LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
     LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
+    LazyLoader { active: enableFpsLimiter; component: FpsLimiter {} }
+
 }
 
