@@ -46,7 +46,6 @@ Singleton {
                 const value = Number(output)
                 if (!isNaN(value)) {
                     root.health = value
-                    console.log("Battery health:", value)
                 } else {
                     console.warn("Battery script output invalid:", output)
                 }
