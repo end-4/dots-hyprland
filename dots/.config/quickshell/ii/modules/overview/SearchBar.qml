@@ -18,7 +18,7 @@ RowLayout {
     property alias searchInput: searchInput
     property string searchingText
 
-    function focus() {
+    function forceFocus() {
         searchInput.forceActiveFocus();
     }
 

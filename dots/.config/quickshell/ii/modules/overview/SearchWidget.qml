@@ -94,7 +94,7 @@ Item { // Wrapper
     }
 
     function focusSearchInput() {
-        searchBar.focus();
+        searchBar.forceFocus();
     }
 
     function disableExpandAnimation() {
