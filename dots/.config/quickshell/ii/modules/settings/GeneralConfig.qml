@@ -127,6 +127,14 @@ ContentPage {
                 }
             }
         }
+        ConfigSwitch {
+            buttonIcon: "healing"
+            text: Translation.tr('Show battery health in popup')
+            checked: Config.options.battery.showHealth
+            onCheckedChanged: {
+                Config.options.battery.showHealth = checked;
+            }
+        }
     }
     
     ContentSection {
