@@ -36,11 +36,6 @@ New features (experimental):
                               see https://github.com/end-4/dots-hyprland/issues/1061 for details.
 ${STY_RST}"
 }
-# TODO: implement options below for --exp-files
-#      --exp-files-path <path> Use <path> instead of the default yaml config
-#      --exp-files-no-strict   Ignore error when minor version number is not the same
-#      --exp-files-regen       Force copy the default config to ${EXP_FILE_PATH}
-#                              (auto do this when not existed)
 
 cleancache(){
   rm -rf "${REPO_ROOT}/cache"
