@@ -465,7 +465,7 @@ Singleton {
             }
 
             property JsonObject screenSnip: JsonObject {
-                property string savePath: "/home/vaguesyntax/Pictures"
+                property string savePath: "" // only copy to clipboard when empty
             }
 
             property JsonObject sounds: JsonObject {
