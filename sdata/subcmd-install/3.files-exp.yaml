@@ -1,3 +1,11 @@
+# The possible values of `mode`: (by default `sync`)
+# - `sync`: Make the destination completely the same as the source.
+# - `soft`: Skip existing files when copying
+# - `hard`: Overwrite existing files when copying
+# - `soft-backup`: If target file exists, copy source file to `*.new`. Do not create `*.new` but skip coyping when source and target HASH values are exactly the same.
+# - `hard-backup`: If target file exists, create backup by renaming it to `*.old.<n>` where `<n>` is a number increment from 1 to prevent backup gets overwritten when running twice. (Keep in mind that this script must be idempotent.) Also must compare the actual file content by using MD5 HASH value to prevent generating lots of `*.old.<n>`s when runnng multiple times. Do not create backup but skip coyping when source and target HASH values are exactly the same.
+# - `skip`: Skip this step
+# - `skip-if-exists`: Skip this step if target exists
 version: "1.0"
 user_preferences:
   shell: "fish" # fish | zsh
