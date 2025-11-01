@@ -101,7 +101,7 @@ ContentPage {
         
         MaterialTextArea {
             Layout.fillWidth: true
-            placeholderText: Translation.tr("Screenshot Path (leave empyt to just copy)")
+            placeholderText: Translation.tr("Screenshot Path (leave empty to just copy)")
             text: Config.options.screenSnip.savePath
             wrapMode: TextEdit.Wrap
             onTextChanged: {
