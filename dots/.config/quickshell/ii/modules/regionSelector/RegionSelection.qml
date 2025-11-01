@@ -277,9 +277,6 @@ PanelWindow {
                     `&& ${cleanup}`
                 ]
                 break;
-
-                //snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
-                //break;
             case RegionSelection.SnipAction.Edit:
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
                 break;
