@@ -22,7 +22,7 @@ function auto_backup_configs(){
     false) if [[ ! -d "$BACKUP_DIR" ]]; then local backup=true;fi;;
     *)
       printf "${STY_RED}"
-      printf "Would you like to backup clashing dirs/files to \"$BACKUP_DIR\"?"
+      printf "Would you like to backup clashing dirs/files to \"$BACKUP_DIR\"?\n"
       printf "${STY_RST}"
       while true;do
         echo "  y = Yes, backup"
@@ -33,7 +33,7 @@ function auto_backup_configs(){
             local backup=true;break ;;
           [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}"
             local backup=false;break ;;
-          *) echo -e "${STY_RED}Please enter [y/n].${STY_RST}";;
+          *) echo -e "${STY_RED}Please enter [y/n/s].${STY_RST}";;
         esac
       done
       ;;
@@ -46,8 +46,8 @@ function auto_backup_configs(){
 }
 
 #####################################################################################
-showfun auto_get_git_submodule
-v auto_get_git_submodule
+showfun auto_update_git_submodule
+v auto_update_git_submodule
 
 # Backup
 if [[ ! "${SKIP_BACKUP}" == true ]]; then auto_backup_configs; fi

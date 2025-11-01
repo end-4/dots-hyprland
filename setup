@@ -23,6 +23,7 @@ Syntax:
 
 Subcommands:
   install        (Re)Install/Update illogical-impulse.
+                 Note: To update to the latest, manually run \"git pull\" first.
   install-deps   Run the install step \"1. Install dependencies\"
   install-setups Run the install step \"2. Setup for permissions/services etc\"
   install-files  Run the install step \"3. Copying config files\"
@@ -36,6 +37,8 @@ Subcommands:
 
 For each <subcommand>, use -h for details:
   $0 <subcommand> -h
+
+${STY_BOLD}${STY_CYAN}Access ${STY_UNDERLINE}https://ii.clsty.link${STY_RST} ${STY_BOLD}${STY_CYAN}for documentation about illogical-impulse.${STY_RST}
 "
 }
 case $1 in
