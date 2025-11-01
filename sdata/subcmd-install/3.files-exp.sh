@@ -1,7 +1,13 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-# TODO: https://github.com/end-4/dots-hyprland/issues/2137
+# See https://github.com/end-4/dots-hyprland/issues/2137
+# TODO: Implement versioning, i.e. when user-defined yaml config file has version number mismatch with the default one, produce error. If only minor version number is not the same, the error can be ommitted via --exp-file-no-strict .
+# TODO: Implement user-define yaml with merging (override) ability for user who only wants little customization and is satisfied with most of the defaults.
+# TODO: Implement symlink (readable or non-readable) as sync mode
+# TODO: Implement --exp-file-reset-symlink to try to remove all symlink in .config and .local, which point to the local repo
+# TODO: Update help and doc about `--exp-files` and the yaml config, including the possible values of mode.
+# TODO: Support exclude pattern for each target to skip some files inside it.
 
 # Configuration file
 CONFIG_FILE="sdata/subcmd-install/3.files.yaml"
