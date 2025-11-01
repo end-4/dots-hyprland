@@ -27,12 +27,13 @@ Options for install:
                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
 ${STY_CYAN}
 New features (experimental):
-      --exp-files           Use yaml-based config for the third step copying files.
-                            This feature is ${STY_YELLOW}still on early stage${STY_CYAN}, feedback and contribution welcomed,
-                            see https://github.com/end-4/dots-hyprland/issues/2137 for details.
-      --via-nix             Use Nix and Home-manager to install dependencies.
-                            This feature is ${STY_RED}working in progress${STY_CYAN}. Contribution is welcomed,
-                            see https://github.com/end-4/dots-hyprland/issues/1061 for details.
+      --exp-files             Use yaml-based config for the third step copying files.
+                              This feature is ${STY_YELLOW}still on early stage${STY_CYAN},
+                              feedback and contribution welcomed,
+                              see https://github.com/end-4/dots-hyprland/issues/2137 for details.
+      --via-nix               Use Nix and Home-manager to install dependencies.
+                              This feature is ${STY_RED}working in progress${STY_CYAN}. Contribution is welcomed,
+                              see https://github.com/end-4/dots-hyprland/issues/1061 for details.
 ${STY_RST}"
 }
 

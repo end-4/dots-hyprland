@@ -4,7 +4,7 @@ printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
 
 function outdate_detect(){
   # Shallow clone prevent latest_commit_timestamp() from working.
-  x git_auto_unshallow
+  x git_auto_unshallow 2>&1>/dev/null
 
   local source_path="$1"
   local target_path="$2"
@@ -119,12 +119,17 @@ elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
   if [[ "${tmp_update_status}" =~ ^(OUTDATED|EMPTY_TARGET|EMPTY_SOURCE|FORCE_OUTDATED|WIP)$ ]]; then
     printf "${STY_RED}${STY_BOLD}===URGENT===${STY_RST}\n"
     printf "${STY_RED}"
-    printf "The community provided ./sdata/dist-${TARGET_ID}/ is not updated (update status: ${tmp_update_status}),\n"
-    printf "which means it does not fully reflect the latest changes of ./sdata/dist-arch/ .\n"
-    printf "You are highly recommended to abort this script, until someone (maybe you?) has updated the ./sdata/dist-${TARGET_ID}/ to fully reflect the latest changes in ./sdata/dist-arch/ .\n"
-    printf "PR is welcomed. Please see discussion#2140 for details.\n"
+    printf "The community provided ./sdata/dist-${TARGET_ID}/ is outdated (status: ${tmp_update_status}),\n"
+    printf "which means it probably does not reflect all latest changes of ./sdata/dist-arch/ .\n"
+    printf "\n"
+    printf "According to the actual changes, it may still works, but it can also work unexpectedly.\n"
+    printf "It's highly recommended to check the following links before continue:${STY_RST}\n"
     printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RST}\n"
-    printf "${STY_RED}${STY_INVERT}If you are proceeding anyway, illogical-impulse will very likely not work as expected.${STY_RST}\n"
+    printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-arch${STY_RST}\n"
+    printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-${TARGET_ID}${STY_RST}\n"
+    printf "\n"
+    printf "${STY_PURPLE}${STY_INVERT}PR on ./sdata/dist-${TARGET_ID}/ to properly reflect the latest changes of ./sdata/dist-arch is welcomed.${STY_RST}\n"
+    printf "\n"
     if [ "$ask" = "false" ]; then
       echo "Urgent problem encountered, aborting...";exit 1
     fi
@@ -163,7 +168,7 @@ else
   printf "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh not found.\n"
   printf "./sdata/dist-${TARGET_ID}/install-deps.sh will be used.\n"
   printf "1. It may disrupt your system and will likely fail without your manual intervention.\n"
-  printf "2. It's WIP and only contains small number of dependencies far from enough.\n"
+  printf "2. It is WIP and only contains small number of dependencies far from enough.\n"
   printf "Proceed only at your own risk.\n"
   printf "${STY_RST}"
   pause
