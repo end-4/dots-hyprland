@@ -11,7 +11,7 @@
 # TODO: add --exp-files-no-strict     Ignore error when minor version number is not the same
 #
 # Stage 2 todos:
-# TODO: Implement symlink (both read-write and read-only) as sync mode
+# TODO: Implement bool key symlink (both read-write and read-only), when the value of `symlink` is true, then instead using `rsync` or `cp`, use `ln`.
 # TODO: add --exp-file-reset-symlink  Try to remove all symlink in .config and .local, which point to the local repo
 # TODO: Update help and doc about `--exp-files` and the yaml config, including the possible values of mode.
 #
