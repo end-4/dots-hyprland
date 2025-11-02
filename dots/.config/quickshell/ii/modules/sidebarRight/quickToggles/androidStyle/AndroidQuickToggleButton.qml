@@ -77,6 +77,13 @@ GroupButton {
                 return ColorUtils.transparentize(baseColor, transparentizeAmount)
             }
 
+            Behavior on radius {
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            }
+            Behavior on color {
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
+
             MaterialSymbol {
                 anchors.centerIn: parent
                 fill: root.toggled ? 1 : 0
@@ -98,6 +105,7 @@ GroupButton {
                         right: parent.right
                     }
                     font.pixelSize: Appearance.font.pixelSize.smallie
+                    font.weight: 600
                     color: root.colText
                     elide: Text.ElideRight
                     text: root.name
@@ -111,9 +119,8 @@ GroupButton {
                     }
                     font {
                         pixelSize: Appearance.font.pixelSize.smaller
-                        weight: Font.Light
                     }
-                    color: root.colText
+                    color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
                     text: root.statusText
                 }
