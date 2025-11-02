@@ -19,7 +19,7 @@ Item {
         // sides: root.isMonth ? 1 : 4
         shape: root.isMonth ? MaterialShape.Shape.Pill : MaterialShape.Shape.Pentagon
         anchors.centerIn: parent
-        color: root.isMonth ? Appearance.colors.colPrimaryContainer : Appearance.colors.colTertiaryContainer
+        color: root.isMonth ? Appearance.colors.colSecondaryContainer : Appearance.colors.colTertiaryContainer
         implicitSize: targetSize
     }
 
@@ -27,7 +27,7 @@ Item {
         id: bubbleText
         z: 6
         anchors.centerIn: parent
-        color: root.isMonth ? Appearance.colors.colPrimary : Appearance.colors.colTertiary
+        color: root.isMonth ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnTertiaryContainer
         font {
             family: Appearance.font.family.expressive
             pixelSize: 30

@@ -11,7 +11,7 @@ Item {
     property string style: "medium"
     property real handLength: 95
     property real handWidth: style === "bold" ? 20 : style === "medium" ? 12 : 5
-    property color color: Appearance.colors.colSecondary
+    property color color: Appearance.colors.colTertiary
 
     rotation: -90 + (360 / 60) * root.clockMinute
     Behavior on rotation {
@@ -34,7 +34,7 @@ Item {
         height: root.handWidth
         
         radius: root.style === "classic" ? 2 : root.handWidth / 2
-        color: Appearance.colors.colSecondary
+        color: root.color
 
         Behavior on height {
             animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
