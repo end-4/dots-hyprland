@@ -62,10 +62,11 @@ ii_check_quickshell_version() {
 e "Checking git repo info"
 x git remote get-url origin
 x git rev-parse HEAD
+x git submodule status --recursive
 
 e "Checking distro"
 x ii_check_distro_id
-x ii_check_distro 
+#x ii_check_distro 
 
 e "Checking variables"
 x declare -p XDG_CACHE_HOME # ~/.cache
@@ -76,11 +77,10 @@ x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/quickshell/.venv
 
 e "Checking directories/files"
 x ls -l ~/.local/state/quickshell/.venv
-#x cat ~/.config/ags/
 
 #e "Checking command existence"
 #commands=(yay pacman zypper apt dnf yum)
-commands+=(ags agsv1)
+#commands+=(ags agsv1)
 #commands+=(Hyprland hypr{ctl,idle,lock,picker})
 #commands+=(uv)
 #for i in "${commands[@]}";do x command -v $i;done
