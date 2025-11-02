@@ -13,10 +13,16 @@ import Quickshell.Hyprland
 Scope {
     id: root
 
+    Process {
+        id: unlockKeyringProc
+        onExited: (exitCode, exitStatus) => {
+            KeyringStorage.fetchKeyringData();
+        }
+    }
     function unlockKeyring() {
-        Quickshell.execDetached({
+        unlockKeyringProc.exec({
             environment: ({
-                UNLOCK_PASSWORD: root.currentText
+                "UNLOCK_PASSWORD": lockContext.currentText
             }),
             command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
         })
@@ -24,7 +30,7 @@ Scope {
 
     property var windowData: []
     function saveWindowPositionAndTile() {
-		Hyprland.dispatch(`keyword dwindle:pseudotile true`)
+        Quickshell.execDetached(["hyprctl", "keyword", "dwindle:pseudotile", "true"])
         root.windowData = HyprlandData.windowList.filter(w => (w.floating && w.workspace.id === HyprlandData.activeWorkspace.id))
         root.windowData.forEach(w => {
 			Hyprland.dispatch(`pseudo address:${w.address}`)
@@ -38,7 +44,7 @@ Scope {
             Hyprland.dispatch(`movewindowpixel exact ${w.at[0]} ${w.at[1]}, address:${w.address}`)
 			Hyprland.dispatch(`pseudo address:${w.address}`)
         })
-		Hyprland.dispatch(`keyword dwindle:pseudotile false`)
+		Quickshell.execDetached(["hyprctl", "keyword", "dwindle:pseudotile", "false"])
     }
 
     // This stores all the information shared between the lock surfaces on each screen.
@@ -156,20 +162,24 @@ Scope {
         }
     }
 
+    function initIfReady() {
+        if (!Config.ready || !Persistent.ready) return;
+        if (Config.options.lock.launchOnStartup && Persistent.isNewHyprlandInstance) {
+            Hyprland.dispatch("global quickshell:lock")
+        } else {
+            KeyringStorage.fetchKeyringData();
+        }
+    }
     Connections {
         target: Config
         function onReadyChanged() {
-            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
-                Hyprland.dispatch("global quickshell:lock")
-            }
+            root.initIfReady();
         }
     }
     Connections {
         target: Persistent
         function onReadyChanged() {
-            if (Config.options.lock.launchOnStartup && Config.ready && Persistent.ready && Persistent.isNewHyprlandInstance) {
-                Hyprland.dispatch("global quickshell:lock")
-            }
+            root.initIfReady();
         }
     }
 }
