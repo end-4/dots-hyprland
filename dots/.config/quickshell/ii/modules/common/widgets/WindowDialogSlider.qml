@@ -35,7 +35,7 @@ Column {
             left: parent.left
             right: parent.right
             leftMargin: 4
-            rightMargin: leftMargin
+            rightMargin: 4
         }
         configuration: StyledSlider.Configuration.S
         onMoved: root.moved()

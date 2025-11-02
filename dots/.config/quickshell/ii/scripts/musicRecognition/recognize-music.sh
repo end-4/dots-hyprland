@@ -17,7 +17,7 @@ while getopts "i:t:s:" opt; do
   esac
 done
 if [ "$SOURCE_TYPE" = "monitor" ]; then
-    MONITOR_SOURCE=$(pactl list short sources 2>/dev/null | grep -m1 monitor | awk '{print $2}' || true)
+    MONITOR_SOURCE=$(pactl get-default-sink).monitor
 elif [ "$SOURCE_TYPE" = "input" ]; then
     MONITOR_SOURCE=$(pactl info | grep "Default Source:" | awk '{print $3}' || true)
 else
@@ -25,7 +25,11 @@ else
     exit 1
 fi
 
-if [ -z "$MONITOR_SOURCE" ] || ! command -v songrec >/dev/null 2>&1; then
+if ! command -v songrec >/dev/null 2>&1 || ! command -v parec >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then
+    exit 1
+fi
+
+if [ -z "$MONITOR_SOURCE" ] || ! pactl list short sources | grep -q "$MONITOR_SOURCE"; then
     exit 1
 fi
 

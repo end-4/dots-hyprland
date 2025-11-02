@@ -57,8 +57,11 @@ Item {
                             
                             StyledText {
                                 id: sectionTitle
-                                font.family: Appearance.font.family.title
-                                font.pixelSize: Appearance.font.pixelSize.huge
+                                font {
+                                    family: Appearance.font.family.title
+                                    pixelSize: Appearance.font.pixelSize.title
+                                    variableAxes: Appearance.font.variableAxes.title
+                                }
                                 color: Appearance.colors.colOnLayer0
                                 text: keybindSection.modelData.name
                             }

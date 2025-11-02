@@ -20,12 +20,12 @@ Item {
     property real implicitSize: 230
 
     property color colShadow: Appearance.colors.colShadow
-    property color colBackground: Appearance.colors.colSecondaryContainer
-    property color colOnBackground: ColorUtils.mix(Appearance.colors.colSecondary, Appearance.colors.colSecondaryContainer, 0.15)
-    property color colBackgroundInfo: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer, 0.55)
+    property color colBackground: Appearance.colors.colPrimaryContainer
+    property color colOnBackground: ColorUtils.mix(Appearance.colors.colSecondary, Appearance.colors.colPrimaryContainer, 0.15)
+    property color colBackgroundInfo: ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colPrimaryContainer, 0.55)
     property color colHourHand: Appearance.colors.colPrimary
-    property color colMinuteHand: Appearance.colors.colSecondary
-    property color colSecondHand: Appearance.colors.colTertiary
+    property color colMinuteHand: Appearance.colors.colTertiary
+    property color colSecondHand: Appearance.colors.colPrimary
 
     readonly property list<string> clockNumbers: DateTime.time.split(/[: ]/)
     readonly property int clockHour: parseInt(clockNumbers[0]) % 12
@@ -157,29 +157,29 @@ Item {
         }
     }
 
-    // Hour hand
-    FadeLoader {
-        anchors.fill: parent
-        z: 1
-        shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
-        sourceComponent: HourHand {
-            clockHour: root.clockHour
-            clockMinute: root.clockMinute
-            style: Config.options.background.clock.cookie.hourHandStyle
-            color: root.colHourHand
-        }
-    }
-
     // Minute hand
     FadeLoader {
         anchors.fill: parent
-        z: 2
+        z: 1
         shown: Config.options.background.clock.cookie.minuteHandStyle !== "hide"
         sourceComponent: MinuteHand {
             anchors.fill: parent
             clockMinute: root.clockMinute
             style: Config.options.background.clock.cookie.minuteHandStyle
             color: root.colMinuteHand
+        }
+    }
+
+    // Hour hand
+    FadeLoader {
+        anchors.fill: parent
+        z: item?.style === "hollow" ? 0 : 2
+        shown: Config.options.background.clock.cookie.hourHandStyle !== "hide"
+        sourceComponent: HourHand {
+            clockHour: root.clockHour
+            clockMinute: root.clockMinute
+            style: Config.options.background.clock.cookie.hourHandStyle
+            color: root.colHourHand
         }
     }
 

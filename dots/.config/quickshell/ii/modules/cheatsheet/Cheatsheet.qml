@@ -134,8 +134,11 @@ Scope { // Scope
                     StyledText {
                         id: cheatsheetTitle
                         Layout.alignment: Qt.AlignHCenter
-                        font.family: Appearance.font.family.title
-                        font.pixelSize: Appearance.font.pixelSize.title
+                        font {
+                            family: Appearance.font.family.title
+                            pixelSize: Appearance.font.pixelSize.title
+                            variableAxes: Appearance.font.variableAxes.title
+                        }
                         text: Translation.tr("Cheat sheet")
                     }
                     PrimaryTabBar { // Tab strip

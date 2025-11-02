@@ -11,7 +11,7 @@ AndroidQuickToggleButton {
     statusText: Appearance.m3colors.darkmode ? Translation.tr("Dark") : Translation.tr("Light")
 
     toggled: Appearance.m3colors.darkmode
-    buttonIcon: Appearance.m3colors.darkmode ? "contrast" : "light_mode"
+    buttonIcon: "contrast"
     
     onClicked: event => {
         if (Appearance.m3colors.darkmode) {

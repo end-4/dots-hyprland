@@ -4,7 +4,7 @@ labels: ["ISSUE"]
 body:
   - type: markdown
     attributes:
-      value: "**Welcome to submit a new issue!**\n- It takes only 3 steps, so please be patient :)\n- Tip: If your issue is not a feature request, and it does not fit into the following form, for example \"how can I edit some widget\", please use [Discussions](https://github.com/end-4/dots-hyprland/discussions) instead."
+      value: "**Welcome to submit a new issue!**\n- Please search in [existing issues](https://github.com/end-4/dots-hyprland/issues?q=is%3Aissue) before continue.\n- It takes only 3 steps, so please be patient :)\n- Tip: If your issue is not a feature request, and it does not fit into the following form, for example \"how can I edit some widget\", please use [Discussions](https://github.com/end-4/dots-hyprland/discussions) instead."
   - type: checkboxes
     attributes:
       label: "Step 1. Before you submit"
@@ -33,7 +33,7 @@ body:
         **Tips for the following Step 3**
         1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
         2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
-           - Bar and widgets not showing? run `pkill agsv1; agsv1` for logs.
+           - Bar and widgets not showing? run `pkill qs; qs -c ii` for logs.
            - Installation failed? Run installation again for logs.
            - You may use more code blocks when needed.
         3. In case you are confused, the `<details>`, `<summary>`, `</summary>`, `</details>` are HTML tags for folding the logs (typically very long) inside. Please do not touch them (unless you know what you are doing).

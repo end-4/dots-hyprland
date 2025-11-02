@@ -26,8 +26,9 @@ function findSuitableMaterialSymbol(summary = "") {
         'upsca': 'compare',
         'music': 'queue_music',
         'install': 'deployed_code_update',
+        'input': 'keyboard_alt',
+        'preedit': 'keyboard_alt',
         'startswith:file': 'folder_copy', // Declarative startsWith check
-        
     };
 
     const lowerSummary = summary.toLowerCase();

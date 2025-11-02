@@ -265,8 +265,27 @@ Rectangle {
 
         ColumnLayout { // Message content
             id: messageContentColumnLayout
-
             spacing: 0
+
+            Item {
+                Layout.fillWidth: true
+                implicitHeight: loadingIndicatorLoader.shown ? loadingIndicatorLoader.implicitHeight : 0
+                implicitWidth: loadingIndicatorLoader.implicitWidth
+                visible: implicitHeight > 0
+
+                Behavior on implicitHeight {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+                FadeLoader {
+                    id: loadingIndicatorLoader
+                    anchors.centerIn: parent
+                    shown: (root.messageBlocks.length < 1) && (!root.messageData.done)
+                    sourceComponent: MaterialLoadingIndicator {
+                        loading: true
+                    }
+                }
+            }
+
             Repeater {
                 model: ScriptModel {
                     values: Array.from({ length: root.messageBlocks.length }, (msg, i) => {

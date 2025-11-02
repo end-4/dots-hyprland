@@ -267,7 +267,6 @@ Variants {
             color: statusTextRow.textColor
             anchors.verticalCenter: statusTextRow.verticalCenter
             font {
-                family: Appearance.font.family.main
                 pixelSize: Appearance.font.pixelSize.large
                 weight: Font.Normal
             }

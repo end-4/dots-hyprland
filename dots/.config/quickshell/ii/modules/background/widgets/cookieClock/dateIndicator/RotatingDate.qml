@@ -41,7 +41,7 @@ Item {
             font {
                 family: Appearance.font.family.title
                 pixelSize: 30
-                weight: Font.DemiBold 
+                variableAxes: Appearance.font.variableAxes.title
             }
 
             text: root.dateText.charAt(index)
