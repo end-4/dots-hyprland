@@ -17,25 +17,20 @@ Item {
     // Excellent symbol explaination and source :
     // http://xahlee.info/comp/unicode_computing_symbols.html
     // https://www.nerdfonts.com/cheat-sheet
-    property list<string> superMap: [
-      "󰖳", "󰌽", "⌘", "", "󰨡", "", "",
-      "󰣇", "", "", "", "", " ", "", 
-      "󱄛", "󰀲", "󰟍", ""
-    ]
     property var macSymbolMap: ({
-        "Ctrl": "󰘴" ,
-        "Alt": "󰘵" ,
-        "Shift": "󰘶" ,
-        "Space": "󱁐" ,
-        "Tab": "↹" ,
-        "Equal": "󰇼" ,
-        "Minus": "" ,
-        "Print": "" ,
-        "BackSpace": "󰭜" ,
-        "Delete": "⌦" ,
-        "Return": "󰌑" ,
-        "Period": "." ,
-        "Escape": "⎋" 
+        "Ctrl": "󰘴",
+        "Alt": "󰘵",
+        "Shift": "󰘶",
+        "Space": "󱁐",
+        "Tab": "↹",
+        "Equal": "󰇼",
+        "Minus": "",
+        "Print": "",
+        "BackSpace": "󰭜",
+        "Delete": "⌦",
+        "Return": "󰌑",
+        "Period": ".",
+        "Escape": "⎋"
       })
     property var functionSymbolMap: ({
         "F1":  "󱊫",
@@ -53,7 +48,7 @@ Item {
     })
 
     property var mouseSymbolMap: ({
-        "mouse_up": "󱕐" ,
+        "mouse_up": "󱕐",
         "mouse_down": "󱕑",
         "mouse:272": "L󰍽",
         "mouse:273": "R󰍽",
@@ -74,8 +69,8 @@ Item {
         "Return": "Enter",
         // "Shift": "",
       },
-      Config.options.appearance.keybinds.superKey > 0 ? {
-          "Super": superMap[Config.options.appearance.keybinds.superKey],
+      !!Config.options.appearance.keybinds.superKey ? {
+          "Super": Config.options.appearance.keybinds.superKey,
       }: {},
       Config.options.appearance.keybinds.useMacSymbol ? macSymbolMap : {},
       Config.options.appearance.keybinds.useFnSymbol ? functionSymbolMap : {},

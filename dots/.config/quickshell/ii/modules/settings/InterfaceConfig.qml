@@ -1019,87 +1019,21 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Super Key Symbol")
+            tooltip: Translation.tr("Choose a symbol from this list or edit config.json and add your own nerd symbol in appearance.keybinds.superKey.")
             ConfigSelectionArray {
                 currentValue: Config.options.appearance.keybinds.superKey
                 onSelected: newValue => {
                     Config.options.appearance.keybinds.superKey = newValue;
                 }
                 // Use a nerdfont to see the icons
-                // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
-                // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
-                // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
-                // 15: 󰀲 | 16: 󰟍 | 17:  |
-                options: [
-                    {
-                        displayName: "󰖳",
-                        value: 0
-                    },
-                    {
-                        displayName: "",
-                        value: 3
-                    },
-                    {
-                        displayName: "󰨡",
-                        value: 4
-                    },
-                    {
-                        displayName: "",
-                        value: 5
-                    },
-                    {
-                        displayName: "󰣇",
-                        value: 7
-                    },
-                    {
-                        displayName: "",
-                        value: 12
-                    },
-                    {
-                        displayName: "",
-                        value: 13
-                    },
-                    {
-                        displayName: "",
-                        value: 11
-                    },
-                    {
-                        displayName: "",
-                        value: 10
-                    },
-                    {
-                        displayName: "",
-                        value: 8
-                    },
-                    {
-                        displayName: "󱄛",
-                        value: 14
-                    },
-                    {
-                        displayName:  "",
-                        value: 9
-                    },
-                    {
-                        displayName: "",
-                        value: 6
-                    },
-                    {
-                        displayName: "󰘳",
-                        value: 2
-                    },
-                    {
-                        displayName: "󰀲",
-                        value: 15
-                    },
-                    {
-                        displayName: "󰟍",
-                        value: 16
-                    },
-                    {
-                        displayName: "",
-                        value: 17
-                    },
-                      
-                ]
+                options: ([
+                  "󰖳", "", "󰨡", "", "󰌽", "󰣇", "", "", "", 
+                  "", "", "󱄛", "", "", "⌘", "󰀲", "󰟍", ""
+                ]).map(icon => { return {
+                  displayName: icon,
+                  value: icon
+                  }
+                })
             }
         }
 

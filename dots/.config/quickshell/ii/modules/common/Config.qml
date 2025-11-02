@@ -128,7 +128,7 @@ Singleton {
                     // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
                     // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
                     // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
-                    property int superKey: 0
+                    property string superKey: "󰖳"
                     property bool useMacSymbol: false
                     property bool useMacLikeShortcut: false
                     property bool useMouseSymbol: false
