@@ -21,7 +21,7 @@ AndroidQuickToggleButton {
         text: Translation.tr("Recognize music | Right-click to toggle source")
     }
 
-    onClicked: {
+    mainAction: () => {
         SongRec.toggleRunning()
     }
 
