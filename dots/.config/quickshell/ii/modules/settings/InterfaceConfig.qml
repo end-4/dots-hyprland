@@ -971,6 +971,7 @@ ContentPage {
             buttonIcon: "center_focus_strong"
             text: Translation.tr("Center icons")
             checked: Config.options.overview.centerIcons
+            visible: Config.options.overview.enable
             onCheckedChanged: {
                 Config.options.overview.centerIcons = checked;
             }
