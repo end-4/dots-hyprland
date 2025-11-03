@@ -32,7 +32,7 @@ Item {
         StyledText {
             visible: true
             font {
-                pixelSize: 52
+                pixelSize: 53
                 family: Appearance.font.family.expressive
                 weight: Font.Medium
             }

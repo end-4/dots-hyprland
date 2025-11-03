@@ -119,6 +119,6 @@ BackgroundWidget {
         color: widget.colText
         style: Text.Raised
         styleColor: Appearance.colors.colShadow
-        animateChange: true
+        animateChange: Config.options.background.clock.digital.animateChange
     }
 }
