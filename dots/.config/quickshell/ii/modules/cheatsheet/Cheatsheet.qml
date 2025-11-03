@@ -75,7 +75,7 @@ Scope { // Scope
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
                 radius: Appearance.rounding.windowRounding
-                property real padding: 30
+                property real padding: 20
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
 
@@ -128,18 +128,7 @@ Scope { // Scope
                 ColumnLayout { // Real content
                     id: cheatsheetColumnLayout
                     anchors.centerIn: parent
-                    spacing: 20
-
-                    StyledText {
-                        id: cheatsheetTitle
-                        Layout.alignment: Qt.AlignHCenter
-                        font {
-                            family: Appearance.font.family.title
-                            pixelSize: Appearance.font.pixelSize.title
-                            variableAxes: Appearance.font.variableAxes.title
-                        }
-                        text: Translation.tr("Cheat sheet")
-                    }
+                    spacing: 10
 
                     Toolbar {
                         Layout.alignment: Qt.AlignHCenter
