@@ -28,6 +28,7 @@ ContentPage {
             from: 1
             to: 200
             stepSize: 2
+            visible: Config.options.background.clock.show
             onValueChanged: {
                 Config.options.background.clock.scale = value / 100;
             }
@@ -35,6 +36,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Clock style")
+            visible: Config.options.background.clock.show
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.style
                 onSelected: newValue => {
@@ -56,9 +58,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "digital"
             title: Translation.tr("Digital clock settings")
-
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "digital"
             ConfigSwitch {
                 buttonIcon: "animation"
                 text: Translation.tr("Animate time change")
@@ -70,9 +71,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Cookie clock settings")
-
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSwitch {
                 buttonIcon: "wand_stars"
                 text: Translation.tr("Auto styling with Gemini")
@@ -158,8 +158,8 @@ ContentPage {
         }
         
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Dial style")
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dialNumberStyle
                 onSelected: newValue => {
@@ -197,8 +197,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Hour hand")
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.hourHandStyle
                 onSelected: newValue => {
@@ -230,9 +230,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Minute hand")
-
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.minuteHandStyle
                 onSelected: newValue => {
@@ -269,9 +268,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Second hand")
-
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.secondHandStyle
                 onSelected: newValue => {
@@ -303,9 +301,8 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.clock.style === "cookie"
             title: Translation.tr("Date style")
-
+            visible: Config.options.background.clock.show && Config.options.background.clock.style === "cookie"
             ConfigSelectionArray {
                 currentValue: Config.options.background.clock.cookie.dateStyle
                 onSelected: newValue => {
@@ -338,6 +335,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Quote settings")
+            visible: Config.options.background.clock.show
             ConfigSwitch {
                 buttonIcon: "format_quote"
                 text: Translation.tr("Show quote")
@@ -351,6 +349,7 @@ ContentPage {
                 placeholderText: Translation.tr("Quote")
                 text: Config.options.background.quote
                 wrapMode: TextEdit.Wrap
+                visible: Config.options.background.showQuote
                 onTextChanged: {
                     Config.options.background.quote = text;
                 }
@@ -359,7 +358,6 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Wallpaper parallax")
-
             ConfigSwitch {
                 buttonIcon: "unfold_more_double"
                 text: Translation.tr("Vertical")
@@ -456,6 +454,7 @@ ContentPage {
 
         ConfigRow {
             uniform: true
+            visible: Config.options.dock.enable
             ConfigSwitch {
                 buttonIcon: "highlight_mouse_cursor"
                 text: Translation.tr("Hover to reveal")
@@ -477,6 +476,7 @@ ContentPage {
             buttonIcon: "colors"
             text: Translation.tr("Tint app icons")
             checked: Config.options.dock.monochromeIcons
+            visible: Config.options.dock.enable
             onCheckedChanged: {
                 Config.options.dock.monochromeIcons = checked;
             }
@@ -503,6 +503,7 @@ ContentPage {
             buttonIcon: "account_circle"
             text: Translation.tr('Launch on startup')
             checked: Config.options.lock.launchOnStartup
+            visible: !Config.options.lock.useHyprlock
             onCheckedChanged: {
                 Config.options.lock.launchOnStartup = checked;
             }
@@ -510,7 +511,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Security")
-
+            visible: !Config.options.lock.useHyprlock
             ConfigSwitch {
                 buttonIcon: "settings_power"
                 text: Translation.tr('Require password to power off/restart')
@@ -538,7 +539,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Style: general")
-
+            visible: !Config.options.lock.useHyprlock
             ConfigSwitch {
                 buttonIcon: "center_focus_weak"
                 text: Translation.tr('Center clock')
@@ -568,7 +569,7 @@ ContentPage {
         }
         ContentSubsection {
             title: Translation.tr("Style: Blurred")
-
+            visible: !Config.options.lock.useHyprlock
             ConfigSwitch {
                 buttonIcon: "blur_on"
                 text: Translation.tr('Enable blur')
@@ -663,7 +664,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Rectangular selection")
-
+            visible: !Config.options.search.imageSearch.useCircleSelection
             ConfigSwitch {
                 buttonIcon: "point_scan"
                 text: Translation.tr("Show aim lines")
@@ -676,7 +677,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Circle selection")
-            
+            visible: Config.options.search.imageSearch.useCircleSelection
             ConfigSpinBox {
                 icon: "eraser_size_3"
                 text: Translation.tr("Stroke width")
@@ -752,13 +753,13 @@ ContentPage {
             }
 
             ConfigSpinBox {
-                enabled: Config.options.sidebar.quickToggles.style === "android"
                 icon: "splitscreen_left"
                 text: Translation.tr("Columns")
                 value: Config.options.sidebar.quickToggles.android.columns
                 from: 1
                 to: 8
                 stepSize: 1
+                visible: Config.options.sidebar.quickToggles.style === "android"
                 onValueChanged: {
                     Config.options.sidebar.quickToggles.android.columns = value;
                 }
@@ -780,8 +781,8 @@ ContentPage {
             ConfigSwitch {
                 buttonIcon: "brightness_6"
                 text: Translation.tr("Brightness")
-                enabled: Config.options.sidebar.quickSliders.enable
                 checked: Config.options.sidebar.quickSliders.showBrightness
+                visible: Config.options.sidebar.quickSliders.enable
                 onCheckedChanged: {
                     Config.options.sidebar.quickSliders.showBrightness = checked;
                 }
@@ -790,8 +791,8 @@ ContentPage {
             ConfigSwitch {
                 buttonIcon: "volume_up"
                 text: Translation.tr("Volume")
-                enabled: Config.options.sidebar.quickSliders.enable
                 checked: Config.options.sidebar.quickSliders.showVolume
+                visible: Config.options.sidebar.quickSliders.enable
                 onCheckedChanged: {
                     Config.options.sidebar.quickSliders.showVolume = checked;
                 }
@@ -800,8 +801,8 @@ ContentPage {
             ConfigSwitch {
                 buttonIcon: "mic"
                 text: Translation.tr("Microphone")
-                enabled: Config.options.sidebar.quickSliders.enable
                 checked: Config.options.sidebar.quickSliders.showMic
+                visible: Config.options.sidebar.quickSliders.enable
                 onCheckedChanged: {
                     Config.options.sidebar.quickSliders.showMic = checked;
                 }
@@ -826,6 +827,7 @@ ContentPage {
                 buttonIcon: "highlight_mouse_cursor"
                 text: Translation.tr("Hover to trigger")
                 checked: Config.options.sidebar.cornerOpen.clickless
+                visible: Config.options.sidebar.cornerOpen.enable
                 onCheckedChanged: {
                     Config.options.sidebar.cornerOpen.clickless = checked;
                 }
@@ -835,6 +837,7 @@ ContentPage {
                 }
             }
             Row {
+                visible: Config.options.sidebar.cornerOpen.enable
                 ConfigSwitch {
                     enabled: !Config.options.sidebar.cornerOpen.clickless
                     text: Translation.tr("Force hover open at absolute corner")
@@ -872,6 +875,7 @@ ContentPage {
             
             ConfigRow {
                 uniform: true
+                visible: Config.options.sidebar.cornerOpen.enable
                 ConfigSwitch {
                     buttonIcon: "vertical_align_bottom"
                     text: Translation.tr("Place at bottom")
@@ -901,11 +905,13 @@ ContentPage {
                 buttonIcon: "visibility"
                 text: Translation.tr("Visualize region")
                 checked: Config.options.sidebar.cornerOpen.visualize
+                visible: Config.options.sidebar.cornerOpen.enable
                 onCheckedChanged: {
                     Config.options.sidebar.cornerOpen.visualize = checked;
                 }
             }
             ConfigRow {
+                visible: Config.options.sidebar.cornerOpen.enable
                 ConfigSpinBox {
                     icon: "arrow_range"
                     text: Translation.tr("Region width")
@@ -968,12 +974,14 @@ ContentPage {
             from: 1
             to: 100
             stepSize: 1
+            visible: Config.options.overview.enable
             onValueChanged: {
                 Config.options.overview.scale = value / 100;
             }
         }
         ConfigRow {
             uniform: true
+            visible: Config.options.overview.enable
             ConfigSpinBox {
                 icon: "splitscreen_bottom"
                 text: Translation.tr("Rows")
