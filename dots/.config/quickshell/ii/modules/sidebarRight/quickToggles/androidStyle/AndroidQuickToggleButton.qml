@@ -119,8 +119,9 @@ GroupButton {
                     }
                     font {
                         pixelSize: Appearance.font.pixelSize.smaller
+                        weight: 100
                     }
-                    color: Appearance.colors.colSubtext
+                    color: root.colText
                     elide: Text.ElideRight
                     text: root.statusText
                 }
