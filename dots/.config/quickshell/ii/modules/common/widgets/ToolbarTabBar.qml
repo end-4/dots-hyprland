@@ -51,8 +51,8 @@ Item {
         id: activeIndicator
         z: 0
         color: Appearance.colors.colSecondaryContainer
-        implicitWidth: contentItem.children[root.currentIndex].implicitWidth
-        implicitHeight: contentItem.children[root.currentIndex].implicitHeight
+        implicitWidth: contentItem.children[root.currentIndex]?.implicitWidth ?? 0
+        implicitHeight: contentItem.children[root.currentIndex]?.implicitHeight ?? 0
         radius: height / 2
         // Animation
         property Item targetItem: contentItem.children[root.currentIndex]
