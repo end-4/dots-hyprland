@@ -47,7 +47,7 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://yande.re/tag.json?order=count&name={{query}}*",
+            "tagSearchTemplate": "https://yande.re/tag.json?order=count&limit=10&name={{query}}*",
             "tagMapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -81,7 +81,7 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://konachan.net/tag.json?order=count&name={{query}}*",
+            "tagSearchTemplate": "https://konachan.net/tag.json?order=count&limit=10&name={{query}}*",
             "tagMapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -142,7 +142,7 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://danbooru.donmai.us/tags.json?search[name_matches]={{query}}*",
+            "tagSearchTemplate": "https://danbooru.donmai.us/tags.json?limit=10&search[name_matches]={{query}}*",
             "tagMapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -151,7 +151,6 @@ Singleton {
                     }
                 })
             }
-
         },
         "gelbooru": {
             "name": "Gelbooru",
@@ -178,7 +177,7 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://gelbooru.com/index.php?page=dapi&s=tag&q=index&json=1&orderby=count&name_pattern={{query}}%",
+            "tagSearchTemplate": "https://gelbooru.com/index.php?page=dapi&s=tag&q=index&json=1&orderby=count&limit=10&name_pattern={{query}}%",
             "tagMapFunc": (response) => {
                 return response.tag.map(item => {
                     return {
