@@ -150,7 +150,7 @@ ContentPage {
         ConfigRow {
             ContentSubsection {
                 Layout.fillWidth: false
-                title: Translation.tr("Show icons")
+                title: Translation.tr("Show resources")
                 ConfigMultiSelectionArray {
                 
                     currentValue: Config.options.bar.resources.items.filter(i => i.visible).map(i => i.type)
@@ -217,7 +217,7 @@ ContentPage {
         ConfigRow {
             ContentSubsection {
                 Layout.fillWidth: true
-                title: Translation.tr("Icon style")
+                title: Translation.tr("Style")
                 ConfigSelectionArray {
                 
                     currentValue: Config.options.bar.resources.style
