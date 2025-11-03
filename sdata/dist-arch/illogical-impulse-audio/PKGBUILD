@@ -5,11 +5,11 @@ pkgdesc='Illogical Impulse Audio Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	cava
-	pavucontrol-qt
-	wireplumber
-	pipewire-pulse
-	libdbusmenu-gtk3
-	playerctl
+  cava
+  pavucontrol-qt
+  wireplumber
+  pipewire-pulse
+  libdbusmenu-gtk3
+  playerctl
 )
 

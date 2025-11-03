@@ -13,27 +13,28 @@ import Quickshell.Io
 
 Item {
     id: root
+    property real padding: 4
     property var inputField: messageInputField
     property string commandPrefix: "/"
 
     property var suggestionQuery: ""
     property var suggestionList: []
 
-    onFocusChanged: (focus) => {
+    onFocusChanged: focus => {
         if (focus) {
-            root.inputField.forceActiveFocus()
+            root.inputField.forceActiveFocus();
         }
     }
 
-    Keys.onPressed: (event) => {
-        messageInputField.forceActiveFocus()
+    Keys.onPressed: event => {
+        messageInputField.forceActiveFocus();
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
-                messageListView.contentY = Math.max(0, messageListView.contentY - messageListView.height / 2)
-                event.accepted = true
+                messageListView.contentY = Math.max(0, messageListView.contentY - messageListView.height / 2);
+                event.accepted = true;
             } else if (event.key === Qt.Key_PageDown) {
-                messageListView.contentY = Math.min(messageListView.contentHeight - messageListView.height / 2, messageListView.contentY + messageListView.height / 2)
-                event.accepted = true
+                messageListView.contentY = Math.min(messageListView.contentHeight - messageListView.height / 2, messageListView.contentY + messageListView.height / 2);
+                event.accepted = true;
             }
         }
         if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O) {
@@ -45,21 +46,21 @@ Item {
         {
             name: "attach",
             description: Translation.tr("Attach a file. Only works with Gemini."),
-            execute: (args) => {
+            execute: args => {
                 Ai.attachFile(args.join(" ").trim());
             }
         },
         {
             name: "model",
             description: Translation.tr("Choose model"),
-            execute: (args) => {
+            execute: args => {
                 Ai.setModel(args[0]);
             }
         },
         {
             name: "tool",
             description: Translation.tr("Set the tool to use for the model."),
-            execute: (args) => {
+            execute: args => {
                 // console.log(args)
                 if (args.length == 0 || args[0] == "get") {
                     Ai.addMessage(Translation.tr("Usage: %1tool TOOL_NAME").arg(root.commandPrefix), Ai.interfaceRole);
@@ -75,7 +76,7 @@ Item {
         {
             name: "prompt",
             description: Translation.tr("Set the system prompt for the model."),
-            execute: (args) => {
+            execute: args => {
                 if (args.length === 0 || args[0] === "get") {
                     Ai.printPrompt();
                     return;
@@ -86,9 +87,9 @@ Item {
         {
             name: "key",
             description: Translation.tr("Set API key"),
-            execute: (args) => {
+            execute: args => {
                 if (args[0] == "get") {
-                    Ai.printApiKey()
+                    Ai.printApiKey();
                 } else {
                     Ai.setApiKey(args[0]);
                 }
@@ -97,25 +98,25 @@ Item {
         {
             name: "save",
             description: Translation.tr("Save chat"),
-            execute: (args) => {
-                const joinedArgs = args.join(" ")
+            execute: args => {
+                const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
                     Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
                     return;
                 }
-                Ai.saveChat(joinedArgs)
+                Ai.saveChat(joinedArgs);
             }
         },
         {
             name: "load",
             description: Translation.tr("Load chat"),
-            execute: (args) => {
-                const joinedArgs = args.join(" ")
+            execute: args => {
+                const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
                     Ai.addMessage(Translation.tr("Usage: %1load CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
                     return;
                 }
-                Ai.loadChat(joinedArgs)
+                Ai.loadChat(joinedArgs);
             }
         },
         {
@@ -128,10 +129,10 @@ Item {
         {
             name: "temp",
             description: Translation.tr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
-            execute: (args) => {
+            execute: args => {
                 // console.log(args)
                 if (args.length == 0 || args[0] == "get") {
-                    Ai.printTemperature()
+                    Ai.printTemperature();
                 } else {
                     const temp = parseFloat(args[0]);
                     Ai.setTemperature(temp);
@@ -191,8 +192,7 @@ Inline w/ double dollar signs: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\p
 Inline w/ backslash and square brackets \\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\]
 
 Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
-`, 
-                    Ai.interfaceRole);
+`, Ai.interfaceRole);
             }
         },
     ]
@@ -208,13 +208,12 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             } else {
                 Ai.addMessage(Translation.tr("Unknown command: ") + command, Ai.interfaceRole);
             }
-        }
-        else {
+        } else {
             Ai.sendUserMessage(inputText);
         }
-        
+
         // Always scroll to bottom when user sends a message
-        messageListView.positionViewAtEnd()
+        messageListView.positionViewAtEnd();
     }
 
     Process {
@@ -223,16 +222,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         property string imageDecodeFileName: "image"
         property string imageDecodeFilePath: `${imageDecodePath}/${imageDecodeFileName}`
         function handleEntry(entry: string) {
-            imageDecodeFileName = parseInt(entry.match(/^(\d+)\t/)[1])
-            decodeImageAndAttachProc.exec(["bash", "-c", 
-                `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`
-            ])
+            imageDecodeFileName = parseInt(entry.match(/^(\d+)\t/)[1]);
+            decodeImageAndAttachProc.exec(["bash", "-c", `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`]);
         }
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {
                 Ai.attachFile(imageDecodeFilePath);
             } else {
-                console.error("[AiChat] Failed to decode image in clipboard content")
+                console.error("[AiChat] Failed to decode image in clipboard content");
             }
         }
     }
@@ -278,37 +275,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
     ColumnLayout {
         id: columnLayout
-        anchors.fill: parent
-
-        RowLayout { // Status
-            Layout.alignment: Qt.AlignHCenter
-            spacing: 10
-
-            StatusItem {
-                icon: Ai.currentModelHasApiKey ? "key" : "key_off"
-                statusText: ""
-                description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
-            }
-            StatusSeparator {}
-            StatusItem {
-                icon: "device_thermostat"
-                statusText: Ai.temperature.toFixed(1)
-                description: Translation.tr("Temperature\nChange with /temp VALUE")
-            }
-            StatusSeparator {
-                visible: Ai.tokenCount.total > 0
-            }
-            StatusItem {
-                visible: Ai.tokenCount.total > 0
-                icon: "token"
-                statusText: Ai.tokenCount.total
-                description: Translation.tr("Total token count\nInput: %1\nOutput: %2")
-                    .arg(Ai.tokenCount.input)
-                    .arg(Ai.tokenCount.output)
-            }
+        anchors {
+            fill: parent
+            margins: root.padding
         }
+        spacing: root.padding
 
-        Item { // Messages
+        Item {
+            // Messages
             Layout.fillWidth: true
             Layout.fillHeight: true
             layer.enabled: true
@@ -317,6 +291,55 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     width: swipeView.width
                     height: swipeView.height
                     radius: Appearance.rounding.small
+                }
+            }
+
+            StyledRectangularShadow {
+                z: 1
+                target: statusBg
+                opacity: messageListView.atYBeginning ? 0 : 1
+                visible: opacity > 0
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+            }
+            Rectangle {
+                id: statusBg
+                z: 2
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: parent.top
+                    topMargin: 4
+                }
+                implicitWidth: statusRowLayout.implicitWidth + 10 * 2
+                implicitHeight: Math.max(statusRowLayout.implicitHeight, 38)
+                radius: Appearance.rounding.normal - root.padding
+                color: Appearance.colors.colLayer2
+                RowLayout {
+                    id: statusRowLayout
+                    anchors.centerIn: parent
+                    spacing: 10
+
+                    StatusItem {
+                        icon: Ai.currentModelHasApiKey ? "key" : "key_off"
+                        statusText: ""
+                        description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
+                    }
+                    StatusSeparator {}
+                    StatusItem {
+                        icon: "device_thermostat"
+                        statusText: Ai.temperature.toFixed(1)
+                        description: Translation.tr("Temperature\nChange with /temp VALUE")
+                    }
+                    StatusSeparator {
+                        visible: Ai.tokenCount.total > 0
+                    }
+                    StatusItem {
+                        visible: Ai.tokenCount.total > 0
+                        icon: "token"
+                        statusText: Ai.tokenCount.total
+                        description: Translation.tr("Total token count\nInput: %1\nOutput: %2").arg(Ai.tokenCount.input).arg(Ai.tokenCount.output)
+                    }
                 }
             }
 
@@ -332,16 +355,20 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 anchors.fill: parent
                 spacing: 10
                 popin: false
+                topMargin: statusBg.implicitHeight + statusBg.anchors.topMargin * 2
 
                 touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
                 onContentHeightChanged: {
-                    if (atYEnd) Qt.callLater(positionViewAtEnd);
+                    if (atYEnd)
+                        Qt.callLater(positionViewAtEnd);
                 }
-                onCountChanged: { // Auto-scroll when new messages are added
-                    if (atYEnd) Qt.callLater(positionViewAtEnd);
+                onCountChanged: {
+                    // Auto-scroll when new messages are added
+                    if (atYEnd)
+                        Qt.callLater(positionViewAtEnd);
                 }
 
                 add: null // Prevent function calls from being janky
@@ -357,7 +384,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     required property int index
                     messageIndex: index
                     messageData: {
-                        Ai.messageByID[modelData]
+                        Ai.messageByID[modelData];
                     }
                     messageInputField: root.inputField
                 }
@@ -393,8 +420,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             Repeater {
                 id: suggestionRepeater
                 model: {
-                    suggestions.selectedIndex = 0
-                    return root.suggestionList.slice(0, 10)
+                    suggestions.selectedIndex = 0;
+                    return root.suggestionList.slice(0, 10);
                 }
                 delegate: ApiCommandButton {
                     id: commandButton
@@ -413,7 +440,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         }
                     }
                     onClicked: {
-                        suggestions.acceptSuggestion(modelData.name)
+                        suggestions.acceptSuggestion(modelData.name);
                     }
                 }
             }
@@ -443,14 +470,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             id: inputWrapper
             property real spacing: 5
             Layout.fillWidth: true
-            radius: Appearance.rounding.small
-            color: Appearance.colors.colLayer1
-            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin
-                + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45)
-                + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin)
+            radius: Appearance.rounding.normal - root.padding
+            color: Appearance.colors.colLayer2
+            implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + spacing, 45) + (attachedFileIndicator.implicitHeight + spacing + attachedFileIndicator.anchors.topMargin)
             clip: true
-            border.color: Appearance.colors.colOutlineVariant
-            border.width: 1
 
             Behavior on implicitHeight {
                 animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -488,121 +511,122 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                     background: null
 
-                    onTextChanged: { // Handle suggestions
+                    onTextChanged: {
+                        // Handle suggestions
                         if (messageInputField.text.length === 0) {
-                            root.suggestionQuery = ""
-                            root.suggestionList = []
-                            return
+                            root.suggestionQuery = "";
+                            root.suggestionList = [];
+                            return;
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}model`)) {
-                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                             const modelResults = Fuzzy.go(root.suggestionQuery, Ai.modelList.map(model => {
                                 return {
                                     name: Fuzzy.prepare(model),
-                                    obj: model,
-                                }
+                                    obj: model
+                                };
                             }), {
                                 all: true,
                                 key: "name"
-                            })
+                            });
                             root.suggestionList = modelResults.map(model => {
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "model ") : ""}${model.target}`,
                                     displayName: `${Ai.models[model.target].name}`,
-                                    description: `${Ai.models[model.target].description}`,
-                                }
-                            })
+                                    description: `${Ai.models[model.target].description}`
+                                };
+                            });
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}prompt`)) {
-                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                             const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.promptFiles.map(file => {
                                 return {
                                     name: Fuzzy.prepare(file),
-                                    obj: file,
-                                }
+                                    obj: file
+                                };
                             }), {
                                 all: true,
                                 key: "name"
-                            })
+                            });
                             root.suggestionList = promptFileResults.map(file => {
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "prompt ") : ""}${file.target}`,
                                     displayName: `${FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target))}`,
-                                    description: Translation.tr("Load prompt from %1").arg(file.target),
-                                }
-                            })
+                                    description: Translation.tr("Load prompt from %1").arg(file.target)
+                                };
+                            });
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}save`)) {
-                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                             const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.savedChats.map(file => {
                                 return {
                                     name: Fuzzy.prepare(file),
-                                    obj: file,
-                                }
+                                    obj: file
+                                };
                             }), {
                                 all: true,
                                 key: "name"
-                            })
+                            });
                             root.suggestionList = promptFileResults.map(file => {
-                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim()
+                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim();
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "save ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: Translation.tr("Save chat to %1").arg(chatName),
-                                }
-                            })
+                                    description: Translation.tr("Save chat to %1").arg(chatName)
+                                };
+                            });
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}load`)) {
-                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                             const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.savedChats.map(file => {
                                 return {
                                     name: Fuzzy.prepare(file),
-                                    obj: file,
-                                }
+                                    obj: file
+                                };
                             }), {
                                 all: true,
                                 key: "name"
-                            })
+                            });
                             root.suggestionList = promptFileResults.map(file => {
-                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim()
+                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim();
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "load ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: Translation.tr(`Load chat from %1`).arg(file.target),
-                                }
-                            })
+                                    description: Translation.tr(`Load chat from %1`).arg(file.target)
+                                };
+                            });
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}tool`)) {
-                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                             const toolResults = Fuzzy.go(root.suggestionQuery, Ai.availableTools.map(tool => {
                                 return {
                                     name: Fuzzy.prepare(tool),
-                                    obj: tool,
-                                }
+                                    obj: tool
+                                };
                             }), {
                                 all: true,
                                 key: "name"
-                            })
+                            });
                             root.suggestionList = toolResults.map(tool => {
-                                const toolName = tool.target
+                                const toolName = tool.target;
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "tool ") : ""}${tool.target}`,
                                     displayName: toolName,
-                                    description: Ai.toolDescriptions[toolName],
-                                }
-                            })
-                        } else if(messageInputField.text.startsWith(root.commandPrefix)) {
-                            root.suggestionQuery = messageInputField.text
+                                    description: Ai.toolDescriptions[toolName]
+                                };
+                            });
+                        } else if (messageInputField.text.startsWith(root.commandPrefix)) {
+                            root.suggestionQuery = messageInputField.text;
                             root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(messageInputField.text.substring(1))).map(cmd => {
                                 return {
                                     name: `${root.commandPrefix}${cmd.name}`,
-                                    description: `${cmd.description}`,
-                                }
-                            })
+                                    description: `${cmd.description}`
+                                };
+                            });
                         }
                     }
 
                     function accept() {
-                        root.handleInput(text)
-                        text = ""
+                        root.handleInput(text);
+                        text = "";
                     }
 
-                    Keys.onPressed: (event) => {
+                    Keys.onPressed: event => {
                         if (event.key === Qt.Key_Tab) {
                             suggestions.acceptSelectedWord();
                             event.accepted = true;
@@ -615,35 +639,41 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
                             if (event.modifiers & Qt.ShiftModifier) {
                                 // Insert newline
-                                messageInputField.insert(messageInputField.cursorPosition, "\n")
-                                event.accepted = true
-                            } else { // Accept text
-                                const inputText = messageInputField.text
-                                messageInputField.clear()
-                                root.handleInput(inputText)
-                                event.accepted = true
+                                messageInputField.insert(messageInputField.cursorPosition, "\n");
+                                event.accepted = true;
+                            } else {
+                                // Accept text
+                                const inputText = messageInputField.text;
+                                messageInputField.clear();
+                                root.handleInput(inputText);
+                                event.accepted = true;
                             }
-                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle image/file pasting
-                            if (event.modifiers & Qt.ShiftModifier) { // Let Shift+Ctrl+V = plain paste
-                                messageInputField.text += Quickshell.clipboardText
+                        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
+                            // Intercept Ctrl+V to handle image/file pasting
+                            if (event.modifiers & Qt.ShiftModifier) {
+                                // Let Shift+Ctrl+V = plain paste
+                                messageInputField.text += Quickshell.clipboardText;
                                 event.accepted = true;
                                 return;
                             }
                             // Try image paste first
-                            const currentClipboardEntry = Cliphist.entries[0]
-                            const cleanCliphistEntry = StringUtils.cleanCliphistEntry(currentClipboardEntry)
-                            if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) { // First entry = currently copied entry = image?
-                                decodeImageAndAttachProc.handleEntry(currentClipboardEntry)
+                            const currentClipboardEntry = Cliphist.entries[0];
+                            const cleanCliphistEntry = StringUtils.cleanCliphistEntry(currentClipboardEntry);
+                            if (/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(currentClipboardEntry)) {
+                                // First entry = currently copied entry = image?
+                                decodeImageAndAttachProc.handleEntry(currentClipboardEntry);
                                 event.accepted = true;
                                 return;
-                            } else if (cleanCliphistEntry.startsWith("file://")) { // First entry = currently copied entry = image?
-                                const fileName = decodeURIComponent(cleanCliphistEntry)
+                            } else if (cleanCliphistEntry.startsWith("file://")) {
+                                // First entry = currently copied entry = image?
+                                const fileName = decodeURIComponent(cleanCliphistEntry);
                                 Ai.attachFile(fileName);
                                 event.accepted = true;
                                 return;
                             }
                             event.accepted = false; // No image, let text pasting proceed
-                        } else if (event.key === Qt.Key_Escape) { // Esc to detach file
+                        } else if (event.key === Qt.Key_Escape) {
+                            // Esc to detach file
                             if (Ai.pendingFilePath.length > 0) {
                                 Ai.attachFile("");
                                 event.accepted = true;
@@ -668,19 +698,18 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         anchors.fill: parent
                         cursorShape: sendButton.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                         onClicked: {
-                            const inputText = messageInputField.text
-                            root.handleInput(inputText)
-                            messageInputField.clear()
+                            const inputText = messageInputField.text;
+                            root.handleInput(inputText);
+                            messageInputField.clear();
                         }
                     }
 
                     contentItem: MaterialSymbol {
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
-                        iconSize: Appearance.font.pixelSize.larger
-                        // fill: sendButton.enabled ? 1 : 0
+                        iconSize: 22
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
-                        text: "send"
+                        text: "arrow_upward"
                     }
                 }
             }
@@ -699,59 +728,58 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     {
                         name: "",
                         sendDirectly: false,
-                        dontAddSpace: true,
-                    }, 
+                        dontAddSpace: true
+                    },
                     {
                         name: "clear",
-                        sendDirectly: true,
-                    }, 
+                        sendDirectly: true
+                    },
                 ]
 
-                ApiInputBoxIndicator { // Model indicator
+                ApiInputBoxIndicator {
+                    // Model indicator
                     icon: "api"
                     text: Ai.getModel().name
-                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL")
-                        .arg(Ai.getModel().name)
-                        .arg(root.commandPrefix)
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
                 }
 
-                ApiInputBoxIndicator { // Tool indicator
+                ApiInputBoxIndicator {
+                    // Tool indicator
                     icon: "service_toolbox"
                     text: Ai.currentTool.charAt(0).toUpperCase() + Ai.currentTool.slice(1)
-                    tooltipText: Translation.tr("Current tool: %1\nSet it with %2tool TOOL")
-                        .arg(Ai.currentTool)
-                        .arg(root.commandPrefix)
+                    tooltipText: Translation.tr("Current tool: %1\nSet it with %2tool TOOL").arg(Ai.currentTool).arg(root.commandPrefix)
                 }
 
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
 
-                ButtonGroup { // Command buttons
+                ButtonGroup {
+                    // Command buttons
                     padding: 0
 
-                    Repeater { // Command buttons
+                    Repeater {
+                        // Command buttons
                         model: commandButtonsRow.commandsShown
                         delegate: ApiCommandButton {
                             property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                             buttonText: commandRepresentation
                             downAction: () => {
                                 if (modelData.sendDirectly) {
-                                    root.handleInput(commandRepresentation)
+                                    root.handleInput(commandRepresentation);
                                 } else {
-                                    messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ")
-                                    messageInputField.cursorPosition = messageInputField.text.length
-                                    messageInputField.forceActiveFocus()
+                                    messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ");
+                                    messageInputField.cursorPosition = messageInputField.text.length;
+                                    messageInputField.forceActiveFocus();
                                 }
                                 if (modelData.name === "clear") {
-                                    messageInputField.text = ""
+                                    messageInputField.text = "";
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
-        
     }
-
 }

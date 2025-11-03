@@ -532,8 +532,6 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
-            // Fetch API keys if needed
-            if (model?.requires_key) KeyringStorage.fetchKeyringData();
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(
@@ -641,6 +639,10 @@ Singleton {
 
         function makeRequest() {
             const model = models[currentModelId];
+
+            // Fetch API keys if needed
+            if (model?.requires_key && !KeyringStorage.loaded) KeyringStorage.fetchKeyringData();
+            
             requester.currentStrategy = root.currentApiStrategy;
             requester.currentStrategy.reset(); // Reset strategy state
 

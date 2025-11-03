@@ -1,6 +1,14 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+function vianix-warning(){
+  printf "${STY_YELLOW}Currently \"--via-nix\" will run:\n"
+  printf "  home-manager switch --flake .#illogical_impulse\n"
+  printf "If you are already using home-manager, it may override your current config,\n"
+  printf "despite that this should be reversible.\n"
+  pause
+}
+
 function install_home-manager(){
   # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
   local cmd=home-manager
@@ -48,8 +56,8 @@ function install_curl(){
   echo "Please install it by yourself and then retry."
   return 1
 }
-function install_zsh(){
-  local cmd=zsh
+function install_fish(){
+  local cmd=fish
 
   if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
     x sudo pacman -Syu
@@ -99,15 +107,18 @@ function hm_deps(){
 
 ##################################################
 ##################################################
+
+vianix-warning
+
 if ! command -v curl >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"curl\" not found.${STY_RST}"
   showfun install_curl
   v install_curl
 fi
-if ! command -v zsh >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"zsh\" not found.${STY_RST}"
-  showfun install_zsh
-  v install_zsh
+if ! command -v fish >/dev/null 2>&1;then
+  echo -e "${STY_YELLOW}[$0]: \"fish\" not found.${STY_RST}"
+  showfun install_fish
+  v install_fish
 fi
 if ! command -v swaylock >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"swaylock\" not found.${STY_RST}"

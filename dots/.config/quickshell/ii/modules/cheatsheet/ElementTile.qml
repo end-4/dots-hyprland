@@ -7,8 +7,8 @@ RippleButton {
     id: root
     required property var element
     opacity: element.type != "empty" ? 1 : 0
-    implicitHeight: 60
-    implicitWidth: 60
+    implicitHeight: 70
+    implicitWidth: 70
     colBackground: Appearance.colors.colLayer2
     buttonRadius: Appearance.rounding.small
 
