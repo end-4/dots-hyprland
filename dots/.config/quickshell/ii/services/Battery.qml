@@ -32,27 +32,29 @@ Singleton {
     property real timeToEmpty: UPower.displayDevice.timeToEmpty
     property real timeToFull: UPower.displayDevice.timeToFull
 
-    property real health: 0
-    Process {
-        id: batteryProcess
-        running: Config.options.battery.showHealth
-        command: [
-            "bash",
-            `${FileUtils.trimFileProtocol(Directories.scriptPath)}/battery/calculate-health.sh`
-        ]
+    property real health: (function() {
+        if (!Config.options.battery.showHealth) {
+            return 0;
+        }
 
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const output = text.trim()
-                const value = Number(output)
-                if (!isNaN(value)) {
-                    root.health = value
+        const devList = UPower.devices.values;
+        for (let i = 0; i < devList.length; ++i) {
+            const dev = devList[i];
+            if (dev.isLaptopBattery && dev.healthSupported) {
+                const health = dev.healthPercentage;
+                if (health === 0) {
+                    return 0;
+                } else if (health < 1) {
+                    return health * 100;
                 } else {
-                    console.warn("Battery script output invalid:", output)
+                    return health;
                 }
             }
         }
-    }
+        return 0;
+    })()
+
+
 
     onIsLowAndNotChargingChanged: {
         if (!root.available || !isLowAndNotCharging) return;
