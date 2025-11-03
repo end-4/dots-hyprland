@@ -21,14 +21,6 @@
   ## Allow fontconfig to discover fonts in home.packages
   fonts.fontconfig.enable = true;
 
-  # home.sessionVariables.NIXOS_OZONE_WL = "1";
-  wayland.windowManager.hyprland = {
-    ## Make sure home-manager not generate ~/.config/hypr/hyprland.conf
-    systemd.enable = false; plugins = []; settings = {}; extraConfig = "";
-    enable = true;
-    ## Use NixGL
-    package = config.lib.nixGL.wrap pkgs.hyprland;
-  };
 
   home = {
     packages = with pkgs; [
@@ -64,10 +56,16 @@
 	    playerctl #playerctl
 
       ### illogical-impulse-backlight
-      # TODO: geoclue is used in https://github.com/end-4/dots-hyprland/blob/0551c010b586dbf5578c32de2735698cca0801a7/dots/.config/hypr/hyprland/scripts/start_geoclue_agent.sh with hardcoded absolute path to search the agent. Below will not work without futher tweaks in that start_geoclue_agent.sh
-      geoclue2 # geoclue
+      # TODO: geoclue agent is used in .config/hypr/hyprland/scripts/start_geoclue_agent.sh with hardcoded path under /usr/ .
+      # If installed by Nix, then the agent path will be ${cfg.package}/libexec/geoclue-2.0/demos/agent , where ${cfg.package} is defined by Nix, see https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/desktops/geoclue2.nix .
+      # it won't work without futher tweaks.
+      # geoclue2 # geoclue
+      (geoclue2.override { withDemoAgent = true; })
       brightnessctl # brightnessctl
       ddcutil # ddcutil
+    ]
+    ++ [
+    (config.lib.nixGL.wrap pkgs.hyprland)
     ];
   }//home_attrs;
 }
