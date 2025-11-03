@@ -86,7 +86,7 @@ Singleton {
         property int rawMaxBrightness: 100
         property real brightness
         property real brightnessMultiplier: 1.0
-        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * brightnessMultiplier))
+        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * (Config.options.light.antiFlashbang.enable ? brightnessMultiplier : 1)))
         property bool ready: false
         property bool animateChanges: !monitor.isDdc
 
