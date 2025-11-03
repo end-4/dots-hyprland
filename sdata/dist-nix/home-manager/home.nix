@@ -10,6 +10,8 @@
       xdg-desktop-portal-gnome
       xdg-desktop-portal-gtk
       xdg-desktop-portal-wlr
+      libsForQt5.xdg-desktop-portal-kde
+      #kdePackages.xdg-desktop-portal-kde
     ];
     config.hyprland = {
       default = [ "hyprland" "gtk" ];
@@ -29,10 +31,6 @@
       ## inetutils: provides hostname, ifconfig, ping, etc.
       ## libnotify: provides notify-send
       inetutils libnotify
-      ## Media related
-      brightnessctl pavucontrol
-      ## Terminal and shell
-      foot cowsay lolcat
 
       ##### Fonts/Icons/Cursors/Decoration #####
       fontconfig
@@ -70,7 +68,7 @@
       wget #wget (Used in Quickshell config)
       ripgrep #ripgrep (Not sure where been used)
       jq #jq (Widely used)
-      #meson (Actually not needed. It was used in building AGS.)
+      #meson (TODO: Actually not needed. It was used in building AGS.)
       xdg-user-dirs #xdg-user-dirs (Used in Hyprland and Quickshell config)
       rsync #rsync (Used in install script)
       yq-go #go-yq (Used in install script)
@@ -85,13 +83,13 @@
       #breeze
       #breeze-plus
       #darkly-bin
-      #eza
-      #fish
-      #fontconfig
-      #kitty
-      #matugen-bin
-      #otf-space-grotesk
-      #starship
+      #eza (Used in Fish config: `alias ls 'eza --icons'`; TODO: Not available on search.nixos.org)
+      #fish (Probably should not install via Nix)
+      fontconfig #fontconfig (Basic thing)
+      kitty #kitty (Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots)
+      matugen #matugen-bin (Used in Quickshell)
+      #otf-space-grotesk https://events.ccc.de/congress/2024/infos/styleguide.html (TODO: Not available on search.nixos.org) (Used in Quickshell and matugen config)
+      starship #starship (Used in Fish config)
       #ttf-gabarito-git
       #ttf-jetbrains-mono-nerd
       #ttf-material-symbols-variable-git
@@ -130,7 +128,7 @@
       ### illogical-impulse-microtex-git
       # This package will be installed as /opt/MicroTeX and it
       #MicroTeX#https://github.com/NanoMichael/MicroTeX
-      # It seems not available on search.nixos.org
+      # TODO: It seems not available on search.nixos.org
 
 
       ### illogical-impulse-oneui4-icons-git
@@ -138,26 +136,25 @@
 
 
       ### illogical-impulse-portal
-      #xdg-desktop-portal
-      #xdg-desktop-portal-kde
-      #xdg-desktop-portal-gtk
-      #xdg-desktop-portal-hyprland
+      #xdg-desktop-portal (Included elsewhere)
+      #xdg-desktop-portal-kde (Included elsewhere)
+      #xdg-desktop-portal-gtk (Included elsewhere)
+      #xdg-desktop-portal-hyprland (Included elsewhere)
 
 
       ### illogical-impulse-python
-      #clang
-      #uv
-      #gtk4
-      #libadwaita
-      #libsoup3
-      #libportal-gtk4
-      #gobject-introspection
-      #sassc
+      #clang (Some python package may need this to be built, e.g. #1235) (However it seems not available directly as a package on search.nixos.org)
+      uv #uv (Used for python venv)
+      #gtk4 (Not explicitly used) (Not directly available as a package on search.nixos.org)
+      #libadwaita (Not explicitly used) (Not directly available as a package on search.nixos.org)
+      libsoup_3 #libsoup3 (Not explicitly used)
+      libportal-gtk4 #libportal-gtk4 (Not explicitly used)
+      gobject-introspection #gobject-introspection (Not explicitly used)
+      #sassc (TODO: Not used anymore?)
 
 
       ### illogical-impulse-quickshell-git
-      #_commit='db1777c20b936a86528c1095cbcb1ebd92801402'
-      #url='https://git.outfoxxed.me/quickshell/quickshell'
+      quickshell.packages.x86_64-linux.default
 
 
       ### illogical-impulse-screencapture
@@ -199,7 +196,7 @@
       #hyprutils
       #hyprlock
       #hyprpicker
-      #nm-connection-editor
+      #nm-connection-editor (TODO: Not needed?)
       songrec #songrec (Used in Quickshell config)
       translate-shell #translate-shell (Used in Quickshell config)
       wlogout #wlogout (Used in Hyprland config)
