@@ -37,14 +37,6 @@ Item {
                 swipeView.decrementCurrentIndex()
                 event.accepted = true;
             }
-            else if (event.key === Qt.Key_Tab) {
-                swipeView.setCurrentIndex((swipeView.currentIndex + 1) % swipeView.count);
-                event.accepted = true;
-            }
-            else if (event.key === Qt.Key_Backtab) {
-                swipeView.setCurrentIndex((swipeView.currentIndex - 1 + swipeView.count) % swipeView.count);
-                event.accepted = true;
-            }
         }
     }
 
@@ -66,29 +58,36 @@ Item {
             }
         }
 
-        SwipeView { // Content pages
-            id: swipeView
-            Layout.topMargin: 5
+        Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
-            currentIndex: tabBar.currentIndex
+            implicitWidth: swipeView.implicitWidth
+            implicitHeight: swipeView.implicitHeight
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colLayer1
 
-            clip: true
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: swipeView.width
-                    height: swipeView.height
-                    radius: Appearance.rounding.small
+            SwipeView { // Content pages
+                id: swipeView
+                anchors.fill: parent
+                spacing: 10
+                currentIndex: tabBar.currentIndex
+
+                clip: true
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: swipeView.width
+                        height: swipeView.height
+                        radius: Appearance.rounding.small
+                    }
                 }
-            }
 
-            contentChildren: [
-                ...((root.aiChatEnabled || (!root.translatorEnabled && !root.animeEnabled)) ? [aiChat.createObject()] : []),
-                ...(root.translatorEnabled ? [translator.createObject()] : []),
-                ...(root.animeEnabled ? [anime.createObject()] : [])
-            ]
+                contentChildren: [
+                    ...((root.aiChatEnabled || (!root.translatorEnabled && !root.animeEnabled)) ? [aiChat.createObject()] : []),
+                    ...(root.translatorEnabled ? [translator.createObject()] : []),
+                    ...(root.animeEnabled ? [anime.createObject()] : [])
+                ]
+            }
         }
 
         Component {
