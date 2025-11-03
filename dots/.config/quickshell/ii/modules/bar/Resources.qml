@@ -30,7 +30,7 @@ MouseArea {
             iconName: "memory"
             percentage: ResourceUsage.memoryUsedPercentage
             warningThreshold: Config.options.bar.resources.memoryWarningThreshold
-            shown: Config.options.bar.resources.collapseResources.includes("memory") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showMemory 
+            shown: Config.options.bar.resources.items.find(i => i.type === "memory").collapse && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.items.find(i => i.type === "memory").visible 
             detailed: Config.options.bar.resources.style === "detailed"
         }
 
@@ -40,7 +40,7 @@ MouseArea {
             percentage: ResourceUsage.swapUsedPercentage
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.swapWarningThreshold
-            shown: Config.options.bar.resources.collapseResources.includes("swap") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showSwap
+            shown: Config.options.bar.resources.items.find(i => i.type === "swap").collapse && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.items.find(i => i.type === "swap").visible
             detailed: Config.options.bar.resources.style === "detailed"
         }
 
@@ -50,7 +50,7 @@ MouseArea {
             percentage: ResourceUsage.cpuUsage
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold
-            shown: Config.options.bar.resources.collapseResources.includes("cpu") && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.showCpu
+            shown: Config.options.bar.resources.items.find(i => i.type === "cpu").collapse && (MprisController.activePlayer?.trackTitle?.length > 0) ? false : Config.options.bar.resources.items.find(i => i.type === "cpu").visible
             detailed: Config.options.bar.resources.style === "detailed"
         }
 

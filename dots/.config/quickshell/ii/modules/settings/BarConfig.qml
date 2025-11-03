@@ -145,35 +145,76 @@ ContentPage {
         icon: "memory"
         title: Translation.tr("Resources")
 
-        ConfigRow {
-            ConfigSwitch {
-                buttonIcon: "memory"
-                text: Translation.tr("Show Memory")
-                checked: Config.options.bar.resources.showMemory
-                onCheckedChanged: {
-                    Config.options.bar.resources.showMemory = checked;
-                }
-            }
-            ConfigSwitch {
-                buttonIcon: "swap_horiz"
-                text: Translation.tr("Show Swap")
-                checked: Config.options.bar.resources.showSwap
-                onCheckedChanged: {
-                    Config.options.bar.resources.showSwap = checked;
-                }
-            }
-            ConfigSwitch {
-                buttonIcon: "planner_review"
-                text: Translation.tr("Show CPU")
-                checked: Config.options.bar.resources.showCpu
-                onCheckedChanged: {
-                    Config.options.bar.resources.showCpu = checked;
-                }
-            }
-            
-        }
         
-        ConfigRow{
+        
+        ConfigRow {
+            ContentSubsection {
+                Layout.fillWidth: false
+                title: Translation.tr("Show icons")
+                ConfigMultiSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.items.filter(i => i.visible).map(i => i.type)
+                    onSelected: newValue => {
+                        const item = Config.options.bar.resources.items.find(i => i.type === newValue);
+                        if (item) {
+                            item.visible = !item.visible;
+                        }
+                    }
+
+                    options: [
+                        {
+                            displayName: Translation.tr("Memory"),
+                            icon: "memory",
+                            value: "memory"
+                        },
+                        {
+                            displayName: Translation.tr("Swap"),
+                            icon: "swap_horiz",
+                            value: "swap"
+                        },
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        }
+                    ]   
+                }
+            }
+            ContentSubsection {
+                Layout.fillWidth: false
+                title: Translation.tr("Collapse resources")
+                tooltip: Translation.tr("Collapses the selected resources when a media player is active to save space")
+                ConfigMultiSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.items.filter(i => i.collapse).map(i => i.type)
+                    onSelected: newValue => {
+                        const item = Config.options.bar.resources.items.find(i => i.type === newValue);
+                        if (item) {
+                            item.collapse = !item.collapse;
+                        }
+                    }
+
+                    options: [
+                        {
+                            displayName: Translation.tr("Memory"),
+                            icon: "memory",
+                            value: "memory"
+                        },
+                        {
+                            displayName: Translation.tr("Swap"),
+                            icon: "swap_horiz",
+                            value: "swap"
+                        },
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        }
+                    ]   
+                }
+            }
+        }
+        ConfigRow {
             ContentSubsection {
                 Layout.fillWidth: true
                 title: Translation.tr("Icon style")
@@ -195,38 +236,6 @@ ContentPage {
                             value: "detailed"
                         }
                     ]
-                }
-            }
-            ContentSubsection {
-                Layout.fillWidth: false
-                title: Translation.tr("Collapse resources")
-                tooltip: Translation.tr("Collapses the selected resources when a media player is active to save space")
-                ConfigMultiSelectionArray {
-                
-                    currentValue: Config.options.bar.resources.collapseResources
-                    onSelected: newValue => {
-                        if (!Config.options.bar.resources.collapseResources.includes(newValue))
-                            Config.options.bar.resources.collapseResources.push(newValue);
-                        else
-                            Config.options.bar.resources.collapseResources.splice(Config.options.bar.resources.collapseResources.indexOf(newValue), 1);
-                    }
-                    options: [
-                        {
-                            displayName: Translation.tr("Memory"),
-                            icon: "memory",
-                            value: "memory"
-                        },
-                        {
-                            displayName: Translation.tr("Swap"),
-                            icon: "swap_horiz",
-                            value: "swap"
-                        },
-                        {
-                            displayName: Translation.tr("CPU"),
-                            icon: "planner_review",
-                            value: "cpu"
-                        }
-                    ]   
                 }
             }
         }
