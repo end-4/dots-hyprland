@@ -1,6 +1,14 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
+function vianix-warning(){
+  printf "${STY_YELLOW}Currently \"--via-nix\" will run:\n"
+  printf "  home-manager switch --flake .#illogical_impulse\n"
+  printf "If you are already using home-manager, it may override your current config,\n"
+  printf "despite that this should be reversible.\n"
+  pause
+}
+
 function install_home-manager(){
   # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
   local cmd=home-manager
@@ -99,6 +107,9 @@ function hm_deps(){
 
 ##################################################
 ##################################################
+
+vianix-warning
+
 if ! command -v curl >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"curl\" not found.${STY_RST}"
   showfun install_curl
