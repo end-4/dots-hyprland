@@ -10,8 +10,7 @@
       xdg-desktop-portal-gnome
       xdg-desktop-portal-gtk
       xdg-desktop-portal-wlr
-      libsForQt5.xdg-desktop-portal-kde
-      #kdePackages.xdg-desktop-portal-kde
+      kdePackages.xdg-desktop-portal-kde
     ];
     config.hyprland = {
       default = [ "hyprland" "gtk" ];
@@ -59,7 +58,7 @@
 
 
       ### illogical-impulse-basic
-      #axel (Seems not available, however actually not needed cuz it's only used for install Bibata_Cursor in package-installers.sh)
+      #axel#axel (TODO: actually not needed cuz it's only used for install Bibata_Cursor in package-installers.sh)
       bc #bc (Used in quickshell/ii/scripts/colors/switchwall.sh for example) 
       uutils-coreutils-noprefix #coreutils (Too many executables involved, not sure where been used)
       cliphist #cliphist (Used in Hyprland and Quickshell config)
@@ -83,12 +82,12 @@
       #breeze
       #breeze-plus
       #darkly-bin
-      #eza (Used in Fish config: `alias ls 'eza --icons'`; TODO: Not available on search.nixos.org)
+      eza #eza (Used in Fish config: `alias ls 'eza --icons'`)
       #fish (Probably should not install via Nix)
       fontconfig #fontconfig (Basic thing)
       kitty #kitty (Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots)
       matugen #matugen-bin (Used in Quickshell)
-      #otf-space-grotesk https://events.ccc.de/congress/2024/infos/styleguide.html (TODO: Not available on search.nixos.org) (Used in Quickshell and matugen config)
+      #otf-space-grotesk https://events.ccc.de/congress/2024/infos/styleguide.html (TODO: Not available as Nixpkg) (Used in Quickshell and matugen config)
       starship #starship (Used in Fish config)
       #ttf-gabarito-git
       #ttf-jetbrains-mono-nerd
@@ -128,7 +127,7 @@
       ### illogical-impulse-microtex-git
       # This package will be installed as /opt/MicroTeX and it
       #MicroTeX#https://github.com/NanoMichael/MicroTeX
-      # TODO: It seems not available on search.nixos.org
+      # TODO: Not available as nixpkg
 
 
       ### illogical-impulse-oneui4-icons-git
@@ -145,8 +144,8 @@
       ### illogical-impulse-python
       #clang (Some python package may need this to be built, e.g. #1235) (However it seems not available directly as a package on search.nixos.org)
       uv #uv (Used for python venv)
-      #gtk4 (Not explicitly used) (Not directly available as a package on search.nixos.org)
-      #libadwaita (Not explicitly used) (Not directly available as a package on search.nixos.org)
+      gtk4 #gtk4 (Not explicitly used)
+      libadwaita #libadwaita (Not explicitly used)
       libsoup_3 #libsoup3 (Not explicitly used)
       libportal-gtk4 #libportal-gtk4 (Not explicitly used)
       gobject-introspection #gobject-introspection (Not explicitly used)
