@@ -22,7 +22,7 @@ BackgroundWidget {
     widgetPrefix: "clock"
 
     property color dominantColor: widget.collectorData.dominant_color
-    property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
+    property bool dominantColorIsDark: dominantColor.hslLightness < 0.85
     property color colText: {
         return (GlobalStates.screenLocked) ? Appearance.colors.colOnLayer0 : CF.ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12));
     }
