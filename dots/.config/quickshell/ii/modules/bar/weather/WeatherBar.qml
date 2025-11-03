@@ -10,7 +10,7 @@ import QtQuick.Layouts
 MouseArea {
     id: root
     property bool hovered: false
-    implicitWidth: rowLayout.implicitWidth + 10 * 2
+    implicitWidth: rowLayout.implicitWidth + 7
     implicitHeight: Appearance.sizes.barHeight
 
     hoverEnabled: true
@@ -32,14 +32,14 @@ MouseArea {
             fill: 0
             text: WeatherIcons.codeToName[Weather.data.wCode] ?? "cloud"
             iconSize: Appearance.font.pixelSize.large
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.colors.colOnPrimary
             Layout.alignment: Qt.AlignVCenter
         }
 
         StyledText {
             visible: true
             font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer1
+            color: Appearance.colors.colOnPrimary
             text: Weather.data?.temp ?? "--°"
             Layout.alignment: Qt.AlignVCenter
         }

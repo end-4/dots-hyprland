@@ -106,10 +106,22 @@ Item { // Bar content region
         }
         spacing: 4
 
+
+        Loader {
+            Layout.leftMargin: 4
+            active: Config.options.bar.weather.enable
+
+            sourceComponent: BarGroup {
+                    backcol: Appearance.colors.colPrimary
+                    WeatherBar {}
+
+            }
+        }
+
         BarGroup {
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: root.centerSideModuleWidth
+            implicitWidth: root.centerSideModuleWidth / 2
 
             Resources {
                 alwaysShowAllResources: root.useShortenedForm === 2
@@ -151,19 +163,11 @@ Item { // Bar content region
         VerticalBarSeparator {
             visible: Config.options?.bar.borderless
         }
-        Loader {
-            Layout.leftMargin: 4
-            active: Config.options.bar.weather.enable
-
-            sourceComponent: BarGroup {
-                WeatherBar {}
-            }
-        }
 
         MouseArea {
             id: rightCenterGroup
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: root.centerSideModuleWidth
+            implicitWidth: root.centerSideModuleWidth / 1.15
             implicitHeight: rightCenterGroupContent.implicitHeight
 
             onPressed: {
