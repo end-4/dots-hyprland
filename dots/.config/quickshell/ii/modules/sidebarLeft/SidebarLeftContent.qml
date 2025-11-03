@@ -21,7 +21,6 @@ Item {
         ...(root.translatorEnabled ? [{"icon": "translate", "name": Translation.tr("Translator")}] : []),
         ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
     ]
-    property int selectedTab: 0
     property int tabCount: swipeView.count
 
     function focusActiveItem() {
@@ -31,36 +30,39 @@ Item {
     Keys.onPressed: (event) => {
         if (event.modifiers === Qt.ControlModifier) {
             if (event.key === Qt.Key_PageDown) {
-                root.selectedTab = Math.min(root.selectedTab + 1, root.tabCount - 1)
+                swipeView.incrementCurrentIndex()
                 event.accepted = true;
-            } 
+            }
             else if (event.key === Qt.Key_PageUp) {
-                root.selectedTab = Math.max(root.selectedTab - 1, 0)
+                swipeView.decrementCurrentIndex()
                 event.accepted = true;
             }
             else if (event.key === Qt.Key_Tab) {
-                root.selectedTab = (root.selectedTab + 1) % root.tabCount;
+                swipeView.setCurrentIndex((swipeView.currentIndex + 1) % swipeView.count);
                 event.accepted = true;
             }
             else if (event.key === Qt.Key_Backtab) {
-                root.selectedTab = (root.selectedTab - 1 + root.tabCount) % root.tabCount;
+                swipeView.setCurrentIndex((swipeView.currentIndex - 1 + swipeView.count) % swipeView.count);
                 event.accepted = true;
             }
         }
     }
 
     ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: sidebarPadding
-        
+        anchors {
+            fill: parent
+            margins: sidebarPadding
+        }
         spacing: sidebarPadding
 
-        PrimaryTabBar { // Tab strip
-            id: tabBar
-            visible: root.tabButtonList.length > 1
-            tabButtonList: root.tabButtonList
-            Synchronizer on currentIndex {
-                property alias source: root.selectedTab
+        Toolbar {
+            Layout.alignment: Qt.AlignHCenter
+            enableShadow: false
+            ToolbarTabBar {
+                id: tabBar
+                Layout.alignment: Qt.AlignHCenter
+                tabButtonList: root.tabButtonList
+                currentIndex: swipeView.currentIndex
             }
         }
 
@@ -70,12 +72,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 10
-            
-            currentIndex: root.selectedTab
-            onCurrentIndexChanged: {
-                tabBar.enableIndicatorAnimation = true
-                root.selectedTab = currentIndex
-            }
+            currentIndex: tabBar.currentIndex
 
             clip: true
             layer.enabled: true
