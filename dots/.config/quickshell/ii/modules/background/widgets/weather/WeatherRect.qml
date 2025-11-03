@@ -31,7 +31,11 @@ Item {
 
         StyledText {
             visible: true
-            font.pixelSize: 60
+            font {
+                pixelSize: 52
+                family: Appearance.font.family.expressive
+                weight: Font.Medium
+            }
             color: widget.colText
             text: Weather.data?.temp.substring(0,Weather.data?.temp.length - 1) ?? "--°"
             Layout.alignment: Qt.AlignVCenter
