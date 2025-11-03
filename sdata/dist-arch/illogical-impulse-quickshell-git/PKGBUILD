@@ -44,7 +44,7 @@ _pkgsrc="$_pkgname"
 source=("$_pkgsrc::git+$url.git#commit=$_commit"
   quickshell-check.hook)
 sha256sums=('SKIP'
-            '8543e21aeaaa5441b73a679160e7601a957f16c433e8d6bd9257e80bd0e94083')
+  '8543e21aeaaa5441b73a679160e7601a957f16c433e8d6bd9257e80bd0e94083')
 
 
 pkgver() {
