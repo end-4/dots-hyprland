@@ -11,7 +11,8 @@ AndroidQuickToggleButton {
     name: Translation.tr("Virtual Keyboard")
     toggled: GlobalStates.oskOpen
     buttonIcon: toggled ? "keyboard_hide" : "keyboard"
-    onClicked: {
+    
+    mainAction: () => {
         GlobalStates.oskOpen = !GlobalStates.oskOpen
     }
 

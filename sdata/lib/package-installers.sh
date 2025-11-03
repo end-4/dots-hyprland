@@ -5,21 +5,6 @@
 
 # This file is provided for any distros, mainly non-Arch(based) distros.
 
-install-agsv1(){
-  x mkdir -p $REPO_ROOT/cache/agsv1
-  x cd $REPO_ROOT/cache/agsv1
-  try git init -b main
-  try git remote add origin https://github.com/Aylur/ags.git
-  x git pull origin main && git submodule update --init --recursive
-  x git fetch --tags
-  x git checkout v1.9.0
-  x npm install
-  x meson setup build # --reconfigure
-  x meson install -C build
-  x sudo mv /usr/local/bin/ags{,v1}
-  x cd $REPO_ROOT
-}
-
 install-Rubik(){
   x mkdir -p $REPO_ROOT/cache/Rubik
   x cd $REPO_ROOT/cache/Rubik

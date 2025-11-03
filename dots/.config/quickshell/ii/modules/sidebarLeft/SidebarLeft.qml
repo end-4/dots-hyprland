@@ -127,6 +127,7 @@ Scope { // Scope
         sourceComponent: FloatingWindow {
             id: detachedSidebarRoot
             property var contentParent: detachedSidebarBackground
+            color: "transparent"
 
             visible: GlobalStates.sidebarLeftOpen
             onVisibleChanged: {

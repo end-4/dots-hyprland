@@ -9,7 +9,7 @@ ColumnLayout {
     id: root
     spacing: 0
     required property var tabButtonList // Something like [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}]
-    property int currentIndex
+    property alias currentIndex: tabBar.currentIndex
     property bool enableIndicatorAnimation: false
     property color colIndicator: Appearance?.colors.colPrimary ?? "#65558F"
     property color colBorder: Appearance?.m3colors.m3outlineVariant ?? "#C6C6D0"
@@ -26,17 +26,14 @@ ColumnLayout {
     TabBar {
         id: tabBar
         Layout.fillWidth: true
-        Synchronizer on currentIndex {
-            property alias source: root.currentIndex
-        }
 
         background: Item {
             WheelHandler {
                 onWheel: (event) => {
                     if (event.angleDelta.y < 0)
-                        tabBar.currentIndex = Math.min(tabBar.currentIndex + 1, root.tabButtonList.length - 1)
+                        tabBar.incrementCurrentIndex()
                     else if (event.angleDelta.y > 0)
-                        tabBar.currentIndex = Math.max(tabBar.currentIndex - 1, 0)
+                        tabBar.decrementCurrentIndex()
                 }
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             }
@@ -49,7 +46,7 @@ ColumnLayout {
                 buttonText: modelData.name
                 buttonIcon: modelData.icon
                 minimumWidth: 160
-                onClicked: root.currentIndex = index
+                onClicked: tabBar.setCurrentIndex(index)
             }
         }
     }

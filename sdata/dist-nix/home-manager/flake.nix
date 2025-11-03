@@ -13,6 +13,10 @@
       url = "github:hyprwm/Hyprland";
     };
     nixgl.url = "github:nix-community/nixGL";
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell?ref=db1777c20b936a86528c1095cbcb1ebd92801402";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { nixpkgs, home-manager, nixgl, ... }:
