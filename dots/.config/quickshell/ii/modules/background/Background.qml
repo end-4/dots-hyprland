@@ -334,7 +334,6 @@ Variants {
                                 font {
                                     pixelSize: Appearance.font.pixelSize.normal
                                     weight: 350
-                                    italic: true
                                 }
                                 color: bgRoot.colText
                                 style: Text.Raised
