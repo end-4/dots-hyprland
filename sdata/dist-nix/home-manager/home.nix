@@ -200,9 +200,9 @@
       #hyprlock
       #hyprpicker
       #nm-connection-editor
-      #songrec
-      #translate-shell
-      #wlogout
+      songrec #songrec (Used in Quickshell config)
+      translate-shell #translate-shell (Used in Quickshell config)
+      wlogout #wlogout (Used in Hyprland config)
 
     ]
     ++ [
