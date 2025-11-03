@@ -160,7 +160,7 @@ MouseArea {
                 NumberAnimation { target: passwordBox; property: "x"; to: 30; duration: 50 }
                 NumberAnimation { target: passwordBox; property: "x"; to: -15; duration: 40 }
                 NumberAnimation { target: passwordBox; property: "x"; to: 15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "x"; to: 0; duration: 30 }
+                NumberAnimation { target: passwordBox; property: "x"; to: root.context.fingerprintsConfigured ? 42 : 0; duration: 30 }
             }
             Connections {
                 target: GlobalStates
