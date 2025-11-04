@@ -152,7 +152,6 @@ Singleton {
                         property real x: 100
                         property real y: 100
                         property string style: "cookie" // Options: "cookie", "digital"
-                        property real scale: 1
                         property JsonObject cookie: JsonObject {
                             property bool aiStyling: false
                             property int sides: 14

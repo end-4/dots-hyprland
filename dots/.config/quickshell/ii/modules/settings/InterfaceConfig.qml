@@ -19,19 +19,6 @@ ContentPage {
                 Config.options.background.widgets.clock.enable = checked;
             }
         }
-            
-
-        ConfigSpinBox {
-            icon: "loupe"
-            text: Translation.tr("Scale (%)")
-            value: Config.options.background.widgets.clock.scale * 100
-            from: 1
-            to: 200
-            stepSize: 2
-            onValueChanged: {
-                Config.options.background.widgets.clock.scale = value / 100;
-            }
-        }
 
         ContentSubsection {
             title: Translation.tr("Clock placement strategy")
