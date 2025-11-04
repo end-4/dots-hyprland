@@ -45,8 +45,8 @@
       lxqt.pavucontrol-qt #pavucontrol-qt (Used in Hyprland and Quickshell config)
       wireplumber #wireplumber (not explicitly used)
       pipewire #pipewire-pulse (not explicitly used)
-	    libdbusmenu-gtk3 #libdbusmenu-gtk3 (not explicitly used)
-	    playerctl #playerctl (Used in Hyprland and Quickshell config)
+      libdbusmenu-gtk3 #libdbusmenu-gtk3 (not explicitly used)
+      playerctl #playerctl (Used in Hyprland and Quickshell config)
 
 
       ### illogical-impulse-backlight
@@ -72,7 +72,7 @@
 
 
       ### illogical-impulse-bibata-modern-classic-bin
-      bibata-cursors #https://github.com/ful1e5/Bibata_Cursor # Used in Hyprland config, not necessary
+      bibata-cursors #https://github.com/ful1e5/Bibata_Cursor (Used in Hyprland config, not necessary)
 
 
       ### illogical-impulse-fonts-themes
