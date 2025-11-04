@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixgl, home_attrs, ... }:
+{ config, lib, pkgs, nixgl, quickshell, home_attrs, ... }:
 {
   programs.home-manager.enable = true;
   nixGL.packages = nixgl.packages;

@@ -19,7 +19,7 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, quickshell, ... }:
     let
       home_attrs = rec {
         username = import ./username.nix;
@@ -35,7 +35,7 @@
       homeConfigurations = {
         illogical_impulse = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit nixgl home_attrs; };
+          extraSpecialArgs = { inherit home_attrs nixgl quickshell; };
           modules = [ 
             ./home.nix
           ];
