@@ -33,13 +33,13 @@
       foot # Used in Quickshell and Hyprland config; its config is also included
 
       ##### Other basic things #####
-      dbus xorg.xlsclients networkmanager
+      dbus xorg.xlsclients
 
       ##### Not work, to be solved #####
-      # swaylock pamtester
+      # hyprlock pamtester
       
 
-      # TODO: migrate all packages from dist-arch. Note that for each package, must know why it's needed and how it's used specifically, cuz things may be need tweak to properly use the package installed by Nix, especially those have hardcoded path /usr/* .
+      # NOTE: below are migrated from dist-arch. For each package, must know why it's needed and how it's used specifically, cuz things may be need tweak to properly use the package installed by Nix, for example those have hardcoded path /usr/* .
       ### illogical-impulse-audio
       libcava #cava (Used in Quickshell config)
       lxqt.pavucontrol-qt #pavucontrol-qt (Used in Hyprland and Quickshell config)
@@ -77,9 +77,9 @@
       adw-gtk3 #adw-gtk-theme-git (https://github.com/lassekongo83/adw-gtk3) (Used in Quickshell config)
       kdePackages.breeze kdePackages.breeze-icons #breeze (Used in kdeglobals config)
       #breeze-plus (https://github.com/mjkim0727/breeze-plus) (TODO: Not available as nixpkg) (Used in kde-material-you-colors config)
-      darkly darkly-qt5 #darkly-bin (TODO: darkly is supposed to be set as the theme for Qt apps, just have not figured out how to properly set it yet.)
+      darkly darkly-qt5 #darkly-bin (darkly is supposed to be set as the theme for Qt apps, just have not figured out how to properly set it yet.)
       eza #eza (Used in Fish config: `alias ls 'eza --icons'`)
-      #fish (Probably should not install via Nix)
+      #fish (Install via system PM instead)
       fontconfig #fontconfig (Basic thing)
       kitty #kitty (Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots)
       matugen #matugen-bin (Used in Quickshell)
@@ -106,10 +106,10 @@
 
       ### illogical-impulse-kde
       kdePackages.bluedevil #bluedevil (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #gnome-keyring #gnome-keyring (TODO: Maybe should not be installed by Nix) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
+      #gnome-keyring #gnome-keyring  (TODO: Install via system PM instead) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
       networkmanager #networkmanager
       kdePackages.plasma-nm #plasma-nm (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #polkit-kde-agent (TODO: Maybe should not install by Nix)
+      #polkit-kde-agent (TODO: Install via system PM instead)
       kdePackages.dolphin #dolphin (Used in Hyprland and Quickshell config)
       kdePackages.systemsettings #systemsettings (Used in Hyprland keybinds.conf)
 
