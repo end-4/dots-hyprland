@@ -30,10 +30,12 @@
       ## inetutils: provides hostname, ifconfig, ping, etc.
       ## libnotify: provides notify-send
       inetutils libnotify
-      foot # Used in Quickshell and Hyprland config; its config is also included
 
-      ##### Other basic things #####
-      dbus xorg.xlsclients
+      ##### Other MISC #####
+      dbus xorg.xlsclients # some basic things
+      foot # Used in Quickshell and Hyprland config; its config is also included
+      kdePackages.kconfig # provide kwriteconfig6, used in install script
+
 
       ##### Not work, to be solved #####
       # hyprlock pamtester
@@ -133,7 +135,7 @@
 
 
       ### illogical-impulse-python
-      pkg-config clang #clang (Some python package may need this to be built, e.g. #1235; Also pkg-config is needed for Nix when running uv install)
+      #clang (Some python package may need this to be built, e.g. #1235; However when cmake is installed by Nix, then pkg-config, cairo etc will be used but they can only be accessible in Nix development environment for example nix-shell, nix develop, etc. See `sdata/uv/shell.nix`. )
       uv #uv (Used for python venv)
       gtk4 #gtk4 (Not explicitly used)
       libadwaita #libadwaita (Not explicitly used)
