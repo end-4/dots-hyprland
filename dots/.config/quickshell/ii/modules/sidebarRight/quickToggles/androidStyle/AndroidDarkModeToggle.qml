@@ -13,7 +13,7 @@ AndroidQuickToggleButton {
     toggled: Appearance.m3colors.darkmode
     buttonIcon: "contrast"
     
-    onClicked: event => {
+    mainAction: () => {
         if (Appearance.m3colors.darkmode) {
             Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", "light", "--noswitch"]);
         } else {

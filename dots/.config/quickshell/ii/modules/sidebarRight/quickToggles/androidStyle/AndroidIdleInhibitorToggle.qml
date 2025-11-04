@@ -11,7 +11,7 @@ AndroidQuickToggleButton {
 
     toggled: Idle.inhibit
     buttonIcon: "coffee"
-    onClicked: {
+    mainAction: () => {
         Idle.toggleInhibit()
     }
     StyledToolTip {

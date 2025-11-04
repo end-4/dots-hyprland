@@ -65,18 +65,16 @@ Toolbar {
         }
     }
 
-    IconAndTextToolbarButton {
-        iconText: "activity_zone"
-        text: Translation.tr("Rect")
-        toggled: root.selectionMode === RegionSelection.SelectionMode.RectCorners
-        onClicked: root.selectionMode = RegionSelection.SelectionMode.RectCorners
-    }
-
-    IconAndTextToolbarButton {
-        iconText: "gesture"
-        text: Translation.tr("Circle")
-        toggled: root.selectionMode === RegionSelection.SelectionMode.Circle
-        onClicked: root.selectionMode = RegionSelection.SelectionMode.Circle
+    ToolbarTabBar {
+        id: tabBar
+        tabButtonList: [
+            {"icon": "activity_zone", "name": Translation.tr("Rect")},
+            {"icon": "gesture", "name": Translation.tr("Circle")}
+        ]
+        currentIndex: root.selectionMode === RegionSelection.SelectionMode.RectCorners ? 0 : 1
+        onCurrentIndexChanged: {
+            root.selectionMode = currentIndex === 0 ? RegionSelection.SelectionMode.RectCorners : RegionSelection.SelectionMode.Circle;
+        }
     }
 
 }

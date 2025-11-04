@@ -10,6 +10,7 @@ Item {
     property bool shown: false
     property real horizontalPadding: 10
     property real verticalPadding: 5
+    property alias font: tooltipTextObject.font
     implicitWidth: tooltipTextObject.implicitWidth + 2 * root.horizontalPadding
     implicitHeight: tooltipTextObject.implicitHeight + 2 * root.verticalPadding
 

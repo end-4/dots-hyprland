@@ -14,7 +14,7 @@ AndroidQuickToggleButton {
     toggled: false
     buttonIcon: "screenshot_region"
 
-    onClicked: {
+    mainAction: () => {
         GlobalStates.sidebarRightOpen = false;
         delayedActionTimer.start()
     }

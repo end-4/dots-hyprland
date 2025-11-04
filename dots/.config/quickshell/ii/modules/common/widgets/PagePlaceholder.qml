@@ -40,8 +40,11 @@ Item {
             id: widgetNameText
             visible: title !== ""
             Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.larger
-            font.family: Appearance.font.family.title
+            font {
+                family: Appearance.font.family.title
+                pixelSize: Appearance.font.pixelSize.larger
+                variableAxes: Appearance.font.variableAxes.title
+            }
             color: Appearance.m3colors.m3outline
             horizontalAlignment: Text.AlignHCenter
         }

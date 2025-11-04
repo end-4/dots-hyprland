@@ -8,10 +8,10 @@ arch=("x86_64")
 url="https://github.com/NanoMichael/${_pkgname}"
 license=('MIT')
 depends=(
-	tinyxml2
-	gtkmm3
-	gtksourceviewmm
-	cairomm
+  tinyxml2
+  gtkmm3
+  gtksourceviewmm
+  cairomm
 )
 makedepends=("git" "cmake")
 source=("git+${url}.git")
@@ -23,9 +23,9 @@ pkgver() {
 }
 
 prepare() {
-    cd $_pkgname
-    sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
-    sed -i 's/tinyxml2.so.10/tinyxml2.so.11/' CMakeLists.txt
+  cd $_pkgname
+  sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
+  sed -i 's/tinyxml2.so.10/tinyxml2.so.11/' CMakeLists.txt
 }
 
 build() {
