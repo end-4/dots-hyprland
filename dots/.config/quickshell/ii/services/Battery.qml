@@ -32,9 +32,6 @@ Singleton {
     property real timeToFull: UPower.displayDevice.timeToFull
 
     property real health: (function() {
-        if (!Config.options.battery.showHealth) {
-            return 0;
-        }
         const devList = UPower.devices.values;
         for (let i = 0; i < devList.length; ++i) {
             const dev = devList[i];

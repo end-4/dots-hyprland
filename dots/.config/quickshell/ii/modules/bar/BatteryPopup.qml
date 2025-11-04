@@ -86,7 +86,7 @@ StyledPopup {
 
         RowLayout {
                 spacing: 5
-                visible: Config.options.battery.showHealth && Battery.health > 0
+                visible: Battery.health > 0
                 Layout.fillWidth: true
 
                 MaterialSymbol {
