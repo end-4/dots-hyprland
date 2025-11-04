@@ -166,21 +166,22 @@
 
       ### illogical-impulse-toolkit
       kdePackages.kdialog #kdialog (Used in Quickshell config)
-      # TODO: Deal with qt6 things, see https://nixos.wiki/wiki/Qt
-      #qt6-5compat (Maybe for some qt support)
-      #qt6-avif-image-plugin (Maybe for some qt support)
-      #qt6-base (Maybe for some qt support)
-      #qt6-declarative (Maybe for some qt support)
-      #qt6-imageformats (Maybe for some qt support)
-      #qt6-multimedia (Maybe for some qt support)
-      #qt6-positioning (Maybe for some qt support)
-      #qt6-quicktimeline (Maybe for some qt support)
-      #qt6-sensors (Maybe for some qt support)
-      #qt6-svg (Maybe for some qt support)
-      #qt6-tools (Maybe for some qt support)
-      #qt6-translations (Maybe for some qt support)
-      #qt6-virtualkeyboard (Maybe for some qt support)
-      #qt6-wayland (Maybe for some qt support)
+      # https://nixos.wiki/wiki/Qt
+      # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/qt-6/srcs.nix
+      qt6.qt5compat #qt6-5compat
+      #qt6.qtimageformats (TODO: really?) #qt6-avif-image-plugin
+      qt6.qtbase #qt6-base
+      qt6.qtdeclarative #qt6-declarative
+      qt6.qtimageformats #qt6-imageformats
+      qt6.qtmultimedia #qt6-multimedia
+      qt6.qtpositioning #qt6-positioning
+      qt6.qtquicktimeline #qt6-quicktimeline
+      qt6.qtsensors #qt6-sensors
+      qt6.qtsvg #qt6-svg
+      qt6.qttools #qt6-tools
+      qt6.qttranslations #qt6-translations
+      qt6.qtvirtualkeyboard #qt6-virtualkeyboard
+      qt6.qtwayland #qt6-wayland
       kdePackages.syntax-highlighting #syntax-highlighting (Used in Quickshell config)
       upower #upower (Used in Quickshell config)
       wtype #wtype (Used in Hyprland scripts/fuzzel-emoji.sh)
