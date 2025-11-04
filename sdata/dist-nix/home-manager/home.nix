@@ -4,6 +4,8 @@
   nixGL.packages = nixgl.packages;
   nixGL.defaultWrapper = "mesa";
 
+  # TODO: The home.nix generates ~/.config/fontconfig conflicts with the one under dots/
+  # TODO: The home.nix generates ~/.config/xdg-desktop-portal conflicts with the one under dots/
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
