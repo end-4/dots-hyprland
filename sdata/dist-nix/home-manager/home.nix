@@ -56,7 +56,7 @@
 
 
       ### illogical-impulse-basic
-      #axel#axel (TODO: actually not needed cuz it's only used for install Bibata_Cursor in package-installers.sh)
+      #axel#axel (TODOrm: actually not needed cuz it's only used for install Bibata_Cursor in package-installers.sh)
       bc #bc (Used in quickshell/ii/scripts/colors/switchwall.sh for example) 
       uutils-coreutils-noprefix #coreutils (Too many executables involved, not sure where been used)
       cliphist #cliphist (Used in Hyprland and Quickshell config)
@@ -65,7 +65,7 @@
       wget #wget (Used in Quickshell config)
       ripgrep #ripgrep (Not sure where been used)
       jq #jq (Widely used)
-      #meson (TODO: Actually not needed. It was used in building AGS.)
+      #meson (TODOrm: Actually not needed. It was used in building AGS.)
       xdg-user-dirs #xdg-user-dirs (Used in Hyprland and Quickshell config)
       rsync #rsync (Used in install script)
       yq-go #go-yq (Used in install script)
@@ -79,7 +79,7 @@
       adw-gtk3 #adw-gtk-theme-git (https://github.com/lassekongo83/adw-gtk3) (Used in Quickshell config)
       kdePackages.breeze kdePackages.breeze-icons #breeze (Used in kdeglobals config)
       #breeze-plus (https://github.com/mjkim0727/breeze-plus) (TODO: Not available as nixpkg) (Used in kde-material-you-colors config)
-      #darkly-bin (TODO: seems not being used)
+      #darkly-bin (TODOrm: seems not being used?)
       eza #eza (Used in Fish config: `alias ls 'eza --icons'`)
       #fish (Probably should not install via Nix)
       fontconfig #fontconfig (Basic thing)
@@ -98,23 +98,23 @@
 
       ### illogical-impulse-hyprland
       hypridle #hypridle (Used for loginctl to lock session)
-      #hyprcursor (TODO: Seems not being used)
+      #hyprcursor (TODOrm: Seems not being used?)
       #hyprland (Need NixGL, included elsewhere)
-      #hyprland-qtutils (TODO: Not needed, it's already a dependency of Hyprland itself, and it's not being used anywhere in this repo)
-      #hyprland-qt-support (TODO: Not needed, it's already a dep of hyprland-qtutils which is a dep of Hyprland, and it's not being used anywhere in this repo)
-      #hyprlang (TODO: Not needed, it's already a dependency of Hyprland, hypridle, etc.)
+      #hyprland-qtutils (TODOrm: Not needed, it's already a dependency of Hyprland itself, and it's not being used anywhere in this repo)
+      #hyprland-qt-support (TODOrm: Not needed, it's already a dep of hyprland-qtutils which is a dep of Hyprland, and it's not being used anywhere in this repo)
+      #hyprlang (TODOrm: Not needed, it's already a dependency of Hyprland, hypridle, etc.)
       #hyprlock (Should not be installed via Nix)
       hyprpicker #hyprpicker (Used in Hyprland and Quickshell config)
       hyprsunset #hyprsunset (Used in Quickshell config)
-      #hyprutils #hyprutils (TODO: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
-      #hyprwayland-scanner (TODO: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
+      #hyprutils #hyprutils (TODOrm: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
+      #hyprwayland-scanner (TODOrm: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
       #xdg-desktop-portal-hyprland (DUPLICATE)
       wl-clipboard #wl-clipboard (Surely needed)
 
 
       ### illogical-impulse-kde
       kdePackages.bluedevil #bluedevil (Seems not being used anywhere, maybe a part of KDE settings panel)
-      gnome-keyring #gnome-keyring (TODO: Maybe should not be installed by Nix) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
+      #gnome-keyring #gnome-keyring (TODO: Maybe should not be installed by Nix) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
       networkmanager #networkmanager
       kdePackages.plasma-nm #plasma-nm (Seems not being used anywhere, maybe a part of KDE settings panel)
       #polkit-kde-agent (TODO: Maybe should not install by Nix)
@@ -148,7 +148,7 @@
       libsoup_3 #libsoup3 (Not explicitly used)
       libportal-gtk4 #libportal-gtk4 (Not explicitly used)
       gobject-introspection #gobject-introspection (Not explicitly used)
-      #sassc (TODO: Not used anymore)
+      #sassc (TODOrm: Not used anymore)
 
 
       ### illogical-impulse-quickshell-git
@@ -196,7 +196,7 @@
       #hyprutils (DUPLICATE)
       #hyprlock (DUPLICATE)
       #hyprpicker (DUPLICATE)
-      #nm-connection-editor (TODO: Not needed)
+      #nm-connection-editor (TODOrm: Not needed)
       songrec #songrec (Used in Quickshell config)
       translate-shell #translate-shell (Used in Quickshell config)
       wlogout #wlogout (Used in Hyprland config)

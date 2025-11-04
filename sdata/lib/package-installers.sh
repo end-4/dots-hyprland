@@ -53,8 +53,8 @@ install-bibata(){
   x cd $REPO_ROOT/cache/bibata-cursor
   name="Bibata-Modern-Classic"
   file="$name.tar.xz"
-  # Use axel because `curl -O` always downloads a file with 0 byte size, idk why
-  x axel https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/$file
+  try rm $file
+  x curl -JLO https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/$file
   tar -xf $file
   x sudo mkdir -p /usr/local/share/icons
   x sudo cp -r $name /usr/local/share/icons
