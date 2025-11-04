@@ -24,6 +24,11 @@ function install_home-manager(){
   command -v $cmd && return
   echo "Failed in installing $cmd."
   echo "Please install it by yourself and then retry."
+  echo ""
+  echo "Hint: It's also possible that the installation is actually successful,"
+  echo "but your \"\$PATH\" is not properly set."
+  echo "This can happen when you have used \"su user\" to switch user."
+  echo "If this is the problem, use \"su - user\" instead."
   return 1
 }
 function install_nix(){
