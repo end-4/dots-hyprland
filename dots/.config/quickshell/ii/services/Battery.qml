@@ -35,14 +35,13 @@ Singleton {
         if (!Config.options.battery.showHealth) {
             return 0;
         }
-
         const devList = UPower.devices.values;
         for (let i = 0; i < devList.length; ++i) {
             const dev = devList[i];
             if (dev.isLaptopBattery && dev.healthSupported) {
                 const health = dev.healthPercentage;
                 if (health === 0) {
-                    return 0;
+                    return 0.01;
                 } else if (health < 1) {
                     return health * 100;
                 } else {
@@ -52,7 +51,6 @@ Singleton {
         }
         return 0;
     })()
-
 
 
     onIsLowAndNotChargingChanged: {
