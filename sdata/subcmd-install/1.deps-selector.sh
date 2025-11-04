@@ -65,9 +65,15 @@ esac
 # Helpful link(s):
 # http://stackoverflow.com/questions/29581754
 # https://github.com/which-distro/os-release
-export OS_RELEASE_FILE=${OS_RELEASE_FILE:-/etc/os-release}
-test -f ${OS_RELEASE_FILE} || \
-  ( echo "${OS_RELEASE_FILE} does not exist. Aborting..." ; exit 1 ; )
+OS_RELEASE_FILE_CUSTOM="${REPO_ROOT}/os-release"
+if test -f "${OS_RELEASE_FILE_CUSTOM}"; then
+  printf "${STY_YELLOW}Warning: using custom os-release file \"${OS_RELEASE_FILE_CUSTOM}\".${STY_RST}\n"
+  OS_RELEASE_FILE="${OS_RELEASE_FILE_CUSTOM}"
+elif test -f /etc/os-release; then
+  OS_RELEASE_FILE=/etc/os-release
+else
+  printf "${STY_RED}/etc/os-release does not exist, aborting...${STY_RST}\n" ; exit 1
+fi
 export OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
 export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
 
