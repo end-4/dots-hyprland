@@ -6,6 +6,10 @@ arch=(any)
 license=(None)
 depends=(
   kdialog
+  syntax-highlighting
+  upower
+  wtype
+  ydotool
   qt6-5compat 
   qt6-avif-image-plugin
   qt6-base
@@ -20,8 +24,4 @@ depends=(
   qt6-translations
   qt6-virtualkeyboard
   qt6-wayland
-  syntax-highlighting
-  upower
-  wtype
-  ydotool
 )
