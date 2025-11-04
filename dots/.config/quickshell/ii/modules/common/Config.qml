@@ -169,7 +169,12 @@ Singleton {
                         property JsonObject digital: JsonObject {
                             property bool animateChange: true
                         }
-                        
+                    }
+                    property JsonObject weather: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 400
+                        property real y: 100
                     }
                 }
                 property string wallpaperPath: ""
