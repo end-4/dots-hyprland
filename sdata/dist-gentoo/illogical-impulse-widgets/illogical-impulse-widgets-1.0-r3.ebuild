@@ -46,7 +46,7 @@ src_install() {
 	dobin target/release/songrec
 	insinto /usr/share/applications
 
-	      doins packaging/rootfs/usr/share/applications/com.github.marinm.songrec.desktop
+	doins packaging/rootfs/usr/share/applications/com.github.marinm.songrec.desktop
 
 	insinto /usr/share/icons/hicolor/scalable/apps
 	doins packaging/rootfs/usr/share/icons/hicolor/scalable/apps/com.github.marinm.songrec.svg
