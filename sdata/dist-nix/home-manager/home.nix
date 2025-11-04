@@ -22,6 +22,15 @@
   ## Allow fontconfig to discover fonts in home.packages
   fonts.fontconfig.enable = true;
 
+  wayland.windowManager.hyprland = {
+    ## Make sure home-manager not generate ~/.config/hypr/hyprland.conf
+    systemd.enable = false; plugins = []; settings = {}; extraConfig = "";
+    enable = true;
+    ## Use NixGL
+    package = config.lib.nixGL.wrap pkgs.hyprland;
+  };
+
+
 
   home = {
     packages = with pkgs; [
@@ -195,7 +204,7 @@
 
     ]
     ++ [
-    (config.lib.nixGL.wrap pkgs.hyprland)
+    #(config.lib.nixGL.wrap pkgs.hyprland)
     (config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
     ];
   }//home_attrs;
