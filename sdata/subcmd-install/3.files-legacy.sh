@@ -80,9 +80,9 @@ case $SKIP_HYPRLAND in
     fi
     t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
     if [[ "$INSTALL_VIA_NIX" = true ]]; then
-      s=dots/.config/hypr/hypridle.conf
-    else
       s=dots-extra/vianix/hypridle.conf
+    else
+      s=dots/.config/hypr/hypridle.conf
     fi
     if [ -f $t ];then
       echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
