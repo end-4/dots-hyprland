@@ -69,12 +69,12 @@ Item {
         "Return": "Enter",
         // "Shift": "",
       },
-      !!Config.options.appearance.keybinds.superKey ? {
-          "Super": Config.options.appearance.keybinds.superKey,
+      !!Config.options.cheatsheet.superKey ? {
+          "Super": Config.options.cheatsheet.superKey,
       }: {},
-      Config.options.appearance.keybinds.useMacSymbol ? macSymbolMap : {},
-      Config.options.appearance.keybinds.useFnSymbol ? functionSymbolMap : {},
-      Config.options.appearance.keybinds.useMouseSymbol ? mouseSymbolMap : {},
+      Config.options.cheatsheet.useMacSymbol ? macSymbolMap : {},
+      Config.options.cheatsheet.useFnSymbol ? functionSymbolMap : {},
+      Config.options.cheatsheet.useMouseSymbol ? mouseSymbolMap : {},
     )
 
     Row { // Keybind columns
@@ -126,7 +126,7 @@ Item {
                                         for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
                                             const keybind = keybindSection.modelData.keybinds[i];
 
-                                            if (Config.options.appearance.keybinds.useMacLikeShortcut) {
+                                            if (!Config.options.cheatsheet.splitButtons) {
 
                                               for (var j = 0; j < keybind.mods.length; j++) {
                                                   keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
@@ -167,19 +167,19 @@ Item {
                                                     delegate: KeyboardKey {
                                                         required property var modelData
                                                         key: keySubstitutions[modelData] || modelData
-                                                        pixelSize: Config.options.appearance.keybinds.fontSize.key
+                                                        pixelSize: Config.options.cheatsheet.fontSize.key
                                                     }
                                                 }
                                                 StyledText {
                                                     id: keybindPlus
-                                                    visible: !Config.options.appearance.keybinds.useMacLikeShortcut && !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
+                                                    visible: Config.options.cheatsheet.splitButtons && !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
                                                     text: "+"
                                                 }
                                                 KeyboardKey {
                                                     id: keybindKey
-                                                    visible: !Config.options.appearance.keybinds.useMacLikeShortcut && !keyBlacklist.includes(modelData.key)
+                                                    visible: Config.options.cheatsheet.splitButtons && !keyBlacklist.includes(modelData.key)
                                                     key: keySubstitutions[modelData.key] || modelData.key
-                                                    pixelSize: Config.options.appearance.keybinds.fontSize.key
+                                                    pixelSize: Config.options.cheatsheet.fontSize.key
                                                     color: Appearance.colors.colOnLayer0
                                                 }
                                             }
@@ -195,7 +195,7 @@ Item {
                                                 StyledText {
                                                     id: commentText
                                                     anchors.centerIn: parent
-                                                    font.pixelSize: Config.options.appearance.keybinds.fontSize.comment || Appearance.font.pixelSize.smaller
+                                                    font.pixelSize: Config.options.cheatsheet.fontSize.comment || Appearance.font.pixelSize.smaller
                                                     text: modelData.comment
                                                 }
                                             }
