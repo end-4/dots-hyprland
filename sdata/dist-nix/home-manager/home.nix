@@ -152,8 +152,7 @@
 
 
       ### illogical-impulse-quickshell-git
-      # TODO: maybe Quickshell uses GPU acceleration, which means NixGL is applicable
-      quickshell.packages.x86_64-linux.default
+      #quickshell.packages.x86_64-linux.default (NixGL applicable, included elsewhere)
 
 
       ### illogical-impulse-screencapture
@@ -204,6 +203,7 @@
     ]
     ++ [
     (config.lib.nixGL.wrap pkgs.hyprland)
+    (config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
     ];
   }//home_attrs;
 }
