@@ -84,13 +84,8 @@ Item {
     }
 
     property bool useSineCookie: Config.options.background.widgets.clock.cookie.useSineCookie
-    DropShadow {
-        source: useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
-        anchors.fill: source
-        radius: 8
-        samples: radius * 2 + 1
-        color: root.colShadow
-        transparentBorder: true
+    StyledDropShadow {
+        target: useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
 
         RotationAnimation on rotation {
             running: Config.options.background.widgets.clock.cookie.constantlyRotate
