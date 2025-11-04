@@ -133,7 +133,7 @@
 
 
       ### illogical-impulse-python
-      clang #clang (Some python package may need this to be built, e.g. #1235)
+      pkg-config clang #clang (Some python package may need this to be built, e.g. #1235; Also pkg-config is needed for Nix when running uv install)
       uv #uv (Used for python venv)
       gtk4 #gtk4 (Not explicitly used)
       libadwaita #libadwaita (Not explicitly used)
