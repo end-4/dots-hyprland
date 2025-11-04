@@ -102,7 +102,7 @@ WindowDialog {
                 right: parent.right
             }
             iconSize: Appearance.font.pixelSize.larger
-            buttonIcon: "destruction"
+            buttonIcon: "flash_off"
             text: Translation.tr("Enable")
             checked: Config.options.light.antiFlashbang.enable
             onCheckedChanged: {

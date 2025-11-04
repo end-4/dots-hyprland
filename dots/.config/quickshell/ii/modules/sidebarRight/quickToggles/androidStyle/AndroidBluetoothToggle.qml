@@ -14,7 +14,7 @@ AndroidQuickToggleButton {
 
     toggled: BluetoothStatus.enabled
     buttonIcon: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
-    onClicked: {
+    mainAction: () => {
         Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter?.enabled
     }
     altAction: () => {

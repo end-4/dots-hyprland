@@ -38,6 +38,7 @@ Scope {
         root.resetTargetAction();
         root.clearText();
         root.unlockInProgress = false;
+        stopFingerPam();
     }
 
     Timer {
@@ -69,7 +70,9 @@ Scope {
     }
 
     function stopFingerPam() {
-        fingerPam.abort();
+        if (fingerPam.running) {
+            fingerPam.abort();
+        }
     }
 
     Process {

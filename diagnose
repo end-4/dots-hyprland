@@ -58,6 +58,9 @@ ii_check_venv() {
 ii_check_quickshell_version() {
   pacman -Q | grep -E 'quickshell|qt6-base'
 }
+ii_check_PKGBUILD_version() {
+  pacman -Q | grep '^illogical-impulse-'
+}
 
 e "Checking git repo info"
 x git remote get-url origin
@@ -88,6 +91,7 @@ x ls -l ~/.local/state/quickshell/.venv
 e "Checking versions"
 x Hyprland --version
 x ii_check_quickshell_version
+x ii_check_PKGBUILD_version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi

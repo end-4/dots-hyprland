@@ -78,7 +78,7 @@ Widget system: Quickshell | Support: Yes
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7b98a354-4489-4a46-aa6a-d08616e77399" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eba0d57-2606-4cea-8993-e6f169e82e70" /> |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ea0154a1-e984-4bb6-a424-23247cefe3c6" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eba0d57-2606-4cea-8993-e6f169e82e70" /> |
 | Window management | Weeb power |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e77a7c96-1905-4126-a2a0-434f818825a2" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
 

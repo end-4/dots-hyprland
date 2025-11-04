@@ -14,7 +14,8 @@ AndroidQuickToggleButton {
 
     toggled: Hyprsunset.active
     buttonIcon: auto ? "night_sight_auto" : "bedtime"
-    onClicked: {
+    
+    mainAction: () => {
         Hyprsunset.toggle()
     }
 

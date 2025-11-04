@@ -43,10 +43,12 @@ Item { // Window
     property bool hovered: false
     property bool pressed: false
 
-    property var iconToWindowRatio: 0.35
-    property var xwaylandIndicatorToIconRatio: 0.35
-    property var iconToWindowRatioCompact: 0.6
-    property var iconPath: Quickshell.iconPath(AppSearch.guessIcon(windowData?.class), "image-missing")
+    property bool centerIcons: Config.options.overview.centerIcons
+    property real iconGapRatio: 0.06
+    property real iconToWindowRatio: centerIcons ? 0.35 : 0.15
+    property real xwaylandIndicatorToIconRatio: 0.35
+    property real iconToWindowRatioCompact: 0.6
+    property string iconPath: Quickshell.iconPath(AppSearch.guessIcon(windowData?.class), "image-missing")
     property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
 
     property bool indicateXWayland: windowData?.xwayland ?? false
@@ -109,14 +111,20 @@ Item { // Window
 
         Image {
             id: windowIcon
-            anchors.centerIn: parent
+            property real baseSize: Math.min(root.targetWindowWidth, root.targetWindowHeight)
+            anchors {
+                top: root.centerIcons ? undefined : parent.top
+                left: root.centerIcons ? undefined : parent.left
+                centerIn: root.centerIcons ? parent : undefined
+                margins: baseSize * root.iconGapRatio
+            }
             property var iconSize: {
                 // console.log("-=-=-", root.toplevel.title, "-=-=-")
                 // console.log("Target window size:", targetWindowWidth, targetWindowHeight)
                 // console.log("Icon ratio:", root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
                 // console.log("Scale:", root.monitorData.scale)
                 // console.log("Final:", Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale)
-                return Math.min(root.targetWindowWidth, root.targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio);
+                return baseSize * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio);
             }
             // mipmap: true
             Layout.alignment: Qt.AlignHCenter

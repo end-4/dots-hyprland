@@ -119,6 +119,7 @@ MouseArea {
 
         ToolbarTextField {
             id: passwordBox
+            Layout.rightMargin: -Layout.leftMargin
             placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
 
             // Style
@@ -156,11 +157,11 @@ MouseArea {
             // Shake when wrong password
             SequentialAnimation {
                 id: wrongPasswordShakeAnim
-                NumberAnimation { target: passwordBox; property: "x"; to: -30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "x"; to: 30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "x"; to: -15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "x"; to: 15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "x"; to: 0; duration: 30 }
+                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -30; duration: 50 }
+                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 30; duration: 50 }
+                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -15; duration: 40 }
+                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 15; duration: 40 }
+                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 0; duration: 30 }
             }
             Connections {
                 target: GlobalStates

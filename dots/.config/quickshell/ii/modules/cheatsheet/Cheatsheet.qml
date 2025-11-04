@@ -31,7 +31,6 @@ Scope { // Scope
         sourceComponent: PanelWindow { // Window
             id: cheatsheetRoot
             visible: cheatsheetLoader.active
-            property int selectedTab: 0
 
             anchors {
                 top: true
@@ -76,7 +75,7 @@ Scope { // Scope
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
                 radius: Appearance.rounding.windowRounding
-                property real padding: 30
+                property real padding: 20
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
 
@@ -86,16 +85,16 @@ Scope { // Scope
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
-                            cheatsheetRoot.selectedTab = Math.min(cheatsheetRoot.selectedTab + 1, root.tabButtonList.length - 1);
+                            tabBar.incrementCurrentIndex();
                             event.accepted = true;
                         } else if (event.key === Qt.Key_PageUp) {
-                            cheatsheetRoot.selectedTab = Math.max(cheatsheetRoot.selectedTab - 1, 0);
+                            tabBar.decrementCurrentIndex();
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Tab) {
-                            cheatsheetRoot.selectedTab = (cheatsheetRoot.selectedTab + 1) % root.tabButtonList.length;
+                            tabBar.setCurrentIndex((tabBar.currentIndex + 1) % root.tabButtonList.length);
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Backtab) {
-                            cheatsheetRoot.selectedTab = (cheatsheetRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
+                            tabBar.setCurrentIndex((tabBar.currentIndex - 1 + root.tabButtonList.length) % root.tabButtonList.length);
                             event.accepted = true;
                         }
                     }
@@ -129,23 +128,15 @@ Scope { // Scope
                 ColumnLayout { // Real content
                     id: cheatsheetColumnLayout
                     anchors.centerIn: parent
-                    spacing: 20
+                    spacing: 10
 
-                    StyledText {
-                        id: cheatsheetTitle
+                    Toolbar {
                         Layout.alignment: Qt.AlignHCenter
-                        font {
-                            family: Appearance.font.family.title
-                            pixelSize: Appearance.font.pixelSize.title
-                            variableAxes: Appearance.font.variableAxes.title
-                        }
-                        text: Translation.tr("Cheat sheet")
-                    }
-                    PrimaryTabBar { // Tab strip
-                        id: tabBar
-                        tabButtonList: root.tabButtonList
-                        Synchronizer on currentIndex {
-                            property alias source: cheatsheetRoot.selectedTab
+                        enableShadow: false
+                        ToolbarTabBar {
+                            id: tabBar
+                            tabButtonList: root.tabButtonList
+                            currentIndex: swipeView.currentIndex
                         }
                     }
 
@@ -154,26 +145,11 @@ Scope { // Scope
                         Layout.topMargin: 5
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        currentIndex: tabBar.currentIndex
                         spacing: 10
 
-                        Behavior on implicitWidth {
-                            id: contentWidthBehavior
-                            enabled: false
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        Behavior on implicitHeight {
-                            id: contentHeightBehavior
-                            enabled: false
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-
-                        currentIndex: cheatsheetRoot.selectedTab
-                        onCurrentIndexChanged: {
-                            contentWidthBehavior.enabled = true;
-                            contentHeightBehavior.enabled = true;
-                            tabBar.enableIndicatorAnimation = true;
-                            cheatsheetRoot.selectedTab = currentIndex;
-                        }
+                        implicitWidth: Math.max.apply(null, contentChildren.map(child => child.implicitWidth || 0))
+                        implicitHeight: Math.max.apply(null, contentChildren.map(child => child.implicitHeight || 0))
 
                         clip: true
                         layer.enabled: true

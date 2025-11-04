@@ -21,7 +21,6 @@ Item {
         ...(root.translatorEnabled ? [{"icon": "translate", "name": Translation.tr("Translator")}] : []),
         ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
     ]
-    property int selectedTab: 0
     property int tabCount: swipeView.count
 
     function focusActiveItem() {
@@ -31,67 +30,64 @@ Item {
     Keys.onPressed: (event) => {
         if (event.modifiers === Qt.ControlModifier) {
             if (event.key === Qt.Key_PageDown) {
-                root.selectedTab = Math.min(root.selectedTab + 1, root.tabCount - 1)
+                swipeView.incrementCurrentIndex()
                 event.accepted = true;
-            } 
+            }
             else if (event.key === Qt.Key_PageUp) {
-                root.selectedTab = Math.max(root.selectedTab - 1, 0)
-                event.accepted = true;
-            }
-            else if (event.key === Qt.Key_Tab) {
-                root.selectedTab = (root.selectedTab + 1) % root.tabCount;
-                event.accepted = true;
-            }
-            else if (event.key === Qt.Key_Backtab) {
-                root.selectedTab = (root.selectedTab - 1 + root.tabCount) % root.tabCount;
+                swipeView.decrementCurrentIndex()
                 event.accepted = true;
             }
         }
     }
 
     ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: sidebarPadding
-        
+        anchors {
+            fill: parent
+            margins: sidebarPadding
+        }
         spacing: sidebarPadding
 
-        PrimaryTabBar { // Tab strip
-            id: tabBar
-            visible: root.tabButtonList.length > 1
-            tabButtonList: root.tabButtonList
-            Synchronizer on currentIndex {
-                property alias source: root.selectedTab
+        Toolbar {
+            Layout.alignment: Qt.AlignHCenter
+            enableShadow: false
+            ToolbarTabBar {
+                id: tabBar
+                Layout.alignment: Qt.AlignHCenter
+                tabButtonList: root.tabButtonList
+                currentIndex: swipeView.currentIndex
             }
         }
 
-        SwipeView { // Content pages
-            id: swipeView
-            Layout.topMargin: 5
+        Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
-            
-            currentIndex: root.selectedTab
-            onCurrentIndexChanged: {
-                tabBar.enableIndicatorAnimation = true
-                root.selectedTab = currentIndex
-            }
+            implicitWidth: swipeView.implicitWidth
+            implicitHeight: swipeView.implicitHeight
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colLayer1
 
-            clip: true
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: swipeView.width
-                    height: swipeView.height
-                    radius: Appearance.rounding.small
+            SwipeView { // Content pages
+                id: swipeView
+                anchors.fill: parent
+                spacing: 10
+                currentIndex: tabBar.currentIndex
+
+                clip: true
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: swipeView.width
+                        height: swipeView.height
+                        radius: Appearance.rounding.small
+                    }
                 }
-            }
 
-            contentChildren: [
-                ...((root.aiChatEnabled || (!root.translatorEnabled && !root.animeEnabled)) ? [aiChat.createObject()] : []),
-                ...(root.translatorEnabled ? [translator.createObject()] : []),
-                ...(root.animeEnabled ? [anime.createObject()] : [])
-            ]
+                contentChildren: [
+                    ...((root.aiChatEnabled || (!root.translatorEnabled && !root.animeEnabled)) ? [aiChat.createObject()] : []),
+                    ...(root.translatorEnabled ? [translator.createObject()] : []),
+                    ...(root.animeEnabled ? [anime.createObject()] : [])
+                ]
+            }
         }
 
         Component {

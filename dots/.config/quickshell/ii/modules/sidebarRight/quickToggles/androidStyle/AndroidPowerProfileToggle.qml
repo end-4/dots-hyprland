@@ -22,7 +22,7 @@ AndroidQuickToggleButton {
         case PowerProfile.Performance: return "Performance"
     }
     
-    onClicked: (event) => {
+    mainAction: () => {
         if (PowerProfiles.hasPerformanceProfile) {
             switch(PowerProfiles.profile) {
                 case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced

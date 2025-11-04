@@ -13,6 +13,7 @@ GroupButton {
     required property bool expandedSize
     required property string buttonIcon
     required property string name
+    required property var mainAction
     property string statusText: toggled ? Translation.tr("Active") : Translation.tr("Inactive")
 
     required property real baseCellWidth
@@ -54,6 +55,11 @@ GroupButton {
     property color colText: (toggled && !(altAction && expandedSize)) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer2
     property color colIcon: expandedSize ? (root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
 
+    onClicked: {
+        if (root.expandedSize && root.altAction) root.altAction();
+        else root.mainAction();
+    }
+
     contentItem: RowLayout {
         id: contentItem
         spacing: 4
@@ -64,35 +70,63 @@ GroupButton {
             rightMargin: root.horizontalPadding
         }
 
-        Rectangle {
+        // Icon
+        MouseArea {
+            id: iconMouseArea
+            hoverEnabled: true
+            acceptedButtons: (root.expandedSize && root.altAction) ? Qt.LeftButton : Qt.NoButton
             Layout.alignment: Qt.AlignHCenter
             Layout.fillHeight: true
             Layout.topMargin: root.verticalPadding
             Layout.bottomMargin: root.verticalPadding
-            implicitWidth: height
-            radius: root.radius - root.verticalPadding
-            color: {
-                const baseColor = root.toggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer3
-                const transparentizeAmount = (root.altAction && root.expandedSize) ? 0 : 1
-                return ColorUtils.transparentize(baseColor, transparentizeAmount)
-            }
+            implicitHeight: iconBackground.implicitHeight
+            implicitWidth: iconBackground.implicitWidth
+            cursorShape: Qt.PointingHandCursor
 
-            Behavior on radius {
-                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-            }
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
+            onClicked: root.mainAction()
 
-            MaterialSymbol {
-                anchors.centerIn: parent
-                fill: root.toggled ? 1 : 0
-                iconSize: root.expandedSize ? 22 : 24
-                color: root.colIcon
-                text: root.buttonIcon
+            Rectangle {
+                id: iconBackground
+                anchors.fill: parent
+                implicitWidth: height
+                radius: root.radius - root.verticalPadding
+                color: {
+                    const baseColor = root.toggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer3
+                    const transparentizeAmount = (root.altAction && root.expandedSize) ? 0 : 1
+                    return ColorUtils.transparentize(baseColor, transparentizeAmount)
+                }
+
+                Behavior on radius {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+                Behavior on color {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
+
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    fill: root.toggled ? 1 : 0
+                    iconSize: root.expandedSize ? 22 : 24
+                    color: root.colIcon
+                    text: root.buttonIcon
+                }
+
+                // State layer
+                Loader {
+                    anchors.fill: parent
+                    active: (root.expandedSize && root.altAction)
+                    sourceComponent: Rectangle {
+                        radius: iconBackground.radius
+                        color: ColorUtils.transparentize(root.colIcon, iconMouseArea.containsPress ? 0.88 : iconMouseArea.containsMouse ? 0.95 : 1)
+                        Behavior on color {
+                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                        }
+                    }
+                }
             }
         }
 
+        // Text column for expanded size
         Loader {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
@@ -119,8 +153,9 @@ GroupButton {
                     }
                     font {
                         pixelSize: Appearance.font.pixelSize.smaller
+                        weight: 100
                     }
-                    color: Appearance.colors.colSubtext
+                    color: root.colText
                     elide: Text.ElideRight
                     text: root.statusText
                 }
