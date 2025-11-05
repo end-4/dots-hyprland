@@ -24,11 +24,11 @@ AbstractBackgroundWidget {
         anchors.fill: parent
         shape: MaterialShape.Shape.Pill
         color: Appearance.colors.colPrimaryContainer
-        implicitSize: 230
+        implicitSize: 200
 
         StyledText {
             font {
-                pixelSize: 84
+                pixelSize: 80
                 family: Appearance.font.family.expressive
                 weight: Font.Medium
             }
@@ -37,21 +37,21 @@ AbstractBackgroundWidget {
             anchors {
                 right: parent.right
                 top: parent.top
-                rightMargin: 26
-                topMargin: 30
+                rightMargin: 20
+                topMargin: 24
             }
         }
 
         MaterialSymbol {
-            iconSize: 84
+            iconSize: 80
             color: Appearance.colors.colOnPrimaryContainer
             text: Icons.getWeatherIcon(Weather.data.wCode) ?? "cloud"
             anchors {
                 left: parent.left
                 bottom: parent.bottom
 
-                leftMargin: 26
-                bottomMargin: 30
+                leftMargin: 20
+                bottomMargin: 24
             }
         }
     }
