@@ -37,7 +37,7 @@ AbstractBackgroundWidget {
     Column {
         id: contentColumn
         anchors.centerIn: parent
-        spacing: 10
+        spacing: 6
 
         FadeLoader {
             id: cookieClockLoader
