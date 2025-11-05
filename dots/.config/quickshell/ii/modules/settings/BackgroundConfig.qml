@@ -406,18 +406,18 @@ ContentPage {
             ConfigSwitch {
                 buttonIcon: "check"
                 text: Translation.tr("Enable")
-                checked: Config.options.background.showQuote
+                checked: Config.options.background.widgets.clock.quote.enable
                 onCheckedChanged: {
-                    Config.options.background.showQuote = checked;
+                    Config.options.background.widgets.clock.quote.enable = checked;
                 }
             }
             MaterialTextArea {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("Quote")
-                text: Config.options.background.quote
+                text: Config.options.background.widgets.clock.quote.text
                 wrapMode: TextEdit.Wrap
                 onTextChanged: {
-                    Config.options.background.quote = text;
+                    Config.options.background.widgets.clock.quote.text = text;
                 }
             }
         }

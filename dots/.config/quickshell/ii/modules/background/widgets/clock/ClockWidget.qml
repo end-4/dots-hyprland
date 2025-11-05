@@ -49,7 +49,7 @@ AbstractBackgroundWidget {
                 }
                 FadeLoader {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    shown: Config.options.background.showQuote && Config.options.background.quote !== ""
+                    shown: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text !== ""
                     sourceComponent: CookieQuote {}
                 }
             }
@@ -73,7 +73,7 @@ AbstractBackgroundWidget {
                 }
                 StyledText {
                     // Somehow gets fucked up if made a ClockText???
-                    visible: Config.options.background.showQuote && Config.options.background.quote.length > 0
+                    visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
                     Layout.fillWidth: true
                     horizontalAlignment: root.textHorizontalAlignment
                     font {
@@ -83,7 +83,7 @@ AbstractBackgroundWidget {
                     color: root.colText
                     style: Text.Raised
                     styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.quote
+                    text: Config.options.background.widgets.clock.quote.text
                 }
             }
         }

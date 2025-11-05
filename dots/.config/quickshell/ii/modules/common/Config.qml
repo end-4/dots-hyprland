@@ -169,6 +169,10 @@ Singleton {
                         property JsonObject digital: JsonObject {
                             property bool animateChange: true
                         }
+                        property JsonObject quote: JsonObject {
+                            property bool enable: false
+                            property string text: ""
+                        }
                     }
                     property JsonObject weather: JsonObject {
                         property bool enable: false
@@ -179,8 +183,6 @@ Singleton {
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
-                property string quote: ""
-                property bool showQuote: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
