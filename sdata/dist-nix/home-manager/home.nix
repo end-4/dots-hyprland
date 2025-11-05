@@ -18,10 +18,9 @@
     #  "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
     #};
   };
-  # TODO: The following seems to generate ~/.config/fontconfig conflicting with the one under dots/
-  # However, fontconfig may rely on this to properly find fonts installed via Nix.
-  # Need a proper way to deal with it.
-  #fonts.fontconfig.enable = true;
+  # Note: The following generate files under ~/.config/fontconfig/conf.d/
+  # fontconfig may rely on this to properly find fonts installed via Nix.
+  fonts.fontconfig.enable = true;
 
   wayland.windowManager.hyprland = {
     ## Make sure home-manager not generate ~/.config/hypr/hyprland.conf
