@@ -224,8 +224,8 @@ Item {
                     }
 
                     z: Drag.active ? root.windowDraggingZ : (root.windowZ + windowData?.floating)
-                    Drag.hotSpot.x: targetWindowWidth / 2
-                    Drag.hotSpot.y: targetWindowHeight / 2
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
                     MouseArea {
                         id: dragArea
                         anchors.fill: parent

@@ -6,13 +6,11 @@ arch=(any)
 license=(None)
 depends=(
   fuzzel
-  glib2 # for `gsettings` it seems?
+  glib2
   imagemagick
   hypridle
-  hyprutils
   hyprlock
   hyprpicker
-  nm-connection-editor
   songrec
   translate-shell
   wlogout

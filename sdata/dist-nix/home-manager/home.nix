@@ -12,16 +12,22 @@
       xdg-desktop-portal-wlr
       kdePackages.xdg-desktop-portal-kde
     ];
-    config.hyprland = {
-      default = [ "hyprland" "gtk" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [
-        "gnome"
-      ];
-    };
+    # The following seems to generate ~/.config/xdg-desktop-portal conflicting with the one under dots/
+    #config.hyprland = {
+    #  default = [ "hyprland" "gtk" ];
+    #  "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+    #};
   };
-  ## Allow fontconfig to discover fonts in home.packages
-  fonts.fontconfig.enable = true;
+  # The following seems to generate ~/.config/fontconfig conflicting with the one under dots/
+  #fonts.fontconfig.enable = true;
 
+  wayland.windowManager.hyprland = {
+    ## Make sure home-manager not generate ~/.config/hypr/hyprland.conf
+    systemd.enable = false; plugins = []; settings = {}; extraConfig = "";
+    enable = true;
+    ## Use NixGL
+    package = config.lib.nixGL.wrap pkgs.hyprland;
+  };
 
   home = {
     packages = with pkgs; [
@@ -30,16 +36,18 @@
       ## inetutils: provides hostname, ifconfig, ping, etc.
       ## libnotify: provides notify-send
       inetutils libnotify
-      foot # Used in Quickshell and Hyprland config; its config is also included
 
-      ##### Other basic things #####
-      dbus xorg.xlsclients networkmanager
+      ##### Other MISC #####
+      dbus xorg.xlsclients # some basic things
+      foot # Used in Quickshell and Hyprland config; its config is also included
+      kdePackages.kconfig # provide kwriteconfig6, used in install script
+
 
       ##### Not work, to be solved #####
-      # swaylock pamtester
+      # hyprlock pamtester
       
 
-      # TODO: migrate all packages from dist-arch. Note that for each package, must know why it's needed and how it's used specifically, cuz things may be need tweak to properly use the package installed by Nix, especially those have hardcoded path /usr/* .
+      # NOTE: below are migrated from dist-arch. For each package, must know why it's needed and how it's used specifically, cuz things may be need tweak to properly use the package installed by Nix, for example those have hardcoded path /usr/* .
       ### illogical-impulse-audio
       libcava #cava (Used in Quickshell config)
       lxqt.pavucontrol-qt #pavucontrol-qt (Used in Hyprland and Quickshell config)
@@ -56,7 +64,6 @@
 
 
       ### illogical-impulse-basic
-      #axel#axel (TODOrm: actually not needed cuz it's only used for install Bibata_Cursor in package-installers.sh)
       bc #bc (Used in quickshell/ii/scripts/colors/switchwall.sh for example) 
       uutils-coreutils-noprefix #coreutils (Too many executables involved, not sure where been used)
       cliphist #cliphist (Used in Hyprland and Quickshell config)
@@ -65,7 +72,6 @@
       wget #wget (Used in Quickshell config)
       ripgrep #ripgrep (Not sure where been used)
       jq #jq (Widely used)
-      #meson (TODOrm: Actually not needed. It was used in building AGS.)
       xdg-user-dirs #xdg-user-dirs (Used in Hyprland and Quickshell config)
       rsync #rsync (Used in install script)
       yq-go #go-yq (Used in install script)
@@ -79,9 +85,9 @@
       adw-gtk3 #adw-gtk-theme-git (https://github.com/lassekongo83/adw-gtk3) (Used in Quickshell config)
       kdePackages.breeze kdePackages.breeze-icons #breeze (Used in kdeglobals config)
       #breeze-plus (https://github.com/mjkim0727/breeze-plus) (TODO: Not available as nixpkg) (Used in kde-material-you-colors config)
-      #darkly-bin (TODOrm: seems not being used?)
+      darkly darkly-qt5 #darkly-bin (darkly is supposed to be set as the theme for Qt apps, just have not figured out how to properly set it yet.)
       eza #eza (Used in Fish config: `alias ls 'eza --icons'`)
-      #fish (Probably should not install via Nix)
+      #fish (Install via system PM instead; TODO: should install via nix in future when authentication problem fixed)
       fontconfig #fontconfig (Basic thing)
       kitty #kitty (Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots)
       matugen #matugen-bin (Used in Quickshell)
@@ -98,26 +104,20 @@
 
       ### illogical-impulse-hyprland
       hypridle #hypridle (Used for loginctl to lock session)
-      #hyprcursor (TODOrm: Seems not being used?)
       #hyprland (Need NixGL, included elsewhere)
-      #hyprland-qtutils (TODOrm: Not needed, it's already a dependency of Hyprland itself, and it's not being used anywhere in this repo)
-      #hyprland-qt-support (TODOrm: Not needed, it's already a dep of hyprland-qtutils which is a dep of Hyprland, and it's not being used anywhere in this repo)
-      #hyprlang (TODOrm: Not needed, it's already a dependency of Hyprland, hypridle, etc.)
-      #hyprlock (Should not be installed via Nix)
+      #hyprlock (Should not be installed via Nix; TODO: should install via nix in future when authentication problem fixed)
       hyprpicker #hyprpicker (Used in Hyprland and Quickshell config)
       hyprsunset #hyprsunset (Used in Quickshell config)
-      #hyprutils #hyprutils (TODOrm: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
-      #hyprwayland-scanner (TODOrm: Not needed, it's already a dep of Hyprland and not being used anywhere in this repo)
       #xdg-desktop-portal-hyprland (DUPLICATE)
       wl-clipboard #wl-clipboard (Surely needed)
 
 
       ### illogical-impulse-kde
       kdePackages.bluedevil #bluedevil (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #gnome-keyring #gnome-keyring (TODO: Maybe should not be installed by Nix) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
+      #gnome-keyring #gnome-keyring  (TODO: Install via system PM instead; should install via nix in future when authentication problem fixed) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
       networkmanager #networkmanager
       kdePackages.plasma-nm #plasma-nm (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #polkit-kde-agent (TODO: Maybe should not install by Nix)
+      #polkit-kde-agent (TODO: Install via system PM instead; should install via nix in future when authentication problem fixed)
       kdePackages.dolphin #dolphin (Used in Hyprland and Quickshell config)
       kdePackages.systemsettings #systemsettings (Used in Hyprland keybinds.conf)
 
@@ -141,18 +141,13 @@
 
 
       ### illogical-impulse-python
-      clang #clang (Some python package may need this to be built, e.g. #1235)
+      #clang (Some python package may need this to be built, e.g. #1235; However when cmake is installed by Nix, then pkg-config, cairo etc will be used but they can only be accessible in Nix development environment for example nix-shell, nix develop, etc. See `sdata/uv/shell.nix`. )
       uv #uv (Used for python venv)
       gtk4 #gtk4 (Not explicitly used)
       libadwaita #libadwaita (Not explicitly used)
       libsoup_3 #libsoup3 (Not explicitly used)
       libportal-gtk4 #libportal-gtk4 (Not explicitly used)
       gobject-introspection #gobject-introspection (Not explicitly used)
-      #sassc (TODOrm: Not used anymore)
-
-
-      ### illogical-impulse-quickshell-git
-      #quickshell.packages.x86_64-linux.default (NixGL applicable, included elsewhere)
 
 
       ### illogical-impulse-screencapture
@@ -165,23 +160,6 @@
 
 
       ### illogical-impulse-toolkit
-      kdePackages.kdialog #kdialog (Used in Quickshell config)
-      # TODO: Deal with qt6 things, see https://nixos.wiki/wiki/Qt
-      #qt6-5compat (Maybe for some qt support)
-      #qt6-avif-image-plugin (Maybe for some qt support)
-      #qt6-base (Maybe for some qt support)
-      #qt6-declarative (Maybe for some qt support)
-      #qt6-imageformats (Maybe for some qt support)
-      #qt6-multimedia (Maybe for some qt support)
-      #qt6-positioning (Maybe for some qt support)
-      #qt6-quicktimeline (Maybe for some qt support)
-      #qt6-sensors (Maybe for some qt support)
-      #qt6-svg (Maybe for some qt support)
-      #qt6-tools (Maybe for some qt support)
-      #qt6-translations (Maybe for some qt support)
-      #qt6-virtualkeyboard (Maybe for some qt support)
-      #qt6-wayland (Maybe for some qt support)
-      kdePackages.syntax-highlighting #syntax-highlighting (Used in Quickshell config)
       upower #upower (Used in Quickshell config)
       wtype #wtype (Used in Hyprland scripts/fuzzel-emoji.sh)
       ydotool #ydotool (Used in Quickshell config)
@@ -195,15 +173,17 @@
       #hyprutils (DUPLICATE)
       #hyprlock (DUPLICATE)
       #hyprpicker (DUPLICATE)
-      #nm-connection-editor (TODOrm: Not needed)
       songrec #songrec (Used in Quickshell config)
       translate-shell #translate-shell (Used in Quickshell config)
       wlogout #wlogout (Used in Hyprland config)
 
     ]
     ++ [
-    (config.lib.nixGL.wrap pkgs.hyprland)
-    (config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    #(config.lib.nixGL.wrap pkgs.hyprland)
+
+    ### illogical-impulse-quickshell-git
+    #(config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    (import ./quickshell.nix { inherit pkgs quickshell; nixGLWrap = config.lib.nixGL.wrap; })
     ];
   }//home_attrs;
 }

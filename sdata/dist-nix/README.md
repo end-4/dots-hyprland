@@ -9,7 +9,12 @@
 Note that this script must be idempotent.
 
 TODO:
-- [ ] Write a proper `flake.nix` and `home.nix` and other files under `dist-nix/home-manager/` to install all dependencies that `dist-arch/` does. (**excluding** the screenlock)
+- [ ] Fix all TODOs inside `dist-nix`.
+- [ ] Warn user if inode-limited filesystem (typically ext4) is used.
+- [ ] Deal with error when running `systemctl --user enable ydotool --now`:
+  ```plain
+  Failed to connect to user scope bus via local transport: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined (consider using --machine=<user>@.host --user to connect to bus of other user)
+  ```
 
 ## Attentions
 ### PAM
