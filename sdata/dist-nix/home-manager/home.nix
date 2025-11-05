@@ -4,8 +4,6 @@
   nixGL.packages = nixgl.packages;
   nixGL.defaultWrapper = "mesa";
 
-  # TODO: The home.nix generates ~/.config/fontconfig conflicts with the one under dots/
-  # TODO: The home.nix generates ~/.config/xdg-desktop-portal conflicts with the one under dots/
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
@@ -14,15 +12,14 @@
       xdg-desktop-portal-wlr
       kdePackages.xdg-desktop-portal-kde
     ];
-    config.hyprland = {
-      default = [ "hyprland" "gtk" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [
-        "gnome"
-      ];
-    };
+    # The following seems to generate ~/.config/xdg-desktop-portal conflicting with the one under dots/
+    #config.hyprland = {
+    #  default = [ "hyprland" "gtk" ];
+    #  "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+    #};
   };
-  ## Allow fontconfig to discover fonts in home.packages
-  fonts.fontconfig.enable = true;
+  # The following seems to generate ~/.config/fontconfig conflicting with the one under dots/
+  #fonts.fontconfig.enable = true;
 
   wayland.windowManager.hyprland = {
     ## Make sure home-manager not generate ~/.config/hypr/hyprland.conf
@@ -31,8 +28,6 @@
     ## Use NixGL
     package = config.lib.nixGL.wrap pkgs.hyprland;
   };
-
-
 
   home = {
     packages = with pkgs; [
@@ -155,10 +150,6 @@
       gobject-introspection #gobject-introspection (Not explicitly used)
 
 
-      ### illogical-impulse-quickshell-git
-      #quickshell.packages.x86_64-linux.default (NixGL applicable, included elsewhere)
-
-
       ### illogical-impulse-screencapture
       hyprshot #hyprshot (Used in Hyprland keybinds.conf as fallback)
       slurp #slurp (Used in Hyprland and Quickshell config)
@@ -169,24 +160,6 @@
 
 
       ### illogical-impulse-toolkit
-      kdePackages.kdialog #kdialog (Used in Quickshell config)
-      # https://nixos.wiki/wiki/Qt
-      # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/qt-6/srcs.nix
-      qt6.qt5compat #qt6-5compat
-      #qt6.qtimageformats (TODO: really?) #qt6-avif-image-plugin
-      qt6.qtbase #qt6-base
-      qt6.qtdeclarative #qt6-declarative
-      qt6.qtimageformats #qt6-imageformats
-      qt6.qtmultimedia #qt6-multimedia
-      qt6.qtpositioning #qt6-positioning
-      qt6.qtquicktimeline #qt6-quicktimeline
-      qt6.qtsensors #qt6-sensors
-      qt6.qtsvg #qt6-svg
-      qt6.qttools #qt6-tools
-      qt6.qttranslations #qt6-translations
-      qt6.qtvirtualkeyboard #qt6-virtualkeyboard
-      qt6.qtwayland #qt6-wayland
-      kdePackages.syntax-highlighting #syntax-highlighting (Used in Quickshell config)
       upower #upower (Used in Quickshell config)
       wtype #wtype (Used in Hyprland scripts/fuzzel-emoji.sh)
       ydotool #ydotool (Used in Quickshell config)
@@ -207,6 +180,8 @@
     ]
     ++ [
     #(config.lib.nixGL.wrap pkgs.hyprland)
+
+    ### illogical-impulse-quickshell-git
     #(config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
     (import ./quickshell.nix { inherit pkgs quickshell; nixGLWrap = config.lib.nixGL.wrap; })
     ];
