@@ -3,6 +3,7 @@
   description = "illogical-impulse";
 
   inputs = {
+    # Qt 6.10 is not yet available from released version of nixpkgs.
     #nixpkgs.url = "nixpkgs/nixos-25.05";
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
