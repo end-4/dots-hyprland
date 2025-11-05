@@ -50,7 +50,7 @@ About handling the dotfiles, i.e. `dots/`, if we are doing this using Nix then t
 Current state of `./setup install`:
 - After finishing running `./setup install`, users can modify any dotfiles in a traditional way, and if they run `./setup install` again to update then they need to skip the steps which overwrite the targets that they have modified and later sync the upgrade manually for such targets by themselves.
   - For Hyprland, specially we have a `custom` folder along with `~/.config/hypr/hyprland.conf` which will only get overwritten the first time but not the later times running `./setup install`.
-- This works but is not elegant. An experimental solution is using yaml config to store the selected behavior for each target, see #2137.
+- This works but is not elegant. An experimental solution is using yaml config to store the selected behavior for each target, see [#2137](https://github.com/end-4/dots-hyprland/issues/2137).
 
 If we use Nix to handle dotfiles, then it must be at least better than the current state described above, mainly in terms of convenience and automation.
 
