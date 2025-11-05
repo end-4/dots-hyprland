@@ -87,7 +87,7 @@
       #breeze-plus (https://github.com/mjkim0727/breeze-plus) (TODO: Not available as nixpkg) (Used in kde-material-you-colors config)
       darkly darkly-qt5 #darkly-bin (darkly is supposed to be set as the theme for Qt apps, just have not figured out how to properly set it yet.)
       eza #eza (Used in Fish config: `alias ls 'eza --icons'`)
-      #fish (Install via system PM instead)
+      #fish (Install via system PM instead; TODO: should install via nix in future when authentication problem fixed)
       fontconfig #fontconfig (Basic thing)
       kitty #kitty (Used in fuzzel, Hyprland, kdeglobals and Quickshell config; kitty config is also included as dots)
       matugen #matugen-bin (Used in Quickshell)
@@ -105,7 +105,7 @@
       ### illogical-impulse-hyprland
       hypridle #hypridle (Used for loginctl to lock session)
       #hyprland (Need NixGL, included elsewhere)
-      #hyprlock (Should not be installed via Nix)
+      #hyprlock (Should not be installed via Nix; TODO: should install via nix in future when authentication problem fixed)
       hyprpicker #hyprpicker (Used in Hyprland and Quickshell config)
       hyprsunset #hyprsunset (Used in Quickshell config)
       #xdg-desktop-portal-hyprland (DUPLICATE)
@@ -114,10 +114,10 @@
 
       ### illogical-impulse-kde
       kdePackages.bluedevil #bluedevil (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #gnome-keyring #gnome-keyring  (TODO: Install via system PM instead) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
+      #gnome-keyring #gnome-keyring  (TODO: Install via system PM instead; should install via nix in future when authentication problem fixed) (Provide executable gnome-keyring-daemon, used in Hyprland and Quickshell config)
       networkmanager #networkmanager
       kdePackages.plasma-nm #plasma-nm (Seems not being used anywhere, maybe a part of KDE settings panel)
-      #polkit-kde-agent (TODO: Install via system PM instead)
+      #polkit-kde-agent (TODO: Install via system PM instead; should install via nix in future when authentication problem fixed)
       kdePackages.dolphin #dolphin (Used in Hyprland and Quickshell config)
       kdePackages.systemsettings #systemsettings (Used in Hyprland keybinds.conf)
 

@@ -19,7 +19,7 @@ export OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolo
 
 if [[ "$INSTALL_VIA_NIX" == "true" ]]; then
 
-  TARGET_ID=fallback
+  TARGET_ID=nix
   printf "${STY_YELLOW}"
   printf "===WARNING===\n"
   printf "./sdata/dist-${TARGET_ID}/install-setups.sh will be used.\n"
