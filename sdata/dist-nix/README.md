@@ -3,21 +3,23 @@
 - See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 - See also [#1061](https://github.com/end-4/dots-hyprland/issues/1061)
 
-**NOTE: The sdata/dist-nix is not for NixOS but every distro, using Nix and home-manager.**
+**NOTE: The `dist-nix` is not for NixOS but every distro, using Nix and home-manager.**
 
 As we all know Nix and Home-manager has two major functionalities:
 - Handling dependencies (i.e. package installation)
 - Handling dotfiles
 
-They are discussed below.
+They are discussed in following sections.
 
 # Handling dependencies
+## Status
+Partially works. See [Discussion #2382](https://github.com/end-4/dots-hyprland/discussions/2382).
 ## plan
 Note that this script must be idempotent.
 
 TODO:
-- [ ] Fix all TODOs inside `dist-nix`.
-- [ ] Warn user if inode-limited filesystem (typically ext4) is used.
+- [ ] Fix all TODOs inside `dist-nix`. ([search online](https://github.com/search?q=repo%3Aend-4%2Fdots-hyprland+path%3A%2F%5Esdata%5C%2Fdist-nix%5C%2F%2F+TODO&type=code))
+- [ ] Since Nix uses a large number of inodes, need to warn user if inode-limited filesystem (typically ext4) is used.
 - [ ] Deal with error when running `systemctl --user enable ydotool --now`:
   ```plain
   Failed to connect to user scope bus via local transport: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined (consider using --machine=<user>@.host --user to connect to bus of other user)
@@ -30,15 +32,16 @@ On non-NixOS distros, programs using PAM (typically screen locker) will not work
 - One problem is that Debian(-based) distros use modified version of PAM which supports `@include` directive in `/etc/pam.d` config files but the PAM from Nix does not support it, see [this comment](https://github.com/NixOS/nixpkgs/issues/128523#issuecomment-1086106614).
 - Another problem is the location of a suid helper binary that is necessary, see [this comment](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3403195230).
 
-The problem could be solved by using the system-provided libpam instead.
+As [commented](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3403195230) by @Cu3PO42 , both the problem could be solved by using the system-provided libpam instead.
 
-See also https://github.com/caelestia-dots/shell/issues/668
+See also [caelestia-dots/shell#668](https://github.com/caelestia-dots/shell/issues/668).
 
 ### NixGL
 On non-NixOS distros, packages installed via home-manager have problem accessing GPU, especially Hyprland because it requires GPU acceleration to launch. `nixGL` should be used to address the problem.
 
 # Handling dot files
-
+## Status
+Paused, until some suitable method has been confirmed to meet the requirements below.
 ## Requirements
 About handling the dotfiles, i.e. `dots/`, if we are doing this using Nix then the following requirements must be fulfilled.
 
