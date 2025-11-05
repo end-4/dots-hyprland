@@ -121,10 +121,11 @@ PanelWindow {
         return (root.targetedRegionX >= 0 && root.targetedRegionY >= 0)
     }
     function setRegionToTargeted() {
-        root.regionX = root.targetedRegionX;
-        root.regionY = root.targetedRegionY;
-        root.regionWidth = root.targetedRegionWidth;
-        root.regionHeight = root.targetedRegionHeight;
+        const padding = Config.options.regionSelector.targetRegions.selectionPadding; // Make borders not cut off n stuff
+        root.regionX = root.targetedRegionX - padding;
+        root.regionY = root.targetedRegionY - padding;
+        root.regionWidth = root.targetedRegionWidth + padding * 2;
+        root.regionHeight = root.targetedRegionHeight + padding * 2;
     }
 
     function updateTargetedRegion(x, y) {
