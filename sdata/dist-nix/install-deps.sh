@@ -8,7 +8,54 @@ function vianix-warning(){
   printf "despite that this should be reversible.\n"
   pause
 }
+function install_cmds(){
+  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo pacman -Syu
+    x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo apt update -y
+    x sudo apt install -y "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" == "fedora" || "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo dnf install -y "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" =~ ^(opensuse-leap|opensuse-tumbleweed)$ ]] || [[ "$OS_DISTRO_ID_LIKE" =~ ^(opensuse|suse)(\ (opensuse|suse))?$ ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo zypper refresh
+    x sudo zypper -n install "${pkgs[@]}"
+  fi
+}
+function install_nix(){
+  # https://github.com/NixOS/experimental-nix-installer
+  local cmd=nix
 
+  x mkdir -p ${REPO_ROOT}/cache
+  x curl -JLo ${REPO_ROOT}/cache/nix-installer https://artifacts.nixos.org/experimental-installer
+  x sh ${REPO_ROOT}/cache/nix-installer install
+  try source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+
+  command -v $cmd && return
+  echo "Failed in installing $cmd."
+  echo "Please install it by yourself and then retry."
+  return 1
+}
 function install_home-manager(){
   # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
   local cmd=home-manager
@@ -31,40 +78,6 @@ function install_home-manager(){
   echo "If this is the problem, use \"su - user\" instead."
   return 1
 }
-function install_nix(){
-  # https://github.com/NixOS/experimental-nix-installer
-  local cmd=nix
-
-  x mkdir -p ${REPO_ROOT}/cache
-  x curl -JLo ${REPO_ROOT}/cache/nix-installer https://artifacts.nixos.org/experimental-installer
-  x sh ${REPO_ROOT}/cache/nix-installer install
-  try source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-function install_cmds(){
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo apt update -y
-    x sudo apt install -y "${pkgs[@]}"
-  fi
-}
-
 function hm_deps(){
   SETUP_HM_DIR="${REPO_ROOT}/sdata/dist-nix/home-manager"
   SETUP_USERNAME_NIXFILE="${SETUP_HM_DIR}/username.nix"
