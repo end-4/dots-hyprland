@@ -8,7 +8,54 @@ function vianix-warning(){
   printf "despite that this should be reversible.\n"
   pause
 }
+function install_cmds(){
+  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo pacman -Syu
+    x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo apt update -y
+    x sudo apt install -y "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" == "fedora" || "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo dnf install -y "${pkgs[@]}"
+  elif [[ "$OS_DISTRO_ID" =~ ^(opensuse-leap|opensuse-tumbleweed)$ ]] || [[ "$OS_DISTRO_ID_LIKE" =~ ^(opensuse|suse)(\ (opensuse|suse))?$ ]]; then
+    local pkgs=()
+    for cmd in "$@";do
+      # For package name which is not cmd name, use "case" syntax to replace
+      pkgs+=($cmd)
+    done
+    x sudo zypper refresh
+    x sudo zypper -n install "${pkgs[@]}"
+  fi
+}
+function install_nix(){
+  # https://github.com/NixOS/experimental-nix-installer
+  local cmd=nix
 
+  x mkdir -p ${REPO_ROOT}/cache
+  x curl -JLo ${REPO_ROOT}/cache/nix-installer https://artifacts.nixos.org/experimental-installer
+  x sh ${REPO_ROOT}/cache/nix-installer install
+  try source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+
+  command -v $cmd && return
+  echo "Failed in installing $cmd."
+  echo "Please install it by yourself and then retry."
+  return 1
+}
 function install_home-manager(){
   # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
   local cmd=home-manager
@@ -31,72 +78,6 @@ function install_home-manager(){
   echo "If this is the problem, use \"su - user\" instead."
   return 1
 }
-function install_nix(){
-  # https://github.com/NixOS/experimental-nix-installer
-  local cmd=nix
-
-  x mkdir -p ${REPO_ROOT}/cache
-  x curl -JLo ${REPO_ROOT}/cache/nix-installer https://artifacts.nixos.org/experimental-installer
-  x sh ${REPO_ROOT}/cache/nix-installer install
-  try source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-function install_curl(){
-  local cmd=curl
-
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-function install_fish(){
-  local cmd=fish
-
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-function install_swaylock(){
-  local cmd=swaylock
-  echo "Detecting command \"$cmd\"..."
-  command -v $cmd && return
-  echo "Command \"$cmd\" not found, try to install..."
-
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-
 function hm_deps(){
   SETUP_HM_DIR="${REPO_ROOT}/sdata/dist-nix/home-manager"
   SETUP_USERNAME_NIXFILE="${SETUP_HM_DIR}/username.nix"
@@ -115,21 +96,19 @@ function hm_deps(){
 
 vianix-warning
 
-if ! command -v curl >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"curl\" not found.${STY_RST}"
-  showfun install_curl
-  v install_curl
+NOT_FOUND_CMDS=()
+TEST_CMDS=(curl fish swaylock gnome-keyring)
+for cmd in "${TEST_CMDS[@]}"; do
+  if ! command -v $cmd >/dev/null 2>&1;then
+    NOT_FOUND_CMDS+=($cmd)
+  fi
+done
+if [[ ${#NOT_FOUND_CMDS[@]} -gt 0 ]]; then
+  echo -e "${STY_YELLOW}[$0]: Not found: ${NOT_FOUND_CMDS[*]}.${STY_RST}"
+  showfun install_cmds
+  v install_cmds "${NOT_FOUND_CMDS[@]}"
 fi
-if ! command -v fish >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"fish\" not found.${STY_RST}"
-  showfun install_fish
-  v install_fish
-fi
-if ! command -v swaylock >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"swaylock\" not found.${STY_RST}"
-  showfun install_swaylock
-  v install_swaylock
-fi
+
 if ! command -v nix >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"nix\" not found.${STY_RST}"
   showfun install_nix

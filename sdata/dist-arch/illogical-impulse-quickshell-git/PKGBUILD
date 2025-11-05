@@ -9,7 +9,7 @@ conflicts=("quickshell-git")
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=3
+pkgrel=4
 pkgdesc="$_pkgname-git which version pinned for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
@@ -26,6 +26,21 @@ depends=(
   'libdrm'
   'mesa'
   'google-breakpad'
+  # NOTE: Below are custom dependencies of illogical-impulse
+  qt6-5compat 
+  qt6-avif-image-plugin
+  qt6-imageformats
+  qt6-multimedia
+  qt6-positioning
+  qt6-quicktimeline
+  qt6-sensors
+  qt6-svg
+  qt6-tools
+  qt6-translations
+  qt6-virtualkeyboard
+  qt6-wayland
+  kdialog
+  syntax-highlighting
 )
 makedepends=(
   'spirv-tools'
