@@ -207,7 +207,8 @@
     ]
     ++ [
     #(config.lib.nixGL.wrap pkgs.hyprland)
-    (config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    #(config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    (import ./quickshell.nix { inherit pkgs quickshell; nixGLWrap = config.lib.nixGL.wrap; })
     ];
   }//home_attrs;
 }
