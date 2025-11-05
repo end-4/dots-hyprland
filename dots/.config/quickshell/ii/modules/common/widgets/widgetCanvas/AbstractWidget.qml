@@ -10,7 +10,7 @@ MouseArea {
 
     property bool draggable: true
     drag.target: draggable ? root : undefined
-    cursorShape: drag.active ? Qt.ClosedHandCursor : draggable ? Qt.OpenHandCursor : Qt.ArrowCursor
+    cursorShape: (draggable && containsPress) ? Qt.ClosedHandCursor : draggable ? Qt.OpenHandCursor : Qt.ArrowCursor
 
     function center() {
         root.x = (root.parent.width - root.width) / 2
