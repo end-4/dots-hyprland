@@ -475,6 +475,14 @@ Singleton {
                 }
             }
 
+            property JsonObject screenRecord: JsonObject {
+                property string savePath: Directories.videos.replace("file://","") // strip "file://"
+            }
+
+            property JsonObject screenSnip: JsonObject {
+                property string savePath: "" // only copy to clipboard when empty
+            }
+
             property JsonObject sounds: JsonObject {
                 property bool battery: false
                 property bool pomodoro: false

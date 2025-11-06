@@ -33,6 +33,10 @@ PanelWindow {
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
     signal dismiss()
     
+    property string saveScreenshotDir: Config.options.screenSnip.savePath !== ""
+                                       ? Config.options.screenSnip.savePath
+                                       : ""
+
     property string screenshotDir: Directories.screenshotTemp
     property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
     property string fileUploadApiEndpoint: "https://uguu.se/upload"
@@ -259,7 +263,23 @@ PanelWindow {
         }
         switch (root.action) {
             case RegionSelection.SnipAction.Copy:
-                snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                if (saveScreenshotDir === "") {
+                    // not saving the screenshot, just copy to clipboard
+                    snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                    break;
+                }
+
+                const savePathBase = root.saveScreenshotDir
+
+                snipProc.command = [
+                    "bash", "-c",
+                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(savePathBase)}' && \
+                    saveFileName="screenshot-$(date '+%Y-%m-%d_%H.%M.%S').png" && \
+                    savePath="${savePathBase}/$saveFileName" && \
+                    ${cropToStdout} | tee >(wl-copy) > "$savePath" && \
+                    ${cleanup}`
+                ]
+
                 break;
             case RegionSelection.SnipAction.Edit:
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
