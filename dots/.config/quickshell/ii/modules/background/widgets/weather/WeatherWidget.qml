@@ -37,8 +37,8 @@ AbstractBackgroundWidget {
             anchors {
                 right: parent.right
                 top: parent.top
-                rightMargin: 20
-                topMargin: 24
+                rightMargin: 16
+                topMargin: 20
             }
         }
 
@@ -50,8 +50,8 @@ AbstractBackgroundWidget {
                 left: parent.left
                 bottom: parent.bottom
 
-                leftMargin: 20
-                bottomMargin: 24
+                leftMargin: 16
+                bottomMargin: 20
             }
         }
     }
