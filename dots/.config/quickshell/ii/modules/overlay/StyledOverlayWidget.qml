@@ -11,7 +11,7 @@ import qs.modules.common.widgets.widgetCanvas
 
 /*
  * To make an overlay widget:
- * 1. Create a modules/overlay/<yourWidget>/<YourWidget>.qml, using this as the base class
+ * 1. Create a modules/overlay/<yourWidget>/<YourWidget>.qml, using this as the base class and declare your widget content as contentItem
  * 2. Add an entry to OverlayContext.availableWidgets with identifier=<yourWidgetIdentifier>
  * 3. Add an entry in Persistent.states.overlay.<yourWidgetIdentifier> with x, y, pinned, clickthrough properties set to reasonable defaults
  * 4. Add an entry in OverlayWidgetDelegateChooser with roleValue=<yourWidgetIdentifier> and Declare your widget in there
@@ -20,9 +20,9 @@ import qs.modules.common.widgets.widgetCanvas
 AbstractOverlayWidget {
     id: root
 
-    required property var modelData
     required property Item contentItem
 
+    required property var modelData
     readonly property string identifier: modelData.identifier
     readonly property string materialSymbol: modelData.materialSymbol ?? "widgets"
     property string title: identifier.replace(/([A-Z])/g, " $1").replace(/^./, function(str){ return str.toUpperCase(); })
