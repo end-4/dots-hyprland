@@ -7,7 +7,7 @@ Singleton {
     
     readonly property list<var> availableWidgets: [
         { identifier: "crosshair", materialSymbol: "point_scan" },
-        { identifier: "fpsLimiter", materialSymbol: "speed" },
+        { identifier: "fpsLimiter", materialSymbol: "animation" },
         { identifier: "volumeMixer", materialSymbol: "volume_up" }
     ]
     

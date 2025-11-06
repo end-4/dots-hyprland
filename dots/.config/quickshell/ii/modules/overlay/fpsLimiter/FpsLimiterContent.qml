@@ -1,3 +1,4 @@
+import qs.services
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -10,12 +11,33 @@ Rectangle {
     id: root
     color: Appearance.m3colors.m3surfaceContainer
     property real padding: 20
+    property bool showCheckIcon: false
+    property bool showError: false
     implicitWidth: contentColumn.implicitWidth + padding * 2
     implicitHeight: contentColumn.implicitHeight + padding * 2
+
+    Timer {
+        id: iconResetTimer
+        interval: 1000
+        onTriggered: {
+            root.showCheckIcon = false;
+        }
+    }
+
+    Timer {
+        id: errorResetTimer
+        interval: 1000
+        onTriggered: {
+            root.showError = false;
+        }
+    }
 
     function applyLimit() {
         var fpsValue = parseInt(fpsField.text);
         if (isNaN(fpsValue) || fpsValue < 0) {
+            root.showError = true;
+            errorResetTimer.restart();
+            fpsField.text = "";
             return;
         }
 
@@ -34,6 +56,9 @@ Rectangle {
         fpsSetter.command = ["bash", "-c", cmd];
         fpsSetter.startDetached();
 
+        root.showCheckIcon = true;
+        iconResetTimer.restart();
+
         // Clear the field after applying
         fpsField.text = "";
     }
@@ -41,7 +66,7 @@ Rectangle {
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Escape) {
             fpsField.text = "";
-            event.accepted = true;
+            event.onAccepted();
         }
     }
 
@@ -58,13 +83,13 @@ Rectangle {
                 id: fpsField
                 Layout.fillWidth: true
                 Layout.preferredWidth: 200
-                placeholderText: qsTr("Set FPS limit (e.g. 80)")
+                placeholderText: root.showError ? Translation.tr("Insert a valid number!") : Translation.tr("Set FPS limit (e.g. 80)")
                 inputMethodHints: Qt.ImhDigitsOnly
                 focus: true
 
                 Keys.onReturnPressed: {
                     root.applyLimit();
-                    event.accepted = true;
+                    event.onAccepted();
                 }
             }
 
@@ -80,7 +105,22 @@ Rectangle {
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: Appearance.font.pixelSize.title
-                    text: "keyboard_return"
+                    text: root.showError ? "close" : (root.showCheckIcon ? "check" : "save")
+                    rotation: (root.showCheckIcon || root.showError) ? 360 : 0
+                    color: root.showError ? "#ef5350" : (root.showCheckIcon ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurface)
+
+                    Behavior on rotation {
+                        NumberAnimation {
+                            duration: 200
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 200
+                        }
+                    }
                 }
             }
         }

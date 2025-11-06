@@ -5,6 +5,6 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
-    title: "FPS Limiter"
+    title: "MangoHud FPS"
     contentItem: FpsLimiterContent {}
 }
