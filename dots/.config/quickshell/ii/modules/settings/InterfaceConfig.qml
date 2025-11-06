@@ -578,14 +578,46 @@ ContentPage {
 
     ContentSection {
         icon: "overview_key"
-        title: Translation.tr("Overview")
+        title: Translation.tr("Search & Overview")
 
-        ConfigSwitch {
-            buttonIcon: "check"
-            text: Translation.tr("Enable")
-            checked: Config.options.overview.enable
-            onCheckedChanged: {
-                Config.options.overview.enable = checked;
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable overview")
+                checked: Config.options.overview.enable
+                onCheckedChanged: {
+                    Config.options.overview.enable = checked;
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.overview.position
+                onSelected: newValue => {
+                    Config.options.overview.position = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Top"),
+                        icon: "align_start",
+                        value: "top"
+                    },
+                    {
+                        displayName: Translation.tr("Center"),
+                        icon: "align_center",
+                        value: "center"
+                    },
+                    {
+                        displayName: Translation.tr("Bottom"),
+                        icon: "align_end",
+                        value: "bottom"
+                    }
+                ]
             }
         }
         ConfigSwitch {
