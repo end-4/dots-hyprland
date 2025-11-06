@@ -14,6 +14,7 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    property string position: Config.options.overview.position
     Variants {
         id: overviewVariants
         model: Quickshell.screens
@@ -96,7 +97,7 @@ Scope {
                 columnSpacing: -8
                 columns: 1
                 
-                state: Config.options.overview.position
+                state: overviewScope.position
                 states: [
                     State {
                         name: "top"
@@ -126,7 +127,7 @@ Scope {
 
                 Item {
                     // Filler item for centered position
-                    visible: Config.options.overview.position === "center" 
+                    visible: overviewScope.position === "center" 
                     Layout.preferredHeight: overviewLoader.implicitHeight
                     Layout.alignment: Qt.AlignHCenter
                     Layout.row: 0
@@ -138,13 +139,13 @@ Scope {
                     Synchronizer on searchingText {
                         property alias source: root.searchingText
                     }
-                    Layout.row: Config.options.overview.position === "bottom" ? 2 : 1
+                    Layout.row: overviewScope.position === "bottom" ? 2 : 1
                 }
 
                 Loader {
                     id: overviewLoader
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.row: Config.options.overview.position === "top" ? 2 : Config.options.overview.position === "center" ? 3 : 1
+                    Layout.row: overviewScope.position === "top" ? 2 : overviewScope.position === "center" ? 3 : 1
                     active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
