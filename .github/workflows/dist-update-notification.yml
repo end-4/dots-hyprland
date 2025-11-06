@@ -5,9 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'sdata/dist-arch/**'
-    paths-ignore:
-      - 'sdata/dist-arch/README.md'
+      - "sdata/dist-arch/**"
+      - "!sdata/dist-arch/README.md"
 #  workflow_dispatch:
 
 jobs:
