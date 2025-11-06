@@ -361,6 +361,11 @@ Singleton {
                 property bool pinnedOnStartup: false
             }
 
+            property JsonObject overlay: JsonObject {
+                property bool openingZoomAnimation: true
+                property bool darkenScreen: true
+            }
+
             property JsonObject overview: JsonObject {
                 property bool enable: true
                 property real scale: 0.18 // Relative to screen size
