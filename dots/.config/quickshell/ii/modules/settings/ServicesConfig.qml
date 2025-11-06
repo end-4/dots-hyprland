@@ -82,7 +82,15 @@ ContentPage {
                 Config.options.resources.updateInterval = value;
             }
         }
-        
+
+        ConfigSwitch {
+            buttonIcon: "speed"
+            text: Translation.tr("Open task manager on mouse click")
+            checked: Config.options.resources.openTaskManagerOnClick
+            onCheckedChanged: {
+                Config.options.resources.openTaskManagerOnClick = checked;
+            }
+        }
     }
 
     ContentSection {

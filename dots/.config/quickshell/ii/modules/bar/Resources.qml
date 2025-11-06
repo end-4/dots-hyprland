@@ -1,3 +1,4 @@
+import Quickshell
 import qs.modules.common
 import qs.services
 import QtQuick
@@ -10,6 +11,11 @@ MouseArea {
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
     implicitHeight: Appearance.sizes.barHeight
     hoverEnabled: true
+    acceptedButtons: Config.options?.resources?.openTaskManagerOnClick ? (Qt.LeftButton | Qt.RightButton) : Qt.NoButton
+
+    onPressed: {
+        Quickshell.execDetached(["bash", "-c", `${Directories.launcherScriptPath} "gnome-system-monitor" "plasma-systemmonitor --page-name Processes" "command -v btop && kitty -1 fish -c btop"`])
+    }
 
     RowLayout {
         id: rowLayout
