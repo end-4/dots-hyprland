@@ -1,0 +1,19 @@
+# PKGBUILD originally copied from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=matugen-bin
+
+pkgname=illogical-impulse-matugen-bin
+pkgver=2.4.1
+pkgrel=1
+pkgdesc="matugen-bin with pinned version for illogical-impulse"
+url="https://github.com/InioX/matugen"
+license=("GPL-2.0")
+arch=("x86_64")
+provides=("matugen")
+conflicts=("matugen" "matugen-bin")
+source=("https://github.com/InioX/matugen/releases/download/v$pkgver/matugen-$pkgver-x86_64.tar.gz")
+sha256sums=("SKIP")
+
+package() {
+    install -Dm755 matugen -t "$pkgdir/usr/bin"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
