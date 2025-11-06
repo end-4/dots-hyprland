@@ -246,7 +246,7 @@ Item { // Wrapper
             rowSpacing: 0
             columns: 1
 
-            // clip: true
+            clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -255,6 +255,7 @@ Item { // Wrapper
                     radius: searchWidgetContent.radius
                 }
             }
+            
             SearchBar {
                 id: searchBar
                 property real verticalPadding: 4

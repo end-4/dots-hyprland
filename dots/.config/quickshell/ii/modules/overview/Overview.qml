@@ -95,9 +95,7 @@ Scope {
                 }
                 columnSpacing: -8
                 columns: 1
-
-                property bool reverseOrder: Config.options.overview.position === "bottom"
-
+                
                 state: Config.options.overview.position
                 states: [
                     State {
