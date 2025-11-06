@@ -38,7 +38,8 @@ Singleton {
             Translation.tr("Low battery"), 
             Translation.tr("Consider plugging in your device"), 
             "-u", "critical",
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ])
 
         if (root.soundEnabled) Audio.playSystemSound("dialog-warning");
@@ -51,7 +52,8 @@ Singleton {
             Translation.tr("Critically low battery"), 
             Translation.tr("Please charge!\nAutomatic suspend triggers at %1%").arg(Config.options.battery.suspend), 
             "-u", "critical",
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ]);
 
         if (root.soundEnabled) Audio.playSystemSound("suspend-error");
@@ -69,7 +71,8 @@ Singleton {
             "notify-send",
             Translation.tr("Battery full"),
             Translation.tr("Please unplug the charger"),
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ]);
 
         if (root.soundEnabled) Audio.playSystemSound("complete");

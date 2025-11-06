@@ -7,7 +7,7 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
 
-    readonly property string quoteText: Config.options.background.quote
+    readonly property string quoteText: Config.options.background.widgets.clock.quote.text
 
     implicitWidth: quoteBox.implicitWidth
     implicitHeight: quoteBox.implicitHeight
@@ -47,7 +47,7 @@ Item {
             StyledText {
                 id: quoteStyledText
                 horizontalAlignment: Text.AlignLeft
-                text: Config.options.background.quote
+                text: Config.options.background.widgets.clock.quote.text
                 color: Appearance.colors.colOnSecondaryContainer
                 font {
                     family: Appearance.font.family.reading

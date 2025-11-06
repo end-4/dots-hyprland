@@ -2,8 +2,11 @@ name: Comment on Discussion When sdata/dist-arch/ Changes
 
 on:
   push:
+    branches:
+      - main
     paths:
-      - 'sdata/dist-arch/**'
+      - "sdata/dist-arch/**"
+      - "!sdata/dist-arch/README.md"
 #  workflow_dispatch:
 
 jobs:
