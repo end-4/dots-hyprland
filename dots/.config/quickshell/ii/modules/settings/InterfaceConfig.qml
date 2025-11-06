@@ -26,7 +26,7 @@ ContentPage {
                 Layout.leftMargin: 10
                 color: Appearance.colors.colSubtext
                 font.pixelSize: Appearance.font.pixelSize.smallie
-                text: Translation.tr("Press Super+G to toggle appearance")
+                text: Translation.tr("Press Super+G to open the overlay and pin the crosshair")
             }
             Item {
                 Layout.fillWidth: true

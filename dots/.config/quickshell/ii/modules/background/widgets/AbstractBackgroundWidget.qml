@@ -35,9 +35,9 @@ AbstractWidget {
     draggable: placementStrategy === "free"
     onReleased: {
         root.targetX = root.x;
-        root.targetY  = root.y;
+        root.targetY = root.y;
         configEntry.x = root.targetX;
-        configEntry.y = root.targetY ;
+        configEntry.y = root.targetY;
     }
 
     property bool needsColText: false
