@@ -43,12 +43,6 @@ StyledPopup {
         }
 
         StyledPopupValueRow {
-            icon: "heart_check"
-            label: Translation.tr("Health:")
-            value: `${(Battery.health).toFixed(1)}%`
-        }
-
-        StyledPopupValueRow {
             visible:  !(Battery.chargeState != 4 && Battery.energyRate == 0)
             icon: "bolt"
             label: {
@@ -67,6 +61,12 @@ StyledPopup {
                     return `${Battery.energyRate.toFixed(2)}W`;
                 }
             }
+        }
+
+        StyledPopupValueRow {
+            icon: "heart_check"
+            label: Translation.tr("Health:")
+            value: `${(Battery.health).toFixed(1)}%`
         }
     }
 }
