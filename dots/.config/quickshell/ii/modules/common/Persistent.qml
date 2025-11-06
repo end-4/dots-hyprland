@@ -84,14 +84,20 @@ Singleton {
                 property JsonObject crosshair: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: true
+                    property real x: 835
+                    property real y: 490
+                }
+                property JsonObject recorder: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
                     property real x: 100
-                    property real y: 100
+                    property real y: 130
                 }
                 property JsonObject volumeMixer: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: false
-                    property real x: 55
-                    property real y: 188
+                    property real x: 100
+                    property real y: 320
                 }
             }
 

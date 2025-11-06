@@ -8,6 +8,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import qs.modules.overlay.crosshair
 import qs.modules.overlay.volumeMixer
+import qs.modules.overlay.recorder
 
 DelegateChooser {
     id: root
@@ -15,4 +16,5 @@ DelegateChooser {
 
     DelegateChoice { roleValue: "crosshair"; Crosshair {} }
     DelegateChoice { roleValue: "volumeMixer"; VolumeMixer {} }
+    DelegateChoice { roleValue: "recorder"; Recorder {} }
 }

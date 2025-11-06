@@ -11,8 +11,8 @@ StyledOverlayWidget {
         anchors.centerIn: parent
         color: Appearance.m3colors.m3surfaceContainer
         property real padding: 16
-        implicitHeight: 700
-        implicitWidth: 400
+        implicitHeight: 600
+        implicitWidth: 350
 
         VolumeDialogContent {
             anchors.fill: parent

@@ -7,7 +7,8 @@ Singleton {
     
     readonly property list<var> availableWidgets: [
         { identifier: "crosshair", materialSymbol: "point_scan" },
-        { identifier: "volumeMixer", materialSymbol: "volume_up" }
+        { identifier: "volumeMixer", materialSymbol: "volume_up" },
+        { identifier: "recorder", materialSymbol: "screen_record" },
     ]
     
     readonly property bool hasPinnedWidgets: root.pinnedWidgetIdentifiers.length > 0
