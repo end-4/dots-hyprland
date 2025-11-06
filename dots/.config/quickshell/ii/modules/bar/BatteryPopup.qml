@@ -90,7 +90,7 @@ StyledPopup {
                 Layout.fillWidth: true
 
                 MaterialSymbol {
-                    text: "healing"
+                    text: "heart_check"
                     color: Appearance.colors.colOnSurfaceVariant
                     iconSize: Appearance.font.pixelSize.large
                 }
