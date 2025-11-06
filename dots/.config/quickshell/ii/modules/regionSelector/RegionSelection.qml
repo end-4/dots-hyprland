@@ -33,9 +33,9 @@ PanelWindow {
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
     signal dismiss()
     
-    property string permanentScreenshotDir: Config.options.screenSnip.savePath && Config.options.screenSnip.savePath !== ""
-        ? Config.options.screenSnip.savePath
-        : ""
+    property string saveScreenshotDir: Config.options.screenSnip.savePath !== ""
+                                       ? Config.options.screenSnip.savePath
+                                       : ""
 
     property string screenshotDir: Directories.screenshotTemp
     property string imageSearchEngineBaseUrl: Config.options.search.imageSearch.imageSearchEngineBaseUrl
@@ -262,20 +262,23 @@ PanelWindow {
         }
         switch (root.action) {
             case RegionSelection.SnipAction.Copy:
-                if (permanentScreenshotDir === "") {
-                    // no permanent dir, just copy to clipboard
+                if (saveScreenshotDir === "") {
+                    // not saving the screenshot, just copy to clipboard
                     snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
                     break;
                 }
-                const saveFileName = 'screenshot-' + DateTime.fileDateTime + '.png'
-                const savePath = `${root.permanentScreenshotDir}/${saveFileName}`
+
+                const savePathBase = root.saveScreenshotDir
 
                 snipProc.command = [
-                    "bash", "-c", 
-                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.permanentScreenshotDir)}' ` + 
-                    `&& ${cropToStdout} | tee >(wl-copy) > '${StringUtils.shellSingleQuoteEscape(savePath)}' ` + 
-                    `&& ${cleanup}`
+                    "bash", "-c",
+                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(savePathBase)}' && \
+                    saveFileName="screenshot-$(date '+%Y-%m-%d_%H.%M.%S').png" && \
+                    savePath="${savePathBase}/$saveFileName" && \
+                    ${cropToStdout} | tee >(wl-copy) > "$savePath" && \
+                    ${cleanup}`
                 ]
+
                 break;
             case RegionSelection.SnipAction.Edit:
                 snipProc.command = ["bash", "-c", `${cropToStdout} | swappy -f - && ${cleanup}`]
