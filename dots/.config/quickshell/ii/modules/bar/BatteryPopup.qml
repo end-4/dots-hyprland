@@ -85,6 +85,30 @@ StyledPopup {
         }
 
         RowLayout {
+                spacing: 5
+                visible: Battery.health > 0
+                Layout.fillWidth: true
+
+                MaterialSymbol {
+                    text: "heart_check"
+                    color: Appearance.colors.colOnSurfaceVariant
+                    iconSize: Appearance.font.pixelSize.large
+                }
+
+                StyledText {
+                    text: Translation.tr("Health:")
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: `${(Battery.health).toFixed(1)}%`
+                }
+            }
+
+        RowLayout {
             spacing: 5
             Layout.fillWidth: true
 
