@@ -47,21 +47,10 @@ Scope {
                 id: grab
                 windows: [overlayWindow]
                 active: GlobalStates.overlayOpen
-                onActiveChanged: {
-                    if (active) {
-                        // Quick workspace flick to unlock cursor from game's relative mode
-                        cursorUnlockProcess.running = true;
-                    }
-                }
                 onCleared: () => {
                     if (!active)
                         GlobalStates.overlayOpen = false;
                 }
-            }
-
-            Process {
-                id: cursorUnlockProcess
-                command: ["bash", "-c", "ws=$(hyprctl activeworkspace -j | jq -r '.id'); hyprctl --batch \"keyword animations:enabled 0 ; dispatch workspace empty ; dispatch workspace $ws ; keyword animations:enabled 1\""]
             }
 
             OverlayContent {
