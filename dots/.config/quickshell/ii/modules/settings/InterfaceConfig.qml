@@ -408,7 +408,7 @@ ContentPage {
 
         ContentSubsection {
             title: Translation.tr("Super key symbol")
-            tooltip: Translation.tr("Choose a symbol from this list or edit config.json and add your own nerd symbol in cheatsheet.superKey.")
+            tooltip: Translation.tr("You can also manually edit cheatsheet.superKey")
             ConfigSelectionArray {
                 currentValue: Config.options.cheatsheet.superKey
                 onSelected: newValue => {
@@ -462,7 +462,7 @@ ContentPage {
         }
         ConfigSwitch {
             buttonIcon: "highlight_keyboard_focus"
-            text: Translation.tr("Split Buttons")
+            text: Translation.tr("Split buttons")
             checked: Config.options.cheatsheet.splitButtons
             onCheckedChanged: {
                 Config.options.cheatsheet.splitButtons = checked;
