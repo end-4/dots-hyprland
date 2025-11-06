@@ -99,7 +99,7 @@ RowLayout {
         Layout.bottomMargin: 4
         onClicked: {
             GlobalStates.overviewOpen = false;
-            Hyprland.dispatch("global quickshell:regionSearch")
+            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "search"]);
         }
         text: "image_search"
         StyledToolTip {
