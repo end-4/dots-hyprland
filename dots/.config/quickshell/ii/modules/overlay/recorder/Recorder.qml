@@ -13,6 +13,7 @@ StyledOverlayWidget {
     contentItem: Rectangle {
         id: contentItem
         anchors.centerIn: parent
+        radius: root.contentRadius
         color: Appearance.m3colors.m3surfaceContainer
         property real padding: 8
         implicitHeight: contentColumn.implicitHeight + padding * 2
