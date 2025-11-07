@@ -73,7 +73,6 @@ Rectangle {
 
                 onAccepted: {
                     root.applyLimit();
-                    event.accepted = true;
                 }
             }
 
