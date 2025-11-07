@@ -17,5 +17,5 @@ S="${WORKDIR}/readexpro-master"
 
 src_install() {
 	insinto /usr/share/fonts/ttf-readex-pro
-	doins "${S_READEXPRO}"/fonts/ttf/*.ttf
+	doins "${S}"/fonts/ttf/*.ttf
 }

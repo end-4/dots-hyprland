@@ -13,6 +13,7 @@ SRC_URI="https://github.com/googlefonts/rubik/archive/${COMMIT}.tar.gz -> ${P}.t
 
 LICENSE="OFL-1.1"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64 ~x86"
 
 S="${WORKDIR}/rubik-${COMMIT}"
 

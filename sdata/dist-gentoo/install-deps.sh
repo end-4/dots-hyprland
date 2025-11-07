@@ -18,8 +18,8 @@ printf "${STY_RST}"
 pause
 
 printf "${STY_YELLOW}"
-printf "https://github.com/end-4/dots-hyprland/blob/main/sdata/dist-gentoo/README.md"
-printf "Checkout the above README for potential bug fixes or additional information"
+printf "https://github.com/end-4/dots-hyprland/blob/main/sdata/dist-gentoo/README.md\n"
+printf "Checkout the above README for potential bug fixes or additional information\n\n"
 printf "${STY_RST}"
 pause
 
@@ -60,27 +60,7 @@ v sudo emerge --depclean
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
 
-###### LIVE EBUILDS START
-HYPR_DIR="illogical-impulse-hyprland"
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprgraphics/
-x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qt-support
-x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qtutils
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
-x sudo mkdir -p ${ebuild_dir}/dev-util/hyprwayland-scanner
-
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprgraphics*.ebuild ${ebuild_dir}/dev-libs/hyprgraphics
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qt-support*.ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qtutils*.ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprlang*.ebuild ${ebuild_dir}/dev-libs/hyprlang
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprwayland-scanner*.ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner
-
-v sudo ebuild ${ebuild_dir}/dev-libs/hyprgraphics/hyprgraphics*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support/hyprland-qt-support*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils/hyprland-qtutils*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
-###### LIVE EBUILDS END
+source ./sdata/dist-gentoo/import-local-pkgs.sh
 
 # Install dependencies
 for i in "${metapkgs[@]}"; do

@@ -43,3 +43,10 @@ x11-libs/libxkbcommon
 dev-util/breakpad
 dev-libs/linux-syscall-support
 dev-embedded/libdisasm
+kde-plasma/breeze-plus
+media-fonts/space-grotesk
+media-fonts/gabarito **
+media-fonts/material-symbols-variable **
+media-fonts/readex-pro
+media-fonts/rubik-vf
+app-misc/songrec

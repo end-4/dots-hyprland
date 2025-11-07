@@ -21,7 +21,6 @@ RDEPEND="
 	dev-cpp/cairomm
 "
 
-# Use WORKDIR directly after stripping top-level folder
 S="${WORKDIR}"
 
 src_unpack() {
@@ -38,7 +37,7 @@ src_prepare() {
 }
 
 src_compile() {
-	cd "${S}" || die
+	cd "${S}"
 	mkdir -p build
 	cmake -B build -S . -DCMAKE_BUILD_TYPE=None
 	cmake --build build
