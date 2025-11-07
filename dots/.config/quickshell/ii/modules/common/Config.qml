@@ -380,6 +380,7 @@ Singleton {
             property JsonObject overlay: JsonObject {
                 property bool openingZoomAnimation: true
                 property bool darkenScreen: true
+                property real clickthroughOpacity: 0.7
             }
 
             property JsonObject overview: JsonObject {
