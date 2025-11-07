@@ -22,6 +22,8 @@ AbstractOverlayWidget {
 
     required property Item contentItem
     property bool fancyBorders: true
+    property bool showCenterButton: false
+    property bool showClickabilityButton: true
 
     required property var modelData
     readonly property string identifier: modelData.identifier
@@ -144,7 +146,7 @@ AbstractOverlayWidget {
                         leftMargin: titleBar.padding + 8
                         bottomMargin: root.fancyBorders ? 0 : titleBar.padding
                     }
-                    spacing: 0
+                    spacing: 2
 
                     MaterialSymbol {
                         text: root.materialSymbol
@@ -160,6 +162,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: root.showCenterButton
                         materialSymbol: "recenter"
                         onClicked: root.center()
                         StyledToolTip {
@@ -168,6 +171,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: (root.pinned && root.showClickabilityButton)
                         materialSymbol: "mouse"
                         toggled: !root.clickthrough
                         onClicked: root.toggleClickthrough()
