@@ -47,6 +47,26 @@ Item {
         }
         spacing: sidebarPadding
 
+        Rectangle { // TODO: make this focus thing work
+            id: rect
+            anchors.fill: parent
+            color: "blue"
+            z: 10
+            opacity: 0.2
+
+            TapHandler {
+                onTapped: {
+                    console.log("Click detected (pass-through)")
+                    root.focusActiveItem()
+                    rect.implicitWidth = 0
+                }
+            } 
+        }
+
+
+        
+
+
         Toolbar {
             Layout.alignment: Qt.AlignHCenter
             enableShadow: false
@@ -66,11 +86,15 @@ Item {
             radius: Appearance.rounding.normal
             color: Appearance.colors.colLayer1
 
+            
+
             SwipeView { // Content pages
                 id: swipeView
                 anchors.fill: parent
                 spacing: 10
                 currentIndex: tabBar.currentIndex
+
+                
 
                 clip: true
                 layer.enabled: true

@@ -35,6 +35,8 @@ Scope { // Scope
         }
     }
 
+    
+
     Loader {
         id: sidebarLoader
         active: true
@@ -44,13 +46,33 @@ Scope { // Scope
             visible: GlobalStates.sidebarLeftOpen
             
             property bool extend: false
+            property bool pinned: false
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
+
+            onPinnedChanged: {
+                updateWidth()
+            }
+
+            onExtendChanged: {
+                updateWidth()
+            }
 
             function hide() {
                 GlobalStates.sidebarLeftOpen = false
             }
 
+            function updateWidth() {
+                if (pinned) {
+                    implicitWidth = sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended - Appearance.sizes.elevationMargin : Appearance.sizes.sidebarWidth - Appearance.sizes.elevationMargin
+                    exclusionMode = ExclusionMode.Auto
+                }else {
+                    implicitWidth = Appearance.sizes.sidebarWidthExtended + Appearance.sizes.elevationMargin
+                    exclusionMode = ExclusionMode.Normal
+                }
+            }
+
+            exclusionMode: ExclusionMode.Normal
             exclusiveZone: 0
             implicitWidth: Appearance.sizes.sidebarWidthExtended + Appearance.sizes.elevationMargin
             WlrLayershell.namespace: "quickshell:sidebarLeft"
@@ -71,14 +93,17 @@ Scope { // Scope
             HyprlandFocusGrab { // Click outside to close
                 id: grab
                 windows: [ sidebarRoot ]
-                active: sidebarRoot.visible
+                active: sidebarRoot.visible 
                 onActiveChanged: { // Focus the selected tab
                     if (active) sidebarLeftBackground.children[0].focusActiveItem()
                 }
                 onCleared: () => {
+                    if (sidebarRoot.pinned) return
                     if (!active) sidebarRoot.hide()
                 }
             }
+
+            
 
             // Content
             StyledRectangularShadow {
@@ -112,6 +137,9 @@ Scope { // Scope
                         }
                         else if (event.key === Qt.Key_P) {
                             root.detach = !root.detach;
+                        }
+                        else if (event.key === Qt.Key_I) {
+                            sidebarRoot.pinned = !sidebarRoot.pinned;
                         }
                         event.accepted = true;
                     }
