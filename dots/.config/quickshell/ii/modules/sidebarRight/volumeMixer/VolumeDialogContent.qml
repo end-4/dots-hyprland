@@ -29,6 +29,7 @@ ColumnLayout {
         Layout.topMargin: -22
         Layout.leftMargin: 0
         Layout.rightMargin: 0
+        color: Appearance.colors.colOutlineVariant
     }
 
     DialogSectionListView {
@@ -56,6 +57,7 @@ ColumnLayout {
         Layout.topMargin: -22
         Layout.leftMargin: 0
         Layout.rightMargin: 0
+        color: Appearance.colors.colOutlineVariant
     }
 
     DialogSectionListView {

@@ -105,6 +105,7 @@ Singleton {
                     property bool clickthrough: false
                     property real x: 80
                     property real y: 280
+                    property int tabIndex: 0
                 }
             }
 

@@ -50,7 +50,7 @@ StyledOverlayWidget {
                 fill: parent
                 margins: parent.padding
             }
-            spacing: 10
+            spacing: 8
 
             SecondaryTabBar {
                 id: tabBar
