@@ -14,9 +14,50 @@ Item {
     property real padding: 4
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
+    // Excellent symbol explaination and source :
+    // http://xahlee.info/comp/unicode_computing_symbols.html
+    // https://www.nerdfonts.com/cheat-sheet
+    property var macSymbolMap: ({
+        "Ctrl": "󰘴",
+        "Alt": "󰘵",
+        "Shift": "󰘶",
+        "Space": "󱁐",
+        "Tab": "↹",
+        "Equal": "󰇼",
+        "Minus": "",
+        "Print": "",
+        "BackSpace": "󰭜",
+        "Delete": "⌦",
+        "Return": "󰌑",
+        "Period": ".",
+        "Escape": "⎋"
+      })
+    property var functionSymbolMap: ({
+        "F1":  "󱊫",
+        "F2":  "󱊬",
+        "F3":  "󱊭",
+        "F4":  "󱊮",
+        "F5":  "󱊯",
+        "F6":  "󱊰",
+        "F7":  "󱊱",
+        "F8":  "󱊲",
+        "F9":  "󱊳",
+        "F10": "󱊴",
+        "F11": "󱊵",
+        "F12": "󱊶",
+    })
+
+    property var mouseSymbolMap: ({
+        "mouse_up": "󱕐",
+        "mouse_down": "󱕑",
+        "mouse:272": "L󰍽",
+        "mouse:273": "R󰍽",
+        "Scroll ↑/↓": "󱕒",
+        "Page_↑/↓": "⇞/⇟",
+    })
 
     property var keyBlacklist: ["Super_L"]
-    property var keySubstitutions: ({
+    property var keySubstitutions: Object.assign({
         "Super": "󰖳",
         "mouse_up": "Scroll ↓",    // ikr, weird
         "mouse_down": "Scroll ↑",  // trust me bro
@@ -27,7 +68,14 @@ Item {
         "Hash": "#",
         "Return": "Enter",
         // "Shift": "",
-    })
+      },
+      !!Config.options.cheatsheet.superKey ? {
+          "Super": Config.options.cheatsheet.superKey,
+      }: {},
+      Config.options.cheatsheet.useMacSymbol ? macSymbolMap : {},
+      Config.options.cheatsheet.useFnSymbol ? functionSymbolMap : {},
+      Config.options.cheatsheet.useMouseSymbol ? mouseSymbolMap : {},
+    )
 
     Row { // Keybind columns
         id: row
@@ -77,6 +125,17 @@ Item {
                                         var result = [];
                                         for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
                                             const keybind = keybindSection.modelData.keybinds[i];
+
+                                            if (!Config.options.cheatsheet.splitButtons) {
+
+                                              for (var j = 0; j < keybind.mods.length; j++) {
+                                                  keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                                              }
+                                              keybind.mods = [keybind.mods.join(' ') ]
+                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
+                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                                            } 
+
                                             result.push({
                                                 "type": "keys",
                                                 "mods": keybind.mods,
@@ -108,17 +167,19 @@ Item {
                                                     delegate: KeyboardKey {
                                                         required property var modelData
                                                         key: keySubstitutions[modelData] || modelData
+                                                        pixelSize: Config.options.cheatsheet.fontSize.key
                                                     }
                                                 }
                                                 StyledText {
                                                     id: keybindPlus
-                                                    visible: !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
+                                                    visible: Config.options.cheatsheet.splitButtons && !keyBlacklist.includes(modelData.key) && modelData.mods.length > 0
                                                     text: "+"
                                                 }
                                                 KeyboardKey {
                                                     id: keybindKey
-                                                    visible: !keyBlacklist.includes(modelData.key)
+                                                    visible: Config.options.cheatsheet.splitButtons && !keyBlacklist.includes(modelData.key)
                                                     key: keySubstitutions[modelData.key] || modelData.key
+                                                    pixelSize: Config.options.cheatsheet.fontSize.key
                                                     color: Appearance.colors.colOnLayer0
                                                 }
                                             }
@@ -134,7 +195,7 @@ Item {
                                                 StyledText {
                                                     id: commentText
                                                     anchors.centerIn: parent
-                                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                                    font.pixelSize: Config.options.cheatsheet.fontSize.comment || Appearance.font.pixelSize.smaller
                                                     text: modelData.comment
                                                 }
                                             }

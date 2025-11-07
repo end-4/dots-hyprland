@@ -12,6 +12,7 @@ import qs.modules.overlay.crosshair
 
 Item {
     id: root
+    focus: true
     readonly property bool usePasswordChars: !PolkitService.flow?.responseVisible ?? true
 
     Keys.onPressed: (event) => { // Esc to close

@@ -25,7 +25,7 @@ Scope {
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:overlay"
             WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+            WlrLayershell.keyboardFocus: GlobalStates.overlayOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
             visible: true
             color: "transparent"
 
@@ -41,6 +41,30 @@ Scope {
                 bottom: true
                 left: true
                 right: true
+            }
+
+            HyprlandFocusGrab {
+                id: grab
+                windows: [overlayWindow]
+                active: false
+                onCleared: () => {
+                    if (!active) GlobalStates.overlayOpen = false;
+                }
+            }
+
+            Connections {
+                target: GlobalStates
+                function onOverlayOpenChanged() {
+                    delayedGrabTimer.restart();
+                }
+            }
+
+            Timer {
+                id: delayedGrabTimer
+                interval: Appearance.animation.elementMoveFast.duration
+                onTriggered: {
+                    grab.active = GlobalStates.overlayOpen;
+                }
             }
 
             OverlayContent {

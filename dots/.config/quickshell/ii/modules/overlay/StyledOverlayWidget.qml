@@ -21,6 +21,9 @@ AbstractOverlayWidget {
     id: root
 
     required property Item contentItem
+    property bool fancyBorders: true
+    property bool showCenterButton: false
+    property bool showClickabilityButton: true
 
     required property var modelData
     readonly property string identifier: modelData.identifier
@@ -29,6 +32,8 @@ AbstractOverlayWidget {
     property var persistentStateEntry: Persistent.states.overlay[identifier]
     property real radius: Appearance.rounding.windowRounding
     property real minWidth: 250
+    property real padding: 6
+    property real contentRadius: radius - padding
 
     draggable: GlobalStates.overlayOpen
     x: Math.round(persistentStateEntry.x) // Round or it'll be blurry
@@ -38,9 +43,10 @@ AbstractOverlayWidget {
     drag {
         minimumX: 0
         minimumY: 0
-        maximumX: root.parent.width - root.width
-        maximumY: root.parent.height - root.height
+        maximumX: root.parent?.width - root.width
+        maximumY: root.parent?.height - root.height
     }
+    opacity: (GlobalStates.overlayOpen || !clickthrough) ? 1.0 : Config.options.overlay.clickthroughOpacity
 
     // Guarded states & registration funcs
     property bool open: Persistent.states.overlay.open
@@ -96,10 +102,14 @@ AbstractOverlayWidget {
     Rectangle {
         id: border
         anchors.fill: parent
-        color: "transparent"
+        color: (root.fancyBorders && GlobalStates.overlayOpen) ? Appearance.colors.colLayer1 : "transparent"
         radius: root.radius
         border.color: ColorUtils.transparentize(Appearance.colors.colOutlineVariant, GlobalStates.overlayOpen ? 0 : 1)
         border.width: 1
+
+        Behavior on color {
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+        }
 
         layer.enabled: GlobalStates.overlayOpen
         layer.effect: OpacityMask {
@@ -110,25 +120,23 @@ AbstractOverlayWidget {
             }
         }
 
-        Column {
+        ColumnLayout {
             id: contentColumn
-            z: -1
+            z: root.fancyBorders ? 0 : -1
             anchors.fill: parent
+            spacing: 0
 
             // Title bar
             Rectangle {
                 id: titleBar
                 opacity: GlobalStates.overlayOpen ? 1 : 0
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                property real padding: 2
+                Layout.fillWidth: true
+                property real padding: 6
                 implicitWidth: titleBarRow.implicitWidth + padding * 2
                 implicitHeight: titleBarRow.implicitHeight + padding * 2
-                color: Appearance.m3colors.m3surfaceContainer
-                border.color: Appearance.colors.colOutlineVariant
-                border.width: 1
+                color: root.fancyBorders ? "transparent" : Appearance.colors.colLayer1
+                // border.color: Appearance.colors.colOutlineVariant
+                // border.width: 1
                 
                 RowLayout {
                     id: titleBarRow
@@ -136,8 +144,9 @@ AbstractOverlayWidget {
                         fill: parent
                         margins: titleBar.padding
                         leftMargin: titleBar.padding + 8
+                        bottomMargin: root.fancyBorders ? 0 : titleBar.padding
                     }
-                    spacing: 0
+                    spacing: 2
 
                     MaterialSymbol {
                         text: root.materialSymbol
@@ -153,6 +162,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: root.showCenterButton
                         materialSymbol: "recenter"
                         onClicked: root.center()
                         StyledToolTip {
@@ -161,6 +171,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: (root.pinned && root.showClickabilityButton)
                         materialSymbol: "mouse"
                         toggled: !root.clickthrough
                         onClicked: root.toggleClickthrough()
@@ -191,7 +202,10 @@ AbstractOverlayWidget {
             // Content
             Item {
                 id: contentContainer
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.margins: root.fancyBorders ? root.padding : 0
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 implicitWidth: root.contentItem.implicitWidth
                 implicitHeight: root.contentItem.implicitHeight
                 children: [root.contentItem]

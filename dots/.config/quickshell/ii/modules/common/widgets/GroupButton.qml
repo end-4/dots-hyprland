@@ -117,7 +117,7 @@ Button {
         };
     }
 
-
+    property bool tabbedTo: root.focus && (focusReason === Qt.TabFocusReason || focusReason === Qt.BacktabFocusReason)
     background: Rectangle {
         id: buttonBackground
         topLeftRadius: root.leftRadius
@@ -130,6 +130,9 @@ Button {
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
+
+        border.width: root.tabbedTo ? 2 : 0
+        border.color: Appearance.colors.colSecondary
     }
 
     contentItem: StyledText {
