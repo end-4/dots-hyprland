@@ -141,6 +141,7 @@ AbstractOverlayWidget {
                         fill: parent
                         margins: titleBar.padding
                         leftMargin: titleBar.padding + 8
+                        bottomMargin: root.fancyBorders ? 0 : titleBar.padding
                     }
                     spacing: 0
 
