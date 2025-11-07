@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+CONFIG_FILE="$HOME/.config/illogical-impulse/config.json"
+JSON_PATH=".screenRecord.savePath"
+
+CUSTOM_PATH=$(jq -r "$JSON_PATH" "$CONFIG_FILE" 2>/dev/null)
+
+RECORDING_DIR=""
+
+if [[ -n "$CUSTOM_PATH" ]]; then
+    RECORDING_DIR="$CUSTOM_PATH"
+else
+    RECORDING_DIR="$HOME/Videos" # Use default path
+fi
+
 getdate() {
     date '+%Y-%m-%d_%H.%M.%S'
 }
@@ -10,12 +23,8 @@ getactivemonitor() {
     hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name'
 }
 
-xdgvideo="$(xdg-user-dir VIDEOS)"
-if [[ $xdgvideo = "$HOME" ]]; then
-  unset xdgvideo
-fi
-mkdir -p "${xdgvideo:-$HOME/Videos}"
-cd "${xdgvideo:-$HOME/Videos}" || exit
+mkdir -p "$RECORDING_DIR"
+cd "$RECORDING_DIR" || exit
 
 # parse --region <value> without modifying $@ so other flags like --fullscreen still work
 ARGS=("$@")

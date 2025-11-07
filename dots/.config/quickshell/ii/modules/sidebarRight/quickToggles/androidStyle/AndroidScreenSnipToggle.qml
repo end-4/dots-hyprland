@@ -23,7 +23,7 @@ AndroidQuickToggleButton {
         interval: 300
         repeat: false
         onTriggered: {
-            Hyprland.dispatch("global quickshell:regionScreenshot")
+            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "screenshot"]);
         }
     }
 

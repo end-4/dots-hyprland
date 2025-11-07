@@ -108,7 +108,7 @@ Singleton {
             }
         }
         onExited: (exitCode, exitStatus) => {
-            console.log("[KeyringStorage] Keyring data fetch process exited with code:", exitCode);
+            // console.log("[KeyringStorage] Keyring data fetch process exited with code:", exitCode);
             if (exitCode === 1) {
                 console.error("[KeyringStorage] Entry not found, initializing.");
                 root.keyringData = {};

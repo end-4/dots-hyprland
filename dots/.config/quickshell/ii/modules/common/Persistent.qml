@@ -79,6 +79,28 @@ Singleton {
                 property bool inhibit: false
             }
 
+            property JsonObject overlay: JsonObject {
+                property list<string> open: ["crosshair"]
+                property JsonObject crosshair: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: true
+                    property real x: 835
+                    property real y: 490
+                }
+                property JsonObject recorder: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 100
+                    property real y: 130
+                }
+                property JsonObject volumeMixer: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 100
+                    property real y: 320
+                }
+            }
+
             property JsonObject timer: JsonObject {
                 property JsonObject pomodoro: JsonObject {
                     property bool running: false

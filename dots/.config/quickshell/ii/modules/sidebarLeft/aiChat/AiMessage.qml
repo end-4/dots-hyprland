@@ -329,7 +329,7 @@ Rectangle {
                         segmentContent: thisBlock.content
                         messageData: root.messageData
                         done: root.messageData?.done ?? false
-                        forceDisableChunkSplitting: root.messageData.content.includes("```")
+                        forceDisableChunkSplitting: root.messageData?.content.includes("```") ?? true
                     } }
                 }
             }
