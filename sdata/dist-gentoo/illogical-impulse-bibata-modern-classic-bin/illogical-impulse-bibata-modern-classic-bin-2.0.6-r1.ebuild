@@ -7,7 +7,7 @@ DESCRIPTION="Material Based Cursor Theme, installed for illogical-impulse dotfil
 HOMEPAGE=""
 SRC_URI="https://github.com/ful1e5/Bibata_Cursor/releases/download/v${PV}/Bibata-Modern-Classic.tar.xz -> bibata-modern-classic.tar.xz"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 RESTRICT="strip"

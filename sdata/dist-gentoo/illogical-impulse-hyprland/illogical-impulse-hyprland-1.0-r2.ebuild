@@ -14,19 +14,10 @@ RESTRICT="strip"
 DEPEND=""
 RDEPEND="
 	gui-apps/hypridle
-	gui-libs/hyprcursor
-	gui-libs/hyprland-qtutils
-	gui-libs/hyprland-qt-support
-	dev-libs/hyprlang
 	gui-apps/hyprlock
 	gui-apps/hyprpicker
 	gui-apps/hyprsunset
-	gui-libs/hyprutils
-	dev-libs/hyprland-protocols
-	dev-libs/hyprgraphics
-	gui-libs/aquamarine
 	gui-wm/hyprland
-	dev-util/hyprwayland-scanner
 	gui-libs/xdg-desktop-portal-hyprland
 	gui-apps/wl-clipboard
 "

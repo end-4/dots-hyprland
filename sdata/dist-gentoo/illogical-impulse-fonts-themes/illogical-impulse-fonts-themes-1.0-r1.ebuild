@@ -5,7 +5,7 @@ EAPI=8
 
 DESCRIPTION="Illogical Impulse Fonts and Theming Dependencies"
 
-LICENSE="GPL-2"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 RESTRICT="strip"
@@ -15,7 +15,7 @@ RDEPEND="
 	x11-themes/adw-gtk3
 	kde-plasma/breeze
 	kde-plasma/breeze-plus
-	app-misc/darkly
+	x11-themes/darkly
 	sys-apps/eza
 	app-shells/fish
 	media-libs/fontconfig
@@ -33,7 +33,7 @@ RDEPEND="
 "
 ##### CUSTOM EBUILDS
 # x11-themes/adw-gtk3
-# app-misc/darkly
+# x11-themes/darkly
 # media-fonts/space-grotesk
 # media-fonts/gabarito
 # media-fonts/material-symbols-variable

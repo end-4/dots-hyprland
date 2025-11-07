@@ -7,7 +7,7 @@ DESCRIPTION="A fork of mjkim0727/OneUI4-Icons for illogical-impulse dotfiles"
 HOMEPAGE=""
 SRC_URI="https://github.com/end-4/OneUI4-Icons/archive/main.tar.gz -> ${P}.tar.gz"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 RESTRICT="strip"

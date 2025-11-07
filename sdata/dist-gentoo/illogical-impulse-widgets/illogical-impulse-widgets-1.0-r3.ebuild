@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Illogicall Impulse Widget Dependencies"
 HOMEPAGE=""
 
-LICENSE="GPL-2"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 

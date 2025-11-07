@@ -23,12 +23,12 @@ printf "Checkout the above README for potential bug fixes or additional informat
 printf "${STY_RST}"
 pause
 
-x sudo emerge --noreplace --quiet app-eselect/eselect-repository
-x sudo emerge --noreplace --quiet app-portage/smart-live-rebuild
+x sudo emerge --update --quiet app-eselect/eselect-repository
+x sudo emerge --update --quiet app-portage/smart-live-rebuild
 
-if [[ -z $(eselect repository list | grep localrepo) ]]; then
-	v sudo eselect repository create localrepo
-	v sudo eselect repository enable localrepo 
+if [[ -z $(eselect repository list | grep ii-dots) ]]; then
+	v sudo eselect repository create ii-dots
+	v sudo eselect repository enable ii-dots
 fi
 
 if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
@@ -40,7 +40,7 @@ arch=$(portageq envvar ACCEPT_KEYWORDS)
 # Exclude hyprland, will deal with that separately
 metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,quickshell-git,screencapture,toolkit,widgets})
 
-ebuild_dir="/var/db/repos/localrepo"
+ebuild_dir="/var/db/repos/ii-dots"
 
 # Unmasks
 x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
@@ -67,7 +67,7 @@ for i in "${metapkgs[@]}"; do
 	x sudo mkdir -p ${ebuild_dir}/app-misc/${i}
 	v sudo cp ./sdata/dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
-	v sudo emerge --quiet app-misc/${i}
+	v sudo emerge --update --quiet app-misc/${i}
 done
 
 # Currently using 3.12 python, this doesn't need to be default though
