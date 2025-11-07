@@ -76,7 +76,7 @@ StyledOverlayWidget {
                 colRipple: Appearance.colors.colLayer3Active
                 onClicked: {
                     GlobalStates.overlayOpen = false;
-                    Qt.openUrlExternally(Directories.videos);
+                    Qt.openUrlExternally(`file://${Config.options.screenRecord.savePath}`);
                 }
                 contentItem: Row {
                     anchors.centerIn: parent
