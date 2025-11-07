@@ -66,15 +66,11 @@ Item {
             radius: Appearance.rounding.normal
             color: Appearance.colors.colLayer1
 
-            
-
             SwipeView { // Content pages
                 id: swipeView
                 anchors.fill: parent
                 spacing: 10
                 currentIndex: tabBar.currentIndex
-
-                
 
                 clip: true
                 layer.enabled: true
