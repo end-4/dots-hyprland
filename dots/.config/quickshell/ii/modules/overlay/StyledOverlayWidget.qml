@@ -43,8 +43,8 @@ AbstractOverlayWidget {
     drag {
         minimumX: 0
         minimumY: 0
-        maximumX: root.parent.width - root.width
-        maximumY: root.parent.height - root.height
+        maximumX: root.parent?.width - root.width
+        maximumY: root.parent?.height - root.height
     }
     opacity: (GlobalStates.overlayOpen || !clickthrough) ? 1.0 : Config.options.overlay.clickthroughOpacity
 
