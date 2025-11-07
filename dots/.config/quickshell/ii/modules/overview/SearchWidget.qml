@@ -208,22 +208,17 @@ Item { // Wrapper
             bottomMargin: Appearance.sizes.elevationMargin
         }
         
-        state: Config.options.overview.position
+        state: Config.options.overview.position === "center" ? "top" : Config.options.overview.position
         states: [
             State {
                 name: "top"
-                AnchorChanges { target: searchWidgetContent; anchors.top: parent.top; anchors.bottom: undefined; anchors.verticalCenter: undefined }
-                AnchorChanges { target: gridLayout; anchors.top: parent.top; anchors.bottom: undefined; anchors.verticalCenter: undefined }
-            },
-            State {
-                name: "center"
-                AnchorChanges { target: searchWidgetContent; anchors.top: undefined; anchors.bottom: undefined; anchors.verticalCenter: parent.verticalCenter }
-                AnchorChanges { target: gridLayout; anchors.top: undefined; anchors.bottom: undefined; anchors.verticalCenter: parent.verticalCenter }
+                AnchorChanges { target: searchWidgetContent; anchors.top: parent.top; anchors.bottom: undefined; }
+                AnchorChanges { target: gridLayout; anchors.top: parent.top; anchors.bottom: undefined; }
             },
             State {
                 name: "bottom"
-                AnchorChanges { target: searchWidgetContent; anchors.top: undefined; anchors.bottom: parent.bottom; anchors.verticalCenter: undefined }
-                AnchorChanges { target: gridLayout; anchors.top: undefined; anchors.bottom: parent.bottom; anchors.verticalCenter: undefined }
+                AnchorChanges { target: searchWidgetContent; anchors.top: undefined; anchors.bottom: parent.bottom; }
+                AnchorChanges { target: gridLayout; anchors.top: undefined; anchors.bottom: parent.bottom; }
             }
         ]
 

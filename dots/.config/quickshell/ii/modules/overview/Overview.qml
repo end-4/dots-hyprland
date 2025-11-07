@@ -97,19 +97,15 @@ Scope {
                 columnSpacing: -8
                 columns: 1
                 
-                state: overviewScope.position
+                state: overviewScope.position === "center" ? "top" : overviewScope.position
                 states: [
                     State {
                         name: "top"
-                        AnchorChanges { target: columnLayout; anchors.top: parent.top; anchors.bottom: undefined; anchors.verticalCenter: undefined }
-                    },
-                    State {
-                        name: "center"
-                        AnchorChanges { target: columnLayout; anchors.top: undefined; anchors.bottom: undefined; anchors.verticalCenter: parent.verticalCenter }
+                        AnchorChanges { target: columnLayout; anchors.top: parent.top; anchors.bottom: undefined; }
                     },
                     State {
                         name: "bottom" 
-                        AnchorChanges { target: columnLayout; anchors.top: undefined; anchors.bottom: parent.bottom; anchors.verticalCenter: undefined }
+                        AnchorChanges { target: columnLayout; anchors.top: undefined; anchors.bottom: parent.bottom; }
                     }
                 ]
 
@@ -128,7 +124,7 @@ Scope {
                 Item {
                     // Filler item for centered position
                     visible: overviewScope.position === "center" 
-                    Layout.preferredHeight: overviewLoader.implicitHeight
+                    Layout.preferredHeight: parent.implicitHeight / 3 // 1/3 margin from top
                     Layout.alignment: Qt.AlignHCenter
                     Layout.row: 0
                 }
@@ -152,6 +148,8 @@ Scope {
                         visible: (root.searchingText == "")
                     }
                 }
+
+                
             }
         }
     }
