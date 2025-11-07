@@ -85,7 +85,7 @@ Singleton {
                     property bool pinned: false
                     property bool clickthrough: true
                     property real x: 835
-                    property real y: 490
+                    property real y: 482
                 }
                 property JsonObject recorder: JsonObject {
                     property bool pinned: false
