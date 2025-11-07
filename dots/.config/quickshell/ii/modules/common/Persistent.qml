@@ -93,6 +93,13 @@ Singleton {
                     property real x: 100
                     property real y: 130
                 }
+                property JsonObject resources: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: true
+                    property real x: 1000
+                    property real y: 320
+                    property int tabIndex: 0
+                }
                 property JsonObject volumeMixer: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: false
