@@ -109,8 +109,8 @@ Singleton {
                 property JsonObject fpsLimiter: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: false
-                    property real x: 100
-                    property real y: 100
+                    property real x: 1600
+                    property real y: 630
                 }
             }
 

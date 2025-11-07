@@ -6,5 +6,7 @@ import qs.modules.overlay
 StyledOverlayWidget {
     id: root
     title: "MangoHud FPS"
-    contentItem: FpsLimiterContent {}
+    contentItem: FpsLimiterContent {
+        radius: root.contentRadius
+    }
 }

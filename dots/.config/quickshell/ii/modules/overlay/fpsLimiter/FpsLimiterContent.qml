@@ -12,8 +12,9 @@ Rectangle {
     color: Appearance.m3colors.m3surfaceContainer
     property real padding: 16
     property string iconState: "normal"
-    implicitWidth: contentColumn.implicitWidth + padding * 2
-    implicitHeight: contentColumn.implicitHeight + padding * 2
+    anchors.fill: parent
+    implicitWidth: content.implicitWidth + (padding * 2)
+    implicitHeight: content.implicitHeight + (padding * 2)
 
     Timer {
         id: iconResetTimer
@@ -54,57 +55,35 @@ Rectangle {
         fpsField.text = "";
     }
 
-    ColumnLayout {
-        id: contentColumn
+    Process {
+        id: fpsSetter
+    }
+
+    RowLayout {
+        id: content
         anchors.centerIn: parent
-        spacing: 15
+        spacing: 4
 
-        RowLayout {
+        ToolbarTextField {
+            id: fpsField
             Layout.fillWidth: true
-            spacing: 10
+            Layout.preferredWidth: 200
+            placeholderText: root.iconState === "error" ? Translation.tr("Insert a valid number") : Translation.tr("Set FPS limit (e.g. 80)")
+            inputMethodHints: Qt.ImhDigitsOnly
+            focus: true
 
-            ToolbarTextField {
-                id: fpsField
-                Layout.fillWidth: true
-                Layout.preferredWidth: 180
-                placeholderText: root.iconState === "error" ? Translation.tr("Insert a valid number") : Translation.tr("Set FPS limit (e.g. 80)")
-                inputMethodHints: Qt.ImhDigitsOnly
-                focus: true
-
-                onAccepted: {
-                    root.applyLimit();
-                }
-            }
-
-            RippleButton {
-                id: applyButton
-                implicitWidth: 25
-                implicitHeight: 25
-                buttonRadius: Appearance.rounding.full
-                onClicked: {
-                    root.applyLimit();
-                }
-                contentItem: MaterialSymbol {
-                    anchors.centerIn: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: Appearance.font.pixelSize.title
-                    text: root.iconState === "error" ? "close" : (root.iconState === "success" ? "check" : "save")
-                    rotation: root.iconState !== "normal" ? 360 : 0
-                    color: root.iconState === "error" ? "#ef5350" : (root.iconState === "success" ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurface)
-
-                    Behavior on rotation {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-
-                    Behavior on color {
-                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                    }
-                }
+            onAccepted: {
+                root.applyLimit();
             }
         }
 
-        Process {
-            id: fpsSetter
+        IconToolbarButton {
+            id: applyButton
+            text: root.iconState === "error" ? "close" : (root.iconState === "success" ? "check" : "save")
+            enabled: root.iconState === "normal" && fpsField.text.length > 0
+            onClicked: {
+                root.applyLimit();
+            }
         }
     }
 }
