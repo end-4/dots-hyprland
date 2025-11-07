@@ -9,10 +9,13 @@ import qs.modules.common.widgets
 
 Rectangle {
     id: root
-    color: Appearance.m3colors.m3surfaceContainer
-    property real padding: 16
-    property string iconState: "normal"
+
+    enum State { Normal, Success, Error }
+
     anchors.fill: parent
+    property real padding: 16
+    property var currentState: FpsLimiterContent.State.Normal
+    color: Appearance.m3colors.m3surfaceContainer
     implicitWidth: content.implicitWidth + (padding * 2)
     implicitHeight: content.implicitHeight + (padding * 2)
 
@@ -20,14 +23,14 @@ Rectangle {
         id: iconResetTimer
         interval: 1000
         onTriggered: {
-            root.iconState = "normal";
+            root.currentState = FpsLimiterContent.State.Normal;
         }
     }
 
     function applyLimit() {
         var fpsValue = parseInt(fpsField.text);
         if (isNaN(fpsValue) || fpsValue < 0) {
-            root.iconState = "error";
+            root.currentState = FpsLimiterContent.State.Error;
             iconResetTimer.restart();
             fpsField.text = "";
             return;
@@ -48,7 +51,7 @@ Rectangle {
         fpsSetter.command = ["bash", "-c", cmd];
         fpsSetter.startDetached();
 
-        root.iconState = "success";
+        root.currentState = FpsLimiterContent.State.Success;
         iconResetTimer.restart();
 
         // Clear the field after applying
@@ -68,7 +71,7 @@ Rectangle {
             id: fpsField
             Layout.fillWidth: true
             Layout.preferredWidth: 200
-            placeholderText: root.iconState === "error" ? Translation.tr("Insert a valid number") : Translation.tr("Set FPS limit (e.g. 80)")
+            placeholderText: root.currentState === FpsLimiterContent.State.Error ? Translation.tr("Enter a valid number") : Translation.tr("Set FPS limit")
             inputMethodHints: Qt.ImhDigitsOnly
             focus: true
 
@@ -79,8 +82,13 @@ Rectangle {
 
         IconToolbarButton {
             id: applyButton
-            text: root.iconState === "error" ? "close" : (root.iconState === "success" ? "check" : "save")
-            enabled: root.iconState === "normal" && fpsField.text.length > 0
+            text: switch (root.currentState) {
+                case FpsLimiterContent.State.Error: return "close";
+                case FpsLimiterContent.State.Success: return "check";
+                case FpsLimiterContent.State.Normal:
+                default: return "save";
+            }
+            enabled: root.currentState === FpsLimiterContent.State.Normal && fpsField.text.length > 0
             onClicked: {
                 root.applyLimit();
             }
