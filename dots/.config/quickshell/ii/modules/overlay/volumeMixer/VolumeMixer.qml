@@ -14,7 +14,7 @@ StyledOverlayWidget {
         anchors.centerIn: parent
         color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
-        property real padding: 16
+        property real padding: 6
         implicitHeight: 600
         implicitWidth: 350
 
@@ -53,8 +53,28 @@ StyledOverlayWidget {
                 }
                 clip: true
 
-                VolumeDialogContent { isSink: true }
-                VolumeDialogContent { isSink: false }
+                PaddedVolumeDialogContent { 
+                    isSink: true 
+                }
+                PaddedVolumeDialogContent { 
+                    isSink: false 
+                }
+            }
+        }
+    }
+
+    component PaddedVolumeDialogContent: Item {
+        id: paddedVolumeDialogContent
+        property alias isSink: volDialogContent.isSink
+        property real padding: 12
+        implicitWidth: volDialogContent.implicitWidth + padding * 2
+        implicitHeight: volDialogContent.implicitHeight + padding * 2
+
+        VolumeDialogContent {
+            id: volDialogContent
+            anchors {
+                fill: parent
+                margins: paddedVolumeDialogContent.padding
             }
         }
     }
