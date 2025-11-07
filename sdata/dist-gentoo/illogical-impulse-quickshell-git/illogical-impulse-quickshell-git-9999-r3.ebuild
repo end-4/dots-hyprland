@@ -60,7 +60,7 @@ BDEPEND="
 src_configure(){
 	mycmakeargs=(
 			-DCMAKE_BUILD_TYPE=RelWithDebInfo
-			-DDISTRIBUTOR="Gentoo GURU"
+			-DDISTRIBUTOR="Gentoo Illogical-Impulses"
 			-DINSTALL_QML_PREFIX="lib64/qt6/qml"
 			-DCRASH_REPORTER=$(usex breakpad ON OFF)
 			-DUSE_JEMALLOC=$(usex jemalloc ON OFF)

@@ -25,6 +25,8 @@ pause
 
 x sudo emerge --update --quiet app-eselect/eselect-repository
 x sudo emerge --update --quiet app-portage/smart-live-rebuild
+# Currently using 3.12 python, this doesn't need to be default though
+x sudo emerge --update --quiet dev-lang/python:3.12
 
 if [[ -z $(eselect repository list | grep ii-dots) ]]; then
 	v sudo eselect repository create ii-dots
@@ -42,16 +44,27 @@ metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fon
 
 ebuild_dir="/var/db/repos/ii-dots"
 
-# Unmasks
+
+########## IMPORT KEYWORDS (START)
+# Illogical-Impulse
 x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/keywords-user
 v sudo cp ./sdata/dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
-# Use Flags
+# QT
+x sudo cp ./sdata/dist-gentoo/qt-keywords ./sdata/dist-gentoo/qt-keywords-user
+x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/qt-keywords-user
+v sudo cp ./sdata/dist-gentoo/qt-keywords-user /etc/portage/package.accept_keywords/qt
+
+########## IMPORT UNMASKS
+sudo mkdir -p /etc/portage/package.unmask/
+v sudo cp ./sdata/dist-gentoo/qt-unmasks /etc/portage/package.unmask/qt
+
+########## IMPORT USEFLAGS
 v sudo cp ./sdata/dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
 v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
 
-# Update system
+########## UPDATE SYSTEM
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
@@ -62,13 +75,10 @@ x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
 
 source ./sdata/dist-gentoo/import-local-pkgs.sh
 
-# Install dependencies
+########## INSTALL ILLOGICAL-IMPUSEL EBUILDS
 for i in "${metapkgs[@]}"; do
 	x sudo mkdir -p ${ebuild_dir}/app-misc/${i}
 	v sudo cp ./sdata/dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
 	v sudo emerge --update --quiet app-misc/${i}
 done
-
-# Currently using 3.12 python, this doesn't need to be default though
-v sudo emerge --noreplace --quiet dev-lang/python:3.12
