@@ -43,20 +43,17 @@ Scope { // Scope
         
         sourceComponent: PanelWindow { // Window
             id: sidebarRoot
-            visible: GlobalStates.sidebarLeftOpen
             
+            visible: GlobalStates.sidebarLeftOpen
+            onVisibleChanged: if (visible) grab.active = true // to make sure the bar gets focused when opened
+
             property bool extend: false
             property bool pinned: false
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
 
-            onPinnedChanged: {
-                updateWidth()
-            }
-
-            onExtendChanged: {
-                updateWidth()
-            }
+            onPinnedChanged: updateWidth()
+            onExtendChanged: updateWidth()
 
             function hide() {
                 GlobalStates.sidebarLeftOpen = false
@@ -94,16 +91,37 @@ Scope { // Scope
                 id: grab
                 windows: [ sidebarRoot ]
                 active: sidebarRoot.visible 
-                onActiveChanged: { // Focus the selected tab
-                    if (active) sidebarLeftBackground.children[0].focusActiveItem()
+                onActiveChanged: { 
+                    if (active) sidebarLeftBackground.children[0].focusActiveItem() // Focus the selected tab
+                    else focusTapItem.currentFocus = true // Make focusTapItem start detecting again
                 }
                 onCleared: () => {
                     if (sidebarRoot.pinned) return
+                    focusTapItem.currentFocus = true // Make focusTapItem start detecting again
                     if (!active) sidebarRoot.hide()
                 }
             }
 
-            
+            Item { // detect tap and focus the bar
+                id: focusTapItem
+                z: 999 // had to be on top
+
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    left: parent.left
+                }  
+                
+                implicitWidth: currentFocus ? sidebarRoot.sidebarWidth : 0
+                property bool currentFocus: true
+
+                TapHandler {   
+                    onTapped: {
+                        grab.active = true
+                        focusTapItem.currentFocus = false
+                    }
+                } 
+            }     
 
             // Content
             StyledRectangularShadow {

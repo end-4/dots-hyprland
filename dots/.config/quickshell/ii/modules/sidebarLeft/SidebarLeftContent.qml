@@ -47,26 +47,6 @@ Item {
         }
         spacing: sidebarPadding
 
-        Rectangle { // TODO: make this focus thing work
-            id: rect
-            anchors.fill: parent
-            color: "blue"
-            z: 10
-            opacity: 0.2
-
-            TapHandler {
-                onTapped: {
-                    console.log("Click detected (pass-through)")
-                    root.focusActiveItem()
-                    rect.implicitWidth = 0
-                }
-            } 
-        }
-
-
-        
-
-
         Toolbar {
             Layout.alignment: Qt.AlignHCenter
             enableShadow: false
