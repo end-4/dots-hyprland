@@ -55,7 +55,7 @@ Scope {
             Connections {
                 target: GlobalStates
                 function onOverlayOpenChanged() {
-                    delayedGrabTimer.start();
+                    delayedGrabTimer.restart();
                 }
             }
 
