@@ -21,6 +21,7 @@ AbstractOverlayWidget {
     id: root
 
     required property Item contentItem
+    property bool fancyBorders: true
 
     required property var modelData
     readonly property string identifier: modelData.identifier
@@ -29,6 +30,8 @@ AbstractOverlayWidget {
     property var persistentStateEntry: Persistent.states.overlay[identifier]
     property real radius: Appearance.rounding.windowRounding
     property real minWidth: 250
+    property real padding: 6
+    property real contentRadius: radius - padding
 
     draggable: GlobalStates.overlayOpen
     x: Math.round(persistentStateEntry.x) // Round or it'll be blurry
@@ -96,10 +99,14 @@ AbstractOverlayWidget {
     Rectangle {
         id: border
         anchors.fill: parent
-        color: "transparent"
+        color: (root.fancyBorders && GlobalStates.overlayOpen) ? Appearance.colors.colLayer1 : "transparent"
         radius: root.radius
         border.color: ColorUtils.transparentize(Appearance.colors.colOutlineVariant, GlobalStates.overlayOpen ? 0 : 1)
         border.width: 1
+
+        Behavior on color {
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+        }
 
         layer.enabled: GlobalStates.overlayOpen
         layer.effect: OpacityMask {
@@ -110,25 +117,23 @@ AbstractOverlayWidget {
             }
         }
 
-        Column {
+        ColumnLayout {
             id: contentColumn
-            z: -1
+            z: root.fancyBorders ? 0 : -1
             anchors.fill: parent
+            spacing: 0
 
             // Title bar
             Rectangle {
                 id: titleBar
                 opacity: GlobalStates.overlayOpen ? 1 : 0
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                property real padding: 2
+                Layout.fillWidth: true
+                property real padding: 6
                 implicitWidth: titleBarRow.implicitWidth + padding * 2
                 implicitHeight: titleBarRow.implicitHeight + padding * 2
-                color: Appearance.m3colors.m3surfaceContainer
-                border.color: Appearance.colors.colOutlineVariant
-                border.width: 1
+                color: root.fancyBorders ? "transparent" : Appearance.colors.colLayer1
+                // border.color: Appearance.colors.colOutlineVariant
+                // border.width: 1
                 
                 RowLayout {
                     id: titleBarRow
@@ -191,7 +196,10 @@ AbstractOverlayWidget {
             // Content
             Item {
                 id: contentContainer
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.margins: root.fancyBorders ? root.padding : 0
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 implicitWidth: root.contentItem.implicitWidth
                 implicitHeight: root.contentItem.implicitHeight
                 children: [root.contentItem]

@@ -104,7 +104,6 @@ Item {
                 id: overflowPopup
                 hoverTarget: trayOverflowButton
                 active: root.trayOverflowOpen && root.unpinnedItems.length > 0
-                popupBackgroundMargin: 300 // This should be plenty... makes sure tooltips don't get cutoff (easily)
 
                 GridLayout {
                     id: trayOverflowLayout

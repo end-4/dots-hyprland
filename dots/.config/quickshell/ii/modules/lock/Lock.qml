@@ -128,11 +128,19 @@ Scope {
         }
     }
 
+    function lock() {
+        if (Config.options.lock.useHyprlock) {
+            Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
+            return;
+        }
+        GlobalStates.screenLocked = true;
+    }
+
     IpcHandler {
         target: "lock"
 
         function activate(): void {
-            GlobalStates.screenLocked = true;
+            root.lock();
         }
         function focus(): void {
             lockContext.shouldReFocus();
@@ -144,11 +152,7 @@ Scope {
         description: "Locks the screen"
 
         onPressed: {
-            if (Config.options.lock.useHyprlock) {
-                Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
-                return;
-            }
-            GlobalStates.screenLocked = true;
+            root.lock()
         }
     }
 
@@ -165,7 +169,7 @@ Scope {
     function initIfReady() {
         if (!Config.ready || !Persistent.ready) return;
         if (Config.options.lock.launchOnStartup && Persistent.isNewHyprlandInstance) {
-            Hyprland.dispatch("global quickshell:lock")
+            root.lock();
         } else {
             KeyringStorage.fetchKeyringData();
         }
