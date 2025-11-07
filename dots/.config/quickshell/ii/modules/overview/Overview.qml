@@ -124,7 +124,8 @@ Scope {
                 Item {
                     // Filler item for centered position
                     visible: overviewScope.position === "center" 
-                    Layout.preferredHeight: parent.implicitHeight / 3 // 1/3 margin from top
+                    Layout.preferredHeight: root.monitor.height / 3 // 1/3 margin from top
+                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter
                     Layout.row: 0
                 }
@@ -132,6 +133,7 @@ Scope {
                 SearchWidget {
                     id: searchWidget
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.fillHeight: true
                     Synchronizer on searchingText {
                         property alias source: root.searchingText
                     }
@@ -141,6 +143,7 @@ Scope {
                 Loader {
                     id: overviewLoader
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.fillHeight: true
                     Layout.row: overviewScope.position === "top" ? 2 : overviewScope.position === "center" ? 3 : 1
                     active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
