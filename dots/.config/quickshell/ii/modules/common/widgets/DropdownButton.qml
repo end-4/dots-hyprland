@@ -21,7 +21,6 @@ Item {
 
     property Component itemDelegate: null
     property real maxPopupHeight: 300
-    property real popupWidth: dropdownButton.width
 
     property real buttonRadius: dropdownButton.height / 2
     property color buttonBackground: Appearance.colors.colSecondaryContainer
@@ -152,7 +151,7 @@ Item {
 
         parent: root.findWindowRoot()
 
-        width: root.popupWidth
+        width: Math.max(dropdownButton.width, optionColumn.implicitWidth + 16)
         height: Math.min(optionColumn.implicitHeight + 16, root.maxPopupHeight)
 
         radius: Appearance.rounding.normal
@@ -162,12 +161,13 @@ Item {
             id: scrollView
             anchors.fill: parent
             anchors.margins: 8
+            contentWidth: optionColumn.implicitWidth
             contentHeight: optionColumn.implicitHeight
             clip: true
 
             ColumnLayout {
                 id: optionColumn
-                width: scrollView.width
+                width: Math.max(implicitWidth, scrollView.width)
                 spacing: 2
 
                 Repeater {
