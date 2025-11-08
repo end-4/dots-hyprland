@@ -16,13 +16,13 @@ fi
 # NVIDIA dGPU
 if command -v nvidia-smi &> /dev/null; then
     echo "[NVIDIA GPU]"
-
+    
     gpu_name=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits | head -n1)
     driver_version=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader,nounits | head -n1)
     echo " Model : ${gpu_name}"
     echo " Driver : ${driver_version}"
     echo
-
+    
     gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
     vram_used_mib=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -n1)
     vram_total_mib=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n1)
@@ -31,10 +31,10 @@ if command -v nvidia-smi &> /dev/null; then
     power_draw=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | head -n1)
     power_limit=$(nvidia-smi --query-gpu=power.limit --format=csv,noheader,nounits | head -n1)
     fan_speed=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits | head -n1)
-
+    
     vram_used_gb=$(awk -v u="$vram_used_mib" 'BEGIN{printf "%.1f", u/1024}')
     vram_total_gb=$(awk -v t="$vram_total_mib" 'BEGIN{printf "%.1f", t/1024}')
-
+    
     echo " Usage : ${gpu_usage} %"
     echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
     echo " Temp : ${temperature} °C"
@@ -48,7 +48,7 @@ fi
 # AMD dGPU
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
     echo "[AMD GPU]"
-
+    
     # VRAM Selection or prioritize boot_vga=0
     card_path=""
     best_vram_total=-1
@@ -76,19 +76,19 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             fi
         done
     fi
-
+    
     # Manual override via env var AMD_GPU_CARD=cardX
     if [[ -n "${AMD_GPU_CARD:-}" && -d "/sys/class/drm/${AMD_GPU_CARD}/device" ]]; then
         card_path="/sys/class/drm/${AMD_GPU_CARD}/device"
     fi
-
+    
     if [[ -n "$card_path" ]]; then
         if [[ -r "$card_path/gpu_busy_percent" ]]; then
             gpu_usage=$(cat "$card_path/gpu_busy_percent")
         else
             gpu_usage=0
         fi
-
+        
         if [[ -r "$card_path/mem_info_vram_used" && -r "$card_path/mem_info_vram_total" ]]; then
             vram_used_b=$(cat "$card_path/mem_info_vram_used")
             vram_total_b=$(cat "$card_path/mem_info_vram_total")
@@ -104,7 +104,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             vram_used_gb=0.0
             vram_total_gb=0.0
         fi
-
+        
         # Priority: Edge > Junction > Whateverrrrr
         temperature=0
         found=0
@@ -151,7 +151,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
         power_draw= 0
         power_limit= 0
         fan_speed= 0
-
+        
         echo "  Usage : ${gpu_usage}%"
         echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
         echo "  Temp : ${temperature} °C"
