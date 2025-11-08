@@ -13,7 +13,7 @@ case $SKIP_SYSUPDATE in
 esac
 
 # Group installation
-v sudo dnf install @development-tools -y
+v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros -y
 
 # COPR repositories
 v sudo dnf copr enable solopasha/hyprland -y
@@ -42,13 +42,16 @@ v sudo dnf install ${themes_deps[@]} -y
 
 # Hyprland 
 hyprland_deps=(
-  hypridle hyprland-qtutils hyprland hyprlock hyprpicker 
+  hypridle hyprland hyprlock hyprpicker 
   hyprsunset xdg-desktop-portal-hyprland wl-clipboard
 )
-v dnf download hyprland-qt-support
-v sudo rpm -ivh --nodeps hyprland-qt-support-*.fc$(rpm -E %fedora).$(uname -m).rpm
-# hyprland-qtutils depends on hyprland-qt-support, but since it does not yet support Qt 6.10, this package has been temporarily removed.
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
+# Deprecation
+echo -e "${STY_YELLOW}${STY_BOLD}!DeprecationWarning! hyprland-qtutils and hyprland-qt-support have been removed in dist-arch recently.$STY_RST"
+echo -e "${STY_YELLOW}${STY_BOLD}You can choose whether or not to install these two packages.$STY_RST"
+# The GitHub repository requires Qt 6.6 or higher, which I think makes DNF's requirement of Qt 6.9 too strict; it should also support Qt 6.10.
+v dnf download hyprland-qt-support && sudo rpm -ivh --nodeps hyprland-qt-support-*.fc$(rpm -E %fedora).$(uname -m).rpm
+v sudo dnf install hyprland-qtutils -y
 
 # KDE
 v sudo dnf install bluedevil gnome-keyring NetworkManager plasma-nm polkit-kde dolphin plasma-systemsettings -y
