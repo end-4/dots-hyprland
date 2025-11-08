@@ -11,6 +11,7 @@ Item {
 
     Column {
         id: mainLayout
+        anchors.centerIn: parent
         spacing: root.spacing
 
         Repeater { // Main table rows

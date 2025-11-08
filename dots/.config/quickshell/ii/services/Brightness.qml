@@ -16,8 +16,6 @@ import QtQuick
  */
 Singleton {
     id: root
-    property real minimumBrightnessAllowed: 0.00001 // Setting to 0 would kind of turn off the screen. We don't want that.
-
     signal brightnessChanged()
 
     property var ddcMonitors: []
@@ -88,7 +86,7 @@ Singleton {
         property int rawMaxBrightness: 100
         property real brightness
         property real brightnessMultiplier: 1.0
-        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * brightnessMultiplier))
+        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * (Config.options.light.antiFlashbang.enable ? brightnessMultiplier : 1)))
         property bool ready: false
         property bool animateChanges: !monitor.isDdc
 
@@ -137,14 +135,14 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = Math.max(monitor.multipliedBrightness, root.minimumBrightnessAllowed)
-            const rounded = Math.round(brightnessValue * monitor.rawMaxBrightness);
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "--class", "backlight", "s", rounded, "--quiet"];
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
+            const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded] : ["brightnessctl", "--class", "backlight", "s", rawValueRounded, "--quiet"];
             setProc.startDetached();
         }
 
         function setBrightness(value: real): void {
-            value = Math.max(root.minimumBrightnessAllowed, Math.min(1, value));
+            value = Math.max(0, Math.min(1, value));
             monitor.brightness = value;
         }
 

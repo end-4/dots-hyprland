@@ -1,0 +1,17 @@
+pkgname=illogical-impulse-widgets
+pkgver=1.0
+pkgrel=5
+pkgdesc='Illogical Impulse Widget Dependencies'
+arch=(any)
+license=(None)
+depends=(
+  fuzzel
+  glib2
+  imagemagick
+  hypridle
+  hyprlock
+  hyprpicker
+  songrec
+  translate-shell
+  wlogout
+)

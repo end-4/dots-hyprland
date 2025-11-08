@@ -28,10 +28,10 @@ Item {
             sourceSize.height: size
             source: {
                 let icon;
-                icon = AppSearch.guessIcon(root.node.properties["application.icon-name"]);
+                icon = AppSearch.guessIcon(root.node?.properties["application.icon-name"] ?? "");
                 if (AppSearch.iconExists(icon))
                     return Quickshell.iconPath(icon, "image-missing");
-                icon = AppSearch.guessIcon(root.node.properties["node.name"]);
+                icon = AppSearch.guessIcon(root.node?.properties["node.name"] ?? "");
                 return Quickshell.iconPath(icon, "image-missing");
             }
         }
@@ -47,7 +47,7 @@ Item {
                 elide: Text.ElideRight
                 text: {
                     // application.name -> description -> name
-                    const app = root.node.properties["application.name"] ?? (root.node.description != "" ? root.node.description : root.node.name);
+                    const app = root.node?.properties["application.name"] ?? (root.node.description != "" ? root.node.description : root.node.name);
                     const media = root.node.properties["media.name"];
                     return media != undefined ? `${app} • ${media}` : app;
                 }
@@ -55,7 +55,7 @@ Item {
 
             StyledSlider {
                 id: slider
-                value: root.node.audio.volume
+                value: root.node?.audio.volume ?? 0
                 onMoved: root.node.audio.volume = value
                 configuration: StyledSlider.Configuration.S
             }

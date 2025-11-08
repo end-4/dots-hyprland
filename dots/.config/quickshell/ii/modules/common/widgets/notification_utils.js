@@ -17,12 +17,17 @@ function findSuitableMaterialSymbol(summary = "") {
         'time': 'scheduleb',
         'installed': 'download',
         'configuration reloaded': 'reset_wrench',
+        'unable': 'question_mark',
+        "couldn't": 'question_mark',
         'config': 'reset_wrench',
         'update': 'update',
         'ai response': 'neurology',
         'control': 'settings',
         'upsca': 'compare',
+        'music': 'queue_music',
         'install': 'deployed_code_update',
+        'input': 'keyboard_alt',
+        'preedit': 'keyboard_alt',
         'startswith:file': 'folder_copy', // Declarative startsWith check
     };
 

@@ -25,6 +25,7 @@ Singleton {
             "text": action.text,
         })) ?? []
         property bool popup: false
+        property bool isTransient: notification?.hints.transient ?? false
         property string appIcon: notification?.appIcon ?? ""
         property string appName: notification?.appName ?? ""
         property string body: notification?.body ?? ""
@@ -63,7 +64,11 @@ Singleton {
         interval: 7000
         running: true
         onTriggered: () => {
-            root.timeoutNotification(notificationId);
+            const index = root.list.findIndex((notif) => notif.notificationId === notificationId);
+            const notifObject = root.list[index];
+            print("[Notifications] Notification timer triggered for ID: " + notificationId + ", transient: " + notifObject?.isTransient);
+            if (notifObject.isTransient) root.discardNotification(notificationId);
+            else root.timeoutNotification(notificationId);
             destroy()
         }
     }
@@ -238,7 +243,7 @@ Singleton {
         if (notifServerIndex !== -1) {
             const notifServerNotif = notifServer.trackedNotifications.values[notifServerIndex];
             const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
-            console.log("Action found: " + JSON.stringify(action));
+            // console.log("Action found: " + JSON.stringify(action));
             action.invoke()
         } 
         else {

@@ -186,6 +186,8 @@ MouseArea {
                             colBackgroundToggled: Appearance.colors.colSecondaryContainer
                             colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                             colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                            buttonRadius: height / 2
+                            implicitHeight: 38
 
                             contentItem: RowLayout {
                                 MaterialSymbol {

@@ -18,11 +18,11 @@ input_path = '~/.config/matugen/templates/fuzzel/fuzzel_theme.ini'
 output_path = '~/.config/fuzzel/fuzzel_theme.ini'
 
 [templates.gtk3]
-input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
+input_path = '~/.config/matugen/templates/gtk-3.0/gtk.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
 
 [templates.gtk4]
-input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
+input_path = '~/.config/matugen/templates/gtk-4.0/gtk.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
 
 [templates.kde_colors]

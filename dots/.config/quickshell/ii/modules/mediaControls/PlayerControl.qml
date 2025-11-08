@@ -101,7 +101,7 @@ Item { // Player instance
         id: background
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
-        color: blendedColors.colLayer0
+        color: ColorUtils.applyAlpha(blendedColors.colLayer0, 1)
         radius: root.radius
 
         layer.enabled: true

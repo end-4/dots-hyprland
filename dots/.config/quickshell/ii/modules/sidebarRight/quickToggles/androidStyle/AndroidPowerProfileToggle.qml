@@ -17,12 +17,12 @@ AndroidQuickToggleButton {
         case PowerProfile.Performance: return "local_fire_department"
     }
     statusText: switch(PowerProfiles.profile) {
-                        case PowerProfile.PowerSaver: return "Power Saver"
-                        case PowerProfile.Balanced: return "Balanced"
-                        case PowerProfile.Performance: return "Performance"
-                    }
+        case PowerProfile.PowerSaver: return "Power Saver"
+        case PowerProfile.Balanced: return "Balanced"
+        case PowerProfile.Performance: return "Performance"
+    }
     
-    onClicked: (event) => {
+    mainAction: () => {
         if (PowerProfiles.hasPerformanceProfile) {
             switch(PowerProfiles.profile) {
                 case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced

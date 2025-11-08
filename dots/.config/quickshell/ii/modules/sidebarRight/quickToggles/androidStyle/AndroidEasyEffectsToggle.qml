@@ -16,7 +16,7 @@ AndroidQuickToggleButton {
         EasyEffects.fetchActiveState()
     }
 
-    onClicked: {
+    mainAction: () => {
         EasyEffects.toggle()
     }
 

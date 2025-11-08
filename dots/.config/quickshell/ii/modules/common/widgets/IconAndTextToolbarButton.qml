@@ -13,7 +13,7 @@ ToolbarButton {
 
     contentItem: Row {
         anchors.centerIn: parent
-        spacing: 6
+        spacing: 4
 
         MaterialSymbol {
             anchors.verticalCenter: parent.verticalCenter
