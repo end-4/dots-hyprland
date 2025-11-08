@@ -157,8 +157,6 @@ Item {
 
         radius: Appearance.rounding.normal
         color: Appearance.colors.colSurfaceContainerHigh
-        border.width: 1
-        border.color: Appearance.colors.colOutline
 
         Flickable {
             id: scrollView
