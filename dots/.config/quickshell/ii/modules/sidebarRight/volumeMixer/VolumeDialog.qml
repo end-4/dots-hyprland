@@ -18,7 +18,6 @@ WindowDialog {
     }
 
     WindowDialogSeparator {
-        visible: root.hasApps
         Layout.topMargin: -22
         Layout.leftMargin: 0
         Layout.rightMargin: 0
