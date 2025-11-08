@@ -88,21 +88,6 @@ ComboBox {
             anchors.leftMargin: 12
             anchors.rightMargin: 12
 
-            MaterialSymbol {
-                Layout.alignment: Qt.AlignVCenter
-                text: "check"
-                iconSize: Appearance.font.pixelSize.normal
-                color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-                opacity: root.currentIndex === itemDelegate.index ? 1 : 0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.OutCubic
-                    }
-                }
-            }
-
             StyledText {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
