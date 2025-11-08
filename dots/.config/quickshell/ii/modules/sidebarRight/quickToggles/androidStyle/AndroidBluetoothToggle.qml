@@ -8,6 +8,7 @@ import Quickshell.Bluetooth
 
 AndroidQuickToggleButton {
     id: root
+    visible: BluetoothStatus.available
     
     name: Translation.tr("Bluetooth")
     statusText: BluetoothStatus.firstActiveDevice?.name ?? Translation.tr("No device")
