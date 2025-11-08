@@ -12,7 +12,7 @@ import Quickshell.Widgets
  * It doesn't exactly match the spec because it does not make sense to have stuff on a computer that fucking huge.
  * Should be at 3/4 scale...
  */
- 
+
 Slider {
     id: root
 
