@@ -387,5 +387,9 @@
   "When enabled keeps the content of the right sidebar loaded to reduce the delay when opening,\nat the cost of around 15MB of consistent RAM usage. Delay significance depends on your system's performance.\nUsing a custom kernel like linux-cachyos might help": "При включении этого параметра содержимое правой боковой панели сохраняется загруженным, что сокращает задержку при открытии,\nзатрачивая около 15 МБ постоянного использования оперативной памяти. Длительность задержки зависит от производительности вашей системы.\nИспользование пользовательского ядра, например, linux-cachyos, может помочь.",
   "High": "Высокий",
   "Focus": "Фокус",
-  "Load:": "Load:"
+  "Load:": "Load:",
+  "Unknown VPN": "Неизвестный VPN",
+  "Loading...": "Загрузка...",
+  "VPN Connections": "VPN Соединения",
+  "Refresh": "Обновить"
 }
