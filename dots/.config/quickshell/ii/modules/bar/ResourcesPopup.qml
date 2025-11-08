@@ -91,7 +91,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
+                    value: `${Math.round(ResourceUsage.cpuUsage * 100)}%`
                 }
 
                 StyledPopupValueRow {
@@ -122,7 +122,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
+                    value: `${Math.round(GpuUsage.iGpuUsage * 100)}%`
                 }
 
                 StyledPopupValueRow {
@@ -153,7 +153,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
+                    value: `${Math.round(GpuUsage.dGpuUsage * 100)}%`
                 }
 
                 StyledPopupValueRow {
