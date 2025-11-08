@@ -137,6 +137,19 @@ StyledOverlayWidget {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
                     value: `${GpuUsage.dGpuTempemperature} °C`
+                  },
+
+                 {
+                    icon: "air",
+                    label: Translation.tr("Fan:"),
+                    value: `${GpuUsage.dGpuFanUsage} %`
+                  },
+
+                 {
+                    icon: "power",
+                    label: Translation.tr("Power:"),
+                    value: `${GpuUsage.dGpuPower} W / ${GpuUsage.dGpuPowerLimit} W`
+
                 }
             ]
         }
@@ -150,7 +163,7 @@ StyledOverlayWidget {
         radius: root.contentRadius
         property real padding: 4
         implicitWidth: 350
-        implicitHeight: 200
+        implicitHeight: 300
         // implicitHeight: contentColumn.implicitHeight + padding * 2
         ColumnLayout {
             id: contentColumn

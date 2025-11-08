@@ -141,46 +141,7 @@ Singleton {
     }
   }
 
-   Process {
-    id: dGpuinfoProc
-    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_dgpuinfo.sh`.replace(/file:\/\//, "")]
-    running: true
 
-    stdout: StdioCollector {
-      onStreamFinished:{
-        dGpuAvailable =  this.text.indexOf("No GPU available") ==-1
-        if(dGpuAvailable){
-          dGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
-          const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
-          dGpuVramUsedGB = Number(vramLine?.[1] ?? 0)
-          dGpuVramTotalGB = Number(vramLine?.[2] ?? 0)
-          dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0;
-          dGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
-        }
-       }
-    }
-  }
-
-
-  Process {
-    id: iGpuinfoProc
-    command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_igpuinfo.sh`.replace(/file:\/\//, "")]
-    running: true
-
-    stdout: StdioCollector {
-      onStreamFinished:{
-        iGpuAvailable =  this.text.indexOf("No GPU available") ==-1
-        if(iGpuAvailable){
-          iGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
-          const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
-          iGpuVramUsedGB = Number(vramLine?.[1] ?? 0)
-          iGpuVramTotalGB = Number(vramLine?.[2] ?? 0)
-          iGpuVramUsage = iGpuVramTotalGB > 0 ? (iGpuVramUsedGB / iGpuVramTotalGB) : 0;
-          iGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
-        }
-       }
-    }
-  }
 
 
 

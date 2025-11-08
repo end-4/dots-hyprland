@@ -16,18 +16,31 @@ fi
 # NVIDIA dGPU
 if command -v nvidia-smi &> /dev/null; then
     echo "[NVIDIA GPU]"
+
+    gpu_name=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits | head -n1)
+    driver_version=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader,nounits | head -n1)
+    echo " Model : ${gpu_name}"
+    echo " Driver : ${driver_version}"
+    echo
+
     gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
     vram_used_mib=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -n1)
     vram_total_mib=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n1)
-    vram_percent=$(( vram_used_mib * 100 / vram_total_mib ))
+    temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits | head -n1)
+    
+    power_draw=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | head -n1)
+    power_limit=$(nvidia-smi --query-gpu=power.limit --format=csv,noheader,nounits | head -n1)
+    fan_speed=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits | head -n1)
+
     vram_used_gb=$(awk -v u="$vram_used_mib" 'BEGIN{printf "%.1f", u/1024}')
     vram_total_gb=$(awk -v t="$vram_total_mib" 'BEGIN{printf "%.1f", t/1024}')
-    temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits | head -n1)
 
-    echo "  Usage : ${gpu_usage} %"
-    echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
-    echo "  Temp : ${temperature} °C"
-
+    echo " Usage : ${gpu_usage} %"
+    echo " VRAM : ${vram_used_gb}/${vram_total_gb} GB"
+    echo " Temp : ${temperature} °C"
+    echo " Power : ${power_draw} W "
+    echo " PowerLimit : ${power_limit} W "
+    echo " Fan   : ${fan_speed} %"
     exit 0
 fi
 
@@ -133,11 +146,18 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             fi
             [[ $found -eq 1 ]] && break
         done
+        
+        # TODO Add AMD calcualtion
+        power_draw= 0
+        power_limit= 0
+        fan_speed= 0
 
         echo "  Usage : ${gpu_usage}%"
         echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
         echo "  Temp : ${temperature} °C"
-
+        echo " Power : ${power_draw} W "
+        echo " PowerLimit : ${power_limit} W "
+        echo " Fan   : ${fan_speed} %"
         exit 0
     fi
 fi

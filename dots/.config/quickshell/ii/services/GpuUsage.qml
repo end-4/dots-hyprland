@@ -8,25 +8,17 @@ import Quickshell.Io
 
 Singleton {
     id: root
-    property bool available: false
-    property string gpuName: ""
-    property int usagePercent: 0
-    property int vramPercent: 0
-    property real vramUsedGB: 0.0
-    property real vramTotalGB: 0.0
-    property int fanRpm: -1
-    property int tempEdgeC: -1
-    property int tempJunctionC: -1
-    property int tempMemC: -1
-
-    
-    
+    property string dGpuName: ""
     property bool dGpuAvailable: false
     property double dGpuUsage: 0
     property double dGpuVramUsage:0
     property double dGpuTempemperature:0
     property double dGpuVramUsedGB: 0    
     property double dGpuVramTotalGB: 0
+    property double dGpuPower: 0
+    property double dGpuPowerLimit: 0
+    property double dGpuFanUsage: 0
+
     
     property bool iGpuAvailable: false
     property double iGpuUsage: 0
@@ -38,7 +30,7 @@ Singleton {
 
 
     property string maxAvailableIGpuString: "100%" 
-    property string maxAvailabledDGpuString: "100%"
+    property string maxAvailabledDGpuString: "\n" + dGpuName
 
 
     property list<real> iGpuUsageHistory: []
@@ -102,10 +94,16 @@ Singleton {
       onStreamFinished:{
         dGpuAvailable =  this.text.indexOf("No GPU available") ==-1
         if(dGpuAvailable){
+          dGpuName = this.text.match(/\sModel\s:\s(.+)/)?.[1].trim()
+          dGpuFanUsage =  this.text.match(/\sFan\s:\s(\d+)/)?.[1] ?? 0 
+
+          dGpuPower =  this.text.match(/\sPower\s:\s(\d+)/)?.[1] ?? 0 
+          dGpuPowerLimit =  this.text.match(/\sPowerLimit\s:\s(\d+)/)?.[1] ?? 0 
           dGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
           const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
           dGpuVramUsedGB = Number(vramLine?.[1] ?? 0)
           dGpuVramTotalGB = Number(vramLine?.[2] ?? 0)
+          
           dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0;
           dGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0 
         }
