@@ -1,23 +1,6 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-# Start building the missing RPM package locally.
-install_RPMS() {
-    rpmbuildroot=${REPO_ROOT}/sdata/dist-fedora
-    x mkdir $rpmbuildroot/{BUILD,RPMS,SOURCES}
-    x cd $rpmbuildroot/SPECS
-    mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
-    for spec_file in ${local_specs[@]}; do
-        x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
-    done
-    mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-    x sudo dnf install "${local_rpms[@]}" -y
-    cd ${REPO_ROOT}
-}
-
-showfun install_RPMS
-v install_RPMS
-
 #####################################################################################
 # These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
 showfun install-python-packages

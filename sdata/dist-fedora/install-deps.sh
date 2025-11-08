@@ -92,3 +92,22 @@ v sudo dnf install fuzzel glib2 ImageMagick hypridle hyprlock hyprpicker songrec
 
 # Extra
 v sudo dnf install --setopt="install_weak_deps=False" mpvpaper plasma-systemmonitor unzip -y
+
+# Start building the missing RPM package locally.
+install_RPMS() {
+    rpmbuildroot=${REPO_ROOT}/cache/rpmbuild
+    x mkdir -p $rpmbuildroot/{BUILD,RPMS,SOURCES}
+    x cp -r ${REPO_ROOT}/sdata/dist-fedora/SPECS $rpmbuildroot/
+    x cd $rpmbuildroot/SPECS
+    mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
+    for spec_file in ${local_specs[@]}; do
+        x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
+    done
+    mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
+    echo "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
+    x sudo dnf install "${local_rpms[@]}" -y
+    x cd ${REPO_ROOT}
+}
+
+showfun install_RPMS
+v install_RPMS
