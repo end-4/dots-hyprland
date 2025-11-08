@@ -13,19 +13,18 @@ import qs.modules.common.widgets
 import qs.modules.overlay
 
 StyledOverlayWidget {
+    id: root
     function formatKB(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
     }
-
-   id: root
-   property list<var> resources: [
+    property list<var> resources: [
         {
             icon: "planner_review",
             name: Translation.tr("CPU"),
             history: ResourceUsage.cpuUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableCpuString,
             available: true,
-              extraProperties: [
+            extraProperties: [
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
@@ -34,7 +33,7 @@ StyledOverlayWidget {
                 {
                     icon: "planner_review",
                     label: Translation.tr("Freq:"),
-                    value: ` ${Math.round(ResourceUsage.cpuFreqency  * 100) / 100} GHz`
+                    value: ` ${Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
                 },
                 {
                     icon: "thermometer",
@@ -73,7 +72,7 @@ StyledOverlayWidget {
             history: ResourceUsage.swapUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableSwapString,
             available: true,
-              extraProperties: [
+            extraProperties: [
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("Used:"),
@@ -90,7 +89,6 @@ StyledOverlayWidget {
                     value: root.formatKB(ResourceUsage.swapTotal)
                 }
             ]
-            
         },
         {
             icon: "empty_dashboard",
@@ -98,7 +96,7 @@ StyledOverlayWidget {
             history: GpuUsage.iGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailableIGpuString,
             available: GpuUsage.iGpuAvailable,
-              extraProperties: [
+            extraProperties: [
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
@@ -122,7 +120,7 @@ StyledOverlayWidget {
             history: GpuUsage.dGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailabledDGpuString,
             available: GpuUsage.dGpuAvailable,
-              extraProperties: [
+            extraProperties: [
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
@@ -137,24 +135,20 @@ StyledOverlayWidget {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
                     value: `${GpuUsage.dGpuTempemperature} °C`
-                  },
-
-                 {
+                },
+                {
                     icon: "air",
                     label: Translation.tr("Fan:"),
                     value: `${GpuUsage.dGpuFanUsage} %`
-                  },
-
-                 {
+                },
+                {
                     icon: "power",
                     label: Translation.tr("Power:"),
                     value: `${GpuUsage.dGpuPower} W / ${GpuUsage.dGpuPowerLimit} W`
-
                 }
             ]
         }
-    ].filter(r => r.available) 
-
+    ].filter(r => r.available)
 
     contentItem: Rectangle {
         id: contentItem
@@ -196,37 +190,37 @@ StyledOverlayWidget {
                 Layout.margins: 8
                 history: root.resources[tabBar.currentIndex]?.history ?? []
                 maxAvailableString: root.resources[tabBar.currentIndex]?.maxAvailableString ?? "--"
-              }
+            }
 
-        ColumnLayout {
-             spacing: 4
-             Repeater {
-            model:  root.resources[tabBar.currentIndex]?.extraProperties.length ?? 0 
-            delegate: RowLayout {
-                required property int index 
-              property var modelData: root.resources[tabBar.currentIndex]?.extraProperties[index] 
-                
+            ColumnLayout {
                 spacing: 4
-                MaterialSymbol {
-                    text: modelData.icon
-                    color: Appearance.colors.colOnSurfaceVariant
-                    iconSize: Appearance.font.pixelSize.large
-                }
-                StyledText {
-                    text: modelData.label ?? ""
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
-                StyledText {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignRight
-                    visible: modelData.value !== ""
-                    color: Appearance.colors.colOnSurfaceVariant
-                    text: modelData.value ?? ""
+                Repeater {
+                    model: root.resources[tabBar.currentIndex]?.extraProperties.length ?? 0
+                    delegate: RowLayout {
+                        required property int index
+                        property var modelData: root.resources[tabBar.currentIndex]?.extraProperties[index]
+
+                        spacing: 4
+                        MaterialSymbol {
+                            text: modelData.icon
+                            color: Appearance.colors.colOnSurfaceVariant
+                            iconSize: Appearance.font.pixelSize.large
+                        }
+                        StyledText {
+                            text: modelData.label ?? ""
+                            color: Appearance.colors.colOnSurfaceVariant
+                        }
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignRight
+                            visible: modelData.value !== ""
+                            color: Appearance.colors.colOnSurfaceVariant
+                            text: modelData.value ?? ""
+                        }
+                    }
                 }
             }
         }
-           
-    }
     }
 
     component ResourceSummary: RowLayout {
@@ -281,10 +275,6 @@ StyledOverlayWidget {
                 points: ResourceUsage.historyLength
                 alignment: Graph.Alignment.Right
             }
-          }
-
-
         }
-      }
-       
+    }
 }

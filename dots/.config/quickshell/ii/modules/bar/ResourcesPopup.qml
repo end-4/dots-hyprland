@@ -45,9 +45,7 @@ StyledPopup {
                     label: Translation.tr("Total:")
                     value: root.formatKB(ResourceUsage.memoryTotal)
                 }
-
             }
-
         }
 
         Column {
@@ -80,9 +78,7 @@ StyledPopup {
                     label: Translation.tr("Total:")
                     value: root.formatKB(ResourceUsage.swapTotal)
                 }
-
             }
-
         }
 
         Column {
@@ -106,17 +102,15 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "planner_review"
                     label: Translation.tr("Freq:")
-                    value: ` ${ Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
+                    value: ` ${Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
                 }
 
                 StyledPopupValueRow {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value: ` ${ Math.round(ResourceUsage.cpuTemperature)} °C`
+                    value: ` ${Math.round(ResourceUsage.cpuTemperature)} °C`
                 }
-
             }
-
         }
 
         ColumnLayout {
@@ -133,7 +127,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage  * 100)}%)`
+                    value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
                 }
 
                 StyledPopupValueRow {
@@ -147,9 +141,7 @@ StyledPopup {
                     label: Translation.tr("Temp:")
                     value: `${GpuUsage.iGpuTempemperature} °C`
                 }
-
             }
-
         }
 
         ColumnLayout {
@@ -166,7 +158,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
-                    value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage  * 100)}%)`
+                    value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
                 }
 
                 StyledPopupValueRow {
@@ -180,11 +172,7 @@ StyledPopup {
                     label: Translation.tr("Temp:")
                     value: `${GpuUsage.dGpuTempemperature} °C`
                 }
-
             }
-
         }
-
     }
-
 }

@@ -5,145 +5,138 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Io
+
 /**
  * Simple polled resource usage service with RAM, Swap, and CPU usage.
  */
 Singleton {
     id: root
-	property real memoryTotal: 1
-	property real memoryFree: 0
-	property real memoryUsed: memoryTotal - memoryFree
+    property real memoryTotal: 1
+    property real memoryFree: 0
+    property real memoryUsed: memoryTotal - memoryFree
     property real memoryUsedPercentage: memoryUsed / memoryTotal
     property real swapTotal: 1
-	property real swapFree: 0
-	property real swapUsed: swapTotal - swapFree
+    property real swapFree: 0
+    property real swapUsed: swapTotal - swapFree
     property real swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property real cpuUsage: 0
     property double cpuFreqency: 0
 
     property var previousCpuStats
-    property double cpuTemperature:  0
-    
-
-
+    property double cpuTemperature: 0
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
     property string maxAvailableCpuString: "--"
 
-
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> cpuUsageHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
-  
-
-
-  
 
     function kbToGbString(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
     }
 
     function updateMemoryUsageHistory() {
-        memoryUsageHistory = [...memoryUsageHistory, memoryUsedPercentage]
+        memoryUsageHistory = [...memoryUsageHistory, memoryUsedPercentage];
         if (memoryUsageHistory.length > historyLength) {
-            memoryUsageHistory.shift()
+            memoryUsageHistory.shift();
         }
     }
     function updateSwapUsageHistory() {
-        swapUsageHistory = [...swapUsageHistory, swapUsedPercentage]
+        swapUsageHistory = [...swapUsageHistory, swapUsedPercentage];
         if (swapUsageHistory.length > historyLength) {
-            swapUsageHistory.shift()
+            swapUsageHistory.shift();
         }
     }
     function updateCpuUsageHistory() {
-        cpuUsageHistory = [...cpuUsageHistory, cpuUsage]
+        cpuUsageHistory = [...cpuUsageHistory, cpuUsage];
         if (cpuUsageHistory.length > historyLength) {
-            cpuUsageHistory.shift()
+            cpuUsageHistory.shift();
         }
-      }
-
-
+    }
 
     function updateHistories() {
-        updateMemoryUsageHistory()
-        updateSwapUsageHistory()
-        updateCpuUsageHistory()
-       }
+        updateMemoryUsageHistory();
+        updateSwapUsageHistory();
+        updateCpuUsageHistory();
+    }
 
-	Timer {
-		interval: 1
-        running: true 
+    Timer {
+        interval: 1
+        running: true
         repeat: true
-		onTriggered: {
+        onTriggered: {
             // Reload files
-            fileMeminfo.reload()
-            fileStat.reload()
-            fileCpuinfo.reload()
+            fileMeminfo.reload();
+            fileStat.reload();
+            fileCpuinfo.reload();
 
             // Parse memory and swap usage
-            const textMeminfo = fileMeminfo.text()
-            memoryTotal = Number(textMeminfo.match(/MemTotal: *(\d+)/)?.[1] ?? 1)
-            memoryFree = Number(textMeminfo.match(/MemAvailable: *(\d+)/)?.[1] ?? 0)
-            swapTotal = Number(textMeminfo.match(/SwapTotal: *(\d+)/)?.[1] ?? 1)
-            swapFree = Number(textMeminfo.match(/SwapFree: *(\d+)/)?.[1] ?? 0)
+            const textMeminfo = fileMeminfo.text();
+            memoryTotal = Number(textMeminfo.match(/MemTotal: *(\d+)/)?.[1] ?? 1);
+            memoryFree = Number(textMeminfo.match(/MemAvailable: *(\d+)/)?.[1] ?? 0);
+            swapTotal = Number(textMeminfo.match(/SwapTotal: *(\d+)/)?.[1] ?? 1);
+            swapFree = Number(textMeminfo.match(/SwapFree: *(\d+)/)?.[1] ?? 0);
 
             // Parse CPU usage
-            const textStat = fileStat.text()
-            const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/)
+            const textStat = fileStat.text();
+            const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/);
             if (cpuLine) {
-                const stats = cpuLine.slice(1).map(Number)
-                const total = stats.reduce((a, b) => a + b, 0)
-                const idle = stats[3]
+                const stats = cpuLine.slice(1).map(Number);
+                const total = stats.reduce((a, b) => a + b, 0);
+                const idle = stats[3];
 
                 if (previousCpuStats) {
-                    const totalDiff = total - previousCpuStats.total
-                    const idleDiff = idle - previousCpuStats.idle
-                    cpuUsage = totalDiff > 0 ? (1 - idleDiff / totalDiff) : 0
+                    const totalDiff = total - previousCpuStats.total;
+                    const idleDiff = idle - previousCpuStats.idle;
+                    cpuUsage = totalDiff > 0 ? (1 - idleDiff / totalDiff) : 0;
                 }
 
-                previousCpuStats = { total, idle }
+                previousCpuStats = {
+                    total,
+                    idle
+                };
             }
 
             // Parse CPU frequency
-            const cpuInfo = fileCpuinfo.text()
-            const cpuCoreFrequencies = cpuInfo.match(/cpu MHz\s+:\s+(\d+\.\d+)\n/g).map(x => Number(x.match(/\d+\.\d+/)))
-            const cpuCoreFreqencyAvg = cpuCoreFrequencies.reduce((a, b) => a + b, 0) / cpuCoreFrequencies.length
-            cpuFreqency = cpuCoreFreqencyAvg / 1000
-            
+            const cpuInfo = fileCpuinfo.text();
+            const cpuCoreFrequencies = cpuInfo.match(/cpu MHz\s+:\s+(\d+\.\d+)\n/g).map(x => Number(x.match(/\d+\.\d+/)));
+            const cpuCoreFreqencyAvg = cpuCoreFrequencies.reduce((a, b) => a + b, 0) / cpuCoreFrequencies.length;
+            cpuFreqency = cpuCoreFreqencyAvg / 1000;
 
             //Process process CPU temp
-            tempProc.running = true
+            tempProc.running = true;
 
-
-            root.updateHistories()
-            interval = Config.options?.resources?.updateInterval ?? 3000
+            root.updateHistories();
+            interval = Config.options?.resources?.updateInterval ?? 3000;
         }
-	}
-
-	FileView { id: fileMeminfo; path: "/proc/meminfo" }
-  FileView { id: fileCpuinfo; path: "/proc/cpuinfo" }
-  FileView { id: fileStat; path: "/proc/stat" }
-
-  Process {
-    id: tempProc
-     command: [
-    "/bin/bash",
-    "-c",
-    "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ] || [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"k10temp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"
-  ]
-    running: true
-    stdout: StdioCollector {
-      onStreamFinished:{
-        cpuTemperature = Number(this.text) /1000
-       }
     }
-  }
 
+    FileView {
+        id: fileMeminfo
+        path: "/proc/meminfo"
+    }
+    FileView {
+        id: fileCpuinfo
+        path: "/proc/cpuinfo"
+    }
+    FileView {
+        id: fileStat
+        path: "/proc/stat"
+    }
 
-
-
+    Process {
+        id: tempProc
+        command: ["/bin/bash", "-c", "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ] || [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"k10temp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                cpuTemperature = Number(this.text) / 1000;
+            }
+        }
+    }
 
     Process {
         id: findCpuMaxFreqProc
@@ -152,7 +145,7 @@ Singleton {
         stdout: StdioCollector {
             id: outputCollector
             onStreamFinished: {
-                root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz"
+                root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz";
             }
         }
     }
