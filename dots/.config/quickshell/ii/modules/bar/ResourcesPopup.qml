@@ -45,7 +45,7 @@ StyledPopup {
         }
 
         Column {
-            visible: ResourceUsage.swapTotal > 0
+            visible: Config.options.bar.resources.alwaysShowSwap && ResourceUsage.swapTotal > 0
             anchors.top: parent.top
             spacing: 8
 
@@ -74,6 +74,7 @@ StyledPopup {
         }
 
         Column {
+            visible: Config.options.bar.resources.alwaysShowCpu
             anchors.top: parent.top
             spacing: 8
 
