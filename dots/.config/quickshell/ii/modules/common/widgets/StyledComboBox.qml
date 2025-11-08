@@ -105,6 +105,40 @@ ComboBox {
         height: Math.min(listView.contentHeight + topPadding + bottomPadding, 300)
         padding: 8
 
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                property: "height"
+                from: 0
+                to: popup.height
+                duration: 200
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 150
+                easing.type: Easing.InCubic
+            }
+            NumberAnimation {
+                property: "height"
+                from: popup.height
+                to: 0
+                duration: 150
+                easing.type: Easing.InCubic
+            }
+        }
+
         background: Rectangle {
             radius: Appearance.rounding.normal
             color: Appearance.colors.colSurfaceContainerHigh
