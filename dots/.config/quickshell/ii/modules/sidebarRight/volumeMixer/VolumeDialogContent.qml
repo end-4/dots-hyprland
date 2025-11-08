@@ -16,25 +16,16 @@ ColumnLayout {
     readonly property list<var> appPwNodes: Pipewire.nodes.values.filter((node) => { // Should be list<PwNode> but it breaks ScriptModel
         return root.correctType(node) && node.isStream
     })
+    readonly property list<var> devices: Pipewire.nodes.values.filter(node => {
+        return root.correctType(node) && !node.isStream
+    })
     readonly property bool hasApps: appPwNodes.length > 0
     spacing: 16
-
-    WindowDialogSectionHeader {
-        visible: root.hasApps
-        text: Translation.tr("Applications")
-    }
-
-    WindowDialogSeparator {
-        visible: root.hasApps
-        Layout.topMargin: -22
-        Layout.leftMargin: 0
-        Layout.rightMargin: 0
-        color: Appearance.colors.colOutlineVariant
-    }
 
     DialogSectionListView {
         visible: root.hasApps
         Layout.fillHeight: true
+        topMargin: 14
 
         model: ScriptModel {
             values: root.appPwNodes
@@ -49,44 +40,25 @@ ColumnLayout {
         }
     }
 
-    WindowDialogSectionHeader {
-        text: Translation.tr("Devices")
-    }
-
-    WindowDialogSeparator {
-        Layout.topMargin: -22
-        Layout.leftMargin: 0
-        Layout.rightMargin: 0
-        color: Appearance.colors.colOutlineVariant
-    }
-
-    DialogSectionListView {
-        Layout.fillHeight: !root.hasApps
-        Layout.preferredHeight: 180
-
-        model: ScriptModel {
-            values: Pipewire.nodes.values.filter(node => {
-                return root.correctType(node) && !node.isStream
-            })
-        }
-        delegate: StyledRadioButton {
-            id: radioButton
-            required property var modelData
-            anchors {
-                left: parent?.left
-                right: parent?.right
+    StyledComboBox {
+        id: deviceSelector
+        Layout.fillWidth: true
+        Layout.bottomMargin: 6
+        model: root.devices.map(node => node.description)
+        currentIndex: root.devices.findIndex(item => {
+            if (root.isSink) {
+                return item.id === Pipewire.preferredDefaultAudioSink?.id
+            } else {
+                return item.id === Pipewire.preferredDefaultAudioSource?.id
             }
-
-            description: modelData.description
-            checked: modelData.id === (root.isSink ? Pipewire.preferredDefaultAudioSink?.id : Pipewire.preferredDefaultAudioSource?.id)
-
-            onCheckedChanged: {
-                if (!checked) return;
-                if (root.isSink) {
-                    Pipewire.preferredDefaultAudioSink = modelData
-                } else {
-                    Pipewire.preferredDefaultAudioSource = modelData
-                }
+        })
+        onActivated: (index) => {
+            print(index)
+            const item = root.devices[index]
+            if (root.isSink) {
+                Pipewire.preferredDefaultAudioSink = item
+            } else {
+                Pipewire.preferredDefaultAudioSource = item
             }
         }
     }
@@ -105,5 +77,10 @@ ColumnLayout {
         clip: true
         spacing: 4
         animateAppearance: false
+    }
+
+    Component {
+        id: listElementComp
+        ListElement {}
     }
 }
