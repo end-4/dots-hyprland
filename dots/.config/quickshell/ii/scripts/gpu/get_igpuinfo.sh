@@ -28,7 +28,6 @@ fi
 
 # AMD iGPU
 if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
-  echo "[AMD GPU - iGPU only]"
 
   card_path=""
 
@@ -90,7 +89,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
   fi
 
   if [[ -z "${card_path}" ]]; then
-    echo "No AMD iGPU found."
+    :
   else
     gpu_usage=0
     [[ -r "$card_path/gpu_busy_percent" ]] && gpu_usage=$(cat "$card_path/gpu_busy_percent")
@@ -145,6 +144,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
       [[ $found -eq 1 ]] && break
     done
 
+    echo "[AMD GPU - iGPU only]"
     echo "  Usage : ${gpu_usage} %"
     echo "  VRAM : ${vram_used_gb}/${vram_total_gb} GB"
     echo "  Temp : ${temperature} °C"
@@ -152,3 +152,9 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
   fi
 fi
 
+echo "No GPU available."
+echo "Make sure you have one of the following tools installed:"
+echo "  - nvidia-smi (NVIDIA GPU)"
+echo "  - rocm-smi   (AMD GPU)"
+echo "  - intel_gpu_top (Intel GPU)"
+exit 1

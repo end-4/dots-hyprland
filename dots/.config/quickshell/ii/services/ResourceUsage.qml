@@ -24,14 +24,14 @@ Singleton {
     property var previousCpuStats
     property double cpuTemperature:  0
     
-    property bool dGpuAvailable: true
+    property bool dGpuAvailable: false
     property double dGpuUsage: 0
     property double dGpuVramUsage:0
     property double dGpuTempemperature:0
     property double dGpuVramUsedGB: 0    
     property double dGpuVramTotalGB: 0
     
-    property bool iGpuAvailable: true
+    property bool iGpuAvailable: false
     property double iGpuUsage: 0
     property double iGpuVramUsage:0
     property double iGpuTempemperature:0
@@ -43,10 +43,19 @@ Singleton {
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
     property string maxAvailableCpuString: "--"
 
+    property string maxAvailableIGpuString: iGpuVramTotalGB
+    property string maxAvailabledDGpuString: dGpuVramTotalGB
+
+
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> cpuUsageHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
+    property list<real> iGpuUsageHistory: []
+    property list<real> dGpuUsageHistory: []
+
+
+  
 
     function kbToGbString(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
@@ -69,11 +78,28 @@ Singleton {
         if (cpuUsageHistory.length > historyLength) {
             cpuUsageHistory.shift()
         }
+      }
+
+    function updateiGpuUsageHistory() {
+        iGpuUsageHistory = [...iGpuUsageHistory, iGpuUsage]
+        if (iGpuUsageHistory.length > historyLength) {
+            iGpuUsageHistory.shift()
+        }
     }
+
+    function updatedGpuUsageHistory() {
+        dGpuUsageHistory = [...dGpuUsageHistory, dGpuUsage]
+        if (dGpuUsageHistory.length > historyLength) {
+            dGpuUsageHistory.shift()
+        }
+    }
+
     function updateHistories() {
         updateMemoryUsageHistory()
         updateSwapUsageHistory()
         updateCpuUsageHistory()
+        if(iGpuAvailable) updateiGpuUsageHistory()
+        if(dGpuAvailable) updatedGpuUsageHistory()
     }
 
 	Timer {
@@ -184,6 +210,7 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished:{
         iGpuAvailable =  this.text.indexOf("No GPU available") ==-1
+        print(this.text.indexOf("No GPU available"))
         if(iGpuAvailable){
           iGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
           const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)

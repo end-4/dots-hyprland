@@ -14,7 +14,10 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
-    property list<var> resources: [
+   property list<var> resources: []
+
+Component.onCompleted: {
+    resources = [
         {
             "icon": "planner_review",
             "name": Translation.tr("CPU"),
@@ -32,8 +35,27 @@ StyledOverlayWidget {
             "name": Translation.tr("Swap"),
             "history": ResourceUsage.swapUsageHistory,
             "maxAvailableString": ResourceUsage.maxAvailableSwapString
-        },
-    ]
+        }
+    ];
+
+    if (ResourceUsage.iGpuAvailable) {
+        resources.push({
+            "icon": "empty_dashboard",
+            "name": Translation.tr("IGPU"),
+            "history": ResourceUsage.iGpuUsageHistory,
+            "maxAvailableString": ResourceUsage.maxAvailabledIGpuString
+        });
+    }
+
+    if (ResourceUsage.dGpuAvailable) {
+        resources.push({
+            "icon": "empty_dashboard",
+            "name": Translation.tr("DGPU"),
+            "history": ResourceUsage.dGpuUsageHistory,
+            "maxAvailableString": ResourceUsage.maxAvailabledDGpuString
+        });
+    }
+}
 
     contentItem: Rectangle {
         id: contentItem
