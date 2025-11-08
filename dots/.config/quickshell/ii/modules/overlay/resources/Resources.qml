@@ -54,7 +54,7 @@ StyledOverlayWidget {
             name: Translation.tr("iGPU"),
             history: GpuUsage.iGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailableIGpuString,
-            available: GpuUsage.iGpuAvailable,
+            available: GpuUsage.iGpuAvailable && (Config.options.bar.resources.gpuLayout == 1 || Config.options.bar.resources.gpuLayout == 2),
             extraProperties: [
                 {
                     icon: "clock_loader_60",
@@ -73,7 +73,7 @@ StyledOverlayWidget {
             name: Translation.tr("dGPU"),
             history: GpuUsage.dGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailabledDGpuString,
-            available: GpuUsage.dGpuAvailable,
+            available: GpuUsage.dGpuAvailable  && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2),
             extraProperties: [
                 {
                     icon: "clock_loader_60",

@@ -65,6 +65,10 @@ Singleton {
         running: true
         repeat: true
         onTriggered: {
+            if(Config.options.bar.resources.gpuLayout == -1){ //disabled gpu
+                this.repeat = false
+            }
+
             //Process process GPU info
             if (iGpuAvailable) {
                 iGpuinfoProc.running = true;
