@@ -23,7 +23,6 @@ ColumnLayout {
     spacing: 16
 
     DialogSectionListView {
-        visible: root.hasApps
         Layout.fillHeight: true
         topMargin: 14
 
@@ -42,6 +41,7 @@ ColumnLayout {
 
     StyledComboBox {
         id: deviceSelector
+        Layout.fillHeight: false
         Layout.fillWidth: true
         Layout.bottomMargin: 6
         model: root.devices.map(node => node.description)
