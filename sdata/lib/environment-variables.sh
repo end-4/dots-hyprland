@@ -25,3 +25,7 @@ STY_RST='\e[00m'
 
 # Used by register_temp_file()
 declare -a TEMP_FILES_TO_CLEANUP=()
+
+# Pinned commit for quickshell
+_qs_commit='db1777c20b936a86528c1095cbcb1ebd92801402'
+_qs_shortcommit=$(echo ${_qs_commit} | cut -c1-7)

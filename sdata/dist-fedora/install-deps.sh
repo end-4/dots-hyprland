@@ -12,7 +12,7 @@ case $SKIP_SYSUPDATE in
   *) v sudo dnf upgrade --refresh -y;;
 esac
 
-# Group installation
+# Development-tools installation
 v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros -y
 
 # COPR repositories
@@ -69,7 +69,7 @@ v sudo dnf install python3{,.12}{,-devel} -y
 
 # Quickshell-git
 quickshell_deps=(
-  quickshell-git qt6-qtdeclarative qt6-qtbase jemalloc qt6-qtsvg pipewire-libs
+  qt6-qtdeclarative qt6-qtbase jemalloc qt6-qtsvg pipewire-libs
   libxcb wayland-devel qt6-qtwayland qt5-qtwayland libdrm breakpad
 )
 # NOTE: Below are custom dependencies of illogical-impulse
@@ -80,6 +80,15 @@ quickshell_custom_deps=(
 )
 v sudo dnf install "${quickshell_deps[@]}" -y
 v sudo dnf install "${quickshell_custom_deps[@]}" -y
+# Dynamically control the version of quickshell
+qs_version=$(dnf list --showduplicates quickshell-git 2>/dev/null |
+  grep -E "\.git${_qs_shortcommit}(-|$)" |
+  awk '{print $2}' |
+  sort -V |
+  tail -n1)
+v sudo dnf versionlock delete quickshell-git 2>/dev/null
+v sudo dnf install quickshell-git-${qs_version}
+v sudo dnf versionlock add quickshell-git
 
 # Screencapture
 v sudo dnf install hyprshot slurp swappy tesseract tesseract-langpack-eng tesseract-langpack-chi_sim wf-recorder -y
