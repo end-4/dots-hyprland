@@ -131,6 +131,20 @@ Item {
         }
     }
 
+    Timer {
+        id: positionTracker
+        interval: 8 // is this smooth enough?
+        repeat: true
+        running: root.popupVisible
+        onTriggered: {
+            if (popupContent.visible) {
+                var pos = root.getGlobalPosition();
+                popupContent.x = pos.x;
+                popupContent.y = pos.y + root.height + 4;
+            }
+        }
+    }
+
     Rectangle {
         id: popupContent
         visible: root.popupVisible
