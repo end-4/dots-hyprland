@@ -221,6 +221,31 @@ Singleton {
                     property int swapWarningThreshold: 85
                     property int cpuWarningThreshold: 90
                     property int gpuWarningThreshold: 90
+                    property JsonObject gpu: JsonObject {
+                    // Manual card override (e.g., "card1" for AMD_GPU_CARD/INTEL_GPU_CARD)
+                    property string dgpuCard: ""
+                    property string igpuCard: ""
+
+                    // Overlay widget GPU display settings
+                    property JsonObject overlay: JsonObject {
+
+                      property JsonObject dGpu: JsonObject {
+                            property bool showUsage: true
+                            property bool showVram: true
+                            property bool showTemp: true // this standw for edge
+                            property bool showTempJunction: false  // AMD only
+                            property bool showTempMem: false       // AMD only
+                            property bool showFan: true
+                            property bool showPower: true
+                        }
+
+                        property JsonObject iGpu: JsonObject {
+                            property bool showUsage: true
+                            property bool showVram: true
+                            property bool showTemp: true
+                        }
+                    } 
+                }
 
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command

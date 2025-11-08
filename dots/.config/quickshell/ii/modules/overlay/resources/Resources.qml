@@ -14,19 +14,122 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
+      
+      function formatKB(kb) {
+        return (kb / (1024 * 1024)).toFixed(1) + " GB";
+    }
+        function buildIGpuProperties() {
+        const cfg = Config.options?.resources?.gpu?.overlay?.iGpu
+        let props = []
 
-    property list<var> resources: [
+        if (cfg?.showUsage !== false) {
+            props.push({
+                icon: "bolt",
+                label: Translation.tr("Load:"),
+                value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
+            })
+        }
+
+        if (cfg?.showVram !== false) {
+            props.push({
+                icon: "clock_loader_60",
+                label: Translation.tr("VRAM:"),
+                value: ` ${Math.round(GpuUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.iGpuVramTotalGB * 10) / 10} GB`
+            })
+        }
+
+        if (cfg?.showTemp !== false) {
+            props.push({
+                icon: "thermometer",
+                label: Translation.tr("Temp:"),
+                value: `${GpuUsage.iGpuTemperature} °C`
+            })
+        }
+
+        return props
+    }
+
+    function buildDGpuProperties() {
+        const cfg = Config.options?.resources?.gpu?.overlay?.dGpu
+        let props = []
+
+        if (cfg?.showUsage !== false) {
+            props.push({
+                icon: "bolt",
+                label: Translation.tr("Load:"),
+                value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
+            })
+        }
+
+        if (cfg?.showVram !== false) {
+            props.push({
+                icon: "clock_loader_60",
+                label: Translation.tr("VRAM:"),
+                value: ` ${Math.round(GpuUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.dGpuVramTotalGB * 10) / 10} GB`
+            })
+        }
+
+        if (cfg?.showTemp !== false) {
+            props.push({
+                icon: "thermometer",
+                label: Translation.tr("Temp:"),
+                value: `${GpuUsage.dGpuTemperature} °C`
+            })
+        }
+
+        if (cfg?.showTempJunction === true && GpuUsage.dGpuTempJunction > 0) {
+            props.push({
+                icon: "thermometer",
+                label: Translation.tr("Junction:"),
+                value: `${GpuUsage.dGpuTempJunction} °C`
+            })
+        }
+
+        if (GpuUsage.dGpuTempMem > 0) {
+            props.push({
+                icon: "thermometer",
+                label: Translation.tr("Mem Temp:"),
+                value: `${GpuUsage.dGpuTempMem} °C`
+            })
+        }
+
+        if (cfg?.showFan !== false) {
+            props.push({
+                icon: "air",
+                label: Translation.tr("Fan:"),
+                value: GpuUsage.dGpuVendor === "nvidia" ? `${GpuUsage.dGpuFanUsage} %` :
+                       GpuUsage.dGpuFanRpm > 0 ? `${GpuUsage.dGpuFanRpm} RPM` : "0"
+            })
+        }
+
+        if (cfg?.showPower !== false) {
+            props.push({
+                icon: "power",
+                label: Translation.tr("Power:"),
+                value: `${GpuUsage.dGpuPower} W / ${GpuUsage.dGpuPowerLimit} W`
+            })
+        }
+
+        return props
+    }
+
+   property list<var> resources: [
         {
             icon: "planner_review",
             name: Translation.tr("CPU"),
             history: ResourceUsage.cpuUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableCpuString,
             available: true,
-            extraProperties: [
+              extraProperties: [
+                {
+                    icon: "bolt",
+                    label: Translation.tr("Load:"),
+                    value: ResourceUsage.cpuUsage 
+                },
                 {
                     icon: "planner_review",
                     label: Translation.tr("Freq:"),
-                    value: ` ${Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
+                    value: ` ${Math.round(ResourceUsage.cpuFrequency  * 100) / 100} GHz`
                 },
                 {
                     icon: "thermometer",
@@ -41,6 +144,23 @@ StyledOverlayWidget {
             history: ResourceUsage.memoryUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableMemoryString,
             available: true,
+            extraProperties: [
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("Used:"),
+                    value: root.formatKB(ResourceUsage.memoryUsed)
+                },
+                {
+                    icon: "check_circle",
+                    label: Translation.tr("Free:"),
+                    value: root.formatKB(ResourceUsage.memoryFree)
+                },
+                {
+                    icon: "empty_dashboard",
+                    label: Translation.tr("Total:"),
+                    value: root.formatKB(ResourceUsage.memoryTotal)
+                }
+            ]
         },
         {
             icon: "swap_horiz",
@@ -48,56 +168,50 @@ StyledOverlayWidget {
             history: ResourceUsage.swapUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableSwapString,
             available: true,
+              extraProperties: [
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("Used:"),
+                    value: root.formatKB(ResourceUsage.swapUsed)
+                },
+                {
+                    icon: "check_circle",
+                    label: Translation.tr("Free:"),
+                    value: root.formatKB(ResourceUsage.swapFree)
+                },
+                {
+                    icon: "empty_dashboard",
+                    label: Translation.tr("Total:"),
+                    value: root.formatKB(ResourceUsage.swapTotal)
+                }
+            ]
+            
         },
         {
             icon: "empty_dashboard",
-            name: Translation.tr("iGPU"),
-            history: GpuUsage.iGpuUsageHistory,
+            name: Translation.tr("IGPU"),
+            history: (Config.options?.resources?.enableGpu !== false) ? GpuUsage.iGpuUsageHistory : [],
             maxAvailableString: GpuUsage.maxAvailableIGpuString,
-            available: GpuUsage.iGpuAvailable && (Config.options.bar.resources.gpuLayout == 1 || Config.options.bar.resources.gpuLayout == 2),
-            extraProperties: [
-                {
-                    icon: "clock_loader_60",
-                    label: Translation.tr("VRAM:"),
-                    value: ` ${Math.round(GpuUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.iGpuVramTotalGB * 10) / 10} GB`
-                },
-                {
-                    icon: "thermometer",
-                    label: Translation.tr("Temp:"),
-                    value: `${GpuUsage.iGpuTemperature} °C`
-                }
-            ]
+            available: (Config.options?.resources?.enableGpu === false && Config.options?.resources?.gpu?.overlay?.showIGpu !== false) ||
+                       (GpuUsage.iGpuAvailable && (Config.options?.resources?.gpu?.overlay?.showIGpu !== false)),
+            disabled: Config.options?.resources?.enableGpu === false,
+            extraProperties: (Config.options?.resources?.enableGpu === false) ?
+                [{icon: "block", label: "", value: Translation.tr("GPU monitoring is disabled")}] :
+                root.buildIGpuProperties()
         },
         {
             icon: "empty_dashboard",
-            name: Translation.tr("dGPU"),
-            history: GpuUsage.dGpuUsageHistory,
-            maxAvailableString: GpuUsage.maxAvailabledDGpuString,
-            available: GpuUsage.dGpuAvailable  && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2),
-            extraProperties: [
-                {
-                    icon: "clock_loader_60",
-                    label: Translation.tr("VRAM:"),
-                    value: ` ${Math.round(GpuUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.dGpuVramTotalGB * 10) / 10} GB`
-                },
-                {
-                    icon: "thermometer",
-                    label: Translation.tr("Temp:"),
-                    value: `${GpuUsage.dGpuTemperature} °C`
-                },
-                {
-                    icon: "air",
-                    label: Translation.tr("Fan:"),
-                    value: `${GpuUsage.dGpuFanUsage} %`
-                },
-                {
-                    icon: "power",
-                    label: Translation.tr("Power:"),
-                    value: `${GpuUsage.dGpuPower} W / ${GpuUsage.dGpuPowerLimit} W`
-                }
-            ]
+            name: Translation.tr("DGPU"),
+            history: (Config.options?.resources?.enableGpu !== false) ? GpuUsage.dGpuUsageHistory : [],
+            maxAvailableString: GpuUsage.maxAvailableDGpuString,
+            available: (Config.options?.resources?.enableGpu === false && Config.options?.resources?.gpu?.overlay?.showDGpu !== false) ||
+                       (GpuUsage.dGpuAvailable && (Config.options?.resources?.gpu?.overlay?.showDGpu !== false)),
+            disabled: Config.options?.resources?.enableGpu === false,
+            extraProperties: (Config.options?.resources?.enableGpu === false) ?
+                [{icon: "block", label: "", value: Translation.tr("GPU monitoring is disabled")}] :
+                root.buildDGpuProperties()
         }
-    ].filter(r => r.available)
+    ].filter(r => r.available) 
 
     contentItem: Rectangle {
         id: contentItem
