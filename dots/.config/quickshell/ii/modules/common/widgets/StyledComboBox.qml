@@ -42,10 +42,15 @@ ComboBox {
 
             Loader {
                 Layout.alignment: Qt.AlignVCenter
-                active: root.buttonIcon.length > 0
+                active: root.buttonIcon.length > 0 || (root.currentIndex >= 0 && root.model[root.currentIndex]?.icon)
                 visible: active
                 sourceComponent: MaterialSymbol {
-                    text: root.buttonIcon
+                    text: {
+                        if (root.currentIndex >= 0 && root.model[root.currentIndex]?.icon) {
+                            return root.model[root.currentIndex].icon;
+                        }
+                        return root.buttonIcon;
+                    }
                     iconSize: Appearance.font.pixelSize.larger
                     color: Appearance.colors.colOnSecondaryContainer
                 }
@@ -88,13 +93,36 @@ ComboBox {
             anchors.leftMargin: 12
             anchors.rightMargin: 12
 
-            StyledText {
-                Layout.fillWidth: true
+            Loader {
                 Layout.alignment: Qt.AlignVCenter
-                color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-                text: itemDelegate.model[root.textRole]
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
+                Layout.preferredHeight: Appearance.font.pixelSize.larger
+                active: itemDelegate.model.icon && itemDelegate.model.icon.length > 0
+                visible: active
+                sourceComponent: Item {
+                    implicitWidth: icon.implicitWidth
+                    implicitHeight: Appearance.font.pixelSize.larger
+                    MaterialSymbol {
+                        id: icon
+                        anchors.centerIn: parent
+                        text: itemDelegate.model.icon
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                    }
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Appearance.font.pixelSize.larger
+
+                StyledText {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                    text: itemDelegate.model[root.textRole]
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }
@@ -134,6 +162,7 @@ ComboBox {
             id: listView
             clip: true
             implicitHeight: contentHeight
+            spacing: 2
             model: root.popup.visible ? root.delegateModel : null
             currentIndex: root.highlightedIndex
 
