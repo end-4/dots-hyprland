@@ -1,0 +1,7 @@
+
+### Task
+Now to implement this algorithm and write the necessary code, your manager is telling you to first  generate the boiler plate basic code for those edit, what are the blueprints and the basic bricks of the edits that we are going to implement. 
+We will be generating the whole code later.
+Explain this in a complex reasoning process and step by step break down.
+Your manager insists on not generating the whole code now, that will come after.
+keep it to a minimum and focus on the reasoning rather than the code.

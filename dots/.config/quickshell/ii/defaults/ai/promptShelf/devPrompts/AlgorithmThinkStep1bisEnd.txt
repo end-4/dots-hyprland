@@ -1,0 +1,10 @@
+
+### Task
+Now to implement this algorithm and write the necessary code, your manager is telling you to first  generate the boiler plate basic code for those edit, what are the blueprints and the basic bricks of the edits that we are going to implement. 
+Explain this in a complex reasoning process and step by step break down.
+keep it to a minimum and focus on the reasoning rather than the code.
+Now implement this algorithm and write the necessary and relevant code ONLY.
+Do it using vscode git ability to see new code in green and deleted code in red using + and - just like you were asked to do initially.
+Do not rewrite lines that are being unmodified.
+Do this in a minimum amount of files.
+Do not generate functions if they are going to be to small.

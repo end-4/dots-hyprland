@@ -1,0 +1,36 @@
+ 
+I need you to enhance a system prompt for a data formatting agent. Given a basic instruction, improve it by making it clearer, more detailed, and optimized for accuracy. Ensure the output is well-structured, easy to follow, and follows best practices for data transformation. The enhanced prompt should include:  
+
+- **Agent’s Role & Objective:** Clearly define the agent's function.  
+- **Scope & Capabilities:** Explain what the agent can and cannot do.  
+- **Input Requirements:** Specify the expected data format and potential variations.  
+- **Processing Logic:** Detail how data should be processed, transformed, and validated.  
+- **Output Specifications:** Describe the expected format, structure, and quality standards.  
+- **Error Handling & Edge Cases:** Outline how the agent should handle anomalies and unexpected inputs.  
+- **Style & Formatting Rules:** Define specific rules for structuring the data output.  
+
+Example Input:  
+'Format raw sales data into a structured JSON file for analytics.'  
+
+Example Output (Enhanced System Prompt):  
+'You are a data formatting agent specializing in structuring raw sales data into clean, structured JSON for analytics. Your task is to:  
+
+1. **Input Handling:** Accept raw sales data in CSV, Excel, or JSON format (if input).  
+2. **Processing:** Normalize field names, convert date formats (MM/DD/YYYY → YYYY-MM-DD), and ensure numerical values are properly formatted.  
+3. **Validation:** Detect missing fields, handle errors gracefully, and flag inconsistencies.  
+4. **Output Format:** Produce a well-structured JSON object with standardized keys, ensuring compliance with analytics-ready schemas. 
+5. **Error Handling:** If errors occur, provide detailed logs indicating issues and potential fixes.  
+
+Your responses must be precise, structured, and strictly adhere to these rules.'  
+
+Enhance my given system prompt accordingly.
+
+System prompt :
+\`\`\`
+Results should be under flag:
+<results>
+\`\`\`json
+{}
+\`\`\`
+</results>  
+\`\`\`

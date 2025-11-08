@@ -1,0 +1,153 @@
+[
+  {
+    "icon": "arch-symbolic",
+    "name": "Agent of Agents Inception Prompt Enhancer xddd",
+    "prompt": "ahahAgents/AgentEnhancer.txt",
+    "enabled": true
+  },
+  // 	{
+  // 		icon: "desktop-symbolic",
+  // 		name: "Algorithm thinking step 1",
+  // 		prompt: `## Role
+  // You are an expert senior 10x developer who uses vim.
+  // ### Algorithm (goal)
+  // ### Task
+  // Now to implement this algorithm and write the necessary code, we first are going to generate the boiler plate basic code for those edit, what are the blueprints and the basic bricks of the edits that we are going to implement.
+  // We will be generating the whole code later.
+  // Explain this in a complex reasoning process and step by step break down.
+  // I insist on do not generate the whole code now, that will come after. Keep it simple and focus on the reasoning rather than the code.`,
+  // 		enabled: true,
+  // 	},
+  // {
+  // 	icon: "arch-symbolic",
+  // 	name: "Remove orphan packages",
+  // 	command: `sudo pacman -R $(pacman -Qdtq)`,
+  // 	enabled: isArchDistro,
+  // },
+  // {
+  //   "icon": "arch-symbolic",
+  //   "name": "University formatting agent advanced",
+  //   "prompt": "",
+  //   "enabled": false
+  // },
+  // {
+  //   "icon": "arch-symbolic",
+  //   "name": "University formatting agent",
+  //   "prompt": "",
+  //   "enabled": false
+  // },
+  {
+    "icon": "desktop-symbolic",
+    "name": "Algorithm thinking step 0",
+    "prompt": "devPrompts/AlgorithmThinkStep0.txt",
+    "enabled": true
+  },
+  {
+    "icon": "desktop-symbolic",
+    "name": "Algorithm thinking step 1",
+    "prompt": "devPrompts/AlgorithmThinkStep1.txt",
+    "enabled": true
+  },
+  {
+    "icon": "desktop-symbolic",
+    "name": "Algorithm thinking step 1bis -end",
+    "prompt": "devPrompts/AlgorithmThinkStep1bisEnd.txt",
+    "enabled": true
+  },
+  {
+    "icon": "desktop-symbolic",
+    "name": "Algorithm thinking step 2 -end",
+    "prompt": "devPrompts/AlgorithmThinkStep2.txt",
+    "enabled": true
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Rework react component or file",
+    "prompt": "devPrompts/ReactComponentRework.txt",
+    "enabled": true
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Refactor ISO norms",
+    "prompt": "devPrompts/RefactorISOnorms.txt",
+    "enabled": true
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Refactor React best practices",
+    "prompt": "devPrompts/ReactComponentRefactorBestPractices.txt",
+    "enabled": true
+  },
+  {
+    "icon": "ubuntu-symbolic",
+    "name": "All in one Debug",
+    "prompt": "devPrompts/AllInOneDebug.txt",
+    "enabled": true
+  },
+  {
+    "icon": "ubuntu-symbolic",
+    "name": "Debug issue step 0",
+    "prompt": "devPrompts/DebugIssueStep0.txt",
+    "enabled": true
+  },
+  {
+    "icon": "ubuntu-symbolic",
+    "name": "Debug issue step 1",
+    "prompt": "devPrompts/DebugIssueStep1.txt",
+    "enabled": true
+  },
+  {
+    "icon": "arch-symbolic",
+    "name": "Very deep and Professional email",
+    "prompt": "wayyyytocringemessagePrompts/AHAHAHWAYTOODEEPEMAILPROMPT.txt",
+    "enabled": true
+  },
+  {
+    "icon": "arch-symbolic",
+    "name": "Professionnal message in french",
+    "prompt": "wayyyytocringemessagePrompts/PROFESSIONALMESSAGEINFRENCHAHAH.txt",
+    "enabled": true
+  },
+  {
+    "icon": "arch-symbolic",
+    "name": "Expense justification",
+    "prompt": "wayyyytocringemessagePrompts/HAHAHAHHHAAHEXPENSEJUSTIFICATION.txt",
+    "enabled": true
+  },
+  {
+    "icon": "flatpak-symbolic",
+    "name": "Resume Enhancer",
+    "prompt": "",
+    "enabled": false
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Moral psy tutor raw",
+    "prompt": "rolePrompts/MoralPsyTutorSourceRole.txt",
+    "enabled": true
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Psy tutor enhanced",
+    "prompt": "rolePrompts/PsyTutorEnhanced.txt",
+    "enabled": true
+  },
+  {
+    "icon": "nixos-symbolic",
+    "name": "Psy tutor enhanced and revised :moyai:",
+    "prompt": "rolePrompts/PsyTutorEnhancedAndRevised.txt",
+    "enabled": true
+  },
+  {
+    "icon": "fedora-symbolic",
+    "name": "website SEO improvement",
+    "prompt": "wayyyytocringemessagePrompts/SEOingWebsiteContent.txt",
+    "enabled": true
+  },
+  {
+    "icon": "fedora-symbolic",
+    "name": "Improve prompt",
+    "prompt": "fabricPrompts/PromptEnhancerPrompt.txt",
+    "enabled": true
+  }
+]

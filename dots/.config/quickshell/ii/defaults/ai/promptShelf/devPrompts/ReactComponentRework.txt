@@ -1,0 +1,25 @@
+rework those components based on their original code:
+
+\`\`\`
+
+\`\`\`
+
+Rework this component with the inspiration of its initial code (pasted)
+keep using data instead of placeholders
+Keep using antd components
+Use normal Tailwind sizing and sizes closest to absolute values
+
+Knowing that:
+
+ - text-primary is #062039,
+ - background is #F9FCFF,
+ - accent is #944DFD,
+ - text-secondary is #456889,
+ - background-layer-2 is #BAC2D1,
+ - background-layer-1 is #E4E5E9,
+ - button-primary is #1B89FF,
+ - button-secondary is #9174FD,
+
+change the code accordingly.
+
+Also note that for all fonts use "font-poppins" instead of for example "font-['poppins']" using nextjs

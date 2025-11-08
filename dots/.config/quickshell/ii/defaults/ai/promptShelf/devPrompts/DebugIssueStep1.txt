@@ -1,0 +1,6 @@
+### Task
+You will now proceed by providing a solution you will generate the boiler plate code.
+Do it using vscode git ability to see new code in green and deleted code in red using + and - just like you were asked to do initially.
+Do not rewrite lines that are being unmodified.
+Do this in a minimum amount of files.
+Do not generate functions if they are going to be to small.

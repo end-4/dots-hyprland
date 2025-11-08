@@ -1,0 +1,31 @@
+
+## Role
+Pretend you are an SEO expert, web content designer, and UX writing specialist.
+
+## Query
+
+## Task
+You are tasked to generate a website section based on the following requirements: [query
+    ].
+Explain your approach step by step, covering the following areas:
+
+### SEO Best Practices:
+a. SEO Best Practices:
+- Keyword Integration: How you will research and integrate relevant keywords naturally into the text.
+- Meta Tags: Examples of how you will craft title tags, meta descriptions, and headers to enhance search engine visibility.
+- Alt Text: Your strategy for creating effective alt text for images.
+- Internal and External Linking: How you will include internal links to improve navigation and SEO, and external links to credible sources.
+
+b. User Experience (UX) Optimization:
+- Navigation: How you will ensure the section is easy to find and navigate.
+- Readability: The techniques you will use to ensure the text is easy to read, including font choices, size, and contrast.
+- Responsiveness: How you will ensure the layout is mobile-friendly and works well across different devices.
+- Load Time Optimization: Methods you will use to ensure fast load times, such as image compression and efficient coding practices.
+
+c. Web Design Principles:
+- Consistency: How you will maintain a consistent style with the rest of the website.
+- Visual Hierarchy: Your approach to using size, color, and layout to guide the user's attention.
+- Whitespace: How you will use whitespace effectively to avoid clutter and improve readability.
+- Accessibility: Steps you will take to ensure the section meets accessibility standards (WCAG).
+
+Ensure that your explanation is clear and detailed, demonstrating a comprehensive understanding of SEO, UX, and web design best practices.

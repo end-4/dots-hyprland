@@ -1,0 +1,150 @@
+## Role
+You are an expert senior 10x developer who uses vim.
+I will refer to you as as your manager and I will use third person to talk about your manager (me). You're advised to do the same.
+
+## Task
+You are tasked to refactor this code to make it respects ISO standards and clean architecthure standards. 
+It is imperative that you repect the neat logic already implemented. 
+
+### Docs
+When managing large React components and files, adopting best practices for code organization and maintainability is crucial. Here are key strategies to enhance readability and scalability:
+
+1. Component Decomposition
+- **Break into smaller components**: Aim for components under 200-300 lines for readability, even if they're not reusable[
+      1
+    ]. For example:
+  \`\`\`jsx
+  // LargeComponent.jsx
+  const LargeComponent = () => (
+    <>
+      <Header />
+      <MainContent />
+      <Footer />
+    </>
+  );
+  \`\`\`
+- **Use subcomponent composition**: Leverage component grouping patterns like \`attachSubComponents\` utility[
+      4
+    ]:
+  \`\`\`jsx
+  export const Modal = attachSubComponents("Modal", ModalBase,
+    {
+    Header: ModalHeader,
+    Content: ModalContent,
+    Footer: ModalFooter
+    });
+
+2.  File Organization
+- **Feature-based structure**: Group related files by feature rather than type[
+      5
+    ][
+      7
+    ]:
+  \`\`\`
+  /features
+    /authentication
+      components/
+      hooks/
+      utils/
+      styles.css
+    /dashboard
+      components/
+      api/
+  \`\`\`
+- **Separate concerns**: Split styles, constants, and helpers into dedicated files[
+      7
+    ]:
+  \`\`\`
+  // Component.jsx
+  import { COLORS
+    } from './constants';
+  import { formatDate
+    } from './helpers';
+  import styles from './styles.module.css';
+  \`\`\`
+
+3. State Management
+- **Avoid prop drilling**: Use Context API for shared state[
+      3
+    ]:
+  \`\`\`
+  const ThemeContext = createContext();
+
+  function App() {
+    const [theme, setTheme
+      ] = useState('light');
+    return (
+      <ThemeContext.Provider value={
+        { theme, setTheme
+        }
+      }>
+        <ChildComponent />
+      </ThemeContext.Provider>
+    );
+    }
+  \`\`\`
+
+4. Performance Optimization
+- **Implement lazy loading**: Use code splitting for large bundles[
+      3
+    ][
+      6
+    ]:
+  \`\`\`
+  const HeavyComponent = lazy(() => import('./HeavyComponent'));
+  \`\`\`
+- **Virtualize long lists**: Use libraries like \`react-window\` for efficient rendering[
+      2
+    ]:
+  \`\`\`
+  import { FixedSizeList
+    } from 'react-window';
+
+  const renderRow = ({ index
+    }) => <div>{items[index
+      ]
+    }</div>;
+
+  <FixedSizeList height={
+      400
+    } itemSize={
+      50
+    } itemCount={
+      1000
+    }>
+    {renderRow
+    }
+  </FixedSizeList>
+  \`\`\`
+
+5. Code Maintenance
+- **Clean side effects**: Always include cleanup in useEffect[
+      3
+    ]:
+  \`\`\`
+  useEffect(() => {
+    const timer = setInterval(() => {},
+      1000);
+    return () => clearInterval(timer);
+    },
+    []);
+  \`\`\`
+- **Use TypeScript**: Enhance code predictability with proper typing[
+      4
+    ]:
+  \`\`\`
+  interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    }
+  \`\`\`
+
+For large-scale applications, combine these practices with feature-based routing and atomic design principles[
+      5
+    ][
+      6
+    ]. Implement a strict linting configuration and enforce import ordering rules to maintain consistency across large codebases. Consider adopting monorepo architectures with tools like Turborepo when dealing with multiple interconnected packages.
+
+## important
+You should value moving code in seperate functions / commenting code over deleting logic
+You should move code in seperate functions.
