@@ -14,48 +14,44 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
-   property list<var> resources: []
-
-Component.onCompleted: {
-    resources = [
+   property list<var> resources: [
         {
-            "icon": "planner_review",
-            "name": Translation.tr("CPU"),
-            "history": ResourceUsage.cpuUsageHistory,
-            "maxAvailableString": ResourceUsage.maxAvailableCpuString
+            icon: "planner_review",
+            name: Translation.tr("CPU"),
+            history: ResourceUsage.cpuUsageHistory,
+            maxAvailableString: ResourceUsage.maxAvailableCpuString,
+            available: true
         },
         {
-            "icon": "memory",
-            "name": Translation.tr("RAM"),
-            "history": ResourceUsage.memoryUsageHistory,
-            "maxAvailableString": ResourceUsage.maxAvailableMemoryString
+            icon: "memory",
+            name: Translation.tr("RAM"),
+            history: ResourceUsage.memoryUsageHistory,
+            maxAvailableString: ResourceUsage.maxAvailableMemoryString,
+            available: true
         },
         {
-            "icon": "swap_horiz",
-            "name": Translation.tr("Swap"),
-            "history": ResourceUsage.swapUsageHistory,
-            "maxAvailableString": ResourceUsage.maxAvailableSwapString
+            icon: "swap_horiz",
+            name: Translation.tr("Swap"),
+            history: ResourceUsage.swapUsageHistory,
+            maxAvailableString: ResourceUsage.maxAvailableSwapString,
+            available: true
+        },
+        {
+            icon: "empty_dashboard",
+            name: Translation.tr("IGPU"),
+            history: ResourceUsage.iGpuUsageHistory,
+            maxAvailableString: ResourceUsage.maxAvailableIGpuString,
+            available: ResourceUsage.iGpuAvailable
+        },
+        {
+            icon: "empty_dashboard",
+            name: Translation.tr("DGPU"),
+            history: ResourceUsage.dGpuUsageHistory,
+            maxAvailableString: ResourceUsage.maxAvailableDGpuString,
+            available: ResourceUsage.dGpuAvailable
         }
-    ];
+    ].filter(r => r.available) 
 
-    if (ResourceUsage.iGpuAvailable) {
-        resources.push({
-            "icon": "empty_dashboard",
-            "name": Translation.tr("IGPU"),
-            "history": ResourceUsage.iGpuUsageHistory,
-            "maxAvailableString": ResourceUsage.maxAvailabledIGpuString
-        });
-    }
-
-    if (ResourceUsage.dGpuAvailable) {
-        resources.push({
-            "icon": "empty_dashboard",
-            "name": Translation.tr("DGPU"),
-            "history": ResourceUsage.dGpuUsageHistory,
-            "maxAvailableString": ResourceUsage.maxAvailabledDGpuString
-        });
-    }
-}
 
     contentItem: Rectangle {
         id: contentItem

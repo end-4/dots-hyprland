@@ -210,7 +210,6 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished:{
         iGpuAvailable =  this.text.indexOf("No GPU available") ==-1
-        print(this.text.indexOf("No GPU available"))
         if(iGpuAvailable){
           iGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] /  100 ?? 0
           const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/)
