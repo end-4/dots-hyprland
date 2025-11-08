@@ -154,13 +154,13 @@ ContentPage {
                         };
                     })]
 
-                Component.onCompleted: {
+                currentIndex: {
                     for (let i = 0; i < model.length; i++) {
                         if (model[i].value === Config.options.language.ui) {
-                            currentIndex = i;
-                            break;
+                            return i;
                         }
                     }
+                    return 0;
                 }
 
                 onActivated: index => {
