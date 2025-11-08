@@ -116,7 +116,7 @@ ComboBox {
     popup: Popup {
         y: root.height + 4
         width: root.width
-        implicitHeight: Math.min(contentItem.implicitHeight, 300)
+        height: Math.min(listView.contentHeight + topPadding + bottomPadding, 300)
         padding: 8
 
         background: Rectangle {
@@ -125,6 +125,7 @@ ComboBox {
         }
 
         contentItem: ListView {
+            id: listView
             clip: true
             implicitHeight: contentHeight
             model: root.popup.visible ? root.delegateModel : null
