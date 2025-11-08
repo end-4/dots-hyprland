@@ -59,6 +59,9 @@ case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
     warning_rsync_delete; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    if [ "$OS_DISTRO_ID" = "fedora" ];then
+      v rsync -av "${REPO_ROOT}/dots-extra/fedora/hypr/hyprland/execs.conf" "$XDG_CONFIG_HOME/hypr/hyprland/execs.conf"
+    fi
     # When hypr/custom does not exist, we assume that it's the firstrun.
     if [ -d "$XDG_CONFIG_HOME/hypr/custom" ];then ii_firstrun=false;else ii_firstrun=true;fi
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
