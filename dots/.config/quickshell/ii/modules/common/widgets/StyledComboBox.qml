@@ -64,13 +64,14 @@ ComboBox {
 
     delegate: ItemDelegate {
         id: itemDelegate
-        width: root.width
+        width: ListView.view ? ListView.view.width : root.width
         height: 40
 
         required property var model
         required property int index
 
         background: Rectangle {
+            anchors.fill: parent
             radius: Appearance.rounding.small
             color: root.currentIndex === itemDelegate.index ? Appearance.colors.colPrimary : itemDelegate.down ? Appearance.colors.colSecondaryContainerActive : itemDelegate.hovered ? Appearance.colors.colSecondaryContainerHover : "transparent"
 
