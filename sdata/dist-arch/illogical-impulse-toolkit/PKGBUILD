@@ -1,0 +1,11 @@
+pkgname=illogical-impulse-toolkit
+pkgver=1.0
+pkgrel=2
+pkgdesc='Illogical Impulse Toolkit Dependencies'
+arch=(any)
+license=(None)
+depends=(
+  upower
+  wtype
+  ydotool
+)

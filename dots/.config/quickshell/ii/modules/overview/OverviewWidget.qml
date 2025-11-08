@@ -1,8 +1,10 @@
+pragma ComponentBehavior: Bound
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -30,6 +32,8 @@ Item {
     property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
         ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
         ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
+    property real largeWorkspaceRadius: Appearance.rounding.large
+    property real smallWorkspaceRadius: Appearance.rounding.verysmall
 
     property real workspaceNumberMargin: 80
     property real workspaceNumberSize: 250 * monitor.scale
@@ -58,10 +62,8 @@ Item {
 
         implicitWidth: workspaceColumnLayout.implicitWidth + padding * 2
         implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
-        radius: Appearance.rounding.screenRounding * root.scale + padding
-        color: Appearance.colors.colLayer0
-        border.width: 1
-        border.color: Appearance.colors.colLayer0Border
+        radius: root.largeWorkspaceRadius + padding
+        color: Appearance.colors.colBackgroundSurfaceContainer
 
         Column { // Workspaces
             id: workspaceColumnLayout
@@ -69,20 +71,22 @@ Item {
             z: root.workspaceZ
             anchors.centerIn: parent
             spacing: workspaceSpacing
+            
             Repeater {
                 model: Config.options.overview.rows
                 delegate: Row {
                     id: row
-                    property int rowIndex: index
+                    required property int index
                     spacing: workspaceSpacing
 
                     Repeater { // Workspace repeater
                         model: Config.options.overview.columns
                         Rectangle { // Workspace
                             id: workspace
+                            required property int index
                             property int colIndex: index
-                            property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * Config.options.overview.columns + colIndex + 1
-                            property color defaultWorkspaceColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
+                            property int workspaceValue: root.workspaceGroup * root.workspacesShown + row.index * Config.options.overview.columns + colIndex + 1
+                            property color defaultWorkspaceColor: ColorUtils.mix(Appearance.colors.colBackgroundSurfaceContainer, Appearance.colors.colSurfaceContainerHigh, 0.8)
                             property color hoveredWorkspaceColor: ColorUtils.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
                             property bool hoveredWhileDragging: false
@@ -90,13 +94,20 @@ Item {
                             implicitWidth: root.workspaceImplicitWidth
                             implicitHeight: root.workspaceImplicitHeight
                             color: hoveredWhileDragging ? hoveredWorkspaceColor : defaultWorkspaceColor
-                            radius: Appearance.rounding.screenRounding * root.scale
+                            property bool workspaceAtLeft: colIndex === 0
+                            property bool workspaceAtRight: colIndex === Config.options.overview.columns - 1
+                            property bool workspaceAtTop: row.index === 0
+                            property bool workspaceAtBottom: row.index === Config.options.overview.rows - 1
+                            topLeftRadius: (workspaceAtLeft && workspaceAtTop) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                            topRightRadius: (workspaceAtRight && workspaceAtTop) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                            bottomLeftRadius: (workspaceAtLeft && workspaceAtBottom) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                            bottomRightRadius: (workspaceAtRight && workspaceAtBottom) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
                             border.width: 2
                             border.color: hoveredWhileDragging ? hoveredBorderColor : "transparent"
 
                             StyledText {
                                 anchors.centerIn: parent
-                                text: workspaceValue
+                                text: workspace.workspaceValue
                                 font {
                                     pixelSize: root.workspaceNumberSize * root.scale
                                     weight: Font.DemiBold
@@ -114,7 +125,7 @@ Item {
                                 onPressed: {
                                     if (root.draggingTargetWorkspace === -1) {
                                         GlobalStates.overviewOpen = false
-                                        Hyprland.dispatch(`workspace ${workspaceValue}`)
+                                        Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
                                     }
                                 }
                             }
@@ -122,13 +133,13 @@ Item {
                             DropArea {
                                 anchors.fill: parent
                                 onEntered: {
-                                    root.draggingTargetWorkspace = workspaceValue
+                                    root.draggingTargetWorkspace = workspace.workspaceValue
                                     if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
                                     hoveredWhileDragging = true
                                 }
                                 onExited: {
                                     hoveredWhileDragging = false
-                                    if (root.draggingTargetWorkspace == workspaceValue) root.draggingTargetWorkspace = -1
+                                    if (root.draggingTargetWorkspace == workspace.workspaceValue) root.draggingTargetWorkspace = -1
                                 }
                             }
 
@@ -165,17 +176,41 @@ Item {
                     toplevel: modelData
                     monitorData: this.monitor
                     scale: root.scale
-                    availableWorkspaceWidth: root.workspaceImplicitWidth
-                    availableWorkspaceHeight: root.workspaceImplicitHeight
                     widgetMonitor: HyprlandData.monitors.find(m => m.id == root.monitor.id)
                     windowData: windowByAddress[address]
 
                     property bool atInitPosition: (initX == x && initY == y)
 
+                    // Offset on the canvas
                     property int workspaceColIndex: (windowData?.workspace.id - 1) % Config.options.overview.columns
                     property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / Config.options.overview.columns)
                     xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex
                     yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex
+                    property real xWithinWorkspaceWidget: Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0)
+                    property real yWithinWorkspaceWidget: Math.max((windowData?.at[1] - (monitor?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0)
+
+                    // Radius
+                    property real minRadius: Appearance.rounding.small
+                    property bool workspaceAtLeft: workspaceColIndex === 0
+                    property bool workspaceAtRight: workspaceColIndex === Config.options.overview.columns - 1
+                    property bool workspaceAtTop: workspaceRowIndex === 0
+                    property bool workspaceAtBottom: workspaceRowIndex === Config.options.overview.rows - 1
+                    property bool workspaceAtTopLeft: (workspaceAtLeft && workspaceAtTop) 
+                    property bool workspaceAtTopRight: (workspaceAtRight && workspaceAtTop) 
+                    property bool workspaceAtBottomLeft: (workspaceAtLeft && workspaceAtBottom) 
+                    property bool workspaceAtBottomRight: (workspaceAtRight && workspaceAtBottom) 
+                    property real distanceFromLeftEdge: xWithinWorkspaceWidget
+                    property real distanceFromRightEdge: root.workspaceImplicitWidth - (xWithinWorkspaceWidget + targetWindowWidth)
+                    property real distanceFromTopEdge: yWithinWorkspaceWidget
+                    property real distanceFromBottomEdge: root.workspaceImplicitHeight - (yWithinWorkspaceWidget + targetWindowHeight)
+                    property real distanceFromTopLeftCorner: Math.max(distanceFromLeftEdge, distanceFromTopEdge)
+                    property real distanceFromTopRightCorner: Math.max(distanceFromRightEdge, distanceFromTopEdge)
+                    property real distanceFromBottomLeftCorner: Math.max(distanceFromLeftEdge, distanceFromBottomEdge)
+                    property real distanceFromBottomRightCorner: Math.max(distanceFromRightEdge, distanceFromBottomEdge)
+                    topLeftRadius: Math.max((workspaceAtTopLeft ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromTopLeftCorner, minRadius)
+                    topRightRadius: Math.max((workspaceAtTopRight ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromTopRightCorner, minRadius)
+                    bottomLeftRadius: Math.max((workspaceAtBottomLeft ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromBottomLeftCorner, minRadius)
+                    bottomRightRadius: Math.max((workspaceAtBottomRight ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromBottomRightCorner, minRadius)
 
                     Timer {
                         id: updateWindowPosition
@@ -183,14 +218,14 @@ Item {
                         repeat: false
                         running: false
                         onTriggered: {
-                            window.x = Math.round(Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0) + xOffset)
-                            window.y = Math.round(Math.max((windowData?.at[1] - (monitor?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0) + yOffset)
+                            window.x = Math.round(xWithinWorkspaceWidget + xOffset)
+                            window.y = Math.round(yWithinWorkspaceWidget + yOffset)
                         }
                     }
 
                     z: Drag.active ? root.windowDraggingZ : (root.windowZ + windowData?.floating)
-                    Drag.hotSpot.x: targetWindowWidth / 2
-                    Drag.hotSpot.y: targetWindowHeight / 2
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
                     MouseArea {
                         id: dragArea
                         anchors.fill: parent
@@ -252,15 +287,22 @@ Item {
             Rectangle { // Focused workspace indicator
                 id: focusedWorkspaceIndicator
                 property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
-                property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / Config.options.overview.columns)
-                property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % Config.options.overview.columns
-                x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
-                y: (root.workspaceImplicitHeight + workspaceSpacing) * activeWorkspaceRowIndex
+                property int rowIndex: Math.floor((activeWorkspaceInGroup - 1) / Config.options.overview.columns)
+                property int colIndex: (activeWorkspaceInGroup - 1) % Config.options.overview.columns
+                x: (root.workspaceImplicitWidth + workspaceSpacing) * colIndex
+                y: (root.workspaceImplicitHeight + workspaceSpacing) * rowIndex
                 z: root.windowZ
                 width: root.workspaceImplicitWidth
                 height: root.workspaceImplicitHeight
                 color: "transparent"
-                radius: Appearance.rounding.screenRounding * root.scale
+                property bool workspaceAtLeft: colIndex === 0
+                property bool workspaceAtRight: colIndex === Config.options.overview.columns - 1
+                property bool workspaceAtTop: rowIndex === 0
+                property bool workspaceAtBottom: rowIndex === Config.options.overview.rows - 1
+                topLeftRadius: (workspaceAtLeft && workspaceAtTop) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                topRightRadius: (workspaceAtRight && workspaceAtTop) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                bottomLeftRadius: (workspaceAtLeft && workspaceAtBottom) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
+                bottomRightRadius: (workspaceAtRight && workspaceAtBottom) ? root.largeWorkspaceRadius : root.smallWorkspaceRadius
                 border.width: 2
                 border.color: root.activeBorderColor
                 Behavior on x {
@@ -268,6 +310,18 @@ Item {
                 }
                 Behavior on y {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on topLeftRadius {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                }
+                Behavior on topRightRadius {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                }
+                Behavior on bottomLeftRadius {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                }
+                Behavior on bottomRightRadius {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
             }
         }

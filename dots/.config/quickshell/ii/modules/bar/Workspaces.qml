@@ -1,6 +1,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
@@ -163,12 +164,12 @@ Item {
             horizontalCenter: vertical ? parent.horizontalCenter : undefined
         }
 
-        // idx1 is the "leading" indicator position, idx2 is the "following" one
-        // The former animates faster than the latter, see the NumberAnimations below
-        property real idx1: workspaceIndexInGroup
-        property real idx2: workspaceIndexInGroup
-        property real indicatorPosition: Math.min(idx1, idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
-        property real indicatorLength: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2
+        AnimatedTabIndexPair {
+            id: idxPair
+            index: root.workspaceIndexInGroup
+        }
+        property real indicatorPosition: Math.min(idxPair.idx1, idxPair.idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
+        property real indicatorLength: Math.abs(idxPair.idx1 - idxPair.idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2
         property real indicatorThickness: workspaceButtonWidth - root.activeWorkspaceMargin * 2
 
         x: root.vertical ? null : indicatorPosition
@@ -176,18 +177,6 @@ Item {
         y: root.vertical ? indicatorPosition : null
         implicitHeight: root.vertical ? indicatorLength : indicatorThickness
 
-        Behavior on idx1 {
-            NumberAnimation {
-                duration: 100
-                easing.type: Easing.OutSine
-            }
-        }
-        Behavior on idx2 {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutSine
-            }
-        }
     }
 
     // Workspaces - numbers
@@ -232,7 +221,7 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         font {
                             pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
-                            family: Config.options?.bar.workspaces.useNerdFont ? Appearance.font.family.iconNerd : Appearance.font.family.main
+                            family: Config.options?.bar.workspaces.useNerdFont ? Appearance.font.family.iconNerd : defaultFont
                         }
                         text: Config.options?.bar.workspaces.numberMap[button.workspaceValue - 1] || button.workspaceValue
                         elide: Text.ElideRight

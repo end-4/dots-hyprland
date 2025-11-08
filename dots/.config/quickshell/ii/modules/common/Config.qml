@@ -145,32 +145,44 @@ Singleton {
             }
 
             property JsonObject background: JsonObject {
-                property JsonObject clock: JsonObject {
-                    property bool fixedPosition: false
-                    property real x: -500
-                    property real y: -500
-                    property bool show: true
-                    property string style: "cookie" // Options: "cookie", "digital"
-                    property real scale: 1
-                    property JsonObject cookie: JsonObject {
-                        property bool aiStyling: false
-                        property int sides: 14
-                        property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
-                        property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
-                        property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
-                        property string secondHandStyle: "dot"    // Options: "dot", "line", "classic", "hide"
-                        property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
-                        property bool timeIndicators: true
-                        property bool hourMarks: false
-                        property bool dateInClock: true
-                        property bool constantlyRotate: false
+                property JsonObject widgets: JsonObject {
+                    property JsonObject clock: JsonObject {
+                        property bool enable: true
+                        property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
+                        property real x: 100
+                        property real y: 100
+                        property string style: "cookie" // Options: "cookie", "digital"
+                        property JsonObject cookie: JsonObject {
+                            property bool aiStyling: false
+                            property int sides: 14
+                            property string dialNumberStyle: "full"   // Options: "dots" , "numbers", "full" , "none"
+                            property string hourHandStyle: "fill"     // Options: "classic", "fill", "hollow", "hide"
+                            property string minuteHandStyle: "medium" // Options "classic", "thin", "medium", "bold", "hide"
+                            property string secondHandStyle: "dot"    // Options: "dot", "line", "classic", "hide"
+                            property string dateStyle: "bubble"       // Options: "border", "rect", "bubble" , "hide"
+                            property bool timeIndicators: true
+                            property bool hourMarks: false
+                            property bool dateInClock: true
+                            property bool constantlyRotate: false
+                            property bool useSineCookie: false
+                        }
+                        property JsonObject digital: JsonObject {
+                            property bool animateChange: true
+                        }
+                        property JsonObject quote: JsonObject {
+                            property bool enable: false
+                            property string text: ""
+                        }
                     }
-                    
+                    property JsonObject weather: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 400
+                        property real y: 100
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
-                property string quote: ""
-                property bool showQuote: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
@@ -178,7 +190,7 @@ Singleton {
                     property bool enableWorkspace: true
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
-                    property real clockFactor: 1.2
+                    property real widgetsFactor: 1.2
                 }
             }
 
@@ -194,6 +206,7 @@ Singleton {
                 }
                 property bool bottom: false // Instead of top
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
+                property bool floatStyleShadow: true // Show shadow behind bar when cornerStyle == 1 (Float)
                 property bool borderless: false // true for no grouping of items
                 property string topLeftIcon: "spark" // Options: "distro" or any icon name in ~/.config/quickshell/ii/assets/icons
                 property bool showBackground: true
@@ -252,6 +265,22 @@ Singleton {
                 property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
+            }
+
+            property JsonObject cheatsheet: JsonObject {
+                // Use a nerdfont to see the icons
+                // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
+                // 5:  | 6:  | 7: 󰣇 | 8:  | 9: 
+                // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
+                property string superKey: "󰖳"
+                property bool useMacSymbol: false
+                property bool splitButtons: true
+                property bool useMouseSymbol: false
+                property bool useFnSymbol: false
+                property JsonObject fontSize: JsonObject {
+                    property int key: Appearance.font.pixelSize.smaller
+                    property int comment: Appearance.font.pixelSize.smaller
+                }
             }
 
             property JsonObject conflictKiller: JsonObject {
@@ -313,7 +342,7 @@ Singleton {
                 property bool useHyprlock: false
                 property bool launchOnStartup: false
                 property JsonObject blur: JsonObject {
-                    property bool enable: false
+                    property bool enable: true
                     property real radius: 100
                     property real extraZoom: 1.1
                 }
@@ -323,6 +352,7 @@ Singleton {
                     property bool unlockKeyring: true
                     property bool requirePasswordToPower: false
                 }
+                property bool materialShapeChars: true
             }
 
             property JsonObject media: JsonObject {
@@ -347,11 +377,18 @@ Singleton {
                 property bool pinnedOnStartup: false
             }
 
+            property JsonObject overlay: JsonObject {
+                property bool openingZoomAnimation: true
+                property bool darkenScreen: true
+                property real clickthroughOpacity: 0.7
+            }
+
             property JsonObject overview: JsonObject {
                 property bool enable: true
                 property real scale: 0.18 // Relative to screen size
                 property real rows: 2
                 property real columns: 5
+                property bool centerIcons: true
             }
 
             property JsonObject regionSelector: JsonObject {
@@ -362,6 +399,7 @@ Singleton {
                     property bool showLabel: false
                     property real opacity: 0.3
                     property real contentRegionOpacity: 0.8
+                    property int selectionPadding: 5
                 }
                 property JsonObject rect: JsonObject {
                     property bool showAimLines: true
@@ -374,6 +412,12 @@ Singleton {
 
             property JsonObject resources: JsonObject {
                 property int updateInterval: 3000
+                property int historyLength: 60
+            }
+
+            property JsonObject musicRecognition: JsonObject {
+                property int timeout: 16
+                property int interval: 4
             }
 
             property JsonObject search: JsonObject {
@@ -404,7 +448,7 @@ Singleton {
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
                 }
                 property JsonObject ai: JsonObject {
-                    property bool textFadeIn: true
+                    property bool textFadeIn: false
                 }
                 property JsonObject booru: JsonObject {
                     property bool allowNsfw: false
@@ -419,10 +463,11 @@ Singleton {
                     property bool bottom: false
                     property bool valueScroll: true
                     property bool clickless: false
-                    property real cornerRegionWidth: 250
-                    property real cornerRegionHeight: 2
+                    property int cornerRegionWidth: 250
+                    property int cornerRegionHeight: 5
                     property bool visualize: false
                     property bool clicklessCornerEnd: true
+                    property int clicklessCornerVerticalOffset: 1
                 }
 
                 property JsonObject quickToggles: JsonObject {
@@ -446,6 +491,14 @@ Singleton {
                     property bool showVolume: true
                     property bool showBrightness: true
                 }
+            }
+
+            property JsonObject screenRecord: JsonObject {
+                property string savePath: Directories.videos.replace("file://","") // strip "file://"
+            }
+
+            property JsonObject screenSnip: JsonObject {
+                property string savePath: "" // only copy to clipboard when empty
             }
 
             property JsonObject sounds: JsonObject {

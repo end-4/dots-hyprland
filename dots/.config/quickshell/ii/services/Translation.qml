@@ -122,7 +122,6 @@ Singleton {
         signal contentLoaded(var data)
 
         function reread() { // Proper reload in case the file was incorrect before
-            print("rereading translations for", translationReader.languageCode);
             translationReader.path = "";
             translationReader.path = `${translationReader.translationsDir}/${translationReader.languageCode}.json`;
             translationReader.reload();

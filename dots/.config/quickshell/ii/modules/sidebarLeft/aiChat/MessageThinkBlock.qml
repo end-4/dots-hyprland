@@ -11,13 +11,13 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
     // These are needed on the parent loader
-    property bool editing: parent?.editing ?? false
-    property bool renderMarkdown: parent?.renderMarkdown ?? true
-    property bool enableMouseSelection: parent?.enableMouseSelection ?? false
-    property string segmentContent: parent?.segmentContent ?? ({})
-    property var messageData: parent?.messageData ?? {}
-    property bool done: parent?.done ?? true
-    property bool completed: parent?.completed ?? false
+    property bool editing: false
+    property bool renderMarkdown: true
+    property bool enableMouseSelection: false
+    property var segmentContent: ({})
+    property var messageData: {}
+    property bool done: true
+    property bool completed: false
 
     property real thinkBlockBackgroundRounding: Appearance.rounding.small
     property real thinkBlockHeaderPaddingVertical: 3

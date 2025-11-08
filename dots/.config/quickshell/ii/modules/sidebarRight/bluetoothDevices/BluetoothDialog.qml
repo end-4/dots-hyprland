@@ -15,6 +15,7 @@ import Quickshell.Hyprland
 
 WindowDialog {
     id: root
+    backgroundHeight: 600
 
     WindowDialogTitle {
         text: Translation.tr("Bluetooth devices")

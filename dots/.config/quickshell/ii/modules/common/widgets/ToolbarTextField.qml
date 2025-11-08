@@ -15,7 +15,12 @@ TextField {
 
     placeholderTextColor: Appearance.colors.colSubtext
     color: Appearance.colors.colOnLayer1
-    font.pixelSize: Appearance.font.pixelSize.small
+    font {
+        family: Appearance.font.family.main
+        pixelSize: Appearance.font.pixelSize.small
+        hintingPreference: Font.PreferFullHinting
+        variableAxes: Appearance.font.variableAxes.main
+    }
     renderType: Text.NativeRendering
     selectedTextColor: Appearance.colors.colOnSecondaryContainer
     selectionColor: Appearance.colors.colSecondaryContainer

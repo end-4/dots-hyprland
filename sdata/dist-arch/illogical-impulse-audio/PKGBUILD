@@ -1,0 +1,15 @@
+pkgname=illogical-impulse-audio
+pkgver=1.0
+pkgrel=2
+pkgdesc='Illogical Impulse Audio Dependencies'
+arch=(any)
+license=(None)
+depends=(
+  cava
+  pavucontrol-qt
+  wireplumber
+  pipewire-pulse
+  libdbusmenu-gtk3
+  playerctl
+)
+
