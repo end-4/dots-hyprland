@@ -38,78 +38,156 @@ Singleton {
     property real backgroundTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoBackgroundTransparency : Config?.options.appearance.transparency.backgroundTransparency : 0
     property real contentTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoContentTransparency : Config?.options.appearance.transparency.contentTransparency : 0
 
-    m3colors: QtObject {
-        property bool darkmode: true
-        property bool transparent: false
-        property color m3background: "#141313"
-        property color m3onBackground: "#e6e1e1"
-        property color m3surface: "#141313"
-        property color m3surfaceDim: "#141313"
-        property color m3surfaceBright: "#3a3939"
-        property color m3surfaceContainerLowest: "#0f0e0e"
-        property color m3surfaceContainerLow: "#1c1b1c"
-        property color m3surfaceContainer: "#201f20"
-        property color m3surfaceContainerHigh: "#2b2a2a"
-        property color m3surfaceContainerHighest: "#363435"
-        property color m3onSurface: "#e6e1e1"
-        property color m3surfaceVariant: "#49464a"
-        property color m3onSurfaceVariant: "#cbc5ca"
-        property color m3inverseSurface: "#e6e1e1"
-        property color m3inverseOnSurface: "#313030"
-        property color m3outline: "#948f94"
-        property color m3outlineVariant: "#49464a"
-        property color m3shadow: "#000000"
-        property color m3scrim: "#000000"
-        property color m3surfaceTint: "#cbc4cb"
-        property color m3primary: "#cbc4cb"
-        property color m3onPrimary: "#322f34"
-        property color m3primaryContainer: "#2d2a2f"
-        property color m3onPrimaryContainer: "#bcb6bc"
-        property color m3inversePrimary: "#615d63"
-        property color m3secondary: "#cac5c8"
-        property color m3onSecondary: "#323032"
-        property color m3secondaryContainer: "#4d4b4d"
-        property color m3onSecondaryContainer: "#ece6e9"
-        property color m3tertiary: "#d1c3c6"
-        property color m3onTertiary: "#372e30"
-        property color m3tertiaryContainer: "#31292b"
-        property color m3onTertiaryContainer: "#c1b4b7"
-        property color m3error: "#ffb4ab"
-        property color m3onError: "#690005"
-        property color m3errorContainer: "#93000a"
-        property color m3onErrorContainer: "#ffdad6"
-        property color m3primaryFixed: "#e7e0e7"
-        property color m3primaryFixedDim: "#cbc4cb"
-        property color m3onPrimaryFixed: "#1d1b1f"
-        property color m3onPrimaryFixedVariant: "#49454b"
-        property color m3secondaryFixed: "#e6e1e4"
-        property color m3secondaryFixedDim: "#cac5c8"
-        property color m3onSecondaryFixed: "#1d1b1d"
-        property color m3onSecondaryFixedVariant: "#484648"
-        property color m3tertiaryFixed: "#eddfe1"
-        property color m3tertiaryFixedDim: "#d1c3c6"
-        property color m3onTertiaryFixed: "#211a1c"
-        property color m3onTertiaryFixedVariant: "#4e4447"
-        property color m3success: "#B5CCBA"
-        property color m3onSuccess: "#213528"
-        property color m3successContainer: "#374B3E"
-        property color m3onSuccessContainer: "#D1E9D6"
-        property color term0: "#EDE4E4"
-        property color term1: "#B52755"
-        property color term2: "#A97363"
-        property color term3: "#AF535D"
-        property color term4: "#A67F7C"
-        property color term5: "#B2416B"
-        property color term6: "#8D76AD"
-        property color term7: "#272022"
-        property color term8: "#0E0D0D"
-        property color term9: "#B52755"
-        property color term10: "#A97363"
-        property color term11: "#AF535D"
-        property color term12: "#A67F7C"
-        property color term13: "#B2416B"
-        property color term14: "#8D76AD"
-        property color term15: "#221A1A"
+    // m3colors: QtObject {
+    //     property bool darkmode: true
+    //     property bool transparent: false
+    //     property color m3background: "#141313"
+    //     property color m3onBackground: "#e6e1e1"
+    //     property color m3surface: "#141313"
+    //     property color m3surfaceDim: "#141313"
+    //     property color m3surfaceBright: "#3a3939"
+    //     property color m3surfaceContainerLowest: "#0f0e0e"
+    //     property color m3surfaceContainerLow: "#1c1b1c"
+    //     property color m3surfaceContainer: "#201f20"
+    //     property color m3surfaceContainerHigh: "#2b2a2a"
+    //     property color m3surfaceContainerHighest: "#363435"
+    //     property color m3onSurface: "#e6e1e1"
+    //     property color m3surfaceVariant: "#49464a"
+    //     property color m3onSurfaceVariant: "#cbc5ca"
+    //     property color m3inverseSurface: "#e6e1e1"
+    //     property color m3inverseOnSurface: "#313030"
+    //     property color m3outline: "#948f94"
+    //     property color m3outlineVariant: "#49464a"
+    //     property color m3shadow: "#000000"
+    //     property color m3scrim: "#000000"
+    //     property color m3surfaceTint: "#cbc4cb"
+    //     property color m3primary: "#cbc4cb"
+    //     property color m3onPrimary: "#322f34"
+    //     property color m3primaryContainer: "#2d2a2f"
+    //     property color m3onPrimaryContainer: "#bcb6bc"
+    //     property color m3inversePrimary: "#615d63"
+    //     property color m3secondary: "#cac5c8"
+    //     property color m3onSecondary: "#323032"
+    //     property color m3secondaryContainer: "#4d4b4d"
+    //     property color m3onSecondaryContainer: "#ece6e9"
+    //     property color m3tertiary: "#d1c3c6"
+    //     property color m3onTertiary: "#372e30"
+    //     property color m3tertiaryContainer: "#31292b"
+    //     property color m3onTertiaryContainer: "#c1b4b7"
+    //     property color m3error: "#ffb4ab"
+    //     property color m3onError: "#690005"
+    //     property color m3errorContainer: "#93000a"
+    //     property color m3onErrorContainer: "#ffdad6"
+    //     property color m3primaryFixed: "#e7e0e7"
+    //     property color m3primaryFixedDim: "#cbc4cb"
+    //     property color m3onPrimaryFixed: "#1d1b1f"
+    //     property color m3onPrimaryFixedVariant: "#49454b"
+    //     property color m3secondaryFixed: "#e6e1e4"
+    //     property color m3secondaryFixedDim: "#cac5c8"
+    //     property color m3onSecondaryFixed: "#1d1b1d"
+    //     property color m3onSecondaryFixedVariant: "#484648"
+    //     property color m3tertiaryFixed: "#eddfe1"
+    //     property color m3tertiaryFixedDim: "#d1c3c6"
+    //     property color m3onTertiaryFixed: "#211a1c"
+    //     property color m3onTertiaryFixedVariant: "#4e4447"
+    //     property color m3success: "#B5CCBA"
+    //     property color m3onSuccess: "#213528"
+    //     property color m3successContainer: "#374B3E"
+    //     property color m3onSuccessContainer: "#D1E9D6"
+    //     property color term0: "#EDE4E4"
+    //     property color term1: "#B52755"
+    //     property color term2: "#A97363"
+    //     property color term3: "#AF535D"
+    //     property color term4: "#A67F7C"
+    //     property color term5: "#B2416B"
+    //     property color term6: "#121213ff"
+    //     property color term7: "#272022"
+    //     property color term8: "#0E0D0D"
+    //     property color term9: "#B52755"
+    //     property color term10: "#A97363"
+    //     property color term11: "#AF535D"
+    //     property color term12: "#A67F7C"
+    //     property color term13: "#B2416B"
+    //     property color term14: "#8D76AD"
+    //     property color term15: "#221A1A"
+    // }
+    m3colors: QtObject { // my own colors
+        property bool darkmode: false
+property bool transparent: false
+property color m3primary_paletteKeyColor: "#9C27B0"        // GRAPE_500
+property color m3secondary_paletteKeyColor: "#6A7CE0"      // BLUEBERRY_300
+property color m3tertiary_paletteKeyColor: "#F15D22"       // STRAWBERRY_500
+property color m3neutral_paletteKeyColor: "#574F4A"        // COCOA_500
+property color m3neutral_variant_paletteKeyColor: "#CCC"   // SILVER_300
+property color m3background: "#EDECEE"                    // theme_bg_color
+property color m3onBackground: "#293A52"                  // theme_fg_color
+property color m3surface: "#EDECEE"                       // theme_bg_color (same as window)
+property color m3surfaceDim: "#EEE"                       // SILVER_100
+property color m3surfaceBright: "#CCC"                    // SILVER_300
+property color m3surfaceContainerLowest: "#FFF"           // pure white for lowest container
+property color m3surfaceContainerLow: "#F7F7F7"           // very light
+property color m3surfaceContainer: "#EFEFF0"              // subtle container surface
+property color m3surfaceContainerHigh: "#E6E6E6"
+property color m3surfaceContainerHighest: "#DDDDDD"
+property color m3onSurface: "#293A52"                      // theme_fg_color (dark text)
+property color m3surfaceVariant: "#F2DCF3"                 // using lighter lavender (matches secondaryFixed feel)
+property color m3onSurfaceVariant: "#574F4A"
+property color m3inverseSurface: "#293A52"                 // dark for inverse surfaces
+property color m3inverseOnSurface: "#EDECEE"
+property color m3outline: "#293A52"           // borders
+property color m3outlineVariant: "#E6CCFF"                // insensitive_base_color-ish
+property color m3shadow: "#000000"
+property color m3scrim: "#000000"
+property color m3surfaceTint: "#D25DE6"                   // GRAPE_100 (soft tint)
+property color m3primary: "#9C27B0"                       // GRAPE_500 (primary accent)
+property color m3onPrimary: "#FFFFFF"
+property color m3primaryContainer: "#D25DE6"              // GRAPE_100 (light container)
+property color m3onPrimaryContainer: "#293A52"
+property color m3inversePrimary: "#3A4F6B"                 // accent_color as inverse-ish
+property color m3secondary: "#6A7CE0"                     // BLUEBERRY_300
+property color m3onSecondary: "#FFFFFF"
+property color m3secondaryContainer: "#94A6FF"            // BLUEBERRY_100
+property color m3onSecondaryContainer: "#293A52"
+property color m3tertiary: "#F15D22"                      // STRAWBERRY_500 (vibrant accent)
+property color m3onTertiary: "#FFFFFF"
+property color m3tertiaryContainer: "#FF9262"             // STRAWBERRY_100-ish
+property color m3onTertiaryContainer: "#293A52"
+property color m3error: "#F28B82"                         // error_color
+property color m3onError: "#FFFFFF"
+property color m3errorContainer: "#FFB4AB"
+property color m3onErrorContainer: "#690005"
+property color m3primaryFixed: "#F2DCF3"
+property color m3primaryFixedDim: "#D25DE6"
+property color m3onPrimaryFixed: "#293A52"
+property color m3onPrimaryFixedVariant: "#9C27B0"
+property color m3secondaryFixed: "#94A6FF"
+property color m3secondaryFixedDim: "#6A7CE0"
+property color m3onSecondaryFixed: "#293A52"
+property color m3onSecondaryFixedVariant: "#514254"
+property color m3tertiaryFixed: "#FFDB91"
+property color m3tertiaryFixedDim: "#F15D22"
+property color m3onTertiaryFixed: "#293A52"
+property color m3onTertiaryFixedVariant: "#CF3B00"
+property color m3success: "#81C995"                        // success_color
+property color m3onSuccess: "#FFFFFF"
+property color m3successContainer: "#D1E9D6"
+property color m3onSuccessContainer: "#213528"
+property color term0: "#EDECEE"
+property color term1: "#CF3B00"
+property color term2: "#A27100"
+property color term3: "#F15D22"
+property color term4: "#574F4A"
+property color term5: "#AC1800"
+property color term6: "#9C27B0"
+property color term7: "#293A52"
+property color term8: "#111"
+property color term9: "#CF3B00"
+property color term10: "#A27100"
+property color term11: "#F15D22"
+property color term12: "#574F4A"
+property color term13: "#AC1800"
+property color term14: "#9C27B0"
+property color term15: "#293A52"
     }
 
     colors: QtObject {
