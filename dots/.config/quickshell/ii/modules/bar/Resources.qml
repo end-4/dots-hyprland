@@ -43,8 +43,16 @@ MouseArea {
 
         Resource {
             iconName: "empty_dashboard"
-            percentage: (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2) ? ResourceUsage.dGpuUsage : ResourceUsage.iGpuUsage
-            shown: (Config.options.bar.resources.alwaysShowGpu && !(MprisController.activePlayer?.trackTitle?.length > 0)) && ((ResourceUsage.dGpuAvailable && (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2)) && (ResourceUsage.iGpuAvailable && (Config.options.bar.resources.gpuLayout == 1)))
+            percentage: (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2) ? GpuUsage.dGpuUsage : GpuUsage.iGpuUsage
+            shown: (
+                (Config.options.bar.resources.alwaysShowGpu ||
+                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
+                 root.alwaysShowAllResources)
+            ) && (
+                (Config.options.bar.resources.gpuLayout == 0 && GpuUsage.dGpuAvailable) ||
+                (Config.options.bar.resources.gpuLayout == 2 && GpuUsage.dGpuAvailable) ||
+                (Config.options.bar.resources.gpuLayout == 1 && GpuUsage.iGpuAvailable)
+            )
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.gpuWarningThreshold
         }

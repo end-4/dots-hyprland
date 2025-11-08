@@ -9,7 +9,7 @@ import Quickshell.Io
 Singleton {
     id: root
     property string dGpuName: ""
-    property bool dGpuAvailable: false
+    property bool dGpuAvailable: true
     property double dGpuUsage: 0
     property double dGpuVramUsage: 0
     property double dGpuTempemperature: 0
@@ -19,7 +19,7 @@ Singleton {
     property double dGpuPowerLimit: 0
     property double dGpuFanUsage: 0
 
-    property bool iGpuAvailable: false
+    property bool iGpuAvailable: true
     property double iGpuUsage: 0
     property double iGpuVramUsage: 0
     property double iGpuTempemperature: 0
