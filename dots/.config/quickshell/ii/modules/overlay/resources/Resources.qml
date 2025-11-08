@@ -24,11 +24,6 @@ StyledOverlayWidget {
             available: true,
             extraProperties: [
                 {
-                    icon: "bolt",
-                    label: Translation.tr("Load:"),
-                    value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
-                },
-                {
                     icon: "planner_review",
                     label: Translation.tr("Freq:"),
                     value: ` ${Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
@@ -46,23 +41,6 @@ StyledOverlayWidget {
             history: ResourceUsage.memoryUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableMemoryString,
             available: true,
-            extraProperties: [
-                {
-                    icon: "clock_loader_60",
-                    label: Translation.tr("Used:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryUsed)
-                },
-                {
-                    icon: "check_circle",
-                    label: Translation.tr("Free:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryFree)
-                },
-                {
-                    icon: "empty_dashboard",
-                    label: Translation.tr("Total:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryTotal)
-                }
-            ]
         },
         {
             icon: "swap_horiz",
@@ -70,23 +48,6 @@ StyledOverlayWidget {
             history: ResourceUsage.swapUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableSwapString,
             available: true,
-            extraProperties: [
-                {
-                    icon: "clock_loader_60",
-                    label: Translation.tr("Used:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.swapUsed)
-                },
-                {
-                    icon: "check_circle",
-                    label: Translation.tr("Free:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.swapFree)
-                },
-                {
-                    icon: "empty_dashboard",
-                    label: Translation.tr("Total:"),
-                    value: ResourceUsage.kbToGbString(ResourceUsage.swapTotal)
-                }
-            ]
         },
         {
             icon: "empty_dashboard",
@@ -95,11 +56,6 @@ StyledOverlayWidget {
             maxAvailableString: GpuUsage.maxAvailableIGpuString,
             available: GpuUsage.iGpuAvailable,
             extraProperties: [
-                {
-                    icon: "bolt",
-                    label: Translation.tr("Load:"),
-                    value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
-                },
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("VRAM:"),
@@ -119,11 +75,6 @@ StyledOverlayWidget {
             maxAvailableString: GpuUsage.maxAvailabledDGpuString,
             available: GpuUsage.dGpuAvailable,
             extraProperties: [
-                {
-                    icon: "bolt",
-                    label: Translation.tr("Load:"),
-                    value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
-                },
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("VRAM:"),
@@ -252,6 +203,7 @@ StyledOverlayWidget {
     component ExtraInfo: ColumnLayout {
         id: extraInfo
         required property list<var> extraProperties
+        visible: extraProperties.length > 0
         spacing: 4
 
         Repeater {
