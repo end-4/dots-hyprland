@@ -3,6 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import Qt.labs.synchronizer
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -15,9 +16,8 @@ Item { // Wrapper
     readonly property string xdgConfigHome: Directories.config
     property string searchingText: ""
     property bool showResults: searchingText != ""
-    property real searchBarHeight: searchBar.height + Appearance.sizes.elevationMargin * 2
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
-    implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
+    implicitHeight: searchBar.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
@@ -93,18 +93,22 @@ Item { // Wrapper
         appResults.currentIndex = 0;
     }
 
+    function focusSearchInput() {
+        searchBar.forceFocus();
+    }
+
     function disableExpandAnimation() {
-        searchWidthBehavior.enabled = false;
+        searchBar.animateWidth = false;
     }
 
     function cancelSearch() {
-        searchInput.selectAll();
+        searchBar.searchInput.selectAll();
         root.searchingText = "";
-        searchWidthBehavior.enabled = true;
+        searchBar.animateWidth = true;
     }
 
     function setSearchingText(text) {
-        searchInput.text = text;
+        searchBar.searchInput.text = text;
         root.searchingText = text;
     }
 
@@ -149,29 +153,29 @@ Item { // Wrapper
 
         // Handle Backspace: focus and delete character if not focused
         if (event.key === Qt.Key_Backspace) {
-            if (!searchInput.activeFocus) {
-                searchInput.forceActiveFocus();
+            if (!searchBar.searchInput.activeFocus) {
+                root.focusSearchInput();
                 if (event.modifiers & Qt.ControlModifier) {
                     // Delete word before cursor
-                    let text = searchInput.text;
-                    let pos = searchInput.cursorPosition;
+                    let text = searchBar.searchInput.text;
+                    let pos = searchBar.searchInput.cursorPosition;
                     if (pos > 0) {
                         // Find the start of the previous word
                         let left = text.slice(0, pos);
                         let match = left.match(/(\s*\S+)\s*$/);
                         let deleteLen = match ? match[0].length : 1;
-                        searchInput.text = text.slice(0, pos - deleteLen) + text.slice(pos);
-                        searchInput.cursorPosition = pos - deleteLen;
+                        searchBar.searchInput.text = text.slice(0, pos - deleteLen) + text.slice(pos);
+                        searchBar.searchInput.cursorPosition = pos - deleteLen;
                     }
                 } else {
                     // Delete character before cursor if any
-                    if (searchInput.cursorPosition > 0) {
-                        searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition - 1) + searchInput.text.slice(searchInput.cursorPosition);
-                        searchInput.cursorPosition -= 1;
+                    if (searchBar.searchInput.cursorPosition > 0) {
+                        searchBar.searchInput.text = searchBar.searchInput.text.slice(0, searchBar.searchInput.cursorPosition - 1) + searchBar.searchInput.text.slice(searchBar.searchInput.cursorPosition);
+                        searchBar.searchInput.cursorPosition -= 1;
                     }
                 }
                 // Always move cursor to end after programmatic edit
-                searchInput.cursorPosition = searchInput.text.length;
+                searchBar.searchInput.cursorPosition = searchBar.searchInput.text.length;
                 event.accepted = true;
             }
             // If already focused, let TextField handle it
@@ -181,11 +185,11 @@ Item { // Wrapper
         // Only handle visible printable characters (ignore control chars, arrows, etc.)
         if (event.text && event.text.length === 1 && event.key !== Qt.Key_Enter && event.key !== Qt.Key_Return && event.key !== Qt.Key_Delete && event.text.charCodeAt(0) >= 0x20) // ignore control chars like Backspace, Tab, etc.
         {
-            if (!searchInput.activeFocus) {
-                searchInput.forceActiveFocus();
+            if (!searchBar.searchInput.activeFocus) {
+                root.focusSearchInput();
                 // Insert the character at the cursor position
-                searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition) + event.text + searchInput.text.slice(searchInput.cursorPosition);
-                searchInput.cursorPosition += 1;
+                searchBar.searchInput.text = searchBar.searchInput.text.slice(0, searchBar.searchInput.cursorPosition) + event.text + searchBar.searchInput.text.slice(searchBar.searchInput.cursorPosition);
+                searchBar.searchInput.cursorPosition += 1;
                 event.accepted = true;
                 root.focusFirstItem();
             }
@@ -197,17 +201,29 @@ Item { // Wrapper
     }
     Rectangle { // Background
         id: searchWidgetContent
-        anchors.centerIn: parent
+        anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+            topMargin: Appearance.sizes.elevationMargin
+        }
+        clip: true
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
-        radius: Appearance.rounding.large
-        color: Appearance.colors.colLayer0
-        border.width: 1
-        border.color: Appearance.colors.colLayer0Border
+        radius: searchBar.height / 2 + searchBar.verticalPadding
+        color: Appearance.colors.colBackgroundSurfaceContainer
+
+        Behavior on implicitHeight {
+            id: searchHeightBehavior
+            enabled: GlobalStates.overviewOpen && root.showResults
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
 
         ColumnLayout {
             id: columnLayout
-            anchors.centerIn: parent
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
             spacing: 0
 
             // clip: true
@@ -220,64 +236,16 @@ Item { // Wrapper
                 }
             }
 
-            RowLayout {
+            SearchBar {
                 id: searchBar
-                spacing: 5
-                MaterialSymbol {
-                    id: searchIcon
-                    Layout.leftMargin: 15
-                    iconSize: Appearance.font.pixelSize.huge
-                    color: Appearance.m3colors.m3onSurface
-                    text: root.searchingText.startsWith(Config.options.search.prefix.clipboard) ? 'content_paste_search' : 'search'
-                }
-                TextField { // Search box
-                    id: searchInput
-
-                    focus: GlobalStates.overviewOpen
-                    Layout.rightMargin: 15
-                    padding: 15
-                    renderType: Text.NativeRendering
-                    font {
-                        family: Appearance?.font.family.main ?? "sans-serif"
-                        pixelSize: Appearance?.font.pixelSize.small ?? 15
-                        hintingPreference: Font.PreferFullHinting
-                    }
-                    color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-                    selectionColor: Appearance.colors.colSecondaryContainer
-                    placeholderText: Translation.tr("Search, calculate or run")
-                    placeholderTextColor: Appearance.m3colors.m3outline
-                    implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
-
-                    Behavior on implicitWidth {
-                        id: searchWidthBehavior
-                        enabled: false
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Appearance.animation.elementMove.type
-                            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                        }
-                    }
-
-                    onTextChanged: root.searchingText = text
-
-                    onAccepted: {
-                        if (appResults.count > 0) {
-                            // Get the first visible delegate and trigger its click
-                            let firstItem = appResults.itemAtIndex(0);
-                            if (firstItem && firstItem.clicked) {
-                                firstItem.clicked();
-                            }
-                        }
-                    }
-
-                    background: null
-
-                    cursorDelegate: Rectangle {
-                        width: 1
-                        color: searchInput.activeFocus ? Appearance.colors.colPrimary : "transparent"
-                        radius: 1
-                    }
+                property real verticalPadding: 4
+                Layout.fillWidth: true
+                Layout.leftMargin: 10
+                Layout.rightMargin: 4
+                Layout.topMargin: verticalPadding
+                Layout.bottomMargin: verticalPadding
+                Synchronizer on searchingText {
+                    property alias source: root.searchingText
                 }
             }
 

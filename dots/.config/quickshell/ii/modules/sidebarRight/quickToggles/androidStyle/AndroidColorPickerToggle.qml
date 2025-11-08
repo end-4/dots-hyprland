@@ -13,7 +13,7 @@ AndroidQuickToggleButton {
     toggled: false
     buttonIcon: "colorize"
 
-    onClicked: {
+    mainAction: () => {
         GlobalStates.sidebarRightOpen = false;
         delayedActionTimer.start()
     }

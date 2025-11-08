@@ -69,7 +69,11 @@ function pause(){
   fi
 }
 function remove_bashcomments_emptylines(){
-  mkdir -p "$(dirname "$2")" && cat "$1" | sed -e 's/#.*//' -e '/^[[:space:]]*$/d' > "$2"
+  echo "pwd=$(pwd)"
+  echo "input=$1"
+  echo "output=$2"
+  mkdir -p "$(dirname "$2")"
+  cat "$1" | sed -e 's/#.*//' -e '/^[[:space:]]*$/d' > "$2"
 }
 function prevent_sudo_or_root(){
   case $(whoami) in
@@ -286,4 +290,57 @@ function check_disk_space() {
   fi
   
   return 0
+}
+
+function auto_update_git_submodule(){
+  if git submodule status --recursive | grep -E '^[+-U]';then
+    # Note: `git pull --recurse-submodules` cannot substitute `git submodule update --init --recursive` cuz it does not init a submodule when needed.
+    x git submodule update --init --recursive
+  fi
+}
+
+function backup_clashing_targets(){
+  # For non-recursive dirs/files under target_dir, only backup those which clashes with the ones under source_dir
+  # However, ignore the ones listed in ignored_list
+
+  # Deal with arguments
+  local source_dir="$1"
+  local target_dir="$2"
+  local backup_dir="$3"
+  local -a ignored_list=("${@:4}")
+
+  # Find clash dirs/files, save as clash_list
+  local clash_list=()
+  local source_list=($(ls -A "$source_dir"))
+  local target_list=($(ls -A "$target_dir"))
+  local -A target_map
+  for i in "${target_list[@]}"; do
+    target_map["$i"]=1
+  done
+  for i in "${source_list[@]}"; do
+    if [[ -n "${target_map[$i]}" ]]; then
+      clash_list+=("$i")
+    fi
+  done
+  local -A delk
+  for del in "${ignored_list[@]}" ; do delk[$del]=1 ; done
+  for k in "${!clash_list[@]}" ; do
+    [ "${delk[${clash_list[$k]}]-}" ] && unset 'clash_list[k]'
+  done
+  clash_list=("${clash_list[@]}")
+
+  # Construct args_includes for rsync
+  local args_includes=()
+  for i in "${clash_list[@]}"; do
+    if [[ -d "$target_dir/$i" ]]; then
+      args_includes+=(--include="/$i/")
+      args_includes+=(--include="/$i/**")
+    else
+      args_includes+=(--include="/$i")
+    fi
+  done
+  args_includes+=(--exclude='*')
+
+  x mkdir -p $backup_dir
+  x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
 }

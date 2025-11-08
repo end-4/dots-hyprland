@@ -74,30 +74,13 @@ MouseArea {
             anchors.centerIn: parent
             spacing: 4
 
-            Row {
-                spacing: 4
-
-                MaterialSymbol {
-                    anchors.verticalCenter: parent.verticalCenter
-                    fill: 0
-                    font.weight: Font.Medium
-                    text: "music_note"
-                    iconSize: Appearance.font.pixelSize.large
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
-
-                StyledText {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Media"
-                    font {
-                        weight: Font.Medium
-                        pixelSize: Appearance.font.pixelSize.normal
-                    }
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
+            Bar.StyledPopupHeaderRow {
+                icon: "music_note"
+                label: Translation.tr("Media")
             }
 
             StyledText {
+                color: Appearance.colors.colOnSurfaceVariant
                 text: `${cleanedTitle}${activePlayer?.trackArtist ? '\n' + activePlayer.trackArtist : ''}`
             }
         }

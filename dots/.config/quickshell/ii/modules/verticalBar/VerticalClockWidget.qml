@@ -36,7 +36,7 @@ Item {
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
 
-        Bar.ClockWidgetTooltip {
+        Bar.ClockWidgetPopup {
             hoverTarget: mouseArea
         }
     }

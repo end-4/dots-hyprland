@@ -2,70 +2,38 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import qs.modules.common
-
+import qs.modules.common.widgets.shapes
+import "shapes/geometry/offset.js" as Offset
+import "shapes/shapes/corner-rounding.js" as CornerRounding
+import "shapes/shapes/rounded-polygon.js" as RoundedPolygon
+import "shapes/material-shapes.js" as MaterialShapes
 
 Item {
     id: root
-    
-    property real sides: 12  
+    property int sides: 12  
     property int implicitSize: 100
-    property real amplitude: implicitSize / 50
-    property int renderPoints: 360
-    property color color: "#605790"
-    property alias strokeWidth: shapePath.strokeWidth
-    property bool constantlyRotate: false
+    property alias color: shapeCanvas.color
 
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
-    property real shapeRotation: 0
+    property var cornerRounding: new CornerRounding.CornerRounding((sides < 17 ? 1.5 : 1.1) / Math.max(sides, 1))
 
-    Loader {
-        active: constantlyRotate
-        sourceComponent: FrameAnimation {
-            running: true
-            onTriggered: {
-                shapeRotation += 0.05
-            }
-        }
-    }
-
-    Behavior on sides {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-
-    Shape {
-        id: shape
+    ShapeCanvas {
+        id: shapeCanvas
         anchors.fill: parent
-        preferredRendererType: Shape.CurveRenderer
-
-        ShapePath {
-            id: shapePath
-            strokeWidth: 0
-            fillColor: root.color
-            pathHints: ShapePath.PathSolid & ShapePath.PathNonIntersecting
-
-            PathPolyline {
-                property var pointsList: {
-                    var points = []
-                    var cx = shape.width / 2   // center x
-                    var cy = shape.height / 2  // center y
-                    var steps = root.renderPoints
-                    var radius = root.implicitSize / 2 - root.amplitude
-                    for (var i = 0; i <= steps; i++) {
-                        var angle = (i / steps) * 2 * Math.PI
-                        var rotatedAngle = angle * root.sides + Math.PI/2 + (root.shapeRotation * root.constantlyRotate)
-                        var wave = Math.sin(rotatedAngle) * root.amplitude
-                        var x = Math.cos(angle) * (radius + wave) + cx
-                        var y = Math.sin(angle) * (radius + wave) + cy
-                        points.push(Qt.point(x, y))
-                    }
-                    return points
-                }
-
-                path: pointsList
-            }
-            
+        roundedPolygon: switch(sides) {
+            case 0: return MaterialShapes.getCircle();
+            case 1: return MaterialShapes.getCircle();
+            case 4: return MaterialShapes.getCookie4Sided();
+            case 6: return MaterialShapes.getCookie6Sided();
+            case 7: return MaterialShapes.getCookie7Sided();
+            case 9: return MaterialShapes.getCookie9Sided();
+            case 12: return MaterialShapes.getCookie12Sided();
+            default: return RoundedPolygon.RoundedPolygon.star(sides, 1, 0.8, root.cornerRounding)
+                .transformed((x, y) => MaterialShapes.rotate30.map(new Offset.Offset(x, y)))
+                .normalized();
         }
     }
 }
+

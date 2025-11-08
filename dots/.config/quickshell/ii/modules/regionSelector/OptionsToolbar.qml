@@ -23,13 +23,25 @@ Toolbar {
     // Signals
     signal dismiss()
 
-    MaterialCookie {
+    MaterialShape {
         Layout.fillHeight: true
         Layout.leftMargin: 2
         Layout.rightMargin: 2
         implicitSize: 36 // Intentionally smaller because this one is brighter than others
-        sides: 10
-        amplitude: implicitSize / 44
+        shape: switch (root.action) {
+            case RegionSelection.SnipAction.Copy:
+            case RegionSelection.SnipAction.Edit:
+                return MaterialShape.Shape.Cookie4Sided;
+            case RegionSelection.SnipAction.Search:
+                return MaterialShape.Shape.Pentagon;
+            case RegionSelection.SnipAction.CharRecognition:
+                return MaterialShape.Shape.Sunny;
+            case RegionSelection.SnipAction.Record:
+            case RegionSelection.SnipAction.RecordWithSound:
+                return MaterialShape.Shape.Gem;
+            default:
+                return MaterialShape.Shape.Cookie12Sided;
+        }
         color: Appearance.colors.colPrimary
         MaterialSymbol {
             anchors.centerIn: parent
@@ -44,24 +56,25 @@ Toolbar {
                     return "image_search";
                 case RegionSelection.SnipAction.CharRecognition:
                     return "document_scanner";
+                case RegionSelection.SnipAction.Record:
+                case RegionSelection.SnipAction.RecordWithSound:
+                    return "videocam";
                 default:
                     return "";
             }
         }
     }
 
-    IconAndTextToolbarButton {
-        iconText: "activity_zone"
-        text: Translation.tr("Rect")
-        toggled: root.selectionMode === RegionSelection.SelectionMode.RectCorners
-        onClicked: root.selectionMode = RegionSelection.SelectionMode.RectCorners
-    }
-
-    IconAndTextToolbarButton {
-        iconText: "gesture"
-        text: Translation.tr("Circle")
-        toggled: root.selectionMode === RegionSelection.SelectionMode.Circle
-        onClicked: root.selectionMode = RegionSelection.SelectionMode.Circle
+    ToolbarTabBar {
+        id: tabBar
+        tabButtonList: [
+            {"icon": "activity_zone", "name": Translation.tr("Rect")},
+            {"icon": "gesture", "name": Translation.tr("Circle")}
+        ]
+        currentIndex: root.selectionMode === RegionSelection.SelectionMode.RectCorners ? 0 : 1
+        onCurrentIndexChanged: {
+            root.selectionMode = currentIndex === 0 ? RegionSelection.SelectionMode.RectCorners : RegionSelection.SelectionMode.Circle;
+        }
     }
 
 }

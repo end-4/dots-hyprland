@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 # Based on https://unix.stackexchange.com/a/602935
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Skip if already unlocked
-locked_state=$(busctl --user get-property org.freedesktop.secrets \
-    /org/freedesktop/secrets/collection/login \
-    org.freedesktop.Secret.Collection Locked)    
-if [[ "${locked_state}" == "b false" ]]; then
-    echo 'Keyring is already unlocked.' >&2
+if "${SCRIPT_DIR}/is_unlocked.sh"; then
     exit 1
 fi
 

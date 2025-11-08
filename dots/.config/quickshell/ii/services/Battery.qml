@@ -31,6 +31,25 @@ Singleton {
     property real timeToEmpty: UPower.displayDevice.timeToEmpty
     property real timeToFull: UPower.displayDevice.timeToFull
 
+    property real health: (function() {
+        const devList = UPower.devices.values;
+        for (let i = 0; i < devList.length; ++i) {
+            const dev = devList[i];
+            if (dev.isLaptopBattery && dev.healthSupported) {
+                const health = dev.healthPercentage;
+                if (health === 0) {
+                    return 0.01;
+                } else if (health < 1) {
+                    return health * 100;
+                } else {
+                    return health;
+                }
+            }
+        }
+        return 0;
+    })()
+
+
     onIsLowAndNotChargingChanged: {
         if (!root.available || !isLowAndNotCharging) return;
         Quickshell.execDetached([
@@ -38,7 +57,8 @@ Singleton {
             Translation.tr("Low battery"), 
             Translation.tr("Consider plugging in your device"), 
             "-u", "critical",
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ])
 
         if (root.soundEnabled) Audio.playSystemSound("dialog-warning");
@@ -51,7 +71,8 @@ Singleton {
             Translation.tr("Critically low battery"), 
             Translation.tr("Please charge!\nAutomatic suspend triggers at %1%").arg(Config.options.battery.suspend), 
             "-u", "critical",
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ]);
 
         if (root.soundEnabled) Audio.playSystemSound("suspend-error");
@@ -69,7 +90,8 @@ Singleton {
             "notify-send",
             Translation.tr("Battery full"),
             Translation.tr("Please unplug the charger"),
-            "-a", "Shell"
+            "-a", "Shell",
+            "--hint=int:transient:1",
         ]);
 
         if (root.soundEnabled) Audio.playSystemSound("complete");

@@ -13,7 +13,7 @@ AndroidQuickToggleButton {
     toggled: false
     buttonIcon: "cloud_lock"
     
-    onClicked: {
+    mainAction: () => {
         if (toggled) {
             root.toggled = false
             Quickshell.execDetached(["warp-cli", "disconnect"])
