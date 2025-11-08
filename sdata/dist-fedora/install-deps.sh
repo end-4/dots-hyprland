@@ -46,10 +46,11 @@ hyprland_deps=(
   hyprsunset xdg-desktop-portal-hyprland wl-clipboard
 )
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
-# Deprecation
-echo -e "${STY_YELLOW}${STY_BOLD}!DeprecationWarning! hyprland-qtutils and hyprland-qt-support have been removed in dist-arch recently.$STY_RST"
-echo -e "${STY_YELLOW}${STY_BOLD}You can choose whether or not to install these two packages.$STY_RST"
-# The GitHub repository requires Qt 6.6 or higher, which I think makes DNF's requirement of Qt 6.9 too strict; it should also support Qt 6.10.
+
+## About `hyprland-qtutils` and `hyprland-qt-support`
+# The hyprland-qt-support's GitHub repository requires Qt 6.6 or higher, which I think makes DNF's requirement of Qt 6.9 too strict; it should also support Qt 6.10.
+# On distro like Arch Linux, `hyprland-qtutils` and `hyprland-qt-support` are in dependency chain already so no need to add them as deps explicitly; 
+# However on Fedora, if this package is not installed, a yellow warning⚠️ will appear every time you log in to Hyprland.  
 v dnf download hyprland-qt-support && sudo rpm -ivh --nodeps hyprland-qt-support-*.fc$(rpm -E %fedora).$(uname -m).rpm
 v sudo dnf install hyprland-qtutils -y
 
