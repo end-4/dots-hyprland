@@ -23,14 +23,13 @@ if command -v nvidia-smi &> /dev/null; then
     echo " Driver : ${driver_version}"
     echo
     
-    gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
-    vram_used_mib=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -n1)
-    vram_total_mib=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n1)
-    temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits | head -n1)
-    
-    power_draw=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | head -n1)
-    power_limit=$(nvidia-smi --query-gpu=power.limit --format=csv,noheader,nounits | head -n1)
-    fan_speed=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits | head -n1)
+    IFS=',' read -r gpu_name driver_version gpu_usage vram_used_mib vram_total_mib temperature power_draw power_limit fan_speed < \
+    <(nvidia-smi --query-gpu=name,driver_version,utilization.gpu,memory.used,memory.total,temperature.gpu,power.draw,power.limit,fan.speed --format=csv,noheader,nounits | head -n1)
+
+    # Trim whitespace
+    for var in gpu_name driver_version gpu_usage vram_used_mib vram_total_mib temperature power_draw power_limit fan_speed; do
+      eval "$var=\"\$(echo \${$var} | xargs)\""
+    done
     
     vram_used_gb=$(awk -v u="$vram_used_mib" 'BEGIN{printf "%.1f", u/1024}')
     vram_total_gb=$(awk -v t="$vram_total_mib" 'BEGIN{printf "%.1f", t/1024}')
