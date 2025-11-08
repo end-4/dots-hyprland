@@ -110,14 +110,7 @@ ComboBox {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 200
-                easing.type: Easing.OutCubic
-            }
-            NumberAnimation {
-                property: "height"
-                from: 0
-                to: popup.height
-                duration: 200
+                duration: 150
                 easing.type: Easing.OutCubic
             }
         }
@@ -127,14 +120,7 @@ ComboBox {
                 property: "opacity"
                 from: 1
                 to: 0
-                duration: 150
-                easing.type: Easing.InCubic
-            }
-            NumberAnimation {
-                property: "height"
-                from: popup.height
-                to: 0
-                duration: 150
+                duration: 100
                 easing.type: Easing.InCubic
             }
         }
