@@ -19,3 +19,4 @@ v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 v kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly
 v bash -c "echo exec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1 |
  sudo tee -a ${REPO_ROOT}/dots/.config/hypr/custom/execs.conf"
+# TODO: This will modify Git repo itself which should be avoided, however it makes sense that this may be needed. Need to improve this in future.
