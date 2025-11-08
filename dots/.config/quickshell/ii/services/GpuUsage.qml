@@ -68,6 +68,11 @@ Singleton {
         running: Config.options?.resources?.enableGpu !== false
         repeat: true
         onTriggered: {
+        
+            if(Config.options.bar.resources.gpuLayout == -1){ //disabled gpu
+                this.repeat = false
+            }
+            
             if (iGpuAvailable) {
                 iGpuinfoProc.running = true
             }
@@ -78,6 +83,9 @@ Singleton {
 
             // History updates after data is received in onStreamFinished handlers
             interval = Config.options?.resources?.updateInterval ?? 3000
+            
+
+            interval = Config.options?.resources?.updateInterval ?? 3000;
         }
     }
 
@@ -117,6 +125,7 @@ Singleton {
                         dGpuPowerLimit = data.powerLimitW ?? 0
 
                         maxAvailableDGpuString = "\n" + dGpuName
+
                     }
                 } catch (e) {
                     console.error("Failed to parse dGPU JSON:", e, "Raw output:", this.text)
@@ -149,6 +158,7 @@ Singleton {
                     if (iGpuAvailable) {
                         iGpuVendor = data.vendor || ""
                         iGpuName = Config.options?.resources?.gpu?.igpuName || data.name || "iGPU"
+
                         iGpuUsage = (data.usagePercent ?? 0) / 100
                         iGpuVramUsedGB = data.vramUsedGB ?? 0
                         iGpuVramTotalGB = data.vramTotalGB ?? 0

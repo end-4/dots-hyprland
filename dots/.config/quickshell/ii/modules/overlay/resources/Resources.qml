@@ -25,7 +25,7 @@ StyledOverlayWidget {
             props.push({
                 icon: "bolt",
                 label: Translation.tr("Load:"),
-                value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
+                value:  `${Math.round(GpuUsage.iGpuUsage * 100)} %`
             })
         }
 
@@ -56,7 +56,7 @@ StyledOverlayWidget {
             props.push({
                 icon: "bolt",
                 label: Translation.tr("Load:"),
-                value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
+                value: ` ${Math.round(GpuUsage.dGpuUsage * 100)} %`
             })
         }
 
@@ -111,7 +111,7 @@ StyledOverlayWidget {
 
         return props
     }
-
+    
    id: root
    property list<var> resources: [
         {
@@ -124,7 +124,7 @@ StyledOverlayWidget {
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
-                    value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
+                    value: ` ${Math.round(ResourceUsage.cpuUsage * 100)}%`
                 },
                 {
                     icon: "planner_review",
@@ -213,7 +213,6 @@ StyledOverlayWidget {
         }
     ].filter(r => r.available) 
 
-
     contentItem: Rectangle {
         id: contentItem
         anchors.centerIn: parent
@@ -222,6 +221,8 @@ StyledOverlayWidget {
         property real padding: 4
         implicitWidth: 350
         implicitHeight: Math.max(300, contentColumn.implicitHeight + padding * 2)
+        // implicitHeight: contentColumn.implicitHeight + padding * 2
+
         ColumnLayout {
             id: contentColumn
             anchors {
@@ -281,6 +282,12 @@ StyledOverlayWidget {
                     text: modelData.value ?? ""
                 }
             }
+
+            ExtraInfo {
+                Layout.margins: 8
+                Layout.topMargin: 0
+                extraProperties: root.resources[tabBar.currentIndex]?.extraProperties ?? []
+            }
         }
            
     }
@@ -307,11 +314,7 @@ StyledOverlayWidget {
             }
             StyledText {
                 text: Translation.tr("of %1").arg(resourceSummary.maxAvailableString)
-                font {
-                    // family: Appearance.font.family.numbers
-                    // variableAxes: Appearance.font.variableAxes.numbers
-                    pixelSize: Appearance.font.pixelSize.smallie
-                }
+                font.pixelSize: Appearance.font.pixelSize.smallie
                 color: Appearance.colors.colSubtext
             }
             Item {
@@ -342,6 +345,42 @@ StyledOverlayWidget {
 
 
         }
-      }
-       
+    }
+
+    component ExtraInfo: ColumnLayout {
+        id: extraInfo
+        required property list<var> extraProperties
+        visible: extraProperties.length > 0
+        spacing: 4
+
+        Repeater {
+            model: ScriptModel {
+                values: extraInfo.extraProperties
+                objectProp: "icon" // A prop that doesn't change
+            }
+            delegate: RowLayout {
+                id: extraInfoRow
+                required property var modelData
+
+                spacing: 4
+                MaterialSymbol {
+                    text: extraInfoRow.modelData.icon
+                    color: Appearance.colors.colOnSurfaceVariant
+                    iconSize: Appearance.font.pixelSize.large
+                }
+                StyledText {
+                    text: extraInfoRow.modelData.label ?? ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    visible: extraInfoRow.modelData.value !== ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: extraInfoRow.modelData.value ?? ""
+                }
+            }
+        }
+    }
+    
 }

@@ -28,9 +28,7 @@ MouseArea {
         Resource {
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
-            shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || 
-                (MprisController.activePlayer?.trackTitle == null) ||
-                root.alwaysShowAllResources
+            shown: (Config.options.bar.resources.alwaysShowSwap && percentage > 0) || (MprisController.activePlayer?.trackTitle == null) || root.alwaysShowAllResources
             Layout.leftMargin: shown ? 6 : 0
             warningThreshold: Config.options.bar.resources.swapWarningThreshold
         }
@@ -38,10 +36,9 @@ MouseArea {
         Resource {
             iconName: "planner_review"
             percentage: ResourceUsage.cpuUsage
-            shown: Config.options.bar.resources.alwaysShowCpu || 
-                !(MprisController.activePlayer?.trackTitle?.length > 0) ||
-                root.alwaysShowAllResources
-                Layout.leftMargin: shown ? 6 : 0
+            shown: Config.options.bar.resources.alwaysShowCpu || !(MprisController.activePlayer?.trackTitle?.length > 0) || root.alwaysShowAllResources
+            Layout.leftMargin: shown ? 6 : 0
+
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold
           }
 
@@ -57,6 +54,21 @@ MouseArea {
 
         }
 
+        Resource {
+            iconName: "empty_dashboard"
+            percentage: (Config.options.bar.resources.gpuLayout == 0 || Config.options.bar.resources.gpuLayout == 2) ? GpuUsage.dGpuUsage : GpuUsage.iGpuUsage
+            shown: (
+                (Config.options.bar.resources.alwaysShowGpu ||
+                 !(MprisController.activePlayer?.trackTitle?.length > 0) ||
+                 root.alwaysShowAllResources)
+            ) && (
+                (Config.options.bar.resources.gpuLayout == 0 && GpuUsage.dGpuAvailable) ||
+                (Config.options.bar.resources.gpuLayout == 2 && GpuUsage.dGpuAvailable) ||
+                (Config.options.bar.resources.gpuLayout == 1 && GpuUsage.iGpuAvailable)
+            )
+            Layout.leftMargin: shown ? 6 : 0
+            warningThreshold: Config.options.bar.resources.gpuWarningThreshold
+        }
     }
 
     ResourcesPopup {
