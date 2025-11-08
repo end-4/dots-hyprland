@@ -14,7 +14,7 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
-    
+
     property list<var> resources: [
         {
             icon: "planner_review",
@@ -190,33 +190,10 @@ StyledOverlayWidget {
                 maxAvailableString: root.resources[tabBar.currentIndex]?.maxAvailableString ?? "--"
             }
 
-            ColumnLayout {
-                spacing: 4
-                Repeater {
-                    model: root.resources[tabBar.currentIndex]?.extraProperties.length ?? 0
-                    delegate: RowLayout {
-                        required property int index
-                        property var modelData: root.resources[tabBar.currentIndex]?.extraProperties[index]
-
-                        spacing: 4
-                        MaterialSymbol {
-                            text: modelData.icon
-                            color: Appearance.colors.colOnSurfaceVariant
-                            iconSize: Appearance.font.pixelSize.large
-                        }
-                        StyledText {
-                            text: modelData.label ?? ""
-                            color: Appearance.colors.colOnSurfaceVariant
-                        }
-                        StyledText {
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignRight
-                            visible: modelData.value !== ""
-                            color: Appearance.colors.colOnSurfaceVariant
-                            text: modelData.value ?? ""
-                        }
-                    }
-                }
+            ExtraInfo {
+                Layout.margins: 8
+                Layout.topMargin: 0
+                extraProperties: root.resources[tabBar.currentIndex]?.extraProperties ?? []
             }
         }
     }
@@ -242,11 +219,7 @@ StyledOverlayWidget {
             }
             StyledText {
                 text: Translation.tr("of %1").arg(resourceSummary.maxAvailableString)
-                font {
-                    // family: Appearance.font.family.numbers
-                    // variableAxes: Appearance.font.variableAxes.numbers
-                    pixelSize: Appearance.font.pixelSize.smallie
-                }
+                font.pixelSize: Appearance.font.pixelSize.smallie
                 color: Appearance.colors.colSubtext
             }
             Item {
@@ -272,6 +245,41 @@ StyledOverlayWidget {
                 values: root.resources[tabBar.currentIndex]?.history ?? []
                 points: ResourceUsage.historyLength
                 alignment: Graph.Alignment.Right
+            }
+        }
+    }
+
+    component ExtraInfo: ColumnLayout {
+        id: extraInfo
+        required property list<var> extraProperties
+        spacing: 4
+
+        Repeater {
+            model: ScriptModel {
+                values: extraInfo.extraProperties
+                objectProp: "icon" // A prop that doesn't change
+            }
+            delegate: RowLayout {
+                id: extraInfoRow
+                required property var modelData
+
+                spacing: 4
+                MaterialSymbol {
+                    text: extraInfoRow.modelData.icon
+                    color: Appearance.colors.colOnSurfaceVariant
+                    iconSize: Appearance.font.pixelSize.large
+                }
+                StyledText {
+                    text: extraInfoRow.modelData.label ?? ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    visible: extraInfoRow.modelData.value !== ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: extraInfoRow.modelData.value ?? ""
+                }
             }
         }
     }
