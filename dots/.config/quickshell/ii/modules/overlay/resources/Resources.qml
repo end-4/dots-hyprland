@@ -47,7 +47,7 @@ StyledOverlayWidget {
             icon: "empty_dashboard",
             name: Translation.tr("DGPU"),
             history: ResourceUsage.dGpuUsageHistory,
-            maxAvailableString: ResourceUsage.maxAvailableDGpuString,
+            maxAvailableString: ResourceUsage.maxAvailabledDGpuString,
             available: ResourceUsage.dGpuAvailable
         }
     ].filter(r => r.available) 

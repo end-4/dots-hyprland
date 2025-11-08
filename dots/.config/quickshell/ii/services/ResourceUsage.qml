@@ -43,8 +43,8 @@ Singleton {
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
     property string maxAvailableCpuString: "--"
 
-    property string maxAvailableIGpuString: iGpuVramTotalGB
-    property string maxAvailabledDGpuString: dGpuVramTotalGB
+    property string maxAvailableIGpuString: "100%" 
+    property string maxAvailabledDGpuString: "100%" 
 
 
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
