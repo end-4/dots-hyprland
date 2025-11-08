@@ -95,48 +95,48 @@ StyledOverlayWidget {
         {
             icon: "empty_dashboard",
             name: Translation.tr("IGPU"),
-            history: ResourceUsage.iGpuUsageHistory,
-            maxAvailableString: ResourceUsage.maxAvailableIGpuString,
-            available: ResourceUsage.iGpuAvailable,
+            history: GpuUsage.iGpuUsageHistory,
+            maxAvailableString: GpuUsage.maxAvailableIGpuString,
+            available: GpuUsage.iGpuAvailable,
               extraProperties: [
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
-                    value: (ResourceUsage.iGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.iGpuUsage * 100)}%)`
+                    value: (GpuUsage.iGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.iGpuUsage * 100)}%)`
                 },
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("VRAM:"),
-                    value: ` ${Math.round(ResourceUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.iGpuVramTotalGB * 10) / 10} GB`
+                    value: ` ${Math.round(GpuUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.iGpuVramTotalGB * 10) / 10} GB`
                 },
                 {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
-                    value: `${ResourceUsage.iGpuTempemperature} °C`
+                    value: `${GpuUsage.iGpuTempemperature} °C`
                 }
             ]
         },
         {
             icon: "empty_dashboard",
             name: Translation.tr("DGPU"),
-            history: ResourceUsage.dGpuUsageHistory,
-            maxAvailableString: ResourceUsage.maxAvailabledDGpuString,
-            available: ResourceUsage.dGpuAvailable,
+            history: GpuUsage.dGpuUsageHistory,
+            maxAvailableString: GpuUsage.maxAvailabledDGpuString,
+            available: GpuUsage.dGpuAvailable,
               extraProperties: [
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
-                    value: (ResourceUsage.dGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.dGpuUsage * 100)}%)`
+                    value: (GpuUsage.dGpuUsage > 0.8 ? Translation.tr("High") : GpuUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(GpuUsage.dGpuUsage * 100)}%)`
                 },
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("VRAM:"),
-                    value: ` ${Math.round(ResourceUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.dGpuVramTotalGB * 10) / 10} GB`
+                    value: ` ${Math.round(GpuUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(GpuUsage.dGpuVramTotalGB * 10) / 10} GB`
                 },
                 {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
-                    value: `${ResourceUsage.dGpuTempemperature} °C`
+                    value: `${GpuUsage.dGpuTempemperature} °C`
                 }
             ]
         }

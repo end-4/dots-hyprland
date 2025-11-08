@@ -24,35 +24,19 @@ Singleton {
     property var previousCpuStats
     property double cpuTemperature:  0
     
-    property bool dGpuAvailable: false
-    property double dGpuUsage: 0
-    property double dGpuVramUsage:0
-    property double dGpuTempemperature:0
-    property double dGpuVramUsedGB: 0    
-    property double dGpuVramTotalGB: 0
-    
-    property bool iGpuAvailable: false
-    property double iGpuUsage: 0
-    property double iGpuVramUsage:0
-    property double iGpuTempemperature:0
-    property double iGpuVramUsedGB: 0    
-    property double iGpuVramTotalGB: 0
+
 
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
     property string maxAvailableCpuString: "--"
 
-    property string maxAvailableIGpuString: "100%" 
-    property string maxAvailabledDGpuString: "100%" 
-
 
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> cpuUsageHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
-    property list<real> iGpuUsageHistory: []
-    property list<real> dGpuUsageHistory: []
+  
 
 
   
@@ -80,27 +64,13 @@ Singleton {
         }
       }
 
-    function updateiGpuUsageHistory() {
-        iGpuUsageHistory = [...iGpuUsageHistory, iGpuUsage]
-        if (iGpuUsageHistory.length > historyLength) {
-            iGpuUsageHistory.shift()
-        }
-    }
 
-    function updatedGpuUsageHistory() {
-        dGpuUsageHistory = [...dGpuUsageHistory, dGpuUsage]
-        if (dGpuUsageHistory.length > historyLength) {
-            dGpuUsageHistory.shift()
-        }
-    }
 
     function updateHistories() {
         updateMemoryUsageHistory()
         updateSwapUsageHistory()
         updateCpuUsageHistory()
-        if(iGpuAvailable) updateiGpuUsageHistory()
-        if(dGpuAvailable) updatedGpuUsageHistory()
-    }
+       }
 
 	Timer {
 		interval: 1
@@ -145,16 +115,6 @@ Singleton {
 
             //Process process CPU temp
             tempProc.running = true
-
-            //Process process GPU info
-            if(iGpuAvailable){
-              iGpuinfoProc.running = true
-            }
-
-            if(dGpuAvailable){
-              dGpuinfoProc.running = true
-            }
-
 
 
             root.updateHistories()
