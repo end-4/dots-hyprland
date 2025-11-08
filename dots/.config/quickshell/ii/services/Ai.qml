@@ -70,6 +70,7 @@ Singleton {
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
+    property var chatMetadata: {}  
 
     property var promptSubstitutions: {
         "{DISTRO}": SystemInfo.distroName,
@@ -458,7 +459,6 @@ Singleton {
             }
         }
     }
-
     Process {
         id: getSavedChats
         running: true
@@ -466,9 +466,10 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 if (text.length === 0) return;
-                root.savedChats = text.split("\n")
-                    .filter(fileName => fileName.endsWith(".json"))
-                    .map(fileName => `${Directories.aiChats}/${fileName}`)
+                const files = text.split("\n").filter(fileName => fileName.length > 0);
+                root.savedChats = files
+                        .filter(fileName => fileName.endsWith(".json") && !fileName.endsWith(".meta.json"))
+                        .map(fileName => `${Directories.aiChats}/${fileName}`);
             }
         }
     }
@@ -909,17 +910,29 @@ Singleton {
      * Saves chat to a JSON list of message objects.
      * @param chatName name of the chat
      */
-    function saveChat(chatName) {
-        console.log("saving something")
+    function saveChat(chatName, extraMetadata = {}) {
         chatSaveFile.chatName = chatName.trim()
-        const saveContent = JSON.stringify(root.chatToJson())
+
+        const defaultMetadata = {
+            savedAt: DateTime.date + DateTime.time,
+            messageCount: root.messageIDs.length,
+            title: chatSaveFile.chatName
+        }
+
+        const metadata = Object.assign({}, defaultMetadata, extraMetadata);
+
+        const saveContent = JSON.stringify({
+            metadata: metadata,
+            messages: root.chatToJson()
+        }, null, 2); // 2 for pretty look instead of 1-line
+
         chatSaveFile.setText(saveContent)
         getSavedChats.running = true;
     }
 
-    function saveChatWithoutName() {
-        getNameAndSaveChat.chatContent = JSON.stringify(root.chatToJson())
-        getNameAndSaveChat.running = true; 
+    function requestChatNameAndSave() {
+        getNameGeminiProc.chatContent = JSON.stringify(root.chatToJson())
+        getNameGeminiProc.running = true; 
     }
 
     /**
@@ -928,18 +941,21 @@ Singleton {
      */
     function loadChat(chatName) {
         try {
-            chatSaveFile.chatName = chatName.trim()
-            chatSaveFile.reload()
-            const saveContent = chatSaveFile.text()
-            // console.log(saveContent)
-            const saveData = JSON.parse(saveContent)
-            root.clearMessages()
-            root.messageIDs = saveData.map((_, i) => {
-                return i
-            })
-            // console.log(JSON.stringify(messageIDs))
-            for (let i = 0; i < saveData.length; i++) {
-                const message = saveData[i];
+            chatSaveFile.chatName = chatName.trim();
+            chatSaveFile.reload();
+            const saveContent = chatSaveFile.text();
+            const saveData = JSON.parse(saveContent);
+
+            // Metadata'yı ayrı olarak al
+            root.chatMetadata = saveData.metadata || {};
+
+            // Mesajları yükle
+            const messages = saveData.messages || [];
+            root.clearMessages();
+            root.messageIDs = messages.map((_, i) => i);
+
+            for (let i = 0; i < messages.length; i++) {
+                const message = messages[i];
                 root.messageByID[i] = root.aiMessageComponent.createObject(root, {
                     "role": message.role,
                     "rawContent": message.rawContent,
@@ -955,7 +971,7 @@ Singleton {
                     "functionName": message.functionName,
                     "functionCall": message.functionCall,
                     "functionResponse": message.functionResponse,
-                    "visibleToUser": message.visibleToUser,
+                    "visibleToUser": message.visibleToUser
                 });
             }
         } catch (e) {
@@ -965,8 +981,10 @@ Singleton {
         }
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
     Process { 
-        id: getNameAndSaveChat
+        id: getNameGeminiProc
         running: false
         property var chatContent
         property string base64Chat: Qt.btoa(chatContent)
@@ -976,10 +994,22 @@ Singleton {
         ]
         stdout: StdioCollector {
             onStreamFinished: {
-                root.saveChat(this.text.trim())
+                var output = this.text.trim()
+                output = output.replace(/^```json/, "").replace(/```$/, "").trim()
+
+                console.log(output) // debug
+                
+                var jsonOutput = JSON.parse(output)
+                var title = jsonOutput.title
+                var icon = jsonOutput.icon
+
+                var metadataObj = { // for extra metadata
+                    icon: icon
+                }
+
                 Qt.callLater(() => {
-                    root.saveChat(this.text.trim())  // I have no fcking idea but it has to be called TWICE and with CALLLATER [btw saveChat(lastSession) is probably called twice as well]
-                    root.getSavedChats.running = true
+                    root.saveChat(title, metadataObj)  
+                    getSavedChats.running = true
                 })
             }
         }

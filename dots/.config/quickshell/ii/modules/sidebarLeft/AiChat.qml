@@ -101,9 +101,9 @@ Item {
             execute: args => {
                 const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
-                    //Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
-                    Ai.saveChatWithoutName();
-                    //Ai.addMessage(Translation.tr("Please wait, chat is being saved with auto naming..."), Ai.interfaceRole);
+                    Ai.addMessage(Translation.tr("Chat is being saved with auto naming."), Ai.interfaceRole);
+                    Ai.requestChatNameAndSave();
+                    
                     return;
                 }
                 Ai.saveChat(joinedArgs);
@@ -393,12 +393,55 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
 
             PagePlaceholder {
+                id: placeholder
                 z: 2
                 shown: Ai.messageIDs.length === 0
                 icon: "neurology"
                 title: Translation.tr("Large language models")
                 description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
                 shape: MaterialShape.Shape.PixelCircle
+            }
+
+            ColumnLayout {
+                visible: Ai.messageIDs.length === 0
+                anchors {
+                    left: parent.left
+                    leftMargin: 50
+                    top: placeholder.verticalCenter
+                    topMargin: 100
+                }
+                Rectangle {
+                    implicitWidth: 50
+                    implicitHeight: 50
+                    color: "blue"
+                }
+                StyledListView {
+                    id: listView
+                    Layout.alignment: Qt.AlignHCenter
+                    implicitWidth: 50
+                    implicitHeight: 100 // FIXME
+
+                    model: Ai.savedChatsMeta
+                    delegate: RippleButtonWithIcon {
+                        Component.onCompleted: {
+                            console.log(Ai.savedChatsMeta)
+                        }
+                        Layout.alignment: Qt.AlignHCenter
+                        materialIcon: modelData.icon
+                        mainText: modelData.title
+                        Layout.fillWidth: true
+                    }
+                }
+                Rectangle {
+                    implicitWidth: 50
+                    implicitHeight: 50
+                    color: "blue"
+                }
+                /* RippleButtonWithIcon {
+                    Layout.fillWidth: true
+                    buttonRadius: Appearance.rounding.small
+                    materialIcon
+                } */
             }
 
             ScrollToBottomButton {

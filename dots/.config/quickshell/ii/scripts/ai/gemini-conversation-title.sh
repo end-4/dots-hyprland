@@ -2,16 +2,10 @@
 set -euo pipefail
 
 # Usage:
-# ./gemini-conversation-title.sh <base64_json_input> <output_path>
-if [[ $# -lt 2 ]]; then
-    echo "Usage: $0 <base64_json_input> <output_path>"
-    exit 1
-fi
+# ./gemini-conversation-title.sh <base64_json_input>
 
 BASE64_INPUT="$1"
-OUTPUT_PATH="$2"
-
-mkdir -p "$(dirname "$OUTPUT_PATH")"
+#JSON_INPUT="$1"
 
 # decode base64
 JSON_INPUT=$(echo "$BASE64_INPUT" | base64 --decode)
@@ -27,12 +21,21 @@ fi
 # fetch .rawContents from JSON
 CONVO_TEXT=$(echo "$JSON_INPUT" | jq -r '.[].rawContent' | tr '\n' ' ' | sed 's/"/\\"/g')
 
-PROMPT="You are an expert title generation specialist tasked with determining the main topic of a conversation between a user and an AI.
-Your job is to analyze the chat transcript and generate a single, short title, consisting of 1 to 6 words, that best summarizes the content.
-Constraints: 1. The title must reflect the main theme of the chat. 2. The output must contain only the title text,
-and must not include quotation marks, numbers, emojis, explanations, or any extra sentences. 3.
-The title must be in the same language as the conversation. 4. Your output must be **only** the title.
-Conversation: $CONVO_TEXT"
+PROMPT="You are helping to automatically name and tag a chat based on its content.
+Analyze the conversation text and respond with a concise, meaningful title and a fitting Material Symbols icon name.
+
+Rules:
+- Respond only in valid JSON.
+- The JSON must contain two fields: "title" and "icon".
+- "title" should be a short, human-readable summary (short but very informative) of the chat topic (maximum 4-5 words).
+- "icon" must be one of the names from Google’s official Material Symbols icon set (for example: "lightbulb", "chat", "code", "backpack", "psychology", "build", "explore", etc.).
+- The icon name must be lowercase and must exist in the Material Symbols library.
+- Use the conversation's language when naming the title.
+- Do not include any explanations, Markdown, or text outside of the JSON object.
+- Do not include any additional text.
+- When choosing an icon, don't shy away from thinking abstractly. For example, a lightbulb for something like new ideas
+Conversation:
+$CONVO_TEXT"
 
 payload=$(jq -n --arg text "$PROMPT" '{
   contents: [{ parts: [{ text: $text }] }],
@@ -47,5 +50,4 @@ response=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/${MO
 
 TITLE=$(echo "$response" | jq -r '.candidates[0].content.parts[0].text' | sed '/^null$/d')
 
-#echo "$TITLE" > "$OUTPUT_PATH"
 echo "$TITLE"
