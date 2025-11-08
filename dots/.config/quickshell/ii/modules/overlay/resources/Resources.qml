@@ -13,42 +13,132 @@ import qs.modules.common.widgets
 import qs.modules.overlay
 
 StyledOverlayWidget {
-    id: root
+    function formatKB(kb) {
+        return (kb / (1024 * 1024)).toFixed(1) + " GB";
+    }
+
+   id: root
    property list<var> resources: [
         {
             icon: "planner_review",
             name: Translation.tr("CPU"),
             history: ResourceUsage.cpuUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableCpuString,
-            available: true
+            available: true,
+              extraProperties: [
+                {
+                    icon: "bolt",
+                    label: Translation.tr("Load:"),
+                    value: (ResourceUsage.cpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.cpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.cpuUsage * 100)}%)`
+                },
+                {
+                    icon: "planner_review",
+                    label: Translation.tr("Freq:"),
+                    value: ` ${Math.round(ResourceUsage.cpuFreqency  * 100) / 100} GHz`
+                },
+                {
+                    icon: "thermometer",
+                    label: Translation.tr("Temp:"),
+                    value: ` ${Math.round(ResourceUsage.cpuTemperature)} °C`
+                }
+            ]
         },
         {
             icon: "memory",
             name: Translation.tr("RAM"),
             history: ResourceUsage.memoryUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableMemoryString,
-            available: true
+            available: true,
+            extraProperties: [
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("Used:"),
+                    value: root.formatKB(ResourceUsage.memoryUsed)
+                },
+                {
+                    icon: "check_circle",
+                    label: Translation.tr("Free:"),
+                    value: root.formatKB(ResourceUsage.memoryFree)
+                },
+                {
+                    icon: "empty_dashboard",
+                    label: Translation.tr("Total:"),
+                    value: root.formatKB(ResourceUsage.memoryTotal)
+                }
+            ]
         },
         {
             icon: "swap_horiz",
             name: Translation.tr("Swap"),
             history: ResourceUsage.swapUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableSwapString,
-            available: true
+            available: true,
+              extraProperties: [
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("Used:"),
+                    value: root.formatKB(ResourceUsage.swapUsed)
+                },
+                {
+                    icon: "check_circle",
+                    label: Translation.tr("Free:"),
+                    value: root.formatKB(ResourceUsage.swapFree)
+                },
+                {
+                    icon: "empty_dashboard",
+                    label: Translation.tr("Total:"),
+                    value: root.formatKB(ResourceUsage.swapTotal)
+                }
+            ]
+            
         },
         {
             icon: "empty_dashboard",
             name: Translation.tr("IGPU"),
             history: ResourceUsage.iGpuUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailableIGpuString,
-            available: ResourceUsage.iGpuAvailable
+            available: ResourceUsage.iGpuAvailable,
+              extraProperties: [
+                {
+                    icon: "bolt",
+                    label: Translation.tr("Load:"),
+                    value: (ResourceUsage.iGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.iGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.iGpuUsage * 100)}%)`
+                },
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("VRAM:"),
+                    value: ` ${Math.round(ResourceUsage.iGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.iGpuVramTotalGB * 10) / 10} GB`
+                },
+                {
+                    icon: "thermometer",
+                    label: Translation.tr("Temp:"),
+                    value: `${ResourceUsage.iGpuTempemperature} °C`
+                }
+            ]
         },
         {
             icon: "empty_dashboard",
             name: Translation.tr("DGPU"),
             history: ResourceUsage.dGpuUsageHistory,
             maxAvailableString: ResourceUsage.maxAvailabledDGpuString,
-            available: ResourceUsage.dGpuAvailable
+            available: ResourceUsage.dGpuAvailable,
+              extraProperties: [
+                {
+                    icon: "bolt",
+                    label: Translation.tr("Load:"),
+                    value: (ResourceUsage.dGpuUsage > 0.8 ? Translation.tr("High") : ResourceUsage.dGpuUsage > 0.4 ? Translation.tr("Medium") : Translation.tr("Low")) + ` (${Math.round(ResourceUsage.dGpuUsage * 100)}%)`
+                },
+                {
+                    icon: "clock_loader_60",
+                    label: Translation.tr("VRAM:"),
+                    value: ` ${Math.round(ResourceUsage.dGpuVramUsedGB * 10) / 10} / ${Math.round(ResourceUsage.dGpuVramTotalGB * 10) / 10} GB`
+                },
+                {
+                    icon: "thermometer",
+                    label: Translation.tr("Temp:"),
+                    value: `${ResourceUsage.dGpuTempemperature} °C`
+                }
+            ]
         }
     ].filter(r => r.available) 
 
@@ -93,14 +183,44 @@ StyledOverlayWidget {
                 Layout.margins: 8
                 history: root.resources[tabBar.currentIndex]?.history ?? []
                 maxAvailableString: root.resources[tabBar.currentIndex]?.maxAvailableString ?? "--"
+              }
+
+        ColumnLayout {
+             spacing: 4
+             Repeater {
+            model:  root.resources[tabBar.currentIndex]?.extraProperties.length ?? 0 
+            delegate: RowLayout {
+                required property int index 
+              property var modelData: root.resources[tabBar.currentIndex]?.extraProperties[index] 
+                
+                spacing: 4
+                MaterialSymbol {
+                    text: modelData.icon
+                    color: Appearance.colors.colOnSurfaceVariant
+                    iconSize: Appearance.font.pixelSize.large
+                }
+                StyledText {
+                    text: modelData.label ?? ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
+                    visible: modelData.value !== ""
+                    color: Appearance.colors.colOnSurfaceVariant
+                    text: modelData.value ?? ""
+                }
             }
         }
+           
+    }
     }
 
     component ResourceSummary: RowLayout {
         id: resourceSummary
         required property list<real> history
         required property string maxAvailableString
+
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 12
@@ -148,6 +268,10 @@ StyledOverlayWidget {
                 points: ResourceUsage.historyLength
                 alignment: Graph.Alignment.Right
             }
+          }
+
+
         }
-    }
+      }
+       
 }
