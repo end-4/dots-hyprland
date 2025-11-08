@@ -40,7 +40,7 @@ Singleton {
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> gpuUsageHistory: []
 
-    property string maxAvailableGpuString: gpuName || "GPU"
+    property string maxAvailableGpuString: dGpuName || "GPU"
 
     readonly property string scriptCmd: "~/.config/quickshell/ii/scripts/gpu/get_amd_gpuinfo.sh"
 
@@ -94,7 +94,7 @@ Singleton {
       onStreamFinished:{
         dGpuAvailable =  this.text.indexOf("No GPU available") ==-1
         if(dGpuAvailable){
-          dGpuName = this.text.match(/\sModel\s:\s(.+)/)?.[1].trim()
+          dGpuName = this.text.match(/\sModel\s:\s(.+)/)?.[1].trim() ?? ""
           dGpuFanUsage =  this.text.match(/\sFan\s:\s(\d+)/)?.[1] ?? 0 
 
           dGpuPower =  this.text.match(/\sPower\s:\s(\d+)/)?.[1] ?? 0 
