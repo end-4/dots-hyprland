@@ -137,7 +137,7 @@ ContentPage {
             title: Translation.tr("Interface Language")
             tooltip: Translation.tr("Select the language for the user interface.\n\"Auto\" will use your system's locale.")
 
-            ConfigSelectionArray {
+            LanguageDropdownButton {
                 id: languageSelector
                 currentValue: Config.options.language.ui
                 onSelected: newValue => {
