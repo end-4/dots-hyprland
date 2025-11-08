@@ -64,7 +64,7 @@ StyledOverlayWidget {
                 {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
-                    value: `${GpuUsage.iGpuTempemperature} °C`
+                    value: `${GpuUsage.iGpuTemperature} °C`
                 }
             ]
         },
@@ -83,7 +83,7 @@ StyledOverlayWidget {
                 {
                     icon: "thermometer",
                     label: Translation.tr("Temp:"),
-                    value: `${GpuUsage.dGpuTempemperature} °C`
+                    value: `${GpuUsage.dGpuTemperature} °C`
                 },
                 {
                     icon: "air",

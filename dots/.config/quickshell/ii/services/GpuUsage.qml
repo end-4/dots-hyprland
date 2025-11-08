@@ -8,21 +8,29 @@ import Quickshell.Io
 
 Singleton {
     id: root
+
+    // dGPU Properties
     property string dGpuName: ""
-    property bool dGpuAvailable: true
+    property string dGpuVendor: ""
+    property bool dGpuAvailable: false
     property double dGpuUsage: 0
     property double dGpuVramUsage: 0
-    property double dGpuTempemperature: 0
+    property double dGpuTemperature: 0
     property double dGpuVramUsedGB: 0
     property double dGpuVramTotalGB: 0
     property double dGpuPower: 0
     property double dGpuPowerLimit: 0
     property double dGpuFanUsage: 0
+    property double dGpuFanRpm: 0
+    property double dGpuTempJunction: 0
+    property double dGpuTempMem: 0
 
-    property bool iGpuAvailable: true
+    // iGPU Properties
+    property string iGpuVendor: ""
+    property bool iGpuAvailable: false
     property double iGpuUsage: 0
     property double iGpuVramUsage: 0
-    property double iGpuTempemperature: 0
+    property double iGpuTemperature: 0
     property double iGpuVramUsedGB: 0
     property double iGpuVramTotalGB: 0
 
@@ -36,9 +44,7 @@ Singleton {
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> gpuUsageHistory: []
 
-    property string maxAvailableGpuString: dGpuName || "GPU"
 
-    readonly property string scriptCmd: "~/.config/quickshell/ii/scripts/gpu/get_amd_gpuinfo.sh"
 
     function updateiGpuUsageHistory() {
         iGpuUsageHistory = [...iGpuUsageHistory, iGpuUsage];
@@ -87,24 +93,46 @@ Singleton {
         id: dGpuinfoProc
         command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_dgpuinfo.sh`.replace(/file:\/\//, "")]
         running: true
+        environment: {
+            "AMD_GPU_CARD": Config.options?.resources?.gpu?.dgpuCard || "",
+            "INTEL_GPU_CARD": Config.options?.resources?.gpu?.dgpuCard || ""
+        }
 
         stdout: StdioCollector {
             onStreamFinished: {
-              dGpuAvailable = this.text.indexOf("No GPU available") == -1;
-                if (dGpuAvailable) {
-                    dGpuName = this.text.match(/\sModel\s:\s(.+)/)?.[1].trim() ?? "";
-                    dGpuFanUsage = this.text.match(/\sFan\s:\s(\d+)/)?.[1] ?? 0;
+                try {
+                    const data = JSON.parse(this.text)
 
-                    dGpuPower = this.text.match(/\sPower\s:\s(\d+)/)?.[1] ?? 0;
-                    dGpuPowerLimit = this.text.match(/\sPowerLimit\s:\s(\d+)/)?.[1] ?? 0;
-                    dGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] / 100 ?? 0;
-                    const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/);
-                    dGpuVramUsedGB = Number(vramLine?.[1] ?? 0);
-                    dGpuVramTotalGB = Number(vramLine?.[2] ?? 0);
+                    // Empty object means no GPU detected
+                    dGpuAvailable = Object.keys(data).length > 0
 
-                    dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0;
-                    dGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0;
+                    if (dGpuAvailable) {
+                        dGpuVendor = data.vendor || ""
+                        dGpuName = data.name || "dGPU"
+                        dGpuUsage = (data.usagePercent ?? 0) / 100
+                        dGpuVramUsedGB = data.vramUsedGB ?? 0
+                        dGpuVramTotalGB = data.vramTotalGB ?? 0
+                        dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0
+
+                        dGpuTemperature = data.tempEdgeC ?? 0
+
+                        dGpuTempJunction = data.tempJunctionC ?? 0
+                        dGpuTempMem = data.tempMemC ?? 0
+
+                        dGpuFanRpm = data.fanRpm ?? 0
+                        dGpuFanUsage = data.fanPercent ?? 0
+
+                        dGpuPower = data.powerW ?? 0
+                        dGpuPowerLimit = data.powerLimitW ?? 0
+
+                    }
+                } catch (e) {
+                    console.error("Failed to parse dGPU JSON:", e, "Raw output:", this.text)
+                    dGpuAvailable = false
                 }
+
+                // Update history after data is processed
+                root.updatedGpuUsageHistory()
             }
         }
     }
@@ -113,18 +141,35 @@ Singleton {
         id: iGpuinfoProc
         command: ["bash", "-c", `${Directories.scriptPath}/gpu/get_igpuinfo.sh`.replace(/file:\/\//, "")]
         running: true
+        environment: {
+            "AMD_GPU_CARD": Config.options?.resources?.gpu?.igpuCard || "",
+            "INTEL_GPU_CARD": Config.options?.resources?.gpu?.igpuCard || ""
+        }
 
         stdout: StdioCollector {
             onStreamFinished: {
-                iGpuAvailable = this.text.indexOf("No GPU available") == -1;
-                if (iGpuAvailable) {
-                    iGpuUsage = this.text.match(/\sUsage\s:\s(\d+)/)?.[1] / 100 ?? 0;
-                    const vramLine = this.text.match(/\sVRAM\s:\s(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\s*GB/);
-                    iGpuVramUsedGB = Number(vramLine?.[1] ?? 0);
-                    iGpuVramTotalGB = Number(vramLine?.[2] ?? 0);
-                    iGpuVramUsage = iGpuVramTotalGB > 0 ? (iGpuVramUsedGB / iGpuVramTotalGB) : 0;
-                    iGpuTempemperature = this.text.match(/\sTemp\s:\s(\d+)/)?.[1] ?? 0;
+                try {
+                    const data = JSON.parse(this.text)
+
+                    // Empty object means no GPU detected
+                    iGpuAvailable = Object.keys(data).length > 0
+
+                    if (iGpuAvailable) {
+                        iGpuVendor = data.vendor || ""
+                        iGpuUsage = (data.usagePercent ?? 0) / 100
+                        iGpuVramUsedGB = data.vramUsedGB ?? 0
+                        iGpuVramTotalGB = data.vramTotalGB ?? 0
+                        iGpuVramUsage = iGpuVramTotalGB > 0 ? (iGpuVramUsedGB / iGpuVramTotalGB) : 0
+
+                        iGpuTemperature = data.tempEdgeC ?? 0
+                    }
+                } catch (e) {
+                    console.error("Failed to parse iGPU JSON:", e, "Raw output:", this.text)
+                    iGpuAvailable = false
                 }
+
+                // Update history after data is processed
+                root.updateiGpuUsageHistory()
             }
         }
     }

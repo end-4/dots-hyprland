@@ -40,7 +40,9 @@ StyledPopup {
                     label: Translation.tr("Total:")
                     value: ResourceUsage.kbToGbString(ResourceUsage.memoryTotal)
                 }
+
             }
+
         }
 
         Column {
@@ -73,7 +75,9 @@ StyledPopup {
                     label: Translation.tr("Total:")
                     value: ResourceUsage.kbToGbString(ResourceUsage.swapTotal)
                 }
+
             }
+
         }
 
         Column {
@@ -105,7 +109,9 @@ StyledPopup {
                     label: Translation.tr("Temp:")
                     value: ` ${Math.round(ResourceUsage.cpuTemperature)} °C`
                 }
+
             }
+
         }
 
         ColumnLayout {
@@ -134,9 +140,11 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value: `${GpuUsage.iGpuTempemperature} °C`
+                    value: `${GpuUsage.iGpuTemperature} °C`
                 }
+
             }
+
         }
 
         ColumnLayout {
@@ -165,9 +173,13 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
-                    value: `${GpuUsage.dGpuTempemperature} °C`
+                    value: `${GpuUsage.dGpuTemperature} °C`
                 }
+
             }
+
         }
+
     }
+
 }
