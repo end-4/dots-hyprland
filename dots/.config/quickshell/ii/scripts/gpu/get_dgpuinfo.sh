@@ -147,7 +147,7 @@ if ls /sys/class/drm/card*/device 1>/dev/null 2>&1; then
             [[ $found -eq 1 ]] && break
         done
         
-        # TODO Add AMD calcualtion
+        # TODO Add AMD calculation
         power_draw= 0
         power_limit= 0
         fan_speed= 0
