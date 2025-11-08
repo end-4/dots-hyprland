@@ -126,7 +126,7 @@ StyledPopup {
 
             StyledPopupHeaderRow {
                 icon: "empty_dashboard"
-                label: "IGPU"
+                label: "iGPU"
             }
 
             ColumnLayout {
@@ -159,7 +159,7 @@ StyledPopup {
 
             StyledPopupHeaderRow {
                 icon: "empty_dashboard"
-                label: "DGPU"
+                label: "dGPU"
             }
 
             ColumnLayout {

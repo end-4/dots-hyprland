@@ -94,7 +94,7 @@ StyledOverlayWidget {
         },
         {
             icon: "empty_dashboard",
-            name: Translation.tr("IGPU"),
+            name: Translation.tr("iGPU"),
             history: GpuUsage.iGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailableIGpuString,
             available: GpuUsage.iGpuAvailable,
@@ -118,7 +118,7 @@ StyledOverlayWidget {
         },
         {
             icon: "empty_dashboard",
-            name: Translation.tr("DGPU"),
+            name: Translation.tr("dGPU"),
             history: GpuUsage.dGpuUsageHistory,
             maxAvailableString: GpuUsage.maxAvailabledDGpuString,
             available: GpuUsage.dGpuAvailable,
