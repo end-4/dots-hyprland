@@ -910,10 +910,16 @@ Singleton {
      * @param chatName name of the chat
      */
     function saveChat(chatName) {
+        console.log("saving something")
         chatSaveFile.chatName = chatName.trim()
         const saveContent = JSON.stringify(root.chatToJson())
         chatSaveFile.setText(saveContent)
         getSavedChats.running = true;
+    }
+
+    function saveChatWithoutName() {
+        getNameAndSaveChat.chatContent = JSON.stringify(root.chatToJson())
+        getNameAndSaveChat.running = true; 
     }
 
     /**
@@ -958,4 +964,24 @@ Singleton {
             getSavedChats.running = true;
         }
     }
+
+    Process { 
+        id: getNameAndSaveChat
+        running: false
+        property var chatContent
+        property string base64Chat: Qt.btoa(chatContent)
+        command: [
+            "bash", "-c",
+            Directories.conversationTitleScriptPath + " '" + base64Chat + "' '" + Directories.generatedConversationTitlePath + "'"
+        ]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.saveChat(this.text.trim())
+                Qt.callLater(() => {
+                    root.saveChat(this.text.trim())  // I have no fcking idea but it has to be called TWICE and with CALLLATER [btw saveChat(lastSession) is probably called twice as well]
+                    root.getSavedChats.running = true
+                })
+            }
+        }
+    } 
 }

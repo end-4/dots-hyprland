@@ -101,7 +101,9 @@ Item {
             execute: args => {
                 const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
-                    Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
+                    //Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
+                    Ai.saveChatWithoutName();
+                    //Ai.addMessage(Translation.tr("Please wait, chat is being saved with auto naming..."), Ai.interfaceRole);
                     return;
                 }
                 Ai.saveChat(joinedArgs);
