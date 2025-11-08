@@ -85,7 +85,7 @@ Singleton {
                     property bool pinned: false
                     property bool clickthrough: true
                     property real x: 835
-                    property real y: 490
+                    property real y: 483
                 }
                 property JsonObject recorder: JsonObject {
                     property bool pinned: false
@@ -104,7 +104,14 @@ Singleton {
                     property bool pinned: false
                     property bool clickthrough: false
                     property real x: 80
-                    property real y: 250
+                    property real y: 280
+                    property int tabIndex: 0
+                }
+                property JsonObject fpsLimiter: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 1576
+                    property real y: 630
                 }
             }
 

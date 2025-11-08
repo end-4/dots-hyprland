@@ -67,7 +67,6 @@ Singleton {
             // Reload files
             fileMeminfo.reload()
             fileStat.reload()
-            fileCpuinfo.reload()
 
             // Parse memory and swap usage
             const textMeminfo = fileMeminfo.text()
@@ -93,29 +92,6 @@ Singleton {
                 previousCpuStats = { total, idle }
             }
 
-            // Parse max CPU frequency
-            const textCpuinfo = fileCpuinfo.text()
-            // Try to find 'cpu max MHz', fallback to highest 'cpu MHz'
-            let maxMHz = 0
-            let match
-            // Try cpu max MHz (modern kernels)
-            match = textCpuinfo.match(/cpu max MHz\s*:\s*([\d.]+)/)
-            if (match) {
-                maxMHz = Number(match[1])
-            } else {
-                // Fallback: find all cpu MHz lines and take the max
-                let mhzRegex = /cpu MHz\s*:\s*([\d.]+)/g
-                let mhzMatch
-                let mhzList = []
-                while ((mhzMatch = mhzRegex.exec(textCpuinfo)) !== null) {
-                    mhzList.push(Number(mhzMatch[1]))
-                }
-                if (mhzList.length > 0) {
-                    maxMHz = Math.max.apply(null, mhzList)
-                }
-            }
-            root.maxAvailableCpuString = maxMHz > 0 ? (maxMHz / 1000).toFixed(1) + "GHz" : "--"
-
             root.updateHistories()
             interval = Config.options?.resources?.updateInterval ?? 3000
         }
@@ -123,5 +99,16 @@ Singleton {
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
-    FileView { id: fileCpuinfo; path: "/proc/cpuinfo" }
+
+    Process {
+        id: findCpuMaxFreqProc
+        command: ["bash", "-c", "lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
+        running: true
+        stdout: StdioCollector {
+            id: outputCollector
+            onStreamFinished: {
+                root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz"
+            }
+        }
+    }
 }

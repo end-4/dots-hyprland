@@ -9,6 +9,7 @@ Singleton {
         { identifier: "recorder", materialSymbol: "screen_record" },
         { identifier: "volumeMixer", materialSymbol: "volume_up" },
         { identifier: "crosshair", materialSymbol: "point_scan" },
+        { identifier: "fpsLimiter", materialSymbol: "animation" },
         { identifier: "resources", materialSymbol: "browse_activity" }
     ]
     

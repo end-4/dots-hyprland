@@ -13,6 +13,7 @@ StyledOverlayWidget {
     contentItem: Rectangle {
         id: contentItem
         anchors.centerIn: parent
+        radius: root.contentRadius
         color: Appearance.m3colors.m3surfaceContainer
         property real padding: 8
         implicitHeight: contentColumn.implicitHeight + padding * 2
@@ -75,7 +76,7 @@ StyledOverlayWidget {
                 colRipple: Appearance.colors.colLayer3Active
                 onClicked: {
                     GlobalStates.overlayOpen = false;
-                    Qt.openUrlExternally(Directories.videos);
+                    Qt.openUrlExternally(`file://${Config.options.screenRecord.savePath}`);
                 }
                 contentItem: Row {
                     anchors.centerIn: parent

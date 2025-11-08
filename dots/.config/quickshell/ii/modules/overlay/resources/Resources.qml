@@ -39,6 +39,7 @@ StyledOverlayWidget {
         id: contentItem
         anchors.centerIn: parent
         color: Appearance.m3colors.m3surfaceContainer
+        radius: root.contentRadius
         property real padding: 4
         implicitWidth: 350
         implicitHeight: 200
@@ -49,7 +50,7 @@ StyledOverlayWidget {
                 fill: parent
                 margins: parent.padding
             }
-            spacing: 10
+            spacing: 8
 
             SecondaryTabBar {
                 id: tabBar
