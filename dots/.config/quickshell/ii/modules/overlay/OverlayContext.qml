@@ -10,7 +10,10 @@ Singleton {
         { identifier: "volumeMixer", materialSymbol: "volume_up" },
         { identifier: "crosshair", materialSymbol: "point_scan" },
         { identifier: "fpsLimiter", materialSymbol: "animation" },
-        { identifier: "resources", materialSymbol: "browse_activity" }
+        { identifier: "resources", materialSymbol: "browse_activity" },
+        // CUSTOM: Stickypad integration - START
+        { identifier: "stickypad", materialSymbol: "note_stack" }
+        // CUSTOM: Stickypad integration - END
     ]
     
     readonly property bool hasPinnedWidgets: root.pinnedWidgetIdentifiers.length > 0
