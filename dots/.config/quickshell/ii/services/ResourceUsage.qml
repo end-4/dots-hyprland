@@ -71,7 +71,6 @@ Singleton {
             // Reload files
             fileMeminfo.reload();
             fileStat.reload();
-            fileCpuinfo.reload();
 
             // Parse memory and swap usage
             const textMeminfo = fileMeminfo.text();
@@ -105,9 +104,10 @@ Singleton {
             const cpuCoreFrequencies = cpuInfo.match(/cpu MHz\s+:\s+(\d+\.\d+)\n/g).map(x => Number(x.match(/\d+\.\d+/)));
             const cpuCoreFreqencyAvg = cpuCoreFrequencies.reduce((a, b) => a + b, 0) / cpuCoreFrequencies.length;
             cpuFreqency = cpuCoreFreqencyAvg / 1000;
+            
 
-            //Process process CPU temp
-            tempProc.running = true;
+            //read cpu temp
+            tempProc.running = true
 
             root.updateHistories();
             interval = Config.options?.resources?.updateInterval ?? 3000;
@@ -125,28 +125,26 @@ Singleton {
     FileView {
         id: fileStat
         path: "/proc/stat"
-    }
+      }
 
-    Process {
-        id: tempProc
-        command: ["/bin/bash", "-c", "for d in /sys/class/hwmon/hwmon*; do if [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"coretemp\" ] || [ \"$(cat \"$d/name\" 2>/dev/null)\" = \"k10temp\" ]; then temp=$(cat \"$d\"/temp*_input 2>/dev/null | head -1); echo \"$temp\"; break; fi; done"]
-        running: true
-        stdout: StdioCollector {
-            onStreamFinished: {
+
+    Process { // only run this once
+      id: fileCreationtempProc
+      running: true
+      command: ["bash", "-c", `${Directories.scriptPath}/cpu/coretemp.sh`.replace(/file:\/\//, "")]
+    }
+    
+      Process { // only run this once
+      id: tempProc
+      running: true
+      command: ["bash", "-c", "cat /tmp/quickshell/coretemp"]
+      stdout: StdioCollector {
+        onStreamFinished: {
                 cpuTemperature = Number(this.text) / 1000;
+
             }
         }
+
     }
 
-    Process {
-        id: findCpuMaxFreqProc
-        command: ["bash", "-c", "lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
-        running: true
-        stdout: StdioCollector {
-            id: outputCollector
-            onStreamFinished: {
-                root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz";
-            }
-        }
-    }
 }

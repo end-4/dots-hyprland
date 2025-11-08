@@ -90,7 +90,7 @@ Singleton {
 
         stdout: StdioCollector {
             onStreamFinished: {
-                dGpuAvailable = this.text.indexOf("No GPU available") == -1;
+              dGpuAvailable = this.text.indexOf("No GPU available") == -1;
                 if (dGpuAvailable) {
                     dGpuName = this.text.match(/\sModel\s:\s(.+)/)?.[1].trim() ?? "";
                     dGpuFanUsage = this.text.match(/\sFan\s:\s(\d+)/)?.[1] ?? 0;
