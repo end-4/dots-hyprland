@@ -18,3 +18,15 @@ Of course, you can choose to skip installing these two packages during the insta
 - `git clone --recurse-submodules https://github.com/end-4/dots-hyprland ~/.cache/dots-hyprland`
 - `cd ~/.cache/dots-hyprland`
 - `./setup install`
+
+# After installation
+- Fix the issue of the right column crashing when clicking the `Details` button in Wi-Fi mode. Edit this file: ~/.config/illogical-impulse/config.json
+```
+@@ 44,3 44,3 @@
+-  "apps": {
+-    "bluetooth": "kcmshell6 kcm_bluetooth",
+-    "network": "kitty -1 fish -c nmtui",
++  "apps": {
++    "bluetooth": "kcmshell6 kcm_bluetooth",
++    "network": "plasmawindowed org.kde.plasma.networkmanagement",
+```
