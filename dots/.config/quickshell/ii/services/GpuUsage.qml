@@ -26,6 +26,7 @@ Singleton {
     property double dGpuTempMem: 0
 
     // iGPU Properties
+    property string iGpuName: ""
     property string iGpuVendor: ""
     property bool iGpuAvailable: false
     property double iGpuUsage: 0
@@ -34,57 +35,56 @@ Singleton {
     property double iGpuVramUsedGB: 0
     property double iGpuVramTotalGB: 0
 
-    property string maxAvailableIGpuString: "100%"
-    property string maxAvailabledDGpuString: "\n" + dGpuName
-
-    property list<real> iGpuUsageHistory: []
-    property list<real> dGpuUsageHistory: []
+    // Display strings
+    property string maxAvailableIGpuString: "\n" + iGpuName
+    property string maxAvailableDGpuString: "\n" + dGpuName
 
     // History for graphing
+    property list<real> iGpuUsageHistory: []
+    property list<real> dGpuUsageHistory: []
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
-    property list<real> gpuUsageHistory: []
-
-
 
     function updateiGpuUsageHistory() {
-        iGpuUsageHistory = [...iGpuUsageHistory, iGpuUsage];
+        iGpuUsageHistory = [...iGpuUsageHistory, iGpuUsage]
         if (iGpuUsageHistory.length > historyLength) {
-            iGpuUsageHistory.shift();
+            iGpuUsageHistory.shift()
         }
     }
 
     function updatedGpuUsageHistory() {
-        dGpuUsageHistory = [...dGpuUsageHistory, dGpuUsage];
+        dGpuUsageHistory = [...dGpuUsageHistory, dGpuUsage]
         if (dGpuUsageHistory.length > historyLength) {
-            dGpuUsageHistory.shift();
+            dGpuUsageHistory.shift()
         }
     }
+
     function updateHistories() {
-        if (iGpuAvailable)
-            updateiGpuUsageHistory();
-        if (dGpuAvailable)
-            updatedGpuUsageHistory();
+        if (iGpuAvailable) updateiGpuUsageHistory()
+        if (dGpuAvailable) updatedGpuUsageHistory()
     }
 
     Timer {
         interval: 1
-        running: true
+        running: Config.options?.resources?.enableGpu !== false
         repeat: true
         onTriggered: {
+        
             if(Config.options.bar.resources.gpuLayout == -1){ //disabled gpu
                 this.repeat = false
             }
-
-            //Process process GPU info
+            
             if (iGpuAvailable) {
-                iGpuinfoProc.running = true;
+                iGpuinfoProc.running = true
             }
 
             if (dGpuAvailable) {
-                dGpuinfoProc.running = true;
+                dGpuinfoProc.running = true
             }
 
-            root.updateHistories();
+            // History updates after data is received in onStreamFinished handlers
+            interval = Config.options?.resources?.updateInterval ?? 3000
+            
+
             interval = Config.options?.resources?.updateInterval ?? 3000;
         }
     }
@@ -108,14 +108,13 @@ Singleton {
 
                     if (dGpuAvailable) {
                         dGpuVendor = data.vendor || ""
-                        dGpuName = data.name || "dGPU"
+                        dGpuName = Config.options?.resources?.gpu?.dgpuName || data.name || "dGPU"
                         dGpuUsage = (data.usagePercent ?? 0) / 100
                         dGpuVramUsedGB = data.vramUsedGB ?? 0
                         dGpuVramTotalGB = data.vramTotalGB ?? 0
                         dGpuVramUsage = dGpuVramTotalGB > 0 ? (dGpuVramUsedGB / dGpuVramTotalGB) : 0
 
                         dGpuTemperature = data.tempEdgeC ?? 0
-
                         dGpuTempJunction = data.tempJunctionC ?? 0
                         dGpuTempMem = data.tempMemC ?? 0
 
@@ -124,6 +123,8 @@ Singleton {
 
                         dGpuPower = data.powerW ?? 0
                         dGpuPowerLimit = data.powerLimitW ?? 0
+
+                        maxAvailableDGpuString = "\n" + dGpuName
 
                     }
                 } catch (e) {
@@ -156,6 +157,8 @@ Singleton {
 
                     if (iGpuAvailable) {
                         iGpuVendor = data.vendor || ""
+                        iGpuName = Config.options?.resources?.gpu?.igpuName || data.name || "iGPU"
+
                         iGpuUsage = (data.usagePercent ?? 0) / 100
                         iGpuVramUsedGB = data.vramUsedGB ?? 0
                         iGpuVramTotalGB = data.vramTotalGB ?? 0
