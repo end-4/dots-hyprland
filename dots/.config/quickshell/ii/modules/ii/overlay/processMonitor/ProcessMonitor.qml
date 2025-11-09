@@ -16,6 +16,39 @@ StyledOverlayWidget {
     property string searchText: ""
     property string expandedPid: ""
 
+    // Sorting states: 0 = none, 1 = ascending, 2 = descending; could be done with just one state variable? 🤔
+    property int sortStateProcess: 0
+    property int sortStateCpu: 0
+    property int sortStateRam: 0
+
+    function applySorting(procs) {
+        let sorted = procs.slice()
+
+        if (sortStateProcess !== 0) {
+            sorted.sort((a, b) => {
+                const nameA = a.name.toLowerCase()
+                const nameB = b.name.toLowerCase()
+                return sortStateProcess === 1 ?
+                    nameA.localeCompare(nameB) :
+                    nameB.localeCompare(nameA)
+            })
+        } else if (sortStateCpu !== 0) {
+            sorted.sort((a, b) => {
+                return sortStateCpu === 1 ?
+                    b.cpuPercent - a.cpuPercent :
+                    a.cpuPercent - b.cpuPercent
+            })
+        } else if (sortStateRam !== 0) {
+            sorted.sort((a, b) => {
+                return sortStateRam === 1 ?
+                    b.memoryKb - a.memoryKb :
+                    a.memoryKb - b.memoryKb
+            })
+        }
+
+        return sorted
+    }
+
     property var filteredProcesses: {
         const search = searchText.trim().toLowerCase()
 
@@ -30,14 +63,14 @@ StyledOverlayWidget {
         )
     }
 
-    property var displayedProcesses: filteredProcesses
+    property var displayedProcesses: applySorting(filteredProcesses)
 
     Timer {
         id: modelRefreshTimer
         interval: 130
         repeat: false
         onTriggered: {
-            displayedProcesses = filteredProcesses
+            displayedProcesses = applySorting(filteredProcesses)
         }
     } // since i dont know how to prevent overlapping smartly, this will avoid most of it when searching
 
@@ -45,23 +78,26 @@ StyledOverlayWidget {
         if (expandedPid !== "") {
             expandedPid = ""
         }
-        
+
         displayedProcesses = []
         modelRefreshTimer.restart()
     }
 
     onExpandedPidChanged: {
         if (expandedPid === "") {
-            displayedProcesses = filteredProcesses
+            displayedProcesses = applySorting(filteredProcesses)
         }
     }
 
     onFilteredProcessesChanged: {
-
         if (expandedPid === "") {
             modelRefreshTimer.restart()
         }
     }
+
+    onSortStateProcessChanged: { displayedProcesses = applySorting(filteredProcesses) }
+    onSortStateCpuChanged: { displayedProcesses = applySorting(filteredProcesses) }
+    onSortStateRamChanged: { displayedProcesses = applySorting(filteredProcesses) }
 
     contentItem: OverlayBackground {
         radius: root.contentRadius
@@ -140,35 +176,137 @@ StyledOverlayWidget {
                     anchors.rightMargin: 12
                     spacing: 6
 
-                    StyledText {
+                    // Process slabel
+                    Item {
                         Layout.fillWidth: true
                         Layout.minimumWidth: 50
-                        text: Translation.tr("Process")
-                        font.bold: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.colors.colOnSecondaryContainer
+                        Layout.preferredHeight: parent.height
+
+                        StyledText {
+                            id: processLabel
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: Translation.tr("Process")
+                            font.bold: true
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: root.sortStateProcess !== 0 ?
+                                   Appearance.colors.colPrimary :
+                                   processMouseArea.containsMouse ?
+                                   Appearance.colors.colPrimary :
+                                   Appearance.colors.colOnSecondaryContainer
+                            opacity: processMouseArea.containsMouse ? 0.7 : 1.0
+                        }
+
+                        MaterialSymbol {
+                            visible: root.sortStateProcess !== 0
+                            anchors.left: processLabel.right
+                            anchors.leftMargin: 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.sortStateProcess === 1 ? "arrow_downward" : "arrow_upward"
+                            color: Appearance.colors.colPrimary
+                            iconSize: 14
+                        }
+
+                        MouseArea {
+                            id: processMouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sortStateCpu = 0
+                                root.sortStateRam = 0
+                                root.sortStateProcess = (root.sortStateProcess + 1) % 3
+                            }
+                        }
                     }
 
-                    StyledText {
+                    // CPU Label
+                    Item {
                         Layout.preferredWidth: 70
                         Layout.minimumWidth: 70
                         Layout.maximumWidth: 70
-                        horizontalAlignment: Text.AlignRight
-                        text: Translation.tr("CPU")
-                        font.bold: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.colors.colOnSecondaryContainer
+                        Layout.preferredHeight: parent.height
+
+                        StyledText {
+                            id: cpuLabel
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: Translation.tr("CPU")
+                            font.bold: true
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: root.sortStateCpu !== 0 ?
+                                   Appearance.colors.colPrimary :
+                                   cpuMouseArea.containsMouse ?
+                                   Appearance.colors.colPrimary :
+                                   Appearance.colors.colOnSecondaryContainer
+                            opacity: cpuMouseArea.containsMouse ? 0.7 : 1.0
+                        }
+
+                        MaterialSymbol {
+                            visible: root.sortStateCpu !== 0
+                            anchors.right: cpuLabel.left
+                            anchors.rightMargin: 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.sortStateCpu === 1 ? "arrow_downward" : "arrow_upward"
+                            color: Appearance.colors.colPrimary
+                            iconSize: 14
+                        }
+
+                        MouseArea {
+                            id: cpuMouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sortStateProcess = 0
+                                root.sortStateRam = 0
+                                root.sortStateCpu = (root.sortStateCpu + 1) % 3
+                            }
+                        }
                     }
 
-                    StyledText {
+                    // RAM label
+                    Item {
                         Layout.preferredWidth: 90
                         Layout.minimumWidth: 90
                         Layout.maximumWidth: 90
-                        horizontalAlignment: Text.AlignRight
-                        text: Translation.tr("RAM")
-                        font.bold: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.colors.colOnSecondaryContainer
+                        Layout.preferredHeight: parent.height
+
+                        StyledText {
+                            id: ramLabel
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: Translation.tr("RAM")
+                            font.bold: true
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: root.sortStateRam !== 0 ?
+                                   Appearance.colors.colPrimary :
+                                   ramMouseArea.containsMouse ?
+                                   Appearance.colors.colPrimary :
+                                   Appearance.colors.colOnSecondaryContainer
+                            opacity: ramMouseArea.containsMouse ? 0.7 : 1.0
+                        }
+
+                        MaterialSymbol {
+                            visible: root.sortStateRam !== 0
+                            anchors.right: ramLabel.left
+                            anchors.rightMargin: 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.sortStateRam === 1 ? "arrow_downward" : "arrow_upward"
+                            color: Appearance.colors.colPrimary
+                            iconSize: 14
+                        }
+
+                        MouseArea {
+                            id: ramMouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.sortStateProcess = 0
+                                root.sortStateCpu = 0
+                                root.sortStateRam = (root.sortStateRam + 1) % 3
+                            }
+                        }
                     }
 
                     Item {
