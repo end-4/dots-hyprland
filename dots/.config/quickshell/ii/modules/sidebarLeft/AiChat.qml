@@ -332,7 +332,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     spacing: 10
                     StatusItem {
                         icon: Ai.chatMetadata.icon ?? ""
-                        statusText: Ai.chatMetadata.title
+                        statusText: Ai.chatMetadata.title ?? ""
                         description: statusText
                         visible: Ai.chatMetadata?.title?.length > 1
                         maxWidth: statusRowLayout.width / 2
@@ -359,6 +359,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         icon: "token"
                         statusText: Ai.tokenCount.total
                         description: Translation.tr("Total token count\nInput: %1\nOutput: %2").arg(Ai.tokenCount.input).arg(Ai.tokenCount.output)
+                        maxWidth: statusRowLayout.width / 3
                     }
                 }
             }
@@ -420,44 +421,34 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 shape: MaterialShape.Shape.PixelCircle
             }
 
-            ColumnLayout {
-                Layout.fillWidth: true
-                visible: Ai.messageIDs.length === 0
-                anchors {
-                    left: parent.left
-                    leftMargin: 50
-                    top: placeholder.verticalCenter
-                    topMargin: 100
-                }
-                Rectangle {
-                    implicitWidth: 50
-                    implicitHeight: 50
-                    color: "blue"
-                }
-                StyledListView {
-                    id: listView
-                    Layout.alignment: Qt.AlignHCenter
-                    implicitWidth: 300 // FIXME
-                    implicitHeight: 200 // FIXME
-
-                    model: Ai.savedChats
-                    delegate: AiChatHistoryButton {}
-                }
-                Rectangle {
-                    implicitWidth: 50
-                    implicitHeight: 50
-                    color: "blue"
-                }
-                /* RippleButtonWithIcon {
-                    Layout.fillWidth: true
-                    buttonRadius: Appearance.rounding.small
-                    materialIcon
-                } */
-            }
+            
 
             ScrollToBottomButton {
                 z: 3
                 target: messageListView
+            }
+            Item {
+                anchors {
+                    bottom: parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                    bottomMargin: 10
+                }
+                id: chatHistoryItem
+                visible: Ai.messageIDs.length === 0
+                implicitWidth: parent.width
+                implicitHeight: 100 // FIX MEEE
+                Layout.bottomMargin: implicitHeight > 0 ? root.padding : -root.padding * 10
+                Behavior on implicitHeight {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+                StyledListView {
+                    id: listView
+                    implicitWidth: parent.implicitWidth
+                    implicitHeight: parent.implicitHeight
+                    //verticalLayoutDirection: ListView.BottomToTop
+                    model: Ai.savedChats
+                    delegate: AiChatHistoryButton {}
+                }
             }
         }
 
@@ -522,6 +513,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
         }
 
+
         Rectangle { // Input area
             id: inputWrapper
             property real spacing: 5
@@ -568,6 +560,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     background: null
 
                     onTextChanged: {
+                        if (messageInputField.text.length !== 0) chatHistoryItem.implicitHeight = 0;
+                        else chatHistoryItem.implicitHeight = inputWrapper.implicitHeight * 2;
                         // Handle suggestions
                         if (messageInputField.text.length === 0) {
                             root.suggestionQuery = "";
@@ -843,6 +837,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
     component AiChatHistoryButton: Item {
         id: chatHistoryItem
         property var metadata
+        
+        onMetadataChanged: {
+            
+        }
 
         implicitHeight: savedChatButton.implicitHeight
         implicitWidth: listView.implicitWidth
@@ -857,14 +855,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 const fullJson = JSON.parse(metadataReader.text());
                 chatHistoryItem.metadata = fullJson.metadata;
                 savedChatButton.materialIcon = chatHistoryItem.metadata.icon ?? "history";
-                savedChatButton.mainText = chatHistoryItem.metadata.title ?? "Last Session";
+                savedChatButton.mainText = chatHistoryItem.metadata.title === "lastSession" ? Translation.tr("Last session") : chatHistoryItem.metadata.title ?? "Unknown chat";
             }
         }
 
         RowLayout {
             implicitWidth: listView.implicitWidth
             RippleButtonWithIcon {
-                implicitWidth: listView.implicitWidth
+                implicitWidth: listView.implicitWidth - chatDeleteButton.implicitWidth * 1.2
                 id: savedChatButton
                 onClicked: {
                     Ai.loadChat(chatHistoryItem.metadata.title);
