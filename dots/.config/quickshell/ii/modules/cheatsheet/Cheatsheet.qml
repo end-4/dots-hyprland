@@ -82,6 +82,10 @@ Scope { // Scope
                 Keys.onPressed: event => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
                         cheatsheetRoot.hide();
+                    } else if (event.key === Qt.Key_Slash) {
+                        // did not work
+                        cheatsheetKeybinds.filterField.forceActiveFocus();
+                        event.accepted = true;
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
@@ -161,7 +165,7 @@ Scope { // Scope
                             }
                         }
 
-                        CheatsheetKeybinds {}
+                        CheatsheetKeybinds { id: cheatsheetKeybinds }
                         CheatsheetPeriodicTable {}
                     }
                 }

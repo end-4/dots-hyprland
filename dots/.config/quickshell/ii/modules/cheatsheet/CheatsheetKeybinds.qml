@@ -8,10 +8,71 @@ import QtQuick.Layouts
 
 Item {
     id: root
-    readonly property var keybinds: HyprlandKeybinds.keybinds
+    readonly property var keybinds: {
+        const hasFilter = root.filter !== '';
+
+        if (!Config.options.cheatsheet.splitButtons) {
+             const children = HyprlandKeybinds.keybinds.children.map((child) => {
+                return Object.assign(
+                    {},
+                    child,
+                    {
+                        children: child.children.map((children) => {
+                            const { keybinds } = children;
+                            return Object.assign({}, children, { keybinds: keybinds.map((keybind) => {
+                              // console.log('======================================' )
+                              // console.log('keybind before', JSON.stringify(keybind, 2))
+                              // console.log('======================================' )
+                              let mods = [];
+                              for (var j = 0; j < keybind.mods.length; j++) {
+                                  mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                              }
+                              mods = [mods.join(' ') ]
+                              mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
+                              mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                              // console.log('======================================' )
+                              // console.log('keybind after', JSON.stringify(keybind, 2))
+                              // console.log('======================================' )
+                              return Object.assign({}, keybind, { mods })
+                            }).filter(keybind => {
+                              return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                            }) })
+                        })
+                    }
+                )
+             })
+          
+             // console.log(JSON.stringify(children))
+             return { children: children }
+        } 
+        return {
+            children: HyprlandKeybinds.keybinds.children.map((child) => {
+                return Object.assign(
+                    {},
+                    child,
+                    {
+                        children: child.children.map((children) => {
+                            const { keybinds } = children;
+                            return Object.assign(
+                                {},
+                                children,
+                                {
+                                    keybinds: keybinds.filter(keybind => {
+                                        return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                                    })
+                                }
+                            )
+                        })
+                    }
+                )
+                
+            })
+        } 
+    }
     property real spacing: 20
     property real titleSpacing: 7
     property real padding: 4
+    property var filter: ''
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
@@ -76,7 +137,55 @@ Item {
       Config.options.cheatsheet.useFnSymbol ? functionSymbolMap : {},
       Config.options.cheatsheet.useMouseSymbol ? mouseSymbolMap : {},
     )
+    
+    // Keys.onPressed: event => {
+    //    if (event.key === Qt.Key_Slash) {
+    //         filterField.forceActiveFocus();
+    //         event.accepted = true;
+    //     }
+    // }
 
+    Toolbar {
+        id: extraOptions
+        anchors {
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+            bottomMargin: 8
+        }
+
+        IconToolbarButton {
+            implicitWidth: height
+            text: "filter_alt"
+        }
+
+        ToolbarTextField {
+            id: filterField
+            placeholderText: focus ? Translation.tr("Filter shortcuts") : Translation.tr("Hit \"/\" to filter")
+
+            // Style
+            clip: true
+            font.pixelSize: Appearance.font.pixelSize.small
+
+            // Search
+            onTextChanged: {
+                // Wallpapers.searchQuery = text;
+                console.log('filter', text)
+                root.filter = text
+            }
+
+        }
+
+        IconToolbarButton {
+            implicitWidth: height
+            onClicked: {
+                root.filter = filterField.text = '';
+            }
+            text: "close"
+            StyledToolTip {
+                text: Translation.tr("Clear filter")
+            }
+        }
+    }
     Row { // Keybind columns
         id: row
         spacing: root.spacing
@@ -102,6 +211,7 @@ Item {
                             id: sectionColumn
                             anchors.centerIn: parent
                             spacing: root.titleSpacing
+                            visible: !!keybindSection.modelData.keybinds.length
                             
                             StyledText {
                                 id: sectionTitle
@@ -126,15 +236,6 @@ Item {
                                         for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
                                             const keybind = keybindSection.modelData.keybinds[i];
 
-                                            if (!Config.options.cheatsheet.splitButtons) {
-
-                                              for (var j = 0; j < keybind.mods.length; j++) {
-                                                  keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
-                                              }
-                                              keybind.mods = [keybind.mods.join(' ') ]
-                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
-                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
-                                            } 
 
                                             result.push({
                                                 "type": "keys",
