@@ -11,63 +11,63 @@ Item {
     readonly property var keybinds: {
         const hasFilter = root.filter !== '';
 
-        if (!Config.options.cheatsheet.splitButtons) {
-             const children = HyprlandKeybinds.keybinds.children.map((child) => {
-                return Object.assign(
-                    {},
-                    child,
-                    {
-                        children: child.children.map((children) => {
-                            const { keybinds } = children;
-                            return Object.assign({}, children, { keybinds: keybinds.map((keybind) => {
-                              // console.log('======================================' )
-                              // console.log('keybind before', JSON.stringify(keybind, 2))
-                              // console.log('======================================' )
-                              let mods = [];
-                              for (var j = 0; j < keybind.mods.length; j++) {
-                                  mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
-                              }
-                              mods = [mods.join(' ') ]
-                              mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
-                              mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
-                              // console.log('======================================' )
-                              // console.log('keybind after', JSON.stringify(keybind, 2))
-                              // console.log('======================================' )
-                              return Object.assign({}, keybind, { mods })
-                            }).filter(keybind => {
-                              return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
-                            }) })
+        const children = HyprlandKeybinds.keybinds.children.map((child) => {
+            return Object.assign({},
+                child, {
+                    children: child.children.map((children) => {
+                        const {
+                            keybinds
+                        } = children;
+                        const remappedKeybinds = keybinds.map((keybind) => {
+                            // console.log('======================================' )
+                            // console.log('keybind before', JSON.stringify(keybind, 2))
+                            // console.log('======================================' )
+                            let mods = [];
+                            for (var j = 0; j < keybind.mods.length; j++) {
+                                mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                            }
+
+                            if (!Config.options.cheatsheet.splitButtons) {
+                                mods = [mods.join(' ')]
+                                mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
+                                mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                            }
+                            // console.log('======================================' )
+                            // console.log('keybind after', JSON.stringify(keybind, 2))
+                            // console.log('======================================' )
+                            return Object.assign({}, keybind, {
+                                mods
+                            })
                         })
-                    }
-                )
-             })
+                        const filteredKeybinds = remappedKeybinds.filter(keybind => {
+                            return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                        })
+                        const result = []
+                        filteredKeybinds.forEach(keybind => {
+                            result.push({
+                                "type": "keys",
+                                "mods": keybind.mods,
+                                "key": keybind.key,
+                            });
+                            result.push({
+                                "type": "comment",
+                                "comment": keybind.comment,
+                            });
+                        })
+
+                        console.log('result', JSON.stringify(result))
+
+                        return Object.assign({}, children, {
+                            keybinds: filteredKeybinds,
+                            result: result
+                        })
+                    })
+                }
+            )
+        })
           
              // console.log(JSON.stringify(children))
-             return { children: children }
-        } 
-        return {
-            children: HyprlandKeybinds.keybinds.children.map((child) => {
-                return Object.assign(
-                    {},
-                    child,
-                    {
-                        children: child.children.map((children) => {
-                            const { keybinds } = children;
-                            return Object.assign(
-                                {},
-                                children,
-                                {
-                                    keybinds: keybinds.filter(keybind => {
-                                        return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
-                                    })
-                                }
-                            )
-                        })
-                    }
-                )
-                
-            })
-        } 
+        return { children: children }
     }
     property real spacing: 20
     property real titleSpacing: 7
@@ -231,24 +231,7 @@ Item {
                                 rowSpacing: 4
 
                                 Repeater {
-                                    model: {
-                                        var result = [];
-                                        for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
-                                            const keybind = keybindSection.modelData.keybinds[i];
-
-
-                                            result.push({
-                                                "type": "keys",
-                                                "mods": keybind.mods,
-                                                "key": keybind.key,
-                                            });
-                                            result.push({
-                                                "type": "comment",
-                                                "comment": keybind.comment,
-                                            });
-                                        }
-                                        return result;
-                                    }
+                                  model: keybindSection.modelData.result
                                     delegate: Item {
                                         required property var modelData
                                         implicitWidth: keybindLoader.implicitWidth
