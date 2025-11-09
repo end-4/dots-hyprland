@@ -84,20 +84,42 @@ Singleton {
                 property JsonObject crosshair: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: true
-                    property real x: 835
-                    property real y: 483
+                    property real x: 827
+                    property real y: 441
+                    property real width: 250
+                    property real height: 100
+                }
+                property JsonObject floatingImage: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 1650
+                    property real y: 390
+                    property real width: 0
+                    property real height: 0
+                }
+                property JsonObject fpsLimiter: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 1570
+                    property real y: 615
+                    property real width: 280
+                    property real height: 80
                 }
                 property JsonObject recorder: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: false
                     property real x: 80
                     property real y: 80
+                    property real width: 350
+                    property real height: 130
                 }
                 property JsonObject resources: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: true
                     property real x: 1500
                     property real y: 770
+                    property real width: 350
+                    property real height: 200
                     property int tabIndex: 0
                 }
                 property JsonObject volumeMixer: JsonObject {
@@ -105,13 +127,9 @@ Singleton {
                     property bool clickthrough: false
                     property real x: 80
                     property real y: 280
+                    property real width: 350
+                    property real height: 600
                     property int tabIndex: 0
-                }
-                property JsonObject fpsLimiter: JsonObject {
-                    property bool pinned: false
-                    property bool clickthrough: false
-                    property real x: 1576
-                    property real y: 630
                 }
             }
 

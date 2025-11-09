@@ -138,13 +138,14 @@ elif [[ -f "./sdata/dist-${OS_DISTRO_ID}/install-deps.sh" ]]; then
     printf "\n"
     if [ "$ask" = "false" ]; then
       echo "Urgent problem encountered, aborting...";exit 1
+    else
+      printf "${STY_RED}Still proceed?${STY_RST}\n"
+      read -p "[y/N]: " p
+      case "$p" in
+        [yY])sleep 0;;
+        *)echo "Aborting...";exit 1;;
+      esac
     fi
-    printf "${STY_RED}Still proceed?${STY_RST}\n"
-    read -p "[y/N]: " p
-    case "$p" in
-      [yY])sleep 0;;
-      *)echo "Aborting...";exit 1;;
-    esac
   fi
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
@@ -177,7 +178,16 @@ else
   printf "2. It is WIP and only contains small number of dependencies far from enough.\n"
   printf "Proceed only at your own risk.\n"
   printf "${STY_RST}"
-  pause
+  if [ "$ask" = "false" ]; then
+    echo "Urgent problem encountered, aborting...";exit 1
+  else
+    printf "${STY_RED}Still proceed?${STY_RST}\n"
+    read -p "[y/N]: " p
+    case "$p" in
+      [yY])sleep 0;;
+      *)echo "Aborting...";exit 1;;
+    esac
+  fi
   source ./sdata/dist-${TARGET_ID}/install-deps.sh
 
 fi
