@@ -71,59 +71,56 @@ Singleton {
                     const line = lines[i].trim()
                     if (!line) continue
 
-                    const parts = line.split(/\s+/)
-                    if (parts.length < 11) continue
+                        const parts = line.split(/\s+/)
+                        if (parts.length < 11) continue
 
-                    const user = parts[0]
-                    const pid = parts[1]
-                    const cpuRaw = parseFloat(parts[2]) || 0
-                    const cpuPercent = Math.min(100, cpuRaw / root.cpuCores)
-                    const memPercent = parseFloat(parts[3])
-                    const rssKb = parseInt(parts[5])
-                    const command = parts.slice(10).join(' ')
+                            const user = parts[0]
+                            const pid = parts[1]
+                            const cpuRaw = parseFloat(parts[2]) || 0
+                            const cpuPercent = Math.min(100, cpuRaw / root.cpuCores)
+                            const memPercent = parseFloat(parts[3])
+                            const rssKb = parseInt(parts[5])
+                            const command = parts.slice(10).join(' ')
 
-                    // Extract a meaningful process name from full command
-                    let processName = command
-                    if (command.startsWith('[') && command.endsWith(']')) {
-                        processName = command
-                    } else {
-                        const cmdParts = command.split(' ')
-                        let baseName = cmdParts[0].split('/').pop()
-
-                        // If it's an interpreter, try to get the actual script name (idk  any more interpreters); honestly I don't know any better way to figure out the process name, but this is better than nothing i guess
-                        const interpreters = ['python', 'python2', 'python3', 'node', 'bash', 'sh', 'perl', 'ruby', 'java']
-                        if (interpreters.includes(baseName) && cmdParts.length > 1) {
-                            let scriptPath = cmdParts[1]
-                            let argIndex = 1
-                            while (argIndex < cmdParts.length && cmdParts[argIndex].startsWith('-')) {
-                                argIndex++
-                            }
-                            if (argIndex < cmdParts.length) {
-                                scriptPath = cmdParts[argIndex]
-                                const scriptName = scriptPath.split('/').pop()
-                                processName = baseName + ': ' + scriptName
+                            // Extract a meaningful process name from full command
+                            let processName = command
+                            if (command.startsWith('[') && command.endsWith(']')) {
+                                processName = command
                             } else {
-                                processName = baseName
+                                const cmdParts = command.split(' ')
+                                let baseName = cmdParts[0].split('/').pop()
+
+                                // If it's an interpreter, try to get the actual script name (idk  any more interpreters); honestly I don't know any better way to figure out the process name, but this is better than nothing i guess
+                                const interpreters = ['python', 'python2', 'python3', 'node', 'bash', 'sh', 'perl', 'ruby', 'java', 'exe', 'php', 'lua', 'luajit', 'dotnet', 'mono', 'swift', 'nim', 'wine', 'proton']
+                                if (interpreters.includes(baseName) && cmdParts.length > 1) {
+                                    let scriptPath = cmdParts[1]
+                                    let argIndex = 1
+                                    while (argIndex < cmdParts.length && cmdParts[argIndex].startsWith('-')) {
+                                        argIndex++
+                                    }
+                                    if (argIndex < cmdParts.length) {
+                                        scriptPath = cmdParts[argIndex]
+                                        const scriptName = scriptPath.split('/').pop()
+                                        processName = baseName + ': ' + scriptName
+                                    } else {
+                                        processName = baseName
+                                    }
+                                } else {
+                                    processName = baseName
+                                }
+
                             }
-                        } else {
-                            processName = baseName
-                        }
 
-                        if (processName.length > 45) {
-                            processName = processName.substring(0, 42) + "..."
-                        }
-                    }
-
-                    processList.push({
-                        pid: pid,
-                        name: processName,
-                        fullCommand: command,
-                        user: user,
-                        cpuPercent: cpuPercent,
-                        memPercent: memPercent,
-                        memoryKb: rssKb,
-                        memoryFormatted: root.formatMemory(rssKb)
-                    })
+                            processList.push({
+                                pid: pid,
+                                name: processName,
+                                fullCommand: command,
+                                user: user,
+                                cpuPercent: cpuPercent,
+                                memPercent: memPercent,
+                                memoryKb: rssKb,
+                                memoryFormatted: root.formatMemory(rssKb)
+                            })
                 }
 
                 root.processes = processList
@@ -133,18 +130,18 @@ Singleton {
     }
 
     Process {
-    id: cpuCoreProbe
-    command: ["/bin/sh", "-c",
+        id: cpuCoreProbe
+        command: ["/bin/sh", "-c",
         "nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1"
-    ]
-    running: true
-    stdout: StdioCollector {
-        onStreamFinished: {
-            const n = parseInt(this.text.trim())
-            if (!isNaN(n) && n > 0) root.cpuCores = n
+        ]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const n = parseInt(this.text.trim())
+                if (!isNaN(n) && n > 0) root.cpuCores = n
+            }
         }
     }
-}
 
     Process {
         id: killProc
@@ -154,5 +151,5 @@ Singleton {
         }
     }
 
-    
+
 }
