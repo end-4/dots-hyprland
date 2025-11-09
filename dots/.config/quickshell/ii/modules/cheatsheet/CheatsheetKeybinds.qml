@@ -30,9 +30,7 @@ Item {
                                 mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
                                 mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
                             }
-                            return Object.assign({}, keybind, {
-                                mods
-                            })
+                            return Object.assign({}, keybind, { mods })
                         })
                         const filteredKeybinds = remappedKeybinds.filter(keybind => {
                             return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
@@ -50,11 +48,9 @@ Item {
                             });
                         })
 
-                        console.log('result', JSON.stringify(result))
-
                         return Object.assign({}, children, {
                             keybinds: filteredKeybinds,
-                            result: result
+                            result
                         })
                     })
                 }
@@ -138,6 +134,11 @@ Item {
     //     }
     // }
 
+    onFocusChanged: focus => {
+        if (focus) {
+            filterField.forceActiveFocus();
+        }
+    }
     Toolbar {
         id: extraOptions
         anchors {
@@ -161,7 +162,6 @@ Item {
 
             // Search
             onTextChanged: {
-                console.log('filter', text)
                 root.filter = text
             }
 

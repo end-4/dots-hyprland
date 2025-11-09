@@ -83,8 +83,7 @@ Scope { // Scope
                     if (event.key === Qt.Key_Escape) {
                         cheatsheetRoot.hide();
                     } else if (event.key === Qt.Key_Slash) {
-                        // did not work
-                        cheatsheetKeybinds.filterField.forceActiveFocus();
+                        swipeView.currentItem.forceActiveFocus();
                         event.accepted = true;
                     }
                     if (event.modifiers === Qt.ControlModifier) {
