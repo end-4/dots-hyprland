@@ -113,14 +113,12 @@ Singleton {
                     property real x: 1576
                     property real y: 630
                 }
-                // CUSTOM: Stickypad integration - START
                 property JsonObject stickypad: JsonObject {
                     property bool pinned: true
                     property bool clickthrough: false
                     property real x: 100
                     property real y: 100
                 }
-                // CUSTOM: Stickypad integration - END
             }
 
             property JsonObject timer: JsonObject {
