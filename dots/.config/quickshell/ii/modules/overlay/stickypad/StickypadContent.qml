@@ -165,41 +165,14 @@ Rectangle {
                 textFormat: TextEdit.PlainText
                 background: null
                 rightPadding: 44
-                // CUSTOM: Adapt text color to theme (light/dark mode) - START
+                // Adapt text color to theme (light/dark mode) - START
                 color: Appearance.colors.colOnLayer0
-                // CUSTOM: Adapt text color to theme (light/dark mode) - END
-                // CUSTOM: Disable text area when clickthrough enabled - START
-                // Allow editing when overlay is open OR when clickthrough is disabled
+                // Adapt text color to theme (light/dark mode) - END
+                // Disable text area when clickthrough enabled - START
                 enabled: GlobalStates.overlayOpen || !root.isClickthrough
                 activeFocusOnTab: GlobalStates.overlayOpen || !root.isClickthrough
+                // Disable text area when clickthrough enabled - END
                 
-                // Release focus when clickthrough is enabled and overlay closes
-                Connections {
-                    target: root
-                    function onIsClickthroughChanged() {
-                        if (root.isClickthrough && !GlobalStates.overlayOpen && stickypadInput.activeFocus) {
-                            stickypadInput.focus = false
-                        }
-                    }
-                }
-                
-                Connections {
-                    target: GlobalStates
-                    function onOverlayOpenChanged() {
-                        if (!GlobalStates.overlayOpen && root.isClickthrough && stickypadInput.activeFocus) {
-                            stickypadInput.focus = false
-                        }
-                    }
-                }
-                // CUSTOM: Disable text area when clickthrough enabled - END
-                
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Escape && event.modifiers === Qt.NoModifier) {
-                        Persistent.states.overlay.open = Persistent.states.overlay.open.filter(type => type !== "stickypad")
-                        event.accepted = true
-                        return
-                    }
-                }
                 onTextChanged: {
                     if (stickypadInput.activeFocus) {
                         saveDebounce.restart()
