@@ -34,29 +34,6 @@ import Quickshell
 import qs.services
 
 ShellRoot {
-    // Enable/disable modules here. False = not loaded at all, so rest assured
-    // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
-    property bool enableBar: true
-    property bool enableBackground: true
-    property bool enableCheatsheet: true
-    property bool enableDock: true
-    property bool enableLock: true
-    property bool enableMediaControls: true
-    property bool enableNotificationPopup: true
-    property bool enablePolkit: true
-    property bool enableOnScreenDisplay: true
-    property bool enableOnScreenKeyboard: true
-    property bool enableOverlay: true
-    property bool enableOverview: true
-    property bool enableRegionSelector: true
-    property bool enableReloadPopup: true
-    property bool enableScreenCorners: true
-    property bool enableSessionScreen: true
-    property bool enableSidebarLeft: true
-    property bool enableSidebarRight: true
-    property bool enableVerticalBar: true
-    property bool enableWallpaperSelector: true
-
     // Force initialization of some singletons
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
@@ -67,25 +44,34 @@ ShellRoot {
         Wallpapers.load()
     }
 
-    LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
-    LazyLoader { active: enableBackground; component: Background {} }
-    LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
-    LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
-    LazyLoader { active: enableLock; component: Lock {} }
-    LazyLoader { active: enableMediaControls; component: MediaControls {} }
-    LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
-    LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
-    LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
-    LazyLoader { active: enableOverlay; component: Overlay {} }
-    LazyLoader { active: enableOverview; component: Overview {} }
-    LazyLoader { active: enablePolkit; component: Polkit {} }
-    LazyLoader { active: enableRegionSelector; component: RegionSelector {} }
-    LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
-    LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
-    LazyLoader { active: enableSessionScreen; component: SessionScreen {} }
-    LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
-    LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
-    LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
-    LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
+    // Load enabled stuff
+    // Well, these loaders only *allow* them to be loaded, to always load or not is defined in each component
+    // The media controls for example is not loaded if it's not opened
+    PanelLoader { identifier: "iiBar"; extraCondition: !Config.options.bar.vertical; component: Bar {} }
+    PanelLoader { identifier: "iiBackground"; component: Background {} }
+    PanelLoader { identifier: "iiCheatsheet"; component: Cheatsheet {} }
+    PanelLoader { identifier: "iiDock"; extraCondition: Config.options.dock.enable; component: Dock {} }
+    PanelLoader { identifier: "iiLock"; component: Lock {} }
+    PanelLoader { identifier: "iiMediaControls"; component: MediaControls {} }
+    PanelLoader { identifier: "iiNotificationPopup"; component: NotificationPopup {} }
+    PanelLoader { identifier: "iiOnScreenDisplay"; component: OnScreenDisplay {} }
+    PanelLoader { identifier: "iiOnScreenKeyboard"; component: OnScreenKeyboard {} }
+    PanelLoader { identifier: "iiOverlay"; component: Overlay {} }
+    PanelLoader { identifier: "iiOverview"; component: Overview {} }
+    PanelLoader { identifier: "iiPolkit"; component: Polkit {} }
+    PanelLoader { identifier: "iiRegionSelector"; component: RegionSelector {} }
+    PanelLoader { identifier: "iiReloadPopup"; component: ReloadPopup {} }
+    PanelLoader { identifier: "iiScreenCorners"; component: ScreenCorners {} }
+    PanelLoader { identifier: "iiSessionScreen"; component: SessionScreen {} }
+    PanelLoader { identifier: "iiSidebarLeft"; component: SidebarLeft {} }
+    PanelLoader { identifier: "iiSidebarRight"; component: SidebarRight {} }
+    PanelLoader { identifier: "iiVerticalBar"; extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
+    PanelLoader { identifier: "iiWallpaperSelector"; component: WallpaperSelector {} }
+
+    component PanelLoader: LazyLoader {
+        required property string identifier
+        property bool extraCondition: true
+        active: Config.ready && Config.options.enabledPanels.includes(identifier) && extraCondition
+    }
 }
 
