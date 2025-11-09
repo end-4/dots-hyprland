@@ -4,6 +4,7 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 
 AndroidQuickToggleButton {
     id: root
@@ -13,7 +14,7 @@ AndroidQuickToggleButton {
     toggled: false
     buttonIcon: "screenshot_region"
 
-    onClicked: {
+    mainAction: () => {
         GlobalStates.sidebarRightOpen = false;
         delayedActionTimer.start()
     }
@@ -22,7 +23,7 @@ AndroidQuickToggleButton {
         interval: 300
         repeat: false
         onTriggered: {
-            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("screenshot.qml")])
+            Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "screenshot"]);
         }
     }
 

@@ -130,9 +130,11 @@ Scope {
                     StyledText { // Title
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignHCenter
-                        font.family: Appearance.font.family.title
-                        font.pixelSize: Appearance.font.pixelSize.title
-                        font.weight: Font.DemiBold
+                        font {
+                            family: Appearance.font.family.title
+                            pixelSize: Appearance.font.pixelSize.title
+                            variableAxes: Appearance.font.variableAxes.title
+                        }
                         text: Translation.tr("Session")
                     }
 

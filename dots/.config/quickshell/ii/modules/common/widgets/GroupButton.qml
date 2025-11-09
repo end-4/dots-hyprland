@@ -22,10 +22,12 @@ Button {
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
+    property bool enableImplicitWidthAnimation: true
+    property bool enableImplicitHeightAnimation: true
     property real clickedWidth: baseWidth + (isAtSide ? 10 : 20)
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
-    property int indexInParent: parentGroup?.children.indexOf(root) ?? 0
+    property int indexInParent: parentGroup?.children.indexOf(root) ?? -1
     property int clickIndex: parentGroup?.clickIndex ?? -1
     property bool isAtSide: indexInParent === 0 || indexInParent === (parentGroup?.childrenCount - 1)
 
@@ -61,10 +63,12 @@ Button {
     }
 
     Behavior on implicitWidth {
+        enabled: root.enableImplicitWidthAnimation
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
     }
 
     Behavior on implicitHeight {
+        enabled: root.enableImplicitHeightAnimation
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
     }
 
@@ -75,7 +79,9 @@ Button {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    property alias mouseArea: buttonMouseArea
     MouseArea {
+        id: buttonMouseArea
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
@@ -111,7 +117,7 @@ Button {
         };
     }
 
-
+    property bool tabbedTo: root.focus && (focusReason === Qt.TabFocusReason || focusReason === Qt.BacktabFocusReason)
     background: Rectangle {
         id: buttonBackground
         topLeftRadius: root.leftRadius
@@ -124,6 +130,9 @@ Button {
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
+
+        border.width: root.tabbedTo ? 2 : 0
+        border.color: Appearance.colors.colSecondary
     }
 
     contentItem: StyledText {

@@ -1,0 +1,20 @@
+pkgname=illogical-impulse-basic
+pkgver=1.0
+pkgrel=2
+pkgdesc='Illogical Impulse Basic Dependencies'
+arch=(any)
+license=(None)
+depends=(
+  bc
+  coreutils
+  cliphist
+  cmake
+  curl
+  wget
+  ripgrep
+  jq
+  xdg-user-dirs
+  # Used in install script
+  rsync
+  go-yq # https://github.com/mikefarah/yq
+)

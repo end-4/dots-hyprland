@@ -3,7 +3,7 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
-import "../bar" as Bar
+import qs.modules.bar as Bar
 
 Item {
     id: root
@@ -36,7 +36,7 @@ Item {
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
 
-        Bar.ClockWidgetTooltip {
+        Bar.ClockWidgetPopup {
             hoverTarget: mouseArea
         }
     }

@@ -7,7 +7,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import QtQuick
-import "./ai/"
+import qs.services.ai
 
 /**
  * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
@@ -532,8 +532,6 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
-            // Fetch API keys if needed
-            if (model?.requires_key) KeyringStorage.fetchKeyringData();
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(
@@ -641,6 +639,10 @@ Singleton {
 
         function makeRequest() {
             const model = models[currentModelId];
+
+            // Fetch API keys if needed
+            if (model?.requires_key && !KeyringStorage.loaded) KeyringStorage.fetchKeyringData();
+            
             requester.currentStrategy = root.currentApiStrategy;
             requester.currentStrategy.reset(); // Reset strategy state
 
@@ -767,6 +769,18 @@ Singleton {
 
     function attachFile(filePath: string) {
         root.pendingFilePath = CF.FileUtils.trimFileProtocol(filePath);
+    }
+
+    function regenerate(messageIndex) {
+        if (messageIndex < 0 || messageIndex >= messageIDs.length) return;
+        const id = root.messageIDs[messageIndex];
+        const message = root.messageByID[id];
+        if (message.role !== "assistant") return;
+        // Remove all messages after this one
+        for (let i = root.messageIDs.length - 1; i >= messageIndex; i--) {
+            root.removeMessage(i);
+        }
+        requester.makeRequest();
     }
 
     function createFunctionOutputMessage(name, output, includeOutputInChat = true) {

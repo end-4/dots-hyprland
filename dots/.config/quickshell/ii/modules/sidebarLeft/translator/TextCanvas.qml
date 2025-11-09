@@ -17,10 +17,8 @@ Rectangle {
     default property alias actionButtons: actions.data
     Layout.fillWidth: true
     implicitHeight: Math.max(150, inputColumn.implicitHeight)
-    color: isInput ? Appearance.colors.colLayer1 : Appearance.colors.colSurfaceContainer
+    color: Appearance.colors.colLayer2
     radius: Appearance.rounding.normal
-    border.color: isInput ? Appearance.colors.colOutlineVariant : "transparent"
-    border.width: isInput ? 1 : 0
 
     signal inputTextChanged(); // Signal emitted when text changes
 

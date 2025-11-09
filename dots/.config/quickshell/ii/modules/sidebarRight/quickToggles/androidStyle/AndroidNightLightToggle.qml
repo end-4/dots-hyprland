@@ -14,12 +14,13 @@ AndroidQuickToggleButton {
 
     toggled: Hyprsunset.active
     buttonIcon: auto ? "night_sight_auto" : "bedtime"
-    onClicked: {
+    
+    mainAction: () => {
         Hyprsunset.toggle()
     }
 
     altAction: () => {
-        Config.options.light.night.automatic = !Config.options.light.night.automatic
+        root.openMenu()
     }
 
     Component.onCompleted: {
@@ -27,7 +28,7 @@ AndroidQuickToggleButton {
     }
     
     StyledToolTip {
-        text: Translation.tr("Night Light | Right-click to toggle Auto mode")
+        text: Translation.tr("Night Light | Right-click to configure")
     }
 }
 

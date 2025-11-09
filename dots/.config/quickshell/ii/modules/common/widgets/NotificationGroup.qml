@@ -1,7 +1,7 @@
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
-import "./notification_utils.js" as NotificationUtils
+import "notification_utils.js" as NotificationUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -86,10 +86,13 @@ MouseArea { // Notification group area
         automaticallyReset: false
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
-        onClicked: (mouse) => {
+        onPressed: {
             if (mouse.button === Qt.RightButton) 
                 root.toggleExpanded();
-            else if (mouse.button === Qt.MiddleButton) 
+        }
+
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.MiddleButton) 
                 root.destroyWithAnimation();
         }
 

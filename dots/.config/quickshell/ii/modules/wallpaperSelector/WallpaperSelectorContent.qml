@@ -186,6 +186,8 @@ MouseArea {
                             colBackgroundToggled: Appearance.colors.colSecondaryContainer
                             colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                             colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                            buttonRadius: height / 2
+                            implicitHeight: 38
 
                             contentItem: RowLayout {
                                 MaterialSymbol {
@@ -316,7 +318,7 @@ MouseArea {
                             bottomMargin: 8
                         }
 
-                        ToolbarButton {
+                        IconToolbarButton {
                             implicitWidth: height
                             onClicked: {
                                 Wallpapers.openFallbackPicker(root.useDarkMode);
@@ -327,42 +329,27 @@ MouseArea {
                                 GlobalStates.wallpaperSelectorOpen = false;
                                 Config.options.wallpaperSelector.useSystemFileDialog = true
                             }
-                            contentItem: MaterialSymbol {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                text: "open_in_new"
-                                iconSize: Appearance.font.pixelSize.larger
-                            }
+                            text: "open_in_new"
                             StyledToolTip {
                                 text: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
                             }
                         }
 
-                        ToolbarButton {
+                        IconToolbarButton {
                             implicitWidth: height
                             onClicked: {
                                 Wallpapers.randomFromCurrentFolder();
                             }
-                            contentItem: MaterialSymbol {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                text: "ifl"
-                                iconSize: Appearance.font.pixelSize.larger
-                            }
+                            text: "ifl"
                             StyledToolTip {
                                 text: Translation.tr("Pick random from this folder")
                             }
                         }
 
-                        ToolbarButton {
+                        IconToolbarButton {
                             implicitWidth: height
                             onClicked: root.useDarkMode = !root.useDarkMode
-                            contentItem: MaterialSymbol {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                text: root.useDarkMode ? "dark_mode" : "light_mode"
-                                iconSize: Appearance.font.pixelSize.larger
-                            }
+                            text: root.useDarkMode ? "dark_mode" : "light_mode"
                             StyledToolTip {
                                 text: Translation.tr("Click to toggle light/dark mode\n(applied when wallpaper is chosen)")
                             }
@@ -403,17 +390,12 @@ MouseArea {
                             }
                         }
 
-                        ToolbarButton {
+                        IconToolbarButton {
                             implicitWidth: height
                             onClicked: {
                                 GlobalStates.wallpaperSelectorOpen = false;
                             }
-                            contentItem: MaterialSymbol {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                text: "cancel_presentation"
-                                iconSize: Appearance.font.pixelSize.larger
-                            }
+                            text: "close"
                             StyledToolTip {
                                 text: Translation.tr("Cancel wallpaper selection")
                             }

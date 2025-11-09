@@ -1,0 +1,124 @@
+# The possible values of `mode`: (by default `sync`)
+# - `sync`: Make the destination completely the same as the source.
+# - `soft`: Skip existing files when copying
+# - `hard`: Overwrite existing files when copying
+# - `soft-backup`: If target file exists, copy source file to `*.new`. Do not create `*.new` but skip coyping when source and target HASH values are exactly the same.
+# - `hard-backup`: If target file exists, create backup by renaming it to `*.old.<n>` where `<n>` is a number increment from 1 to prevent backup gets overwritten when running twice. (Keep in mind that this script must be idempotent.) Also must compare the actual file content by using MD5 HASH value to prevent generating lots of `*.old.<n>`s when runnng multiple times. Do not create backup but skip coyping when source and target HASH values are exactly the same.
+# - `skip`: Skip this step
+# - `skip-if-exists`: Skip this step if target exists
+version: "1.0"
+user_preferences:
+  shell: "fish" # fish | zsh
+  terminal: "foot" # kitty | foot
+  keybindings: "default" # default | vim
+patterns:
+  # Always install these files
+  - from: "dots/.config/quickshell"
+    to: "$XDG_CONFIG_HOME/quickshell"
+    mode: "sync"
+  # Conditionally install these files
+  - from: "dots/.config/fish"
+    to: "$XDG_CONFIG_HOME/fish"
+    mode: "sync"
+    condition:
+      type: "shell"
+      value: "fish"
+  - from: "dots/.config/zshrc.d"
+    to: "$XDG_CONFIG_HOME/zshrc.d"
+    mode: "sync"
+    condition:
+      type: "shell"
+      value: "zsh"
+  - from: "dots/.config/foot"
+    to: "$XDG_CONFIG_HOME/foot"
+    mode: "sync"
+    condition:
+      type: "terminal"
+      value: "foot"
+  - from: "dots/.config/kitty"
+    to: "$XDG_CONFIG_HOME/kitty"
+    mode: "sync"
+    condition:
+      type: "terminal"
+      value: "kitty"
+  # Hyprland    
+  - from: "dots/.config/hypr"
+    to: "$XDG_CONFIG_HOME/hypr"
+    mode: "sync"
+    excludes: ["custom", "hyprlock.conf", "hypridle.conf", "hyprland.conf"]
+  # Hyprland special files
+  - from: "dots/.config/hypr/hyprland.conf"
+    to: "$XDG_CONFIG_HOME/hypr/hyprland.conf"
+    mode: "hard-backup"
+  - from: "dots/.config/hypr/hypridle.conf"
+    to: "$XDG_CONFIG_HOME/hypr/hypridle.conf"
+    mode: "soft-backup"
+  - from: "dots/.config/hypr/hyprlock.conf"
+    to: "$XDG_CONFIG_HOME/hypr/hyprlock.conf"
+    mode: "soft-backup"
+  - from: "dots/.config/hypr/custom"
+    to: "$XDG_CONFIG_HOME/hypr/custom"
+    mode: "skip-if-exists"
+  - from: "dots/.local/share/icons"
+    to: "$XDG_DATA_HOME/icons"
+    mode: "soft"
+  - from: "dots/.local/share/konsole"
+    to: "$XDG_DATA_HOME/konsole"
+    mode: "soft"
+  # Fontconfig (default - fontsets handled separately if FONTSET_DIR_NAME is set)
+  - from: "dots/.config/fontconfig"
+    to: "$XDG_CONFIG_HOME/fontconfig"
+    mode: "sync"
+  # MISC config directories (other .config directories)
+  - from: "dots/.config/fuzzel"
+    to: "$XDG_CONFIG_HOME/fuzzel"
+    mode: "sync"
+  - from: "dots/.config/kde-material-you-colors"
+    to: "$XDG_CONFIG_HOME/kde-material-you-colors"
+    mode: "sync"
+  - from: "dots/.config/Kvantum"
+    to: "$XDG_CONFIG_HOME/Kvantum"
+    mode: "sync"
+  - from: "dots/.config/matugen"
+    to: "$XDG_CONFIG_HOME/matugen"
+    mode: "sync"
+  - from: "dots/.config/mpv"
+    to: "$XDG_CONFIG_HOME/mpv"
+    mode: "sync"
+  - from: "dots/.config/qt5ct"
+    to: "$XDG_CONFIG_HOME/qt5ct"
+    mode: "sync"
+  - from: "dots/.config/qt6ct"
+    to: "$XDG_CONFIG_HOME/qt6ct"
+    mode: "sync"
+  - from: "dots/.config/wlogout"
+    to: "$XDG_CONFIG_HOME/wlogout"
+    mode: "sync"
+  - from: "dots/.config/xdg-desktop-portal"
+    to: "$XDG_CONFIG_HOME/xdg-desktop-portal"
+    mode: "sync"
+  # MISC config files (individual files in .config)
+  - from: "dots/.config/chrome-flags.conf"
+    to: "$XDG_CONFIG_HOME/chrome-flags.conf"
+    mode: "soft"
+  - from: "dots/.config/code-flags.conf"
+    to: "$XDG_CONFIG_HOME/code-flags.conf"
+    mode: "soft"
+  - from: "dots/.config/darklyrc"
+    to: "$XDG_CONFIG_HOME/darklyrc"
+    mode: "soft"
+  - from: "dots/.config/dolphinrc"
+    to: "$XDG_CONFIG_HOME/dolphinrc"
+    mode: "soft"
+  - from: "dots/.config/kdeglobals"
+    to: "$XDG_CONFIG_HOME/kdeglobals"
+    mode: "soft"
+  - from: "dots/.config/konsolerc"
+    to: "$XDG_CONFIG_HOME/konsolerc"
+    mode: "soft"
+  - from: "dots/.config/starship.toml"
+    to: "$XDG_CONFIG_HOME/starship.toml"
+    mode: "soft"
+  - from: "dots/.config/thorium-flags.conf"
+    to: "$XDG_CONFIG_HOME/thorium-flags.conf"
+    mode: "soft"

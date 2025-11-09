@@ -14,7 +14,7 @@ GroupButton {
 
     contentItem: MaterialSymbol {
         anchors.centerIn: parent
-        iconSize: 20
+        iconSize: 22
         fill: toggled ? 1 : 0
         color: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
         horizontalAlignment: Text.AlignHCenter

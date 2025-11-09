@@ -36,6 +36,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         Config.readWriteDelay = 0;
+        Config.blockWrites = true;
         MaterialThemeLoader.reapplyTheme();
     }
 
@@ -90,8 +91,8 @@ ApplicationWindow {
                 }
                 onClicked: {
                     Quickshell.execDetached(["killall", ...conflictGroup.programs])
-                    conflictGroup.visible = false
                     conflictGroup.alwaysSelected()
+                    conflictGroup.visible = false
                 }
             }
             RippleButton {
@@ -135,8 +136,11 @@ ApplicationWindow {
                 }
                 color: Appearance.colors.colOnLayer0
                 text: Translation.tr("Kill conflicting programs?")
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
+                font {
+                    family: Appearance.font.family.title
+                    pixelSize: Appearance.font.pixelSize.title
+                    variableAxes: Appearance.font.variableAxes.title
+                }
             }
             RowLayout { // Window controls row
                 id: windowControlsRow

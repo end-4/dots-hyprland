@@ -13,7 +13,7 @@ AndroidQuickToggleButton {
     toggled: !Notifications.silent
     buttonIcon: toggled ? "notifications_active" : "notifications_paused"
 
-    onClicked: {
+    mainAction: () => {
         Notifications.silent = !Notifications.silent;
     }
 

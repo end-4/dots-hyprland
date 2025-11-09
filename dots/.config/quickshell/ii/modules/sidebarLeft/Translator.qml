@@ -2,7 +2,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "./translator/"
+import qs.modules.sidebarLeft.translator
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -13,17 +13,24 @@ import Quickshell.Io
  */
 Item {
     id: root
+
+    // Sizes
+    property real padding: 4
+
     // Widgets
     property var inputField: inputCanvas.inputTextArea
+
     // Widget variables
     property bool translationFor: false // Indicates if the translation is for an autocorrected text
     property string translatedText: ""
     property list<string> languages: []
+
     // Options
     property string targetLanguage: Config.options.language.translator.targetLanguage
     property string sourceLanguage: Config.options.language.translator.sourceLanguage
     property string hostLanguage: targetLanguage
 
+    // States
     property bool showLanguageSelector: false
     property bool languageSelectorTarget: false // true for target language, false for source language
 
@@ -99,7 +106,11 @@ Item {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: root.padding
+        }
+
         StyledFlickable {
             Layout.fillWidth: true
             Layout.fillHeight: true

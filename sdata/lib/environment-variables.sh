@@ -4,7 +4,7 @@ XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
-BACKUP_DIR=${BACKUP_DIR:-$HOME/backup}
+BACKUP_DIR=${BACKUP_DIR:-$HOME/ii-original-dots-backup}
 
 
 STY_RED='\e[31m'
@@ -25,3 +25,7 @@ STY_RST='\e[00m'
 
 # Used by register_temp_file()
 declare -a TEMP_FILES_TO_CLEANUP=()
+
+# Pinned commit for quickshell
+_qs_commit='db1777c20b936a86528c1095cbcb1ebd92801402'
+_qs_shortcommit=$(echo ${_qs_commit} | cut -c1-7)

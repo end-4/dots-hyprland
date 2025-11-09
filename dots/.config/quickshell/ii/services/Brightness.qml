@@ -4,6 +4,8 @@ pragma ComponentBehavior: Bound
 // From https://github.com/caelestia-dots/shell with modifications.
 // License: GPLv3
 
+import qs.modules.common
+import qs.modules.common.functions
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -14,7 +16,6 @@ import QtQuick
  */
 Singleton {
     id: root
-
     signal brightnessChanged()
 
     property var ddcMonitors: []
@@ -84,12 +85,27 @@ Singleton {
         }
         property int rawMaxBrightness: 100
         property real brightness
+        property real brightnessMultiplier: 1.0
+        property real multipliedBrightness: Math.max(0, Math.min(1, brightness * (Config.options.light.antiFlashbang.enable ? brightnessMultiplier : 1)))
         property bool ready: false
+        property bool animateChanges: !monitor.isDdc
 
         onBrightnessChanged: {
-            if (monitor.ready) {
-                root.brightnessChanged();
+            if (!monitor.ready) return;
+            root.brightnessChanged();
+        }
+
+        Behavior on multipliedBrightness {
+            enabled: monitor.animateChanges
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveEffects
             }
+        }
+        onMultipliedBrightnessChanged: {
+            if (monitor.animationEnabled) syncBrightness();
+            else setTimer.restart();
         }
 
         function initialize() {
@@ -119,15 +135,19 @@ Singleton {
         }
 
         function syncBrightness() {
-            const rounded = Math.round(monitor.brightness * monitor.rawMaxBrightness);
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "--class", "backlight", "s", rounded, "--quiet"];
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
+            const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded] : ["brightnessctl", "--class", "backlight", "s", rawValueRounded, "--quiet"];
             setProc.startDetached();
         }
 
         function setBrightness(value: real): void {
-            value = Math.max(0.01, Math.min(1, value));
+            value = Math.max(0, Math.min(1, value));
             monitor.brightness = value;
-            setTimer.restart();
+        }
+
+        function setBrightnessMultiplier(value: real): void {
+            monitor.brightnessMultiplier = value;
         }
 
         Component.onCompleted: {
@@ -144,6 +164,68 @@ Singleton {
 
         BrightnessMonitor {}
     }
+
+    // Anti-flashbang
+    property int workspaceAnimationDelay: 500
+    property int contentSwitchDelay: 30
+    property string screenshotDir: "/tmp/quickshell/brightness/antiflashbang"
+    function brightnessMultiplierForLightness(x: real): real {
+        // I hand picked some values and fitted an exponential curve for this
+        // 6.600135 + 216.360356 * e^(-0.0811129189x)
+        // Division by 100 is to normalize to [0, 1]
+        return (6.600135 + 216.360356 * Math.pow(Math.E, -0.0811129189 * x)) / 100.0;
+    }
+    Variants {
+        model: Quickshell.screens
+        Scope {
+            id: screenScope
+            required property var modelData
+            property string screenName: modelData.name
+            property string screenshotPath: `${root.screenshotDir}/screenshot-${screenName}.png`
+            Connections {
+                enabled: Config.options.light.antiFlashbang.enable && Appearance.m3colors.darkmode
+                target: Hyprland
+                function onRawEvent(event) {
+                    if (["activewindowv2", "windowtitlev2"].includes(event.name)) {
+                        screenshotTimer.interval = root.contentSwitchDelay;
+                        screenshotTimer.restart();
+                    } else if (["workspacev2"].includes(event.name)) {
+                        screenshotTimer.interval = root.workspaceAnimationDelay;
+                        screenshotTimer.restart();
+                    }
+                }
+            }
+
+            Timer {
+                id: screenshotTimer
+                interval: 700 // This is what I have for a Hyprland ws anim
+                onTriggered: {
+                    screenshotProc.running = false;
+                    screenshotProc.running = true;
+                }
+            }
+
+            Process {
+                id: screenshotProc
+                command: ["bash", "-c", 
+                    `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
+                    + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
+                    + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`
+                ]
+                stdout: StdioCollector {
+                    id: lightnessCollector
+                    onStreamFinished: {
+                        Quickshell.execDetached(["rm", screenScope.screenshotPath]); // Cleanup
+                        const lightness = lightnessCollector.text
+                        const newMultiplier = root.brightnessMultiplierForLightness(parseFloat(lightness))
+                        Brightness.getMonitorForScreen(screenScope.modelData).setBrightnessMultiplier(newMultiplier)
+                    }
+                }
+            }
+        }
+    }
+
+    // External trigger points
 
     IpcHandler {
         target: "brightness"

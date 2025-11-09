@@ -80,8 +80,11 @@ ApplicationWindow {
                 }
                 color: Appearance.colors.colOnLayer0
                 text: Translation.tr("Hi there! First things first...")
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
+                font {
+                    family: Appearance.font.family.title
+                    pixelSize: Appearance.font.pixelSize.title
+                    variableAxes: Appearance.font.variableAxes.title
+                }
             }
             RowLayout { // Window controls row
                 id: windowControlsRow

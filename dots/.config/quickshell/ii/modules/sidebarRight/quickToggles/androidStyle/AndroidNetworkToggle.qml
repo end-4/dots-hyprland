@@ -12,7 +12,7 @@ AndroidQuickToggleButton {
 
     toggled: Network.wifiStatus !== "disabled"
     buttonIcon: Network.materialSymbol
-    onClicked: Network.toggleWifi()
+    mainAction: () => Network.toggleWifi()
     altAction: () => {
         root.openMenu()
     }

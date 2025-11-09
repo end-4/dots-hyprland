@@ -4,7 +4,7 @@ labels: ["FEATURE"]
 body:
   - type: markdown
     attributes:
-      value: "NOTE: Please write in **English**."
+      value: "NOTE:\n- Please search in [existing issues](https://github.com/end-4/dots-hyprland/issues?q=is%3Aissue) before continue.\n- Please write in **English**."
 
   - type: textarea
     attributes:

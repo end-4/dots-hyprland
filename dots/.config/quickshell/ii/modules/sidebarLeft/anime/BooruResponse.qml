@@ -3,8 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import "../"
-import qs.services
+import qs.modules.sidebarLeft
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -101,9 +100,7 @@ Rectangle {
             id: tagsFlickable
             visible: root.responseData.tags.length > 0
             Layout.alignment: Qt.AlignLeft
-            Layout.fillWidth: {
-                return true
-            }
+            Layout.fillWidth: true
             implicitHeight: tagRowLayout.implicitHeight
             contentWidth: tagRowLayout.implicitWidth
 

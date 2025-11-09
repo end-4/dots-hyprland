@@ -11,8 +11,9 @@ TextArea {
     selectionColor: Appearance.colors.colSecondaryContainer
     placeholderTextColor: Appearance.m3colors.m3outline
     font {
-        family: Appearance?.font.family.main ?? "sans-serif"
+        family: Appearance.font.family.main
         pixelSize: Appearance?.font.pixelSize.small ?? 15
         hintingPreference: Font.PreferFullHinting
+        variableAxes: Appearance.font.variableAxes.main
     }
 }

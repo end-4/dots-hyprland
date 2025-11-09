@@ -79,7 +79,7 @@ Singleton {
         // Special cases
         if (!text) return "";
         var key = text.toString();
-        if (root.isLoading || (!root.translations.hasOwnProperty(key) && !root.generatedTranslations.hasOwnProperty(key)))
+        if (root.isLoading || (!root?.translations?.hasOwnProperty(key) && !root?.generatedTranslations?.hasOwnProperty(key)))
             return key;
         
         // Normal cases
@@ -122,7 +122,6 @@ Singleton {
         signal contentLoaded(var data)
 
         function reread() { // Proper reload in case the file was incorrect before
-            print("rereading translations for", translationReader.languageCode);
             translationReader.path = "";
             translationReader.path = `${translationReader.translationsDir}/${translationReader.languageCode}.json`;
             translationReader.reload();

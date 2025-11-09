@@ -17,8 +17,10 @@ Item {
     property bool showOverflowMenu: true
     property var activeMenu: null
 
-    property list<var> itemsInUserList: SystemTray.items.values.filter(i => (Config.options.bar.tray.pinnedItems.includes(i.id) && i.status !== Status.Passive))
-    property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => (!Config.options.bar.tray.pinnedItems.includes(i.id) && i.status !== Status.Passive))
+    property bool smartTray: Config.options.bar.tray.filterPassive
+    property list<var> itemsInUserList: SystemTray.items.values.filter(i => (Config.options.bar.tray.pinnedItems.includes(i.id) && (!smartTray || i.status !== Status.Passive)))
+    property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => (!Config.options.bar.tray.pinnedItems.includes(i.id) && (!smartTray || i.status !== Status.Passive)))
+
     property bool invertPins: Config.options.bar.tray.invertPinnedItems
     property list<var> pinnedItems: invertPins ? itemsNotInUserList : itemsInUserList
     property list<var> unpinnedItems: invertPins ? itemsInUserList : itemsNotInUserList
@@ -102,7 +104,6 @@ Item {
                 id: overflowPopup
                 hoverTarget: trayOverflowButton
                 active: root.trayOverflowOpen && root.unpinnedItems.length > 0
-                popupBackgroundMargin: 300 // This should be plenty... makes sure tooltips don't get cutoff (easily)
 
                 GridLayout {
                     id: trayOverflowLayout

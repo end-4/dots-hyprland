@@ -21,7 +21,7 @@ Scope {
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
-    property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+    property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
     property list<real> visualizerPoints: []
 
     property bool hasPlasmaIntegration: false
@@ -159,7 +159,13 @@ Scope {
                 }
 
                 Item { // No player placeholder
-                    Layout.fillWidth: true
+                    Layout.alignment: {
+                        if (mediaControlsRoot.anchors.left) return Qt.AlignLeft;
+                        if (mediaControlsRoot.anchors.right) return Qt.AlignRight;
+                        return Qt.AlignHCenter;
+                    }
+                    Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
+                    Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
                     visible: root.meaningfulPlayers.length === 0
                     implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
                     implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin

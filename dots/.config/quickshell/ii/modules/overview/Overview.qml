@@ -2,6 +2,7 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import Qt.labs.synchronizer
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -33,15 +34,12 @@ Scope {
             mask: Region {
                 item: GlobalStates.overviewOpen ? columnLayout : null
             }
-            // HyprlandWindow.visibleMask: Region { // Buggy with scaled monitors
-            //     item: GlobalStates.overviewOpen ? columnLayout : null
-            // }
 
             anchors {
                 top: true
                 bottom: true
-                left: !(Config?.options.overview.enable ?? true) 
-                right: !(Config?.options.overview.enable ?? true) 
+                left: true
+                right: true
             }
 
             HyprlandFocusGrab {
@@ -89,13 +87,14 @@ Scope {
                 searchWidget.focusFirstItem();
             }
 
-            ColumnLayout {
+            Column {
                 id: columnLayout
                 visible: GlobalStates.overviewOpen
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     top: parent.top
                 }
+                spacing: -8
 
                 Keys.onPressed: event => {
                     if (event.key === Qt.Key_Escape) {
@@ -111,14 +110,15 @@ Scope {
 
                 SearchWidget {
                     id: searchWidget
-                    Layout.alignment: Qt.AlignHCenter
-                    onSearchingTextChanged: text => {
-                        root.searchingText = searchingText;
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Synchronizer on searchingText {
+                        property alias source: root.searchingText
                     }
                 }
 
                 Loader {
                     id: overviewLoader
+                    anchors.horizontalCenter: parent.horizontalCenter
                     active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
