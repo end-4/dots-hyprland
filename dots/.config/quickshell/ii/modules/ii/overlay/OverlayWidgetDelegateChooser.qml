@@ -11,6 +11,7 @@ import qs.modules.ii.overlay.volumeMixer
 import qs.modules.ii.overlay.fpsLimiter
 import qs.modules.ii.overlay.recorder
 import qs.modules.ii.overlay.resources
+import qs.modules.ii.overlay.processMonitor
 
 DelegateChooser {
     id: root
@@ -21,4 +22,5 @@ DelegateChooser {
     DelegateChoice { roleValue: "fpsLimiter"; FpsLimiter {} }
     DelegateChoice { roleValue: "recorder"; Recorder {} }
     DelegateChoice { roleValue: "resources"; Resources {} }
+    DelegateChoice { roleValue: "processMonitor"; ProcessMonitor {} }
 }
