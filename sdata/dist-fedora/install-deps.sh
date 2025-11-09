@@ -12,6 +12,9 @@ case $SKIP_SYSUPDATE in
   *) v sudo dnf upgrade --refresh -y;;
 esac
 
+# Remove version lock
+v sudo dnf versionlock delete quickshell-git 2>/dev/null
+
 # Development-tools installation
 v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros qt6-rpm-macros -y
 
