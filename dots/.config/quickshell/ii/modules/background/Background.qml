@@ -214,6 +214,8 @@ Variants {
                     right: wallpaper.right
                     top: wallpaper.top
                     bottom: wallpaper.bottom
+                    horizontalCenter: undefined
+                    verticalCenter: undefined
                     readonly property real parallaxFactor: Config.options.background.parallax.widgetsFactor
                     leftMargin: {
                         const xOnWallpaper = bgRoot.movableXSpace;
@@ -249,8 +251,8 @@ Variants {
                             right: undefined
                             top: undefined
                             bottom: undefined
-                            // horizontalCenter: parent.horizontalCenter
-                            // verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                            verticalCenter: parent.verticalCenter
                         }
                     }
                 }

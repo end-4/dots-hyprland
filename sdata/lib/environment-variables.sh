@@ -25,3 +25,5 @@ STY_RST='\e[00m'
 
 # Used by register_temp_file()
 declare -a TEMP_FILES_TO_CLEANUP=()
+
+

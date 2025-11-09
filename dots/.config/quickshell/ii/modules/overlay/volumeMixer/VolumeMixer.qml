@@ -10,13 +10,14 @@ import qs.modules.sidebarRight.volumeMixer
 
 StyledOverlayWidget {
     id: root
+    minimumWidth: 300
+    minimumHeight: 380
+
     contentItem: Rectangle {
-        anchors.centerIn: parent
+        anchors.fill: parent
         color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
         property real padding: 6
-        implicitHeight: 600
-        implicitWidth: 350
 
         ColumnLayout {
             id: contentColumn
