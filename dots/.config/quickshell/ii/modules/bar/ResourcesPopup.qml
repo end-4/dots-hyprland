@@ -105,7 +105,7 @@ StyledPopup {
                 StyledPopupValueRow {
                     icon: "planner_review"
                     label: Translation.tr("Freq:")
-                    value: ` ${ Math.round(ResourceUsage.cpuFrequency * 100) / 100} GHz`
+                    value: ` ${ Math.round(ResourceUsage.cpuFreqency * 100) / 100} GHz`
                 }
 
                 StyledPopupValueRow {
