@@ -10,6 +10,13 @@ import qs.modules.common.functions
 import qs.modules.bar as Bar
 import Quickshell
 import Quickshell.Services.SystemTray
+import Quickshell.Io
+import Quickshell
+import Quickshell.Services.Mpris
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
+
+import qs.modules.mediaControls
 
 MouseArea {
     id: root
@@ -17,6 +24,7 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
+
 
     // Force focus on entry
     function forceFieldFocus() {
@@ -214,6 +222,8 @@ MouseArea {
         }
     }
 
+    
+
     // Left toolbar
     Toolbar {
         id: leftIsland
@@ -225,6 +235,8 @@ MouseArea {
         }
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+
+
 
         // Username
         IconAndTextPair {
@@ -312,6 +324,28 @@ MouseArea {
             targetAction: LockContext.ActionEnum.Reboot
         }
     }
+
+    MediaControls {
+        id: mediaControls
+    }
+
+    Loader {
+        active: Config.options.lock.showMediaPlayer && mediaControls.meaningfulPlayers.length != 0
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: 32
+        }
+        sourceComponent: Toolbar {
+            scale: root.toolbarScale
+            opacity: root.toolbarOpacity
+            radius: Appearance.rounding.large
+            implicitHeight: 120
+            implicitWidth: 450
+            LockMediaPlayer {}
+        }
+    }
+    
 
     component PasswordGuardedIconToolbarButton: IconToolbarButton {
         id: guardedBtn
