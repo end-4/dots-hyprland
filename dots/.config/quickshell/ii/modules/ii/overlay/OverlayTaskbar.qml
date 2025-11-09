@@ -49,8 +49,13 @@ Rectangle {
         }
 
         Separator {}
-
         TimeWidget {}
+        Separator {
+            visible: Battery.available
+        }
+        BatteryWidget {
+            visible: Battery.available
+        }
     }
 
     component Separator: Rectangle {
@@ -67,10 +72,42 @@ Rectangle {
         Layout.rightMargin: 6
 
         text: DateTime.time
+        color: Appearance.colors.colOnSurface
         font {
             family: Appearance.font.family.numbers
             variableAxes: Appearance.font.variableAxes.numbers
             pixelSize: 22
+        }
+    }
+    
+    component BatteryWidget: Row {
+        id: batteryWidget
+        Layout.alignment: Qt.AlignVCenter
+        Layout.leftMargin: 6
+        Layout.rightMargin: 6
+        spacing: 2
+        property color colText: Battery.isLowAndNotCharging ? Appearance.colors.colError : Appearance.colors.colOnSurface
+
+        MaterialSymbol {
+            id: boltIcon
+            anchors.verticalCenter: parent.verticalCenter
+            fill: 1
+            text: Battery.isCharging ? "bolt" : "battery_android_full"
+            color: batteryWidget.colText
+            iconSize: 24
+            animateChange: true
+        }
+        
+        StyledText {
+            id: batteryText
+            anchors.verticalCenter: parent.verticalCenter
+            text: Math.round(Battery.percentage * 100) + "%"
+            color: batteryWidget.colText
+            font {
+                family: Appearance.font.family.numbers
+                variableAxes: Appearance.font.variableAxes.numbers
+                pixelSize: 18
+            }
         }
     }
 

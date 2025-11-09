@@ -148,11 +148,11 @@ Item { // Bar content region
             }
 
             HorizontalBarSeparator {
-                visible: UPower.displayDevice.isLaptopBattery
+                visible: Battery.available
             }
 
             BatteryIndicator {
-                visible: UPower.displayDevice.isLaptopBattery
+                visible: Battery.available
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }

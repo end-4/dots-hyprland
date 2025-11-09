@@ -288,7 +288,7 @@ MouseArea {
         opacity: root.toolbarOpacity
 
         IconAndTextPair {
-            visible: UPower.displayDevice.isLaptopBattery
+            visible: Battery.available
             icon: Battery.isCharging ? "bolt" : "battery_android_full"
             text: Math.round(Battery.percentage * 100)
             color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
