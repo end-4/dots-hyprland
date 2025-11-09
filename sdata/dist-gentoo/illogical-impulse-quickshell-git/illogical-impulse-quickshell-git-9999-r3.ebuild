@@ -20,6 +20,21 @@ IUSE="+breakpad +jemalloc +sockets +wayland +layer-shell +session-lock +toplevel
 RDEPEND="
 	dev-qt/qtbase:6
 	dev-qt/qtsvg:6
+	dev-qt/qt5compat:6
+
+	dev-qt/qtimageformats:6
+	dev-qt/qtmultimedia:6
+	dev-qt/qtpositioning:6
+	dev-qt/qtquicktimeline:6
+	dev-qt/qtsensors:6
+	dev-qt/qtsvg:6
+	dev-qt/qttools:6
+	dev-qt/qttranslations:6
+	dev-qt/qtvirtualkeyboard:6
+	dev-qt/qtwayland:6
+	kde-apps/kdialog
+	kde-frameworks/syntax-highlighting:6
+
 	jemalloc? ( dev-libs/jemalloc )
 	wayland? (
 		dev-libs/wayland
@@ -34,9 +49,6 @@ RDEPEND="
 	mpris? ( dev-qt/qtdbus )
 	pam? ( sys-libs/pam )
 	bluetooth? ( net-wireless/bluez )
-
-
-
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
