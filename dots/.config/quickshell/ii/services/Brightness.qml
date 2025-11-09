@@ -110,7 +110,7 @@ Singleton {
 
         function initialize() {
             monitor.ready = false;
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g --device intel_backlight) $(brightnessctl m --device intel_backlight)"`];
             initProc.running = true;
         }
 
@@ -135,14 +135,24 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
-            const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded] : ["brightnessctl", "--class", "backlight", "s", rawValueRounded, "--quiet"];
-            setProc.startDetached();
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
+            if(isDdc){
+                const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+                setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
+                setProc.startDetached();
+            }else{
+                const valuePercentNumber = Math.floor(brightnessValue * 100);
+                let valuePercent = ""+valuePercentNumber+"%";
+                if(valuePercentNumber == 0)
+                    //Set it to raw 1
+                    valuePercent = 1;
+                setProc.command = ["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"];
+                setProc.startDetached();
+            }
         }
 
         function setBrightness(value: real): void {
-            value = Math.max(0, Math.min(1, value));
+            value = Math.max(0, Math.min(value, 1));
             monitor.brightness = value;
         }
 
