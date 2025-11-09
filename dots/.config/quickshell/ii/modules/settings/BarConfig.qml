@@ -142,6 +142,106 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "memory"
+        title: Translation.tr("Resources")
+
+        
+        
+        ConfigRow {
+            ContentSubsection {
+                Layout.fillWidth: false
+                title: Translation.tr("Show resources")
+                ConfigMultiSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.items.filter(i => i.visible).map(i => i.type)
+                    onSelected: newValue => {
+                        const item = Config.options.bar.resources.items.find(i => i.type === newValue);
+                        if (item) {
+                            item.visible = !item.visible;
+                        }
+                    }
+
+                    options: [
+                        {
+                            displayName: Translation.tr("Memory"),
+                            icon: "memory",
+                            value: "memory"
+                        },
+                        {
+                            displayName: Translation.tr("Swap"),
+                            icon: "swap_horiz",
+                            value: "swap"
+                        },
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        }
+                    ]   
+                }
+            }
+            ContentSubsection {
+                Layout.fillWidth: false
+                title: Translation.tr("Collapse resources")
+                tooltip: Translation.tr("Collapses the selected resources when a media player is active to save space")
+                ConfigMultiSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.items.filter(i => i.collapse).map(i => i.type)
+                    onSelected: newValue => {
+                        const item = Config.options.bar.resources.items.find(i => i.type === newValue);
+                        if (item) {
+                            item.collapse = !item.collapse;
+                        }
+                    }
+
+                    options: [
+                        {
+                            displayName: Translation.tr("Memory"),
+                            icon: "memory",
+                            value: "memory"
+                        },
+                        {
+                            displayName: Translation.tr("Swap"),
+                            icon: "swap_horiz",
+                            value: "swap"
+                        },
+                        {
+                            displayName: Translation.tr("CPU"),
+                            icon: "planner_review",
+                            value: "cpu"
+                        }
+                    ]   
+                }
+            }
+        }
+        ConfigRow {
+            ContentSubsection {
+                Layout.fillWidth: true
+                title: Translation.tr("Style")
+                ConfigSelectionArray {
+                
+                    currentValue: Config.options.bar.resources.style
+                    onSelected: newValue => {
+                        Config.options.bar.resources.style = newValue; // Update local copy
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Icon"),
+                            icon: "stroke_full",
+                            value: "icon"
+                        },
+                        {
+                            displayName: Translation.tr("Detailed"),
+                            icon: "notes",
+                            value: "detailed"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "shelf_auto_hide"
         title: Translation.tr("Tray")
 
