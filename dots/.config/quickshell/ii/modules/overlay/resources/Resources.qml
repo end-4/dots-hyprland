@@ -14,8 +14,9 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
-      
-        function buildIGpuProperties() {
+    minimumWidth: 300
+    minimumHeight: 300
+    function buildIGpuProperties() {
         const cfg = Config.options?.resources?.gpu?.overlay?.iGpu
         let props = []
 
@@ -110,7 +111,8 @@ StyledOverlayWidget {
         return props
     }
 
-   property list<var> resources: [
+
+    property list<var> resources: [
         {
             icon: "planner_review",
             name: Translation.tr("CPU"),
@@ -213,13 +215,10 @@ StyledOverlayWidget {
 
     contentItem: Rectangle {
         id: contentItem
-        anchors.centerIn: parent
+        anchors.fill: parent
         color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
         property real padding: 4
-        implicitWidth: 350
-        implicitHeight: 300
-        // implicitHeight: contentColumn.implicitHeight + padding * 2
         ColumnLayout {
             id: contentColumn
             anchors {

@@ -11,6 +11,7 @@ StyledOverlayWidget {
     opacity: 1 // The crosshair itself already has transparency if configured
     showClickabilityButton: false
     clickthrough: true
+    resizable: false
 
     contentItem: CrosshairContent {
         anchors.centerIn: parent

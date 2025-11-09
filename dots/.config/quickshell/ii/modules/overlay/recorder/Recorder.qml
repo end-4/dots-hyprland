@@ -9,25 +9,22 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
+    minimumWidth: 310
+    minimumHeight: 130
 
     contentItem: Rectangle {
         id: contentItem
-        anchors.centerIn: parent
+        anchors.fill: parent
         radius: root.contentRadius
         color: Appearance.m3colors.m3surfaceContainer
         property real padding: 8
-        implicitHeight: contentColumn.implicitHeight + padding * 2
-        implicitWidth: 350
         ColumnLayout {
             id: contentColumn
-            anchors {
-                fill: parent
-                margins: parent.padding
-            }
+            anchors.centerIn: parent
             spacing: 10
 
             Row {
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 spacing: 10
 
                 BigRecorderButton {
@@ -68,7 +65,7 @@ StyledOverlayWidget {
             }
 
             RippleButton {
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.fillWidth: false
                 buttonRadius: height / 2
                 colBackground: Appearance.colors.colLayer3
