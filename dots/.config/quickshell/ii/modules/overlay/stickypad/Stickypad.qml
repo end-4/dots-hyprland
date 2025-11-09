@@ -10,9 +10,6 @@ StyledOverlayWidget {
     minWidth: 440
     showCenterButton: true
 
-    // Override opacity to always stay fully opaque, even in clickthrough mode
-    opacity: 1.0
-
     contentItem: StickypadContent {
         implicitWidth: 440
         implicitHeight: 380
