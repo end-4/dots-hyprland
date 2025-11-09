@@ -462,17 +462,18 @@ Singleton {
     Process {
         id: getSavedChats
         running: true
-        command: ["ls", "-1", Directories.aiChats]
+        command: ["ls", "-1t", Directories.aiChats]
         stdout: StdioCollector {
             onStreamFinished: {
                 if (text.length === 0) return;
                 const files = text.split("\n").filter(fileName => fileName.length > 0);
                 root.savedChats = files
-                        .filter(fileName => fileName.endsWith(".json") && !fileName.endsWith(".meta.json"))
+                        .filter(fileName => fileName.endsWith(".json"))
                         .map(fileName => `${Directories.aiChats}/${fileName}`);
             }
         }
     }
+
 
     FileView {
         id: promptLoader
@@ -483,6 +484,8 @@ Singleton {
             root.addMessage(Translation.tr("Loaded the following system prompt\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
         }
     }
+
+
 
     function printPrompt() {
         root.addMessage(Translation.tr("The current system prompt is\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
@@ -901,9 +904,18 @@ Singleton {
 
     FileView {
         id: chatSaveFile
+        property bool isLoading: false
         property string chatName: ""
         path: chatName.length > 0 ? `${Directories.aiChats}/${chatName}.json` : ""
         blockLoading: true // Prevent race conditions
+        onLoadedChanged: {
+            if (!chatSaveFile.loaded) return;
+            if (isLoading) {
+                loadData(chatSaveFile.text());
+                isLoading = false;
+                chatName = "";
+            }
+        }
     }
 
     /**
@@ -916,10 +928,11 @@ Singleton {
         const defaultMetadata = {
             savedAt: DateTime.date + DateTime.time,
             messageCount: root.messageIDs.length,
+            path: chatSaveFile.path,
             title: chatSaveFile.chatName
         }
 
-        const metadata = Object.assign({}, defaultMetadata, extraMetadata);
+        var metadata = Object.assign({}, defaultMetadata, extraMetadata);
 
         const saveContent = JSON.stringify({
             metadata: metadata,
@@ -935,21 +948,29 @@ Singleton {
         getNameGeminiProc.running = true; 
     }
 
+    function updateSavedChats() {
+        getSavedChats.running = true
+        root.chatMetadata = {} 
+    }
+
     /**
      * Loads chat from a JSON list of message objects.
      * @param chatName name of the chat
      */
     function loadChat(chatName) {
+        chatSaveFile.chatName = chatName.trim();
+        chatSaveFile.isLoading = true
+        chatSaveFile.reload();
+        
+    }
+
+    function loadData(data) {
         try {
-            chatSaveFile.chatName = chatName.trim();
-            chatSaveFile.reload();
-            const saveContent = chatSaveFile.text();
+            const saveContent = data
             const saveData = JSON.parse(saveContent);
 
-            // Metadata'yı ayrı olarak al
             root.chatMetadata = saveData.metadata || {};
 
-            // Mesajları yükle
             const messages = saveData.messages || [];
             root.clearMessages();
             root.messageIDs = messages.map((_, i) => i);
@@ -977,6 +998,7 @@ Singleton {
         } catch (e) {
             console.log("[AI] Could not load chat: ", e);
         } finally {
+            root.savedChats = [];
             getSavedChats.running = true;
         }
     }
@@ -990,14 +1012,12 @@ Singleton {
         property string base64Chat: Qt.btoa(chatContent)
         command: [
             "bash", "-c",
-            Directories.conversationTitleScriptPath + " '" + base64Chat + "' '" + Directories.generatedConversationTitlePath + "'"
+            Directories.conversationTitleScriptPath + " " + base64Chat + " '" + Directories.generatedConversationTitlePath + "'"
         ]
         stdout: StdioCollector {
             onStreamFinished: {
                 var output = this.text.trim()
                 output = output.replace(/^```json/, "").replace(/```$/, "").trim()
-
-                console.log(output) // debug
                 
                 var jsonOutput = JSON.parse(output)
                 var title = jsonOutput.title
@@ -1007,6 +1027,7 @@ Singleton {
                     icon: icon
                 }
 
+                //root.saveChat(title, metadataObj)
                 Qt.callLater(() => {
                     root.saveChat(title, metadataObj)  
                     getSavedChats.running = true
