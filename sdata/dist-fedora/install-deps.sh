@@ -108,7 +108,7 @@ install_RPMS() {
         x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
     done
     mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-    echo "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
+    echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
     x sudo dnf install "${local_rpms[@]}" -y
     x cd ${REPO_ROOT}
 }
