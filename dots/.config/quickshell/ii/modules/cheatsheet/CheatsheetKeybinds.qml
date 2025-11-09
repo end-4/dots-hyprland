@@ -13,15 +13,13 @@ Item {
 
         const children = HyprlandKeybinds.keybinds.children.map((child) => {
             return Object.assign({},
-                child, {
+                child, 
+                {
                     children: child.children.map((children) => {
                         const {
                             keybinds
                         } = children;
                         const remappedKeybinds = keybinds.map((keybind) => {
-                            // console.log('======================================' )
-                            // console.log('keybind before', JSON.stringify(keybind, 2))
-                            // console.log('======================================' )
                             let mods = [];
                             for (var j = 0; j < keybind.mods.length; j++) {
                                 mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
@@ -32,9 +30,6 @@ Item {
                                 mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
                                 mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
                             }
-                            // console.log('======================================' )
-                            // console.log('keybind after', JSON.stringify(keybind, 2))
-                            // console.log('======================================' )
                             return Object.assign({}, keybind, {
                                 mods
                             })
@@ -65,8 +60,6 @@ Item {
                 }
             )
         })
-          
-             // console.log(JSON.stringify(children))
         return { children: children }
     }
     property real spacing: 20
@@ -168,7 +161,6 @@ Item {
 
             // Search
             onTextChanged: {
-                // Wallpapers.searchQuery = text;
                 console.log('filter', text)
                 root.filter = text
             }
