@@ -3,17 +3,18 @@ import qs.modules.common.widgets
 import qs.services
 import qs
 import qs.modules.common.functions
-
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
+import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 Item {
     id: root
     property bool borderless: Config.options.bar.borderless
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
-    readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
+    readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("")
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
@@ -48,8 +49,55 @@ Item {
         spacing: 4
         anchors.fill: parent
 
+        Image { // Art image
+            Layout.alignment: Qt.AlignVCenter
+            source: activePlayer?.trackArtUrl && activePlayer.trackArtUrl !== "" ? activePlayer.trackArtUrl : "../../assets/icons/cover.png"
+            fillMode: Image.PreserveAspectCrop
+            cache: false
+            width: 25
+            height: 25
+            sourceSize.width: 25
+            sourceSize.height: 25
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: 25
+                    height: 25
+                    radius: 6
+                }
+            }
+        }
+
+        Column {
+            visible: Config.options.bar.verbose
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
+            spacing: -4
+            
+            StyledText {
+                width: parent.width
+                horizontalAlignment: Text.AlignLeft
+                elide: Text.ElideRight
+                color: Appearance.colors.colSubtext
+                text: activePlayer?.trackArtist || " "
+                font.pixelSize: 12
+            }
+            
+            StyledText {
+                width: parent.width
+                horizontalAlignment: Text.AlignLeft
+                elide: Text.ElideRight
+                color: Appearance.colors.colOnLayer1
+                text: cleanedTitle
+                font.weight: Font.Medium
+                font.pixelSize: 13
+            }
+        }
+        
         ClippedFilledCircularProgress {
             id: mediaCircProg
+            visible: Config.options.bar.verbose
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
             value: activePlayer?.position / activePlayer?.length
@@ -71,19 +119,5 @@ Item {
                 }
             }
         }
-
-        StyledText {
-            visible: Config.options.bar.verbose
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true // Ensures the text takes up available space
-            Layout.rightMargin: rowLayout.spacing
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight // Truncates the text on the right
-            color: Appearance.colors.colOnLayer1
-            text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
-        }
-
     }
-
 }
