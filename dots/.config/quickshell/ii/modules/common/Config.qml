@@ -274,7 +274,7 @@ Singleton {
                 // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
                 property string superKey: ""
                 property bool useMacSymbol: false
-                property bool splitButtons: true
+                property bool splitButtons: false
                 property bool useMouseSymbol: false
                 property bool useFnSymbol: false
                 property JsonObject fontSize: JsonObject {
@@ -380,7 +380,7 @@ Singleton {
             property JsonObject overlay: JsonObject {
                 property bool openingZoomAnimation: true
                 property bool darkenScreen: true
-                property real clickthroughOpacity: 0.7
+                property real clickthroughOpacity: 0.8
                 property JsonObject floatingImage: JsonObject {
                     property string imageSource: "https://cdn.discordapp.com/attachments/961693710968557598/1369635662390759434/image.gif?ex=6911cb1c&is=6910799c&hm=4450244066c0a7a6e5d2bdd195f47388eb5e7f9dd53d3931e99ad9642c638a00&"
                     property real scale: 0.5
