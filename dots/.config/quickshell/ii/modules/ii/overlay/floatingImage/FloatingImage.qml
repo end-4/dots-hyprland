@@ -1,7 +1,6 @@
+pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-import Quickshell
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.utils
@@ -11,6 +10,7 @@ StyledOverlayWidget {
     id: root
     showClickabilityButton: false
     resizable: false
+    clickthrough: true
 
     property string imageSource: Config.options.overlay.floatingImage.imageSource
     property real scaleFactor: Config.options.overlay.floatingImage.scale
@@ -19,10 +19,10 @@ StyledOverlayWidget {
 
     // Override to always save 0 size
     function savePosition(xPos = root.x, yPos = root.y, width = 0, height = 0) {
-        persistentStateEntry.x = Math.round(xPos);
-        persistentStateEntry.y = Math.round(yPos);
-        persistentStateEntry.width = 0
-        persistentStateEntry.height = 0
+        root.persistentStateEntry.x = Math.round(xPos);
+        root.persistentStateEntry.y = Math.round(yPos);
+        root.persistentStateEntry.width = 0
+        root.persistentStateEntry.height = 0
     }
 
     onImageSourceChanged: {
