@@ -13,11 +13,12 @@ import qs.modules.common.widgets
 import qs.modules.overlay
 
 StyledOverlayWidget {
-    function formatKB(kb) {
+    id: root
+      
+      function formatKB(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
     }
-
-    function buildIGpuProperties() {
+        function buildIGpuProperties() {
         const cfg = Config.options?.resources?.gpu?.overlay?.iGpu
         let props = []
 
@@ -84,7 +85,7 @@ StyledOverlayWidget {
             })
         }
 
-        if (cfg?.showTempMem === true && GpuUsage.dGpuTempMem > 0) {
+        if (GpuUsage.dGpuTempMem > 0) {
             props.push({
                 icon: "thermometer",
                 label: Translation.tr("Mem Temp:"),
@@ -111,8 +112,7 @@ StyledOverlayWidget {
 
         return props
     }
-    
-   id: root
+
    property list<var> resources: [
         {
             icon: "planner_review",
@@ -124,12 +124,13 @@ StyledOverlayWidget {
                 {
                     icon: "bolt",
                     label: Translation.tr("Load:"),
-                    value: ` ${Math.round(ResourceUsage.cpuUsage * 100)}%`
+                    value: `${Math.round(ResourceUsage.cpuUsage  * 100)}%`
+ 
                 },
                 {
                     icon: "planner_review",
                     label: Translation.tr("Freq:"),
-                    value: ` ${Math.round(ResourceUsage.cpuFrequency  * 100) / 100} GHz`
+                    value: ` ${Math.round(ResourceUsage.cpuFreqency  * 100) /100} GHz`
                 },
                 {
                     icon: "thermometer",
@@ -220,9 +221,8 @@ StyledOverlayWidget {
         radius: root.contentRadius
         property real padding: 4
         implicitWidth: 350
-        implicitHeight: Math.max(300, contentColumn.implicitHeight + padding * 2)
+        implicitHeight: 300
         // implicitHeight: contentColumn.implicitHeight + padding * 2
-
         ColumnLayout {
             id: contentColumn
             anchors {
@@ -254,33 +254,6 @@ StyledOverlayWidget {
                 Layout.margins: 8
                 history: root.resources[tabBar.currentIndex]?.history ?? []
                 maxAvailableString: root.resources[tabBar.currentIndex]?.maxAvailableString ?? "--"
-              }
-
-        ColumnLayout {
-             spacing: 4
-             Repeater {
-            model:  root.resources[tabBar.currentIndex]?.extraProperties.length ?? 0 
-            delegate: RowLayout {
-                required property int index 
-              property var modelData: root.resources[tabBar.currentIndex]?.extraProperties[index] 
-                
-                spacing: 4
-                MaterialSymbol {
-                    text: modelData.icon
-                    color: Appearance.colors.colOnSurfaceVariant
-                    iconSize: Appearance.font.pixelSize.large
-                }
-                StyledText {
-                    text: modelData.label ?? ""
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
-                StyledText {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignRight
-                    visible: modelData.value !== ""
-                    color: Appearance.colors.colOnSurfaceVariant
-                    text: modelData.value ?? ""
-                }
             }
 
             ExtraInfo {
@@ -289,8 +262,6 @@ StyledOverlayWidget {
                 extraProperties: root.resources[tabBar.currentIndex]?.extraProperties ?? []
             }
         }
-           
-    }
     }
 
     component ResourceSummary: RowLayout {
@@ -341,9 +312,6 @@ StyledOverlayWidget {
                 points: ResourceUsage.historyLength
                 alignment: Graph.Alignment.Right
             }
-          }
-
-
         }
     }
 
@@ -382,5 +350,4 @@ StyledOverlayWidget {
             }
         }
     }
-    
 }
