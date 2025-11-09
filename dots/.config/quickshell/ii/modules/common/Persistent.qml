@@ -123,6 +123,14 @@ Singleton {
                     property real width: 280
                     property real height: 80
                 }
+                property JsonObject processMonitor: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 530
+                    property real y: 600
+                    property real width: 300
+                    property real height: 300
+                }
             }
 
             property JsonObject timer: JsonObject {
