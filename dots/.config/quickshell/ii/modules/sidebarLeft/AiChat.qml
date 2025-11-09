@@ -693,6 +693,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     buttonRadius: Appearance.rounding.small
                     enabled: messageInputField.text.length > 0
                     toggled: enabled
+                    visible: !Ai.requestRunning 
 
                     MouseArea {
                         anchors.fill: parent
@@ -710,6 +711,34 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         iconSize: 22
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
                         text: "arrow_upward"
+                    }
+                  }
+                  
+
+                  RippleButton { // Stop button
+                    id: stopButton
+                    Layout.alignment: Qt.AlignTop
+                    Layout.rightMargin: 5
+                    implicitWidth: 40
+                    implicitHeight: 40
+                    buttonRadius: Appearance.rounding.small
+                    enabled: true
+                    toggled: true
+                    visible: Ai.requestRunning || Ai.localLLMRunning
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: sendButton.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        onClicked: Ai.stopUserMessage()
+                        
+                    }
+
+                    contentItem: MaterialSymbol {
+                        anchors.centerIn: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
+                        text: "stop"
                     }
                 }
             }
