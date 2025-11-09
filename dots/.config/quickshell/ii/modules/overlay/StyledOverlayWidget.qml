@@ -13,29 +13,67 @@ import qs.modules.common.widgets.widgetCanvas
  * To make an overlay widget:
  * 1. Create a modules/overlay/<yourWidget>/<YourWidget>.qml, using this as the base class and declare your widget content as contentItem
  * 2. Add an entry to OverlayContext.availableWidgets with identifier=<yourWidgetIdentifier>
- * 3. Add an entry in Persistent.states.overlay.<yourWidgetIdentifier> with x, y, pinned, clickthrough properties set to reasonable defaults
+ * 3. Add an entry in Persistent.states.overlay.<yourWidgetIdentifier> with x, y, width, height, pinned, clickthrough properties set to reasonable defaults
  * 4. Add an entry in OverlayWidgetDelegateChooser with roleValue=<yourWidgetIdentifier> and Declare your widget in there
  * Use existing entries as reference.
  */
 AbstractOverlayWidget {
     id: root
 
+    // To be defined by subclasses
     required property Item contentItem
     property bool fancyBorders: true
     property bool showCenterButton: false
     property bool showClickabilityButton: true
 
+    // Defaults n stuff
     required property var modelData
     readonly property string identifier: modelData.identifier
     readonly property string materialSymbol: modelData.materialSymbol ?? "widgets"
     property string title: identifier.replace(/([A-Z])/g, " $1").replace(/^./, function(str){ return str.toUpperCase(); })
     property var persistentStateEntry: Persistent.states.overlay[identifier]
     property real radius: Appearance.rounding.windowRounding
-    property real minWidth: 250
+    property real minimumWidth: 250
+    property real minimumHeight: 100
+    property real resizeMargin: 8
     property real padding: 6
     property real contentRadius: radius - padding
 
+    // Resizing
+    function getXResizeDirection(x) {
+        return (x < root.resizeMargin) ? -1 : (x > root.width - root.resizeMargin) ? 1 : 0
+    }
+    function getYResizeDirection(y) {
+        return (y < root.resizeMargin) ? -1 : (y > root.height - root.resizeMargin) ? 1 : 0
+    }
+    hoverEnabled: true
+    property bool resizable: true
+    property bool resizing: false
+    property int resizeXDirection: getXResizeDirection(mouseX)
+    property int resizeYDirection: getYResizeDirection(mouseY)
     draggable: GlobalStates.overlayOpen
+    drag.target: undefined
+    animateXPos: !dragHandler.active
+    animateYPos: !dragHandler.active
+    z: dragHandler.active ? 2 : 1
+    cursorShape: {
+        if (dragHandler.active) return root.resizing ? cursorShape : Qt.ArrowCursor;
+        if (resizeMargin < mouseX && mouseX < width - resizeMargin &&
+            resizeMargin < mouseY && mouseY < height - resizeMargin) {
+            return Qt.ArrowCursor;
+        } else {
+            if (!root.resizable) return Qt.ArrowCursor;
+            const dragIsLeft = mouseX < width / 2
+            const dragIsTop = mouseY < height / 2
+            if ((dragIsLeft && dragIsTop) || (!dragIsLeft && !dragIsTop)) {
+                return Qt.SizeFDiagCursor
+            } else {
+                return Qt.SizeBDiagCursor
+            }
+        }
+    }
+
+    // Positioning & sizing
     x: Math.round(persistentStateEntry.x) // Round or it'll be blurry
     y: Math.round(persistentStateEntry.y) // Round or it'll be blurry
     pinned: persistentStateEntry.pinned
@@ -68,7 +106,52 @@ AbstractOverlayWidget {
     }
 
     // Hooks
-    onReleased: savePosition();
+    onPressed: (event) => {
+        // We're only interested in handling resize here
+        // Early returns
+        if (!root.resizable) return;
+        if (root.resizeMargin < event.x && event.x < root.width - root.resizeMargin &&
+            root.resizeMargin < event.y && event.y < root.height - root.resizeMargin) {
+            return;
+        }
+        // Resizing setup
+        root.resizing = true;
+        root.resizeXDirection = getXResizeDirection(event.x);
+        root.resizeYDirection = getYResizeDirection(event.y);
+        if (root.resizeYDirection !== 0 && root.resizeXDirection === 0) {
+            root.resizeXDirection = event.x < root.width / 2 ? -1 : 1;
+        } else if (root.resizeXDirection !== 0 && root.resizeYDirection === 0) {
+            root.resizeYDirection = event.y < root.height / 2 ? -1 : 1;
+        }
+    }
+    onPositionChanged: (event) => {
+        if (!resizing) return;
+        contentContainer.implicitWidth = Math.max(root.persistentStateEntry.width + dragHandler.xAxis.activeValue * root.resizeXDirection, root.minimumWidth);
+        contentContainer.implicitHeight = Math.max(root.persistentStateEntry.height + dragHandler.yAxis.activeValue * root.resizeYDirection, root.minimumHeight);
+        const negativeXDrag = root.resizeXDirection === -1;
+        const negativeYDrag = root.resizeYDirection === -1;
+        const wantedX = root.persistentStateEntry.x + (negativeXDrag ? dragHandler.xAxis.activeValue : 0)
+        const wantedY = root.persistentStateEntry.y + (negativeYDrag ? dragHandler.yAxis.activeValue : 0)
+        const negativeXDragLimit = root.persistentStateEntry.x + root.persistentStateEntry.width - contentContainer.implicitWidth;
+        const negativeYDragLimit = root.persistentStateEntry.y + root.persistentStateEntry.height - contentContainer.implicitHeight;
+        root.x = negativeXDrag ? Math.min(wantedX, negativeXDragLimit) : wantedX;
+        root.y = negativeYDrag ? Math.min(wantedY, negativeYDragLimit) : wantedY;
+    }
+    DragHandler {
+        id: dragHandler
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        target: (root.draggable && !root.resizing) ? root : null
+        onActiveChanged: { // Handle drag release
+            if (!active) {
+                root.resizing = false;
+                root.savePosition();
+            }
+        }
+        xAxis.minimum: 0
+        xAxis.maximum: root.parent?.width - root.width
+        yAxis.minimum: 0
+        yAxis.maximum: root.parent?.height - root.height
+    }
 
     function close() {
         Persistent.states.overlay.open = Persistent.states.overlay.open.filter(type => type !== root.identifier);
@@ -82,34 +165,35 @@ AbstractOverlayWidget {
         persistentStateEntry.clickthrough = !persistentStateEntry.clickthrough;
     }
 
-    function savePosition(xPos = root.x, yPos = root.y) {
-        persistentStateEntry.x = xPos;
-        persistentStateEntry.y = yPos;
+    function savePosition(xPos = root.x, yPos = root.y, width = contentContainer.implicitWidth, height = contentContainer.implicitHeight) {
+        persistentStateEntry.x = Math.round(xPos);
+        persistentStateEntry.y = Math.round(yPos);
+        persistentStateEntry.width = Math.round(width);
+        persistentStateEntry.height = Math.round(height);
     }
 
     function center() {
-        const targetX = (root.parent.width - contentColumn.width) / 2
-        const targetY = (root.parent.height - contentItem.height) / 2 - titleBar.implicitHeight + border.border.width
+        const targetX = (root.parent.width - contentColumn.width) / 2 - root.resizeMargin
+        const targetY = (root.parent.height - contentContainer.height) / 2 - titleBar.implicitHeight + border.border.width - root.resizeMargin
         root.x = targetX
         root.y = targetY
         root.savePosition(targetX, targetY)
     }
 
     visible: GlobalStates.overlayOpen || actuallyPinned
-    implicitWidth: Math.max(contentColumn.implicitWidth, minWidth)
-    implicitHeight: contentColumn.implicitHeight
+    implicitWidth: contentColumn.implicitWidth + resizeMargin * 2
+    implicitHeight: contentColumn.implicitHeight + resizeMargin * 2
 
     Rectangle {
         id: border
-        anchors.fill: parent
-        color: (root.fancyBorders && GlobalStates.overlayOpen) ? Appearance.colors.colLayer1 : "transparent"
+        anchors {
+            fill: parent
+            margins: root.resizeMargin
+        }
+        color: ColorUtils.transparentize(Appearance.colors.colLayer1, (root.fancyBorders && GlobalStates.overlayOpen) ? 0 : 1)
         radius: root.radius
         border.color: ColorUtils.transparentize(Appearance.colors.colOutlineVariant, GlobalStates.overlayOpen ? 0 : 1)
         border.width: 1
-
-        Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-        }
 
         layer.enabled: GlobalStates.overlayOpen
         layer.effect: OpacityMask {
@@ -205,8 +289,8 @@ AbstractOverlayWidget {
                 Layout.margins: root.fancyBorders ? root.padding : 0
                 Layout.topMargin: -border.border.width // Border of a rectangle is drawn inside its bounds, so we do this to make the gap not too big
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                implicitWidth: root.contentItem.implicitWidth
-                implicitHeight: root.contentItem.implicitHeight
+                implicitWidth: Math.max(root.persistentStateEntry.width, root.minimumWidth)
+                implicitHeight: Math.max(root.persistentStateEntry.height, root.minimumHeight)
                 children: [root.contentItem]
             }
         }

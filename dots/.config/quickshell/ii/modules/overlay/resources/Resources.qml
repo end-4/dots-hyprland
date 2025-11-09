@@ -14,6 +14,8 @@ import qs.modules.overlay
 
 StyledOverlayWidget {
     id: root
+    minimumWidth: 300
+    minimumHeight: 200
     property list<var> resources: [
         {
             "icon": "planner_review",
@@ -37,13 +39,10 @@ StyledOverlayWidget {
 
     contentItem: Rectangle {
         id: contentItem
-        anchors.centerIn: parent
+        anchors.fill: parent
         color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
         property real padding: 4
-        implicitWidth: 350
-        implicitHeight: 200
-        // implicitHeight: contentColumn.implicitHeight + padding * 2
         ColumnLayout {
             id: contentColumn
             anchors {
