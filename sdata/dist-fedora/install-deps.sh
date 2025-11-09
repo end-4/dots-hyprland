@@ -42,12 +42,12 @@ v sudo dnf install ${themes_deps[@]} -y
 
 # Hyprland 
 hyprland_deps=(
-  hypridle hyprland hyprlock hyprpicker hyprsunset 
+  hypridle hyprland hyprlock hyprpicker hyprsunset
   xdg-desktop-portal-hyprland wl-clipboard
 )
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
 # hyprland-qt-support's build deps
-v sudo dnf install hyprlang-devel
+v sudo dnf install hyprlang-devel -y
 
 # KDE
 v sudo dnf install bluedevil gnome-keyring NetworkManager plasma-nm polkit-kde dolphin plasma-systemsettings -y
@@ -75,10 +75,9 @@ quickshell_custom_deps=(
   qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting 
 )
 quickshell_build_deps=(
-  breakpad-static qt6-qtdeclarative-devel qt6-qtshadertools-devel breakpad-devel 
-  gcc-c++ ninja-build mesa-libgbm-devel cli11-devel glib2-devel jemalloc-devel 
-  libdrm-devel pipewire-devel pam-devel polkit-devel wayland-devel wayland-protocols-devel
-  qt6-qtbase-private-devel spirv-tools
+  breakpad-static breakpad-devel gcc-c++ ninja-build mesa-libgbm-devel cli11-devel glib2-devel
+  jemalloc-devel libdrm-devel pipewire-devel pam-devel polkit-devel wayland-devel wayland-protocols-devel
+  qt6-qtdeclarative-devel qt6-qtshadertools-devel qt6-qtbase-private-devel spirv-tools
   libasan
 )
 v sudo dnf install "${quickshell_deps[@]}" -y
