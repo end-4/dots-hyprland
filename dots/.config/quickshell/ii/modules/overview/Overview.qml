@@ -14,6 +14,7 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    property string position: Config.options.overview.position
     Variants {
         id: overviewVariants
         model: Quickshell.screens
@@ -87,14 +88,26 @@ Scope {
                 searchWidget.focusFirstItem();
             }
 
-            Column {
+            GridLayout {
                 id: columnLayout
                 visible: GlobalStates.overviewOpen
                 anchors {
                     horizontalCenter: parent.horizontalCenter
-                    top: parent.top
                 }
-                spacing: -8
+                columnSpacing: -8
+                columns: 1
+                
+                state: overviewScope.position === "center" ? "top" : overviewScope.position
+                states: [
+                    State {
+                        name: "top"
+                        AnchorChanges { target: columnLayout; anchors.top: parent.top; anchors.bottom: undefined; }
+                    },
+                    State {
+                        name: "bottom" 
+                        AnchorChanges { target: columnLayout; anchors.top: undefined; anchors.bottom: parent.bottom; }
+                    }
+                ]
 
                 Keys.onPressed: event => {
                     if (event.key === Qt.Key_Escape) {
@@ -108,23 +121,38 @@ Scope {
                     }
                 }
 
+                Item {
+                    // Filler item for centered position
+                    visible: overviewScope.position === "center" 
+                    Layout.preferredHeight: root.monitor.height / 3 // 1/3 margin from top
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.row: 0
+                }
+
                 SearchWidget {
                     id: searchWidget
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillHeight: true
                     Synchronizer on searchingText {
                         property alias source: root.searchingText
                     }
+                    Layout.row: overviewScope.position === "bottom" ? 2 : 1
                 }
 
                 Loader {
                     id: overviewLoader
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillHeight: true
+                    Layout.row: overviewScope.position === "top" ? 2 : overviewScope.position === "center" ? 3 : 1
                     active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
                     }
                 }
+
+                
             }
         }
     }

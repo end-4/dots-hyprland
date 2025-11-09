@@ -19,6 +19,7 @@ Item { // Wrapper
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: searchBar.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
+    property bool reverseOrder: Config.options.overview.position === "bottom"
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
         const enabled = Config.options.workSafety.enable.clipboard;
@@ -202,13 +203,28 @@ Item { // Wrapper
     Rectangle { // Background
         id: searchWidgetContent
         anchors {
-            top: parent.top
             horizontalCenter: parent.horizontalCenter
             topMargin: Appearance.sizes.elevationMargin
+            bottomMargin: Appearance.sizes.elevationMargin
         }
+        
+        state: Config.options.overview.position === "center" ? "top" : Config.options.overview.position
+        states: [
+            State {
+                name: "top"
+                AnchorChanges { target: searchWidgetContent; anchors.top: parent.top; anchors.bottom: undefined; }
+                AnchorChanges { target: gridLayout; anchors.top: parent.top; anchors.bottom: undefined; }
+            },
+            State {
+                name: "bottom"
+                AnchorChanges { target: searchWidgetContent; anchors.top: undefined; anchors.bottom: parent.bottom; }
+                AnchorChanges { target: gridLayout; anchors.top: undefined; anchors.bottom: parent.bottom; }
+            }
+        ]
+
         clip: true
-        implicitWidth: columnLayout.implicitWidth
-        implicitHeight: columnLayout.implicitHeight
+        implicitWidth: gridLayout.implicitWidth
+        implicitHeight: gridLayout.implicitHeight
         radius: searchBar.height / 2 + searchBar.verticalPadding
         color: Appearance.colors.colBackgroundSurfaceContainer
 
@@ -218,15 +234,14 @@ Item { // Wrapper
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
 
-        ColumnLayout {
-            id: columnLayout
-            anchors {
-                top: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            spacing: 0
+        GridLayout {
+            id: gridLayout
+            anchors.horizontalCenter: parent.horizontalCenter
+            columnSpacing: 0
+            rowSpacing: 0
+            columns: 1
 
-            // clip: true
+            clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -235,7 +250,7 @@ Item { // Wrapper
                     radius: searchWidgetContent.radius
                 }
             }
-
+            
             SearchBar {
                 id: searchBar
                 property real verticalPadding: 4
@@ -244,9 +259,10 @@ Item { // Wrapper
                 Layout.rightMargin: 4
                 Layout.topMargin: verticalPadding
                 Layout.bottomMargin: verticalPadding
+                Layout.row: root.reverseOrder ? 2 : 0
                 Synchronizer on searchingText {
                     property alias source: root.searchingText
-                }
+                }   
             }
 
             Rectangle {
@@ -254,6 +270,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 height: 1
+                Layout.row: 1
                 color: Appearance.colors.colOutlineVariant
             }
 
@@ -261,6 +278,7 @@ Item { // Wrapper
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
+                Layout.row: root.reverseOrder ? 0 : 2
                 implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
                 clip: true
                 topMargin: 10

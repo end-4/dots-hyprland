@@ -389,6 +389,7 @@ Singleton {
                 property real rows: 2
                 property real columns: 5
                 property bool centerIcons: true
+                property string position: "top" // Options: "top", "center", "bottom"
             }
 
             property JsonObject regionSelector: JsonObject {
