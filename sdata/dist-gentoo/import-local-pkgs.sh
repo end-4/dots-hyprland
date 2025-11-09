@@ -12,13 +12,6 @@ function import_ebuild(){
 	v sudo ebuild "${ebuild_dir}/${to_dir}/${ename}/${ename}"*.ebuild digest
 }
 
-############### HYPRLAND
-import_ebuild "${HYPR_DIR}" "dev-libs" "hyprgraphics"
-import_ebuild "${HYPR_DIR}" "gui-libs" "hyprland-qt-support"
-import_ebuild "${HYPR_DIR}" "gui-libs" "hyprland-qtutils"
-import_ebuild "${HYPR_DIR}" "dev-libs" "hyprlang"
-import_ebuild "${HYPR_DIR}" "dev-util" "hyprwayland-scanner"
-
 ############### FONTS AND THEMES
 import_ebuild "${HYPR_DIR}" "dev-libs" "hyprgraphics"
 import_ebuild "${FT_DIR}" "media-fonts" "gabarito"
