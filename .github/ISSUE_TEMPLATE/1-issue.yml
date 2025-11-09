@@ -4,7 +4,7 @@ labels: ["ISSUE"]
 body:
   - type: markdown
     attributes:
-      value: "**Welcome to submit a new issue!**\n- Please search in [existing issues](https://github.com/end-4/dots-hyprland/issues?q=is%3Aissue) before continue.\n- It takes only 3 steps, so please be patient :)\n- Tip: If your issue is not a feature request, and it does not fit into the following form, for example \"how can I edit some widget\", please use [Discussions](https://github.com/end-4/dots-hyprland/discussions) instead."
+      value: "**Welcome to submit a new issue!**\n- Please search in [existing issues](https://github.com/end-4/dots-hyprland/issues?q=is%3Aissue) before continue.\n- It takes only 3 steps, so please be patient :)\n- NOTE 1: If your issue is not a feature request, and it does not fit into the following form, for example \"how can I edit some widget\", please use [Discussions](https://github.com/end-4/dots-hyprland/discussions) instead.\n- NOTE 2: If your problem is distro specific and you do not use Arch(-based) distros, plesae submit [Discussion at Extra Distros](https://github.com/end-4/dots-hyprland/discussions/new?category=extra-distros) instead."
   - type: checkboxes
     attributes:
       label: "Step 1. Before you submit"

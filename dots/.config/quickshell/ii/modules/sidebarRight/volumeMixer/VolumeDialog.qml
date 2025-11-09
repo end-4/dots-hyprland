@@ -11,19 +11,20 @@ import Quickshell.Services.Pipewire
 WindowDialog {
     id: root
     property bool isSink: true
-    backgroundHeight: 700
+    backgroundHeight: 600
 
     WindowDialogTitle {
         text: root.isSink ? Translation.tr("Audio output") : Translation.tr("Audio input")
     }
 
-    VolumeDialogContent {
-        isSink: root.isSink
-    }
-
     WindowDialogSeparator {
+        Layout.topMargin: -22
         Layout.leftMargin: 0
         Layout.rightMargin: 0
+    }
+
+    VolumeDialogContent {
+        isSink: root.isSink
     }
 
     WindowDialogButtonRow {

@@ -58,7 +58,7 @@ Item {
 
     property var keyBlacklist: ["Super_L"]
     property var keySubstitutions: Object.assign({
-        "Super": "󰖳",
+        "Super": "",
         "mouse_up": "Scroll ↓",    // ikr, weird
         "mouse_down": "Scroll ↑",  // trust me bro
         "mouse:272": "LMB",
