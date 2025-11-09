@@ -13,8 +13,6 @@ StyledOverlayWidget {
     contentItem: StickypadContent {
         implicitWidth: 440
         implicitHeight: 380
-        // CUSTOM: Pass clickthrough state to content - START
         isClickthrough: root.clickthrough
-        // CUSTOM: Pass clickthrough state to content - END
     }
 }
