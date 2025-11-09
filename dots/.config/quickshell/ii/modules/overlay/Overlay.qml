@@ -25,10 +25,8 @@ Scope {
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:overlay"
             WlrLayershell.layer: WlrLayer.Overlay
-            // CUSTOM: Stickypad keyboard focus fix - START
             // Use OnDemand for pinned widgets to allow focus switching with mouse clicks
             WlrLayershell.keyboardFocus: GlobalStates.overlayOpen ? WlrKeyboardFocus.Exclusive : (OverlayContext.clickableWidgets.length > 0 ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None)
-            // CUSTOM: Stickypad keyboard focus fix - END
             visible: true
             color: "transparent"
 
