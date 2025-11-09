@@ -15,9 +15,6 @@ import qs.modules.overlay
 StyledOverlayWidget {
     id: root
       
-      function formatKB(kb) {
-        return (kb / (1024 * 1024)).toFixed(1) + " GB";
-    }
         function buildIGpuProperties() {
         const cfg = Config.options?.resources?.gpu?.overlay?.iGpu
         let props = []
@@ -149,17 +146,17 @@ StyledOverlayWidget {
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("Used:"),
-                    value: root.formatKB(ResourceUsage.memoryUsed)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryUsed)
                 },
                 {
                     icon: "check_circle",
                     label: Translation.tr("Free:"),
-                    value: root.formatKB(ResourceUsage.memoryFree)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryFree)
                 },
                 {
                     icon: "empty_dashboard",
                     label: Translation.tr("Total:"),
-                    value: root.formatKB(ResourceUsage.memoryTotal)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.memoryTotal)
                 }
             ]
         },
@@ -173,17 +170,17 @@ StyledOverlayWidget {
                 {
                     icon: "clock_loader_60",
                     label: Translation.tr("Used:"),
-                    value: root.formatKB(ResourceUsage.swapUsed)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.swapUsed)
                 },
                 {
                     icon: "check_circle",
                     label: Translation.tr("Free:"),
-                    value: root.formatKB(ResourceUsage.swapFree)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.swapFree)
                 },
                 {
                     icon: "empty_dashboard",
                     label: Translation.tr("Total:"),
-                    value: root.formatKB(ResourceUsage.swapTotal)
+                    value: ResourceUsage.kbToGbString(ResourceUsage.swapTotal)
                 }
             ]
             
