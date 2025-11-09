@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-hyprland
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Illogical Impulse Hyprland relatated packages'
 arch=(any)
 license=(None)

@@ -8,25 +8,25 @@
 
 
 import qs.modules.common
-import qs.modules.background
-import qs.modules.bar
-import qs.modules.cheatsheet
-import qs.modules.dock
-import qs.modules.lock
-import qs.modules.mediaControls
-import qs.modules.notificationPopup
-import qs.modules.onScreenDisplay
-import qs.modules.onScreenKeyboard
-import qs.modules.overview
-import qs.modules.polkit
-import qs.modules.regionSelector
-import qs.modules.screenCorners
-import qs.modules.sessionScreen
-import qs.modules.sidebarLeft
-import qs.modules.sidebarRight
-import qs.modules.overlay
-import qs.modules.verticalBar
-import qs.modules.wallpaperSelector
+import qs.modules.ii.background
+import qs.modules.ii.bar
+import qs.modules.ii.cheatsheet
+import qs.modules.ii.dock
+import qs.modules.ii.lock
+import qs.modules.ii.mediaControls
+import qs.modules.ii.notificationPopup
+import qs.modules.ii.onScreenDisplay
+import qs.modules.ii.onScreenKeyboard
+import qs.modules.ii.overview
+import qs.modules.ii.polkit
+import qs.modules.ii.regionSelector
+import qs.modules.ii.screenCorners
+import qs.modules.ii.sessionScreen
+import qs.modules.ii.sidebarLeft
+import qs.modules.ii.sidebarRight
+import qs.modules.ii.overlay
+import qs.modules.ii.verticalBar
+import qs.modules.ii.wallpaperSelector
 
 import QtQuick
 import QtQuick.Window

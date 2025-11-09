@@ -329,6 +329,21 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "point_scan"
+        title: Translation.tr("Overlay: Floating Image")
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Image source")
+            text: Config.options.overlay.floatingImage.imageSource
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.overlay.floatingImage.imageSource = text;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "screenshot_frame_2"
         title: Translation.tr("Region selector (screen snipping/Google Lens)")
 
