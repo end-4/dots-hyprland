@@ -27,7 +27,7 @@ RDEPEND="
 	media-fonts/jetbrains-mono
 	media-fonts/material-symbols-variable
 	media-fonts/readex-pro
-
+	media-fonts/roboto-flex
 	media-fonts/rubik-vf
 	media-fonts/twemoji
 "
