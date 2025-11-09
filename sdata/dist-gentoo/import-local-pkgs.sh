@@ -28,6 +28,7 @@ import_ebuild "${FT_DIR}" "media-fonts" "rubik-vf"
 import_ebuild "${FT_DIR}" "media-fonts" "space-grotesk"
 import_ebuild "${FT_DIR}" "kde-plasma" "breeze-plus"
 import_ebuild "${FT_DIR}" "x11-themes" "darkly"
+import_ebuild "${FT_DIR}" "media-fonts" "roboto-flex"
 
 ############### WIDGETS
 import_ebuild "${WIDGETS_DIR}" "app-misc" "songrec"
