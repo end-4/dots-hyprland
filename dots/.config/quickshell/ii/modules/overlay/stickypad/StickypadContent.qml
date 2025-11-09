@@ -15,9 +15,7 @@ Rectangle {
     property var copylistEntries: []
     property string lastParsedCopylistText: ""
     property var parsedCopylistLines: []
-    // CUSTOM: Track clickthrough state to disable text editing - START
     property bool isClickthrough: false
-    // CUSTOM: Track clickthrough state to disable text editing - END
     
     color: Appearance.colors.colLayer0
     radius: Appearance.rounding.windowRounding - 6
