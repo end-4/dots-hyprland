@@ -151,6 +151,23 @@ Item { // Wrapper
         if (event.key === Qt.Key_Escape)
             return;
 
+        // Add C-n/C-p navigation in search results
+        if (event.modifiers & Qt.ControlModifier) {
+            if (event.key === Qt.Key_N) {
+                if (appResults.count > 0 && appResults.currentIndex < appResults.count - 1) {
+                    appResults.currentIndex++;
+                }
+                event.accepted = true;
+                return;
+            } else if (event.key === Qt.Key_P) {
+                if (appResults.count > 0 && appResults.currentIndex > 0) {
+                    appResults.currentIndex--;
+                }
+                event.accepted = true;
+                return;
+            }
+        }
+
         // Handle Backspace: focus and delete character if not focused
         if (event.key === Qt.Key_Backspace) {
             if (!searchBar.searchInput.activeFocus) {
