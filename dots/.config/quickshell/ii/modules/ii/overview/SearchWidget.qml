@@ -317,6 +317,16 @@ Item { // Wrapper
                                 let posK = searchBar.searchInput.cursorPosition;
                                 searchBar.searchInput.text = textK.slice(0, posK);
                                 break;
+
+                            case Qt.Key_D:
+                                if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
+                                    let text = searchBar.searchInput.text;
+                                    let pos = searchBar.searchInput.cursorPosition;
+                                    searchBar.searchInput.text = text.slice(0, pos) + text.slice(pos + 1);
+                                    searchBar.searchInput.cursorPosition = pos;
+                                    event.accepted = true;
+                                }
+                                break;
                         }
                     }
                 }
