@@ -16,7 +16,7 @@ AbstractBackgroundWidget {
     implicitHeight: contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
 
-    readonly property string clockStyle: Config.options.background.widgets.clock.style
+    readonly property string clockStyle: GlobalStates.screenLocked ? Config.options.background.widgets.clock.styleLocked : Config.options.background.widgets.clock.style
     readonly property bool forceCenter: (GlobalStates.screenLocked && Config.options.lock.centerClock)
     readonly property bool shouldShow: (!Config.options.background.widgets.clock.showOnlyWhenLocked || GlobalStates.screenLocked)
     property bool wallpaperSafetyTriggered: false

@@ -55,6 +55,10 @@ ContentPage {
     ContentSection {
         icon: "clock_loader_40"
         title: Translation.tr("Widget: Clock")
+        id: settingsClock
+
+        readonly property bool digitalPresent: (!Config.options.background.widgets.clock.showOnlyWhenLocked && Config.options.background.widgets.clock.style === "digital") || Config.options.background.widgets.clock.styleLocked === "digital"
+        readonly property bool cookiePresent: (!Config.options.background.widgets.clock.showOnlyWhenLocked && Config.options.background.widgets.clock.style === "cookie") || Config.options.background.widgets.clock.styleLocked === "cookie"
 
         ConfigRow {
             Layout.fillWidth: true
@@ -107,6 +111,7 @@ ContentPage {
         }
 
         ContentSubsection {
+            visible: !Config.options.background.widgets.clock.showOnlyWhenLocked
             title: Translation.tr("Clock style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.widgets.clock.style
@@ -129,7 +134,29 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "digital"
+            title: Translation.tr("Clock style (locked)")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.widgets.clock.styleLocked
+                onSelected: newValue => {
+                    Config.options.background.widgets.clock.styleLocked = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Digital"),
+                        icon: "timer_10",
+                        value: "digital"
+                    },
+                    {
+                        displayName: Translation.tr("Cookie"),
+                        icon: "cookie",
+                        value: "cookie"
+                    }
+                ]
+            }
+        }
+
+        ContentSubsection {
+            visible: settingsClock.digitalPresent
             title: Translation.tr("Digital clock settings")
 
             ConfigSwitch {
@@ -143,7 +170,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Cookie clock settings")
 
             ConfigSwitch {
@@ -197,7 +224,7 @@ ContentPage {
             ConfigRow {
 
                 ConfigSwitch {
-                    enabled: Config.options.background.widgets.clock.style === "cookie" && Config.options.background.widgets.clock.cookie.dialNumberStyle === "dots" || Config.options.background.widgets.clock.cookie.dialNumberStyle === "full"
+                    enabled: Config.options.background.widgets.clock.cookie.dialNumberStyle === "dots" || Config.options.background.widgets.clock.cookie.dialNumberStyle === "full"
                     buttonIcon: "brightness_7"
                     text: Translation.tr("Hour marks")
                     checked: Config.options.background.widgets.clock.cookie.hourMarks
@@ -213,7 +240,7 @@ ContentPage {
                 }
 
                 ConfigSwitch {
-                    enabled: Config.options.background.widgets.clock.style === "cookie" && Config.options.background.widgets.clock.cookie.dialNumberStyle !== "numbers"
+                    enabled: Config.options.background.widgets.clock.cookie.dialNumberStyle !== "numbers"
                     buttonIcon: "timer_10"
                     text: Translation.tr("Digits in the middle")
                     checked: Config.options.background.widgets.clock.cookie.timeIndicators
@@ -231,7 +258,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Dial style")
             ConfigSelectionArray {
                 currentValue: Config.options.background.widgets.clock.cookie.dialNumberStyle
@@ -270,7 +297,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Hour hand")
             ConfigSelectionArray {
                 currentValue: Config.options.background.widgets.clock.cookie.hourHandStyle
@@ -303,7 +330,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Minute hand")
 
             ConfigSelectionArray {
@@ -342,7 +369,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Second hand")
 
             ConfigSelectionArray {
@@ -376,7 +403,7 @@ ContentPage {
         }
 
         ContentSubsection {
-            visible: Config.options.background.widgets.clock.style === "cookie"
+            visible: settingsClock.cookiePresent
             title: Translation.tr("Date style")
 
             ConfigSelectionArray {
