@@ -118,5 +118,9 @@ install_RPMS() {
 showfun install_RPMS
 v install_RPMS
 
+
 # hyprland-qtutils depends on hyprland-qt-support
 v sudo dnf install hyprland-qtutils -y
+
+# Add back versionlock at the end
+v sudo dnf versionlock add quickshell-git
