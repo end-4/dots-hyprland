@@ -6,10 +6,9 @@ EAPI=8
 DESCRIPTION="Illogicall Impulse Widget Dependencies"
 HOMEPAGE=""
 
-LICENSE="GPL-2"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
 
 DEPEND=""
 RDEPEND="
@@ -17,9 +16,11 @@ RDEPEND="
 	dev-libs/glib
 	media-gfx/imagemagick
 	gui-apps/hypridle
-	gui-libs/hyprutils
 	gui-apps/hyprlock
 	gui-apps/hyprpicker
+	app-misc/songrec
 	app-i18n/translate-shell
 	gui-apps/wlogout
 "
+##### CUSTOM EBUILDS
+# app-misc/songrec
