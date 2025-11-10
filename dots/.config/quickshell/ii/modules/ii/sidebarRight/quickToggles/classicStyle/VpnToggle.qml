@@ -12,6 +12,7 @@ import Quickshell.Hyprland
 QuickToggleButton {
     toggled: Network.vpnEnabled
     buttonIcon: "vpn_lock"
+    onClicked: Network.updateVpnList()
     altAction: () => {
         Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`])
         GlobalStates.sidebarRightOpen = false

@@ -12,6 +12,7 @@ AndroidQuickToggleButton {
 
     toggled: Network.vpnEnabled
     buttonIcon: "vpn_lock"
+    onClicked: Network.updateVpnList()
     altAction: () => {
         root.openMenu();
         Network.updateVpnList();
