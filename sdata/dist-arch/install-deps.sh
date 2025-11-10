@@ -16,7 +16,11 @@ install-yay(){
 # However, let's just keep it as references for other distros writing their `sdata/dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 remove_deprecated_dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
-  for i in illogical-impulse-{microtex,pymyc-aur} hyprland-qtutils {quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+  local list=()
+  list+=(illogical-impulse-{microtex,pymyc-aur})
+  list+=(hyprland-qtutils)
+  list+=({quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git)
+  for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
 }
 implicitize_old_dependencies(){
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
