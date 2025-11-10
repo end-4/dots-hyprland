@@ -28,7 +28,7 @@ src_unpack() {
 	mkdir -p "${S}"
 	cp "${DISTDIR}/MaterialSymbolsOutlined-FILL-GRAD-opsz-wght.ttf" \
 		"${S}/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf"
-	cp "${DISTDIR}/MaterialSymbolsRounded-FILL-GRAD-opsz-wght.ttf"
+	cp "${DISTDIR}/MaterialSymbolsRounded-FILL-GRAD-opsz-wght.ttf" \
 		"${S}/MaterialSymbolsRounded[FILL,GRAD,opsz,wght].ttf"
 	cp "${DISTDIR}/MaterialSymbolsSharp-FILL-GRAD-opsz-wght.ttf" \
 		"${S}/MaterialSymbolsSharp[FILL,GRAD,opsz,wght].ttf"
