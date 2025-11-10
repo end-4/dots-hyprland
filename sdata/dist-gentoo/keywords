@@ -29,15 +29,15 @@ gui-apps/fuzzel
 gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
-dev-libs/hyprland-protocols **
-gui-libs/aquamarine **
-gui-libs/hyprutils **
-dev-util/hyprwayland-scanner **
-dev-libs/hyprlang **
-dev-libs/hyprgraphics **
-gui-libs/hyprcursor **
-gui-libs/hyprland-qt-support **
-gui-libs/hyprland-qtutils **
+dev-libs/hyprland-protocols
+gui-libs/aquamarine
+gui-libs/hyprutils
+dev-util/hyprwayland-scanner
+dev-libs/hyprlang
+dev-libs/hyprgraphics
+gui-libs/hyprcursor
+gui-libs/hyprland-qt-support
+gui-libs/hyprland-qtutils
 gui-wm/hyprland
 x11-libs/libxkbcommon
 dev-util/breakpad
