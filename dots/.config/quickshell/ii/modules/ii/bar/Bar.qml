@@ -14,12 +14,14 @@ Scope {
 
     Variants {
         // For each monitor
-        model: {
-            const screens = Quickshell.screens;
-            const list = Config.options.bar.screenList;
-            if (!list || list.length === 0)
-                return screens;
-            return screens.filter(screen => list.includes(screen.name));
+        model: ScriptModel {
+            values: {
+                const screens = Quickshell.screens;
+                const list = Config.options.bar.screenList;
+                if (!list || list.length === 0)
+                    return screens;
+                return screens.filter(screen => list.includes(screen.name));
+            }
         }
         LazyLoader {
             id: barLoader
@@ -28,10 +30,6 @@ Scope {
             component: PanelWindow { // Bar window
                 id: barRoot
                 screen: barLoader.modelData
-
-                property var brightnessMonitor: Brightness.getMonitorForScreen(barLoader.modelData)
-                property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen.width) ? 1 : 0
-                readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
 
                 Timer {
                     id: showBarTimer
