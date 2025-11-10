@@ -70,7 +70,7 @@ case ${SUBCMD_NAME} in
       source ${SUBCMD_DIR}/1.deps-selector.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
@@ -83,7 +83,7 @@ case ${SUBCMD_NAME} in
     ;;
   install-setups)
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     ;;
   install-files)
