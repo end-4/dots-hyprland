@@ -156,7 +156,7 @@ def get_keybind_at_line(line_number, line_start = 0):
             if comment.startswith("[ignore]"):
                 # print('unbind [ignore]')
                 return None
-        mods, key, *_ = list(map(str.strip, keys.split(",", 33)))
+        mods, key, *_ = list(map(str.strip, keys.split(",", 3)))
         if mods:
             modstring = mods + MOD_SEPARATORS[0] # Add separator at end to ensure last mod is read
             mods = []
