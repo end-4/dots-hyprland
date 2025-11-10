@@ -8,8 +8,13 @@ import QtQuick.Layouts
 
 Item {
     id: root
+
     readonly property var keybinds: {
         const hasFilter = root.filter !== '';
+        
+
+        const defaultKeybinds = HyprlandKeybinds.defaultKeybinds.children ?? []
+        const userKeybinds = HyprlandKeybinds.userKeybinds.children ?? []
 
         const children = HyprlandKeybinds.keybinds.children.map((child) => {
             return Object.assign({},
@@ -17,7 +22,7 @@ Item {
                 {
                     children: child.children.map((children) => {
                         const {
-                            keybinds
+                          keybinds,
                         } = children;
                         const remappedKeybinds = keybinds.map((keybind) => {
                             let mods = [];
@@ -56,7 +61,23 @@ Item {
                 }
             )
         })
-        return { children: children }
+        // console.log('===')
+        // // console.log(JSON.stringify(children))
+        const unbinds = parseUnbinds(userKeybinds)
+        //  console.log('===')
+        // console.log(JSON.stringify(unbinds))
+        // console.log('===')   
+        // console.log(JSON.stringify(parseKeymaps(defaultKeybinds), unbinds), 'system')
+        // console.log('===')
+        // console.log(JSON.stringify(parseKeymaps(userKeybinds)), 'user')
+        // console.log('===')
+       // return { children: children }
+        return { 
+            children: [
+                ...(parseKeymaps(defaultKeybinds, unbinds) ?? []),
+                ...(parseKeymaps(userKeybinds) ?? []),
+            ]
+        }
     }
     property real spacing: 20
     property real titleSpacing: 7
@@ -126,6 +147,97 @@ Item {
       Config.options.cheatsheet.useFnSymbol ? functionSymbolMap : {},
       Config.options.cheatsheet.useMouseSymbol ? mouseSymbolMap : {},
     )
+
+    function parseKeymaps(cheatsheet, unbinds) {
+        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
+        if (!unbinds) unbinds = []
+        if (!cheatsheet) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
+        return cheatsheet.map((child) => {
+            return Object.assign({},
+                child, 
+                {
+                    children: child.children.map((children) => {
+                        const {
+                          keybinds,
+                        } = children;
+                        const remappedKeybinds = keybinds.map((keybind) => {
+                            let mods = [];
+
+                            for (var j = 0; j < keybind.mods.length; j++) {
+                                mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                            }
+                            console.log('I am here', unbinds.length)
+                            for (var i = 0; i < unbinds.length; i++) {
+                               var unbindMod = true;
+                               for (var j = 0; j < keybind.mods.length; j++) {
+                                    console.log('here ->', JSON.stringify(unbinds[i]))
+                                    if (unbinds[i].mods[j] && keybind.mods[j] !== unbinds[i].mods[j]) {
+                                        unbindMod = false;
+                                        console.log('o')
+                                    } else {
+                                        console.log('a')
+                                    }
+                                }
+                                if (unbindMod && keybind.key === unbinds[i].key) {
+                                    console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    console.log(mods.join(' '), keybind.key, keybind.comment)
+                                    console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    return false  
+                                } 
+                            }
+
+                            if (!Config.options.cheatsheet.splitButtons) {
+                                mods = [mods.join(' ')]
+                                mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
+                                mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                            }
+                            return Object.assign({}, keybind, { mods })
+                        })
+                        const filteredKeybinds = remappedKeybinds.filter(keybind => {
+                            return !root.hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                        })
+                        const result = []
+                        filteredKeybinds.forEach(keybind => {
+                            result.push({
+                                "type": "keys",
+                                "mods": keybind.mods,
+                                "key": keybind.key,
+                            });
+                            result.push({
+                                "type": "comment",
+                                "comment": keybind.comment,
+                            });
+                        })
+
+                        return Object.assign({}, children, {
+                            keybinds: filteredKeybinds,
+                            result
+                        })
+                    })
+                }
+            )
+        })
+    }
+
+    function parseUnbinds(cheatsheet, name) {
+        const unbinds = []
+        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
+        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
+        cheatsheet.forEach((child) => {
+            child.children.forEach((children) => {
+                const {
+                  unbinds: childUnbind
+                } = children;
+                childUnbind.forEach((unbind) => {
+                    unbinds.push(unbind)
+                    console.log('===============================')
+                    console.log(JSON.stringify(unbind))
+                    console.log('===============================')
+                })
+            })
+        })
+        return unbinds
+    }
     
     // Keys.onPressed: event => {
     //    if (event.key === Qt.Key_Slash) {
