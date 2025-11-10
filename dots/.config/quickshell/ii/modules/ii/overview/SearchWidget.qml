@@ -151,7 +151,7 @@ Item { // Wrapper
         if (event.key === Qt.Key_Escape)
             return;
 
-        // Add Emacs navigation in search results and search box
+        // Add Emacs navigation in search results
         if (event.modifiers & Qt.ControlModifier) {
             switch (event.key) {
                 case Qt.Key_N:
@@ -164,30 +164,6 @@ Item { // Wrapper
                     if (appResults.count > 0 && appResults.currentIndex > 0) {
                         appResults.currentIndex--;
                     }
-                    event.accepted = true;
-                    return;
-                case Qt.Key_B:
-                    if (searchBar.searchInput.cursorPosition > 0) {
-                        searchBar.searchInput.cursorPosition -= 1;
-                        event.accepted = true;
-                        return;
-                    }
-                    break;
-                case Qt.Key_F:
-                    if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
-                        searchBar.searchInput.cursorPosition += 1;
-                        event.accepted = true;
-                        return;
-                    }
-                    break;
-                case Qt.Key_E:
-                    searchBar.searchInput.cursorPosition = searchBar.searchInput.length;
-                    event.accepted = true;
-                    return;
-                case Qt.Key_K:
-                    let textK = searchBar.searchInput.text;
-                    let posK = searchBar.searchInput.cursorPosition;
-                    searchBar.searchInput.text = textK.slice(0, posK);
                     event.accepted = true;
                     return;
             }
@@ -288,6 +264,61 @@ Item { // Wrapper
                 Layout.bottomMargin: verticalPadding
                 Synchronizer on searchingText {
                     property alias source: root.searchingText
+                }
+            }
+
+            // Add Emacs navigation & editing inside search box
+            Connections {
+                target: searchBar.searchInput
+                function onActiveFocusChanged() {
+                    if (searchBar.searchInput.activeFocus) {
+                        searchBar.searchInput.Keys.pressed.connect(handleSearchKeys);
+                    }
+                }
+
+                function handleSearchKeys(event) {
+                    if (event.modifiers & Qt.ControlModifier) {
+                        switch (event.key) {
+                            case Qt.Key_B:
+                                if (searchBar.searchInput.cursorPosition > 0) {
+                                    searchBar.searchInput.cursorPosition -= 1;
+                                    event.accepted = true;
+                                }
+                                break;
+
+                            case Qt.Key_F:
+                                if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
+                                    searchBar.searchInput.cursorPosition += 1;
+                                    event.accepted = true;
+                                }
+                                break;
+
+                            case Qt.Key_E:
+                                searchBar.searchInput.cursorPosition = searchBar.searchInput.length;
+                                event.accepted = true;
+                                break;
+
+                            case Qt.Key_U:
+                                event.accepted = true;
+                                let textU = searchBar.searchInput.text;
+                                let posU = searchBar.searchInput.cursorPosition;
+                                searchBar.searchInput.text = textU.slice(posU);
+                                searchBar.searchInput.cursorPosition = 0;
+                                break;
+
+                            case Qt.Key_A:
+                                event.accepted = true;
+                                searchBar.searchInput.cursorPosition = 0;
+                                break;
+
+                            case Qt.Key_K:
+                                event.accepted = true;
+                                let textK = searchBar.searchInput.text;
+                                let posK = searchBar.searchInput.cursorPosition;
+                                searchBar.searchInput.text = textK.slice(0, posK);
+                                break;
+                        }
+                    }
                 }
             }
 
