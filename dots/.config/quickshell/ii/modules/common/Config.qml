@@ -561,6 +561,7 @@ Singleton {
             property JsonObject waffles: JsonObject {
                 property JsonObject bar: JsonObject {
                     property bool bottom: true
+                    property bool leftAlignApps: true
                 }
             }
         }
