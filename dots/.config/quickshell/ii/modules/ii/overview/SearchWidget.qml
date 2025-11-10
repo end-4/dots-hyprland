@@ -151,20 +151,39 @@ Item { // Wrapper
         if (event.key === Qt.Key_Escape)
             return;
 
-        // Add C-n/C-p navigation in search results
+        // Add Emacs navigation in search results and search box
         if (event.modifiers & Qt.ControlModifier) {
-            if (event.key === Qt.Key_N) {
-                if (appResults.count > 0 && appResults.currentIndex < appResults.count - 1) {
-                    appResults.currentIndex++;
-                }
-                event.accepted = true;
-                return;
-            } else if (event.key === Qt.Key_P) {
-                if (appResults.count > 0 && appResults.currentIndex > 0) {
-                    appResults.currentIndex--;
-                }
-                event.accepted = true;
-                return;
+            switch (event.key) {
+                case Qt.Key_N:
+                    if (appResults.count > 0 && appResults.currentIndex < appResults.count - 1) {
+                        appResults.currentIndex++;
+                    }
+                    event.accepted = true;
+                    return;
+                case Qt.Key_P:
+                    if (appResults.count > 0 && appResults.currentIndex > 0) {
+                        appResults.currentIndex--;
+                    }
+                    event.accepted = true;
+                    return;
+                case Qt.Key_B:
+                    if (searchBar.searchInput.cursorPosition > 0) {
+                        searchBar.searchInput.cursorPosition -= 1;
+                        event.accepted = true;
+                        return;
+                    }
+                    break;
+                case Qt.Key_F:
+                    if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
+                        searchBar.searchInput.cursorPosition += 1;
+                        event.accepted = true;
+                        return;
+                    }
+                    break;
+                case Qt.Key_E:
+                    searchBar.searchInput.cursorPosition = searchBar.searchInput.length;
+                    event.accepted = true;
+                    return;
             }
         }
 
