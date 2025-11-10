@@ -8,6 +8,6 @@ import qs.modules.waffle.looks
 AppButton {
     id: root
 
-    leftInset: 12
+    leftInset: Config.options.waffles.bar.leftAlignApps ? 12 : 0
     iconName: "start-here"
 }

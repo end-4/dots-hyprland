@@ -9,6 +9,7 @@ BarButton {
     id: root
 
     required property string iconName
+    property bool separateLightDark: false
     implicitWidth: height - topInset - bottomInset + leftInset + rightInset
 
     contentItem: Item {
@@ -27,14 +28,10 @@ BarButton {
             }
         }
 
-        Kirigami.Icon {
+        AppIcon {
             id: iconWidget
             anchors.centerIn: parent
-            implicitWidth: 26
-            implicitHeight: 26
-            roundToIconSize: false
-            source: `${Looks.iconsPath}/${root.iconName}-${Looks.dark ? "dark" : "light"}.svg`
-            fallback: root.iconName
+            iconName: root.iconName
         }
     }
 }
