@@ -54,6 +54,7 @@ else
 	pause
 fi
 
+# _icons_, _konsole_, _hypr_, and _quickshell_ are are chowned to user since they're emerge in as root by default.
 if [[ "$OS_DISTRO_ID" == "gentoo" ]]; then
   v sudo chown -R $(whoami):$(whoami) ~/.config/hypr/
   v sudo chown -R $(whoami):$(whoami) ~/.config/quickshell/

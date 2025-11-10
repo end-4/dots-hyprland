@@ -10,7 +10,6 @@ Note:
 ## Contributors
 - Author: [jwihardi](https://github.com/jwihardi)
 
-
 ## install-deps.sh
 1. Enables localrepo and guru overlays if not already enabled.
 2. Copies _keywords_ to _keywords-user_ and appends the correct unmask keywords for the user's architecture (adm64, arm64, and x86 are supported).
@@ -19,19 +18,13 @@ Note:
 5. Copies over the custom live ebuilds (hyprgraphics, hyprland-qt-support, hyprland-qtutils, hyprlang, hyprwayland-scanner) into localrepo and digests them.
 6. Loops through all illogical-impulse ebuilds to digest and emerge them.
 
-## install-setup.sh
-1. Creates the _i2c_ group since Gentoo doesn't have this by default, then adds the user to it.
-2. Enables _bluetooth_ and _ydotool_ services (systemd or openrc)
-3. _icons_, _konsole_, _hypr_, and _quickshell_ are are chowned to user since they're emerge in as root by default.
-4. gsettings and kwriteconfig6 are set (same as sdata/dist-arch).
-
 ## Recommended use flags (useflags)
 - **The recommended useflags are not required, this is a more out of the box experience with these**
 - Pipewire is used, alsa and pulseaudio are disabled (enabling them won't hurt).
 - Init system is not assumed or considered so disabling systemd should be done in make.conf, same with session managers (elogind is recommended).
 
 ## Making the dot-files work
-- elogind is expected to be installed and run as a service on OpenRC to set ```XDG_RUNTIME_DIR```
+- elogind is expected to be installed and run as a service on OpenRC to set `XDG_RUNTIME_DIR`
   - NOT recommended: seatd will require more manual setup
 - pipewire, pipewire-pulse, and wireplumber must be started after a dbus-session is created and before Hyprland is launched.
 
@@ -54,8 +47,8 @@ end
 ```
 
 ## Known Issues
-- If Hyprland is just blank, rebuild Quickshell (emerge -q gui-apps/quickshell)
-- ```Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory```
-  - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from ```/usr/bin/``` and then re-emerging usually fixes this.
-- When emerging Hyprland if you get an issue relating to```undefined reference to `Hyprutils::Math::Vector2D::˜Vector2D()` ```
-  - Clear the cache folder (```rm -fr /var/tmp/portage/gui-wm/hyprland*```) then try again
+- If Hyprland is just blank, rebuild Quickshell (`emerge -q gui-apps/quickshell`)
+- `Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory`
+  - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from `/usr/bin/` and then re-emerging usually fixes this.
+- When emerging Hyprland if you get an issue relating to `undefined reference to ``Hyprutils::Math::Vector2D::˜Vector2D()`` `
+  - Clear the cache folder (`rm -fr /var/tmp/portage/gui-wm/hyprland*`) then try again
