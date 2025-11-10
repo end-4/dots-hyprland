@@ -184,6 +184,12 @@ Item { // Wrapper
                     searchBar.searchInput.cursorPosition = searchBar.searchInput.length;
                     event.accepted = true;
                     return;
+                case Qt.Key_K:
+                    let textK = searchBar.searchInput.text;
+                    let posK = searchBar.searchInput.cursorPosition;
+                    searchBar.searchInput.text = textK.slice(0, posK);
+                    event.accepted = true;
+                    return;
             }
         }
 
