@@ -20,7 +20,7 @@ fi
 v sudo usermod -aG video,i2c,input "$(whoami)"
 
 if [[ ! -z $(systemctl --version) ]]; then
-  if [[ "$OS_DISTRO_ID" == "fedora" ]]; then
+  if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
     v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
   else
@@ -28,7 +28,7 @@ if [[ ! -z $(systemctl --version) ]]; then
   fi
   # TODO: find a proper way for enable Nix installed ydotool. When running `systemctl --user enable ydotool, it errors "Failed to enable unit: Unit ydotool.service does not exist".
   if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
-    if [[ "$OS_DISTRO_ID" == "fedora" ]]; then
+    if [[ "$OS_GROUP_ID" == "fedora" ]]; then
       v prepare_systemd_user_service
     fi
     # When $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR are empty, it commonly means that the current user has been logged in with `su - user` or `ssh user@hostname`. In such case `systemctl --user enable <service>` is not usable. It should be `sudo systemctl --machine=$(whoami)@.host --user enable <service>` instead.
@@ -55,7 +55,7 @@ else
 fi
 
 # _icons_, _konsole_, _hypr_, and _quickshell_ are are chowned to user since they're emerge in as root by default.
-if [[ "$OS_DISTRO_ID" == "gentoo" ]]; then
+if [[ "$OS_GROUP_ID" == "gentoo" ]]; then
   v sudo chown -R $(whoami):$(whoami) ~/.config/hypr/
   v sudo chown -R $(whoami):$(whoami) ~/.config/quickshell/
 fi
