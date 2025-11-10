@@ -16,54 +16,9 @@ Item {
         const defaultKeybinds = HyprlandKeybinds.defaultKeybinds.children ?? []
         const userKeybinds = HyprlandKeybinds.userKeybinds.children ?? []
 
-        const children = HyprlandKeybinds.keybinds.children.map((child) => {
-            return Object.assign({},
-                child, 
-                {
-                    children: child.children.map((children) => {
-                        const {
-                          keybinds,
-                        } = children;
-                        const remappedKeybinds = keybinds.map((keybind) => {
-                            let mods = [];
-                            for (var j = 0; j < keybind.mods.length; j++) {
-                                mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
-                            }
-
-                            if (!Config.options.cheatsheet.splitButtons) {
-                                mods = [mods.join(' ')]
-                                mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
-                                mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
-                            }
-                            return Object.assign({}, keybind, { mods })
-                        })
-                        const filteredKeybinds = remappedKeybinds.filter(keybind => {
-                            return !hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
-                        })
-                        const result = []
-                        filteredKeybinds.forEach(keybind => {
-                            result.push({
-                                "type": "keys",
-                                "mods": keybind.mods,
-                                "key": keybind.key,
-                            });
-                            result.push({
-                                "type": "comment",
-                                "comment": keybind.comment,
-                            });
-                        })
-
-                        return Object.assign({}, children, {
-                            keybinds: filteredKeybinds,
-                            result
-                        })
-                    })
-                }
-            )
-        })
         // console.log('===')
         // // console.log(JSON.stringify(children))
-        const unbinds = parseUnbinds(userKeybinds)
+        const unbinds = root.filterUnbinds ? parseUnbinds(userKeybinds) : []
         //  console.log('===')
         // console.log(JSON.stringify(unbinds))
         // console.log('===')   
@@ -83,6 +38,7 @@ Item {
     property real titleSpacing: 7
     property real padding: 4
     property var filter: ''
+    property var filterUnbinds: false
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
@@ -149,6 +105,7 @@ Item {
     )
 
     function parseKeymaps(cheatsheet, unbinds) {
+        const hasFilter = root.filter !== '';
         // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
         if (!unbinds) unbinds = []
         if (!cheatsheet) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
@@ -166,23 +123,20 @@ Item {
                             for (var j = 0; j < keybind.mods.length; j++) {
                                 mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
                             }
-                            console.log('I am here', unbinds.length)
+                            // console.log('I am here', unbinds.length)
                             for (var i = 0; i < unbinds.length; i++) {
-                               var unbindMod = true;
+                               var unbindMod = unbinds[i].mods.length === keybind.mods.length;
                                for (var j = 0; j < keybind.mods.length; j++) {
-                                    console.log('here ->', JSON.stringify(unbinds[i]))
+                                    // console.log('here ->', JSON.stringify(unbinds[i]))
                                     if (unbinds[i].mods[j] && keybind.mods[j] !== unbinds[i].mods[j]) {
                                         unbindMod = false;
-                                        console.log('o')
-                                    } else {
-                                        console.log('a')
-                                    }
+                                    } 
                                 }
                                 if (unbindMod && keybind.key === unbinds[i].key) {
-                                    console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
-                                    console.log(mods.join(' '), keybind.key, keybind.comment)
-                                    console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
-                                    return false  
+                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    // console.log(mods.join(' '), keybind.key, keybind.comment)
+                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    return !root.filterUnbinds 
                                 } 
                             }
 
@@ -194,7 +148,7 @@ Item {
                             return Object.assign({}, keybind, { mods })
                         })
                         const filteredKeybinds = remappedKeybinds.filter(keybind => {
-                            return !root.hasFilter ? keybind : keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                            return !hasFilter ? keybind : keybind && keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
                         })
                         const result = []
                         filteredKeybinds.forEach(keybind => {
@@ -230,9 +184,9 @@ Item {
                 } = children;
                 childUnbind.forEach((unbind) => {
                     unbinds.push(unbind)
-                    console.log('===============================')
-                    console.log(JSON.stringify(unbind))
-                    console.log('===============================')
+                    // console.log('===============================')
+                    // console.log(JSON.stringify(unbind))
+                    // console.log('===============================')
                 })
             })
         })
@@ -261,7 +215,13 @@ Item {
 
         IconToolbarButton {
             implicitWidth: height
-            text: "filter_alt"
+            text: root.filterUnbinds ? "filter_alt" : "filter_alt_off"
+            onClicked: {
+                root.filterUnbinds = !root.filterUnbinds
+            }
+            StyledToolTip {
+                text: Translation.tr("Toggle filter on system shortcuts unbind by the user")
+            }
         }
 
         ToolbarTextField {
