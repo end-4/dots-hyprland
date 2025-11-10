@@ -13,6 +13,7 @@ Singleton {
     property QtObject font
     property QtObject transition
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
+    property bool dark: Appearance.m3colors.darkmode
 
     property real fluentBackgroundTransparency: 0.17
     property real fluentContentTransparency: 0.3
@@ -65,6 +66,38 @@ Singleton {
         property Component color: Component {
             ColorAnimation {
                 duration: 80
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
+        property Component enter: Component {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
+        property Component exit: Component {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeOut
+            }
+        }
+
+        property Component move: Component {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+            }
+        }
+
+        property Component anchor: Component {
+            AnchorAnimation {
+                duration: 250
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeInOut
             }

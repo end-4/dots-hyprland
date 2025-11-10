@@ -34,10 +34,7 @@ BarButton {
             }
 
             FluentIcon {
-                icon: {
-                    print(WIcons.batteryIcon)
-                    return WIcons.batteryIcon
-                }
+                icon: WIcons.batteryIcon
             }
         }
     }

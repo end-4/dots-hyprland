@@ -22,13 +22,27 @@ Rectangle {
     }
 
     BarGroupRow {
-        id: bloatRow
-        anchors.left: parent.left
-    }
-
-    BarGroupRow {
         id: appsRow
+        spacing: 4
+        anchors.left: undefined
         anchors.horizontalCenter: parent.horizontalCenter
+
+        states: State {
+            name: "left"
+            when: Config.options.waffles.bar.leftAlignApps
+            AnchorChanges {
+                target: appsRow
+                anchors.left: parent.left
+                anchors.horizontalCenter: undefined
+            }
+        }
+
+        transitions: Transition {
+            animations: Looks.transition.anchor.createObject(this)
+        }
+
+        StartButton {}
+        SearchButton {}
     }
 
     BarGroupRow {

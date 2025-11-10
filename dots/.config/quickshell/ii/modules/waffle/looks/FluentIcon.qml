@@ -13,6 +13,7 @@ Kirigami.Icon {
     implicitHeight: implicitSize
 
     source: `${Looks.iconsPath}/${root.icon}.svg`
+    fallback: root.icon
     roundToIconSize: false
     color: Looks.colors.fg
     isMask: true
