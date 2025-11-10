@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.waffle.looks
 
 Rectangle {
@@ -19,6 +20,18 @@ Rectangle {
         }
         color: Looks.colors.bg0Border
         implicitHeight: 1
+    }
+
+    BarGroupRow {
+        id: bloatRow
+        anchors.left: parent.left
+        opacity: Config.options.waffles.bar.leftAlignApps ? 0 : 1
+        visible: opacity > 0
+        Behavior on opacity {
+            animation: Looks.transition.opacity.createObject(this)
+        }
+
+        WidgetsButton {}
     }
 
     BarGroupRow {
@@ -43,11 +56,17 @@ Rectangle {
 
         StartButton {}
         SearchButton {}
+        TaskViewButton {}
     }
 
     BarGroupRow {
         id: systemRow
         anchors.right: parent.right
+        FadeLoader {
+            Layout.fillHeight: true
+            shown: Config.options.waffles.bar.leftAlignApps
+            sourceComponent: WidgetsButton {}
+        }
         SystemButton {}
         TimeButton {}
     }

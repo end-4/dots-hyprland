@@ -19,13 +19,13 @@ Singleton {
     property real fluentContentTransparency: 0.3
     colors: QtObject {
         id: colors
-        property color bg0: "#1C1C1C"
-        property color bg0Border: "#404040"
-        property color bg1: "#2E2E2E"
-        property color bg1Hover: "#292929"
-        property color bg1Active: "#252525"
-        property color bg1Border: "#333333"
-        property color fg: "#FFFFFF"
+        property color bg0: root.dark ? "#1C1C1C" : "#EEEEEE"
+        property color bg0Border: root.dark ? "#404040" : "#BEBEBE"
+        property color bg1: root.dark ? "#2E2E2E" : "#F7F7F7"
+        property color bg1Hover: root.dark ? "#292929" : "#F7F7F7"
+        property color bg1Active: root.dark ? "#252525" : "#F3F3F3"
+        property color bg1Border: root.dark ? "#333333" : "#E9E9E9"
+        property color fg: root.dark ? "#FFFFFF" : "#000000"
         property color brand: Appearance.m3colors.m3primary
     }
 
@@ -71,6 +71,14 @@ Singleton {
             }
         }
 
+        property Component opacity: Component {
+            NumberAnimation{
+                duration: 80
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
         property Component enter: Component {
             NumberAnimation {
                 duration: 250
@@ -97,9 +105,9 @@ Singleton {
 
         property Component anchor: Component {
             AnchorAnimation {
-                duration: 250
+                duration: 160
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }
         }
     }

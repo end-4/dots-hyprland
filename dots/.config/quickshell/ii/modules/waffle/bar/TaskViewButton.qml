@@ -8,6 +8,5 @@ import qs.modules.waffle.looks
 AppButton {
     id: root
 
-    iconName: "system-search"
-    separateLightDark: true
+    iconName: "task-view"
 }
