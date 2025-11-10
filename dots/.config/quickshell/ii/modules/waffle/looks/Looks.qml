@@ -42,17 +42,13 @@ Singleton {
         property QtObject family: QtObject {
             property string ui: "Noto Sans"
         }
-        property QtObject weight: QtObject {
-            property int regular: Font.Normal
+        property QtObject weight: QtObject { // Noto is not Segoe, so we might use slightly different weights
+            property int regular: Font.Medium
             property int strong: Font.DemiBold
             property int stronger: Font.Bold
         }
-        property QtObject variableAxes: QtObject {
-            
-        }
         property QtObject pixelSize: QtObject {
-            property int small: 10
-            property int normal: 11
+            property real normal: 11
         }
     }
 

@@ -16,9 +16,28 @@ BarButton {
         Row {
             id: column
             anchors.centerIn: parent
+            spacing: 4
             
             FluentIcon {
-                icon: "speaker" // System icon
+                icon: WIcons.internetIcon
+            }
+            
+            FluentIcon {
+                icon: {
+                    const muted = Audio.sink?.audio.muted ?? false;
+                    const volume = Audio.sink?.audio.volume ?? 0;
+                    if (muted) return volume > 0 ? "speaker-off" : "speaker-none";
+                    if (volume == 0) return "speaker-none";
+                    if (volume < 0.5) return "speaker-1";
+                    return "speaker";
+                }
+            }
+
+            FluentIcon {
+                icon: {
+                    print(WIcons.batteryIcon)
+                    return WIcons.batteryIcon
+                }
             }
         }
     }
