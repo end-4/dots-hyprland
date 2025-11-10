@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import qs
 import qs.services
 import qs.modules.common
 import qs.modules.waffle.looks
@@ -9,6 +10,11 @@ BarButton {
 
     rightInset: 12 // For now this is the rightmost button. Desktop peek is useless. (for now)
     padding: 12
+
+    checked: GlobalStates.sidebarRightOpen
+    onClicked: {
+        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+    }
 
     contentItem: Item {
         anchors.centerIn: root.background

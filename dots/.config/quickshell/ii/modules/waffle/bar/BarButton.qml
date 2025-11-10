@@ -12,7 +12,7 @@ Button {
     topInset: 4
     bottomInset: 4
     
-    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, (root.hovered && !root.down) ? Looks.fluentContentTransparency : 1)
+    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, ((root.hovered && !root.down) || root.checked) ? Looks.fluentContentTransparency : 1)
     Behavior on borderColor {
         animation: Looks.transition.color.createObject(this)
     }
@@ -25,7 +25,7 @@ Button {
         color: {
             if (root.down) {
                 return Looks.colors.bg1Active
-            } else if (root.hovered) {
+            } else if ((root.hovered && !root.down) || root.checked) {
                 return Looks.colors.bg1Hover
             } else {
                 return ColorUtils.transparentize(Looks.colors.bg1)
