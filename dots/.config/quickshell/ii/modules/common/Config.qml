@@ -391,6 +391,18 @@ Singleton {
                     property string imageSource: "https://cdn.discordapp.com/attachments/961693710968557598/1369635662390759434/image.gif?ex=6911cb1c&is=6910799c&hm=4450244066c0a7a6e5d2bdd195f47388eb5e7f9dd53d3931e99ad9642c638a00&"
                     property real scale: 0.5
                 }
+                property JsonObject webView: JsonObject {
+                    property list<var> bookmarks: [
+                        {
+                            "name": "DuckDuckGo",
+                            "url": "https://duckduckgo.com"
+                        },
+                        {
+                            "name": "GitHub",
+                            "url": "https://github.com"
+                        }
+                    ]
+                }
             }
 
             property JsonObject overview: JsonObject {

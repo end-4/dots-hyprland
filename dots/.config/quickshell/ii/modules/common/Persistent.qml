@@ -131,6 +131,14 @@ Singleton {
                     property real height: 600
                     property int tabIndex: 0
                 }
+                property JsonObject webView: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 80
+                    property real y: 280
+                    property real width: 350
+                    property real height: 600
+                }
             }
 
             property JsonObject timer: JsonObject {

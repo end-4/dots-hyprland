@@ -12,6 +12,7 @@ Singleton {
         { identifier: "recorder", materialSymbol: "screen_record" },
         { identifier: "resources", materialSymbol: "browse_activity" },
         { identifier: "volumeMixer", materialSymbol: "volume_up" },
+        { identifier: "webView", materialSymbol: "planet" },
     ]
     
     readonly property bool hasPinnedWidgets: root.pinnedWidgetIdentifiers.length > 0
