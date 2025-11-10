@@ -3,8 +3,44 @@
 
 # shellcheck shell=bash
 
+function copy_file_s_t(){
+  local s=$1
+  local t=$2
+  if [ -f $t ];then
+    echo -e "${STY_YELLOW}[$0]: \"$t\" already exists.${STY_RST}"
+    if $firstrun;then
+      echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
+      v mv $t $t.old
+      v cp -f $s $t
+    else
+      echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
+      v cp -f $s $t.new
+    fi
+  else
+    echo -e "${STY_GREEN}[$0]: \"$t\" does not exist yet.${STY_RST}"
+    v cp $s $t
+  fi
+}
+function copy_dir_s_t(){
+  local s=$1
+  local t=$2
+  if [ -d $t ];then
+    echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RST}"
+  else
+    echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
+    v rsync -av --delete $s/ $t/
+  fi
+}
+
+#####################################################################################
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
+firstrun_file="${XDG_CACHE_HOME}/.ii-qs-installed"
+if test -f "${firstrun_file}"; then
+  firstrun=false
+else
+  firstrun=true
+fi
 
 # `--delete' for rsync to make sure that
 # original dotfiles and new ones in the SAME DIRECTORY
@@ -50,69 +86,18 @@ case $SKIP_FONTCONFIG in
 esac
 
 # For Hyprland
-declare -a arg_excludes=()
-arg_excludes+=(--exclude '/custom')
-arg_excludes+=(--exclude '/hyprlock.conf')
-arg_excludes+=(--exclude '/hypridle.conf')
-arg_excludes+=(--exclude '/hyprland.conf')
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    warning_rsync_delete; v rsync -av --delete "${arg_excludes[@]}" dots/.config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    warning_rsync_delete; v rsync -av --delete dots/.config/hypr/hyprland/ "$XDG_CONFIG_HOME"/hypr/hyprland/
+    for i in hypr{land,idle,lock}.conf {monitors,workspaces}.conf ; do
+      copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
+    done
     if [ "$OS_GROUP_ID" = "fedora" ];then
-      v rsync -av "${REPO_ROOT}/dots-extra/fedora/hypr/hyprland/execs.conf" "$XDG_CONFIG_HOME/hypr/hyprland/execs.conf"
+      v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf"
     fi
-    # When hypr/custom does not exist, we assume that it's the firstrun.
-    if [ -d "$XDG_CONFIG_HOME/hypr/custom" ];then ii_firstrun=false;else ii_firstrun=true;fi
-    t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
-      if $ii_firstrun;then
-        echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
-        v mv $t $t.old
-        v cp -f dots/.config/hypr/hyprland.conf $t
-        existed_hypr_conf_firstrun=y
-      else
-        echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
-        v cp -f dots/.config/hypr/hyprland.conf $t.new
-        existed_hypr_conf=y
-      fi
-    else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
-      v cp dots/.config/hypr/hyprland.conf $t
-    fi
-    t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
-    if [[ "$INSTALL_VIA_NIX" = true ]]; then
-      s=dots-extra/vianix/hypridle.conf
-    else
-      s=dots/.config/hypr/hypridle.conf
-    fi
-    if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
-      v cp -f $s $t.new
-      existed_hypridle_conf=y
-    else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
-      v cp $s $t
-      existed_hypridle_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
-    if [ -f $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists.${STY_RST}"
-      v cp -f dots/.config/hypr/hyprlock.conf $t.new
-      existed_hyprlock_conf=y
-    else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
-      v cp dots/.config/hypr/hyprlock.conf $t
-      existed_hyprlock_conf=n
-    fi
-    t="$XDG_CONFIG_HOME/hypr/custom"
-    if [ -d $t ];then
-      echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RST}"
-    else
-      echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
-      v rsync -av --delete dots/.config/hypr/custom/ $t/
-    fi
+
+    copy_dir_s_t "dots/.config/hypr/custom" "${XDG_CONFIG_HOME}/hypr/custom"
     ;;
 esac
 declare -a arg_excludes=()
@@ -121,3 +106,5 @@ declare -a arg_excludes=()
 # since the files here come from different places, not only about one program.
 # v rsync -av "dots/.local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 v cp -f "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
+
+v touch "${firstrun_file}"
