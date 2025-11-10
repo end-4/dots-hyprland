@@ -12,6 +12,7 @@ function print_os_group_id(){
 function print_os_group_id_alike(){
     printf "${STY_YELLOW}"
     printf "===WARNING===\n"
+    printf "Your OS_GROUP_ID has been determined by \"alike\" match.\n"
     printf "Ideally, it should also work for your distro.\n"
     printf "Still, there is a chance that it not works as expected or even fails.\n"
     printf "Proceed only at your own risk.\n"
@@ -48,27 +49,16 @@ function print_os_group_id_force_vianix(){
     printf "=============\n\n"
     printf "${STY_RST}"
 }
-#####################################################################################
-
-####################
-# Detect architecture
-# Helpful link(s):
-# http://stackoverflow.com/questions/45125516
-export MACHINE_ARCH=$(uname -m)
-case "${MACHINE_ARCH}" in
-  "x86_64") sleep 0;;
-  *)
-    printf "${STY_YELLOW}"
-    printf "===WARNING===\n"
+function print_os_group_id_architecture(){
+    printf "${STY_RED}"
+    printf "===CAUTION===\n"
     printf "Detected machine architecture: ${MACHINE_ARCH}\n"
     printf "This script only supports x86_64.\n"
     printf "It is very likely to fail when installing dependencies on your machine.\n"
-    printf "=============\n"
-    printf "\n"
+    printf "=============\n\n"
     printf "${STY_RST}"
-    pause
-    ;;
-esac
+}
+#####################################################################################
 
 ####################
 # Detect distro
@@ -114,3 +104,13 @@ else
   INSTALL_VIA_NIX=true
   print_os_group_id_functions=(print_os_group_id{,_fallback,_force_vianix})
 fi
+
+####################
+# Detect architecture
+# Helpful link(s):
+# http://stackoverflow.com/questions/45125516
+export MACHINE_ARCH=$(uname -m)
+case "${MACHINE_ARCH}" in
+  "x86_64") sleep 0;;
+  *) print_os_group_id_functions+=(print_os_group_id_architecture);;
+esac
