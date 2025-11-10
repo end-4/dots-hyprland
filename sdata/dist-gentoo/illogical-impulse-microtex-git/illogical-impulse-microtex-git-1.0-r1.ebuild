@@ -52,4 +52,3 @@ src_install() {
 	insinto /usr/share/licenses/illogical-impulse-microtex-git
 	doins LICENSE
 }
-
