@@ -5,6 +5,7 @@ REPO_ROOT="$(pwd)"
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
+source ./sdata/lib/dist-determine.sh
 
 prevent_sudo_or_root
 set -e
@@ -58,6 +59,11 @@ case $1 in
   *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
 esac
 #####################################################################################
+for function in ${print_os_group_id_functions[@]}; do
+  $function
+done
+pause
+
 if [[ -f "${SUBCMD_DIR}/options.sh" ]];
   then source "${SUBCMD_DIR}/options.sh"
 fi
@@ -70,7 +76,7 @@ case ${SUBCMD_NAME} in
       source ${SUBCMD_DIR}/1.deps-selector.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
@@ -83,7 +89,7 @@ case ${SUBCMD_NAME} in
     ;;
   install-setups)
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     ;;
   install-files)
