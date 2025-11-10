@@ -9,17 +9,24 @@ function prepare_systemd_user_service(){
     x ln -s /usr/lib/systemd/system/ydotool.service "${XDG_CONFIG_HOME}/systemd/user/ydotool.service"
   fi
 }
+
+function setup_user_group(){
+  if [[ -z $(getent group i2c) ]]; then
+    x sudo groupadd i2c
+  fi
+  x sudo usermod -aG video,i2c,input "$(whoami)"
+}
 #####################################################################################
 # These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
 showfun install-python-packages
 v install-python-packages
 
-if [[ -z $(getent group i2c) ]]; then
-	v sudo groupadd i2c
-fi
-v sudo usermod -aG video,i2c,input "$(whoami)"
+showfun setup_user_group
+v setup_user_group
 
 if [[ ! -z $(systemctl --version) ]]; then
+  # TODO: Why fedora does not add i2c-dev?
+  # TODO: Why fedora add uinput and udev rules?
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
     v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
@@ -44,17 +51,16 @@ elif [[ ! -z $(openrc --version) ]]; then
   v sudo rc-update add modules boot
   v sudo rc-update add ydotool default
   v sudo rc-update add bluetooth default
-	
-	x sudo rc-service ydotool start
-	x sudo rc-service bluetooth start
+
+  x sudo rc-service ydotool start
+  x sudo rc-service bluetooth start
 else
-	printf "${STY_RED}"
-	printf "====================INIT SYSTEM NOT FOUND====================\n"
-	printf "${STY_RST}"
-	pause
+  printf "${STY_RED}"
+  printf "====================INIT SYSTEM NOT FOUND====================\n"
+  printf "${STY_RST}"
+  pause
 fi
 
-# _icons_, _konsole_, _hypr_, and _quickshell_ are are chowned to user since they're emerge in as root by default.
 if [[ "$OS_GROUP_ID" == "gentoo" ]]; then
   v sudo chown -R $(whoami):$(whoami) ~/.local/
 fi
