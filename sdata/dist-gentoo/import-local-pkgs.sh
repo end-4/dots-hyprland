@@ -13,7 +13,6 @@ function import_ebuild(){
 }
 
 ############### FONTS AND THEMES
-import_ebuild "${HYPR_DIR}" "dev-libs" "hyprgraphics"
 import_ebuild "${FT_DIR}" "media-fonts" "gabarito"
 import_ebuild "${FT_DIR}" "media-fonts" "material-symbols-variable"
 import_ebuild "${FT_DIR}" "media-fonts" "readex-pro"
