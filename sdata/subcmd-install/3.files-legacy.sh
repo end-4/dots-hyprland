@@ -89,6 +89,7 @@ esac
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
+    if ! [ -d "$XDG_CONFIG_HOME"/hypr ]; then v mkdir -p "$XDG_CONFIG_HOME"/hypr ; fi
     warning_rsync_delete; v rsync -av --delete dots/.config/hypr/hyprland/ "$XDG_CONFIG_HOME"/hypr/hyprland/
     for i in hypr{land,idle,lock}.conf {monitors,workspaces}.conf ; do
       copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
