@@ -20,7 +20,7 @@ Singleton {
     property bool isLoading: false
     property string translationKeepSuffix: "/*keep*/"
     property string translationsDir: Quickshell.shellPath("translations")
-    property string generatedTranslationsDir: Directories.shellConfig + "/translations"
+    property string generatedTranslationsDir: translationsDir
 
     property string languageCode: {
         var configLang = Config?.options.language.ui ?? "auto";
@@ -81,7 +81,7 @@ Singleton {
         var key = text.toString();
         if (root.isLoading || (!root?.translations?.hasOwnProperty(key) && !root?.generatedTranslations?.hasOwnProperty(key)))
             return key;
-        
+
         // Normal cases
         var translation = root.translations[key] || root.generatedTranslations[key] || key;
         // print(key, "-> [", root.translations[key], root.generatedTranslations[key], key, "] ->", translation);

@@ -10,15 +10,15 @@ Item {
     property bool vertical: false
     clip: true
 
-    implicitWidth: (reveal || vertical) ? childrenRect.width : 0
-    implicitHeight: (reveal || !vertical) ? childrenRect.height : 0
+    width: (reveal || vertical) ? childrenRect.width : 0
+    height: childrenRect.height
     visible: reveal || (width > 0 && height > 0)
 
-    Behavior on implicitWidth {
+    Behavior on width {
         enabled: !vertical
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
-    Behavior on implicitHeight {
+    Behavior on height {
         enabled: vertical
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }

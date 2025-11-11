@@ -28,14 +28,14 @@ Singleton {
     }
 
     function increaseBrightness(): void {
-        const focusedName = Hyprland.focusedMonitor.name;
+        const focusedName = Hyprland.focusedMonitor?.name ?? "";
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
             monitor.setBrightness(monitor.brightness + 0.05);
     }
 
     function decreaseBrightness(): void {
-        const focusedName = Hyprland.focusedMonitor.name;
+        const focusedName = Hyprland.focusedMonitor?.name ?? "";
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
             monitor.setBrightness(monitor.brightness - 0.05);
@@ -57,10 +57,14 @@ Singleton {
             onRead: data => {
                 if (data.startsWith("Display ")) {
                     const lines = data.split("\n").map(l => l.trim());
-                    root.ddcMonitors.push({
-                        model: lines.find(l => l.startsWith("Monitor:")).split(":")[2],
-                        busNum: lines.find(l => l.startsWith("I2C bus:")).split("/dev/i2c-")[1]
-                    });
+                    const monitorLine = lines.find(l => l.startsWith("Monitor:"));
+                    const busLine = lines.find(l => l.startsWith("I2C bus:"));
+                    if (monitorLine && busLine) {
+                        root.ddcMonitors.push({
+                            model: monitorLine.split(":")[1].trim(),
+                            busNum: busLine.split(":")[1].trim().split("/dev/i2c-")[1]
+                        });
+                    }
                 }
             }
         }
@@ -76,11 +80,11 @@ Singleton {
 
         required property ShellScreen screen
         readonly property bool isDdc: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            const match = root.ddcMonitors.find(m => m.model === (screen?.model ?? "") && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             return !!match;
         }
         readonly property string busNum: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            const match = root.ddcMonitors.find(m => m.model === (screen?.model ?? "") && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             return match?.busNum ?? "";
         }
         property int rawMaxBrightness: 100
@@ -117,6 +121,7 @@ Singleton {
         readonly property Process initProc: Process {
             stdout: SplitParser {
                 onRead: data => {
+                    if (!data) return;
                     const [, , , current, max] = data.split(" ");
                     monitor.rawMaxBrightness = parseInt(max);
                     monitor.brightness = parseInt(current) / monitor.rawMaxBrightness;
@@ -135,10 +140,20 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
-            const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded] : ["brightnessctl", "--class", "backlight", "s", rawValueRounded, "--quiet"];
-            setProc.startDetached();
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
+            if(isDdc){
+                const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+                setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
+                setProc.startDetached();
+            }else{
+                const valuePercentNumber = Math.floor(brightnessValue * 100);
+                let valuePercent = ""+valuePercentNumber+"%";
+                if(valuePercentNumber == 0)
+                    //Set it to raw 1
+                    valuePercent = 1;
+                setProc.command = ["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"];
+                setProc.startDetached();
+            }
         }
 
         function setBrightness(value: real): void {
@@ -207,7 +222,7 @@ Singleton {
 
             Process {
                 id: screenshotProc
-                command: ["bash", "-c", 
+                command: ["bash", "-c",
                     `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
                     + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
                     + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`

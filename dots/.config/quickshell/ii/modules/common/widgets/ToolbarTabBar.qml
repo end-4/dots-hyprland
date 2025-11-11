@@ -9,17 +9,17 @@ import Qt.labs.synchronizer
 
 Item {
     id: root
-    property alias currentIndex: tabBar.currentIndex
+    property int currentIndex: 0
     required property var tabButtonList
 
     function incrementCurrentIndex() {
-        tabBar.incrementCurrentIndex()
+        root.currentIndex = (root.currentIndex + 1) % root.tabButtonList.length
     }
     function decrementCurrentIndex() {
-        tabBar.decrementCurrentIndex()
+        root.currentIndex = (root.currentIndex - 1 + root.tabButtonList.length) % root.tabButtonList.length
     }
     function setCurrentIndex(index) {
-        tabBar.setCurrentIndex(index)
+        root.currentIndex = Math.max(0, Math.min(index, root.tabButtonList.length - 1))
     }
 
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -83,20 +83,6 @@ Item {
             }
             else {
                 root.decrementCurrentIndex();
-            }
-        }
-    }
-
-    // TabBar doesn't allow tabs to be of different sizes. Literally unusable. 
-    // We use it only for the logic and draw stuff manually
-    TabBar {
-        id: tabBar
-        z: -1
-        background: null
-        Repeater { // This is to fool the TabBar that it has tabs so it does the indices properly
-            model: root.tabButtonList.length
-            delegate: TabButton {
-                background: null
             }
         }
     }
