@@ -73,7 +73,7 @@ case ${SUBCMD_NAME} in
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
       source ${SUBCMD_DIR}/2.setups.sh
@@ -84,7 +84,7 @@ case ${SUBCMD_NAME} in
     ;;
   install-deps)
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     ;;
   install-setups)

@@ -34,8 +34,10 @@ function print_os_group_id_unofficial(){
 function print_os_group_id_unsupported(){
     printf "${STY_RED}"
     printf "===CAUTION===\n"
-    printf "\"--via-nix\" is forcely specified as the only method to support your distro.\n"
-    printf "It is still experimental and some functionalities are missing.\n"
+    printf "\"--via-nix\" is forcely specified \n"
+    printf "as the only way to try to install on your distro.\n"
+    printf "It is still experimental.\n"
+    printf "Some functionalities are missing.\n"
     printf "It may also behave unexpectedly.\n"
     printf "Proceed only at your own risk.\n"
     printf "=============\n\n"
