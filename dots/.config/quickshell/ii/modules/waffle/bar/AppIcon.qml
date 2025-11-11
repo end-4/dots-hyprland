@@ -5,11 +5,13 @@ import qs.modules.common
 import qs.modules.waffle.looks
 
 Kirigami.Icon {
-    id: iconWidget
+    id: root
     required property string iconName
+    property bool separateLightDark: false
     
-    implicitWidth: 26
-    implicitHeight: 26
+    property real implicitSize: 26
+    implicitWidth: implicitSize
+    implicitHeight: implicitSize
     roundToIconSize: false
     source: `${Looks.iconsPath}/${root.iconName}${!root.separateLightDark ? "" : Looks.dark ? "-dark" : "-light"}.svg`
     fallback: root.iconName

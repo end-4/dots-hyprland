@@ -36,7 +36,6 @@ Rectangle {
 
     BarGroupRow {
         id: appsRow
-        spacing: 4
         anchors.left: undefined
         anchors.horizontalCenter: parent.horizontalCenter
 
