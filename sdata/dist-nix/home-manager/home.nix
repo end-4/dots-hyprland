@@ -104,12 +104,8 @@
 
 
       ### illogical-impulse-hyprland
-      hypridle #hypridle
       #hyprland
-      #hyprlock (Should not be installed via Nix; TODO: should install via nix in future when authentication problem fixed)
-      hyprpicker #hyprpicker
       hyprsunset #hyprsunset
-      #xdg-desktop-portal-hyprland (DUPLICATE)
       wl-clipboard #wl-clipboard
 
 
@@ -167,10 +163,9 @@
       fuzzel #fuzzel
       glib #glib2
       imagemagick #imagemagick
-      #hypridle (DUPLICATE)
-      #hyprutils (DUPLICATE)
-      #hyprlock (DUPLICATE)
-      #hyprpicker (DUPLICATE)
+      hypridle #hypridle
+      #hyprlock (Should not be installed via Nix; TODO: should install via nix in future when authentication problem fixed)
+      hyprpicker #hyprpicker
       songrec #songrec
       translate-shell #translate-shell
       wlogout #wlogout

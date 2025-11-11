@@ -95,18 +95,10 @@ This file contains information about the dependencies, currently it describes ab
   - Not explicitly used, but it may help as fallback for displaying emoji charaters.
 
 ## illogical-impulse-hyprland
-- `hypridle`
-  - Used for loginctl to lock session.
 - `hyprland`
   - Surely needed.
-- `hyprlock`
-  - Installed as fallback; its config is also included.
-- `hyprpicker`
-  - Used in Hyprland and Quickshell config.
 - `hyprsunset`
   - Used in Quickshell config.
-- `xdg-desktop-portal-hyprland`
-  - DUPLICATE
 - `wl-clipboard`
   - Surely needed.
 
@@ -185,10 +177,12 @@ This file contains information about the dependencies, currently it describes ab
 - `imagemagick`
   - Provides executable: `magick`
   - Used in Quickshell config.
-- `hypridle` (DUPLICATE)
-- `hyprutils` (DUPLICATE)
-- `hyprlock` (DUPLICATE)
-- `hyprpicker` (DUPLICATE)
+- `hypridle`
+  - Used for loginctl to lock session.
+- `hyprlock`
+  - Installed as fallback; its config is also included.
+- `hyprpicker`
+  - Used in Hyprland and Quickshell config.
 - `songrec`
   - Used in Quickshell config.
 - `translate-shell`
@@ -223,9 +217,11 @@ Extra dependencies.
 ## illogical-impulse-bibata-modern-classic-bin
 - [source](https://github.com/ful1e5/Bibata_Cursor)
 - Used in Hyprland config, not necessary.
+
 ## illogical-impulse-microtex-git
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
+
 ## illogical-impulse-oneui4-icons-git
 - [source](https://github.com/end-4/OneUI4-Icons)
 - Customed version of normal oneui4-icons.
