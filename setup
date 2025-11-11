@@ -59,21 +59,20 @@ case $1 in
   *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
 esac
 #####################################################################################
+if [[ -f "${SUBCMD_DIR}/options.sh" ]];
+  then source "${SUBCMD_DIR}/options.sh"
+fi
 for function in ${print_os_group_id_functions[@]}; do
   $function
 done
 pause
-
-if [[ -f "${SUBCMD_DIR}/options.sh" ]];
-  then source "${SUBCMD_DIR}/options.sh"
-fi
 case ${SUBCMD_NAME} in
   install)
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
       source ${SUBCMD_DIR}/2.setups.sh
@@ -84,7 +83,7 @@ case ${SUBCMD_NAME} in
     ;;
   install-deps)
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     ;;
   install-setups)

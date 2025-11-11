@@ -12,8 +12,6 @@ install-yay(){
   rm -rf /tmp/buildyay
 }
 
-# NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
-# However, let's just keep it as references for other distros writing their `sdata/dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 remove_deprecated_dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
   local list=()
@@ -22,6 +20,8 @@ remove_deprecated_dependencies(){
   list+=({quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git)
   for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
 }
+# NOTE: `implicitize_old_dependencies()` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
+# However, let's just keep it as references for other distros writing their `sdata/dist-<OS_GROUP_ID>/install-deps.sh`, if they need it.
 implicitize_old_dependencies(){
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
   remove_bashcomments_emptylines ./sdata/dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf

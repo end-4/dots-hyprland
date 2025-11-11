@@ -89,9 +89,17 @@ esac
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
+    if ! [ -d "$XDG_CONFIG_HOME"/hypr ]; then v mkdir -p "$XDG_CONFIG_HOME"/hypr ; fi
     warning_rsync_delete; v rsync -av --delete dots/.config/hypr/hyprland/ "$XDG_CONFIG_HOME"/hypr/hyprland/
-    for i in hypr{land,idle,lock}.conf {monitors,workspaces}.conf ; do
+    for i in hypr{land,lock}.conf {monitors,workspaces}.conf ; do
       copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
+    done
+    for i in hypridle.conf ; do
+      if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
+        copy_file_s_t "dots-extra/via-nix/$i" "${XDG_CONFIG_HOME}/hypr/$i"
+      else
+        copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
+      fi
     done
     if [ "$OS_GROUP_ID" = "fedora" ];then
       v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf"

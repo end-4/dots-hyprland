@@ -2,45 +2,59 @@
 # It's not for directly running.
 
 function vianix-warning(){
-  printf "${STY_YELLOW}Currently \"--via-nix\" will run:\n"
+  printf "${STY_YELLOW}"
+  printf "Currently \"--via-nix\" will run:\n"
   printf "  home-manager switch --flake .#illogical_impulse\n"
-  printf "If you are already using home-manager, it may override your current config,\n"
+  printf "If you are already using home-manager,\n"
+  printf "it may override your current config,\n"
   printf "despite that this should be reversible.\n"
+  printf "${STY_RST}"
   pause
 }
 function install_cmds(){
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo apt update -y
-    x sudo apt install -y "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" == "fedora" || "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo dnf install -y "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" =~ ^(opensuse-leap|opensuse-tumbleweed)$ ]] || [[ "$OS_DISTRO_ID_LIKE" =~ ^(opensuse|suse)(\ (opensuse|suse))?$ ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo zypper refresh
-    x sudo zypper -n install "${pkgs[@]}"
-  fi
+  case $OS_GROUP_ID in
+    "arch")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        pkgs+=($cmd)
+      done
+      x sudo pacman -Syu
+      x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+      ;;
+    "debian")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        pkgs+=($cmd)
+      done
+      x sudo apt update -y
+      x sudo apt install -y "${pkgs[@]}"
+      ;;
+    "fedora")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        pkgs+=($cmd)
+      done
+      x sudo dnf install -y "${pkgs[@]}"
+      ;;
+    "suse")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        pkgs+=($cmd)
+      done
+      x sudo zypper refresh
+      x sudo zypper -n install "${pkgs[@]}"
+      ;;
+    *)
+      printf "WARNING\n"
+      printf "No method found to install package providing the commands:\n"
+      printf "  $@\n"
+      printf "Please install by yourself.\n"
+      ;;
+  esac
 }
 function install_nix(){
   # https://github.com/NixOS/experimental-nix-installer

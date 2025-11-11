@@ -45,8 +45,9 @@ v sudo dnf install ${themes_deps[@]} -y
 
 # Hyprland 
 hyprland_deps=(
-  hypridle hyprland hyprlock hyprpicker hyprsunset
-  xdg-desktop-portal-hyprland wl-clipboard
+  hyprland
+  hyprsunset
+  wl-clipboard
 )
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
 # hyprland-qt-support's build deps
