@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import qs
 import qs.services
 import qs.modules.common
 import qs.modules.waffle.looks
@@ -12,6 +13,11 @@ AppButton {
     leftInset: Config.options.waffles.bar.leftAlignApps ? 0 : 12
     implicitWidth: expandedForm ? 148 : (height - topInset - bottomInset + leftInset + rightInset)
     iconName: "widgets"
+
+    checked: GlobalStates.sidebarLeftOpen
+    onClicked: {
+        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen
+    }
 
     contentItem: Item {
         anchors {
@@ -29,10 +35,19 @@ AppButton {
                 horizontalCenter: root.expandedForm ? undefined : parent.horizontalCenter
                 margins: 8
             }
+            spacing: 6
 
             AppIcon {
                 id: iconWidget
+                anchors.verticalCenter: parent.verticalCenter
                 iconName: root.iconName
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                WText {
+                    text: Translation.tr("Widgets")
+                }
             }
         }
     }
