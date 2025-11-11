@@ -1,6 +1,3 @@
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -8,6 +5,10 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 Item {
     id: root
@@ -40,44 +41,7 @@ Item {
 
         model: ScriptModel {
             objectProp: "appId"
-            values: {
-                var map = new Map();
-
-                // Pinned apps
-                const pinnedApps = Config.options?.dock.pinnedApps ?? [];
-                for (const appId of pinnedApps) {
-                    if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
-                        pinned: true,
-                        toplevels: []
-                    }));
-                }
-
-                // Separator
-                if (pinnedApps.length > 0) {
-                    map.set("SEPARATOR", { pinned: false, toplevels: [] });
-                }
-
-                // Ignored apps
-                const ignoredRegexStrings = Config.options?.dock.ignoredAppRegexes ?? [];
-                const ignoredRegexes = ignoredRegexStrings.map(pattern => new RegExp(pattern, "i"));
-                // Open windows
-                for (const toplevel of ToplevelManager.toplevels.values) {
-                    if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;
-                    if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
-                        pinned: false,
-                        toplevels: []
-                    }));
-                    map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
-                }
-
-                var values = [];
-
-                for (const [key, value] of map) {
-                    values.push({ appId: key, toplevels: value.toplevels, pinned: value.pinned });
-                }
-
-                return values;
-            }
+            values: TaskbarApps.apps
         }
         delegate: DockAppButton {
             required property var modelData

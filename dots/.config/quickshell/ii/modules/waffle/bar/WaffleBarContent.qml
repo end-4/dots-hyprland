@@ -57,6 +57,7 @@ Rectangle {
         StartButton {}
         SearchButton {}
         TaskViewButton {}
+        Tasks {}
     }
 
     BarGroupRow {

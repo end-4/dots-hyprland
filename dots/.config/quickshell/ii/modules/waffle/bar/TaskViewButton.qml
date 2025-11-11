@@ -10,6 +10,7 @@ AppButton {
     id: root
 
     iconName: "task-view"
+    separateLightDark: true
 
     checked: GlobalStates.overviewOpen
     onClicked: {
