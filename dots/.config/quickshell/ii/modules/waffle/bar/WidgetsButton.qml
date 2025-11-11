@@ -44,6 +44,7 @@ AppButton {
             }
 
             Column {
+                visible: root.expandedForm
                 anchors.verticalCenter: parent.verticalCenter
                 WText {
                     text: Translation.tr("Widgets")
