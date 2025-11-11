@@ -2,10 +2,13 @@
 # It's not for directly running.
 
 function vianix-warning(){
-  printf "${STY_YELLOW}Currently \"--via-nix\" will run:\n"
+  printf "${STY_YELLOW}"
+  printf "Currently \"--via-nix\" will run:\n"
   printf "  home-manager switch --flake .#illogical_impulse\n"
-  printf "If you are already using home-manager, it may override your current config,\n"
+  printf "If you are already using home-manager,\n"
+  printf "it may override your current config,\n"
   printf "despite that this should be reversible.\n"
+  printf "${STY_RST}"
   pause
 }
 function install_cmds(){
