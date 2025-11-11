@@ -19,13 +19,18 @@ jobs:
           DISCUSSION_NUMBER: 2140
         # https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions
         # https://docs.github.com/en/graphql/reference/mutations#adddiscussioncomment
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_EVENT_REPOSITORY_NAME: ${{ github.event.repository.name }}
         run: |
           MESSAGE="**Auto notification:**\n"
           MESSAGE+="Directory \`sdata/dist-arch\` has been updated.\n"
-          MESSAGE+="Commit HASH: ${{ github.sha }}\n"
-          MESSAGE+="Commit message: ${{ github.event.head_commit.message }}"
-          REPO_OWNER="${{ github.repository_owner }}"
-          REPO_NAME="${{ github.event.repository.name }}"
+          MESSAGE+="Commit HASH: "$GITHUB_SHA"\n"
+          MESSAGE+="Commit message: "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE""
+          REPO_OWNER=""$GITHUB_REPOSITORY_OWNER""
+          REPO_NAME=""$GITHUB_EVENT_REPOSITORY_NAME""
 
           DISCUSSION_NODE_ID=$(gh api graphql -f query='
             query {
