@@ -13,11 +13,7 @@ RESTRICT="strip"
 
 DEPEND=""
 RDEPEND="
-	gui-apps/hypridle
-	gui-apps/hyprlock
-	gui-apps/hyprpicker
 	gui-apps/hyprsunset
 	gui-wm/hyprland
-	gui-libs/xdg-desktop-portal-hyprland
 	gui-apps/wl-clipboard
 "
