@@ -10,7 +10,15 @@ BarButton {
 
     required property string iconName
     property bool separateLightDark: false
+    leftInset: 2
+    rightInset: 2
     implicitWidth: height - topInset - bottomInset + leftInset + rightInset
+
+    onDownChanged: {
+        scaleAnim.duration = root.down ? 150 : 200
+        scaleAnim.easing.bezierCurve = root.down ? Looks.transition.easing.bezierCurve.easeIn : Looks.transition.easing.bezierCurve.easeOut
+        contentItem.scale = root.down ? 5/6 : 1 // If/When we do dragging, the scale is 1.25
+    }
 
     contentItem: Item {
         id: contentItem
@@ -19,12 +27,10 @@ BarButton {
         implicitHeight: iconWidget.implicitHeight
         implicitWidth: iconWidget.implicitWidth
 
-        scale: root.down ? 5/6 : 1 // If/When we do dragging, the scale is 1.25
         Behavior on scale {
             NumberAnimation {
-                duration: 90
+                id: scaleAnim
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: root.down ? Looks.transition.easing.bezierCurve.easeIn : Looks.transition.easing.bezierCurve.easeOut
             }
         }
 
@@ -32,6 +38,7 @@ BarButton {
             id: iconWidget
             anchors.centerIn: parent
             iconName: root.iconName
+            separateLightDark: root.separateLightDark
         }
     }
 }

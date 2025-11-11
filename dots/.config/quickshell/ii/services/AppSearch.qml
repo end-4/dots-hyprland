@@ -151,6 +151,6 @@ Singleton {
 
 
         // Give up
-        return str;
+        return "application-x-executable";
     }
 }
