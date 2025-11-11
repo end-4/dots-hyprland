@@ -225,7 +225,7 @@ Singleton {
                     property int swapWarningThreshold: 85
                     property int cpuWarningThreshold: 90
                 }
-                property list<string> screenList: ["DP-1"] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
+                property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
                 property JsonObject utilButtons: JsonObject {
                     property bool showScreenSnip: true
                     property bool showColorPicker: false
