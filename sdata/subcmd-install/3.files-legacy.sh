@@ -35,7 +35,6 @@ function copy_dir_s_t(){
 #####################################################################################
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
-firstrun_file="${XDG_CACHE_HOME}/.ii-qs-installed"
 if test -f "${firstrun_file}"; then
   firstrun=false
 else

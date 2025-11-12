@@ -344,6 +344,7 @@ function backup_clashing_targets(){
   x mkdir -p $backup_dir
   x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
 }
+
 function install_cmds(){
   case $OS_GROUP_ID in
     "arch")
@@ -401,6 +402,7 @@ function install_cmds(){
       ;;
   esac
 }
+
 function ensure_cmds(){
   local not_found_cmds=()
   for cmd in "$@"; do
