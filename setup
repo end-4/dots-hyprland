@@ -33,7 +33,9 @@ Subcommands:
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
+  resetfirstrun  Reset firstrun state.
   checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
+  virtmon        (For dev only) Create virtual monitors for testing multi-monitors.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
@@ -46,7 +48,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old|checkdeps)
+  install|exp-uninstall|exp-update|exp-update-old|resetfirstrun|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;
@@ -62,12 +64,12 @@ esac
 if [[ -f "${SUBCMD_DIR}/options.sh" ]];
   then source "${SUBCMD_DIR}/options.sh"
 fi
-for function in ${print_os_group_id_functions[@]}; do
-  $function
-done
-pause
 case ${SUBCMD_NAME} in
   install)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
@@ -82,16 +84,28 @@ case ${SUBCMD_NAME} in
     fi
     ;;
   install-deps)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
       source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     ;;
   install-setups)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
       source ${SUBCMD_DIR}/2.setups.sh
     fi
     ;;
   install-files)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
     fi

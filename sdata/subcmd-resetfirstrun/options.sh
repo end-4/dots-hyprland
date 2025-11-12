@@ -2,21 +2,20 @@
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Syntax: $0 checkdeps [OPTIONS] <LIST_FILE_PATH>...
+echo -e "Syntax: $0 resetfirstrun [OPTIONS]
 
-Check whether pkgs listed in <LIST_FILE_PATH> exist in AUR or repos of Arch.
+Reset firstrun state.
 
 Options:
-  -h, --help       Show this help message
+  -h, --help       Show this help message and exit
 "
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o h \
+  -o c \
   -l help \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
-echo $para
 #####################################################################################
 eval set -- "$para"
 while true ; do
@@ -26,9 +25,3 @@ while true ; do
     *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done
-
-if [[ -f "$1" ]]; then
-  echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 1
-else
-  echo "Wrong path \"$1\" of list file.";exit 1
-fi

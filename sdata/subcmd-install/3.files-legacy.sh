@@ -35,7 +35,6 @@ function copy_dir_s_t(){
 #####################################################################################
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
-firstrun_file="${XDG_CACHE_HOME}/.ii-qs-installed"
 if test -f "${firstrun_file}"; then
   firstrun=false
 else
@@ -95,7 +94,7 @@ case $SKIP_HYPRLAND in
       copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
     for i in hypridle.conf ; do
-      if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
+      if [[ "${INSTALL_VIA_NIX}" == true ]]; then
         copy_file_s_t "dots-extra/via-nix/$i" "${XDG_CONFIG_HOME}/hypr/$i"
       else
         copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
