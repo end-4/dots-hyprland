@@ -251,6 +251,34 @@ ContentPage {
                         }
                     ]
                 }
+
+            // Wallpaper Policy (proof of concept)
+            ColumnLayout {
+
+                ContentSubsectionLabel {
+                    text: Translation.tr("Wallpapers")
+                }
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.policies.wallpaper
+                    onSelected: newValue => {
+                        Config.options.policies.wallpaper = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("No"),
+                            icon: "close",
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Yes"),
+                            icon: "check",
+                            value: 1
+                        },
+                    ]
+                }
+
+
             }
         }
     }
