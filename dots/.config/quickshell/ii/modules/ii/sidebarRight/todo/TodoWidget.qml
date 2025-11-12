@@ -1,35 +1,40 @@
-import qs.services
-import qs.modules.common
-import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 
 Item {
     id: root
-    property var tabButtonList: [{"icon": "checklist", "name": Translation.tr("Unfinished")}, {"name": Translation.tr("Done"), "icon": "check_circle"}]
+
+    property var tabButtonList: [{
+        "icon": "checklist",
+        "name": Translation.tr("Unfinished")
+    }, {
+        "name": Translation.tr("Done"),
+        "icon": "check_circle"
+    }]
     property bool showAddDialog: false
     property int dialogMargins: 20
     property int fabSize: 48
     property int fabMargins: 14
 
     Keys.onPressed: (event) => {
-        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
-            if (event.key === Qt.Key_PageDown) {
-                tabBar.incrementCurrentIndex();
-            } else if (event.key === Qt.Key_PageUp) {
-                tabBar.decrementCurrentIndex();
-            }
-            event.accepted = true;
-        }
         // Open add dialog on "N" (any modifiers)
-        else if (event.key === Qt.Key_N) {
-            root.showAddDialog = true
-            event.accepted = true;
-        }
         // Close dialog on Esc if open
-        else if (event.key === Qt.Key_Escape && root.showAddDialog) {
-            root.showAddDialog = false
+
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
+            if (event.key === Qt.Key_PageDown)
+                tabBar.incrementCurrentIndex();
+            else if (event.key === Qt.Key_PageUp)
+                tabBar.decrementCurrentIndex();
+            event.accepted = true;
+        } else if (event.key === Qt.Key_N) {
+            root.showAddDialog = true;
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Escape && root.showAddDialog) {
+            root.showAddDialog = false;
             event.accepted = true;
         }
     }
@@ -40,19 +45,24 @@ Item {
 
         SecondaryTabBar {
             id: tabBar
+
             currentIndex: swipeView.currentIndex
 
             Repeater {
                 model: root.tabButtonList
+
                 delegate: SecondaryTabButton {
                     buttonText: modelData.name
                     buttonIcon: modelData.icon
                 }
+
             }
+
         }
 
         SwipeView {
             id: swipeView
+
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -65,20 +75,32 @@ Item {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
                 emptyPlaceholderText: Translation.tr("Nothing here!")
-                taskList: Todo.list
-                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
-                    .filter(function(item) { return !item.done; })
+                taskList: Todo.list.map(function(item, i) {
+                    return Object.assign({
+                    }, item, {
+                        "originalIndex": i
+                    });
+                }).filter(function(item) {
+                    return !item.done;
+                })
             }
+
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
                 emptyPlaceholderText: Translation.tr("Finished tasks will go here")
-                taskList: Todo.list
-                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
-                    .filter(function(item) { return item.done; })
+                taskList: Todo.list.map(function(item, i) {
+                    return Object.assign({
+                    }, item, {
+                        "originalIndex": i
+                    });
+                }).filter(function(item) {
+                    return item.done;
+                })
             }
 
         }
+
     }
 
     // + FAB
@@ -87,13 +109,14 @@ Item {
         radius: fabButton.buttonRadius
         blur: 0.6 * Appearance.sizes.elevationMargin
     }
+
     FloatingActionButton {
         id: fabButton
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: root.fabMargins
         anchors.bottomMargin: root.fabMargins
-
         onClicked: root.showAddDialog = true
         iconText: "add"
     }
@@ -101,58 +124,54 @@ Item {
     Item {
         anchors.fill: parent
         z: 9999
-
         visible: opacity > 0
         opacity: root.showAddDialog ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { 
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-            }
-        }
-
         onVisibleChanged: {
             if (!visible) {
-                todoInput.text = ""
-                fabButton.focus = true
+                todoInput.text = "";
+                fabButton.focus = true;
             }
         }
 
-        Rectangle { // Scrim
+        // Scrim
+        Rectangle {
             anchors.fill: parent
             radius: Appearance.rounding.small
             color: Appearance.colors.colScrim
+
             MouseArea {
                 hoverEnabled: true
                 anchors.fill: parent
                 preventStealing: true
                 propagateComposedEvents: false
             }
+
         }
 
-        Rectangle { // The dialog
+        // The dialog
+        Rectangle {
             id: dialog
+
+            function addTask() {
+                if (todoInput.text.length > 0) {
+                    Todo.addTask(todoInput.text);
+                    todoInput.text = "";
+                    root.showAddDialog = false;
+                    tabBar.setCurrentIndex(0); // Show unfinished tasks
+                }
+            }
+
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: root.dialogMargins
             implicitHeight: dialogColumnLayout.implicitHeight
-
             color: Appearance.colors.colSurfaceContainerHigh
             radius: Appearance.rounding.normal
 
-            function addTask() {
-                if (todoInput.text.length > 0) {
-                    Todo.addTask(todoInput.text)
-                    todoInput.text = ""
-                    root.showAddDialog = false
-                    tabBar.setCurrentIndex(0) // Show unfinished tasks
-                }
-            }
-
             ColumnLayout {
                 id: dialogColumnLayout
+
                 anchors.fill: parent
                 spacing: 16
 
@@ -168,6 +187,7 @@ Item {
 
                 TextField {
                     id: todoInput
+
                     Layout.fillWidth: true
                     Layout.leftMargin: 16
                     Layout.rightMargin: 16
@@ -194,6 +214,7 @@ Item {
                         color: todoInput.activeFocus ? Appearance.colors.colPrimary : "transparent"
                         radius: 1
                     }
+
                 }
 
                 RowLayout {
@@ -207,13 +228,28 @@ Item {
                         buttonText: Translation.tr("Cancel")
                         onClicked: root.showAddDialog = false
                     }
+
                     DialogButton {
                         buttonText: Translation.tr("Add")
                         enabled: todoInput.text.length > 0
                         onClicked: dialog.addTask()
                     }
+
                 }
+
             }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            }
+
+        }
+
     }
+
 }
