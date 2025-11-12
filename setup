@@ -34,7 +34,7 @@ Subcommands:
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
   checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
-  virtmon        (For dev only, WIP) Create virtual monitors for testing multi-monitors.
+  virtmon        (For dev only) Create virtual monitors for testing multi-monitors.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
