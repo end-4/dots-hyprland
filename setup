@@ -28,14 +28,14 @@ Subcommands:
   install-deps   Run the install step \"1. Install dependencies\"
   install-setups Run the install step \"2. Setup for permissions/services etc\"
   install-files  Run the install step \"3. Copying config files\"
+  resetfirstrun  Reset firstrun state.
 
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
-  resetfirstrun  Reset firstrun state.
-  checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
   virtmon        (For dev only) Create virtual monitors for testing multi-monitors.
+  checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
