@@ -5,6 +5,15 @@
 
 readarray -t vmons < <(hyprctl -j monitors all | jq -r '.[] | select(.name | test("^HEADLESS-")) | .name')
 
+ensure_cmds wayvnc lsof jq
+
+if [[ "${CLEAN_VIRTUAL_MONITORS}" = true ]]; then
+  echo "Cleaning virtual monitors..."
+  for i in "${vmons[@]}"; do
+    x hyprctl output remove "$i"
+  done
+  exit 0
+fi
 if [ "${#vmons[@]}" -gt 0 ]; then
   echo "headless monitors found:"
   printf '%s\n' "${vmons[@]}"
@@ -18,7 +27,7 @@ else
   echo "No headless monitors found."
 fi
 
-echo "Creating headless monitor..."
+echo "Creating tester monitor..."
 readarray -t vmons_old < <(hyprctl -j monitors all | jq -r '.[] | select(.name | test("^HEADLESS-")) | .name')
 x hyprctl output create headless
 readarray -t vmons_new < <(hyprctl -j monitors all | jq -r '.[] | select(.name | test("^HEADLESS-")) | .name')
@@ -34,12 +43,12 @@ for e in "${vmons_new[@]}"; do
 done
 if (( ${#deltas[@]} == 1 )); then
   vmon_tester="${deltas[0]}"
-  echo "New virtual monitor found: $vmons_tester"
+  echo "tester monitor found: $vmons_tester"
 elif (( ${#deltas[@]} == 0 )); then
-  echo "Error: No new virtual monitor found"
+  echo "Error: No tester monitor found"
   exit 1
 else
-  echo "Error: multiple new virtual monitor found: ${deltas[*]}"
+  echo "Error: multiple tester monitor found: ${deltas[*]}"
   exit 1
 fi
 #echo "Setting geometry..."
@@ -52,10 +61,11 @@ for port in {5900..5999}; do
     break
   fi
 done
+# TODO: Allow running in background and implement --stop to stop it
 if [ -z "$vnc_port" ];then
   echo "No available port for vnc server, aborting..."; exit 1
 fi
 wayvnc -S -o=${vmon_tester} --log-level=trace 0.0.0.0 $vnc_port
 
-echo "Cleaning the new headless monitor..."
-x hyprctl output remove "${vmon_tester}"
+echo "Cleaning the tester monitor..."
+hyprctl output remove "${vmon_tester}"

@@ -8,13 +8,14 @@ Create virtual monitor for testing multi-monitors.
 
 Options:
   -h, --help       Show this help message
+  -c, --clean      Clean all virtual monitors and exit
   -k, --keep       Do not remove virtual monitors
 "
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hk \
-  -l help,keep \
+  -o hck \
+  -l help,clean,keep \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -30,14 +31,9 @@ done
 eval set -- "$para"
 while true ; do
   case "$1" in
+    -c|--clean) CLEAN_VIRTUAL_MONITORS=true;shift;;
     -k|--keep) KEEP_VIRTUAL_MONITORS=true;shift;;
     --) shift;break ;;
     *) sleep 0 ;;
   esac
 done
-
-#if [[ -f "$1" ]]; then
-#  echo "Using list file \"$1\".";LIST_FILE_PATH="$1";shift 1
-#else
-#  echo "Wrong path \"$1\" of list file.";exit 1
-#fi
