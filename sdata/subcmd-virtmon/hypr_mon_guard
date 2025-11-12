@@ -9,5 +9,5 @@ readarray -t enabled_mons < <(hyprctl -j monitors all | jq -r '.[] | select(.dis
 if [ ${#enabled_mons[@]} -eq 0 ]; then
 hyprctl reload
 fi
-sleep 10
+sleep 30
 done

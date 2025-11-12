@@ -13,15 +13,12 @@ echo -e "Syntax: $0 virtmon [OPTIONS]
 
 Create virtual monitor for testing multi-monitors.
 
-Note:
-  The virtual monitor will be served via wayvnc.
-  You need a VNC client to connect to it.
-
 Options:
   -h, --help       Show this help message and exit
   -c, --clean      Clean all tester monitors and wayvnc sessions and exit
   -d, --daemon     Run in background
-      --no-guard   Disable hypr_mon_guard
+      --no-guard   Disable hypr_mon_guard. Tip: this process can
+                   also be terminated using ${STY_BOLD}pkill hypr_mon_guard${STY_RST}
 
 For the syntax of following options, see also Hyprland Wiki:
   https://wiki.hypr.land/Configuring/Monitors
@@ -32,10 +29,19 @@ For the syntax of following options, see also Hyprland Wiki:
       --sca <sca>  Scale, by default ${STY_UNDERLINE}$VMON_SCALE${STY_RST}
       --ext <ext>  Extra properties, e.g. ${STY_UNDERLINE}transform, 1${STY_RST}
 
-Tip: Recommended VNC client:
-- Android: AVNC (https://github.com/gujjwal00/avnc)
-- Linux X11, Windows and MacOS: TigerVNC (https://github.com/TigerVNC/tigervnc)
-- Linux Wayland: Remmina-VNC (https://remmina.org/remmina-vnc)
+Note 1:
+  The virtual monitor will be served via wayvnc.
+  You need a VNC client to connect to it.
+  Recommended VNC client:
+  - Android: AVNC (https://github.com/gujjwal00/avnc)
+  - Linux X11, Windows and MacOS: TigerVNC (https://github.com/TigerVNC/tigervnc)
+  - Linux Wayland: Remmina-VNC (https://remmina.org/remmina-vnc)
+
+Note 2:
+  You can run this subcommand multiple times to create multiple virtual monitor. To do this, use ${STY_UNDERLINE}-d${STY_RST} to run wayvnc in background and repeat again, or just open extra terminal/shell and run the subcommand again.
+
+Note 3:
+  If you do not have a spare device connected to the same network, it's still possible to test multi-monitor by using VNC client on this device, in which case the <IP> should be ${STY_UNDERLINE}localhost${STY_RST} or ${STY_UNDERLINE}127.0.0.1${STY_RST}.
 "
 }
 # `man getopt` to see more
