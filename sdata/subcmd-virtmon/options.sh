@@ -21,8 +21,7 @@ Options:
   -h, --help       Show this help message and exit
   -c, --clean      Clean all tester monitors and wayvnc sessions and exit
   -d, --daemon     Run in background
-  -g, --guard      Enable hypr_mon_guard so it will be safe to
-                   temporarily disable monitors using hyprctl.
+      --no-guard   Disable hypr_mon_guard
 
 For the syntax of following options, see also Hyprland Wiki:
   https://wiki.hypr.land/Configuring/Monitors
@@ -41,8 +40,8 @@ Tip: Recommended VNC client:
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hcdg \
-  -l help,clean,daemon,guard,res:,fps:,pos:,sca:,ext: \
+  -o hcd \
+  -l help,clean,daemon,no-guard,res:,fps:,pos:,sca:,ext: \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -60,7 +59,7 @@ while true ; do
   case "$1" in
     -c|--clean) CLEAN_TESTER_MONITORS=true;shift;;
     -d|--daemon) RUNNING_IN_BACKGROUND=true;shift;;
-    -g|--guard) ENABLE_HYPR_MON_GUARD=true;shift;;
+    --no-guard) DISABLE_HYPR_MON_GUARD=true;shift;;
     --res) VMON_RESOLUTION="$2";shift 2;;
     --fps) VMON_FPS="$2";shift 2;;
     --pos) VMON_POSITION="$2";shift 2;;

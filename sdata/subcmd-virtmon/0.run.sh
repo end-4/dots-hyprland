@@ -5,7 +5,7 @@
 
 ensure_cmds wayvnc lsof jq ip
 
-enable_hypr_mon_guard(){
+start_hypr_mon_guard(){
   if ! pgrep -x hypr_mon_guard >/dev/null 2>&1; then
     if PATH=$PATH:${REPO_ROOT}/sdata/subcmd-virtmon command -v hypr_mon_guard ; then
       echo "Running hypr_mon_guard."
@@ -16,8 +16,8 @@ enable_hypr_mon_guard(){
     fi
   fi
 }
-if [[ "${ENABLE_HYPR_MON_GUARD}" = true ]]; then
-  enable_hypr_mon_guard
+if ! [[ "${DISABLE_HYPR_MON_GUARD}" = true ]]; then
+  start_hypr_mon_guard
 fi
 
 readarray -t vmon_ids < <(hyprctl -j monitors all | jq -r '.[] | select(.name | test("^TESTER-")) | .name | sub("^TESTER-"; "")')
