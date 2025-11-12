@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
+import qs.modules.waffle.bar.tasks
 
 Rectangle {
     id: root

@@ -13,6 +13,10 @@ MouseArea {
     implicitWidth: row.implicitWidth
     hoverEnabled: true
 
+    function showPreviewPopup(appEntry, button) {
+        previewPopup.show(appEntry, button);
+    }
+
     // Apps row
     RowLayout {
         id: row
@@ -20,7 +24,7 @@ MouseArea {
         spacing: 0
 
         Repeater {
-            // TODO: Include only apps (and windows) in current workspace only
+            // TODO: Include only apps (and windows) in current workspace only | wait, does that even make sense in a Hyprland workflow?
             model: ScriptModel {
                 objectProp: "appId"
                 values: TaskbarApps.apps.filter(app => app.appId !== "SEPARATOR")
@@ -30,7 +34,7 @@ MouseArea {
                 appEntry: modelData
 
                 onHoverPreviewRequested: {
-                    previewPopup.show(appEntry, this)
+                    root.showPreviewPopup(appEntry, this)
                 }
             }
         }
