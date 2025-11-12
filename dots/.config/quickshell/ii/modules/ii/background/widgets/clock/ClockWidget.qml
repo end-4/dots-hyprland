@@ -70,7 +70,7 @@ AbstractBackgroundWidget {
                 }
                 ClockText {
                     Layout.topMargin: -5
-                    text: DateTime.date
+                    text: DateTime.longDate
                 }
                 StyledText {
                     // Somehow gets fucked up if made a ClockText???
