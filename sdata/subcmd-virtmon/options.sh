@@ -22,6 +22,9 @@ Options:
   -c, --clean      Clean all tester monitors and wayvnc sessions and exit
 
   -d, --daemon     Running in background
+
+For the syntax of following options, see also Hyprland Wiki:
+  https://wiki.hypr.land/Configuring/Monitors
       --res <res>  Resolution, by default $VMON_RESOLUTION
       --fps <fps>  Refresh rate and FPS, by default $VMON_FPS
       --pos <pos>  Position, by default $VMON_POSITION
