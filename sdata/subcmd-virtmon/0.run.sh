@@ -45,9 +45,17 @@ fi
 #echo "Setting geometry..."
 #${vmon_new}
 
-echo "Using wayvnc to share monitor..."
-# TODO: handle port properly
-wayvnc -o=${vmon_tester} --log-level=trace 0.0.0.0 5901
+echo "Using wayvnc to share monitor $vmons_tester..."
+for port in {5900..5999}; do
+  if ! lsof -nP -iTCP:"$port" -sTCP:LISTEN -t >/dev/null 2>&1; then
+    vnc_port="$port"
+    break
+  fi
+done
+if [ -z "$vnc_port" ];then
+  echo "No available port for vnc server, aborting..."; exit 1
+fi
+wayvnc -S -o=${vmon_tester} --log-level=trace 0.0.0.0 $vnc_port
 
 echo "Cleaning the new headless monitor..."
 x hyprctl output remove "${vmon_tester}"
