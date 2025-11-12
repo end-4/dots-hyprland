@@ -22,6 +22,6 @@ while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
     --) shift;break ;;
-    *) sleep 0 ;;
+    *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done

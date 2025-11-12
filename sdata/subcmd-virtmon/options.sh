@@ -41,7 +41,7 @@ while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
     --) shift;break ;;
-    *) sleep 0 ;;
+    *) shift ;;
   esac
 done
 
@@ -56,6 +56,6 @@ while true ; do
     --sca) VMON_SCALE="$2";shift 2;;
     --ext) VMON_EXTRA=", $2";shift 2;;
     --) shift;break ;;
-    *) sleep 0 ;;
+    *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done
