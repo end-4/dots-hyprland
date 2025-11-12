@@ -20,21 +20,21 @@ Note:
 Options:
   -h, --help       Show this help message and exit
   -c, --clean      Clean all tester monitors and wayvnc sessions and exit
-
-  -d, --daemon     Running in background
+  -d, --daemon     Run in background
 
 For the syntax of following options, see also Hyprland Wiki:
   https://wiki.hypr.land/Configuring/Monitors
-      --res <res>  Resolution, by default $VMON_RESOLUTION
-      --fps <fps>  Refresh rate and FPS, by default $VMON_FPS
-      --pos <pos>  Position, by default $VMON_POSITION
-      --sca <sca>  Scale, by default $VMON_SCALE
-      --ext <ext>  Extra args, e.g. \"transform, 1\"
+      --res <res>  Resolution, by default ${STY_UNDERLINE}$VMON_RESOLUTION${STY_RST}
+      --fps <fps>  Refresh rate and FPS, by default ${STY_UNDERLINE}$VMON_FPS${STY_RST}
+      --pos <pos>  Position, by default ${STY_UNDERLINE}$VMON_POSITION${STY_RST}
+                   Examples: ${STY_UNDERLINE}auto-left${STY_RST}, ${STY_UNDERLINE}0x-1080${STY_RST}
+      --sca <sca>  Scale, by default ${STY_UNDERLINE}$VMON_SCALE${STY_RST}
+      --ext <ext>  Extra args, e.g. ${STY_UNDERLINE}transform, 1${STY_RST}
 
 Tip: Recommended VNC client:
 - Android: AVNC (https://github.com/gujjwal00/avnc)
 - Linux X11, Windows and MacOS: TigerVNC (https://github.com/TigerVNC/tigervnc)
-- Linux Wayland: Remmina-VNC (https://remmina.org/remmina-vnc/)
+- Linux Wayland: Remmina-VNC (https://remmina.org/remmina-vnc)
 "
 }
 # `man getopt` to see more
