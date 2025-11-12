@@ -14,14 +14,12 @@ Scope {
 
     Variants {
         // For each monitor
-        model: ScriptModel {
-            values: {
-                const screens = Quickshell.screens;
-                const list = Config.options.bar.screenList;
-                if (!list || list.length === 0)
-                    return screens;
-                return screens.filter(screen => list.includes(screen.name));
-            }
+        model: {
+            const screens = Quickshell.screens;
+            const list = Config.options.bar.screenList;
+            if (!list || list.length === 0)
+                return screens;
+            return screens.filter(screen => list.includes(screen.name));
         }
         LazyLoader {
             id: barLoader
