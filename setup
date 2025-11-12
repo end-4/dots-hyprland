@@ -34,6 +34,7 @@ Subcommands:
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
   checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
+  virtmon        (For dev only, WIP) Create virtual monitors for testing multi-monitors.
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
@@ -46,7 +47,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old|checkdeps)
+  install|exp-uninstall|exp-update|exp-update-old|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;
