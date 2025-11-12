@@ -260,9 +260,9 @@ ContentPage {
                 }
 
                 ConfigSelectionArray {
-                    currentValue: Config.options.policies.wallpaper
+                    currentValue: Config.options.policies.wallpapers
                     onSelected: newValue => {
-                        Config.options.policies.wallpaper = newValue;
+                        Config.options.policies.wallpapers = newValue;
                     }
                     options: [
                         {
