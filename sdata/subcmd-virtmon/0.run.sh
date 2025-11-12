@@ -47,27 +47,29 @@ echo "Setting geometry..."
 x hyprctl keyword monitor ${vmon_tester},${VMON_RESOLUTION}@${VMON_FPS},${VMON_POSITION},${VMON_SCALE}${VMON_EXTRA}
 
 e="%s${STY_RST}\n"
-printf "${STY_CYAN}$e" "========================================="
-printf "${STY_BLUE}$e" "Use a VNC client to connect to the virtual monitor."
-printf "${STY_RED}$e" "  Port: $vnc_port"
-printf "${STY_RED}$e" "  IP: choose a suitable one from below:"
+printf "${STY_YELLOW}=========================================$e"
+printf "${STY_CYAN}The status of the virtual monitor:$e"
+printf "${STY_BLUE}Resolution: ${STY_UNDERLINE}${STY_INVERT}${VMON_RESOLUTION}$e"
+printf "${STY_BLUE}Frame rate: ${STY_UNDERLINE}${STY_INVERT}${VMON_FPS}$e"
+printf "${STY_CYAN}Use a VNC client to connect to the virtual monitor.$e"
+printf "${STY_BLUE}Port: ${STY_UNDERLINE}${STY_INVERT}$vnc_port$e"
+printf "${STY_BLUE}IP: use a suitable one from below:$e"
+printf ${STY_PURPLE}
 LANG=C LC_ALL=C ip -o addr show up | grep -v -E 'docker|veth|virbr' | awk '{split($4,a,"/"); print $2"\t"a[1]}'
-printf "${STY_YELLOW}$e" "The status of the virtual monitor:"
-printf "${STY_YELLOW}$e" "  Resolution: ${VMON_RESOLUTION}"
-printf "${STY_YELLOW}$e" "  Frame rate: ${VMON_FPS}"
-printf "${STY_GREEN}$e" "Hint:"
-printf "${STY_GREEN}$e" "  The VNC client will ask you about server address,"
-printf "${STY_GREEN}$e" "  either joined as <IP>:<Port> or separately."
-printf "${STY_GREEN}$e" "  As for username and password, just leave them as empty."
-printf "${STY_CYAN}$e" "========================================="
+printf ${STY_RST}
+printf "${STY_CYAN}Hint:$e"
+printf "${STY_GREEN}  The VNC client will ask you about server address,$e"
+printf "${STY_GREEN}  either joined as <IP>:<Port> or separately.$e"
+printf "${STY_GREEN}  As for username and password, just leave them as empty.$e"
+printf "${STY_YELLOW}=========================================$e"
 
 if [ "$RUNNING_IN_BACKGROUND" = true ];then
   echo "wayvnc now running in background. Run again with --clean to cleanup."
-  nohup wayvnc --socket=$tester_socket -f=${VMON_FPS} -o=${vmon_tester} --log-level=${WAYVNC_LOGLEVEL} 0.0.0.0 $vnc_port > $(mktemp) 2>&1 &
+  nohup wayvnc ${WAYVNC_EX_ARGS} --socket=$tester_socket -f=${VMON_FPS} -o=${vmon_tester} --log-level=${WAYVNC_LOGLEVEL} 0.0.0.0 $vnc_port > $(mktemp) 2>&1 &
   disown
 else
   echo "wayvnc now running, press Ctrl-C to quit."
-  wayvnc --socket=$tester_socket -f=${VMON_FPS} -o=${vmon_tester} --log-level=${WAYVNC_LOGLEVEL} 0.0.0.0 $vnc_port
+  wayvnc ${WAYVNC_EX_ARGS} --socket=$tester_socket -f=${VMON_FPS} -o=${vmon_tester} --log-level=${WAYVNC_LOGLEVEL} 0.0.0.0 $vnc_port
   echo "wayvnc stopped. Cleaning..."
   hyprctl output remove "${vmon_tester}"
 fi
