@@ -5,6 +5,21 @@
 
 ensure_cmds wayvnc lsof jq ip
 
+enable_hypr_mon_guard(){
+  if ! pgrep -x hypr_mon_guard >/dev/null 2>&1; then
+    if PATH=$PATH:${REPO_ROOT}/sdata/subcmd-virtmon command -v hypr_mon_guard ; then
+      echo "Running hypr_mon_guard."
+      PATH=$PATH:${REPO_ROOT}/sdata/subcmd-virtmon setsid hypr_mon_guard > $(mktemp) 2>&1 &
+    else
+      echo "Script hypr_mon_guard not found."
+      exit 1
+    fi
+  fi
+}
+if [[ "${ENABLE_HYPR_MON_GUARD}" = true ]]; then
+  enable_hypr_mon_guard
+fi
+
 readarray -t vmon_ids < <(hyprctl -j monitors all | jq -r '.[] | select(.name | test("^TESTER-")) | .name | sub("^TESTER-"; "")')
 
 if [[ "${CLEAN_TESTER_MONITORS}" = true ]]; then
@@ -43,7 +58,7 @@ vmon_tester=TESTER-$vnc_port
 echo "Creating tester monitor..."
 x hyprctl output create headless ${vmon_tester}
 
-echo "Setting geometry..."
+echo "Setting properties of tester monitor..."
 x hyprctl keyword monitor ${vmon_tester},${VMON_RESOLUTION}@${VMON_FPS},${VMON_POSITION},${VMON_SCALE}${VMON_EXTRA}
 
 e="%s${STY_RST}\n"

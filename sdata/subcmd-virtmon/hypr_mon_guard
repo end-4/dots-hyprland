@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+# This script is to prevent hyprland from not responding to any input when no monitor is enabled.
+# The shebang cannot be #!/usr/bin/env bash , idk why
+while true; do
+readarray -t enabled_mons < <(hyprctl -j monitors all | jq -r '.[] | select(.disabled == false) | .name')
+#if -z "$enabled_mons"; then
+if [ ${#enabled_mons[@]} -eq 0 ]; then
+hyprctl reload
+fi
+sleep 10
+done
