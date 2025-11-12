@@ -127,7 +127,14 @@ ContentPage {
                     onClicked: {
                         Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
                     }
+
                     mainContentComponent: Component {
+                        // property var ctrlKey: Config.options.cheatsheet.useMacSymbol ? '󰘴 ' : 'Ctrl'
+                        // property var superKey: Config.options.cheatsheet.superKey
+                        // property var modKey: Config.options.cheatsheet.splitButtons ? ctrlKey : superKey + ctrlKey + 'T' 
+                        // property var test: {
+                        //     console.log('La', ctrl, super, mods)
+                        // }
                         RowLayout {
                             spacing: 10
                             StyledText {
@@ -138,17 +145,22 @@ ContentPage {
                             RowLayout {
                                 spacing: 3
                                 KeyboardKey {
-                                    key: "Ctrl"
+                                    // key: 'Ctrl'
+                                    // key: mainContent.modKey
+                                    key: (Config.options.cheatsheet.splitButtons ? (Config.options.cheatsheet.useMacSymbol ? '󰘴' : 'Ctrl') : (Config.options.cheatsheet.useMacSymbol ? '󰘴' : 'Ctrl') + ' ' + Config.options.cheatsheet.superKey + ' T')
                                 }
                                 KeyboardKey {
-                                    key: "󰖳"
+                                    key: Config.options.cheatsheet.superKey
+                                    visible: Config.options.cheatsheet.splitButtons
                                 }
                                 StyledText {
                                     Layout.alignment: Qt.AlignVCenter
                                     text: "+"
+                                    visible: Config.options.cheatsheet.splitButtons
                                 }
                                 KeyboardKey {
                                     key: "T"
+                                    visible: Config.options.cheatsheet.splitButtons
                                 }
                             }
                         }
