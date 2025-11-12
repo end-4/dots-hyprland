@@ -30,6 +30,11 @@ For the syntax of following options, see also Hyprland Wiki:
       --pos <pos>  Position, by default $VMON_POSITION
       --sca <sca>  Scale, by default $VMON_SCALE
       --ext <ext>  Extra args, e.g. \"transform, 1\"
+
+Tip: Recommended VNC client:
+- Android: AVNC (https://github.com/gujjwal00/avnc)
+- Linux X11, Windows and MacOS: TigerVNC (https://github.com/TigerVNC/tigervnc)
+- Linux Wayland: Remmina-VNC (https://remmina.org/remmina-vnc/)
 "
 }
 # `man getopt` to see more
