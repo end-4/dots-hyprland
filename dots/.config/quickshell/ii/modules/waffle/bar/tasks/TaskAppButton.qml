@@ -37,6 +37,12 @@ AppButton {
         }
     }
 
+    onMiddleClickAction: {
+        if (root.desktopEntry) {
+            desktopEntry.execute()
+        }
+    }
+
     // Active indicator
     Rectangle {
         id: activeIndicator
