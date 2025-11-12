@@ -55,7 +55,7 @@ while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
     -c|--clean) cleancache;shift;;
-    --) break ;;
+    --) shift;break ;;
     *) shift ;;
   esac
 done
@@ -93,7 +93,7 @@ while true ; do
     fi;;
 
     ## Ending
-    --) break ;;
+    --) shift;break ;;
     *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done
