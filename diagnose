@@ -65,6 +65,7 @@ ii_check_PKGBUILD_version() {
 e "Checking git repo info"
 x git remote get-url origin
 x git rev-parse HEAD
+x git status
 x git submodule status --recursive
 
 e "Checking distro"
