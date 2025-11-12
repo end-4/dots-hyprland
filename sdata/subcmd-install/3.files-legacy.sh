@@ -95,7 +95,7 @@ case $SKIP_HYPRLAND in
       copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
     for i in hypridle.conf ; do
-      if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
+      if [[ "${INSTALL_VIA_NIX}" == true ]]; then
         copy_file_s_t "dots-extra/via-nix/$i" "${XDG_CONFIG_HOME}/hypr/$i"
       else
         copy_file_s_t "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
