@@ -46,19 +46,20 @@ x hyprctl output create headless ${vmon_tester}
 echo "Setting geometry..."
 x hyprctl keyword monitor ${vmon_tester},${VMON_RESOLUTION}@${VMON_FPS},${VMON_POSITION},${VMON_SCALE}${VMON_EXTRA}
 
-printf "%s\n" "========================================="
-printf "%s\n" "Use a VNC client to connect to the virtual monitor."
-printf "%s\n" "  Port: $vnc_port"
-printf "%s\n" "  IP: choose a suitable one from below:"
+e="%s${STY_RST}\n"
+printf "${STY_CYAN}$e" "========================================="
+printf "${STY_BLUE}$e" "Use a VNC client to connect to the virtual monitor."
+printf "${STY_RED}$e" "  Port: $vnc_port"
+printf "${STY_RED}$e" "  IP: choose a suitable one from below:"
 LANG=C LC_ALL=C ip -o addr show up | grep -v -E 'docker|veth|virbr' | awk '{split($4,a,"/"); print $2"\t"a[1]}'
-printf "%s\n" "The status of the virtual monitor:"
-printf "%s\n" "  Resolution: ${VMON_RESOLUTION}"
-printf "%s\n" "  Frame rate: ${VMON_FPS}"
-printf "%s\n" "Hint:"
-printf "%s\n" "  The VNC client will ask you about server address,"
-printf "%s\n" "  either joined as <IP>:<Port> or separately."
-printf "%s\n" "  As for username and password, just leave them as empty."
-printf "%s\n" "========================================="
+printf "${STY_YELLOW}$e" "The status of the virtual monitor:"
+printf "${STY_YELLOW}$e" "  Resolution: ${VMON_RESOLUTION}"
+printf "${STY_YELLOW}$e" "  Frame rate: ${VMON_FPS}"
+printf "${STY_GREEN}$e" "Hint:"
+printf "${STY_GREEN}$e" "  The VNC client will ask you about server address,"
+printf "${STY_GREEN}$e" "  either joined as <IP>:<Port> or separately."
+printf "${STY_GREEN}$e" "  As for username and password, just leave them as empty."
+printf "${STY_CYAN}$e" "========================================="
 
 if [ "$RUNNING_IN_BACKGROUND" = true ];then
   echo "wayvnc now running in background. Run again with --clean to cleanup."
