@@ -3,7 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import qs.modules.sidebarLeft.anime
+import qs.modules.sidebarLeft.wallpaper
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
