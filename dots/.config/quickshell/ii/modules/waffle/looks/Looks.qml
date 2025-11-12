@@ -17,6 +17,7 @@ Singleton {
 
     property real backgroundTransparency: 0.17
     property real contentTransparency: 0.25
+    property real shadowTransparency: 0.6
     colors: QtObject {
         id: colors
         property color bg0: root.dark ? "#1C1C1C" : "#EEEEEE"
@@ -33,7 +34,9 @@ Singleton {
         property color fg1: root.dark ? "#D1D1D1" : "#626262"
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
-        property color brand: Appearance.m3colors.m3primary
+        // property color accent: root.dark ? "#A5C6D8" : "#5377A3"
+        property color accent: Appearance.m3colors.m3primary
+        property color accentUnfocused: root.dark ? "#989898" : "#848484"
     }
 
     radius: QtObject {
@@ -106,7 +109,7 @@ Singleton {
 
         property Component move: Component {
             NumberAnimation {
-                duration: 100
+                duration: 170
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeInOut
             }

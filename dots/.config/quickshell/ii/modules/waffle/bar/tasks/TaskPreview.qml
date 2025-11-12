@@ -70,7 +70,7 @@ PopupWindow {
                 fill: contentItem
                 margins: -border.width
             }
-            border.color: ColorUtils.transparentize(Looks.colors.bg0Border, Looks.contentTransparency)
+            border.color: ColorUtils.transparentize(Looks.colors.bg0Border, Looks.shadowTransparency)
             border.width: 1
             color: "transparent"
             radius: Looks.radius.large + border.width

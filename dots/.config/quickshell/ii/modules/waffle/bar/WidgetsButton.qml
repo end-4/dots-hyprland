@@ -52,4 +52,9 @@ AppButton {
             }
         }
     }
+
+    BarToolTip {
+        extraVisibleCondition: root.shouldShowTooltip
+        text: Translation.tr("Widgets")
+    }
 }
