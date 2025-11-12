@@ -51,8 +51,9 @@ else
   echo "Error: multiple tester monitor found: ${deltas[*]}"
   exit 1
 fi
+# TODO: Implement setting geometry
 #echo "Setting geometry..."
-#${vmon_new}
+#${vmon_tester}
 
 echo "Using wayvnc to share monitor $vmons_tester..."
 for port in {5900..5999}; do
