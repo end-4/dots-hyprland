@@ -194,8 +194,6 @@ ComboBox {
             spacing: 2
             model: root.popup.visible ? root.delegateModel : null
             currentIndex: root.highlightedIndex
-
-            ScrollIndicator.vertical: ScrollIndicator {}
         }
     }
 }
