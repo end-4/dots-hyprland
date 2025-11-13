@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 
 ComboBox {
     id: root
@@ -84,7 +85,7 @@ ComboBox {
         background: Rectangle {
             anchors.fill: parent
             radius: Appearance.rounding.small
-            color: root.currentIndex === itemDelegate.index ? Appearance.colors.colPrimary : itemDelegate.down ? Appearance.colors.colSecondaryContainerActive : itemDelegate.hovered ? Appearance.colors.colSecondaryContainerHover : "transparent"
+            color: root.currentIndex === itemDelegate.index ? Appearance.colors.colPrimary : itemDelegate.down ? Appearance.colors.colSecondaryContainerActive : itemDelegate.hovered ? Appearance.colors.colSecondaryContainerHover : ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh)
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
