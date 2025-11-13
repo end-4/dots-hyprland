@@ -1,0 +1,173 @@
+{
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "catppuccin-icons.hidesExplorerArrows": true,
+  "chat.mcp.autostart": "newAndOutdated",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+    "source.sortImports": "always"
+  },
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorSurroundingLines": 12,
+  // "editor.fontFamily": "SpaceMono Nerd Font",
+  "editor.fontFamily": "'Cascadia Code',  monospace",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.gotoLocation.multipleDeclarations": "goto",
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.gotoLocation.multipleImplementations": "goto",
+  "editor.gotoLocation.multipleTypeDefinitions": "goto",
+  "editor.guides.bracketPairs": "active",
+  "editor.guides.indentation": true,
+  "editor.hideCursorInOverviewRuler": true,
+  "editor.hover.enabled": true,
+  "editor.insertSpaces": true,
+  "editor.language.colorizedBracketPairs": [
+    ["<", "/>"],
+    ["<", ">"],
+    ["</", ">"],
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "editor.lightbulb.enabled": "off",
+  "editor.matchBrackets": "near",
+  "editor.minimap.enabled": false,
+  "editor.occurrencesHighlight": "off",
+  "editor.overviewRulerBorder": false,
+  "editor.quickSuggestions": {
+    "comments": false,
+    "other": true,
+    "strings": true
+  },
+  "editor.renderControlCharacters": false,
+  "editor.renderLineHighlight": "none",
+  "editor.renderWhitespace": "none",
+  "editor.selectionHighlight": false,
+  "editor.smoothScrolling": true,
+  "editor.stickyScroll.enabled": false,
+  "editor.suggest.localityBonus": true,
+  "editor.suggestSelection": "recentlyUsed",
+  "editor.wordWrap": "off",
+  "explorer.excludeGitIgnore": false,
+  "explorer.incrementalNaming": "smart",
+  "extensions.ignoreRecommendations": true,
+  "files.associations": {
+    ".env*": "dotenv",
+    "*.css": "tailwindcss"
+  },
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
+  "github.copilot.enable": {
+    "*": false,
+    "dotenv": false,
+    "markdown": false,
+    "plaintext": false,
+    "scminput": false
+  },
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "go.toolsManagement.autoUpdate": true,
+  "javascript.suggest.autoImports": true,
+  "prettier.tabWidth": 2,
+  "problems.decorations.enabled": false,
+  "python.languageServer": "Pylance",
+  "sqltools.useNodeRuntime": true,
+  "svelte.enable-ts-plugin": true,
+  "terminal.explorerKind": "external",
+  "terminal.external.linuxExec": "kitty",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.fontFamily": "'SpaceMono Nerd Font', 'monospace'",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "icon": "terminal-bash",
+      "path": "bash"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "pwsh": {
+      "icon": "terminal-powershell",
+      "path": "pwsh"
+    },
+    "tmux": {
+      "icon": "terminal-tmux",
+      "path": "tmux"
+    },
+    "zsh": {
+      "path": "/bin/zsh"
+    }
+  },
+  "terminal.integrated.shellIntegration.history": 1000,
+  "terminal.integrated.smoothScrolling": true,
+  "terminal.integrated.stickyScroll.enabled": true,
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vim.cursorStylePerMode.replace": "underline",
+  "vim.normalModeKeyBindings": [
+    {
+      "before": [":"],
+      "commands": ["workbench.action.quickOpen"],
+      "silent": true
+    }
+  ],
+  "vim.smartRelativeLine": true,
+  "vim.useSystemClipboard": true,
+  "window.commandCenter": false,
+  "window.customMenuBarAltFocus": false,
+  "window.customTitleBarVisibility": "auto",
+  "window.enableMenuBarMnemonics": false,
+  "window.menuBarVisibility": "toggle",
+  "window.restoreWindows": "none",
+  "window.titleBarStyle": "native",
+  "window.zoomLevel": 1.25,
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.layoutControl.enabled": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.sideBar.location": "right",
+  "workbench.startupEditor": "none",
+  "workbench.tips.enabled": false,
+  "zenMode.centerLayout": false,
+  "zenMode.fullScreen": false,
+  "zenMode.hideLineNumbers": false,
+  "zenMode.hideStatusBar": true,
+  "zenMode.showTabs": "none",
+  "mdb.mcp.server": "prompt",
+  "mermaid.vscode.dark": "light",
+  "git.confirmSync": false,
+  "hediet.vscode-drawio.resizeImages": null
+}
