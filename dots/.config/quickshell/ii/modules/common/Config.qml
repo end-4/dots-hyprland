@@ -85,6 +85,7 @@ Singleton {
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
                 property int weeb: 1 // 0: No | 1: Open | 2: Closet
+                property int wallpaperBrowser: 1 // 0: No | 1: Yes
             }
 
             property JsonObject ai: JsonObject {
@@ -558,6 +559,9 @@ Singleton {
                 }
             }
 
+                property JsonObject unsplash: JsonObject {  
+                    property string apiKey: ""  
+                }    
             property JsonObject waffles: JsonObject {
                 property JsonObject bar: JsonObject {
                     property bool bottom: true
@@ -566,4 +570,7 @@ Singleton {
             }
         }
     }
+
+
+
 }

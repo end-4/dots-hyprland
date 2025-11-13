@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = https://git.outfoxxed.me/quickshell/quickshell.git
+	tagOpt = --no-tags
+	fetch = +refs/*:refs/*
+	mirror = true

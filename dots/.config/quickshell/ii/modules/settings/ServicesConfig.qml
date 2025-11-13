@@ -249,4 +249,22 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {  
+        icon: "image"  
+        title: Translation.tr("Unsplash API Key")  
+    
+        MaterialTextArea {  
+            Layout.fillWidth: true  
+            placeholderText: Translation.tr("Enter your Unsplash API key")  
+            text: Config.options.unsplash?.apiKey ?? ""  
+            wrapMode: TextEdit.Wrap  
+            onTextChanged: {  
+                Qt.callLater(() => {  
+                    Config.options.unsplash.apiKey = text;  
+                });  
+            }  
+        }  
+    }
+
 }
