@@ -10,16 +10,16 @@ ComboBox {
 
     property string buttonIcon: ""
     property real buttonRadius: height / 2
-    property color buttonBackground: Appearance.colors.colSecondaryContainer
-    property color buttonBackgroundHover: Appearance.colors.colSecondaryContainerHover
-    property color buttonBackgroundActive: Appearance.colors.colSecondaryContainerActive
+    property color colBackground: Appearance.colors.colSecondaryContainer
+    property color colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+    property color colBackgroundActive: Appearance.colors.colSecondaryContainerActive
 
     implicitHeight: 40
     Layout.fillWidth: true
 
     background: Rectangle {
         radius: root.buttonRadius
-        color: root.down ? root.buttonBackgroundActive : root.hovered ? root.buttonBackgroundHover : root.buttonBackground
+        color: root.down ? root.colBackgroundActive : root.hovered ? root.colBackgroundHover : root.colBackground
 
         Behavior on color {
             ColorAnimation {
