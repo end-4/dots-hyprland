@@ -27,6 +27,14 @@ ComboBox {
         }
     }
 
+    indicator: MaterialSymbol {
+        x: root.width - width - 16
+        y: root.height / 2 - height / 2
+        text: "arrow_drop_down"
+        iconSize: Appearance.font.pixelSize.larger
+        color: Appearance.colors.colOnSecondaryContainer
+    }
+
     contentItem: Item {
         implicitWidth: buttonLayout.implicitWidth
         implicitHeight: buttonLayout.implicitHeight
