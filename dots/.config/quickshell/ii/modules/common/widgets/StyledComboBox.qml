@@ -48,11 +48,11 @@ ComboBox {
 
             Loader {
                 Layout.alignment: Qt.AlignVCenter
-                active: root.buttonIcon.length > 0 || (root.currentIndex >= 0 && root.model[root.currentIndex]?.icon)
+                active: root.buttonIcon.length > 0 || (root.currentIndex >= 0 && typeof root.model[root.currentIndex] === 'object' && root.model[root.currentIndex]?.icon)
                 visible: active
                 sourceComponent: MaterialSymbol {
                     text: {
-                        if (root.currentIndex >= 0 && root.model[root.currentIndex]?.icon) {
+                        if (root.currentIndex >= 0 && typeof root.model[root.currentIndex] === 'object' && root.model[root.currentIndex]?.icon) {
                             return root.model[root.currentIndex].icon;
                         }
                         return root.buttonIcon;
@@ -99,7 +99,7 @@ ComboBox {
             Loader {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredHeight: Appearance.font.pixelSize.larger
-                active: itemDelegate.model.icon && itemDelegate.model.icon.length > 0
+                active: typeof itemDelegate.model === 'object' && itemDelegate.model?.icon?.length > 0
                 visible: active
                 sourceComponent: Item {
                     implicitWidth: icon.implicitWidth
@@ -107,7 +107,7 @@ ComboBox {
                     MaterialSymbol {
                         id: icon
                         anchors.centerIn: parent
-                        text: itemDelegate.model.icon
+                        text: itemDelegate.model?.icon ?? ""
                         iconSize: Appearance.font.pixelSize.larger
                         color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
                     }
