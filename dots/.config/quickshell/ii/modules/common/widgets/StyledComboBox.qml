@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -152,7 +153,7 @@ ComboBox {
             color: Appearance.colors.colSurfaceContainerHigh
         }
 
-        contentItem: ListView {
+        contentItem: StyledListView {
             id: listView
             clip: true
             implicitHeight: contentHeight
