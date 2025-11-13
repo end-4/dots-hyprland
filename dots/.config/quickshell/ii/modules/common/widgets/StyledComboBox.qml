@@ -22,10 +22,7 @@ ComboBox {
         color: root.down ? root.colBackgroundActive : root.hovered ? root.colBackgroundHover : root.colBackground
 
         Behavior on color {
-            ColorAnimation {
-                duration: 150
-                easing.type: Easing.OutCubic
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 
@@ -81,10 +78,7 @@ ComboBox {
             color: root.currentIndex === itemDelegate.index ? Appearance.colors.colPrimary : itemDelegate.down ? Appearance.colors.colSecondaryContainerActive : itemDelegate.hovered ? Appearance.colors.colSecondaryContainerHover : "transparent"
 
             Behavior on color {
-                ColorAnimation {
-                    duration: 150
-                    easing.type: Easing.OutCubic
-                }
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
         }
 
