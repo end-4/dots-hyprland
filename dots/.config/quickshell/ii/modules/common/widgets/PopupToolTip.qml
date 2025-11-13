@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
@@ -13,15 +14,24 @@ Item {
     property real horizontalPadding: 10
     property real verticalPadding: 5
 
+    readonly property bool internalVisibleCondition: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition
     property var anchorEdges: Edges.Top
     property var anchorGravity: anchorEdges
 
-    readonly property bool internalVisibleCondition: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition
+    property Item contentItem: StyledToolTipContent {
+        id: contentItem
+        anchors.centerIn: parent
+        text: root.text
+        shown: false
+        Component.onCompleted: shown = true
+        horizontalPadding: root.horizontalPadding
+        verticalPadding: root.verticalPadding
+    }
 
     Loader {
         id: tooltipLoader
         anchors.fill: parent
-        active: internalVisibleCondition
+        active: root.internalVisibleCondition
         sourceComponent: PopupWindow {
             visible: true
             anchor {
@@ -35,18 +45,10 @@ Item {
             }
 
             color: "transparent"
-            implicitWidth: contentItem.implicitWidth + root.horizontalPadding * 2
-            implicitHeight: contentItem.implicitHeight + root.verticalPadding * 2
+            implicitWidth: root.contentItem.implicitWidth + root.horizontalPadding * 2
+            implicitHeight: root.contentItem.implicitHeight + root.verticalPadding * 2
 
-            StyledToolTipContent {
-                id: contentItem
-                anchors.centerIn: parent
-                text: root.text
-                shown: false
-                Component.onCompleted: shown = true
-                horizontalPadding: root.horizontalPadding
-                verticalPadding: root.verticalPadding
-            }
+            data: [root.contentItem]
         }
     }
 }

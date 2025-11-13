@@ -80,6 +80,7 @@ Singleton {
             property list<string> enabledPanels: [
                 "iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"
             ]
+            property string panelFamily: "ii" // "ii", "w"
 
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
@@ -522,6 +523,7 @@ Singleton {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
                 property string shortDateFormat: "dd/MM"
+                property string dateWithYearFormat: "dd/MM/yyyy"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
                     property int breakTime: 300
@@ -560,6 +562,12 @@ Singleton {
                 property JsonObject unsplash: JsonObject {  
                     property string apiKey: ""  
                 }    
+            property JsonObject waffles: JsonObject {
+                property JsonObject bar: JsonObject {
+                    property bool bottom: true
+                    property bool leftAlignApps: false
+                }
+            }
         }
     }
 
