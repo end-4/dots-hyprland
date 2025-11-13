@@ -21,7 +21,7 @@ ComboBox {
 
     background: Rectangle {
         radius: root.buttonRadius
-        color: root.down ? root.colBackgroundActive : root.hovered ? root.colBackgroundHover : root.colBackground
+        color: (root.down && !root.popup.visible) ? root.colBackgroundActive : root.hovered ? root.colBackgroundHover : root.colBackground
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
