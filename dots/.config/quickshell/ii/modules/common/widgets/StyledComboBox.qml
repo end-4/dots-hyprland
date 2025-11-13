@@ -155,22 +155,22 @@ ComboBox {
         padding: 8
 
         enter: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 0
+            PropertyAnimation {
+                properties: "opacity"
                 to: 1
-                duration: 150
-                easing.type: Easing.OutCubic
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 
         exit: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 1
+            PropertyAnimation {
+                properties: "opacity"
                 to: 0
-                duration: 100
-                easing.type: Easing.InCubic
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 
