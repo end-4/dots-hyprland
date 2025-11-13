@@ -3,7 +3,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import qs.modules.sidebarLeft.wallpaper
+import qs.modules.ii.sidebarLeft.wallpaperBrowser
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -13,9 +13,9 @@ import Quickshell
 Item {
     id: root
     property var inputField: tagInputField
-    readonly property var responses: Booru.responses
+    readonly property var responses: BooruWallpapers.responses
     property string previewDownloadPath: Directories.booruPreviews
-    property string downloadPath: Directories.booruDownloads
+    property string downloadPath: FileUtils.trimFileProtocol(Directories.pictures + "/Wallpapers")
     property string nsfwPath: Directories.booruDownloadsNsfw
     property string commandPrefix: "/"
     property real scrollOnNewResponse: 100
@@ -28,13 +28,13 @@ Item {
     property real normalizedPullDistance: Math.max(0, (1 - Math.exp(-booruResponseListView.verticalOvershoot / 50)) * booruResponseListView.dragging)
 
     Connections {
-        target: Booru
+        target: BooruWallpapers
         function onTagSuggestion(query, suggestions) {
             root.suggestionQuery = query;
             root.suggestionList = suggestions;
         }
         function onRunningRequestsChanged() {
-            if (Booru.runningRequests === 0) {
+            if (BooruWallpapers.runningRequests === 0) {
                 root.pullLoading = false;
             }
         }
@@ -45,7 +45,7 @@ Item {
             name: "clear",
             description: Translation.tr("Clear the current list of images"),
             execute: () => {
-                Booru.clearResponses();
+                BooruWallpapers.clearResponses();
             }
         },
         {
@@ -71,7 +71,7 @@ Item {
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                Booru.addSystemMessage(Translation.tr("Unknown command: ") + command);
+                BooruWallpapers.addSystemMessage(Translation.tr("Unknown command: ") + command);
             }
         }
         else if (inputText.trim() == "+") {
@@ -88,7 +88,7 @@ Item {
                     break;
                 }
             }
-            Booru.makeRequest(tagList, false, Config.options.sidebar.booru.limit, pageIndex);
+            BooruWallpapers.makeRequest(tagList, false, Config.options.sidebar.booru.limit, pageIndex);
         }
     }
 
@@ -113,7 +113,7 @@ Item {
             }
         }
         if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O) {
-            Booru.clearResponses()
+            BooruWallpapers.clearResponses()
         }
     }
 
@@ -212,7 +212,7 @@ Item {
                         }
                     }
                 }
-                loading: root.pullLoading || Booru.runningRequests > 0
+                loading: root.pullLoading || BooruWallpapers.runningRequests > 0
                 pullProgress: Math.min(1, booruResponseListView.verticalOvershoot / root.pullLoadingGap * booruResponseListView.dragging)
                 scale: root.pullLoading ? 1 : Math.min(1, root.normalizedPullDistance * 2)
             }
@@ -335,7 +335,7 @@ Item {
                             const inputText = tagInputField.text
                             const words = inputText.trim().split(/\s+/);
                             if (words.length > 0) {
-                                Booru.triggerTagSearch(words[words.length - 1]);
+                                BooruWallpapers.triggerTagSearch(words[words.length - 1]);
                             }
                         }
                     }

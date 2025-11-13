@@ -75,7 +75,7 @@ Rectangle {
                     anchors.centerIn: parent
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: Appearance.m3colors.m3onSecondaryContainer
-                    text: Booru.providers[root.responseData.provider].name
+                    text: BooruWallpapers.providers[root.responseData.provider].name
                 }
             }
             Item { Layout.fillWidth: true }

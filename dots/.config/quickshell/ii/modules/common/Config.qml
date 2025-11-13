@@ -84,7 +84,7 @@ Singleton {
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
                 property int weeb: 1 // 0: No | 1: Open | 2: Closet
-                property int wallpaper: 1 // 0: No | 1: Yes
+                property int wallpaperBrowser: 1 // 0: No | 1: Yes
             }
 
             property JsonObject ai: JsonObject {
@@ -556,6 +556,13 @@ Singleton {
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
                 }
             }
+
+                property JsonObject unsplash: JsonObject {  
+                    property string apiKey: ""  
+                }    
         }
     }
+
+
+
 }

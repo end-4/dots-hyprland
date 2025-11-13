@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+a1a150fab00a93ea983aaca5df55304bc837f51b refs/heads/0.2
+fc704e6b5d445899a1565955268c91942a4f263f refs/heads/master
+49fe1ca43fbaf8770874dbada04ff6075bae4250 refs/heads/wip-ext-workspace
+cad9198241ff5f4306051ac7fc05c5d3d2a28983 refs/pull/1/head
+703a3789083d2f990c4e99cd25c97c2a4cccbd81 refs/tags/v0.1.0
+a5431dd02dc23d9ef1680e67777fed00fe5f7cda refs/tags/v0.2.0
+a1a150fab00a93ea983aaca5df55304bc837f51b refs/tags/v0.2.1
