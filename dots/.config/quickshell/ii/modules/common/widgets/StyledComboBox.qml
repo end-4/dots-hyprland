@@ -31,9 +31,14 @@ ComboBox {
     indicator: MaterialSymbol {
         x: root.width - width - 16
         y: root.height / 2 - height / 2
-        text: "arrow_drop_down"
+        text: "keyboard_arrow_down"
         iconSize: Appearance.font.pixelSize.larger
         color: Appearance.colors.colOnSecondaryContainer
+
+        rotation: root.popup.visible ? 180 : 0
+        Behavior on rotation {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
     }
 
     contentItem: Item {
