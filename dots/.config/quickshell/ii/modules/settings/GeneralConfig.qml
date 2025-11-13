@@ -155,12 +155,8 @@ ContentPage {
                     })]
 
                 currentIndex: {
-                    for (let i = 0; i < model.length; i++) {
-                        if (model[i].value === Config.options.language.ui) {
-                            return i;
-                        }
-                    }
-                    return 0;
+                    const index = model.findIndex(item => item.value === Config.options.language.ui);
+                    return index !== -1 ? index : 0;
                 }
 
                 onActivated: index => {
