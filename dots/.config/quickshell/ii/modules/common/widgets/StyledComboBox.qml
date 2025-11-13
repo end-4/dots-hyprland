@@ -156,9 +156,17 @@ ComboBox {
             }
         }
 
-        background: Rectangle {
-            radius: Appearance.rounding.normal
-            color: Appearance.colors.colSurfaceContainerHigh
+        background: Item {
+            StyledRectangularShadow {
+                target: popupBackground
+            }
+
+            Rectangle {
+                id: popupBackground
+                anchors.fill: parent
+                radius: Appearance.rounding.normal
+                color: Appearance.colors.colSurfaceContainerHigh
+            }
         }
 
         contentItem: StyledListView {
