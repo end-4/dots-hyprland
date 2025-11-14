@@ -113,6 +113,7 @@ OverlayBackground {
         const rangeEnd = Math.max(selectionStart, selectionEnd);
 
         const entries = parsedCopylistLines.map(line => {
+            // Don't show copy button if line is (partially) selected
             const caretIntersects = rangeEnd > line.start && rangeStart <= line.end;
             if (caretIntersects)
                 return null;
@@ -137,7 +138,7 @@ OverlayBackground {
     ColumnLayout {
         id: stickypadLayout
         anchors.fill: parent
-        spacing: 0
+        spacing: -16
 
         ScrollView {
             id: editorScrollView
@@ -147,7 +148,7 @@ OverlayBackground {
             ScrollBar.vertical.policy: ScrollBar.AsNeeded
             onWidthChanged: root.scheduleCopylistUpdate(true)
 
-            StyledTextArea {
+            StyledTextArea { // This has to be a direct child of ScrollView for proper scrolling
                 id: stickypadInput
                 anchors {
                     left: parent.left
