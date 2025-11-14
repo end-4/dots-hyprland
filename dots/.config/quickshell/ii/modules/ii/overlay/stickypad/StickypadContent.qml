@@ -18,6 +18,7 @@ OverlayBackground {
     property string lastParsedCopylistText: ""
     property var parsedCopylistLines: []
     property bool isClickthrough: false
+    property real maxCopyButtonSize: 20
 
     Component.onCompleted: {
         stickypadFile.reload();
@@ -161,7 +162,7 @@ OverlayBackground {
                 textFormat: TextEdit.PlainText
                 background: null
                 padding: 16
-                rightPadding: 44 + padding
+                rightPadding: root.maxCopyButtonSize + padding
 
                 onTextChanged: {
                     if (stickypadInput.activeFocus) {
@@ -189,7 +190,7 @@ OverlayBackground {
                     delegate: RippleButton {
                         id: copyButton
                         required property var modelData
-                        readonly property real lineHeight: Math.min(Math.max(modelData.height, Appearance.font.pixelSize.normal + 6), 40)
+                        readonly property real lineHeight: Math.min(Math.max(modelData.height, Appearance.font.pixelSize.normal + 6), root.maxCopyButtonSize)
                         readonly property real iconSizeLocal: Appearance.font.pixelSize.normal
                         readonly property real hitPadding: 6
                         property bool justCopied: false
@@ -198,7 +199,8 @@ OverlayBackground {
                         implicitWidth: lineHeight
                         buttonRadius: height / 2
                         y: modelData.y
-                        x: Math.max(stickypadInput.width - width - 16, 0)
+                        anchors.right: parent.right
+                        anchors.rightMargin: 16
                         z: 5
 
                         Timer {
