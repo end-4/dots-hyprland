@@ -8,7 +8,7 @@ function copy_file_s_t(){
   local t=$2
   if [ -f $t ];then
     echo -e "${STY_YELLOW}[$0]: \"$t\" already exists.${STY_RST}"
-    if $firstrun;then
+    if ${INSTALL_FIRSTRUN};then
       echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
       v mv $t $t.old
       v cp -f $s $t
@@ -35,11 +35,19 @@ function copy_dir_s_t(){
 #####################################################################################
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
-if test -f "${FIRSTRUN_FILE}"; then
-  firstrun=false
-else
-  firstrun=true
-fi
+
+case ${INSTALL_FIRSTRUN} in
+  # When specify --firstrun
+  true) sleep 0 ;;
+  # When not specify --firstrun
+  *)
+    if test -f "${FIRSTRUN_FILE}"; then
+      ${INSTALL_FIRSTRUN}=false
+    else
+      ${INSTALL_FIRSTRUN}=true
+    fi
+    ;;
+esac
 
 # `--delete' for rsync to make sure that
 # original dotfiles and new ones in the SAME DIRECTORY
