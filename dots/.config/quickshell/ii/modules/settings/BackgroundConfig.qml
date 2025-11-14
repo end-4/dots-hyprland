@@ -57,8 +57,18 @@ ContentPage {
         title: Translation.tr("Widget: Clock")
         id: settingsClock
 
-        readonly property bool digitalPresent: (!Config.options.background.widgets.clock.showOnlyWhenLocked && Config.options.background.widgets.clock.style === "digital") || Config.options.background.widgets.clock.styleLocked === "digital"
-        readonly property bool cookiePresent: (!Config.options.background.widgets.clock.showOnlyWhenLocked && Config.options.background.widgets.clock.style === "cookie") || Config.options.background.widgets.clock.styleLocked === "cookie"
+        function stylePresent(styleName) {
+            if (!Config.options.background.widgets.clock.showOnlyWhenLocked && Config.options.background.widgets.clock.style === styleName) {
+                return true;
+            }
+            if (Config.options.background.widgets.clock.styleLocked === styleName) {
+                return true;
+            }
+            return false;
+        }
+
+        readonly property bool digitalPresent: stylePresent("digital")
+        readonly property bool cookiePresent: stylePresent("cookie")
 
         ConfigRow {
             Layout.fillWidth: true
