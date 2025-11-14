@@ -33,7 +33,7 @@ Item {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: !Config.options.bar.tooltips.clickToShow
         acceptedButtons: Qt.NoButton
 
         Bar.ClockWidgetPopup {
