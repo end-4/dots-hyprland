@@ -286,7 +286,9 @@ Rectangle {
                 }
             }
             Repeater {
-                model: root.messageBlocks
+                model: ScriptModel {
+                    values: root.messageBlocks
+                }
                 delegate: DelegateChooser {
                     id: messageDelegate
                     role: "type"
