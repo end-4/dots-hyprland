@@ -36,7 +36,7 @@ function copy_dir_s_t(){
 # In case some dirs does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME/icons
 
-case ${INSTALL_FIRSTRUN} in
+case "${INSTALL_FIRSTRUN}" in
   # When specify --firstrun
   true) sleep 0 ;;
   # When not specify --firstrun
@@ -54,7 +54,7 @@ esac
 # (eg. in ~/.config/hypr) won't be mixed together
 
 # MISC (For dots/.config/* but not quickshell, not fish, not Hyprland, not fontconfig)
-case $SKIP_MISCCONF in
+case "${SKIP_MISCCONF}" in
   true) sleep 0;;
   *)
     for i in $(find dots/.config/ -mindepth 1 -maxdepth 1 ! -name 'quickshell' ! -name 'fish' ! -name 'hypr' ! -name 'fontconfig' -exec basename {} \;); do
@@ -68,7 +68,7 @@ case $SKIP_MISCCONF in
     ;;
 esac
 
-case $SKIP_QUICKSHELL in
+case "${SKIP_QUICKSHELL}" in
   true) sleep 0;;
   *)
      # Should overwriting the whole directory not only ~/.config/quickshell/ii/ cuz https://github.com/end-4/dots-hyprland/issues/2294#issuecomment-3448671064
@@ -76,14 +76,14 @@ case $SKIP_QUICKSHELL in
     ;;
 esac
 
-case $SKIP_FISH in
+case "${SKIP_FISH}" in
   true) sleep 0;;
   *)
     warning_rsync_delete; v rsync -av --delete dots/.config/fish/ "$XDG_CONFIG_HOME"/fish/
     ;;
 esac
 
-case $SKIP_FONTCONFIG in
+case "${SKIP_FONTCONFIG}" in
   true) sleep 0;;
   *)
     case "$FONTSET_DIR_NAME" in
@@ -93,7 +93,7 @@ case $SKIP_FONTCONFIG in
 esac
 
 # For Hyprland
-case $SKIP_HYPRLAND in
+case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
     if ! [ -d "$XDG_CONFIG_HOME"/hypr ]; then v mkdir -p "$XDG_CONFIG_HOME"/hypr ; fi
