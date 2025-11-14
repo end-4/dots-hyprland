@@ -34,7 +34,6 @@ RippleButton {
         StyledSwitch {
             id: switchWidget
             down: root.down
-            scale: 0.6
             Layout.fillWidth: false
             checked: root.checked
             onClicked: root.clicked()
