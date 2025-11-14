@@ -191,6 +191,7 @@ OverlayBackground {
                         readonly property real lineHeight: Math.min(Math.max(modelData.height, Appearance.font.pixelSize.normal + 6), 40)
                         readonly property real iconSizeLocal: Appearance.font.pixelSize.normal
                         readonly property real hitPadding: 6
+                        property bool justCopied: false
 
                         implicitHeight: lineHeight
                         implicitWidth: lineHeight
@@ -199,8 +200,18 @@ OverlayBackground {
                         x: Math.max(stickypadInput.width - width - 16, 0)
                         z: 5
 
+                        Timer {
+                            id: resetState
+                            interval: 700
+                            onTriggered: {
+                                copyButton.justCopied = false;
+                            }
+                        }
+
                         onClicked: {
                             Quickshell.clipboardText = copyButton.modelData.content;
+                            justCopied = true;
+                            resetState.start();
                         }
 
                         contentItem: Item {
@@ -208,7 +219,7 @@ OverlayBackground {
                             MaterialSymbol {
                                 id: iconItem
                                 anchors.centerIn: parent
-                                text: "content_copy"
+                                text: copyButton.justCopied ? "check" : "content_copy"
                                 iconSize: copyButton.iconSizeLocal
                                 color: Appearance.colors.colOnLayer1
                             }
