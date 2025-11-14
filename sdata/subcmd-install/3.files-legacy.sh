@@ -42,9 +42,9 @@ case "${INSTALL_FIRSTRUN}" in
   # When not specify --firstrun
   *)
     if test -f "${FIRSTRUN_FILE}"; then
-      ${INSTALL_FIRSTRUN}=false
+      INSTALL_FIRSTRUN=false
     else
-      ${INSTALL_FIRSTRUN}=true
+      INSTALL_FIRSTRUN=true
     fi
     ;;
 esac
