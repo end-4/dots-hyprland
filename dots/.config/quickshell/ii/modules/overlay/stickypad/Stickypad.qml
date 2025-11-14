@@ -10,8 +10,7 @@ StyledOverlayWidget {
     showCenterButton: true
 
     contentItem: StickypadContent {
-        implicitWidth: 440
-        implicitHeight: 380
+        anchors.fill: parent
         isClickthrough: root.clickthrough
     }
 }
