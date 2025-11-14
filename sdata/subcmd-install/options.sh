@@ -8,6 +8,7 @@ Idempotent installation for dotfiles.
 Options for install:
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
+  -F, --fisrtrun            Act like it is the first run
   -c, --clean               Clean the build cache first
       --skip-allgreeting    Skip the whole process greeting
       --skip-alldeps        Skip the whole process installing dependency
@@ -43,8 +44,8 @@ cleancache(){
 
 # `man getopt` to see more
 para=$(getopt \
-  -o hfk:cs \
-  -l help,force,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-fontconfig,skip-miscconf,core,exp-files,via-nix \
+  -o hfFk:cs \
+  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-fontconfig,skip-miscconf,core,exp-files,via-nix \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -55,7 +56,7 @@ while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
     -c|--clean) cleancache;shift;;
-    --) break ;;
+    --) shift;break ;;
     *) shift ;;
   esac
 done
@@ -69,6 +70,7 @@ while true ; do
     -c|--clean) shift;;
     ## Ones without parameter
     -f|--force) ask=false;shift;;
+    -F|--firstrun) INSTALL_FIRSTRUN=true;shift;;
     --skip-allgreeting) SKIP_ALLGREETING=true;shift;;
     --skip-alldeps) SKIP_ALLDEPS=true;shift;;
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
@@ -93,7 +95,7 @@ while true ; do
     fi;;
 
     ## Ending
-    --) break ;;
+    --) shift;break ;;
     *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done

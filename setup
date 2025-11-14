@@ -5,6 +5,7 @@ REPO_ROOT="$(pwd)"
 source ./sdata/lib/environment-variables.sh
 source ./sdata/lib/functions.sh
 source ./sdata/lib/package-installers.sh
+source ./sdata/lib/dist-determine.sh
 
 prevent_sudo_or_root
 set -e
@@ -23,15 +24,17 @@ Syntax:
 
 Subcommands:
   install        (Re)Install/Update illogical-impulse.
-                 Note: To update to the latest, manually run \"git pull\" first.
+                 Note: To update to the latest, manually run \"git stash && git pull\" first.
   install-deps   Run the install step \"1. Install dependencies\"
   install-setups Run the install step \"2. Setup for permissions/services etc\"
   install-files  Run the install step \"3. Copying config files\"
+  resetfirstrun  Reset firstrun state.
 
   exp-uninstall  (Experimental) Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
+  virtmon        (For dev only) Create virtual monitors for testing multi-monitors.
   checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
   help           Show this help message.
 
@@ -45,7 +48,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old|checkdeps)
+  install|exp-uninstall|exp-update|exp-update-old|resetfirstrun|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;
@@ -63,30 +66,46 @@ if [[ -f "${SUBCMD_DIR}/options.sh" ]];
 fi
 case ${SUBCMD_NAME} in
   install)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
     fi
     ;;
   install-deps)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-selector.sh
+      source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     ;;
   install-setups)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups-selector.sh
+      source ${SUBCMD_DIR}/2.setups.sh
     fi
     ;;
   install-files)
+    for function in ${print_os_group_id_functions[@]}; do
+      $function
+    done
+    pause
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
     fi

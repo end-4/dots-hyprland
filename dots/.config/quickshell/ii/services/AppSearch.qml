@@ -94,7 +94,7 @@ Singleton {
         if (!str || str.length == 0) return "image-missing";
 
         // Quickshell's desktop entry lookup
-        const entry = DesktopEntries.heuristicLookup(str);
+        const entry = DesktopEntries.byId(str);
         if (entry) return entry.icon;
 
         // Normal substitutions
@@ -149,8 +149,11 @@ Singleton {
             if (iconExists(guess)) return guess;
         }
 
+        // Quickshell's desktop entry lookup
+        const heuristicEntry = DesktopEntries.heuristicLookup(str);
+        if (heuristicEntry) return heuristicEntry.icon;
 
         // Give up
-        return str;
+        return "application-x-executable";
     }
 }
