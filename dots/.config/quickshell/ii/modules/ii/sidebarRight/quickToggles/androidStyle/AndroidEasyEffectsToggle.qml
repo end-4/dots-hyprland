@@ -9,6 +9,7 @@ AndroidQuickToggleButton {
     
     name: Translation.tr("EasyEffects")
 
+    available: EasyEffects.available
     toggled: EasyEffects.active
     buttonIcon: "graphic_eq"
 
