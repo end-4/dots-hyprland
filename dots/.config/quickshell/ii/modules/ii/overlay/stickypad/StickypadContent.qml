@@ -7,8 +7,9 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.ii.overlay
 
-Rectangle {
+OverlayBackground {
     id: root
     
     readonly property real panelPadding: 20
@@ -18,9 +19,6 @@ Rectangle {
     property string lastParsedCopylistText: ""
     property var parsedCopylistLines: []
     property bool isClickthrough: false
-    
-    color: Appearance.colors.colLayer0
-    radius: Appearance.rounding.windowRounding - 6
     
     Component.onCompleted: {
         stickypadFile.reload()
@@ -279,7 +277,7 @@ Rectangle {
                     rightMargin: 8
                 }
                 text: saveDebounce.running ? "Saving..." : "Saved"
-                color: saveDebounce.running ? Appearance.colors.colAccent : Appearance.colors.colSubtext
+                color: Appearance.colors.colSubtext
                 font.pixelSize: Appearance.font.pixelSize.small
                 font.weight: Font.Medium
             }
