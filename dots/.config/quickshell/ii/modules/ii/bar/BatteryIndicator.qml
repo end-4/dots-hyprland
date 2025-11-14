@@ -16,7 +16,7 @@ MouseArea {
     implicitWidth: batteryProgress.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
 
-    hoverEnabled: true
+    hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
     ClippedProgressBar {
         id: batteryProgress
