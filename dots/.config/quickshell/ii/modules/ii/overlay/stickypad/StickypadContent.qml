@@ -14,14 +14,14 @@ OverlayBackground {
 
     property alias stickypadContents: stickypadInput.text
     property bool pendingReload: false
-    property var copylistEntries: []
+    property var copyListEntries: []
     property string lastParsedCopylistText: ""
     property var parsedCopylistLines: []
     property bool isClickthrough: false
 
     Component.onCompleted: {
         stickypadFile.reload();
-        updateCopylistEntries();
+        updateCopyListEntries();
     }
 
     function saveStickypad() {
@@ -54,20 +54,20 @@ OverlayBackground {
             return;
         if (immediate) {
             copyListDebounce?.stop();
-            updateCopylistEntries();
+            updateCopyListEntries();
         } else {
             copyListDebounce.restart();
         }
     }
 
-    function updateCopylistEntries() {
+    function updateCopyListEntries() {
         if (!stickypadInput)
             return;
         const textValue = root.stickypadContents;
         if (!textValue || textValue.length === 0) {
             lastParsedCopylistText = "";
             parsedCopylistLines = [];
-            copylistEntries = [];
+            root.copyListEntries = [];
             return;
         }
 
@@ -94,7 +94,7 @@ OverlayBackground {
             lastParsedCopylistText = textValue;
             parsedCopylistLines = parsed;
             if (parsed.length === 0) {
-                copylistEntries = [];
+                root.copyListEntries = [];
                 return;
             }
         }
@@ -131,7 +131,7 @@ OverlayBackground {
             };
         }).filter(entry => entry !== null);
 
-        copylistEntries = entries;
+        root.copyListEntries = entries;
     }
 
     ColumnLayout {
@@ -181,11 +181,13 @@ OverlayBackground {
 
             Item {
                 anchors.fill: stickypadInput
-                visible: copylistEntries.length > 0
+                visible: root.copyListEntries.length > 0
                 clip: true
 
                 Repeater {
-                    model: copylistEntries
+                    model: ScriptModel {
+                        values: root.copyListEntries
+                    }
                     delegate: Item {
                         readonly property real lineHeight: Math.max(modelData.height, Appearance.font.pixelSize.normal + 6)
                         readonly property real iconSizeLocal: Appearance.font.pixelSize.normal
@@ -261,12 +263,9 @@ OverlayBackground {
         StyledText {
             id: statusLabel
             Layout.fillWidth: true
-            // Layout.preferredHeight: 28
             horizontalAlignment: Text.AlignRight
-            text: saveDebounce.running ? Translation.tr("Saving...") : Translation.tr("Saved")
+            text: saveDebounce.running ? Translation.tr("Saving...") : Translation.tr("Saved    ")
             color: Appearance.colors.colSubtext
-            font.pixelSize: Appearance.font.pixelSize.small
-            font.weight: Font.Medium
         }
     }
 
@@ -299,7 +298,7 @@ OverlayBackground {
                 pendingReload = false;
                 Qt.callLater(root.focusStickypadAtEnd);
             }
-            Qt.callLater(root.updateCopylistEntries);
+            Qt.callLater(root.updateCopyListEntries);
         }
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
@@ -309,7 +308,7 @@ OverlayBackground {
                     pendingReload = false;
                     Qt.callLater(root.focusStickypadAtEnd);
                 }
-                Qt.callLater(root.updateCopylistEntries);
+                Qt.callLater(root.updateCopyListEntries);
             } else {
                 console.log("[Stickypad] Error loading file: " + error);
             }
