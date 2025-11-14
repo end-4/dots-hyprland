@@ -44,6 +44,7 @@ AbstractBackgroundWidget {
             id: cookieClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "cookie" && (root.shouldShow)
+            fade: false
             sourceComponent: Column {
                 spacing: 10
                 CookieClock {
@@ -61,6 +62,7 @@ AbstractBackgroundWidget {
             id: digitalClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "digital" && (root.shouldShow)
+            fade: false
             sourceComponent: ColumnLayout {
                 id: clockColumn
                 spacing: 6
