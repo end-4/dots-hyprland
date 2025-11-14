@@ -17,11 +17,6 @@ makedepends=("git" "cmake")
 source=("git+${url}.git")
 sha256sums=("SKIP")
 
-pkgver() {
-  cd $_pkgname
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
-
 prepare() {
   cd $_pkgname
   sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
