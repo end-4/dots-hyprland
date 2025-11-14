@@ -12,7 +12,7 @@ import qs.modules.ii.overlay
 OverlayBackground {
     id: root
 
-    property string stickypadContents: ""
+    property alias stickypadContents: stickypadInput.text
     property bool pendingReload: false
     property var copylistEntries: []
     property string lastParsedCopylistText: ""
@@ -27,22 +27,21 @@ OverlayBackground {
     function saveStickypad() {
         if (!stickypadInput)
             return;
-        stickypadContents = stickypadInput.text;
-        stickypadFile.setText(stickypadContents);
+        stickypadFile.setText(root.stickypadContents);
     }
 
     function focusStickypadAtEnd() {
         if (!stickypadInput)
             return;
         stickypadInput.forceActiveFocus();
-        const endPos = stickypadInput.text.length;
+        const endPos = root.stickypadContents.length;
         applySelection(endPos, endPos);
     }
 
     function applySelection(cursorPos, anchorPos) {
         if (!stickypadInput)
             return;
-        const textLength = stickypadInput.text.length;
+        const textLength = root.stickypadContents.length;
         const cursor = Math.max(0, Math.min(cursorPos, textLength));
         const anchor = Math.max(0, Math.min(anchorPos, textLength));
         stickypadInput.select(anchor, cursor);
@@ -64,7 +63,7 @@ OverlayBackground {
     function updateCopylistEntries() {
         if (!stickypadInput)
             return;
-        const textValue = stickypadInput.text;
+        const textValue = root.stickypadContents;
         if (!textValue || textValue.length === 0) {
             lastParsedCopylistText = "";
             parsedCopylistLines = [];
@@ -175,9 +174,7 @@ OverlayBackground {
                     }
                     root.scheduleCopylistUpdate(true);
                 }
-                onCursorPositionChanged: root.scheduleCopylistUpdate()
-                onSelectionStartChanged: root.scheduleCopylistUpdate()
-                onSelectionEndChanged: root.scheduleCopylistUpdate()
+                
                 onHeightChanged: root.scheduleCopylistUpdate(true)
                 onContentHeightChanged: root.scheduleCopylistUpdate(true)
             }
@@ -291,28 +288,26 @@ OverlayBackground {
         id: stickypadFile
         path: Qt.resolvedUrl(Directories.stickypadPath)
         onLoaded: {
-            stickypadContents = stickypadFile.text();
-            if (stickypadInput && stickypadInput.text !== stickypadContents) {
+            root.stickypadContents = stickypadFile.text();
+            if (root.stickypadContents !== root.stickypadContents) {
                 const previousCursor = stickypadInput.cursorPosition;
                 const previousAnchor = stickypadInput.selectionStart;
-                stickypadInput.text = stickypadContents;
+                root.stickypadContents = root.stickypadContents;
                 applySelection(previousCursor, previousAnchor);
             }
             if (pendingReload) {
                 pendingReload = false;
-                Qt.callLater(focusStickypadAtEnd);
+                Qt.callLater(root.focusStickypadAtEnd);
             }
             Qt.callLater(root.updateCopylistEntries);
         }
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
-                stickypadContents = "";
-                stickypadFile.setText(stickypadContents);
-                if (stickypadInput)
-                    stickypadInput.text = stickypadContents;
+                root.stickypadContents = "";
+                stickypadFile.setText(root.stickypadContents);
                 if (pendingReload) {
                     pendingReload = false;
-                    Qt.callLater(focusStickypadAtEnd);
+                    Qt.callLater(root.focusStickypadAtEnd);
                 }
                 Qt.callLater(root.updateCopylistEntries);
             } else {
