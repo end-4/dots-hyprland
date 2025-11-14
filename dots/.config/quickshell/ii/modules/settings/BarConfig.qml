@@ -339,7 +339,7 @@ ContentPage {
         icon: "tooltip"
         title: Translation.tr("Tooltips")
         ConfigSwitch {
-            buttonIcon: "web_traffic"
+            buttonIcon: "ads_click"
             text: Translation.tr("Click to show")
             checked: Config.options.bar.tooltips.clickToShow
             onCheckedChanged: {
