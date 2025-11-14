@@ -7,7 +7,6 @@ import qs.modules.overlay
 StyledOverlayWidget {
     id: root
     title: "Stickypad"
-    minWidth: 440
     showCenterButton: true
 
     contentItem: StickypadContent {
