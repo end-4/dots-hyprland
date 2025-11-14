@@ -10,7 +10,7 @@ StyledOverlayWidget {
     title: Translation.tr("Notes")
     showCenterButton: true
 
-    contentItem: StickypadContent {
+    contentItem: NotesContent {
         radius: root.contentRadius
         isClickthrough: root.clickthrough
     }

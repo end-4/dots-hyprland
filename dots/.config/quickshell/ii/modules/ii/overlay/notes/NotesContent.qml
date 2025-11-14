@@ -12,7 +12,7 @@ import qs.modules.ii.overlay
 OverlayBackground {
     id: root
 
-    property alias stickypadContents: stickypadInput.text
+    property alias content: textInput.text
     property bool pendingReload: false
     property var copyListEntries: []
     property string lastParsedCopylistText: ""
@@ -21,37 +21,37 @@ OverlayBackground {
     property real maxCopyButtonSize: 20
 
     Component.onCompleted: {
-        stickypadFile.reload();
+        noteFile.reload();
         updateCopyListEntries();
     }
 
-    function saveStickypad() {
-        if (!stickypadInput)
+    function saveContent() {
+        if (!textInput)
             return;
-        stickypadFile.setText(root.stickypadContents);
+        noteFile.setText(root.content);
     }
 
-    function focusStickypadAtEnd() {
-        if (!stickypadInput)
+    function focusAtEnd() {
+        if (!textInput)
             return;
-        stickypadInput.forceActiveFocus();
-        const endPos = root.stickypadContents.length;
+        textInput.forceActiveFocus();
+        const endPos = root.content.length;
         applySelection(endPos, endPos);
     }
 
     function applySelection(cursorPos, anchorPos) {
-        if (!stickypadInput)
+        if (!textInput)
             return;
-        const textLength = root.stickypadContents.length;
+        const textLength = root.content.length;
         const cursor = Math.max(0, Math.min(cursorPos, textLength));
         const anchor = Math.max(0, Math.min(anchorPos, textLength));
-        stickypadInput.select(anchor, cursor);
+        textInput.select(anchor, cursor);
         if (cursor === anchor)
-            stickypadInput.deselect();
+            textInput.deselect();
     }
 
     function scheduleCopylistUpdate(immediate = false) {
-        if (!stickypadInput)
+        if (!textInput)
             return;
         if (immediate) {
             copyListDebounce?.stop();
@@ -62,9 +62,9 @@ OverlayBackground {
     }
 
     function updateCopyListEntries() {
-        if (!stickypadInput)
+        if (!textInput)
             return;
-        const textValue = root.stickypadContents;
+        const textValue = root.content;
         if (!textValue || textValue.length === 0) {
             lastParsedCopylistText = "";
             parsedCopylistLines = [];
@@ -104,12 +104,12 @@ OverlayBackground {
     }
 
     function updateCopylistPositions() {
-        if (!stickypadInput || parsedCopylistLines.length === 0)
+        if (!textInput || parsedCopylistLines.length === 0)
             return;
-        const rawSelectionStart = stickypadInput.selectionStart;
-        const rawSelectionEnd = stickypadInput.selectionEnd;
-        const selectionStart = rawSelectionStart === -1 ? stickypadInput.cursorPosition : rawSelectionStart;
-        const selectionEnd = rawSelectionEnd === -1 ? stickypadInput.cursorPosition : rawSelectionEnd;
+        const rawSelectionStart = textInput.selectionStart;
+        const rawSelectionEnd = textInput.selectionEnd;
+        const selectionStart = rawSelectionStart === -1 ? textInput.cursorPosition : rawSelectionStart;
+        const selectionEnd = rawSelectionEnd === -1 ? textInput.cursorPosition : rawSelectionEnd;
         const rangeStart = Math.min(selectionStart, selectionEnd);
         const rangeEnd = Math.max(selectionStart, selectionEnd);
 
@@ -118,14 +118,14 @@ OverlayBackground {
             const caretIntersects = rangeEnd > line.start && rangeStart <= line.end;
             if (caretIntersects)
                 return null;
-            const startRect = stickypadInput.positionToRectangle(line.start);
-            let endRect = stickypadInput.positionToRectangle(line.end);
+            const startRect = textInput.positionToRectangle(line.start);
+            let endRect = textInput.positionToRectangle(line.end);
             if (!isFinite(startRect.y))
                 return null;
             if (!isFinite(endRect.y))
                 endRect = startRect;
             const lineBottom = endRect.y + endRect.height;
-            const rectHeight = Math.max(lineBottom - startRect.y, stickypadInput.font.pixelSize + 8);
+            const rectHeight = Math.max(lineBottom - startRect.y, textInput.font.pixelSize + 8);
             return {
                 content: line.content,
                 y: startRect.y,
@@ -137,7 +137,7 @@ OverlayBackground {
     }
 
     ColumnLayout {
-        id: stickypadLayout
+        id: contentItem
         anchors.fill: parent
         spacing: -16
 
@@ -150,7 +150,7 @@ OverlayBackground {
             onWidthChanged: root.scheduleCopylistUpdate(true)
 
             StyledTextArea { // This has to be a direct child of ScrollView for proper scrolling
-                id: stickypadInput
+                id: textInput
                 anchors {
                     left: parent.left
                     right: parent.right
@@ -165,7 +165,7 @@ OverlayBackground {
                 rightPadding: root.maxCopyButtonSize + padding
 
                 onTextChanged: {
-                    if (stickypadInput.activeFocus) {
+                    if (textInput.activeFocus) {
                         saveDebounce.restart();
                     }
                     root.scheduleCopylistUpdate(true);
@@ -179,7 +179,7 @@ OverlayBackground {
             }
 
             Item {
-                anchors.fill: stickypadInput
+                anchors.fill: textInput
                 visible: root.copyListEntries.length > 0
                 clip: true
 
@@ -246,7 +246,7 @@ OverlayBackground {
         id: saveDebounce
         interval: 500
         repeat: false
-        onTriggered: saveStickypad()
+        onTriggered: saveContent()
     }
 
     Timer {
@@ -257,33 +257,33 @@ OverlayBackground {
     }
 
     FileView {
-        id: stickypadFile
-        path: Qt.resolvedUrl(Directories.stickypadPath)
+        id: noteFile
+        path: Qt.resolvedUrl(Directories.notesPath)
         onLoaded: {
-            root.stickypadContents = stickypadFile.text();
-            if (root.stickypadContents !== root.stickypadContents) {
-                const previousCursor = stickypadInput.cursorPosition;
-                const previousAnchor = stickypadInput.selectionStart;
-                root.stickypadContents = root.stickypadContents;
+            root.content = noteFile.text();
+            if (root.content !== root.content) {
+                const previousCursor = textInput.cursorPosition;
+                const previousAnchor = textInput.selectionStart;
+                root.content = root.content;
                 applySelection(previousCursor, previousAnchor);
             }
             if (pendingReload) {
                 pendingReload = false;
-                Qt.callLater(root.focusStickypadAtEnd);
+                Qt.callLater(root.focusAtEnd);
             }
             Qt.callLater(root.updateCopyListEntries);
         }
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
-                root.stickypadContents = "";
-                stickypadFile.setText(root.stickypadContents);
+                root.content = "";
+                noteFile.setText(root.content);
                 if (pendingReload) {
                     pendingReload = false;
-                    Qt.callLater(root.focusStickypadAtEnd);
+                    Qt.callLater(root.focusAtEnd);
                 }
                 Qt.callLater(root.updateCopyListEntries);
             } else {
-                console.log("[Stickypad] Error loading file: " + error);
+                console.log("[Overlay Notes] Error loading file: " + error);
             }
         }
     }
