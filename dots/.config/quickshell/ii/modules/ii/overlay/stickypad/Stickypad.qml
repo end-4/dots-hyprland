@@ -1,16 +1,17 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import qs.services
 import qs.modules.common
 import qs.modules.ii.overlay
 
 StyledOverlayWidget {
     id: root
-    title: "Stickypad"
+    title: Translation.tr("Notes")
     showCenterButton: true
 
     contentItem: StickypadContent {
-        anchors.fill: parent
+        radius: root.contentRadius
         isClickthrough: root.clickthrough
     }
 }

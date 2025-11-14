@@ -11,7 +11,7 @@ Singleton {
         { identifier: "floatingImage", materialSymbol: "imagesmode" },
         { identifier: "recorder", materialSymbol: "screen_record" },
         { identifier: "resources", materialSymbol: "browse_activity" },
-        { identifier: "stickypad", materialSymbol: "note_stack" },
+        { identifier: "notes", materialSymbol: "note_stack" },
         { identifier: "volumeMixer", materialSymbol: "volume_up" },
     ]
     

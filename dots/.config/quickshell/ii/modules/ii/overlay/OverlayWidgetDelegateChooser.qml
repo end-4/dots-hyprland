@@ -23,6 +23,6 @@ DelegateChooser {
     DelegateChoice { roleValue: "fpsLimiter"; FpsLimiter {} }
     DelegateChoice { roleValue: "recorder"; Recorder {} }
     DelegateChoice { roleValue: "resources"; Resources {} }
-    DelegateChoice { roleValue: "stickypad"; Stickypad {} }
+    DelegateChoice { roleValue: "notes"; Stickypad {} }
     DelegateChoice { roleValue: "volumeMixer"; VolumeMixer {} }
 }

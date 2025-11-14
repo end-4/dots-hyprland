@@ -131,13 +131,13 @@ Singleton {
                     property real height: 600
                     property int tabIndex: 0
                 }
-                property JsonObject stickypad: JsonObject {
-                    property bool pinned: true
-                    property bool clickthrough: false
-                    property real x: 100
-                    property real y: 100
-                    property real width: 350
-                    property real height: 600
+                property JsonObject notes: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: true
+                    property real x: 1400
+                    property real y: 42
+                    property real width: 460
+                    property real height: 330
                 }
             }
 
