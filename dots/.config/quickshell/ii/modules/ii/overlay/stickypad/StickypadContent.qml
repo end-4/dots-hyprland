@@ -136,11 +136,8 @@ OverlayBackground {
 
     ColumnLayout {
         id: stickypadLayout
-        anchors {
-            fill: parent
-            margins: 16
-        }
-        spacing: 10
+        anchors.fill: parent
+        spacing: 0
 
         ScrollView {
             id: editorScrollView
@@ -162,11 +159,8 @@ OverlayBackground {
                 persistentSelection: true
                 textFormat: TextEdit.PlainText
                 background: null
-                rightPadding: 44
-                // Disable text area when clickthrough enabled - START
-                enabled: GlobalStates.overlayOpen || !root.isClickthrough
-                activeFocusOnTab: GlobalStates.overlayOpen || !root.isClickthrough
-                // Disable text area when clickthrough enabled - END
+                padding: 16
+                rightPadding: 44 + padding
 
                 onTextChanged: {
                     if (stickypadInput.activeFocus) {
@@ -263,6 +257,7 @@ OverlayBackground {
         StyledText {
             id: statusLabel
             Layout.fillWidth: true
+            Layout.margins: 16
             horizontalAlignment: Text.AlignRight
             text: saveDebounce.running ? Translation.tr("Saving...") : Translation.tr("Saved    ")
             color: Appearance.colors.colSubtext
