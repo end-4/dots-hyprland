@@ -53,7 +53,7 @@ OverlayBackground {
         if (!stickypadInput)
             return;
         if (immediate) {
-            copyListDebounce.stop();
+            copyListDebounce?.stop();
             updateCopylistEntries();
         } else {
             copyListDebounce.restart();
