@@ -18,7 +18,7 @@ Item {
 
         // console.log('===')
         // // console.log(JSON.stringify(children))
-        const unbinds = root.filterUnbinds ? parseUnbinds(userKeybinds) : []
+        const unbinds = Config.options.cheatsheet.filterUnbinds ? parseUnbinds(userKeybinds) : []
         //  console.log('===')
         // console.log(JSON.stringify(unbinds))
         // console.log('===')   
@@ -38,7 +38,6 @@ Item {
     property real titleSpacing: 7
     property real padding: 4
     property var filter: ''
-    property var filterUnbinds: false
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
@@ -96,6 +95,7 @@ Item {
         "Return": "Enter",
         // "Shift": "",
       },
+      
       !!Config.options.cheatsheet.superKey ? {
           "Super": Config.options.cheatsheet.superKey,
       }: {},
@@ -136,7 +136,7 @@ Item {
                                     // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
                                     // console.log(mods.join(' '), keybind.key, keybind.comment)
                                     // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
-                                    return !root.filterUnbinds 
+                                    return !Config.options.cheatsheet.filterUnbinds 
                                 } 
                             }
 
@@ -176,7 +176,7 @@ Item {
     function parseUnbinds(cheatsheet, name) {
         const unbinds = []
         // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
-        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
+        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are not loaded yet
         cheatsheet.forEach((child) => {
             child.children.forEach((children) => {
                 const {
@@ -215,9 +215,9 @@ Item {
 
         IconToolbarButton {
             implicitWidth: height
-            text: root.filterUnbinds ? "filter_alt" : "filter_alt_off"
+            text: Config.options.cheatsheet.filterUnbinds ? "filter_alt" : "filter_alt_off"
             onClicked: {
-                root.filterUnbinds = !root.filterUnbinds
+                Config.options.cheatsheet.filterUnbinds = !Config.options.cheatsheet.filterUnbinds
             }
             StyledToolTip {
                 text: Translation.tr("Toggle filter on system shortcuts unbind by the user")

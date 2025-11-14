@@ -164,7 +164,7 @@ Scope { // Scope
                             }
                         }
 
-                        CheatsheetKeybinds { id: cheatsheetKeybinds }
+                        CheatsheetKeybinds {}
                         CheatsheetPeriodicTable {}
                     }
                 }
