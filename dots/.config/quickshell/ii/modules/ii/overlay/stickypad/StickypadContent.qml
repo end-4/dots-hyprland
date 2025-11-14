@@ -171,6 +171,9 @@ OverlayBackground {
                 
                 onHeightChanged: root.scheduleCopylistUpdate(true)
                 onContentHeightChanged: root.scheduleCopylistUpdate(true)
+                onCursorPositionChanged: root.scheduleCopylistUpdate()
+                onSelectionStartChanged: root.scheduleCopylistUpdate()
+                onSelectionEndChanged: root.scheduleCopylistUpdate()
             }
 
             Item {
@@ -182,72 +185,33 @@ OverlayBackground {
                     model: ScriptModel {
                         values: root.copyListEntries
                     }
-                    delegate: Item {
-                        readonly property real lineHeight: Math.max(modelData.height, Appearance.font.pixelSize.normal + 6)
+                    delegate: RippleButton {
+                        id: copyButton
+                        required property var modelData
+                        readonly property real lineHeight: Math.min(Math.max(modelData.height, Appearance.font.pixelSize.normal + 6), 40)
                         readonly property real iconSizeLocal: Appearance.font.pixelSize.normal
                         readonly property real hitPadding: 6
 
-                        width: iconSizeLocal + hitPadding * 2
-                        height: lineHeight
+                        implicitHeight: lineHeight
+                        implicitWidth: lineHeight
+                        buttonRadius: height / 2
                         y: modelData.y
-                        x: Math.max(stickypadInput.width - width - 8, 0)
+                        x: Math.max(stickypadInput.width - width - 16, 0)
                         z: 5
 
-                        Rectangle {
-                            id: feedbackFlash
-                            anchors.centerIn: iconItem
-                            width: iconSizeLocal + hitPadding
-                            height: width
-                            radius: width / 2
-                            color: Appearance.colors.colLayer2
-                            opacity: 0
-                            z: 999
+                        onClicked: {
+                            Quickshell.clipboardText = copyButton.modelData.content;
                         }
 
-                        MaterialSymbol {
-                            id: iconItem
+                        contentItem: Item {
                             anchors.centerIn: parent
-                            text: "content_copy"
-                            iconSize: iconSizeLocal
-                            color: Appearance.colors.colOnLayer1
-                            opacity: mouseArea.containsMouse ? 1 : 0.85
-                            scale: 1
-                            Behavior on scale {
-                                NumberAnimation {
-                                    duration: 120
-                                    easing.type: Easing.OutQuad
-                                }
+                            MaterialSymbol {
+                                id: iconItem
+                                anchors.centerIn: parent
+                                text: "content_copy"
+                                iconSize: copyButton.iconSizeLocal
+                                color: Appearance.colors.colOnLayer1
                             }
-                            Behavior on opacity {
-                                NumberAnimation {
-                                    duration: 120
-                                }
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseArea
-                            anchors.fill: parent
-                            anchors.margins: hitPadding
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onPressed: iconItem.scale = 0.85
-                            onReleased: iconItem.scale = 1
-                            onCanceled: iconItem.scale = 1
-                            onClicked: {
-                                feedbackFlash.opacity = 0.6;
-                                feedbackFade.restart();
-                                Quickshell.clipboardText = modelData.content;
-                            }
-                        }
-
-                        NumberAnimation {
-                            id: feedbackFade
-                            target: feedbackFlash
-                            property: "opacity"
-                            to: 0
-                            duration: 200
-                            easing.type: Easing.OutQuad
                         }
                     }
                 }
