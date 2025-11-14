@@ -12,6 +12,7 @@ import qs.modules.ii.overlay.fpsLimiter
 import qs.modules.ii.overlay.recorder
 import qs.modules.ii.overlay.resources
 import qs.modules.ii.overlay.floatingImage
+import qs.modules.ii.overlay.webView
 
 DelegateChooser {
     id: root
@@ -23,4 +24,5 @@ DelegateChooser {
     DelegateChoice { roleValue: "recorder"; Recorder {} }
     DelegateChoice { roleValue: "resources"; Resources {} }
     DelegateChoice { roleValue: "volumeMixer"; VolumeMixer {} }
+    DelegateChoice { roleValue: "webView"; WebView {} }
 }
