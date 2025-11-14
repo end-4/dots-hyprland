@@ -12,9 +12,6 @@ Item {
     implicitWidth: quoteBox.implicitWidth
     implicitHeight: quoteBox.implicitHeight
 
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: -24
-
     DropShadow {
         source: quoteBox 
         anchors.fill: quoteBox
@@ -29,14 +26,16 @@ Item {
     Rectangle {
         id: quoteBox
 
-        implicitWidth: quoteStyledText.width + quoteIcon.width + 16 // for spacing on both sides
-        implicitHeight: quoteStyledText.height + 8 
+        implicitWidth: quoteRow.implicitWidth + 8 * 2
+        implicitHeight: quoteRow.implicitHeight + 4 * 2
         radius: Appearance.rounding.small
         color: Appearance.colors.colSecondaryContainer
 
         Row {
+            id: quoteRow
             anchors.centerIn: parent
             spacing: 4
+            
             MaterialSymbol {
                 id: quoteIcon
                 anchors.top: parent.top
