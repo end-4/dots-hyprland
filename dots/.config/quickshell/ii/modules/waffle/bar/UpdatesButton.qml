@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import qs
 import qs.services
 import qs.modules.common
@@ -8,8 +9,12 @@ BarButton {
     id: root
 
     visible: Updates.available && Updates.updateAdvised
-
     padding: 4
+
+    onClicked: {
+        Quickshell.execDetached(["bash", "-c", Config.options.apps.update]);
+    }
+
     contentItem: Item {
         anchors.centerIn: parent
         implicitWidth: iconContent.implicitWidth
