@@ -87,6 +87,13 @@ AppButton {
         id: contextMenu
 
         model: [
+            ...((root.desktopEntry?.actions.length > 0) ? root.desktopEntry.actions.map(action =>({
+                iconName: action.icon,
+                text: action.name,
+                action: () => {
+                    action.execute()
+                }
+            })).concat({ type: "separator" }) : []),
             {
                 iconName: root.iconName,
                 text: root.desktopEntry ? root.desktopEntry.name : StringUtils.toTitleCase(appEntry.appId),

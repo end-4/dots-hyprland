@@ -14,6 +14,7 @@ Button {
     property color colBackground: ColorUtils.transparentize(Looks.colors.bg1)
 
     property alias monochromeIcon: buttonIcon.monochrome
+    property bool forceShowIcon: false
 
     property var altAction: () => {}
     property var middleClickAction: () => {}
@@ -71,12 +72,12 @@ Button {
             spacing: 12
             FluentIcon {
                 id: buttonIcon
+                visible: root.icon.name !== "" || root.forceShowIcon
                 monochrome: true
                 implicitSize: 16
                 Layout.leftMargin: 6
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignVCenter
-                visible: root.icon.name !== ""
                 icon: root.icon.name
             }
             WText {

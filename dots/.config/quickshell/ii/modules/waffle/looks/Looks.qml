@@ -20,6 +20,7 @@ Singleton {
     property real shadowTransparency: 0.6
     colors: QtObject {
         id: colors
+        property color ambientShadow: ColorUtils.transparentize("#000000", 0.4)
         property color bg0: root.dark ? "#1C1C1C" : "#EEEEEE"
         property color bg0Border: root.dark ? "#404040" : "#BEBEBE"
         property color bg1: root.dark ? "#2C2C2C" : "#F7F7F7"
@@ -34,6 +35,7 @@ Singleton {
         property color fg1: root.dark ? "#D1D1D1" : "#626262"
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
+        property color warning: "#FF9900"
         // property color accent: root.dark ? "#A5C6D8" : "#5377A3"
         property color accent: Appearance.m3colors.m3primary
         property color accentUnfocused: root.dark ? "#989898" : "#848484"

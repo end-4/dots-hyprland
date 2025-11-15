@@ -91,7 +91,7 @@ Loader {
                 fill: realContent
                 margins: -border.width
             }
-            border.color: ColorUtils.transparentize(Looks.colors.bg0Border, Looks.shadowTransparency)
+            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
             border.width: root.ambientShadowWidth
             color: "transparent"
             radius: realContent.radius + border.width

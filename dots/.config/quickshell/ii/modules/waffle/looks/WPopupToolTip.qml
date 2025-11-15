@@ -10,14 +10,14 @@ import qs.modules.waffle.looks
 PopupToolTip {
     id: root
 
-    property real padding: 2
-    verticalPadding: padding
-    horizontalPadding: padding
+    property real visualMargin: 11
+    verticalPadding: visualMargin
+    horizontalPadding: visualMargin
 
     contentItem: Item {
         anchors.centerIn: parent
-        implicitWidth: realContent.implicitWidth + root.verticalPadding * 2
-        implicitHeight: realContent.implicitHeight + root.horizontalPadding * 2
+        implicitWidth: realContent.implicitWidth + 2 * 2
+        implicitHeight: realContent.implicitHeight + 2 * 2
 
         Rectangle {
             id: ambientShadow
@@ -26,7 +26,7 @@ PopupToolTip {
                 fill: realContent
                 margins: -border.width
             }
-            border.color: ColorUtils.transparentize(Looks.colors.bg0Border, Looks.shadowTransparency)
+            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
             border.width: 1
             color: "transparent"
             radius: realContent.radius + border.width
