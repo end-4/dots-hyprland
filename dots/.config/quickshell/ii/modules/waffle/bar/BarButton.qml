@@ -8,8 +8,8 @@ import qs.modules.waffle.looks
 Button {
     id: root
 
-    signal altAction()
-    signal middleClickAction()
+    property var altAction: () => {}
+    property var middleClickAction: () => {}
 
     property color colBackground
     property color colBackgroundBorder

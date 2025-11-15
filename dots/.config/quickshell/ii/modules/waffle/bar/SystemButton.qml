@@ -90,6 +90,6 @@ BarButton {
     }
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && batteryHoverArea.containsMouse
-        text: Translation.tr("Battery: %1").arg(`${Math.round(Battery.percentage * 100) || 0}%`)
+        text: Translation.tr("Battery: %1%2").arg(`${Math.round(Battery.percentage * 100) || 0}%`).arg(Battery.isPluggedIn ? (" " + Translation.tr("(Plugged in)")) : "")
     }
 }

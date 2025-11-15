@@ -37,7 +37,7 @@ AppButton {
         }
     }
 
-    onMiddleClickAction: {
+    middleClickAction: () => {
         if (root.desktopEntry) {
             desktopEntry.execute()
         }
