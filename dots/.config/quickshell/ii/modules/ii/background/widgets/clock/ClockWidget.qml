@@ -16,7 +16,7 @@ AbstractBackgroundWidget {
     implicitHeight: contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
 
-    readonly property string clockStyle: Config.options.background.widgets.clock.style
+    readonly property string clockStyle: GlobalStates.screenLocked ? Config.options.background.widgets.clock.styleLocked : Config.options.background.widgets.clock.style
     readonly property bool forceCenter: (GlobalStates.screenLocked && Config.options.lock.centerClock)
     readonly property bool shouldShow: (!Config.options.background.widgets.clock.showOnlyWhenLocked || GlobalStates.screenLocked)
     property bool wallpaperSafetyTriggered: false
@@ -44,6 +44,7 @@ AbstractBackgroundWidget {
             id: cookieClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "cookie" && (root.shouldShow)
+            fade: false
             sourceComponent: Column {
                 spacing: 10
                 CookieClock {
@@ -61,6 +62,7 @@ AbstractBackgroundWidget {
             id: digitalClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "digital" && (root.shouldShow)
+            fade: false
             sourceComponent: ColumnLayout {
                 id: clockColumn
                 spacing: 6

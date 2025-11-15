@@ -15,6 +15,7 @@ GroupButton {
     required property string name
     required property var mainAction
     property string statusText: toggled ? Translation.tr("Active") : Translation.tr("Inactive")
+    property bool available: true
 
     required property real baseCellWidth
     required property real baseCellHeight
@@ -42,6 +43,7 @@ GroupButton {
 
     signal openMenu()
 
+    enabled: available || editMode
     padding: 6
     horizontalPadding: padding
     verticalPadding: padding
@@ -52,8 +54,8 @@ GroupButton {
     colBackgroundToggledActive: (altAction && expandedSize) ? Appearance.colors.colLayer2Active : Appearance.colors.colPrimaryActive
     buttonRadius: toggled ? Appearance.rounding.large : height / 2
     buttonRadiusPressed: Appearance.rounding.normal
-    property color colText: (toggled && !(altAction && expandedSize)) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer2
-    property color colIcon: expandedSize ? (root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
+    property color colText: (toggled && !(altAction && expandedSize) && enabled) ? Appearance.colors.colOnPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7)
+    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
 
     onClicked: {
         if (root.expandedSize && root.altAction) root.altAction();

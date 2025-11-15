@@ -158,7 +158,8 @@ Singleton {
                         property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
                         property real x: 100
                         property real y: 100
-                        property string style: "cookie" // Options: "cookie", "digital"
+                        property string style: "cookie"        // Options: "cookie", "digital"
+                        property string styleLocked: "cookie"  // Options: "cookie", "digital"
                         property JsonObject cookie: JsonObject {
                             property bool aiStyling: false
                             property int sides: 14
