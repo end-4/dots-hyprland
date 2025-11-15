@@ -17,6 +17,10 @@ MouseArea {
         previewPopup.show(appEntry, button);
     }
 
+    function showContextMenu(appEntry, button) {
+        // TODO
+    }
+
     // Apps row
     RowLayout {
         id: row
@@ -36,6 +40,10 @@ MouseArea {
                 onHoverPreviewRequested: {
                     root.showPreviewPopup(appEntry, this)
                 }
+
+                altAction: () => {
+                    root.showContextMenu(appEntry, this)
+                }
             }
         }
     }
@@ -46,4 +54,6 @@ MouseArea {
         tasksHovered: root.containsMouse
         anchor.window: root.QsWindow.window
     }
+
+
 }

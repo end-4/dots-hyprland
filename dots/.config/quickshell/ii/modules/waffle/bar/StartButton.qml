@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import qs
@@ -20,5 +21,13 @@ AppButton {
         id: tooltip
         text: Translation.tr("Start")
         extraVisibleCondition: root.shouldShowTooltip
+    }
+
+    altAction: () => {
+        contextMenu.active = !contextMenu.active;
+    }
+
+    BarMenu {
+        id: contextMenu
     }
 }

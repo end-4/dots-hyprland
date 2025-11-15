@@ -45,9 +45,7 @@ BarButton {
             anchors.fill: parent
             anchors.rightMargin: 5
             active: root.multiple
-            sourceComponent: BackgroundAcrylicRectangle {
-                
-            }
+            sourceComponent: BackgroundAcrylicRectangle {}
         }
     }
 

@@ -16,7 +16,7 @@ PopupWindow {
     property Item anchorItem
 
     //////////////////// Functions ////////////////////
-    function close() {
+    function close() { // Closing doesn't animate, not sure if they're just lazy or it's intentional
         marginBehavior.enabled = false;
         root.visible = false;
     }
