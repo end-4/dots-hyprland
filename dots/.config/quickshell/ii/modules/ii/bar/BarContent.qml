@@ -320,6 +320,12 @@ Item { // Bar content region
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
+                    MaterialSymbol {
+                        visible: !BluetoothStatus.available
+                        text: "power_settings_new"
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                    }
                 }
             }
 
