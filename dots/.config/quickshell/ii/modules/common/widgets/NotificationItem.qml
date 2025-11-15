@@ -154,19 +154,16 @@ Item { // Notification item area
             ColorUtils.transparentize(Appearance.colors.colLayer3)
 
         implicitHeight: expanded ? (contentColumn.implicitHeight + padding * 2) : summaryRow.implicitHeight
-        Behavior on implicitHeight {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-        }
+
 
         ColumnLayout { // Content column
             id: contentColumn
             anchors.fill: parent
-            anchors.margins: expanded ? root.padding : 0
+            anchors.leftMargin: expanded ? root.padding : 0
+            anchors.rightMargin: expanded ? root.padding : 0
+            anchors.topMargin: expanded ? root.padding : 0
+            anchors.bottomMargin: expanded ? root.padding : 0
             spacing: 3
-
-            Behavior on anchors.margins {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
 
             RowLayout { // Summary row
                 id: summaryRow
@@ -232,7 +229,7 @@ Item { // Notification item area
 
                 Item {
                     Layout.fillWidth: true
-                    implicitWidth: actionsFlickable.implicitWidth
+
                     implicitHeight: actionsFlickable.implicitHeight
 
                     layer.enabled: true
@@ -258,12 +255,7 @@ Item { // Notification item area
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
-                        Behavior on height {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        Behavior on implicitHeight {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
+
 
                         RowLayout {
                             id: actionRowLayout
@@ -273,8 +265,6 @@ Item { // Notification item area
                                 Layout.fillWidth: true
                                 buttonText: Translation.tr("Close")
                                 urgency: notificationObject.urgency
-                                implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
-                                    (contentItem.implicitWidth + leftPadding + rightPadding)
 
                                 onClicked: {
                                     root.destroyWithAnimation()
@@ -305,8 +295,6 @@ Item { // Notification item area
                             NotificationActionButton {
                                 Layout.fillWidth: true
                                 urgency: notificationObject.urgency
-                                implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
-                                    (contentItem.implicitWidth + leftPadding + rightPadding)
 
                                 onClicked: {
                                     Quickshell.clipboardText = notificationObject.body
