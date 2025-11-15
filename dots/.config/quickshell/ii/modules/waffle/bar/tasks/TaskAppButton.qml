@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.waffle.looks
 import qs.modules.waffle.bar
 import Quickshell
@@ -16,6 +17,7 @@ AppButton {
     property bool hasWindows: appEntry.toplevels.length > 0
 
     signal hoverPreviewRequested()
+    signal hoverPreviewDismissed()
 
     multiple: appEntry.toplevels.length > 1
     checked: active
@@ -41,6 +43,12 @@ AppButton {
         if (root.desktopEntry) {
             desktopEntry.execute()
         }
+    }
+
+    altAction: () => {
+        root.hoverPreviewDismissed()
+        root.hoverTimer.stop()
+        contextMenu.active = true;
     }
 
     // Active indicator
@@ -73,5 +81,38 @@ AppButton {
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && !root.hasWindows
         text: desktopEntry ? desktopEntry.name : appEntry.appId
+    }
+
+    BarMenu {
+        id: contextMenu
+
+        model: [
+            {
+                iconName: root.iconName,
+                text: root.desktopEntry ? root.desktopEntry.name : StringUtils.toTitleCase(appEntry.appId),
+                monochromeIcon: false,
+                action: () => {
+                    if (root.desktopEntry) {
+                        root.desktopEntry.execute()
+                    }
+                }
+            },
+            {
+                iconName: root.appEntry.pinned ? "pin-off" : "pin",
+                text: root.appEntry.pinned ? qsTr("Unpin from taskbar") : qsTr("Pin to taskbar"),
+                action: () => {
+                    TaskbarApps.togglePin(root.appEntry.appId);
+                }
+            },
+            ...(root.appEntry.toplevels.length > 0 ? [{
+                iconName: "dismiss",
+                text: root.multiple ? qsTr("Close all windows") : qsTr("Close window"),
+                action: () => {
+                    for (let toplevel of root.appEntry.toplevels) {
+                        toplevel.close();
+                    }
+                }
+            }] : []),
+        ]
     }
 }

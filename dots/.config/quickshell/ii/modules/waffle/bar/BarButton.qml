@@ -37,6 +37,7 @@ Button {
         }
     }
 
+    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, root.checked ? Looks.contentTransparency : 1)
     colBackground: {
         if (root.down) {
             return Looks.colors.bg1Active
@@ -46,7 +47,6 @@ Button {
             return ColorUtils.transparentize(Looks.colors.bg1)
         }
     }
-    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, root.checked ? Looks.contentTransparency : 1)
 
     MouseArea {
         anchors.fill: parent
@@ -67,6 +67,7 @@ Button {
     background: AcrylicRectangle {
         shiny: ((root.hovered && !root.down) || root.checked)
         color: root.colBackground
+        radius: Looks.radius.medium
         border.width: 1
         border.color: root.colBackgroundBorder
 
