@@ -81,7 +81,7 @@ elif [[ "$OS_GROUP_ID" =~ ^(arch|gentoo|fedora)$ ]]; then
       printf "\n"
       if [[ "${tmp_update_status}" = "OUTDATED" ]]; then
         printf "${STY_RED}NOTE: The conclusion above is determined automatically by comparing latest Git commit time,\n"
-        printf "which is not always correct because some changes on \"dist-arch\" is not needed for \"dist-${TARGET_ID}\",\n"
+        printf "however sometimes the changes on \"dist-arch\" are actually not needed for \"dist-${TARGET_ID}\",\n"
         printf "in such case you should just ignore it and continue.\n"
         printf "${STY_RST}\n"
       fi
