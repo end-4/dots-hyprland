@@ -11,7 +11,7 @@ AppButton {
     id: root
 
     leftInset: Config.options.waffles.bar.leftAlignApps ? 12 : 0
-    iconName: "start-here"
+    iconName: down ? "start-here-pressed" : "start-here"
 
     onClicked: {
         GlobalStates.overviewOpen = !GlobalStates.overviewOpen; // For now...
