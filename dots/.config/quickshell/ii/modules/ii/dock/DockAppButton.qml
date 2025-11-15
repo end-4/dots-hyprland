@@ -67,11 +67,7 @@ DockButton {
     }
 
     altAction: () => {
-        if (Config.options.dock.pinnedApps.indexOf(appToplevel.appId) !== -1) {
-            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.filter(id => id !== appToplevel.appId)
-        } else {
-            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.concat([appToplevel.appId])
-        }
+        TaskbarApps.togglePin(appToplevel.appId);
     }
 
     contentItem: Loader {

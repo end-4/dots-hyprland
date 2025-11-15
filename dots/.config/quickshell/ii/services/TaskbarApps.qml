@@ -8,6 +8,14 @@ import Quickshell.Wayland
 Singleton {
     id: root
 
+    function togglePin(appId) {
+        if (Config.options.dock.pinnedApps.indexOf(appId) !== -1) {
+            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.filter(id => id !== appId)
+        } else {
+            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.concat([appId])
+        }
+    }
+
     property list<var> apps: {
         var map = new Map();
 
