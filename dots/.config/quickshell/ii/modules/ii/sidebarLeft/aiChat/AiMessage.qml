@@ -285,48 +285,36 @@ Rectangle {
                     }
                 }
             }
-
             Repeater {
                 model: ScriptModel {
-                    values: Array.from({ length: root.messageBlocks.length }, (msg, i) => {
-                        return ({
-                            type: root.messageBlocks[i].type
-                        })
-                    });
+                    values: root.messageBlocks
                 }
-
                 delegate: DelegateChooser {
                     id: messageDelegate
                     role: "type"
 
                     DelegateChoice { roleValue: "code"; MessageCodeBlock {
-                        required property int index
-                        property var thisBlock: root.messageBlocks[index]
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: thisBlock.content
-                        segmentLang: thisBlock.lang
+                        segmentContent: modelData.content
+                        segmentLang: modelData.lang
                         messageData: root.messageData
                     } }
                     DelegateChoice { roleValue: "think"; MessageThinkBlock {
-                        required property int index
-                        property var thisBlock: root.messageBlocks[index]
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: thisBlock.content
+                        segmentContent: modelData.content
                         messageData: root.messageData
                         done: root.messageData?.done ?? false
-                        completed: thisBlock.completed ?? false
+                        completed: modelData.completed ?? false
                     } }
                     DelegateChoice { roleValue: "text"; MessageTextBlock {
-                        required property int index
-                        property var thisBlock: root.messageBlocks[index]
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: thisBlock.content
+                        segmentContent: modelData.content
                         messageData: root.messageData
                         done: root.messageData?.done ?? false
                         forceDisableChunkSplitting: root.messageData?.content.includes("```") ?? true
