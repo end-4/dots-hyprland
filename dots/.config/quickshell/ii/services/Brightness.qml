@@ -83,7 +83,8 @@ Singleton {
             const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             return match?.busNum ?? "";
         }
-        property int rawMaxBrightness: 100
+        property var rawMaxBrightness: []
+        property var devices: []
         property real brightness
         property real brightnessMultiplier: 1.0
         property real multipliedBrightness: Math.max(0, Math.min(1, brightness * (Config.options.light.antiFlashbang.enable ? brightnessMultiplier : 1)))
@@ -110,7 +111,7 @@ Singleton {
 
         function initialize() {
             monitor.ready = false;
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c d $(brightnessctl -lmc backlight | tr '\n' ';' | sed 's/;$//')"`];
             initProc.running = true;
         }
 
@@ -118,8 +119,20 @@ Singleton {
             stdout: SplitParser {
                 onRead: data => {
                     const [, , , current, max] = data.split(" ");
-                    monitor.rawMaxBrightness = parseInt(max);
-                    monitor.brightness = parseInt(current) / monitor.rawMaxBrightness;
+                    if(isDdc){
+                        monitor.rawMaxBrightness[0] = parseInt(max);
+                        monitor.brightness = parseInt(current) / monitor.rawMaxBrightness;
+                    }else{
+                        const infos = max.split(";");
+                        for(let info of infos){
+                            const [device, clazz, current, percent, max] = info.split(",");
+                            let rawMaxBrightness = parseInt(max);
+                            monitor.rawMaxBrightness.push(rawMaxBrightness);
+                            //monitor.brightness of all devices should be the same, so just use the last one
+                            monitor.brightness = parseInt(current) / rawMaxBrightness;
+                            monitor.devices.push(device);
+                        }
+                    }
                     monitor.ready = true;
                 }
             }
@@ -135,20 +148,17 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
             if(isDdc){
-                const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+                const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[0]), 1);
                 setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
-                setProc.startDetached();
             }else{
-                const valuePercentNumber = Math.floor(brightnessValue * 100);
-                let valuePercent = ""+valuePercentNumber+"%";
-                if(valuePercentNumber == 0)
-                    //Set it to raw 1
-                    valuePercent = 1;
-                setProc.command = ["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"];
-                setProc.startDetached();
+                for(let i = 0; i < monitor.rawMaxBrightness.length; i++){
+                    const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[i]), 1);
+                    setProc.command = ["brightnessctl", "-d", monitor.devices[i], "set", rawValueRounded, "--quiet"];
+                }
             }
+            setProc.startDetached();
         }
 
         function setBrightness(value: real): void {
