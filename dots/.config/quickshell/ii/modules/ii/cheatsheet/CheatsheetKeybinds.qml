@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
@@ -150,8 +151,20 @@ Item {
                         const filteredKeybinds = remappedKeybinds.filter(keybind => {
                             return !hasFilter ? keybind : keybind && keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
                         })
+                        const fuzzyKeybinds = Fuzzy.go(root.filter.toLowerCase(), remappedKeybinds.map(keybind => {
+                            console.log('K ->', root.filter.toLowerCase(), keybind.comment)
+                            return {
+                                name: Fuzzy.prepare(keybind.comment),
+                                obj: keybind
+                            };
+                        }), {
+                            all: true,
+                            key: "name"
+                        }).map(result => remappedKeybinds.find(keybind => keybind.comment === result.target)).filter(Boolean);                  
+                        console.log('here ->', JSON.stringify(fuzzyKeybinds))
                         const result = []
-                        filteredKeybinds.forEach(keybind => {
+                        fuzzyKeybinds.forEach(keybind => {
+                        // filteredKeybinds.forEach(keybind => {
                             result.push({
                                 "type": "keys",
                                 "mods": keybind.mods,
@@ -164,7 +177,8 @@ Item {
                         })
 
                         return Object.assign({}, children, {
-                            keybinds: filteredKeybinds,
+                            keybinds: fuzzyKeybinds,
+                            // keybinds: filteredKeybinds,
                             result
                         })
                     })
