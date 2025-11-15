@@ -119,12 +119,12 @@ Singleton {
             stdout: SplitParser {
                 onRead: data => {
                     const [, , , current, max] = data.split(" ");
-                    if(isDdc){
+                    if (isDdc) {
                         monitor.rawMaxBrightness[0] = parseInt(max);
                         monitor.brightness = parseInt(current) / monitor.rawMaxBrightness;
-                    }else{
+                    } else {
                         const infos = max.split(";");
-                        for(let info of infos){
+                        for (let info of infos) {
                             const [device, clazz, current, percent, max] = info.split(",");
                             let rawMaxBrightness = parseInt(max);
                             monitor.rawMaxBrightness.push(rawMaxBrightness);
@@ -148,12 +148,12 @@ Singleton {
         }
 
         function syncBrightness() {
-            const brightnessValue = Math.max(monitor.multipliedBrightness, 0)
-            if(isDdc){
+            const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
+            if (isDdc) {
                 const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[0]), 1);
                 setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
-            }else{
-                for(let i = 0; i < monitor.rawMaxBrightness.length; i++){
+            } else {
+                for (let i = 0; i < monitor.rawMaxBrightness.length; i++) {
                     const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[i]), 1);
                     setProc.command = ["brightnessctl", "-d", monitor.devices[i], "set", rawValueRounded, "--quiet"];
                 }
