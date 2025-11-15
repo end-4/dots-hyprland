@@ -10,11 +10,6 @@ source=("git+${url}.git")
 sha256sums=('SKIP')
 options=('!strip')
 
-pkgver(){
-  cd $srcdir/$_pkgname
-  printf 'r%s.%s' "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
-
 package() {
   cd $srcdir/$_pkgname
   install -dm755 "$pkgdir/usr/share/icons"
