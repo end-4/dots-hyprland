@@ -10,6 +10,7 @@ AppButton {
     id: root
 
     iconName: (down && !checked) ? "task-view-pressed" : "task-view"
+    pressedScale: checked ? 5/6 : 1
     separateLightDark: true
 
     checked: GlobalStates.overviewOpen
