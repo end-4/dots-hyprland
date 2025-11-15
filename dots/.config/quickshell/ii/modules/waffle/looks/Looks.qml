@@ -61,7 +61,7 @@ Singleton {
         }
         property QtObject pixelSize: QtObject {
             property real normal: 11
-            property real large: 15
+            property real large: 14
         }
     }
 

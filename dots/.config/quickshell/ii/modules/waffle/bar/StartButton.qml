@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
+import Quickshell
 import qs
 import qs.services
 import qs.modules.common
@@ -24,10 +24,43 @@ AppButton {
     }
 
     altAction: () => {
-        contextMenu.active = !contextMenu.active;
+        contextMenu.active = true;
     }
 
     BarMenu {
         id: contextMenu
+
+        model: [
+            {
+                text: Translation.tr("Terminal"),
+                action: () => {
+                    Quickshell.execDetached(["bash", "-c", Config.options.apps.terminal]);
+                }
+            },
+            {
+                text: Translation.tr("Task Manager"),
+                action: () => {
+                    Quickshell.execDetached(["bash", "-c", Config.options.apps.taskManager]);
+                }
+            },
+            {
+                text: Translation.tr("Settings"),
+                action: () => {
+                    Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("settings.qml")]);
+                }
+            },
+            {
+                text: Translation.tr("File Explorer"),
+                action: () => {
+                    Qt.openUrlExternally(Directories.home);
+                }
+            },
+            {
+                text: Translation.tr("Search"),
+                action: () => {
+                    Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "overview", "toggle"]);
+                }
+            },
+        ]
     }
 }
