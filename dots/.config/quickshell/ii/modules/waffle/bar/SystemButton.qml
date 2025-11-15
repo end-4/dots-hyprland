@@ -85,11 +85,13 @@ BarButton {
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && volumeHoverArea.containsMouse
         text: Translation.tr("Speakers (%1): %2") //
-        .arg(Audio.sink?.nickname || Audio.sink?.description || Translation.tr("Unknown")) //
-        .arg(`${Math.round(Audio.sink?.audio.volume * 100) || 0}%`) //
+            .arg(Audio.sink?.nickname || Audio.sink?.description || Translation.tr("Unknown")) //
+            .arg(Audio.sink?.audio.muted ? Translation.tr("Muted") : `${Math.round(Audio.sink?.audio.volume * 100) || 0}%`) //
     }
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && batteryHoverArea.containsMouse
-        text: Translation.tr("Battery: %1%2").arg(`${Math.round(Battery.percentage * 100) || 0}%`).arg(Battery.isPluggedIn ? (" " + Translation.tr("(Plugged in)")) : "")
+        text: Translation.tr("Battery: %1%2") //
+            .arg(`${Math.round(Battery.percentage * 100) || 0}%`) //
+            .arg(Battery.isPluggedIn ? (" " + Translation.tr("(Plugged in)")) : "")
     }
 }
