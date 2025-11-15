@@ -1,0 +1,31 @@
+pragma Singleton
+import QtQuick
+import Quickshell
+import qs.services
+
+Singleton {
+    id: root
+
+    property string internetIcon: {
+        if (Network.ethernet) return "ethernet";
+        if (Network.wifiEnabled) {
+            const strength = Network.networkStrength;
+            if (strength > 75) return "wifi-1";
+            if (strength > 50) return "wifi-2";
+            if (strength > 25) return "wifi-3";
+            return "wifi-4";
+        }
+        if (Network.wifiStatus === "connecting") return "wifi-4";
+        if (Network.wifiStatus === "disconnected") return "wifi-off";
+        if (Network.wifiStatus === "disabled") return "wifi-off";
+        return "wifi-warning";
+    }
+
+    property string batteryIcon: {
+        if (Battery.isCharging) return "battery-charge";
+        if (Battery.isCriticalAndNotCharging) return "battery-warning";
+        if (Battery.percentage >= 0.9) return "battery-full";
+        return `battery-${Math.ceil(Battery.percentage * 10)}`;
+    }
+    
+}

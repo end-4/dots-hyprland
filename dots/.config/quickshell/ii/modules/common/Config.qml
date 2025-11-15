@@ -76,6 +76,12 @@ Singleton {
 
         JsonAdapter {
             id: configOptionsJsonAdapter
+
+            property list<string> enabledPanels: [
+                "iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"
+            ]
+            property string panelFamily: "ii" // "ii", "w"
+
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
                 property int weeb: 1 // 0: No | 1: Open | 2: Closet
@@ -148,10 +154,12 @@ Singleton {
                 property JsonObject widgets: JsonObject {
                     property JsonObject clock: JsonObject {
                         property bool enable: true
+                        property bool showOnlyWhenLocked: false
                         property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
                         property real x: 100
                         property real y: 100
-                        property string style: "cookie" // Options: "cookie", "digital"
+                        property string style: "cookie"        // Options: "cookie", "digital"
+                        property string styleLocked: "cookie"  // Options: "cookie", "digital"
                         property JsonObject cookie: JsonObject {
                             property bool aiStyling: false
                             property int sides: 14
@@ -257,6 +265,9 @@ Singleton {
                         property bool showUnreadCount: false
                     }
                 }
+                property JsonObject tooltips: JsonObject {
+                    property bool clickToShow: false
+                }
             }
 
             property JsonObject battery: JsonObject {
@@ -274,7 +285,7 @@ Singleton {
                 // 10:  | 11:  | 12:  | 13:  | 14: 󱄛
                 property string superKey: ""
                 property bool useMacSymbol: false
-                property bool splitButtons: true
+                property bool splitButtons: false
                 property bool useMouseSymbol: false
                 property bool useFnSymbol: false
                 property JsonObject fontSize: JsonObject {
@@ -380,7 +391,11 @@ Singleton {
             property JsonObject overlay: JsonObject {
                 property bool openingZoomAnimation: true
                 property bool darkenScreen: true
-                property real clickthroughOpacity: 0.7
+                property real clickthroughOpacity: 0.8
+                property JsonObject floatingImage: JsonObject {
+                    property string imageSource: "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif"
+                    property real scale: 0.5
+                }
             }
 
             property JsonObject overview: JsonObject {
@@ -511,6 +526,7 @@ Singleton {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
                 property string shortDateFormat: "dd/MM"
+                property string dateWithYearFormat: "dd/MM/yyyy"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
                     property int breakTime: 300
@@ -543,6 +559,13 @@ Singleton {
                     property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
                     property list<string> fileKeywords: ["anime", "booru", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
+                }
+            }
+
+            property JsonObject waffles: JsonObject {
+                property JsonObject bar: JsonObject {
+                    property bool bottom: true
+                    property bool leftAlignApps: false
                 }
             }
         }

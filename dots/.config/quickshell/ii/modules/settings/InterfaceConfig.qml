@@ -22,7 +22,7 @@ ContentPage {
                 // Use a nerdfont to see the icons
                 options: ([
                   "󰖳", "", "󰨡", "", "󰌽", "󰣇", "", "", "", 
-                  "", "", "󱄛", "", "", "⌘", "󰀲", "󰟍", ""
+                  "", "", "󱄛", "", "", "", "⌘", "󰀲", "󰟍", ""
                 ]).map(icon => { return {
                   displayName: icon,
                   value: icon
@@ -324,6 +324,21 @@ ContentPage {
                 StyledToolTip {
                     text: "www.vcrdb.net"
                 }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "point_scan"
+        title: Translation.tr("Overlay: Floating Image")
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Image source")
+            text: Config.options.overlay.floatingImage.imageSource
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.overlay.floatingImage.imageSource = text;
             }
         }
     }
