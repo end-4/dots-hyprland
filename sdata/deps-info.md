@@ -211,6 +211,7 @@ Extra dependencies.
 - `qt6-translations`
 - `qt6-virtualkeyboard`
 - `qt6-wayland`
+- `kirigami`
 - `kdialog`
 - `syntax-highlighting`
 

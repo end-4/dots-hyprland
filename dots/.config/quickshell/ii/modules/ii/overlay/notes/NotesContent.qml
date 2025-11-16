@@ -136,6 +136,9 @@ OverlayBackground {
         root.copyListEntries = entries;
     }
 
+    implicitWidth: 300
+    implicitHeight: 200
+
     ColumnLayout {
         id: contentItem
         anchors.fill: parent
@@ -161,8 +164,7 @@ OverlayBackground {
                 persistentSelection: true
                 textFormat: TextEdit.PlainText
                 background: null
-                padding: 16
-                rightPadding: root.maxCopyButtonSize + padding
+                padding: 24
 
                 onTextChanged: {
                     if (textInput.activeFocus) {
@@ -179,7 +181,7 @@ OverlayBackground {
             }
 
             Item {
-                anchors.fill: textInput
+                anchors.fill: parent
                 visible: root.copyListEntries.length > 0
                 clip: true
 
@@ -200,7 +202,7 @@ OverlayBackground {
                         buttonRadius: height / 2
                         y: modelData.y
                         anchors.right: parent.right
-                        anchors.rightMargin: 16
+                        anchors.rightMargin: 10
                         z: 5
 
                         Timer {

@@ -9,9 +9,10 @@ import qs.modules.waffle.looks
 AppButton {
     id: root
 
-    iconName: "system-search"
+    iconName: checked ? "system-search-checked" : "system-search"
     separateLightDark: true
 
+    checked: GlobalStates.overviewOpen
     onClicked: {
         GlobalStates.overviewOpen = !GlobalStates.overviewOpen; // For now...
     }

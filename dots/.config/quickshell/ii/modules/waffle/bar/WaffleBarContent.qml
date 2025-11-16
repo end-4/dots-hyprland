@@ -68,6 +68,7 @@ Rectangle {
             shown: Config.options.waffles.bar.leftAlignApps
             sourceComponent: WidgetsButton {}
         }
+        UpdatesButton {}
         SystemButton {}
         TimeButton {}
     }

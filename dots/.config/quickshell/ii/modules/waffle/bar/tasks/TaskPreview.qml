@@ -16,7 +16,7 @@ PopupWindow {
     property Item anchorItem
 
     //////////////////// Functions ////////////////////
-    function close() {
+    function close() { // Closing doesn't animate, not sure if they're just lazy or it's intentional
         marginBehavior.enabled = false;
         root.visible = false;
     }
@@ -70,7 +70,7 @@ PopupWindow {
                 fill: contentItem
                 margins: -border.width
             }
-            border.color: ColorUtils.transparentize(Looks.colors.bg0Border, Looks.shadowTransparency)
+            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
             border.width: 1
             color: "transparent"
             radius: Looks.radius.large + border.width

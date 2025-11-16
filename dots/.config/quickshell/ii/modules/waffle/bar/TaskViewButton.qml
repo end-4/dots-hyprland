@@ -9,7 +9,8 @@ import qs.modules.waffle.looks
 AppButton {
     id: root
 
-    iconName: "task-view"
+    iconName: (down && !checked) ? "task-view-pressed" : "task-view"
+    pressedScale: checked ? 5/6 : 1
     separateLightDark: true
 
     checked: GlobalStates.overviewOpen

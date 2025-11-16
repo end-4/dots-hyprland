@@ -36,6 +36,9 @@ MouseArea {
                 onHoverPreviewRequested: {
                     root.showPreviewPopup(appEntry, this)
                 }
+                onHoverPreviewDismissed: {
+                    previewPopup.close()
+                }
             }
         }
     }
@@ -46,4 +49,5 @@ MouseArea {
         tasksHovered: root.containsMouse
         anchor.window: root.QsWindow.window
     }
+
 }
