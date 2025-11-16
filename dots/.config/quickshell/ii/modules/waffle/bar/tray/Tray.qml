@@ -13,6 +13,7 @@ RowLayout {
     id: root
 
     property bool overflowOpen: false
+    property bool dragging: false
 
     Layout.fillHeight: true
     spacing: 0
@@ -20,7 +21,7 @@ RowLayout {
     BarIconButton {
         id: overflowButton
 
-        visible: TrayService.unpinnedItems.length > 0
+        visible: (TrayService.unpinnedItems.length > 0 || root.dragging)
         checked: root.overflowOpen
 
         iconName: "chevron-down"
@@ -29,11 +30,11 @@ RowLayout {
         Behavior on iconRotation {
             animation: Looks.transition.rotate.createObject(this)
         }
-        
+
         onClicked: {
             root.overflowOpen = !root.overflowOpen;
         }
-    
+
         TrayOverflowMenu {
             id: trayOverflowLayout
             Synchronizer on active {
@@ -64,26 +65,24 @@ RowLayout {
             required property var modelData
             item: modelData
 
-            Drag.active: dragArea.drag.active
-            Drag.hotSpot.x: width / 2
-            Drag.hotSpot.y: height / 2
             property real initialX
             property real initialY
-
-            Behavior on x {
-                animation: Looks.transition.move.createObject(this)
-            }
 
             MouseArea {
                 id: dragArea
                 anchors.fill: parent
                 drag.target: parent
                 drag.axis: Drag.XAxis
+                drag.threshold: 2
 
-                onPressed: (event) => {
+                onPressed: event => {
+                    trayButton.Drag.hotSpot.x = event.x;
                     trayButton.initialX = trayButton.x;
-                    trayButton.initialY = trayButton.y;
+                    root.dragging = true;
                     trayButton.Drag.active = true;
+                }
+                onPositionChanged: {
+                    pinTooltip.updateAnchor();
                 }
                 onReleased: {
                     if (!dragArea.drag.active) {
@@ -96,9 +95,22 @@ RowLayout {
                             pinDropArea.willPin = false;
                         } else {
                             trayButton.x = trayButton.initialX;
-                            trayButton.y = trayButton.initialY;
                         }
                     }
+                    trayButton.Drag.active = false;
+                    root.dragging = false;
+                }
+            }
+
+            BarToolTip {
+                id: pinTooltip
+                extraVisibleCondition: trayButton.Drag.active && pinDropArea.containsDrag && pinDropArea.willPin
+                realContentHorizontalPadding: 6
+                realContentVerticalPadding: 6
+                realContentItem: FluentIcon {
+                    anchors.centerIn: parent
+                    icon: "pin-off"
+                    implicitSize: 18
                 }
             }
         }

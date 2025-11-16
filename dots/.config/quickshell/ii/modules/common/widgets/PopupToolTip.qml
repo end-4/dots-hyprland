@@ -14,6 +14,10 @@ Item {
     property real horizontalPadding: 10
     property real verticalPadding: 5
 
+    function updateAnchor() {
+        tooltipLoader.item?.anchor.updateAnchor();
+    }
+
     readonly property bool internalVisibleCondition: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition
     property var anchorEdges: Edges.Top
     property var anchorGravity: anchorEdges

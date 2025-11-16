@@ -10,9 +10,17 @@ import qs.modules.waffle.looks
 PopupToolTip {
     id: root
 
+    property Item realContentItem
+    realContentItem: WText {
+        text: root.text
+        anchors.centerIn: parent
+    }
+
     property real visualMargin: 11
     verticalPadding: visualMargin
     horizontalPadding: visualMargin
+    property real realContentVerticalPadding: 8
+    property real realContentHorizontalPadding: 10
 
     contentItem: Item {
         anchors.centerIn: parent
@@ -36,16 +44,12 @@ PopupToolTip {
             id: realContent
             z: 1
             anchors.centerIn: parent
-            implicitWidth: tooltipText.implicitWidth + 10 * 2
-            implicitHeight: tooltipText.implicitHeight + 8 * 2
+            implicitWidth: root.realContentItem.implicitWidth + root.realContentHorizontalPadding * 2
+            implicitHeight: root.realContentItem.implicitHeight + root.realContentVerticalPadding * 2
             color: Looks.colors.bg1
             radius: Looks.radius.medium
 
-            WText {
-                id: tooltipText
-                text: root.text
-                anchors.centerIn: parent
-            }
+            children: [root.realContentItem]
         }
     }
 }

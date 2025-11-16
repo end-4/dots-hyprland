@@ -16,6 +16,13 @@ BarIconButton {
     property alias menuOpen: menu.visible
     readonly property bool barAtBottom: Config.options.waffles.bar.bottom
     iconSource: item.icon
+    iconScale: 0
+    Component.onCompleted: {
+        root.iconScale = 1
+    }
+    Behavior on iconScale {
+        animation: Looks.transition.enter.createObject(this)
+    }
 
     onClicked: {
         item.activate();
@@ -39,7 +46,7 @@ BarIconButton {
     }
 
     BarToolTip {
-        extraVisibleCondition: root.shouldShowTooltip
+        extraVisibleCondition: root.shouldShowTooltip && !root.Drag.active
         text: TrayService.getTooltipForItem(root.item)
     }
 }
