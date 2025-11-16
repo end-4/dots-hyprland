@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.modules.common.functions
 
 Singleton {
     id: root
@@ -238,13 +239,6 @@ Singleton {
                     property bool showPerformanceProfileToggle: false
                     property bool showScreenRecord: false
                 }
-                property JsonObject tray: JsonObject {
-                    property bool monochromeIcons: true
-                    property bool showItemId: false
-                    property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
-                    property list<string> pinnedItems: [ ]
-                    property bool filterPassive: true
-                }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
                     property int shown: 10
@@ -429,6 +423,14 @@ Singleton {
             property JsonObject resources: JsonObject {
                 property int updateInterval: 3000
                 property int historyLength: 60
+            }
+
+            property JsonObject tray: JsonObject {
+                property bool monochromeIcons: true
+                property bool showItemId: false
+                property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
+                property list<var> pinnedItems: [ "Fcitx" ]
+                property bool filterPassive: true
             }
 
             property JsonObject musicRecognition: JsonObject {

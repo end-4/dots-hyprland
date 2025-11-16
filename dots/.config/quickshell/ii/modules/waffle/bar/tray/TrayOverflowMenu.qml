@@ -28,7 +28,9 @@ BarPopup {
         rowSpacing: 0
 
         Repeater {
-            model: TrayService.unpinnedItems
+            model: ScriptModel {
+                values: TrayService.unpinnedItems
+            }
             delegate: TrayButton {
                 required property var modelData
                 item: modelData
