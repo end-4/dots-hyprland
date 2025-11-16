@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Illogical Impulse Audio Dependencies"
 HOMEPAGE=""
 
-LICENSE="GPL-2"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 RESTRICT="strip"

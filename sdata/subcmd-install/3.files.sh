@@ -78,7 +78,6 @@ for i in "${warn_files_tests[@]}"; do
 done
 
 #####################################################################################
-# TODO: output the logs below to a temp file and cat that file, also show the path of the file so users will be able to read it again.
 printf "\n"
 printf "\n"
 printf "\n"

@@ -36,7 +36,7 @@ _exec() {
   "$@"
   err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
 }
-ii_check_distro_id() {
+_check_distro_id() {
   OS_RELEASE_FILE=/etc/os-release
   if [[ -f "$OS_RELEASE_FILE" ]]; then
     OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
@@ -47,29 +47,31 @@ ii_check_distro_id() {
     echo "$OS_RELEASE_FILE does not exist."
   fi
 }
-ii_check_distro() {
+_check_distro() {
   lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
 }
-ii_check_venv() {
+_check_venv() {
   source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   which python
   deactivate
 }
-ii_check_quickshell_version() {
+_check_quickshell_version() {
   pacman -Q | grep -E 'quickshell|qt6-base'
 }
-ii_check_PKGBUILD_version() {
+_check_PKGBUILD_version() {
   pacman -Q | grep '^illogical-impulse-'
 }
 
 e "Checking git repo info"
 x git remote get-url origin
 x git rev-parse HEAD
+x git status
 x git submodule status --recursive
 
 e "Checking distro"
-x ii_check_distro_id
-#x ii_check_distro 
+x _check_distro_id
+x cat os-release
+#x _check_distro 
 
 e "Checking variables"
 x declare -p XDG_CACHE_HOME # ~/.cache
@@ -90,8 +92,8 @@ x ls -l ~/.local/state/quickshell/.venv
 
 e "Checking versions"
 x Hyprland --version
-x ii_check_quickshell_version
-x ii_check_PKGBUILD_version
+x _check_quickshell_version
+x _check_PKGBUILD_version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi

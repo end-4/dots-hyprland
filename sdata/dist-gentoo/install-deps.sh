@@ -18,17 +18,19 @@ printf "${STY_RST}"
 pause
 
 printf "${STY_YELLOW}"
-printf "https://github.com/end-4/dots-hyprland/blob/main/sdata/dist-gentoo/README.md"
-printf "Checkout the above README for potential bug fixes or additional information"
+printf "https://github.com/end-4/dots-hyprland/blob/main/sdata/dist-gentoo/README.md\n"
+printf "Checkout the above README for potential bug fixes or additional information\n\n"
 printf "${STY_RST}"
 pause
 
-x sudo emerge --noreplace --quiet app-eselect/eselect-repository
-x sudo emerge --noreplace --quiet app-portage/smart-live-rebuild
+x sudo emerge --update --quiet app-eselect/eselect-repository
+x sudo emerge --update --quiet app-portage/smart-live-rebuild
+# Currently using 3.12 python, this doesn't need to be default though
+x sudo emerge --update --quiet dev-lang/python:3.12
 
-if [[ -z $(eselect repository list | grep localrepo) ]]; then
-	v sudo eselect repository create localrepo
-	v sudo eselect repository enable localrepo 
+if [[ -z $(eselect repository list | grep ii-dots) ]]; then
+	v sudo eselect repository create ii-dots
+	v sudo eselect repository enable ii-dots
 fi
 
 if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
@@ -40,18 +42,29 @@ arch=$(portageq envvar ACCEPT_KEYWORDS)
 # Exclude hyprland, will deal with that separately
 metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,quickshell-git,screencapture,toolkit,widgets})
 
-ebuild_dir="/var/db/repos/localrepo"
+ebuild_dir="/var/db/repos/ii-dots"
 
-# Unmasks
+
+########## IMPORT KEYWORDS (START)
+# Illogical-Impulse
 x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/keywords-user
 v sudo cp ./sdata/dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
-# Use Flags
+# QT
+x sudo cp ./sdata/dist-gentoo/qt-keywords ./sdata/dist-gentoo/qt-keywords-user
+x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/qt-keywords-user
+v sudo cp ./sdata/dist-gentoo/qt-keywords-user /etc/portage/package.accept_keywords/qt
+
+########## IMPORT UNMASKS
+sudo mkdir -p /etc/portage/package.unmask/
+v sudo cp ./sdata/dist-gentoo/qt-unmasks /etc/portage/package.unmask/qt
+
+########## IMPORT USEFLAGS
 v sudo cp ./sdata/dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
 v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
 
-# Update system
+########## UPDATE SYSTEM
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
@@ -60,35 +73,12 @@ v sudo emerge --depclean
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
 
-###### LIVE EBUILDS START
-HYPR_DIR="illogical-impulse-hyprland"
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprgraphics/
-x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qt-support
-x sudo mkdir -p ${ebuild_dir}/gui-libs/hyprland-qtutils
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
-x sudo mkdir -p ${ebuild_dir}/dev-libs/hyprlang
-x sudo mkdir -p ${ebuild_dir}/dev-util/hyprwayland-scanner
+source ./sdata/dist-gentoo/import-local-pkgs.sh
 
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprgraphics*.ebuild ${ebuild_dir}/dev-libs/hyprgraphics
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qt-support*.ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprland-qtutils*.ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprlang*.ebuild ${ebuild_dir}/dev-libs/hyprlang
-v sudo cp ./sdata/dist-gentoo/${HYPR_DIR}/hyprwayland-scanner*.ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner
-
-v sudo ebuild ${ebuild_dir}/dev-libs/hyprgraphics/hyprgraphics*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qt-support/hyprland-qt-support*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/gui-libs/hyprland-qtutils/hyprland-qtutils*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/dev-libs/hyprlang/hyprlang*9999.ebuild digest
-v sudo ebuild ${ebuild_dir}/dev-util/hyprwayland-scanner/hyprwayland-scanner*9999.ebuild digest
-###### LIVE EBUILDS END
-
-# Install dependencies
+########## INSTALL ILLOGICAL-IMPUSEL EBUILDS
 for i in "${metapkgs[@]}"; do
 	x sudo mkdir -p ${ebuild_dir}/app-misc/${i}
 	v sudo cp ./sdata/dist-gentoo/${i}/${i}*.ebuild ${ebuild_dir}/app-misc/${i}/
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
-	v sudo emerge --quiet app-misc/${i}
+	v sudo emerge --update --quiet app-misc/${i}
 done
-
-# Currently using 3.12 python, this doesn't need to be default though
-v sudo emerge --noreplace --quiet dev-lang/python:3.12

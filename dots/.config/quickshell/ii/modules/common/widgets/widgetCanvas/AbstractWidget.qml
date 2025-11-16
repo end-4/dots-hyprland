@@ -8,6 +8,8 @@ import qs.modules.common
 MouseArea {
     id: root
 
+    property alias animateXPos: xBehavior.enabled
+    property alias animateYPos: yBehavior.enabled
     property bool draggable: true
     drag.target: draggable ? root : undefined
     cursorShape: (draggable && containsPress) ? Qt.ClosedHandCursor : draggable ? Qt.OpenHandCursor : Qt.ArrowCursor
@@ -18,9 +20,11 @@ MouseArea {
     }
 
     Behavior on x {
+        id: xBehavior
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
     Behavior on y {
+        id: yBehavior
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
 }
