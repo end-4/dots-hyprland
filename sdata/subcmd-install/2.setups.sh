@@ -28,9 +28,7 @@ showfun setup_user_group
 v setup_user_group
 
 if [[ ! -z $(systemctl --version) ]]; then
-  # TODO: Why fedora does not add i2c-dev?
-  # TODO: Why fedora add uinput and udev rules?
-  # Regarding uinput and udev rules: the former is required for the virtual keyboard to function, while the latter enables input group users to utilize it.
+  # For Fedora, uinput is required for the virtual keyboard to function, and udev rules enable input group users to utilize it.
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
     v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
