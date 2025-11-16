@@ -421,34 +421,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 shape: MaterialShape.Shape.PixelCircle
             }
 
-            
+            AiChatHistoryItem {}
 
             ScrollToBottomButton {
                 z: 3
                 target: messageListView
-            }
-            Item {
-                anchors {
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    bottomMargin: 10
-                }
-                id: chatHistoryItem
-                visible: Ai.messageIDs.length === 0
-                implicitWidth: parent.width
-                implicitHeight: 100 // FIX MEEE
-                Layout.bottomMargin: implicitHeight > 0 ? root.padding : -root.padding * 10
-                Behavior on implicitHeight {
-                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                }
-                StyledListView {
-                    id: listView
-                    implicitWidth: parent.implicitWidth
-                    implicitHeight: parent.implicitHeight
-                    //verticalLayoutDirection: ListView.BottomToTop
-                    model: Ai.savedChats
-                    delegate: AiChatHistoryButton {}
-                }
             }
         }
 
@@ -560,8 +537,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     background: null
 
                     onTextChanged: {
-                        if (messageInputField.text.length !== 0) chatHistoryItem.implicitHeight = 0;
-                        else chatHistoryItem.implicitHeight = inputWrapper.implicitHeight * 2;
                         // Handle suggestions
                         if (messageInputField.text.length === 0) {
                             root.suggestionQuery = "";
@@ -834,8 +809,137 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         }
     }
 
-    component AiChatHistoryButton: Item {
+    /* component AiChatHistoryItem: Item { // Chat History
+        anchors {
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+            bottomMargin: Appearance.sizes.elevationMargin
+        }
+        property real margins: 20
         id: chatHistoryItem
+        visible: Ai.messageIDs.length === 0
+        implicitWidth: parent.width - margins
+        
+        
+        implicitHeight: 150 // FIX ME
+
+        Rectangle {
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
+            id: chatHistoryBackground
+            clip: true
+            color: Appearance.colors.colLayer2
+            radius: Appearance.rounding.normal
+
+            implicitWidth: parent.implicitWidth + chatHistoryItem.margins
+            implicitHeight: parent.implicitHeight + chatHistoryItem.margins
+
+            
+
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: chatHistoryTitle.implicitHeight
+                    StyledText {
+                        id: chatHistoryTitle
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.margins: chatHistoryItem.margins
+                        text: Translation.tr("Chat history")
+                        color: Appearance.colors.colSubtext
+                        font.pixelSize: Appearance.font.pixelSize.small
+                    }
+                }
+                Item {
+                    clip: true
+                    implicitWidth: listView.implicitWidth
+                    implicitHeight: listView.implicitHeight
+                    StyledListView {
+                        id: listView
+                        property real delegateHeight: 80
+                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 200)
+                    
+                        implicitWidth: chatHistoryBackground.implicitWidth - chatHistoryItem.margins
+                        //implicitHeight: chatHistoryBackground.implicitHeight - chatHistoryItem.margins * 2
+                        model: Ai.savedChats
+                        delegate: AiChatHistoryButton {}
+                    }
+                }
+            }
+        }
+    } */
+
+    component AiChatHistoryItem: Item {
+        id: root
+        property real margins: 10
+        visible: Ai.messageIDs.length === 0
+
+        property real widthWithMargins: parent.width - margins  // to be used for listview
+
+        implicitWidth: background.implicitWidth
+        implicitHeight: background.implicitHeight
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Appearance.sizes.elevationMargin
+
+
+        Rectangle {
+            id: background
+            color: Appearance.colors.colLayer2
+            radius: Appearance.rounding.normal
+
+            clip: true
+            implicitWidth: contentColumn.implicitWidth + root.margins * 2
+            implicitHeight: contentColumn.implicitHeight + root.margins
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ColumnLayout {
+                id: contentColumn
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: root.margins
+                    rightMargin: root.margins
+                    top: parent.top
+                    topMargin: root.margins / 2
+                }
+
+                StyledText {
+                    id: chatHistoryTitle
+                    text: Translation.tr("Chat history")
+                    color: Appearance.colors.colSubtext
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                Item { // Clip wrapper
+                    implicitWidth: listView.implicitWidth
+                    implicitHeight: listView.implicitHeight
+                    clip: true
+                    StyledListView {
+                        id: listView
+
+                        property real delegateHeight: 30
+                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 400)
+                        implicitWidth: root.widthWithMargins - root.margins * 2
+
+                        Layout.fillWidth: true
+
+                        model: Ai.savedChats
+                        delegate: AiChatHistoryButton {}
+                    }
+                }
+            }
+        }
+    }
+
+
+    component AiChatHistoryButton: Item {
+        id: chatHistoryButton
         property var metadata
         
         onMetadataChanged: {
@@ -853,9 +957,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             onLoadedChanged: {
                 if (!metadataReader.loaded) return;
                 const fullJson = JSON.parse(metadataReader.text());
-                chatHistoryItem.metadata = fullJson.metadata;
-                savedChatButton.materialIcon = chatHistoryItem.metadata.icon ?? "history";
-                savedChatButton.mainText = chatHistoryItem.metadata.title === "lastSession" ? Translation.tr("Last session") : chatHistoryItem.metadata.title ?? "Unknown chat";
+                chatHistoryButton.metadata = fullJson.metadata;
+                savedChatButton.materialIcon = chatHistoryButton.metadata.icon ?? "history";
+                savedChatButton.mainText = chatHistoryButton.metadata.title === "lastSession" ? Translation.tr("Last Session") : chatHistoryButton.metadata.title;
             }
         }
 
@@ -865,7 +969,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 implicitWidth: listView.implicitWidth - chatDeleteButton.implicitWidth * 1.2
                 id: savedChatButton
                 onClicked: {
-                    Ai.loadChat(chatHistoryItem.metadata.title);
+                    Ai.loadChat(chatHistoryButton.metadata.title);
                 }
             }
             RippleButton {
@@ -880,7 +984,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
                 onClicked: {
                     if (confirmState) {
-                        Quickshell.execDetached(["rm", "-rf", chatHistoryItem.metadata.path]);
+                        Quickshell.execDetached(["rm", "-rf", chatHistoryButton.metadata.path]);
                         Ai.updateSavedChats();
                     }else {
                         confirmState = true
