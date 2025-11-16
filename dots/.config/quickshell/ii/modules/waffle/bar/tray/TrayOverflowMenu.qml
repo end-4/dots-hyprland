@@ -39,6 +39,7 @@ BarPopup {
                 model: ScriptModel {
                     values: TrayService.unpinnedItems
                     onValuesChanged: {
+                        root.updateAnchor();
                         if (values.length === 0) {
                             root.close();
                         }

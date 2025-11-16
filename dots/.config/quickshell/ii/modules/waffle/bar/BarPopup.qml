@@ -34,6 +34,10 @@ Loader {
         item.close();
     }
 
+    function updateAnchor() {
+        item?.anchor.updateAnchor();
+    }
+
     active: false
     visible: active
     sourceComponent: PopupWindow {
