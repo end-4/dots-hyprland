@@ -70,7 +70,7 @@ Singleton {
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
-    property var chatMetadata: {}  
+    property var chatMetadata: {}  // current chat metadata
 
     property var promptSubstitutions: {
         "{DISTRO}": SystemInfo.distroName,
@@ -637,7 +637,7 @@ Singleton {
                 root.postResponseHook();
                 root.postResponseHook = null; // Reset hook after use
             }
-            root.saveChat("lastSession")
+            root.saveCurrentChat()
             root.responseFinished()
         }
 
@@ -910,6 +910,7 @@ Singleton {
         blockLoading: true // Prevent race conditions
         onLoadedChanged: {
             if (!chatSaveFile.loaded) return;
+
             if (isLoading) {
                 loadData(chatSaveFile.text());
                 isLoading = false;
@@ -940,20 +941,34 @@ Singleton {
         }, null, 2); // 2 for pretty look instead of 1-line
 
         chatSaveFile.setText(saveContent)
-        getSavedChats.running = true;
+        updateSavedChats()
     }
 
-    function requestChatNameAndSave() {
+    function saveCurrentChat() {
+        chatSaveFile.chatName = root.chatMetadata.title.trim()
+
+        const saveContent = JSON.stringify({
+            metadata: root.chatMetadata,
+            messages: root.chatToJson()
+        }, null, 2); // 2 for pretty look instead of 1-line
+
+        chatSaveFile.setText(saveContent)
+    }
+
+    function requestChatNameAndSave() { // rename this function FIX ME
         getNameGeminiProc.chatContent = JSON.stringify(root.chatToJson())
         getNameGeminiProc.running = true; 
     }
 
+    /*
+     * Updates the list of saved chats.
+    */
     function updateSavedChats() {
         getSavedChats.running = true
         root.chatMetadata = {} 
     }
 
-    /**
+    /*
      * Loads chat from a JSON list of message objects.
      * @param chatName name of the chat
      */
@@ -969,9 +984,11 @@ Singleton {
             const saveContent = data
             const saveData = JSON.parse(saveContent);
 
-            root.chatMetadata = saveData.metadata || {};
+            
+            root.chatMetadata = saveData.metadata;
+            console.log("chat  loading : " + JSON.stringify(root.chatMetadata))
 
-            const messages = saveData.messages || [];
+            const messages = saveData.messages;
             root.clearMessages();
             root.messageIDs = messages.map((_, i) => i);
 
@@ -1027,7 +1044,6 @@ Singleton {
                     icon: icon
                 }
 
-                //root.saveChat(title, metadataObj)
                 Qt.callLater(() => {
                     root.saveChat(title, metadataObj)  
                     getSavedChats.running = true

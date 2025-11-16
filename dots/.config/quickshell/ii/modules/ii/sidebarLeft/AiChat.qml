@@ -809,68 +809,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         }
     }
 
-    /* component AiChatHistoryItem: Item { // Chat History
-        anchors {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-            bottomMargin: Appearance.sizes.elevationMargin
-        }
-        property real margins: 20
-        id: chatHistoryItem
-        visible: Ai.messageIDs.length === 0
-        implicitWidth: parent.width - margins
-        
-        
-        implicitHeight: 150 // FIX ME
-
-        Rectangle {
-            anchors {
-                top: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            id: chatHistoryBackground
-            clip: true
-            color: Appearance.colors.colLayer2
-            radius: Appearance.rounding.normal
-
-            implicitWidth: parent.implicitWidth + chatHistoryItem.margins
-            implicitHeight: parent.implicitHeight + chatHistoryItem.margins
-
-            
-
-            ColumnLayout {
-                anchors.horizontalCenter: parent.horizontalCenter
-                Item {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: chatHistoryTitle.implicitHeight
-                    StyledText {
-                        id: chatHistoryTitle
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        Layout.margins: chatHistoryItem.margins
-                        text: Translation.tr("Chat history")
-                        color: Appearance.colors.colSubtext
-                        font.pixelSize: Appearance.font.pixelSize.small
-                    }
-                }
-                Item {
-                    clip: true
-                    implicitWidth: listView.implicitWidth
-                    implicitHeight: listView.implicitHeight
-                    StyledListView {
-                        id: listView
-                        property real delegateHeight: 80
-                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 200)
-                    
-                        implicitWidth: chatHistoryBackground.implicitWidth - chatHistoryItem.margins
-                        //implicitHeight: chatHistoryBackground.implicitHeight - chatHistoryItem.margins * 2
-                        model: Ai.savedChats
-                        delegate: AiChatHistoryButton {}
-                    }
-                }
-            }
-        }
-    } */
-
     component AiChatHistoryItem: Item {
         id: root
         property real margins: 10
@@ -942,10 +880,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         id: chatHistoryButton
         property var metadata
         
-        onMetadataChanged: {
-            
-        }
-
         implicitHeight: savedChatButton.implicitHeight
         implicitWidth: listView.implicitWidth
 
@@ -970,6 +904,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 id: savedChatButton
                 onClicked: {
                     Ai.loadChat(chatHistoryButton.metadata.title);
+                    messageListView.positionViewAtEnd();
                 }
             }
             RippleButton {
