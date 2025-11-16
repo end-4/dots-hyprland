@@ -8,8 +8,8 @@ fi
 
 # Update System
 case $SKIP_SYSUPDATE in
-true) sleep 0 ;;
-*) v sudo dnf upgrade --refresh -y ;;
+  true) sleep 0 ;;
+  *) v sudo dnf upgrade --refresh -y ;;
 esac
 
 # Remove version lock
@@ -44,7 +44,7 @@ themes_deps=(
   starship gabarito-fonts jetbrains-mono-nerd-fonts google-material-symbols-vf-rounded-fonts material-icons-fonts
   readex-pro-fonts-all google-roboto-flex-fonts google-rubik-vf-fonts twitter-twemoji-fonts
 )
-sudo dnf install ${themes_deps[@]} -y
+v sudo dnf install ${themes_deps[@]} -y
 
 # Hyprland
 hyprland_deps=(
