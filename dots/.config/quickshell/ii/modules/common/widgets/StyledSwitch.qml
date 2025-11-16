@@ -9,7 +9,7 @@ import Qt5Compat.GraphicalEffects
  */
 Switch {
     id: root
-    property real scale: 0.6 // Default in m3 spec is huge af
+    property real scale: 0.75 // Default in m3 spec is huge af
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
     property color activeColor: Appearance?.colors.colPrimary ?? "#685496"

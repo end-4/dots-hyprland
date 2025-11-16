@@ -9,8 +9,8 @@ conflicts=("quickshell-git")
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=4
-pkgdesc="$_pkgname-git which version pinned for $_prefix"
+pkgrel=6
+pkgdesc="$_pkgname-git pinned commit and extra deps for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
 options=(!strip)
@@ -39,6 +39,7 @@ depends=(
   qt6-translations
   qt6-virtualkeyboard
   qt6-wayland
+  kirigami
   kdialog
   syntax-highlighting
 )
@@ -60,13 +61,6 @@ source=("$_pkgsrc::git+$url.git#commit=$_commit"
   quickshell-check.hook)
 sha256sums=('SKIP'
   '8543e21aeaaa5441b73a679160e7601a957f16c433e8d6bd9257e80bd0e94083')
-
-
-pkgver() {
-  cd "$_pkgsrc"
-  git describe --long --tags --abbrev=7 --exclude='*[a-zA-Z][a-zA-Z]*' \
-    | sed -E 's/^[^0-9]*//;s/([^-]*-g)/r\1/;s/-/./g'
-}
 
 build() {
   cd "$_pkgname"

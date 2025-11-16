@@ -24,6 +24,7 @@ TODO:
   ```plain
   Failed to connect to user scope bus via local transport: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined (consider using --machine=<user>@.host --user to connect to bus of other user)
   ```
+- [ ] Handle problem that `pkill qs` and `pkill hyprland` does not work (should be `.quickshell-wra` and `.Hyprland-wrapp` when installed via Nix).
 
 ## Attentions
 ### PAM

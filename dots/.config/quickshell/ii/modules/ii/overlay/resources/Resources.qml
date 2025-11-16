@@ -37,10 +37,8 @@ StyledOverlayWidget {
         },
     ]
 
-    contentItem: Rectangle {
+    contentItem: OverlayBackground {
         id: contentItem
-        anchors.fill: parent
-        color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
         property real padding: 4
         ColumnLayout {

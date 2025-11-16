@@ -28,7 +28,7 @@ MouseArea {
     }
 
     acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
-    hoverEnabled: true
+    hoverEnabled: !Config.options.bar.tooltips.clickToShow
     onPressed: (event) => {
         if (event.button === Qt.MiddleButton) {
             activePlayer.togglePlaying();

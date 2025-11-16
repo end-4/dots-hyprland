@@ -12,6 +12,9 @@ case $SKIP_SYSUPDATE in
   *) v sudo dnf upgrade --refresh -y;;
 esac
 
+# Remove version lock
+v sudo dnf versionlock delete quickshell-git 2>/dev/null
+
 # Development-tools installation
 v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros qt6-rpm-macros -y
 
@@ -42,8 +45,9 @@ v sudo dnf install ${themes_deps[@]} -y
 
 # Hyprland 
 hyprland_deps=(
-  hypridle hyprland hyprlock hyprpicker hyprsunset
-  xdg-desktop-portal-hyprland wl-clipboard
+  hyprland
+  hyprsunset
+  wl-clipboard
 )
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
 # hyprland-qt-support's build deps
@@ -115,5 +119,9 @@ install_RPMS() {
 showfun install_RPMS
 v install_RPMS
 
+
 # hyprland-qtutils depends on hyprland-qt-support
 v sudo dnf install hyprland-qtutils -y
+
+# Add back versionlock at the end
+v sudo dnf versionlock add quickshell-git
