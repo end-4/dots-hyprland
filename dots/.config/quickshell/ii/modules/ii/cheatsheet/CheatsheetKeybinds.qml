@@ -3,15 +3,42 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
 Item {
     id: root
-    readonly property var keybinds: HyprlandKeybinds.keybinds
+
+    readonly property var keybinds: {
+        const hasFilter = root.filter !== '';
+        
+
+        const defaultKeybinds = HyprlandKeybinds.defaultKeybinds.children ?? []
+        const userKeybinds = HyprlandKeybinds.userKeybinds.children ?? []
+
+        // console.log('===')
+        // // console.log(JSON.stringify(children))
+        const unbinds = Config.options.cheatsheet.filterUnbinds ? parseUnbinds(userKeybinds) : []
+        //  console.log('===')
+        // console.log(JSON.stringify(unbinds))
+        // console.log('===')   
+        // console.log(JSON.stringify(parseKeymaps(defaultKeybinds), unbinds), 'system')
+        // console.log('===')
+        // console.log(JSON.stringify(parseKeymaps(userKeybinds)), 'user')
+        // console.log('===')
+       // return { children: children }
+        return { 
+            children: [
+                ...(parseKeymaps(defaultKeybinds, unbinds) ?? []),
+                ...(parseKeymaps(userKeybinds) ?? []),
+            ]
+        }
+    }
     property real spacing: 20
     property real titleSpacing: 7
     property real padding: 4
+    property var filter: ''
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
@@ -69,6 +96,7 @@ Item {
         "Return": "Enter",
         // "Shift": "",
       },
+      
       !!Config.options.cheatsheet.superKey ? {
           "Super": Config.options.cheatsheet.superKey,
       }: {},
@@ -77,6 +105,165 @@ Item {
       Config.options.cheatsheet.useMouseSymbol ? mouseSymbolMap : {},
     )
 
+    function parseKeymaps(cheatsheet, unbinds) {
+        const hasFilter = root.filter !== '';
+        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
+        if (!unbinds) unbinds = []
+        if (!cheatsheet) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
+        return cheatsheet.map((child) => {
+            return Object.assign({},
+                child, 
+                {
+                    children: child.children.map((children) => {
+                        const {
+                          keybinds,
+                        } = children;
+                        const remappedKeybinds = keybinds.map((keybind) => {
+                            let mods = [];
+
+                            for (var j = 0; j < keybind.mods.length; j++) {
+                                mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                            }
+                            // console.log('I am here', unbinds.length)
+                            for (var i = 0; i < unbinds.length; i++) {
+                               var unbindMod = unbinds[i].mods.length === keybind.mods.length;
+                               for (var j = 0; j < keybind.mods.length; j++) {
+                                    // console.log('here ->', JSON.stringify(unbinds[i]))
+                                    if (unbinds[i].mods[j] && keybind.mods[j] !== unbinds[i].mods[j]) {
+                                        unbindMod = false;
+                                    } 
+                                }
+                                if (unbindMod && keybind.key === unbinds[i].key) {
+                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    // console.log(mods.join(' '), keybind.key, keybind.comment)
+                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                                    return !Config.options.cheatsheet.filterUnbinds 
+                                } 
+                            }
+
+                            if (!Config.options.cheatsheet.splitButtons) {
+                                mods = [mods.join(' ')]
+                                mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0]?.length ? ' ' : ''
+                                mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                            }
+                            return Object.assign({}, keybind, { mods })
+                        })
+                        const filteredKeybinds = remappedKeybinds.filter(keybind => {
+                            return !hasFilter ? keybind : keybind && keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
+                        })
+                        const fuzzyKeybinds = Fuzzy.go(root.filter.toLowerCase(), remappedKeybinds.map(keybind => {
+                            console.log('K ->', root.filter.toLowerCase(), keybind.comment)
+                            return {
+                                name: Fuzzy.prepare(keybind.comment),
+                                obj: keybind
+                            };
+                        }), {
+                            all: true,
+                            key: "name"
+                        }).map(result => remappedKeybinds.find(keybind => keybind.comment === result.target)).filter(Boolean);                  
+                        console.log('here ->', JSON.stringify(fuzzyKeybinds))
+                        const result = []
+                        fuzzyKeybinds.forEach(keybind => {
+                        // filteredKeybinds.forEach(keybind => {
+                            result.push({
+                                "type": "keys",
+                                "mods": keybind.mods,
+                                "key": keybind.key,
+                            });
+                            result.push({
+                                "type": "comment",
+                                "comment": keybind.comment,
+                            });
+                        })
+
+                        return Object.assign({}, children, {
+                            keybinds: fuzzyKeybinds,
+                            // keybinds: filteredKeybinds,
+                            result
+                        })
+                    })
+                }
+            )
+        })
+    }
+
+    function parseUnbinds(cheatsheet, name) {
+        const unbinds = []
+        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
+        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are not loaded yet
+        cheatsheet.forEach((child) => {
+            child.children.forEach((children) => {
+                const {
+                  unbinds: childUnbind
+                } = children;
+                childUnbind.forEach((unbind) => {
+                    unbinds.push(unbind)
+                    // console.log('===============================')
+                    // console.log(JSON.stringify(unbind))
+                    // console.log('===============================')
+                })
+            })
+        })
+        return unbinds
+    }
+    
+    // Keys.onPressed: event => {
+    //    if (event.key === Qt.Key_Slash) {
+    //         filterField.forceActiveFocus();
+    //         event.accepted = true;
+    //     }
+    // }
+
+    onFocusChanged: focus => {
+        if (focus) {
+            filterField.forceActiveFocus();
+        }
+    }
+    Toolbar {
+        id: extraOptions
+        anchors {
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+            bottomMargin: 8
+        }
+
+        IconToolbarButton {
+            implicitWidth: height
+            text: Config.options.cheatsheet.filterUnbinds ? "filter_alt" : "filter_alt_off"
+            onClicked: {
+                Config.options.cheatsheet.filterUnbinds = !Config.options.cheatsheet.filterUnbinds
+            }
+            StyledToolTip {
+                text: Translation.tr("Toggle filter on system shortcuts unbind by the user")
+            }
+        }
+
+        ToolbarTextField {
+            id: filterField
+            placeholderText: focus ? Translation.tr("Filter shortcuts") : Translation.tr("Hit \"/\" to filter")
+
+            // Style
+            clip: true
+            font.pixelSize: Appearance.font.pixelSize.small
+
+            // Search
+            onTextChanged: {
+                root.filter = text
+            }
+
+        }
+
+        IconToolbarButton {
+            implicitWidth: height
+            onClicked: {
+                root.filter = filterField.text = '';
+            }
+            text: "close"
+            StyledToolTip {
+                text: Translation.tr("Clear filter")
+            }
+        }
+    }
     Row { // Keybind columns
         id: row
         spacing: root.spacing
@@ -102,6 +289,7 @@ Item {
                             id: sectionColumn
                             anchors.centerIn: parent
                             spacing: root.titleSpacing
+                            visible: !!keybindSection.modelData.keybinds.length
                             
                             StyledText {
                                 id: sectionTitle
@@ -121,32 +309,7 @@ Item {
                                 rowSpacing: 4
 
                                 Repeater {
-                                    model: {
-                                        var result = [];
-                                        for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
-                                            const keybind = keybindSection.modelData.keybinds[i];
-
-                                            if (!Config.options.cheatsheet.splitButtons) {
-                                                for (var j = 0; j < keybind.mods.length; j++) {
-                                                    keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
-                                                }
-                                                keybind.mods = [keybind.mods.join(' ') ]
-                                                keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
-                                                keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
-                                            } 
-
-                                            result.push({
-                                                "type": "keys",
-                                                "mods": keybind.mods,
-                                                "key": keybind.key,
-                                            });
-                                            result.push({
-                                                "type": "comment",
-                                                "comment": keybind.comment,
-                                            });
-                                        }
-                                        return result;
-                                    }
+                                  model: keybindSection.modelData.result
                                     delegate: Item {
                                         required property var modelData
                                         implicitWidth: keybindLoader.implicitWidth
