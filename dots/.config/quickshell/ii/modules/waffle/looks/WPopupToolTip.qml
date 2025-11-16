@@ -27,17 +27,8 @@ PopupToolTip {
         implicitWidth: realContent.implicitWidth + 2 * 2
         implicitHeight: realContent.implicitHeight + 2 * 2
 
-        Rectangle {
-            id: ambientShadow
-            z: 0
-            anchors {
-                fill: realContent
-                margins: -border.width
-            }
-            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
-            border.width: 1
-            color: "transparent"
-            radius: realContent.radius + border.width
+        WAmbientShadow {
+            target: realContent
         }
         
         Rectangle {

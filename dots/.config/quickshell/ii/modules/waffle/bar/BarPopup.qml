@@ -70,8 +70,8 @@ Loader {
             focusGrab.active = true; // Doesn't work
         }
 
-        implicitWidth: realContent.implicitWidth + (ambientShadow.border.width * 2) + (root.visualMargin * 2)
-        implicitHeight: realContent.implicitHeight + (ambientShadow.border.width * 2) + (root.visualMargin * 2)
+        implicitWidth: realContent.implicitWidth + (root.ambientShadowWidth * 2) + (root.visualMargin * 2)
+        implicitHeight: realContent.implicitHeight + (root.ambientShadowWidth * 2) + (root.visualMargin * 2)
 
         property real sourceEdgeMargin: -implicitHeight
         PropertyAnimation {
@@ -101,17 +101,8 @@ Loader {
         }
 
         color: "transparent"
-        Rectangle {
-            id: ambientShadow
-            z: 0
-            anchors {
-                fill: realContent
-                margins: -border.width
-            }
-            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
-            border.width: root.ambientShadowWidth
-            color: "transparent"
-            radius: realContent.radius + border.width
+        WAmbientShadow {
+            target: realContent
         }
         
         Rectangle {

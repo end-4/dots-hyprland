@@ -17,10 +17,12 @@ Singleton {
 
     property real backgroundTransparency: 0.17
     property real contentTransparency: 0.25
-    property real shadowTransparency: 0.6
     colors: QtObject {
         id: colors
-        property color ambientShadow: ColorUtils.transparentize("#000000", 0.4)
+        property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
+        property color bgPanelFooter: root.dark ? "#1C1C1C" : "#EEEEEE"
+        property color bgPanelBody: root.dark ? "#242424" : "#F2F2F2"
+        property color bgPanelSeparator: root.dark ? "#191919" : "#E0E0E0"
         property color bg0: root.dark ? "#1C1C1C" : "#EEEEEE"
         property color bg0Border: root.dark ? "#404040" : "#BEBEBE"
         property color bg1: root.dark ? "#2C2C2C" : "#F7F7F7"

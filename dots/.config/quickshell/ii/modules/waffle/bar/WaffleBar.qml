@@ -9,9 +9,8 @@ import qs.modules.common
 import qs.modules.common.widgets
 
 Scope {
-    id: bar
-    property bool showBarBackground: Config.options.bar.showBackground
-
+    id: root
+    
     LazyLoader {
         id: barLoader
         active: GlobalStates.barOpen && !GlobalStates.screenLocked
