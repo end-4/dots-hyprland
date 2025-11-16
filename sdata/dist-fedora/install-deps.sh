@@ -78,7 +78,7 @@ quickshell_deps=(
 # NOTE: Below are custom dependencies of illogical-impulse
 quickshell_custom_deps=(
   qt6-qt5compat qt6-qtimageformats qt6-qtpositioning qt6-qtquicktimeline qt6-qtsensors qt6-qttools
-  qt6-qttranslations qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting
+  qt6-qttranslations qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting  kf6-kirigami
 )
 quickshell_build_deps=(
   breakpad-static breakpad-devel gcc-c++ ninja-build mesa-libgbm-devel cli11-devel glib2-devel
