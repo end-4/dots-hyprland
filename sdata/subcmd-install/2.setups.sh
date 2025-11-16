@@ -3,12 +3,13 @@
 
 function prepare_systemd_user_service(){
   if [[ ! -e "/usr/lib/systemd/user/ydotool.service" ]]; then
-    x ln -s /usr/lib/systemd/{system,user}/ydotool.service
+    x sudo ln -s /usr/lib/systemd/{system,user}/ydotool.service
   fi
 }
 
 function setup_user_group(){
   if [[ -z $(getent group i2c) ]] && [[ "$OS_GROUP_ID" != "fedora" ]]; then
+    # On Fedora this is not needed. Tested with desktop computer with NVIDIA video card.
     x sudo groupadd i2c
   fi
 
@@ -30,6 +31,7 @@ v setup_user_group
 if [[ ! -z $(systemctl --version) ]]; then
   # TODO: Why fedora does not add i2c-dev?
   # TODO: Why fedora add uinput and udev rules?
+  # Regarding uinput and udev rules: the former is required for the virtual keyboard to function, while the latter enables input group users to utilize it.
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
     v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
