@@ -13,11 +13,22 @@ Loader {
     required property var contentItem
     property real padding: Looks.radius.large - Looks.radius.medium
     property bool noSmoothClosing: !Config.options.waffles.smootherAnimations
+    property bool closeOnFocusLost: true
+    signal focusCleared()
     
     property Item anchorItem: parent
     property real visualMargin: 12
     readonly property bool barAtBottom: Config.options.waffles.bar.bottom
     property real ambientShadowWidth: 1
+
+    onFocusCleared: {
+        if (!root.closeOnFocusLost) return;
+        root.close()
+    }
+
+    function grabFocus() { // Doesn't work
+        item.grabFocus();
+    }
 
     function close() {
         item.close();
@@ -43,14 +54,16 @@ Loader {
             id: focusGrab
             active: true
             windows: [popupWindow]
-            onCleared: {
-                root.close()
-            }
+            onCleared: root.focusCleared();
         }
 
         function close() {
             if (root.noSmoothClosing) root.active = false;
             else closeAnim.start();
+        }
+
+        function grabFocus() {
+            focusGrab.active = true; // Doesn't work
         }
 
         implicitWidth: realContent.implicitWidth + (ambientShadow.border.width * 2) + (root.visualMargin * 2)

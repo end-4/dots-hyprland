@@ -5,7 +5,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-import Qt.labs.synchronizer
 import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland

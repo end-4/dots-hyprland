@@ -2,19 +2,22 @@
 # It's not for directly running.
 
 function prepare_systemd_user_service(){
-  if [[ ! -d "${XDG_CONFIG_HOME}/systemd/user" ]]; then
-    x mkdir -p "${XDG_CONFIG_HOME}/systemd/user"
-  fi
-  if [[ ! -e "${XDG_CONFIG_HOME}/systemd/user/ydotool.service" ]]; then
-    x ln -s /usr/lib/systemd/system/ydotool.service "${XDG_CONFIG_HOME}/systemd/user/ydotool.service"
+  if [[ ! -e "/usr/lib/systemd/user/ydotool.service" ]]; then
+    x sudo ln -s /usr/lib/systemd/{system,user}/ydotool.service
   fi
 }
 
 function setup_user_group(){
-  if [[ -z $(getent group i2c) ]]; then
+  if [[ -z $(getent group i2c) ]] && [[ "$OS_GROUP_ID" != "fedora" ]]; then
+    # On Fedora this is not needed. Tested with desktop computer with NVIDIA video card.
     x sudo groupadd i2c
   fi
-  x sudo usermod -aG video,i2c,input "$(whoami)"
+
+  if [[ "$OS_GROUP_ID" == "fedora" ]]; then
+    x sudo usermod -aG video,input "$(whoami)"
+  else
+    x sudo usermod -aG video,i2c,input "$(whoami)"
+  fi
 }
 #####################################################################################
 # These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
@@ -25,8 +28,7 @@ showfun setup_user_group
 v setup_user_group
 
 if [[ ! -z $(systemctl --version) ]]; then
-  # TODO: Why fedora does not add i2c-dev?
-  # TODO: Why fedora add uinput and udev rules?
+  # For Fedora, uinput is required for the virtual keyboard to function, and udev rules enable input group users to utilize it.
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
     v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'

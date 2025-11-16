@@ -75,7 +75,7 @@ BarButton {
 
     component BackgroundAcrylicRectangle: AcrylicRectangle {
         shiny: ((root.hovered && !root.down) || root.checked)
-        color: root.colBackground
+        color: root.color
         border.width: 1
         border.color: root.colBackgroundBorder
 

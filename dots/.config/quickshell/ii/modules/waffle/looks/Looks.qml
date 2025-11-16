@@ -117,6 +117,14 @@ Singleton {
             }
         }
 
+        property Component rotate: Component {
+            NumberAnimation {
+                duration: 170
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+            }
+        }
+
         property Component anchor: Component {
             AnchorAnimation {
                 duration: 160

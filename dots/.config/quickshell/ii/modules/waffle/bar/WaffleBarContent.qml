@@ -4,6 +4,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
 import qs.modules.waffle.bar.tasks
+import qs.modules.waffle.bar.tray
 
 Rectangle {
     id: root
@@ -68,6 +69,7 @@ Rectangle {
             shown: Config.options.waffles.bar.leftAlignApps
             sourceComponent: WidgetsButton {}
         }
+        Tray {}
         UpdatesButton {}
         SystemButton {}
         TimeButton {}
