@@ -14,7 +14,6 @@ function setup_user_group(){
   fi
 
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
-    # TODO: I'm not sure what the video group is for. I didn't join it, and it doesn't seem to be affecting anything. I may need to remove it later
     x sudo usermod -aG video,input "$(whoami)"
   else
     x sudo usermod -aG video,i2c,input "$(whoami)"
