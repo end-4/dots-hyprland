@@ -14,8 +14,6 @@ BarPopup {
 
     closeOnFocusLost: false
     onFocusCleared: {
-        print("uwu")
-        print(contentItem.children)
         const hasMenuOpen = contentItem.children.some(c => (c.menuOpen));
         if (!hasMenuOpen) root.close();
         else root.grabFocus();
@@ -24,7 +22,8 @@ BarPopup {
     contentItem: GridLayout {
         id: contentItem
         anchors.centerIn: parent
-        columns: Math.ceil(Math.sqrt(TrayService.unpinnedItems.length))
+        rows: Math.floor(Math.sqrt(TrayService.unpinnedItems.length))
+        columns: Math.ceil(TrayService.unpinnedItems.length / rows)
         columnSpacing: 0
         rowSpacing: 0
 
