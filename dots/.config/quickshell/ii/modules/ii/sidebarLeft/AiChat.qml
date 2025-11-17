@@ -335,7 +335,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         statusText: Ai.currentChatMetadata.title ?? ""
                         description: statusText
                         visible: Ai.currentChatMetadata?.title?.length > 1
-                        maxWidth: statusRowLayout.width / 2
+                        maxWidth: 100
                     }
                     StatusSeparator {
                         visible: Ai.currentChatMetadata?.title?.length > 1
@@ -360,6 +360,15 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         statusText: Ai.tokenCount.total
                         description: Translation.tr("Total token count\nInput: %1\nOutput: %2").arg(Ai.tokenCount.input).arg(Ai.tokenCount.output)
                         maxWidth: statusRowLayout.width / 3
+                    }
+                    StatusSeparator {
+                        visible: Ai.messageIDs.length > 0
+                    }
+                    StatusItem {
+                        visible: Ai.messageIDs.length > 0
+                        icon: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? "hourglass_empty" : "save" : "file_save_off"
+                        statusText: ""
+                        description: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? Translation.tr("Waiting for response") : Translation.tr("Chat is saved") : Translation.tr("Chat is not saved\nSave with '/save'\nOr enable 'autoSave' in settings")
                     }
                 }
             }
@@ -846,13 +855,56 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     topMargin: root.margins / 2
                 }
 
-                StyledText {
-                    id: chatHistoryTitle
-                    text: Translation.tr("Chat history")
-                    color: Appearance.colors.colSubtext
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    Layout.alignment: Qt.AlignHCenter
+                RowLayout {
+                    RippleButton {
+                        id: directoryButton
+                        implicitWidth: implicitHeight
+                        onClicked: {
+                            Qt.openUrlExternally(`file://${Directories.aiChats}`);
+                        }
+                        MaterialSymbol {
+                            text: "folder"
+                            fill: 1
+                            anchors.centerIn: parent
+                        }
+                        StyledToolTip {
+                            text: Translation.tr("Open chat history folder")
+                        }
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    StyledText {
+                        id: chatHistoryTitle
+                        text: Translation.tr("Chat history")
+                        color: Appearance.colors.colSubtext
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    RippleButton {
+                        id: refreshChatHistory
+                        implicitWidth: implicitHeight
+                        onClicked: {
+                            Ai.updateSavedChats();
+                        }
+                        MaterialSymbol {
+                            text: "refresh"
+                            fill: 1
+                            anchors.centerIn: parent
+                        }
+                        StyledToolTip {
+                            text: Translation.tr("Refresh chat history manually")
+                        }
+                    }
                 }
+                
 
                 Rectangle {
                     Layout.fillWidth: true
@@ -868,7 +920,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         id: listView
 
                         property real delegateHeight: 40
-                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 400)
+                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 250)
                         implicitWidth: root.widthWithMargins - root.margins * 2
 
                         Layout.fillWidth: true
@@ -898,8 +950,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 if (!metadataReader.loaded) return;
                 const fullJson = JSON.parse(metadataReader.text());
                 chatHistoryButton.metadata = fullJson.metadata;
-                savedChatButton.materialIcon = chatHistoryButton.metadata.icon ?? "history";
-                savedChatButton.mainText = chatHistoryButton.metadata.title === "lastSession" ? Translation.tr("Last Session") : chatHistoryButton.metadata.title;
+                savedChatButton.materialIcon = chatHistoryButton.metadata.icon ?? "chat_bubble";
+                savedChatButton.mainText = chatHistoryButton.metadata.title;
             }
         }
 
@@ -912,11 +964,15 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Ai.loadChat(chatHistoryButton.metadata.title);
                     messageListView.positionViewAtEnd();
                 }
+                StyledToolTip {
+                    text: Translation.tr("Conversation started at %1").arg(chatHistoryButton.metadata.savedAt)
+                }
             }
             RippleButton {
                 id: chatDeleteButton
                 property bool confirmState: false
                 colBackground: confirmState ? Appearance.colors.colError : Appearance.colors.colLayer2
+                colBackgroundHover: confirmState ? Appearance.colors.colErrorHover : Appearance.colors.colLayer2Hover
                 implicitWidth: implicitHeight
                 MaterialSymbol {
                     text: "delete"
@@ -929,8 +985,16 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         Ai.updateSavedChats();
                     }else {
                         confirmState = true
+                        confirmStateTimer.running = true
                     }
                     
+                }
+                Timer {
+                    id: confirmStateTimer
+                    interval: 1000
+                    onTriggered: {
+                        chatDeleteButton.confirmState = false
+                    }
                 }
             }
         }

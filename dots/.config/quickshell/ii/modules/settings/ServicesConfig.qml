@@ -11,6 +11,18 @@ ContentPage {
         icon: "neurology"
         title: Translation.tr("AI")
 
+        ConfigSwitch {
+            buttonIcon: "save"
+            text: Translation.tr("Automatically save chats")
+            checked: Config.options.ai.autoSave
+            onCheckedChanged: {
+                Config.options.ai.autoSave = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Automatically names and saves the conversations that are more than 3 responses longs.")
+            }
+        }
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("System prompt")
