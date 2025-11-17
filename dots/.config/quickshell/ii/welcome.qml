@@ -314,8 +314,6 @@ ApplicationWindow {
                                     RowLayout {
                                         spacing: 3
                                         KeyboardKey {
-                                            // key: 'Ctrl'
-                                            // key: mainContent.modKey
                                             key: (Config.options.cheatsheet.splitButtons ? (Config.options.cheatsheet.useMacSymbol ? '󰘴' : 'Ctrl') : (Config.options.cheatsheet.useMacSymbol ? '󰘴' : 'Ctrl') + ' ' + Config.options.cheatsheet.superKey + ' T')
                                         }
                                         KeyboardKey {
