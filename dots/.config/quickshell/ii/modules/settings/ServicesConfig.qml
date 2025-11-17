@@ -249,4 +249,27 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {    
+        icon: "image"    
+        title: Translation.tr("Wallpapers")    
+    
+        ContentSubsection {  
+            title: Translation.tr("Unsplash API Key")
+            tooltip: Translation.tr("API Keys can be created here: www.unsplash.com/developers")
+              
+            MaterialTextArea {    
+                Layout.fillWidth: true    
+                placeholderText: Translation.tr("Access Code")    
+                text: Config.options.unsplash?.apiKey ?? ""    
+                wrapMode: TextEdit.Wrap    
+                onTextChanged: {    
+                    Qt.callLater(() => {    
+                        Config.options.unsplash.apiKey = text;    
+                    });    
+                }    
+            }  
+        }  
+    }
+
 }
