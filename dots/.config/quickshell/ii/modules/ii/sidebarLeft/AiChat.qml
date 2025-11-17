@@ -331,6 +331,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     anchors.centerIn: parent
                     spacing: 10
                     StatusItem {
+                        // Chat title indicator
                         icon: Ai.currentChatMetadata.icon ?? ""
                         statusText: Ai.currentChatMetadata.title ?? ""
                         description: statusText
@@ -341,12 +342,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         visible: Ai.currentChatMetadata?.title?.length > 1
                     }
                     StatusItem {
+                        // Api key indicator
                         icon: Ai.currentModelHasApiKey ? "key" : "key_off"
                         statusText: ""
                         description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
                     }
                     StatusSeparator {}
                     StatusItem {
+                        // Ai temperature indicator
                         icon: "device_thermostat"
                         statusText: Ai.temperature.toFixed(1)
                         description: Translation.tr("Temperature\nChange with /temp VALUE")
@@ -355,6 +358,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         visible: Ai.tokenCount.total > 0
                     }
                     StatusItem {
+                        // Ai token count indicator
                         visible: Ai.tokenCount.total > 0
                         icon: "token"
                         statusText: Ai.tokenCount.total
@@ -365,10 +369,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         visible: Ai.messageIDs.length > 0
                     }
                     StatusItem {
+                        // Chat save indicator
                         visible: Ai.messageIDs.length > 0
-                        icon: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? "hourglass_empty" : "save" : "file_save_off"
+                        icon: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? "hourglass_empty" : "save" : Config.options.ai.autoSave ? "save_clock" : "file_save_off"
                         statusText: ""
-                        description: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? Translation.tr("Waiting for response") : Translation.tr("Chat is saved") : Translation.tr("Chat is not saved\nSave with '/save'\nOr enable 'autoSave' in settings")
+                        description: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? Translation.tr("Waiting for response") : Translation.tr("Chat is saved") : Config.options.ai.autoSave ? Translation.tr("Chat is not saved (auto save enabled)\nSave with '/save'\nOr continue writing to automatically save") : Translation.tr("Chat is not saved\nSave with auto-naming using /save\nOr enable auto save in settings")
                     }
                 }
             }
@@ -821,17 +826,25 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
     component AiChatHistoryItem: Item {
         id: root
         property real margins: 10
-        visible: Ai.messageIDs.length === 0 && Ai.savedChats.length > 0
+        visible: implicitHeight > 0
+
+        opacity: implicitHeight > 0 ? 1 : 0
 
         property real widthWithMargins: parent.width - margins  // to be used for listview
 
         implicitWidth: background.implicitWidth
-        implicitHeight: background.implicitHeight
+        implicitHeight: Ai.messageIDs.length === 0 && Ai.savedChats.length > 0 && messageInputField.text.length < 125 && !messageInputField.text.startsWith("/") ? background.implicitHeight : 0
+
+        Behavior on implicitHeight {
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+        Behavior on opacity {
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Appearance.sizes.elevationMargin
-
 
         Rectangle {
             id: background
@@ -904,7 +917,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         }
                     }
                 }
-                
 
                 Rectangle {
                     Layout.fillWidth: true
@@ -916,15 +928,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     implicitWidth: listView.implicitWidth
                     implicitHeight: listView.implicitHeight
                     clip: true
+
                     StyledListView {
                         id: listView
-
                         property real delegateHeight: 40
-                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 250)
+                        implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 225)
                         implicitWidth: root.widthWithMargins - root.margins * 2
 
                         Layout.fillWidth: true
-
                         model: Ai.savedChats
                         delegate: AiChatHistoryButton {}
                     }
@@ -932,7 +943,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
         }
     }
-
 
     component AiChatHistoryButton: Item {
         id: chatHistoryButton
@@ -965,7 +975,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     messageListView.positionViewAtEnd();
                 }
                 StyledToolTip {
-                    text: Translation.tr("Conversation started at %1").arg(chatHistoryButton.metadata.savedAt)
+                    text: Translation.tr("Conversation started at %1").arg(chatHistoryButton?.metadata?.savedAt)
                 }
             }
             RippleButton {
@@ -974,11 +984,13 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 colBackground: confirmState ? Appearance.colors.colError : Appearance.colors.colLayer2
                 colBackgroundHover: confirmState ? Appearance.colors.colErrorHover : Appearance.colors.colLayer2Hover
                 implicitWidth: implicitHeight
+
                 MaterialSymbol {
                     text: "delete"
                     fill: 1
                     anchors.centerIn: parent
                 }
+
                 onClicked: {
                     if (confirmState) {
                         Quickshell.execDetached(["rm", "-rf", chatHistoryButton.metadata.path]);
@@ -989,6 +1001,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     }
                     
                 }
+
                 Timer {
                     id: confirmStateTimer
                     interval: 1000
@@ -998,6 +1011,5 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
             }
         }
-        
     }
 }

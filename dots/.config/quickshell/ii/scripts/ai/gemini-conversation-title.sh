@@ -33,6 +33,7 @@ Rules:
 - Use the conversation's language when naming the title.
 - Do not include any explanations, Markdown, or text outside of the JSON object.
 - Do not include any additional text.
+- Do not use any capital letters except for the first letter of the first word
 - When choosing an icon, don't shy away from thinking abstractly. For example, a lightbulb for something like new ideas
 Conversation:
 $CONVO_TEXT"
