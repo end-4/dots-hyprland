@@ -2,29 +2,42 @@ import QtQuick
 import QtQuick.Layouts
 import qs.services
 import qs.modules.common
+import qs.modules.common.models.quickToggles
 import qs.modules.common.functions
 import qs.modules.common.widgets
 
 GroupButton {
     id: root
     
+    // Info to be passed to by repeater
     required property int buttonIndex
     required property var buttonData
     required property bool expandedSize
-    required property string buttonIcon
-    required property string name
-    required property var mainAction
-    property string statusText: toggled ? Translation.tr("Active") : Translation.tr("Inactive")
-    property bool available: true
-
     required property real baseCellWidth
     required property real baseCellHeight
     required property real cellSpacing
     required property int cellSize
+
+    // Signals
+    signal openMenu()
+
+    // Declared in specific toggles
+    property QuickToggleModel toggleModel
+    property string name: toggleModel?.name ?? ""
+    property string statusText: (toggleModel?.hasStatusText) ? (toggleModel?.statusText || (toggled ? Translation.tr("Active") : Translation.tr("Inactive"))) : ""
+    property string tooltipText: toggleModel?.tooltipText ?? ""
+    property string buttonIcon: toggleModel?.icon ?? "close"
+    property bool available: toggleModel?.available ?? true
+    toggled: toggleModel?.toggled ?? false
+    property var mainAction: toggleModel?.mainAction ?? null
+    altAction: toggleModel?.hasMenu ? (() => root.openMenu()) : (toggleModel?.altAction ?? null)
+
+    // Edit mode state
+    property bool editMode: false
+
+    // Sizing shenanigans
     baseWidth: root.baseCellWidth * cellSize + cellSpacing * (cellSize - 1)
     baseHeight: root.baseCellHeight
-
-    property bool editMode: false
     enableImplicitWidthAnimation: !editMode && root.mouseArea.containsMouse
     enableImplicitHeightAnimation: !editMode && root.mouseArea.containsMouse
     Behavior on baseWidth {
@@ -40,8 +53,6 @@ GroupButton {
     Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
-
-    signal openMenu()
 
     enabled: available || editMode
     padding: 6
@@ -225,5 +236,10 @@ GroupButton {
             }
             event.accepted = true;
         }
+    }
+
+    StyledToolTip {
+        extraVisibleCondition: root.tooltipText !== ""
+        text: root.tooltipText
     }
 }

@@ -27,5 +27,16 @@ Singleton {
         if (Battery.percentage >= 0.9) return "battery-full";
         return `battery-${Math.ceil(Battery.percentage * 10)}`;
     }
-    
+
+    property string volumeIcon: {
+        const muted = Audio.sink?.audio.muted ?? false;
+        const volume = Audio.sink?.audio.volume ?? 0;
+        if (muted)
+            return volume > 0 ? "speaker-off" : "speaker-none";
+        if (volume == 0)
+            return "speaker-none";
+        if (volume < 0.5)
+            return "speaker-1";
+        return "speaker";
+    }    
 }

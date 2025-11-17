@@ -85,6 +85,7 @@ AppButton {
 
     BarMenu {
         id: contextMenu
+        noSmoothClosing: false // On the real thing this is always smooth
 
         model: [
             ...((root.desktopEntry?.actions.length > 0) ? root.desktopEntry.actions.map(action =>({
