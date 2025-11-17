@@ -36,7 +36,7 @@ PopupWindow {
     ///////////////////// Internals /////////////////////
     readonly property bool bottom: Config.options.waffles.bar.bottom
     property real visualMargin: 12
-    property alias ambientShadowWidth: ambientShadow.border.width
+    property real ambientShadowWidth: 1
 
     visible: false
     color: "transparent"
@@ -64,16 +64,8 @@ PopupWindow {
         hoverEnabled: true
 
         // Shadow
-        Rectangle {
-            id: ambientShadow
-            anchors {
-                fill: contentItem
-                margins: -border.width
-            }
-            border.color: ColorUtils.transparentize(Looks.colors.ambientShadow, Looks.shadowTransparency)
-            border.width: 1
-            color: "transparent"
-            radius: Looks.radius.large + border.width
+        WAmbientShadow {
+            target: contentItem
         }
 
         Rectangle {
