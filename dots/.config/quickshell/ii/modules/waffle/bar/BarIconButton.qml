@@ -14,6 +14,7 @@ BarButton {
     property alias iconSize: iconContent.implicitSize
     property alias iconRotation: iconContent.rotation
     property alias iconMonochrome: iconContent.monochrome
+    property alias iconScale: iconContent.scale
     property alias tooltipText: tooltip.text
     property alias overlayingItems: iconContent.data
 

@@ -8,9 +8,9 @@ import qs.modules.waffle.looks
 BarButton {
     id: root
 
-    checked: GlobalStates.sidebarRightOpen
+    checked: GlobalStates.sidebarLeftOpen
     onClicked: {
-        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen; // For now...
+        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
     }
 
     contentItem: Item {
