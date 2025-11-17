@@ -8,17 +8,19 @@ fi
 
 # Update System
 case $SKIP_SYSUPDATE in
-  true) sleep 0;;
-  *) v sudo dnf upgrade --refresh -y;;
+  true) sleep 0 ;;
+  *) v sudo dnf upgrade --refresh -y ;;
 esac
 
+# Remove version lock
+v sudo dnf versionlock delete quickshell-git 2>/dev/null
+
 # Development-tools installation
-v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros -y
+v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros qt6-rpm-macros -y
 
 # COPR repositories
+v sudo dnf copr enable ririko66z/dots-hyprland -y
 v sudo dnf copr enable solopasha/hyprland -y
-v sudo dnf copr enable errornointernet/quickshell -y
-v sudo dnf copr enable errornointernet/packages -y
 v sudo dnf copr enable deltacopy/darkly -y
 v sudo dnf copr enable alternateved/eza -y
 v sudo dnf copr enable atim/starship -y
@@ -32,33 +34,33 @@ v sudo dnf install geoclue2 brightnessctl ddcutil -y
 # Basic
 v sudo dnf install bc coreutils cliphist cmake curl wget2 ripgrep jq xdg-utils rsync yq -y
 
+# Cursor themes
+v sudo dnf install bibata-cursor-theme -y
+
 # Fonts & Themes
 themes_deps=(
-  adw-gtk3-theme breeze-cursor-theme grub2-breeze-theme breeze-icon-theme{,-fedora} 
-  kf6-breeze-icons sddm-breeze darkly eza fish fontconfig kitty matugen starship 
-  jetbrains-mono-nl-fonts material-icons-fonts twitter-twemoji-fonts
+  adw-gtk3-theme breeze-cursor-theme grub2-breeze-theme breeze-icon-theme{,-fedora} kf6-breeze-icons
+  sddm-breeze breeze-plus-icon-theme darkly eza fish fontconfig kitty matugen florian-karsten-space-grotesk-fonts
+  starship gabarito-fonts jetbrains-mono-nerd-fonts google-material-symbols-vf-rounded-fonts material-icons-fonts
+  readex-pro-fonts-all google-roboto-flex-fonts google-rubik-vf-fonts twitter-twemoji-fonts
 )
 v sudo dnf install ${themes_deps[@]} -y
 
-# Hyprland 
+# Hyprland
 hyprland_deps=(
-  hypridle hyprland hyprlock hyprpicker 
-  hyprsunset xdg-desktop-portal-hyprland wl-clipboard
+  hyprland
+  hyprsunset
+  wl-clipboard
 )
 v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
-
-## About `hyprland-qtutils` and `hyprland-qt-support`
-# The hyprland-qt-support's GitHub repository requires Qt 6.6 or higher, which I think makes DNF's requirement of Qt 6.9 too strict; it should also support Qt 6.10.
-# On distro like Arch Linux, `hyprland-qtutils` and `hyprland-qt-support` are in dependency chain already so no need to add them as deps explicitly; 
-# However on Fedora, if this package is not installed, a yellow warning⚠️ will appear every time you log in to Hyprland.  
-v dnf download hyprland-qt-support && v sudo rpm -ivh --nodeps hyprland-qt-support-*.fc$(rpm -E %fedora).$(uname -m).rpm
-v sudo dnf install hyprland-qtutils -y
+# hyprland-qt-support's build deps
+v sudo dnf install hyprlang-devel -y
 
 # KDE
 v sudo dnf install bluedevil gnome-keyring NetworkManager plasma-nm polkit-kde dolphin plasma-systemsettings -y
 
-# Microtex-git
-v sudo dnf install --setopt="install_weak_deps=False" tinyxml2-devel gtkmm3.0-devel gtksourceviewmm3-devel cairomm-devel -y
+# MicroTeX-git
+v sudo dnf install microtex -y
 
 # Portal
 v sudo dnf install xdg-desktop-portal{,-gtk,-kde,-hyprland} -y
@@ -70,26 +72,23 @@ v sudo dnf install python3{,.12}{,-devel} -y
 
 # Quickshell-git
 quickshell_deps=(
-  qt6-qtdeclarative qt6-qtbase jemalloc qt6-qtsvg pipewire-libs
-  libxcb wayland-devel qt6-qtwayland qt5-qtwayland libdrm breakpad
+  qt6-qtdeclarative qt6-qtbase jemalloc qt6-qtsvg pipewire-libs libxcb wayland-devel qt6-qtwayland
+  qt5-qtwayland libdrm breakpad
 )
 # NOTE: Below are custom dependencies of illogical-impulse
 quickshell_custom_deps=(
-  qt6-qt5compat qt6-qtimageformats qt6-qtpositioning 
-  qt6-qtquicktimeline qt6-qtsensors qt6-qttools qt6-qttranslations 
-  qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting 
+  qt6-qt5compat qt6-qtimageformats qt6-qtpositioning qt6-qtquicktimeline qt6-qtsensors qt6-qttools
+  qt6-qttranslations qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting  kf6-kirigami
+)
+quickshell_build_deps=(
+  breakpad-static breakpad-devel gcc-c++ ninja-build mesa-libgbm-devel cli11-devel glib2-devel
+  jemalloc-devel libdrm-devel pipewire-devel pam-devel polkit-devel wayland-devel wayland-protocols-devel
+  qt6-qtdeclarative-devel qt6-qtshadertools-devel qt6-qtbase-private-devel spirv-tools
+  libasan
 )
 v sudo dnf install "${quickshell_deps[@]}" -y
 v sudo dnf install "${quickshell_custom_deps[@]}" -y
-# Dynamically control the version of quickshell
-qs_version=$(dnf list --showduplicates quickshell-git 2>/dev/null |
-  grep -E "\.git${_qs_shortcommit}(-|$)" |
-  awk '{print $2}' |
-  sort -V |
-  tail -n1)
-v sudo dnf versionlock delete quickshell-git 2>/dev/null
-v sudo dnf install quickshell-git-${qs_version}
-v sudo dnf versionlock add quickshell-git
+v sudo dnf install "${quickshell_build_deps[@]}" -y
 
 # Screencapture
 v sudo dnf install hyprshot slurp swappy tesseract tesseract-langpack-eng tesseract-langpack-chi_sim wf-recorder -y
@@ -105,19 +104,26 @@ v sudo dnf install --setopt="install_weak_deps=False" mpvpaper plasma-systemmoni
 
 # Start building the missing RPM package locally.
 install_RPMS() {
-    rpmbuildroot=${REPO_ROOT}/cache/rpmbuild
-    x mkdir -p $rpmbuildroot/{BUILD,RPMS,SOURCES}
-    x cp -r ${REPO_ROOT}/sdata/dist-fedora/SPECS $rpmbuildroot/
-    x cd $rpmbuildroot/SPECS
-    mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
-    for spec_file in ${local_specs[@]}; do
-        x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
-    done
-    mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-    echo "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
-    x sudo dnf install "${local_rpms[@]}" -y
-    x cd ${REPO_ROOT}
+  rpmbuildroot=${REPO_ROOT}/cache/rpmbuild
+  x mkdir -p $rpmbuildroot/{BUILD,RPMS,SOURCES}
+  x cp -r ${REPO_ROOT}/sdata/dist-fedora/SPECS $rpmbuildroot/
+  x cd $rpmbuildroot/SPECS
+  mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
+  for spec_file in ${local_specs[@]}; do
+    x spectool -g -C "$rpmbuildroot/SOURCES" $spec_file
+    x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
+  done
+  mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
+  echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
+  x sudo dnf install "${local_rpms[@]}" -y
+  x cd ${REPO_ROOT}
 }
 
 showfun install_RPMS
 v install_RPMS
+
+# hyprland-qtutils depends on hyprland-qt-support
+v sudo dnf install hyprland-qtutils -y
+
+# Add back versionlock at the end
+v sudo dnf versionlock add quickshell-git

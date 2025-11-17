@@ -18,7 +18,7 @@ body:
           required: false # Not required cuz user may have failed to do so
         - label: I've ticked the checkboxes without reading their contents
           required: false # Obviously
-
+  # TODO: Use GitHub Action to auto add folding tag if the log contains more than 15 lines, instead of tell user to "paste here" cuz many users actually does not know its meaning (It's also not convenient anyway).
   - type: textarea
     attributes:
       label: "Step 2. Quick diagnose info"

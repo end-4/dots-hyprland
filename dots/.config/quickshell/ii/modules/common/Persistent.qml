@@ -89,6 +89,22 @@ Singleton {
                     property real width: 250
                     property real height: 100
                 }
+                property JsonObject floatingImage: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 1650
+                    property real y: 390
+                    property real width: 0
+                    property real height: 0
+                }
+                property JsonObject fpsLimiter: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: false
+                    property real x: 1570
+                    property real y: 615
+                    property real width: 280
+                    property real height: 80
+                }
                 property JsonObject recorder: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: false
@@ -115,13 +131,13 @@ Singleton {
                     property real height: 600
                     property int tabIndex: 0
                 }
-                property JsonObject fpsLimiter: JsonObject {
+                property JsonObject notes: JsonObject {
                     property bool pinned: false
-                    property bool clickthrough: false
-                    property real x: 1576
-                    property real y: 630
-                    property real width: 280
-                    property real height: 80
+                    property bool clickthrough: true
+                    property real x: 1400
+                    property real y: 42
+                    property real width: 460
+                    property real height: 330
                 }
             }
 

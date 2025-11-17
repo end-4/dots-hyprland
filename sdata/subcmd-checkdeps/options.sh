@@ -16,13 +16,14 @@ para=$(getopt \
   -l help \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
+echo $para
 #####################################################################################
 eval set -- "$para"
 while true ; do
   case "$1" in
     -h|--help) showhelp;exit;;
     --) shift;break ;;
-    *) sleep 0 ;;
+    *) echo -e "$0: Wrong parameters.";exit 1;;
   esac
 done
 

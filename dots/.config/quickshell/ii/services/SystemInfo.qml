@@ -58,6 +58,7 @@ Singleton {
 
             // Update the distroIcon property based on distroId
             switch (distroId) {
+                case "artix":
                 case "arch": distroIcon = "arch-symbolic"; break;
                 case "endeavouros": distroIcon = "endeavouros-symbolic"; break;
                 case "cachyos": distroIcon = "cachyos-symbolic"; break;
