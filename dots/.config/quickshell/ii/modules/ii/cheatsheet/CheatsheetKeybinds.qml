@@ -109,9 +109,9 @@ Item {
         const hasFilter = root.filter !== '';
         // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
         if (!unbinds) unbinds = []
-        if (!cheatsheet) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are empty
+        if (!cheatsheet) return [ ] // Avoid warning in QML when cheatsheets are empty
         return cheatsheet.map((child) => {
-            return Object.assign({},
+            const currentChild = Object.assign({},
                 child, 
                 {
                     children: child.children.map((children) => {
@@ -152,7 +152,7 @@ Item {
                             return !hasFilter ? keybind : keybind && keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
                         })
                         const fuzzyKeybinds = Fuzzy.go(root.filter.toLowerCase(), remappedKeybinds.map(keybind => {
-                            console.log('K ->', root.filter.toLowerCase(), keybind.comment)
+                            // console.log('K ->', root.filter.toLowerCase(), keybind.comment)
                             return {
                                 name: Fuzzy.prepare(keybind.comment),
                                 obj: keybind
@@ -161,7 +161,7 @@ Item {
                             all: true,
                             key: "name"
                         }).map(result => remappedKeybinds.find(keybind => keybind.comment === result.target)).filter(Boolean);                  
-                        console.log('here ->', JSON.stringify(fuzzyKeybinds))
+                        // console.log('here ->', JSON.stringify(fuzzyKeybinds))
                         const result = []
                         fuzzyKeybinds.forEach(keybind => {
                         // filteredKeybinds.forEach(keybind => {
@@ -176,15 +176,16 @@ Item {
                             });
                         })
 
-                        return Object.assign({}, children, {
+                        return !!fuzzyKeybinds.length ? Object.assign({}, children, {
                             keybinds: fuzzyKeybinds,
                             // keybinds: filteredKeybinds,
                             result
-                        })
-                    })
+                        }) : null
+                    }).filter(Boolean)
                 }
             )
-        })
+            return currentChild.children.length ? currentChild : null
+        }).filter(Boolean).filter(child => child.children.length)
     }
 
     function parseUnbinds(cheatsheet, name) {
@@ -270,6 +271,7 @@ Item {
         
         Repeater {
             model: keybinds.children
+            visible: !!keybinds.children.length
             
             delegate: Column { // Keybind sections
                 spacing: root.spacing
@@ -278,7 +280,7 @@ Item {
 
                 Repeater {
                     model: modelData.children
-
+                    visible: !!modelData.children.length
                     delegate: Item { // Section with real keybinds
                         id: keybindSection
                         required property var modelData
