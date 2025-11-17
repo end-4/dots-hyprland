@@ -34,6 +34,7 @@ RDEPEND="
 	dev-qt/qtwayland:6
 	kde-apps/kdialog
 	kde-frameworks/syntax-highlighting:6
+	kde-frameworks/kirigami
 
 	jemalloc? ( dev-libs/jemalloc )
 	wayland? (
