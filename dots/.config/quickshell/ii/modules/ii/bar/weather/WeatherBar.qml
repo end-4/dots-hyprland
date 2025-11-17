@@ -13,15 +13,19 @@ MouseArea {
     implicitWidth: rowLayout.implicitWidth + 10 * 2
     implicitHeight: Appearance.sizes.barHeight
 
-    hoverEnabled: true
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
     onPressed: {
-        Weather.getData();
-        Quickshell.execDetached(["notify-send", 
-            Translation.tr("Weather"), 
-            Translation.tr("Refreshing (manually triggered)")
-            , "-a", "Shell"
-        ])
+        if (mouse.button === Qt.RightButton) {
+            Weather.getData();
+            Quickshell.execDetached(["notify-send", 
+                Translation.tr("Weather"), 
+                Translation.tr("Refreshing (manually triggered)")
+                , "-a", "Shell"
+            ])
+            mouse.accepted = false
+        }
     }
 
     RowLayout {

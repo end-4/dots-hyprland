@@ -9,7 +9,7 @@ conflicts=("quickshell-git")
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=5
+pkgrel=6
 pkgdesc="$_pkgname-git pinned commit and extra deps for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
@@ -39,6 +39,7 @@ depends=(
   qt6-translations
   qt6-virtualkeyboard
   qt6-wayland
+  kirigami
   kdialog
   syntax-highlighting
 )

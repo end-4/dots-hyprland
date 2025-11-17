@@ -13,6 +13,8 @@ Kirigami.Icon {
     property real implicitSize: 26
     implicitWidth: implicitSize
     implicitHeight: implicitSize
+
+    animated: true
     roundToIconSize: false
     fallback: root.iconName
     source: tryCustomIcon ? `${Looks.iconsPath}/${root.iconName}${!root.separateLightDark ? "" : Looks.dark ? "-dark" : "-light"}.svg` : fallback

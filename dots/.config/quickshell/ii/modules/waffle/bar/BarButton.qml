@@ -8,11 +8,14 @@ import qs.modules.waffle.looks
 Button {
     id: root
 
-    signal altAction()
-    signal middleClickAction()
+    property var altAction: () => {}
+    property var middleClickAction: () => {}
 
-    property color colBackground
+    property color colBackground: ColorUtils.transparentize(Looks.colors.bg1)
+    property color colBackgroundHover: Looks.colors.bg1Hover
+    property color colBackgroundActive: Looks.colors.bg1Active
     property color colBackgroundBorder
+    property color color
     Layout.fillHeight: true
     topInset: 4
     bottomInset: 4
@@ -37,16 +40,16 @@ Button {
         }
     }
 
-    colBackground: {
+    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, (root.checked || root.hovered) ? Looks.contentTransparency : 1)
+    color: {
         if (root.down) {
-            return Looks.colors.bg1Active
+            return root.colBackgroundActive
         } else if ((root.hovered && !root.down) || root.checked) {
-            return Looks.colors.bg1Hover
+            return root.colBackgroundHover
         } else {
-            return ColorUtils.transparentize(Looks.colors.bg1)
+            return root.colBackground
         }
     }
-    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, root.checked ? Looks.contentTransparency : 1)
 
     MouseArea {
         anchors.fill: parent
@@ -66,7 +69,8 @@ Button {
 
     background: AcrylicRectangle {
         shiny: ((root.hovered && !root.down) || root.checked)
-        color: root.colBackground
+        color: root.color
+        radius: Looks.radius.medium
         border.width: 1
         border.color: root.colBackgroundBorder
 

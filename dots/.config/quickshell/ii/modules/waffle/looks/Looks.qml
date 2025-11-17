@@ -17,9 +17,12 @@ Singleton {
 
     property real backgroundTransparency: 0.17
     property real contentTransparency: 0.25
-    property real shadowTransparency: 0.6
     colors: QtObject {
         id: colors
+        property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
+        property color bgPanelFooter: root.dark ? "#1C1C1C" : "#EEEEEE"
+        property color bgPanelBody: root.dark ? "#242424" : "#F2F2F2"
+        property color bgPanelSeparator: root.dark ? "#191919" : "#E0E0E0"
         property color bg0: root.dark ? "#1C1C1C" : "#EEEEEE"
         property color bg0Border: root.dark ? "#404040" : "#BEBEBE"
         property color bg1: root.dark ? "#2C2C2C" : "#F7F7F7"
@@ -34,6 +37,7 @@ Singleton {
         property color fg1: root.dark ? "#D1D1D1" : "#626262"
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
+        property color warning: "#FF9900"
         // property color accent: root.dark ? "#A5C6D8" : "#5377A3"
         property color accent: Appearance.m3colors.m3primary
         property color accentUnfocused: root.dark ? "#989898" : "#848484"
@@ -61,7 +65,7 @@ Singleton {
         }
         property QtObject pixelSize: QtObject {
             property real normal: 11
-            property real large: 15
+            property real large: 14
         }
     }
 
@@ -108,6 +112,14 @@ Singleton {
         }
 
         property Component move: Component {
+            NumberAnimation {
+                duration: 170
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeInOut
+            }
+        }
+
+        property Component rotate: Component {
             NumberAnimation {
                 duration: 170
                 easing.type: Easing.BezierSpline

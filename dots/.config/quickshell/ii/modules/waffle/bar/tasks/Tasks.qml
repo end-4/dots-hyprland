@@ -17,10 +17,17 @@ MouseArea {
         previewPopup.show(appEntry, button);
     }
 
+    Behavior on implicitWidth {
+        animation: Looks.transition.move.createObject(this)
+    }
+
     // Apps row
     RowLayout {
         id: row
-        anchors.fill: parent
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+        }
         spacing: 0
 
         Repeater {
@@ -36,6 +43,9 @@ MouseArea {
                 onHoverPreviewRequested: {
                     root.showPreviewPopup(appEntry, this)
                 }
+                onHoverPreviewDismissed: {
+                    previewPopup.close()
+                }
             }
         }
     }
@@ -46,4 +56,5 @@ MouseArea {
         tasksHovered: root.containsMouse
         anchor.window: root.QsWindow.window
     }
+
 }
