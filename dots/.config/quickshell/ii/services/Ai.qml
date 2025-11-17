@@ -70,7 +70,10 @@ Singleton {
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
-    property var chatMetadata: {}  // current chat metadata
+    property var currentChatMetadata: {}  // current chat metadata
+    
+
+
 
     property var promptSubstitutions: {
         "{DISTRO}": SystemInfo.distroName,
@@ -910,7 +913,6 @@ Singleton {
         blockLoading: true // Prevent race conditions
         onLoadedChanged: {
             if (!chatSaveFile.loaded) return;
-
             if (isLoading) {
                 loadData(chatSaveFile.text());
                 isLoading = false;
@@ -924,7 +926,8 @@ Singleton {
      * @param chatName name of the chat
      */
     function saveChat(chatName, extraMetadata = {}) {
-        chatSaveFile.chatName = chatName.trim()
+        root.addMessage(Translation.tr("Saving the chat as '%1'").arg(chatName), root.interfaceRole);
+        chatSaveFile.chatName = chatName
 
         const defaultMetadata = {
             savedAt: DateTime.date + DateTime.time,
@@ -938,34 +941,33 @@ Singleton {
         const saveContent = JSON.stringify({
             metadata: metadata,
             messages: root.chatToJson()
-        }, null, 2); // 2 for pretty look instead of 1-line
+        }, null, 2); // 2 for pretty look
 
         chatSaveFile.setText(saveContent)
         updateSavedChats()
     }
 
     function saveCurrentChat() {
-        chatSaveFile.chatName = root.chatMetadata.title.trim()
+        if (!root.currentChatMetadata) return;
+        chatSaveFile.chatName = root.currentChatMetadata.title;
 
         const saveContent = JSON.stringify({
-            metadata: root.chatMetadata,
+            metadata: root.currentChatMetadata,
             messages: root.chatToJson()
-        }, null, 2); // 2 for pretty look instead of 1-line
+        }, null, 2); // 2 for pretty look
 
-        chatSaveFile.setText(saveContent)
+        chatSaveFile.setText(saveContent);
+        chatSaveFile.chatName = ""; // we have to unload chatSaveFile or else it brokes (it took me 5 hours to figure out this bug)
     }
 
-    function requestChatNameAndSave() { // rename this function FIX ME
+    function autoNameAndSave() {
         getNameGeminiProc.chatContent = JSON.stringify(root.chatToJson())
         getNameGeminiProc.running = true; 
     }
 
-    /*
-     * Updates the list of saved chats.
-    */
     function updateSavedChats() {
         getSavedChats.running = true
-        root.chatMetadata = {} 
+        root.currentChatMetadata = {} 
     }
 
     /*
@@ -973,23 +975,21 @@ Singleton {
      * @param chatName name of the chat
      */
     function loadChat(chatName) {
-        chatSaveFile.chatName = chatName.trim();
+        chatSaveFile.chatName = chatName;
         chatSaveFile.isLoading = true
         chatSaveFile.reload();
-        
     }
 
     function loadData(data) {
         try {
             const saveContent = data
             const saveData = JSON.parse(saveContent);
-
             
-            root.chatMetadata = saveData.metadata;
-            console.log("chat  loading : " + JSON.stringify(root.chatMetadata))
-
+            root.currentChatMetadata = saveData.metadata;
+            
             const messages = saveData.messages;
             root.clearMessages();
+            
             root.messageIDs = messages.map((_, i) => i);
 
             for (let i = 0; i < messages.length; i++) {
@@ -1020,10 +1020,9 @@ Singleton {
         }
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
+    ////// Auto name chat and save it //////
     Process { 
-        id: getNameGeminiProc
+        id: getNameGeminiProc // FIX ME: rename
         running: false
         property var chatContent
         property string base64Chat: Qt.btoa(chatContent)
@@ -1034,13 +1033,13 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 var output = this.text.trim()
-                output = output.replace(/^```json/, "").replace(/```$/, "").trim()
+                output = output.replace(/^```json/, "").replace(/```$/, "").trim() // clear the junk from AI output
                 
                 var jsonOutput = JSON.parse(output)
                 var title = jsonOutput.title
                 var icon = jsonOutput.icon
 
-                var metadataObj = { // for extra metadata
+                var metadataObj = { // AI extra metadata such as icon (can be expanded in the future)
                     icon: icon
                 }
 

@@ -102,7 +102,7 @@ Item {
                 const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
                     Ai.addMessage(Translation.tr("Chat is being saved with auto naming."), Ai.interfaceRole);
-                    Ai.requestChatNameAndSave();
+                    Ai.autoNameAndSave();
                     
                     return;
                 }
@@ -331,14 +331,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     anchors.centerIn: parent
                     spacing: 10
                     StatusItem {
-                        icon: Ai.chatMetadata.icon ?? ""
-                        statusText: Ai.chatMetadata.title ?? ""
+                        icon: Ai.currentChatMetadata.icon ?? ""
+                        statusText: Ai.currentChatMetadata.title ?? ""
                         description: statusText
-                        visible: Ai.chatMetadata?.title?.length > 1
+                        visible: Ai.currentChatMetadata?.title?.length > 1
                         maxWidth: statusRowLayout.width / 2
                     }
                     StatusSeparator {
-                        visible: Ai.chatMetadata?.title?.length > 1
+                        visible: Ai.currentChatMetadata?.title?.length > 1
                     }
                     StatusItem {
                         icon: Ai.currentModelHasApiKey ? "key" : "key_off"
@@ -812,7 +812,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
     component AiChatHistoryItem: Item {
         id: root
         property real margins: 10
-        visible: Ai.messageIDs.length === 0
+        visible: Ai.messageIDs.length === 0 && Ai.savedChats.length > 0
 
         property real widthWithMargins: parent.width - margins  // to be used for listview
 
@@ -854,6 +854,12 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Layout.alignment: Qt.AlignHCenter
                 }
 
+                Rectangle {
+                    Layout.fillWidth: true
+                    color: Appearance.colors.colOutlineVariant
+                    implicitHeight: 1
+                }
+
                 Item { // Clip wrapper
                     implicitWidth: listView.implicitWidth
                     implicitHeight: listView.implicitHeight
@@ -861,7 +867,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     StyledListView {
                         id: listView
 
-                        property real delegateHeight: 30
+                        property real delegateHeight: 40
                         implicitHeight: Math.min(Ai.savedChats.length * delegateHeight, 400)
                         implicitWidth: root.widthWithMargins - root.margins * 2
 
