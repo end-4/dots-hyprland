@@ -453,8 +453,6 @@ ApplicationWindow {
                                         spacing: 3
 
                                         KeyboardKey {
-                                            // key: 'Ctrl'
-                                            // key: mainContent.modKey
                                             key: (Config.options.cheatsheet.splitButtons ? Config.options.cheatsheet.superKey  :  Config.options.cheatsheet.superKey + ' /')
                                         }
                                         StyledText {

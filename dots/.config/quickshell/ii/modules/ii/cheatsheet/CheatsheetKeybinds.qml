@@ -17,17 +17,7 @@ Item {
         const defaultKeybinds = HyprlandKeybinds.defaultKeybinds.children ?? []
         const userKeybinds = HyprlandKeybinds.userKeybinds.children ?? []
 
-        // console.log('===')
-        // // console.log(JSON.stringify(children))
         const unbinds = Config.options.cheatsheet.filterUnbinds ? parseUnbinds(userKeybinds) : []
-        //  console.log('===')
-        // console.log(JSON.stringify(unbinds))
-        // console.log('===')   
-        // console.log(JSON.stringify(parseKeymaps(defaultKeybinds), unbinds), 'system')
-        // console.log('===')
-        // console.log(JSON.stringify(parseKeymaps(userKeybinds)), 'user')
-        // console.log('===')
-       // return { children: children }
         return { 
             children: [
                 ...(parseKeymaps(defaultKeybinds, unbinds) ?? []),
@@ -107,7 +97,6 @@ Item {
 
     function parseKeymaps(cheatsheet, unbinds) {
         const hasFilter = root.filter !== '';
-        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
         if (!unbinds) unbinds = []
         if (!cheatsheet) return [ ] // Avoid warning in QML when cheatsheets are empty
         return cheatsheet.map((child) => {
@@ -124,19 +113,14 @@ Item {
                             for (var j = 0; j < keybind.mods.length; j++) {
                                 mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
                             }
-                            // console.log('I am here', unbinds.length)
                             for (var i = 0; i < unbinds.length; i++) {
                                var unbindMod = unbinds[i].mods.length === keybind.mods.length;
                                for (var j = 0; j < keybind.mods.length; j++) {
-                                    // console.log('here ->', JSON.stringify(unbinds[i]))
                                     if (unbinds[i].mods[j] && keybind.mods[j] !== unbinds[i].mods[j]) {
                                         unbindMod = false;
                                     } 
                                 }
                                 if (unbindMod && keybind.key === unbinds[i].key) {
-                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
-                                    // console.log(mods.join(' '), keybind.key, keybind.comment)
-                                    // console.log('>>>>>>>>>>>>>>>>>>>>BAN<<<<<<<<<<<<<<<<<<<<<<<<<<')
                                     return !Config.options.cheatsheet.filterUnbinds 
                                 } 
                             }
@@ -148,11 +132,7 @@ Item {
                             }
                             return Object.assign({}, keybind, { mods })
                         })
-                        const filteredKeybinds = remappedKeybinds.filter(keybind => {
-                            return !hasFilter ? keybind : keybind && keybind.comment.toLowerCase().includes(root.filter.toLowerCase())
-                        })
                         const fuzzyKeybinds = Fuzzy.go(root.filter.toLowerCase(), remappedKeybinds.map(keybind => {
-                            // console.log('K ->', root.filter.toLowerCase(), keybind.comment)
                             return {
                                 name: Fuzzy.prepare(keybind.comment),
                                 obj: keybind
@@ -161,10 +141,8 @@ Item {
                             all: true,
                             key: "name"
                         }).map(result => remappedKeybinds.find(keybind => keybind.comment === result.target)).filter(Boolean);                  
-                        // console.log('here ->', JSON.stringify(fuzzyKeybinds))
                         const result = []
                         fuzzyKeybinds.forEach(keybind => {
-                        // filteredKeybinds.forEach(keybind => {
                             result.push({
                                 "type": "keys",
                                 "mods": keybind.mods,
@@ -178,7 +156,6 @@ Item {
 
                         return !!fuzzyKeybinds.length ? Object.assign({}, children, {
                             keybinds: fuzzyKeybinds,
-                            // keybinds: filteredKeybinds,
                             result
                         }) : null
                     }).filter(Boolean)
@@ -190,7 +167,6 @@ Item {
 
     function parseUnbinds(cheatsheet, name) {
         const unbinds = []
-        // console.log('parseKeymaps', name, JSON.stringify(cheatsheet))
         if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are not loaded yet
         cheatsheet.forEach((child) => {
             child.children.forEach((children) => {
@@ -199,22 +175,12 @@ Item {
                 } = children;
                 childUnbind.forEach((unbind) => {
                     unbinds.push(unbind)
-                    // console.log('===============================')
-                    // console.log(JSON.stringify(unbind))
-                    // console.log('===============================')
                 })
             })
         })
         return unbinds
     }
     
-    // Keys.onPressed: event => {
-    //    if (event.key === Qt.Key_Slash) {
-    //         filterField.forceActiveFocus();
-    //         event.accepted = true;
-    //     }
-    // }
-
     onFocusChanged: focus => {
         if (focus) {
             filterField.forceActiveFocus();
@@ -365,16 +331,12 @@ Item {
                                             }
                                         }
                                     }
-
                                 }
                             }
                         }
                     }
-
                 }
             }
-            
         }
     }
-    
 }
