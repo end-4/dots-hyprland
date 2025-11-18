@@ -63,7 +63,7 @@ MouseArea {
 
     IconImage {
         id: trayIcon
-        visible: !Config.options.bar.tray.monochromeIcons
+        visible: !Config.options.tray.monochromeIcons
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
@@ -71,7 +71,7 @@ MouseArea {
     }
 
     Loader {
-        active: Config.options.bar.tray.monochromeIcons
+        active: Config.options.tray.monochromeIcons
         anchors.fill: trayIcon
         sourceComponent: Item {
             Desaturate {
