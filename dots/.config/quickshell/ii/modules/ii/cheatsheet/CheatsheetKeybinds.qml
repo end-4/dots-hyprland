@@ -29,8 +29,10 @@ Item {
     property real titleSpacing: 7
     property real padding: 4
     property var filter: ''
-    implicitWidth: row.implicitWidth + padding * 2
-    implicitHeight: row.implicitHeight + padding * 2
+    property var localWidth: 0 
+    property var localHeight: 0 
+    implicitWidth: root.filter !== '' ? root.localWidth : row.implicitWidth + padding * 2
+    implicitHeight: root.filter !== '' ? root.localHeight : row.implicitHeight + padding * 2
     // Excellent symbol explaination and source :
     // http://xahlee.info/comp/unicode_computing_symbols.html
     // https://www.nerdfonts.com/cheat-sheet
@@ -183,6 +185,8 @@ Item {
     
     onFocusChanged: focus => {
         if (focus) {
+            root.localWidth = Math.max(root.localWidth, root.implicitWidth)
+            root.localHeight = Math.max(root.localHeight, root.implicitHeight)
             filterField.forceActiveFocus();
         }
     }
