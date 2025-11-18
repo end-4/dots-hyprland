@@ -5,29 +5,29 @@
 
 function gen_firstrun(){
   x mkdir -p "$(dirname ${FIRSTRUN_FILE})"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   x touch "${FIRSTRUN_FILE}"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   realpath -se "${FIRSTRUN_FILE}" >> "${INSTALLED_LISTFILE}"
 }
 cp_file(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$(dirname $2)"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   x cp -f "$1" "$2"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   realpath -se "$2" >> "${INSTALLED_LISTFILE}"
 }
 rsync_dir(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$2"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 rsync_dir__sync(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$2"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 function install_file(){
@@ -93,18 +93,19 @@ function install_google_sans_flex(){
   local src_url="https://github.com/end-4/google-sans-flex"
   local src_dir="$REPO_ROOT/cache/$src_name"
   local target_dir="${XDG_DATA_HOME}/fonts/illogical-impulse-$src_name"
-  if ! fc-list | grep -qi "$font_name"; then
-    x mkdir -p $src_dir
-    x cd $src_dir
-    try git init -b main
-    try git remote add origin $src_url
-    x git pull origin main 
-    x git submodule update --init --recursive
-    warning_overwrite
-    rsync_dir "$src_dir" "$target_dir" 
-    x fc-cache -fv
-    x cd $REPO_ROOT
-  fi
+  if fc-list | grep -qi "$font_name"; then return; fi
+  x mkdir -p $src_dir
+  x cd $src_dir
+  try git init -b main
+  try git remote add origin $src_url
+  x git pull origin main 
+  x git submodule update --init --recursive
+  warning_overwrite
+  rsync_dir "$src_dir" "$target_dir" 
+  x fc-cache -fv
+  x cd $REPO_ROOT
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
 }
 
 #####################################################################################
