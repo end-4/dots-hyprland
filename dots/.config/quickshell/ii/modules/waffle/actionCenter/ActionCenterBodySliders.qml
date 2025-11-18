@@ -18,7 +18,7 @@ ColumnLayout {
 
         WPanelIconButton {
             color: colBackground
-            property real animationValue: root.brightnessMonitor.brightness
+            property real animationValue: root.brightnessMonitor?.brightness ?? 0
             rotation: animationValue * 180
             scale: 0.8 + animationValue * 0.2
             iconName: "weather-sunny"
@@ -30,9 +30,9 @@ ColumnLayout {
         
         WSlider {
             Layout.fillWidth: true
-            value: root.brightnessMonitor.brightness
+            value: root.brightnessMonitor?.brightness ?? 0
             onMoved: {
-                root.brightnessMonitor.setBrightness(value)
+                root.brightnessMonitor?.setBrightness(value)
             }
         }
 

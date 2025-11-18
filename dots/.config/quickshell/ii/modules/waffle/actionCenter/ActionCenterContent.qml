@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs
@@ -10,19 +11,28 @@ import qs.modules.waffle.looks
 WBarAttachedPanelContent {
     id: root
 
-    contentItem: ColumnLayout {
-        anchors.centerIn: parent
-        spacing: 0
+    contentItem: StackView {
+        implicitWidth: currentItem.implicitWidth
+        implicitHeight: currentItem.implicitHeight
 
-        ActionCenterBody {}
+        initialItem: ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 0
 
-        Rectangle {
-            Layout.fillHeight: false
-            Layout.fillWidth: true
-            color: Looks.colors.bgPanelSeparator
-            implicitHeight: 1
+            ActionCenterBody {}
+
+            Rectangle {
+                Layout.fillHeight: false
+                Layout.fillWidth: true
+                color: Looks.colors.bgPanelSeparator
+                implicitHeight: 1
+            }
+
+            ActionCenterFooter {}
         }
 
-        ActionCenterFooter {}
+        Component.onCompleted: {
+            ActionCenterContext.stackView = this
+        }
     }
 }
