@@ -293,7 +293,7 @@ if [[ "$SKIP_NOTICE" == false ]]; then
   log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
   log_warning "  but this can cause partial updates and therefore unexpected behavior."
   log_warning "In general, prefer \"./setup install\" for updates if available."
-  safe_read "Continue? (y/N): " response "N"
+  read -p "Continue? (y/N): " response
 
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
     log_error "Merge aborted by user"
