@@ -288,6 +288,19 @@ update_hypr_config() {
 
 log_header "Experimental Config Merge"
 
+if [[ "$SKIP_NOTICE" == false ]]; then
+  log_warning "THIS SCRIPT IS EXPERIMENTAL, ONLY CONTINUE AT YOUR OWN RISK!"
+  log_warning "It might be safer if you want to preserve your modifications and not delete added files,"
+  log_warning "  but this can cause partial updates and therefore unexpected behavior."
+  log_warning "In general, prefer \"./setup install\" for updates if available."
+  safe_read "Continue? (y/N): " response "N"
+
+  if [[ ! "$response" =~ ^[Yy]$ ]]; then
+    log_error "Merge aborted by user"
+    exit 1
+  fi
+fi
+
 check_preconditions
 
 fetch_upstream

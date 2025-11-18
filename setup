@@ -49,7 +49,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old|exp-merge|resetfirstrun|checkdeps|virtmon)
+  install|uninstall|exp-update|exp-update-old|exp-merge|resetfirstrun|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;
