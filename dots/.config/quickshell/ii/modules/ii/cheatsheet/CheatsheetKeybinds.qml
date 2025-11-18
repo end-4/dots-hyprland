@@ -231,10 +231,17 @@ Item {
             }
         }
     }
+    PagePlaceholder {
+        shown: keybinds.children.length === 0 && root.filter !== ''
+        icon: "search_off"
+        description: Translation.tr("No results")
+        shape: MaterialShape.Shape.Ghostish
+        descriptionHorizontalAlignment: Text.AlignHCenter
+    }
     Row { // Keybind columns
         id: row
         spacing: root.spacing
-        
+
         Repeater {
             model: keybinds.children
             visible: !!keybinds.children.length
