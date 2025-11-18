@@ -15,7 +15,7 @@ showhelp_global(){
 printf "${STY_CYAN}NOTE:
   The old \"./install.sh\"   is now \"./setup install\"
   The old \"./update.sh\"    is now \"./setup exp-update\"
-  The old \"./uninstall.sh\" is now \"./setup exp-uninstall\"${STY_RST}
+  The old \"./uninstall.sh\" is now \"./setup uninstall\"${STY_RST}
 
 [$0]: Handle setup for illogical-impulse.
 
@@ -30,7 +30,7 @@ Subcommands:
   install-files  Run the install step \"3. Copying config files\"
   resetfirstrun  Reset firstrun state.
 
-  exp-uninstall  (Experimental) Uninstall illogical-impulse.
+  uninstall      Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
 
@@ -48,7 +48,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|exp-uninstall|exp-update|exp-update-old|resetfirstrun|checkdeps|virtmon)
+  install|uninstall|exp-update|exp-update-old|resetfirstrun|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;

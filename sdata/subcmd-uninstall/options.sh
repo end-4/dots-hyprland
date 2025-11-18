@@ -1,10 +1,10 @@
-# Handle args for subcmd: exp-uninstall
+# Handle args for subcmd: uninstall
 # shellcheck shell=bash
 
 showhelp(){
-echo -e "Syntax: $0 exp-uninstall [OPTIONS]...
+echo -e "Syntax: $0 uninstall [OPTIONS]...
 
-Experimental unintallation.
+Unintall dots.
 
 Options:
   -h, --help       Show this help message
