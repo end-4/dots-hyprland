@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.waffle.looks
 
 BarButton {
@@ -38,22 +39,15 @@ BarButton {
                 id: volumeHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: {
-                        const muted = Audio.sink?.audio.muted ?? false;
-                        const volume = Audio.sink?.audio.volume ?? 0;
-                        if (muted)
-                            return volume > 0 ? "speaker-off" : "speaker-none";
-                        if (volume == 0)
-                            return "speaker-none";
-                        if (volume < 0.5)
-                            return "speaker-1";
-                        return "speaker";
-                    }
+                    icon: WIcons.volumeIcon
                 }
+                onScrollDown: Audio.decrementVolume();
+                onScrollUp: Audio.incrementVolume();
             }
 
             IconHoverArea {
                 id: batteryHoverArea
+                visible: Battery?.available ?? false
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
                     icon: WIcons.batteryIcon
@@ -62,7 +56,7 @@ BarButton {
         }
     }
 
-    component IconHoverArea: MouseArea {
+    component IconHoverArea: FocusedScrollMouseArea {
         id: hoverArea
         required property var iconItem
         anchors {
