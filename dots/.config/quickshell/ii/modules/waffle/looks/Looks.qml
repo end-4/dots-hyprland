@@ -17,6 +17,12 @@ Singleton {
 
     property real backgroundTransparency: 0.17
     property real contentTransparency: 0.25
+    function applyBackgroundTransparency(col) {
+        return ColorUtils.applyAlpha(col, 1 - root.backgroundTransparency)
+    }
+    function applyContentTransparency(col) {
+        return ColorUtils.applyAlpha(col, 1 - root.contentTransparency)
+    }
     colors: QtObject {
         id: colors
         property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
@@ -41,8 +47,11 @@ Singleton {
         property color dangerActive: "#B62D1F"
         property color warning: "#FF9900"
         // property color accent: root.dark ? "#A5C6D8" : "#5377A3"
-        property color accent: Appearance.m3colors.m3primary
+        property color accent: Appearance.colors.colPrimary
+        property color accentHover: Appearance.colors.colPrimaryHover
+        property color accentActive: Appearance.colors.colPrimaryActive
         property color accentUnfocused: root.dark ? "#989898" : "#848484"
+        property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
     }
 
     radius: QtObject {

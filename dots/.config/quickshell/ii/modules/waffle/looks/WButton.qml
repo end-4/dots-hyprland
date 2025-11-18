@@ -9,9 +9,13 @@ import qs.modules.waffle.looks
 Button {
     id: root
 
+    property color colBackground: ColorUtils.transparentize(Looks.colors.bg1)
     property color colBackgroundHover: Looks.colors.bg2Hover
     property color colBackgroundActive: Looks.colors.bg2Active
-    property color colBackground: ColorUtils.transparentize(Looks.colors.bg1)
+    property color colBackgroundToggled: Looks.colors.accent
+    property color colBackgroundToggledHover: Looks.colors.accentHover
+    property color colBackgroundToggledActive: Looks.colors.accentActive
+    property alias backgroundOpacity: backgroundRect.opacity
 
     property alias monochromeIcon: buttonIcon.monochrome
     property bool forceShowIcon: false
@@ -24,17 +28,33 @@ Button {
     bottomInset: inset
     leftInset: inset
     rightInset: inset
+    property alias radius: backgroundRect.radius
+    property alias topLeftRadius: backgroundRect.topLeftRadius
+    property alias topRightRadius: backgroundRect.topRightRadius
+    property alias bottomLeftRadius: backgroundRect.bottomLeftRadius
+    property alias bottomRightRadius: backgroundRect.bottomRightRadius
+    property alias border: backgroundRect.border
     horizontalPadding: 10
     verticalPadding: 6
     implicitHeight: contentItem.implicitHeight + verticalPadding * 2
     implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
 
     background: Rectangle {
+        id: backgroundRect
         radius: Looks.radius.medium
         color: {
+            if (root.checked) {
+                if (root.down) {
+                    return root.colBackgroundToggledActive;
+                } else if (root.hovered && !root.down) {
+                    return root.colBackgroundToggledHover;
+                } else {
+                    return root.colBackgroundToggled;
+                }
+            }
             if (root.down) {
                 return root.colBackgroundActive;
-            } else if ((root.hovered && !root.down) || root.checked) {
+            } else if (root.hovered && !root.down) {
                 return root.colBackgroundHover;
             } else {
                 return root.colBackground;

@@ -146,6 +146,8 @@ GroupButton {
             visible: root.expandedSize
             active: visible
             sourceComponent: Column {
+                spacing: -2
+
                 StyledText {
                     anchors {
                         left: parent.left

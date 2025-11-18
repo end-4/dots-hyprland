@@ -50,8 +50,7 @@ Scope {
 
     Process {
         id: detectPackageManagerProc
-        command: ["pidof", "pacman", "yay", "paru", "dnf", "zypper", "apt", "apx", "xbps", "flatpak", "snap", "apk",
-            "yum", "epsi", "pikman"]
+        command: ["bash", "-c", "pidof pacman yay paru dnf zypper apt apx xbps flatpak snap apk yum epsi pikman"]
         onExited: (exitCode, exitStatus) => {
             root.packageManagerRunning = (exitCode === 0);
         }

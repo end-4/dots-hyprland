@@ -1,6 +1,7 @@
 pragma Singleton
 import QtQuick
 import Quickshell
+import Quickshell.Services.UPower
 import qs.services
 
 Singleton {
@@ -38,5 +39,24 @@ Singleton {
         if (volume < 0.5)
             return "speaker-1";
         return "speaker";
-    }    
+    }
+
+    property string micIcon: {
+        const muted = Audio.source?.audio.muted ?? false;
+        return muted ? "mic-off" : "mic";
+    }
+
+    property string bluetoothIcon: BluetoothStatus.connected ? "bluetooth-connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth-disabled"
+
+    property string nightLightIcon: Hyprsunset.active ? "weather-moon" : "weather-moon-off"
+
+    property string notificationsIcon: Notifications.silent ? "alert-snooze" : "alert"
+
+    property string powerProfileIcon: {
+        switch(PowerProfiles.profile) {
+            case PowerProfile.PowerSaver: return "leaf-two";
+            case PowerProfile.Balanced: return "settings-cog-multiple";
+            case PowerProfile.Performance: return "fire";
+        }
+    }
 }
