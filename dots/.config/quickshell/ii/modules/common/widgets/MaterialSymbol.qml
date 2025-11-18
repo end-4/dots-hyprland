@@ -6,9 +6,9 @@ StyledText {
     property real iconSize: Appearance?.font.pixelSize.small ?? 16
     property real fill: 0
     property real truncatedFill: fill.toFixed(1) // Reduce memory consumption spikes from constant font remapping
-    renderType: fill !== 0 ? Text.CurveRendering : Text.NativeRendering
+    renderType: Text.NativeRendering
     font {
-        hintingPreference: Font.PreferFullHinting
+        hintingPreference: Font.PreferNoHinting
         family: Appearance?.font.family.iconMaterial ?? "Material Symbols Rounded"
         pixelSize: iconSize
         weight: Font.Normal + (Font.DemiBold - Font.Normal) * truncatedFill
