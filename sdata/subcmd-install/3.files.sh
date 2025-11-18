@@ -4,15 +4,9 @@ printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
 
 # shellcheck shell=bash
 
-function warning_rsync_delete(){
+function warning_overwrite(){
   printf "${STY_YELLOW}"
-  printf "The command below uses --delete for rsync which overwrites the destination folder.\n"
-  printf "${STY_RST}"
-}
-
-function warning_rsync_normal(){
-  printf "${STY_YELLOW}"
-  printf "The command below uses rsync which overwrites the destination.\n"
+  printf "The command below overwrites the destination.\n"
   printf "${STY_RST}"
 }
 

@@ -5,6 +5,7 @@ XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 BACKUP_DIR=${BACKUP_DIR:-$HOME/ii-original-dots-backup}
+INSTALLED_LISTFILE=${INSTALLED_LISTFILE:-$XDG_CONFIG_HOME/illogical-impulse/installed_listfile}
 
 
 STY_RED='\e[31m'
