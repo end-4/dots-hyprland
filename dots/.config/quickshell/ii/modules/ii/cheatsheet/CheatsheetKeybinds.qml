@@ -98,7 +98,7 @@ Item {
     function parseKeymaps(cheatsheet, unbinds) {
         const hasFilter = root.filter !== '';
         if (!unbinds) unbinds = []
-        if (!cheatsheet) return [ ] // Avoid warning in QML when cheatsheets are empty
+        if (!cheatsheet) return [ ] 
         return cheatsheet.map((child) => {
             const currentChild = Object.assign({},
                 child, 
@@ -167,7 +167,7 @@ Item {
 
     function parseUnbinds(cheatsheet, name) {
         const unbinds = []
-        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] // Avoid warning in QML when cheatsheets are not loaded yet
+        if (!(cheatsheet && cheatsheet.length) ) return [ {children: [], keybinds: [] }] 
         cheatsheet.forEach((child) => {
             child.children.forEach((children) => {
                 const {
