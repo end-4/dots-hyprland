@@ -9,7 +9,6 @@ function warning_overwrite(){
   printf "The command below overwrites the destination.\n"
   printf "${STY_RST}"
 }
-
 function auto_backup_configs(){
   local backup=false
   case $ask in
@@ -38,8 +37,135 @@ function auto_backup_configs(){
     printf "${STY_BLUE}Backup into \"${BACKUP_DIR}\" finished.${STY_RST}\n"
   fi
 }
+function gen_firstrun(){
+  x mkdir -p "$(dirname ${FIRSTRUN_FILE})"
+  x touch "${FIRSTRUN_FILE}"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  realpath -se "${FIRSTRUN_FILE}" >> "${INSTALLED_LISTFILE}"
+}
+cp_file(){
+  # NOTE: This function is only for using in other functions
+  x mkdir -p "$(dirname $2)"
+  x cp -f "$1" "$2"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+}
+rsync_dir(){
+  # NOTE: This function is only for using in other functions
+  x mkdir -p "$2"
+  local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  rsync -a --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+}
+rsync_dir__sync(){
+  # NOTE: This function is only for using in other functions
+  # `--delete' for rsync to make sure that
+  # original dotfiles and new ones in the SAME DIRECTORY
+  # (eg. in ~/.config/hypr) won't be mixed together
+  x mkdir -p "$2"
+  local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+}
+function install_file(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -f $t ];then
+    warning_overwrite
+  fi
+  v cp_file $s $t
+}
+function install_file__auto_backup(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -f $t ];then
+    echo -e "${STY_YELLOW}[$0]: \"$t\" already exists.${STY_RST}"
+    if ${INSTALL_FIRSTRUN};then
+      echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
+      v mv $t $t.old
+      v cp_file $s $t
+    else
+      echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
+      v cp_file $s $t.new
+    fi
+  else
+    echo -e "${STY_GREEN}[$0]: \"$t\" does not exist yet.${STY_RST}"
+    v cp_file $s $t
+  fi
+}
+function install_dir(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -d $t ];then
+    warning_overwrite
+  fi
+  rsync_dir $s $t
+}
+function install_dir__sync(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -d $t ];then
+    warning_overwrite
+  fi
+  rsync_dir__sync $s $t
+}
+function install_dir__skip_existed(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -d $t ];then
+    echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RST}"
+  else
+    echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
+    v rsync_dir $s $t
+  fi
+}
+function install_google_sans_flex(){
+  local font_name="Google Sans Flex"
+  local src_name="google-sans-flex"
+  local src_url="https://github.com/end-4/google-sans-flex"
+  local src_dir="$REPO_ROOT/cache/$src_name"
+  local target_dir="${XDG_DATA_HOME}/fonts/illogical-impulse-$src_name"
+  if fc-list | grep -qi "$font_name"; then return; fi
+  x mkdir -p $src_dir
+  x cd $src_dir
+  try git init -b main
+  try git remote add origin $src_url
+  x git pull origin main 
+  x git submodule update --init --recursive
+  warning_overwrite
+  rsync_dir "$src_dir" "$target_dir" 
+  x fc-cache -fv
+  x cd $REPO_ROOT
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+}
 
 #####################################################################################
+# In case some dirs does not exists
+for i in "$XDG_BIN_HOME" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME"; do
+  if ! test -e "$i"; then
+    v mkdir -p "$i"
+  fi
+done
+case "${INSTALL_FIRSTRUN}" in
+  # When specify --firstrun
+  true) sleep 0 ;;
+  # When not specify --firstrun
+  *)
+    if test -f "${FIRSTRUN_FILE}"; then
+      INSTALL_FIRSTRUN=false
+    else
+      INSTALL_FIRSTRUN=true
+    fi
+    ;;
+esac
+
+
 showfun auto_update_git_submodule
 v auto_update_git_submodule
 
@@ -50,6 +176,14 @@ case "${EXPERIMENTAL_FILES_SCRIPT}" in
   true)source sdata/subcmd-install/3.files-exp.sh;;
   *)source sdata/subcmd-install/3.files-legacy.sh;;
 esac
+
+showfun install_google_sans_flex
+v install_google_sans_flex
+
+#####################################################################################
+
+v gen_firstrun
+v dedup_and_sort_listfile "${INSTALLED_LISTFILE}" "${INSTALLED_LISTFILE}"
 
 # Prevent hyprland from not fully loaded
 sleep 1
