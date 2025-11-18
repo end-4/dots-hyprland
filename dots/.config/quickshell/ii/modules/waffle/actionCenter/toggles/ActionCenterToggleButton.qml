@@ -32,18 +32,18 @@ ColumnLayout {
     property color colBorder: toggled ? Looks.colors.accentHover : Looks.colors.bg0Border
     property color colForeground: toggled ? Looks.colors.accentFg : Looks.colors.fg1
 
+    spacing: 0
+    property real wholeToggleWidth: 96
+
     Rectangle {
         Layout.fillWidth: true
-        implicitWidth: 96
+        implicitWidth: root.wholeToggleWidth
         implicitHeight: 48
         color: root.colBackground
-        border.color: root.colBorder
-        border.width: 1
         radius: Looks.radius.medium
 
         RowLayout {
             anchors.fill: parent
-            uniformCellSizes: true
             spacing: 0
 
             WButton {
@@ -102,8 +102,8 @@ ColumnLayout {
 
     Item {
         id: toggleNameWidget
+        implicitWidth: root.wholeToggleWidth
         implicitHeight: 36
-        Layout.fillWidth: true
         WText {
             id: toggleNameText
             anchors {

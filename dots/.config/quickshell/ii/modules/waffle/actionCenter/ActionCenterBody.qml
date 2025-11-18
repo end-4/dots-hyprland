@@ -25,7 +25,6 @@ Rectangle {
         ActionCenterBodyToggles {
             id: togglesContainer
             Layout.fillWidth: true
-            Layout.bottomMargin: -12
         }
 
         Rectangle {

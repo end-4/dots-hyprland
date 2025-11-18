@@ -16,6 +16,24 @@ Button {
     property color colBackgroundToggledHover: Looks.colors.accentHover
     property color colBackgroundToggledActive: Looks.colors.accentActive
     property alias backgroundOpacity: backgroundRect.opacity
+    property color color: {
+        if (root.checked) {
+            if (root.down) {
+                return root.colBackgroundToggledActive;
+            } else if (root.hovered && !root.down) {
+                return root.colBackgroundToggledHover;
+            } else {
+                return root.colBackgroundToggled;
+            }
+        }
+        if (root.down) {
+            return root.colBackgroundActive;
+        } else if (root.hovered && !root.down) {
+            return root.colBackgroundHover;
+        } else {
+            return root.colBackground;
+        }
+    }
 
     property alias monochromeIcon: buttonIcon.monochrome
     property bool forceShowIcon: false
@@ -42,24 +60,7 @@ Button {
     background: Rectangle {
         id: backgroundRect
         radius: Looks.radius.medium
-        color: {
-            if (root.checked) {
-                if (root.down) {
-                    return root.colBackgroundToggledActive;
-                } else if (root.hovered && !root.down) {
-                    return root.colBackgroundToggledHover;
-                } else {
-                    return root.colBackgroundToggled;
-                }
-            }
-            if (root.down) {
-                return root.colBackgroundActive;
-            } else if (root.hovered && !root.down) {
-                return root.colBackgroundHover;
-            } else {
-                return root.colBackground;
-            }
-        }
+        color: root.color
         Behavior on color {
             animation: Looks.transition.color.createObject(this)
         }

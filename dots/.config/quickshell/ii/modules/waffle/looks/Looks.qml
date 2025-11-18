@@ -148,5 +148,13 @@ Singleton {
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }
         }
+
+        property Component longMovement: Component {
+            NumberAnimation {
+                duration: 1000
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
     }
 }

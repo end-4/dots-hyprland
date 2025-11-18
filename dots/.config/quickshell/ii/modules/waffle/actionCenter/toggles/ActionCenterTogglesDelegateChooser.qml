@@ -32,6 +32,7 @@ DelegateChooser {
         roleValue: "bluetooth"
         ActionCenterToggleButton {
             toggleModel: BluetoothToggle {}
+            name: toggleModel.statusText
             icon: WIcons.bluetoothIcon
         }
     }
@@ -39,7 +40,7 @@ DelegateChooser {
         roleValue: "cloudflareWarp"
         ActionCenterToggleButton {
             toggleModel: CloudflareWarpToggle {}
-            icon: "globe-shield"
+            icon: "cloudflare"
         }
     }
     DelegateChoice {
@@ -53,7 +54,7 @@ DelegateChooser {
         roleValue: "darkMode"
         ActionCenterToggleButton {
             toggleModel: DarkModeToggle {}
-            icon: "dark-theme*"
+            icon: "dark-theme"
         }
     }
     DelegateChoice {
@@ -95,6 +96,7 @@ DelegateChooser {
         roleValue: "network"
         ActionCenterToggleButton {
             toggleModel: NetworkToggle {}
+            name: toggleModel.statusText
             icon: WIcons.internetIcon
         }
     }
@@ -124,6 +126,7 @@ DelegateChooser {
         ActionCenterToggleButton {
             toggleModel: PowerProfilesToggle {}
             icon: WIcons.powerProfileIcon
+            name: toggleModel.statusText
         }
     }
     DelegateChoice {

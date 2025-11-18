@@ -18,18 +18,29 @@ BarButton {
 
     contentItem: Item {
         anchors.centerIn: root.background
-        implicitHeight: column.implicitHeight
-        implicitWidth: column.implicitWidth
-        Column {
-            id: column
+        implicitHeight: contentLayout.implicitHeight
+        implicitWidth: contentLayout.implicitWidth
+        Row {
+            id: contentLayout
             anchors.centerIn: parent
-            WText {
-                anchors.right: parent.right
-                text: DateTime.time
+            spacing: 7
+            
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                WText {
+                    anchors.right: parent.right
+                    text: DateTime.time
+                }
+                WText {
+                    anchors.right: parent.right
+                    text: DateTime.date
+                }
             }
-            WText {
-                anchors.right: parent.right
-                text: DateTime.date
+            FluentIcon {
+                anchors.verticalCenter: parent.verticalCenter
+                icon: "alert-snooze"
+                implicitSize: 18
+                filled: true
             }
         }
     }

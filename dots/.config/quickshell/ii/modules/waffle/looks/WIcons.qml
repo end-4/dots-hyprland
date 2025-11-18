@@ -55,7 +55,7 @@ Singleton {
     property string powerProfileIcon: {
         switch(PowerProfiles.profile) {
             case PowerProfile.PowerSaver: return "leaf-two";
-            case PowerProfile.Balanced: return "settings-cog-multiple";
+            case PowerProfile.Balanced: return "flash-on";
             case PowerProfile.Performance: return "fire";
         }
     }

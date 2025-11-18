@@ -46,8 +46,8 @@ Slider {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            topLeftRadius: root.trackWidth / 2
-            bottomLeftRadius: root.trackWidth / 2
+            topRightRadius: root.trackWidth / 2
+            bottomRightRadius: root.trackWidth / 2
             color: Looks.colors.controlBg
             implicitHeight: root.trackWidth
             width: background.width * (1 - root.visualPosition)

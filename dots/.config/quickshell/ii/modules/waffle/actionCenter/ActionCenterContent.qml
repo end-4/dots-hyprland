@@ -14,10 +14,7 @@ WBarAttachedPanelContent {
         anchors.centerIn: parent
         spacing: 0
 
-        ActionCenterBody {
-            topLeftRadius: root.border.radius - root.border.border.width
-            topRightRadius: topLeftRadius
-        }
+        ActionCenterBody {}
 
         Rectangle {
             Layout.fillHeight: false
@@ -26,9 +23,6 @@ WBarAttachedPanelContent {
             implicitHeight: 1
         }
 
-        ActionCenterFooter {
-            bottomLeftRadius: root.border.radius - root.border.border.width
-            bottomRightRadius: bottomLeftRadius
-        }
+        ActionCenterFooter {}
     }
 }

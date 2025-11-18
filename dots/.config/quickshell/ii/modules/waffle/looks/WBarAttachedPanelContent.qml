@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import qs
 import qs.services
@@ -9,10 +10,10 @@ import qs.modules.waffle.looks
 Item {
     id: root
 
-    signal closed()
+    signal closed
 
     property alias border: borderRect
-    required default property Item contentItem
+    default required property Item contentItem
     property real visualMargin: 12
 
     function close() {
@@ -26,6 +27,7 @@ Item {
 
     Rectangle {
         id: borderRect
+        z: 1
 
         color: "transparent"
         radius: Looks.radius.large
@@ -33,7 +35,6 @@ Item {
         border.width: 1
         implicitWidth: contentItem.implicitWidth + border.width * 2
         implicitHeight: contentItem.implicitHeight + border.width * 2
-        children: [root.contentItem]
 
         anchors {
             left: parent.left
@@ -75,5 +76,21 @@ Item {
                 }
             }
         }
+    }
+
+    Item {
+        id: contentArea
+        z: 0
+        anchors.fill: borderRect
+        anchors.margins: borderRect.border.width
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: contentArea.width
+                height: contentArea.height
+                radius: borderRect.radius - borderRect.border.width
+            }
+        }
+        children: [root.contentItem]
     }
 }

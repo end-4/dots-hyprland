@@ -56,6 +56,13 @@ Scope {
                 id: content
                 anchors.centerIn: parent
 
+                focus: true
+                Keys.onPressed: event => { // Esc to close
+                    if (event.key === Qt.Key_Escape) {
+                        content.close()
+                    }
+                }
+
                 onClosed: {
                     barLoader.active = false;
                     GlobalStates.sidebarLeftOpen = false;
