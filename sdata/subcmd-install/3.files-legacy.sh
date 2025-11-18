@@ -192,7 +192,8 @@ case "${SKIP_HYPRLAND}" in
 esac
 
 install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
-install_google_sans_flex
+showfun install_google_sans_flex
+v install_google_sans_flex
 
 v dedup_and_sort_listfile "${INSTALLED_LISTFILE}" "${INSTALLED_LISTFILE}"
 v gen_firstrun
