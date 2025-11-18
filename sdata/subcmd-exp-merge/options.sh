@@ -10,6 +10,7 @@ Merges upstream changes with your quickshell config.
 Options:
   -n, --dry-run      Show what would be done
   -h, --help         Show this help
+  -s, --skip-notice  Skip notice about script being experimental
   --skip-fetch       Skip fetching from remote
 
 How it works:
@@ -25,8 +26,8 @@ How it works:
 }
 
 para=$(getopt \
-  -o hn \
-  -l help,dry-run,skip-fetch \
+  -o hns \
+  -l help,dry-run,skip-notice,skip-fetch \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 
@@ -41,12 +42,16 @@ done
 
 DRY_RUN=false
 SKIP_FETCH=false
+SKIP_NOTICE=false
 
 eval set -- "$para"
 while true ; do
   case "$1" in
     -n|--dry-run) DRY_RUN=true;shift
       log_info "Dry-run mode enabled - no changes will be made"
+      ;;
+    -s|--skip-notice) SKIP_NOTICE=true;shift
+      log_warning "Skipping notice about script being experimental"
       ;;
     --skip-fetch) SKIP_FETCH=true;shift
       log_info "Skipping fetch from remote"
