@@ -41,13 +41,32 @@ Item {
   
     property var allCommands: [  
         {  
+            name: "mode",  
+            description: Translation.tr("Set the current API provider"),  
+            execute: (args) => {  
+                UnsplashWallpapers.setProvider(args[0]);  
+            }  
+        },  
+        {  
             name: "clear",  
             description: Translation.tr("Clear the current list of images"),  
             execute: () => {  
                 UnsplashWallpapers.clearResponses();  
             }  
+        },  
+        {  
+            name: "next",  
+            description: Translation.tr("Get the next page of results"),  
+            execute: () => {  
+                if (root.responses.length > 0) {  
+                    const lastResponse = root.responses[root.responses.length - 1];  
+                    root.handleInput(`${lastResponse.tags.join(" ")} ${parseInt(lastResponse.page) + 1}`);  
+                } else {  
+                    root.handleInput("");  
+                }  
+            }  
         }  
-    ]  
+    ]
   
     function handleInput(inputText) {  
         if (inputText.startsWith(root.commandPrefix)) {  
@@ -404,16 +423,22 @@ Item {
   
                 property var commandsShown: [  
                     {  
+                        name: "mode",  
+                        sendDirectly: false,  
+                    },
+                    {  
                         name: "clear",  
                         sendDirectly: true,  
                     },   
                 ]  
-  
+
                 ApiInputBoxIndicator {  
                     icon: "api"  
-                    text: "Unsplash"  
-                    tooltipText: Translation.tr("Using Unsplash API")  
-                }  
+                    text: UnsplashWallpapers.providers[UnsplashWallpapers.currentProvider].name  
+                    tooltipText: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")  
+                        .arg(UnsplashWallpapers.providers[UnsplashWallpapers.currentProvider].url)  
+                        .arg(root.commandPrefix)  
+                }
   
                 Item { Layout.fillWidth: true }  
   
