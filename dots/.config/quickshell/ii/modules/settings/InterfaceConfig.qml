@@ -696,6 +696,14 @@ ContentPage {
             }
         }
         ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Show only on focused monitor")
+            checked: Config.options.overview.showOnlyOnFocusedMonitor
+            onCheckedChanged: {
+                Config.options.overview.showOnlyOnFocusedMonitor = checked;
+            }
+        }
+        ConfigSwitch {
             buttonIcon: "center_focus_strong"
             text: Translation.tr("Center icons")
             checked: Config.options.overview.centerIcons
