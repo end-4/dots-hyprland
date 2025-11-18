@@ -73,9 +73,6 @@ This file contains information about the dependencies, currently it describes ab
   - Used in Quickshell and matugen config.
 - `starship`
   - Used in Fish config.
-- `ttf-gabarito-git`
-  - Font name: `Gabarito`
-  - Used in fuzzel and Quickshell config.
 - `ttf-jetbrains-mono-nerd`
   - Font name: `JetBrains Mono NF`, `JetBrainsMono Nerd Font`.
   - Used in foot, kdeglobals, kitty, qt5ct, qt6ct and Quickshell config.
