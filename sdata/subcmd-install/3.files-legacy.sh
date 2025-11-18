@@ -5,29 +5,29 @@
 
 function gen_firstrun(){
   x mkdir -p "$(dirname ${FIRSTRUN_FILE})"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   x touch "${FIRSTRUN_FILE}"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   realpath -se "${FIRSTRUN_FILE}" >> "${INSTALLED_LISTFILE}"
 }
 cp_file(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$(dirname $2)"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   x cp -f "$1" "$2"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   realpath -se "$2" >> "${INSTALLED_LISTFILE}"
 }
 rsync_dir(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$2"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 rsync_dir__sync(){
   # NOTE: This function is only for using in other functions
   x mkdir -p "$2"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 function install_file(){
@@ -87,6 +87,26 @@ function install_dir__skip_existed(){
     v rsync_dir $s $t
   fi
 }
+function install_google_sans_flex(){
+  local font_name="Google Sans Flex"
+  local src_name="google-sans-flex"
+  local src_url="https://github.com/end-4/google-sans-flex"
+  local src_dir="$REPO_ROOT/cache/$src_name"
+  local target_dir="${XDG_DATA_HOME}/fonts/illogical-impulse-$src_name"
+  if fc-list | grep -qi "$font_name"; then return; fi
+  x mkdir -p $src_dir
+  x cd $src_dir
+  try git init -b main
+  try git remote add origin $src_url
+  x git pull origin main 
+  x git submodule update --init --recursive
+  warning_overwrite
+  rsync_dir "$src_dir" "$target_dir" 
+  x fc-cache -fv
+  x cd $REPO_ROOT
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+}
 
 #####################################################################################
 # In case some dirs does not exists
@@ -120,7 +140,7 @@ case "${SKIP_MISCCONF}" in
       elif [ -f "dots/.config/$i" ];then install_file "dots/.config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
-    install_dir "dots/.local/share/konsole" "${XDG_DATA_HOME:-$HOME/.local/share}"/konsole
+    install_dir "dots/.local/share/konsole" "${XDG_DATA_HOME}"/konsole
     ;;
 esac
 
@@ -172,6 +192,8 @@ case "${SKIP_HYPRLAND}" in
 esac
 
 install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
+showfun install_google_sans_flex
+v install_google_sans_flex
 
 v dedup_and_sort_listfile "${INSTALLED_LISTFILE}" "${INSTALLED_LISTFILE}"
 v gen_firstrun

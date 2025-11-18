@@ -15,7 +15,7 @@ showhelp_global(){
 printf "${STY_CYAN}NOTE:
   The old \"./install.sh\"   is now \"./setup install\"
   The old \"./update.sh\"    is now \"./setup exp-update\"
-  The old \"./uninstall.sh\" is now \"./setup exp-uninstall\"${STY_RST}
+  The old \"./uninstall.sh\" is now \"./setup uninstall\"${STY_RST}
 
 [$0]: Handle setup for illogical-impulse.
 
@@ -30,7 +30,7 @@ Subcommands:
   install-files  Run the install step \"3. Copying config files\"
   resetfirstrun  Reset firstrun state.
 
-  exp-uninstall  (Experimental) Uninstall illogical-impulse.
+  uninstall      Uninstall illogical-impulse.
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
   exp-update-old (Experimental) exp-update but use behaves like old version.
   exp-merge      (Experimental) Merge upstream changes with local configs using git rebase.
