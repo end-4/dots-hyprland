@@ -1036,7 +1036,7 @@ Singleton {
         property string base64Chat: Qt.btoa(chatContent)
         command: [
             "bash", "-c",
-            Directories.conversationTitleScriptPath + " " + base64Chat + " '" + Directories.generatedConversationTitlePath + "'"
+            Directories.conversationTitleScriptPath + " " + base64Chat
         ]
         stdout: StdioCollector {
             onStreamFinished: {
