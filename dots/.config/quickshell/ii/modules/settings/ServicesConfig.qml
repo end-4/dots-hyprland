@@ -19,7 +19,7 @@ ContentPage {
                 Config.options.ai.autoSave = checked;
             }
             StyledToolTip {
-                text: Translation.tr("Automatically names and saves the conversations that are more than 3 responses longs.")
+                text: Translation.tr("Automatically names and saves the conversations that are more than preferred number of responses longs.")
             }
         }
         ConfigSpinBox {
