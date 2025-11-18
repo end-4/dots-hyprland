@@ -72,7 +72,7 @@ function deletion_prompt(){
   while true; do
     printf "Every target which path as a line inside the list \"$listfile\" will be deleted permanently.\n"
     printf "Please choose:\nv=View the list\ne=Edit the list\nq=Quit\ny=Perform deletion now\n"
-    read -n1 -p "> " choice
+    read -n1 -p "> " choice < /dev/tty
     echo
     case "$choice" in
       q|Q)
