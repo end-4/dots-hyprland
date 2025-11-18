@@ -87,6 +87,25 @@ function install_dir__skip_existed(){
     v rsync_dir $s $t
   fi
 }
+function install_google_sans_flex(){
+  local font_name="Google Sans Flex"
+  local src_name="google-sans-flex"
+  local src_url="https://github.com/end-4/google-sans-flex"
+  local src_dir="$REPO_ROOT/cache/$src_name"
+  local target_dir="${XDG_DATA_HOME}/fonts/illogical-impulse-$src_name"
+  if ! fc-list | grep -qi "$font_name"; then
+    x mkdir -p $src_dir
+    x cd $src_dir
+    try git init -b main
+    try git remote add origin $src_url
+    x git pull origin main 
+    x git submodule update --init --recursive
+    warning_overwrite
+    rsync_dir "$src_dir" "$target_dir" 
+    x fc-cache -fv
+    x cd $REPO_ROOT
+  fi
+}
 
 #####################################################################################
 # In case some dirs does not exists
@@ -172,6 +191,7 @@ case "${SKIP_HYPRLAND}" in
 esac
 
 install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
+install_google_sans_flex
 
 v dedup_and_sort_listfile "${INSTALLED_LISTFILE}" "${INSTALLED_LISTFILE}"
 v gen_firstrun
