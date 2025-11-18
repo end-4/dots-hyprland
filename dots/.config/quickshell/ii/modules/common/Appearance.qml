@@ -203,7 +203,7 @@ Singleton {
     font: QtObject {
         property QtObject family: QtObject {
             property string main: "Google Sans Flex"
-            property string numbers: "Rubik"
+            property string numbers: "Google Sans Flex"
             property string title: "Google Sans Flex"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
@@ -212,34 +212,14 @@ Singleton {
             property string expressive: "Space Grotesk"
         }
         property QtObject variableAxes: QtObject {
-            // Roboto Flex is customized to feel geometric, unserious yet not overly kiddy
-            // property var main: ({
-            //     "YTUC": 716, // Uppercase height (Raised from 712 to be more distinguishable from lowercase)
-            //     "YTFI": 716, // Figure (numbers) height (Lowered from 738 to match uppercase)
-            //     "YTAS": 716, // Ascender height (Lowered from 750 to match uppercase)
-            //     "YTLC": 490, // Lowercase height (Lowered from 514 to be more distinguishable from uppercase)
-            //     "XTRA": 488, // Counter width (Raised from 468 to be less condensed, less serious)
-            //     "wdth": 105, // Width (Space out a tiny bit for readability)
-            //     "GRAD": 175, // Grade (Increased so the 6 and 9 don't look weak)
-            //     "wght": 300, // Weight (Lowered to compensate for increased grade)
-            // })
             property var main: ({
                 "wght": 450,
                 "wdth": 100,
             })
-            // Rubik simply needs regular weight to override that of the main font where necessary
             property var numbers: ({
-                "wght": 400,
+                "wght": 450,
             })
-            // Slightly bold weight for title
-            property var title: ({
-                // "YTUC": 716, // Uppercase height (Raised from 712 to be more distinguishable from lowercase)
-                // "YTFI": 716, // Figure (numbers) height (Lowered from 738 to match uppercase)
-                // "YTAS": 716, // Ascender height (Lowered from 750 to match uppercase)
-                // "YTLC": 490, // Lowercase height (Lowered from 514 to be more distinguishable from uppercase)
-                // "XTRA": 490, // Counter width (Raised from 468 to be less condensed, less serious)
-                // "wdth": 110, // Width (Space out a tiny bit for readability)
-                // "GRAD": 150, // Grade (Increased so the 6 and 9 don't look weak)
+            property var title: ({ // Slightly bold weight for title
                 "wght": 550, // Weight (Lowered to compensate for increased grade)
             })
         }
