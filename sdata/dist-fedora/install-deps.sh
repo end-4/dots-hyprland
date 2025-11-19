@@ -41,8 +41,8 @@ v sudo dnf install bibata-cursor-theme -y
 themes_deps=(
   adw-gtk3-theme breeze-cursor-theme grub2-breeze-theme breeze-icon-theme{,-fedora} kf6-breeze-icons
   sddm-breeze breeze-plus-icon-theme darkly eza fish fontconfig kitty matugen florian-karsten-space-grotesk-fonts
-  starship gabarito-fonts jetbrains-mono-nerd-fonts google-material-symbols-vf-rounded-fonts material-icons-fonts
-  readex-pro-fonts-all google-roboto-flex-fonts google-rubik-vf-fonts twitter-twemoji-fonts
+  starship jetbrains-mono-nerd-fonts google-material-symbols-vf-rounded-fonts material-icons-fonts
+  readex-pro-fonts-all google-rubik-vf-fonts twitter-twemoji-fonts
 )
 v sudo dnf install ${themes_deps[@]} -y
 

@@ -82,9 +82,6 @@ This file contains information about the dependencies, currently it describes ab
 - `ttf-readex-pro`
   - Font name: `Readex Pro`
   - Used in Quickshell config.
-- `ttf-roboto-flex`
-  - Font name: `Roboto Flex`
-  - Used in Hyprland, matugen and Quickshell config.
 - `ttf-rubik-vf`
   - Font name: `Rubik`, `Rubik Light`
   - Used in Hyprland, kdeglobals, matugen, qt5ct, qt6ct and Quickshell config.
