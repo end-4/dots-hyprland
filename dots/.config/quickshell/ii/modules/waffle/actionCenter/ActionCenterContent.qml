@@ -7,32 +7,34 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.actionCenter.mainPage
 
 WBarAttachedPanelContent {
     id: root
 
-    contentItem: StackView {
-        implicitWidth: currentItem.implicitWidth
-        implicitHeight: currentItem.implicitHeight
+    contentItem: StackView { // TODO: Make this a WStackView with proper anim
+        id: stackView
+        anchors.fill: parent
+        implicitWidth: initItem.implicitWidth
+        implicitHeight: initItem.implicitHeight        
 
-        initialItem: ColumnLayout {
-            anchors.centerIn: parent
-            spacing: 0
-
-            ActionCenterBody {}
-
-            Rectangle {
-                Layout.fillHeight: false
-                Layout.fillWidth: true
-                color: Looks.colors.bgPanelSeparator
-                implicitHeight: 1
-            }
-
-            ActionCenterFooter {}
+        initialItem: PageColumn {
+            id: initItem
+            MainPageBody {}
+            Separator {}
+            MainPageFooter {}
         }
 
         Component.onCompleted: {
             ActionCenterContext.stackView = this
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.BackButton
+            onClicked: {
+                ActionCenterContext.back()
+            }
         }
     }
 }

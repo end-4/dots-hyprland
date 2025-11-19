@@ -6,15 +6,10 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.actionCenter
 
-Rectangle {
+BodyRectangle {
     id: root
-
-    Layout.fillHeight: true
-    Layout.fillWidth: true
-    color: Looks.colors.bgPanelBody
-
-    implicitWidth: 360
     implicitHeight: contentLayout.implicitHeight
 
     ColumnLayout {
@@ -22,7 +17,7 @@ Rectangle {
         anchors.fill: parent
         spacing: 0
 
-        ActionCenterBodyToggles {
+        MainPageBodyToggles {
             id: togglesContainer
             Layout.fillWidth: true
         }
@@ -33,7 +28,7 @@ Rectangle {
             color: Looks.colors.bg1Border
         }
 
-        ActionCenterBodySliders {
+        MainPageBodySliders {
             Layout.margins: 12
             Layout.topMargin: 18
             Layout.bottomMargin: 14

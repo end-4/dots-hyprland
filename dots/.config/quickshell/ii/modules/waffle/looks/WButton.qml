@@ -15,6 +15,7 @@ Button {
     property color colBackgroundToggled: Looks.colors.accent
     property color colBackgroundToggledHover: Looks.colors.accentHover
     property color colBackgroundToggledActive: Looks.colors.accentActive
+    property color colForeground: Looks.colors.fg
     property alias backgroundOpacity: backgroundRect.opacity
     property color color: {
         if (root.checked) {
@@ -35,7 +36,29 @@ Button {
         }
     }
 
+    // Hover stuff
+    signal hoverTimedOut()
+    property bool shouldShowTooltip: false
+    property Timer hoverTimer: Timer {
+        id: hoverTimer
+        running: root.hovered
+        interval: 400
+        onTriggered: {
+            root.hoverTimedOut()
+        }
+    }
+    onHoverTimedOut: {
+        root.shouldShowTooltip = true
+    }
+    onHoveredChanged: {
+        if (!root.hovered) {
+            root.shouldShowTooltip = false
+            root.hoverTimer.stop()
+        }
+    }
+
     property alias monochromeIcon: buttonIcon.monochrome
+    property alias buttonSpacing: contentLayout.spacing
     property bool forceShowIcon: false
 
     property var altAction: () => {}
@@ -93,16 +116,16 @@ Button {
             spacing: 12
             FluentIcon {
                 id: buttonIcon
-                visible: root.icon.name !== "" || root.forceShowIcon
                 monochrome: true
                 implicitSize: 16
-                Layout.leftMargin: 6
+                Layout.leftMargin: root.iconLeftMargin
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignVCenter
                 icon: root.icon.name
+                color: root.colForeground
+                visible: root.icon.name !== ""
             }
             WText {
-                Layout.rightMargin: 12
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 text: root.text
@@ -110,6 +133,7 @@ Button {
                 font {
                     pixelSize: Looks.font.pixelSize.large
                 }
+                color: root.colForeground
             }
         }
     }

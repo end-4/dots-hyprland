@@ -6,6 +6,8 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.actionCenter
+import qs.modules.waffle.actionCenter.volumeControl
 
 ColumnLayout {
     id: root
@@ -58,6 +60,13 @@ ColumnLayout {
         }
 
         WPanelIconButton {
+            Component {
+                id: volumeControlComp
+                VolumeControl {}
+            }
+            onClicked: {
+                ActionCenterContext.push(volumeControlComp)
+            }
             contentItem: Item {
                 anchors.centerIn: parent
                 Row {

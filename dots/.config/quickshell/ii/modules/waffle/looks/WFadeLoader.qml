@@ -1,7 +1,8 @@
 import QtQuick
-
 import qs.modules.common
 
+// Yes, this is (mostly) a copy of FadeLoader.
+// The animation of a Behavior cannot be changed... I'd love to be proven wrong.
 Loader {
     id: root
     property bool shown: true
@@ -13,6 +14,6 @@ Loader {
 
     Behavior on opacity {
         id: opacityBehavior
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        animation: Looks.transition.opacity.createObject(null)
     }
 }

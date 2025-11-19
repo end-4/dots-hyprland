@@ -10,8 +10,7 @@ Slider {
     id: root
 
     property real trackWidth: 4
-    // leftPadding: handle.width / 2
-    // rightPadding: handle.width / 2
+    property string tooltipContent: `${Math.round(value * 100)}`
     leftPadding: 0
     rightPadding: 0
 
@@ -76,6 +75,15 @@ Slider {
             Behavior on diameter {
                 animation: Looks.transition.enter.createObject(this)
             }
+        }
+
+        WToolTip {
+            id: tooltip
+            extraVisibleCondition: root.pressed
+            text: root.tooltipContent
+            font.pixelSize: Looks.font.pixelSize.larger
+            verticalPadding: 3
+            horizontalPadding: 8
         }
     }
 }

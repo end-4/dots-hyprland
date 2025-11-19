@@ -78,11 +78,14 @@ Item {
         }
     }
 
-    Item {
+    Rectangle {
         id: contentArea
+        color: "red"
         z: 0
         anchors.fill: borderRect
         anchors.margins: borderRect.border.width
+        implicitWidth: contentItem.implicitWidth
+        implicitHeight: contentItem.implicitHeight
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {

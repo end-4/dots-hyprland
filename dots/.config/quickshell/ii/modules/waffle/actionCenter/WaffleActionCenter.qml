@@ -54,7 +54,8 @@ Scope {
 
             ActionCenterContent {
                 id: content
-                anchors.centerIn: parent
+                anchors.fill: parent
+                anchors.margins: visualMargin
 
                 focus: true
                 Keys.onPressed: event => { // Esc to close
