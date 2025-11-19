@@ -12,7 +12,7 @@ import Quickshell.Widgets
  * It doesn't exactly match the spec because it does not make sense to have stuff on a computer that fucking huge.
  * Should be at 3/4 scale...
  */
- 
+
 Slider {
     id: root
 
@@ -188,6 +188,10 @@ Slider {
         StyledToolTip {
             extraVisibleCondition: root.pressed
             text: root.tooltipContent
+            font {
+                family: Appearance.font.family.numbers
+                variableAxes: Appearance.font.variableAxes.numbers
+            }
         }
     }
 }

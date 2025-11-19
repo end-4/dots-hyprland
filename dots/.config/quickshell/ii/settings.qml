@@ -31,7 +31,6 @@ ApplicationWindow {
         {
             name: Translation.tr("General"),
             icon: "browse",
-            iconRotation: 180,
             component: "modules/settings/GeneralConfig.qml"
         },
         {
@@ -39,6 +38,11 @@ ApplicationWindow {
             icon: "toast",
             iconRotation: 180,
             component: "modules/settings/BarConfig.qml"
+        },
+        {
+            name: Translation.tr("Background"),
+            icon: "texture",
+            component: "modules/settings/BackgroundConfig.qml"
         },
         {
             name: Translation.tr("Interface"),
@@ -120,8 +124,11 @@ ApplicationWindow {
                 }
                 color: Appearance.colors.colOnLayer0
                 text: Translation.tr("Settings")
-                font.pixelSize: Appearance.font.pixelSize.title
-                font.family: Appearance.font.family.title
+                font {
+                    family: Appearance.font.family.title
+                    pixelSize: Appearance.font.pixelSize.title
+                    variableAxes: Appearance.font.variableAxes.title
+                }
             }
             RowLayout { // Window controls row
                 id: windowControlsRow

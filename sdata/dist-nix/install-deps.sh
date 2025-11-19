@@ -1,22 +1,15 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-function install_home-manager(){
-  # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
-  local cmd=home-manager
-  # Maybe installed already, just not sourced yet
-  try source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-  command -v $cmd && return
-
-  x nix-channel --add https://nixos.org/channels/nixos-25.05 nixpkgs-home
-  x nix-channel --add https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz home-manager
-  x nix-channel --update
-  x env NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs-home" nix-shell '<home-manager>' -A install
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
+function vianix-warning(){
+  printf "${STY_YELLOW}"
+  printf "Currently \"--via-nix\" will run:\n"
+  printf "  home-manager switch --flake .#illogical_impulse\n"
+  printf "If you are already using home-manager,\n"
+  printf "it may override your current config,\n"
+  printf "despite that this should be reversible.\n"
+  printf "${STY_RST}"
+  pause
 }
 function install_nix(){
   # https://github.com/NixOS/experimental-nix-installer
@@ -32,58 +25,28 @@ function install_nix(){
   echo "Please install it by yourself and then retry."
   return 1
 }
-function install_curl(){
-  local cmd=curl
+function install_home-manager(){
+  # https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone
+  local cmd=home-manager
+  # Maybe installed already, just not sourced yet
+  try source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+  command -v $cmd && return
 
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
+  x nix-channel --add https://nixos.org/channels/nixos-25.05 nixpkgs-home
+  x nix-channel --add https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz home-manager
+  x nix-channel --update
+  x env NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs-home" nix-shell '<home-manager>' -A install
 
   command -v $cmd && return
   echo "Failed in installing $cmd."
   echo "Please install it by yourself and then retry."
+  echo ""
+  echo "Hint: It's also possible that the installation is actually successful,"
+  echo "but your \"\$PATH\" is not properly set."
+  echo "This can happen when you have used \"su user\" to switch user."
+  echo "If this is the problem, use \"su - user\" instead."
   return 1
 }
-function install_zsh(){
-  local cmd=zsh
-
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-function install_swaylock(){
-  local cmd=swaylock
-  echo "Detecting command \"$cmd\"..."
-  command -v $cmd && return
-  echo "Command \"$cmd\" not found, try to install..."
-
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm $cmd
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    x sudo apt update
-    x sudo apt install $cmd
-  fi
-
-  command -v $cmd && return
-  echo "Failed in installing $cmd."
-  echo "Please install it by yourself and then retry."
-  return 1
-}
-
 function hm_deps(){
   SETUP_HM_DIR="${REPO_ROOT}/sdata/dist-nix/home-manager"
   SETUP_USERNAME_NIXFILE="${SETUP_HM_DIR}/username.nix"
@@ -99,21 +62,12 @@ function hm_deps(){
 
 ##################################################
 ##################################################
-if ! command -v curl >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"curl\" not found.${STY_RST}"
-  showfun install_curl
-  v install_curl
-fi
-if ! command -v zsh >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"zsh\" not found.${STY_RST}"
-  showfun install_zsh
-  v install_zsh
-fi
-if ! command -v swaylock >/dev/null 2>&1;then
-  echo -e "${STY_YELLOW}[$0]: \"swaylock\" not found.${STY_RST}"
-  showfun install_swaylock
-  v install_swaylock
-fi
+
+vianix-warning
+
+TEST_CMDS=(curl fish swaylock gnome-keyring)
+ensure_cmds "${TEST_CMDS[@]}"
+
 if ! command -v nix >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"nix\" not found.${STY_RST}"
   showfun install_nix

@@ -9,15 +9,11 @@
 pkglistfile=$(mktemp)
 pkglistfile_orig=${LIST_FILE_PATH}
 pkglistfile_orig_s=${REPO_ROOT}/cache/dependencies_stripped.conf
-#if ! "$(command -v curl)";then
-#  echo "Please install curl first.";exit 1
-#fi
-#if ! "$(command -v gzip)";then
-#  echo "Please install gzip first.";exit 1
-#fi
-#if ! "$(command -v pacman)";then
-#  echo "pacman not found, aborting...";exit 1
-#fi
+for cmd in curl gzip pacman;do
+  if ! command -v $cmd;then
+    echo "Please install $cmd first.";exit 1
+  fi
+done
 remove_bashcomments_emptylines $pkglistfile_orig $pkglistfile_orig_s
 
 cat $pkglistfile_orig_s | sed "s_\ _\n_g" > $pkglistfile

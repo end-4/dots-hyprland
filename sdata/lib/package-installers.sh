@@ -5,21 +5,6 @@
 
 # This file is provided for any distros, mainly non-Arch(based) distros.
 
-install-agsv1(){
-  x mkdir -p $REPO_ROOT/cache/agsv1
-  x cd $REPO_ROOT/cache/agsv1
-  try git init -b main
-  try git remote add origin https://github.com/Aylur/ags.git
-  x git pull origin main && git submodule update --init --recursive
-  x git fetch --tags
-  x git checkout v1.9.0
-  x npm install
-  x meson setup build # --reconfigure
-  x meson install -C build
-  x sudo mv /usr/local/bin/ags{,v1}
-  x cd $REPO_ROOT
-}
-
 install-Rubik(){
   x mkdir -p $REPO_ROOT/cache/Rubik
   x cd $REPO_ROOT/cache/Rubik
@@ -68,8 +53,8 @@ install-bibata(){
   x cd $REPO_ROOT/cache/bibata-cursor
   name="Bibata-Modern-Classic"
   file="$name.tar.xz"
-  # Use axel because `curl -O` always downloads a file with 0 byte size, idk why
-  x axel https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/$file
+  try rm $file
+  x curl -JLO https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/$file
   tar -xf $file
   x sudo mkdir -p /usr/local/share/icons
   x sudo cp -r $name /usr/local/share/icons
@@ -103,6 +88,10 @@ install-python-packages(){
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
   x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
-  x uv pip install -r sdata/uv/requirements.txt
+  if [[ "$INSTALL_VIA_NIX" = true ]]; then
+    x nix-shell ${REPO_ROOT}/sdata/uv/shell.nix --run "uv pip install -r ${REPO_ROOT}/sdata/uv/requirements.txt"
+  else
+    x uv pip install -r ${REPO_ROOT}/sdata/uv/requirements.txt
+  fi
   x deactivate
 }

@@ -30,12 +30,7 @@ def image_colorfulness(image):
 # scheme-content respects the image's colors very well, but it might
 # look too saturated, so we only use it for not very colorful images to be safe
 def pick_scheme(colorfulness):
-    if colorfulness < 10:
-        # return "scheme-monochrome"
-        return "scheme-content"
-    elif colorfulness < 20:
-        return "scheme-content"
-    elif colorfulness < 50:
+    if colorfulness < 40:
         return "scheme-neutral"
     else:
         return "scheme-tonal-spot"

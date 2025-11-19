@@ -164,6 +164,7 @@ Singleton {
         property color colOnSecondaryContainer: m3colors.m3onSecondaryContainer
         property color colSurfaceContainerLow: ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency)
         property color colSurfaceContainer: ColorUtils.transparentize(m3colors.m3surfaceContainer, root.contentTransparency)
+        property color colBackgroundSurfaceContainer: ColorUtils.transparentize(m3colors.m3surfaceContainer, root.backgroundTransparency)
         property color colSurfaceContainerHigh: ColorUtils.transparentize(m3colors.m3surfaceContainerHigh, root.contentTransparency)
         property color colSurfaceContainerHighest: ColorUtils.transparentize(m3colors.m3surfaceContainerHighest, root.contentTransparency)
         property color colSurfaceContainerHighestHover: ColorUtils.mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
@@ -201,13 +202,26 @@ Singleton {
 
     font: QtObject {
         property QtObject family: QtObject {
-            property string main: "Rubik"
-            property string title: "Gabarito"
+            property string main: "Google Sans Flex"
+            property string numbers: "Google Sans Flex"
+            property string title: "Google Sans Flex"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
             property string expressive: "Space Grotesk"
+        }
+        property QtObject variableAxes: QtObject {
+            property var main: ({
+                "wght": 450,
+                "wdth": 100,
+            })
+            property var numbers: ({
+                "wght": 450,
+            })
+            property var title: ({ // Slightly bold weight for title
+                "wght": 550, // Weight (Lowered to compensate for increased grade)
+            })
         }
         property QtObject pixelSize: QtObject {
             property int smallest: 10

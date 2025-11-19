@@ -2,13 +2,17 @@ name: Comment on Discussion When sdata/dist-arch/ Changes
 
 on:
   push:
+    branches:
+      - main
     paths:
-      - 'sdata/dist-arch/**'
+      - "sdata/dist-arch/**"
+      - "!sdata/dist-arch/README.md"
 #  workflow_dispatch:
 
 jobs:
   comment_on_discussion:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.repository == 'end-4/dots-hyprland'
     steps:
       - name: Create comment on discussion #2140
         env:

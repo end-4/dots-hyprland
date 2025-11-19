@@ -292,24 +292,9 @@ function check_disk_space() {
   return 0
 }
 
-function auto_get_git_submodule(){
-  local git_submodules_list=()
-
-  while IFS= read -r path; do
-    [ -z "$path" ] && continue
-    git_submodules_list+=("$path")
-  done < <(git submodule status --recursive 2>/dev/null | awk '{print $2}')
-
-  local missing=0
-
-  for p in "${git_submodules_list[@]}"; do
-    if [ ! -d "$p" ] || [ -z "$(ls -A "$p" 2>/dev/null)" ]; then
-      missing=1
-      break
-    fi
-  done
-
-  if [ "$missing" -eq 1 ]; then
+function auto_update_git_submodule(){
+  if git submodule status --recursive | grep -E '^[+-U]';then
+    # Note: `git pull --recurse-submodules` cannot substitute `git submodule update --init --recursive` cuz it does not init a submodule when needed.
     x git submodule update --init --recursive
   fi
 }
@@ -358,4 +343,85 @@ function backup_clashing_targets(){
 
   x mkdir -p $backup_dir
   x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
+}
+
+function install_cmds(){
+  case $OS_GROUP_ID in
+    "arch")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo pacman -Syu
+      v sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+      ;;
+    "debian")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo apt update -y
+      v sudo apt install -y "${pkgs[@]}"
+      ;;
+    "fedora")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo dnf install -y "${pkgs[@]}"
+      ;;
+    "suse")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo zypper refresh
+      v sudo zypper -n install "${pkgs[@]}"
+      ;;
+    *)
+      printf "WARNING\n"
+      printf "No method found to install package providing the commands:\n"
+      printf "  $@\n"
+      printf "Please install by yourself.\n"
+      ;;
+  esac
+}
+
+function ensure_cmds(){
+  local not_found_cmds=()
+  for cmd in "$@"; do
+    if ! command -v $cmd >/dev/null 2>&1;then
+      not_found_cmds+=($cmd)
+    fi
+  done
+  if [[ ${#not_found_cmds[@]} -gt 0 ]]; then
+    echo -e "${STY_YELLOW}[$0]: Not found: ${not_found_cmds[*]}.${STY_RST}"
+    install_cmds "${not_found_cmds[@]}"
+  fi
+}
+
+function dedup_and_sort_listfile(){
+  if ! test -f "$1"; then
+    echo "File not found: $1" >&2; return 2
+  else
+    temp="$(mktemp)"
+    sort -u -- "$1" > "$temp"
+    mv -f -- "$temp" "$2"
+  fi
 }

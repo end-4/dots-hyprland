@@ -6,12 +6,10 @@ EAPI=8
 DESCRIPTION="Illogical Impulse Python Dependencies"
 HOMEPAGE=""
 
-LICENSE="GPL-2"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
 
-# SASSC is not needed here, pkgbuild is capping
 DEPEND=""
 RDEPEND="
 	dev-python/clang

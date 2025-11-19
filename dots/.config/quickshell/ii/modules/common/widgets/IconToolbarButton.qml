@@ -18,5 +18,6 @@ ToolbarButton {
         iconSize: 22
         text: iconBtn.text
         color: iconBtn.colText
+        animateChange: true
     }
 }

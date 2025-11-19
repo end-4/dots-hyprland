@@ -18,7 +18,7 @@ def center_crop(img, target_w, target_h):
     y2 = y1 + target_h
     return img[y1:y2, x1:x2]
 
-def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", horizontal_padding=50, vertical_padding=50):
+def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", horizontal_padding=50, vertical_padding=50, busiest=False):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -77,7 +77,9 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
             total += ii[y1-1, x1-1]
         return total
     min_var = None
+    max_var = None
     min_coords = (horizontal_padding, vertical_padding)
+    max_coords = (horizontal_padding, vertical_padding)
     area = region_width * region_height
     x_start = horizontal_padding
     y_start = vertical_padding
@@ -100,7 +102,13 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
             if (min_var is None) or (var < min_var):
                 min_var = var
                 min_coords = (x, y)
-    return min_coords, min_var
+            if (max_var is None) or (var > max_var):
+                max_var = var
+                max_coords = (x, y)
+    if busiest:
+        return max_coords, max_var
+    else:
+        return min_coords, min_var
 
 def find_largest_region(image_path, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", threshold=100.0, aspect_ratio=1.0, horizontal_padding=50, vertical_padding=50):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -313,6 +321,7 @@ def main():
     parser.add_argument("--aspect-ratio", type=float, default=1.78, help="Aspect ratio (width/height) for largest region mode")
     parser.add_argument("--horizontal-padding", "-hp", type=int, default=50, help="Minimum horizontal distance from region to image edge")
     parser.add_argument("--vertical-padding", "-vp", type=int, default=50, help="Minimum vertical distance from region to image edge")
+    parser.add_argument("--busiest", action="store_true", help="Find the busiest region instead of the least busy")
     args = parser.parse_args()
 
     if args.largest_region:
@@ -363,7 +372,8 @@ def main():
         stride=args.stride,
         screen_mode=args.screen_mode,
         horizontal_padding=args.horizontal_padding,
-        vertical_padding=args.vertical_padding
+        vertical_padding=args.vertical_padding,
+        busiest=args.busiest
     )
     if args.visual_output:
         draw_region(args.image_path, coords, region_width=args.width, region_height=args.height, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)

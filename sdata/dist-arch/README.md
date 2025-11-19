@@ -18,3 +18,6 @@ Why is this awesome?
 The PKGBUILDs contains two forms of dependencies:
 - Package name written in dependencies, like a "meta" package.
 - Normal PKGBUILD content to build dependencies, e.g. AGS, which is often for version controlling.
+
+## Note
+- `pkgver()` should be removed from `PKGBUILD` cuz it will modify the `PKGBUILD` which is tracked by Git and should not be modified during building.

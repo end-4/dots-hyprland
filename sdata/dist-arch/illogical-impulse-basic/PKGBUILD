@@ -5,7 +5,6 @@ pkgdesc='Illogical Impulse Basic Dependencies'
 arch=(any)
 license=(None)
 depends=(
-  axel
   bc
   coreutils
   cliphist
@@ -14,7 +13,6 @@ depends=(
   wget
   ripgrep
   jq
-  meson
   xdg-user-dirs
   # Used in install script
   rsync
