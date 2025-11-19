@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs
@@ -6,29 +7,34 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.actionCenter.mainPage
 
 WBarAttachedPanelContent {
     id: root
 
-    contentItem: ColumnLayout {
-        anchors.centerIn: parent
-        spacing: 0
+    contentItem: StackView { // TODO: Make this a WStackView with proper anim
+        id: stackView
+        anchors.fill: parent
+        implicitWidth: initItem.implicitWidth
+        implicitHeight: initItem.implicitHeight        
 
-        ActionCenterBody {
-            topLeftRadius: root.border.radius - root.border.border.width
-            topRightRadius: topLeftRadius
+        initialItem: PageColumn {
+            id: initItem
+            MainPageBody {}
+            Separator {}
+            MainPageFooter {}
         }
 
-        Rectangle {
-            Layout.fillHeight: false
-            Layout.fillWidth: true
-            color: Looks.colors.bgPanelSeparator
-            implicitHeight: 1
+        Component.onCompleted: {
+            ActionCenterContext.stackView = this
         }
 
-        ActionCenterFooter {
-            bottomLeftRadius: root.border.radius - root.border.border.width
-            bottomRightRadius: bottomLeftRadius
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.BackButton
+            onClicked: {
+                ActionCenterContext.back()
+            }
         }
     }
 }

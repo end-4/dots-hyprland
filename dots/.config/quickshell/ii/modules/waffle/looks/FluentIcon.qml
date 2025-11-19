@@ -6,6 +6,7 @@ import qs.modules.waffle.looks
 Kirigami.Icon {
     id: root
     required property string icon
+    property bool filled: false
     property alias monochrome: root.isMask
     // Should be 16, but it appears the icons have some padding, 
     // Unlike the Windows-only Segoe UI icons, the open source FluentUI ones are hella small
@@ -13,7 +14,7 @@ Kirigami.Icon {
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
-    source: `${Looks.iconsPath}/${root.icon}.svg`
+    source: icon === "" ? "" : `${Looks.iconsPath}/${root.icon}${filled ? "-filled" : ""}.svg`
     fallback: root.icon
     roundToIconSize: false
     color: Looks.colors.fg

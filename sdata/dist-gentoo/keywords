@@ -47,9 +47,7 @@ kde-plasma/breeze-plus
 x11-themes/darkly
 x11-themes/adw-gtk3
 media-fonts/space-grotesk
-media-fonts/gabarito **
 media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
-media-fonts/roboto-flex
 app-misc/songrec

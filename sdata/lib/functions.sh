@@ -417,7 +417,7 @@ function ensure_cmds(){
 }
 
 function dedup_and_sort_listfile(){
-  if test -f "$1"; then
+  if ! test -f "$1"; then
     echo "File not found: $1" >&2; return 2
   else
     temp="$(mktemp)"

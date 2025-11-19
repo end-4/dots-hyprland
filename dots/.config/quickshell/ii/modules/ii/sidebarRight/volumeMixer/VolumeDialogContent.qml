@@ -10,15 +10,8 @@ import Quickshell.Services.Pipewire
 ColumnLayout {
     id: root
     required property bool isSink
-    function correctType(node) {
-        return (node.isSink === root.isSink) && node.audio
-    }
-    readonly property list<var> appPwNodes: Pipewire.nodes.values.filter((node) => { // Should be list<PwNode> but it breaks ScriptModel
-        return root.correctType(node) && node.isStream
-    })
-    readonly property list<var> devices: Pipewire.nodes.values.filter(node => {
-        return root.correctType(node) && !node.isStream
-    })
+    readonly property list<var> appPwNodes: isSink ? Audio.outputAppNodes : Audio.inputAppNodes
+    readonly property list<var> devices: isSink ? Audio.outputDevices : Audio.inputDevices
     readonly property bool hasApps: appPwNodes.length > 0
     spacing: 16
 
@@ -44,21 +37,21 @@ ColumnLayout {
         Layout.fillHeight: false
         Layout.fillWidth: true
         Layout.bottomMargin: 6
-        model: root.devices.map(node => (node.nickname || node.description || Translation.tr("Unknown")))
+        model: root.devices.map(node => Audio.friendlyDeviceName(node))
         currentIndex: root.devices.findIndex(item => {
             if (root.isSink) {
-                return item.id === Pipewire.preferredDefaultAudioSink?.id
+                return item.id === Pipewire.defaultAudioSink?.id
             } else {
-                return item.id === Pipewire.preferredDefaultAudioSource?.id
+                return item.id === Pipewire.defaultAudioSource?.id
             }
         })
         onActivated: (index) => {
             print(index)
             const item = root.devices[index]
             if (root.isSink) {
-                Pipewire.preferredDefaultAudioSink = item
+                Audio.setDefaultSink(item)
             } else {
-                Pipewire.preferredDefaultAudioSource = item
+                Audio.setDefaultSource(item)
             }
         }
     }

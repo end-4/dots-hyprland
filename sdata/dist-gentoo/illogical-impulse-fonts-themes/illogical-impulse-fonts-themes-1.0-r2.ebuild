@@ -23,11 +23,9 @@ RDEPEND="
 	x11-misc/matugen
 	media-fonts/space-grotesk
 	app-shells/starship
-	media-fonts/gabarito
 	media-fonts/jetbrains-mono
 	media-fonts/material-symbols-variable
 	media-fonts/readex-pro
-	media-fonts/roboto-flex
 	media-fonts/rubik-vf
 	media-fonts/twemoji
 "
@@ -35,7 +33,6 @@ RDEPEND="
 # x11-themes/adw-gtk3
 # x11-themes/darkly
 # media-fonts/space-grotesk
-# media-fonts/gabarito
 # media-fonts/material-symbols-variable
 # media-fonts/readex-pro
 # media-fonts/rubik-vf

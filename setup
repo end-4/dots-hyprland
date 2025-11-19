@@ -29,13 +29,14 @@ Subcommands:
   install-setups Run the install step \"2. Setup for permissions/services etc\"
   install-files  Run the install step \"3. Copying config files\"
   resetfirstrun  Reset firstrun state.
-
   uninstall      Uninstall illogical-impulse.
+
   exp-update     (Experimental) Update illogical-impulse without fully reinstall.
-  exp-update-old (Experimental) exp-update but use behaves like old version.
+  exp-merge      (Experimental) Merge upstream changes with local configs using git rebase.
 
   virtmon        (For dev only) Create virtual monitors for testing multi-monitors.
   checkdeps      (For dev only) Check whether pkgs exist in AUR or repos of Arch.
+
   help           Show this help message.
 
 For each <subcommand>, use -h for details:
@@ -48,7 +49,7 @@ case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
   # Correct subcommand
-  install|uninstall|exp-update|exp-update-old|resetfirstrun|checkdeps|virtmon)
+  install|uninstall|exp-update|exp-merge|resetfirstrun|checkdeps|virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
     shift;;
