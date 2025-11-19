@@ -111,7 +111,7 @@ Singleton {
     //     property color term14: "#8D76AD"
     //     property color term15: "#221A1A"
     // }
-    m3colors: QtObject { // my own colors
+    m3colors: QtObject {
         property bool darkmode: false
 property bool transparent: false
 property color m3primary_paletteKeyColor: "#9C27B0"        // GRAPE_500
@@ -144,9 +144,9 @@ property color m3onPrimary: "#FFFFFF"
 property color m3primaryContainer: "#D25DE6"              // GRAPE_100 (light container)
 property color m3onPrimaryContainer: "#293A52"
 property color m3inversePrimary: "#3A4F6B"                 // accent_color as inverse-ish
-property color m3secondary: "#6A7CE0"                     // BLUEBERRY_300
+property color m3secondary: '#be6ae0'                     // BLUEBERRY_300
 property color m3onSecondary: "#FFFFFF"
-property color m3secondaryContainer: "#94A6FF"            // BLUEBERRY_100
+property color m3secondaryContainer: '#e694ff'            // BLUEBERRY_100
 property color m3onSecondaryContainer: "#293A52"
 property color m3tertiary: "#F15D22"                      // STRAWBERRY_500 (vibrant accent)
 property color m3onTertiary: "#FFFFFF"
@@ -188,6 +188,7 @@ property color term12: "#574F4A"
 property color term13: "#AC1800"
 property color term14: "#9C27B0"
 property color term15: "#293A52"
+
     }
 
     colors: QtObject {
