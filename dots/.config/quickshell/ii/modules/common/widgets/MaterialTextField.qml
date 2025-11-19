@@ -24,9 +24,10 @@ TextField {
     clip: true
 
     font {
-        family: Appearance?.font.family.main ?? "sans-serif"
+        family: Appearance.font.family.main
         pixelSize: Appearance?.font.pixelSize.small ?? 15
         hintingPreference: Font.PreferFullHinting
+        variableAxes: Appearance.font.variableAxes.main
     }
     wrapMode: TextEdit.Wrap
 

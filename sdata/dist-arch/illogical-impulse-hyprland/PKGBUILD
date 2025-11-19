@@ -1,0 +1,11 @@
+pkgname=illogical-impulse-hyprland
+pkgver=1.0
+pkgrel=4
+pkgdesc='Illogical Impulse Hyprland relatated packages'
+arch=(any)
+license=(None)
+depends=(
+  hyprland
+  hyprsunset
+  wl-clipboard
+)

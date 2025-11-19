@@ -7,51 +7,40 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 
-import "./modules/common/"
-import "./modules/background/"
-import "./modules/bar/"
-import "./modules/cheatsheet/"
-import "./modules/crosshair/"
-import "./modules/dock/"
-import "./modules/lock/"
-import "./modules/mediaControls/"
-import "./modules/notificationPopup/"
-import "./modules/onScreenDisplay/"
-import "./modules/onScreenKeyboard/"
-import "./modules/overview/"
-import "./modules/screenCorners/"
-import "./modules/sessionScreen/"
-import "./modules/sidebarLeft/"
-import "./modules/sidebarRight/"
-import "./modules/verticalBar/"
-import "./modules/wallpaperSelector/"
+import qs.modules.common
+import qs.modules.ii.background
+import qs.modules.ii.bar
+import qs.modules.ii.cheatsheet
+import qs.modules.ii.dock
+import qs.modules.ii.lock
+import qs.modules.ii.mediaControls
+import qs.modules.ii.notificationPopup
+import qs.modules.ii.onScreenDisplay
+import qs.modules.ii.onScreenKeyboard
+import qs.modules.ii.overview
+import qs.modules.ii.polkit
+import qs.modules.ii.regionSelector
+import qs.modules.ii.screenCorners
+import qs.modules.ii.sessionScreen
+import qs.modules.ii.sidebarLeft
+import qs.modules.ii.sidebarRight
+import qs.modules.ii.overlay
+import qs.modules.ii.verticalBar
+import qs.modules.ii.wallpaperSelector
+
+import qs.modules.waffle.actionCenter
+import qs.modules.waffle.background
+import qs.modules.waffle.bar
 
 import QtQuick
 import QtQuick.Window
 import Quickshell
-import "./services/"
+import Quickshell.Io
+import Quickshell.Hyprland
+import qs.services
 
 ShellRoot {
-    // Enable/disable modules here. False = not loaded at all, so rest assured
-    // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
-    property bool enableBar: true
-    property bool enableBackground: true
-    property bool enableCheatsheet: true
-    property bool enableCrosshair: true
-    property bool enableDock: true
-    property bool enableLock: true
-    property bool enableMediaControls: true
-    property bool enableNotificationPopup: true
-    property bool enableOnScreenDisplay: true
-    property bool enableOnScreenKeyboard: true
-    property bool enableOverview: true
-    property bool enableReloadPopup: true
-    property bool enableScreenCorners: true
-    property bool enableSessionScreen: true
-    property bool enableSidebarLeft: true
-    property bool enableSidebarRight: true
-    property bool enableVerticalBar: true
-    property bool enableWallpaperSelector: true
+    id: root
 
     // Force initialization of some singletons
     Component.onCompleted: {
@@ -61,25 +50,68 @@ ShellRoot {
         ConflictKiller.load()
         Cliphist.refresh()
         Wallpapers.load()
+        Updates.load()
     }
 
-    LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
-    LazyLoader { active: enableBackground; component: Background {} }
-    LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
-    LazyLoader { active: enableCrosshair; component: Crosshair {} }
-    LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
-    LazyLoader { active: enableLock; component: Lock {} }
-    LazyLoader { active: enableMediaControls; component: MediaControls {} }
-    LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
-    LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
-    LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
-    LazyLoader { active: enableOverview; component: Overview {} }
-    LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
-    LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
-    LazyLoader { active: enableSessionScreen; component: SessionScreen {} }
-    LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
-    LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
-    LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
-    LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
+    // Load enabled stuff
+    // Well, these loaders only *allow* them to be loaded, to always load or not is defined in each component
+    // The media controls for example is not loaded if it's not opened
+    PanelLoader { identifier: "iiBar"; extraCondition: !Config.options.bar.vertical; component: Bar {} }
+    PanelLoader { identifier: "iiBackground"; component: Background {} }
+    PanelLoader { identifier: "iiCheatsheet"; component: Cheatsheet {} }
+    PanelLoader { identifier: "iiDock"; extraCondition: Config.options.dock.enable; component: Dock {} }
+    PanelLoader { identifier: "iiLock"; component: Lock {} }
+    PanelLoader { identifier: "iiMediaControls"; component: MediaControls {} }
+    PanelLoader { identifier: "iiNotificationPopup"; component: NotificationPopup {} }
+    PanelLoader { identifier: "iiOnScreenDisplay"; component: OnScreenDisplay {} }
+    PanelLoader { identifier: "iiOnScreenKeyboard"; component: OnScreenKeyboard {} }
+    PanelLoader { identifier: "iiOverlay"; component: Overlay {} }
+    PanelLoader { identifier: "iiOverview"; component: Overview {} }
+    PanelLoader { identifier: "iiPolkit"; component: Polkit {} }
+    PanelLoader { identifier: "iiRegionSelector"; component: RegionSelector {} }
+    PanelLoader { identifier: "iiReloadPopup"; component: ReloadPopup {} }
+    PanelLoader { identifier: "iiScreenCorners"; component: ScreenCorners {} }
+    PanelLoader { identifier: "iiSessionScreen"; component: SessionScreen {} }
+    PanelLoader { identifier: "iiSidebarLeft"; component: SidebarLeft {} }
+    PanelLoader { identifier: "iiSidebarRight"; component: SidebarRight {} }
+    PanelLoader { identifier: "iiVerticalBar"; extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
+    PanelLoader { identifier: "iiWallpaperSelector"; component: WallpaperSelector {} }
+    PanelLoader { identifier: "wActionCenter"; component: WaffleActionCenter {} }
+    PanelLoader { identifier: "wBar"; component: WaffleBar {} }
+    PanelLoader { identifier: "wBackground"; component: WaffleBackground {} }
+
+    component PanelLoader: LazyLoader {
+        required property string identifier
+        property bool extraCondition: true
+        active: Config.ready && Config.options.enabledPanels.includes(identifier) && extraCondition
+    }
+
+    // Panel families
+    property list<string> families: ["ii", "waffle"]
+    property var panelFamilies: ({
+        "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
+        "waffle": ["wBar", "wBackground", "wActionCenter", "iiCheatsheet", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiSessionScreen", "iiSidebarRight", "iiWallpaperSelector"],
+    })
+    function cyclePanelFamily() {
+        const currentIndex = families.indexOf(Config.options.panelFamily)
+        const nextIndex = (currentIndex + 1) % families.length
+        Config.options.panelFamily = families[nextIndex]
+        Config.options.enabledPanels = panelFamilies[Config.options.panelFamily]
+    }
+
+    IpcHandler {
+        target: "panelFamily"
+
+        function cycle(): void {
+            root.cyclePanelFamily()
+        }
+    }
+
+    GlobalShortcut {
+        name: "panelFamilyCycle"
+        description: "Cycles panel family"
+
+        onPressed: root.cyclePanelFamily()
+    }
 }
 

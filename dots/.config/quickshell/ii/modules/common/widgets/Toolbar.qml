@@ -10,6 +10,7 @@ import qs.modules.common.widgets
 Item {
     id: root
 
+    property bool enableShadow: true
     property real padding: 8
     property alias colBackground: background.color
     property alias spacing: toolbarLayout.spacing
@@ -18,15 +19,20 @@ Item {
     implicitHeight: background.implicitHeight
     property alias radius: background.radius
 
-    StyledRectangularShadow {
-        target: background
+    Loader {
+        active: root.enableShadow
+        anchors.fill: background
+        sourceComponent: StyledRectangularShadow {
+            target: background
+            anchors.fill: undefined
+        }
     }
 
     Rectangle {
         id: background
         anchors.fill: parent
-        color: Appearance.m3colors.m3surfaceContainer // Needs to be opaque
-        implicitHeight: Math.max(toolbarLayout.implicitHeight + root.padding * 2, 56)
+        color: Appearance.m3colors.m3surfaceContainer
+        implicitHeight: 56
         implicitWidth: toolbarLayout.implicitWidth + root.padding * 2
         radius: height / 2
 

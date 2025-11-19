@@ -1,12 +1,12 @@
 import qs.modules.common
-import "./notification_utils.js" as NotificationUtils
+import "notification_utils.js" as NotificationUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
 
-MaterialCookie { // App icon
+MaterialShape { // App icon
     id: root
     property var appIcon: ""
     property var summary: ""
@@ -21,10 +21,13 @@ MaterialCookie { // App icon
     property real smallAppIconSize: implicitSize * smallAppIconScale
 
     implicitSize: 38 * scale
-    sides: isUrgent ? 10 : 0
-    amplitude: implicitSize / 24
+    property list<var> urgentShapes: [
+        MaterialShape.Shape.VerySunny,
+        MaterialShape.Shape.SoftBurst,
+    ]
+    shape: isUrgent ? urgentShapes[Math.floor(Math.random() * urgentShapes.length)] : MaterialShape.Shape.Circle
 
-    color: isUrgent ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
+    color: isUrgent ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSecondaryContainer
     Loader {
         id: materialSymbolLoader
         active: root.appIcon == ""
@@ -37,7 +40,7 @@ MaterialCookie { // App icon
                     "priority_high" : guessedIcon
             }
             anchors.fill: parent
-            color: isUrgent ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+            color: isUrgent ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colOnSecondaryContainer
             iconSize: root.materialIconSize
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

@@ -4,6 +4,7 @@ import Quickshell.Io
 import QtQuick.Layouts
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
@@ -112,6 +113,20 @@ ContentPage {
                 }
             }
         }
+        ConfigRow {
+            uniform: true
+            ConfigSpinBox {
+                icon: "charger"
+                text: Translation.tr("Full warning")
+                value: Config.options.battery.full
+                from: 0
+                to: 101
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.battery.full = value;
+                }
+            }
+        }
     }
     
     ContentSection {
@@ -144,6 +159,7 @@ ContentPage {
         }
         ContentSubsection {
             title: Translation.tr("Generate translation with Gemini")
+            tooltip: Translation.tr("You'll need to enter your Gemini API key first.\nType /key on the sidebar for instructions.")
             
             ConfigRow {
                 MaterialTextArea {
@@ -240,6 +256,30 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "notification_sound"
+        title: Translation.tr("Sounds")
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "battery_android_full"
+                text: Translation.tr("Battery")
+                checked: Config.options.sounds.battery
+                onCheckedChanged: {
+                    Config.options.sounds.battery = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "av_timer"
+                text: Translation.tr("Pomodoro")
+                checked: Config.options.sounds.pomodoro
+                onCheckedChanged: {
+                    Config.options.sounds.pomodoro = checked;
+                }
+            }
+        }
+    }
+    
+    ContentSection {
         icon: "nest_clock_farsight_analog"
         title: Translation.tr("Time")
 
@@ -285,6 +325,28 @@ ContentPage {
                         value: "h:mm AP"
                     },
                 ]
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "work_alert"
+        title: Translation.tr("Work safety")
+
+        ConfigSwitch {
+            buttonIcon: "assignment"
+            text: Translation.tr("Hide clipboard images copied from sussy sources")
+            checked: Config.options.workSafety.enable.clipboard
+            onCheckedChanged: {
+                Config.options.workSafety.enable.clipboard = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "wallpaper"
+            text: Translation.tr("Hide sussy/anime wallpapers")
+            checked: Config.options.workSafety.enable.wallpaper
+            onCheckedChanged: {
+                Config.options.workSafety.enable.wallpaper = checked;
             }
         }
     }

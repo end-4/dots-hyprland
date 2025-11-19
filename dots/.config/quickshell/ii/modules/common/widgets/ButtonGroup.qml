@@ -13,7 +13,8 @@ Rectangle {
     property alias uniformCellSizes: rowLayout.uniformCellSizes
     property real spacing: 5
     property real padding: 0
-    property int clickIndex: rowLayout.clickIndex
+    property alias clickIndex: rowLayout.clickIndex
+    property alias childrenCount: rowLayout.childrenCount
 
     property real contentWidth: {
         let total = 0;
@@ -43,5 +44,6 @@ Rectangle {
         anchors.margins: root.padding
         spacing: root.spacing
         property int clickIndex: -1
+        property int childrenCount: children.length
     }]
 }
