@@ -28,7 +28,7 @@ packages = [
   "curl",
   "wget2",
   "ripgrep",
-  "gojq",
+  "jq",
   "xdg-utils",
   "rsync",
   "yq"
@@ -145,7 +145,6 @@ packages = [
   "qt6-qttools",
   "qt6-qttranslations",
   "qt6-qtvirtualkeyboard",
-  "qt6-qtwayland",
   "kdialog",
   "kf6-syntax-highlighting"
 ]
