@@ -64,7 +64,8 @@ packages = [
   "material-icons-fonts",
   "readex-pro-fonts-all",
   "google-rubik-vf-fonts",
-  "twitter-twemoji-fonts"
+  "twitter-twemoji-fonts",
+  "google-sans-flex-vf-fonts"
 ]
 
 # Hyprland
