@@ -4,6 +4,7 @@ import Quickshell
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.waffle.looks
 import qs.modules.waffle.actionCenter
@@ -40,6 +41,20 @@ ColumnLayout {
 
         WPanelIconButton {
             opacity: 0
+        }
+
+        FocusedScrollMouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            hoverEnabled: false
+            onScrollUp: {
+                const newValue = Math.min(1.0, (root.brightnessMonitor?.brightness ?? 0) + 0.02);
+                root.brightnessMonitor?.setBrightness(newValue);
+            }
+            onScrollDown: {
+                const newValue = Math.max(0.0, (root.brightnessMonitor?.brightness ?? 0) - 0.02);
+                root.brightnessMonitor?.setBrightness(newValue);
+            }
         }
     }
     
@@ -83,6 +98,18 @@ ColumnLayout {
                         icon: "chevron-right"
                     }
                 }
+            }
+        }
+
+        FocusedScrollMouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            hoverEnabled: false
+            onScrollUp: {
+                Audio.sink.audio.volume = Math.min(1.0, Audio.sink.audio.volume + 0.02);
+            }
+            onScrollDown: {
+                Audio.sink.audio.volume = Math.max(0.0, Audio.sink.audio.volume - 0.02);
             }
         }
     }
