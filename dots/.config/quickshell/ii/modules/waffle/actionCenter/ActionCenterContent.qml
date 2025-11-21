@@ -12,7 +12,7 @@ import qs.modules.waffle.actionCenter.mainPage
 WBarAttachedPanelContent {
     id: root
 
-    contentItem: StackView { // TODO: Make this a WStackView with proper anim
+    contentItem: WStackView {
         id: stackView
         anchors.fill: parent
         implicitWidth: initItem.implicitWidth
