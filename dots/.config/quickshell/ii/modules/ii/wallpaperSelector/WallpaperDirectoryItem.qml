@@ -12,12 +12,12 @@ MouseArea {
     property bool isDirectory: fileModelData.fileIsDir
 
     property bool isVideo: {
-                    const path = fileModelData.fileName.toLowerCase();
-                    return path.endsWith('.mp4') || path.endsWith('.webm') || 
-                           path.endsWith('.mkv') || path.endsWith('.avi') || 
-                           path.endsWith('.mov') || path.endsWith('.m4v') ||
-                           path.endsWith('.ogv');
-                }
+        const path = fileModelData.fileName.toLowerCase();
+        return path.endsWith('.mp4') || path.endsWith('.webm') || 
+                path.endsWith('.mkv') || path.endsWith('.avi') || 
+                path.endsWith('.mov') || path.endsWith('.m4v') ||
+                path.endsWith('.ogv');
+    }
     property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName) || root.isVideo
 
     property alias colBackground: background.color
