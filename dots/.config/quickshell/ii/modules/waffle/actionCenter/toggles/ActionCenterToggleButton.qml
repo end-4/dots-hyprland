@@ -27,7 +27,7 @@ ColumnLayout {
     property var mainAction: toggleModel?.mainAction ?? null
     property var altAction: toggleModel?.hasMenu ? (() => root.openMenu()) : (toggleModel?.altAction ?? null)
     property bool hasMenu: toggleModel?.hasMenu ?? false
-    property Item menu
+    property Component menu
 
     property color colBackground: toggled ? Looks.colors.accent : Looks.colors.bg2
     property color colBackgroundHovered: toggled ? Looks.colors.accentHover : Looks.colors.bg2Hover

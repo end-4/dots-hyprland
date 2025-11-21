@@ -7,18 +7,22 @@ import qs.services
 Singleton {
     id: root
 
+    function wifiIconForStrength(strength) {
+        if (strength > 75)
+            return "wifi-1";
+        if (strength > 50)
+            return "wifi-2";
+        if (strength > 25)
+            return "wifi-3";
+        return "wifi-4";
+    }
+
     property string internetIcon: {
         if (Network.ethernet)
             return "ethernet";
         if (Network.wifiEnabled) {
             const strength = Network.networkStrength;
-            if (strength > 75)
-                return "wifi-1";
-            if (strength > 50)
-                return "wifi-2";
-            if (strength > 25)
-                return "wifi-3";
-            return "wifi-4";
+            return wifiIconForStrength(strength);
         }
         if (Network.wifiStatus === "connecting")
             return "wifi-4";

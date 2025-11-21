@@ -39,8 +39,10 @@ Singleton {
         property color bg2Hover: root.dark ? "#383838" : "#FDFDFD"
         property color bg2Active: root.dark ? "#333333" : "#FDFDFD"
         property color bg2Border: root.dark ? "#464646" : "#EEEEEE"
+        property color subfg: root.dark ? "#CED1D7" : "#5C5C5C"
         property color fg: root.dark ? "#FFFFFF" : "#000000"
         property color fg1: root.dark ? "#D1D1D1" : "#626262"
+        property color inactiveIcon: root.dark ? "#494949" : "#C4C4C4"
         property color controlBg: root.dark ? "#9B9B9B" : "#868686"
         property color controlFg: root.dark ? "#454545" : "#FFFFFF"
         property color danger: "#C42B1C"
@@ -103,8 +105,16 @@ Singleton {
         }
 
         property Component opacity: Component {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 120
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
+        property Component resize: Component { // TODO: better curve needed
+            NumberAnimation {
+                duration: 200
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }
