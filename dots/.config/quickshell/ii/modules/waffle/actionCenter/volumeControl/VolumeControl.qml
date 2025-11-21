@@ -10,7 +10,7 @@ import qs.modules.common.widgets
 import qs.modules.waffle.looks
 import qs.modules.waffle.actionCenter
 
-Rectangle {
+Item {
     id: root
     implicitWidth: 360
     implicitHeight: 352

@@ -11,6 +11,8 @@ Slider {
 
     property real trackWidth: 4
     property string tooltipContent: `${Math.round(value * 100)}`
+    property bool scrollable: false
+    stepSize: 0.02
     leftPadding: 0
     rightPadding: 0
 
@@ -22,9 +24,23 @@ Slider {
         }
     }
 
-    background: Item {
+    background: MouseArea {
         id: background
         anchors.fill: parent
+
+        onWheel: (event) => {
+            if (!root.scrollable) {
+                event.accepted = false;
+                return;
+            }
+            if (event.angleDelta.y > 0) {
+                root.value = Math.min(root.value + root.stepSize, 1)
+                root.moved()
+            } else {
+                root.value = Math.max(root.value - root.stepSize, 0)
+                root.moved()
+            }
+        }
 
         Rectangle {
             id: trackHighlight

@@ -78,9 +78,8 @@ Item {
         }
     }
 
-    Rectangle {
+    Item {
         id: contentArea
-        color: "red"
         z: 0
         anchors.fill: borderRect
         anchors.margins: borderRect.border.width
