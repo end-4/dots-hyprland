@@ -151,6 +151,24 @@ Item { // Wrapper
         if (event.key === Qt.Key_Escape)
             return;
 
+        // Add Emacs navigation in search results
+        if (event.modifiers & Qt.ControlModifier) {
+            switch (event.key) {
+                case Qt.Key_N:
+                    if (appResults.count > 0 && appResults.currentIndex < appResults.count - 1) {
+                        appResults.currentIndex++;
+                    }
+                    event.accepted = true;
+                    return;
+                case Qt.Key_P:
+                    if (appResults.count > 0 && appResults.currentIndex > 0) {
+                        appResults.currentIndex--;
+                    }
+                    event.accepted = true;
+                    return;
+            }
+        }
+
         // Handle Backspace: focus and delete character if not focused
         if (event.key === Qt.Key_Backspace) {
             if (!searchBar.searchInput.activeFocus) {
@@ -246,6 +264,71 @@ Item { // Wrapper
                 Layout.bottomMargin: verticalPadding
                 Synchronizer on searchingText {
                     property alias source: root.searchingText
+                }
+            }
+
+            // Add Emacs navigation & editing inside search box
+            Connections {
+                target: searchBar.searchInput
+                function onActiveFocusChanged() {
+                    if (searchBar.searchInput.activeFocus) {
+                        searchBar.searchInput.Keys.pressed.connect(handleSearchKeys);
+                    }
+                }
+
+                function handleSearchKeys(event) {
+                    if (event.modifiers & Qt.ControlModifier) {
+                        switch (event.key) {
+                            case Qt.Key_B:
+                                if (searchBar.searchInput.cursorPosition > 0) {
+                                    searchBar.searchInput.cursorPosition -= 1;
+                                    event.accepted = true;
+                                }
+                                break;
+
+                            case Qt.Key_F:
+                                if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
+                                    searchBar.searchInput.cursorPosition += 1;
+                                    event.accepted = true;
+                                }
+                                break;
+
+                            case Qt.Key_E:
+                                searchBar.searchInput.cursorPosition = searchBar.searchInput.length;
+                                event.accepted = true;
+                                break;
+
+                            case Qt.Key_U:
+                                event.accepted = true;
+                                let textU = searchBar.searchInput.text;
+                                let posU = searchBar.searchInput.cursorPosition;
+                                searchBar.searchInput.text = textU.slice(posU);
+                                searchBar.searchInput.cursorPosition = 0;
+                                break;
+
+                            case Qt.Key_A:
+                                event.accepted = true;
+                                searchBar.searchInput.cursorPosition = 0;
+                                break;
+
+                            case Qt.Key_K:
+                                event.accepted = true;
+                                let textK = searchBar.searchInput.text;
+                                let posK = searchBar.searchInput.cursorPosition;
+                                searchBar.searchInput.text = textK.slice(0, posK);
+                                break;
+
+                            case Qt.Key_D:
+                                if (searchBar.searchInput.cursorPosition < searchBar.searchInput.length) {
+                                    let text = searchBar.searchInput.text;
+                                    let pos = searchBar.searchInput.cursorPosition;
+                                    searchBar.searchInput.text = text.slice(0, pos) + text.slice(pos + 1);
+                                    searchBar.searchInput.cursorPosition = pos;
+                                    event.accepted = true;
+                                }
+                                break;
+                        }
+                    }
                 }
             }
 
