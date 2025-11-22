@@ -94,6 +94,7 @@ WChoiceButton {
                 horizontalAlignment: Text.AlignHCenter
                 visible: root.expanded
                 checked: !(root.wifiNetwork?.active ?? false)
+                colBackground: Looks.colors.bg2
                 colBackgroundHover: Looks.colors.bg2Hover
                 colBackgroundActive: Looks.colors.bg2Active
                 implicitHeight: 30
