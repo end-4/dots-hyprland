@@ -8,10 +8,12 @@ user_config=${REPO_ROOT}/sdata/dist-fedora/user_data.yaml
 # Recording DNF Transaction ID
 function r() {
   original_id=$(dnf history info | grep -Po '^Transaction ID\s+:\s+\K\d+')
-  "$@"
+  "$@" || {
+    echo -e "${STY_RED}[$0]: Stack Exception...${STY_RST}"
+  }
   last_id=$(dnf history info | grep -Po '^Transaction ID\s+:\s+\K\d+')
-  [ -f "$user_config" ] || ( touch "$user_config" && yq -i ".dnf.original_transaction_id = $original_id" "$user_config" )
-  [ "$original_id" != "$last_id" ] && yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config"
+  [ -f "$user_config" ] || { touch "$user_config" && yq -i ".dnf.original_transaction_id = $original_id" "$user_config"; } || :
+  [ "$original_id" == "$last_id" ] || yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config" || :
 }
 
 if ! command -v dnf >/dev/null 2>&1; then
