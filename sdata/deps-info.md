@@ -3,9 +3,9 @@ This file contains information about the dependencies.
 It mainly describes about `sdata/dist-arch` which is actively maintained by the devs.
 
 Tips:
-- The packages which name has prefix `illogical-impulse-` are defined with local file `PKGBUILD`. They are categoried into 2 types:
-  - **Meta packages**, which do not have actual content but only install dependencies specified in the array `depends`.
-  - **Actual packages**, which not only install dependencies listed in `depends`, but also build a package which has actual content in it and install it later.
+- The packages which name has prefix `illogical-impulse-` are defined with local files `PKGBUILD`. There're two types:
+  - **Meta packages**, which do not have actual content but only include other packages specified in the array `depends`.
+  - **Actual packages**, which not only install dependencies listed in `depends`, but also build packages which have actual content to be installed later.
 - For each package included in the local `PKGBUILD`s which name does **not** have prefix `illogical-impulse-`, for example `rsync`, it's either from [Arch Linux Packages](https://archlinux.org/packages) or the [AUR](https://aur.archlinux.org/packages). Search the package name on them to get the info (e.g. what executable(s) the package provides).
 
 # Meta packages
