@@ -35,7 +35,7 @@ RowLayout {
                 right: parent.right
                 margins: -1
             }
-            implicitSize: 14
+            implicitSize: 16
             icon: "speaker-mute"
         }
 

@@ -9,8 +9,9 @@ import qs.modules.common
 import qs.modules.common.models.quickToggles
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
-import qs.modules.waffle.actionCenter.wifi
 import qs.modules.waffle.actionCenter.bluetooth
+import qs.modules.waffle.actionCenter.volumeControl
+import qs.modules.waffle.actionCenter.wifi
 
 DelegateChooser {
     id: root
@@ -82,6 +83,11 @@ DelegateChooser {
         ActionCenterToggleButton {
             toggleModel: MicToggle {}
             icon: WIcons.micIcon
+            menu: Component {
+                VolumeControl {
+                    output: false
+                }
+            }
         }
     }
     DelegateChoice {
