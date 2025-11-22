@@ -88,15 +88,27 @@ ComboBox {
     delegate: ItemDelegate {
         id: itemDelegate
         width: ListView.view ? ListView.view.width : root.width
-        height: 40
+        implicitHeight: 40
 
         required property var model
         required property int index
+        property color color: {
+            if (root.currentIndex === itemDelegate.index) {
+                if (itemDelegate.down) return Appearance.colors.colSecondaryContainerActive;
+                if (itemDelegate.hovered) return Appearance.colors.colSecondaryContainerHover;
+                return Appearance.colors.colSecondaryContainer;
+            } else {
+                if (itemDelegate.down) return Appearance.colors.colLayer3Active;
+                if (itemDelegate.hovered) return Appearance.colors.colLayer3Hover;
+                return ColorUtils.transparentize(Appearance.colors.colLayer3);
+            }
+        }
+        property color colText: (root.currentIndex === itemDelegate.index) ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer3
 
         background: Rectangle {
             anchors.fill: parent
             radius: Appearance.rounding.small
-            color: root.currentIndex === itemDelegate.index ? Appearance.colors.colPrimary : itemDelegate.down ? Appearance.colors.colSecondaryContainerActive : itemDelegate.hovered ? Appearance.colors.colSecondaryContainerHover : ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh)
+            color: itemDelegate.color
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -119,31 +131,28 @@ ComboBox {
                 Layout.preferredHeight: Appearance.font.pixelSize.larger
                 active: typeof itemDelegate.model === 'object' && itemDelegate.model?.icon?.length > 0
                 visible: active
+
                 sourceComponent: Item {
                     implicitWidth: icon.implicitWidth
                     implicitHeight: Appearance.font.pixelSize.larger
+
                     MaterialSymbol {
                         id: icon
                         anchors.centerIn: parent
                         text: itemDelegate.model?.icon ?? ""
                         iconSize: Appearance.font.pixelSize.larger
-                        color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+                        color: itemDelegate.colText
                     }
                 }
             }
 
-            Item {
+            StyledText {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Appearance.font.pixelSize.larger
-
-                StyledText {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    color: root.currentIndex === itemDelegate.index ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-                    text: itemDelegate.model[root.textRole]
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                }
+                color: itemDelegate.colText
+                text: itemDelegate.model[root.textRole]
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
             }
         }
     }
