@@ -124,4 +124,15 @@ Singleton {
         var a = Math.max(0, Math.min(1, alpha));
         return Qt.rgba(c.r, c.g, c.b, a);
     }
+
+    /**
+     * Returns true if the color is considered "dark" (hslLightness < 0.5).
+     *
+     * @param {string} color - The color to check (any Qt.color-compatible string).
+     * @returns {boolean} True if dark, false otherwise.
+     */
+    function isDark(color) {
+        var c = Qt.color(color);
+        return c.hslLightness < 0.5;
+    }
 }

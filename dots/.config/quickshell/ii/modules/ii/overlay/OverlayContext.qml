@@ -6,13 +6,14 @@ Singleton {
     id: root
     
     readonly property list<var> availableWidgets: [
-        { identifier: "recorder", materialSymbol: "screen_record" },
-        { identifier: "volumeMixer", materialSymbol: "volume_up" },
         { identifier: "crosshair", materialSymbol: "point_scan" },
         { identifier: "fpsLimiter", materialSymbol: "animation" },
+        { identifier: "floatingImage", materialSymbol: "imagesmode" },
+        { identifier: "recorder", materialSymbol: "screen_record" },
         { identifier: "resources", materialSymbol: "browse_activity" },
-        { identifier: "processMonitor", materialSymbol: "list_alt" }
-
+        { identifier: "processMonitor", materialSymbol: "list_alt" },
+        { identifier: "notes", materialSymbol: "note_stack" },
+        { identifier: "volumeMixer", materialSymbol: "volume_up" },
     ]
     
     readonly property bool hasPinnedWidgets: root.pinnedWidgetIdentifiers.length > 0

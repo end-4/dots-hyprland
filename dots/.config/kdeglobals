@@ -148,6 +148,9 @@ toolBarFont=Rubik,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 [Icons]
 Theme=breeze-dark
 
+[KDE]
+widgetStyle=Darkly
+
 [KFileDialog Settings]
 Allow Expansion=false
 Automatically select filename extension=true

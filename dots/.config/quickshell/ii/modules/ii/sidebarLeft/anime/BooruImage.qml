@@ -1,7 +1,8 @@
 import qs.services
 import qs.modules.common
-import qs.modules.common.widgets
 import qs.modules.common.functions
+import qs.modules.common.utils
+import qs.modules.common.widgets
 import QtQml
 import QtQuick
 import QtQuick.Controls
@@ -25,18 +26,19 @@ Button {
     property real imageRadius: Appearance.rounding.small
 
     property bool showActions: false
-    Process {
-        id: downloadProcess
-        running: false
-        command: ["bash", "-c", `mkdir -p '${root.previewDownloadPath}' && [ -f ${root.filePath} ] || curl -sSL '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.filePath}'`]
-        onExited: (exitCode, exitStatus) => {
-            imageObject.source = `${previewDownloadPath}/${root.fileName}`
-        }
-    }
-
-    Component.onCompleted: {
-        if (root.manualDownload) {
-            downloadProcess.running = true
+    ImageDownloaderProcess {
+        id: imageDownloader
+        running: root.manualDownload
+        filePath: root.filePath
+        sourceUrl: root.imageData.preview_url ?? root.imageData.sample_url
+        onDone: (path, width, height) => {
+            imageObject.source = ""
+            imageObject.source = path
+            if (!modelData.width || !modelData.height) {
+                modelData.width = width
+                modelData.height = height
+                modelData.aspect_ratio = width / height
+            }
         }
     }
 
