@@ -28,7 +28,7 @@ Item {
 
                 HeaderRow {
                     Layout.fillWidth: true
-                    title: root.output ? qsTr("Sound output") : qsTr("Sound input")
+                    title: root.output ? Translation.tr("Sound output") : Translation.tr("Sound input")
                 }
 
                 StyledFlickable {
@@ -72,7 +72,7 @@ Item {
                     WText {
                         id: buttonText
                         anchors.centerIn: parent
-                        text: qsTr("More volume settings")
+                        text: Translation.tr("More volume settings")
                         color: moreSettingsButton.pressed ? Looks.colors.fg : Looks.colors.fg1
                     }
                 }
@@ -84,7 +84,7 @@ Item {
         spacing: 4
 
         SectionText {
-            text: root.output ? qsTr("Output device") : qsTr("Input device")
+            text: root.output ? Translation.tr("Output device") : Translation.tr("Input device")
         }
 
         Repeater {
@@ -112,7 +112,7 @@ Item {
 
         SectionText {
             visible: EasyEffects.available && root.output
-            text: qsTr("Sound effects")
+            text: Translation.tr("Sound effects")
         }
 
         WChoiceButton {
@@ -137,7 +137,7 @@ Item {
 
         SectionText {
             visible: EasyEffects.available
-            text: qsTr("Volume mixer")
+            text: Translation.tr("Volume mixer")
         }
 
         VolumeEntry {

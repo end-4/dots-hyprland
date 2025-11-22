@@ -45,7 +45,7 @@ Item {
                         HeaderRow {
                             id: headerRow
                             Layout.fillWidth: true
-                            title: qsTr("Bluetooth")
+                            title: Translation.tr("Bluetooth")
                         }
                         WSwitch {
                             id: toggleSwitch
@@ -104,7 +104,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
                 }
-                text: qsTr("More Bluetooth settings")
+                text: Translation.tr("More Bluetooth settings")
                 onClicked: {
                     Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "sidebarLeft", "toggle"]);
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth]);

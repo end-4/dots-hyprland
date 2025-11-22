@@ -33,11 +33,7 @@ ExpandableChoiceButton {
             Layout.bottomMargin: 4
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
-            spacing: 1
-
-            Behavior on Layout.topMargin {
-                animation: Looks.transition.move.createObject(this)
-            }
+            spacing: 0
 
             WText {
                 // Network name

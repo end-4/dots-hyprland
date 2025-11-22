@@ -2,13 +2,10 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import qs.modules.common
-import qs.modules.common.widgets
 import qs.modules.waffle.looks
 
 Switch {
     id: root
-    
-    PointingHandInteraction {}
 
     implicitWidth: 40
     implicitHeight: 20
