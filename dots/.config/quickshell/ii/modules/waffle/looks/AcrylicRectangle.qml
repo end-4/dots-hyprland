@@ -9,7 +9,7 @@ Rectangle {
     id: root
 
     property bool shiny: true // Top border
-    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, shiny ? 0.5 : 1)
+    property color borderColor: ColorUtils.transparentize(Looks.colors.bg2Border, shiny ? 0.5 : 1)
     color: Looks.colors.bg1Hover
     radius: Looks.radius.medium
     Behavior on color {
@@ -22,10 +22,12 @@ Rectangle {
         borderCanvas.requestPaint();
     }
     
-    // Top 1px border with color 
+    // 1px border at the top or bottom
     Canvas {
         id: borderCanvas
         anchors.fill: parent
+        // For dark mode we have a shiny top border, and for light mode we have sort of a shadow
+        rotation: Looks.dark ? 0 : 180
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
