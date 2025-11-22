@@ -202,14 +202,14 @@ Singleton {
 
     font: QtObject {
         property QtObject family: QtObject {
-            property string main: "Google Sans Flex"
-            property string numbers: "Google Sans Flex"
-            property string title: "Google Sans Flex"
+            property string main: Config.options.appearance.fonts.main
+            property string numbers: Config.options.appearance.fonts.numbers
+            property string title: Config.options.appearance.fonts.title
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "JetBrains Mono NF"
-            property string monospace: "JetBrains Mono NF"
-            property string reading: "Readex Pro"
-            property string expressive: "Space Grotesk"
+            property string iconNerd: Config.options.appearance.fonts.iconNerd
+            property string monospace: Config.options.appearance.fonts.monospace
+            property string reading: Config.options.appearance.fonts.reading
+            property string expressive: Config.options.appearance.fonts.expressive
         }
         property QtObject variableAxes: QtObject {
             property var main: ({
