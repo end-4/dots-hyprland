@@ -44,14 +44,14 @@
 <details>
   <summary>Software overview</summary>
 
-
   | Software | Purpose |
   | ------------- | ------------- |
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
+  | Others | See [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md) |
 
-  - For the full list of dependencies, read [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md)
-  - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
+  **Note: No Waybar here. Please stop calling every bar "Waybar".**
+
 </details>
 
 <details>
