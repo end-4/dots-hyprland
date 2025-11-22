@@ -118,7 +118,7 @@ Loader {
                 bottomMargin: root.barAtBottom ? popupWindow.sourceEdgeMargin : (root.ambientShadowWidth + root.visualMargin)
                 topMargin: root.barAtBottom ? (root.ambientShadowWidth + root.visualMargin) : popupWindow.sourceEdgeMargin
             }
-            color: Looks.colors.bg1
+            color: Looks.colors.bg1Base
             radius: Looks.radius.large
 
             // test

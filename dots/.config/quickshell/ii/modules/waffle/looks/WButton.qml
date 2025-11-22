@@ -85,8 +85,8 @@ Button {
     property alias border: backgroundRect.border
     horizontalPadding: 10
     verticalPadding: 6
-    implicitHeight: contentItem.implicitHeight + verticalPadding * 2
-    implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
+    implicitHeight: contentItem.implicitHeight + verticalPadding * 2 + topInset + bottomInset
+    implicitWidth: contentItem.implicitWidth + horizontalPadding * 2 + leftInset + rightInset
 
     background: Rectangle {
         id: backgroundRect

@@ -7,7 +7,7 @@ import qs.modules.common.widgets
 
 QuickToggleModel {
     name: Translation.tr("Bluetooth")
-    statusText: BluetoothStatus.firstActiveDevice?.name ?? Translation.tr("No device")
+    statusText: BluetoothStatus.firstActiveDevice?.name ?? Translation.tr("Not connected")
     tooltipText: Translation.tr("%1 | Right-click to configure").arg(
         (BluetoothStatus.firstActiveDevice?.name ?? Translation.tr("Bluetooth"))
         + (BluetoothStatus.activeDeviceCount > 1 ? ` +${BluetoothStatus.activeDeviceCount - 1}` : "")

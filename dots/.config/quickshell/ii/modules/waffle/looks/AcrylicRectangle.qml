@@ -9,7 +9,7 @@ Rectangle {
     id: root
 
     property bool shiny: true // Top border
-    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, shiny ? Looks.contentTransparency : 1)
+    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, shiny ? 0.5 : 1)
     color: Looks.colors.bg1Hover
     radius: Looks.radius.medium
     Behavior on color {

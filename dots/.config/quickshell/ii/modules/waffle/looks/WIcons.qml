@@ -40,7 +40,12 @@ Singleton {
             return "battery-warning";
         if (Battery.percentage >= 0.9)
             return "battery-full";
-        return `battery-${Math.ceil(Battery.percentage * 10)}`;
+        return `battery-0`;
+    }
+
+    property string batteryLevelIcon: {
+        const discreteLevel = Math.ceil(Battery.percentage * 10)
+        return `battery-${discreteLevel > 9 ? "full" : discreteLevel}`;
     }
 
     property string volumeIcon: {

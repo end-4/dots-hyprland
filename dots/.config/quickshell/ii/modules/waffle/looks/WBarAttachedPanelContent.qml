@@ -25,6 +25,10 @@ Item {
     implicitHeight: borderRect.implicitHeight
     implicitWidth: borderRect.implicitWidth
 
+    WRectangularShadow {
+        target: borderRect
+    }
+
     Rectangle {
         id: borderRect
         z: 1

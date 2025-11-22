@@ -9,7 +9,8 @@ BarButton {
     id: root
 
     rightInset: 12 // For now this is the rightmost button. Desktop peek is useless. (for now)
-    padding: 12
+    leftPadding: 12
+    rightPadding: 22
 
     checked: GlobalStates.sidebarRightOpen
     onClicked: {
@@ -17,7 +18,7 @@ BarButton {
     }
 
     contentItem: Item {
-        anchors.centerIn: root.background
+        // anchors.centerIn: parent
         implicitHeight: contentLayout.implicitHeight
         implicitWidth: contentLayout.implicitWidth
         Row {
