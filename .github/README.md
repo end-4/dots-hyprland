@@ -137,7 +137,7 @@ Widget system: AGS | Support: No
 |:---|:---------------|
 | ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
 | Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/65951b8b-1434-4e2c-a3e8-cf570c9b55d5" /> |
+| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
 
 #### m3ww
 
