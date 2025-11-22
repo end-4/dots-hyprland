@@ -29,20 +29,20 @@ StyledOverlayWidget {
                 const nameA = a.name.toLowerCase()
                 const nameB = b.name.toLowerCase()
                 return sortStateProcess === 1 ?
-                    nameA.localeCompare(nameB) :
-                    nameB.localeCompare(nameA)
+                nameA.localeCompare(nameB) :
+                nameB.localeCompare(nameA)
             })
         } else if (sortStateCpu !== 0) {
             sorted.sort((a, b) => {
                 return sortStateCpu === 1 ?
-                    b.cpuPercent - a.cpuPercent :
-                    a.cpuPercent - b.cpuPercent
+                b.cpuPercent - a.cpuPercent :
+                a.cpuPercent - b.cpuPercent
             })
         } else if (sortStateRam !== 0) {
             sorted.sort((a, b) => {
                 return sortStateRam === 1 ?
-                    b.memoryKb - a.memoryKb :
-                    a.memoryKb - b.memoryKb
+                b.memoryKb - a.memoryKb :
+                a.memoryKb - b.memoryKb
             })
         }
 
@@ -176,7 +176,7 @@ StyledOverlayWidget {
                     anchors.rightMargin: 12
                     spacing: 6
 
-                    // Process slabel
+                    // Process header
                     Item {
                         Layout.fillWidth: true
                         Layout.minimumWidth: 50
@@ -189,10 +189,10 @@ StyledOverlayWidget {
                             font.bold: true
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: root.sortStateProcess !== 0 ?
-                                   Appearance.colors.colPrimary :
-                                   processMouseArea.containsMouse ?
-                                   Appearance.colors.colPrimary :
-                                   Appearance.colors.colOnSecondaryContainer
+                            Appearance.colors.colPrimary :
+                            processMouseArea.containsMouse ?
+                            Appearance.colors.colPrimary :
+                            Appearance.colors.colOnSecondaryContainer
                             opacity: processMouseArea.containsMouse ? 0.7 : 1.0
                         }
 
@@ -219,7 +219,7 @@ StyledOverlayWidget {
                         }
                     }
 
-                    // CPU Label
+                    // CPU header
                     Item {
                         Layout.preferredWidth: 70
                         Layout.minimumWidth: 70
@@ -234,10 +234,10 @@ StyledOverlayWidget {
                             font.bold: true
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: root.sortStateCpu !== 0 ?
-                                   Appearance.colors.colPrimary :
-                                   cpuMouseArea.containsMouse ?
-                                   Appearance.colors.colPrimary :
-                                   Appearance.colors.colOnSecondaryContainer
+                            Appearance.colors.colPrimary :
+                            cpuMouseArea.containsMouse ?
+                            Appearance.colors.colPrimary :
+                            Appearance.colors.colOnSecondaryContainer
                             opacity: cpuMouseArea.containsMouse ? 0.7 : 1.0
                         }
 
@@ -264,7 +264,7 @@ StyledOverlayWidget {
                         }
                     }
 
-                    // RAM label
+                    // RAM header
                     Item {
                         Layout.preferredWidth: 90
                         Layout.minimumWidth: 90
@@ -279,10 +279,10 @@ StyledOverlayWidget {
                             font.bold: true
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: root.sortStateRam !== 0 ?
-                                   Appearance.colors.colPrimary :
-                                   ramMouseArea.containsMouse ?
-                                   Appearance.colors.colPrimary :
-                                   Appearance.colors.colOnSecondaryContainer
+                            Appearance.colors.colPrimary :
+                            ramMouseArea.containsMouse ?
+                            Appearance.colors.colPrimary :
+                            Appearance.colors.colOnSecondaryContainer
                             opacity: ramMouseArea.containsMouse ? 0.7 : 1.0
                         }
 
@@ -384,7 +384,7 @@ StyledOverlayWidget {
                             clip: true
 
                             Behavior on height {
-                                enabled: !ProcessMonitor.updating && !modelRefreshTimer.running
+                                enabled: !modelRefreshTimer.running
                                 NumberAnimation {
                                     easing.type: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                                 }
@@ -494,7 +494,6 @@ StyledOverlayWidget {
                                                     anchors.centerIn: parent
                                                     text: "close"
                                                     color: Appearance.colors.colError
-                                                    iconSize: Appearance.font.pixelSize.medium
                                                 }
 
                                                 onClicked: {
@@ -666,26 +665,20 @@ StyledOverlayWidget {
                         width: 6
                         height: 6
                         radius: 3
-                        color: ProcessMonitor.updating ?
-                        Appearance.colors.colWarning :
-                        Appearance.colors.colPrimary
+                        color: Appearance.colors.colPrimary
                     }
 
-                    Rectangle { 
+                    Rectangle {
                         visible: root.expandedPid !== ""
                         width: 6
                         height: 6
                         radius: 1
-                        color: ProcessMonitor.updating ?
-                        Appearance.colors.colWarning :
-                        Appearance.colors.colPrimary
+                        color: Appearance.colors.colPrimary
                     }
 
                     StyledText {
-                        text: ProcessMonitor.updating ? Translation.tr("Updating...") : root.expandedPid !== "" ? Translation.tr("Paused") : Translation.tr("Live")
-                        color: ProcessMonitor.updating ?
-                        Appearance.colors.colOnSecondaryContainer :
-                        Appearance.colors.colPrimary
+                        text: root.expandedPid !== "" ? Translation.tr("Paused") : Translation.tr("Live")
+                        color: Appearance.colors.colPrimary
                         font.pixelSize: Appearance.font.pixelSize.smallie
                     }
                 }
