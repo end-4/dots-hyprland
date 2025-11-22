@@ -33,17 +33,17 @@ Singleton {
         property color bgPanelBody: "#F2F2F2"
         property color bgPanelSeparator: "#E0E0E0"
         property color bg0: "#EEEEEE"
-        property color bg0Border: "#BEBEBE"
+        property color bg0Border: '#adadad'
         property color bg1: "#F7F7F7"
         property color bg1Base: "#F7F7F7"
         property color bg1Hover: "#F7F7F7"
         property color bg1Active: '#EFEFEF'
-        property color bg1Border: '#141414'
+        property color bg1Border: '#d7d7d7'
         property color bg2: "#FBFBFB"
         property color bg2Base: "#FBFBFB"
         property color bg2Hover: "#FDFDFD"
         property color bg2Active: "#FDFDFD"
-        property color bg2Border: "#EEEEEE"
+        property color bg2Border: '#cdcdcd'
         property color subfg: "#5C5C5C"
         property color fg: "#000000"
         property color fg1: "#626262"
@@ -68,7 +68,7 @@ Singleton {
         property color bg2: '#8a8a8a'
         property color bg2Hover: '#b1b1b1'
         property color bg2Active: '#919191'
-        property color bg2Border: "#bebebe"
+        property color bg2Border: '#c4c4c4'
         property color subfg: "#CED1D7"
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"

@@ -32,13 +32,13 @@ ColumnLayout {
     property color colBackground: toggled ? Looks.colors.accent : Looks.colors.bg2
     property color colBackgroundHovered: toggled ? Looks.colors.accentHover : Looks.colors.bg2Hover
     property color colBackgroundActive: toggled ? Looks.colors.accentActive : Looks.colors.bg2Active
-    property color colBorder: toggled ? Looks.colors.accentHover : Looks.colors.bg0Border
+    property color colBorder: toggled ? Looks.colors.accentHover : Looks.colors.bg2Border
     property color colForeground: toggled ? Looks.colors.accentFg : Looks.colors.fg1
 
     spacing: 0
     property real wholeToggleWidth: 96
 
-    Rectangle {
+    AcrylicRectangle {
         Layout.fillWidth: true
         implicitWidth: root.wholeToggleWidth
         implicitHeight: 48

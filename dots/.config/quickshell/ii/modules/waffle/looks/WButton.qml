@@ -72,7 +72,7 @@ Button {
     property var altAction: () => {}
     property var middleClickAction: () => {}
 
-    property real inset: 2
+    property real inset: 0
     topInset: inset
     bottomInset: inset
     leftInset: inset
