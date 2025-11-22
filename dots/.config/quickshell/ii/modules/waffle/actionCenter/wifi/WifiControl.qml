@@ -95,7 +95,6 @@ Item {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
                 }
-                inset: 0
                 implicitHeight: 40
                 implicitWidth: contentItem.implicitWidth + 30
                 color: "transparent"

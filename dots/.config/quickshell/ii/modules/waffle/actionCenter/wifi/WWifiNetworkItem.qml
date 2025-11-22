@@ -96,7 +96,6 @@ WChoiceButton {
                 checked: !(root.wifiNetwork?.active ?? false)
                 colBackgroundHover: Looks.colors.bg2Hover
                 colBackgroundActive: Looks.colors.bg2Active
-                inset: 0
                 implicitHeight: 30
                 implicitWidth: 148
                 text: root.wifiNetwork?.active ? Translation.tr("Disconnect") : Translation.tr("Connect")

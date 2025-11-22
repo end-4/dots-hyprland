@@ -17,7 +17,6 @@ WButton {
     implicitWidth: contentItem.implicitWidth
     horizontalPadding: 10
     verticalPadding: 11
-    inset: 0
     buttonSpacing: 8
 
     color: {
