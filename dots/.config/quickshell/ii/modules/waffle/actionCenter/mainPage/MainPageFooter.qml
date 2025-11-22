@@ -22,7 +22,11 @@ FooterRectangle {
 
             FluentIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                icon: WIcons.batteryIcon
+                icon: WIcons.batteryLevelIcon
+                FluentIcon {
+                    anchors.fill: parent
+                    icon: WIcons.batteryIcon
+                }
             }
             WText {
                 anchors.verticalCenter: parent.verticalCenter

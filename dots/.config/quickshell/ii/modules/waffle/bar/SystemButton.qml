@@ -50,7 +50,11 @@ BarButton {
                 visible: Battery?.available ?? false
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: WIcons.batteryIcon
+                    icon: WIcons.batteryLevelIcon
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.batteryIcon
+                    }
                 }
             }
         }

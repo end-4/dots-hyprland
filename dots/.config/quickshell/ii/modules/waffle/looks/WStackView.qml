@@ -4,15 +4,15 @@ import qs.modules.waffle.looks
 
 StackView {
     id: root
-    property real moveDistance: 20
-    property int pushDuration: 100
+    property real moveDistance: 30
+    property int pushDuration: 220
     property list<real> bezierCurve: Looks.transition.easing.bezierCurve.easeIn
     clip: true
 
     property alias color: background.color
     background: Rectangle {
         id: background
-        color: Looks.colors.bgPanelBody
+        color: Looks.colors.bgPanelFooterBase
     }
 
     pushEnter: Transition {

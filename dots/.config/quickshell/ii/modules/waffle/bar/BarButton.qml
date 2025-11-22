@@ -19,8 +19,11 @@ WButton {
     Layout.fillHeight: true
     topInset: 4
     bottomInset: 4
+    leftInset: 0
+    rightInset: 0
+    horizontalPadding: 8
 
-    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, (root.checked || root.hovered) ? Looks.contentTransparency : 1)
+    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, (root.checked || root.hovered) ? Looks.backgroundTransparency : 1)
     color: {
         if (root.down) {
             return root.colBackgroundActive

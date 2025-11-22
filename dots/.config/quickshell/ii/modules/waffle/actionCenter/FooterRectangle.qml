@@ -10,7 +10,7 @@ import qs.modules.waffle.looks
 Rectangle {
     Layout.fillHeight: false
     Layout.fillWidth: true
-    color: Looks.colors.bgPanelFooter
+    color: "transparent"
 
     implicitWidth: 360
     implicitHeight: 47
