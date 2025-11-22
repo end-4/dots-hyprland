@@ -27,11 +27,16 @@ class KeyBinding(dict):
         self["dispatcher"] = dispatcher
         self["params"] = params
         self["comment"] = comment
-
+class Unbinding(dict):
+    def __init__(self, mods, key, comment) -> None:
+        self["mods"] = mods
+        self["key"] = key
+        self["comment"] = comment
 class Section(dict):
-    def __init__(self, children, keybinds, name) -> None:
+    def __init__(self, children, keybinds, unbinds, name) -> None:
         self["children"] = children
         self["keybinds"] = keybinds
+        self["unbinds"] = unbinds
         self["name"] = name
 
 
@@ -139,14 +144,41 @@ def autogenerate_comment(dispatcher: str, params: str = "") -> str:
 def get_keybind_at_line(line_number, line_start = 0):
     global content_lines
     line = content_lines[line_number]
-    _, keys = line.split("=", 1)
+    command, keys = line.split("=", 1)
+    
     keys, *comment = keys.split("#", 1)
+
+    # print("command : {0} {1} {2}".format(command, comment, keys))
+    if 'unbind' in command:
+        comment = list(map(str.strip, comment))
+        if comment:
+            comment = comment[0]
+            if comment.startswith("[ignore]"):
+                # print('unbind [ignore]')
+                return None
+        mods, key, *_ = list(map(str.strip, keys.split(",", 3)))
+        if mods:
+            modstring = mods + MOD_SEPARATORS[0] # Add separator at end to ensure last mod is read
+            mods = []
+            p = 0
+            for index, char in enumerate(modstring):
+                if(char in MOD_SEPARATORS):
+                    if(index - p > 1):
+                        mods.append(modstring[p:index])
+                    p = index+1
+        else:
+            mods = []
+        # print('unbind skip, {0} {1}'.format(mods, key))
+        return Unbinding(mods, key, comment)
+
 
     mods, key, dispatcher, *params = list(map(str.strip, keys.split(",", 4)))
     params = "".join(map(str.strip, params))
 
     # Remove empty spaces
     comment = list(map(str.strip, comment))
+
+
     # Add comment if it exists, else generate it
     if comment:
         comment = comment[0]
@@ -188,20 +220,25 @@ def get_binds_recursive(current_content, scope):
             section_name = line[(heading_scope+1):].strip()
             # print("[[ Found h{0} at line {1} ]] {2}".format(heading_scope, reading_line+1, content_lines[reading_line]))
             reading_line += 1
-            current_content["children"].append(get_binds_recursive(Section([], [], section_name), heading_scope))
+            current_content["children"].append(get_binds_recursive(Section([], [], [], section_name), heading_scope))
 
         elif line.startswith(COMMENT_BIND_PATTERN):
             keybind = get_keybind_at_line(reading_line, line_start=len(COMMENT_BIND_PATTERN))
-            if(keybind != None):
+            # if(keybind != None):
+            if isinstance(keybind, KeyBinding):
                 current_content["keybinds"].append(keybind)
+            elif isinstance(keybind, Unbinding):
+                current_content["unbinds"].append(keybind)
 
-        elif line == "" or not line.lstrip().startswith("bind"): # Comment, ignore
+        elif line == "" or not (line.lstrip().startswith("bind") or line.lstrip().startswith("unbind")): # Comment, ignore
             pass
 
         else: # Normal keybind
             keybind = get_keybind_at_line(reading_line)
-            if(keybind != None):
+            if isinstance(keybind, KeyBinding):
                 current_content["keybinds"].append(keybind)
+            elif isinstance(keybind, Unbinding):
+                current_content["unbinds"].append(keybind)
 
         reading_line += 1
 
@@ -212,7 +249,7 @@ def parse_keys(path: str) -> Dict[str, List[KeyBinding]]:
     content_lines = read_content(path).splitlines()
     if content_lines[0] == "error":
         return "error"
-    return get_binds_recursive(Section([], [], ""), 0)
+    return get_binds_recursive(Section([], [], [], ""), 0)
 
 
 if __name__ == "__main__":
