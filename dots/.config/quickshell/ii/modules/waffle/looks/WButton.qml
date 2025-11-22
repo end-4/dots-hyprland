@@ -19,6 +19,7 @@ Button {
     property color colForegroundToggled: Looks.colors.accentFg
     property alias backgroundOpacity: backgroundRect.opacity
     property color color: {
+        if (!root.enabled) return colBackground;
         if (root.checked) {
             if (root.down) {
                 return root.colBackgroundToggledActive;

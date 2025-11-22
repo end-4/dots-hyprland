@@ -17,7 +17,7 @@ Singleton {
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
     property bool dark: Appearance.m3colors.darkmode
 
-    property real backgroundTransparency: 0.13
+    property real backgroundTransparency: 0.11
     property real panelBackgroundTransparency: 0.12
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
     property real contentTransparency: root.dark ? 0.9 : 0.5
@@ -48,6 +48,7 @@ Singleton {
         property color fg: "#000000"
         property color fg1: "#626262"
         property color inactiveIcon: "#C4C4C4"
+        property color controlBgInactive: '#555458'
         property color controlBg: '#807F85'
         property color controlBgHover: '#57575B'
         property color controlFg: "#FFFFFF"
@@ -74,6 +75,7 @@ Singleton {
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"
         property color inactiveIcon: "#494949"
+        property color controlBgInactive: "#CDCECF"
         property color controlBg: "#9B9B9B"
         property color controlBgHover: "#CFCED1"
         property color controlFg: "#454545"
@@ -104,6 +106,7 @@ Singleton {
         property color fg: root.dark ? root.darkColors.fg : root.lightColors.fg
         property color fg1: root.dark ? root.darkColors.fg1 : root.lightColors.fg1
         property color inactiveIcon: root.dark ? root.darkColors.inactiveIcon : root.lightColors.inactiveIcon
+        property color controlBgInactive: root.dark ? root.darkColors.controlBgInactive : root.lightColors.controlBgInactive
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
         property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg

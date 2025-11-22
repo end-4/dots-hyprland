@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Bluetooth
 import qs
 import qs.services
 import qs.services.network
@@ -16,7 +17,10 @@ Item {
     id: root
 
     Component.onCompleted: {
-        Network.rescanWifi();
+        if (Bluetooth.defaultAdapter.enabled) Bluetooth.defaultAdapter.discovering = true;
+    }
+    Component.onDestruction: {
+        Bluetooth.defaultAdapter.discovering = false;
     }
 
     PageColumn {
@@ -41,15 +45,21 @@ Item {
                         HeaderRow {
                             id: headerRow
                             Layout.fillWidth: true
-                            title: qsTr("Wi-Fi")
+                            title: qsTr("Bluetooth")
                         }
                         WSwitch {
                             id: toggleSwitch
                             Layout.rightMargin: 12
-                            checked: Network.wifiStatus !== "disabled"
+                            checked: Bluetooth.defaultAdapter?.enabled ?? false
                             onCheckedChanged: {
-                                Network.enableWifi(checked);
-                                Network.rescanWifi();
+                                if (Bluetooth.defaultAdapter) {
+                                    Bluetooth.defaultAdapter.enabled = checked;
+                                    if (checked) {
+                                        Bluetooth.defaultAdapter.discovering = true;
+                                    } else {
+                                        Bluetooth.defaultAdapter.discovering = false;
+                                    }
+                                }
                             }
                         }
                     }
@@ -57,7 +67,7 @@ Item {
                         Layout.leftMargin: -4
                         Layout.rightMargin: -4
                         Layout.fillWidth: true
-                        shown: Network.wifiScanning
+                        shown: Bluetooth.defaultAdapter?.discovering ?? false
                         visible: true
                         sourceComponent: WIndeterminateProgressBar {}
                     }
@@ -75,11 +85,11 @@ Item {
                     spacing: 4
 
                     model: ScriptModel {
-                        values: Network.friendlyWifiNetworks
+                        values: BluetoothStatus.friendlyDeviceList
                     }
-                    delegate: WWifiNetworkItem {
-                        required property WifiAccessPoint modelData
-                        wifiNetwork: modelData
+                    delegate: BluetoothDeviceItem {
+                        required property BluetoothDevice modelData
+                        device: modelData
                         width: ListView.view.width
                     }
                 }
@@ -94,20 +104,20 @@ Item {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
                 }
-                text: qsTr("More Internet settings")
+                text: qsTr("More Bluetooth settings")
                 onClicked: {
                     Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "sidebarLeft", "toggle"]);
-                    Quickshell.execDetached(["bash", "-c", Config.options.apps.network]);
+                    Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth]);
                 }
             }
             WPanelFooterButton {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12
-                enabled: !Network.wifiScanning
+                enabled: !Bluetooth.defaultAdapter?.discovering && Bluetooth.defaultAdapter?.enabled
 
                 onClicked: {
-                    Network.rescanWifi();
+                    Bluetooth.defaultAdapter.discovering = true;
                 }
 
                 contentItem: FluentIcon {

@@ -2,51 +2,34 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Bluetooth
 import qs
 import qs.services
 import qs.services.network
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
 import qs.modules.waffle.actionCenter
 
 ExpandableChoiceButton {
     id: root
-    required property WifiAccessPoint wifiNetwork
+    required property BluetoothDevice device
 
     contentItem: RowLayout {
         id: contentItem
-        spacing: 12
+        spacing: 20
 
-        FluentIcon { // Duotone hack
-            Layout.bottomMargin: 2
+        // Device icon
+        FluentIcon {
+            Layout.topMargin: 4
+            Layout.bottomMargin: 4
             Layout.alignment: Qt.AlignTop
-            property int strength: root.wifiNetwork?.strength ?? 0
-            icon: "wifi-1"
-            implicitSize: 30
-            color: Looks.colors.inactiveIcon
-
-            FluentIcon { // Signal
-                property int strength: root.wifiNetwork?.strength ?? 0
-                icon: WIcons.wifiIconForStrength(strength)
-                implicitSize: 30
-
-                FluentIcon { // Security
-                    anchors {
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
-                    visible: root?.wifiNetwork?.isSecure ?? false
-                    icon: "lock-closed"
-                    filled: true
-                    implicitSize: 14           
-                }
-            }
+            icon: WIcons.bluetoothDeviceIcon(root?.device)
+            implicitSize: 18
         }
 
         ColumnLayout {
-            Layout.topMargin: statusText.visible ? 4 : 7
+            Layout.topMargin: 4
             Layout.bottomMargin: 4
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
@@ -56,22 +39,31 @@ ExpandableChoiceButton {
                 animation: Looks.transition.move.createObject(this)
             }
 
-            WText { // Network name
+            WText {
+                // Network name
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Looks.font.pixelSize.large
-                text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
+                text: root.device?.name || Translation.tr("Unknown device")
             }
             WText { // Status
                 id: statusText
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                text: root.wifiNetwork?.active ? Translation.tr("Connected") : root.wifiNetwork?.isSecure ? Translation.tr("Secured") : Translation.tr("Not secured")
                 font.pixelSize: Looks.font.pixelSize.large
                 color: Looks.colors.subfg
-                visible: root.wifiNetwork?.active || root.expanded
+                visible: root.device?.connected || root.expanded
                 Behavior on opacity {
                     animation: Looks.transition.opacity.createObject(this)
+                }
+                text: {
+                    if (!root.device?.paired)
+                        return Translation.tr("Not connected");
+                    let statusText = root.device?.connected ? Translation.tr("Connected") : Translation.tr("Paired");
+                    if (!root.device?.batteryAvailable)
+                        return statusText;
+                    statusText += ` • ${Math.round(root.device?.battery * 100)}%`;
+                    return statusText;
                 }
             }
 
@@ -79,19 +71,19 @@ ExpandableChoiceButton {
                 Layout.alignment: Qt.AlignRight
                 horizontalAlignment: Text.AlignHCenter
                 visible: root.expanded
-                checked: !(root.wifiNetwork?.active ?? false)
+                checked: !(root.device?.connected ?? false)
                 colBackground: Looks.colors.bg2
                 colBackgroundHover: Looks.colors.bg2Hover
                 colBackgroundActive: Looks.colors.bg2Active
                 implicitHeight: 30
                 implicitWidth: 148
-                text: root.wifiNetwork?.active ? Translation.tr("Disconnect") : Translation.tr("Connect")
+                text: root.device?.connected ? Translation.tr("Disconnect") : Translation.tr("Connect")
 
                 onClicked: {
-                    if (root.wifiNetwork?.active) {
-                        Network.disconnectWifiNetwork();
+                    if (root.device?.connected) {
+                        root.device.disconnect();
                     } else {
-                        Network.connectToWifiNetwork(root.wifiNetwork);
+                        root.device.connect();
                     }
                 }
             }

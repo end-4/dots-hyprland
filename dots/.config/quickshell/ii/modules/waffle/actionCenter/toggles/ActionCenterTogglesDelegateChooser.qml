@@ -10,6 +10,7 @@ import qs.modules.common.models.quickToggles
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
 import qs.modules.waffle.actionCenter.wifi
+import qs.modules.waffle.actionCenter.bluetooth
 
 DelegateChooser {
     id: root
@@ -29,6 +30,9 @@ DelegateChooser {
             toggleModel: BluetoothToggle {}
             name: toggleModel.statusText
             icon: WIcons.bluetoothIcon
+            menu: Component {
+                BluetoothControl {}
+            }
         }
     }
     DelegateChoice {
