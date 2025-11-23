@@ -297,7 +297,7 @@ Singleton {
         "gemini-3-pro": aiModelComponent.createObject(this, {
             "name": "Gemini 3.0 Pro",
             "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nGoogle's most intelligent model with SOTA reasoning and multimodal understanding."),
+            "description": Translation.tr("Online | Google's model\nGoogle's most intelligent model with state-of-the-art reasoning and multimodal understanding."),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:streamGenerateContent",
             "model": "gemini-3-pro-preview",
