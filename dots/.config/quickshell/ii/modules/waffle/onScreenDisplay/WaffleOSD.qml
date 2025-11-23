@@ -76,6 +76,12 @@ Scope {
     Loader {
         id: panelLoader
         active: false
+        onActiveChanged: {
+            if (active) return;
+            root.indicators.forEach(i => {
+                GlobalStates[i.globalStateValue] = false;
+            });
+        }
         sourceComponent: PanelWindow {
             id: panelWindow
 
@@ -123,13 +129,13 @@ Scope {
                         // Animate close of current indicator
                         ScriptAction {
                             script: {
-                                osdIndicatorLoader.item.close()
+                                osdIndicatorLoader.item.close();
                             }
                         }
                         // Wait for close anim
                         PauseAnimation {
                             duration: osdIndicatorLoader.item.closeAnimDuration
-                        } 
+                        }
                         PropertyAction {} // The source change happens here
                     }
                 }
