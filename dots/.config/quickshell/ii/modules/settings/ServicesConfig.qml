@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
+import Quickshell.Io
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -48,6 +50,82 @@ ContentPage {
             stepSize: 1
             onValueChanged: {
                 Config.options.musicRecognition.interval = value;
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "brightness_high"
+        title: Translation.tr("Brightness")
+
+        Process {
+            id: brightnessListProc
+            command: ["brightnessctl", "-l", "-m"]
+            stdout: SplitParser {
+                splitMarker: "\n" // Split by line
+                onRead: data => {
+                    if (!data) return;
+                    
+                    const parts = data.split(",");
+                    // format: name,class,current,percent,max
+                    if (parts.length >= 2 && parts[1] === "backlight") {
+                        const newDevice = {
+                            displayName: parts[0],
+                            value: parts[0]
+                        };
+                        
+                        // Check if device already exists to avoid duplicates
+                        const currentModel = deviceSelector.model;
+                        const exists = currentModel.some(d => d.value === newDevice.value);
+                        
+                        if (!exists) {
+                            const newModel = [...currentModel, newDevice];
+                            deviceSelector.model = newModel;
+                        }
+                    }
+                }
+            }
+        }
+
+        Component.onCompleted: brightnessListProc.running = true
+
+        ConfigRow {
+            StyledComboBox {
+                id: deviceSelector
+                Layout.fillWidth: true
+                buttonIcon: "laptop_chromebook"
+                textRole: "displayName"
+                
+                // Initial model with just Auto until process runs
+                model: [{
+                    displayName: Translation.tr("Auto"),
+                    value: ""
+                }]
+
+                currentIndex: {
+                    const index = model.findIndex(item => item.value === Config.options.light.device);
+                    return index !== -1 ? index : 0;
+                }
+
+                onActivated: index => {
+                    Config.options.light.device = model[index].value;
+                }
+            }
+
+            RippleButtonWithIcon {
+                nerdIcon: ""
+                mainText: "" // Clear default text
+                onClicked: {
+                    // Reset model to just Auto before refreshing
+                    deviceSelector.model = [{
+                        displayName: Translation.tr("Auto"),
+                        value: ""
+                    }];
+                    brightnessListProc.running = true;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Refresh device list")
+                }
             }
         }
     }
