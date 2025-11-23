@@ -26,6 +26,7 @@ BarButton {
     }
 
     background: Item {
+        id: background
         BackgroundAcrylicRectangle {
             id: mainBgRect
             anchors.fill: parent
@@ -53,7 +54,7 @@ BarButton {
 
     contentItem: Item {
         id: contentItem
-        anchors.centerIn: parent
+        anchors.centerIn: background
 
         implicitHeight: iconWidget.implicitHeight
         implicitWidth: iconWidget.implicitWidth
