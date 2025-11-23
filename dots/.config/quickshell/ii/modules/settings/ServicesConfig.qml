@@ -9,6 +9,39 @@ import qs.modules.common.widgets
 ContentPage {
     forceWidth: true
 
+    Process {
+        id: brightnessListProc
+        command: ["brightnessctl", "-l", "-m"]
+        property bool hasBacklightDevices: false
+        stdout: SplitParser {
+            splitMarker: "\n" // Split by line
+            onRead: data => {
+                if (!data) return;
+                
+                const parts = data.split(",");
+                // format: name,class,current,percent,max
+                if (parts.length >= 2 && parts[1] === "backlight") {
+                    const newDevice = {
+                        displayName: parts[0],
+                        value: parts[0]
+                    };
+                    
+                    // Check if device already exists to avoid duplicates
+                    const currentModel = deviceSelector.model;
+                    const exists = currentModel.some(d => d.value === newDevice.value);
+                    
+                    if (!exists) {
+                        const newModel = [...currentModel, newDevice];
+                        deviceSelector.model = newModel;
+                        brightnessListProc.hasBacklightDevices = true;
+                    }
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: brightnessListProc.running = true
+
     ContentSection {
         icon: "neurology"
         title: Translation.tr("AI")
@@ -57,37 +90,7 @@ ContentPage {
     ContentSection {
         icon: "brightness_high"
         title: Translation.tr("Brightness")
-
-        Process {
-            id: brightnessListProc
-            command: ["brightnessctl", "-l", "-m"]
-            stdout: SplitParser {
-                splitMarker: "\n" // Split by line
-                onRead: data => {
-                    if (!data) return;
-                    
-                    const parts = data.split(",");
-                    // format: name,class,current,percent,max
-                    if (parts.length >= 2 && parts[1] === "backlight") {
-                        const newDevice = {
-                            displayName: parts[0],
-                            value: parts[0]
-                        };
-                        
-                        // Check if device already exists to avoid duplicates
-                        const currentModel = deviceSelector.model;
-                        const exists = currentModel.some(d => d.value === newDevice.value);
-                        
-                        if (!exists) {
-                            const newModel = [...currentModel, newDevice];
-                            deviceSelector.model = newModel;
-                        }
-                    }
-                }
-            }
-        }
-
-        Component.onCompleted: brightnessListProc.running = true
+        visible: brightnessListProc.hasBacklightDevices || Config.options.light.device !== ""
 
         ConfigRow {
             StyledComboBox {
