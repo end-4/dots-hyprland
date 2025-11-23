@@ -48,7 +48,9 @@ Singleton {
         property color fg: "#000000"
         property color fg1: "#626262"
         property color inactiveIcon: "#C4C4C4"
-        property color controlBg: '#b18484'
+        property color controlBgInactive: '#555458'
+        property color controlBg: '#807F85'
+        property color controlBgHover: '#57575B'
         property color controlFg: "#FFFFFF"
         property color accentUnfocused: "#848484"
     }
@@ -73,13 +75,15 @@ Singleton {
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"
         property color inactiveIcon: "#494949"
+        property color controlBgInactive: "#CDCECF"
         property color controlBg: "#9B9B9B"
+        property color controlBgHover: "#CFCED1"
         property color controlFg: "#454545"
         property color accentUnfocused: "#989898"
     }
     colors: QtObject {
         id: colors
-        property color shadow: ColorUtils.transparentize("#000000", 0.62)
+        property color shadow: ColorUtils.transparentize('#161616', 0.62)
         property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
         property color bgPanelFooterBase: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelFooter : root.lightColors.bgPanelFooter, root.panelBackgroundTransparency)
         property color bgPanelFooter: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelFooter : root.lightColors.bgPanelFooter, root.panelLayerTransparency)
@@ -102,7 +106,9 @@ Singleton {
         property color fg: root.dark ? root.darkColors.fg : root.lightColors.fg
         property color fg1: root.dark ? root.darkColors.fg1 : root.lightColors.fg1
         property color inactiveIcon: root.dark ? root.darkColors.inactiveIcon : root.lightColors.inactiveIcon
+        property color controlBgInactive: root.dark ? root.darkColors.controlBgInactive : root.lightColors.controlBgInactive
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
+        property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"

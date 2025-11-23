@@ -19,6 +19,7 @@ Button {
     property color colForegroundToggled: Looks.colors.accentFg
     property alias backgroundOpacity: backgroundRect.opacity
     property color color: {
+        if (!root.enabled) return colBackground;
         if (root.checked) {
             if (root.down) {
                 return root.colBackgroundToggledActive;
@@ -128,7 +129,7 @@ Button {
             FluentIcon {
                 id: buttonIcon
                 monochrome: true
-                implicitSize: 16
+                implicitSize: 18
                 Layout.leftMargin: root.iconLeftMargin
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignVCenter

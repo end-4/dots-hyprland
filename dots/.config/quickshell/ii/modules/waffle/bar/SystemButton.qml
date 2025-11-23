@@ -31,7 +31,13 @@ BarButton {
                 id: internetHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: WIcons.internetIcon
+                    icon: "wifi-1"
+                    color: Looks.colors.inactiveIcon
+
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.internetIcon
+                    }
                 }
             }
 
@@ -39,7 +45,13 @@ BarButton {
                 id: volumeHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: WIcons.volumeIcon
+                    icon: "speaker"
+                    color: Looks.colors.inactiveIcon
+                    
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.volumeIcon
+                    }
                 }
                 onScrollDown: Audio.decrementVolume();
                 onScrollUp: Audio.incrementVolume();

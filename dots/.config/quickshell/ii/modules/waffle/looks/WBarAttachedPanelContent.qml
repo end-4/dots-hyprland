@@ -10,11 +10,13 @@ import qs.modules.waffle.looks
 Item {
     id: root
 
-    signal closed
+    signal closed()
 
     property alias border: borderRect
-    default required property Item contentItem
+    property alias borderColor: borderRect.border.color
+    required property Item contentItem
     property real visualMargin: 12
+    property int closeAnimDuration: 150
 
     function close() {
         closeAnim.start();
@@ -70,7 +72,7 @@ Item {
                 target: borderRect
                 property: "sourceEdgeMargin"
                 to: -(implicitHeight + root.visualMargin)
-                duration: 150
+                duration: root.closeAnimDuration
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Looks.transition.easing.bezierCurve.easeOut
             }

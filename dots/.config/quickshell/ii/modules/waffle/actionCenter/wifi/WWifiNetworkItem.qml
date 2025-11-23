@@ -11,30 +11,16 @@ import qs.modules.common.widgets
 import qs.modules.waffle.looks
 import qs.modules.waffle.actionCenter
 
-WChoiceButton {
+ExpandableChoiceButton {
     id: root
     required property WifiAccessPoint wifiNetwork
-
-    property bool expanded: false
-    checked: expanded
-    clip: true
-
-    horizontalPadding: 12
-    verticalPadding: 6
-    animateChoiceHighlight: false
-
-    Behavior on implicitHeight {
-        animation: Looks.transition.resize.createObject(this)
-    }
-
-    onClicked: expanded = !expanded
 
     contentItem: RowLayout {
         id: contentItem
         spacing: 12
 
         FluentIcon { // Duotone hack
-        Layout.bottomMargin: 2
+            Layout.bottomMargin: 2
             Layout.alignment: Qt.AlignTop
             property int strength: root.wifiNetwork?.strength ?? 0
             icon: "wifi-1"
@@ -94,6 +80,7 @@ WChoiceButton {
                 horizontalAlignment: Text.AlignHCenter
                 visible: root.expanded
                 checked: !(root.wifiNetwork?.active ?? false)
+                colBackground: Looks.colors.bg2
                 colBackgroundHover: Looks.colors.bg2Hover
                 colBackgroundActive: Looks.colors.bg2Active
                 implicitHeight: 30

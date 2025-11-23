@@ -107,4 +107,20 @@ Singleton {
         icon = AppSearch.guessIcon(node?.properties["node.name"] ?? "");
         return icon;
     }
+
+    function bluetoothDeviceIcon(device) {
+        const systemIconName = device?.icon || "";
+        if (systemIconName.includes("headset") || systemIconName.includes("headphones"))
+            return "headphones";
+        if (systemIconName.includes("audio"))
+            return "speaker";
+        if (systemIconName.includes("phone"))
+            return "phone";
+        if (systemIconName.includes("mouse"))
+            return "bluetooth";
+        if (systemIconName.includes("keyboard"))
+            return "keyboard";
+        return "bluetooth";
+    }
+
 }

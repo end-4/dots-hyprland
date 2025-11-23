@@ -83,7 +83,7 @@ StyledOverlayWidget {
                     }
                     StyledText {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Open recordings folder")
+                        text: Translation.tr("Open recordings folder")
                     }
                 }
             }
