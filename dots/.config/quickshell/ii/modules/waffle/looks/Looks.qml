@@ -17,7 +17,7 @@ Singleton {
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
     property bool dark: Appearance.m3colors.darkmode
 
-    property real backgroundTransparency: 0.11
+    property real backgroundTransparency: 0.18
     property real panelBackgroundTransparency: 0.12
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
     property real contentTransparency: root.dark ? 0.9 : 0.5
@@ -83,7 +83,7 @@ Singleton {
     }
     colors: QtObject {
         id: colors
-        property color shadow: ColorUtils.transparentize("#000000", 0.62)
+        property color shadow: ColorUtils.transparentize('#161616', 0.62)
         property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
         property color bgPanelFooterBase: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelFooter : root.lightColors.bgPanelFooter, root.panelBackgroundTransparency)
         property color bgPanelFooter: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelFooter : root.lightColors.bgPanelFooter, root.panelLayerTransparency)

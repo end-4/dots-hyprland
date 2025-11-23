@@ -65,8 +65,8 @@ Scope {
                 }
 
                 onClosed: {
-                    barLoader.active = false;
                     GlobalStates.sidebarLeftOpen = false;
+                    barLoader.active = false;
                 }
             }
         }

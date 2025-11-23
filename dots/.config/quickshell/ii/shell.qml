@@ -31,6 +31,7 @@ import qs.modules.ii.wallpaperSelector
 import qs.modules.waffle.actionCenter
 import qs.modules.waffle.background
 import qs.modules.waffle.bar
+import qs.modules.waffle.onScreenDisplay
 
 import QtQuick
 import QtQuick.Window
@@ -78,6 +79,7 @@ ShellRoot {
     PanelLoader { identifier: "wActionCenter"; component: WaffleActionCenter {} }
     PanelLoader { identifier: "wBar"; component: WaffleBar {} }
     PanelLoader { identifier: "wBackground"; component: WaffleBackground {} }
+    PanelLoader { identifier: "wOnScreenDisplay"; component: WaffleOSD {} }
     ReloadPopup {}
 
     component PanelLoader: LazyLoader {
@@ -90,7 +92,7 @@ ShellRoot {
     property list<string> families: ["ii", "waffle"]
     property var panelFamilies: ({
         "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wBar", "wBackground", "wActionCenter", "iiCheatsheet", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiSessionScreen", "iiSidebarRight", "iiWallpaperSelector"],
+        "waffle": ["wActionCenter", "wBar", "wBackground", "wOnScreenDisplay", "iiCheatsheet", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiSessionScreen", "iiSidebarRight", "iiWallpaperSelector"],
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
