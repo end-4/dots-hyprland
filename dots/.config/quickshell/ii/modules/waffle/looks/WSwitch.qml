@@ -46,7 +46,7 @@ Switch {
             if (root.checked) {
                 return 24 - (root.pressed || root.down ? root.indicatorPressedWidthDiff : 0);
             } else {
-                return (root.pressed || root.down) ? 3 : 4
+                return (root.pressed || root.down) ? 3 : (Config.options.waffles.tweaks.switchHandlePositionFix ? 4 : 3);
             }
         }
 
