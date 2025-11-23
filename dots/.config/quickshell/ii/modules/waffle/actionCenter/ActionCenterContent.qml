@@ -23,6 +23,7 @@ WBarAttachedPanelContent {
             top: root.barAtBottom ? undefined : parent.top
             bottom: root.barAtBottom ? parent.bottom : undefined
             margins: root.visualMargin
+            bottomMargin: 0
         }
         spacing: 12
 
