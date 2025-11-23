@@ -75,10 +75,6 @@ Scope {
         function random(): void {
             Wallpapers.randomFromCurrentFolder();
         }
-        
-        function apply(path: string): void {
-            Wallpapers.apply(path);
-        }
     }
 
     GlobalShortcut {
