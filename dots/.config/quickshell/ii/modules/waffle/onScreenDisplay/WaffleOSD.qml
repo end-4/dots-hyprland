@@ -75,7 +75,7 @@ Scope {
     // The actual thing
     Loader {
         id: panelLoader
-        active: GlobalStates.osdBrightnessOpen || GlobalStates.osdVolumeOpen
+        active: false
         sourceComponent: PanelWindow {
             id: panelWindow
 
