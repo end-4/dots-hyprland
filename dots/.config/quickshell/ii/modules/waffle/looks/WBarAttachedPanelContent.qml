@@ -12,8 +12,6 @@ Item {
 
     signal closed()
 
-    property alias border: borderRect
-    property alias borderColor: borderRect.border.color
     required property Item contentItem
     property real visualMargin: 12
     property int closeAnimDuration: 150
@@ -24,32 +22,19 @@ Item {
 
     readonly property bool barAtBottom: Config.options.waffles.bar.bottom
 
-    implicitHeight: borderRect.implicitHeight
-    implicitWidth: borderRect.implicitWidth
+    implicitHeight: contentItem.implicitHeight + visualMargin * 2
+    implicitWidth: contentItem.implicitWidth + visualMargin * 2
 
-    WRectangularShadow {
-        target: borderRect
-    }
-
-    Rectangle {
-        id: borderRect
-        z: 1
-
-        color: "transparent"
-        radius: Looks.radius.large
-        border.color: Looks.colors.bg2Border
-        border.width: 1
-        implicitWidth: contentItem.implicitWidth + border.width * 2
-        implicitHeight: contentItem.implicitHeight + border.width * 2
-
+    Item {
+        id: panelContent
         anchors {
             left: parent.left
             right: parent.right
             top: root.barAtBottom ? undefined : parent.top
             bottom: root.barAtBottom ? parent.bottom : undefined
             // Opening anim
-            bottomMargin: root.barAtBottom ? sourceEdgeMargin : 0
-            topMargin: root.barAtBottom ? 0 : sourceEdgeMargin
+            bottomMargin: root.barAtBottom ? sourceEdgeMargin : root.visualMargin
+            topMargin: root.barAtBottom ? root.visualMargin : sourceEdgeMargin
         }
 
         Component.onCompleted: {
@@ -59,9 +44,9 @@ Item {
         property real sourceEdgeMargin: -(implicitHeight + root.visualMargin)
         PropertyAnimation {
             id: openAnim
-            target: borderRect
+            target: panelContent
             property: "sourceEdgeMargin"
-            to: 0
+            to: root.visualMargin
             duration: 200
             easing.type: Easing.BezierSpline
             easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
@@ -69,7 +54,7 @@ Item {
         SequentialAnimation {
             id: closeAnim
             PropertyAnimation {
-                target: borderRect
+                target: panelContent
                 property: "sourceEdgeMargin"
                 to: -(implicitHeight + root.visualMargin)
                 duration: root.closeAnimDuration
@@ -82,23 +67,8 @@ Item {
                 }
             }
         }
-    }
-
-    Item {
-        id: contentArea
-        z: 0
-        anchors.fill: borderRect
-        anchors.margins: borderRect.border.width
-        implicitWidth: contentItem.implicitWidth
-        implicitHeight: contentItem.implicitHeight
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: contentArea.width
-                height: contentArea.height
-                radius: borderRect.radius - borderRect.border.width
-            }
-        }
+        implicitWidth: root.contentItem.implicitWidth
+        implicitHeight: root.contentItem.implicitHeight
         children: [root.contentItem]
-    }
+    }    
 }

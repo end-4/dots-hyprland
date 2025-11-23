@@ -100,7 +100,7 @@ Item {
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.network]);
                 }
             }
-            WPanelFooterButton {
+            WBorderlessButton {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12

@@ -104,13 +104,12 @@ Scope {
                 item: osdIndicatorLoader
             }
 
-            implicitWidth: osdIndicatorLoader.implicitWidth + osdIndicatorLoader.item.visualMargin * 2
-            implicitHeight: osdIndicatorLoader.implicitHeight + osdIndicatorLoader.item.visualMargin * 2
+            implicitWidth: osdIndicatorLoader.implicitWidth
+            implicitHeight: osdIndicatorLoader.implicitHeight
 
             Loader {
                 id: osdIndicatorLoader
                 anchors.fill: parent
-                anchors.margins: item.visualMargin
                 source: root.indicators.find(i => i.id === root.currentIndicator)?.sourceUrl
 
                 Connections {

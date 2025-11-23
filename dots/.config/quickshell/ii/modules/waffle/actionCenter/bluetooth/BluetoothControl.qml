@@ -110,7 +110,7 @@ Item {
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth]);
                 }
             }
-            WPanelFooterButton {
+            WBorderlessButton {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12
