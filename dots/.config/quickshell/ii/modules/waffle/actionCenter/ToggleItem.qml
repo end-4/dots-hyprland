@@ -67,24 +67,12 @@ RowLayout {
             id: switchRow
             spacing: 12
 
-            Item {
-                implicitWidth: onOffTextMetrics.width
-                implicitHeight: onOffTextMetrics.height
-                TextMetrics {
-                    id: onOffTextMetrics
-                    text: "Off" // The larger one
-                    font {
-                        family: Looks.font.family.ui
-                        pixelSize: Looks.font.pixelSize.large
-                        weight: Looks.font.weight.regular
-                    }
-                }
-                WText {
-                    anchors.centerIn: parent
-                    text: switchWidget.checked ? Translation.tr("On") : Translation.tr("Off")
-                    font.pixelSize: Looks.font.pixelSize.large
-                }
+            WTextWithFixedWidth {
+                longestText: "Off" // The larger one
+                text: switchWidget.checked ? Translation.tr("On") : Translation.tr("Off")
+                font.pixelSize: Looks.font.pixelSize.large
             }
+            
             WSwitch {
                 id: switchWidget
                 Layout.alignment: Qt.AlignVCenter
