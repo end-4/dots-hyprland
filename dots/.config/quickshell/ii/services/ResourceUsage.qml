@@ -5,6 +5,7 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Qt.labs.platform
 
 /**
  * Simple polled resource usage service with RAM, Swap, and CPU usage.
@@ -111,7 +112,7 @@ Singleton {
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
-    FileView { id: fileTemp; path: "/home/darshil/.config/quickshell/ii/coretemp" }
+    FileView { id: fileTemp; path: StandardPaths.writableLocation(StandardPaths.GenericConfigLocation) + "/quickshell/ii/coretemp" }
     FileView { id: fileCpuinfo; path: "/proc/cpuinfo" }
 
     Process {
