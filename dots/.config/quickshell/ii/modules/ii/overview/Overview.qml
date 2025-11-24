@@ -100,11 +100,17 @@ Scope {
                     if (event.key === Qt.Key_Escape) {
                         GlobalStates.overviewOpen = false;
                     } else if (event.key === Qt.Key_Left) {
-                        if (!root.searchingText)
+                        if (!root.searchingText) {
                             Hyprland.dispatch("workspace r-1");
+                            grab.active = false;
+                            delayedGrabTimer.restart();
+                        }
                     } else if (event.key === Qt.Key_Right) {
-                        if (!root.searchingText)
+                        if (!root.searchingText) {
                             Hyprland.dispatch("workspace r+1");
+                            grab.active = false;
+                            delayedGrabTimer.restart();
+                        }
                     }
                 }
 
