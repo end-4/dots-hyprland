@@ -58,7 +58,7 @@ Singleton {
                 if (data.startsWith("Display ")) {
                     const lines = data.split("\n").map(l => l.trim());
                     root.ddcMonitors.push({
-                        model: lines.find(l => l.startsWith("Monitor:")).split(":")[2],
+                        name: lines.find(l => l.startsWith("DRM connector:")).split("-").slice(1).join('-'),
                         busNum: lines.find(l => l.startsWith("I2C bus:")).split("/dev/i2c-")[1]
                     });
                 }
@@ -76,11 +76,11 @@ Singleton {
 
         required property ShellScreen screen
         readonly property bool isDdc: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             return !!match;
         }
         readonly property string busNum: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             return match?.busNum ?? "";
         }
         property int rawMaxBrightness: 100
@@ -215,7 +215,7 @@ Singleton {
 
             Process {
                 id: screenshotProc
-                command: ["bash", "-c", 
+                command: ["bash", "-c",
                     `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
                     + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
                     + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`
