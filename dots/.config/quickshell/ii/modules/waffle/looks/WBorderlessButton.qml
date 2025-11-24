@@ -16,6 +16,7 @@ Button {
     property color color
     property color colForeground: Looks.colors.fg
     color: {
+        if (!root.enabled) return colBackground;
         if (root.down) {
             return root.colBackgroundActive
         } else if ((root.hovered && !root.down) || root.checked) {

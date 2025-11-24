@@ -21,7 +21,7 @@ Item {
         anchors.centerIn: parent
         implicitWidth: root.realContentItem.implicitWidth + root.horizontalPadding * 2
         implicitHeight: root.realContentItem.implicitHeight + root.verticalPadding * 2
-        color: Looks.colors.bg1
+        color: Looks.colors.bg1Base
         radius: Looks.radius.medium
 
         children: [root.realContentItem]

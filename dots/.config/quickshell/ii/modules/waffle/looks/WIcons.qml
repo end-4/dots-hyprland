@@ -7,18 +7,22 @@ import qs.services
 Singleton {
     id: root
 
+    function wifiIconForStrength(strength) {
+        if (strength > 75)
+            return "wifi-1";
+        if (strength > 50)
+            return "wifi-2";
+        if (strength > 25)
+            return "wifi-3";
+        return "wifi-4";
+    }
+
     property string internetIcon: {
         if (Network.ethernet)
             return "ethernet";
         if (Network.wifiEnabled) {
             const strength = Network.networkStrength;
-            if (strength > 75)
-                return "wifi-1";
-            if (strength > 50)
-                return "wifi-2";
-            if (strength > 25)
-                return "wifi-3";
-            return "wifi-4";
+            return wifiIconForStrength(strength);
         }
         if (Network.wifiStatus === "connecting")
             return "wifi-4";
@@ -36,7 +40,12 @@ Singleton {
             return "battery-warning";
         if (Battery.percentage >= 0.9)
             return "battery-full";
-        return `battery-${Math.ceil(Battery.percentage * 10)}`;
+        return `battery-0`;
+    }
+
+    property string batteryLevelIcon: {
+        const discreteLevel = Math.ceil(Battery.percentage * 10)
+        return `battery-${discreteLevel > 9 ? "full" : discreteLevel}`;
     }
 
     property string volumeIcon: {
@@ -98,4 +107,20 @@ Singleton {
         icon = AppSearch.guessIcon(node?.properties["node.name"] ?? "");
         return icon;
     }
+
+    function bluetoothDeviceIcon(device) {
+        const systemIconName = device?.icon || "";
+        if (systemIconName.includes("headset") || systemIconName.includes("headphones"))
+            return "headphones";
+        if (systemIconName.includes("audio"))
+            return "speaker";
+        if (systemIconName.includes("phone"))
+            return "phone";
+        if (systemIconName.includes("mouse"))
+            return "bluetooth";
+        if (systemIconName.includes("keyboard"))
+            return "keyboard";
+        return "bluetooth";
+    }
+
 }

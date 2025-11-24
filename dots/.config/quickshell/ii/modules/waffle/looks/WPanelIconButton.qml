@@ -11,7 +11,6 @@ WButton {
 
     property alias iconName: iconContent.icon
     property alias monochrome: iconContent.monochrome
-    inset: 0
     implicitWidth: 40
     implicitHeight: 40
 

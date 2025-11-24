@@ -44,7 +44,7 @@ RowLayout {
 
         BarToolTip {
             extraVisibleCondition: overflowButton.shouldShowTooltip
-            text: qsTr("Show hidden icons")
+            text: Translation.tr("Show hidden icons")
         }
 
         DropArea {

@@ -16,7 +16,6 @@ install-Rubik(){
 	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
 	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
   x fc-cache -fv
-  x gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
   x cd $REPO_ROOT
 }
 

@@ -110,6 +110,15 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+                property JsonObject fonts: JsonObject {
+                    property string main: "Google Sans Flex"
+                    property string numbers: "Google Sans Flex"
+                    property string title: "Google Sans Flex"
+                    property string iconNerd: "JetBrains Mono NF"
+                    property string monospace: "JetBrains Mono NF"
+                    property string reading: "Readex Pro"
+                    property string expressive: "Space Grotesk"
+                }
                 property JsonObject transparency: JsonObject {
                     property bool enable: false
                     property bool automatic: true
@@ -148,7 +157,7 @@ Singleton {
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
                 property string taskManager: "plasma-systemmonitor --page-name Processes"
                 property string terminal: "kitty -1" // This is only for shell actions
-                property string update: "kitty -1 --hold=yes fish -i -c 'sudo pacman -Syu'"
+                property string update: "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'"
                 property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
@@ -575,13 +584,16 @@ Singleton {
                 // Animations on Windoes are kinda janky. Setting the following to
                 // false will make (some) stuff also be like that for accuracy. 
                 // Example: the right-click menu of the Start button
-                property bool smootherAnimations: true
+                property JsonObject tweaks: JsonObject {
+                    property bool smootherMenuAnimations: true
+                    property bool switchHandlePositionFix: true
+                }
                 property JsonObject bar: JsonObject {
                     property bool bottom: true
                     property bool leftAlignApps: false
                 }
                 property JsonObject actionCenter: JsonObject {
-                    property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "nightLight", "darkMode", "antiFlashbang", "cloudflareWarp", "mic", "audio", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "screenSnip", "colorPicker" ]
+                    property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "nightLight", "darkMode", "antiFlashbang", "cloudflareWarp", "mic", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "screenSnip", "colorPicker" ]
                 }
             }
         }

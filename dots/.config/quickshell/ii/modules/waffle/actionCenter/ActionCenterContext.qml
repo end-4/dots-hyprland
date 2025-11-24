@@ -11,9 +11,7 @@ Singleton {
 
     function push(component) {
         if (stackView) {
-            item = stackView.push(component)
-            stackView.implicitWidth = item.implicitWidth
-            stackView.implicitHeight = item.implicitHeight
+            stackView.push(component)
         }
     }
 

@@ -93,38 +93,31 @@ Item {
         anchors.rightMargin: 6
         spacing: 6
 
-        FluentIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
-            implicitSize: 12
-            icon: "caret-up"
-            color: Looks.colors.controlBg
-            filled: true
-            opacity: root.currentPage > 0 ? 1 : 0
+        NavigationArrow {
+            down: false
         }
 
         Repeater {
             model: root.pages
-            delegate: Item {
+            delegate: MouseArea {
+                id: pageIndicator
                 required property int index
+                hoverEnabled: true
+                onClicked: root.currentPage = index
                 anchors.horizontalCenter: parent.horizontalCenter
                 implicitWidth: 6
                 implicitHeight: 6
 
                 Circle {
                     anchors.centerIn: parent
-                    diameter: index === root.currentPage ? 6 : 4
-                    color: Looks.colors.controlBg
+                    diameter: (index === root.currentPage || pageIndicator.containsMouse) && !pageIndicator.pressed ? 6 : 4
+                    color: pageIndicator.containsMouse ? Looks.colors.controlBgHover : Looks.colors.controlBg
                 }
             }
         }
 
-        FluentIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
-            implicitSize: 12
-            icon: "caret-down"
-            color: Looks.colors.controlBg
-            filled: true
-            opacity: root.currentPage < (root.pages - 1) ? 1 : 0
+        NavigationArrow {
+            down: true
         }
     }
 
@@ -135,5 +128,23 @@ Item {
         hoverEnabled: false
         onScrollUp: decreasePage();
         onScrollDown: increasePage();
+    }
+
+    component NavigationArrow: FluentIcon {
+        id: navArrow
+        required property bool down
+        anchors.horizontalCenter: parent.horizontalCenter
+        implicitHeight: 12
+        implicitWidth: 12 - (2 * upArea.containsPress)
+        icon: down ? "caret-down" : "caret-up"
+        color: upArea.containsMouse ? Looks.colors.controlBgHover : Looks.colors.controlBg
+        filled: true
+        opacity: ((down && root.currentPage < root.pages - 1) || (!down && root.currentPage > 0)) ? 1 : 0
+        MouseArea {
+            id: upArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: navArrow.down ? root.increasePage() : root.decreasePage();
+        }
     }
 }

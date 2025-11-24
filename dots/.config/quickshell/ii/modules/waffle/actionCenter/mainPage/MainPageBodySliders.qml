@@ -33,6 +33,7 @@ ColumnLayout {
         WSlider {
             Layout.fillWidth: true
             value: root.brightnessMonitor?.brightness ?? 0
+            scrollable: true
             onMoved: {
                 root.brightnessMonitor?.setBrightness(value)
             }
@@ -54,6 +55,7 @@ ColumnLayout {
         WSlider {
             Layout.fillWidth: true
             value: Audio.sink.audio.volume
+            scrollable: true
             onMoved: {
                 Audio.sink.audio.volume = value;
             }
