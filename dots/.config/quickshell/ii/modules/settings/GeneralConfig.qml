@@ -336,6 +336,44 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "calendar_month"
+        title: Translation.tr("Date")
+        
+        ContentSubsection {
+            title: Translation.tr("Format")
+            tooltip: ""
+
+            ConfigSelectionArray {
+                currentValue: Config.options.time.format
+                onSelected: newValue => {
+                    if (newValue === "hh:mm") {
+                        Quickshell.execDetached(["bash", "-c", `sed -i 's/\\TIME12\\b/TIME/' '${FileUtils.trimFileProtocol(Directories.config)}/hypr/hyprlock.conf'`]);
+                    } else {
+                        Quickshell.execDetached(["bash", "-c", `sed -i 's/\\TIME\\b/TIME12/' '${FileUtils.trimFileProtocol(Directories.config)}/hypr/hyprlock.conf'`]);
+                    }
+
+                    Config.options.time.format = newValue;
+                    
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("24h"),
+                        value: "hh:mm"
+                    },
+                    {
+                        displayName: Translation.tr("12h am/pm"),
+                        value: "h:mm ap"
+                    },
+                    {
+                        displayName: Translation.tr("12h AM/PM"),
+                        value: "h:mm AP"
+                    },
+                ]
+            }
+        }
+    }
+
+    ContentSection {
         icon: "work_alert"
         title: Translation.tr("Work safety")
 
