@@ -152,13 +152,14 @@ Singleton {
             if (isDdc) {
                 const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[0]), 1);
                 setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
+                setProc.startDetached();
             } else {
                 for (let i = 0; i < monitor.rawMaxBrightness.length; i++) {
                     const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness[i]), 1);
                     setProc.command = ["brightnessctl", "-d", monitor.devices[i], "set", rawValueRounded, "--quiet"];
+                    setProc.startDetached();
                 }
             }
-            setProc.startDetached();
         }
 
         function setBrightness(value: real): void {
