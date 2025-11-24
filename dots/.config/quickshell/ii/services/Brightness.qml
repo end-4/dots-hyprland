@@ -48,6 +48,16 @@ Singleton {
         ddcProc.running = true;
     }
 
+    function initializeMonitor(i: int): void {
+        if (i >= monitors.length)
+            return;
+        monitors[i].initialize();
+    }
+
+    function ddcDetectFinished(): void {
+        initializeMonitor(0);
+    }
+
     Process {
         id: ddcProc
 
@@ -64,7 +74,7 @@ Singleton {
                 }
             }
         }
-        onExited: root.ddcMonitorsChanged()
+        onExited: root.ddcDetectFinished()
     }
 
     Process {
@@ -75,14 +85,8 @@ Singleton {
         id: monitor
 
         required property ShellScreen screen
-        readonly property bool isDdc: {
-            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
-            return !!match;
-        }
-        readonly property string busNum: {
-            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
-            return match?.busNum ?? "";
-        }
+        property bool isDdc
+        property string busNum
         property int rawMaxBrightness: 100
         property real brightness
         property real brightnessMultiplier: 1.0
@@ -110,6 +114,9 @@ Singleton {
 
         function initialize() {
             monitor.ready = false;
+            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            isDdc = !!match;
+            busNum = match?.busNum ?? "";
             initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
             initProc.running = true;
         }
@@ -122,6 +129,9 @@ Singleton {
                     monitor.brightness = parseInt(current) / monitor.rawMaxBrightness;
                     monitor.ready = true;
                 }
+            }
+            onExited: (exitCode, exitStatus) => {
+                initializeMonitor(root.monitors.indexOf(monitor) + 1);
             }
         }
 
@@ -156,14 +166,6 @@ Singleton {
 
         function setBrightnessMultiplier(value: real): void {
             monitor.brightnessMultiplier = value;
-        }
-
-        Component.onCompleted: {
-            initialize();
-        }
-
-        onBusNumChanged: {
-            initialize();
         }
     }
 
