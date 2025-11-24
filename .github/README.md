@@ -50,7 +50,7 @@
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
   | Others | See [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md) |
 
-  **Note: No Waybar here. Please stop calling every bar "Waybar".**
+  _THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR_
 
 </details>
 
