@@ -12,6 +12,6 @@ Rectangle {
     Layout.fillWidth: true
     color: "transparent"
 
-    implicitWidth: 360
+    implicitWidth: 358
     implicitHeight: 47
 }

@@ -15,7 +15,7 @@ WBarAttachedPanelContent {
 
     readonly property bool barAtBottom: Config.options.waffles.bar.bottom
     
-    contentItem: Column {
+    contentItem: ColumnLayout {
         // This somewhat sophisticated anchoring is needed to make opening anim not jump abruptly when stuff appear
         anchors {
             left: parent.left
@@ -28,24 +28,21 @@ WBarAttachedPanelContent {
         spacing: 12
 
         WPane {
-            visible: MprisController.activePlayer != null && MprisController.isRealPlayer(MprisController.activePlayer)
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
+            opacity: (MprisController.activePlayer != null && MprisController.isRealPlayer(MprisController.activePlayer)) ? 1 : 0
+            Layout.fillWidth: true
             contentItem: MediaPaneContent {}
         }
         WPane {
+            Layout.fillWidth: true
             contentItem: WStackView {
                 id: stackView
-                anchors.fill: parent
                 implicitWidth: initItem.implicitWidth
                 implicitHeight: initItem.implicitHeight
 
-                initialItem: PageColumn {
+                initialItem: WPanelPageColumn {
                     id: initItem
                     MainPageBody {}
-                    Separator {}
+                    WPanelSeparator {}
                     MainPageFooter {}
                 }
 

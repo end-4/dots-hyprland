@@ -15,8 +15,8 @@ Item {
     property alias border: borderRect
     property alias borderColor: borderRect.border.color
 
-    implicitWidth: contentItem.implicitWidth
-    implicitHeight: contentItem.implicitHeight
+    implicitWidth: borderRect.implicitWidth
+    implicitHeight: borderRect.implicitHeight
 
     WRectangularShadow {
         target: borderRect

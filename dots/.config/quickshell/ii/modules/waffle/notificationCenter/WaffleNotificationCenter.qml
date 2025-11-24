@@ -14,24 +14,24 @@ Scope {
     Connections {
         target: GlobalStates
 
-        function onSidebarLeftOpenChanged() {
-            if (GlobalStates.sidebarLeftOpen) panelLoader.active = true;
+        function onSidebarRightOpenChanged() {
+            if (GlobalStates.sidebarRightOpen) panelLoader.active = true;
         }
     }
 
     Loader {
         id: panelLoader
-        active: GlobalStates.sidebarLeftOpen
+        active: GlobalStates.sidebarRightOpen
         sourceComponent: PanelWindow {
             id: panelWindow
             exclusiveZone: 0
-            WlrLayershell.namespace: "quickshell:actionCenter"
+            WlrLayershell.namespace: "quickshell:wNotificationCenter"
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
             anchors {
-                bottom: Config.options.waffles.bar.bottom
-                top: !Config.options.waffles.bar.bottom
+                bottom: true
+                top: true
                 right: true
             }
 
@@ -47,17 +47,17 @@ Scope {
 
             Connections {
                 target: GlobalStates
-                function onSidebarLeftOpenChanged() {
-                    if (!GlobalStates.sidebarLeftOpen) content.close();
+                function onSidebarRightOpenChanged() {
+                    if (!GlobalStates.sidebarRightOpen) content.close();
                 }
             }
 
-            ActionCenterContent {
+            NotificationCenterContent {
                 id: content
                 anchors.fill: parent
 
                 onClosed: {
-                    GlobalStates.sidebarLeftOpen = false;
+                    GlobalStates.sidebarRightOpen = false;
                     panelLoader.active = false;
                 }
             }
@@ -65,11 +65,11 @@ Scope {
     }
 
     function toggleOpen() {
-        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
     }
 
     IpcHandler {
-        target: "sidebarLeft"
+        target: "sidebarRight"
 
         function toggle() {
             root.toggleOpen();
@@ -77,8 +77,8 @@ Scope {
     }
 
     GlobalShortcut {
-        name: "sidebarLeftToggle"
-        description: "Toggles left sidebar on press"
+        name: "sidebarRightToggle"
+        description: "Toggles notification center on press"
 
         onPressed: root.toggleOpen();
     }
