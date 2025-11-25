@@ -9,6 +9,8 @@ import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
 
+// TODO: The overlaps are crazy, but the positioning approach works.
+//       This could work well if we do it week by week instead of month by month.
 BodyRectangle {
     id: root
 
