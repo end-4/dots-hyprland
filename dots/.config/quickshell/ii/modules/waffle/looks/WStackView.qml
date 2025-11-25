@@ -11,11 +11,7 @@ StackView {
     property list<real> fadeBezierCurve: Looks.transition.easing.bezierCurve.easeInOut
     clip: true
 
-    property alias color: background.color
-    background: Rectangle {
-        id: background
-        color: Looks.colors.bgPanelFooterBase
-    }
+    background: null
 
     pushEnter: Transition {
         XAnimator {

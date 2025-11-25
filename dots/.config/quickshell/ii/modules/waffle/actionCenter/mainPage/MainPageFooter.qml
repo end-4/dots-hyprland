@@ -11,7 +11,7 @@ import qs.modules.waffle.actionCenter
 FooterRectangle {
 
     // Battery button
-    WPanelFooterButton {
+    WBorderlessButton {
         visible: Battery.available
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -36,7 +36,7 @@ FooterRectangle {
     }
 
     // Settings button
-    WPanelFooterButton {
+    WBorderlessButton {
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: 12

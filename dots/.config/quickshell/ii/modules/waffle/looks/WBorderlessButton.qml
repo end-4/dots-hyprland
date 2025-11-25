@@ -25,8 +25,10 @@ Button {
             return root.colBackground
         }
     }
+    property alias radius: background.radius
 
     background: Rectangle {
+        id: background
         radius: Looks.radius.medium
         color: root.color
     }

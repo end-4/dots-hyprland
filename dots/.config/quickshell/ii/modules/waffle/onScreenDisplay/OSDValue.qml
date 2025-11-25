@@ -13,7 +13,6 @@ WBarAttachedPanelContent {
     required property string iconName
     property real value
     property bool showNumber: true
-    borderColor: Looks.colors.ambientShadow
 
     property Timer timer: Timer {
         id: autoCloseTimer
@@ -21,44 +20,48 @@ WBarAttachedPanelContent {
         interval: Config.options.osd.timeout
         repeat: false
         onTriggered: {
-            root.close()
+            root.close();
         }
     }
 
-    contentItem: Rectangle {
+    contentItem: WPane {
         anchors.centerIn: parent
-        color: Looks.colors.bg1Base
-        radius: Looks.radius.medium
-        implicitWidth: root.showNumber ? 192 : 170
-        implicitHeight: 46
-        
-        RowLayout {
-            id: contentRow
-            anchors.fill: parent
-            anchors.margins: 12
+        borderColor: Looks.colors.ambientShadow
 
-            spacing: 12
+        contentItem: Item {
+            // color: Looks.colors.bg1Base
+            // radius: Looks.radius.medium
+            implicitWidth: root.showNumber ? 192 : 170
+            implicitHeight: 46
 
-            FluentIcon {
-                Layout.alignment: Qt.AlignVCenter
-                icon: root.iconName
-                implicitSize: 18
-            }
+            RowLayout {
+                id: contentRow
+                anchors.fill: parent
+                anchors.margins: 12
 
-            WProgressBar {
-                id: progressBar
-                value: root.value
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-                Layout.rightMargin: root.showNumber ? 0 : 3
-            }
+                spacing: 12
 
-            WTextWithFixedWidth {
-                visible: root.showNumber
-                text: Math.round(root.value * 100)
-                // longestText: "100"
-                implicitWidth: 16
-                horizontalAlignment: Text.AlignHCenter
+                FluentIcon {
+                    Layout.alignment: Qt.AlignVCenter
+                    icon: root.iconName
+                    implicitSize: 18
+                }
+
+                WProgressBar {
+                    id: progressBar
+                    value: root.value
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.rightMargin: root.showNumber ? 0 : 3
+                }
+
+                WTextWithFixedWidth {
+                    visible: root.showNumber
+                    text: Math.round(root.value * 100)
+                    // longestText: "100"
+                    implicitWidth: 16
+                    horizontalAlignment: Text.AlignHCenter
+                }
             }
         }
     }

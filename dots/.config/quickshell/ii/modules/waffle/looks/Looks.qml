@@ -20,7 +20,7 @@ Singleton {
     property real backgroundTransparency: 0.13
     property real panelBackgroundTransparency: 0.12
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
-    property real contentTransparency: root.dark ? 0.9 : 0.5
+    property real contentTransparency: root.dark ? 0.87 : 0.5
     function applyBackgroundTransparency(col) {
         return ColorUtils.applyAlpha(col, 1 - root.backgroundTransparency)
     }
@@ -41,8 +41,8 @@ Singleton {
         property color bg1Border: '#d7d7d7'
         property color bg2: "#FBFBFB"
         property color bg2Base: "#FBFBFB"
-        property color bg2Hover: "#FDFDFD"
-        property color bg2Active: "#FDFDFD"
+        property color bg2Hover: '#ffffff'
+        property color bg2Active: '#eeeeee'
         property color bg2Border: '#cdcdcd'
         property color subfg: "#5C5C5C"
         property color fg: "#000000"
