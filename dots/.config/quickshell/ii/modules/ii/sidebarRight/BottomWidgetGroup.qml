@@ -16,9 +16,9 @@ Rectangle {
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
-        {"type": "calendar", "name": Translation.tr("Calendar"), "icon": "calendar_month", "widget": calendarWidget}, 
-        {"type": "todo", "name": Translation.tr("To Do"), "icon": "done_outline", "widget": todoWidget},
-        {"type": "timer", "name": Translation.tr("Timer"), "icon": "schedule", "widget": pomodoroWidget},
+        {"type": "calendar", "name": Translation.tr("Calendar"), "icon": "calendar_month", "widget": "calendar/CalendarWidget.qml"}, 
+        {"type": "todo", "name": Translation.tr("To Do"), "icon": "done_outline", "widget": "todo/TodoWidget.qml"},
+        {"type": "timer", "name": Translation.tr("Timer"), "icon": "schedule", "widget": "pomodoro/PomodoroWidget.qml"},
     ]
 
     Behavior on implicitHeight {
@@ -170,83 +170,56 @@ Rectangle {
         }
 
         // Content area
-        StackLayout {
+        Loader {
             id: tabStack
             Layout.fillWidth: true
-            // Take the highest one, because the TODO list has no implicit height. This way the heigth of the calendar is used when it's initially loaded with the TODO list
-            height: Math.max(...tabStack.children.map(child => child.tabLoader?.implicitHeight || 0)) // TODO: make this less stupid
-            Layout.alignment: Qt.AlignVCenter
-            property int realIndex: root.selectedTab
-            property int animationDuration: Appearance.animation.elementMoveFast.duration * 1.5
-            currentIndex: root.selectedTab
+            Layout.fillHeight: true
+            source: root.tabs[root.selectedTab].widget
 
-            // Switch the tab on halfway of the anim duration
-            Connections {
-                target: root
-                function onSelectedTabChanged() {
-                    delayedStackSwitch.start()
-                    tabStack.realIndex = root.selectedTab
-                }
-            }
-            Timer {
-                id: delayedStackSwitch
-                interval: tabStack.animationDuration / 2
-                repeat: false
-                onTriggered: {
-                    tabStack.currentIndex = root.selectedTab
-                }
-            }
+            Behavior on source {
+                id: switchBehavior
 
-            Repeater {
-                model: tabs
-                Item { // TODO: make behavior on y also act for the item that's switched to
-                    id: tabItem
-                    property int tabIndex: index
-                    property string tabType: modelData.type
-                    property int animDistance: 5
-                    property var tabLoader: tabLoader
-                    // Opacity: show up only when being animated to
-                    opacity: (tabStack.currentIndex === tabItem.tabIndex && tabStack.realIndex === tabItem.tabIndex) ? 1 : 0
-                    // Y: starts animating when user selects a different tab
-                    y: (tabStack.realIndex === tabItem.tabIndex) ? 0 : (tabStack.realIndex < tabItem.tabIndex) ? animDistance : -animDistance
-                    Behavior on opacity { NumberAnimation { duration: tabStack.animationDuration / 2; easing.type: Easing.OutCubic } }
-                    Behavior on y { NumberAnimation { duration: tabStack.animationDuration; easing.type: Easing.OutExpo } }
-                    Loader {
-                        id: tabLoader
-                        anchors.fill: parent
-                        sourceComponent: modelData.widget
-                        focus: root.selectedTab === tabItem.tabIndex
+                SequentialAnimation {
+                    id: switchAnim
+                    ParallelAnimation {
+                        PropertyAnimation {
+                            target: tabStack.item
+                            properties: "opacity"
+                            to: 0
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                        }
+                        PropertyAnimation {
+                            target: tabStack.item
+                            properties: "y"
+                            from: 0
+                            to: 20
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Easing.InExpo
+                        }
+                    }
+                    PropertyAction {} // The source change happens here
+                    ParallelAnimation {
+                        PropertyAnimation {
+                            target: tabStack.item
+                            properties: "opacity"
+                            to: 1
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                        }
+                        PropertyAnimation {
+                            target: tabStack.item
+                            properties: "y"
+                            from: 20
+                            to: 0
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Easing.OutExpo
+                        }
                     }
                 }
             }
-        }
-    }
-
-    // Calendar component
-    Component {
-        id: calendarWidget
-
-        CalendarWidget {
-            anchors.fill: parent
-            anchors.margins: 5
-        }
-    }
-
-    // To Do component
-    Component {
-        id: todoWidget
-        TodoWidget {
-            anchors.fill: parent
-            anchors.margins: 5
-        }
-    }
-
-    // Pomodoro component
-    Component {
-        id: pomodoroWidget
-        PomodoroWidget {
-            anchors.fill: parent
-            anchors.margins: 5
         }
     }
 }

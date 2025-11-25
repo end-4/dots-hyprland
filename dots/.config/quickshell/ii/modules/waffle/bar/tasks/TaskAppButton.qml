@@ -85,6 +85,7 @@ AppButton {
 
     BarMenu {
         id: contextMenu
+        noSmoothClosing: false // On the real thing this is always smooth
 
         model: [
             ...((root.desktopEntry?.actions.length > 0) ? root.desktopEntry.actions.map(action =>({
@@ -106,14 +107,14 @@ AppButton {
             },
             {
                 iconName: root.appEntry.pinned ? "pin-off" : "pin",
-                text: root.appEntry.pinned ? qsTr("Unpin from taskbar") : qsTr("Pin to taskbar"),
+                text: root.appEntry.pinned ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar"),
                 action: () => {
                     TaskbarApps.togglePin(root.appEntry.appId);
                 }
             },
             ...(root.appEntry.toplevels.length > 0 ? [{
                 iconName: "dismiss",
-                text: root.multiple ? qsTr("Close all windows") : qsTr("Close window"),
+                text: root.multiple ? Translation.tr("Close all windows") : Translation.tr("Close window"),
                 action: () => {
                     for (let toplevel of root.appEntry.toplevels) {
                         toplevel.close();

@@ -10,37 +10,22 @@ import qs.modules.waffle.looks
 PopupToolTip {
     id: root
 
-    property Item realContentItem
+    required property Item realContentItem
     realContentItem: WText {
         text: root.text
         anchors.centerIn: parent
     }
 
     property real visualMargin: 11
-    verticalPadding: visualMargin
-    horizontalPadding: visualMargin
-    property real realContentVerticalPadding: 8
-    property real realContentHorizontalPadding: 10
+    verticalPadding: 8
+    horizontalPadding: 10
+    verticalMargin: visualMargin
+    horizontalMargin: visualMargin
 
-    contentItem: Item {
-        anchors.centerIn: parent
-        implicitWidth: realContent.implicitWidth + 2 * 2
-        implicitHeight: realContent.implicitHeight + 2 * 2
-
-        WAmbientShadow {
-            target: realContent
-        }
-        
-        Rectangle {
-            id: realContent
-            z: 1
-            anchors.centerIn: parent
-            implicitWidth: root.realContentItem.implicitWidth + root.realContentHorizontalPadding * 2
-            implicitHeight: root.realContentItem.implicitHeight + root.realContentVerticalPadding * 2
-            color: Looks.colors.bg1
-            radius: Looks.radius.medium
-
-            children: [root.realContentItem]
-        }
+    contentItem: WToolTipContent {
+        id: tooltipContent
+        realContentItem: root.realContentItem
+        horizontalPadding: root.horizontalPadding
+        verticalPadding: root.verticalPadding
     }
 }

@@ -13,6 +13,7 @@ BarIconButton {
     padding: 4
     iconName: "arrow-sync"
     iconSize: 20 // Needed because the icon appears to have some padding
+    iconMonochrome: true
     tooltipText: Translation.tr("Get the latest features and security improvements with\nthe newest feature update.\n\n%1 packages").arg(Updates.count)
 
     onClicked: {

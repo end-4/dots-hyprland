@@ -13,7 +13,9 @@ Item {
     property bool alternativeVisibleCondition: false
     property real horizontalPadding: 10
     property real verticalPadding: 5
-
+    property real horizontalMargin: horizontalPadding
+    property real verticalMargin: verticalPadding
+    
     function updateAnchor() {
         tooltipLoader.item?.anchor.updateAnchor();
     }
@@ -49,8 +51,8 @@ Item {
             }
 
             color: "transparent"
-            implicitWidth: root.contentItem.implicitWidth + root.horizontalPadding * 2
-            implicitHeight: root.contentItem.implicitHeight + root.verticalPadding * 2
+            implicitWidth: root.contentItem.implicitWidth + root.horizontalMargin * 2
+            implicitHeight: root.contentItem.implicitHeight + root.verticalMargin * 2
 
             data: [root.contentItem]
         }
