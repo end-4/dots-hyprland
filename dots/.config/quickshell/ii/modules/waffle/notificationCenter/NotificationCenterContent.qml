@@ -40,7 +40,7 @@ WBarAttachedPanelContent {
                 WPanelSeparator { visible: !root.collapsed }
 
                 CalendarView {
-                    Layout.fillWidth: true
+                    // Layout.fillWidth: true
                     Synchronizer on collapsed {
                         property alias source: root.collapsed
                     }

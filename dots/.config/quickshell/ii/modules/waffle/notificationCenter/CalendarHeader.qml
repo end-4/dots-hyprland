@@ -13,7 +13,7 @@ FooterRectangle {
     id: root
 
     property bool collapsed
-    implicitWidth: 334
+    implicitWidth: 0
 
     RowLayout {
         anchors {

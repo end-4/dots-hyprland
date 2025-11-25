@@ -11,7 +11,7 @@ import qs.modules.waffle.looks
 
 FooterRectangle {
     Layout.fillWidth: true
-    implicitWidth: 334
+    implicitWidth: 0
 
     RowLayout {
         anchors {

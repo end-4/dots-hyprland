@@ -23,7 +23,7 @@ Button {
         if (root.checked) {
             if (root.down) {
                 return root.colBackgroundToggledActive;
-            } else if (root.hovered && !root.down) {
+            } else if (root.hovered) {
                 return root.colBackgroundToggledHover;
             } else {
                 return root.colBackgroundToggled;
@@ -31,7 +31,7 @@ Button {
         }
         if (root.down) {
             return root.colBackgroundActive;
-        } else if (root.hovered && !root.down) {
+        } else if (root.hovered) {
             return root.colBackgroundHover;
         } else {
             return root.colBackground;
