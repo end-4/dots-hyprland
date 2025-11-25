@@ -89,12 +89,33 @@ Scope {
 
             Column {
                 id: columnLayout
-                visible: GlobalStates.overviewOpen
+                opacity: GlobalStates.overviewOpen ? 1 : 0
+                Behavior on opacity {
+                    NumberAnimation { duration: 200; easing.type: Easing.OutQuad }
+                }
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     top: parent.top
                 }
                 spacing: -8
+
+                transform: [
+                    Translate {
+                        y: GlobalStates.overviewOpen ? 0 : -100
+                        Behavior on y {
+                            NumberAnimation { duration: 350; easing.type: Easing.OutExpo }
+                        }
+                    },
+                    Scale {
+                        origin.x: columnLayout.width / 2
+                        origin.y: columnLayout.height / 2
+                        xScale: GlobalStates.overviewOpen ? 1 : 0.1
+                        yScale: 1
+                        Behavior on xScale {
+                            NumberAnimation { duration: 350; easing.type: Easing.OutExpo }
+                        }
+                    }
+                ]
 
                 Keys.onPressed: event => {
                     if (event.key === Qt.Key_Escape) {
@@ -119,7 +140,8 @@ Scope {
                 Loader {
                     id: overviewLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
+                    // Changed to root.visible to keep content alive during fade-out
+                    active: root.visible && (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
