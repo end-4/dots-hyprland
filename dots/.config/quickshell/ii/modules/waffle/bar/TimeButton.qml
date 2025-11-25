@@ -9,7 +9,8 @@ BarButton {
     id: root
 
     rightInset: 12 // For now this is the rightmost button. Desktop peek is useless. (for now)
-    padding: 12
+    leftPadding: 12
+    rightPadding: 22
 
     checked: GlobalStates.sidebarRightOpen
     onClicked: {
@@ -17,19 +18,31 @@ BarButton {
     }
 
     contentItem: Item {
-        anchors.centerIn: root.background
-        implicitHeight: column.implicitHeight
-        implicitWidth: column.implicitWidth
-        Column {
-            id: column
+        // anchors.centerIn: parent
+        implicitHeight: contentLayout.implicitHeight
+        implicitWidth: contentLayout.implicitWidth
+        Row {
+            id: contentLayout
             anchors.centerIn: parent
-            WText {
-                anchors.right: parent.right
-                text: DateTime.time
+            spacing: 7
+            
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                WText {
+                    anchors.right: parent.right
+                    text: DateTime.time
+                }
+                WText {
+                    anchors.right: parent.right
+                    text: DateTime.date
+                }
             }
-            WText {
-                anchors.right: parent.right
-                text: DateTime.date
+            FluentIcon {
+                visible: Notifications.silent
+                anchors.verticalCenter: parent.verticalCenter
+                icon: "alert-snooze"
+                implicitSize: 18
+                filled: true
             }
         }
     }

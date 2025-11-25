@@ -1,4 +1,6 @@
+pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs
@@ -6,70 +8,54 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.actionCenter.mainPage
 
 WBarAttachedPanelContent {
     id: root
 
+    readonly property bool barAtBottom: Config.options.waffles.bar.bottom
+    
     contentItem: ColumnLayout {
-        anchors.centerIn: parent
-        spacing: 0
-
-        Rectangle {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            topLeftRadius: root.border.radius - root.border.border.width
-            topRightRadius: topLeftRadius
-            color: Looks.colors.bgPanelBody
-
-            implicitWidth: 360
-            implicitHeight: 380
+        // This somewhat sophisticated anchoring is needed to make opening anim not jump abruptly when stuff appear
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: root.barAtBottom ? undefined : parent.top
+            bottom: root.barAtBottom ? parent.bottom : undefined
+            margins: root.visualMargin
+            bottomMargin: 0
         }
+        spacing: 12
 
-        Rectangle {
-            Layout.fillHeight: false
+        WPane {
+            opacity: (MprisController.activePlayer != null && MprisController.isRealPlayer(MprisController.activePlayer)) ? 1 : 0
             Layout.fillWidth: true
-            color: Looks.colors.bgPanelSeparator
-            implicitHeight: 1
+            contentItem: MediaPaneContent {}
         }
-
-        Rectangle {
-            Layout.fillHeight: false
+        WPane {
             Layout.fillWidth: true
-            bottomLeftRadius: root.border.radius - root.border.border.width
-            bottomRightRadius: bottomLeftRadius
-            color: Looks.colors.bgPanelFooter
+            contentItem: WStackView {
+                id: stackView
+                implicitWidth: initItem.implicitWidth
+                implicitHeight: initItem.implicitHeight
 
-            implicitWidth: 360
-            implicitHeight: 47
-
-            // Battery button
-            WPanelFooterButton {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: 12
-
-                contentItem: Row {
-                    spacing: 4
-
-                    FluentIcon {
-                        anchors.verticalCenter: parent.verticalCenter
-                        icon: WIcons.batteryIcon
-                    }
-                    WText {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: `${Math.round(Battery.percentage * 100) || 0}%`
-                    }
+                initialItem: WPanelPageColumn {
+                    id: initItem
+                    MainPageBody {}
+                    WPanelSeparator {}
+                    MainPageFooter {}
                 }
-            }
 
-            // Settings button
-            WPanelFooterButton {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 12
+                Component.onCompleted: {
+                    ActionCenterContext.stackView = this;
+                }
 
-                contentItem: FluentIcon {
-                    icon: "settings"
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.BackButton
+                    onClicked: {
+                        ActionCenterContext.back();
+                    }
                 }
             }
         }

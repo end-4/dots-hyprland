@@ -1,4 +1,12 @@
-This file contains information about the dependencies, currently it describes about `sdata/dist-arch/`.
+This file contains information about the dependencies.
+
+It mainly describes about `sdata/dist-arch` which is actively maintained by the devs.
+
+Tips:
+- The packages which name has prefix `illogical-impulse-` are defined with local files `PKGBUILD`. There're two types:
+  - **Meta packages**, which do not have actual content but only include other packages specified in the array `depends`.
+  - **Actual packages**, which not only install dependencies listed in `depends`, but also build packages which have actual content to be installed later.
+- For each package included in the local `PKGBUILD`s which name does **not** have prefix `illogical-impulse-`, for example `rsync`, it's either from [Arch Linux Packages](https://archlinux.org/packages) or the [AUR](https://aur.archlinux.org/packages). Search the package name on them to get the info (e.g. what executable(s) the package provides).
 
 # Meta packages
 ## illogical-impulse-audio
@@ -73,9 +81,6 @@ This file contains information about the dependencies, currently it describes ab
   - Used in Quickshell and matugen config.
 - `starship`
   - Used in Fish config.
-- `ttf-gabarito-git`
-  - Font name: `Gabarito`
-  - Used in fuzzel and Quickshell config.
 - `ttf-jetbrains-mono-nerd`
   - Font name: `JetBrains Mono NF`, `JetBrainsMono Nerd Font`.
   - Used in foot, kdeglobals, kitty, qt5ct, qt6ct and Quickshell config.
@@ -85,9 +90,6 @@ This file contains information about the dependencies, currently it describes ab
 - `ttf-readex-pro`
   - Font name: `Readex Pro`
   - Used in Quickshell config.
-- `ttf-roboto-flex`
-  - Font name: `Roboto Flex`
-  - Used in Hyprland, matugen and Quickshell config.
 - `ttf-rubik-vf`
   - Font name: `Rubik`, `Rubik Light`
   - Used in Hyprland, kdeglobals, matugen, qt5ct, qt6ct and Quickshell config.

@@ -12,7 +12,7 @@ Loader {
 
     required property var contentItem
     property real padding: Looks.radius.large - Looks.radius.medium
-    property bool noSmoothClosing: !Config.options.waffles.smootherAnimations
+    property bool noSmoothClosing: !Config.options.waffles.tweaks.smootherMenuAnimations
     property bool closeOnFocusLost: true
     signal focusCleared()
     
@@ -118,7 +118,7 @@ Loader {
                 bottomMargin: root.barAtBottom ? popupWindow.sourceEdgeMargin : (root.ambientShadowWidth + root.visualMargin)
                 topMargin: root.barAtBottom ? (root.ambientShadowWidth + root.visualMargin) : popupWindow.sourceEdgeMargin
             }
-            color: Looks.colors.bg1
+            color: Looks.colors.bg1Base
             radius: Looks.radius.large
 
             // test
