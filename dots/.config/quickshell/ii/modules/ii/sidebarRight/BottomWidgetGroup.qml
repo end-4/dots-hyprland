@@ -228,11 +228,6 @@ Rectangle {
     component TabSwitchAnim: SequentialAnimation {
         id: switchAnim
         property bool down: false
-        // ScriptAction {
-        //     script: {
-        //         switchAnim.down = root.selectedTab > root.previousIndex;
-        //     }
-        // }
         ParallelAnimation {
             PropertyAnimation {
                 target: tabStack

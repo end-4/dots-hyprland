@@ -15,7 +15,8 @@ Scope {
         target: GlobalStates
 
         function onSidebarLeftOpenChanged() {
-            if (GlobalStates.sidebarLeftOpen) panelLoader.active = true;
+            if (GlobalStates.sidebarLeftOpen)
+                panelLoader.active = true;
         }
     }
 
@@ -42,13 +43,14 @@ Scope {
                 id: focusGrab
                 active: true
                 windows: [panelWindow]
-                onCleared: content.close();
+                onCleared: content.close()
             }
 
             Connections {
                 target: GlobalStates
                 function onSidebarLeftOpenChanged() {
-                    if (!GlobalStates.sidebarLeftOpen) content.close();
+                    if (!GlobalStates.sidebarLeftOpen)
+                        content.close();
                 }
             }
 
@@ -80,6 +82,23 @@ Scope {
         name: "sidebarLeftToggle"
         description: "Toggles left sidebar on press"
 
-        onPressed: root.toggleOpen();
+        onPressed: root.toggleOpen()
+    }
+
+    IpcHandler {
+        target: "mediaControls"
+
+        function toggle(): void {
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        }
+    }
+
+    GlobalShortcut {
+        name: "mediaControlsToggle"
+        description: "Toggles media controls on press"
+
+        onPressed: {
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        }
     }
 }
