@@ -50,8 +50,7 @@ Scope {
 
     Process {
         id: detectPackageManagerProc
-        command: ["pidof", "pacman", "yay", "paru", "dnf", "zypper", "apt", "apx", "xbps", "flatpak", "snap", "apk",
-            "yum", "epsi", "pikman"]
+        command: ["bash", "-c", "pidof pacman yay paru dnf zypper apt apx xbps flatpak snap apk yum epsi pikman"]
         onExited: (exitCode, exitStatus) => {
             root.packageManagerRunning = (exitCode === 0);
         }
@@ -94,7 +93,9 @@ Scope {
             WlrLayershell.namespace: "quickshell:session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: ColorUtils.transparentize(Appearance.m3colors.m3background, 0.3)
+            // This is a big surface so we needa carefully choose the transparency,
+            // or we'll get a large scary rgb blob
+            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.04 : 0.12)
 
             anchors {
                 top: true

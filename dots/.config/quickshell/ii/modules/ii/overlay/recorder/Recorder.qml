@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.overlay
@@ -12,11 +13,9 @@ StyledOverlayWidget {
     minimumWidth: 310
     minimumHeight: 130
 
-    contentItem: Rectangle {
+    contentItem: OverlayBackground {
         id: contentItem
-        anchors.fill: parent
         radius: root.contentRadius
-        color: Appearance.m3colors.m3surfaceContainer
         property real padding: 8
         ColumnLayout {
             id: contentColumn
@@ -85,7 +84,7 @@ StyledOverlayWidget {
                     }
                     StyledText {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Open recordings folder")
+                        text: Translation.tr("Open recordings folder")
                     }
                 }
             }

@@ -1,15 +1,13 @@
 import qs.modules.common
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 
 /**
  * Material 3 switch. See https://m3.material.io/components/switch/overview
  */
 Switch {
     id: root
-    property real scale: 0.6 // Default in m3 spec is huge af
+    property real scale: 0.75 // Default in m3 spec is huge af
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
     property color activeColor: Appearance?.colors.colPrimary ?? "#685496"

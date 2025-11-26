@@ -2,45 +2,14 @@
 # It's not for directly running.
 
 function vianix-warning(){
-  printf "${STY_YELLOW}Currently \"--via-nix\" will run:\n"
+  printf "${STY_YELLOW}"
+  printf "Currently \"--via-nix\" will run:\n"
   printf "  home-manager switch --flake .#illogical_impulse\n"
-  printf "If you are already using home-manager, it may override your current config,\n"
+  printf "If you are already using home-manager,\n"
+  printf "it may override your current config,\n"
   printf "despite that this should be reversible.\n"
+  printf "${STY_RST}"
   pause
-}
-function install_cmds(){
-  if [[ "$OS_DISTRO_ID" == "arch" || "$OS_DISTRO_ID_LIKE" == "arch" || "$OS_DISTRO_ID" == "cachyos" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo pacman -Syu
-    x sudo pacman -S --noconfirm --needed "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo apt update -y
-    x sudo apt install -y "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" == "fedora" || "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo dnf install -y "${pkgs[@]}"
-  elif [[ "$OS_DISTRO_ID" =~ ^(opensuse-leap|opensuse-tumbleweed)$ ]] || [[ "$OS_DISTRO_ID_LIKE" =~ ^(opensuse|suse)(\ (opensuse|suse))?$ ]]; then
-    local pkgs=()
-    for cmd in "$@";do
-      # For package name which is not cmd name, use "case" syntax to replace
-      pkgs+=($cmd)
-    done
-    x sudo zypper refresh
-    x sudo zypper -n install "${pkgs[@]}"
-  fi
 }
 function install_nix(){
   # https://github.com/NixOS/experimental-nix-installer
@@ -96,18 +65,8 @@ function hm_deps(){
 
 vianix-warning
 
-NOT_FOUND_CMDS=()
 TEST_CMDS=(curl fish swaylock gnome-keyring)
-for cmd in "${TEST_CMDS[@]}"; do
-  if ! command -v $cmd >/dev/null 2>&1;then
-    NOT_FOUND_CMDS+=($cmd)
-  fi
-done
-if [[ ${#NOT_FOUND_CMDS[@]} -gt 0 ]]; then
-  echo -e "${STY_YELLOW}[$0]: Not found: ${NOT_FOUND_CMDS[*]}.${STY_RST}"
-  showfun install_cmds
-  v install_cmds "${NOT_FOUND_CMDS[@]}"
-fi
+ensure_cmds "${TEST_CMDS[@]}"
 
 if ! command -v nix >/dev/null 2>&1;then
   echo -e "${STY_YELLOW}[$0]: \"nix\" not found.${STY_RST}"

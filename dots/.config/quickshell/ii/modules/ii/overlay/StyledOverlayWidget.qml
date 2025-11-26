@@ -33,8 +33,8 @@ AbstractOverlayWidget {
     property string title: identifier.replace(/([A-Z])/g, " $1").replace(/^./, function(str){ return str.toUpperCase(); })
     property var persistentStateEntry: Persistent.states.overlay[identifier]
     property real radius: Appearance.rounding.windowRounding
-    property real minimumWidth: 250
-    property real minimumHeight: 100
+    property real minimumWidth: contentItem.implicitWidth
+    property real minimumHeight: contentItem.implicitHeight
     property real resizeMargin: 8
     property real padding: 6
     property real contentRadius: radius - padding
@@ -238,8 +238,8 @@ AbstractOverlayWidget {
                     }
                     
                     StyledText {
-                        text: root.title
                         Layout.fillWidth: true
+                        text: root.title
                         elide: Text.ElideRight
                     }
 

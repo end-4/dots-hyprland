@@ -10,7 +10,7 @@ Item {
     id: root
     required property PwNode node
     PwObjectTracker {
-        objects: [node]
+        objects: [root.node]
     }
 
     implicitHeight: rowLayout.implicitHeight
@@ -47,7 +47,7 @@ Item {
                 elide: Text.ElideRight
                 text: {
                     // application.name -> description -> name
-                    const app = root.node?.properties["application.name"] ?? (root.node.description != "" ? root.node.description : root.node.name);
+                    const app = Audio.appNodeDisplayName(root.node);
                     const media = root.node.properties["media.name"];
                     return media != undefined ? `${app} • ${media}` : app;
                 }

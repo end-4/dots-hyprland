@@ -29,17 +29,25 @@ gui-apps/fuzzel
 gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
-dev-libs/hyprland-protocols **
-gui-libs/aquamarine **
-gui-libs/hyprutils **
-dev-util/hyprwayland-scanner **
-dev-libs/hyprlang **
-dev-libs/hyprgraphics **
-gui-libs/hyprcursor **
-gui-libs/hyprland-qt-support **
-gui-libs/hyprland-qtutils **
-gui-wm/hyprland **
+dev-libs/hyprland-protocols
+gui-libs/aquamarine
+gui-libs/hyprutils
+dev-util/hyprwayland-scanner
+dev-libs/hyprlang
+dev-libs/hyprgraphics
+gui-libs/hyprcursor
+gui-libs/hyprland-qt-support
+gui-libs/hyprland-qtutils
+gui-wm/hyprland
 x11-libs/libxkbcommon
 dev-util/breakpad
 dev-libs/linux-syscall-support
 dev-embedded/libdisasm
+kde-plasma/breeze-plus
+x11-themes/darkly
+x11-themes/adw-gtk3
+media-fonts/space-grotesk
+media-fonts/material-symbols-variable **
+media-fonts/readex-pro
+media-fonts/rubik-vf
+app-misc/songrec

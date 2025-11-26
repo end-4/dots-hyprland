@@ -9,7 +9,7 @@ MouseArea {
     property bool alwaysShowAllResources: false
     implicitHeight: columnLayout.implicitHeight
     implicitWidth: columnLayout.implicitWidth
-    hoverEnabled: true
+    hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
     ColumnLayout {
         id: columnLayout

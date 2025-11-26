@@ -6,16 +6,15 @@ import Quickshell
 import Quickshell.Io
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.ii.overlay
 
-Rectangle {
+OverlayBackground {
     id: root
 
     enum State { Normal, Success, Error }
 
-    anchors.fill: parent
     property real padding: 16
     property var currentState: FpsLimiterContent.State.Normal
-    color: Appearance.m3colors.m3surfaceContainer
     implicitWidth: content.implicitWidth + (padding * 2)
     implicitHeight: content.implicitHeight + (padding * 2)
 
