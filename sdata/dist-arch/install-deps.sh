@@ -12,11 +12,17 @@ install-yay(){
   rm -rf /tmp/buildyay
 }
 
-# NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
-# However, let's just keep it as references for other distros writing their `sdata/dist-<DISTRO_ID>/install-deps.sh`, if they need it.
-handle-deprecated-dependencies(){
+remove_deprecated_dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
-  for i in illogical-impulse-{microtex,pymyc-aur} {quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+  local list=()
+  list+=(illogical-impulse-{microtex,pymyc-aur})
+  list+=(hyprland-qtutils)
+  list+=({quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git)
+  for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
+}
+# NOTE: `implicitize_old_dependencies()` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
+# However, let's just keep it as references for other distros writing their `sdata/dist-<OS_GROUP_ID>/install-deps.sh`, if they need it.
+implicitize_old_dependencies(){
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
   remove_bashcomments_emptylines ./sdata/dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
   readarray -t old_deps_list < ./cache/old_deps_stripped.conf
@@ -37,6 +43,9 @@ if ! command -v pacman >/dev/null 2>&1; then
   exit 1
 fi
 
+showfun remove_deprecated_dependencies
+v remove_deprecated_dependencies
+
 # Issue #363
 case $SKIP_SYSUPDATE in
   true) sleep 0;;
@@ -51,8 +60,8 @@ if ! command -v yay >/dev/null 2>&1;then
   v install-yay
 fi
 
-showfun handle-deprecated-dependencies
-v handle-deprecated-dependencies
+showfun implicitize_old_dependencies
+v implicitize_old_dependencies
 
 # https://github.com/end-4/dots-hyprland/issues/581
 # yay -Bi is kinda hit or miss, instead cd into the relevant directory and manually source and install deps

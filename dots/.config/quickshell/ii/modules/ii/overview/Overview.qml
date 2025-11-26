@@ -167,6 +167,9 @@ Scope {
         function toggle() {
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
+        function workspacesToggle() {
+            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+        }
         function close() {
             GlobalStates.overviewOpen = false;
         }
@@ -183,6 +186,14 @@ Scope {
 
     GlobalShortcut {
         name: "overviewToggle"
+        description: "Toggles overview on press"
+
+        onPressed: {
+            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+        }
+    }
+    GlobalShortcut {
+        name: "overviewWorkspacesToggle"
         description: "Toggles overview on press"
 
         onPressed: {

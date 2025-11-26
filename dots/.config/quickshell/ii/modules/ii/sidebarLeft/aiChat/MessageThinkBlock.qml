@@ -156,7 +156,6 @@ Item {
                 property bool editing: root.editing
                 property bool renderMarkdown: root.renderMarkdown
                 property bool enableMouseSelection: root.enableMouseSelection
-                property string segmentContent: root.segmentContent
                 property var messageData: root.messageData
                 property bool done: root.done
 
@@ -165,6 +164,7 @@ Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
+                    segmentContent: root.segmentContent
                 }
             }
         }

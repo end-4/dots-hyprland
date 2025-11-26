@@ -127,13 +127,12 @@ Item {
                                             const keybind = keybindSection.modelData.keybinds[i];
 
                                             if (!Config.options.cheatsheet.splitButtons) {
-
-                                              for (var j = 0; j < keybind.mods.length; j++) {
-                                                  keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
-                                              }
-                                              keybind.mods = [keybind.mods.join(' ') ]
-                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
-                                              keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
+                                                for (var j = 0; j < keybind.mods.length; j++) {
+                                                    keybind.mods[j] = keySubstitutions[keybind.mods[j]] || keybind.mods[j];
+                                                }
+                                                keybind.mods = [keybind.mods.join(' ') ]
+                                                keybind.mods[0] += !keyBlacklist.includes(keybind.key) && keybind.mods[0].length ? ' ' : ''
+                                                keybind.mods[0] += !keyBlacklist.includes(keybind.key) ? (keySubstitutions[keybind.key] || keybind.key) : ''
                                             } 
 
                                             result.push({

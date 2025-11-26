@@ -13,9 +13,7 @@ StyledOverlayWidget {
     minimumWidth: 300
     minimumHeight: 380
 
-    contentItem: Rectangle {
-        anchors.fill: parent
-        color: Appearance.m3colors.m3surfaceContainer
+    contentItem: OverlayBackground {
         radius: root.contentRadius
         property real padding: 6
 

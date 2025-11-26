@@ -5,7 +5,6 @@ import qs.services
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt.labs.synchronizer
 
 Item {
     id: root

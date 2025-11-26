@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
-import Qt.labs.synchronizer
 import qs
 import qs.services
 import qs.modules.common
@@ -213,10 +212,8 @@ StyledOverlayWidget {
         }
     ].filter(r => r.available) 
 
-    contentItem: Rectangle {
+    contentItem: OverlayBackground {
         id: contentItem
-        anchors.fill: parent
-        color: Appearance.m3colors.m3surfaceContainer
         radius: root.contentRadius
         property real padding: 4
         ColumnLayout {
