@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
-import Qt.labs.synchronizer
 import qs
 import qs.services
 import qs.modules.common

@@ -17,13 +17,16 @@ BarButton {
     rightInset: 2
     implicitWidth: height - topInset - bottomInset + leftInset + rightInset
 
+    property real pressedScale: 5/6
+
     onDownChanged: {
         scaleAnim.duration = root.down ? 150 : 200
         scaleAnim.easing.bezierCurve = root.down ? Looks.transition.easing.bezierCurve.easeIn : Looks.transition.easing.bezierCurve.easeOut
-        contentItem.scale = root.down ? 5/6 : 1 // If/When we do dragging, the scale is 1.25
+        contentItem.scale = root.down ? root.pressedScale : 1 // If/When we do dragging, the scale is 1.25
     }
 
     background: Item {
+        id: background
         BackgroundAcrylicRectangle {
             id: mainBgRect
             anchors.fill: parent
@@ -51,7 +54,7 @@ BarButton {
 
     contentItem: Item {
         id: contentItem
-        anchors.centerIn: parent
+        anchors.centerIn: root.background
 
         implicitHeight: iconWidget.implicitHeight
         implicitWidth: iconWidget.implicitWidth
@@ -73,7 +76,7 @@ BarButton {
 
     component BackgroundAcrylicRectangle: AcrylicRectangle {
         shiny: ((root.hovered && !root.down) || root.checked)
-        color: root.colBackground
+        color: root.color
         border.width: 1
         border.color: root.colBackgroundBorder
 

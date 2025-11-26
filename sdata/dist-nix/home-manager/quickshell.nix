@@ -40,6 +40,7 @@ in pkgs.stdenv.mkDerivation {
     qt6.qttranslations #qt6-translations
     qt6.qtvirtualkeyboard #qt6-virtualkeyboard
     qt6.qtwayland #qt6-wayland
+    kdePackages.kirigami #kirigami
     kdePackages.kdialog #kdialog
     kdePackages.syntax-highlighting #syntax-highlighting
   ];

@@ -94,11 +94,9 @@
       matugen #matugen-bin (Used in Quickshell)
       #otf-space-grotesk (TODO: Not available as Nixpkg)
       starship #starship
-      #ttf-gabarito-git (TODO: Not available as Nixpkg)
       nerd-fonts.jetbrains-mono #ttf-jetbrains-mono-nerd
       material-symbols #ttf-material-symbols-variable-git
       #ttf-readex-pro (TODO: seems not available as nixpkg)
-      roboto-flex #ttf-roboto-flex
       rubik #ttf-rubik-vf
       twemoji-color-font #ttf-twemoji
 

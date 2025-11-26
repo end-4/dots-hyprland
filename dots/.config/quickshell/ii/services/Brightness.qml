@@ -48,6 +48,16 @@ Singleton {
         ddcProc.running = true;
     }
 
+    function initializeMonitor(i: int): void {
+        if (i >= monitors.length)
+            return;
+        monitors[i].initialize();
+    }
+
+    function ddcDetectFinished(): void {
+        initializeMonitor(0);
+    }
+
     Process {
         id: ddcProc
 
@@ -58,13 +68,13 @@ Singleton {
                 if (data.startsWith("Display ")) {
                     const lines = data.split("\n").map(l => l.trim());
                     root.ddcMonitors.push({
-                        model: lines.find(l => l.startsWith("Monitor:")).split(":")[2],
+                        name: lines.find(l => l.startsWith("DRM connector:")).split("-").slice(1).join('-'),
                         busNum: lines.find(l => l.startsWith("I2C bus:")).split("/dev/i2c-")[1]
                     });
                 }
             }
         }
-        onExited: root.ddcMonitorsChanged()
+        onExited: root.ddcDetectFinished()
     }
 
     Process {
@@ -75,14 +85,8 @@ Singleton {
         id: monitor
 
         required property ShellScreen screen
-        readonly property bool isDdc: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
-            return !!match;
-        }
-        readonly property string busNum: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
-            return match?.busNum ?? "";
-        }
+        property bool isDdc
+        property string busNum
         property var rawMaxBrightness: []
         property var devices: []
         property real brightness
@@ -111,6 +115,9 @@ Singleton {
 
         function initialize() {
             monitor.ready = false;
+            const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
+            isDdc = !!match;
+            busNum = match?.busNum ?? "";
             initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c d $(brightnessctl -lmc backlight | tr '\n' ';' | sed 's/;$//')"`];
             initProc.running = true;
         }
@@ -135,6 +142,9 @@ Singleton {
                     }
                     monitor.ready = true;
                 }
+            }
+            onExited: (exitCode, exitStatus) => {
+                initializeMonitor(root.monitors.indexOf(monitor) + 1);
             }
         }
 
@@ -169,14 +179,6 @@ Singleton {
 
         function setBrightnessMultiplier(value: real): void {
             monitor.brightnessMultiplier = value;
-        }
-
-        Component.onCompleted: {
-            initialize();
-        }
-
-        onBusNumChanged: {
-            initialize();
         }
     }
 
@@ -228,7 +230,7 @@ Singleton {
 
             Process {
                 id: screenshotProc
-                command: ["bash", "-c", 
+                command: ["bash", "-c",
                     `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.screenshotDir)}'`
                     + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
                     + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`

@@ -1,33 +1,11 @@
 import qs
+import qs.modules.common.models.quickToggles
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import Quickshell
 
 AndroidQuickToggleButton {
-    id: root
-    
-    name: Translation.tr("EasyEffects")
-
-    available: EasyEffects.available
-    toggled: EasyEffects.active
-    buttonIcon: "graphic_eq"
-
-    Component.onCompleted: {
-        EasyEffects.fetchActiveState()
-    }
-
-    mainAction: () => {
-        EasyEffects.toggle()
-    }
-
-    altAction: () => {
-        Quickshell.execDetached(["bash", "-c", "flatpak run com.github.wwmm.easyeffects || easyeffects"])
-        GlobalStates.sidebarRightOpen = false
-    }
-
-    StyledToolTip {
-        text: Translation.tr("EasyEffects | Right-click to configure")
-    }
+    toggleModel: EasyEffectsToggle {}
 }
 
