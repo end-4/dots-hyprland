@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -15,6 +16,9 @@ BodyRectangle {
 
     // State
     property bool collapsed
+
+    // Locale
+    property var locale: Config.options.calendar.forceMondayWeekStart ? Qt.locale("en-GB") : Qt.locale()
 
     implicitHeight: collapsed ? 0 : contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
@@ -38,7 +42,7 @@ BodyRectangle {
             spacing: 1
             DayOfWeekRow {
                 Layout.fillWidth: true
-                locale: Qt.locale("en-GB")
+                locale: root.locale
                 spacing: calendarView.buttonSpacing
                 implicitHeight: calendarView.buttonSize
                 delegate: Item {
@@ -56,6 +60,7 @@ BodyRectangle {
             }
             CalendarView {
                 id: calendarView
+                locale: root.locale
                 verticalPadding: 2
                 buttonSize: 41 // ???
                 buttonSpacing: 1

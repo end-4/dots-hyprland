@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -21,7 +22,8 @@ Item {
 
     // Configuration
     property int paddingWeeks: 2 // 1 should be sufficient with proper clipping and no padding
-    property bool american: false // 🍔🦅 = Sunday first
+    property var locale: Qt.locale() // Should be of type Locale but QML is being funny
+    property bool american: locale.firstDayOfWeek == Locale.Sunday
 
     // Scrolling
     function scrollMonthsAndSnap(x) { // Scroll x months and snap to month
@@ -104,10 +106,13 @@ Item {
         }
 
         spacing: root.buttonSpacing
+        
         Repeater {
             model: root.totalWeeks
+
             WeekRow {
                 required property int index
+                sundayFirst: root.american
                 date: new Date(root.dateInFirstWeek.getTime() + (index * root.millisPerWeek))
                 Layout.fillWidth: true
                 spacing: root.buttonSpacing
