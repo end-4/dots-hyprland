@@ -192,6 +192,7 @@ Item {
     }
     Toolbar {
         id: extraOptions
+        z: 1
         anchors {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
