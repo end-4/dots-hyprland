@@ -153,7 +153,7 @@ get_next_backup_number() {
 # =============================================================================
 
 # Run user preference wizard
-case $ask in
+case "$ask" in
   false) sleep 0 ;;
   *) wizard_update_preferences ;;
 esac
@@ -214,19 +214,19 @@ for pattern in "${patterns[@]}"; do
   fi
 
   # Execute based on mode
-  case $mode in
+  case "$mode" in
     "sync")
       if [[ -d "$from" ]]; then
-        warning_rsync_delete
+        warning_overwrite
         v rsync -av --delete "${excludes[@]}" "$from/" "$to/"
       else
-        warning_rsync_normal
+        warning_overwrite
         # For files, don't use trailing slash and don't use --delete
         v rsync -av "${excludes[@]}" "$from" "$to"
       fi
       ;;
     "soft")
-      warning_rsync_normal
+      warning_overwrite
       if [[ -d "$from" ]]; then
         v rsync -av "${excludes[@]}" "$from/" "$to/"
       else

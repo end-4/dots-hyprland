@@ -202,41 +202,25 @@ Singleton {
 
     font: QtObject {
         property QtObject family: QtObject {
-            property string main: "Roboto Flex"
-            property string numbers: "Rubik"
-            property string title: "Gabarito"
+            property string main: Config.options.appearance.fonts.main
+            property string numbers: Config.options.appearance.fonts.numbers
+            property string title: Config.options.appearance.fonts.title
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "JetBrains Mono NF"
-            property string monospace: "JetBrains Mono NF"
-            property string reading: "Readex Pro"
-            property string expressive: "Space Grotesk"
+            property string iconNerd: Config.options.appearance.fonts.iconNerd
+            property string monospace: Config.options.appearance.fonts.monospace
+            property string reading: Config.options.appearance.fonts.reading
+            property string expressive: Config.options.appearance.fonts.expressive
         }
         property QtObject variableAxes: QtObject {
-            // Roboto Flex is customized to feel geometric, unserious yet not overly kiddy
             property var main: ({
-                "YTUC": 716, // Uppercase height (Raised from 712 to be more distinguishable from lowercase)
-                "YTFI": 716, // Figure (numbers) height (Lowered from 738 to match uppercase)
-                "YTAS": 716, // Ascender height (Lowered from 750 to match uppercase)
-                "YTLC": 490, // Lowercase height (Lowered from 514 to be more distinguishable from uppercase)
-                "XTRA": 488, // Counter width (Raised from 468 to be less condensed, less serious)
-                "wdth": 105, // Width (Space out a tiny bit for readability)
-                "GRAD": 175, // Grade (Increased so the 6 and 9 don't look weak)
-                "wght": 300, // Weight (Lowered to compensate for increased grade)
+                "wght": 450,
+                "wdth": 100,
             })
-            // Rubik simply needs regular weight to override that of the main font where necessary
             property var numbers: ({
-                "wght": 400,
+                "wght": 450,
             })
-            // Slightly bold weight for title
-            property var title: ({
-                // "YTUC": 716, // Uppercase height (Raised from 712 to be more distinguishable from lowercase)
-                // "YTFI": 716, // Figure (numbers) height (Lowered from 738 to match uppercase)
-                // "YTAS": 716, // Ascender height (Lowered from 750 to match uppercase)
-                // "YTLC": 490, // Lowercase height (Lowered from 514 to be more distinguishable from uppercase)
-                // "XTRA": 490, // Counter width (Raised from 468 to be less condensed, less serious)
-                // "wdth": 110, // Width (Space out a tiny bit for readability)
-                // "GRAD": 150, // Grade (Increased so the 6 and 9 don't look weak)
-                "wght": 900, // Weight (Lowered to compensate for increased grade)
+            property var title: ({ // Slightly bold weight for title
+                "wght": 550, // Weight (Lowered to compensate for increased grade)
             })
         }
         property QtObject pixelSize: QtObject {
@@ -294,6 +278,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementMoveEnter.duration
                     easing.type: root.animation.elementMoveEnter.type
                     easing.bezierCurve: root.animation.elementMoveEnter.bezierCurve
@@ -308,6 +293,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementMoveExit.duration
                     easing.type: root.animation.elementMoveExit.type
                     easing.bezierCurve: root.animation.elementMoveExit.bezierCurve
@@ -326,9 +312,10 @@ Singleton {
                 easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
             property Component numberAnimation: Component { NumberAnimation {
-                    duration: root.animation.elementMoveFast.duration
-                    easing.type: root.animation.elementMoveFast.type
-                    easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
+                alwaysRunToEnd: true
+                duration: root.animation.elementMoveFast.duration
+                easing.type: root.animation.elementMoveFast.type
+                easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
         }
 
@@ -339,6 +326,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementResize.duration
                     easing.type: root.animation.elementResize.type
                     easing.bezierCurve: root.animation.elementResize.bezierCurve
@@ -352,9 +340,10 @@ Singleton {
             property list<real> bezierCurve: animationCurves.expressiveDefaultSpatial
             property int velocity: 850
             property Component numberAnimation: Component { NumberAnimation {
-                    duration: root.animation.clickBounce.duration
-                    easing.type: root.animation.clickBounce.type
-                    easing.bezierCurve: root.animation.clickBounce.bezierCurve
+                alwaysRunToEnd: true
+                duration: root.animation.clickBounce.duration
+                easing.type: root.animation.clickBounce.type
+                easing.bezierCurve: root.animation.clickBounce.bezierCurve
             }}
         }
         

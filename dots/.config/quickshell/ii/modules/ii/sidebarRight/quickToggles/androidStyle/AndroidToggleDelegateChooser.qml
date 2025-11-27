@@ -23,7 +23,7 @@ DelegateChooser {
 
     role: "type"
 
-    DelegateChoice { roleValue: "network"; AndroidNetworkToggle {
+    DelegateChoice { roleValue: "antiFlashbang"; AndroidAntiFlashbangToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -35,7 +35,23 @@ DelegateChooser {
         cellSpacing: root.spacing
         cellSize: modelData.size
         onOpenMenu: {
-            root.openWifiDialog()
+            root.openNightLightDialog()
+        }
+    } }
+
+    DelegateChoice { roleValue: "audio"; AndroidAudioToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+        onOpenMenu: {
+            root.openAudioOutputDialog()
         }
     } }
 
@@ -55,88 +71,7 @@ DelegateChooser {
         }
     } }
 
-    DelegateChoice { roleValue: "idleInhibitor"; AndroidIdleInhibitorToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-    } }
-
-    DelegateChoice { roleValue: "easyEffects"; AndroidEasyEffectsToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-    } }
-
-    DelegateChoice { roleValue: "nightLight"; AndroidNightLightToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-        onOpenMenu: {
-            root.openNightLightDialog()
-        }
-    } }
-
-    DelegateChoice { roleValue: "darkMode"; AndroidDarkModeToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-    } }
-
     DelegateChoice { roleValue: "cloudflareWarp"; AndroidCloudflareWarpToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-    } }
-
-    DelegateChoice { roleValue: "gameMode"; AndroidGameModeToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-    } }
-
-    DelegateChoice { roleValue: "screenSnip"; AndroidScreenSnipToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -162,7 +97,46 @@ DelegateChooser {
         cellSize: modelData.size
     } }
 
-    DelegateChoice { roleValue: "onScreenKeyboard"; AndroidOnScreenKeyboardToggle {
+    DelegateChoice { roleValue: "darkMode"; AndroidDarkModeToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
+    DelegateChoice { roleValue: "easyEffects"; AndroidEasyEffectsToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
+    DelegateChoice { roleValue: "gameMode"; AndroidGameModeToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
+    DelegateChoice { roleValue: "idleInhibitor"; AndroidIdleInhibitorToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -191,7 +165,20 @@ DelegateChooser {
         }
     } }
 
-    DelegateChoice { roleValue: "audio"; AndroidAudioToggle {
+    DelegateChoice { roleValue: "musicRecognition"; AndroidMusicRecognition {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
+    DelegateChoice { roleValue: "network"; AndroidNetworkToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -203,11 +190,40 @@ DelegateChooser {
         cellSpacing: root.spacing
         cellSize: modelData.size
         onOpenMenu: {
-            root.openAudioOutputDialog()
+            root.openWifiDialog()
+        }
+    } }
+
+    DelegateChoice { roleValue: "nightLight"; AndroidNightLightToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+        onOpenMenu: {
+            root.openNightLightDialog()
         }
     } }
 
     DelegateChoice { roleValue: "notifications"; AndroidNotificationToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
+    DelegateChoice { roleValue: "onScreenKeyboard"; AndroidOnScreenKeyboardToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -233,7 +249,7 @@ DelegateChooser {
         cellSize: modelData.size
     } }
 
-    DelegateChoice { roleValue: "musicRecognition"; AndroidMusicRecognition {
+    DelegateChoice { roleValue: "screenSnip"; AndroidScreenSnipToggle {
         required property int index
         required property var modelData
         buttonIndex: root.startingIndex + index
@@ -244,22 +260,6 @@ DelegateChooser {
         baseCellHeight: root.baseCellHeight
         cellSpacing: root.spacing
         cellSize: modelData.size
-    } }
-
-    DelegateChoice { roleValue: "antiFlashbang"; AndroidAntiFlashbangToggle {
-        required property int index
-        required property var modelData
-        buttonIndex: root.startingIndex + index
-        buttonData: modelData
-        editMode: root.editMode
-        expandedSize: modelData.size > 1
-        baseCellWidth: root.baseCellWidth
-        baseCellHeight: root.baseCellHeight
-        cellSpacing: root.spacing
-        cellSize: modelData.size
-        onOpenMenu: {
-            root.openNightLightDialog()
-        }
     } }
 
     DelegateChoice { roleValue: "vpn"; AndroidVpnToggle {
@@ -277,5 +277,4 @@ DelegateChooser {
             root.openVpnDialog()
         }
     } }
-
 }

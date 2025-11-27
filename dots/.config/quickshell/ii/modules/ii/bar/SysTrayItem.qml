@@ -1,11 +1,12 @@
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 MouseArea {
     id: root
@@ -31,10 +32,7 @@ MouseArea {
         event.accepted = true;
     }
     onEntered: {
-        tooltip.text = item.tooltipTitle.length > 0 ? item.tooltipTitle
-                : (item.title.length > 0 ? item.title : item.id);
-        if (item.tooltipDescription.length > 0) tooltip.text += " • " + item.tooltipDescription;
-        if (Config.options.bar.tray.showItemId) tooltip.text += "\n[" + item.id + "]";
+        tooltip.text = TrayService.getTooltipForItem(root.item);
     }
 
     Loader {
@@ -65,7 +63,7 @@ MouseArea {
 
     IconImage {
         id: trayIcon
-        visible: !Config.options.bar.tray.monochromeIcons
+        visible: !Config.options.tray.monochromeIcons
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
@@ -73,7 +71,7 @@ MouseArea {
     }
 
     Loader {
-        active: Config.options.bar.tray.monochromeIcons
+        active: Config.options.tray.monochromeIcons
         anchors.fill: trayIcon
         sourceComponent: Item {
             Desaturate {
