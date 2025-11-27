@@ -23,7 +23,6 @@ Item {
     // Configuration
     property int paddingWeeks: 2 // 1 should be sufficient with proper clipping and no padding
     property var locale: Qt.locale() // Should be of type Locale but QML is being funny
-    property bool american: locale.firstDayOfWeek == Locale.Sunday
 
     // Scrolling
     function scrollMonthsAndSnap(x) { // Scroll x months and snap to month
@@ -68,7 +67,7 @@ Item {
     readonly property int millisPerWeek: 7 * 24 * 60 * 60 * 1000
     readonly property int totalWeeks: 6 + (paddingWeeks * 2)
     readonly property int focusedWeekIndex: 2 // The third row, 0-indexed
-    readonly property int focusDayOfWeekIndex: 6 // Non-American
+    readonly property int focusDayOfWeekIndex: 6
     property date dateInFirstWeek: {
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
@@ -80,7 +79,7 @@ Item {
         // The last day of 3rd week shown is considered the focused month
         const addedTime = (root.paddingWeeks + root.focusedWeekIndex) * root.millisPerWeek
         const dateInTargetWeek = new Date(root.dateInFirstWeek.getTime() + addedTime);
-        return DateUtils.getIthDayDateOfSameWeek(dateInTargetWeek, root.focusDayOfWeekIndex - (1 * root.american), root.american); // 4 = Thursday
+        return DateUtils.getIthDayDateOfSameWeek(dateInTargetWeek, root.focusDayOfWeekIndex - root.locale.firstDayOfWeek, root.locale.firstdayOfWeek); // 4 = Thursday
     }
     property int focusedMonth: focusedDate.getMonth() + 1 // 0-indexed -> 1-indexed
 
@@ -112,7 +111,7 @@ Item {
 
             WeekRow {
                 required property int index
-                sundayFirst: root.american
+                locale: root.locale
                 date: new Date(root.dateInFirstWeek.getTime() + (index * root.millisPerWeek))
                 Layout.fillWidth: true
                 spacing: root.buttonSpacing

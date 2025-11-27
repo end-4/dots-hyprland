@@ -8,14 +8,14 @@ RowLayout {
     id: root
 
     // Pls supply
-    required property date date
-    property bool sundayFirst: false
+    required property date date // Any date within the week
+    property var locale
 
     // Expose model and delegate for flexibility
     property list<var> model: {
         // Should expose props like here: https://doc.qt.io/qt-6/qml-qtquick-controls-monthgrid.html#delegate-prop
         // (except weekNumber because i'm lazy and it's not so important)
-        const firstDayOfWeek = DateUtils.getMonday(root.date, root.sundayFirst);
+        const firstDayOfWeek = DateUtils.getFirstDayOfWeek(root.date, root.locale.firstDayOfWeek);
         const weekDates = [];
         for (let i = 0; i < 7; i++) {
             const dayDate = new Date(firstDayOfWeek);

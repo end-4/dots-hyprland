@@ -18,7 +18,7 @@ BodyRectangle {
     property bool collapsed
 
     // Locale
-    property var locale: Config.options.calendar.forceMondayWeekStart ? Qt.locale("en-GB") : Qt.locale()
+    property var locale: Qt.locale(Config.options.calendar.locale)
 
     implicitHeight: collapsed ? 0 : contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
@@ -52,7 +52,11 @@ BodyRectangle {
                     implicitWidth: calendarView.buttonSize
                     WText {
                         anchors.centerIn: parent
-                        text: dayOfWeekItem.model.shortName.substring(0,2)
+                        text: {
+                            var result = dayOfWeekItem.model.shortName;
+                            if (Config.options.waffles.calendar.force2CharDayOfWeek) result = result.substring(0,2);
+                            return result;
+                        }
                         color: Looks.colors.fg
                         font.pixelSize: Looks.font.pixelSize.large
                     }
@@ -103,7 +107,7 @@ BodyRectangle {
                 WText {
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignLeft
-                    text: Qt.locale().toString(calendarView.dateInFirstWeek, "MMMM yyyy")
+                    text: Qt.locale().toString(calendarView.focusedDate, "MMMM yyyy")
                     font.pixelSize: Looks.font.pixelSize.large
                     font.weight: Looks.font.weight.strong
                 }
