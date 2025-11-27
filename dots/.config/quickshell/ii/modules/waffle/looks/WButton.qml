@@ -17,6 +17,7 @@ Button {
     property color colBackgroundToggledActive: Looks.colors.accentActive
     property color colForeground: Looks.colors.fg
     property color colForegroundToggled: Looks.colors.accentFg
+    property color colForegroundDisabled: ColorUtils.transparentize(Looks.colors.subfg, 0.4)
     property alias backgroundOpacity: backgroundRect.opacity
     property color color: {
         if (!root.enabled) return colBackground;
@@ -37,7 +38,11 @@ Button {
             return root.colBackground;
         }
     }
-    property color fgColor: root.checked ? root.colForegroundToggled : root.colForeground
+    property color fgColor: {
+        if (root.checked) return root.colForegroundToggled
+        if (root.enabled) return root.colForeground
+        return root.colForegroundDisabled
+    }
     property alias horizontalAlignment: buttonText.horizontalAlignment
     font {
         family: Looks.font.family.ui

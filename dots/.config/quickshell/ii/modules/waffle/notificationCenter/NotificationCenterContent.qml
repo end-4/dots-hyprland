@@ -30,7 +30,7 @@ WBarAttachedPanelContent {
         WPane {
             contentItem: ColumnLayout {
                 spacing: 0
-                CalendarHeader {
+                DateHeader {
                     Layout.fillWidth: true
                     Synchronizer on collapsed {
                         property alias source: root.collapsed
@@ -39,8 +39,8 @@ WBarAttachedPanelContent {
 
                 WPanelSeparator { visible: !root.collapsed }
 
-                CalendarView {
-                    // Layout.fillWidth: true
+                CalendarWidget {
+                    Layout.fillWidth: true
                     Synchronizer on collapsed {
                         property alias source: root.collapsed
                     }

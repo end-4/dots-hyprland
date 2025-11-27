@@ -231,5 +231,13 @@ Singleton {
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }
         }
+
+        property Component scroll: Component {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: [0.0, 0.0, 0.25, 1.0, 1, 1]
+            }
+        }
     }
 }
