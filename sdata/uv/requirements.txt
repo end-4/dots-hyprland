@@ -49,6 +49,18 @@ pygobject==3.52.3
     # via -r sdata/uv/requirements.in
 pyproject-hooks==1.2.0
     # via build
+pyqt5==5.15.11
+    # via -r sdata/uv/requirements.in
+pyqt5-qt5==5.15.18
+    # via pyqt5
+pyqt5-sip==12.17.1
+    # via pyqt5
+pyqt6==6.10.0
+    # via -r sdata/uv/requirements.in
+pyqt6-qt6==6.10.0
+    # via pyqt6
+pyqt6-sip==13.10.2
+    # via pyqt6
 pywayland==0.4.18
     # via -r sdata/uv/requirements.in
 setproctitle==1.3.4
