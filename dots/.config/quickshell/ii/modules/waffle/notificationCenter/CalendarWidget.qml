@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -15,6 +16,9 @@ BodyRectangle {
 
     // State
     property bool collapsed
+
+    // Locale
+    property var locale: Qt.locale(Config.options.calendar.locale)
 
     implicitHeight: collapsed ? 0 : contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
@@ -38,7 +42,7 @@ BodyRectangle {
             spacing: 1
             DayOfWeekRow {
                 Layout.fillWidth: true
-                locale: Qt.locale("en-GB")
+                locale: root.locale
                 spacing: calendarView.buttonSpacing
                 implicitHeight: calendarView.buttonSize
                 delegate: Item {
@@ -48,7 +52,11 @@ BodyRectangle {
                     implicitWidth: calendarView.buttonSize
                     WText {
                         anchors.centerIn: parent
-                        text: dayOfWeekItem.model.shortName.substring(0,2)
+                        text: {
+                            var result = dayOfWeekItem.model.shortName;
+                            if (Config.options.waffles.calendar.force2CharDayOfWeek) result = result.substring(0,2);
+                            return result;
+                        }
                         color: Looks.colors.fg
                         font.pixelSize: Looks.font.pixelSize.large
                     }
@@ -56,6 +64,7 @@ BodyRectangle {
             }
             CalendarView {
                 id: calendarView
+                locale: root.locale
                 verticalPadding: 2
                 buttonSize: 41 // ???
                 buttonSpacing: 1
@@ -98,7 +107,7 @@ BodyRectangle {
                 WText {
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignLeft
-                    text: Qt.locale().toString(calendarView.dateInFirstWeek, "MMMM yyyy")
+                    text: Qt.locale().toString(calendarView.focusedDate, "MMMM yyyy")
                     font.pixelSize: Looks.font.pixelSize.large
                     font.weight: Looks.font.weight.strong
                 }

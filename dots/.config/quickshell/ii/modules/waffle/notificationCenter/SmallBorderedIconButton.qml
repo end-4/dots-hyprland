@@ -13,6 +13,7 @@ WBorderedButton {
             anchors.centerIn: parent
             implicitSize: 12
             icon: root.icon.name
+            color: root.fgColor
         }
     }
 }
