@@ -186,7 +186,12 @@ Singleton {
                             property bool useSineCookie: false
                         }
                         property JsonObject digital: JsonObject {
+                            property bool adaptiveAlignment: true
+                            property bool showDate: true
                             property bool animateChange: true
+                            property bool vertical: false
+                            property real weight: 350
+                            property real size: 90
                         }
                         property JsonObject quote: JsonObject {
                             property bool enable: false
