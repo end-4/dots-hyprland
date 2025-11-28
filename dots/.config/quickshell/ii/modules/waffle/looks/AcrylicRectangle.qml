@@ -9,16 +9,17 @@ Rectangle {
     id: root
 
     property bool shiny: true // Top border
-    property color borderColor: ColorUtils.transparentize(Looks.colors.bg2Border, shiny ? 0.5 : 1)
+    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Hover, 0.7)
+    property color internalBorderColor: ColorUtils.transparentize(borderColor, shiny ? 0.0 : 1)
     color: Looks.colors.bg1Hover
     radius: Looks.radius.medium
     Behavior on color {
         animation: Looks.transition.color.createObject(this)
     }
-    Behavior on borderColor {
+    Behavior on internalBorderColor {
         animation: Looks.transition.color.createObject(this)
     }
-    onBorderColorChanged: {
+    onInternalBorderColorChanged: {
         borderCanvas.requestPaint();
     }
     
@@ -32,7 +33,7 @@ Rectangle {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
-            var borderColor = root.borderColor;
+            var borderColor = root.internalBorderColor;
 
             var r = root.radius;
             var fadeLength = Math.max(1, r);

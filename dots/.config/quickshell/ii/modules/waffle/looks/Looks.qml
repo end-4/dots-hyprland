@@ -53,6 +53,7 @@ Singleton {
         property color controlBgHover: '#57575B'
         property color controlFg: "#FFFFFF"
         property color accentUnfocused: "#848484"
+        property color link: "#235CCF"
     }
     darkColors: QtObject {
         id: darkColors
@@ -80,6 +81,7 @@ Singleton {
         property color controlBgHover: "#CFCED1"
         property color controlFg: "#454545"
         property color accentUnfocused: "#989898"
+        property color link: "#A7C9FC"
     }
     colors: QtObject {
         id: colors
@@ -110,6 +112,7 @@ Singleton {
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
         property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
+        property color link: root.dark ? root.darkColors.link : root.lightColors.link
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
         property color warning: "#FF9900"
