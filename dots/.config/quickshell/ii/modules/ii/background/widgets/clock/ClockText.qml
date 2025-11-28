@@ -10,6 +10,7 @@ StyledText {
         family: Appearance.font.family.expressive
         pixelSize: 20
         weight: 350
+        variableAxes: ({})
     }
     color: root.colText
     style: Text.Raised
