@@ -3,23 +3,24 @@
   description = "illogical-impulse";
 
   inputs = {
-    # Qt 6.10 is not yet available from released version of nixpkgs.
-    #nixpkgs.url = "nixpkgs/nixos-25.05";
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-25.11";
+    #nixpkgs.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
-      #url = "github:nix-community/home-manager/release-25.05";
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.11";
+      #url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixgl.url = "github:nix-community/nixGL";
+    #nixgl.url = "github:nix-community/nixGL";
     quickshell = {
       url = "github:quickshell-mirror/quickshell/db1777c20b936a86528c1095cbcb1ebd92801402";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, home-manager, nixgl, quickshell, ... }:
+  outputs = { nixpkgs, home-manager, 
+  #nixgl,
+  quickshell, ... }:
     let
       home_attrs = rec {
         username = import ./username.nix;
@@ -36,7 +37,9 @@
       homeConfigurations = {
         illogical_impulse = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit home_attrs nixgl quickshell; };
+          extraSpecialArgs = { inherit home_attrs 
+          #nixgl
+          quickshell; };
           modules = [ 
             ./home.nix
           ];
