@@ -16,7 +16,7 @@ Text {
         hintingPreference: Font.PreferDefaultHinting
         family: defaultFont
         pixelSize: Appearance?.font.pixelSize.small ?? 15
-        //variableAxes: shouldUseNumberFont ? ({}) : Appearance.font.variableAxes.main
+        //variableAxes: shouldUseNumberFont ? ({}) : Appearance.font.variableAxes.main // Disabled for now because it causes some fonts to not display their weight properly
     }
     color: Appearance?.m3colors.m3onBackground ?? "black"
     linkColor: Appearance?.m3colors.m3primary

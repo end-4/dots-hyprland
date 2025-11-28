@@ -54,19 +54,11 @@ ColumnLayout {
         Layout.topMargin: clockColumn.isVertical ? -10 : 0
         text: DateTime.longDate
     }
-    StyledText {
-        // Somehow gets fucked up if made a ClockText???
+    ClockText {
         visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
-        Layout.fillWidth: true
-        horizontalAlignment: root.textHorizontalAlignment
-        font {
-            pixelSize: Appearance.font.pixelSize.normal
-            weight: 350
-        }
-        color: root.colText
-        style: Text.Raised
-        styleColor: Appearance.colors.colShadow
+        font.pixelSize: Appearance.font.pixelSize.normal
         text: Config.options.background.widgets.clock.quote.text
+        animateChange: false
     }
 }
 
