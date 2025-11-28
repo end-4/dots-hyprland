@@ -181,6 +181,7 @@ packages = [
   "hyprpicker",
   "songrec",
   "translate-shell",
+  "qalculate",
   "wlogout"
 ]
 
