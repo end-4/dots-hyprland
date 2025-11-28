@@ -181,6 +181,7 @@ packages = [
   "hyprpicker",
   "songrec",
   "translate-shell",
+  "qalculate",
   "wlogout"
 ]
 
@@ -192,3 +193,4 @@ packages = [
   "unzip"
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
+

@@ -278,6 +278,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementMoveEnter.duration
                     easing.type: root.animation.elementMoveEnter.type
                     easing.bezierCurve: root.animation.elementMoveEnter.bezierCurve
@@ -292,6 +293,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementMoveExit.duration
                     easing.type: root.animation.elementMoveExit.type
                     easing.bezierCurve: root.animation.elementMoveExit.bezierCurve
@@ -310,9 +312,10 @@ Singleton {
                 easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
             property Component numberAnimation: Component { NumberAnimation {
-                    duration: root.animation.elementMoveFast.duration
-                    easing.type: root.animation.elementMoveFast.type
-                    easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
+                alwaysRunToEnd: true
+                duration: root.animation.elementMoveFast.duration
+                easing.type: root.animation.elementMoveFast.type
+                easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
         }
 
@@ -323,6 +326,7 @@ Singleton {
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
+                    alwaysRunToEnd: true
                     duration: root.animation.elementResize.duration
                     easing.type: root.animation.elementResize.type
                     easing.bezierCurve: root.animation.elementResize.bezierCurve
@@ -336,9 +340,10 @@ Singleton {
             property list<real> bezierCurve: animationCurves.expressiveDefaultSpatial
             property int velocity: 850
             property Component numberAnimation: Component { NumberAnimation {
-                    duration: root.animation.clickBounce.duration
-                    easing.type: root.animation.clickBounce.type
-                    easing.bezierCurve: root.animation.clickBounce.bezierCurve
+                alwaysRunToEnd: true
+                duration: root.animation.clickBounce.duration
+                easing.type: root.animation.clickBounce.type
+                easing.bezierCurve: root.animation.clickBounce.bezierCurve
             }}
         }
         

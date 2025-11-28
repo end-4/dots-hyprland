@@ -283,6 +283,10 @@ Singleton {
                 property int suspend: 3
             }
 
+            property JsonObject calendar: JsonObject {
+                property string locale: "en-GB"
+            }
+
             property JsonObject cheatsheet: JsonObject {
                 // Use a nerdfont to see the icons
                 // 0: 󰖳  | 1: 󰌽 | 2: 󰘳 | 3:  | 4: 󰨡
@@ -586,7 +590,7 @@ Singleton {
             }
 
             property JsonObject waffles: JsonObject {
-                // Animations on Windoes are kinda janky. Setting the following to
+                // Some spots are kinda janky/awkward. Setting the following to
                 // false will make (some) stuff also be like that for accuracy. 
                 // Example: the right-click menu of the Start button
                 property JsonObject tweaks: JsonObject {
@@ -599,6 +603,9 @@ Singleton {
                 }
                 property JsonObject actionCenter: JsonObject {
                     property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "nightLight", "darkMode", "antiFlashbang", "cloudflareWarp", "mic", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "screenSnip", "colorPicker" ]
+                }
+                property JsonObject calendar: JsonObject {
+                    property bool force2CharDayOfWeek: true
                 }
             }
             property JsonObject unsplash: JsonObject {  
