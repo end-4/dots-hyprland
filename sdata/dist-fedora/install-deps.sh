@@ -34,7 +34,7 @@ v sudo dnf versionlock delete quickshell-git 2>/dev/null
 v sudo dnf install yq -y
 
 # Development-tools
-r v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros qt6-rpm-macros -y
+r v sudo dnf install @development-tools fedora-packager -y
 
 # COPR repositories
 v sudo dnf copr enable ririko66z/dots-hyprland -y
