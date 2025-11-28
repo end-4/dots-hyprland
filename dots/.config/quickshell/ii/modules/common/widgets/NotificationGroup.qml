@@ -1,7 +1,6 @@
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
-import "notification_utils.js" as NotificationUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -136,7 +135,7 @@ MouseArea { // Notification group area
         }
         
         clip: true
-        implicitHeight: expanded ? 
+        implicitHeight: root.expanded ? 
             row.implicitHeight + padding * 2 :
             Math.min(80, row.implicitHeight + padding * 2)
 
@@ -157,8 +156,8 @@ MouseArea { // Notification group area
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
                 image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
-                appIcon: notificationGroup?.appIcon
-                summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
+                appIcon: root.notificationGroup?.appIcon
+                summary: root.notificationGroup?.notifications[root.notificationCount - 1]?.summary
                 urgency: root.notifications.some(n => n.urgency === NotificationUrgency.Critical.toString()) ? 
                     NotificationUrgency.Critical : NotificationUrgency.Normal
             }

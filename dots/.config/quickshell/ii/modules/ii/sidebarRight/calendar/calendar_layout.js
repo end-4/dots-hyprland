@@ -74,7 +74,7 @@ function getCalendarLayout(dateObject, highlight) {
     // Fill
     var monthDiff = (weekdayOfMonthFirst == 0 ? 0 : -1);
     var toFill, dim;
-    if(weekdayOfMonthFirst == 0) {
+    if (weekdayOfMonthFirst == 0) {
         toFill = 1;
         dim = daysInMonth;
     }
@@ -88,8 +88,7 @@ function getCalendarLayout(dateObject, highlight) {
         calendar[i][j] = {
             "day": toFill,
             "today": ((toFill == day && monthDiff == 0 && highlight) ? 1 : (
-                monthDiff == 0 ? 0 :
-                    -1
+                monthDiff == 0 ? 0 : -1
             ))
         };
         // Increment
@@ -112,4 +111,3 @@ function getCalendarLayout(dateObject, highlight) {
     }
     return calendar;
 }
-
