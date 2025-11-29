@@ -7,6 +7,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.waffle.looks
 
+// TODO: Replace the icon with QMLized svg (with /usr/lib/qt6/bin/svgtoqml) for proper micro-animation
 AppButton {
     id: root
 

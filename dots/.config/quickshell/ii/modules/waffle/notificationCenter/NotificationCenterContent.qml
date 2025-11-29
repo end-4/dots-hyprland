@@ -20,6 +20,7 @@ WBarAttachedPanelContent {
     property bool collapsed: false
 
     contentItem: ColumnLayout {
+        id: contentLayout
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
@@ -41,9 +42,24 @@ WBarAttachedPanelContent {
                 }
                 contentItem: NotificationPaneContent {
                     implicitWidth: calendarColumnLayout.implicitWidth
-                    implicitHeight: Notifications.list.length > 0 ? (notificationArea.height - notificationPane.borderWidth * 2) : 230
+                    implicitHeight: {
+                        if (Notifications.list.length > 0) {
+                            return ((contentLayout.height - calendarPane.height - contentLayout.spacing) - notificationPane.borderWidth * 2)
+                        }
+                        return 230;
+                    }
                     
+                    Timer {
+                        id: enableTimer
+                        interval: Config.options.hacks.arbitraryRaceConditionDelay
+                        onTriggered: heightBehavior.enabled = true;
+                    }
                     Behavior on implicitHeight {
+                        id: heightBehavior
+                        enabled: false
+                        Component.onCompleted: {
+                            enableTimer.restart();
+                        }
                         animation: Looks.transition.enter.createObject(this)
                     }
                 }
@@ -51,6 +67,7 @@ WBarAttachedPanelContent {
         }
 
         WPane {
+            id: calendarPane
             contentItem: ColumnLayout {
                 id: calendarColumnLayout
                 spacing: 0

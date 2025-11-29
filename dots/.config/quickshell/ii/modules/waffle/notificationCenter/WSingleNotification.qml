@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -41,52 +42,115 @@ MouseArea {
             anchors.margins: contentItem.padding
             spacing: 19
 
-            RowLayout {
+            // Header
+            SingleNotificationHeader {
                 Layout.fillWidth: true
+            }
 
-                ExpandButton {
-                    Layout.topMargin: -2
+            // Content
+            Item {
+                id: actualContent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                property real spacing: 16
+                implicitHeight: Math.max(contentColumn.implicitHeight, imageLoader.height)
+                implicitWidth: contentColumn.implicitWidth
+
+                Loader {
+                    id: imageLoader
+                    active: root.notification.image != ""
+                    sourceComponent: StyledImage {
+                        width: 48
+                        height: 48
+                        sourceSize.width: width
+                        sourceSize.height: height
+                        source: root.notification.image
+                    }
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
+                ColumnLayout {
+                    id: contentColumn
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                    }
+                    spacing: 3
 
-                NotificationHeaderButton {
-                    Layout.rightMargin: 4
-                    opacity: root.containsMouse ? 1 : 0
-                    icon.name: "dismiss"
-                    implicitSize: 12
-                    onClicked: {
-                        Qt.callLater(() => {
-                            Notifications.discardNotification(root.notification?.notificationId);
-                        });
+                    SummaryText {
+                        id: summaryText
+                        Layout.leftMargin: imageLoader.active ? imageLoader.width + actualContent.spacing : 0
+                    }
+                    BodyText {
+                        Layout.leftMargin: imageLoader.active ? imageLoader.width + actualContent.spacing : 0
+                        // onLineLaidOut: (line) => {
+                        //     if (!imageLoader.active) return;
+                        //     const dodgeDistance = imageLoader.width + actualContent.spacing;
+                        //     // print(line.y, dodgeDistance)
+                        //     if (summaryText.height + line.y > dodgeDistance) {
+                        //         line.x -= dodgeDistance;
+                        //         line.width += dodgeDistance;
+                        //     }
+                        // }
                     }
                 }
             }
 
-            ColumnLayout {
+            // Actions
+            ActionsRow {
                 Layout.fillWidth: true
-                spacing: 3
-
-                SummaryText {}
-                BodyText {}
             }
 
-            AcrylicButton {
-                id: groupExpandButton
-                visible: root.groupExpandControlMessage !== ""
+            // "+1 notifications" button
+            GroupExpandButton {
                 Layout.bottomMargin: 2
-                horizontalPadding: 10
-                implicitHeight: 24
-                implicitWidth: expandButtonText.implicitWidth + horizontalPadding * 2
-                onClicked: root.groupExpandToggle()
-                contentItem: Item {
-                    WText {
-                        id: expandButtonText
-                        anchors.centerIn: parent
-                        text: root.groupExpandControlMessage
-                    }
+            }
+        }
+    }
+
+    component SingleNotificationHeader: RowLayout {
+        ExpandButton {
+            Layout.topMargin: -2
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        NotificationHeaderButton {
+            Layout.rightMargin: 4
+            opacity: root.containsMouse ? 1 : 0
+            icon.name: "dismiss"
+            implicitSize: 12
+            onClicked: {
+                Qt.callLater(() => {
+                    Notifications.discardNotification(root.notification?.notificationId);
+                });
+            }
+        }
+    }
+
+    component ActionsRow: RowLayout {
+        visible: root.expanded && root.notification.actions.length > 0
+        uniformCellSizes: true
+        Repeater {
+            id: actionRepeater
+            model: root.notification.actions
+            delegate: WBorderedButton {
+                id: actionButton
+                Layout.fillHeight: true
+                required property var modelData
+                Layout.fillWidth: true
+                verticalPadding: 16
+                horizontalPadding: 12
+                text: modelData.text
+                implicitHeight: actionButtonText.implicitHeight + verticalPadding * 2
+                contentItem: WText {
+                    id: actionButtonText
+                    text: actionButton.text
+                    font.pixelSize: Looks.font.pixelSize.large
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
                 }
             }
         }
@@ -106,8 +170,17 @@ MouseArea {
         verticalAlignment: Text.AlignTop
         wrapMode: Text.Wrap
         maximumLineCount: root.expanded ? 100 : 1
-        text: root.notification?.body
+        text: {
+            if (root.expanded)
+                return `<style>img{max-width:${summaryText.width}px; align: right}</style>` + `${NotificationUtils.processNotificationBody(root.notification.body, root.notification.appName || root.notification.summary).replace(/\n/g, "<br/>")}`;
+            return NotificationUtils.processNotificationBody(root.notification.body, root.notification.appName || root.notification.summary).replace(/\n/g, "<br/>");
+        }
         color: Looks.colors.subfg
+        textFormat: root.expanded ? Text.RichText : Text.StyledText
+        onLinkActivated: link => {
+            Qt.openUrlExternally(link);
+            GlobalStates.sidebarRightOpen = false;
+        }
     }
 
     component ExpandButton: NotificationHeaderButton {
@@ -137,6 +210,22 @@ MouseArea {
                         animation: Looks.transition.rotate.createObject(this)
                     }
                 }
+            }
+        }
+    }
+
+    component GroupExpandButton: AcrylicButton {
+        id: groupExpandButton
+        visible: root.groupExpandControlMessage !== ""
+        horizontalPadding: 10
+        implicitHeight: 24
+        implicitWidth: expandButtonText.implicitWidth + horizontalPadding * 2
+        onClicked: root.groupExpandToggle()
+        contentItem: Item {
+            WText {
+                id: expandButtonText
+                anchors.centerIn: parent
+                text: root.groupExpandControlMessage
             }
         }
     }
