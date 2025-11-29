@@ -225,7 +225,7 @@ ContentPage {
                 }
             }
             ConfigSlider {
-                text: Translation.tr("Font Width")
+                text: Translation.tr("Font width")
                 value: Config.options.background.widgets.clock.digital.font.width
                 usePercentTooltip: false
                 buttonIcon: "fit_width"
@@ -236,7 +236,7 @@ ContentPage {
                 }
             }
             ConfigSlider {
-                text: Translation.tr("Font Size")
+                text: Translation.tr("Font size")
                 value: Config.options.background.widgets.clock.digital.font.size
                 usePercentTooltip: false
                 buttonIcon: "format_size"
