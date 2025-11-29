@@ -14,8 +14,9 @@ AppButton {
     leftInset: Config.options.waffles.bar.leftAlignApps ? 12 : 0
     iconName: down ? "start-here-pressed" : "start-here"
 
+    checked: GlobalStates.searchOpen
     onClicked: {
-        GlobalStates.overviewOpen = !GlobalStates.overviewOpen; // For now...
+        GlobalStates.searchOpen = !GlobalStates.searchOpen;
     }
 
     BarToolTip {

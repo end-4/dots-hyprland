@@ -13,7 +13,7 @@ MouseArea {
     id: root
 
     required property var notification
-    property bool expanded: false
+    property bool expanded: notification.actions.length > 0
     property string groupExpandControlMessage: ""
     signal groupExpandToggle
     hoverEnabled: true
@@ -58,13 +58,19 @@ MouseArea {
 
                 Loader {
                     id: imageLoader
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                    }
                     active: root.notification.image != ""
                     sourceComponent: StyledImage {
-                        width: 48
-                        height: 48
-                        sourceSize.width: width
-                        sourceSize.height: height
+                        readonly property int size: 48
+                        width: size
+                        height: size
+                        sourceSize.width: size
+                        sourceSize.height: size
                         source: root.notification.image
+                        fillMode: Image.PreserveAspectFit
                     }
                 }
 

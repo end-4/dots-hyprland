@@ -23,10 +23,10 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="6.5849319"
-     inkscape:cx="26.95548"
+     inkscape:cx="27.031411"
      inkscape:cy="26.423963"
-     inkscape:window-width="1257"
-     inkscape:window-height="1020"
+     inkscape:window-width="1621"
+     inkscape:window-height="820"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -35,10 +35,10 @@
      id="defs2">
     <linearGradient
        id="linearGradient919"
-       x1="4.3106"
-       x2="14.36"
-       y1="8.4665"
-       y2="8.4665"
+       x1="4.4818139"
+       x2="14.188786"
+       y1="7.1660118"
+       y2="9.7669868"
        gradientTransform="matrix(1.226575,0,0,1.226575,-0.82407803,-6.4497629)"
        gradientUnits="userSpaceOnUse">
       <stop
@@ -48,7 +48,7 @@
          style="stop-color:#5fe277;stop-opacity:1;" />
       <stop
          stop-color="#55b4ff"
-         offset="1"
+         offset="0.40380999"
          id="stop2"
          style="stop-color:#0078d3;stop-opacity:1;" />
     </linearGradient>

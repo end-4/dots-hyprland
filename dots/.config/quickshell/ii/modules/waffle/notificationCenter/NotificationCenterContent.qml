@@ -68,9 +68,8 @@ WBarAttachedPanelContent {
 
         WPane {
             id: calendarPane
-            contentItem: ColumnLayout {
+            contentItem: WPanelPageColumn {
                 id: calendarColumnLayout
-                spacing: 0
                 DateHeader {
                     Layout.fillWidth: true
                     Synchronizer on collapsed {

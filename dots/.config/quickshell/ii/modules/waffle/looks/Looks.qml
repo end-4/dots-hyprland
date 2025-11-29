@@ -54,6 +54,7 @@ Singleton {
         property color controlFg: "#FFFFFF"
         property color accentUnfocused: "#848484"
         property color link: "#235CCF"
+        property color inputBg: ColorUtils.transparentize(bg0, 0.4)
     }
     darkColors: QtObject {
         id: darkColors
@@ -71,7 +72,7 @@ Singleton {
         property color bg2: '#8a8a8a'
         property color bg2Hover: '#b1b1b1'
         property color bg2Active: '#919191'
-        property color bg2Border: '#c4c4c4'
+        property color bg2Border: '#bdbdbd'
         property color subfg: "#CED1D7"
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"
@@ -82,6 +83,7 @@ Singleton {
         property color controlFg: "#454545"
         property color accentUnfocused: "#989898"
         property color link: "#A7C9FC"
+        property color inputBg: ColorUtils.transparentize(darkColors.bg0, 0.5)
     }
     colors: QtObject {
         id: colors
@@ -112,6 +114,7 @@ Singleton {
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
         property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
+        property color inputBg: root.dark ? root.darkColors.inputBg : root.lightColors.inputBg
         property color link: root.dark ? root.darkColors.link : root.lightColors.link
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
@@ -121,6 +124,7 @@ Singleton {
         property color accentActive: Appearance.colors.colPrimaryActive
         property color accentUnfocused: root.dark ? root.darkColors.accentUnfocused : root.lightColors.accentUnfocused
         property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
+        property color selection: Appearance.colors.colPrimaryContainer
     }
 
     radius: QtObject {
