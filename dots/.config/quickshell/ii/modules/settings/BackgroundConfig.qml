@@ -215,24 +215,35 @@ ContentPage {
             }
             ConfigSlider {
                 text: Translation.tr("Font weight")
-                value: Config.options.background.widgets.clock.digital.weight
+                value: Config.options.background.widgets.clock.digital.font.weight
                 usePercentTooltip: false
                 buttonIcon: "format_bold"
                 from: 1
                 to: 1000
                 onValueChanged: {
-                    Config.options.background.widgets.clock.digital.weight = value;
+                    Config.options.background.widgets.clock.digital.font.weight = value;
+                }
+            }
+            ConfigSlider {
+                text: Translation.tr("Font Width")
+                value: Config.options.background.widgets.clock.digital.font.width
+                usePercentTooltip: false
+                buttonIcon: "fit_width"
+                from: 25
+                to: 125
+                onValueChanged: {
+                    Config.options.background.widgets.clock.digital.font.width = value;
                 }
             }
             ConfigSlider {
                 text: Translation.tr("Font Size")
-                value: Config.options.background.widgets.clock.digital.size
+                value: Config.options.background.widgets.clock.digital.font.size
                 usePercentTooltip: false
                 buttonIcon: "format_size"
                 from: 70
                 to: 150
                 onValueChanged: {
-                    Config.options.background.widgets.clock.digital.size = value;
+                    Config.options.background.widgets.clock.digital.font.size = value;
                 }
             }
         }

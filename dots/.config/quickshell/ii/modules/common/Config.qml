@@ -190,8 +190,11 @@ Singleton {
                             property bool showDate: true
                             property bool animateChange: true
                             property bool vertical: false
-                            property real weight: 350
-                            property real size: 90
+                            property JsonObject font: JsonObject {
+                                property real weight: 350
+                                property real width: 100
+                                property real size: 90
+                            }
                         }
                         property JsonObject quote: JsonObject {
                             property bool enable: false

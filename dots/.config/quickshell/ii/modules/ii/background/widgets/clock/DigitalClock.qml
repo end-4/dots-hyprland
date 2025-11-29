@@ -29,8 +29,11 @@ ColumnLayout {
                 horizontalCenter: parent.horizontalCenter
             }
             font {
-                pixelSize: Config.options.background.widgets.clock.digital.size
-                weight: Config.options.background.widgets.clock.digital.weight
+                pixelSize: Config.options.background.widgets.clock.digital.font.size
+                weight: Config.options.background.widgets.clock.digital.font.weight
+                variableAxes: ({
+                    "wdth": Config.options.background.widgets.clock.digital.font.width,
+                })
             }
         }
         ClockText {
@@ -43,8 +46,11 @@ ColumnLayout {
                 horizontalCenter: parent.horizontalCenter
             }
             font {
-                pixelSize: Config.options.background.widgets.clock.digital.size
-                weight: Config.options.background.widgets.clock.digital.weight
+                pixelSize: Config.options.background.widgets.clock.digital.font.size
+                weight: Config.options.background.widgets.clock.digital.font.weight
+                variableAxes: ({
+                    "wdth": Config.options.background.widgets.clock.digital.font.width,
+                })
             }
         }
     }
