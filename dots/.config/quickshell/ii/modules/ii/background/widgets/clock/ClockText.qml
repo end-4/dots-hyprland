@@ -11,6 +11,7 @@ StyledText {
         pixelSize: 20
         weight: 350
         variableAxes: ({})
+        styleName: ""
     }
     color: root.colText
     style: Text.Raised
