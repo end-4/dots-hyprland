@@ -12,6 +12,7 @@ MouseArea {
 
     required property var notificationGroup
     readonly property var notifications: notificationGroup?.notifications ?? []
+    property bool expanded: false
 
     implicitWidth: contentLayout.implicitWidth
     implicitHeight: contentLayout.implicitHeight
@@ -34,12 +35,23 @@ MouseArea {
             interactive: false
             spacing: 4
             model: ScriptModel {
-                values: root.notifications.slice().reverse()
+                values: root.expanded ? root.notifications.slice().reverse() : root.notifications.slice(-1)
+                objectProp: "notificationId"
             }
             delegate: WSingleNotification {
+                required property int index
                 required property var modelData
                 width: ListView.view.width
                 notification: modelData
+                groupExpandControlMessage: {
+                    if (root.notifications.length <= 1) return "";
+                    if (!root.expanded) return Translation.tr("+%1 notifications").arg(root.notifications.length - 1);
+                    if (index === root.notifications.length - 1) return Translation.tr("See fewer");
+                    return "";
+                }
+                onGroupExpandToggle: {
+                    root.expanded = !root.expanded;
+                }
             }
         }
     }

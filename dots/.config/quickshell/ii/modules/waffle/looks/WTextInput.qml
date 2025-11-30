@@ -1,8 +1,8 @@
 import QtQuick
+import QtQuick.Controls
 
-Text {
+TextInput {
     id: root
-
     renderType: Text.NativeRendering
     verticalAlignment: Text.AlignVCenter
     color: Looks.colors.fg
@@ -10,9 +10,9 @@ Text {
     font {
         hintingPreference: Font.PreferFullHinting
         family: Looks.font.family.ui
-        pixelSize: Looks.font.pixelSize.normal
+        pixelSize: Looks.font.pixelSize.large
         weight: Looks.font.weight.regular
     }
 
-    linkColor: Looks.colors.link
+    selectionColor: Looks.colors.selection
 }
