@@ -53,6 +53,9 @@ Singleton {
                         ? "signal_wifi_off"
                         : "signal_wifi_bad"
 
+    property bool vpnEnabled: false
+    readonly property list<VpnConnection> vpnConnections: []
+
     // Control
     function enableWifi(enabled = true): void {
         const cmd = enabled ? "on" : "off";
@@ -93,6 +96,26 @@ Singleton {
             },
             "command": ["bash", "-c", `nmcli connection modify ${network.ssid} wifi-sec.psk "$PASSWORD"`]
         })
+    }
+
+    function updateVpnList(): void {
+        getVpnConnections.running = true;
+    }
+
+    function toggleVpnConnection(connectionName: string, isActive: bool): void {
+        if (isActive) {
+            disconnectProc.exec(["nmcli", "connection", "down", connectionName]);
+        } else {
+            connectProc.exec(["nmcli", "connection", "up", connectionName]);
+        }
+        updateVpnTimer.restart();
+        updateVpnList();
+    }
+
+    Timer {
+        id: updateVpnTimer
+        interval: 2000
+        onTriggered: updateVpnList()
     }
 
     Process {
@@ -321,6 +344,65 @@ Singleton {
                 }
             }
         }
+    }
+
+    Process {
+        id: getVpnConnections
+        command: ["nmcli", "-t", "-f", "NAME,TYPE,DEVICE,STATE", "connection", "show"]
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const connections = text.trim().split('\n');
+                const vpnConnections = [];
+                
+                for (let i = 0; i < connections.length; i++) {
+                    const connection = connections[i].split(':');
+                    if (connection.length >= 4 && (connection[1] === "vpn" || connection[1] === "wireguard")) {
+                        vpnConnections.push({
+                            name: connection[0],
+                            type: connection[1],
+                            device: connection[2],
+                            state: connection[3],
+                            isActive: connection[3] === "activated"
+                        });
+                    }
+                }
+
+                const rConnections = root.vpnConnections;
+
+                // remove non-existing
+                for (let i = rConnections.length - 1; i >= 0; i--) {
+                    const existingConn = rConnections[i];
+                    const stillExists = vpnConnections.find(vc => vc.name === existingConn.name);
+                    if (!stillExists) {
+                        rConnections.splice(i, 1)[0].destroy();
+                    }
+                }
+
+                // update existing, add new
+                for (const connectionData of vpnConnections) {
+                    let existingConn = rConnections.find(c => c.name === connectionData.name);
+                    if (existingConn) {
+                        existingConn.updateFromObject(connectionData);
+                    } else {
+                        var newConn = vpnComp.createObject(root, {});
+                        newConn.updateFromObject(connectionData);
+                        rConnections.push(newConn);
+                    }
+                }
+
+                root.vpnEnabled = vpnConnections.filter(n => n.isActive).length > 0;
+            }
+        }
+    }
+
+    Component {
+        id: vpnComp
+
+        VpnConnection {}
     }
 
     Component {
