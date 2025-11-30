@@ -21,6 +21,7 @@ RDEPEND="
 	app-misc/songrec
 	app-i18n/translate-shell
 	gui-apps/wlogout
+	sci-libs/libqalculate
 "
 ##### CUSTOM EBUILDS
 # app-misc/songrec
