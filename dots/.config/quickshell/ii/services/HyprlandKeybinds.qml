@@ -22,7 +22,8 @@ Singleton {
     property var keybinds: ({
         children: [
             ...(defaultKeybinds.children ?? []),
-            ...(userKeybinds.children ?? []),
+            // Honor the user's preference to hide their custom keybinds
+            ...(Config.options.cheatsheet && Config.options.cheatsheet.hideUserKeybinds ? [] : (userKeybinds.children ?? [])),
         ]
     })
 
