@@ -36,7 +36,7 @@ link=$(echo "$response" | jq ".backgrounds[$randomIndex].url" -r)
 ext=$(echo "$link" | awk -F. '{print $NF}')
 illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
 currentWallpaperPath=$(jq -r '.background.wallpaperPath' $illogicalImpulseConfigPath)
-downloadName="$(basename "$link" | sed "s/%20/ /g")"
+downloadName="$(python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))" "$(basename $link)")"
 if [ "$#" -ge 2 ]; then
     downloadName="$2.$ext"
     if [ "${1%/}/$downloadName" == "$currentWallpaperPath" ]; then
