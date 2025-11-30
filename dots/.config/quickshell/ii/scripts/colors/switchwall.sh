@@ -32,6 +32,7 @@ handle_kde_material_you_colors() {
             ;;
     esac
     "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
+    "$XDG_CONFIG_HOME"/matugen/templates/kde/qtct-wrapper.sh
 }
 
 pre_process() {
