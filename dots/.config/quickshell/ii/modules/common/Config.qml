@@ -300,6 +300,7 @@ Singleton {
                     property int key: Appearance.font.pixelSize.smaller
                     property int comment: Appearance.font.pixelSize.smaller
                 }
+                property bool hideUserKeybinds: false
             }
 
             property JsonObject conflictKiller: JsonObject {

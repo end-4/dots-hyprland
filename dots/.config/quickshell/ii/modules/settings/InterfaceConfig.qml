@@ -78,6 +78,18 @@ ContentPage {
 
         }
 
+        ConfigSwitch {
+            buttonIcon: "person"
+            text: Translation.tr("Hide user keybinds")
+            checked: Config.options.cheatsheet.hideUserKeybinds
+            onCheckedChanged: {
+                Config.options.cheatsheet.hideUserKeybinds = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("When enabled, keybinds from your personal/custom Hyprland keybinds file will be hidden from the cheatsheet.")
+            }
+        }
+
         ConfigSpinBox {
             text: Translation.tr("Keybind font size")
             value: Config.options.cheatsheet.fontSize.key
