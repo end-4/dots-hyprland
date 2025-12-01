@@ -7,6 +7,7 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.waffle.looks
 
+// TODO: Swipe to dismiss
 MouseArea {
     id: root
 

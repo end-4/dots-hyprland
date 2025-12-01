@@ -25,6 +25,8 @@ StyledToolTip {
     verticalPadding: 8
     horizontalPadding: 10
 
+    delay: 400
+
     contentItem: WToolTipContent {
         id: tooltipContent
         realContentItem: root.realContentItem
