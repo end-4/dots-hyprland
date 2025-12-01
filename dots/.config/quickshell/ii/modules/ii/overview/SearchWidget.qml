@@ -152,7 +152,7 @@ Item { // Wrapper
             return;
 
         // Add Emacs navigation in search results
-        if (event.modifiers & Qt.ControlModifier) {
+        if (event.modifiers & Qt.ControlModifier & Config.options.interactions.searchWidget.rofiStyleNavigation) {
             switch (event.key) {
                 case Qt.Key_N:
                     if (appResults.count > 0 && appResults.currentIndex < appResults.count - 1) {
@@ -271,7 +271,7 @@ Item { // Wrapper
             Connections {
                 target: searchBar.searchInput
                 function onActiveFocusChanged() {
-                    if (searchBar.searchInput.activeFocus) {
+                    if (searchBar.searchInput.activeFocus & Config.options.interactions.searchWidget.rofiStyleNavigation) {
                         searchBar.searchInput.Keys.pressed.connect(handleSearchKeys);
                     }
                 }
@@ -307,8 +307,10 @@ Item { // Wrapper
                                 break;
 
                             case Qt.Key_A:
-                                event.accepted = true;
-                                searchBar.searchInput.cursorPosition = 0;
+			        if (Config.options.interactions.searchWidget.ctrlAAsHome) {
+                                    event.accepted = true;
+                                    searchBar.searchInput.cursorPosition = 0;
+				}
                                 break;
 
                             case Qt.Key_K:

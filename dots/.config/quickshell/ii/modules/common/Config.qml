@@ -334,6 +334,10 @@ Singleton {
                 property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
                     property bool enable: false
                 }
+                property JsonObject searchWidget: JsonObject {
+                    property bool rofiStyleNavigation: true // Use Ctrl+N, Ctrl+P and the other hotkeys to mimic Rofi navigation style
+                    property bool ctrlAAsHome: false // Use Ctrl+A as "move cursor to the beginning" for search bar
+                }
             }
 
             property JsonObject language: JsonObject {
