@@ -151,7 +151,7 @@ Item { // Wrapper
         if (event.key === Qt.Key_Escape)
             return;
 
-        // Add Emacs navigation in search results
+        // Add Rofi navigation in search results
         if (event.modifiers & Qt.ControlModifier & Config.options.interactions.searchWidget.rofiStyleNavigation) {
             switch (event.key) {
                 case Qt.Key_N:
@@ -267,7 +267,7 @@ Item { // Wrapper
                 }
             }
 
-            // Add Emacs navigation & editing inside search box
+            // Add Rofi navigation & editing inside search box
             Connections {
                 target: searchBar.searchInput
                 function onActiveFocusChanged() {
