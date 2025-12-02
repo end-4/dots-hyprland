@@ -29,6 +29,10 @@ StyledFlickable {
     property int cpuCores: 0
     property string cpuName: "Detecting..."
 
+    // GPU properties
+    property var gpuList: []
+    property int selectedGpuIndex: 0
+    
     readonly property int historyLength: 60
     property list<real> cpuHistory: []
     property list<real> memHistory: []
@@ -69,13 +73,100 @@ StyledFlickable {
         }
     }
 
+    // GPU Discovery
+    property string gpuDiscoveryBuffer: ""
+    Process {
+        id: gpuDiscovery
+        command: ["bash", "-c", "lspci -mm | grep -E 'VGA|3D|Display'"]
+        running: true
+        stdout: SplitParser {
+            onRead: data => root.gpuDiscoveryBuffer += data + "\n"
+        }
+        onExited: (exitCode, exitStatus) => {
+            var lines = root.gpuDiscoveryBuffer.trim().split("\n")
+            var gpus = []
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i]
+                if (!line) continue
+                
+                // Parse lspci -mm output
+                // Format: Slot "Class" "Vendor" "Device" ...
+                // Example: 00:02.0 "Display controller" "Intel Corporation" "Raptor Lake-P [UHD Graphics]" ...
+                var parts = line.split('"')
+                if (parts.length >= 6) {
+                    var busId = parts[0].trim()
+                    var vendor = parts[3]
+                    var device = parts[5]
+                    var type = "other"
+                    
+                    if (vendor.toLowerCase().includes("nvidia")) type = "nvidia"
+                    else if (vendor.toLowerCase().includes("intel")) type = "intel"
+                    else if (vendor.toLowerCase().includes("amd") || vendor.toLowerCase().includes("ati")) type = "amd"
+                    
+                    gpus.push({
+                        name: device,
+                        vendor: vendor,
+                        type: type,
+                        busId: busId,
+                        index: gpus.length
+                    })
+                }
+            }
+            
+            // Sort GPUs: NVIDIA first, then others
+            gpus.sort((a, b) => {
+                if (a.type === "nvidia" && b.type !== "nvidia") return -1
+                if (a.type !== "nvidia" && b.type === "nvidia") return 1
+                return 0
+            })
+            
+            // Reassign indices after sort
+            for (var j = 0; j < gpus.length; j++) {
+                gpus[j].index = j
+            }
+            
+            root.gpuList = gpus
+            if (gpus.length > 0) {
+                root.selectedGpuIndex = 0
+                gpuProc.updateCommand()
+            }
+        }
+    }
+
+    onSelectedGpuIndexChanged: gpuProc.updateCommand()
+
     // GPU monitoring
     Process {
         id: gpuProc
-        command: ["bash", "-c", "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total,name --format=csv,noheader,nounits 2>/dev/null || echo '0,0,1,No GPU'"]
+        command: [] 
+        
+        function updateCommand() {
+            if (root.gpuList.length === 0) return
+            var gpu = root.gpuList[root.selectedGpuIndex]
+            
+            if (gpu.type === "nvidia") {
+                // NVIDIA: Use nvidia-smi with bus ID
+                var pciId = "0000:" + gpu.busId
+                gpuProc.command = ["bash", "-c", "nvidia-smi --id=" + pciId + " --query-gpu=utilization.gpu,memory.used,memory.total,name --format=csv,noheader,nounits 2>/dev/null || echo '0,0,1,' + '" + gpu.name + "'"]
+            } else {
+                // Generic: Try /sys/class/drm
+                var pciId = "0000:" + gpu.busId
+                var cmd = "pci_path=\"/sys/bus/pci/devices/" + pciId + "/drm\"; " +
+                          "card=$(ls $pci_path 2>/dev/null | grep -E '^card[0-9]+$' | head -n1); " +
+                          "usage=0; mem_used=0; mem_total=1; " +
+                          "if [ ! -z \"$card\" ]; then " +
+                              "if [ -f \"$pci_path/$card/device/gpu_busy_percent\" ]; then " +
+                                  "usage=$(cat \"$pci_path/$card/device/gpu_busy_percent\"); " +
+                              "fi; " +
+                          "fi; " +
+                          "echo \"$usage,$mem_used,$mem_total," + gpu.name + "\""
+                gpuProc.command = ["bash", "-c", cmd]
+            }
+        }
+
         stdout: SplitParser {
             onRead: data => {
-                const parts = data.trim().split(", ")
+                const parts = data.trim().split(",")
                 if (parts.length >= 4) {
                     root.gpuUsage = parseFloat(parts[0]) || 0
                     root.gpuMemoryUsed = parseFloat(parts[1]) || 0
@@ -192,6 +283,14 @@ StyledFlickable {
                 subtitle: root.gpuName
                 history: root.gpuHistory
                 progressColor: Appearance.m3colors.m3primary
+                
+                pills: {
+                    var list = []
+                    for(var i=0; i<root.gpuList.length; i++) list.push("GPU " + i)
+                    return list
+                }
+                activePillIndex: root.selectedGpuIndex
+                onPillClicked: index => root.selectedGpuIndex = index
             }
 
             ResourceCard {

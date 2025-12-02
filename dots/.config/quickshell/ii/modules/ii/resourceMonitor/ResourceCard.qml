@@ -16,6 +16,10 @@ Rectangle {
     property list<real> history: []
     property bool showProgress: true
     property bool showGraph: true
+    
+    property var pills: []
+    property int activePillIndex: 0
+    signal pillClicked(int index)
 
     implicitHeight: 140
     radius: Appearance.rounding.normal
@@ -45,12 +49,43 @@ Rectangle {
 
             Item { Layout.fillWidth: true }
 
+            RowLayout {
+                visible: card.pills.length > 0
+                spacing: 4
+                
+                Repeater {
+                    model: card.pills
+                    delegate: Rectangle {
+                        height: 20
+                        width: pillText.implicitWidth + 16
+                        radius: 10
+                        color: index === card.activePillIndex ? card.progressColor : Appearance.colors.colLayer2
+                        
+                        StyledText {
+                            id: pillText
+                            anchors.centerIn: parent
+                            text: modelData
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: index === card.activePillIndex ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer2
+                        }
+                        
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: card.pillClicked(index)
+                            cursorShape: Qt.PointingHandCursor
+                        }
+                    }
+                }
+            }
+
             StyledText {
                 text: card.value
                 font.pixelSize: Appearance.font.pixelSize.larger
                 font.weight: Font.Bold
                 font.family: Appearance.font.family.numbers
                 color: Appearance.colors.colOnLayer1
+                Layout.minimumWidth: 60
+                horizontalAlignment: Text.AlignRight
             }
         }
 
