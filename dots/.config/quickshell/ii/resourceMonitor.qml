@@ -51,11 +51,14 @@ ApplicationWindow {
 
     property var processList: []
     property var processTree: []  // Hierarchical process list
+    property var groupedProcesses: []  // Grouped by name
     property var expandedPids: ({})  // Track which processes are expanded
+    property var expandedGroups: ({})  // Track which groups are expanded
     property string sortBy: "cpu"
     property bool sortAscending: false
     property string filterText: ""
     property int selectedPid: -1
+    property string selectedGroup: ""
 
     readonly property int historyLength: 60
     property list<real> cpuHistory: []
@@ -166,6 +169,110 @@ ApplicationWindow {
         }
     }
 
+    // Group processes by name
+    function groupByName(procs) {
+        var groups = {}
+        for (var i = 0; i < procs.length; i++) {
+            var p = procs[i]
+            if (!groups[p.name]) {
+                groups[p.name] = {
+                    name: p.name,
+                    processes: [],
+                    totalCpu: 0,
+                    totalMem: 0,
+                    isGroup: true
+                }
+            }
+            groups[p.name].processes.push(p)
+            groups[p.name].totalCpu += p.cpu
+            groups[p.name].totalMem += p.mem
+        }
+        
+        // Convert to array and sort
+        var result = []
+        for (var name in groups) {
+            result.push(groups[name])
+        }
+        
+        return result
+    }
+    
+    // Flatten grouped processes for display
+    function flattenGrouped(groups) {
+        var result = []
+        
+        // Sort groups
+        var sortedGroups = groups.slice()
+        sortedGroups.sort(function(a, b) {
+            var valA, valB
+            switch (sortBy) {
+                case "cpu": valA = a.totalCpu; valB = b.totalCpu; break
+                case "mem": valA = a.totalMem; valB = b.totalMem; break
+                case "name": valA = a.name.toLowerCase(); valB = b.name.toLowerCase(); break
+                default: valA = a.totalCpu; valB = b.totalCpu
+            }
+            if (sortAscending) return valA > valB ? 1 : -1
+            return valA < valB ? 1 : -1
+        })
+        
+        for (var i = 0; i < sortedGroups.length; i++) {
+            var group = sortedGroups[i]
+            // Add group header
+            result.push({
+                isGroup: true,
+                name: group.name,
+                cpu: group.totalCpu,
+                mem: group.totalMem,
+                count: group.processes.length,
+                pid: 0,
+                depth: 0
+            })
+            
+            // Add individual processes if expanded
+            if (expandedGroups[group.name] && group.processes.length > 1) {
+                // Sort processes within group
+                var sortedProcs = group.processes.slice()
+                sortedProcs.sort(function(a, b) {
+                    return b.cpu - a.cpu  // Sort by CPU within group
+                })
+                
+                for (var j = 0; j < sortedProcs.length; j++) {
+                    result.push({
+                        isGroup: false,
+                        name: sortedProcs[j].name,
+                        cpu: sortedProcs[j].cpu,
+                        mem: sortedProcs[j].mem,
+                        pid: sortedProcs[j].pid,
+                        depth: 1,
+                        count: 0
+                    })
+                }
+            }
+        }
+        
+        return result
+    }
+    
+    function toggleGroup(name) {
+        var newExpanded = Object.assign({}, expandedGroups)
+        if (newExpanded[name]) {
+            delete newExpanded[name]
+        } else {
+            newExpanded[name] = true
+        }
+        expandedGroups = newExpanded
+    }
+    
+    // Kill all processes in a group
+    function killGroup(name) {
+        for (var i = 0; i < processList.length; i++) {
+            if (processList[i].name === name) {
+                killProc.targetPid = processList[i].pid
+                killProc.running = true
+            }
+        }
+    }
+
     // Build tree structure from flat process list
     function buildProcessTree(procs) {
         // Create a map of pid -> process
@@ -258,6 +365,7 @@ ApplicationWindow {
                 }
                 root.processList = procs
                 root.processTree = buildProcessTree(procs)
+                root.groupedProcesses = groupByName(procs)
             }
             processProc.outputBuffer = ""
         }
@@ -633,7 +741,7 @@ ApplicationWindow {
                     }
                 }
 
-                // Process list with tree view
+                // Process list with grouped view
                 ListView {
                     id: processListView
                     Layout.fillWidth: true
@@ -641,7 +749,7 @@ ApplicationWindow {
                     clip: true
                     spacing: 2
                     
-                    model: root.filterText ? root.sortProcesses(root.filterProcesses(root.processList)) : root.flattenTree(root.processTree)
+                    model: root.filterText ? root.sortProcesses(root.filterProcesses(root.processList)) : root.flattenGrouped(root.groupedProcesses)
 
                     delegate: Rectangle {
                         id: processItem
@@ -649,51 +757,57 @@ ApplicationWindow {
                         required property int index
 
                         property int indent: modelData.depth || 0
-                        property bool hasChildren: (modelData.totalChildren || 0) > 0
-                        property bool isExpanded: root.expandedPids[modelData.pid] || false
+                        property bool isGroupItem: modelData.isGroup || false
+                        property bool hasMultiple: (modelData.count || 0) > 1
+                        property bool isExpanded: root.expandedGroups[modelData.name] || false
+                        property bool isSelected: isGroupItem ? (root.selectedGroup === modelData.name) : (root.selectedPid === modelData.pid)
 
                         width: processListView.width
                         height: 40
                         radius: Appearance.rounding.small
-                        color: root.selectedPid === modelData.pid ? Appearance.m3colors.m3primaryContainer : 
+                        color: processItem.isSelected ? Appearance.m3colors.m3primaryContainer : 
                                (index % 2 === 0 ? "transparent" : Appearance.colors.colLayer1)
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: root.selectedPid = (root.selectedPid === processItem.modelData.pid) ? -1 : processItem.modelData.pid
+                            onClicked: {
+                                if (processItem.isGroupItem) {
+                                    root.selectedGroup = (root.selectedGroup === processItem.modelData.name) ? "" : processItem.modelData.name
+                                    root.selectedPid = -1
+                                } else {
+                                    root.selectedPid = (root.selectedPid === processItem.modelData.pid) ? -1 : processItem.modelData.pid
+                                    root.selectedGroup = ""
+                                }
+                            }
                         }
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 12 + (processItem.indent * 20)
+                            anchors.leftMargin: 12 + (processItem.indent * 24)
                             anchors.rightMargin: 12
                             spacing: 4
 
-                            // Expand/collapse button
+                            // Expand/collapse button for groups
                             Item {
                                 implicitWidth: 24
                                 implicitHeight: 24
                                 
                                 RippleButton {
                                     anchors.fill: parent
-                                    visible: processItem.hasChildren && !root.filterText
+                                    visible: processItem.isGroupItem && processItem.hasMultiple && !root.filterText
                                     buttonRadius: Appearance.rounding.full
-                                    onClicked: root.toggleExpanded(processItem.modelData.pid)
+                                    onClicked: root.toggleGroup(processItem.modelData.name)
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
                                         text: processItem.isExpanded ? "expand_more" : "chevron_right"
                                         iconSize: 18
                                         color: Appearance.colors.colSubtext
-                                        
-                                        Behavior on text {
-                                            enabled: false
-                                        }
                                     }
                                 }
                                 
-                                // Tree line for items without children
+                                // Dot for single process groups or child processes
                                 Rectangle {
-                                    visible: !processItem.hasChildren && processItem.indent > 0 && !root.filterText
+                                    visible: (!processItem.isGroupItem || !processItem.hasMultiple) && !root.filterText
                                     anchors.centerIn: parent
                                     width: 6
                                     height: 6
@@ -705,17 +819,17 @@ ApplicationWindow {
 
                             StyledText {
                                 Layout.preferredWidth: 60
-                                text: processItem.modelData.pid
+                                text: processItem.isGroupItem ? (processItem.hasMultiple ? "(" + processItem.modelData.count + ")" : "") : processItem.modelData.pid
                                 font.pixelSize: Appearance.font.pixelSize.small
                                 font.family: Appearance.font.family.monospace
-                                color: Appearance.colors.colOnLayer1
+                                color: processItem.isGroupItem ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                             }
 
                             StyledText {
                                 Layout.fillWidth: true
-                                text: processItem.modelData.name + (processItem.hasChildren && !root.filterText ? " (" + processItem.modelData.totalChildren + ")" : "")
+                                text: processItem.modelData.name
                                 font.pixelSize: Appearance.font.pixelSize.small
-                                font.weight: processItem.hasChildren ? Font.Medium : Font.Normal
+                                font.weight: processItem.isGroupItem ? Font.Medium : Font.Normal
                                 color: Appearance.colors.colOnLayer1
                                 elide: Text.ElideRight
                             }
@@ -742,7 +856,7 @@ ApplicationWindow {
                                 implicitWidth: 36
                                 implicitHeight: 36
                                 buttonRadius: Appearance.rounding.full
-                                visible: root.selectedPid === processItem.modelData.pid
+                                visible: processItem.isSelected && !processItem.isGroupItem
                                 colBackground: Appearance.m3colors.m3errorContainer
                                 onClicked: {
                                     killProc.targetPid = processItem.modelData.pid
@@ -756,10 +870,26 @@ ApplicationWindow {
                                     color: Appearance.m3colors.m3onErrorContainer
                                 }
                             }
+                            
+                            RippleButton {
+                                implicitWidth: 36
+                                implicitHeight: 36
+                                buttonRadius: Appearance.rounding.full
+                                visible: processItem.isSelected && processItem.isGroupItem && processItem.hasMultiple
+                                colBackground: Appearance.m3colors.m3errorContainer
+                                onClicked: root.killGroup(processItem.modelData.name)
+                                StyledToolTip { text: Translation.tr("Kill all %1 processes").arg(processItem.modelData.count) }
+                                contentItem: MaterialSymbol {
+                                    anchors.centerIn: parent
+                                    text: "delete_sweep"
+                                    iconSize: 18
+                                    color: Appearance.m3colors.m3onErrorContainer
+                                }
+                            }
 
                             Item {
                                 implicitWidth: 36
-                                visible: root.selectedPid !== processItem.modelData.pid
+                                visible: !processItem.isSelected
                             }
                         }
                     }
@@ -771,7 +901,7 @@ ApplicationWindow {
                     spacing: 8
 
                     StyledText {
-                        text: Translation.tr("Total: %1 processes").arg(root.processList.length)
+                        text: Translation.tr("%1 processes in %2 groups").arg(root.processList.length).arg(root.groupedProcesses.length)
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colSubtext
                     }
