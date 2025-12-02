@@ -197,6 +197,41 @@ ApplicationWindow {
         return result
     }
     
+    // Filter groups by name (keeps grouped structure)
+    function filterGroups(groups) {
+        if (!filterText) return groups
+        var search = filterText.toLowerCase()
+        var result = []
+        
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i]
+            // Check if group name matches
+            if (group.name.toLowerCase().includes(search)) {
+                result.push(group)
+            } else {
+                // Check if any process in the group matches (by PID)
+                var matchingProcs = []
+                for (var j = 0; j < group.processes.length; j++) {
+                    var p = group.processes[j]
+                    if (p.pid.toString().includes(search)) {
+                        matchingProcs.push(p)
+                    }
+                }
+                if (matchingProcs.length > 0) {
+                    // Create a filtered group with only matching processes
+                    result.push({
+                        name: group.name,
+                        processes: matchingProcs,
+                        totalCpu: matchingProcs.reduce(function(sum, p) { return sum + p.cpu }, 0),
+                        totalMem: matchingProcs.reduce(function(sum, p) { return sum + p.mem }, 0),
+                        isGroup: true
+                    })
+                }
+            }
+        }
+        return result
+    }
+    
     // Flatten grouped processes for display
     function flattenGrouped(groups) {
         var result = []
@@ -228,8 +263,9 @@ ApplicationWindow {
                 depth: 0
             })
             
-            // Add individual processes if expanded
-            if (expandedGroups[group.name] && group.processes.length > 1) {
+            // Add individual processes if expanded (or when filtering, auto-expand)
+            var shouldExpand = expandedGroups[group.name] || (filterText && group.processes.length > 1)
+            if (shouldExpand && group.processes.length > 1) {
                 // Sort processes within group
                 var sortedProcs = group.processes.slice()
                 sortedProcs.sort(function(a, b) {
@@ -749,7 +785,7 @@ ApplicationWindow {
                     clip: true
                     spacing: 2
                     
-                    model: root.filterText ? root.sortProcesses(root.filterProcesses(root.processList)) : root.flattenGrouped(root.groupedProcesses)
+                    model: root.flattenGrouped(root.filterGroups(root.groupedProcesses))
 
                     delegate: Rectangle {
                         id: processItem
@@ -794,12 +830,12 @@ ApplicationWindow {
                                 
                                 RippleButton {
                                     anchors.fill: parent
-                                    visible: processItem.isGroupItem && processItem.hasMultiple && !root.filterText
+                                    visible: processItem.isGroupItem && processItem.hasMultiple
                                     buttonRadius: Appearance.rounding.full
                                     onClicked: root.toggleGroup(processItem.modelData.name)
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
-                                        text: processItem.isExpanded ? "expand_more" : "chevron_right"
+                                        text: (processItem.isExpanded || root.filterText) ? "expand_more" : "chevron_right"
                                         iconSize: 18
                                         color: Appearance.colors.colSubtext
                                     }
@@ -807,7 +843,7 @@ ApplicationWindow {
                                 
                                 // Dot for single process groups or child processes
                                 Rectangle {
-                                    visible: (!processItem.isGroupItem || !processItem.hasMultiple) && !root.filterText
+                                    visible: !processItem.isGroupItem || !processItem.hasMultiple
                                     anchors.centerIn: parent
                                     width: 6
                                     height: 6
@@ -910,7 +946,7 @@ ApplicationWindow {
 
                     StyledText {
                         visible: root.filterText
-                        text: Translation.tr("Showing: %1").arg(root.filterProcesses(root.processList).length)
+                        text: Translation.tr("Showing: %1 groups").arg(root.filterGroups(root.groupedProcesses).length)
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colSubtext
                     }
