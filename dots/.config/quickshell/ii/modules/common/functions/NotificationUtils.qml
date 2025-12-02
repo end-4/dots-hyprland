@@ -84,4 +84,28 @@ Singleton {
         // Older dates
         return Qt.formatDateTime(messageTime, "MMMM dd");
     }
+
+    function processNotificationBody(body, appName) {
+        let processedBody = body
+        
+        // Clean Chromium-based browsers notifications - remove first line
+        if (appName) {
+            const lowerApp = appName.toLowerCase()
+            const chromiumBrowsers = [
+                "brave", "chrome", "chromium", "vivaldi", "opera", "microsoft edge"
+            ]
+
+            if (chromiumBrowsers.some(name => lowerApp.includes(name))) {
+                const lines = body.split('\n\n')
+
+                if (lines.length > 1 && lines[0].startsWith('<a')) {
+                    processedBody = lines.slice(1).join('\n\n')
+                }
+            }
+        }
+
+        processedBody = processedBody.replace(/<img/gi, '\n\n<img');
+        
+        return processedBody
+    }
 }

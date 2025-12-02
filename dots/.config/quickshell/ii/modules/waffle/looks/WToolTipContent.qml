@@ -6,6 +6,7 @@ Item {
     id: root
     anchors.centerIn: parent
     required property Item realContentItem
+    property alias radius: realContent.radius
     property real verticalPadding: 8
     property real horizontalPadding: 10
     implicitWidth: realContent.implicitWidth + 2 * 2
