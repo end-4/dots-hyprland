@@ -428,7 +428,7 @@ ApplicationWindow {
                             progress: ResourceUsage.memoryUsed / ResourceUsage.memoryTotal
                             subtitle: root.formatBytes(ResourceUsage.memoryTotal) + " total"
                             history: root.memHistory
-                            progressColor: Appearance.m3colors.m3tertiary
+                            progressColor: Appearance.m3colors.m3primary
                         }
                     }
 
@@ -445,7 +445,7 @@ ApplicationWindow {
                             progress: root.gpuUsage / 100
                             subtitle: root.gpuName
                             history: root.gpuHistory
-                            progressColor: Appearance.m3colors.m3secondary
+                            progressColor: Appearance.m3colors.m3primary
                         }
 
                         ResourceCard {
@@ -455,7 +455,7 @@ ApplicationWindow {
                             value: root.formatBytes(ResourceUsage.swapUsed)
                             progress: ResourceUsage.swapTotal > 0 ? ResourceUsage.swapUsed / ResourceUsage.swapTotal : 0
                             subtitle: ResourceUsage.swapTotal > 0 ? root.formatBytes(ResourceUsage.swapTotal) + " total" : "Not configured"
-                            progressColor: Appearance.m3colors.m3error
+                            progressColor: Appearance.m3colors.m3primary
                         }
                     }
 
@@ -483,7 +483,7 @@ ApplicationWindow {
                             progress: root.maxNetSpeed > 0 ? (root.networkDownSpeed + root.networkUpSpeed) / root.maxNetSpeed : 0
                             subtitle: "↑ " + root.formatSpeed(root.networkUpSpeed)
                             history: root.netHistory
-                            progressColor: Appearance.m3colors.m3tertiary
+                            progressColor: Appearance.m3colors.m3primary
                             showProgress: true
                             showGraph: true
                         }
