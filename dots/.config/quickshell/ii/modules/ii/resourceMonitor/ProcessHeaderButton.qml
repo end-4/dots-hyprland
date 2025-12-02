@@ -6,6 +6,7 @@ import qs.modules.common.widgets
 // Header button component for process list sorting
 MouseArea {
     id: headerBtn
+    Layout.fillHeight: true
     
     property string text
     property string sortKey
