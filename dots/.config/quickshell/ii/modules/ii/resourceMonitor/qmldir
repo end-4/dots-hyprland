@@ -1,0 +1,4 @@
+module qs.modules.ii.resourceMonitor
+
+ResourceCard 1.0 ResourceCard.qml
+ProcessHeaderButton 1.0 ProcessHeaderButton.qml
