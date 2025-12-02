@@ -215,7 +215,7 @@ StyledFlickable {
 
     // Update timer
     Timer {
-        interval: 1000
+        interval: 3000
         running: true
         repeat: true
         triggeredOnStart: true

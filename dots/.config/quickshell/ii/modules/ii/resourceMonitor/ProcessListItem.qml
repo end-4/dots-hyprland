@@ -38,7 +38,7 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: 12 + (processItem.indent * 24)
         anchors.rightMargin: 12
-        spacing: 4
+        spacing: 8
 
         // Expand/collapse button for groups
         Item {
@@ -93,7 +93,7 @@ Rectangle {
             font.pixelSize: Appearance.font.pixelSize.small
             font.family: Appearance.font.family.numbers
             color: processItem.modelData.cpu > 50 ? Appearance.m3colors.m3error : Appearance.colors.colOnLayer1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignHCenter
         }
 
         StyledText {
@@ -102,7 +102,7 @@ Rectangle {
             font.pixelSize: Appearance.font.pixelSize.small
             font.family: Appearance.font.family.numbers
             color: processItem.modelData.mem > 50 ? Appearance.m3colors.m3error : Appearance.colors.colOnLayer1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignHCenter
         }
 
         RippleButton {

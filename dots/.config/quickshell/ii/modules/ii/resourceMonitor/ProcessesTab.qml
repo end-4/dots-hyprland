@@ -364,6 +364,7 @@ ColumnLayout {
                 sortKey: "cpu"
                 currentSort: root.sortBy
                 ascending: root.sortAscending
+                horizontalAlignment: Text.AlignHCenter
                 onClicked: {
                     if (root.sortBy === "cpu") root.sortAscending = !root.sortAscending
                     else { root.sortBy = "cpu"; root.sortAscending = false }
@@ -376,6 +377,7 @@ ColumnLayout {
                 sortKey: "mem"
                 currentSort: root.sortBy
                 ascending: root.sortAscending
+                horizontalAlignment: Text.AlignHCenter
                 onClicked: {
                     if (root.sortBy === "mem") root.sortAscending = !root.sortAscending
                     else { root.sortBy = "mem"; root.sortAscending = false }
@@ -387,55 +389,76 @@ ColumnLayout {
     }
 
     // Process list with grouped view
-    ListView {
-        id: processListView
+    Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        clip: true
-        spacing: 2
-        cacheBuffer: 2000
 
-        // Keep track of the first visible index (delegate height is fixed at 40)
-        property int savedFirstIndex: 0
-        property bool restoringPosition: false
+        ListView {
+            id: processListView
+            anchors.fill: parent
+            clip: true
+            spacing: 2
+            cacheBuffer: 2000
 
-        onContentYChanged: {
-            if (!restoringPosition) savedFirstIndex = Math.max(0, Math.floor(contentY / 40))
-        }
+            // Keep track of the first visible index (delegate height is fixed at 40)
+            property int savedFirstIndex: 0
+            property bool restoringPosition: false
 
-        onModelChanged: {
-            // Restore position after the model updates. Use callLater to wait for layout.
-            restoringPosition = true
-            Qt.callLater(function() {
-                var idx = Math.min(savedFirstIndex, Math.max(0, count - 1))
-                if (idx >= 0) positionViewAtIndex(idx, ListView.Beginning)
-                restoringPosition = false
-            })
-        }
-        
-        model: root.flattenGrouped(root.filterGroups(root.groupedProcesses))
+            onContentYChanged: {
+                if (!restoringPosition) savedFirstIndex = Math.max(0, Math.floor(contentY / 40))
+            }
 
-        delegate: ProcessListItem {
-            width: processListView.width
-            isExpanded: root.expandedGroups[modelData.name] || false
-            isSelected: isGroupItem ? (root.selectedGroup === modelData.name) : (root.selectedPid === modelData.pid)
-            filterActive: root.filterText.length > 0
-            
-            onItemClicked: {
-                if (isGroupItem) {
-                    root.selectedGroup = (root.selectedGroup === modelData.name) ? "" : modelData.name
-                    root.selectedPid = -1
-                } else {
-                    root.selectedPid = (root.selectedPid === modelData.pid) ? -1 : modelData.pid
-                    root.selectedGroup = ""
-                }
+            onModelChanged: {
+                // Restore position after the model updates. Use callLater to wait for layout.
+                restoringPosition = true
+                Qt.callLater(function() {
+                    var idx = Math.min(savedFirstIndex, Math.max(0, count - 1))
+                    if (idx >= 0) positionViewAtIndex(idx, ListView.Beginning)
+                    restoringPosition = false
+                })
             }
             
-            onToggleGroup: name => root.toggleGroup(name)
-            onKillGroup: name => root.killGroup(name)
-            onKillProcess: pid => {
-                killProc.targetPid = pid
-                killProc.running = true
+            model: root.flattenGrouped(root.filterGroups(root.groupedProcesses))
+
+            delegate: ProcessListItem {
+                width: processListView.width
+                isExpanded: root.expandedGroups[modelData.name] || false
+                isSelected: isGroupItem ? (root.selectedGroup === modelData.name) : (root.selectedPid === modelData.pid)
+                filterActive: root.filterText.length > 0
+                
+                onItemClicked: {
+                    if (isGroupItem) {
+                        root.selectedGroup = (root.selectedGroup === modelData.name) ? "" : modelData.name
+                        root.selectedPid = -1
+                    } else {
+                        root.selectedPid = (root.selectedPid === modelData.pid) ? -1 : modelData.pid
+                        root.selectedGroup = ""
+                    }
+                }
+                
+                onToggleGroup: name => root.toggleGroup(name)
+                onKillGroup: name => root.killGroup(name)
+                onKillProcess: pid => {
+                    killProc.targetPid = pid
+                    killProc.running = true
+                }
+            }
+        }
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            visible: root.processList.length === 0
+            spacing: 10
+
+            BusyIndicator {
+                Layout.alignment: Qt.AlignHCenter
+                running: parent.visible
+            }
+
+            StyledText {
+                text: Translation.tr("Loading processes...")
+                color: Appearance.colors.colSubtext
+                font.pixelSize: Appearance.font.pixelSize.normal
             }
         }
     }

@@ -11,12 +11,18 @@ MouseArea {
     property string sortKey
     property string currentSort
     property bool ascending
+    property int horizontalAlignment: Text.AlignLeft
 
     hoverEnabled: true
 
     RowLayout {
         anchors.fill: parent
         spacing: 4
+
+        Item {
+            Layout.fillWidth: true
+            visible: headerBtn.horizontalAlignment === Text.AlignRight || headerBtn.horizontalAlignment === Text.AlignHCenter
+        }
 
         StyledText {
             text: headerBtn.text
@@ -30,6 +36,11 @@ MouseArea {
             text: headerBtn.ascending ? "arrow_upward" : "arrow_downward"
             iconSize: 14
             color: Appearance.m3colors.m3primary
+        }
+
+        Item {
+            Layout.fillWidth: true
+            visible: headerBtn.horizontalAlignment === Text.AlignLeft || headerBtn.horizontalAlignment === Text.AlignHCenter
         }
     }
 }
