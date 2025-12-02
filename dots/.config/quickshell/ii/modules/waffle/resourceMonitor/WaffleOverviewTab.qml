@@ -343,6 +343,7 @@ Item {
                 Layout.alignment: Qt.AlignVCenter
                 radius: 1.5
                 color: miniChart.isSelected ? Appearance.m3colors.m3primary : "transparent"
+                visible: false
             }
 
             Rectangle {
@@ -455,7 +456,7 @@ Item {
         spacing: 16
 
         ColumnLayout {
-            Layout.preferredWidth: 260
+            Layout.preferredWidth: 220
             Layout.fillHeight: true
             spacing: 4
 
