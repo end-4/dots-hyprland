@@ -20,6 +20,7 @@ ColumnLayout {
     property string filterText: ""
     property int selectedPid: -1
     property string selectedGroup: ""
+    property int cpuCores: 1
 
     function sortProcesses(procs) {
         let sorted = [...procs]
@@ -180,8 +181,20 @@ ColumnLayout {
     }
 
     Process {
+        id: cpuCount
+        command: ["nproc"]
+        running: true
+        stdout: SplitParser {
+            onRead: data => {
+                var cores = parseInt(data.trim())
+                if (cores > 0) root.cpuCores = cores
+            }
+        }
+    }
+
+    Process {
         id: processProc
-        command: ["bash", "-c", "ps -eo pid,ppid,%cpu,%mem,comm --sort=-%cpu | head -101 | tail -100 | awk '{printf \"%s|%s|%s|%s|%s\\n\",$1,$2,$3,$4,$5}'"]
+        command: ["bash", "-c", "LC_NUMERIC=C top -b -n 2 -d 0.5 -w 512 | awk '/PID/ {iter++} iter==2 { print $0 }'"]
         property string outputBuffer: ""
         stdout: SplitParser {
             onRead: data => {
@@ -193,14 +206,19 @@ ColumnLayout {
                 const lines = processProc.outputBuffer.trim().split("\n")
                 const procs = []
                 for (const line of lines) {
-                    const parts = line.split("|")
-                    if (parts.length >= 5) {
+                    // Skip header line
+                    if (line.includes("PID") && line.includes("USER")) continue
+                    
+                    const parts = line.trim().split(/\s+/)
+                    if (parts.length >= 12) {
+                        let rawCpu = parseFloat(parts[8]) || 0
+                        let normalizedCpu = rawCpu / root.cpuCores
                         procs.push({
                             pid: parseInt(parts[0]) || 0,
-                            ppid: parseInt(parts[1]) || 0,
-                            cpu: parseFloat(parts[2]) || 0,
-                            mem: parseFloat(parts[3]) || 0,
-                            name: parts[4] || "unknown",
+                            ppid: 0, // top doesn't show ppid by default in this view
+                            cpu: normalizedCpu,
+                            mem: parseFloat(parts[9]) || 0,
+                            name: parts.slice(11).join(" ") || "unknown",
                             children: [],
                             totalChildren: 0
                         })
