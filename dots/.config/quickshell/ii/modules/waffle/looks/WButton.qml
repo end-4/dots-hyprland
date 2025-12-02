@@ -53,10 +53,11 @@ Button {
     // Hover stuff
     signal hoverTimedOut
     property bool shouldShowTooltip: false
+    ToolTip.delay: 400
     property Timer hoverTimer: Timer {
         id: hoverTimer
         running: root.hovered
-        interval: 400
+        interval: root.ToolTip.delay
         onTriggered: {
             root.hoverTimedOut();
         }

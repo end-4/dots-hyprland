@@ -8,18 +8,24 @@ import qs.modules.common.functions
 import qs.modules.waffle.looks
 
 WBorderlessButton {
-    id: headerButton
+    id: root
     Layout.fillWidth: false
-    implicitWidth: 16
-    implicitHeight: 16
+    property real implicitSize: 16
+    implicitWidth: implicitSize
+    implicitHeight: implicitSize
     color: "transparent"
+    colForeground: root.hovered && !root.pressed ? Looks.colors.fg : Looks.colors.fg1
+
+    Behavior on colForeground {
+        animation: Looks.transition.color.createObject(this)
+    }
 
     contentItem: Item {
         FluentIcon {
             anchors.centerIn: parent
-            implicitSize: 16
-            icon: headerButton.icon.name
-            color: headerButton.hovered && !headerButton.pressed ? Looks.colors.fg : Looks.colors.fg1
+            implicitSize: root.implicitSize
+            icon: root.icon.name
+            color: root.colForeground
         }
     }
 }

@@ -7,6 +7,10 @@ import qs.services
 Singleton {
     id: root
 
+    function pathForName(iconName) {
+        return Quickshell.shellPath(`assets/icons/fluent/${iconName}.svg`);
+    }
+
     function wifiIconForStrength(strength) {
         if (strength > 75)
             return "wifi-1";
