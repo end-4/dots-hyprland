@@ -48,6 +48,7 @@ ApplicationWindow {
     property real previousTxBytes: 0
     
     property int cpuCores: 0
+    property string cpuName: "Detecting..."
 
     property var processList: []
     property var processTree: []  // Hierarchical process list
@@ -113,6 +114,16 @@ ApplicationWindow {
         running: true
         stdout: SplitParser {
             onRead: data => root.cpuCores = parseInt(data.trim()) || 0
+        }
+    }
+
+    // CPU name detection
+    Process {
+        id: cpuNameProc
+        command: ["bash", "-c", "grep -m1 'model name' /proc/cpuinfo | cut -d: -f2 | sed 's/^ //'"]
+        running: true
+        stdout: SplitParser {
+            onRead: data => root.cpuName = data.trim() || "Unknown CPU"
         }
     }
 
@@ -559,7 +570,7 @@ ApplicationWindow {
                             icon: "memory"
                             value: (ResourceUsage.cpuUsage * 100).toFixed(1) + "%"
                             progress: ResourceUsage.cpuUsage
-                            subtitle: root.cpuCores + " cores"
+                            subtitle: root.cpuName + " (" + root.cpuCores + " cores)"
                             history: root.cpuHistory
                             progressColor: Appearance.m3colors.m3primary
                         }
@@ -596,9 +607,9 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             title: "Swap"
                             icon: "swap_horiz"
-                            value: root.formatBytes(ResourceUsage.swapUsed)
+                            value: (ResourceUsage.swapUsed / (1024 * 1024)).toFixed(2) + " GB"
                             progress: ResourceUsage.swapTotal > 0 ? ResourceUsage.swapUsed / ResourceUsage.swapTotal : 0
-                            subtitle: ResourceUsage.swapTotal > 0 ? root.formatBytes(ResourceUsage.swapTotal) + " total" : "Not configured"
+                            subtitle: ResourceUsage.swapTotal > 0 ? (ResourceUsage.swapTotal / (1024 * 1024)).toFixed(2) + " GB total" : "Not configured"
                             progressColor: Appearance.m3colors.m3primary
                         }
                     }
