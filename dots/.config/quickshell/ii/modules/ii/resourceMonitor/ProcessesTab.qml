@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Widgets
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -450,9 +451,18 @@ ColumnLayout {
             visible: root.processList.length === 0
             spacing: 10
 
-            BusyIndicator {
+            IconImage {
                 Layout.alignment: Qt.AlignHCenter
-                running: parent.visible
+                implicitWidth: 64
+                implicitHeight: 64
+                source: Quickshell.iconPath("illogical-impulse")
+                
+                SequentialAnimation on opacity {
+                    loops: Animation.Infinite
+                    running: parent.visible
+                    NumberAnimation { from: 1; to: 0.3; duration: 1000; easing.type: Easing.InOutQuad }
+                    NumberAnimation { from: 0.3; to: 1; duration: 1000; easing.type: Easing.InOutQuad }
+                }
             }
 
             StyledText {
