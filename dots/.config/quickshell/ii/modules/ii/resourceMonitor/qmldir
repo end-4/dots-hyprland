@@ -5,3 +5,4 @@ ProcessHeaderButton 1.0 ProcessHeaderButton.qml
 OverviewTab 1.0 OverviewTab.qml
 ProcessesTab 1.0 ProcessesTab.qml
 ProcessListItem 1.0 ProcessListItem.qml
+IIResourceMonitor 1.0 IIResourceMonitor.qml

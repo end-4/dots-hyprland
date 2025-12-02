@@ -1,0 +1,3 @@
+module qs.modules.waffle.resourceMonitor
+WaffleResourceMonitor 1.0 WaffleResourceMonitor.qml
+WaffleOverviewTab 1.0 WaffleOverviewTab.qml
