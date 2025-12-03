@@ -163,7 +163,9 @@ Item {
                     label: Translation.tr("Settings")
                     iconName: "settings"
                     isActive: false
-                    onClicked: {}
+                    onClicked: {
+                        Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("settings.qml")]);
+                    }
                 }
                 
                 Item { Layout.preferredHeight: 12 }

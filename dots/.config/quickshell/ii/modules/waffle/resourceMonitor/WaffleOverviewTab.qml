@@ -6,7 +6,7 @@ import Quickshell.Io
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.resourceMonitor
-import "../../common/models" as Models
+import qs.modules.common.models as Models
 import "../../common/functions/ResourceMonitorUtils.js" as Utils
 
 Item {
@@ -17,6 +17,7 @@ Item {
         active: root.visible
         selectedGpuIndex: root.selectedGpuIndex
         processMonitorActive: true
+        monitorGpu: false
     }
 
     // Data properties
@@ -255,7 +256,7 @@ Item {
             }
 
             MiniChart {
-                title: "Wi-Fi"
+                title: "Network"
                 subtitle: "S: " + Utils.formatSpeed(root.networkUpSpeed) + " R: " + Utils.formatSpeed(root.networkDownSpeed)
                 historyData: root.netHistory
                 isSelected: root.selectedComponent === 3
@@ -263,12 +264,54 @@ Item {
                 graphColor: "#D81B60"
             }
 
-            MiniChart {
-                title: "GPU 0"
-                subtitle: root.gpuUsage.toFixed(0) + "%"
-                historyData: root.gpuHistory
-                isSelected: root.selectedComponent === 4
-                onClicked: root.selectedComponent = 4
+            Repeater {
+                model: backend.gpuList
+                delegate: MiniChart {
+                    id: gpuChart
+                    
+                    Models.ResourceBackend {
+                        id: gpuChartBackend
+                        active: root.visible
+                        enableGpuDiscovery: false
+                        gpuList: backend.gpuList
+                        monitorCpu: false
+                        monitorMemory: false
+                        monitorDisk: false
+                        monitorNetwork: false
+                        monitorGpu: true
+                        selectedGpuIndex: index
+                    }
+                    
+                    property list<real> gpuHistory: []
+                    
+                    Timer {
+                        interval: 1000
+                        running: root.visible
+                        repeat: true
+                        triggeredOnStart: true
+                        onTriggered: {
+                            gpuChart.gpuHistory = [...gpuChart.gpuHistory.slice(-(root.historyLength - 1)), gpuChartBackend.gpuUsage / 100]
+                        }
+                    }
+
+                    title: {
+                        var name = "GPU " + index
+                        if (modelData.type === "nvidia") name = "NVIDIA"
+                        else if (modelData.type === "intel") name = "Intel"
+                        else if (modelData.type === "amd") name = "AMD"
+                        
+                        var count = 0
+                        for(var j=0; j<backend.gpuList.length; j++) {
+                            if (backend.gpuList[j].type === modelData.type) count++
+                        }
+                        if (count > 1) name += " " + index
+                        return name
+                    }
+                    subtitle: gpuChartBackend.gpuUsage.toFixed(0) + "%"
+                    historyData: gpuChart.gpuHistory
+                    isSelected: root.selectedComponent === (4 + index)
+                    onClicked: root.selectedComponent = (4 + index)
+                }
             }
 
             Item { Layout.fillHeight: true }
@@ -417,8 +460,8 @@ Item {
             }
 
             DetailView {
-                title: "Wi-Fi"
-                subtitle: "Wi-Fi"
+                title: "Network"
+                subtitle: "Network"
                 historyData: root.netHistory
                 graphColor: "#D81B60"
                 
@@ -440,25 +483,57 @@ Item {
                 }
             }
 
-            DetailView {
-                title: "GPU 0"
-                subtitle: root.gpuName
-                historyData: root.gpuHistory
-                
-                GridLayout {
-                    Layout.fillWidth: true
-                    flow: GridLayout.TopToBottom
-                    rows: 3
-                    columnSpacing: 40
-                    rowSpacing: 10
+            Repeater {
+                model: backend.gpuList
+                delegate: DetailView {
+                    id: gpuDetail
                     
-                    ColumnLayout {
-                        StyledText { text: "Utilization"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
-                        StyledText { text: root.gpuUsage.toFixed(0) + "%"; font.pixelSize: Appearance.font.pixelSize.large }
+                    Models.ResourceBackend {
+                        id: gpuBackend
+                        active: root.visible && root.selectedComponent === (4 + index)
+                        enableGpuDiscovery: false
+                        gpuList: backend.gpuList
+                        monitorCpu: false
+                        monitorMemory: false
+                        monitorDisk: false
+                        monitorNetwork: false
+                        monitorGpu: true
+                        selectedGpuIndex: index
                     }
-                    ColumnLayout {
-                        StyledText { text: "GPU Memory"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
-                        StyledText { text: root.gpuMemoryUsed.toFixed(0) + " / " + root.gpuMemoryTotal.toFixed(0) + " MB"; font.pixelSize: Appearance.font.pixelSize.large }
+                    
+                    property list<real> gpuHistory: []
+                    
+                    Timer {
+                        interval: 1000
+                        running: root.visible && root.selectedComponent === (4 + index)
+                        repeat: true
+                        triggeredOnStart: true
+                        onTriggered: {
+                            gpuDetail.gpuHistory = [...gpuDetail.gpuHistory.slice(-(root.historyLength - 1)), gpuBackend.gpuUsage / 100]
+                        }
+                    }
+
+                    title: {
+                        return Utils.getGpuDisplayName(modelData, index, backend.gpuList);
+                    }
+                    subtitle: gpuBackend.gpuName
+                    historyData: gpuDetail.gpuHistory
+                    
+                    GridLayout {
+                        Layout.fillWidth: true
+                        flow: GridLayout.TopToBottom
+                        rows: 3
+                        columnSpacing: 40
+                        rowSpacing: 10
+                        
+                        ColumnLayout {
+                            StyledText { text: "Utilization"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
+                            StyledText { text: gpuBackend.gpuUsage.toFixed(0) + "%"; font.pixelSize: Appearance.font.pixelSize.large }
+                        }
+                        ColumnLayout {
+                            StyledText { text: "GPU Memory"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
+                            StyledText { text: gpuBackend.gpuMemoryUsed.toFixed(0) + " / " + gpuBackend.gpuMemoryTotal.toFixed(0) + " MB"; font.pixelSize: Appearance.font.pixelSize.large }
+                        }
                     }
                 }
             }

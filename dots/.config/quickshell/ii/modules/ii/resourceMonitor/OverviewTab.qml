@@ -7,7 +7,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.resourceMonitor
-import "../../common/models" as Models
+import qs.modules.common.models as Models
 import "../../common/functions/ResourceMonitorUtils.js" as Utils
 
 StyledFlickable {

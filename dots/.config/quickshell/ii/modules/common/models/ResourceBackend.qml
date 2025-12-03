@@ -8,6 +8,14 @@ Item {
 
     property bool active: false
     property bool processMonitorActive: false
+    
+    // Granular control
+    property bool monitorCpu: true
+    property bool monitorMemory: true
+    property bool monitorDisk: true
+    property bool monitorNetwork: true
+    property bool monitorGpu: true
+    property bool enableGpuDiscovery: true
 
     // System Resources
     property real cpuUsage: 0
@@ -264,7 +272,7 @@ Item {
     Process {
         id: gpuDiscovery
         command: ["bash", "-c", "lspci -mm | grep -E 'VGA|3D|Display'"]
-        running: root.active
+        running: root.active && root.enableGpuDiscovery
         onStarted: root.gpuDiscoveryBuffer = ""
         stdout: SplitParser {
             onRead: data => root.gpuDiscoveryBuffer += data + "\n"
@@ -308,6 +316,7 @@ Item {
     }
 
     onSelectedGpuIndexChanged: gpuProc.updateCommand()
+    onGpuListChanged: gpuProc.updateCommand()
 
     Process {
         id: gpuProc
@@ -423,7 +432,7 @@ Item {
     Process {
         id: killProc
         property int targetPid: 0
-        command: ["bash", "-c", "kill -15 " + targetPid + "; sleep 1; kill -0 " + targetPid + " 2>/dev/null && kill -9 " + targetPid]
+        command: ["bash", "-c", "kill -15 " + targetPid + "; for i in {1..5}; do sleep 1; kill -0 " + targetPid + " 2>/dev/null || break; done; kill -0 " + targetPid + " 2>/dev/null && kill -9 " + targetPid]
         onExited: (exitCode, exitStatus) => {
             root.killFinished(exitCode)
             if (root.processMonitorActive) processProc.running = true
@@ -436,20 +445,25 @@ Item {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            if (gpuProc.command.length > 0) gpuProc.running = true
-            diskProc.running = true
-            netProc.running = true
-            cpuSpeedProc.running = true
-            uptimeProc.running = true
-            threadCountProc.running = true
-            handleCountProc.running = true
+            if (root.monitorGpu && gpuProc.command.length > 0) gpuProc.running = true
+            if (root.monitorDisk) diskProc.running = true
+            if (root.monitorNetwork) netProc.running = true
+            
+            if (root.monitorCpu) {
+                cpuSpeedProc.running = true
+                uptimeProc.running = true
+                threadCountProc.running = true
+                handleCountProc.running = true
+                cpuStatProc.running = true
+            }
+            
+            if (root.monitorMemory) memInfoProc.running = true
             
             // New stats
-            if (root.diskIoDevice === "") detectDiskDevice.running = true
-            else diskStatsProc.running = true
-            
-            cpuStatProc.running = true
-            memInfoProc.running = true
+            if (root.monitorDisk) {
+                if (root.diskIoDevice === "") detectDiskDevice.running = true
+                else diskStatsProc.running = true
+            }
             
             if (root.processMonitorActive && !processProc.running) processProc.running = true
         }
