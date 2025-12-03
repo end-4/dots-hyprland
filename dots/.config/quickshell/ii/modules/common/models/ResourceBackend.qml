@@ -1,8 +1,6 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.services
-import qs.modules.common
 import "../functions/ResourceMonitorUtils.js" as Utils
 
 Item {
@@ -11,10 +9,21 @@ Item {
     property bool active: false
     property bool processMonitorActive: false
 
-    // System Resources (from Quickshell/System)
-    property real cpuUsage: ResourceUsage.cpuUsage
-    property real memoryUsed: ResourceUsage.memoryUsed
-    property real memoryTotal: ResourceUsage.memoryTotal
+    // System Resources
+    property real cpuUsage: 0
+    property real memoryUsed: 0
+    property real memoryTotal: 1
+    property real swapUsed: 0
+    property real swapTotal: 1
+    
+    // Disk I/O
+    property real diskReadSpeed: 0
+    property real diskWriteSpeed: 0
+    property real diskActiveTime: 0
+    property string diskIoDevice: ""
+    
+    property var _cpuPrev: ({total: 0, idle: 0})
+    property var _diskPrev: ({read: 0, write: 0, time: 0, timestamp: 0})
 
     // CPU Info
     property int cpuCores: 1
@@ -66,6 +75,91 @@ Item {
     }
 
     // --- Processes ---
+
+    Process {
+        id: detectDiskDevice
+        command: ["bash", "-c", "basename $(findmnt -n -o SOURCE /)"]
+        running: root.active && root.diskIoDevice === ""
+        stdout: SplitParser { onRead: data => root.diskIoDevice = data.trim() }
+    }
+
+    Process {
+        id: cpuStatProc
+        command: ["bash", "-c", "grep '^cpu ' /proc/stat"]
+        running: root.active
+        stdout: SplitParser {
+            onRead: data => {
+                let parts = data.trim().split(/\s+/)
+                if (parts.length >= 5) {
+                    let idle = parseFloat(parts[4])
+                    let total = 0
+                    for (let i=1; i<parts.length; i++) total += parseFloat(parts[i])
+                    
+                    if (root._cpuPrev.total > 0) {
+                        let totalDiff = total - root._cpuPrev.total
+                        let idleDiff = idle - root._cpuPrev.idle
+                        root.cpuUsage = totalDiff > 0 ? (totalDiff - idleDiff) / totalDiff : 0
+                    }
+                    root._cpuPrev = {total: total, idle: idle}
+                }
+            }
+        }
+    }
+
+    Process {
+        id: memInfoProc
+        command: ["bash", "-c", "grep -E 'MemTotal|MemAvailable|SwapTotal|SwapFree' /proc/meminfo"]
+        running: root.active
+        stdout: SplitParser {
+            onRead: data => {
+                let lines = data.trim().split("\n")
+                for (let line of lines) {
+                    let parts = line.split(":")
+                    if (parts.length < 2) continue
+                    let val = parseInt(parts[1].trim()) * 1024 // KB to Bytes
+                    
+                    if (line.startsWith("MemTotal")) {
+                        root.memoryTotal = val
+                    } else if (line.startsWith("MemAvailable")) {
+                        root.memoryUsed = root.memoryTotal - val
+                    } else if (line.startsWith("SwapTotal")) {
+                        root.swapTotal = val
+                    } else if (line.startsWith("SwapFree")) {
+                        root.swapUsed = root.swapTotal - val
+                    }
+                }
+            }
+        }
+    }
+
+    Process {
+        id: diskStatsProc
+        command: ["bash", "-c", "grep -w '" + root.diskIoDevice + "' /proc/diskstats"]
+        running: root.active && root.diskIoDevice !== ""
+        stdout: SplitParser {
+            onRead: data => {
+                let parts = data.trim().split(/\s+/)
+                if (parts[0] === "") parts.shift()
+                if (parts.length >= 14) {
+                    let readSectors = parseFloat(parts[5])
+                    let writeSectors = parseFloat(parts[9])
+                    let ioTime = parseFloat(parts[12])
+                    let now = Date.now()
+                    
+                    if (root._diskPrev.timestamp > 0) {
+                        let timeDelta = now - root._diskPrev.timestamp
+                        if (timeDelta > 0) {
+                            root.diskReadSpeed = (readSectors - root._diskPrev.read) * 512 * (1000 / timeDelta)
+                            root.diskWriteSpeed = (writeSectors - root._diskPrev.write) * 512 * (1000 / timeDelta)
+                            let activeMs = ioTime - root._diskPrev.time
+                            root.diskActiveTime = Math.min(1, Math.max(0, activeMs / timeDelta))
+                        }
+                    }
+                    root._diskPrev = {read: readSectors, write: writeSectors, time: ioTime, timestamp: now}
+                }
+            }
+        }
+    }
 
     Process {
         id: cpuCoresProc
@@ -171,18 +265,26 @@ Item {
         id: gpuDiscovery
         command: ["bash", "-c", "lspci -mm | grep -E 'VGA|3D|Display'"]
         running: root.active
+        onStarted: root.gpuDiscoveryBuffer = ""
         stdout: SplitParser {
             onRead: data => root.gpuDiscoveryBuffer += data + "\n"
         }
         onExited: (exitCode, exitStatus) => {
             var lines = root.gpuDiscoveryBuffer.trim().split("\n")
             var gpus = []
+            var seenBusIds = new Set()
+            
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i]
                 if (!line) continue
                 var parts = line.split('"')
                 if (parts.length >= 6) {
                     var busId = parts[0].trim()
+                    
+                    // Avoid duplicates
+                    if (seenBusIds.has(busId)) continue
+                    seenBusIds.add(busId)
+                    
                     var vendor = parts[3]
                     var device = parts[5]
                     var type = "other"
@@ -200,7 +302,6 @@ Item {
             for (var j = 0; j < gpus.length; j++) gpus[j].index = j
             root.gpuList = gpus
             if (gpus.length > 0) {
-                root.selectedGpuIndex = 0
                 gpuProc.updateCommand()
             }
         }
@@ -330,7 +431,7 @@ Item {
     }
 
     Timer {
-        interval: 2000
+        interval: 1000
         running: root.active
         repeat: true
         triggeredOnStart: true
@@ -343,7 +444,14 @@ Item {
             threadCountProc.running = true
             handleCountProc.running = true
             
-            if (root.processMonitorActive) processProc.running = true
+            // New stats
+            if (root.diskIoDevice === "") detectDiskDevice.running = true
+            else diskStatsProc.running = true
+            
+            cpuStatProc.running = true
+            memInfoProc.running = true
+            
+            if (root.processMonitorActive && !processProc.running) processProc.running = true
         }
     }
 }

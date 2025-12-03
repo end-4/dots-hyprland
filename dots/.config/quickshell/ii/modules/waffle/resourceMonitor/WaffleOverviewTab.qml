@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.resourceMonitor
@@ -32,6 +31,9 @@ Item {
     
     property real diskUsed: backend.diskUsed
     property real diskTotal: backend.diskTotal
+    property real diskReadSpeed: backend.diskReadSpeed
+    property real diskWriteSpeed: backend.diskWriteSpeed
+    property real diskActiveTime: backend.diskActiveTime
     
     property real networkDownSpeed: backend.networkDownSpeed
     property real networkUpSpeed: backend.networkUpSpeed
@@ -74,7 +76,7 @@ Item {
             root.cpuHistory = [...root.cpuHistory.slice(-(root.historyLength - 1)), root.cpuUsage]
             root.memHistory = [...root.memHistory.slice(-(root.historyLength - 1)), root.memoryUsed / root.memoryTotal]
             root.gpuHistory = [...root.gpuHistory.slice(-(root.historyLength - 1)), root.gpuUsage / 100]
-            root.diskHistory = [...root.diskHistory.slice(-(root.historyLength - 1)), Math.random() * 0.1] 
+            root.diskHistory = [...root.diskHistory.slice(-(root.historyLength - 1)), root.diskActiveTime] 
 
             var currentNetSpeed = root.networkDownSpeed + root.networkUpSpeed
             if (currentNetSpeed > root.maxNetSpeed) root.maxNetSpeed = currentNetSpeed
@@ -392,11 +394,24 @@ Item {
                     
                     ColumnLayout {
                         StyledText { text: "Active time"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
-                        StyledText { text: "0%"; font.pixelSize: Appearance.font.pixelSize.large }
+                        StyledText { text: (root.diskActiveTime * 100).toFixed(0) + "%"; font.pixelSize: Appearance.font.pixelSize.large }
+                    }
+                    ColumnLayout {
+                        StyledText { text: "Average response time"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
+                        StyledText { text: "0 ms"; font.pixelSize: Appearance.font.pixelSize.large }
                     }
                     ColumnLayout {
                         StyledText { text: "Capacity"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
                         StyledText { text: Utils.formatBytes(root.diskTotal); font.pixelSize: Appearance.font.pixelSize.large }
+                    }
+                    
+                    ColumnLayout {
+                        StyledText { text: "Read speed"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
+                        StyledText { text: Utils.formatSpeed(root.diskReadSpeed); font.pixelSize: Appearance.font.pixelSize.large }
+                    }
+                    ColumnLayout {
+                        StyledText { text: "Write speed"; color: Appearance.colors.colSubtext; font.pixelSize: Appearance.font.pixelSize.smaller }
+                        StyledText { text: Utils.formatSpeed(root.diskWriteSpeed); font.pixelSize: Appearance.font.pixelSize.large }
                     }
                 }
             }

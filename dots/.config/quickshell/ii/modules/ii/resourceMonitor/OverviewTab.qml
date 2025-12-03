@@ -28,6 +28,7 @@ StyledFlickable {
     
     property real diskUsed: backend.diskUsed
     property real diskTotal: backend.diskTotal
+    property real diskActiveTime: backend.diskActiveTime
     
     property real networkDownSpeed: backend.networkDownSpeed
     property real networkUpSpeed: backend.networkUpSpeed
@@ -44,6 +45,7 @@ StyledFlickable {
     property list<real> memHistory: []
     property list<real> gpuHistory: []
     property list<real> netHistory: []
+    property list<real> diskHistory: []
     property real maxNetSpeed: 1024 * 1024
 
     // Update timer
@@ -53,9 +55,10 @@ StyledFlickable {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            root.cpuHistory = [...root.cpuHistory.slice(-(root.historyLength - 1)), ResourceUsage.cpuUsage]
-            root.memHistory = [...root.memHistory.slice(-(root.historyLength - 1)), ResourceUsage.memoryUsed / ResourceUsage.memoryTotal]
+            root.cpuHistory = [...root.cpuHistory.slice(-(root.historyLength - 1)), backend.cpuUsage]
+            root.memHistory = [...root.memHistory.slice(-(root.historyLength - 1)), backend.memoryUsed / backend.memoryTotal]
             root.gpuHistory = [...root.gpuHistory.slice(-(root.historyLength - 1)), root.gpuUsage / 100]
+            root.diskHistory = [...root.diskHistory.slice(-(root.historyLength - 1)), root.diskActiveTime]
             
             var currentNetSpeed = root.networkDownSpeed + root.networkUpSpeed
             if (currentNetSpeed > root.maxNetSpeed) root.maxNetSpeed = currentNetSpeed
@@ -78,8 +81,8 @@ StyledFlickable {
                 Layout.fillWidth: true
                 title: "CPU"
                 icon: "memory"
-                value: (ResourceUsage.cpuUsage * 100).toFixed(1) + "%"
-                progress: ResourceUsage.cpuUsage
+                value: (backend.cpuUsage * 100).toFixed(1) + "%"
+                progress: backend.cpuUsage
                 subtitle: root.cpuName + " (" + root.cpuCores + " cores)"
                 history: root.cpuHistory
                 progressColor: Appearance.m3colors.m3primary
@@ -89,9 +92,9 @@ StyledFlickable {
                 Layout.fillWidth: true
                 title: Translation.tr("Memory")
                 icon: "memory_alt"
-                value: Utils.formatBytes(ResourceUsage.memoryUsed)
-                progress: ResourceUsage.memoryUsed / ResourceUsage.memoryTotal
-                subtitle: Utils.formatBytes(ResourceUsage.memoryTotal) + " total"
+                value: Utils.formatBytes(backend.memoryUsed)
+                progress: backend.memoryUsed / backend.memoryTotal
+                subtitle: Utils.formatBytes(backend.memoryTotal) + " total"
                 history: root.memHistory
                 progressColor: Appearance.m3colors.m3primary
             }
@@ -114,7 +117,22 @@ StyledFlickable {
                 
                 pills: {
                     var list = []
-                    for(var i=0; i<root.gpuList.length; i++) list.push("GPU " + i)
+                    for(var i=0; i<root.gpuList.length; i++) {
+                        var gpu = root.gpuList[i]
+                        var name = "GPU " + i
+                        if (gpu.type === "nvidia") name = "NVIDIA"
+                        else if (gpu.type === "intel") name = "Intel"
+                        else if (gpu.type === "amd") name = "AMD"
+                        
+                        // Check if we have multiple of the same type to append index
+                        var count = 0
+                        for(var j=0; j<root.gpuList.length; j++) {
+                            if (root.gpuList[j].type === gpu.type) count++
+                        }
+                        if (count > 1) name += " " + i
+                        
+                        list.push(name)
+                    }
                     return list
                 }
                 activePillIndex: root.selectedGpuIndex
@@ -125,9 +143,9 @@ StyledFlickable {
                 Layout.fillWidth: true
                 title: "Swap"
                 icon: "swap_horiz"
-                value: (ResourceUsage.swapUsed / (1024 * 1024)).toFixed(2) + " GB"
-                progress: ResourceUsage.swapTotal > 0 ? ResourceUsage.swapUsed / ResourceUsage.swapTotal : 0
-                subtitle: ResourceUsage.swapTotal > 0 ? (ResourceUsage.swapTotal / (1024 * 1024)).toFixed(2) + " GB total" : "Not configured"
+                value: (backend.swapUsed / (1024 * 1024 * 1024)).toFixed(2) + " GB"
+                progress: backend.swapTotal > 0 ? backend.swapUsed / backend.swapTotal : 0
+                subtitle: backend.swapTotal > 0 ? (backend.swapTotal / (1024 * 1024 * 1024)).toFixed(2) + " GB total" : "Not configured"
                 progressColor: Appearance.m3colors.m3primary
             }
         }
@@ -141,11 +159,12 @@ StyledFlickable {
                 Layout.fillWidth: true
                 title: Translation.tr("Disk") + " (/)"
                 icon: "hard_drive"
-                value: Utils.formatBytes(root.diskUsed)
+                value: ((root.diskUsed / root.diskTotal) * 100).toFixed(0) + "%"
                 progress: root.diskUsed / root.diskTotal
-                subtitle: Utils.formatBytes(root.diskTotal) + " total"
+                subtitle: Utils.formatBytes(root.diskUsed) + " / " + Utils.formatBytes(root.diskTotal)
+                history: root.diskHistory
                 progressColor: Appearance.m3colors.m3primary
-                showGraph: false
+                showGraph: true
             }
 
             ResourceCard {
