@@ -213,7 +213,19 @@ ColumnLayout {
                     const parts = line.trim().split(/\s+/)
                     if (parts.length >= 12) {
                         let rawCpu = parseFloat(parts[8]) || 0
+
+                        // NOTE: top reports CPU usage as a percentage of a single core. if process is multi-threaded, this can exceed 100%.
+                        // We normalize it by dividing by the number of CPU cores.
+                        // If we have more than one core, normalize the CPU usage
+                        // to be a percentage of total CPU usage across all cores.
+                        // This is a workaround for top's behavior where it shows CPU usage
+                        // as a percentage of a single core, which can exceed 100% for multi-threaded processes.
+                        // For example, if a process uses 200% CPU on a 4-core system,
+                        // it means it is using 50% of total CPU time across all cores
+                        // (200% / 4 cores = 50% total CPU usage).
+                        // This is a common way to represent CPU usage in multi-core systems.
                         let normalizedCpu = rawCpu / root.cpuCores
+                        
                         procs.push({
                             pid: parseInt(parts[0]) || 0,
                             ppid: 0, // top doesn't show ppid by default in this view
