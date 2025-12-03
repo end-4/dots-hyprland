@@ -8,160 +8,27 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.resourceMonitor
+import "../../common/models" as Models
+import "../../common/functions/ResourceMonitorUtils.js" as Utils
 
 ColumnLayout {
     id: root
     spacing: 8
 
-    property var processList: []
-    property var groupedProcesses: []
     property var expandedGroups: ({})
     property string sortBy: "cpu"
     property bool sortAscending: false
     property string filterText: ""
     property int selectedPid: -1
     property string selectedGroup: ""
-    property int cpuCores: 1
 
-    function sortProcesses(procs) {
-        let sorted = [...procs]
-        sorted.sort((a, b) => {
-            let valA, valB
-            switch (sortBy) {
-                case "cpu": valA = a.cpu; valB = b.cpu; break
-                case "mem": valA = a.mem; valB = b.mem; break
-                case "pid": valA = a.pid; valB = b.pid; break
-                case "name": valA = a.name.toLowerCase(); valB = b.name.toLowerCase(); break
-                default: valA = a.cpu; valB = b.cpu
-            }
-            if (sortAscending) return valA > valB ? 1 : -1
-            return valA < valB ? 1 : -1
-        })
-        return sorted
+    Models.ResourceBackend {
+        id: backend
+        active: root.visible
+        processMonitorActive: true
+        onKillFinished: backend.refreshProcesses()
     }
 
-    function filterProcesses(procs) {
-        if (!filterText) return procs
-        const search = filterText.toLowerCase()
-        return procs.filter(p => 
-            p.name.toLowerCase().includes(search) || 
-            p.pid.toString().includes(search)
-        )
-    }
-
-    function groupByName(procs) {
-        var groups = {}
-        for (var i = 0; i < procs.length; i++) {
-            var p = procs[i]
-            if (!groups[p.name]) {
-                groups[p.name] = {
-                    name: p.name,
-                    processes: [],
-                    totalCpu: 0,
-                    totalMem: 0,
-                    isGroup: true
-                }
-            }
-            groups[p.name].processes.push(p)
-            groups[p.name].totalCpu += p.cpu
-            groups[p.name].totalMem += p.mem
-        }
-        
-        var result = []
-        for (var name in groups) {
-            result.push(groups[name])
-        }
-        
-        return result
-    }
-    
-    function filterGroups(groups) {
-        if (!filterText) return groups
-        var search = filterText.toLowerCase()
-        var result = []
-        
-        for (var i = 0; i < groups.length; i++) {
-            var group = groups[i]
-            // Check if group name matches
-            if (group.name.toLowerCase().includes(search)) {
-                result.push(group)
-            } else {
-                // Check if any process in the group matches (by PID)
-                var matchingProcs = []
-                for (var j = 0; j < group.processes.length; j++) {
-                    var p = group.processes[j]
-                    if (p.pid.toString().includes(search)) {
-                        matchingProcs.push(p)
-                    }
-                }
-                if (matchingProcs.length > 0) {
-                    result.push({
-                        name: group.name,
-                        processes: matchingProcs,
-                        totalCpu: matchingProcs.reduce(function(sum, p) { return sum + p.cpu }, 0),
-                        totalMem: matchingProcs.reduce(function(sum, p) { return sum + p.mem }, 0),
-                        isGroup: true
-                    })
-                }
-            }
-        }
-        return result
-    }
-    
-    function flattenGrouped(groups) {
-        var result = []
-        
-        var sortedGroups = groups.slice()
-        sortedGroups.sort(function(a, b) {
-            var valA, valB
-            switch (sortBy) {
-                case "cpu": valA = a.totalCpu; valB = b.totalCpu; break
-                case "mem": valA = a.totalMem; valB = b.totalMem; break
-                case "name": valA = a.name.toLowerCase(); valB = b.name.toLowerCase(); break
-                default: valA = a.totalCpu; valB = b.totalCpu
-            }
-            if (sortAscending) return valA > valB ? 1 : -1
-            return valA < valB ? 1 : -1
-        })
-        
-        for (var i = 0; i < sortedGroups.length; i++) {
-            var group = sortedGroups[i]
-            // Add group header
-            result.push({
-                isGroup: true,
-                name: group.name,
-                cpu: group.totalCpu,
-                mem: group.totalMem,
-                count: group.processes.length,
-                pid: 0,
-                depth: 0
-            })
-            
-            // Add individual processes if expanded (or when filtering, auto-expand)
-            var shouldExpand = expandedGroups[group.name] || (filterText && group.processes.length > 1)
-            if (shouldExpand && group.processes.length > 1) {
-                var sortedProcs = group.processes.slice()
-                sortedProcs.sort(function(a, b) {
-                    return b.cpu - a.cpu  // Sort by CPU within group
-                })
-                
-                for (var j = 0; j < sortedProcs.length; j++) {
-                    result.push({
-                        isGroup: false,
-                        name: sortedProcs[j].name,
-                        cpu: sortedProcs[j].cpu,
-                        mem: sortedProcs[j].mem,
-                        pid: sortedProcs[j].pid,
-                        depth: 1,
-                        count: 0
-                    })
-                }
-            }
-        }
-        
-        return result
-    }
-    
     function toggleGroup(name) {
         var newExpanded = Object.assign({}, expandedGroups)
         if (newExpanded[name]) {
@@ -173,92 +40,11 @@ ColumnLayout {
     }
     
     function killGroup(name) {
-        for (var i = 0; i < processList.length; i++) {
-            if (processList[i].name === name) {
-                killProc.targetPid = processList[i].pid
-                killProc.running = true
+        for (var i = 0; i < backend.processList.length; i++) {
+            if (backend.processList[i].name === name) {
+                backend.killProcess(backend.processList[i].pid)
             }
         }
-    }
-
-    Process {
-        id: cpuCount
-        command: ["nproc"]
-        running: true
-        stdout: SplitParser {
-            onRead: data => {
-                var cores = parseInt(data.trim())
-                if (cores > 0) root.cpuCores = cores
-            }
-        }
-    }
-
-    Process {
-        id: processProc
-        command: ["bash", "-c", "LC_NUMERIC=C top -b -n 2 -d 0.5 -w 512 | awk '/PID/ {iter++} iter==2 { print $0 }'"]
-        property string outputBuffer: ""
-        stdout: SplitParser {
-            onRead: data => {
-                processProc.outputBuffer += data + "\n"
-            }
-        }
-        onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0) {
-                const lines = processProc.outputBuffer.trim().split("\n")
-                const procs = []
-                for (const line of lines) {
-                    // Skip header line
-                    if (line.includes("PID") && line.includes("USER")) continue
-                    
-                    const parts = line.trim().split(/\s+/)
-                    if (parts.length >= 12) {
-                        let rawCpu = parseFloat(parts[8]) || 0
-
-                        // NOTE: top reports CPU usage as a percentage of a single core. if process is multi-threaded, this can exceed 100%.
-                        // We normalize it by dividing by the number of CPU cores.
-                        // If we have more than one core, normalize the CPU usage
-                        // to be a percentage of total CPU usage across all cores.
-                        // This is a workaround for top's behavior where it shows CPU usage
-                        // as a percentage of a single core, which can exceed 100% for multi-threaded processes.
-                        // For example, if a process uses 200% CPU on a 4-core system,
-                        // it means it is using 50% of total CPU time across all cores
-                        // (200% / 4 cores = 50% total CPU usage).
-                        // This is a common way to represent CPU usage in multi-core systems.
-                        let normalizedCpu = rawCpu / root.cpuCores
-
-                        procs.push({
-                            pid: parseInt(parts[0]) || 0,
-                            ppid: 0, // top doesn't show ppid by default in this view
-                            cpu: normalizedCpu,
-                            mem: parseFloat(parts[9]) || 0,
-                            name: parts.slice(11).join(" ") || "unknown",
-                            children: [],
-                            totalChildren: 0
-                        })
-                    }
-                }
-                root.processList = procs
-                root.groupedProcesses = groupByName(procs)
-            }
-            processProc.outputBuffer = ""
-        }
-    }
-
-    Process {
-        id: killProc
-        property int targetPid: 0
-        command: ["bash", "-c", "kill -15 " + targetPid + "; sleep 1; kill -0 " + targetPid + " 2>/dev/null && kill -9 " + targetPid]
-        onExited: (exitCode, exitStatus) => {
-            processProc.running = true
-        }
-    }
-
-    Timer {
-        interval: 2000
-        running: root.visible
-        repeat: true
-        triggeredOnStart: true
-        onTriggered: processProc.running = true
     }
 
     // Search and controls
@@ -321,7 +107,7 @@ ColumnLayout {
             implicitHeight: 40
             buttonRadius: Appearance.rounding.small
             colBackground: Appearance.colors.colLayer1
-            onClicked: processProc.running = true
+            onClicked: backend.refreshProcesses()
             StyledToolTip { text: Translation.tr("Refresh") }
             contentItem: MaterialSymbol {
                 anchors.centerIn: parent
@@ -431,7 +217,13 @@ ColumnLayout {
                 })
             }
             
-            model: root.flattenGrouped(root.filterGroups(root.groupedProcesses))
+            model: Utils.flattenGrouped(
+                Utils.filterGroups(Utils.groupByName(backend.processList), root.filterText),
+                root.expandedGroups,
+                root.filterText,
+                root.sortBy,
+                root.sortAscending
+            )
 
             delegate: ProcessListItem {
                 width: processListView.width
@@ -451,16 +243,13 @@ ColumnLayout {
                 
                 onToggleGroup: name => root.toggleGroup(name)
                 onKillGroup: name => root.killGroup(name)
-                onKillProcess: pid => {
-                    killProc.targetPid = pid
-                    killProc.running = true
-                }
+                onKillProcess: pid => backend.killProcess(pid)
             }
         }
 
         ColumnLayout {
             anchors.centerIn: parent
-            visible: root.processList.length === 0
+            visible: backend.processList.length === 0
             spacing: 10
 
             IconImage {
@@ -491,7 +280,7 @@ ColumnLayout {
         spacing: 8
 
         StyledText {
-            text: Translation.tr("%1 processes in %2 groups").arg(root.processList.length).arg(root.groupedProcesses.length)
+            text: Translation.tr("%1 processes in %2 groups").arg(backend.processList.length).arg(Utils.groupByName(backend.processList).length)
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
         }
@@ -500,7 +289,7 @@ ColumnLayout {
 
         StyledText {
             visible: root.filterText
-            text: Translation.tr("Showing: %1 groups").arg(root.filterGroups(root.groupedProcesses).length)
+            text: Translation.tr("Showing: %1 groups").arg(Utils.filterGroups(Utils.groupByName(backend.processList), root.filterText).length)
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
         }
