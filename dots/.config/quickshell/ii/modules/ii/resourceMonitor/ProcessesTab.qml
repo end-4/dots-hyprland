@@ -225,7 +225,7 @@ ColumnLayout {
                         // (200% / 4 cores = 50% total CPU usage).
                         // This is a common way to represent CPU usage in multi-core systems.
                         let normalizedCpu = rawCpu / root.cpuCores
-                        
+
                         procs.push({
                             pid: parseInt(parts[0]) || 0,
                             ppid: 0, // top doesn't show ppid by default in this view
@@ -247,9 +247,9 @@ ColumnLayout {
     Process {
         id: killProc
         property int targetPid: 0
-        command: ["kill", "-9", targetPid.toString()]
+        command: ["bash", "-c", "kill -15 " + targetPid + "; sleep 1; kill -0 " + targetPid + " 2>/dev/null && kill -9 " + targetPid]
         onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0) processProc.running = true
+            processProc.running = true
         }
     }
 
