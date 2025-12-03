@@ -62,10 +62,7 @@ rsync_dir__sync(){
   # `--delete' for rsync to make sure that
   # original dotfiles and new ones in the SAME DIRECTORY
   # (eg. in ~/.config/hypr) won't be mixed together
-  x mkdir -p "$2"
-  local dest="$(realpath -se $2)"
-  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+  rsync_dir__sync_exclude "$1" "$2"
 }
 rsync_dir__sync_exclude(){
   # NOTE: This function is only for using in other functions
