@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.services
+import qs.modules.common
 import "../functions/ResourceMonitorUtils.js" as Utils
 
 Item {
@@ -8,6 +10,11 @@ Item {
 
     property bool active: false
     property bool processMonitorActive: false
+
+    // System Resources (from Quickshell/System)
+    property real cpuUsage: ResourceUsage.cpuUsage
+    property real memoryUsed: ResourceUsage.memoryUsed
+    property real memoryTotal: ResourceUsage.memoryTotal
 
     // CPU Info
     property int cpuCores: 1
