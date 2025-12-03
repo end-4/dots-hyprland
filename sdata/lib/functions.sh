@@ -91,12 +91,6 @@ function sudo_init_keepalive(){
     return 0
   fi
 
-  # Only initialize for install-related commands that need sudo
-  case "${SUBCMD_NAME}" in
-    install|install-deps|install-setups) ;;
-    *) return 0 ;;
-  esac
-
   # Skip if already initialized
   if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
     return 0
