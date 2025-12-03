@@ -71,6 +71,10 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for the entire install process
+    sudo_init_keepalive
+    # Set trap to cleanup when this subcommand exits
+    trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
@@ -89,6 +93,10 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for dependency installation
+    sudo_init_keepalive
+    # Set trap to cleanup when this subcommand exits
+    trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
       source ${SUBCMD_DIR}/1.deps-router.sh
     fi
@@ -98,6 +106,10 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for setup steps
+    sudo_init_keepalive
+    # Set trap to cleanup when this subcommand exits
+    trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
       source ${SUBCMD_DIR}/2.setups.sh
     fi
