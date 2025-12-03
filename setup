@@ -8,6 +8,10 @@ source ./sdata/lib/package-installers.sh
 source ./sdata/lib/dist-determine.sh
 
 prevent_sudo_or_root
+
+# Trap to ensure sudo keepalive is stopped on exit
+trap sudo_stop_keepalive EXIT INT TERM
+
 set -e
 
 #####################################################################################
@@ -71,6 +75,8 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for the entire install process
+    sudo_init_keepalive
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
       source ${SUBCMD_DIR}/0.greeting.sh
     fi
@@ -89,6 +95,8 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for dependency installation
+    sudo_init_keepalive
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
       source ${SUBCMD_DIR}/1.deps-router.sh
     fi
@@ -98,6 +106,8 @@ case ${SUBCMD_NAME} in
       $function
     done
     pause
+    # Initialize sudo keepalive for setup steps
+    sudo_init_keepalive
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
       source ${SUBCMD_DIR}/2.setups.sh
     fi
