@@ -17,7 +17,7 @@ WPanelPageColumn {
     WPanelSeparator {}
 
     BodyRectangle {
-        implicitHeight: 736 // TODO: Make sizes naturally inferred
+        Layout.fillHeight: true
     }
 
     WPanelSeparator {}
