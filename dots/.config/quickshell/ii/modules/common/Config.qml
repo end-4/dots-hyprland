@@ -590,8 +590,9 @@ Singleton {
                 // false will make (some) stuff also be like that for accuracy. 
                 // Example: the right-click menu of the Start button
                 property JsonObject tweaks: JsonObject {
-                    property bool smootherMenuAnimations: true
                     property bool switchHandlePositionFix: true
+                    property bool smootherMenuAnimations: true
+                    property bool smootherSearchBar: true
                 }
                 property JsonObject bar: JsonObject {
                     property bool bottom: true
