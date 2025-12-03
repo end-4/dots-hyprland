@@ -13,7 +13,6 @@ const elements = [
         { name: 'ka', symbol: 'カ', number: '', weight: '', type: 'kana' },
         { name: 'a', symbol: 'ア', number: '', weight: '', type: 'kana' },
     ],
-
     [
         { name: '', symbol: '', number: '', weight: '', type: 'kana' }, // 
         { name: 'wi', symbol: 'ヰ', number: '', weight: '', type: 'kana' },
@@ -53,20 +52,19 @@ const elements = [
         { name: 'ke', symbol: 'ケ', number: '', weight: '', type: 'kana' },
         { name: 'e', symbol: 'エ', number: '', weight: '', type: 'kana' },
     ],
-[
-    { name: 'n', symbol: 'ン', number: '', weight: '', type: 'kana' },
-{ name: 'wo', symbol: 'ヲ', number: '', weight: '', type: 'kana' },
-{ name: 'ro', symbol: 'ロ', number: '', weight: '', type: 'kana' },
-{ name: 'yo', symbol: 'ヨ', number: '', weight: '', type: 'kana' },
-{ name: 'mo', symbol: 'モ', number: '', weight: '', type: 'kana' },
-{ name: 'ho', symbol: 'ホ', number: '', weight: '', type: 'kana' },
-{ name: 'no', symbol: 'ノ', number: '', weight: '', type: 'kana' },
-{ name: 'to', symbol: 'ト', number: '', weight: '', type: 'kana' },
-{ name: 'so', symbol: 'ソ', number: '', weight: '', type: 'kana' },
-{ name: 'ko', symbol: 'コ', number: '', weight: '', type: 'kana' },
-{ name: 'o', symbol: 'オ', number: '', weight: '', type: 'kana' },
-],
-
+    [
+        { name: 'n', symbol: 'ン', number: '', weight: '', type: 'kana' },
+        { name: 'wo', symbol: 'ヲ', number: '', weight: '', type: 'kana' },
+        { name: 'ro', symbol: 'ロ', number: '', weight: '', type: 'kana' },
+        { name: 'yo', symbol: 'ヨ', number: '', weight: '', type: 'kana' },
+        { name: 'mo', symbol: 'モ', number: '', weight: '', type: 'kana' },
+        { name: 'ho', symbol: 'ホ', number: '', weight: '', type: 'kana' },
+        { name: 'no', symbol: 'ノ', number: '', weight: '', type: 'kana' },
+        { name: 'to', symbol: 'ト', number: '', weight: '', type: 'kana' },
+        { name: 'so', symbol: 'ソ', number: '', weight: '', type: 'kana' },
+        { name: 'ko', symbol: 'コ', number: '', weight: '', type: 'kana' },
+        { name: 'o', symbol: 'オ', number: '', weight: '', type: 'kana' },
+    ],
 ];
 
 const niceTypes = {
