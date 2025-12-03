@@ -18,6 +18,10 @@ Scope { // Scope
             "name": Translation.tr("Keybinds")
         },
         {
+            "icon": "カ",
+            "name": Translation.tr("Katakana")
+        },
+        {
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
@@ -161,6 +165,7 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
+                        CheatsheetKatakana {}
                         CheatsheetPeriodicTable {}
                     }
                 }
