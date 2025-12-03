@@ -102,7 +102,7 @@ Singleton {
 
     Process {
         id: findCpuMaxFreqProc
-        command: ["bash", "-c", "lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
+        command: ["bash", "-c", "LANG=en_US.UTF-8 lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
         running: true
         stdout: StdioCollector {
             id: outputCollector
