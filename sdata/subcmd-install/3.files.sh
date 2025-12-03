@@ -67,6 +67,22 @@ rsync_dir__sync(){
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
+rsync_dir__sync_exclude(){
+  # NOTE: This function is only for using in other functions
+  # Same as rsync_dir__sync but with exclude patterns support
+  # Usage: rsync_dir__sync_exclude <src> <dest> <exclude_pattern1> [<exclude_pattern2> ...]
+  local src="$1"
+  local dest_dir="$2"
+  shift 2
+  local excludes=()
+  for pattern in "$@"; do
+    excludes+=(--exclude "$pattern")
+  done
+  x mkdir -p "$dest_dir"
+  local dest="$(realpath -se $dest_dir)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  rsync -a --delete "${excludes[@]}" --out-format='%i %n' "$src"/ "$dest_dir"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+}
 function install_file(){
   # NOTE: Do not add prefix `v` or `x` when using this function
   local s=$1
