@@ -48,7 +48,7 @@ Variants {
             return enabled && sensitiveWallpaper && sensitiveNetwork;
         }
         property real parallaxRation: 1.2
-        property real additionalScaleFactor: Config.options.background.parallax.workspaceZoom
+        readonly property real additionalScaleFactor: Config.options.background.parallax.workspaceZoom
         property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
@@ -119,7 +119,6 @@ Variants {
                     // Big picture; scale < 1; will zoom out the picture
                     // Choose max number so every side will fit
                     const minSuitableScale = Math.max(screenWidth / width, screenHeight / height);
-                    //todo switch off parallax
                     bgRoot.effectiveWallpaperScale = minSuitableScale * bgRoot.additionalScaleFactor * bgRoot.parallaxRation;
                 }
             }
