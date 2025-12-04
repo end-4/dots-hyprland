@@ -131,6 +131,14 @@ Singleton {
                     property real height: 600
                     property int tabIndex: 0
                 }
+                property JsonObject catwalk: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: true
+                    property real x: 500
+                    property real y: 500
+                    property real width: 0
+                    property real height: 0
+                }
                 property JsonObject notes: JsonObject {
                     property bool pinned: false
                     property bool clickthrough: true
