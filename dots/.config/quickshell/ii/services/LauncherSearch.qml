@@ -4,7 +4,6 @@ import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 
@@ -12,6 +11,15 @@ Singleton {
     id: root
 
     property string query: ""
+
+    function ensurePrefix(prefix) {
+        if ([Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
+            root.query = prefix + root.query.slice(1);
+        } else {
+            root.query = prefix + root.query;
+        }
+    }
+
     property var searchActions: [
         {
             action: "accentcolor",
@@ -74,12 +82,13 @@ Singleton {
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
         const enabled = Config.options.workSafety.enable.clipboard;
-        const sensitiveNetwork = (StringUtils.stringListContainsSubstring(Network.networkName.toLowerCase(), Config.options.workSafety.triggerCondition.networkNameKeywords))
+        const sensitiveNetwork = (StringUtils.stringListContainsSubstring(Network.networkName.toLowerCase(), Config.options.workSafety.triggerCondition.networkNameKeywords));
         return enabled && sensitiveNetwork;
     }
 
     function containsUnsafeLink(entry) {
-        if (entry == undefined) return false;
+        if (entry == undefined)
+            return false;
         const unsafeKeywords = Config.options.workSafety.triggerCondition.linkKeywords;
         return StringUtils.stringListContainsSubstring(entry.toLowerCase(), unsafeKeywords);
     }
@@ -128,95 +137,121 @@ Singleton {
                     shouldBlurImage = shouldBlurImage && (root.containsUnsafeLink(array[index - 1]) || root.containsUnsafeLink(array[index + 1]));
                 }
                 const type = `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`;
-                return {
-                    key: type,
-                    cliphistRawString: entry,
+                return resultComp.createObject(null, {
+                    rawValue: entry,
                     name: StringUtils.cleanCliphistEntry(entry),
-                    clickActionName: "",
+                    verb: "",
                     type: type,
                     execute: () => {
                         Cliphist.copy(entry);
                     },
-                    actions: [
-                        {
-                            name: "Copy",
-                            materialIcon: "content_copy",
+                    actions: [resultComp.createObject(null, {
+                            name: Translation.tr("Copy"),
+                            iconName: "content_copy",
+                            iconType: LauncherSearchResult.IconType.Material,
                             execute: () => {
                                 Cliphist.copy(entry);
                             }
-                        },
-                        {
-                            name: "Delete",
-                            materialIcon: "delete",
+                        }), resultComp.createObject(null, {
+                            name: Translation.tr("Delete"),
+                            iconName: "delete",
+                            iconType: LauncherSearchResult.IconType.Material,
                             execute: () => {
                                 Cliphist.deleteEntry(entry);
                             }
-                        }
-                    ],
-                    blurImage: shouldBlurImage,
-                    blurImageText: Translation.tr("Work safety")
-                };
+                        })],
+                    blurImage: shouldBlurImage
+                });
             }).filter(Boolean);
         } else if (root.query.startsWith(Config.options.search.prefix.emojis)) {
             // Clipboard
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.emojis);
             return Emojis.fuzzyQuery(searchString).map(entry => {
                 const emoji = entry.match(/^\s*(\S+)/)?.[1] || "";
-                return {
-                    key: emoji,
-                    cliphistRawString: entry,
-                    bigText: emoji,
+                return resultComp.createObject(null, {
+                    rawValue: entry,
                     name: entry.replace(/^\s*\S+\s+/, ""),
-                    clickActionName: "",
-                    type: "Emoji",
+                    iconName: emoji,
+                    iconType: LauncherSearchResult.IconType.Text,
+                    verb: Translation.tr("Copy"),
+                    type: Translation.tr("Emoji"),
                     execute: () => {
                         Quickshell.clipboardText = entry.match(/^\s*(\S+)/)?.[1];
                     }
-                };
+                });
             }).filter(Boolean);
         }
 
         ////////////////// Init ///////////////////
         nonAppResultsTimer.restart();
-        const mathResultObject = {
-            key: `Math result: ${root.mathResult}`,
+        const mathResultObject = resultComp.createObject(null, {
             name: root.mathResult,
-            clickActionName: Translation.tr("Copy"),
+            verb: Translation.tr("Copy"),
             type: Translation.tr("Math result"),
-            fontType: "monospace",
-            materialSymbol: 'calculate',
+            fontType: LauncherSearchResult.FontType.Monospace,
+            iconName: 'calculate',
+            iconType: LauncherSearchResult.IconType.Material,
             execute: () => {
                 Quickshell.clipboardText = root.mathResult;
             }
-        };
-        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
-            entry.clickActionName = Translation.tr("Launch");
-            entry.type = Translation.tr("App");
-            entry.key = entry.execute;
-            return entry;
         });
-        const commandResultObject = {
-            key: `cmd ${root.query}`,
+        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
+            return resultComp.createObject(null, {
+                type: Translation.tr("App"),
+                name: entry.name,
+                iconName: entry.icon,
+                iconType: LauncherSearchResult.IconType.System,
+                verb: Translation.tr("Launch"),
+                execute: () => {
+                    if (!entry.runInTerminal)
+                        entry.execute();
+                    else {
+                        // Probably needs more proper escaping, but this will do for now
+                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                    }
+                },
+                comment: entry.comment,
+                runInTerminal: entry.runInTerminal,
+                genericName: entry.genericName,
+                keywords: entry.keywords,
+                actions: entry.actions.map(action => {
+                    return resultComp.createObject(null, {
+                        name: action.name,
+                        iconName: action.icon,
+                        iconType: LauncherSearchResult.IconType.System,
+                        execute: () => {
+                            if (!action.runInTerminal)
+                                action.execute();
+                            else {
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                            }
+                        }
+                    });
+                })
+            });
+        });
+        const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
-            clickActionName: Translation.tr("Run"),
+            verb: Translation.tr("Run"),
             type: Translation.tr("Run command"),
-            fontType: "monospace",
-            materialSymbol: 'terminal',
+            fontType: LauncherSearchResult.FontType.Monospace,
+            iconName: 'terminal',
+            iconType: LauncherSearchResult.IconType.Material,
             execute: () => {
                 let cleanedCommand = root.query.replace("file://", "");
                 cleanedCommand = StringUtils.cleanPrefix(cleanedCommand, Config.options.search.prefix.shellCommand);
                 if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
                     cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
                 }
-                Quickshell.execDetached(["bash", "-c", searchingText.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
+                Quickshell.execDetached(["bash", "-c", root.query.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
             }
-        };
-        const webSearchResultObject = {
-            key: `website ${root.query}`,
+        });
+        const webSearchResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch),
-            clickActionName: Translation.tr("Search"),
+            verb: Translation.tr("Search"),
             type: Translation.tr("Search the web"),
-            materialSymbol: 'travel_explore',
+            iconName: 'travel_explore',
+            iconType: LauncherSearchResult.IconType.Material,
             execute: () => {
                 let query = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch);
                 let url = Config.options.search.engineBaseUrl + query;
@@ -225,20 +260,20 @@ Singleton {
                 }
                 Qt.openUrlExternally(url);
             }
-        };
+        });
         const launcherActionObjects = root.searchActions.map(action => {
             const actionString = `${Config.options.search.prefix.action}${action.action}`;
             if (actionString.startsWith(root.query) || root.query.startsWith(actionString)) {
-                return {
-                    key: `Action ${actionString}`,
+                return resultComp.createObject(null, {
                     name: root.query.startsWith(actionString) ? root.query : actionString,
-                    clickActionName: Translation.tr("Run"),
+                    verb: Translation.tr("Run"),
                     type: Translation.tr("Action"),
-                    materialSymbol: 'settings_suggest',
+                    iconName: 'settings_suggest',
+                    iconType: LauncherSearchResult.IconType.Material,
                     execute: () => {
                         action.execute(root.query.split(" ").slice(1).join(" "));
                     }
-                };
+                });
             }
             return null;
         }).filter(Boolean);
@@ -274,5 +309,10 @@ Singleton {
         }
 
         return result;
+    }
+
+    Component {
+        id: resultComp
+        LauncherSearchResult {}
     }
 }

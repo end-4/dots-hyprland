@@ -2,6 +2,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
@@ -12,20 +13,27 @@ import Quickshell.Hyprland
 
 RippleButton {
     id: root
-    property var entry
+    property LauncherSearchResult entry
     property string query
     property bool entryShown: entry?.shown ?? true
     property string itemType: entry?.type ?? Translation.tr("App")
     property string itemName: entry?.name ?? ""
-    property string itemIcon: entry?.icon ?? ""
+    property var iconType: entry?.iconType
+    property string iconName: entry?.iconName ?? ""
     property var itemExecute: entry?.execute
-    property string fontType: entry?.fontType ?? "main"
-    property string itemClickActionName: entry?.clickActionName ?? "Open"
-    property string bigText: entry?.bigText ?? ""
-    property string materialSymbol: entry?.materialSymbol ?? ""
-    property string cliphistRawString: entry?.cliphistRawString ?? ""
+    property var fontType: switch(entry?.fontType) {
+        case LauncherSearchResult.FontType.Monospace:
+            return "monospace"
+        case LauncherSearchResult.FontType.Normal:
+            return "main"
+        default:
+            return "main"
+    }
+    property string itemClickActionName: entry?.verb ?? "Open"
+    property string bigText: entry?.iconType === LauncherSearchResult.IconType.Text ? entry?.iconName ?? "" : ""
+    property string materialSymbol: entry.iconType === LauncherSearchResult.IconType.Material ? entry?.iconName ?? "" : ""
+    property string cliphistRawString: entry?.rawValue ?? ""
     property bool blurImage: entry?.blurImage ?? false
-    property string blurImageText: entry?.blurImageText ?? "Image hidden"
     
     visible: root.entryShown
     property int horizontalMargin: 10
@@ -97,7 +105,7 @@ RippleButton {
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Delete && event.modifiers === Qt.ShiftModifier) {
-            const deleteAction = root.entry.actions.find(action => action.name == "Delete");
+            const deleteAction = root.entry.actions.find(action => action.name == Translation.tr("Delete"));
 
             if (deleteAction) {
                 deleteAction.execute()
@@ -126,16 +134,24 @@ RippleButton {
         Loader {
             id: iconLoader
             active: true
-            sourceComponent: root.materialSymbol !== "" ? materialSymbolComponent :
-                root.bigText ? bigTextComponent :
-                root.itemIcon !== "" ? iconImageComponent : 
-                null
+            sourceComponent: switch(root.iconType) {
+                case LauncherSearchResult.IconType.Material:
+                    return materialSymbolComponent
+                case LauncherSearchResult.IconType.Text:
+                    return bigTextComponent
+                case LauncherSearchResult.IconType.System:
+                    return iconImageComponent
+                case LauncherSearchResult.IconType.None:
+                    return null
+                default:
+                    return null
+            }
         }
 
         Component {
             id: iconImageComponent
             IconImage {
-                source: Quickshell.iconPath(root.itemIcon, "image-missing")
+                source: Quickshell.iconPath(root.iconName, "image-missing")
                 width: 35
                 height: 35
             }
@@ -217,7 +233,6 @@ RippleButton {
                     maxWidth: contentColumn.width
                     maxHeight: 140
                     blur: root.blurImage
-                    blurText: root.blurImageText
                 }
             }
         }
@@ -243,8 +258,8 @@ RippleButton {
                 delegate: RippleButton {
                     id: actionButton
                     required property var modelData
-                    property string iconName: modelData.icon ?? ""
-                    property string materialIconName: modelData.materialIcon ?? ""
+                    property var iconType: modelData.iconType
+                    property string iconName: modelData.iconName ?? ""
                     implicitHeight: 34
                     implicitWidth: 34
 
@@ -256,16 +271,16 @@ RippleButton {
                         anchors.centerIn: parent
                         Loader {
                             anchors.centerIn: parent
-                            active: !(actionButton.iconName !== "") || actionButton.materialIconName
+                            active: actionButton.iconType === LauncherSearchResult.IconType.Material || actionButton.iconName === ""
                             sourceComponent: MaterialSymbol {
-                                text: actionButton.materialIconName || "video_settings"
+                                text: actionButton.iconName || "video_settings"
                                 font.pixelSize: Appearance.font.pixelSize.hugeass
                                 color: Appearance.m3colors.m3onSurface
                             }
                         }
                         Loader {
                             anchors.centerIn: parent
-                            active: actionButton.materialIconName.length == 0 && actionButton.iconName && actionButton.iconName !== ""
+                            active: actionButton.iconType === LauncherSearchResult.IconType.System && actionButton.iconName !== ""
                             sourceComponent: IconImage {
                                 source: Quickshell.iconPath(actionButton.iconName)
                                 implicitSize: 20

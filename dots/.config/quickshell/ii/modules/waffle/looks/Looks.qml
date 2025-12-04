@@ -64,7 +64,7 @@ Singleton {
         property color bg0: "#1C1C1C"
         property color bg0Border: "#404040"
         property color bg1Base: "#2C2C2C"
-        property color bg1: "#a8a8a8"
+        property color bg1: '#9f9f9f'
         property color bg1Hover: "#b3b3b3"
         property color bg1Active: '#727272'
         property color bg1Border: '#bebebe'
@@ -125,6 +125,7 @@ Singleton {
         property color accentUnfocused: root.dark ? root.darkColors.accentUnfocused : root.lightColors.accentUnfocused
         property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
         property color selection: Appearance.colors.colPrimaryContainer
+        property color selectionFg: Appearance.colors.colOnPrimaryContainer
     }
 
     radius: QtObject {

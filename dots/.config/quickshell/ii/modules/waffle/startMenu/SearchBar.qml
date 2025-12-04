@@ -12,26 +12,36 @@ import qs.modules.waffle.looks
 FooterRectangle {
     id: root
 
+    property real horizontalPadding: 32
+    property real verticalPadding: 16
     property bool searching: text.length > 0
     property alias text: searchInput.text
+    implicitHeight: outline.implicitHeight + verticalPadding * 2
 
     Component.onCompleted: searchInput.forceActiveFocus()
 
     focus: true
     color: searching ? Looks.colors.bgPanelBody : Looks.colors.bgPanelFooter
 
-    implicitWidth: 832 // TODO: Make sizes naturally inferred
-    implicitHeight: 63
+    Behavior on horizontalPadding {
+        enabled: Config.options.waffles.tweaks.smootherSearchBar
+        animation: Looks.transition.move.createObject(this)
+    }
+    Behavior on verticalPadding {
+        enabled: Config.options.waffles.tweaks.smootherSearchBar
+        animation: Looks.transition.move.createObject(this)
+    }
 
     Rectangle {
         id: outline
         anchors {
-            fill: parent
-            leftMargin: 32
-            rightMargin: 32
-            topMargin: 16
-            bottomMargin: 15
+            left: parent.left
+            right: parent.right
+            leftMargin: root.horizontalPadding
+            rightMargin: root.horizontalPadding
+            verticalCenter: parent.verticalCenter
         }
+        implicitHeight: 32
         color: "transparent"
         radius: height / 2
         border.width: 1

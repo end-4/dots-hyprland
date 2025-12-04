@@ -42,12 +42,6 @@ Item { // Wrapper
         LauncherSearch.query = text;
     }
 
-    function containsUnsafeLink(entry) {
-        if (entry == undefined) return false;
-        const unsafeKeywords = Config.options.workSafety.triggerCondition.linkKeywords;
-        return StringUtils.stringListContainsSubstring(entry.toLowerCase(), unsafeKeywords);
-    }
-
     Keys.onPressed: event => {
         // Prevent Esc and Backspace from registering
         if (event.key === Qt.Key_Escape)
