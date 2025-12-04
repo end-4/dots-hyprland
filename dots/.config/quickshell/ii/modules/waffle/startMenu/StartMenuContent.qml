@@ -14,26 +14,43 @@ WBarAttachedPanelContent {
     id: root
 
     property bool searching: false
-    property string searchText: ""
+    property string searchText: LauncherSearch.query
 
     contentItem: WPane {
         contentItem: WPanelPageColumn {
             SearchBar {
                 focus: true
                 Layout.fillWidth: true
+                implicitWidth: 832 // TODO: Make sizes naturally inferred
+                horizontalPadding: root.searching ? 24 : 32
+                // verticalPadding: root.searching ? 32 : 16 // TODO: make this not nuke the panel
                 Synchronizer on searching {
                     property alias target: root.searching
                 }
-                Synchronizer on text {
-                    property alias source: root.searchText
+                text: root.searchText
+                onTextChanged: {
+                    LauncherSearch.query = text;
                 }
             }
-            Loader {
-                id: pageContentLoader
+            Item {
+                implicitHeight: root.searching ? 736 : 736 // TODO: Make sizes naturally inferred
                 Layout.fillWidth: true
-                source: root.searching ? "SearchPageContent.qml" : "StartPageContent.qml"
+                Loader {
+                    id: pageContentLoader
+                    anchors.fill: parent
+                    sourceComponent: root.searching ? searchPageComp : startPageComp
+                }
             }
         }
     }
-    
+
+    Component {
+        id: searchPageComp
+        SearchPageContent {}
+    }
+
+    Component {
+        id: startPageComp
+        StartPageContent {}
+    }
 }
