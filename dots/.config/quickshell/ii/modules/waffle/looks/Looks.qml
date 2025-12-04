@@ -53,6 +53,8 @@ Singleton {
         property color controlBgHover: '#57575B'
         property color controlFg: "#FFFFFF"
         property color accentUnfocused: "#848484"
+        property color link: "#235CCF"
+        property color inputBg: ColorUtils.transparentize(bg0, 0.4)
     }
     darkColors: QtObject {
         id: darkColors
@@ -62,7 +64,7 @@ Singleton {
         property color bg0: "#1C1C1C"
         property color bg0Border: "#404040"
         property color bg1Base: "#2C2C2C"
-        property color bg1: "#a8a8a8"
+        property color bg1: '#9f9f9f'
         property color bg1Hover: "#b3b3b3"
         property color bg1Active: '#727272'
         property color bg1Border: '#bebebe'
@@ -70,7 +72,7 @@ Singleton {
         property color bg2: '#8a8a8a'
         property color bg2Hover: '#b1b1b1'
         property color bg2Active: '#919191'
-        property color bg2Border: '#c4c4c4'
+        property color bg2Border: '#bdbdbd'
         property color subfg: "#CED1D7"
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"
@@ -80,6 +82,8 @@ Singleton {
         property color controlBgHover: "#CFCED1"
         property color controlFg: "#454545"
         property color accentUnfocused: "#989898"
+        property color link: "#A7C9FC"
+        property color inputBg: ColorUtils.transparentize(darkColors.bg0, 0.5)
     }
     colors: QtObject {
         id: colors
@@ -110,6 +114,8 @@ Singleton {
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
         property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
+        property color inputBg: root.dark ? root.darkColors.inputBg : root.lightColors.inputBg
+        property color link: root.dark ? root.darkColors.link : root.lightColors.link
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
         property color warning: "#FF9900"
@@ -118,6 +124,8 @@ Singleton {
         property color accentActive: Appearance.colors.colPrimaryActive
         property color accentUnfocused: root.dark ? root.darkColors.accentUnfocused : root.lightColors.accentUnfocused
         property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
+        property color selection: Appearance.colors.colPrimaryContainer
+        property color selectionFg: Appearance.colors.colOnPrimaryContainer
     }
 
     radius: QtObject {
@@ -229,6 +237,14 @@ Singleton {
                 duration: 1000
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
+        property Component scroll: Component {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: [0.0, 0.0, 0.25, 1.0, 1, 1]
             }
         }
     }
