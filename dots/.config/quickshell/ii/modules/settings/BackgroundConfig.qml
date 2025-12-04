@@ -43,8 +43,8 @@ ContentPage {
             icon: "loupe"
             text: Translation.tr("Preferred wallpaper zoom (%)")
             value: Config.options.background.parallax.workspaceZoom * 100
-            from: 100
-            to: 150
+            from: 10
+            to: 200
             stepSize: 1
             onValueChanged: {
                 Config.options.background.parallax.workspaceZoom = value / 100;
