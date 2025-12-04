@@ -172,8 +172,10 @@ ContentPage {
         ContentSubsection {
             visible: settingsClock.digitalPresent
             title: Translation.tr("Digital clock settings")
+            tooltip: Translation.tr("Font width and roundness settings are only available for some fonts like 'Google Sans Flex'")
 
             ConfigRow {
+                uniform: true
                 ConfigSwitch {
                     buttonIcon: "vertical_distribute"
                     text: Translation.tr("Vertical")
@@ -193,6 +195,9 @@ ContentPage {
             }
 
             ConfigRow {
+                uniform: true
+                
+
                 ConfigSwitch {
                     buttonIcon: "date_range"
                     text: Translation.tr("Show date")
@@ -213,6 +218,8 @@ ContentPage {
                     }
                 }
             }
+
+            
             ConfigSlider {
                 text: Translation.tr("Font weight")
                 value: Config.options.background.widgets.clock.digital.font.weight
@@ -220,21 +227,12 @@ ContentPage {
                 buttonIcon: "format_bold"
                 from: 1
                 to: 1000
+                stopIndicatorValues: [350]
                 onValueChanged: {
                     Config.options.background.widgets.clock.digital.font.weight = value;
                 }
             }
-            ConfigSlider {
-                text: Translation.tr("Font width")
-                value: Config.options.background.widgets.clock.digital.font.width
-                usePercentTooltip: false
-                buttonIcon: "fit_width"
-                from: 25
-                to: 125
-                onValueChanged: {
-                    Config.options.background.widgets.clock.digital.font.width = value;
-                }
-            }
+
             ConfigSlider {
                 text: Translation.tr("Font size")
                 value: Config.options.background.widgets.clock.digital.font.size
@@ -242,8 +240,33 @@ ContentPage {
                 buttonIcon: "format_size"
                 from: 70
                 to: 150
+                stopIndicatorValues: [90]
                 onValueChanged: {
                     Config.options.background.widgets.clock.digital.font.size = value;
+                }
+            }
+
+            ConfigSlider {
+                text: Translation.tr("Font width")
+                value: Config.options.background.widgets.clock.digital.font.width
+                usePercentTooltip: false
+                buttonIcon: "fit_width"
+                from: 25
+                to: 125
+                stopIndicatorValues: [100]
+                onValueChanged: {
+                    Config.options.background.widgets.clock.digital.font.width = value;
+                }
+            }
+            ConfigSlider {
+                text: Translation.tr("Font roundness")
+                value: Config.options.background.widgets.clock.digital.font.roundness
+                usePercentTooltip: false
+                buttonIcon: "line_curve"
+                from: 0
+                to: 100
+                onValueChanged: {
+                    Config.options.background.widgets.clock.digital.font.roundness = value;
                 }
             }
         }

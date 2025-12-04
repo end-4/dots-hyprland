@@ -194,6 +194,7 @@ Singleton {
                                 property real weight: 350
                                 property real width: 100
                                 property real size: 90
+                                property real roundness: 0
                             }
                         }
                         property JsonObject quote: JsonObject {

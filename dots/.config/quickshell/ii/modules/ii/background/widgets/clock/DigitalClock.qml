@@ -33,6 +33,7 @@ ColumnLayout {
                 weight: Config.options.background.widgets.clock.digital.font.weight
                 variableAxes: ({
                     "wdth": Config.options.background.widgets.clock.digital.font.width,
+                    "ROND": Config.options.background.widgets.clock.digital.font.roundness
                 })
             }
         }
@@ -50,6 +51,7 @@ ColumnLayout {
                 weight: Config.options.background.widgets.clock.digital.font.weight
                 variableAxes: ({
                     "wdth": Config.options.background.widgets.clock.digital.font.width,
+                    "ROND": Config.options.background.widgets.clock.digital.font.roundness
                 })
             }
         }

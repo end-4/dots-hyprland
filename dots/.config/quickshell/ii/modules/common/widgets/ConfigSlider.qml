@@ -2,6 +2,7 @@ import qs.modules.common.widgets
 import qs.modules.common
 import QtQuick
 import QtQuick.Layouts
+import qs.services
 
 RowLayout {
     id: root
@@ -12,12 +13,16 @@ RowLayout {
     property string text: ""
     property string buttonIcon: ""
     property alias value: slider.value
+    property alias stopIndicatorValues: slider.stopIndicatorValues
     property bool usePercentTooltip: true
     property real from: slider.from
     property real to: slider.to
-    
+    property real textWidth: 120
+
     RowLayout {
+        id: row
         spacing: 10
+
         OptionalMaterialSymbol {
             id: iconWidget
             icon: root.buttonIcon
@@ -25,6 +30,7 @@ RowLayout {
         }
         StyledText {
             id: labelWidget
+            Layout.preferredWidth: root.textWidth
             text: root.text
             color: Appearance.colors.colOnSecondaryContainer
         }
@@ -32,7 +38,6 @@ RowLayout {
     
     StyledSlider {
         id: slider
-        Layout.fillWidth: true
         configuration: StyledSlider.Configuration.XS
         usePercentTooltip: root.usePercentTooltip
         value: root.value
