@@ -152,6 +152,7 @@ Singleton {
             property real normal: 11
             property real large: 13
             property real larger: 15
+            property real xlarger: 17
         }
     }
 

@@ -11,7 +11,7 @@ import qs.modules.waffle.looks
 
 WChoiceButton {
     id: root
-    
+
     required property LauncherSearchResult entry
     property bool firstEntry: false
 
@@ -21,42 +21,25 @@ WChoiceButton {
     implicitHeight: contentLayout.implicitHeight + topPadding + bottomPadding
 
     onClicked: {
-        GlobalStates.searchOpen = false
-        root.entry.execute()
+        execute();
     }
-    
+
+    function execute() {
+        GlobalStates.searchOpen = false;
+        root.entry.execute();
+    }
+
     contentItem: RowLayout {
         id: contentLayout
         spacing: 8
-        
-        EntryIcon {}
+
+        SearchEntryIcon {
+            entry: root.entry
+            iconSize: 24
+        }
         EntryNameColumn {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
-        }
-    }
-
-    component EntryIcon: Item {
-        implicitWidth: 24
-        implicitHeight: 24
-        Loader {
-            anchors.centerIn: parent
-            active: root.entry.iconType === LauncherSearchResult.IconType.System
-            sourceComponent: WAppIcon {
-                implicitSize: 24
-                tryCustomIcon: false
-                iconName: root.entry.iconName
-            }
-        }
-        Loader {
-            anchors.centerIn: parent
-            active: root.entry.iconType === LauncherSearchResult.IconType.Text
-            sourceComponent: WText {
-                text: root.entry.iconName
-                font.pixelSize: 24
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
     }
 
@@ -77,5 +60,12 @@ WChoiceButton {
             text: root.entry.type
             color: Looks.colors.accentUnfocused
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        // hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        cursorShape: Qt.PointingHandCursor
     }
 }
