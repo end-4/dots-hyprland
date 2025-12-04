@@ -137,6 +137,18 @@ function install_dir__skip_existed(){
     v rsync_dir $s $t
   fi
 }
+function install_dir__sync_exclude(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  # Sync directory with exclude patterns
+  # Usage: install_dir__sync_exclude <src> <dest> <exclude_pattern1> [<exclude_pattern2> ...]
+  local s=$1
+  local t=$2
+  shift 2
+  if [ -d $t ];then
+    warning_overwrite
+  fi
+  rsync_dir__sync_exclude $s $t "$@"
+}
 function install_google_sans_flex(){
   local font_name="Google Sans Flex"
   local src_name="google-sans-flex"

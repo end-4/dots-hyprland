@@ -30,11 +30,7 @@ esac
 case "${SKIP_FISH}" in
   true) sleep 0;;
   *)
-    # Use rsync with exclude to preserve user's custom conf.d directory
-    if [ -d "$XDG_CONFIG_HOME"/fish ];then
-      warning_overwrite
-    fi
-    rsync_dir__sync_exclude dots/.config/fish "$XDG_CONFIG_HOME"/fish "conf.d"
+    install_dir__sync_exclude dots/.config/fish "$XDG_CONFIG_HOME"/fish "conf.d"
     ;;
 esac
 
