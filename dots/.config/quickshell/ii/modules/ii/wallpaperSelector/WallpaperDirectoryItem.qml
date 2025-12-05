@@ -11,6 +11,7 @@ MouseArea {
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
     property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
+    property bool showLoadingIndicator: false
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -69,6 +70,8 @@ MouseArea {
                         sourceSize.width: wallpaperItemColumnLayout.width
                         sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
 
+                        onVisibleChanged: root.showLoadingIndicator = !thumbnailImage.visible
+
                         Connections {
                             target: Wallpapers
                             function onThumbnailGenerated(directory) {
@@ -104,6 +107,15 @@ MouseArea {
                         fileModelData: root.fileModelData
                         sourceSize.width: wallpaperItemColumnLayout.width
                         sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
+                    }
+                }
+
+                FadeLoader {
+                    id: loadingIndicatorLoader
+                    shown: root.showLoadingIndicator
+                    anchors.centerIn: parent
+                    sourceComponent: MaterialLoadingIndicator {
+                        loading: true
                     }
                 }
             }
