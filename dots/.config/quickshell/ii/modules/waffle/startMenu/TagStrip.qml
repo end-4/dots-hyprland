@@ -10,6 +10,9 @@ import qs.modules.common.functions
 import qs.modules.waffle.looks
 
 RowLayout {
+    id: root
+    property StartMenuContext context
+
     WPanelIconButton {
         implicitWidth: 36
         implicitHeight: 36
@@ -23,40 +26,8 @@ RowLayout {
         Layout.fillHeight: true
         orientation: Qt.Horizontal
         spacing: 4
-        model: [
-            {
-                name: Translation.tr("All"),
-                prefix: ""
-            },
-            {
-                name: Translation.tr("Apps"),
-                prefix: Config.options.search.prefix.app
-            },
-            {
-                name: Translation.tr("Actions"),
-                prefix: Config.options.search.prefix.action
-            },
-            {
-                name: Translation.tr("Clipboard"),
-                prefix: Config.options.search.prefix.clipboard
-            },
-            {
-                name: Translation.tr("Emojis"),
-                prefix: Config.options.search.prefix.emojis
-            },
-            {
-                name: Translation.tr("Math"),
-                prefix: Config.options.search.prefix.math
-            },
-            {
-                name: Translation.tr("Commands"),
-                prefix: Config.options.search.prefix.shellCommand
-            },
-            {
-                name: Translation.tr("Web"),
-                prefix: Config.options.search.prefix.webSearch
-            },
-        ]
+        model: root.context.categories
+        clip: true
         delegate: WBorderedButton {
             id: tagButton
             required property var modelData
@@ -68,7 +39,7 @@ RowLayout {
                 if (modelData.prefix != "") {
                     return LauncherSearch.query.startsWith(modelData.prefix);
                 } else {
-                    return !tagListView.model.some(i => (i.prefix != "" && LauncherSearch.query.startsWith(i.prefix)))
+                    return !tagListView.model.some(i => (i.prefix != "" && LauncherSearch.query.startsWith(i.prefix)));
                 }
             }
             contentItem: Item {
@@ -84,9 +55,27 @@ RowLayout {
         }
     }
     WPanelIconButton {
+        id: optionsButton
         implicitWidth: 36
         implicitHeight: 36
         iconSize: 24
         iconName: "more-horizontal"
+
+        onClicked: accountsMenu.open()
+
+        WMenu {
+            id: accountsMenu
+            x: -accountsMenu.implicitWidth + optionsButton.implicitWidth
+            y: optionsButton.height + 10
+            downDirection: true
+            Action {
+                icon.name: "people-settings"
+                text: Translation.tr("Manage accounts")
+                onTriggered: {
+                    Quickshell.execDetached(["bash", "-c", Config.options.apps.manageUser])
+                    GlobalStates.searchOpen = false;
+                }
+            }
+        }
     }
 }

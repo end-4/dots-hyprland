@@ -12,7 +12,9 @@ import qs.modules.waffle.looks
 BodyRectangle {
     id: root
 
+    property alias context: searchResults.context
     property string searchText: LauncherSearch.query
+    property alias currentIndex: searchResults.currentIndex
 
     ColumnLayout {
         anchors {
@@ -24,11 +26,13 @@ BodyRectangle {
         spacing: 12
 
         TagStrip {
+            context: root.context
             Layout.fillWidth: true
             Layout.fillHeight: false
         }
 
         SearchResults {
+            id: searchResults
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

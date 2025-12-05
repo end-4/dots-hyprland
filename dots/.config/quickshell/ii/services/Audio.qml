@@ -18,6 +18,7 @@ Singleton {
     readonly property real hardMaxValue: 2.00 // People keep joking about setting volume to 5172% so...
     property string audioTheme: Config.options.sounds.theme
     property real value: sink?.audio.volume ?? 0
+    
     function friendlyDeviceName(node) {
         return (node.nickname || node.description || Translation.tr("Unknown"));
     }
@@ -105,9 +106,9 @@ Singleton {
             if (newVolume - lastVolume > maxAllowedIncrease) {
                 sink.audio.volume = lastVolume;
                 root.sinkProtectionTriggered(Translation.tr("Illegal increment"));
-            } else if (newVolume > maxAllowed || newVolume > root.hardMaxValue) {
+            } else if (Math.round(newVolume * 100) / 100 > maxAllowed || newVolume > root.hardMaxValue) {
                 root.sinkProtectionTriggered(Translation.tr("Exceeded max allowed"));
-                sink.audio.volume = Math.min(lastVolume, maxAllowed);
+                sink.audio.volume = maxAllowed;
             }
             lastVolume = sink.audio.volume;
         }

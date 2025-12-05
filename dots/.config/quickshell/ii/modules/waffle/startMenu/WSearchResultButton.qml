@@ -11,9 +11,11 @@ import qs.modules.waffle.looks
 
 WChoiceButton {
     id: root
-    
+
     required property LauncherSearchResult entry
     property bool firstEntry: false
+
+    signal requestFocus()
 
     checked: focus
     animateChoiceHighlight: false
@@ -21,41 +23,72 @@ WChoiceButton {
     implicitHeight: contentLayout.implicitHeight + topPadding + bottomPadding
 
     onClicked: {
-        GlobalStates.searchOpen = false
-        root.entry.execute()
-    }
-    
-    contentItem: RowLayout {
-        id: contentLayout
-        spacing: 8
-        
-        EntryIcon {}
-        EntryNameColumn {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-        }
+        execute();
     }
 
-    component EntryIcon: Item {
-        implicitWidth: 24
-        implicitHeight: 24
-        Loader {
-            anchors.centerIn: parent
-            active: root.entry.iconType === LauncherSearchResult.IconType.System
-            sourceComponent: WAppIcon {
-                implicitSize: 24
-                tryCustomIcon: false
-                iconName: root.entry.iconName
+    function execute() {
+        GlobalStates.searchOpen = false;
+        root.entry.execute();
+    }
+
+    horizontalPadding: 0
+    verticalPadding: 0
+
+    contentItem: RowLayout {
+        id: contentLayout
+        spacing: 0
+
+        WButton {
+            id: launchButton
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            horizontalPadding: 10
+            verticalPadding: 11
+            implicitHeight: root.firstEntry ? 62 : 36
+            implicitWidth: entryContentRow.implicitWidth + leftPadding + rightPadding
+            topRightRadius: 0
+            bottomRightRadius: 0
+            onClicked: root.click()
+            contentItem: Item {
+                RowLayout {
+                    id: entryContentRow
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                    }
+                    spacing: 8
+
+                    SearchEntryIcon {
+                        entry: root.entry
+                        iconSize: 24
+                    }
+                    EntryNameColumn {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                }
             }
         }
-        Loader {
-            anchors.centerIn: parent
-            active: root.entry.iconType === LauncherSearchResult.IconType.Text
-            sourceComponent: WText {
-                text: root.entry.iconName
-                font.pixelSize: 24
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
+        Rectangle {
+            id: separator
+            opacity: (root.hovered && !root.checked) ? 1 : 0
+            Layout.fillHeight: true
+            implicitWidth: 1
+            color: ColorUtils.transparentize(Looks.colors.fg, 0.75)
+        }
+        WButton {
+            visible: !root.checked
+            Layout.fillHeight: true
+            implicitWidth: 47
+            topLeftRadius: 0
+            bottomLeftRadius: 0
+            onClicked: root.requestFocus()
+            contentItem: Item {
+                FluentIcon {
+                    anchors.centerIn: parent
+                    icon: "chevron-right"
+                    implicitSize: 14
+                }
             }
         }
     }
@@ -77,5 +110,12 @@ WChoiceButton {
             text: root.entry.type
             color: Looks.colors.accentUnfocused
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        // hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        cursorShape: Qt.PointingHandCursor
     }
 }
