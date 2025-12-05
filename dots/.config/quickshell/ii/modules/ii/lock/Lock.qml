@@ -72,7 +72,7 @@ Scope {
             }
 
             // Unlock the keyring if configured to do so
-            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring(); // Async
+            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
 
             // Unlock the screen before exiting, or the compositor will display a
             // fallback lock you can't interact with.
@@ -83,12 +83,6 @@ Scope {
 
             // Reset
             lockContext.reset();
-
-            // Post-unlock actions
-            if (lockContext.alsoInhibitIdle) {
-                lockContext.alsoInhibitIdle = false;
-                Idle.toggleInhibit(true);
-            }
         }
     }
 
@@ -101,7 +95,7 @@ Scope {
             Loader {
                 active: GlobalStates.screenLocked
                 anchors.fill: parent
-                opacity: active ? 1 : 0
+                opacity: active ? 1 : 0.5
                 Behavior on opacity {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
