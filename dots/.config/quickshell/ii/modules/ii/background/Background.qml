@@ -54,8 +54,8 @@ Variants {
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
         property real scaledWallpaperWidth: wallpaperWidth * effectiveWallpaperScale
         property real scaledWallpaperHeight: wallpaperHeight * effectiveWallpaperScale
-        property real parallaxTotalPixelsX: Math.max(screen.width - scaledWallpaperWidth, scaledWallpaperWidth - screen.width)
-        property real parallaxTotalPixelsY: Math.max(screen.height - scaledWallpaperHeight, scaledWallpaperHeight - screen.height)
+        property real parallaxTotalPixelsX: Math.max(0, scaledWallpaperWidth - screen.width)
+        property real parallaxTotalPixelsY: Math.max(0, scaledWallpaperHeight - screen.height)
         readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
         // Colors
         property bool shouldBlur: (GlobalStates.screenLocked && Config.options.lock.blur.enable)
@@ -150,7 +150,7 @@ Variants {
                 x: {
                     if (bgRoot.screen.width > bgRoot.scaledWallpaperWidth) {
                         // Center the picture
-                        return bgRoot.parallaxTotalPixelsX / 2;
+                        return (bgRoot.screen.width - bgRoot.scaledWallpaperWidth) / 2;
                     }
 
                     let usedFraction = middleFraction;
@@ -167,7 +167,7 @@ Variants {
                 y: {
                     if (bgRoot.screen.height > bgRoot.scaledWallpaperHeight) {
                         // Center the picture
-                        return bgRoot.parallaxTotalPixelsY / 2;
+                        return (bgRoot.screen.height - bgRoot.scaledWallpaperHeight) / 2;
                     }
 
                     let usedFraction = middleFraction;
@@ -193,8 +193,8 @@ Variants {
                     }
                 }
                 sourceSize {
-                    width: Math.max(bgRoot.wallpaperWidth, bgRoot.wallpaperWidth / bgRoot.parallaxRation)
-                    height: Math.max(bgRoot.wallpaperHeight, bgRoot.wallpaperHeight / bgRoot.parallaxRation)
+                    width: bgRoot.scaledWallpaperWidth
+                    height: bgRoot.scaledWallpaperHeight
                 }
                 width: bgRoot.scaledWallpaperWidth
                 height: bgRoot.scaledWallpaperHeight
