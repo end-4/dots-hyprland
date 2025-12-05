@@ -3,6 +3,9 @@ import QtQuick.Layouts
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import Qt.labs.settings 1.0
 
 ContentPage {
     forceWidth: true
@@ -75,7 +78,6 @@ ContentPage {
             StyledToolTip {
                 text: Translation.tr("Display modifiers and keys in multiple keycap (e.g., \"Ctrl + A\" instead of \"Ctrl A\" or \"󰘴 + A\" instead of \"󰘴 A\")")
             }
-
         }
 
         ConfigSpinBox {
@@ -96,6 +98,31 @@ ContentPage {
             stepSize: 1
             onValueChanged: {
                 Config.options.cheatsheet.fontSize.comment = value;
+            }
+        }
+        ContentSubsection{
+        title: Translation.tr("More Cheatsheets")
+            ConfigRow{
+
+                ConfigSwitch {
+                    buttonIcon: "experiment"
+                    text: Translation.tr("Periodic Table")
+                    checked: Config.options.cheatsheet.showPeriodicTable
+                    onCheckedChanged: {
+                        Config.options.cheatsheet.showPeriodicTable = checked;
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "カ"
+                    text: Translation.tr("Katakana")
+                    checked: Config.options.cheatsheet.showKatakana
+                    onCheckedChanged: {
+                        Config.options.cheatsheet.showKatakana = checked;
+                    }
+                }
+                function visibleTabs() {
+                    return tabButtonList.filter(tab => tab.visible);
+                }
             }
         }
     }
