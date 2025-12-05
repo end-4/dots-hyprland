@@ -15,8 +15,10 @@ Scope {
         target: GlobalStates
 
         function onSearchOpenChanged() {
-            if (GlobalStates.searchOpen)
+            if (GlobalStates.searchOpen) {
+                LauncherSearch.query = "";
                 panelLoader.active = true;
+            }
         }
     }
 
@@ -62,6 +64,7 @@ Scope {
                 onClosed: {
                     GlobalStates.searchOpen = false;
                     panelLoader.active = false;
+                    LauncherSearch.query = "";
                 }
             }
         }
