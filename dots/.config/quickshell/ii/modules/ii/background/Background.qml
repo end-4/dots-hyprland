@@ -193,8 +193,8 @@ Variants {
                     }
                 }
                 sourceSize {
-                    width: bgRoot.scaledWallpaperWidth
-                    height: bgRoot.scaledWallpaperHeight
+                    width: Math.max(bgRoot.wallpaperWidth, bgRoot.wallpaperWidth / bgRoot.parallaxRation)
+                    height: Math.max(bgRoot.wallpaperHeight, bgRoot.wallpaperHeight / bgRoot.parallaxRation)
                 }
                 width: bgRoot.scaledWallpaperWidth
                 height: bgRoot.scaledWallpaperHeight
