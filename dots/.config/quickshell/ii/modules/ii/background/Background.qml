@@ -47,7 +47,7 @@ Variants {
             const sensitiveNetwork = (CF.StringUtils.stringListContainsSubstring(Network.networkName.toLowerCase(), Config.options.workSafety.triggerCondition.networkNameKeywords));
             return enabled && sensitiveWallpaper && sensitiveNetwork;
         }
-        readonly property real parallaxRation: 1.2
+        readonly property real parallaxRation: 1.1
         readonly property real additionalScaleFactor: Config.options.background.parallax.workspaceZoom
         property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
@@ -229,19 +229,13 @@ Variants {
             WidgetCanvas {
                 id: widgetCanvas
                 anchors {
-                    left: bgRoot.screen.left
-                    right: bgRoot.screen.right
-                    top: bgRoot.screen.top
-                    bottom: bgRoot.screen.bottom
+                    left: wallpaper.left
+                    right: wallpaper.right
+                    top: wallpaper.top
+                    bottom: wallpaper.bottom
                     horizontalCenter: undefined
                     verticalCenter: undefined
                     readonly property real parallaxFactor: Config.options.background.parallax.widgetsFactor
-                    leftMargin: {
-                        return bgRoot.screen.width * 0.2;
-                    }
-                    topMargin: {
-                        return bgRoot.screen.height * 0.2;
-                    }
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }
