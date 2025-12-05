@@ -95,7 +95,7 @@ Scope {
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             // This is a big surface so we needa carefully choose the transparency,
             // or we'll get a large scary rgb blob
-            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.04 : 0.12)
+            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.3 : 0.12)
 
             anchors {
                 top: true
@@ -125,32 +125,33 @@ Scope {
                     }
                 }
 
-                ColumnLayout {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 0
-                    StyledText { // Title
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        font {
-                            family: Appearance.font.family.title
-                            pixelSize: Appearance.font.pixelSize.title
-                            variableAxes: Appearance.font.variableAxes.title
-                        }
-                        text: Translation.tr("Session")
-                    }
-
-                    StyledText { // Small instruction
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.normal
-                        text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
-                    }
-                }
+                // ColumnLayout {
+                //     Layout.alignment: Qt.AlignHCenter
+                //     spacing: 0
+                //     StyledText { // Title
+                //         Layout.alignment: Qt.AlignHCenter
+                //         horizontalAlignment: Text.AlignHCenter
+                //         font {
+                //             family: Appearance.font.family.main
+                //             pixelSize: Appearance.font.pixelSize.main
+                //             variableAxes: Appearance.font.variableAxes.main
+                //         }
+                //         text: Translation.tr("Session")
+                //     }
+                //
+                //     StyledText { // Small instruction
+                //         Layout.alignment: Qt.AlignHCenter
+                //         horizontalAlignment: Text.AlignHCenter
+                //         font.pixelSize: Appearance.font.pixelSize.normal
+                //         text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
+                //     }
+                // }
 
                 GridLayout {
                     columns: 4
                     columnSpacing: 15
                     rowSpacing: 15
+                    Layout.topMargin: 60
 
                     SessionActionButton {
                         id: sessionLock
