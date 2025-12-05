@@ -1,374 +1,314 @@
-import QtQuick
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import Quickshell.Services.UPower
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+import Quickshell.Hyprland
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import qs.modules.ii.bar as Bar
-import Quickshell
-import Quickshell.Services.SystemTray
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls.Fusion
+import Qt5Compat.GraphicalEffects
 
-MouseArea {
+Rectangle {
     id: root
     required property LockContext context
-    property bool active: false
-    property bool showInputField: active || context.currentText.length > 0
-    readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
 
-    // Force focus on entry
+    // Monitor name where the login field (centralBox) should appear
+    readonly property string simplifiedMonitorName: "DP-1"
+    readonly property bool isSimplifiedMonitor: screen?.name === root.simplifiedMonitorName
+
+    property real lockScreenScale: 0
+
+    Component.onCompleted: {
+        lockScreenScale = 1.0;
+    }
+
+    // Behavior on lockScreenScale {
+    //     animation: Appearance.animation.elementMove.numberAnimation.createObject(this);
+    // } @vaguesyntax way o animate, thx bro :)
+
+    Behavior on lockScreenScale {
+        NumberAnimation {
+            duration: 2000
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.animationCurves.expressiveSlowSpatial
+        }
+    }
+
+    opacity: lockScreenScale
+    // #######################
+
+    // Base wallpaper, same crop as the workspace
+    Image {
+        id: wallpaperLayer
+        anchors.fill: parent
+        source: Config.options.background.wallpaperPath
+        fillMode: Image.PreserveAspectCrop
+        smooth: true
+        opacity: 0    // invisible but still renders for blur
+    }
+
+    // Main Blur
+    FastBlur {
+        id: globalBlur
+        anchors.fill: parent
+        source: wallpaperLayer
+        radius: 35
+    }
+
+    // Darkening
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+        opacity: 0.6
+    }
+
+    // NOISE
+    Image {
+        anchors.fill: parent
+        source: "noise.png"
+        fillMode: Image.Tile
+        opacity: 0.04
+        smooth: false
+    }
+
+    color: "transparent"
+
+    // Function to force focus on the password field (kept)
     function forceFieldFocus() {
         passwordBox.forceActiveFocus();
     }
-    Connections {
-        target: context
-        function onShouldReFocus() {
-            forceFieldFocus();
-        }
-    }
-    hoverEnabled: true
-    acceptedButtons: Qt.LeftButton
-    onPressed: mouse => {
-        forceFieldFocus();
-    }
-    onPositionChanged: mouse => {
-        forceFieldFocus();
-    }
 
-    // Toolbar appearing animation
-    property real toolbarScale: 0.9
-    property real toolbarOpacity: 0
-    Behavior on toolbarScale {
-        NumberAnimation {
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
-        }
-    }
-    Behavior on toolbarOpacity {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-
-    // Init
-    Component.onCompleted: {
-        forceFieldFocus();
-        toolbarScale = 1;
-        toolbarOpacity = 1;
-    }
-
-    // Key presses
-    property bool ctrlHeld: false
-    Keys.onPressed: event => {
-        root.context.resetClearTimer();
-        if (event.key === Qt.Key_Control) {
-            root.ctrlHeld = true;
-        }
-        if (event.key === Qt.Key_Escape) { // Esc to clear
-            root.context.currentText = "";
-        } 
-        forceFieldFocus();
-    }
-    Keys.onReleased: event => {
-        if (event.key === Qt.Key_Control) {
-            root.ctrlHeld = false;
-        }
-        forceFieldFocus();
-    }
-
-    // RippleButton {
-    //     anchors {
-    //         top: parent.top
-    //         left: parent.left
-    //         leftMargin: 10
-    //         topMargin: 10
-    //     }
-    //     implicitHeight: 40
-    //     colBackground: Appearance.colors.colLayer2
-    //     onClicked: {
-    //         context.unlocked(LockContext.ActionEnum.Unlock);
-    //         GlobalStates.screenLocked = false;
-    //     }
-    //     contentItem: StyledText {
-    //         text: "[[ DEBUG BYPASS ]]"
-    //     }
-    // }
-
-    // Main toolbar: password box
-    Toolbar {
-        id: mainIsland
+    // FORCE UNLOCK
+    RippleButton {
+        visible: Wayland.outputName === root.targetMonitor // Fixed visibility using targetMonitor
         anchors {
-            horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
-            bottomMargin: 20
-        }
-        Behavior on anchors.bottomMargin {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-        }
-
-        scale: root.toolbarScale
-        opacity: root.toolbarOpacity
-
-        // Fingerprint
-        Loader {
-            Layout.leftMargin: 10
-            Layout.rightMargin: 6
-            Layout.alignment: Qt.AlignVCenter
-            active: root.context.fingerprintsConfigured
-            visible: active
-
-            sourceComponent: MaterialSymbol {
-                id: fingerprintIcon
-                fill: 1
-                text: "fingerprint"
-                iconSize: Appearance.font.pixelSize.hugeass
-                color: Appearance.colors.colOnSurfaceVariant
-            }
-        }
-
-        ToolbarTextField {
-            id: passwordBox
-            Layout.rightMargin: -Layout.leftMargin
-            placeholderText: GlobalStates.screenUnlockFailed ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
-
-            // Style
-            clip: true
-            font.pixelSize: Appearance.font.pixelSize.small
-
-            // Password
-            enabled: !root.context.unlockInProgress
-            echoMode: TextInput.Password
-            inputMethodHints: Qt.ImhSensitiveData
-
-            // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
-            onAccepted: {
-                root.context.tryUnlock(ctrlHeld);
-            }
-            Connections {
-                target: root.context
-                function onCurrentTextChanged() {
-                    passwordBox.text = root.context.currentText;
-                }
-            }
-
-            Keys.onPressed: event => {
-                root.context.resetClearTimer();
-            }
-            
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: passwordBox.width - 8
-                    height: passwordBox.height
-                    radius: height / 2
-                }
-            }
-
-            // Shake when wrong password
-            SequentialAnimation {
-                id: wrongPasswordShakeAnim
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 0; duration: 30 }
-            }
-            Connections {
-                target: GlobalStates
-                function onScreenUnlockFailedChanged() {
-                    if (GlobalStates.screenUnlockFailed) wrongPasswordShakeAnim.restart();
-                }
-            }
-
-            // We're drawing dots manually
-            property bool materialShapeChars: Config.options.lock.materialShapeChars
-            color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, materialShapeChars ? 1 : 0)
-            Loader {
-                active: passwordBox.materialShapeChars
-                anchors {
-                    fill: parent
-                    leftMargin: passwordBox.padding
-                    rightMargin: passwordBox.padding
-                }
-                sourceComponent: PasswordChars {
-                    length: root.context.currentText.length
-                }
-            }
-        }
-
-        ToolbarButton {
-            id: confirmButton
-            implicitWidth: height
-            toggled: true
-            enabled: !root.context.unlockInProgress
-            colBackgroundToggled: Appearance.colors.colPrimary
-
-            onClicked: root.context.tryUnlock()
-
-            contentItem: MaterialSymbol {
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                iconSize: 24
-                text: {
-                    if (root.context.targetAction === LockContext.ActionEnum.Unlock) {
-                        return root.ctrlHeld ? "emoji_food_beverage" : "arrow_right_alt";
-                    } else if (root.context.targetAction === LockContext.ActionEnum.Poweroff) {
-                        return "power_settings_new";
-                    } else if (root.context.targetAction === LockContext.ActionEnum.Reboot) {
-                        return "restart_alt";
-                    }
-                }
-                color: confirmButton.enabled ? Appearance.colors.colOnPrimary : Appearance.colors.colSubtext
-            }
-        }
-    }
-
-    // Left toolbar
-    Toolbar {
-        id: leftIsland
-        anchors {
-            right: mainIsland.left
-            top: mainIsland.top
-            bottom: mainIsland.bottom
-            rightMargin: 10
-        }
-        scale: root.toolbarScale
-        opacity: root.toolbarOpacity
-
-        // Username
-        IconAndTextPair {
-            Layout.leftMargin: 8
-            icon: "account_circle"
-            text: SystemInfo.username
-        }
-
-        // Keyboard layout (Xkb)
-        Loader {
-            Layout.rightMargin: 8
-            Layout.fillHeight: true
-
-            active: true
-            visible: active
-
-            sourceComponent: Row {
-                spacing: 8
-
-                MaterialSymbol {
-                    id: keyboardIcon
-                    anchors.verticalCenter: parent.verticalCenter
-                    fill: 1
-                    text: "keyboard_alt"
-                    iconSize: Appearance.font.pixelSize.huge
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
-                Loader {
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceComponent: StyledText {
-                        text: HyprlandXkb.currentLayoutCode
-                        color: Appearance.colors.colOnSurfaceVariant
-                        animateChange: true
-                    }
-                }
-            }
-        }
-
-        // Keyboard layout (Fcitx)
-        Bar.SysTray {
-            Layout.rightMargin: 10
-            Layout.alignment: Qt.AlignVCenter
-            showSeparator: false
-            showOverflowMenu: false
-            pinnedItems: SystemTray.items.values.filter(i => i.id == "Fcitx")
-            visible: pinnedItems.length > 0
-        }
-    }
-
-    // Right toolbar
-    Toolbar {
-        id: rightIsland
-        anchors {
-            left: mainIsland.right
-            top: mainIsland.top
-            bottom: mainIsland.bottom
+            top: parent.top
+            left: parent.left
             leftMargin: 10
+            topMargin: 10
         }
-
-        scale: root.toolbarScale
-        opacity: root.toolbarOpacity
-
-        IconAndTextPair {
-            visible: Battery.available
-            icon: Battery.isCharging ? "bolt" : "battery_android_full"
-            text: Math.round(Battery.percentage * 100)
-            color: (Battery.isLow && !Battery.isCharging) ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
-        }
-
-        IconToolbarButton {
-            id: sleepButton
-            onClicked: Session.suspend()
-            text: "dark_mode"
-        }
-
-        PasswordGuardedIconToolbarButton {
-            id: powerButton
-            text: "power_settings_new"
-            targetAction: LockContext.ActionEnum.Poweroff
-        }
-
-        PasswordGuardedIconToolbarButton {
-            id: rebootButton
-            text: "restart_alt"
-            targetAction: LockContext.ActionEnum.Reboot
-        }
-    }
-
-    component PasswordGuardedIconToolbarButton: IconToolbarButton {
-        id: guardedBtn
-        required property var targetAction
-
-        toggled: root.context.targetAction === guardedBtn.targetAction
-
+        implicitHeight: 40
+        // Background color using the Appearance.qml theme
+        colBackground: Appearance.colors.colLayer2
         onClicked: {
-            if (!root.requirePasswordToPower) {
-                root.context.unlocked(guardedBtn.targetAction);
-                return;
-            }
-            if (root.context.targetAction === guardedBtn.targetAction) {
-                root.context.resetTargetAction();
-            } else {
-                root.context.targetAction = guardedBtn.targetAction;
-                root.context.shouldReFocus();
-            }
+            context.unlocked(LockContext.ActionEnum.Unlock);
+            GlobalStates.screenLocked = false;
+        }
+        contentItem: StyledText {
+            // Text color using the Appearance.qml theme
+            color: Appearance.colors.colOnLayer2
+            text: "[[ DEBUG BYPASS ]]"
         }
     }
 
-    component IconAndTextPair: Row {
-        id: pair
-        required property string icon
-        required property string text
-        property color color: Appearance.colors.colOnSurfaceVariant
+    Rectangle {
+        id: centralBox
 
-        spacing: 4
-        Layout.fillHeight: true
-        Layout.leftMargin: 10
-        Layout.rightMargin: 10
-        
+        // show only in the main monitor
+        visible: !root.isSimplifiedMonitor
 
-        MaterialSymbol {
-            anchors.verticalCenter: parent.verticalCenter
-            fill: 1
-            text: pair.icon
-            iconSize: Appearance.font.pixelSize.huge
-            animateChange: true
-            color: pair.color
-        }
-        StyledText {
-            anchors.verticalCenter: parent.verticalCenter
-            text: pair.text
-            color: pair.color
+        property int spacingRow: 40
+        property int sqrsize: 450 // makes the image fit snugly with centralBox
+
+        width: sqrsize + spacingRow + rightColumn.implicitWidth
+        height: sqrsize
+        radius: 0                        // rounding corners of the centralBox
+
+        // Dynamic background color (using Appearance.colors.colLayer0 with transparency)
+        color: Appearance.colors.colBackgroundSurfaceContainer
+        anchors.centerIn: parent
+        border.color: Appearance.colors.colOutlineVariant
+        border.width: 2
+
+        RowLayout {
+            id: mainRow
+            anchors.fill: parent
+            anchors.margins: centralBox.border.width
+            spacing: centralBox.spacingRow
+
+            // Dynamic Wallpaper
+            // LockSurface.qml - inside Image { id: preview }
+            Item {
+                id: container
+                width: centralBox.sqrsize - centralBox.border.width * 2
+                height: centralBox.sqrsize - centralBox.border.width * 2 // ensures a square aspect
+                // p.s.: I didn't want the border underneath the image, so I used this workaround
+                // the "- centralBox.border.width * 2" can be removed and anchors.margins should be changed to zero
+                clip: true
+
+                Image {
+                    id: preview
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectCrop   // <-- center-cropped, no stretching
+                    asynchronous: true
+                    smooth: true
+
+                    source: Config.options.background.wallpaperPath
+                }
+            }
+
+            ColumnLayout {
+                id: rightColumn
+
+                Layout.fillWidth: false
+                Layout.preferredWidth: implicitWidth
+                Layout.minimumWidth: implicitWidth
+                Layout.maximumWidth: implicitWidth
+
+                spacing: 20
+
+                // Clock (using dynamic font from Appearance.qml)
+                Label {
+                    id: clock
+
+                    Layout.topMargin: -10 // workaround, can be removed freely
+                    Layout.bottomMargin: -5 // workaround, can be removed freely
+
+                    property var date: new Date()
+                    renderType: Text.NativeRendering
+                    font {
+                        // Using the title/clock font
+                        family: Appearance.font.family.monospace
+                        pixelSize: 60 // Keep large size for the clock
+                        variableAxes: Appearance.font.variableAxes.title
+                    }
+
+                    color: Appearance.colors.colOnSurface // Main text color
+
+                    Timer {
+                        running: true
+                        repeat: true
+                        interval: 60
+                        onTriggered: clock.date = new Date()
+                    }
+
+                    text: {
+                        const h = clock.date.getHours().toString().padStart(2, "0");
+                        const m = clock.date.getMinutes().toString().padStart(2, "0");
+                        return `${h}:${m}`;
+                    }
+                }
+
+                // System Information (using dynamic font from Appearance.qml)
+                Label {
+                    textFormat: Text.RichText
+                    wrapMode: Text.NoWrap
+                    rightPadding: centralBox.spacingRow
+                    Layout.bottomMargin: 13 // workaround, can be removed freely
+
+                    // Using the monospace font (if Iosevka is configured as such)
+                    font {
+                        family: Appearance.font.family.monospace
+                        pixelSize: Appearance.font.pixelSize.small
+                        variableAxes: Appearance.font.variableAxes.numbers
+                    }
+
+                    // Get the primary color from your Appearance.qml theme
+                    readonly property string accentColor: Appearance.colors.colPrimary
+
+                    // Build the text using <font color='...'> tags
+                    text: `
+                    <font color='${accentColor}'>CPU:</font> Intel Xeon E5-2650 v4 @2.90 GHz<br>
+                    <font color='${accentColor}'>GPU:</font> AMD Radeon RX 580 2048SP<br>
+                    <br>
+                    <font color='${accentColor}'>OS:</font> Arch Linux x86_64<br>
+                    <font color='${accentColor}'>Kernel:</font> Linux 6.17.8-arch1-1<br>
+                    <font color='${accentColor}'>WM:</font> Hyprland 0.52.1 (Wayland)<br>
+                    <br>
+                    <font color='${accentColor}'>Shell:</font> fish 4.2.1<br>
+                    <font color='${accentColor}'>Terminal:</font> kitty 0.44.0<br><br>
+                    <font color='${accentColor}'>masthierryi</font> @masthierryi-arch
+                    `
+                    // Dynamic color (fallback, if tag fails or for untagged text)
+                    color: Appearance.colors.colSubtext
+                }
+
+                RowLayout {
+                    spacing: 0
+                    TextField {
+                        id: passwordBox
+                        implicitWidth: rightColumn.implicitWidth - centralBox.spacingRow
+                        Layout.leftMargin: -4
+
+                        // Style
+                        padding: 12
+                        clip: true
+                        font.pixelSize: Appearance.font.pixelSize.scritsize
+
+                        Component.onCompleted: {
+                            forceFieldFocus();
+                        }
+
+                        focus: true
+                        enabled: !root.context.unlockInProgress
+                        echoMode: TextInput.Password
+                        inputMethodHints: Qt.ImhSensitiveData
+
+                        onTextChanged: root.context.currentText = this.text
+                        onAccepted: root.context.tryUnlock()
+                        Connections {
+                            target: root.context
+                            function onCurrentTextChanged() {
+                                passwordBox.text = root.context.currentText
+                            }
+                        }
+
+                        Keys.onPressed: event => {
+                            root.context.resetClearTimer();
+                        }
+
+                        // Shake when wrong password
+                        SequentialAnimation {
+                            id: wrongPasswordShakeAnim
+                            // Using dynamic animation properties (Duration and Easing)
+                            NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -30; duration: Appearance.animation.elementMoveFast.duration / 3 }
+                            NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 30; duration: Appearance.animation.elementMoveFast.duration / 3 }
+                            NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -15; duration: Appearance.animation.elementMoveFast.duration / 4 }
+                            NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 15; duration: Appearance.animation.elementMoveFast.duration / 4 }
+                            NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 0; duration: Appearance.animation.elementMoveFast.duration / 5 }
+                        }
+
+                        Connections {
+                            target: GlobalStates
+                            function onScreenUnlockFailedChanged() {
+                                if (GlobalStates.screenUnlockFailed) wrongPasswordShakeAnim.restart();
+                            }
+                        }
+
+                        background: Rectangle {
+                            // Semi-transparent black background
+                            color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerLowest, 0.4)
+                            border.color: "transparent"
+                            radius: Appearance.rounding.verysmall
+
+                            Behavior on border.width {
+                                NumberAnimation { duration: 150 }
+                            }
+                        }
+
+                        property bool materialShapeChars: Config.options.lock.materialShapeChars
+                        // Dynamic color, using ColorUtils from Appearance.qml and colOnLayer1
+                        color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, materialShapeChars ? 1 : 0)
+                        Loader {
+                            active: passwordBox.materialShapeChars
+                            anchors {
+                                fill: parent
+                                leftMargin: passwordBox.padding
+                                rightMargin: passwordBox.padding
+                            }
+                            sourceComponent: PasswordChars {
+                                length: root.context.currentText.length
+                            }
+                        }
+                    }
+
+                }
+
+            }
         }
     }
 }
