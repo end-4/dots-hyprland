@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 
 Item {
     id: root
+
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
@@ -25,6 +26,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: -4
+        anchors.leftMargin: 12
 
         StyledText {
             Layout.fillWidth: true

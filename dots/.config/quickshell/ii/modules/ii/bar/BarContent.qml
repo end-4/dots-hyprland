@@ -17,6 +17,13 @@ Item { // Bar content region
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
     readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
 
+    // per monitor show/hide property
+    // add "visible: !root.isSimplifiedMonitor" on the parts you want to hide
+    readonly property string mainMonitorName: "HDMI-A-1"
+    readonly property string simplifiedMonitorName: "DP-1"
+    readonly property bool isMainMonitor: screen?.name === root.mainMonitorName
+    readonly property bool isSimplifiedMonitor: screen?.name === root.simplifiedMonitorName
+
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
         Layout.bottomMargin: Appearance.sizes.baseBarHeight / 3
@@ -62,14 +69,14 @@ Item { // Bar content region
         onScrollDown: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05)
         onScrollUp: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05)
         onMovedAway: GlobalStates.osdBrightnessOpen = false
-        onPressed: event => {
-            if (event.button === Qt.LeftButton)
-                GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-        }
+        // onPressed: event => {
+        //     if (event.button === Qt.LeftButton)
+        //         GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        // }
 
         // Visual content
         ScrollHint {
-            reveal: barLeftSideMouseArea.hovered
+            reveal: false//barLeftSideMouseArea.hovered
             icon: "light_mode"
             tooltipText: Translation.tr("Scroll to change brightness")
             side: "left"
@@ -83,13 +90,14 @@ Item { // Bar content region
             spacing: 10
 
             LeftSidebarButton { // Left sidebar button
+                visible: false
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             }
 
             ActiveWindow {
-                visible: root.useShortenedForm === 0
+                visible: true
                 Layout.rightMargin: Appearance.rounding.screenRounding
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -107,6 +115,7 @@ Item { // Bar content region
         spacing: 4
 
         BarGroup {
+            visible: !root.isSimplifiedMonitor
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
@@ -153,6 +162,7 @@ Item { // Bar content region
         }
 
         MouseArea {
+            visible: !root.isSimplifiedMonitor
             id: rightCenterGroup
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
@@ -208,7 +218,7 @@ Item { // Bar content region
 
         // Visual content
         ScrollHint {
-            reveal: barRightSideMouseArea.hovered
+            reveal: false //barRightSideMouseArea.hovered
             icon: "volume_up"
             tooltipText: Translation.tr("Scroll to change volume")
             side: "right"
@@ -329,6 +339,7 @@ Item { // Bar content region
 
             // Weather
             Loader {
+                visible: !root.isSimplifiedMonitor
                 Layout.leftMargin: 4
                 active: Config.options.bar.weather.enable
 
