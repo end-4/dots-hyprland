@@ -12,15 +12,15 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property var tabButtonList: [
-        {
-            "icon": "keyboard",
-            "name": Translation.tr("Keybinds")
-        },
-        {
-            "icon": "experiment",
-            "name": Translation.tr("Elements")
-        },
+
+    Component { id: keybindsComp; CheatsheetKeybinds {} }
+    Component { id: tableComp; CheatsheetPeriodicTable {} }
+    Component { id: katakanaComp; CheatsheetKatakana {} }
+
+    property var cheatsheetArr: [
+        { name: Translation.tr("Keybinds"), icon: "keyboard", component: keybindsComp },
+        ...(Config.options.cheatsheet.showPeriodicTable ? [{ name: Translation.tr("Elements"), icon: "experiment", component: tableComp }] : []),
+        ...(Config.options.cheatsheet.showKatakana ? [{ name: Translation.tr("Katakana"), icon: "カ", component: katakanaComp }] : [])
     ]
 
     Loader {
@@ -134,12 +134,12 @@ Scope { // Scope
                         enableShadow: false
                         ToolbarTabBar {
                             id: tabBar
-                            tabButtonList: root.tabButtonList
+                            tabButtonList: cheatsheetArr
                             currentIndex: swipeView.currentIndex
                         }
                     }
 
-                    SwipeView { // Content pages
+                    SwipeView {
                         id: swipeView
                         Layout.topMargin: 5
                         Layout.fillWidth: true
@@ -160,9 +160,14 @@ Scope { // Scope
                             }
                         }
 
-                        CheatsheetKeybinds {}
-                        CheatsheetPeriodicTable {}
+                        Repeater {
+                            model: root.cheatsheetArr.length
+                            Loader {
+                                sourceComponent: root.cheatsheetArr[index].component
+                            }
+                        }
                     }
+
                 }
             }
         }
