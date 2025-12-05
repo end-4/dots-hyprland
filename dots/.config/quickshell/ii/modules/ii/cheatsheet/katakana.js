@@ -68,4 +68,5 @@ const elements = [
 ];
 
 const niceTypes = {
+    kana: "Kana"
 }
