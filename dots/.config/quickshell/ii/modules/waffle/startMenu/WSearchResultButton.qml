@@ -15,6 +15,8 @@ WChoiceButton {
     required property LauncherSearchResult entry
     property bool firstEntry: false
 
+    signal requestFocus()
+
     checked: focus
     animateChoiceHighlight: false
     implicitWidth: contentLayout.implicitWidth + leftPadding + rightPadding
@@ -29,17 +31,65 @@ WChoiceButton {
         root.entry.execute();
     }
 
+    horizontalPadding: 0
+    verticalPadding: 0
+
     contentItem: RowLayout {
         id: contentLayout
-        spacing: 8
+        spacing: 0
 
-        SearchEntryIcon {
-            entry: root.entry
-            iconSize: 24
-        }
-        EntryNameColumn {
+        WButton {
+            id: launchButton
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
+            Layout.fillHeight: true
+            horizontalPadding: 10
+            verticalPadding: 11
+            implicitHeight: root.firstEntry ? 62 : 36
+            implicitWidth: entryContentRow.implicitWidth + leftPadding + rightPadding
+            topRightRadius: 0
+            bottomRightRadius: 0
+            onClicked: root.click()
+            contentItem: Item {
+                RowLayout {
+                    id: entryContentRow
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                    }
+                    spacing: 8
+
+                    SearchEntryIcon {
+                        entry: root.entry
+                        iconSize: 24
+                    }
+                    EntryNameColumn {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                }
+            }
+        }
+        Rectangle {
+            id: separator
+            opacity: (root.hovered && !root.checked) ? 1 : 0
+            Layout.fillHeight: true
+            implicitWidth: 1
+            color: ColorUtils.transparentize(Looks.colors.fg, 0.75)
+        }
+        WButton {
+            visible: !root.checked
+            Layout.fillHeight: true
+            implicitWidth: 47
+            topLeftRadius: 0
+            bottomLeftRadius: 0
+            onClicked: root.requestFocus()
+            contentItem: Item {
+                FluentIcon {
+                    anchors.centerIn: parent
+                    icon: "chevron-right"
+                    implicitSize: 14
+                }
+            }
         }
     }
 

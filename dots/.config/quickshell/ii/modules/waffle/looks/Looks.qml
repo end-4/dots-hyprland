@@ -17,8 +17,8 @@ Singleton {
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
     property bool dark: Appearance.m3colors.darkmode
 
-    property real backgroundTransparency: 0.13
-    property real panelBackgroundTransparency: 0.12
+    property real backgroundTransparency: 0.16
+    property real panelBackgroundTransparency: 0.14
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
     property real contentTransparency: root.dark ? 0.87 : 0.5
     function applyBackgroundTransparency(col) {

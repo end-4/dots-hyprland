@@ -125,6 +125,10 @@ RowLayout {
             entry: modelData
             firstEntry: index === 0
             width: ListView.view?.width
+            checked: resultListView.currentIndex === index
+            onRequestFocus: {
+                root.forceCurrentIndex(index);
+            }
         }
     }
 
