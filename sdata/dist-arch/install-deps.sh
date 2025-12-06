@@ -18,7 +18,20 @@ remove_deprecated_dependencies(){
   list+=(illogical-impulse-{microtex,pymyc-aur})
   list+=(hyprland-qtutils)
   list+=({quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git)
-  for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
+
+  local installed_deprecated=()
+  for i in "${list[@]}";do
+    if pacman -Qi "$i" >/dev/null 2>&1;then
+      installed_deprecated+=("$i")
+    fi
+  done
+
+  if [ ${#installed_deprecated[@]} -eq 0 ];then
+    printf "${STY_GREEN}[$0]: No deprecated dependencies installed.${STY_RST}\n"
+    return 0
+  fi
+
+  for i in "${installed_deprecated[@]}";do try sudo pacman --noconfirm -Rdd "$i";done
 }
 # NOTE: `implicitize_old_dependencies()` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
 # However, let's just keep it as references for other distros writing their `sdata/dist-<OS_GROUP_ID>/install-deps.sh`, if they need it.
