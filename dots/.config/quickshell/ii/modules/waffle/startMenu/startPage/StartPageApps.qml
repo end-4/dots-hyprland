@@ -44,6 +44,8 @@ BodyRectangle {
 
     component AllApps: PageSection {
         title: Translation.tr("All")
+        // TODO: Do we wanna also implement list view and grid view?
+        //       (instead of only category view)
         AllAppsGrid {
             Layout.fillWidth: true
             Layout.fillHeight: true

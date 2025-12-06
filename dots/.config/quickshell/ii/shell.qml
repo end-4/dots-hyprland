@@ -6,7 +6,6 @@
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 
-
 import qs.modules.common
 import qs.modules.ii.background
 import qs.modules.ii.bar
@@ -34,6 +33,7 @@ import qs.modules.waffle.bar
 import qs.modules.waffle.notificationCenter
 import qs.modules.waffle.onScreenDisplay
 import qs.modules.waffle.startMenu
+import qs.modules.waffle.sessionScreen
 
 import QtQuick
 import QtQuick.Window
@@ -85,6 +85,7 @@ ShellRoot {
     PanelLoader { identifier: "wNotificationCenter"; component: WaffleNotificationCenter {} }
     PanelLoader { identifier: "wOnScreenDisplay"; component: WaffleOSD {} }
     PanelLoader { identifier: "wStartMenu"; component: WaffleStartMenu {} }
+    PanelLoader { identifier: "wSessionScreen"; component: WaffleSessionScreen {} }
     ReloadPopup {}
 
     component PanelLoader: LazyLoader {
@@ -97,7 +98,7 @@ ShellRoot {
     property list<string> families: ["ii", "waffle"]
     property var panelFamilies: ({
         "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wActionCenter", "wBar", "wBackground", "wNotificationCenter", "wOnScreenDisplay", "wStartMenu", "iiCheatsheet", "iiLock", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiPolkit", "iiRegionSelector", "iiSessionScreen", "iiWallpaperSelector"],
+        "waffle": ["wActionCenter", "wBar", "wBackground", "wNotificationCenter", "wOnScreenDisplay", "wStartMenu", "iiCheatsheet", "iiLock", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiPolkit", "iiRegionSelector", "wSessionScreen", "iiWallpaperSelector"],
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)

@@ -90,7 +90,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "x"
-                from: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 3 / 2
+                from: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 5 / 2
                 to: categoryFolderPopup.windowCenterPoint.x - categoryFolderPopup.width / 2
                 duration: 300
                 easing.type: Easing.BezierSpline
@@ -99,7 +99,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "y"
-                from: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height / 2
+                from: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height * 3 / 2
                 to: categoryFolderPopup.windowCenterPoint.y - categoryFolderPopup.height / 2
                 duration: 300
                 easing.type: Easing.BezierSpline
@@ -120,7 +120,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "x"
-                to: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 3 / 2
+                to: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 5 / 2
                 duration: 200
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Looks.transition.easing.bezierCurve.easeOut
@@ -128,7 +128,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "y"
-                to: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height / 2
+                to: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height * 3 / 2
                 duration: 200
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Looks.transition.easing.bezierCurve.easeOut
@@ -147,10 +147,13 @@ Rectangle {
         background: null
 
         Loader {
+            id: folderContentLoader
             active: categoryFolderPopup.visible
-            sourceComponent: CategoryFolderContent {
-                title: root.aggregatedCategory.name
-                desktopEntries: root.desktopEntries
+            sourceComponent: WRectangularShadowThis {
+                CategoryFolderContent {
+                    title: root.aggregatedCategory.name
+                    desktopEntries: root.desktopEntries
+                }
             }
         }
     }

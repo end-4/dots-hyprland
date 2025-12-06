@@ -9,6 +9,8 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.startMenu.startPage
+import qs.modules.waffle.startMenu.searchPage
 
 WBarAttachedPanelContent {
     id: root

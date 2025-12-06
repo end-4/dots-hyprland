@@ -5,6 +5,7 @@ import qs.modules.common
 import qs.modules.waffle.looks
 import qs.modules.common.functions
 import qs.modules.common.models
+import qs.modules.waffle.startMenu
 import Quickshell
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -119,7 +120,7 @@ RowLayout {
         onModelChanged: {
             root.focusFirstItem();
         }
-        delegate: WSearchResultButton {
+        delegate: SearchResultButton {
             required property int index
             required property var modelData
             entry: modelData
