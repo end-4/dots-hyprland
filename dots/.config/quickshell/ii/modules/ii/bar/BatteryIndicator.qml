@@ -47,6 +47,7 @@ MouseArea {
                     Layout.alignment: Qt.AlignVCenter
                     font: batteryProgress.font
                     text: batteryProgress.text
+                    transform: Translate { y: 1 }
                 }
             }
         }

@@ -20,6 +20,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             text: DateTime.time
+            transform: Translate { y: 1 }
         }
 
         StyledText {
