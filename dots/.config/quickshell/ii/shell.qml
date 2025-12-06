@@ -120,5 +120,27 @@ ShellRoot {
 
         onPressed: root.cyclePanelFamily()
     }
+
+    Timer { // wallpaper timer
+        id: rotationTimer
+        interval: Config.options.background.slideInterval * 60000
+        running: Config.options.background.enableSlide
+        repeat: true
+
+        onTriggered: {
+            console.log("[Wallpaper] Timer disparado. Trocando wallpaper...");
+            Wallpapers.randomFromCurrentFolder();
+        }
+    }
+
+    Connections {
+        target: Config.options.background
+        function onRotationIntervalChanged() {
+            if (rotationTimer.running) {
+                rotationTimer.restart();
+            }
+        }
+    }
+
 }
 
