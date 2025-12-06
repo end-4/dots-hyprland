@@ -99,7 +99,7 @@ WBarAttachedPanelContent {
                 }
             }
             Item {
-                implicitHeight: root.searching ? 736 : 736 // TODO: Make sizes naturally inferred
+                implicitHeight: root.searching ? 800 : 800 // TODO: Make sizes naturally inferred
                 Layout.fillWidth: true
                 Loader {
                     id: pageContentLoader
