@@ -20,6 +20,17 @@ Singleton {
         }
     }
 
+    // https://specifications.freedesktop.org/menu/latest/category-registry.html
+    property list<string> mainRegisteredCategories: ["AudioVideo", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"]
+    property list<string> appCategories: DesktopEntries.applications.values.reduce((acc, entry) => {
+        for (const category of entry.categories) {
+            if (!acc.includes(category) && mainRegisteredCategories.includes(category)) {
+                acc.push(category);
+            }
+        }
+        return acc;
+    }, []).sort()
+
     property var searchActions: [
         {
             action: "accentcolor",

@@ -65,8 +65,8 @@ RowLayout {
 
         WMenu {
             id: accountsMenu
-            x: -accountsMenu.implicitWidth + optionsButton.implicitWidth
-            y: optionsButton.height + 10
+            x: -accountsMenu.implicitWidth + optionsButton.implicitWidth + 10
+            y: optionsButton.height
             downDirection: true
             Action {
                 icon.name: "people-settings"

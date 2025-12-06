@@ -189,6 +189,7 @@ RowLayout {
                     const isAppEntry = resultPreview.entry.type === Translation.tr("App");
                     const appId = isAppEntry ? resultPreview.entry.id : "";
                     const pinned = isAppEntry ? (Config.options.dock.pinnedApps.includes(appId)) : false;
+                    const startPinned = isAppEntry ? (Config.options.launcher.pinnedApps.includes(appId)) : false;
                     var result = [
                         searchResultComp.createObject(null, {
                             name: resultPreview.entry.verb,
@@ -205,6 +206,20 @@ RowLayout {
                                 iconType: LauncherSearchResult.IconType.Material,
                                 execute: () => {
                                     TaskbarApps.togglePin(appId);
+                                }
+                            })
+                        ] : []),
+                        ...(isAppEntry ? [
+                            searchResultComp.createObject(null, {
+                                name: startPinned ? Translation.tr("Unpin from start") : Translation.tr("Pin to start"),
+                                iconName: startPinned ? "keep_off" : "keep",
+                                iconType: LauncherSearchResult.IconType.Material,
+                                execute: () => {
+                                    if (Config.options.launcher.pinnedApps.indexOf(appId) !== -1) {
+                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.filter(id => id !== appId)
+                                    } else {
+                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.concat([appId])
+                                    }
                                 }
                             })
                         ] : [])
