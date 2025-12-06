@@ -90,6 +90,20 @@ Scope { // Scope
             property bool extend: false
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
+            readonly property bool posLeft: !(Config.options.bar.vertical && Config.options.bar.bottom)
+
+            Component.onCompleted: {
+                updateLayerRule();
+            }
+
+            onPosLeftChanged: {
+                updateLayerRule();
+            }
+
+            function updateLayerRule() {
+                console.log("Updating layer rule for left sidebar to", `animation slide ${posLeft ? "left" : "right"}, quickshell:sidebarLeft`);
+                Quickshell.execDetached(["hyprctl", "keyword", "layerrule", `animation slide ${posLeft ? "left" : "right"}, quickshell:sidebarLeft`]);
+            }
 
             function hide() {
                 GlobalStates.sidebarLeftOpen = false
@@ -97,7 +111,7 @@ Scope { // Scope
 
             exclusionMode: ExclusionMode.Normal
             exclusiveZone: root.pin ? sidebarWidth : 0
-            implicitWidth: Appearance.sizes.sidebarWidthExtended + Appearance.sizes.elevationMargin
+            implicitWidth: sidebarWidth
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
@@ -105,7 +119,8 @@ Scope { // Scope
 
             anchors {
                 top: true
-                left: true
+                left: posLeft ? true : null
+                right: !posLeft ? true : null
                 bottom: true
             }
 
@@ -133,9 +148,11 @@ Scope { // Scope
             Rectangle {
                 id: sidebarLeftBackground
                 anchors.top: parent.top
-                anchors.left: parent.left
+                anchors.left: posLeft ? true : null
+                anchors.right: !posLeft ? true : null
                 anchors.topMargin: Appearance.sizes.hyprlandGapsOut
-                anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
+                anchors.leftMargin: posLeft ? Appearance.sizes.hyprlandGapsOut : null
+                anchors.rightMargin: !posLeft ? Appearance.sizes.hyprlandGapsOut + Appearance.sizes.elevationMargin : null
                 width: sidebarRoot.sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
