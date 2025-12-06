@@ -57,7 +57,6 @@ Scope {
 
             Item {
                 anchors.fill: parent
-                focus: true
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
                         sessionRoot.hide();

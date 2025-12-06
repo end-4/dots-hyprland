@@ -274,6 +274,9 @@ Rectangle {
         id: smallGridAppButton
         property DesktopEntry desktopEntry
 
+        property bool pinnedStart: LauncherApps.isPinned(smallGridAppButton.desktopEntry.id);
+        property bool pinnedTaskbar: TaskbarApps.isPinned(smallGridAppButton.desktopEntry.id);
+
         onClicked: {
             GlobalStates.searchOpen = false;
             desktopEntry.execute();
@@ -297,6 +300,30 @@ Rectangle {
 
         WToolTip {
             text: smallGridAppButton.desktopEntry.name
+        }
+
+        altAction: () => {
+            appMenu.popup();
+        }
+
+        WMenu {
+            id: appMenu
+            downDirection: true
+
+            WMenuItem {
+                icon.name: smallGridAppButton.pinnedStart ? "pin-off" : "pin"
+                text: smallGridAppButton.pinnedStart ? Translation.tr("Unpin from Start") : Translation.tr("Pin to Start")
+                onTriggered: {
+                    LauncherApps.togglePin(smallGridAppButton.desktopEntry.id);
+                }
+            }
+            WMenuItem {
+                icon.name: smallGridAppButton.pinnedTaskbar ? "pin-off" : "pin"
+                text: smallGridAppButton.pinnedTaskbar ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar")
+                onTriggered: {
+                    TaskbarApps.togglePin(smallGridAppButton.desktopEntry.id);
+                }
+            }
         }
     }
 

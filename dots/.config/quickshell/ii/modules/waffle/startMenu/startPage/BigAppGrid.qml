@@ -23,9 +23,7 @@ GridLayout {
     uniformCellWidths: true
 
     Repeater {
-        model: ScriptModel {
-            values: root.desktopEntries
-        }
+        model: root.desktopEntries
         delegate: StartAppButton {
             id: pinnedAppButton
             required property var modelData

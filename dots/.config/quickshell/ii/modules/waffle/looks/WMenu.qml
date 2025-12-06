@@ -95,6 +95,5 @@ Menu {
 
     delegate: WMenuItem {
         id: menuItemDelegate
-        width: ListView.view?.width
     }
 }

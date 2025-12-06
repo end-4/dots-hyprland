@@ -202,6 +202,16 @@ RowLayout {
                         }),
                         ...(isAppEntry ? [
                             searchResultComp.createObject(null, {
+                                name: startPinned ? Translation.tr("Unpin from Start") : Translation.tr("Pin to Start"),
+                                iconName: startPinned ? "keep_off" : "keep",
+                                iconType: LauncherSearchResult.IconType.Material,
+                                execute: () => {
+                                    LauncherApps.togglePin(appId);
+                                }
+                            })
+                        ] : []),
+                        ...(isAppEntry ? [
+                            searchResultComp.createObject(null, {
                                 name: pinned ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar"),
                                 iconName: pinned ? "keep_off" : "keep",
                                 iconType: LauncherSearchResult.IconType.Material,
@@ -210,20 +220,6 @@ RowLayout {
                                 }
                             })
                         ] : []),
-                        ...(isAppEntry ? [
-                            searchResultComp.createObject(null, {
-                                name: startPinned ? Translation.tr("Unpin from start") : Translation.tr("Pin to start"),
-                                iconName: startPinned ? "keep_off" : "keep",
-                                iconType: LauncherSearchResult.IconType.Material,
-                                execute: () => {
-                                    if (Config.options.launcher.pinnedApps.indexOf(appId) !== -1) {
-                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.filter(id => id !== appId)
-                                    } else {
-                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.concat([appId])
-                                    }
-                                }
-                            })
-                        ] : [])
                     ];
                     result = result.concat(resultPreview.entry.actions);
                     return result;
