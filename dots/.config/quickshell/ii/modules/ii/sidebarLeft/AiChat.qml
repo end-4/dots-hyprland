@@ -11,6 +11,7 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 
+
 Item {
     id: root
     property real padding: 4
@@ -101,7 +102,9 @@ Item {
             execute: args => {
                 const joinedArgs = args.join(" ");
                 if (joinedArgs.trim().length == 0) {
-                    Ai.addMessage(Translation.tr("Usage: %1save CHAT_NAME").arg(root.commandPrefix), Ai.interfaceRole);
+                    Ai.addMessage(Translation.tr("Chat is being saved with auto naming."), Ai.interfaceRole);
+                    Ai.autoNameAndSave();
+                    
                     return;
                 }
                 Ai.saveChat(joinedArgs);
@@ -239,23 +242,29 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         property string icon
         property string statusText
         property string description
+        property int maxWidth: materialIcon.width
         hoverEnabled: true
         implicitHeight: statusItemRowLayout.implicitHeight
         implicitWidth: statusItemRowLayout.implicitWidth
 
+
         RowLayout {
             id: statusItemRowLayout
-            spacing: 0
+            spacing: statusText.length > 1 ? 5 : 0
+
             MaterialSymbol {
+                id: materialIcon
                 text: statusItem.icon
                 iconSize: Appearance.font.pixelSize.huge
                 color: Appearance.colors.colSubtext
+                Layout.preferredWidth: width
             }
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.small
                 text: statusItem.statusText
                 color: Appearance.colors.colSubtext
-                animateChange: true
+                elide: Text.ElideRight
+                Layout.preferredWidth: text.length > 1 ? Math.min(implicitWidth , maxWidth) : 0
             }
         }
 
@@ -315,18 +324,33 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 implicitHeight: Math.max(statusRowLayout.implicitHeight, 38)
                 radius: Appearance.rounding.normal - root.padding
                 color: Appearance.colors.colLayer2
+                Behavior on implicitWidth {
+                    animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                }
                 RowLayout {
                     id: statusRowLayout
                     anchors.centerIn: parent
                     spacing: 10
-
                     StatusItem {
+                        // Chat title indicator
+                        icon: Ai.currentChatMetadata.icon ?? ""
+                        statusText: Ai.currentChatMetadata.title ?? ""
+                        description: statusText
+                        visible: Ai.currentChatMetadata?.title?.length > 1
+                        maxWidth: 100
+                    }
+                    StatusSeparator {
+                        visible: Ai.currentChatMetadata?.title?.length > 1
+                    }
+                    StatusItem {
+                        // Api key indicator
                         icon: Ai.currentModelHasApiKey ? "key" : "key_off"
                         statusText: ""
                         description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
                     }
                     StatusSeparator {}
                     StatusItem {
+                        // Ai temperature indicator
                         icon: "device_thermostat"
                         statusText: Ai.temperature.toFixed(1)
                         description: Translation.tr("Temperature\nChange with /temp VALUE")
@@ -335,10 +359,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         visible: Ai.tokenCount.total > 0
                     }
                     StatusItem {
+                        // Ai token count indicator
                         visible: Ai.tokenCount.total > 0
                         icon: "token"
                         statusText: Ai.tokenCount.total
                         description: Translation.tr("Total token count\nInput: %1\nOutput: %2").arg(Ai.tokenCount.input).arg(Ai.tokenCount.output)
+                        maxWidth: statusRowLayout.width / 3
+                    }
+                    StatusSeparator {
+                        visible: Ai.messageIDs.length > 0
+                    }
+                    StatusItem {
+                        // Chat save indicator
+                        visible: Ai.messageIDs.length > 0
+                        icon: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? "hourglass_empty" : "save" : Config.options.ai.autoSave ? "save_clock" : "file_save_off"
+                        statusText: ""
+                        description: Ai.currentChatMetadata?.title?.length > 1 ? Ai.waitingForResponse ? Translation.tr("Waiting for response") : Translation.tr("Chat is saved") : Config.options.ai.autoSave ? Translation.tr("Chat is not saved (auto save enabled)\nSave with '/save'\nOr continue writing to automatically save") : Translation.tr("Chat is not saved\nSave with auto-naming using /save\nOr enable auto save in settings")
                     }
                 }
             }
@@ -391,6 +427,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             }
 
             PagePlaceholder {
+                id: placeholder
                 z: 2
                 shown: Ai.messageIDs.length === 0
                 icon: "neurology"
@@ -398,6 +435,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar")
                 shape: MaterialShape.Shape.PixelCircle
             }
+
+            AiChatHistoryItem {}
 
             ScrollToBottomButton {
                 z: 3
@@ -465,6 +504,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
             }
         }
+
 
         Rectangle { // Input area
             id: inputWrapper
@@ -774,6 +814,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 }
                                 if (modelData.name === "clear") {
                                     messageInputField.text = "";
+                                    Ai.updateSavedChats()
                                 }
                             }
                         }
