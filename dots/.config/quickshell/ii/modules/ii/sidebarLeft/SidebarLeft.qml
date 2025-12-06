@@ -87,8 +87,20 @@ Scope { // Scope
             id: sidebarRoot
             visible: GlobalStates.sidebarLeftOpen
             
-            property bool extend: false
-            property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
+            property bool extend: {  
+                const aiEnabled = Config.options.policies.ai !== 0;  
+                const weebEnabled = Config.options.policies.weeb !== 0;  
+                const wallpaperEnabled = Config.options.policies.wallpaperBrowser !== 0;  
+                  
+                // Count enabled tabs  
+                let enabledCount = 0;  
+                if (aiEnabled) enabledCount++;  
+                if (weebEnabled) enabledCount++;  
+                if (wallpaperEnabled) enabledCount++;  
+                  
+                // Extend if all three are enabled  
+                return enabledCount === 3;  
+            }            property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarLeftWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
 
             function hide() {
