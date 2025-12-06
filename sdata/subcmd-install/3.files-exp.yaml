@@ -20,6 +20,7 @@ patterns:
   - from: "dots/.config/fish"
     to: "$XDG_CONFIG_HOME/fish"
     mode: "sync"
+    excludes: ["conf.d"]
     condition:
       type: "shell"
       value: "fish"
