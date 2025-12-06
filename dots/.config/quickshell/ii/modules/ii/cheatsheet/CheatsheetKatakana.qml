@@ -1,0 +1,42 @@
+import "katakana.js" as Kana
+import QtQuick
+
+Item {
+    id: root
+    readonly property var elements: Kana.elements
+    property real spacing: 6
+    implicitWidth: mainLayout.implicitWidth
+    implicitHeight: mainLayout.implicitHeight
+
+    Column {
+        id: mainLayout
+        anchors.centerIn: parent
+        spacing: root.spacing
+
+        Repeater { // Main table rows
+            model: root.elements
+            
+            delegate: Row { // Table cells
+                id: tableRow
+                spacing: root.spacing
+                required property var modelData
+                
+                Repeater {
+                    model: tableRow.modelData
+                    delegate: ElementTile {
+                        required property var modelData
+                        element: modelData
+                    }
+
+                }
+            }
+            
+        }
+
+        Item {
+            id: gap
+            implicitHeight: 20
+        }
+
+    }
+}

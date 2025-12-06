@@ -301,6 +301,8 @@ Singleton {
                     property int key: Appearance.font.pixelSize.smaller
                     property int comment: Appearance.font.pixelSize.smaller
                 }
+                property bool showKatakana: false
+                property bool showPeriodicTable: false
             }
 
             property JsonObject conflictKiller: JsonObject {
