@@ -49,12 +49,25 @@ Singleton {
                 try {
                     // Trim whitespace and newlines
                     const fetchedIp = text.trim();
-                    // Validate IPv4 or IPv6 format
+                    // Basic validation - check if it looks like an IP address
+                    // We trust ipinfo.io to return valid IPs, so we just check format
                     const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
-                    const ipv6Pattern = /^([0-9a-f]{0,4}:){2,7}[0-9a-f]{0,4}$/i;
+                    const ipv6Pattern = /^([0-9a-f:]+)$/i;
                     if (ipv4Pattern.test(fetchedIp) || ipv6Pattern.test(fetchedIp)) {
-                        root.ip = fetchedIp;
-                        console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
+                        // For IPv4, do additional validation that octets are in range
+                        if (ipv4Pattern.test(fetchedIp)) {
+                            const octets = fetchedIp.split('.');
+                            if (octets.every(octet => parseInt(octet) <= 255)) {
+                                root.ip = fetchedIp;
+                                console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
+                            } else {
+                                console.error(`[ExternalIpService] Invalid IPv4 - octet out of range: ${fetchedIp}`);
+                            }
+                        } else {
+                            // IPv6 - trust the API response
+                            root.ip = fetchedIp;
+                            console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
+                        }
                     } else {
                         console.error(`[ExternalIpService] Invalid IP format: ${fetchedIp}`);
                     }
