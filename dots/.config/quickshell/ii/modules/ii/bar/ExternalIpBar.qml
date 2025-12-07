@@ -33,7 +33,6 @@ MouseArea {
                 Translation.tr("Refreshing (manually triggered)"),
                 "-a", "Shell"
             ]);
-            mouse.accepted = false
         }
     }
     

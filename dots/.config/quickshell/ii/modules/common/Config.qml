@@ -268,6 +268,7 @@ Singleton {
                 }
                 property JsonObject externalIp: JsonObject {
                     property bool enable: false
+                    property int fetchInterval: 5 // minutes
                 }
                 property JsonObject indicators: JsonObject {
                     property JsonObject notifications: JsonObject {

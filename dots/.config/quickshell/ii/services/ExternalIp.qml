@@ -13,8 +13,8 @@ import qs.modules.common
 Singleton {
     id: root
     
-    // Fetch interval: 5 minutes (in milliseconds)
-    readonly property int fetchInterval: 5 * 60 * 1000
+    // Fetch interval in milliseconds (default: 5 minutes)
+    readonly property int fetchInterval: (Config.options.bar.externalIp.fetchInterval || 5) * 60 * 1000
     
     // The current external IP address
     property string ip: ""
@@ -25,7 +25,9 @@ Singleton {
     function getData() {
         root.loading = true;
         // Using ipinfo.io/ip which returns just the IP address
-        fetcher.command[2] = "curl -s --max-time 5 ipinfo.io/ip";
+        // --fail makes curl return error code on HTTP errors
+        // --silent suppresses progress output, --show-error shows errors
+        fetcher.command[2] = "curl -sSf --max-time 5 ipinfo.io/ip";
         fetcher.running = true;
     }
     
@@ -47,8 +49,10 @@ Singleton {
                 try {
                     // Trim whitespace and newlines
                     const fetchedIp = text.trim();
-                    // Basic validation - check if it looks like an IP
-                    if (fetchedIp.match(/^[\d.:a-f]+$/i)) {
+                    // Validate IPv4 or IPv6 format
+                    const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+                    const ipv6Pattern = /^([0-9a-f]{0,4}:){2,7}[0-9a-f]{0,4}$/i;
+                    if (ipv4Pattern.test(fetchedIp) || ipv6Pattern.test(fetchedIp)) {
                         root.ip = fetchedIp;
                         console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
                     } else {
