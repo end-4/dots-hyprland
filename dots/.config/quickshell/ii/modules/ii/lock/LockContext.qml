@@ -72,7 +72,7 @@ Scope {
     }
 
     function stopFingerPam() {
-        if (fingerPam.running) {
+        if (fingerPam.active) {
             fingerPam.abort();
         }
     }
