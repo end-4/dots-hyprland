@@ -50,24 +50,24 @@ Singleton {
                     // Trim whitespace and newlines
                     const fetchedIp = text.trim();
                     // Basic validation - check if it looks like an IP address
-                    // We trust ipinfo.io to return valid IPs, so we just check format
+                    // We trust ipinfo.io to return valid IPs, just do basic sanity check
                     const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
-                    const ipv6Pattern = /^([0-9a-f:]+)$/i;
-                    if (ipv4Pattern.test(fetchedIp) || ipv6Pattern.test(fetchedIp)) {
-                        // For IPv4, do additional validation that octets are in range
-                        if (ipv4Pattern.test(fetchedIp)) {
-                            const octets = fetchedIp.split('.');
-                            if (octets.every(octet => parseInt(octet) <= 255)) {
-                                root.ip = fetchedIp;
-                                console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
-                            } else {
-                                console.error(`[ExternalIpService] Invalid IPv4 - octet out of range: ${fetchedIp}`);
-                            }
-                        } else {
-                            // IPv6 - trust the API response
+                    const ipv6Pattern = /^[0-9a-f:]+$/i;
+                    
+                    if (ipv4Pattern.test(fetchedIp)) {
+                        // For IPv4, validate octets are in range 0-255
+                        const octets = fetchedIp.split('.');
+                        if (octets.every(octet => parseInt(octet) <= 255)) {
                             root.ip = fetchedIp;
-                            console.info(`[ExternalIpService] Fetched IP: ${fetchedIp}`);
+                            console.info(`[ExternalIpService] Fetched IPv4: ${fetchedIp}`);
+                        } else {
+                            console.error(`[ExternalIpService] Invalid IPv4 - octet out of range: ${fetchedIp}`);
                         }
+                    } else if (ipv6Pattern.test(fetchedIp) && fetchedIp.includes(':')) {
+                        // For IPv6, basic check that it contains colons and valid characters
+                        // We trust the API to return valid IPv6, just ensure it's not garbage
+                        root.ip = fetchedIp;
+                        console.info(`[ExternalIpService] Fetched IPv6: ${fetchedIp}`);
                     } else {
                         console.error(`[ExternalIpService] Invalid IP format: ${fetchedIp}`);
                     }
@@ -76,10 +76,15 @@ Singleton {
                 }
             }
         }
+        stderr: SplitParser {
+            onRead: line => {
+                console.error(`[ExternalIpService] ${line}`);
+            }
+        }
         onExited: (exitCode, exitStatus) => {
             root.loading = false;
             if (exitCode !== 0) {
-                console.error(`[ExternalIpService] Process exited with code ${exitCode}`);
+                console.error(`[ExternalIpService] Process exited with code ${exitCode}, status: ${exitStatus}`);
             }
         }
     }

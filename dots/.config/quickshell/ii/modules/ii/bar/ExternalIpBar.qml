@@ -19,7 +19,7 @@ MouseArea {
     onPressed: {
         if (mouse.button === Qt.LeftButton) {
             // Copy IP to clipboard only if available
-            if (ExternalIp.ip && ExternalIp.ip.length > 0) {
+            if (ExternalIp.ip) {
                 Quickshell.execDetached(["wl-copy", ExternalIp.ip]);
                 Quickshell.execDetached(["notify-send", 
                     Translation.tr("External IP"), 
