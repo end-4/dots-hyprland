@@ -252,6 +252,19 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "language"
+        title: Translation.tr("External IP")
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable")
+            checked: Config.options.bar.externalIp.enable
+            onCheckedChanged: {
+                Config.options.bar.externalIp.enable = checked;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "workspaces"
         title: Translation.tr("Workspaces")
 
