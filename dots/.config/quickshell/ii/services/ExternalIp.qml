@@ -19,15 +19,18 @@ Singleton {
     // The current external IP address
     property string ip: ""
     
+    // The ISP/organization name
+    property string isp: ""
+    
     // Loading state
     property bool loading: false
     
     function getData() {
         root.loading = true;
-        // Using ipinfo.io/ip which returns just the IP address
+        // Using ipinfo.io without /ip to get full JSON including org (ISP)
         // --fail makes curl return error code on HTTP errors
         // --silent suppresses progress output, --show-error shows errors
-        fetcher.command[2] = "curl -sSf --max-time 5 ipinfo.io/ip";
+        fetcher.command[2] = "curl -sSf --max-time 5 ipinfo.io";
         fetcher.running = true;
     }
     
@@ -47,8 +50,11 @@ Singleton {
                     return;
                 }
                 try {
-                    // Trim whitespace and newlines
-                    const fetchedIp = text.trim();
+                    // Parse JSON response from ipinfo.io
+                    const data = JSON.parse(text.trim());
+                    const fetchedIp = data.ip || "";
+                    const fetchedOrg = data.org || "";
+                    
                     // Basic validation - check if it looks like an IP address
                     // We trust ipinfo.io to return valid IPs, just do basic sanity check
                     const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
@@ -59,7 +65,10 @@ Singleton {
                         const octets = fetchedIp.split('.');
                         if (octets.every(octet => parseInt(octet) <= 255)) {
                             root.ip = fetchedIp;
-                            console.info(`[ExternalIpService] Fetched IPv4: ${fetchedIp}`);
+                            // Extract ISP name from org field (format: "AS#### ISP Name")
+                            // Remove the AS number prefix if present
+                            root.isp = fetchedOrg.replace(/^AS\d+\s+/, '');
+                            console.info(`[ExternalIpService] Fetched IPv4: ${fetchedIp}, ISP: ${root.isp}`);
                         } else {
                             console.error(`[ExternalIpService] Invalid IPv4 - octet out of range: ${fetchedIp}`);
                         }
@@ -67,7 +76,9 @@ Singleton {
                         // For IPv6, basic check that it contains colons and valid characters
                         // We trust the API to return valid IPv6, just ensure it's not garbage
                         root.ip = fetchedIp;
-                        console.info(`[ExternalIpService] Fetched IPv6: ${fetchedIp}`);
+                        // Extract ISP name from org field
+                        root.isp = fetchedOrg.replace(/^AS\d+\s+/, '');
+                        console.info(`[ExternalIpService] Fetched IPv6: ${fetchedIp}, ISP: ${root.isp}`);
                     } else {
                         console.error(`[ExternalIpService] Invalid IP format: ${fetchedIp}`);
                     }

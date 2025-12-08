@@ -54,7 +54,16 @@ MouseArea {
             visible: true
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
-            text: ExternalIp.loading ? Translation.tr("...") : (ExternalIp.ip || Translation.tr("--"))
+            text: {
+                if (ExternalIp.loading) {
+                    return Translation.tr("...");
+                } else if (ExternalIp.ip) {
+                    // Show "IP | ISP" format if ISP is available
+                    return ExternalIp.isp ? `${ExternalIp.ip} | ${ExternalIp.isp}` : ExternalIp.ip;
+                } else {
+                    return Translation.tr("--");
+                }
+            }
             Layout.alignment: Qt.AlignVCenter
         }
     }
@@ -76,6 +85,13 @@ MouseArea {
                 icon: "public"
                 label: Translation.tr("IP Address:")
                 value: ExternalIp.ip || Translation.tr("Not available")
+            }
+            
+            StyledPopupValueRow {
+                visible: ExternalIp.isp && ExternalIp.isp.length > 0
+                icon: "router"
+                label: Translation.tr("ISP:")
+                value: ExternalIp.isp
             }
             
             StyledText {
