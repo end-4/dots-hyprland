@@ -389,7 +389,9 @@
   "Focus": "Фокус",
   "Load:": "Load:",
   "Unknown VPN": "Неизвестный VPN",
+  "Default VPN": "VPN по умолчанию",
   "Loading...": "Загрузка...",
   "VPN Connections": "VPN Соединения",
-  "Refresh": "Обновить"
+  "Refresh": "Обновить",
+  "Select the VPN connection that will be activated by clicking on the VPN icon.": "Выберите VPN-соединение, которое будет активировано, нажав на значок VPN."
 }

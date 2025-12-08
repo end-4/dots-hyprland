@@ -98,24 +98,12 @@ Singleton {
         })
     }
 
-    function updateVpnList(): void {
-        getVpnConnections.running = true;
-    }
-
     function toggleVpnConnection(connectionName: string, isActive: bool): void {
         if (isActive) {
-            disconnectProc.exec(["nmcli", "connection", "down", connectionName]);
+            Quickshell.execDetached(["bash", "-c", `nmcli connection down ${connectionName}`]);
         } else {
-            connectProc.exec(["nmcli", "connection", "up", connectionName]);
+            Quickshell.execDetached(["bash", "-c", `nmcli connection up ${connectionName}`]);
         }
-        updateVpnTimer.restart();
-        updateVpnList();
-    }
-
-    Timer {
-        id: updateVpnTimer
-        interval: 2000
-        onTriggered: updateVpnList()
     }
 
     Process {
@@ -180,6 +168,7 @@ Singleton {
         wifiStatusProcess.running = true
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
+        getVpnConnections.running = true;
     }
 
     Process {
