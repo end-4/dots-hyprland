@@ -17,8 +17,8 @@ Singleton {
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
     property bool dark: Appearance.m3colors.darkmode
 
-    property real backgroundTransparency: 0.13
-    property real panelBackgroundTransparency: 0.12
+    property real backgroundTransparency: 0.16
+    property real panelBackgroundTransparency: 0.14
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
     property real contentTransparency: root.dark ? 0.87 : 0.5
     function applyBackgroundTransparency(col) {
@@ -53,6 +53,8 @@ Singleton {
         property color controlBgHover: '#57575B'
         property color controlFg: "#FFFFFF"
         property color accentUnfocused: "#848484"
+        property color link: "#235CCF"
+        property color inputBg: ColorUtils.transparentize(bg0, 0.4)
     }
     darkColors: QtObject {
         id: darkColors
@@ -62,7 +64,7 @@ Singleton {
         property color bg0: "#1C1C1C"
         property color bg0Border: "#404040"
         property color bg1Base: "#2C2C2C"
-        property color bg1: "#a8a8a8"
+        property color bg1: '#9f9f9f'
         property color bg1Hover: "#b3b3b3"
         property color bg1Active: '#727272'
         property color bg1Border: '#bebebe'
@@ -70,7 +72,7 @@ Singleton {
         property color bg2: '#8a8a8a'
         property color bg2Hover: '#b1b1b1'
         property color bg2Active: '#919191'
-        property color bg2Border: '#c4c4c4'
+        property color bg2Border: '#bdbdbd'
         property color subfg: "#CED1D7"
         property color fg: "#FFFFFF"
         property color fg1: "#D1D1D1"
@@ -80,6 +82,8 @@ Singleton {
         property color controlBgHover: "#CFCED1"
         property color controlFg: "#454545"
         property color accentUnfocused: "#989898"
+        property color link: "#A7C9FC"
+        property color inputBg: ColorUtils.transparentize(darkColors.bg0, 0.5)
     }
     colors: QtObject {
         id: colors
@@ -92,12 +96,12 @@ Singleton {
         property color bg0Opaque: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
         property color bg0: ColorUtils.transparentize(bg0Opaque, root.backgroundTransparency)
         property color bg0Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg0Border : root.lightColors.bg0Border, root.backgroundTransparency)
-        property color bg1Base: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Base : root.lightColors.bg1Base, root.backgroundTransparency)
+        property color bg1Base: root.dark ? root.darkColors.bg1Base : root.lightColors.bg1Base
         property color bg1: ColorUtils.transparentize(root.dark ? root.darkColors.bg1 : root.lightColors.bg1, root.contentTransparency)
         property color bg1Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Hover : root.lightColors.bg1Hover, root.contentTransparency)
         property color bg1Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Active : root.lightColors.bg1Active, root.contentTransparency)
         property color bg1Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Border : root.lightColors.bg1Border, root.contentTransparency)
-        property color bg2Base: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base, root.backgroundTransparency)
+        property color bg2Base: root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base
         property color bg2: ColorUtils.transparentize(root.dark ? root.darkColors.bg2 : root.lightColors.bg2, root.contentTransparency)
         property color bg2Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Hover : root.lightColors.bg2Hover, root.contentTransparency)
         property color bg2Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Active : root.lightColors.bg2Active, root.contentTransparency)
@@ -110,6 +114,8 @@ Singleton {
         property color controlBg: root.dark ? root.darkColors.controlBg : root.lightColors.controlBg
         property color controlBgHover: root.dark ? root.darkColors.controlBgHover : root.lightColors.controlBgHover
         property color controlFg: root.dark ? root.darkColors.controlFg : root.lightColors.controlFg
+        property color inputBg: root.dark ? root.darkColors.inputBg : root.lightColors.inputBg
+        property color link: root.dark ? root.darkColors.link : root.lightColors.link
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
         property color warning: "#FF9900"
@@ -118,6 +124,8 @@ Singleton {
         property color accentActive: Appearance.colors.colPrimaryActive
         property color accentUnfocused: root.dark ? root.darkColors.accentUnfocused : root.lightColors.accentUnfocused
         property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
+        property color selection: Appearance.colors.colPrimaryContainer
+        property color selectionFg: Appearance.colors.colOnPrimaryContainer
     }
 
     radius: QtObject {
@@ -138,12 +146,14 @@ Singleton {
             property int thin: Font.Normal
             property int regular: Font.Medium
             property int strong: Font.DemiBold
-            property int stronger: Font.Bold
+            property int stronger: (Font.DemiBold + 2*Font.Bold) / 3
+            property int strongest: Font.Bold
         }
         property QtObject pixelSize: QtObject {
             property real normal: 11
             property real large: 13
             property real larger: 15
+            property real xlarger: 17
         }
     }
 

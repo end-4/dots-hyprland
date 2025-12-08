@@ -54,33 +54,17 @@ FooterRectangle {
             Layout.fillWidth: true
         }
 
-        SmallBorderedIconButton {
-            leftPadding: 12
-            rightPadding: 12
-            implicitWidth: focusButtonContent.implicitWidth + leftPadding + rightPadding
+        SmallBorderedIconAndTextButton {
+            iconName: TimerService.pomodoroRunning ? "stop" : "play"
+            text: TimerService.pomodoroRunning ? Translation.tr("End session") : Translation.tr("Focus")
 
             onClicked: {
                 if (TimerService.pomodoroRunning) {
-                    TimerService.togglePomodoro()
-                    TimerService.resetPomodoro()
+                    TimerService.togglePomodoro();
+                    TimerService.resetPomodoro();
                 } else {
-                    TimerService.togglePomodoro()
+                    TimerService.togglePomodoro();
                     Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "sidebarRight", "toggle"]);
-                }
-            }
-
-            contentItem: Row {
-                id: focusButtonContent
-                spacing: 4
-                FluentIcon {
-                    icon: TimerService.pomodoroRunning ? "stop" : "play"
-                    filled: true
-                    implicitSize: 14
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                WText {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: TimerService.pomodoroRunning ? Translation.tr("End session") : Translation.tr("Focus")
                 }
             }
         }

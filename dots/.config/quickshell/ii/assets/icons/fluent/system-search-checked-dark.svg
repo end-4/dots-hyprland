@@ -26,8 +26,8 @@
      inkscape:zoom="4.65625"
      inkscape:cx="32"
      inkscape:cy="32"
-     inkscape:window-width="1197"
-     inkscape:window-height="1020"
+     inkscape:window-width="1595"
+     inkscape:window-height="664"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -48,10 +48,10 @@
     </linearGradient>
     <linearGradient
        id="linearGradient919"
-       x1="4.3106"
-       x2="14.36"
-       y1="8.4665"
-       y2="8.4665"
+       x1="4.4818125"
+       x2="14.188787"
+       y1="7.1660123"
+       y2="9.7669888"
        gradientTransform="matrix(1.226575,0,0,1.226575,-0.82407803,-6.4497629)"
        gradientUnits="userSpaceOnUse">
       <stop
@@ -61,7 +61,7 @@
          style="stop-color:#5fe277;stop-opacity:1;" />
       <stop
          stop-color="#55b4ff"
-         offset="1"
+         offset="0.40375727"
          id="stop2"
          style="stop-color:#0078d3;stop-opacity:1;" />
     </linearGradient>

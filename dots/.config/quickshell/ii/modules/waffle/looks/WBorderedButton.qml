@@ -11,8 +11,8 @@ WButton {
     colBackground: Looks.colors.bg2
     colBackgroundHover: Looks.colors.bg2Hover
     colBackgroundActive: Looks.colors.bg2Active
-    border.color: Looks.colors.bg2Border
+    property color colBorder: Looks.colors.bg2Border
+    property color colBorderToggled: Looks.colors.accent
+    border.color: checked ? colBorderToggled : colBorder
     border.width: root.pressed ? 2 : 1
-
-    
 }

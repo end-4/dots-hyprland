@@ -89,7 +89,7 @@ Item {
         WPanelSeparator {}
 
         FooterRectangle {
-            FooterMoreButton {
+            WTextButton {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
