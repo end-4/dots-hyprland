@@ -63,13 +63,18 @@ MouseArea {
         id: ipPopup
         hoverTarget: root
         
-        contentItem: StyledPopupContent {
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 4
+            
             StyledPopupHeaderRow {
-                text: Translation.tr("External IP Address")
+                icon: "language"
+                label: Translation.tr("External IP Address")
             }
             
             StyledPopupValueRow {
-                text: Translation.tr("IP Address")
+                icon: "public"
+                label: Translation.tr("IP Address:")
                 value: ExternalIp.ip || Translation.tr("Not available")
             }
             
