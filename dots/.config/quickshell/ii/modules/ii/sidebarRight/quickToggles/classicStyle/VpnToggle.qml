@@ -17,6 +17,6 @@ QuickToggleButton {
         GlobalStates.sidebarRightOpen = false
     }
     StyledToolTip {
-        text: Translation.tr("%1 | Right-click to configure").arg(Network.vpnEnabled ? Translation.tr("enabled") : Translation.tr("disabled"))
+        text: Translation.tr("%1 | Right-click to configure").arg(Network.vpnEnabled ? Translation.tr("Enabled") : Translation.tr("Disabled"))
     }
 }
