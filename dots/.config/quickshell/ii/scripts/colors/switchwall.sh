@@ -322,8 +322,9 @@ main() {
     get_accent_color_from_config() {
         jq -r '.appearance.palette.accentColor' "$SHELL_CONFIG_FILE" 2>/dev/null || echo ""
     }
-    set_accent_color_in_config() {
-        jq --arg c "$1" '.appearance.palette.accentColor = $c' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+    set_accent_color() {
+        local color="$1"
+        jq --arg color "$color" '.appearance.palette.accentColor = $color' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
     }
 
     detect_scheme_type_from_image() {
@@ -345,10 +346,13 @@ main() {
                 ;;
             --color)
                 if [[ "$2" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
-                    set_accent_color_in_config "$2"
+                    set_accent_color "$2"
+                    shift 2
+                elif [[ "$2" == "clear" ]]; then
+                    set_accent_color ""
                     shift 2
                 else
-                    set_accent_color_in_config $(hyprpicker --no-fancy)
+                    set_accent_color $(hyprpicker --no-fancy)
                     shift
                 fi
                 ;;
