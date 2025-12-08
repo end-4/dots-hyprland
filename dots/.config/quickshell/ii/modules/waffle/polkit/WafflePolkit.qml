@@ -10,6 +10,6 @@ import Quickshell.Wayland
 FullscreenPolkitWindow {
     id: root
     contentComponent: Component {
-        PolkitContent {}
+        WPolkitContent {}
     }
 }

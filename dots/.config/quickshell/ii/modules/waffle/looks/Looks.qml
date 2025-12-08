@@ -101,7 +101,7 @@ Singleton {
         property color bg1Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Hover : root.lightColors.bg1Hover, root.contentTransparency)
         property color bg1Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Active : root.lightColors.bg1Active, root.contentTransparency)
         property color bg1Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Border : root.lightColors.bg1Border, root.contentTransparency)
-        property color bg2Base: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base, root.backgroundTransparency)
+        property color bg2Base: root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base
         property color bg2: ColorUtils.transparentize(root.dark ? root.darkColors.bg2 : root.lightColors.bg2, root.contentTransparency)
         property color bg2Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Hover : root.lightColors.bg2Hover, root.contentTransparency)
         property color bg2Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Active : root.lightColors.bg2Active, root.contentTransparency)
@@ -147,6 +147,7 @@ Singleton {
             property int regular: Font.Medium
             property int strong: Font.DemiBold
             property int stronger: (Font.DemiBold + 2*Font.Bold) / 3
+            property int strongest: Font.Bold
         }
         property QtObject pixelSize: QtObject {
             property real normal: 11

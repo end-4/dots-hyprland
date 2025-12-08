@@ -1,8 +1,12 @@
+import qs.modules.common
 import QtQuick
+import QtQuick.Controls.FluentWinUI3
+import QtQuick.Controls
 
-Text {
+TextField {
     id: root
-
+    
+    clip: true
     renderType: Text.NativeRendering
     verticalAlignment: Text.AlignVCenter
     color: Looks.colors.fg
@@ -14,5 +18,10 @@ Text {
         weight: Looks.font.weight.regular
     }
 
-    linkColor: Looks.colors.link
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        hoverEnabled: true
+        cursorShape: Qt.IBeamCursor
+    }
 }
