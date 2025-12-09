@@ -88,7 +88,7 @@ Scope { // Scope
                 }
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.windowRounding
-                implicitHeight: width * aspectRatio + padding * 2
+                implicitHeight: (width >= 0 ? width : maxWidth) * aspectRatio + padding * 2
 
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
