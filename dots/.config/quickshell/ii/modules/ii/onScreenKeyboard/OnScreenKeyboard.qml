@@ -16,10 +16,15 @@ Scope { // Scope
 
     component OskControlButton: GroupButton { // Pin button
         baseWidth: 40
-        baseHeight: 40
-        clickedWidth: baseWidth
-        clickedHeight: baseHeight + 10
+        baseHeight: width
+        clickedWidth: width
+        clickedHeight: width + 10
         buttonRadius: Appearance.rounding.normal
+
+        height: width
+
+        Layout.fillWidth: true
+        Layout.preferredWidth: baseWidth
     }
 
     Loader {
@@ -93,7 +98,6 @@ Scope { // Scope
 
                 RowLayout {
                     id: oskRowLayout
-                    property real margin: 10
                     anchors {
                         left: parent.left
                         right: parent.right
@@ -105,8 +109,9 @@ Scope { // Scope
                         topMargin: parent.padding
                         bottomMargin: parent.padding
                     }
-                    spacing: 5
+                    spacing: parent.padding
                     VerticalButtonGroup {
+                        Layout.fillWidth: true
                         OskControlButton { // Pin button
                             toggled: root.pinned
                             downAction: () => root.pinned = !root.pinned

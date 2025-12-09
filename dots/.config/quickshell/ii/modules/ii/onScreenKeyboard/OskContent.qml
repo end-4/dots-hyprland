@@ -18,7 +18,6 @@ Item {
         id: keyRows
         anchors.fill: parent
         spacing: 5
-        Layout.fillWidth: true
 
         Repeater {
             model: root.currentLayout.keys
@@ -27,7 +26,6 @@ Item {
                 id: keyRow
                 required property var modelData
                 spacing: 5
-                Layout.fillWidth: true
                 
                 Repeater {
                     model: modelData
