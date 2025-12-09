@@ -437,6 +437,9 @@ Singleton {
                     property int strokeWidth: 6
                     property int padding: 10
                 }
+                property JsonObject annotation: JsonObject {
+                    property bool useSatty: false
+                }
             }
 
             property JsonObject resources: JsonObject {
