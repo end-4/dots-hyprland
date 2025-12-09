@@ -49,7 +49,7 @@ Scope { // Scope
             function hide() {
                 GlobalStates.oskOpen = false
             }
-            exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.hyprlandGapsOut : 0
+            exclusiveZone: root.pinned ? implicitHeight : 0
             implicitHeight: oskBackground.height + Appearance.sizes.elevationMargin * 2
             WlrLayershell.namespace: "quickshell:osk"
             WlrLayershell.layer: WlrLayer.Overlay
