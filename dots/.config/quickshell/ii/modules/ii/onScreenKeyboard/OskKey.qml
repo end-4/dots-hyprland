@@ -23,7 +23,8 @@ RippleButton {
         "tab": 1.6,
         "caps": 1.9,
         "shift": 2.5,
-        "control": 1.3
+        "control": 1.3,
+        "space": 5,
     })
     property var heightMultiplier: ({
         "normal": 1,
@@ -38,9 +39,10 @@ RippleButton {
     enabled: shape != "empty"
     colBackground: shape == "empty" ? ColorUtils.transparentize(Appearance.colors.colLayer1) : Appearance.colors.colLayer1
     buttonRadius: Appearance.rounding.small
-    implicitWidth: baseWidth * widthMultiplier[shape] || baseWidth
-    implicitHeight: baseHeight * heightMultiplier[shape] || baseHeight
-    Layout.fillWidth: shape == "space" || shape == "expand"
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.preferredWidth: baseWidth * widthMultiplier[shape] || baseWidth
+    Layout.preferredHeight: baseHeight * heightMultiplier[shape] || baseHeight
 
     Connections {
         target: Ydotool
@@ -108,9 +110,9 @@ RippleButton {
         id: keyText
         anchors.fill: parent
         font.family: (isBackspace || isEnter) ? Appearance.font.family.iconMaterial : Appearance.font.family.main
-        font.pixelSize: root.shape == "fn" ? Appearance.font.pixelSize.small : 
-            (isBackspace || isEnter) ? Appearance.font.pixelSize.huge :
-            Appearance.font.pixelSize.large
+        font.pixelSize: root.shape == "fn" ? Appearance.font.pixelSize.larger : 
+            (isBackspace || isEnter) ? Appearance.font.pixelSize.hugeass :
+            Appearance.font.pixelSize.huge
         horizontalAlignment: Text.AlignHCenter
         color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
         text: root.isBackspace ? "backspace" : root.isEnter ? "subdirectory_arrow_left" :

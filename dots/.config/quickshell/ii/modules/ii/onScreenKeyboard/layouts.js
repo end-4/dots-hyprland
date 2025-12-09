@@ -99,7 +99,7 @@ const byName = {
                 { keytype: "normal", label: ",", labelShift: "<", shape: "normal", keycode: 51 },
                 { keytype: "normal", label: ".", labelShift: ">", shape: "normal", keycode: 52 },
                 { keytype: "normal", label: "/", labelShift: "?", shape: "normal", keycode: 53 },
-                { keytype: "modkey", label: "Shift", labelShift: "Shift", labelCaps: "Caps", shape: "expand", keycode: 54 } // optional
+                { keytype: "modkey", label: "Shift", labelShift: "Shift", labelCaps: "Caps", shape: "shift", keycode: 54 } // optional
             ],
             [
                 { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 29 },
