@@ -106,13 +106,27 @@ RippleButton {
 
     }
 
+    function calculateFontSize() {
+        if (root.width >= 60) {
+            return root.shape == "fn" ? Appearance.font.pixelSize.larger : 
+                (isBackspace || isEnter) ? Appearance.font.pixelSize.hugeass :
+                Appearance.font.pixelSize.hugeass;
+        } else {
+            return root.shape == "fn" ? Appearance.font.pixelSize.normal : 
+                (isBackspace || isEnter) ? Appearance.font.pixelSize.huge :
+                Appearance.font.pixelSize.huge;
+        }
+    }
+
+    onWidthChanged: {
+        keyText.font.pixelSize = calculateFontSize();
+    }
+
     contentItem: StyledText {
         id: keyText
         anchors.fill: parent
         font.family: (isBackspace || isEnter) ? Appearance.font.family.iconMaterial : Appearance.font.family.main
-        font.pixelSize: root.shape == "fn" ? Appearance.font.pixelSize.larger : 
-            (isBackspace || isEnter) ? Appearance.font.pixelSize.hugeass :
-            Appearance.font.pixelSize.huge
+        font.pixelSize: calculateFontSize()
         horizontalAlignment: Text.AlignHCenter
         color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
         text: root.isBackspace ? "backspace" : root.isEnter ? "subdirectory_arrow_left" :
