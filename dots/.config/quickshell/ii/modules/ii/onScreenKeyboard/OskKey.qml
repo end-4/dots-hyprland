@@ -24,7 +24,7 @@ RippleButton {
         "caps": 1.9,
         "shift": 2.5,
         "control": 1.3,
-        "space": 5,
+        "space": 10,
     })
     property var heightMultiplier: ({
         "normal": 1,
