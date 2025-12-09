@@ -15,10 +15,16 @@ FooterRectangle {
     property real horizontalPadding: 32
     property real verticalPadding: 16
     property bool searching: text.length > 0
+    property alias searchInput: searchInput
     property alias text: searchInput.text
     implicitHeight: outline.implicitHeight + verticalPadding * 2
 
-    Component.onCompleted: searchInput.forceActiveFocus()
+    signal accepted()
+
+    Component.onCompleted: forceFocus()
+    function forceFocus() {
+        searchInput.forceActiveFocus();
+    }
 
     focus: true
     color: searching ? Looks.colors.bgPanelBody : Looks.colors.bgPanelFooter
@@ -80,6 +86,10 @@ FooterRectangle {
                     text: Translation.tr("Search for apps") // should also have "", settings, and documents" but we don't have those
                     visible: searchInput.text.length === 0
                     font.pixelSize: Looks.font.pixelSize.large
+                }
+
+                onAccepted: {
+                    root.accepted();
                 }
             }
         }

@@ -8,7 +8,7 @@ Text {
     color: Looks.colors.fg
 
     font {
-        hintingPreference: Font.PreferFullHinting
+        hintingPreference: Font.PreferDefaultHinting
         family: Looks.font.family.ui
         pixelSize: Looks.font.pixelSize.normal
         weight: Looks.font.weight.regular

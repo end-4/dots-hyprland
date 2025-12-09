@@ -17,8 +17,8 @@ Singleton {
     property string iconsPath: `${Directories.assetsPath}/icons/fluent`
     property bool dark: Appearance.m3colors.darkmode
 
-    property real backgroundTransparency: 0.13
-    property real panelBackgroundTransparency: 0.12
+    property real backgroundTransparency: 0.16
+    property real panelBackgroundTransparency: 0.14
     property real panelLayerTransparency: root.dark ? 0.9 : 0.7
     property real contentTransparency: root.dark ? 0.87 : 0.5
     function applyBackgroundTransparency(col) {
@@ -96,12 +96,12 @@ Singleton {
         property color bg0Opaque: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
         property color bg0: ColorUtils.transparentize(bg0Opaque, root.backgroundTransparency)
         property color bg0Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg0Border : root.lightColors.bg0Border, root.backgroundTransparency)
-        property color bg1Base: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Base : root.lightColors.bg1Base, root.backgroundTransparency)
+        property color bg1Base: root.dark ? root.darkColors.bg1Base : root.lightColors.bg1Base
         property color bg1: ColorUtils.transparentize(root.dark ? root.darkColors.bg1 : root.lightColors.bg1, root.contentTransparency)
         property color bg1Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Hover : root.lightColors.bg1Hover, root.contentTransparency)
         property color bg1Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Active : root.lightColors.bg1Active, root.contentTransparency)
         property color bg1Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg1Border : root.lightColors.bg1Border, root.contentTransparency)
-        property color bg2Base: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base, root.backgroundTransparency)
+        property color bg2Base: root.dark ? root.darkColors.bg2Base : root.lightColors.bg2Base
         property color bg2: ColorUtils.transparentize(root.dark ? root.darkColors.bg2 : root.lightColors.bg2, root.contentTransparency)
         property color bg2Hover: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Hover : root.lightColors.bg2Hover, root.contentTransparency)
         property color bg2Active: ColorUtils.transparentize(root.dark ? root.darkColors.bg2Active : root.lightColors.bg2Active, root.contentTransparency)
@@ -146,12 +146,14 @@ Singleton {
             property int thin: Font.Normal
             property int regular: Font.Medium
             property int strong: Font.DemiBold
-            property int stronger: Font.Bold
+            property int stronger: (Font.DemiBold + 2*Font.Bold) / 3
+            property int strongest: Font.Bold
         }
         property QtObject pixelSize: QtObject {
             property real normal: 11
             property real large: 13
             property real larger: 15
+            property real xlarger: 17
         }
     }
 

@@ -153,6 +153,7 @@ Singleton {
 
             property JsonObject apps: JsonObject {
                 property string bluetooth: "kcmshell6 kcm_bluetooth"
+                property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
                 property string network: "kcmshell6 kcm_networkmanagement"
                 property string manageUser: "kcmshell6 kcm_users"
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
@@ -345,6 +346,10 @@ Singleton {
                     property string targetLanguage: "auto" // Run `trans -list-all` for available languages
                     property string sourceLanguage: "auto"
                 }
+            }
+
+            property JsonObject launcher: JsonObject {
+                property list<string> pinnedApps: [ "org.kde.dolphin", "kitty", "cmake-gui"]
             }
 
             property JsonObject light: JsonObject {

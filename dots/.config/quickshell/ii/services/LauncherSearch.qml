@@ -20,6 +20,17 @@ Singleton {
         }
     }
 
+    // https://specifications.freedesktop.org/menu/latest/category-registry.html
+    property list<string> mainRegisteredCategories: ["AudioVideo", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"]
+    property list<string> appCategories: DesktopEntries.applications.values.reduce((acc, entry) => {
+        for (const category of entry.categories) {
+            if (!acc.includes(category) && mainRegisteredCategories.includes(category)) {
+                acc.push(category);
+            }
+        }
+        return acc;
+    }, []).sort()
+
     property var searchActions: [
         {
             action: "accentcolor",
@@ -198,10 +209,11 @@ Singleton {
         const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
             return resultComp.createObject(null, {
                 type: Translation.tr("App"),
+                id: entry.id,
                 name: entry.name,
                 iconName: entry.icon,
                 iconType: LauncherSearchResult.IconType.System,
-                verb: Translation.tr("Launch"),
+                verb: Translation.tr("Open"),
                 execute: () => {
                     if (!entry.runInTerminal)
                         entry.execute();
@@ -233,7 +245,7 @@ Singleton {
         const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
             verb: Translation.tr("Run"),
-            type: Translation.tr("Run command"),
+            type: Translation.tr("Command"),
             fontType: LauncherSearchResult.FontType.Monospace,
             iconName: 'terminal',
             iconType: LauncherSearchResult.IconType.Material,
@@ -249,7 +261,7 @@ Singleton {
         const webSearchResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch),
             verb: Translation.tr("Search"),
-            type: Translation.tr("Search the web"),
+            type: Translation.tr("Web search"),
             iconName: 'travel_explore',
             iconType: LauncherSearchResult.IconType.Material,
             execute: () => {
