@@ -53,8 +53,8 @@ Scope {
 				color: failed ?  "#ffe99195" : "#ffD1E8D5"
 
 				implicitHeight: layout.implicitHeight + 30
-				implicitWidth: layout.implicitWidth + 30
-				radius: 12
+				implicitWidth: layout.implicitWidth + 200
+				radius: 6
 
 				// Fills the whole area of the rectangle, making any clicks go to it,
 				// which dismiss the popup.
@@ -82,7 +82,7 @@ Scope {
 					Text {
 						renderType: Text.NativeRendering
 						font.family: "Google Sans Flex"
-						font.pointSize: 14
+						font.pointSize: 8
 						text: root.failed ? "Quickshell: Reload failed" : "Quickshell reloaded"
 						color: failed ? "#ff93000A" : "#ff0C1F13"
 					}
@@ -90,7 +90,8 @@ Scope {
 					Text {
 						renderType: Text.NativeRendering
 						font.family: "JetBrains Mono NF"
-						font.pointSize: 11
+						font.pointSize: 8
+						wrapMode: Text.Wrap
 						text: root.errorString
 						color: failed ? "#ff93000A" : "#ff0C1F13"
 						// When visible is false, it also takes up no space.

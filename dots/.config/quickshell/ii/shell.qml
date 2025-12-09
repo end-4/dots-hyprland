@@ -22,7 +22,7 @@ import qs.modules.ii.polkit
 import qs.modules.ii.regionSelector
 import qs.modules.ii.screenCorners
 import qs.modules.ii.sessionScreen
-import qs.modules.ii.sidebarLeft
+// import qs.modules.ii.sidebarLeft
 import qs.modules.ii.sidebarRight
 import qs.modules.ii.overlay
 import qs.modules.ii.verticalBar
@@ -31,9 +31,7 @@ import qs.modules.ii.wallpaperSelector
 import qs.modules.waffle.actionCenter
 import qs.modules.waffle.background
 import qs.modules.waffle.bar
-import qs.modules.waffle.notificationCenter
 import qs.modules.waffle.onScreenDisplay
-import qs.modules.waffle.startMenu
 
 import QtQuick
 import QtQuick.Window
@@ -41,6 +39,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import qs.services
+
 
 ShellRoot {
     id: root
@@ -74,17 +73,14 @@ ShellRoot {
     PanelLoader { identifier: "iiRegionSelector"; component: RegionSelector {} }
     PanelLoader { identifier: "iiScreenCorners"; component: ScreenCorners {} }
     PanelLoader { identifier: "iiSessionScreen"; component: SessionScreen {} }
-    PanelLoader { identifier: "iiSidebarLeft"; component: SidebarLeft {} }
+    // PanelLoader { identifier: "iiSidebarLeft"; component: SidebarLeft {} }
     PanelLoader { identifier: "iiSidebarRight"; component: SidebarRight {} }
     PanelLoader { identifier: "iiVerticalBar"; extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
     PanelLoader { identifier: "iiWallpaperSelector"; component: WallpaperSelector {} }
-
     PanelLoader { identifier: "wActionCenter"; component: WaffleActionCenter {} }
     PanelLoader { identifier: "wBar"; component: WaffleBar {} }
     PanelLoader { identifier: "wBackground"; component: WaffleBackground {} }
-    PanelLoader { identifier: "wNotificationCenter"; component: WaffleNotificationCenter {} }
     PanelLoader { identifier: "wOnScreenDisplay"; component: WaffleOSD {} }
-    PanelLoader { identifier: "wStartMenu"; component: WaffleStartMenu {} }
     ReloadPopup {}
 
     component PanelLoader: LazyLoader {
@@ -96,8 +92,8 @@ ShellRoot {
     // Panel families
     property list<string> families: ["ii", "waffle"]
     property var panelFamilies: ({
-        "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wActionCenter", "wBar", "wBackground", "wNotificationCenter", "wOnScreenDisplay", "wStartMenu", "iiCheatsheet", "iiLock", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiPolkit", "iiRegionSelector", "iiSessionScreen", "iiWallpaperSelector"],
+        "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"   ],
+        "waffle": ["wActionCenter", "wBar", "wBackground", "wOnScreenDisplay", "iiCheatsheet", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiSessionScreen", "iiSidebarRight", "iiWallpaperSelector"],  //iiSidebarLeft
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
@@ -120,5 +116,42 @@ ShellRoot {
 
         onPressed: root.cyclePanelFamily()
     }
+
+    // Timer { // wallpaper timer
+    //     id: rotationTimer
+    //     interval: Config.options.background.slideInterval * 60000
+    //     running: Config.options.background.enableSlide
+    //     repeat: true
+    //     triggeredOnStart: false
+    //
+    //     onTriggered: {
+    //         Wallpapers.randomFromCurrentFolder();
+    //     }
+    // }
+    // Connections { // timer conections
+    //     target: Config.options.background
+    //     function onRotationIntervalChanged() {
+    //         if (rotationTimer.running) {
+    //             rotationTimer.restart();
+    //         }
+    //     }
+    // } // wallpaper timer end
+
+    Timer { // wallpaper timer
+        id: rotationTimer
+        interval: Math.max(1, Config.options.background.slideInterval) * 60000 // minutos -> ms
+        running: Config.options.background.enableSlide
+        repeat: true
+
+        onTriggered: {
+            console.log("[Wallpaper] Timer triggered. Changing wallpaper...");
+            try {
+                Wallpapers.randomFromCurrentFolder();
+            } catch (e) {
+                console.error("[Wallpaper] Error changing wallpaper:", e);
+            }
+        }
+    }
+
 }
 
