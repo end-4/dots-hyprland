@@ -10,6 +10,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
     property bool barOpen: true
+    property var barWindowReference: null
     property bool crosshairOpen: false
     property bool sidebarLeftOpen: false
     property bool sidebarRightOpen: false
@@ -17,6 +18,7 @@ Singleton {
     property bool osdBrightnessOpen: false
     property bool osdVolumeOpen: false
     property bool oskOpen: false
+    property var oskWindowReference: null
     property bool overlayOpen: false
     property bool overviewOpen: false
     property bool regionSelectorOpen: false

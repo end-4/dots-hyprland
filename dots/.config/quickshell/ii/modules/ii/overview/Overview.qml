@@ -44,7 +44,7 @@ Scope {
 
             HyprlandFocusGrab {
                 id: grab
-                windows: [root]
+                windows: [root, GlobalStates.oskWindowReference, GlobalStates.barWindowReference]
                 property bool canBeActive: root.monitorIsFocused
                 active: false
                 onCleared: () => {

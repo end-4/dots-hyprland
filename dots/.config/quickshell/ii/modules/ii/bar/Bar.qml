@@ -29,6 +29,16 @@ Scope {
                 id: barRoot
                 screen: barLoader.modelData
 
+                Component.onCompleted: {
+                    // Save reference to bar window object
+                    GlobalStates.barWindowReference = barRoot;
+                }
+
+                Component.onDestruction: {
+                    // Clear reference to bar window object
+                    GlobalStates.barWindowReference = null;
+                }
+
                 Timer {
                     id: showBarTimer
                     interval: (Config?.options.bar.autoHide.showWhenPressingSuper.delay ?? 100)
