@@ -14,6 +14,9 @@ Menu {
     property bool downDirection: false
     property bool hasIcons: false // TODO: implement
 
+    property color color: Looks.colors.bg1Base
+    property alias backgroundPane: bgPane
+
     implicitWidth: background.implicitWidth + margins * 2
     implicitHeight: background.implicitHeight + margins * 2
     margins: 10
@@ -58,7 +61,7 @@ Menu {
                 bottomMargin: root.downDirection ? root.margins : root.sourceEdgeMargin
             }
             contentItem: Rectangle {
-                color: Looks.colors.bg1Base
+                color: root.color
                 implicitWidth: menuListView.implicitWidth + root.padding * 2
                 implicitHeight: root.contentItem.implicitHeight + root.padding * 2
             }

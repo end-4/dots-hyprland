@@ -155,6 +155,11 @@ Singleton {
             property real larger: 15
             property real xlarger: 17
         }
+        property QtObject variableAxes: QtObject {
+            property var ui: ({
+                "wdth": 25
+            })
+        }
     }
 
     transition: QtObject {

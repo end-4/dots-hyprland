@@ -11,6 +11,10 @@ TextField {
     verticalAlignment: Text.AlignVCenter
     color: Looks.colors.fg
 
+    palette {
+        active: Looks.colors.accent
+    }
+
     font {
         hintingPreference: Font.PreferDefaultHinting
         family: Looks.font.family.ui
