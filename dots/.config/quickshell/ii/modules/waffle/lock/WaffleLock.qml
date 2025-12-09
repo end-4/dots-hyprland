@@ -30,7 +30,7 @@ LockScreen {
         }
 
         Keys.onPressed: {
-            root.passwordView = true;
+            interactables.switchToFocusedView();
         }
 
         Image {
@@ -65,13 +65,14 @@ LockScreen {
         }
 
         Interactables {
+            id: interactables
             z: 2
             anchors.fill: parent
         }
     }
 
     component Interactables: Rectangle {
-        id: interactables
+        id: interactablesComponent
         color: ColorUtils.transparentize("#000000", 0.8)
         // Button {
         //     onClicked: {
@@ -81,51 +82,63 @@ LockScreen {
         //     text: "woah it doesnt work let me out pls uwu colon three"
         // }
 
-        ClockTextGroup {
+        function switchToFocusedView() {
+            root.passwordView = true;
+        }
+
+        Item {
+            id: unfocusedContent
+            anchors.fill: parent
             visible: !root.passwordView
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: parent.top
-                topMargin: interactables.height * 0.1
+            ClockTextGroup {
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: parent.top
+                    topMargin: interactablesComponent.height * 0.1
+                }
+            }
+            RowLayout {
+                anchors {
+                    bottom: parent.bottom
+                    right: parent.right
+                    bottomMargin: 21
+                    rightMargin: 31
+                }
+                IconIndicator {
+                    baseIcon: "wifi-1"
+                    icon: WIcons.internetIcon
+                }
+                IconIndicator {
+                    baseIcon: WIcons.batteryIcon
+                    icon: WIcons.batteryLevelIcon
+                }
             }
         }
 
-        PasswordGroup {
+        Item {
+            id: focusedContent
+            anchors.fill: parent
             visible: root.passwordView
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter: parent.verticalCenter
-            }
-        }
 
-        RowLayout {
-            visible: !root.passwordView
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-                bottomMargin: 21
-                rightMargin: 31
+            PasswordGroup {
+                visible: root.passwordView
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
             }
-            IconIndicator {
-                baseIcon: "wifi-1"
-                icon: WIcons.internetIcon
-            }
-            IconIndicator {
-                baseIcon: WIcons.batteryIcon
-                icon: WIcons.batteryLevelIcon
-            }
-        }
 
-        RowLayout {
-            visible: root.passwordView
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-                bottomMargin: 21
-                rightMargin: 31
-            }
-            SessionScreen.PowerButton {
-                id: powerButton
+            RowLayout {
+                visible: root.passwordView
+                anchors {
+                    bottom: parent.bottom
+                    right: parent.right
+                    bottomMargin: 21
+                    rightMargin: 31
+                }
+                SessionScreen.PowerButton {
+                    id: powerButton
+                }
             }
         }
     }
@@ -258,11 +271,18 @@ LockScreen {
                         Keys.onPressed: event => {
                             root.context.resetClearTimer();
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.NoButton
+                            cursorShape: Qt.IBeamCursor
+                        }
                     }
 
                     PasswordBoxButton {
                         id: passwordVisibilityButton
                         property bool passwordVisible: false
+                        visible: passwordInput.text.length > 0
                         onPressed: passwordVisible = true
                         onReleased: passwordVisible = false
                         icon.name: passwordVisible ? "eye-off" : "eye"
@@ -308,7 +328,7 @@ LockScreen {
         property color colBackground: ColorUtils.transparentize(Looks.darkColors.bg1)
         property color colBackgroundHover: ColorUtils.transparentize(Looks.darkColors.bg2Hover)
         property color colBackgroundActive: ColorUtils.transparentize(Looks.darkColors.bg2Active)
-        fgColor: Looks.darkColors.fg
+        fgColor: checked ? Looks.colors.accentFg : Looks.darkColors.fg
 
         checked: hovered
 
