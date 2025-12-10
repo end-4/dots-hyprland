@@ -46,7 +46,7 @@ Scope {
             HyprlandFocusGrab {
                 id: grab
                 windows: {
-                    // Workaround: only allow root if it's no longer focused
+                    // Workaround: disallow other windows if search is no longer focused
                     return (visible && !Utils.hasActive(columnLayout)) ? [root] : 
                         [root, GlobalStates.oskWindowReference, ...GlobalStates.barWindowReferences];
                 }
