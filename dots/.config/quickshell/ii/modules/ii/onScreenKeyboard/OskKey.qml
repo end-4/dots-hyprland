@@ -118,7 +118,7 @@ RippleButton {
         }
     }
 
-    onWidthChanged: {
+    onHeightChanged: {
         keyText.font.pixelSize = calculateFontSize();
     }
 
