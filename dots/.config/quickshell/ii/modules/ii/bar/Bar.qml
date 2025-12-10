@@ -31,12 +31,20 @@ Scope {
 
                 Component.onCompleted: {
                     // Save reference to bar window object
-                    GlobalStates.barWindowReference = barRoot;
+                    GlobalStates.barWindowReferences = [
+                        ...GlobalStates.barWindowReferences, barRoot,
+                    ];
                 }
 
                 Component.onDestruction: {
                     // Clear reference to bar window object
-                    GlobalStates.barWindowReference = null;
+                    const index = GlobalStates.barWindowReferences.indexOf(barRoot);
+                    if (index !== -1) {
+                        GlobalStates.barWindowReferences = [
+                            ...GlobalStates.barWindowReferences.slice(0, index),
+                            ...GlobalStates.barWindowReferences.slice(index + 1),
+                        ];
+                    }
                 }
 
                 Timer {
