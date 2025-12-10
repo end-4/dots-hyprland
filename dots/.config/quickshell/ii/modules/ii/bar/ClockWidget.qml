@@ -8,7 +8,16 @@ Item {
     id: root
     property bool borderless: Config.options.bar.borderless
     property bool showDate: Config.options.bar.verbose
-    implicitWidth: rowLayout.implicitWidth
+
+    Layout.fillHeight: true  
+    Layout.fillWidth: true  
+    Layout.maximumWidth: 180 
+    implicitWidth: {  
+        const timeWidth = timeText.implicitWidth;  
+        const dateWidth = showDate ? dateText.implicitWidth + bulletText.implicitWidth : 0;  
+        const spacing = showDate ? rowLayout.spacing * 2 : rowLayout.spacing;  
+        return timeWidth + dateWidth + spacing + 16; // 16 for padding  
+    }
     implicitHeight: Appearance.sizes.barHeight
 
     RowLayout {
@@ -16,24 +25,27 @@ Item {
         anchors.centerIn: parent
         spacing: 4
 
-        StyledText {
-            font.pixelSize: Appearance.font.pixelSize.large
-            color: Appearance.colors.colOnLayer1
-            text: DateTime.time
-        }
-
-        StyledText {
-            visible: root.showDate
-            font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer1
-            text: "•"
-        }
-
-        StyledText {
-            visible: root.showDate
-            font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer1
-            text: DateTime.longDate
+        StyledText {  
+            id: timeText  
+            font.pixelSize: Appearance.font.pixelSize.small  
+            color: Appearance.colors.colOnLayer1  
+            text: DateTime.time  
+        }  
+        
+        StyledText {  
+            id: bulletText  
+            visible: root.showDate  
+            font.pixelSize: Appearance.font.pixelSize.small  
+            color: Appearance.colors.colOnLayer1  
+            text: "•"  
+        }  
+        
+        StyledText {  
+            id: dateText  
+            visible: root.showDate  
+            font.pixelSize: Appearance.font.pixelSize.small  
+            color: Appearance.colors.colOnLayer1  
+            text: DateTime.longDate  
         }
     }
 

@@ -15,8 +15,11 @@ Item {
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
 
-    Layout.fillHeight: true
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
+    Layout.fillHeight: true  
+    Layout.fillWidth: activePlayer ? true : false  
+    Layout.preferredWidth: activePlayer ? -1 : mediaCircProg.implicitSize + 8  
+    implicitWidth: activePlayer ? (rowLayout.implicitWidth + rowLayout.spacing * 2) : (mediaCircProg.implicitSize + 8)
+    Layout.maximumWidth: 250
     implicitHeight: Appearance.sizes.barHeight
 
     Timer {
@@ -44,9 +47,11 @@ Item {
 
     RowLayout { // Real content
         id: rowLayout
-
         spacing: 4
         anchors.fill: parent
+
+        Layout.fillWidth: activePlayer ? true : false  
+        Layout.preferredWidth: activePlayer ? -1 : mediaCircProg.implicitSize + spacing * 2 
 
         ClippedFilledCircularProgress {
             id: mediaCircProg
@@ -74,7 +79,7 @@ Item {
 
         StyledText {
             visible: Config.options.bar.verbose
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
+            // width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true // Ensures the text takes up available space
             Layout.rightMargin: rowLayout.spacing

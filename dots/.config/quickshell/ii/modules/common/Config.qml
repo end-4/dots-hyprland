@@ -224,6 +224,7 @@ Singleton {
                     property JsonObject showWhenPressingSuper: JsonObject {
                         property bool enable: true
                         property int delay: 140
+                    property bool shrinkWhenNoMedia: true  
                     }
                 }
                 property bool bottom: false // Instead of top
