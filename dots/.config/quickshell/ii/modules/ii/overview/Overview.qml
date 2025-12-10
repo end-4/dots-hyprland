@@ -10,6 +10,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import "./hasActive.js" as Utils
 
 Scope {
     id: overviewScope
@@ -44,7 +45,11 @@ Scope {
 
             HyprlandFocusGrab {
                 id: grab
-                windows: [root, GlobalStates.oskWindowReference, ...GlobalStates.barWindowReferences]
+                windows: {
+                    // Workaround: only allow root if it's no longer focused
+                    return (visible && !Utils.hasActive(columnLayout)) ? [root] : 
+                        [root, GlobalStates.oskWindowReference, ...GlobalStates.barWindowReferences];
+                }
                 property bool canBeActive: root.monitorIsFocused
                 active: false
                 onCleared: () => {
