@@ -138,6 +138,7 @@ Singleton {
                 }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
+                    property string accentColor: ""
                 }
             }
 
@@ -153,6 +154,7 @@ Singleton {
 
             property JsonObject apps: JsonObject {
                 property string bluetooth: "kcmshell6 kcm_bluetooth"
+                property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
                 property string network: "kcmshell6 kcm_networkmanagement"
                 property string manageUser: "kcmshell6 kcm_users"
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
@@ -346,6 +348,10 @@ Singleton {
                 }
             }
 
+            property JsonObject launcher: JsonObject {
+                property list<string> pinnedApps: [ "org.kde.dolphin", "kitty", "cmake-gui"]
+            }
+
             property JsonObject light: JsonObject {
                 property JsonObject night: JsonObject {
                     property bool automatic: true
@@ -431,6 +437,9 @@ Singleton {
                 property JsonObject circle: JsonObject {
                     property int strokeWidth: 6
                     property int padding: 10
+                }
+                property JsonObject annotation: JsonObject {
+                    property bool useSatty: false
                 }
             }
 

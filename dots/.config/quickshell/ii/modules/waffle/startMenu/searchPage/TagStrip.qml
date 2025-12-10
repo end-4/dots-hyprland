@@ -8,6 +8,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.startMenu
 
 RowLayout {
     id: root
@@ -65,8 +66,8 @@ RowLayout {
 
         WMenu {
             id: accountsMenu
-            x: -accountsMenu.implicitWidth + optionsButton.implicitWidth
-            y: optionsButton.height + 10
+            x: -accountsMenu.implicitWidth + optionsButton.implicitWidth + 10
+            y: optionsButton.height
             downDirection: true
             Action {
                 icon.name: "people-settings"

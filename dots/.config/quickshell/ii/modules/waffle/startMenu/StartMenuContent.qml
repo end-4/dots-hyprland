@@ -9,6 +9,8 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
+import qs.modules.waffle.startMenu.startPage
+import qs.modules.waffle.startMenu.searchPage
 
 WBarAttachedPanelContent {
     id: root
@@ -99,7 +101,7 @@ WBarAttachedPanelContent {
                 }
             }
             Item {
-                implicitHeight: root.searching ? 736 : 736 // TODO: Make sizes naturally inferred
+                implicitHeight: root.searching ? 800 : 800 // TODO: Make sizes naturally inferred
                 Layout.fillWidth: true
                 Loader {
                     id: pageContentLoader
