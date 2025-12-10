@@ -319,6 +319,13 @@ main() {
     get_type_from_config() {
         jq -r '.appearance.palette.type' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "auto"
     }
+    get_accent_color_from_config() {
+        jq -r '.appearance.palette.accentColor' "$SHELL_CONFIG_FILE" 2>/dev/null || echo ""
+    }
+    set_accent_color() {
+        local color="$1"
+        jq --arg color "$color" '.appearance.palette.accentColor = $color' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+    }
 
     detect_scheme_type_from_image() {
         local img="$1"
@@ -338,12 +345,14 @@ main() {
                 shift 2
                 ;;
             --color)
-                color_flag="1"
                 if [[ "$2" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
-                    color="$2"
+                    set_accent_color "$2"
+                    shift 2
+                elif [[ "$2" == "clear" ]]; then
+                    set_accent_color ""
                     shift 2
                 else
-                    color=$(hyprpicker --no-fancy)
+                    set_accent_color $(hyprpicker --no-fancy)
                     shift
                 fi
                 ;;
@@ -364,6 +373,13 @@ main() {
                 ;;
         esac
     done
+
+    # If accentColor is set in config, use it
+    config_color="$(get_accent_color_from_config)"
+    if [[ "$config_color" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
+        color_flag="1"
+        color="$config_color"
+    fi
 
     # If type_flag is not set, get it from config
     if [[ -z "$type_flag" ]]; then
