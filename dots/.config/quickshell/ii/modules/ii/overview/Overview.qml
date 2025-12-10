@@ -63,8 +63,8 @@ Scope {
                         if (!overviewScope.dontAutoCancelSearch) {
                             searchWidget.cancelSearch();
                         }
-                        delayedGrabTimer.start();
                     }
+                    delayedGrabTimer.start();
                 }
             }
 
