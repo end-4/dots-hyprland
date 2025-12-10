@@ -11,7 +11,7 @@ Item {
 
     Layout.fillHeight: true  
     Layout.fillWidth: true  
-    Layout.maximumWidth: 180 
+    Layout.maximumWidth: Config.options.bar.dynamicSizing ? 180 : -1
     implicitWidth: {  
         const timeWidth = timeText.implicitWidth;  
         const dateWidth = showDate ? dateText.implicitWidth + bulletText.implicitWidth : 0;  

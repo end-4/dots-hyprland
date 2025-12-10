@@ -335,6 +335,20 @@ ContentPage {
         }
     }
 
+    ContentSection {  
+        icon: "auto_fix_high"  
+        title: Translation.tr("Dynamic sizing")  
+          
+        ConfigSwitch {  
+            buttonIcon: "width_normal"  
+            text: Translation.tr("Enable adaptive bar sizing")  
+            checked: Config.options.bar.dynamicSizing  
+            onCheckedChanged: {  
+                Config.options.bar.dynamicSizing = checked;  
+            }  
+        }  
+    }
+
     ContentSection {
         icon: "tooltip"
         title: Translation.tr("Tooltips")

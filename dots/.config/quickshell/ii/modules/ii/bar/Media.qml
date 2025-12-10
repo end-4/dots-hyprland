@@ -14,13 +14,14 @@ Item {
     property bool borderless: Config.options.bar.borderless
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
+    readonly property bool hasMedia: activePlayer?.trackTitle != null && activePlayer?.trackTitle !== ""
 
     Layout.fillHeight: true  
-    Layout.fillWidth: activePlayer ? true : false  
-    Layout.preferredWidth: activePlayer ? -1 : mediaCircProg.implicitSize + 8  
     implicitWidth: activePlayer ? (rowLayout.implicitWidth + rowLayout.spacing * 2) : (mediaCircProg.implicitSize + 8)
-    Layout.maximumWidth: 250
     implicitHeight: Appearance.sizes.barHeight
+    Layout.fillWidth: Config.options.bar.dynamicSizing ? (hasMedia ? true : false) : true  
+    Layout.preferredWidth: Config.options.bar.dynamicSizing ? (hasMedia ? 250 : mediaCircProg.implicitSize + 8) : -1  
+    Layout.maximumWidth: Config.options.bar.dynamicSizing ? 250 : -1
 
     Timer {
         running: activePlayer?.playbackState == MprisPlaybackState.Playing
