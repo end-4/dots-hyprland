@@ -73,7 +73,7 @@ Scope { // Scope
             Rectangle {
                 id: oskBackground
                 anchors.centerIn: parent
-                property real maxWidth: {
+                property int maxWidth: {
                     return Math.max(Screen.width, Screen.height) * Config.options.osk.maxWidthFraction
                 }
                 property real aspectRatio: 0.35
