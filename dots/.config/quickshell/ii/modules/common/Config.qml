@@ -401,7 +401,7 @@ Singleton {
             property JsonObject osk: JsonObject {
                 property string layout: "qwerty_full"
                 property bool pinnedOnStartup: false
-                property real maxWidthFraction: 0.8 // Fraction of max(screenWidth, screenHeight)
+                property real maxWidthFraction: 0.6 // Fraction of max(screenWidth, screenHeight)
             }
 
             property JsonObject overlay: JsonObject {

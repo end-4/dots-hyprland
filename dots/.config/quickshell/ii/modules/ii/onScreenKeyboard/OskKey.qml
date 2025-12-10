@@ -24,7 +24,7 @@ RippleButton {
         "caps": 1.9,
         "shift": 2.5,
         "control": 1.3,
-        "space": 10,
+        "space": 11,
     })
     property var heightMultiplier: ({
         "normal": 1,
@@ -107,14 +107,14 @@ RippleButton {
     }
 
     function calculateFontSize() {
-        if (root.width >= 60) {
+        if (root.height >= 60) {
             return root.shape == "fn" ? Appearance.font.pixelSize.larger : 
                 (isBackspace || isEnter) ? Appearance.font.pixelSize.hugeass :
                 Appearance.font.pixelSize.hugeass;
         } else {
-            return root.shape == "fn" ? Appearance.font.pixelSize.normal : 
+            return root.shape == "fn" ? Appearance.font.pixelSize.small : 
                 (isBackspace || isEnter) ? Appearance.font.pixelSize.huge :
-                Appearance.font.pixelSize.huge;
+                Appearance.font.pixelSize.large
         }
     }
 
