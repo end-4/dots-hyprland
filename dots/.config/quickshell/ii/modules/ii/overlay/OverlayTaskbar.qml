@@ -167,20 +167,18 @@ Rectangle {
     }
 
     component BatteryWidget: Row {
+        id: batteryWidget
         Layout.alignment: Qt.AlignVCenter
         Layout.leftMargin: 6
         Layout.rightMargin: 6
         spacing: 2
-
-        property color colText: Battery.isLowAndNotCharging ?
-            Appearance.colors.colError :
-            Appearance.colors.colOnSurface
+        property color colText: Battery.isLowAndNotCharging ? Appearance.colors.colError : Appearance.colors.colOnSurface
 
         MaterialSymbol {
             anchors.verticalCenter: parent.verticalCenter
             fill: 1
             text: Battery.isCharging ? "bolt" : "battery_android_full"
-            color: parent.colText
+            color: batteryWidget.colText
             iconSize: 24
             animateChange: true
         }
@@ -188,7 +186,7 @@ Rectangle {
         StyledText {
             anchors.verticalCenter: parent.verticalCenter
             text: Math.round(Battery.percentage * 100) + "%"
-            color: parent.colText
+            color: batteryWidget.colText
             font {
                 family: Appearance.font.family.numbers
                 variableAxes: Appearance.font.variableAxes.numbers
@@ -213,8 +211,8 @@ Rectangle {
         onClicked: {
             const openWidgets = Persistent.states.overlay.open
             Persistent.states.overlay.open = toggled ?
-                openWidgets.filter(type => type !== identifier) :
-                [...openWidgets, identifier]
+            openWidgets.filter(type => type !== identifier) :
+            [...openWidgets, identifier]
         }
 
         contentItem: Item {
@@ -226,8 +224,8 @@ Rectangle {
                 iconSize: 24
                 text: parent.parent.materialSymbol
                 color: parent.parent.toggled ?
-                    Appearance.colors.colOnSecondaryContainer :
-                    Appearance.colors.colOnSurfaceVariant
+                Appearance.colors.colOnSecondaryContainer :
+                Appearance.colors.colOnSurfaceVariant
             }
         }
     }
@@ -250,7 +248,7 @@ Rectangle {
             onClicked: root.settingsMenuOpen = !root.settingsMenuOpen
         }
     }
-    
+
 
     component SettingsMenu: Item {
         implicitHeight: Math.min(menuContent.implicitHeight + 16, 340)
@@ -310,8 +308,8 @@ Rectangle {
         onClicked: {
             const buttons = Config.options.overlay.buttons
             Config.options.overlay.buttons = isActive ?
-                buttons.filter(id => id !== identifier) :
-                [...buttons, identifier]
+            buttons.filter(id => id !== identifier) :
+            [...buttons, identifier]
         }
 
         contentItem: RowLayout {
@@ -327,8 +325,8 @@ Rectangle {
                 iconSize: 20
                 text: parent.parent.materialSymbol
                 color: parent.parent.isActive ?
-                    Appearance.colors.colOnSecondaryContainer :
-                    Appearance.colors.colOnSurfaceVariant
+                Appearance.colors.colOnSecondaryContainer :
+                Appearance.colors.colOnSurfaceVariant
             }
 
             StyledText {
@@ -337,8 +335,8 @@ Rectangle {
                 text: parent.parent.widgetName
                 elide: Text.ElideRight
                 color: parent.parent.isActive ?
-                    Appearance.colors.colOnSecondaryContainer :
-                    Appearance.colors.colOnSurface
+                Appearance.colors.colOnSecondaryContainer :
+                Appearance.colors.colOnSurface
                 font.pixelSize: Appearance.font.pixelSize.small
             }
 
@@ -348,8 +346,8 @@ Rectangle {
                 text: "star"
                 fill: parent.parent.isActive ? 1 : 0
                 color: parent.parent.isActive ?
-                    Appearance.colors.colOnSecondaryContainer :
-                    Appearance.colors.colOnSurfaceVariant
+                Appearance.colors.colOnSecondaryContainer :
+                Appearance.colors.colOnSurfaceVariant
             }
         }
     }
