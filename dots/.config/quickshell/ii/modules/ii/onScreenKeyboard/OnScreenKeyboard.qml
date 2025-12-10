@@ -90,17 +90,10 @@ Scope { // Scope
                 RowLayout {
                     id: oskRowLayout
                     anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                        bottom: parent.bottom
-
-                        leftMargin: parent.padding
-                        rightMargin: parent.padding
-                        topMargin: parent.padding
-                        bottomMargin: parent.padding
+                        fill: parent
+                        margins: oskBackground.padding
                     }
-                    spacing: parent.padding
+                    spacing: oskBackground.padding
                     VerticalButtonGroup {
                         Layout.fillWidth: true
                         OskControlButton { // Pin button
