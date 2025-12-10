@@ -68,27 +68,18 @@ Scope { // Scope
             }
             Rectangle {
                 id: oskBackground
-                // anchors.centerIn: parent
-                property real maxWidth: 1200
+                anchors.centerIn: parent
+                property real maxWidth: {
+                    return Math.max(Screen.width, Screen.height) * Config.options.osk.maxWidthFraction
+                }
                 property real aspectRatio: 0.35
                 property real padding: 10
-                property real margin: {
-                    const defaultMargin = 20
-                    if ((oskRoot.width - 2 * defaultMargin) > maxWidth) {
-                        return (oskRoot.width - maxWidth) / 2
-                    }
-                    return defaultMargin
+                implicitWidth: {
+                    return Math.min(Screen.width - 2 * Appearance.sizes.elevationMargin, maxWidth)
                 }
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    
-                    leftMargin: margin
-                    rightMargin: margin
-                }
+                implicitHeight: implicitWidth * aspectRatio + padding * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.windowRounding
-                implicitHeight: (width >= 0 ? width : maxWidth) * aspectRatio + padding * 2
 
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
