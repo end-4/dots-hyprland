@@ -25,6 +25,10 @@ Scope { // Scope
 
         Layout.fillWidth: true
         Layout.preferredWidth: baseWidth
+
+        function calculateIconSize() {
+            return height >= 50 ? Appearance.font.pixelSize.huge : Appearance.font.pixelSize.larger;
+        }
     }
 
     Loader {
@@ -102,8 +106,11 @@ Scope { // Scope
                             contentItem: MaterialSymbol {
                                 text: "keep"
                                 horizontalAlignment: Text.AlignHCenter
-                                iconSize: Appearance.font.pixelSize.huge
+                                iconSize: parent.calculateIconSize()
                                 color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                            }
+                            onHeightChanged: {
+                                contentItem.iconSize = calculateIconSize()
                             }
                         }
                         OskControlButton {
@@ -113,7 +120,10 @@ Scope { // Scope
                             contentItem: MaterialSymbol {
                                 horizontalAlignment: Text.AlignHCenter
                                 text: "keyboard_hide"
-                                iconSize: Appearance.font.pixelSize.huge
+                                iconSize: parent.calculateIconSize()
+                            }
+                            onHeightChanged: {
+                                contentItem.iconSize = calculateIconSize()
                             }
                         }
                     }

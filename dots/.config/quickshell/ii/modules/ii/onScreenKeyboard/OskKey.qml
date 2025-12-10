@@ -107,14 +107,12 @@ RippleButton {
     }
 
     function calculateFontSize() {
-        if (root.height >= 60) {
-            return root.shape == "fn" ? Appearance.font.pixelSize.larger : 
-                (isBackspace || isEnter) ? Appearance.font.pixelSize.hugeass :
-                Appearance.font.pixelSize.hugeass;
+        if (root.shape == "fn") {
+            return root.height >= 45 ? Appearance.font.pixelSize.larger: Appearance.font.pixelSize.small;
+        } else if (isBackspace || isEnter) {
+            return root.height >= 60 ? Appearance.font.pixelSize.hugeass : Appearance.font.pixelSize.huge;
         } else {
-            return root.shape == "fn" ? Appearance.font.pixelSize.small : 
-                (isBackspace || isEnter) ? Appearance.font.pixelSize.huge :
-                Appearance.font.pixelSize.large
+            return root.height >= 60 ? Appearance.font.pixelSize.hugeass : Appearance.font.pixelSize.large;
         }
     }
 
