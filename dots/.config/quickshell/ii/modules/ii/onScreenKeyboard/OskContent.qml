@@ -18,7 +18,7 @@ Rectangle {
     property real aspectRatio: 0.35
     property real padding: 10
     implicitWidth: {
-        return Math.min(Screen.width - 2 * Appearance.sizes.elevationMargin, maxWidth)
+        return Math.min((parent.width || Screen.width) - 2 * Appearance.sizes.elevationMargin, maxWidth)
     }
     implicitHeight: implicitWidth * aspectRatio + padding * 2
     color: Appearance.colors.colLayer0
