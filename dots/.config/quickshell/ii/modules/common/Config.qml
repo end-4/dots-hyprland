@@ -419,9 +419,11 @@ Singleton {
                 property real rows: 2
                 property real columns: 5
                 property bool centerIcons: true
+                property bool showOnlyOnFocusedMonitor: false
             }
 
             property JsonObject regionSelector: JsonObject {
+                property bool showOnlyOnFocusedMonitor: false
                 property JsonObject targetRegions: JsonObject {
                     property bool windows: true
                     property bool layers: false
