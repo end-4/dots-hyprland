@@ -233,8 +233,21 @@ Singleton {
             property int larger: 19
             property int huge: 22
             property int hugeass: 23
+            property int hugest: 25
             property int title: huge
         }
+        property list<int> pixelSizeIncreasingList: [
+            pixelSize.smallest,
+            pixelSize.smaller,
+            pixelSize.smallie,
+            pixelSize.small,
+            pixelSize.normal,
+            pixelSize.large,
+            pixelSize.larger,
+            pixelSize.huge,
+            pixelSize.hugeass,
+            pixelSize.hugest
+        ]
     }
 
     animationCurves: QtObject {
