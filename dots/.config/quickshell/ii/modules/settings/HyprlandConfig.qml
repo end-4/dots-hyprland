@@ -154,7 +154,7 @@ ContentPage {
                 title: Translation.tr("Example Usage")
 
                 StyledText {
-                    text: Translation.tr("Set global opacity values that can be used in your window rules.\nUse $OPACITY_ACTIVE, $OPACITY_INACTIVE, and $OPACITY_HOVER variables in custom/rules.conf\nwindowrulev2 = opacity $OPACITY_ACTIVE override $OPACITY_INACTIVE override, class:^(kate)$")
+                    text: Translation.tr("Set global opacity values that can be used in your window rules.\nUse $OPACITY_ACTIVE and $OPACITY_INACTIVE variables in custom/rules.conf\nwindowrulev2 = opacity $OPACITY_ACTIVE override $OPACITY_INACTIVE override, class:^(kate)$")
                     color: Appearance.colors.colSubtext
                     wrapMode: Text.Wrap
                     font.pixelSize: Appearance.font.pixelSize.smaller
