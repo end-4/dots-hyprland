@@ -29,11 +29,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 mkdir -p "$PICTURES_DIR/Wallpapers"
 page=$((1 + RANDOM % 1000));
-response=$(curl "https://konachan.net/post.json?tags=rating%3Asafe&limit=1&page=$page")
+illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
+rating=$(jq -r '.background.randomWallRating' $illogicalImpulseConfigPath)
+response=$(curl "https://konachan.net/post.json?tags=rating%3A$rating&limit=1&page=$page")
 link=$(echo "$response" | jq '.[0].file_url' -r);
 ext=$(echo "$link" | awk -F. '{print $NF}')
 downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper.$ext"
-illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
 currentWallpaperPath=$(jq -r '.background.wallpaperPath' $illogicalImpulseConfigPath)
 if [ "$downloadPath" == "$currentWallpaperPath" ]; then
     downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper-1.$ext"
