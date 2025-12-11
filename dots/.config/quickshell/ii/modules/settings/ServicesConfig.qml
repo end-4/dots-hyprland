@@ -156,6 +156,15 @@ ContentPage {
                         Config.options.search.prefix.emojis = text;
                     }
                 }
+                MaterialTextArea {
+                    Layout.fillWidth: true
+                    placeholderText: Translation.tr("Symbols")
+                    text: Config.options.search.prefix.symbols
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.symbols = text;
+                    }
+                }
             }
 
             ConfigRow {
