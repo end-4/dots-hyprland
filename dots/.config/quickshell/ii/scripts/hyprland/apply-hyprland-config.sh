@@ -143,7 +143,7 @@ apply_kitty_conf() {
 
     if [ -f "$KITTY_CONF" ]; then
         # Update background_opacity (POSIX-compatible pattern)
-        sed -i "s/^[[:space:]]*background_opacity[[:space:]][[:space:]]*.*/background_opacity $bg_opacity/" "$KITTY_CONF"
+        sed -i "s/^[[:space:]]*background_opacity[[:space:]]\+.*/background_opacity $bg_opacity/" "$KITTY_CONF"
     fi
 }
 
