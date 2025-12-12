@@ -1,11 +1,16 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
+import Quickshell.Hyprland
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
+import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
+import "window-layout.js" as WindowLayout
 
 Rectangle {
     id: root
@@ -34,6 +39,90 @@ Rectangle {
         duration: 200
         easing.type: Easing.BezierSpline
         easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
+    }
+
+    // Windows
+    property real maxWindowHeight: 290
+    property real maxWindowWidth: 738
+    property real padding: 52
+    property real spacing: 25
+    readonly property list<var> toplevels: ToplevelManager.toplevels.values.filter(t => {
+        const client = HyprlandData.clientForToplevel(t);
+        return client && client.workspace.id === HyprlandData.activeWorkspace?.id;
+    })
+    readonly property list<var> arrangedToplevels: {
+        const maxRowWidth = width - padding * 2;
+        const count = toplevels.length;
+        const resultLayout = [];
+
+        var i = 0;
+        while (i < count) {
+            var row = [];
+            var rowWidth = 0;
+            var j = i;
+
+            while (j < count) {
+                const toplevel = toplevels[j];
+                const client = HyprlandData.clientForToplevel(toplevel);
+                const scaledSize = WindowLayout.scaleWindow(client, maxWindowWidth, maxWindowHeight);
+
+                if (rowWidth + scaledSize.width <= maxRowWidth || row.length === 0) {
+                    row.push(toplevel);
+                    rowWidth += scaledSize.width;
+                    j++;
+                } else {
+                    break;
+                }
+            }
+
+            resultLayout.push(row);
+            i = j;
+        }
+        return resultLayout;
+    }
+
+    // Windows
+    WListView {
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            topMargin: (root.height - (wsBorder.height + 16) - height) / 2
+        }
+        spacing: root.spacing
+        topMargin: root.padding
+        bottomMargin: root.padding
+        leftMargin: root.padding
+        rightMargin: root.padding
+        height: Math.min(contentHeight + topMargin + bottomMargin, root.height - (wsBorder.height + 16))
+
+        interactive: height < contentHeight
+
+        clip: true
+
+        model: IndexModel {
+            count: arrangedToplevels.length
+        }
+        delegate: RowLayout {
+            id: clientRow
+            required property int index
+            spacing: root.spacing
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Repeater {
+                model: IndexModel {
+                    count: root.arrangedToplevels[clientRow.index].length
+                }
+                delegate: TaskViewWindow {
+                    id: client
+                    required property int index
+                    Layout.alignment: Qt.AlignTop
+                    maxHeight: root.maxWindowHeight
+                    maxWidth: root.maxWindowWidth
+                    toplevel: root.arrangedToplevels[clientRow.index][index]
+                }
+            }
+        }
     }
 
     // Workspaces
@@ -65,7 +154,7 @@ Rectangle {
 
             implicitHeight: 174
 
-            ListView {
+            WListView {
                 id: workspaceListView
                 anchors {
                     top: parent.top
@@ -83,15 +172,27 @@ Rectangle {
                 clip: true
                 spacing: 4
 
-                model: ScriptModel {
-                    values: {
+                function reposition() {
+                    positionViewAtIndex(HyprlandData.activeWorkspace.id - 1, ListView.Contain);
+                }
+
+                Connections {
+                    target: HyprlandData
+                    function onActiveWorkspaceChanged() {
+                        workspaceListView.reposition();
+                    }
+                }
+                model: IndexModel {
+                    id: workspaceIndexModel
+                    count: {
                         const maxWorkspaceId = Math.max.apply(null, HyprlandData.workspaces.map(ws => ws.id));
-                        return Array(Math.max(maxWorkspaceId, 1));
+                        return Math.max(maxWorkspaceId, 1) + 1;
                     }
                 }
                 delegate: TaskViewWorkspace {
                     required property int index
                     workspace: index + 1
+                    newWorkspace: index == workspaceIndexModel.count - 1
                 }
             }
         }
