@@ -61,113 +61,148 @@
 </details>
 
 <div align="center">
-    <h2>• screenshots •</h2>
+    <h2>• masthierryi mods - 12-12-2025 - 18:28 GTM UTC+0•</h2>
     <h3></h3>
 </div>
 
-<div align="center">
-    <img src="assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:400;">
-</div>
+<details>
+    <summary>Changelog </summary>
+---
 
-### illogical-impulse<sup>Quickshell</sup>
-
-This is the latest and only supported style. Other stuff are still there mostly for viewing pleasure and not actual use, but code is still available, see below.
-
-Widget system: Quickshell | Support: Yes
-
-[Showcase video](https://www.youtube.com/watch?v=RPwovTInagE)
-
-| AI, settings app | Some widgets |
-|:---|:---------------|
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ea0154a1-e984-4bb6-a424-23247cefe3c6" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eba0d57-2606-4cea-8993-e6f169e82e70" /> |
-| Window management | Built with love |
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a7e6d29c-e82c-4934-98db-36c810ec999b" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1b806b53-9310-4c63-84a9-cec9e311d439" /> |
-
-### Other styles: Available at the end of the readme.
-
-<div align="center">
-    <h2>• thank you •</h2>
-    <h3></h3>
-</div>
-
- - [@clsty](https://github.com/clsty) for making the dotfiles accessible by taking care of the install script and many other things
- - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
- - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
- - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
- - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
- - EWW: [fufexan](https://github.com/fufexan/dotfiles)
-
-<div align="center">
-    <h2>• stonks •</h2>
-    <h3></h3>
-</div>
-
-- If you would like to give me some milk😳 (i dont drink coffee): https://github.com/sponsors/end-4
-- Virtual tentacle cat website points chart
-
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
-
-
-<div align="center">
-    <h2>• inspirations/copying •</h2>
-    <h3></h3>
-</div>
-
- - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
- - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (maybe unless you loudly do weird stuff and violate the license) <sub>(some people actually had to ask smh)</sub>
+**VLC scratchpad, transparency, and automation**
+- `dots/.config/hypr/custom/execs.conf` (l:4-6)
+- `dots/.config/hypr/custom/rules.conf` (l:23-32)
+- `dots/.config/hypr/custom/rules.conf.bak` (l:23-32)
+- `dots/.config/hypr/hyprland/keybinds.conf` (special binds — various, e.g., submaps and binds Super+Q/W/S)
+- `dots/.config/quickshell/ii/modules/common/Config.qml` (vars, integration, l:82-194)
+- `dots/.config/quickshell/ii/modules/settings/HyprlandConfig.qml` (rule blocks)
+- `dots/.config/kitty/kitty.conf` (opacity, visual integration, l:1-17)
+- `dots/.config/hypr/hyprland/rules.conf` (l:23-32)
 
 ---
 
+**Variable transparency per app (kitty, dolphin, kate, VLC, Bitwarden, BTOP, pavucontrol)**
+- `dots/.config/hypr/custom/rules.conf` (l:1-7, 9-21, 23-42)
+- `dots/.config/hypr/custom/rules.conf.bak` (whole file)
+- `dots/.config/hypr/hyprland/general.conf` (l:20-22, 49-87)
+- `dots/.config/quickshell/ii/modules/common/Config.qml` (l:82-194, 644-688)
+- `dots/.config/quickshell/ii/modules/settings/HyprlandConfig.qml`
+- `dots/.config/kitty/kitty.conf` (opacity and comments, l:7-17)
+- `dots/.config/kitty/kitty.conf.bak` (automatic backup)
+- `dots/.config/hypr/hyprland/rules.conf` (l:1-16, 8-11, 23-42)
+
 ---
 
-<div align="center">
-    <h2>• old, UNSUPPORTED stuff •</h2>
-    <h3></h3>
-</div>
+**BTOP, Bitwarden, Pavucontrol-qt: float, size, workspace**
+- `dots/.config/hypr/custom/rules.conf` (l:33-42)
+- `dots/.config/hypr/custom/rules.conf.bak` (l:33-42)
+- `dots/.config/quickshell/ii/modules/settings/HyprlandConfig.qml`
+- `dots/.config/hypr/hyprland/rules.conf` (l:33-42)
 
-- Source for illogical-impulse AGS available in the `ii-ags` branch, others in the `archive` branch.
-- The list goes from newest to the oldest, and the code quality is worse the older a style is
-- No bug fix or official support will be provided.
+---
 
-### illogical-impulse<sup>AGS</sup>
+**Custom Lockscreen: keyring, fingerprint, blur, bypass**
+- `dots/.config/quickshell/ii/modules/ii/lock/Lock.qml` (almost everything: l:1-135 especially)
+- `dots/.config/quickshell/ii/modules/ii/lock/LockSurface.qml` (l:1-314, practically whole file)
+- `dots/.config/quickshell/ii/modules/ii/lock/LockContext.qml` (new file)
+- `dots/.config/quickshell/ii/modules/ii/lock/PasswordChars.qml` (l:30-32)
+- `dots/.config/quickshell/ii/modules/ii/lock/noise.png` (new)
+- `dots/.config/quickshell/ii/modules/ii/lock/pam/fprintd.conf` (new)
 
-Widget system: AGS | Support: No
+---
 
-| AI | Common widgets |
-|:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
-| Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
+**Katakana cheatsheet, dynamic tabs, periodic table**
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/katakana.js` (new)
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/CheatsheetKatakana.qml` (new)
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/Cheatsheet.qml` (l:13-82, 134-176, 161-176)
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/CheatsheetKeybinds.qml` (l:7, 119)
+- `dots/.config/quickshell/ii/modules/settings/InterfaceConfig.qml` (l:100-131)
 
-#### m3ww
+---
 
-   Widget system: EWW | Support: No, dead
+**Keybinds, submaps, automation shortcuts/WM cycle**
+- `dots/.config/hypr/hyprland/keybinds.conf` (major part: l:1-381, 390-482)
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/CheatsheetKeybinds.qml` (l:7, 119)
+- `dots/.config/quickshell/ii/modules/ii/cheatsheet/Cheatsheet.qml` (in conjunction with other features l:13-176)
 
-   <a href="https://streamable.com/85ch8x">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-   </a>
+---
 
-#### NovelKnock
+**Wallpaper automation: rotation, dark/light, apply**
+- `dots/.config/quickshell/ii/scripts/colors/switchwall.sh` (l:8-19, 68, 77, 331-377)
+- `dots/.config/quickshell/ii/scripts/hyprland/apply-hyprland-config.sh` (new file)
+- `dots/.config/quickshell/ii/services/Wallpapers.qml` (l:79-143)
+- `dots/.config/quickshell/ii/settings.qml` (l:33-37)
+- `dots/.config/quickshell/ii/modules/settings/QuickConfig.qml` (l:217-243)
 
-   Widget system: EWW | Support: No
+---
 
-   <a href="https://streamable.com/7vo61k">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-   </a>
+**Multi-monitor workspaces & monitor configs**
+- `dots/.config/hypr/hyprland/general.conf` (l:1-4, 20-22, 49-87, 119-124)
+- `dots/.config/hypr/workspaces.conf` (l:1-24, practically whole file/new)
+- `dots/.config/hypr/hyprland/execs.conf` (l:1-20, extra post-login execs)
+- `dots/.config/quickshell/ii/modules/settings/HyprlandConfig.qml`
+- `dots/.config/hypr/hyprland/rules.conf` (l:16-22, floating & centering)
+- `dots/.config/hypr/hyprland/env.conf` (l:1-11, l:17-23; input methods, monitor tweaks)
 
-#### Hybrid
+---
 
-   Widget system: EWW | Support: No
-   
-   <a href="https://streamable.com/4oogot">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-   </a>
+**Kitty: custom font, backup, apply-hyprland-config.sh integration**
+- `dots/.config/kitty/kitty.conf` (l:1-43 changed)
+- `dots/.config/kitty/kitty.conf.bak` (new file)
+- `dots/.config/quickshell/ii/scripts/hyprland/apply-hyprland-config.sh` (l:111-146)
 
-#### Windoes
+---
 
-   Widget system: EWW | Support: No
-   
-   <a href="https://streamable.com/5qx614">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-   </a>
+**Top bar, Action Center widgets, dynamic panel**
+- `dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml` (l:17-115, 153-339)
+- `dots/.config/quickshell/ii/modules/waffle/actionCenter/BodyRectangle.qml` (new)
+- `dots/.config/quickshell/ii/modules/waffle/actionCenter/FooterMoreButton.qml` (new)
+- `dots/.config/quickshell/ii/modules/waffle/actionCenter/FooterRectangle.qml` (new)
+- `dots/.config/quickshell/ii/modules/waffle/actionCenter/PageColumn.qml` (new)
+- `dots/.config/quickshell/ii/modules/waffle/actionCenter/Separator.qml` (new)
+- `dots/.config/quickshell/ii/modules/settings/BarConfig.qml` (l:323-329)
 
+---
+
+**Appearance/themes, palette, fine-tuning**
+- `dots/.config/hypr/hyprlock/colors.conf` (l:1-13)
+- `dots/.config/quickshell/ii/modules/common/Config.qml` (l:82-194, 244-644)
+- `dots/.config/quickshell/ii/modules/common/Directories.qml` (l:33, 48-50)
+- `dots/.config/hypr/hyprland/general.conf` (l:20-22, 49-87)
+- `dots/.config/quickshell/ii/settings.qml` (l:13-47, visual integration)
+- `dots/.config/quickshell/ii/shell.qml` (l:6-133)
+- `dots/.config/quickshell/ii/welcome.qml` (l:278-338)
+
+---
+
+**Hyprland configs integrated, pages, and QML**
+- `dots/.config/quickshell/ii/settings.qml` (l:33-37)
+- `dots/.config/quickshell/ii/modules/settings/HyprlandConfig.qml` (whole file)
+- `dots/.config/quickshell/ii/modules/settings/InterfaceConfig.qml` (l:100-131)
+- `dots/.config/quickshell/ii/modules/settings/GeneralConfig.qml` (l:191-277)
+- `dots/.config/quickshell/ii/modules/settings/QuickConfig.qml` (l:82-115, 217-243)
+
+---
+
+**Utility Widgets/Helpers and custom scripts**
+- `dots/.config/quickshell/ii/modules/common/widgets/notification_utils.js` (new file)
+- `dots/.config/quickshell/ii/modules/common/Directories.qml` (l:33, 48-50)
+- `dots/.config/quickshell/ii/services/Wallpapers.qml` (l:79-143)
+- `dots/.config/quickshell/ii/scripts/colors/switchwall.sh` (auxiliary interactions, l:8-19, 68, 77, 331-377)
+
+---
+
+**Shell/System Core**
+- `dots/.config/fish/config.fish` (l:13-24, aliases and initialization)
+
+---
+
+**Others (backs, helpers, backup configs)**
+- `dots/.config/hypr/custom/rules.conf.bak` (whole file)
+- `dots/.config/hypr/hyprland/general.conf.bak` (whole file)
+- `dots/.config/kitty/kitty.conf.bak` (whole file)
+
+---
+
+
+</details>
