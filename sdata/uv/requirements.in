@@ -13,6 +13,8 @@ click
 loguru
 pycairo
 pygobject
+pyqt5
+pyqt6
 tqdm
 numpy
 opencv-contrib-python
