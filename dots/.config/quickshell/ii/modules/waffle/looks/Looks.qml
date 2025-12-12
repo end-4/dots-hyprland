@@ -177,7 +177,7 @@ Singleton {
 
         property Component color: Component {
             ColorAnimation {
-                duration: 120
+                duration: 70
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }

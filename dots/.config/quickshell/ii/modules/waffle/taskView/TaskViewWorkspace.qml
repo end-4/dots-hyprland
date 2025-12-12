@@ -16,6 +16,7 @@ WMouseAreaButton {
 
     required property int workspace
 
+    readonly property bool isActiveWorkspace: HyprlandData.activeWorkspace?.id === root.workspace
     readonly property real screenWidth: QsWindow.window.width
     readonly property real screenHeight: QsWindow.window.height
     readonly property real screenAspectRatio: screenWidth / screenHeight
@@ -30,6 +31,12 @@ WMouseAreaButton {
         Hyprland.dispatch(`workspace ${root.workspace}`);
     }
 
+    colBackground: ColorUtils.transparentize(Looks.colors.bg2, isActiveWorkspace ? 0 : 1)
+    Behavior on color {
+        animation: Looks.transition.color.createObject(this)
+    }
+
+    // Content
     ColumnLayout {
         anchors {
             fill: parent
@@ -92,6 +99,23 @@ WMouseAreaButton {
                     }
                 }
             }
+        }
+    }
+
+    // Active indicator
+    WFadeLoader {
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+        shown: root.isActiveWorkspace
+        
+        sourceComponent: Rectangle {
+            id: activeIndicator
+            implicitWidth: 32
+            implicitHeight: 3
+            color: Looks.colors.accent
+            radius: height / 2
         }
     }
 }

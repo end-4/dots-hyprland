@@ -64,8 +64,9 @@ Rectangle {
             color: Looks.colors.bgPanelFooterBase
 
             implicitHeight: 174
-            
+
             ListView {
+                id: workspaceListView
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
@@ -73,17 +74,19 @@ Rectangle {
                     topMargin: 5
                     bottomMargin: 5
                 }
+                flickableDirection: Flickable.HorizontalFlick
+                orientation: ListView.Horizontal
+                interactive: width == parent.width
                 width: Math.min(contentWidth + leftMargin + rightMargin, parent.width)
                 leftMargin: 5
                 rightMargin: 5
                 clip: true
-                orientation: ListView.Horizontal
                 spacing: 4
 
                 model: ScriptModel {
                     values: {
-                        const maxWorkspaceId = Math.max.apply(null, HyprlandData.workspaces.map(ws => ws.id))
-                        return Array(maxWorkspaceId)
+                        const maxWorkspaceId = Math.max.apply(null, HyprlandData.workspaces.map(ws => ws.id));
+                        return Array(Math.max(maxWorkspaceId, 1));
                     }
                 }
                 delegate: TaskViewWorkspace {
