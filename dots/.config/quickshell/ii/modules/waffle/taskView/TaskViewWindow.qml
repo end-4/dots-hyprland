@@ -34,7 +34,11 @@ WMouseAreaButton {
 
     layer.enabled: true
     layer.effect: OpacityMask {
-        maskSource: root.background
+        maskSource: Rectangle {
+            width: root.width
+            height: root.height
+            radius: root.radius
+        }
     }
     scale: (root.pressedButtons & Qt.LeftButton) ? 0.95 : 1
     Behavior on scale {
