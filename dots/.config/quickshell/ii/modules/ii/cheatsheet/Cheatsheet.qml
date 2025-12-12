@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import Qt.labs.settings 1.1
 import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland
@@ -12,6 +13,12 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
+
+    Settings {
+        id: cheatsheetSettings
+        category: "ii.cheatsheet"
+        property int defaultTabIndex: 0
+    }
 
     property var tabButtonList: [
         {
@@ -59,6 +66,8 @@ Scope {
 
             visible: false
 
+            property int savedDefaultTabIndex: 0
+
             anchors { top: true; bottom: true; left: true; right: true }
 
             function hide() {
@@ -75,9 +84,39 @@ Scope {
                 return idx
             }
 
-            // Always jump to index 0 (first tab) when opening.
+            function readPersistedDefaultTabIndex() {
+                let idx = undefined
+
+                if (typeof Config !== "undefined"
+                        && Config.cheatsheet
+                        && Config.cheatsheet.defaultTabIndex !== undefined) {
+                    idx = Config.cheatsheet.defaultTabIndex
+                } else {
+                    idx = cheatsheetSettings.defaultTabIndex
+                }
+
+                return clampTabIndex(idx)
+            }
+
+            function writePersistedDefaultTabIndex(idx) {
+                const clamped = clampTabIndex(idx)
+
+                cheatsheetSettings.defaultTabIndex = clamped
+                if (typeof cheatsheetSettings.sync === "function")
+                    cheatsheetSettings.sync()
+
+                if (typeof Config !== "undefined" && Config.cheatsheet) {
+                    Config.cheatsheet.defaultTabIndex = clamped
+                    if (typeof Config.save === "function") Config.save()
+                    else if (typeof Config.sync === "function") Config.sync()
+                }
+
+                savedDefaultTabIndex = clamped
+            }
+
             function jumpToTabWithoutAnimation(idx) {
                 const clamped = clampTabIndex(idx)
+                savedDefaultTabIndex = clamped
 
                 const lv = swipeView.contentItem
                 const oldMove = lv ? lv.highlightMoveDuration : 250
@@ -100,13 +139,18 @@ Scope {
             }
 
             function open() {
-                // Always open to first tab (index 0)
-                const idx = 0
+                const idx = readPersistedDefaultTabIndex()
 
                 Qt.callLater(() => {
                     jumpToTabWithoutAnimation(idx)
                     visible = true
                 })
+            }
+
+            function setDefaultTab(idx) {
+                writePersistedDefaultTabIndex(idx)
+
+                jumpToTabWithoutAnimation(savedDefaultTabIndex)
             }
 
             exclusiveZone: 0
@@ -158,6 +202,37 @@ Scope {
                         }
                     }
                 }
+
+                RippleButton {
+                    id: lockButton
+                    implicitWidth: 40
+                    implicitHeight: 40
+                    buttonRadius: Appearance.rounding.full
+                    z: 10
+
+                    anchors {
+                        top: parent.top
+                        right: closeButton.left
+                        topMargin: 20
+                        rightMargin: 10
+                    }
+
+                    property bool isDefaultTab: cheatsheetRoot.savedDefaultTabIndex === swipeView.currentIndex
+                    onClicked: cheatsheetRoot.setDefaultTab(swipeView.currentIndex)
+
+                    background: Rectangle {
+                        color: lockButton.isDefaultTab ? "black" : "transparent"
+                        radius: width / 2
+                    }
+
+                    contentItem: MaterialSymbol {
+                        anchors.centerIn: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: Appearance.font.pixelSize.title
+                        text: lockButton.isDefaultTab ? "lock" : "lock_open"
+                    }
+                }
+
 
                 RippleButton {
                     id: closeButton
