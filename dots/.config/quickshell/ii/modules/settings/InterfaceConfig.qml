@@ -739,6 +739,45 @@ ContentPage {
                 }
             }
         }
+        ConfigRow {
+            uniform: true
+            ConfigSelectionArray {
+                currentValue: Config.options.overview.orderRightLeft
+                onSelected: newValue => {
+                    Config.options.overview.orderRightLeft = newValue
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Left to right"),
+                        icon: "arrow_forward",
+                        value: 0
+                    },
+                    {
+                        displayName: Translation.tr("Right to left"),
+                        icon: "arrow_back",
+                        value: 1
+                    }
+                ]
+            }
+            ConfigSelectionArray {
+                currentValue: Config.options.overview.orderBottomUp
+                onSelected: newValue => {
+                    Config.options.overview.orderBottomUp = newValue
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Top-down"),
+                        icon: "arrow_downward",
+                        value: 0
+                    },
+                    {
+                        displayName: Translation.tr("Bottom-up"),
+                        icon: "arrow_upward",
+                        value: 1
+                    }
+                ]
+            }
+        }
     }
 
     ContentSection {
