@@ -17,6 +17,10 @@ Item {
         spacing: 4
 
         StyledText {
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: (parent.height - height) / 2 - 1
+            }
             font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             text: DateTime.time
