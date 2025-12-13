@@ -18,14 +18,14 @@ WMouseAreaButton {
     property bool newWorkspace: false
 
     readonly property bool isActiveWorkspace: HyprlandData.activeWorkspace?.id === root.workspace
-    readonly property real screenWidth: QsWindow.window.width
-    readonly property real screenHeight: QsWindow.window.height
+    readonly property real screenWidth: QsWindow.window?.width ?? 0
+    readonly property real screenHeight: QsWindow.window?.height ?? 0
     readonly property real screenAspectRatio: screenWidth / screenHeight
     readonly property real windowScale: wallpaperHeight / screenHeight
 
     property real wallpaperHeight: 124
 
-    height: ListView.view.height
+    height: ListView.view?.height ?? 100
     implicitWidth: 244 // for now
 
     onClicked: {

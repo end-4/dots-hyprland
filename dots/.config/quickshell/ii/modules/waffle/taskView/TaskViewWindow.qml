@@ -21,6 +21,7 @@ WMouseAreaButton {
     required property int maxWidth
 
     property var hyprlandClient: HyprlandData.clientForToplevel(root.toplevel)
+    property string address: hyprlandClient?.address
 
     property string iconName: AppSearch.guessIcon(hyprlandClient?.class)
 
@@ -35,9 +36,9 @@ WMouseAreaButton {
     layer.enabled: true
     layer.effect: OpacityMask {
         maskSource: Rectangle {
-            width: root.width
-            height: root.height
-            radius: root.radius
+            width: root.background.width
+            height: root.background.height
+            radius: root.background.radius
         }
     }
     scale: (root.pressedButtons & Qt.LeftButton) ? 0.95 : 1

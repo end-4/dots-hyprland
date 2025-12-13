@@ -100,26 +100,34 @@ Rectangle {
 
         clip: true
 
-        model: IndexModel {
-            count: arrangedToplevels.length
+        model: ScriptModel {
+            values: root.arrangedToplevels
         }
         delegate: RowLayout {
             id: clientRow
-            required property int index
+            required property var modelData
             spacing: root.spacing
             anchors.horizontalCenter: parent.horizontalCenter
 
             Repeater {
-                model: IndexModel {
-                    count: root.arrangedToplevels[clientRow.index].length
+                model: ScriptModel {
+                    values: clientRow.modelData
                 }
-                delegate: TaskViewWindow {
-                    id: client
+                delegate: Item {
+                    id: clientGridArea
                     required property int index
-                    Layout.alignment: Qt.AlignTop
-                    maxHeight: root.maxWindowHeight
-                    maxWidth: root.maxWindowWidth
-                    toplevel: root.arrangedToplevels[clientRow.index][index]
+                    required property var modelData
+                    implicitWidth: windowItem.implicitWidth
+                    implicitHeight: windowItem.implicitHeight
+
+                    TaskViewWindow {
+                        id: windowItem
+                        z: 9999
+                        Layout.alignment: Qt.AlignTop
+                        maxHeight: root.maxWindowHeight
+                        maxWidth: root.maxWindowWidth
+                        toplevel: clientGridArea.modelData
+                    }
                 }
             }
         }
