@@ -36,6 +36,7 @@ Scope { // Scope
             }
 
             exclusiveZone: root.pinned ? implicitHeight : 0
+            exclusionMode: (root.pinned || !ToplevelManager.activeToplevel?.activated) ? ExclusionMode.Normal : ExclusionMode.Ignore
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
