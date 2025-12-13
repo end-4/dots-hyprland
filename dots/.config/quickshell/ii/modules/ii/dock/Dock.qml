@@ -56,7 +56,7 @@ Scope { // Scope
                     topMargin: dockRoot.reveal ? 0 : Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
                     horizontalCenter: parent.horizontalCenter
                 }
-                implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.hyprlandGapsOut
+                implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
                 hoverEnabled: true
 
                 Behavior on anchors.topMargin {
