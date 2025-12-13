@@ -97,7 +97,7 @@ Scope { // Scope
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             anchors.horizontalCenter: parent.horizontalCenter
-                            // spacing: 3
+                            spacing: 3
                             property real padding: 5
 
                             VerticalButtonGroup {
