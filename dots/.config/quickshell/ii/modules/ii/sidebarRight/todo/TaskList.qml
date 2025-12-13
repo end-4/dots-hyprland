@@ -1,11 +1,12 @@
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.services
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 
 Item {
     id: root
@@ -16,6 +17,155 @@ Item {
     property int todoListItemPadding: 8
     property int listBottomPadding: 80
 
+    StyledFlickable {
+        id: flickable
+
+        anchors.fill: parent
+        contentHeight: columnLayout.height
+        clip: true
+        layer.enabled: true
+
+        ColumnLayout {
+            id: columnLayout
+
+            width: parent.width
+            spacing: 0
+
+            Repeater {
+
+                model: ScriptModel {
+                    values: taskList
+                }
+
+                delegate: Item {
+                    id: todoItem
+
+                    property bool pendingDoneToggle: false
+                    property bool pendingDelete: false
+                    property bool enableHeightAnimation: false
+
+                    function startAction() {
+                        enableHeightAnimation = true;
+                        todoItem.implicitHeight = 0;
+                        actionTimer.start();
+                    }
+
+                    Layout.fillWidth: true
+                    implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
+                    height: implicitHeight
+                    clip: true
+
+                    Timer {
+                        id: actionTimer
+
+                        interval: Appearance.animation.elementMoveFast.duration
+                        repeat: false
+                        onTriggered: {
+                            if (todoItem.pendingDelete) {
+                                Todo.deleteItem(modelData.originalIndex);
+                            } else if (todoItem.pendingDoneToggle) {
+                                if (!modelData.done)
+                                    Todo.markDone(modelData.originalIndex);
+                                else
+                                    Todo.markUnfinished(modelData.originalIndex);
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: todoItemRectangle
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        implicitHeight: todoContentRowLayout.implicitHeight
+                        color: Appearance.colors.colLayer2
+                        radius: Appearance.rounding.small
+
+                        ColumnLayout {
+                            id: todoContentRowLayout
+
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+
+                            StyledText {
+                                id: todoContentText
+
+                                Layout.fillWidth: true // Needed for wrapping
+                                Layout.leftMargin: 10
+                                Layout.rightMargin: 10
+                                Layout.topMargin: todoListItemPadding
+                                text: modelData.content
+                                wrapMode: Text.Wrap
+                            }
+
+                            RowLayout {
+                                Layout.leftMargin: 10
+                                Layout.rightMargin: 10
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                TodoItemActionButton {
+                                    Layout.fillWidth: false
+                                    onClicked: {
+                                        todoItem.pendingDoneToggle = true;
+                                        todoItem.startAction();
+                                    }
+
+                                    contentItem: MaterialSymbol {
+                                        anchors.centerIn: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        text: modelData.done ? "remove_done" : "check"
+                                        iconSize: Appearance.font.pixelSize.larger
+                                        color: Appearance.colors.colOnLayer1
+                                    }
+
+                                }
+
+                                TodoItemActionButton {
+                                    Layout.fillWidth: false
+                                    onClicked: {
+                                        todoItem.pendingDelete = true;
+                                        todoItem.startAction();
+                                    }
+
+                                    contentItem: MaterialSymbol {
+                                        anchors.centerIn: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        text: "delete_forever"
+                                        iconSize: Appearance.font.pixelSize.larger
+                                        color: Appearance.colors.colOnLayer1
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    Behavior on implicitHeight {
+                        enabled: enableHeightAnimation
+
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Appearance.animation.elementMoveFast.type
+                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                        }
+
+                    }
+
+                }
+
+            }
+            // Bottom padding
+
+            Item {
+                implicitHeight: listBottomPadding
+=======
     StyledListView {
         id: listView
         anchors.fill: parent
@@ -105,19 +255,33 @@ Item {
                         }
                     }
                 }
+>>>>>>> main
             }
+
         }
+
+        layer.effect: OpacityMask {
+
+            maskSource: Rectangle {
+                width: flickable.width
+                height: flickable.height
+                radius: Appearance.rounding.small
+            }
+
+        }
+
     }
 
+<<<<<<< HEAD
+    // Placeholder when list is empty
+    Item {
+=======
     Item {
         // Placeholder when list is empty
+>>>>>>> main
         visible: opacity > 0
         opacity: taskList.length === 0 ? 1 : 0
         anchors.fill: parent
-
-        Behavior on opacity {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-        }
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -129,6 +293,7 @@ Item {
                 color: Appearance.m3colors.m3outline
                 text: emptyPlaceholderIcon
             }
+
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
                 font.pixelSize: Appearance.font.pixelSize.normal
@@ -136,6 +301,16 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 text: emptyPlaceholderText
             }
+
         }
+
+        Behavior on opacity {
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+        }
+
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> main
 }
