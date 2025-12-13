@@ -21,10 +21,7 @@ Item {
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
 
-    anchors {
-        top: parent.top
-        bottom: parent.bottom
-    }
+    Layout.fillHeight: true
     implicitWidth: listView.implicitWidth
     
     StyledListView {

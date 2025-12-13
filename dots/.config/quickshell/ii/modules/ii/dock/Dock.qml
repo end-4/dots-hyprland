@@ -97,7 +97,7 @@ Scope { // Scope
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: 3
+                            // spacing: 3
                             property real padding: 5
 
                             VerticalButtonGroup {
@@ -125,10 +125,7 @@ Scope { // Scope
                             }
                             DockSeparator {}
                             DockButton {
-                                anchors {
-                                    top: parent.top
-                                    bottom: parent.bottom
-                                }
+                                Layout.fillHeight: true
                                 onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
                                 topInset: dockRow.padding
                                 bottomInset: dockRow.padding
