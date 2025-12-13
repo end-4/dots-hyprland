@@ -35,14 +35,14 @@ Scope { // Scope
                 right: true
             }
 
-            exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.elevationMargin : 0
+            exclusiveZone: root.pinned ? implicitHeight : 0
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
             WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
-            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
+            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.hyprlandGapsOut
 
             mask: Region {
                 item: dockMouseArea
@@ -56,7 +56,7 @@ Scope { // Scope
                     topMargin: dockRoot.reveal ? 0 : Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
                     horizontalCenter: parent.horizontalCenter
                 }
-                implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
+                implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.hyprlandGapsOut
                 hoverEnabled: true
 
                 Behavior on anchors.topMargin {
@@ -73,7 +73,6 @@ Scope { // Scope
                         anchors {
                             top: parent.top
                             bottom: parent.bottom
-                            topMargin: Appearance.sizes.elevationMargin
                             bottomMargin: Appearance.sizes.hyprlandGapsOut
                             horizontalCenter: parent.horizontalCenter
                         }
