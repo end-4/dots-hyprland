@@ -85,7 +85,7 @@ Scope { // Scope
                         }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
-                            property real margin: Appearance.sizes.elevationMargin
+                            property real margin: Appearance.sizes.hyprlandGapsOut
                             anchors.fill: parent
                             color: Appearance.colors.colLayer0
                             border.width: 1
