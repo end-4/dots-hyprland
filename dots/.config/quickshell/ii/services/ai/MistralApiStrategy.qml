@@ -58,8 +58,17 @@ ApiStrategy {
         // Real stuff
         try {
             const dataJson = JSON.parse(cleanData);
+
+            // Error response handling
+            if (dataJson.error) {
+                const errorMsg = `**Error**: ${dataJson.error.message || JSON.stringify(dataJson.error)}`;
+                message.rawContent += errorMsg;
+                message.content += errorMsg;
+                return { finished: true };
+            }
+
             let newContent = "";
-            
+
             const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
             const responseReasoning = dataJson.choices[0]?.delta?.reasoning || dataJson.choices[0]?.delta?.reasoning_content;
 
