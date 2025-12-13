@@ -183,7 +183,7 @@ MouseArea { // Notification group area
                     RowLayout {
                         id: topTextRow
                         anchors.left: parent.left
-                        anchors.right: expandButton.left
+                        anchors.right: headerButtons.left
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 5
                         StyledText {
@@ -210,18 +210,56 @@ MouseArea { // Notification group area
                             color: Appearance.colors.colSubtext
                         }
                     }
-                    NotificationGroupExpandButton {
-                        id: expandButton
+                    Row {
+                        id: headerButtons
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        count: root.notificationCount
-                        expanded: root.expanded
-                        fontSize: topRow.fontSize
-                        onClicked: { root.toggleExpanded() }
-                        altAction: () => { root.toggleExpanded() }
+                        spacing: 5
 
-                        StyledToolTip {
-                            text: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                        RippleButton {
+                            id: dismissGroupButton
+                            visible: root.multipleNotifications
+                            implicitHeight: expandButton.implicitHeight
+                            implicitWidth: expandButton.implicitHeight
+                            
+                            buttonRadius: Appearance.rounding.full
+                            
+                            colBackground: ColorUtils.mix(Appearance.colors.colLayer2, Appearance.colors.colLayer2Hover, 0.5)
+                            colBackgroundHover: Appearance.colors.colLayer2Hover
+                            colRipple: Appearance.colors.colLayer2Active
+                            
+                            onClicked: {
+                                root.destroyWithAnimation()
+                            }
+
+                            contentItem: Item {
+                                anchors.fill: parent
+                                MaterialSymbol {
+                                    anchors.centerIn: parent
+                                    text: "close"
+                                    iconSize: expandButton.iconSize
+                                    color: Appearance.colors.colOnLayer2
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+                            }
+
+                            StyledToolTip {
+                                text: Translation.tr("Dismiss group")
+                            }
+                        }
+
+                        NotificationGroupExpandButton {
+                            id: expandButton
+                            count: root.notificationCount
+                            expanded: root.expanded
+                            fontSize: topRow.fontSize
+                            onClicked: { root.toggleExpanded() }
+                            altAction: () => { root.toggleExpanded() }
+
+                            StyledToolTip {
+                                text: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                            }
                         }
                     }
                 }
