@@ -39,6 +39,7 @@ Scope { // Scope
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
+            WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
             implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
