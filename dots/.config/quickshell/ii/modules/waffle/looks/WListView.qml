@@ -6,5 +6,7 @@ import QtQuick.Controls
 ListView {
     id: root
 
+    boundsBehavior: Flickable.DragOverBounds
+    
     ScrollBar.vertical: WScrollBar {}
 }

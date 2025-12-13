@@ -70,6 +70,19 @@ Scope {
         }
     }
 
+    function toggleClipboard() {
+        if (LauncherSearch.query.startsWith(Config.options.search.prefix.clipboard) || !GlobalStates.searchOpen) {
+            GlobalStates.searchOpen = !GlobalStates.searchOpen;
+        }
+        LauncherSearch.ensurePrefix(Config.options.search.prefix.clipboard);
+    }
+    function toggleEmojis() {
+        if (LauncherSearch.query.startsWith(Config.options.search.prefix.emojis) || !GlobalStates.searchOpen) {
+            GlobalStates.searchOpen = !GlobalStates.searchOpen;
+        }
+        LauncherSearch.ensurePrefix(Config.options.search.prefix.emojis);
+    }
+
     IpcHandler {
         target: "search"
 
@@ -117,6 +130,24 @@ Scope {
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = false;
+        }
+    }
+
+    GlobalShortcut {
+        name: "overviewClipboardToggle"
+        description: "Toggle clipboard query on overview widget"
+
+        onPressed: {
+            root.toggleClipboard();
+        }
+    }
+
+    GlobalShortcut {
+        name: "overviewEmojiToggle"
+        description: "Toggle emoji query on overview widget"
+
+        onPressed: {
+            root.toggleEmojis();
         }
     }
 }

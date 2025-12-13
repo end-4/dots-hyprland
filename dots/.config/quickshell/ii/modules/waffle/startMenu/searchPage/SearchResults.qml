@@ -5,6 +5,7 @@ import qs.modules.common
 import qs.modules.waffle.looks
 import qs.modules.common.functions
 import qs.modules.common.models
+import qs.modules.waffle.startMenu
 import Quickshell
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -119,7 +120,7 @@ RowLayout {
         onModelChanged: {
             root.focusFirstItem();
         }
-        delegate: WSearchResultButton {
+        delegate: SearchResultButton {
             required property int index
             required property var modelData
             entry: modelData
@@ -201,6 +202,16 @@ RowLayout {
                         }),
                         ...(isAppEntry ? [
                             searchResultComp.createObject(null, {
+                                name: startPinned ? Translation.tr("Unpin from Start") : Translation.tr("Pin to Start"),
+                                iconName: startPinned ? "keep_off" : "keep",
+                                iconType: LauncherSearchResult.IconType.Material,
+                                execute: () => {
+                                    LauncherApps.togglePin(appId);
+                                }
+                            })
+                        ] : []),
+                        ...(isAppEntry ? [
+                            searchResultComp.createObject(null, {
                                 name: pinned ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar"),
                                 iconName: pinned ? "keep_off" : "keep",
                                 iconType: LauncherSearchResult.IconType.Material,
@@ -209,20 +220,6 @@ RowLayout {
                                 }
                             })
                         ] : []),
-                        ...(isAppEntry ? [
-                            searchResultComp.createObject(null, {
-                                name: startPinned ? Translation.tr("Unpin from start") : Translation.tr("Pin to start"),
-                                iconName: startPinned ? "keep_off" : "keep",
-                                iconType: LauncherSearchResult.IconType.Material,
-                                execute: () => {
-                                    if (Config.options.launcher.pinnedApps.indexOf(appId) !== -1) {
-                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.filter(id => id !== appId)
-                                    } else {
-                                        Config.options.launcher.pinnedApps = Config.options.launcher.pinnedApps.concat([appId])
-                                    }
-                                }
-                            })
-                        ] : [])
                     ];
                     result = result.concat(resultPreview.entry.actions);
                     return result;

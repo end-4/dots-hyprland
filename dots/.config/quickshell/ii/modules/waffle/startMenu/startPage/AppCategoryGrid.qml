@@ -13,11 +13,11 @@ import qs.modules.waffle.looks
 Rectangle {
     id: root
     property AggregatedAppCategoryModel aggregatedCategory
-    property list<DesktopEntry> desktopEntries: DesktopEntries.applications.values.filter(app => {
+    property list<DesktopEntry> desktopEntries: [...DesktopEntries.applications.values.filter(app => {
         const appCategories = app.categories;
         const gridCategories = root.aggregatedCategory.categories;
         return appCategories.some(cat => gridCategories.indexOf(cat) !== -1);
-    })
+    })].sort((a, b) => a.name.localeCompare(b.name));
 
     property Item windowRootItem: {
         var item = root;
@@ -90,7 +90,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "x"
-                from: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 3 / 2
+                from: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 5 / 2
                 to: categoryFolderPopup.windowCenterPoint.x - categoryFolderPopup.width / 2
                 duration: 300
                 easing.type: Easing.BezierSpline
@@ -99,7 +99,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "y"
-                from: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height / 2
+                from: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height * 3 / 2
                 to: categoryFolderPopup.windowCenterPoint.y - categoryFolderPopup.height / 2
                 duration: 300
                 easing.type: Easing.BezierSpline
@@ -120,7 +120,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "x"
-                to: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 3 / 2
+                to: categoryFolderPopup.originPoint.x - categoryOpenButtonLoader.width * 5 / 2
                 duration: 200
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Looks.transition.easing.bezierCurve.easeOut
@@ -128,7 +128,7 @@ Rectangle {
             NumberAnimation {
                 target: categoryFolderPopup
                 property: "y"
-                to: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height / 2
+                to: categoryFolderPopup.originPoint.y - categoryOpenButtonLoader.height * 3 / 2
                 duration: 200
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Looks.transition.easing.bezierCurve.easeOut
@@ -147,10 +147,13 @@ Rectangle {
         background: null
 
         Loader {
+            id: folderContentLoader
             active: categoryFolderPopup.visible
-            sourceComponent: CategoryFolderContent {
-                title: root.aggregatedCategory.name
-                desktopEntries: root.desktopEntries
+            sourceComponent: WRectangularShadowThis {
+                CategoryFolderContent {
+                    title: root.aggregatedCategory.name
+                    desktopEntries: root.desktopEntries
+                }
             }
         }
     }
@@ -271,6 +274,9 @@ Rectangle {
         id: smallGridAppButton
         property DesktopEntry desktopEntry
 
+        property bool pinnedStart: LauncherApps.isPinned(smallGridAppButton.desktopEntry.id);
+        property bool pinnedTaskbar: TaskbarApps.isPinned(smallGridAppButton.desktopEntry.id);
+
         onClicked: {
             GlobalStates.searchOpen = false;
             desktopEntry.execute();
@@ -294,6 +300,30 @@ Rectangle {
 
         WToolTip {
             text: smallGridAppButton.desktopEntry.name
+        }
+
+        altAction: () => {
+            appMenu.popup();
+        }
+
+        WMenu {
+            id: appMenu
+            downDirection: true
+
+            WMenuItem {
+                icon.name: smallGridAppButton.pinnedStart ? "pin-off" : "pin"
+                text: smallGridAppButton.pinnedStart ? Translation.tr("Unpin from Start") : Translation.tr("Pin to Start")
+                onTriggered: {
+                    LauncherApps.togglePin(smallGridAppButton.desktopEntry.id);
+                }
+            }
+            WMenuItem {
+                icon.name: smallGridAppButton.pinnedTaskbar ? "pin-off" : "pin"
+                text: smallGridAppButton.pinnedTaskbar ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar")
+                onTriggered: {
+                    TaskbarApps.togglePin(smallGridAppButton.desktopEntry.id);
+                }
+            }
         }
     }
 
