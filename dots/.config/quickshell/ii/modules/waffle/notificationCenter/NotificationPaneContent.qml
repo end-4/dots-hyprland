@@ -53,10 +53,9 @@ BodyRectangle {
             }
         }
 
-        StyledListView {
+        WListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            animateAppearance: false
             clip: true
 
             model: Notifications.appNameList
