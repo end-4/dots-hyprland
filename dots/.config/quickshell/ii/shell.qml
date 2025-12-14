@@ -122,23 +122,19 @@ ShellRoot {
     }
 
     Timer { // wallpaper timer
-        id: rotationTimer
-        interval: Config.options.background.slideInterval * 60000
-        running: Config.options.background.enableSlide
+        id: enableSlideshow
+        interval: Math.max(1, Config.options.background.slideshowInterval) * 60000 // min -> ms
+        running: Config.options.background.enableSlideshow
         repeat: true
-
         onTriggered: {
-            console.log("[Wallpaper] Timer disparado. Trocando wallpaper...");
+            console.log("[Wallpaper] Timer triggered. Cycling wallpaper...");
             Wallpapers.randomFromCurrentFolder();
         }
     }
-
     Connections {
         target: Config.options.background
-        function onRotationIntervalChanged() {
-            if (rotationTimer.running) {
-                rotationTimer.restart();
-            }
+        function onSlideshowIntervalChanged() {
+            if (enableSlideshow.running) enableSlideshow.restart();
         }
     }
 
