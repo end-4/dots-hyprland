@@ -51,20 +51,17 @@ Item {
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
     
-    function getWsRow(ws)
-    {
+    function getWsRow(ws) {
         // 1-indexed workspace, 0-indexed row
         var normalRow = Math.floor((ws - 1) / Config.options.overview.columns) % Config.options.overview.rows;
         return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - normalRow - 1 : normalRow);
     }
-    function getWsColumn(ws)
-    {
+    function getWsColumn(ws) {
         // 1-indexed workspace, 0-indexed column
         var normalCol = (ws - 1) % Config.options.overview.columns;
         return (Config.options.overview.orderRightLeft ? Config.options.overview.columns - normalCol - 1 : normalCol);
     }
-    function getWsInCell(ri, ci)
-    {
+    function getWsInCell(ri, ci) {
         // 1-indexed workspace, 0-indexed row and column index
         return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - ri - 1 : ri) * Config.options.overview.columns + (Config.options.overview.orderRightLeft ? Config.options.overview.columns - ci - 1 : ci) + 1
     }
