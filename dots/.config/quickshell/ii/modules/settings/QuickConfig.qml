@@ -222,24 +222,21 @@ ContentPage {
             Layout.fillWidth: true
             ConfigSwitch {
                 buttonIcon: "shuffle"
-                text: Translation.tr("Wallpaper slideshow")
-                checked: Config.options.background.enableSlide
+                text: Translation.tr("Wallpaper Slideshow")
+                checked: Config.options.background.enableSlideshow
                 onCheckedChanged: {
-                    Config.options.background.enableSlide = checked;
-                }
-                StyledToolTip {
-                    text: "Note that the wallpapers are chosen from your defined wallpaper folder, and not from web"
+                    Config.options.background.enableSlideshow = checked;
                 }
             }
             ConfigSpinBox {
                 icon: "timer"
-                text: Translation.tr("Wallpaper change timer")
-                value: Config.options.background.slideInterval
+                text: Translation.tr("Change every (min)")
+                value: Config.options.background.slideshowInterval
                 from: 1
-                to: 60
+                to: 1440
                 stepSize: 1
                 onValueChanged: {
-                    Config.options.background.slideInterval = value;
+                    Config.options.background.slideshowInterval = value;
                 }
             }
         }
