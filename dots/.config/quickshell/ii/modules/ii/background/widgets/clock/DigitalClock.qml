@@ -16,12 +16,12 @@ ColumnLayout {
 
     property bool isVertical: Config.options.background.widgets.clock.digital.vertical
     property color colText: Appearance.colors.colOnSecondaryContainer
-    property string textHorizontalAlignment: Text.AlignHCenter
+    property var textHorizontalAlignment: Text.AlignHCenter
 
     ClockText {
         id: timeTextTop
         text: clockColumn.isVertical ? DateTime.time.substring(0, 2) : DateTime.time
-        color: root.colText
+        color: clockColumn.colText
         horizontalAlignment: Text.AlignHCenter
         font {
             pixelSize: Config.options.background.widgets.clock.digital.font.size
@@ -38,7 +38,7 @@ ColumnLayout {
         id: timeTextBottom
         text: DateTime.time.substring(3, 5)
         visible: clockColumn.isVertical
-        color: root.colText
+        color: clockColumn.colText
         Layout.topMargin: -40
         horizontalAlignment: Text.AlignHCenter
         font {
@@ -56,16 +56,16 @@ ColumnLayout {
         visible: Config.options.background.widgets.clock.digital.showDate
         Layout.topMargin: -20
         text: DateTime.longDate
-        color: root.colText
-        horizontalAlignment: root.textHorizontalAlignment
+        color: clockColumn.colText
+        horizontalAlignment: clockColumn.textHorizontalAlignment
     }
     ClockText {
         visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
         font.pixelSize: Appearance.font.pixelSize.normal
         text: Config.options.background.widgets.clock.quote.text
         animateChange: false
-        color: root.colText
-        horizontalAlignment: root.textHorizontalAlignment
+        color: clockColumn.colText
+        horizontalAlignment: clockColumn.textHorizontalAlignment
     }
 }
 
