@@ -143,6 +143,7 @@
   "Make sure your player has MPRIS support\nor try turning off duplicate player filtering": "Make sure your player has MPRIS support\nor try turning off duplicate player filtering",
   "Pause": "Pause",
   "Desktop": "Desktop",
+  "Scratchpad": "Scratchpad",
   "Conflicts with the shell's system tray implementation": "Conflicts with the shell's system tray implementation",
   "Your package manager is running": "Your package manager is running",
   "Conflicts with the shell's notification implementation": "Conflicts with the shell's notification implementation",
