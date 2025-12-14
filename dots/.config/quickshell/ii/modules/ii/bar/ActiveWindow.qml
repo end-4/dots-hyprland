@@ -30,7 +30,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace.id === root.currentWorkspaceID ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
                 root.activeWindow?.appId :
                 Translation.tr("Desktop")
 
@@ -41,7 +41,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace.id === root.currentWorkspaceID ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
                 root.activeWindow?.title :
                 `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
         }
