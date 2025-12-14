@@ -31,6 +31,7 @@ ColumnLayout {
             font {
                 pixelSize: Config.options.background.widgets.clock.digital.font.size
                 weight: Config.options.background.widgets.clock.digital.font.weight
+                family: Config.options.background.widgets.clock.digital.font.family
                 variableAxes: ({
                     "wdth": Config.options.background.widgets.clock.digital.font.width,
                     "ROND": Config.options.background.widgets.clock.digital.font.roundness
@@ -49,6 +50,7 @@ ColumnLayout {
             font {
                 pixelSize: Config.options.background.widgets.clock.digital.font.size
                 weight: Config.options.background.widgets.clock.digital.font.weight
+                family: Config.options.background.widgets.clock.digital.font.family
                 variableAxes: ({
                     "wdth": Config.options.background.widgets.clock.digital.font.width,
                     "ROND": Config.options.background.widgets.clock.digital.font.roundness

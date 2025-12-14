@@ -219,6 +219,16 @@ ContentPage {
                 }
             }
 
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Font family (e.g., Google Sans Flex)")
+                text: Config.options.background.widgets.clock.digital.font.family
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.background.widgets.clock.digital.font.family = text;
+                }
+            }
+
             
             ConfigSlider {
                 text: Translation.tr("Font weight")

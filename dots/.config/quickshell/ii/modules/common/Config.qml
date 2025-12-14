@@ -191,6 +191,7 @@ Singleton {
                             property bool animateChange: true
                             property bool vertical: false
                             property JsonObject font: JsonObject {
+                                property string family: "Google Sans Flex"
                                 property real weight: 350
                                 property real width: 100
                                 property real size: 90
