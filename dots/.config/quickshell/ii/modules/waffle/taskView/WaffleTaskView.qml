@@ -40,7 +40,7 @@ Scope {
 
                 WlrLayershell.namespace: "quickshell:wTaskView"
                 WlrLayershell.layer: WlrLayer.Overlay
-                // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
                 color: "transparent"
 
                 anchors {
@@ -54,13 +54,23 @@ Scope {
                     id: taskViewContent
                     anchors.fill: parent
 
+                    Component.onCompleted: {
+                        taskViewContent.forceActiveFocus();
+                    }
+                    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Escape) {
+                            GlobalStates.overviewOpen = false;
+                        }
+                    }
+
                     Connections {
                         target: GlobalStates
                         function onOverviewOpenChanged() {
-                            if (!GlobalStates.overviewOpen) taskViewContent.close();
+                            if (!GlobalStates.overviewOpen)
+                                taskViewContent.close();
                         }
                     }
-                    onClosed: panelLoader.active = false;
+                    onClosed: panelLoader.active = false
                 }
             }
         }
