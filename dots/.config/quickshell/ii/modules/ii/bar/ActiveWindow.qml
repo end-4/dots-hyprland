@@ -12,9 +12,8 @@ Item {
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
-    property string activeWindowAddress: `0x${activeWindow?.HyprlandToplevel?.address}`
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
+    property var currentWorkspaceID: HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]?.specialWorkspace.id || HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]?.activeWorkspace.id
 
     implicitWidth: colLayout.implicitWidth
 
@@ -31,9 +30,9 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace.id === root.currentWorkspaceID ? 
                 root.activeWindow?.appId :
-                (root.biggestWindow?.class) ?? Translation.tr("Desktop")
+                Translation.tr("Desktop")
 
         }
 
@@ -42,9 +41,9 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace.id === root.currentWorkspaceID ? 
                 root.activeWindow?.title :
-                (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
+                `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
         }
 
     }

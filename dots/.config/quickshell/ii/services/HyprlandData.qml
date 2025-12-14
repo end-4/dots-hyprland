@@ -18,11 +18,13 @@ Singleton {
     property var workspaceIds: []
     property var workspaceById: ({})
     property var activeWorkspace: null
+    property var activeWindow: null
     property var monitors: []
     property var layers: ({})
 
-    function updateWindowList() {
+    function updateWindows() {
         getClients.running = true;
+        getActiveWindow.running = true;
     }
 
     function updateLayers() {
@@ -39,7 +41,7 @@ Singleton {
     }
 
     function updateAll() {
-        updateWindowList();
+        updateWindows();
         updateMonitors();
         updateLayers();
         updateWorkspaces();
@@ -81,6 +83,17 @@ Singleton {
                 }
                 root.windowByAddress = tempWinByAddress;
                 root.addresses = root.windowList.map(win => win.address);
+            }
+        }
+    }
+
+    Process {
+        id: getActiveWindow
+        command: ["hyprctl", "activewindow", "-j"]
+        stdout: StdioCollector {
+            id: activeWindowCollector
+            onStreamFinished: {
+                root.activeWindow = JSON.parse(activeWindowCollector.text)
             }
         }
     }
