@@ -25,47 +25,60 @@ WMouseAreaButton {
 
     property string iconName: AppSearch.guessIcon(hyprlandClient?.class)
 
-    color: containsMouse ? Looks.colors.bg1Base : Looks.colors.bgPanelFooterBase
-    borderColor: Looks.colors.bg2Border
+    color: drag.active ? ColorUtils.transparentize(Looks.colors.bg1Base) : (containsMouse ? Looks.colors.bg1Base : Looks.colors.bgPanelFooterBase)
+    borderColor: ColorUtils.transparentize(Looks.colors.bg2Border, drag.active ? 1 : 0)
     radius: Looks.radius.xLarge
 
-    property size size: WindowLayout.scaleWindow(hyprlandClient, maxWidth, maxHeight)
+    property real titleBarImplicitHeight: titleBar.implicitHeight
+    property bool scaleSize: true
+    property size openedSize: WindowLayout.scaleWindow(hyprlandClient, maxWidth, maxHeight);
+    property size fullSize: Qt.size(hyprlandClient?.size[0] ?? maxWidth, hyprlandClient?.size[1] ?? maxHeight)
+    property size size: scaleSize ? openedSize : fullSize
     implicitWidth: Math.max(Math.round(contentItem.implicitWidth), 138)
     implicitHeight: Math.round(contentItem.implicitHeight)
 
     layer.enabled: true
     layer.effect: OpacityMask {
-        maskSource: Rectangle {
+        maskSource: Item {
             width: root.background.width
             height: root.background.height
-            radius: root.background.radius
+            Rectangle {
+                radius: root.background.radius
+                anchors {
+                    fill: parent
+                    topMargin: root.drag.active ? root.titleBarImplicitHeight : 0
+                }
+            }
         }
     }
-    scale: (root.pressedButtons & Qt.LeftButton) ? 0.95 : 1
+    property bool droppable: false
+    scale: (root.pressedButtons & Qt.LeftButton || root.Drag.active) ? (droppable ? 0.4 : 0.95) : 1
     Behavior on scale {
         NumberAnimation {
             id: scaleAnim
-            duration: 300
+            duration: 200
             easing.type: Easing.OutExpo
         }
     }
 
     function closeWindow() {
-        Hyprland.dispatch(`closewindow address:${root.hyprlandClient?.address}`)
+        Hyprland.dispatch(`closewindow address:${root.hyprlandClient?.address}`);
     }
 
     acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
-    onClicked: (event) => {
+    onClicked: event => {
         if (event.button === Qt.LeftButton) {
-            GlobalStates.overviewOpen = false
-            Hyprland.dispatch(`focuswindow address:${root.hyprlandClient?.address}`)
+            GlobalStates.overviewOpen = false;
+            Hyprland.dispatch(`focuswindow address:${root.hyprlandClient?.address}`);
             GlobalStates.overviewOpen = false;
         } else if (event.button === Qt.MiddleButton) {
             root.closeWindow();
             event.accepted = true;
         } else if (event.button === Qt.RightButton) {
-            if (!windowMenu.visible) windowMenu.popup();
-            else windowMenu.close();
+            if (!windowMenu.visible)
+                windowMenu.popup();
+            else
+                windowMenu.close();
         }
     }
 
@@ -77,6 +90,8 @@ WMouseAreaButton {
         spacing: 0
 
         RowLayout {
+            id: titleBar
+            opacity: root.drag.active ? 0 : 1
             spacing: 8
             WAppIcon {
                 Layout.leftMargin: 10
@@ -104,6 +119,14 @@ WMouseAreaButton {
             Layout.alignment: Qt.AlignHCenter
             implicitWidth: Math.round(root.size.width)
             implicitHeight: Math.round(root.size.height)
+            constraintSize: Qt.size(Math.round(root.size.width), Math.round(root.size.height))
+
+            Behavior on implicitWidth {
+                animation: Looks.transition.enter.createObject(this)
+            }
+            Behavior on implicitHeight {
+                animation: Looks.transition.enter.createObject(this)
+            }
 
             captureSource: root.toplevel ?? null
             live: true
@@ -120,7 +143,7 @@ WMouseAreaButton {
             icon.name: isPinned ? "checkmark" : "empty"
             text: Translation.tr("Show this window on all desktops")
             onTriggered: {
-                Hyprland.dispatch(`pin address:${root.hyprlandClient?.address}`)
+                Hyprland.dispatch(`pin address:${root.hyprlandClient?.address}`);
             }
         }
         Action {

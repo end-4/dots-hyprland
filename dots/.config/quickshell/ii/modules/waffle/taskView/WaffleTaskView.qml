@@ -23,7 +23,14 @@ Scope {
         Loader {
             id: panelLoader
             required property var modelData
-            active: GlobalStates.overviewOpen
+            active: false
+            Connections {
+                target: GlobalStates
+                function onOverviewOpenChanged() {
+                    if (GlobalStates.overviewOpen)
+                        panelLoader.active = true;
+                }
+            }
             sourceComponent: PanelWindow {
                 id: root
                 property string searchingText: ""
@@ -44,7 +51,16 @@ Scope {
                 }
 
                 TaskViewContent {
+                    id: taskViewContent
                     anchors.fill: parent
+
+                    Connections {
+                        target: GlobalStates
+                        function onOverviewOpenChanged() {
+                            if (!GlobalStates.overviewOpen) taskViewContent.close();
+                        }
+                    }
+                    onClosed: panelLoader.active = false;
                 }
             }
         }

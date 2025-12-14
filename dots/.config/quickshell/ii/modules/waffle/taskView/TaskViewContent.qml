@@ -16,10 +16,16 @@ Rectangle {
     id: root
 
     color: ColorUtils.transparentize(Looks.colors.bg1Base, 0.5)
+    property bool draggingWindow: false
     property real openProgress: 0
+    property Item hoveredWorkspace: null
+    signal closed
 
     Component.onCompleted: {
         openAnim.start();
+    }
+    function close() {
+        closeAnim.start();
     }
 
     PropertyAnimation {
@@ -27,18 +33,26 @@ Rectangle {
         target: root
         property: "openProgress"
         to: 1
-        duration: 200
+        duration: 250
         easing.type: Easing.BezierSpline
         easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
     }
-    PropertyAnimation {
+    SequentialAnimation {
         id: closeAnim
-        target: root
-        property: "openProgress"
-        to: 0
-        duration: 200
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
+
+        PropertyAnimation {
+            target: root
+            property: "openProgress"
+            to: 0
+            duration: 200
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
+        }
+        ScriptAction {
+            script: {
+                root.closed();
+            }
+        }
     }
 
     // Windows
@@ -81,8 +95,18 @@ Rectangle {
         return resultLayout;
     }
 
+    MouseArea {
+        z: 0
+        anchors.fill: parent
+        onClicked: {
+            GlobalStates.overviewOpen = false;
+        }
+    }
+
     // Windows
     WListView {
+        id: windowListView
+        z: root.openProgress == 1 ? 2 : 1
         anchors {
             left: parent.left
             right: parent.right
@@ -96,9 +120,8 @@ Rectangle {
         rightMargin: root.padding
         height: Math.min(contentHeight + topMargin + bottomMargin, root.height - (wsBorder.height + 16))
 
-        interactive: height < contentHeight
-
-        clip: true
+        interactive: (height < contentHeight) && !root.draggingWindow
+        clip: root.openProgress > 0.99 && !root.draggingWindow
 
         model: ScriptModel {
             values: root.arrangedToplevels
@@ -107,7 +130,7 @@ Rectangle {
             id: clientRow
             required property var modelData
             spacing: root.spacing
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenter: parent?.horizontalCenter ?? undefined
 
             Repeater {
                 model: ScriptModel {
@@ -117,24 +140,61 @@ Rectangle {
                     id: clientGridArea
                     required property int index
                     required property var modelData
-                    implicitWidth: windowItem.implicitWidth
-                    implicitHeight: windowItem.implicitHeight
+                    implicitWidth: windowItem.openedSize.width
+                    implicitHeight: windowItem.openedSize.height + windowItem.titleBarImplicitHeight
 
                     TaskViewWindow {
                         id: windowItem
-                        z: 9999
-                        drag {
-                            target: this
+                        z: Drag.active ? 2 : 1
+                        opacity: openAnim.running ? root.openProgress : 1
+
+                        property int mappedX: {
+                            // print("AAAWAWAAWAWWA: ", -(clientRow.x + clientGridArea.x + root.padding));
+                            var rootPosToThis = -(clientRow.x + clientGridArea.x + root.padding);
+                            return rootPosToThis + hyprlandClient.at[0];
+                        }
+                        property int mappedY: {
+                            // print("AAAWAWAAWAWWA YYYY YUIUSDFOIU: ", clientRow.y + windowListView.y + root.padding + windowItem.titleBarImplicitHeight)
+                            var rootPosToThis = -(clientRow.y + windowListView.y + root.padding + windowItem.titleBarImplicitHeight);
+                            return rootPosToThis + hyprlandClient.at[1];
+                        }
+                        property int openedX: 0
+                        property int openedY: 0
+                        // property int openedX: Drag.active ? (dragHandler.xAxis.activeValue) : 0
+                        // property int openedY: Drag.active ? (dragHandler.yAxis.activeValue) : 0
+                        scaleSize: (root.openProgress > 0 && !closeAnim.running)
+                        x: mappedX + (openedX - mappedX) * root.openProgress
+                        y: mappedY + (openedY - mappedY) * root.openProgress
+
+                        droppable: root.hoveredWorkspace !== null
+                        Drag.active: dragHandler.active
+                        Drag.hotSpot.x: mouseX
+                        Drag.hotSpot.y: mouseY
+
+                        DragHandler {
+                            id: dragHandler
+                            target: null
+                            xAxis.onActiveValueChanged: {
+                                windowItem.openedX = dragHandler.xAxis.activeValue;
+                            }
+                            yAxis.onActiveValueChanged: {
+                                windowItem.openedY = dragHandler.yAxis.activeValue;
+                            }
                             onActiveChanged: {
-                                if (drag.active) {
-                                    parent = root;
+                                if (active) {
+                                    root.draggingWindow = true;
                                 } else {
-                                    parent = clientGridArea;
-                                    x = 0;
-                                    y = 0;
+                                    root.draggingWindow = false;
+                                    if (root.hoveredWorkspace !== null && root.hoveredWorkspace.workspace !== windowItem.hyprlandClient.workspace.id) {
+                                        Hyprland.dispatch(`movetoworkspacesilent ${root.hoveredWorkspace.workspace}, address:${windowItem.hyprlandClient.address}`);
+                                    } else {
+                                        windowItem.openedX = 0;
+                                        windowItem.openedY = 0;
+                                    }
                                 }
                             }
                         }
+
                         Layout.alignment: Qt.AlignTop
                         maxHeight: root.maxWindowHeight
                         maxWidth: root.maxWindowWidth
@@ -148,6 +208,7 @@ Rectangle {
     // Workspaces
     Rectangle {
         id: wsBorder
+        z: root.openProgress == 1 ? 1 : 2
         property real sourceEdgeMargin: -(height + 8) + root.openProgress * (height + 16)
         anchors {
             left: parent.left
@@ -210,9 +271,29 @@ Rectangle {
                     }
                 }
                 delegate: TaskViewWorkspace {
+                    id: workspaceItem
                     required property int index
                     workspace: index + 1
                     newWorkspace: index == workspaceIndexModel.count - 1
+
+                    droppable: root.hoveredWorkspace === workspaceItem
+                    DropArea {
+                        anchors.fill: parent
+                        onEntered: drag => {
+                            root.hoveredWorkspace = workspaceItem;
+                        }
+                        onExited: {
+                            if (root.hoveredWorkspace === workspaceItem) {
+                                root.hoveredWorkspace = null;
+                            }
+                        }
+                    }
+
+                    onClicked: {
+                        GlobalStates.overviewOpen = false;
+                        root.closed(); // Close immediately to avoid weird animations
+                        Hyprland.dispatch(`workspace ${workspaceItem.workspace}`);
+                    }
                 }
             }
         }
