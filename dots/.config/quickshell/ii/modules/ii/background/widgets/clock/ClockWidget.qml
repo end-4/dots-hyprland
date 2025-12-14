@@ -63,7 +63,9 @@ AbstractBackgroundWidget {
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "digital" && (root.shouldShow)
             fade: false
-            sourceComponent: DigitalClock {}
+            sourceComponent: DigitalClock {
+                colText: root.colText
+            }
         }
         StatusRow {
             anchors.horizontalCenter: parent.horizontalCenter
