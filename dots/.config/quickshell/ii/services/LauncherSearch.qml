@@ -45,7 +45,7 @@ Singleton {
                     action: actionName,
                     execute: ((path) => (args) => {
                         Quickshell.execDetached([path, ...(args ? args.split(" ") : [])]);
-                    })(filePath.toString().replace("file://", ""))
+                    })(FileUtils.trimFileProtocol(filePath.toString()))
                 });
             }
         }
@@ -54,7 +54,7 @@ Singleton {
 
     FolderListModel {
         id: userActionsFolder
-        folder: `file://${Directories.userActions}`
+        folder: Qt.resolvedUrl(Directories.userActions)
         showDirs: false
         showHidden: false
         sortField: FolderListModel.Name
