@@ -67,6 +67,22 @@ rsync_dir__sync(){
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
+rsync_dir__sync_exclude(){
+  # NOTE: This function is only for using in other functions
+  # Same as rsync_dir__sync but with exclude patterns support
+  # Usage: rsync_dir__sync_exclude <src> <dest> <exclude_pattern1> [<exclude_pattern2> ...]
+  local src="$1"
+  local dest_dir="$2"
+  shift 2
+  local excludes=()
+  for pattern in "$@"; do
+    excludes+=(--exclude "$pattern")
+  done
+  x mkdir -p "$dest_dir"
+  local dest="$(realpath -se $dest_dir)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  rsync -a --delete "${excludes[@]}" --out-format='%i %n' "$src"/ "$dest_dir"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+}
 function install_file(){
   # NOTE: Do not add prefix `v` or `x` when using this function
   local s=$1
@@ -123,6 +139,18 @@ function install_dir__skip_existed(){
     echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
     v rsync_dir $s $t
   fi
+}
+function install_dir__sync_exclude(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  # Sync directory with exclude patterns
+  # Usage: install_dir__sync_exclude <src> <dest> <exclude_pattern1> [<exclude_pattern2> ...]
+  local s=$1
+  local t=$2
+  shift 2
+  if [ -d $t ];then
+    warning_overwrite
+  fi
+  rsync_dir__sync_exclude $s $t "$@"
 }
 function install_google_sans_flex(){
   local font_name="Google Sans Flex"

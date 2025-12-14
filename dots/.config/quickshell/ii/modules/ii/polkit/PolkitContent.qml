@@ -86,7 +86,7 @@ Item {
         }
 
         WindowDialogButtonRow {
-
+            Layout.bottomMargin: 10 // I honestly don't know why this is necessary
             Item {
                 Layout.fillWidth: true
             }

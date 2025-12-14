@@ -155,6 +155,11 @@ Singleton {
             property real larger: 15
             property real xlarger: 17
         }
+        property QtObject variableAxes: QtObject {
+            property var ui: ({
+                "wdth": 25
+            })
+        }
     }
 
     transition: QtObject {
@@ -172,7 +177,7 @@ Singleton {
 
         property Component color: Component {
             ColorAnimation {
-                duration: 120
+                duration: 80
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }

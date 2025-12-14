@@ -18,6 +18,18 @@ MouseArea {
     signal groupExpandToggle
     hoverEnabled: true
 
+    function dismiss() {
+        Qt.callLater(() => {
+            Notifications.discardNotification(root.notification?.notificationId);
+        });
+        removeAnimation.start();
+    }
+
+    WNotificationDismissAnim {
+        id: removeAnimation
+        target: root
+    }
+
     implicitHeight: contentItem.implicitHeight
     implicitWidth: contentItem.implicitWidth
 
@@ -25,9 +37,25 @@ MouseArea {
         animation: Looks.transition.enter.createObject(this)
     }
 
+    property real dragDismissThreshold: 100
+    drag {
+        axis: Drag.XAxis
+        target: contentItem
+        minimumX: 0
+        onActiveChanged: {
+            if (drag.active)
+                return;
+            if (contentItem.x > root.dragDismissThreshold) {
+                root.dismiss();
+            } else {
+                contentItem.x = 0;
+            }
+        }
+    }
+
     Rectangle {
         id: contentItem
-        anchors.fill: parent
+        width: parent.width
         color: Looks.colors.bgPanelBody
         radius: Looks.radius.medium
         property real padding: 12
@@ -35,6 +63,10 @@ MouseArea {
         implicitWidth: notificationContent.implicitWidth + padding * 2
         border.width: 1
         border.color: ColorUtils.applyAlpha(Looks.colors.ambientShadow, 0.1)
+
+        Behavior on x {
+            animation: Looks.transition.enter.createObject(this)
+        }
 
         ColumnLayout {
             id: notificationContent
@@ -128,11 +160,7 @@ MouseArea {
             opacity: root.containsMouse ? 1 : 0
             icon.name: "dismiss"
             implicitSize: 12
-            onClicked: {
-                Qt.callLater(() => {
-                    Notifications.discardNotification(root.notification?.notificationId);
-                });
-            }
+            onClicked: root.dismiss()
         }
     }
 
