@@ -13,7 +13,16 @@ Item {
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var currentWorkspaceID: HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]?.specialWorkspace.id || HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]?.activeWorkspace.id
+    property var hyprlandDataMonitor: HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]
+    property bool activeIsSpecialWorkspace: Boolean(hyprlandDataMonitor?.specialWorkspace.id)
+    property var currentWorkspaceID: activeIsSpecialWorkspace? hyprlandDataMonitor?.specialWorkspace.id : hyprlandDataMonitor?.activeWorkspace.id
+    property var currentWorkspaceName: activeIsSpecialWorkspace? 
+        capitalize(hyprlandDataMonitor?.specialWorkspace.name.replace("special:", "")) :
+        hyprlandDataMonitor?.activeWorkspace.name
+    
+    function capitalize(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
 
     implicitWidth: colLayout.implicitWidth
 
@@ -32,8 +41,9 @@ Item {
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
                 root.activeWindow?.appId :
-                Translation.tr("Desktop")
-
+                activeIsSpecialWorkspace ? 
+                    Translation.tr("Scratchpad") :
+                    Translation.tr("Desktop")
         }
 
         StyledText {
@@ -43,7 +53,9 @@ Item {
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
                 root.activeWindow?.title :
-                `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
+                activeIsSpecialWorkspace ?
+                    `${Translation.tr("Workspace")} ${currentWorkspaceName}` :
+                    `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
         }
 
     }
