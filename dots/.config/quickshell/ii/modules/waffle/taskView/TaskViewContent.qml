@@ -123,6 +123,18 @@ Rectangle {
                     TaskViewWindow {
                         id: windowItem
                         z: 9999
+                        drag {
+                            target: this
+                            onActiveChanged: {
+                                if (drag.active) {
+                                    parent = root;
+                                } else {
+                                    parent = clientGridArea;
+                                    x = 0;
+                                    y = 0;
+                                }
+                            }
+                        }
                         Layout.alignment: Qt.AlignTop
                         maxHeight: root.maxWindowHeight
                         maxWidth: root.maxWindowWidth
