@@ -22,7 +22,7 @@ Singleton {
 
     function logout() {
         closeAllWindows();
-        Quickshell.execDetached(["hyprshutdown", "&&, "pkill", "-i", "Hyprland"]);
+        Quickshell.execDetached(["hyprshutdown", "&&", "pkill", "-i", "Hyprland"]);
     }
 
     function launchTaskManager() {
