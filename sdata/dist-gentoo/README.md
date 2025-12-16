@@ -77,3 +77,4 @@ end
       * An ALIAS target is missing.
   ```
   Try putting ``sdata/dist-gentoo/hyprland-qtutils-private.patch`` into ``/etc/portage/patches/gui-libs/hyprland-qtutils/``.
+  - Patch Credit: fedeliallalinea on https://forums.gentoo.org/viewtopic-p-8874098.html  
