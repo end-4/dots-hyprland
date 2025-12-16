@@ -91,6 +91,7 @@ Item {
             focus: true
             enabled: PolkitService.interactionAvailable
             placeholderText: PolkitService.cleanPrompt
+            visible: !PolkitService.isFingerprintCurrentlyOffered
             echoMode: root.usePasswordChars ? TextInput.Password : TextInput.Normal
             onAccepted: root.submit();
 

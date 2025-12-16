@@ -12,6 +12,8 @@ Singleton {
     property alias active: polkitAgent.isActive
     property alias flow: polkitAgent.flow
     property bool interactionAvailable: false
+    property bool fingerprintAvailable: false
+    property bool isFingerprintCurrentlyOffered: false
     property string cleanMessage: {
         if (!root.flow) return "";
         return root.flow.message.endsWith(".")
