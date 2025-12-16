@@ -9,4 +9,15 @@ Singleton {
     
     property StackView stackView
 
+    function push(component) {
+        if (stackView) {
+            stackView.push(component)
+        }
+    }
+
+    function back() {
+        if (stackView && stackView.depth > 1) {
+            stackView.pop()
+        }
+    }
 }

@@ -10,14 +10,17 @@ WButton {
     id: root
 
     property alias iconName: iconContent.icon
-    inset: 0
+    property alias iconSize: iconContent.implicitSize
+    property alias monochrome: iconContent.monochrome
     implicitWidth: 40
     implicitHeight: 40
 
-    contentItem: FluentIcon {
-        id: iconContent
-        anchors.centerIn: parent
-        implicitSize: 18
-        icon: root.iconName
+    contentItem: Item {
+        FluentIcon {
+            id: iconContent
+            anchors.centerIn: parent
+            implicitSize: 18
+            icon: root.iconName
+        }
     }
 }

@@ -44,7 +44,7 @@ RowLayout {
 
         BarToolTip {
             extraVisibleCondition: overflowButton.shouldShowTooltip
-            text: qsTr("Show hidden icons")
+            text: Translation.tr("Show hidden icons")
         }
 
         DropArea {
@@ -105,8 +105,8 @@ RowLayout {
             BarToolTip {
                 id: pinTooltip
                 extraVisibleCondition: trayButton.Drag.active && pinDropArea.containsDrag && pinDropArea.willPin
-                realContentHorizontalPadding: 6
-                realContentVerticalPadding: 6
+                horizontalPadding: 6
+                verticalPadding: 6
                 realContentItem: FluentIcon {
                     anchors.centerIn: parent
                     icon: "pin-off"

@@ -1,13 +1,18 @@
 pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.models.quickToggles
 import qs.modules.common.widgets
 import qs.modules.waffle.looks
-import QtQuick
-import QtQuick.Layouts
-import Quickshell
+import qs.modules.waffle.actionCenter.bluetooth
+import qs.modules.waffle.actionCenter.nightLight
+import qs.modules.waffle.actionCenter.volumeControl
+import qs.modules.waffle.actionCenter.wifi
 
 DelegateChooser {
     id: root
@@ -19,13 +24,9 @@ DelegateChooser {
         ActionCenterToggleButton {
             toggleModel: AntiFlashbangToggle {}
             icon: "flash-off"
-        }
-    }
-    DelegateChoice {
-        roleValue: "audio"
-        ActionCenterToggleButton {
-            toggleModel: AudioToggle {}
-            icon: "speaker-2"
+            menu: Component {
+                NightLightControl {}
+            }
         }
     }
     DelegateChoice {
@@ -34,6 +35,9 @@ DelegateChooser {
             toggleModel: BluetoothToggle {}
             name: toggleModel.statusText
             icon: WIcons.bluetoothIcon
+            menu: Component {
+                BluetoothControl {}
+            }
         }
     }
     DelegateChoice {
@@ -83,6 +87,11 @@ DelegateChooser {
         ActionCenterToggleButton {
             toggleModel: MicToggle {}
             icon: WIcons.micIcon
+            menu: Component {
+                VolumeControl {
+                    output: false
+                }
+            }
         }
     }
     DelegateChoice {
@@ -98,6 +107,9 @@ DelegateChooser {
             toggleModel: NetworkToggle {}
             name: toggleModel.statusText
             icon: WIcons.internetIcon
+            menu: Component {
+                WifiControl {}
+            }
         }
     }
     DelegateChoice {
@@ -105,6 +117,9 @@ DelegateChooser {
         ActionCenterToggleButton {
             toggleModel: NightLightToggle {}
             icon: WIcons.nightLightIcon
+            menu: Component {
+                NightLightControl {}
+            }
         }
     }
     DelegateChoice {

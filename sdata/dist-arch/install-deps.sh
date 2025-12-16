@@ -43,6 +43,11 @@ if ! command -v pacman >/dev/null 2>&1; then
   exit 1
 fi
 
+# Keep makepkg from resetting sudo credentials
+if [[ -z "${PACMAN_AUTH:-}" ]]; then
+  export PACMAN_AUTH="sudo"
+fi
+
 showfun remove_deprecated_dependencies
 v remove_deprecated_dependencies
 
