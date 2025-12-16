@@ -44,7 +44,7 @@ Rectangle {
             target: root
             property: "openProgress"
             to: 0
-            duration: 200
+            duration: 250
             easing.type: Easing.BezierSpline
             easing.bezierCurve: Looks.transition.easing.bezierCurve.easeIn
         }
