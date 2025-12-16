@@ -421,9 +421,11 @@ Singleton {
                 property bool orderRightLeft: false
                 property bool orderBottomUp: false
                 property bool centerIcons: true
+                property bool showOnlyOnFocusedMonitor: false
             }
 
             property JsonObject regionSelector: JsonObject {
+                property bool showOnlyOnFocusedMonitor: false
                 property JsonObject targetRegions: JsonObject {
                     property bool windows: true
                     property bool layers: false
