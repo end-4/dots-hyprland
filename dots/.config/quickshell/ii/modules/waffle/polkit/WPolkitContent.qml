@@ -104,6 +104,12 @@ Rectangle {
                         horizontalAlignment: Text.AlignLeft
                         text: PolkitService.cleanMessage
                     }
+                    WText {
+                        Layout.fillWidth: true
+                        wrapMode: Text.Wrap
+                        horizontalAlignment: Text.AlignHCenter
+                        text: PolkitService.flow.supplementaryMessage
+                    }
                     WAppIcon {
                         iconName: "fingerprint"
                         isMask: PolkitService.flow?.iconName === ""
