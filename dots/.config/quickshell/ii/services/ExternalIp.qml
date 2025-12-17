@@ -35,8 +35,6 @@ Singleton {
         // --silent suppresses progress output, --show-error shows errors
         fetcher.command[2] = "curl -sSf --max-time 5 ipinfo.io";
         fetcher.running = true;
-        // Also fetch internal IP
-        getInternalIp();
     }
     
     function getInternalIp() {
@@ -48,11 +46,13 @@ Singleton {
     Component.onCompleted: {
         console.info("[ExternalIpService] Starting external IP service.");
         root.getData();
+        // Fetch internal IP once on startup
+        getInternalIp();
     }
     
     Process {
         id: internalIpFetcher
-        command: ["bash", "-c", "ip addr show | grep -E 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1 | head -1"]
+        command: ["bash", "-c", "hostname -I | awk '{print $1}'"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const fetchedInternalIp = text.trim();
