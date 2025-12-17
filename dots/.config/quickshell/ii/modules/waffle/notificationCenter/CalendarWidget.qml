@@ -67,7 +67,8 @@ BodyRectangle {
                 locale: root.locale
                 verticalPadding: 2
                 buttonSize: 41 // ???
-                buttonSpacing: 1
+                buttonSpacing: 6
+                buttonVerticalSpacing: 1
                 Layout.fillWidth: true
                 delegate: DayButton {}
             }
@@ -90,7 +91,7 @@ BodyRectangle {
                 anchors.centerIn: parent
                 text: dayButton.model.day
                 color: dayButton.fgColor
-                font.pixelSize: Looks.font.pixelSize.large
+                font.pixelSize: Looks.font.pixelSize.larger
             }
         }
     }

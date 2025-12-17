@@ -138,6 +138,7 @@ Singleton {
                 }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
+                    property string accentColor: ""
                 }
             }
 
@@ -421,6 +422,8 @@ Singleton {
                 property real scale: 0.18 // Relative to screen size
                 property real rows: 2
                 property real columns: 5
+                property bool orderRightLeft: false
+                property bool orderBottomUp: false
                 property bool centerIcons: true
             }
 
@@ -440,6 +443,9 @@ Singleton {
                 property JsonObject circle: JsonObject {
                     property int strokeWidth: 6
                     property int padding: 10
+                }
+                property JsonObject annotation: JsonObject {
+                    property bool useSatty: false
                 }
             }
 
