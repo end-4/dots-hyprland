@@ -7,6 +7,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import qs.modules.common.panels.lock
 import qs.modules.ii.bar as Bar
 import Quickshell
 import Quickshell.Services.SystemTray
@@ -59,10 +60,20 @@ MouseArea {
     }
 
     // Key presses
+    property bool ctrlHeld: false
     Keys.onPressed: event => {
         root.context.resetClearTimer();
+        if (event.key === Qt.Key_Control) {
+            root.ctrlHeld = true;
+        }
         if (event.key === Qt.Key_Escape) { // Esc to clear
             root.context.currentText = "";
+        } 
+        forceFieldFocus();
+    }
+    Keys.onReleased: event => {
+        if (event.key === Qt.Key_Control) {
+            root.ctrlHeld = false;
         }
         forceFieldFocus();
     }
@@ -133,7 +144,9 @@ MouseArea {
 
             // Synchronizing (across monitors) and unlocking
             onTextChanged: root.context.currentText = this.text
-            onAccepted: root.context.tryUnlock()
+            onAccepted: {
+                root.context.tryUnlock(ctrlHeld);
+            }
             Connections {
                 target: root.context
                 function onCurrentTextChanged() {
@@ -202,7 +215,7 @@ MouseArea {
                 iconSize: 24
                 text: {
                     if (root.context.targetAction === LockContext.ActionEnum.Unlock) {
-                        return "arrow_right_alt";
+                        return root.ctrlHeld ? "emoji_food_beverage" : "arrow_right_alt";
                     } else if (root.context.targetAction === LockContext.ActionEnum.Poweroff) {
                         return "power_settings_new";
                     } else if (root.context.targetAction === LockContext.ActionEnum.Reboot) {

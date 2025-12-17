@@ -1,0 +1,33 @@
+--- a/utils/dialog/CMakeLists.txt
++++ b/utils/dialog/CMakeLists.txt
+@@ -8,7 +8,7 @@
+ set(CMAKE_CXX_STANDARD 23)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient)
++find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient WaylandClientPrivate)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_check_modules(hyprutils REQUIRED IMPORTED_TARGET hyprutils)
+--- a/utils/donate-screen/CMakeLists.txt
++++ b/utils/donate-screen/CMakeLists.txt
+@@ -8,7 +8,7 @@
+ set(CMAKE_CXX_STANDARD 23)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient)
++find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient WaylandClientPrivate)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_check_modules(hyprutils REQUIRED IMPORTED_TARGET hyprutils)
+--- a/utils/update-screen/CMakeLists.txt
++++ b/utils/update-screen/CMakeLists.txt
+@@ -8,7 +8,7 @@
+ set(CMAKE_CXX_STANDARD 23)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient)
++find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick QuickControls2 WaylandClient WaylandClientPrivate)
+ find_package(PkgConfig REQUIRED)
+ 
+ pkg_check_modules(hyprutils REQUIRED IMPORTED_TARGET hyprutils)

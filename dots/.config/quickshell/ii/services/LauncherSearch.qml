@@ -4,6 +4,7 @@ import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
 import QtQuick
+import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
 
@@ -18,6 +19,45 @@ Singleton {
         } else {
             root.query = prefix + root.query;
         }
+    }
+
+    // https://specifications.freedesktop.org/menu/latest/category-registry.html
+    property list<string> mainRegisteredCategories: ["AudioVideo", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"]
+    property list<string> appCategories: DesktopEntries.applications.values.reduce((acc, entry) => {
+        for (const category of entry.categories) {
+            if (!acc.includes(category) && mainRegisteredCategories.includes(category)) {
+                acc.push(category);
+            }
+        }
+        return acc;
+    }, []).sort()
+
+    // Load user action scripts from ~/.config/illogical-impulse/actions/
+    // Uses FolderListModel to auto-reload when scripts are added/removed
+    property var userActionScripts: {
+        const actions = [];
+        for (let i = 0; i < userActionsFolder.count; i++) {
+            const fileName = userActionsFolder.get(i, "fileName");
+            const filePath = userActionsFolder.get(i, "filePath");
+            if (fileName && filePath) {
+                const actionName = fileName.replace(/\.[^/.]+$/, ""); // strip extension
+                actions.push({
+                    action: actionName,
+                    execute: ((path) => (args) => {
+                        Quickshell.execDetached([path, ...(args ? args.split(" ") : [])]);
+                    })(FileUtils.trimFileProtocol(filePath.toString()))
+                });
+            }
+        }
+        return actions;
+    }
+
+    FolderListModel {
+        id: userActionsFolder
+        folder: Qt.resolvedUrl(Directories.userActions)
+        showDirs: false
+        showHidden: false
+        sortField: FolderListModel.Name
     }
 
     property var searchActions: [
@@ -78,6 +118,9 @@ Singleton {
             }
         },
     ]
+
+    // Combined built-in and user actions
+    property var allActions: searchActions.concat(userActionScripts)
 
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
@@ -198,10 +241,11 @@ Singleton {
         const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
             return resultComp.createObject(null, {
                 type: Translation.tr("App"),
+                id: entry.id,
                 name: entry.name,
                 iconName: entry.icon,
                 iconType: LauncherSearchResult.IconType.System,
-                verb: Translation.tr("Launch"),
+                verb: Translation.tr("Open"),
                 execute: () => {
                     if (!entry.runInTerminal)
                         entry.execute();
@@ -233,7 +277,7 @@ Singleton {
         const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
             verb: Translation.tr("Run"),
-            type: Translation.tr("Run command"),
+            type: Translation.tr("Command"),
             fontType: LauncherSearchResult.FontType.Monospace,
             iconName: 'terminal',
             iconType: LauncherSearchResult.IconType.Material,
@@ -249,7 +293,7 @@ Singleton {
         const webSearchResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch),
             verb: Translation.tr("Search"),
-            type: Translation.tr("Search the web"),
+            type: Translation.tr("Web search"),
             iconName: 'travel_explore',
             iconType: LauncherSearchResult.IconType.Material,
             execute: () => {
@@ -261,7 +305,7 @@ Singleton {
                 Qt.openUrlExternally(url);
             }
         });
-        const launcherActionObjects = root.searchActions.map(action => {
+        const launcherActionObjects = root.allActions.map(action => {
             const actionString = `${Config.options.search.prefix.action}${action.action}`;
             if (actionString.startsWith(root.query) || root.query.startsWith(actionString)) {
                 return resultComp.createObject(null, {
