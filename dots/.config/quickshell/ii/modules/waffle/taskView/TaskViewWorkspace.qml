@@ -15,22 +15,37 @@ WMouseAreaButton {
     id: root
 
     required property int workspace
+    property bool newWorkspace: false
+    property bool droppable: false
 
-    readonly property real screenWidth: QsWindow.window.width
-    readonly property real screenHeight: QsWindow.window.height
+    readonly property bool isActiveWorkspace: HyprlandData.activeWorkspace?.id === root.workspace
+    readonly property real screenWidth: QsWindow.window?.width ?? 0
+    readonly property real screenHeight: QsWindow.window?.height ?? 0
     readonly property real screenAspectRatio: screenWidth / screenHeight
-    readonly property real screenScale: QsWindow.window.devicePixelRatio
-    readonly property real scale: 0.1148148148
+    readonly property real windowScale: wallpaperHeight / screenHeight
 
-    height: ListView.view.height
+    property real wallpaperHeight: 124
+
+    height: ListView.view?.height ?? 100
     implicitWidth: 244 // for now
 
-    onClicked: {
-        GlobalStates.overviewOpen = false;
-        Hyprland.dispatch(`workspace ${root.workspace}`);
+    colBackground: ColorUtils.transparentize(Looks.colors.bg2, (isActiveWorkspace || droppable) ? 0 : 1)
+    Behavior on color {
+        animation: Looks.transition.color.createObject(this)
     }
 
+    scale: root.containsPress ? 0.95 : 1
+    Behavior on scale {
+        NumberAnimation {
+            id: scaleAnim
+            duration: 300
+            easing.type: Easing.OutExpo
+        }
+    }
+
+    // Content
     ColumnLayout {
+        id: contentItem
         anchors {
             fill: parent
             leftMargin: 12
@@ -45,15 +60,15 @@ WMouseAreaButton {
             Layout.fillHeight: false
             horizontalAlignment: Text.AlignLeft
             elide: Text.ElideRight
-            text: Translation.tr("Desktop %1").arg(root.workspace)
+            text: root.newWorkspace ? Translation.tr("New desktop") : Translation.tr("Desktop %1").arg(root.workspace)
         }
 
         Rectangle {
             id: wsBg
-            height: 124
+            height: root.wallpaperHeight
             Layout.fillHeight: true
             Layout.fillWidth: true
-            color: Looks.colors.bg1Base
+            color: Looks.colors.bg1
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -64,34 +79,67 @@ WMouseAreaButton {
                 }
             }
 
-            StyledImage {
+            // Workspace content
+            Loader {
                 anchors.fill: parent
-                cache: true
-                sourceSize: Qt.size(root.screenAspectRatio * 124, 124)
-                source: Config.options.background.wallpaperPath
-                fillMode: Image.PreserveAspectCrop
+                active: !root.newWorkspace
+                sourceComponent: StyledImage {
+                    cache: true
+                    sourceSize: Qt.size(root.screenAspectRatio * root.wallpaperHeight, root.wallpaperHeight)
+                    source: Config.options.background.wallpaperPath
+                    fillMode: Image.PreserveAspectCrop
 
-                Repeater {
-                    model: ScriptModel {
-                        values: ToplevelManager.toplevels.values.filter(toplevel => {
-                            const address = `0x${toplevel.HyprlandToplevel?.address}`;
-                            var win = HyprlandData.windowByAddress[address];
-                            const inWorkspace = win?.workspace?.id === root.workspace;
-                            return inWorkspace;
-                        })
-                    }
-                    delegate: ScreencopyView {
-                        required property var modelData
-                        readonly property var hyprlandWindowData: HyprlandData.windowByAddress[`0x${modelData.HyprlandToplevel?.address}`]
-                        captureSource: modelData
-                        live: true
-                        width: hyprlandWindowData?.size[0] * root.scale
-                        height: hyprlandWindowData?.size[1] * root.scale
-                        x: hyprlandWindowData?.at[0] * root.scale
-                        y: hyprlandWindowData?.at[1] * root.scale
+                    Repeater {
+                        model: ScriptModel {
+                            values: HyprlandData.toplevelsForWorkspace(root.workspace)
+                        }
+                        delegate: ScreencopyView {
+                            required property var modelData
+                            readonly property var hyprlandWindowData: HyprlandData.windowByAddress[`0x${modelData.HyprlandToplevel?.address}`]
+                            captureSource: modelData
+                            live: true
+                            width: hyprlandWindowData?.size[0] * root.windowScale
+                            height: hyprlandWindowData?.size[1] * root.windowScale
+                            x: hyprlandWindowData?.at[0] * root.windowScale
+                            y: hyprlandWindowData?.at[1] * root.windowScale
+                        }
                     }
                 }
             }
+
+            // New plus icon
+            Loader {
+                anchors.centerIn: parent
+                active: root.newWorkspace
+                sourceComponent: FluentIcon {
+                    icon: "add"
+                }
+            }
+
+            Rectangle {
+                z: 2
+                visible: root.droppable && !root.newWorkspace
+                anchors.fill: parent
+                color: Looks.colors.accent
+                opacity: 0.2
+            }
+        }
+    }
+
+    // Active indicator
+    WFadeLoader {
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+        shown: root.isActiveWorkspace
+
+        sourceComponent: Rectangle {
+            id: activeIndicator
+            implicitWidth: 32
+            implicitHeight: 3
+            color: Looks.colors.accent
+            radius: height / 2
         }
     }
 }

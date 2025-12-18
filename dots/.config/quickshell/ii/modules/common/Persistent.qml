@@ -63,6 +63,10 @@ Singleton {
                 property real temperature: 0.5
             }
 
+            property JsonObject cheatsheet: JsonObject {
+                property int tabIndex: 0
+            }
+
             property JsonObject sidebar: JsonObject {
                 property JsonObject bottomGroup: JsonObject {
                     property bool collapsed: false
