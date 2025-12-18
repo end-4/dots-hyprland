@@ -16,6 +16,8 @@ Item { // Bar content region
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
     readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+    readonly property bool lyricsEnabled: Config.options.bar.media?.showLyrics ?? false
+    readonly property int lyricsExtraWidth: (!root.lyricsEnabled || root.useShortenedForm === 2) ? 0 : (root.useShortenedForm === 1 ? 60 : 140)
 
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
@@ -109,9 +111,10 @@ Item { // Bar content region
         BarGroup {
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: root.centerSideModuleWidth
+            implicitWidth: root.centerSideModuleWidth + root.lyricsExtraWidth
 
             Resources {
+                visible: !root.lyricsEnabled || root.useShortenedForm === 2
                 alwaysShowAllResources: root.useShortenedForm === 2
                 Layout.fillWidth: root.useShortenedForm === 2
             }
