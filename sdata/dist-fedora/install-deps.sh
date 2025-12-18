@@ -1,6 +1,6 @@
 # This script is meant to be sourced.
 # It's not for directly running.
-
+set -ex
 # -------------------------
 # CONFIG
 # -------------------------
@@ -39,13 +39,19 @@ function install_RPMS() {
     x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
     # Install build dependencies
     r x sudo dnf builddep -y "$spec_file"
-    # Build the RPM with proper quoting preserved
-    x rpmbuild -bb --define "_topdir $rpmbuildroot" "$spec_file"
+    # Build the RPM package locally. If it fails, download it from COPR.
+    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
+      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
+      sudo dnf install -y $(basename "$spec_file" .spec)
+      nolock_qs=true
+    fi
   done
 
   mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-  echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
-  r x sudo dnf install "${local_rpms[@]}" -y
+  if [[ ${#local_rpms[@]} -ge 1 ]]; then
+    echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
+    r x sudo dnf install "${local_rpms[@]}" -y
+  fi
   x cd ${REPO_ROOT}
 }
 
@@ -100,7 +106,7 @@ while IFS= read -r deps_list_key; do
 done < <(echo "$deps_data" | yq '.groups | keys[]? | select(length > 0)')
 
 # Add back versionlock at the end
-v sudo dnf versionlock add quickshell-git
+[ -n $nolock_qs ] || v sudo dnf versionlock add quickshell-git || true
 
 echo -e "\n========================================"
 echo "All installations are completed."
