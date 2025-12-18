@@ -42,7 +42,18 @@ Scope {
             margins {
                 top: Config.options.bar.vertical ? ((selectorWindow.screen.height / 2) - (selectorWindow.implicitHeight / 2)) : Appearance.sizes.barHeight
                 bottom: Appearance.sizes.barHeight
-                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((selectorWindow.screen.width / 2) - (selectorWindow.implicitWidth / 2))
+                left: {
+                    if (Config.options.bar.vertical)
+                        return Appearance.sizes.barHeight;
+
+                    const fallback = (selectorWindow.screen.width / 2) - (selectorWindow.implicitWidth / 2);
+                    const anchorCenter = GlobalStates.lyricsSelectorAnchorCenterX;
+                    if (!anchorCenter || anchorCenter < 0)
+                        return fallback;
+
+                    const desired = anchorCenter - (selectorWindow.implicitWidth / 2);
+                    return Math.max(0, Math.min(desired, selectorWindow.screen.width - selectorWindow.implicitWidth));
+                }
                 right: Appearance.sizes.barHeight
             }
 

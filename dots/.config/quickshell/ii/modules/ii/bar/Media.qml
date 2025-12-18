@@ -7,6 +7,7 @@ import qs.modules.common.functions
 
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
 
@@ -272,6 +273,9 @@ Item {
                     acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
+                            const center = root.QsWindow?.mapFromItem(lyricScroller, lyricScroller.width / 2, lyricScroller.height / 2);
+                            if (center && typeof center.x === "number")
+                                GlobalStates.lyricsSelectorAnchorCenterX = center.x;
                             GlobalStates.lyricsSelectorOpen = !GlobalStates.lyricsSelectorOpen;
                             return;
                         }
