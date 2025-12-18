@@ -87,26 +87,33 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        ClippedFilledCircularProgress {
-            id: mediaCircProg
+        Item {
+            id: mediaIndicator
             Layout.alignment: Qt.AlignVCenter
-            lineWidth: Appearance.rounding.unsharpen
-            value: activePlayer?.position / activePlayer?.length
-            implicitSize: 20
-            colPrimary: Appearance.colors.colOnSecondaryContainer
-            enableAnimation: false
+            implicitWidth: mediaCircProg.implicitWidth
+            implicitHeight: mediaCircProg.implicitHeight
 
-            Item {
-                anchors.centerIn: parent
-                width: mediaCircProg.implicitSize
-                height: mediaCircProg.implicitSize
-                
-                MaterialSymbol {
+            ClippedFilledCircularProgress {
+                id: mediaCircProg
+                anchors.fill: parent
+                lineWidth: Appearance.rounding.unsharpen
+                value: activePlayer?.position / activePlayer?.length
+                implicitSize: 20
+                colPrimary: Appearance.colors.colOnSecondaryContainer
+                enableAnimation: false
+
+                Item {
                     anchors.centerIn: parent
-                    fill: 1
-                    text: activePlayer?.isPlaying ? "pause" : "music_note"
-                    iconSize: Appearance.font.pixelSize.normal
-                    color: Appearance.m3colors.m3onSecondaryContainer
+                    width: mediaCircProg.implicitSize
+                    height: mediaCircProg.implicitSize
+                    
+                    MaterialSymbol {
+                        anchors.centerIn: parent
+                        fill: 1
+                        text: activePlayer?.isPlaying ? "pause" : "music_note"
+                        iconSize: Appearance.font.pixelSize.normal
+                        color: Appearance.m3colors.m3onSecondaryContainer
+                    }
                 }
             }
 
