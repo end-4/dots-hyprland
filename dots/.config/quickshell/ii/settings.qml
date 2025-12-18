@@ -10,7 +10,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -31,6 +30,7 @@ ApplicationWindow {
         {
             name: Translation.tr("General"),
             icon: "browse",
+            iconRotation: 180,
             component: "modules/settings/GeneralConfig.qml"
         },
         {
@@ -48,6 +48,11 @@ ApplicationWindow {
             name: Translation.tr("Interface"),
             icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
+        },
+        {
+            name: Translation.tr("Display"),
+            icon: "desktop_windows",
+            component: "modules/settings/DisplayConfig.qml"
         },
         {
             name: Translation.tr("Services"),

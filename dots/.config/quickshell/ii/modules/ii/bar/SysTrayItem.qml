@@ -12,12 +12,13 @@ MouseArea {
     id: root
     required property SystemTrayItem item
     property bool targetMenuOpen: false
+    property bool isPinned: TrayService.isItemPinned(item)
 
     signal menuOpened(qsWindow: var)
     signal menuClosed()
 
     hoverEnabled: true
-    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     implicitWidth: 20
     implicitHeight: 20
     onPressed: (event) => {
@@ -27,6 +28,9 @@ MouseArea {
             break;
         case Qt.RightButton:
             if (item.hasMenu) menu.open();
+            break;
+        case Qt.MiddleButton:
+            TrayService.togglePin(item);
             break;
         }
         event.accepted = true;
@@ -88,7 +92,6 @@ MouseArea {
             }
         }
     }
-
     PopupToolTip {
         id: tooltip
         extraVisibleCondition: root.containsMouse
