@@ -60,6 +60,11 @@ ApplicationWindow {
             component: "modules/settings/ServicesConfig.qml"
         },
         {
+            name: Translation.tr("Security"),
+            icon: "fingerprint",
+            component: "modules/settings/SecurityConfig.qml"
+        },
+        {
             name: Translation.tr("Advanced"),
             icon: "construction",
             component: "modules/settings/AdvancedConfig.qml"

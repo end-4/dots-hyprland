@@ -334,12 +334,134 @@ MouseArea {
             active: root.context.fingerprintsConfigured
             visible: active
 
-            sourceComponent: MaterialSymbol {
-                id: fingerprintIcon
-                fill: 1
-                text: "fingerprint"
-                iconSize: Appearance.font.pixelSize.hugeass
-                color: Appearance.colors.colOnSurfaceVariant
+            sourceComponent: Item {
+                id: fingerprintContainer
+                implicitWidth: fingerprintIcon.implicitWidth
+                implicitHeight: fingerprintIcon.implicitHeight
+                x: 0
+                
+                MaterialSymbol {
+                    id: fingerprintIcon
+                    anchors.centerIn: parent
+                    fill: 1
+                    text: "fingerprint"
+                    iconSize: Appearance.font.pixelSize.hugeass
+                    color: {
+                        if (root.context.fingerprintVerifyResult === "no-match") {
+                            return Appearance.colors.colError;
+                        } else if (root.context.fingerprintVerifyResult === "unknown-error") {
+                            return Appearance.colors.colError;
+                        } else {
+                            return Appearance.colors.colOnSurfaceVariant;
+                        }
+                    }
+                    
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Appearance.animation.elementMoveFast.type
+                        }
+                    }
+                }
+                
+                // Shake animation for no-match
+                SequentialAnimation {
+                    id: fingerprintShakeAnim
+                    NumberAnimation { 
+                        target: fingerprintContainer; 
+                        property: "x"; 
+                        from: 0; 
+                        to: -10; 
+                        duration: 50 
+                        easing.type: Easing.OutQuad
+                    }
+                    NumberAnimation { 
+                        target: fingerprintContainer; 
+                        property: "x"; 
+                        to: 10; 
+                        duration: 50 
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation { 
+                        target: fingerprintContainer; 
+                        property: "x"; 
+                        to: -8; 
+                        duration: 40 
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation { 
+                        target: fingerprintContainer; 
+                        property: "x"; 
+                        to: 8; 
+                        duration: 40 
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation { 
+                        target: fingerprintContainer; 
+                        property: "x"; 
+                        to: 0; 
+                        duration: 30 
+                        easing.type: Easing.InQuad
+                    }
+                    onStopped: {
+                        // Ensure x is reset to 0 when animation stops
+                        fingerprintContainer.x = 0;
+                    }
+                }
+                
+                // Property to track last state to prevent duplicate triggers
+                property string lastVerifyResult: ""
+                property bool animationCooldown: false
+                
+                // Timer for animation cooldown (prevents animation from playing multiple times rapidly)
+                Timer {
+                    id: animationCooldownTimer
+                    interval: 1500 // 1.5 second cooldown between animations
+                    onTriggered: {
+                        fingerprintContainer.animationCooldown = false;
+                    }
+                }
+                
+                // Trigger animation only once when state changes to no-match
+                Connections {
+                    target: root.context
+                    function onFingerprintVerifyResultChanged() {
+                        const currentResult = root.context.fingerprintVerifyResult;
+                        // Only trigger if state changed to no-match and wasn't already no-match
+                        if (currentResult === "no-match" && fingerprintContainer.lastVerifyResult !== "no-match") {
+                            // Only start if not already running and cooldown has passed
+                            if (!fingerprintShakeAnim.running && !fingerprintContainer.animationCooldown) {
+                                fingerprintContainer.x = 0;
+                                fingerprintContainer.animationCooldown = true;
+                                fingerprintShakeAnim.start();
+                                animationCooldownTimer.restart();
+                            }
+                        } else if (currentResult !== "no-match" && fingerprintContainer.lastVerifyResult === "no-match") {
+                            // Reset position when leaving no-match state
+                            if (!fingerprintShakeAnim.running) {
+                                fingerprintContainer.x = 0;
+                            }
+                        }
+                        fingerprintContainer.lastVerifyResult = currentResult;
+                    }
+                }
+                
+                // Behavior to smoothly return x to 0 when not animating (safety net)
+                Behavior on x {
+                    enabled: !fingerprintShakeAnim.running
+                    NumberAnimation {
+                        duration: 100
+                        easing.type: Easing.OutQuad
+                    }
+                }
+                
+                // Error tooltip for unknown-error
+                PopupToolTip {
+                    extraVisibleCondition: root.context.fingerprintVerifyResult === "unknown-error"
+                    alternativeVisibleCondition: extraVisibleCondition
+                    anchorEdges: Edges.Bottom
+                    text: Translation.tr("Fingerprint verification error. Please delete old fingerprint and enroll again.")
+                }
             }
         }
 
