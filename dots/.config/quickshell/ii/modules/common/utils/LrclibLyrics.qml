@@ -182,7 +182,8 @@ Item {
     }
 
     function buildLyricsSearchUrl(attempt) {
-        const base = "https://lrclib.net/api/search";
+        const baseSearch = "https://lrclib.net/api/search";
+        const baseGet = "https://lrclib.net/api/get";
         const title = root.queryTitle;
         const artist = root.queryArtist;
         const duration = root.queryDuration;
@@ -191,18 +192,25 @@ Item {
             return "";
 
         if (attempt === 0) {
-            let url = `${base}?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`;
+            let url = `${baseGet}?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`;
             if (duration > 0)
                 url += `&duration=${duration}`;
             return url;
         }
 
         if (attempt === 1) {
-            return `${base}?q=${encodeURIComponent(`${title} ${artist}`)}`;
+            let url = `${baseSearch}?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`;
+            if (duration > 0)
+                url += `&duration=${duration}`;
+            return url;
         }
 
         if (attempt === 2) {
-            return `${base}?q=${encodeURIComponent(title)}`;
+            return `${baseSearch}?q=${encodeURIComponent(`${title} ${artist}`)}`;
+        }
+
+        if (attempt === 3) {
+            return `${baseSearch}?q=${encodeURIComponent(title)}`;
         }
 
         return "";
@@ -376,10 +384,17 @@ Item {
 
                 try {
                     const parsed = JSON.parse(text);
-                    const results = Array.isArray(parsed) ? parsed : [];
+                    let results = [];
+                    
+                    if (Array.isArray(parsed)) {
+                        results = parsed;
+                    } else if (parsed && typeof parsed === "object" && !parsed.code && !parsed.error) {
+                        results = [parsed];
+                    }
+
                     let filtered = results;
 
-                    if (fetcher.attempt === 2 && root.queryArtist) {
+                    if (fetcher.attempt === 3 && root.queryArtist) {
                         const artistLower = root.queryArtist.toLowerCase();
                         filtered = results.filter(item => (item?.artistName ?? "").toLowerCase() === artistLower);
                     }
