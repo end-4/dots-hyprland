@@ -13,6 +13,7 @@ Item {
     property string artist: ""
     property real duration: 0
     property real position: 0
+    property int selectedId: 0
 
     property bool loading: false
     property string error: ""
@@ -29,6 +30,7 @@ Item {
     readonly property string queryArtist: normalizeArtist(artist)
     readonly property int queryDuration: Math.round(duration ?? 0)
     readonly property string queryKey: `${queryTitle}||${queryArtist}||${queryDuration}`
+    readonly property string fetchKey: `${queryKey}||${selectedId}`
 
     readonly property int currentIndex: syncedLyricIndexForPosition(position)
     readonly property string currentLineText: currentIndex >= 0 ? (root.lines[currentIndex]?.text ?? "") : ""
@@ -191,6 +193,12 @@ Item {
         if (!title || !artist)
             return "";
 
+        if (root.selectedId > 0 && attempt === 0)
+            return `${baseGet}/${root.selectedId}`;
+
+        if (root.selectedId > 0)
+            attempt -= 1;
+
         if (attempt === 0) {
             let url = `${baseGet}?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`;
             if (duration > 0)
@@ -288,18 +296,18 @@ Item {
             return;
         }
 
-        if (root.loadedKey === root.queryKey)
+        if (root.loadedKey === root.fetchKey)
             return;
 
-        if (root.loading && root.requestKey === root.queryKey)
+        if (root.loading && root.requestKey === root.fetchKey)
             return;
 
-        if (fetcher.running && fetcher.requestKey === root.queryKey)
+        if (fetcher.running && fetcher.requestKey === root.fetchKey)
             return;
 
         root.requestId += 1;
         root.attempt = 0;
-        root.requestKey = root.queryKey;
+        root.requestKey = root.fetchKey;
         root.loading = true;
         root.error = "";
         root.instrumental = false;
@@ -316,7 +324,7 @@ Item {
     function fetchAttempt(requestId) {
         if (requestId !== root.requestId)
             return;
-        if (root.requestKey !== root.queryKey)
+        if (root.requestKey !== root.fetchKey)
             return;
 
         const url = root.buildLyricsSearchUrl(root.attempt);
@@ -346,6 +354,12 @@ Item {
             fetchDebounce.restart();
     }
 
+    onSelectedIdChanged: {
+        root.resetState();
+        if (root.enabled)
+            fetchDebounce.restart();
+    }
+
     onEnabledChanged: {
         if (root.enabled)
             fetchDebounce.restart();
@@ -367,7 +381,7 @@ Item {
                 const requestId = fetcher.requestId;
                 const requestKey = fetcher.requestKey;
 
-                if (requestKey !== root.queryKey) {
+                if (requestKey !== root.fetchKey) {
                     if (root.startPending) {
                         root.startPending = false;
                         if (root.enabled)

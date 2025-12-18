@@ -40,6 +40,7 @@ Item {
         artist: root.activePlayer?.trackArtist ?? ""
         duration: root.activePlayer?.length ?? 0
         position: root.activePlayer?.position ?? 0
+        selectedId: LyricsService.selectedId
     }
 
     Timer {
@@ -107,6 +108,12 @@ Item {
                     iconSize: Appearance.font.pixelSize.normal
                     color: Appearance.m3colors.m3onSecondaryContainer
                 }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
+                onPressed: (event) => root.handleMediaClick(event)
             }
         }
 
@@ -248,14 +255,20 @@ Item {
                             ? lyricScroller.downScale + (1.0 - lyricScroller.downScale) * lyricScroller.animProgress
                             : lyricScroller.downScale
 
-            MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
-                onPressed: (event) => root.handleMediaClick(event)
-            }
-
                         opacity: dynamicOpacity
                         textScale: dynamicScale
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
+                    onPressed: (event) => {
+                        if (event.button === Qt.LeftButton) {
+                            GlobalStates.lyricsSelectorOpen = !GlobalStates.lyricsSelectorOpen;
+                            return;
+                        }
+                        root.handleMediaClick(event)
                     }
                 }
             }

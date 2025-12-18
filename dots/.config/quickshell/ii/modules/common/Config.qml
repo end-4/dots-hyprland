@@ -243,6 +243,7 @@ Singleton {
                 }
                 property JsonObject media: JsonObject {
                     property bool showLyrics: false
+                    property var lyricsSelection: ({})
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
                 property JsonObject utilButtons: JsonObject {
