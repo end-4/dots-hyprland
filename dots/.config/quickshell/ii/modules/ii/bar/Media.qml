@@ -17,6 +17,18 @@ Item {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
     readonly property bool lyricsEnabled: Config.options.bar.media?.showLyrics ?? false
 
+    function handleMediaClick(event) {
+        if (event.button === Qt.MiddleButton) {
+            activePlayer.togglePlaying();
+        } else if (event.button === Qt.BackButton) {
+            activePlayer.previous();
+        } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
+            activePlayer.next();
+        } else if (event.button === Qt.LeftButton) {
+            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
+        }
+    }
+
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: Appearance.sizes.barHeight
@@ -68,22 +80,6 @@ Item {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
-        onPressed: (event) => {
-            if (event.button === Qt.MiddleButton) {
-                activePlayer.togglePlaying();
-            } else if (event.button === Qt.BackButton) {
-                activePlayer.previous();
-            } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
-                activePlayer.next();
-            } else if (event.button === Qt.LeftButton) {
-                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
-            }
-        }
-    }
-
     RowLayout { // Real content
         id: rowLayout
 
@@ -128,6 +124,12 @@ Item {
             StyledText {
                 id: normalText
                 anchors.fill: parent
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
+                onPressed: (event) => root.handleMediaClick(event)
+            }
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight
                 color: Appearance.colors.colOnLayer1
@@ -245,6 +247,12 @@ Item {
                         property real dynamicScale: (!lyricScroller.isMovingForward)
                             ? lyricScroller.downScale + (1.0 - lyricScroller.downScale) * lyricScroller.animProgress
                             : lyricScroller.downScale
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
+                onPressed: (event) => root.handleMediaClick(event)
+            }
 
                         opacity: dynamicOpacity
                         textScale: dynamicScale
