@@ -170,7 +170,7 @@ function install_google_sans_flex(){
   x fc-cache -fv
   x cd $REPO_ROOT
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+  realpath -se "$target_dir" >> "${INSTALLED_LISTFILE}"
 }
 
 #####################################################################################
