@@ -55,8 +55,25 @@ Item {
             return "";
 
         let cleaned = StringUtils.cleanMusicTitle(rawTitle);
-        cleaned = cleaned.split(" - ")[0];
-        cleaned = cleaned.replace(/\s*[\(\[\{][^\)\]\}]*[\)\]\}]\s*/g, " ").replace(/\s+/g, " ").trim();
+
+        // Keep trailing suffixes like "Remix", "Version", "Edit" (e.g. "Title - Remix").
+        const parts = cleaned.split(" - ");
+        let main = parts[0].trim();
+        let suffix = parts.slice(1).join(" - ").trim();
+        if (suffix && /\b(remix|version|edit|mix|rework)\b/i.test(suffix))
+            cleaned = `${main} ${suffix}`;
+        else
+            cleaned = main;
+
+        // Remove parenthetical content except keep featuring info (feat/ft/featuring).
+        cleaned = cleaned.replace(/\s*[\(\[\{]([^\)\]\}]*)[\)\]\}]\s*/g, function(_, inner) {
+            if (/(?:feat\.?|ft\.?|featuring)/i.test(inner)) {
+                const m = inner.replace(/^(?:feat\.?|ft\.?|featuring)\s*/i, '').trim();
+                return m ? ` feat. ${m} ` : ' ';
+            }
+            return ' ';
+        }).replace(/\s+/g, " ").trim();
+
         return cleaned;
     }
 
