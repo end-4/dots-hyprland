@@ -17,7 +17,9 @@ Item { // Bar content region
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
     readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
     readonly property bool lyricsEnabled: Config.options.bar.media?.showLyrics ?? false
-    readonly property int lyricsExtraWidth: (!root.lyricsEnabled || root.useShortenedForm === 2) ? 0 : (root.useShortenedForm === 1 ? 60 : 140)
+    readonly property int lyricsExtraWidthTarget: (!root.lyricsEnabled || root.useShortenedForm === 2) ? 0 : (root.useShortenedForm === 1 ? 100 : 240)
+    property real lyricsExtraWidth: lyricsExtraWidthTarget
+    Behavior on lyricsExtraWidth { NumberAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
@@ -90,11 +92,17 @@ Item { // Bar content region
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             }
 
-            ActiveWindow {
-                visible: root.useShortenedForm === 0
-                Layout.rightMargin: Appearance.rounding.screenRounding
-                Layout.fillWidth: true
+            Item {
+                id: activeWindowWrapper
                 Layout.fillHeight: true
+                Layout.fillWidth: true
+                clip: true
+
+                ActiveWindow {
+                    visible: root.useShortenedForm === 0
+                    anchors.fill: parent
+                    anchors.rightMargin: Appearance.rounding.screenRounding
+                }
             }
         }
     }
@@ -105,6 +113,8 @@ Item { // Bar content region
             top: parent.top
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
+            // Offset left by half the extra width so expansion only goes leftward (right side stays fixed)
+            horizontalCenterOffset: -root.lyricsExtraWidth / 2
         }
         spacing: 4
 
