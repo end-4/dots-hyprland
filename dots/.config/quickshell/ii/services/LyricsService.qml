@@ -94,11 +94,17 @@ Singleton {
         if (!title || !artist)
             return "";
 
+        // attempt 0: try an exact/raw title + artist search (no normalization removals)
         if (attempt === 0) {
-            let url = `${baseSearch}?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`;
-            if (duration > 0)
-                url += `&duration=${duration}`;
-            return url;
+            const rawTitle = (root.title || "").trim();
+            const rawArtist = (root.artist || "").trim();
+            if (rawTitle && rawArtist) {
+                let url = `${baseSearch}?track_name=${encodeURIComponent(rawTitle)}&artist_name=${encodeURIComponent(rawArtist)}`;
+                if (duration > 0)
+                    url += `&duration=${duration}`;
+                return url;
+            }
+            // fall through to normalized attempt if raw info missing
         }
 
         if (attempt === 1)
@@ -120,15 +126,23 @@ Singleton {
 
         const titleLower = root.queryTitle.toLowerCase();
         const artistLower = root.queryArtist.toLowerCase();
+        const rawTitleLower = (root.title || "").toLowerCase();
+        const rawArtistLower = (root.artist || "").toLowerCase();
         const duration = root.queryDuration;
 
         let score = 0;
         const itemTitle = (item?.trackName ?? item?.name ?? "").toLowerCase();
         const itemArtist = (item?.artistName ?? "").toLowerCase();
 
-        if (itemArtist && itemArtist === artistLower)
+        // Prefer exact raw matches highest (e.g., "Title - Remix" exact match)
+        if (itemArtist && itemArtist === rawArtistLower)
+            score += 200;
+        else if (itemArtist && itemArtist === artistLower)
             score += 100;
-        if (itemTitle && itemTitle === titleLower)
+
+        if (itemTitle && itemTitle === rawTitleLower)
+            score += 150;
+        else if (itemTitle && itemTitle === titleLower)
             score += 50;
 
         if (duration > 0 && typeof item?.duration === "number") {
