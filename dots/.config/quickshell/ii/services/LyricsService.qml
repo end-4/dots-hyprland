@@ -33,7 +33,8 @@ Singleton {
     // 0 means "auto" (use best match).
     property int selectedId: 0
 
-    readonly property int maxResults: 5
+    // Show more results in the selector; UI will allow scrolling if needed.
+    readonly property int maxResults: 12
 
     property int requestId: 0
     property string requestKey: ""
