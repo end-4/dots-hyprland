@@ -38,8 +38,8 @@ Singleton {
     }
     
     function getInternalIp() {
-        // Get internal IP using ip command
-        // Filter out loopback and get the first valid IP
+        // Get internal IP from physical network interfaces (eno*, wlan*, eth*, wlp*, enp*)
+        // Excludes virtual interfaces like docker, loopback, etc.
         internalIpFetcher.running = true;
     }
     
@@ -52,7 +52,7 @@ Singleton {
     
     Process {
         id: internalIpFetcher
-        command: ["bash", "-c", "hostname -I | awk '{print $1}'"]
+        command: ["bash", "-c", "ip addr show | grep -E '^[0-9]+: (eno|wlan|eth|wlp|enp)' -A 4 | grep -E 'inet ' | head -1 | awk '{print $2}' | cut -d/ -f1"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const fetchedInternalIp = text.trim();
