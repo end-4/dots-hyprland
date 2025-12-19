@@ -1,0 +1,12 @@
+[Unit]
+Description=Digital Wellbeing - Application Usage Tracker
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.config/hypr/productivity/digital-wellbeing.py start
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

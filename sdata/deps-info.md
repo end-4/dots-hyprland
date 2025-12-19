@@ -3,13 +3,16 @@ This file contains information about the dependencies.
 It mainly describes about `sdata/dist-arch` which is actively maintained by the devs.
 
 Tips:
+
 - The packages which name has prefix `illogical-impulse-` are defined with local files `PKGBUILD`. There're two types:
   - **Meta packages**, which do not have actual content but only include other packages specified in the array `depends`.
   - **Actual packages**, which not only install dependencies listed in `depends`, but also build packages which have actual content to be installed later.
 - For each package included in the local `PKGBUILD`s which name does **not** have prefix `illogical-impulse-`, for example `rsync`, it's either from [Arch Linux Packages](https://archlinux.org/packages) or the [AUR](https://aur.archlinux.org/packages). Search the package name on them to get the info (e.g. what executable(s) the package provides).
 
 # Meta packages
+
 ## illogical-impulse-audio
+
 - `cava`
   - Used in Quickshell config.
 - `pavucontrol-qt`
@@ -24,6 +27,7 @@ Tips:
   - Used in Hyprland and Quickshell config.
 
 ## illogical-impulse-backlight
+
 - `geoclue`
   - Which demo agent used in Quickshell config.
 - `brightnessctl`
@@ -32,6 +36,7 @@ Tips:
   - Used in Quickshell config.
 
 ## illogical-impulse-basic
+
 - `bc`
   - Used in `quickshell/ii/scripts/colors/switchwall.sh` for example.
 - `coreutils`
@@ -56,6 +61,7 @@ Tips:
   - Used in install script.
 
 ## illogical-impulse-fonts-themes
+
 - `adw-gtk-theme-git`
   - [source](https://github.com/lassekongo83/adw-gtk3)
   - Used in Quickshell config.
@@ -97,6 +103,7 @@ Tips:
   - Not explicitly used, but it may help as fallback for displaying emoji charaters.
 
 ## illogical-impulse-hyprland
+
 - `hyprland`
   - Surely needed.
 - `hyprsunset`
@@ -105,6 +112,7 @@ Tips:
   - Surely needed.
 
 ## illogical-impulse-kde
+
 - `bluedevil`
   - Seems not being used anywhere, maybe a part of KDE settings panel.
 - `gnome-keyring`
@@ -120,8 +128,8 @@ Tips:
 - `systemsettings`
   - Used in Hyprland `keybinds.conf`.
 
-
 ## illogical-impulse-portal
+
 - `xdg-desktop-portal`
   - Basic component.
 - `xdg-desktop-portal-kde`
@@ -132,6 +140,7 @@ Tips:
   - Basic component.
 
 ## illogical-impulse-python
+
 - `clang`
   - Some python package may need this to be built, e.g. #1235. This may varies on different distros though.
 - `uv`
@@ -148,6 +157,7 @@ Tips:
   - Not explicitly used.
 
 ## illogical-impulse-screencapture
+
 - `hyprshot`
   - Used in Hyprland `keybinds.conf` as fallback.
 - `slurp`
@@ -161,8 +171,8 @@ Tips:
 - `wf-recorder`
   - Used in Quickshell config.
 
-
 ## illogical-impulse-toolkit
+
 - `upower`
   - Used in Quickshell config.
 - `wtype`
@@ -171,6 +181,7 @@ Tips:
   - Used in Quickshell config.
 
 ## illogical-impulse-widgets
+
 - `fuzzel`
   - Used in Hyprland and Quickshell config; its config is also included.
 - `glib2`
@@ -195,13 +206,15 @@ Tips:
   - Used in Quickshell config, providing math ability in searchbar.
   - Note that `qalc` is the needed executable. In Arch Linux [libqalculate](https://archlinux.org/packages/extra/x86_64/libqalculate) provides it, but in Fedora [qalculate](https://packages.fedoraproject.org/pkgs/libqalculate/qalculate/fedora-43.html#files) does and [libqalculate](https://packages.fedoraproject.org/pkgs/libqalculate/libqalculate/fedora-43.html#files) does not.
 
-
 # Actual packages
+
 ## illogical-impulse-quickshell-git
+
 - Pinned commit.
 - Also with extra dependencies (mainly Qt things) needed by the illogical-impulse Quickshell config.
 
 Extra dependencies.
+
 - `qt6-base`
 - `qt6-declarative`
 - `qt6-5compat`
@@ -221,13 +234,32 @@ Extra dependencies.
 - `syntax-highlighting`
 
 ## illogical-impulse-bibata-modern-classic-bin
+
 - [source](https://github.com/ful1e5/Bibata_Cursor)
 - Used in Hyprland config, not necessary.
 
 ## illogical-impulse-microtex-git
+
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
 
 ## illogical-impulse-oneui4-icons-git
+
 - [source](https://github.com/end-4/OneUI4-Icons)
 - Customed version of normal oneui4-icons.
+
+## illogical-impulse-productivity
+
+- Focus Mode and Digital Wellbeing features for productivity and health
+- **Focus Mode**: Temporarily blocks distracting applications
+- **Digital Wellbeing**: Tracks application usage and provides eye care/break reminders
+- Dependencies:
+  - `python` - For tracking service
+  - `python-gobject` - GTK bindings for GUI
+  - `gtk3` - GUI toolkit
+  - `jq` - JSON processing for window queries
+  - `libnotify` - Desktop notifications
+  - `sqlite` - Database for usage tracking
+  - `libpulse` - Audio notifications (optional)
+- Scripts located in `~/.config/hypr/productivity/`
+- See `PRODUCTIVITY_FEATURES.md` for full documentation

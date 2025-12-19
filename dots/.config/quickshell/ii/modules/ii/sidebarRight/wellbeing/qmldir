@@ -1,0 +1,4 @@
+module qs.modules.ii.sidebarRight.wellbeing
+WellbeingWidget 1.0 WellbeingWidget.qml
+WellbeingStatistics 1.0 WellbeingStatistics.qml
+WellbeingSettings 1.0 WellbeingSettings.qml

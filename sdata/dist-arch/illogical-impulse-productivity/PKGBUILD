@@ -1,0 +1,37 @@
+pkgname=illogical-impulse-productivity
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse Productivity Features (Focus Mode & Digital Wellbeing)'
+arch=(any)
+license=(MIT)
+depends=(
+  # Core dependencies
+  bash
+  python
+  python-gobject  # For GTK GUI
+  gtk3           # For productivity dashboard
+  
+  # Hyprland integration
+  hyprland
+  hyprctl
+  
+  # Notification support
+  libnotify
+  
+  # For querying window information
+  jq
+  
+  # Audio notifications (optional)
+  libpulse
+  
+  # Database
+  sqlite
+)
+optdepends=(
+  'python-matplotlib: For usage graphs'
+  'python-numpy: For statistics calculations'
+)
+
+package() {
+  install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README.md"
+}

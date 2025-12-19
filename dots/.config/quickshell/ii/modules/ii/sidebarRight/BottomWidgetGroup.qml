@@ -3,6 +3,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
 import qs.modules.ii.sidebarRight.calendar
+import qs.modules.ii.sidebarRight.wellbeing
 import qs.modules.ii.sidebarRight.todo
 import qs.modules.ii.sidebarRight.pomodoro
 import QtQuick
@@ -23,6 +24,12 @@ Rectangle {
             "name": Translation.tr("Calendar"),
             "icon": "calendar_month",
             "widget": "calendar/CalendarWidget.qml"
+        },
+        {
+            "type": "wellbeing",
+            "name": Translation.tr("Wellbeing"),
+            "icon": "health_and_safety",
+            "widget": "wellbeing/WellbeingWidget.qml"
         },
         {
             "type": "todo",
