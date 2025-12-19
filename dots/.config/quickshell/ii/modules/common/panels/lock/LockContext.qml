@@ -108,6 +108,11 @@ Scope {
         root.fingerprintVerifying = false;
     }
 
+    function refreshFingerprintCheck() {
+        fingerprintCheckProc.running = false;
+        fingerprintCheckProc.running = true;
+    }
+
     Process {
         id: fingerprintCheckProc
         running: true
@@ -115,7 +120,18 @@ Scope {
         stdout: StdioCollector {
             id: fingerprintOutputCollector
             onStreamFinished: {
-                root.fingerprintsConfigured = fingerprintOutputCollector.text.includes("Fingerprints for user");
+                const output = fingerprintOutputCollector.text || "";
+                // Check if there are actual fingerprint entries (lines like " - #0: right-index-finger")
+                // Just having "Fingerprints for user" header is not enough - need actual enrolled fingerprints
+                const lines = output.split('\n');
+                const hasFingerprintEntries = lines.some(line => /^\s*-\s*#\d+:/.test(line.trim()));
+                const wasConfigured = root.fingerprintsConfigured;
+                root.fingerprintsConfigured = output.includes("Fingerprints for user") && hasFingerprintEntries;
+                
+                // If fingerprints just became configured and screen is locked, start fingerprint unlock
+                if (!wasConfigured && root.fingerprintsConfigured && GlobalStates.screenLocked && !fingerPam.active) {
+                    Qt.callLater(() => tryFingerUnlock());
+                }
             }
         }
         onExited: (exitCode, exitStatus) => {
@@ -123,6 +139,14 @@ Scope {
                 // console.warn("[LockContext] fprintd-list command exited with error:", exitCode, exitStatus);
                 root.fingerprintsConfigured = false;
             }
+        }
+    }
+    
+    // Watch for fingerprintsConfigured changes and auto-start unlock if screen is locked
+    onFingerprintsConfiguredChanged: {
+        // If fingerprints become configured while screen is locked, start fingerprint unlock
+        if (fingerprintsConfigured && GlobalStates.screenLocked && !fingerPam.active) {
+            Qt.callLater(() => tryFingerUnlock());
         }
     }
     
