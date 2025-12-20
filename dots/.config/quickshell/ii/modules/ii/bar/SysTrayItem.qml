@@ -12,7 +12,6 @@ MouseArea {
     id: root
     required property SystemTrayItem item
     property bool targetMenuOpen: false
-    property bool isPinned: TrayService.isItemPinned(item)
 
     signal menuOpened(qsWindow: var)
     signal menuClosed()
@@ -92,6 +91,7 @@ MouseArea {
             }
         }
     }
+    
     PopupToolTip {
         id: tooltip
         extraVisibleCondition: root.containsMouse
