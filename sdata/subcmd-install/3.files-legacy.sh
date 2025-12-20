@@ -66,4 +66,4 @@ case "${SKIP_HYPRLAND}" in
     ;;
 esac
 
-install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg
+install_file "dots/.local/share/icons/illogical-impulse.svg" "${XDG_DATA_HOME}"/icons/illogical-impulse.svg || exit 0
