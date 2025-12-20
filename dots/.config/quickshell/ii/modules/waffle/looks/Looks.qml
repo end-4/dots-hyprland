@@ -93,8 +93,8 @@ Singleton {
         property color bgPanelFooter: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelFooter : root.lightColors.bgPanelFooter, root.panelLayerTransparency)
         property color bgPanelBody: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelBody : root.lightColors.bgPanelBody, root.panelLayerTransparency)
         property color bgPanelSeparator: ColorUtils.transparentize(root.dark ? root.darkColors.bgPanelSeparator : root.lightColors.bgPanelSeparator, root.backgroundTransparency)
-        property color bg0Opaque: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
-        property color bg0: ColorUtils.transparentize(bg0Opaque, root.backgroundTransparency)
+        property color bg0Base: root.dark ? root.darkColors.bg0 : root.lightColors.bg0
+        property color bg0: ColorUtils.transparentize(bg0Base, root.backgroundTransparency)
         property color bg0Border: ColorUtils.transparentize(root.dark ? root.darkColors.bg0Border : root.lightColors.bg0Border, root.backgroundTransparency)
         property color bg1Base: root.dark ? root.darkColors.bg1Base : root.lightColors.bg1Base
         property color bg1: ColorUtils.transparentize(root.dark ? root.darkColors.bg1 : root.lightColors.bg1, root.contentTransparency)
