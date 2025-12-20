@@ -6,6 +6,9 @@ import QtQuick.Layouts
 
 StyledPopup {
     id: root
+    
+    // Override the default centering behavior to align right
+    popupBackgroundMargin: 0
 
     // Helper function to format KB to GB
     function formatKB(kb) {

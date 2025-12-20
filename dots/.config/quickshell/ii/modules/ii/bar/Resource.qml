@@ -49,26 +49,6 @@ Item {
             }
         }
 
-        Item {
-            Layout.alignment: Qt.AlignVCenter
-            implicitWidth: fullPercentageTextMetrics.width
-            implicitHeight: percentageText.implicitHeight
-
-            TextMetrics {
-                id: fullPercentageTextMetrics
-                text: "100"
-                font.pixelSize: Appearance.font.pixelSize.small
-            }
-
-            StyledText {
-                id: percentageText
-                anchors.centerIn: parent
-                color: Appearance.colors.colOnLayer1
-                font.pixelSize: Appearance.font.pixelSize.small
-                text: `${Math.round(percentage * 100).toString()}`
-            }
-        }
-
         Behavior on x {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }

@@ -35,12 +35,17 @@ LazyLoader {
         exclusiveZone: 0
         margins {
             left: {
-                if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
-                    root.hoverTarget, 
-                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
-                ).x;
-                return Appearance.sizes.verticalBarWidth
+                if (!Config.options.bar.vertical) {
+                    // Align to the left edge of the hover target (start at position 0)
+                    return root.QsWindow?.mapFromItem(
+                        root.hoverTarget,
+                        0,
+                        0
+                    ).x;
+                }
+                return Appearance.sizes.verticalBarWidth;
             }
+
             top: {
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
                 return root.QsWindow?.mapFromItem(
