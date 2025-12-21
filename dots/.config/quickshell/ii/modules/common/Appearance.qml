@@ -30,12 +30,7 @@ Singleton {
         let y = 0.5768 * (x * x) - 0.759 * (x) + 0.2896
         return Math.max(0, Math.min(0.22, y))
     }
-    property real autoContentTransparency: { // y = -10.1734x^2 + 3.4457x + 0.1872
-        // let x = autoBackgroundTransparency
-        // let y = -10.1734 * (x * x) + 3.4457 * (x) + 0.1872
-        // return Math.max(0, Math.min(0.6, y))
-        return 0.9;
-    }
+    property real autoContentTransparency: 0.9
     property real backgroundTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoBackgroundTransparency : Config?.options.appearance.transparency.backgroundTransparency : 0
     property real contentTransparency: Config?.options.appearance.transparency.automatic ? autoContentTransparency : Config?.options.appearance.transparency.contentTransparency
 
