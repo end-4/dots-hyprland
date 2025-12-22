@@ -32,6 +32,7 @@ import qs.modules.waffle.background
 import qs.modules.waffle.bar
 import qs.modules.waffle.lock
 import qs.modules.waffle.notificationCenter
+import qs.modules.waffle.notificationPopup
 import qs.modules.waffle.onScreenDisplay
 import qs.modules.waffle.polkit
 import qs.modules.waffle.screenSnip
@@ -88,6 +89,7 @@ ShellRoot {
     PanelLoader { identifier: "wBackground"; component: WaffleBackground {} }
     PanelLoader { identifier: "wLock"; component: WaffleLock {} }
     PanelLoader { identifier: "wNotificationCenter"; component: WaffleNotificationCenter {} }
+    PanelLoader { identifier: "wNotificationPopup"; component: WaffleNotificationPopup {} }
     PanelLoader { identifier: "wOnScreenDisplay"; component: WaffleOSD {} }
     PanelLoader { identifier: "wPolkit"; component: WafflePolkit {} }
     PanelLoader { identifier: "wScreenSnip"; component: WScreenSnip {} }
@@ -106,7 +108,7 @@ ShellRoot {
     property list<string> families: ["ii", "waffle"]
     property var panelFamilies: ({
         "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wActionCenter", "wBar", "wBackground", "wLock", "wNotificationCenter", "wOnScreenDisplay", "wTaskView", "wPolkit", "wScreenSnip", "wSessionScreen", "wStartMenu", "iiCheatsheet", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiWallpaperSelector"],
+        "waffle": ["wActionCenter", "wBar", "wBackground", "wLock", "wNotificationCenter", "wNotificationPopup", "wOnScreenDisplay", "wTaskView", "wPolkit", "wScreenSnip", "wSessionScreen", "wStartMenu", "iiCheatsheet", "iiOnScreenKeyboard", "iiOverlay", "iiWallpaperSelector"],
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
