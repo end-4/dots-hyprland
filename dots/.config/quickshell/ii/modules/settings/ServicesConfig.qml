@@ -11,6 +11,30 @@ ContentPage {
         icon: "neurology"
         title: Translation.tr("AI")
 
+        ConfigSwitch {
+            buttonIcon: "save"
+            text: Translation.tr("Automatically save chats")
+            checked: Config.options.ai.autoSave
+            onCheckedChanged: {
+                Config.options.ai.autoSave = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Automatically names and saves the conversations that are more than preferred number of responses longs.")
+            }
+        }
+        ConfigSpinBox {
+            icon: "chat_add_on"
+            text: Translation.tr("Automatically save message count")
+            value: Config.options.ai.autoSaveResponses
+            from: 1
+            to: 10
+            stepSize: 1
+            onValueChanged: {
+                Config.options.ai.autoSaveResponses = value;
+            }
+        }
+        
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("System prompt")

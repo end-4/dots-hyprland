@@ -57,6 +57,8 @@ Singleton {
         property int total: -1
     }
 
+    property bool waitingForResponse: false // for save indicator
+
     function idForMessage(message) {
         // Generate a unique ID using timestamp and random value
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
@@ -70,6 +72,8 @@ Singleton {
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
     property list<var> savedChats: []
+    property var currentChatMetadata: {}  // current chat metadata
+    
 
     property var promptSubstitutions: {
         "{DISTRO}": SystemInfo.distroName,
@@ -458,20 +462,21 @@ Singleton {
             }
         }
     }
-
     Process {
         id: getSavedChats
         running: true
-        command: ["ls", "-1", Directories.aiChats]
+        command: ["ls", "-1t", Directories.aiChats]
         stdout: StdioCollector {
             onStreamFinished: {
                 if (text.length === 0) return;
-                root.savedChats = text.split("\n")
-                    .filter(fileName => fileName.endsWith(".json"))
-                    .map(fileName => `${Directories.aiChats}/${fileName}`)
+                const files = text.split("\n").filter(fileName => fileName.length > 0);
+                root.savedChats = files
+                        .filter(fileName => fileName.endsWith(".json"))
+                        .map(fileName => `${Directories.aiChats}/${fileName}`);
             }
         }
     }
+
 
     FileView {
         id: promptLoader
@@ -482,6 +487,8 @@ Singleton {
             root.addMessage(Translation.tr("Loaded the following system prompt\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
         }
     }
+
+
 
     function printPrompt() {
         root.addMessage(Translation.tr("The current system prompt is\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
@@ -628,16 +635,23 @@ Singleton {
         property ApiStrategy currentStrategy
 
         function markDone() {
+            root.waitingForResponse = false;
             requester.message.done = true;
             if (root.postResponseHook) {
                 root.postResponseHook();
                 root.postResponseHook = null; // Reset hook after use
             }
-            root.saveChat("lastSession")
-            root.responseFinished()
+            if (Config.options.ai.autoSave) {
+                if ((root.currentChatMetadata === undefined || JSON.stringify(root.currentChatMetadata) === '{}') && root.messageIDs.length > Config.options.ai.autoSaveResponses * 2) root.autoNameAndSave();
+            }
+
+            if (root.currentChatMetadata != undefined && JSON.stringify(root.currentChatMetadata) !== '{}') root.saveCurrentChat();
+
+            root.responseFinished();
         }
 
         function makeRequest() {
+            root.waitingForResponse = true
             const model = models[currentModelId];
 
             // Fetch API keys if needed
@@ -900,40 +914,95 @@ Singleton {
 
     FileView {
         id: chatSaveFile
+        property bool isLoading: false
         property string chatName: ""
         path: chatName.length > 0 ? `${Directories.aiChats}/${chatName}.json` : ""
         blockLoading: true // Prevent race conditions
+        onLoadedChanged: {
+            if (!chatSaveFile.loaded) return;
+            if (isLoading) {
+                loadData(chatSaveFile.text());
+                isLoading = false;
+                chatName = "";
+            }
+        }
     }
 
     /**
      * Saves chat to a JSON list of message objects.
      * @param chatName name of the chat
      */
-    function saveChat(chatName) {
-        chatSaveFile.chatName = chatName.trim()
-        const saveContent = JSON.stringify(root.chatToJson())
-        chatSaveFile.setText(saveContent)
-        getSavedChats.running = true;
+    function saveChat(chatName, extraMetadata = {}) {
+        root.addMessage(Translation.tr("Saving the chat as '%1'").arg(chatName), root.interfaceRole);
+        chatSaveFile.chatName = chatName;
+
+        const defaultMetadata = {
+            savedAt: DateTime.date + " | " + DateTime.time,
+            messageCount: root.messageIDs.length,
+            path: chatSaveFile.path,
+            title: chatSaveFile.chatName
+        };
+
+        var metadata = Object.assign({}, defaultMetadata, extraMetadata); 
+
+        const saveContent = JSON.stringify({
+            metadata: metadata,
+            messages: root.chatToJson()
+        }, null, 2); // 2 for pretty look
+
+        chatSaveFile.setText(saveContent);
+        updateSavedChats();
+
+        root.currentChatMetadata = metadata;
     }
 
-    /**
+    function saveCurrentChat() {
+        if (!root.currentChatMetadata) return;
+        chatSaveFile.chatName = root.currentChatMetadata.title;
+
+        const saveContent = JSON.stringify({
+            metadata: root.currentChatMetadata,
+            messages: root.chatToJson()
+        }, null, 2); // 2 for pretty look
+
+        chatSaveFile.setText(saveContent);
+        chatSaveFile.chatName = ""; // we have to unload chatSaveFile or else it brokes (it took me 5 hours to figure out this bug)
+    }
+
+    function autoNameAndSave() {
+        autoNameGeminiProc.chatContent = JSON.stringify(root.chatToJson());
+        autoNameGeminiProc.running = true; 
+    }
+
+    function updateSavedChats() {
+        getSavedChats.running = true;
+        root.currentChatMetadata = {}; 
+    }
+
+    /*
      * Loads chat from a JSON list of message objects.
      * @param chatName name of the chat
      */
     function loadChat(chatName) {
+        chatSaveFile.chatName = chatName;
+        chatSaveFile.isLoading = true
+        chatSaveFile.reload();
+    }
+
+    function loadData(data) {
         try {
-            chatSaveFile.chatName = chatName.trim()
-            chatSaveFile.reload()
-            const saveContent = chatSaveFile.text()
-            // console.log(saveContent)
-            const saveData = JSON.parse(saveContent)
-            root.clearMessages()
-            root.messageIDs = saveData.map((_, i) => {
-                return i
-            })
-            // console.log(JSON.stringify(messageIDs))
-            for (let i = 0; i < saveData.length; i++) {
-                const message = saveData[i];
+            const saveContent = data
+            const saveData = JSON.parse(saveContent);
+            
+            root.currentChatMetadata = saveData.metadata;
+            
+            const messages = saveData.messages;
+            root.clearMessages();
+            
+            root.messageIDs = messages.map((_, i) => i);
+
+            for (let i = 0; i < messages.length; i++) {
+                const message = messages[i];
                 root.messageByID[i] = root.aiMessageComponent.createObject(root, {
                     "role": message.role,
                     "rawContent": message.rawContent,
@@ -949,13 +1018,44 @@ Singleton {
                     "functionName": message.functionName,
                     "functionCall": message.functionCall,
                     "functionResponse": message.functionResponse,
-                    "visibleToUser": message.visibleToUser,
+                    "visibleToUser": message.visibleToUser
                 });
             }
         } catch (e) {
             console.log("[AI] Could not load chat: ", e);
         } finally {
+            root.savedChats = [];
             getSavedChats.running = true;
         }
     }
+
+    Process { 
+        id: autoNameGeminiProc
+        running: false
+        property var chatContent
+        property string base64Chat: Qt.btoa(chatContent)
+        command: [
+            "bash", "-c",
+            Directories.conversationTitleScriptPath + " " + base64Chat
+        ]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var output = this.text.trim()
+                output = output.replace(/^```json/, "").replace(/```$/, "").trim() // clear the junk from AI output
+                
+                var jsonOutput = JSON.parse(output)
+                var title = jsonOutput.title
+                var icon = jsonOutput.icon
+
+                var metadataObj = { // AI extra metadata such as icon (can be expanded in the future)
+                    icon: icon
+                }
+
+                Qt.callLater(() => {
+                    root.saveChat(title, metadataObj)  
+                    getSavedChats.running = true
+                })
+            }
+        }
+    } 
 }
