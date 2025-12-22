@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import QtQuick.Layouts
+import QtQuick.Controls
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
@@ -48,7 +49,14 @@ ContentPage {
     // Process to enroll fingerprint (automatic finger detection)
     Process {
         id: enrollFingerprintProc
-        command: ["fprintd-enroll", currentUser]
+        property string selectedFinger: ""
+        function getCommand() {
+            if (selectedFinger && selectedFinger !== "") {
+                return ["fprintd-enroll", currentUser, "-f", selectedFinger];
+            }
+            return ["fprintd-enroll", currentUser];
+        }
+        command: getCommand()
         running: false
         property string output: ""
         property string errorOutput: ""
@@ -345,10 +353,26 @@ ContentPage {
     }
 
     // Enrollment state
-    property string enrollmentState: "idle" // idle, scanning, completed, verifying, verified, verify-failed, error
+    property string enrollmentState: "idle" // idle, select-finger, scanning, completed, verifying, verified, verify-failed, error
     property string enrollmentError: ""
     property string enrollmentTip: ""
     property bool showError: false
+    property string selectedFinger: ""
+
+    // Available finger options
+    ListModel {
+        id: fingerOptionsModel
+        ListElement { finger: "left-thumb"; displayName: "Left Thumb" }
+        ListElement { finger: "left-index-finger"; displayName: "Left Index Finger" }
+        ListElement { finger: "left-middle-finger"; displayName: "Left Middle Finger" }
+        ListElement { finger: "left-ring-finger"; displayName: "Left Ring Finger" }
+        ListElement { finger: "left-little-finger"; displayName: "Left Little Finger" }
+        ListElement { finger: "right-thumb"; displayName: "Right Thumb" }
+        ListElement { finger: "right-index-finger"; displayName: "Right Index Finger" }
+        ListElement { finger: "right-middle-finger"; displayName: "Right Middle Finger" }
+        ListElement { finger: "right-ring-finger"; displayName: "Right Ring Finger" }
+        ListElement { finger: "right-little-finger"; displayName: "Right Little Finger" }
+    }
 
     function parseFingerprints(output) {
         fingerprintListModel.clear();
@@ -379,7 +403,7 @@ ContentPage {
         listFingerprintsProc.running = true;
     }
 
-    function startEnrollment() {
+    function startEnrollment(finger) {
         if (!deviceAvailable) {
             enrollmentError = Translation.tr("No fingerprint device found. Please check your hardware.");
             enrollmentState = "error";
@@ -387,6 +411,17 @@ ContentPage {
             showError = true;
             return;
         }
+        if (!finger || finger === "") {
+            // Show finger selection UI
+            enrollmentState = "select-finger";
+            enrollmentError = "";
+            enrollmentTip = Translation.tr("Select which finger to enroll");
+            showError = false;
+            return;
+        }
+        selectedFinger = finger;
+        enrollFingerprintProc.selectedFinger = finger;
+        enrollFingerprintProc.command = enrollFingerprintProc.getCommand();
         enrollmentState = "scanning";
         enrollmentError = "";
         enrollmentTip = Translation.tr("Place your finger on the sensor");
@@ -407,6 +442,8 @@ ContentPage {
         enrollmentError = "";
         enrollmentTip = "";
         showError = false;
+        selectedFinger = "";
+        enrollFingerprintProc.selectedFinger = "";
     }
 
     function deleteFingerprint(finger) {
@@ -492,7 +529,7 @@ ContentPage {
                     model: fingerprintListModel
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 60
+                        Layout.preferredHeight: 72
                         radius: Appearance.rounding.medium
                         color: Appearance.m3colors.m3surfaceContainerHigh
                         border.width: 1
@@ -500,18 +537,29 @@ ContentPage {
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
+                            anchors.margins: 16
+                            spacing: 16
 
-                            MaterialSymbol {
-                                text: "fingerprint"
-                                iconSize: 28
-                                color: Appearance.m3colors.m3primary
+                            // Centered fingerprint icon in a circular background
+                            Rectangle {
+                                Layout.alignment: Qt.AlignVCenter
+                                Layout.preferredWidth: 48
+                                Layout.preferredHeight: 48
+                                radius: width / 2
+                                color: Appearance.m3colors.m3primaryContainer
+
+                                MaterialSymbol {
+                                    anchors.centerIn: parent
+                                    text: "fingerprint"
+                                    iconSize: 24
+                                    color: Appearance.m3colors.m3onPrimaryContainer
+                                }
                             }
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 4
+                                Layout.alignment: Qt.AlignVCenter
+                                spacing: 2
 
                                 StyledText {
                                     text: model.displayName
@@ -527,19 +575,29 @@ ContentPage {
                                 }
                             }
 
+                            // Better positioned delete button
                             RippleButton {
-                                implicitWidth: 40
-                                implicitHeight: 40
+                                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                                Layout.preferredWidth: 48
+                                Layout.preferredHeight: 48
                                 buttonRadius: Appearance.rounding.full
                                 colBackground: Appearance.m3colors.m3errorContainer
+                                padding: 0
+                                leftPadding: 0
+                                rightPadding: 0
+                                topPadding: 0
+                                bottomPadding: 0
                                 onClicked: {
                                     deleteFingerprint(model.finger);
                                 }
-                                contentItem: MaterialSymbol {
-                                    anchors.centerIn: parent
-                                    text: "delete"
-                                    iconSize: 20
-                                    color: Appearance.m3colors.m3onErrorContainer
+                                contentItem: Item {
+                                    anchors.fill: parent
+                                    MaterialSymbol {
+                                        anchors.centerIn: parent
+                                        text: "delete"
+                                        iconSize: 20
+                                        color: Appearance.m3colors.m3onErrorContainer
+                                    }
                                 }
                                 StyledToolTip {
                                     text: Translation.tr("Delete fingerprint")
@@ -549,14 +607,36 @@ ContentPage {
                     }
                 }
 
-                StyledText {
+                // Empty state with better styling
+                Rectangle {
                     visible: fingerprintListModel.count === 0
                     Layout.fillWidth: true
+                    Layout.preferredHeight: 80
                     Layout.topMargin: 8
-                    text: Translation.tr("No fingerprints enrolled")
-                    font.pixelSize: Appearance.font.pixelSize.normal
-                    color: Appearance.colors.colSubtext
-                    horizontalAlignment: Text.AlignHCenter
+                    radius: Appearance.rounding.medium
+                    color: Appearance.colors.colLayer0
+                    border.width: 1
+                    border.color: Appearance.colors.colLayer1
+
+                    ColumnLayout {
+                        anchors.centerIn: parent
+                        spacing: 8
+
+                        MaterialSymbol {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: "fingerprint"
+                            iconSize: 32
+                            color: Appearance.colors.colSubtext
+                            opacity: 0.5
+                        }
+
+                        StyledText {
+                            text: Translation.tr("No fingerprints enrolled")
+                            font.pixelSize: Appearance.font.pixelSize.normal
+                            color: Appearance.colors.colSubtext
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                    }
                 }
             }
         }
@@ -572,7 +652,7 @@ ContentPage {
                 // Device status
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 50
+                    Layout.preferredHeight: 56
                     radius: Appearance.rounding.medium
                     color: deviceAvailable ? Appearance.m3colors.m3primaryContainer : Appearance.m3colors.m3errorContainer
                     border.width: 1
@@ -580,19 +660,31 @@ ContentPage {
 
                     RowLayout {
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 12
+                        anchors.margins: 16
+                        spacing: 16
 
-                        MaterialSymbol {
-                            text: deviceAvailable ? "check_circle" : "error"
-                            iconSize: 24
-                            color: deviceAvailable ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onErrorContainer
+                        // Centered status icon in circular background
+                        Rectangle {
+                            Layout.alignment: Qt.AlignVCenter
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 32
+                            radius: width / 2
+                            color: deviceAvailable ? Appearance.m3colors.m3primary : Appearance.m3colors.m3error
+
+                            MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: deviceAvailable ? "check_circle" : "error"
+                                iconSize: 16
+                                color: deviceAvailable ? Appearance.m3colors.m3onPrimary : Appearance.m3colors.m3onError
+                            }
                         }
 
                         StyledText {
                             Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignVCenter
                             text: deviceAvailable ? Translation.tr("Fingerprint device ready") : Translation.tr("No fingerprint device found")
                             font.pixelSize: Appearance.font.pixelSize.normal
+                            font.weight: Font.Medium
                             color: deviceAvailable ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onErrorContainer
                         }
                     }
@@ -601,23 +693,34 @@ ContentPage {
                 // Enroll button
                 RippleButton {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 56
+                    Layout.preferredHeight: 64
                     enabled: deviceAvailable && (enrollmentState === "idle" || enrollmentState === "error" || enrollmentState === "verify-failed" || enrollmentState === "verified")
                     buttonRadius: Appearance.rounding.medium
                     colBackground: enabled ? Appearance.m3colors.m3primary : Appearance.colors.colLayer1
                     onClicked: {
                         if (enabled) {
-                            startEnrollment();
+                            startEnrollment(""); // Empty string triggers finger selection
                         }
                     }
                     contentItem: RowLayout {
                         anchors.centerIn: parent
-                        spacing: 12
+                        spacing: 16
 
-                        MaterialSymbol {
-                            text: "fingerprint"
-                            iconSize: 28
+                        // Centered fingerprint icon
+                        Rectangle {
+                            Layout.alignment: Qt.AlignVCenter
+                            Layout.preferredWidth: 40
+                            Layout.preferredHeight: 40
+                            radius: width / 2
                             color: enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colSubtext
+                            opacity: 0.2
+
+                            MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: "fingerprint"
+                                iconSize: 20
+                                color: enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colSubtext
+                            }
                         }
 
                         StyledText {
@@ -629,11 +732,198 @@ ContentPage {
                     }
                 }
 
+                // Finger selection UI
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: enrollmentState === "select-finger" ? 400 : 0
+                    visible: enrollmentState === "select-finger"
+                    radius: Appearance.rounding.large
+                    color: Appearance.m3colors.m3surfaceContainerHigh
+                    border.width: 1
+                    border.color: Appearance.colors.colLayer1
+
+                    Behavior on Layout.preferredHeight {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 24
+                        spacing: 20
+
+                        StyledText {
+                            Layout.fillWidth: true
+                            text: Translation.tr("Select Finger to Enroll")
+                            font.pixelSize: Appearance.font.pixelSize.larger
+                            font.weight: Font.Medium
+                            horizontalAlignment: Text.AlignHCenter
+                            color: Appearance.colors.colOnLayer0
+                        }
+
+                        // Left Hand Section
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: Translation.tr("Left Hand")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                font.weight: Font.Medium
+                                color: Appearance.colors.colSubtext
+                                horizontalAlignment: Text.AlignLeft
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 8
+
+                                Repeater {
+                                    model: [
+                                        { finger: "left-thumb", displayName: "Left Thumb" },
+                                        { finger: "left-index-finger", displayName: "Left Index Finger" },
+                                        { finger: "left-middle-finger", displayName: "Left Middle Finger" },
+                                        { finger: "left-ring-finger", displayName: "Left Ring Finger" },
+                                        { finger: "left-little-finger", displayName: "Left Little Finger" }
+                                    ]
+                                    RippleButton {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 64
+                                        buttonRadius: Appearance.rounding.medium
+                                        colBackground: Appearance.m3colors.m3primaryContainer
+                                        onClicked: {
+                                            startEnrollment(modelData.finger);
+                                        }
+                                        contentItem: ColumnLayout {
+                                            anchors.centerIn: parent
+                                            spacing: 4
+
+                                            MaterialSymbol {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                text: "fingerprint"
+                                                iconSize: 20
+                                                color: Appearance.m3colors.m3onPrimaryContainer
+                                            }
+
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                text: {
+                                                    const name = modelData.displayName;
+                                                    if (name.includes("Thumb")) return Translation.tr("Thumb");
+                                                    if (name.includes("Index")) return Translation.tr("Index");
+                                                    if (name.includes("Middle")) return Translation.tr("Middle");
+                                                    if (name.includes("Ring")) return Translation.tr("Ring");
+                                                    if (name.includes("Little")) return Translation.tr("Little");
+                                                    return name;
+                                                }
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                                font.weight: Font.Medium
+                                                color: Appearance.m3colors.m3onPrimaryContainer
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Right Hand Section
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: Translation.tr("Right Hand")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                font.weight: Font.Medium
+                                color: Appearance.colors.colSubtext
+                                horizontalAlignment: Text.AlignLeft
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 8
+
+                                Repeater {
+                                    model: [
+                                        { finger: "right-thumb", displayName: "Right Thumb" },
+                                        { finger: "right-index-finger", displayName: "Right Index Finger" },
+                                        { finger: "right-middle-finger", displayName: "Right Middle Finger" },
+                                        { finger: "right-ring-finger", displayName: "Right Ring Finger" },
+                                        { finger: "right-little-finger", displayName: "Right Little Finger" }
+                                    ]
+                                    RippleButton {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 64
+                                        buttonRadius: Appearance.rounding.medium
+                                        colBackground: Appearance.m3colors.m3primaryContainer
+                                        onClicked: {
+                                            startEnrollment(modelData.finger);
+                                        }
+                                        contentItem: ColumnLayout {
+                                            anchors.centerIn: parent
+                                            spacing: 4
+
+                                            MaterialSymbol {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                text: "fingerprint"
+                                                iconSize: 20
+                                                color: Appearance.m3colors.m3onPrimaryContainer
+                                            }
+
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignHCenter
+                                                text: {
+                                                    const name = modelData.displayName;
+                                                    if (name.includes("Thumb")) return Translation.tr("Thumb");
+                                                    if (name.includes("Index")) return Translation.tr("Index");
+                                                    if (name.includes("Middle")) return Translation.tr("Middle");
+                                                    if (name.includes("Ring")) return Translation.tr("Ring");
+                                                    if (name.includes("Little")) return Translation.tr("Little");
+                                                    return name;
+                                                }
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                                font.weight: Font.Medium
+                                                color: Appearance.m3colors.m3onPrimaryContainer
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        RippleButton {
+                            Layout.alignment: Qt.AlignHCenter
+                            implicitHeight: 44
+                            horizontalPadding: 32
+                            buttonRadius: Appearance.rounding.medium
+                            colBackground: Appearance.m3colors.m3errorContainer
+                            onClicked: {
+                                enrollmentState = "idle";
+                                enrollmentError = "";
+                                enrollmentTip = "";
+                                showError = false;
+                                selectedFinger = "";
+                            }
+                            contentItem: StyledText {
+                                anchors.centerIn: parent
+                                text: Translation.tr("Cancel")
+                                font.pixelSize: Appearance.font.pixelSize.normal
+                                font.weight: Font.Medium
+                                color: Appearance.m3colors.m3onErrorContainer
+                            }
+                        }
+                    }
+                }
+
                 // Enrollment status card
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: enrollmentState === "idle" ? 0 : 180
-                    visible: enrollmentState !== "idle"
+                    Layout.preferredHeight: (enrollmentState === "idle" || enrollmentState === "select-finger") ? 0 : 180
+                    visible: enrollmentState !== "idle" && enrollmentState !== "select-finger"
                     radius: Appearance.rounding.large
                     color: {
                         if (enrollmentState === "error" || enrollmentState === "verify-failed") return Appearance.m3colors.m3errorContainer;
@@ -813,8 +1103,8 @@ ContentPage {
                         Rectangle {
                             visible: enrollmentState === "scanning" || enrollmentState === "verifying" || enrollmentState === "completed"
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 8
-                            radius: 4
+                            Layout.preferredHeight: 12
+                            radius: 6
                             color: Appearance.colors.colLayer1
 
                             Rectangle {
@@ -831,7 +1121,7 @@ ContentPage {
                                     // Fallback: estimate based on stage count
                                     return parent.width * Math.min(enrollFingerprintProc.stageCount / 20, 1.0);
                                 }
-                                radius: 4
+                                radius: 6
                                 color: showError ? Appearance.m3colors.m3error : Appearance.m3colors.m3primary
 
                                 Behavior on width {
@@ -840,7 +1130,7 @@ ContentPage {
                                         easing.type: Easing.OutCubic
                                     }
                                 }
-                                
+
                                 Behavior on color {
                                     ColorAnimation {
                                         duration: 200
@@ -887,12 +1177,14 @@ ContentPage {
                                             enrollmentError = "";
                                             enrollmentTip = "";
                                             showError = false;
+                                            selectedFinger = "";
                                         }
                                     } else {
                                         enrollmentState = "idle";
                                         enrollmentError = "";
                                         enrollmentTip = "";
                                         showError = false;
+                                        selectedFinger = "";
                                     }
                                 }
                                 contentItem: StyledText {

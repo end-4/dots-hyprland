@@ -10,7 +10,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -31,6 +30,7 @@ ApplicationWindow {
         {
             name: Translation.tr("General"),
             icon: "browse",
+            iconRotation: 180,
             component: "modules/settings/GeneralConfig.qml"
         },
         {
@@ -50,13 +50,18 @@ ApplicationWindow {
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
+            name: Translation.tr("Display"),
+            icon: "desktop_windows",
+            component: "modules/settings/DisplayConfig.qml"
+        },
+        {
             name: Translation.tr("Services"),
             icon: "settings",
             component: "modules/settings/ServicesConfig.qml"
         },
         {
             name: Translation.tr("Security"),
-            icon: "fingerprint",
+            icon: "security",
             component: "modules/settings/SecurityConfig.qml"
         },
         {
@@ -208,21 +213,36 @@ ApplicationWindow {
                         }
                     }
 
-                    NavigationRailTabArray {
-                        currentIndex: root.currentPage
-                        expanded: navRail.expanded
-                        Repeater {
-                            model: root.pages
-                            NavigationRailButton {
-                                required property var index
-                                required property var modelData
-                                toggled: root.currentPage === index
-                                onPressed: root.currentPage = index;
+                    ScrollView {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumHeight: 0
+                        clip: true
+                        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                        ScrollBar.vertical.interactive: true
+                        
+                        ColumnLayout {
+                            width: ScrollView.viewport ? ScrollView.viewport.width : parent.width
+                            spacing: 0
+                            
+                            NavigationRailTabArray {
+                                currentIndex: root.currentPage
                                 expanded: navRail.expanded
-                                buttonIcon: modelData.icon
-                                buttonIconRotation: modelData.iconRotation || 0
-                                buttonText: modelData.name
-                                showToggledHighlight: false
+                                Layout.fillWidth: true
+                                Repeater {
+                                    model: root.pages
+                                    NavigationRailButton {
+                                        required property var index
+                                        required property var modelData
+                                        toggled: root.currentPage === index
+                                        onPressed: root.currentPage = index;
+                                        expanded: navRail.expanded
+                                        buttonIcon: modelData.icon
+                                        buttonIconRotation: modelData.iconRotation || 0
+                                        buttonText: modelData.name
+                                        showToggledHighlight: false
+                                    }
+                                }
                             }
                         }
                     }
