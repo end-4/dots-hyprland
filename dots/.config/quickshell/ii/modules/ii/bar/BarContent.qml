@@ -327,6 +327,26 @@ Item { // Bar content region
                 Layout.fillHeight: true
             }
 
+            // Crypto
+            Loader {
+                Layout.leftMargin: 4
+                active: Config.options.bar.crypto.enable
+
+                sourceComponent: Row {
+                    spacing: 4
+                    Repeater {
+                        model: Crypto.coinModel
+                        delegate: BarGroup {
+                            CryptoWidget {
+                                imageUrl: model.imageUrl
+                                symbol: model.symbol
+                                price: model.price
+                            }
+                        }
+                    }
+                }
+            }
+
             // Weather
             Loader {
                 Layout.leftMargin: 4

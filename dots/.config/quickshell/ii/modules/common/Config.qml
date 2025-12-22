@@ -275,6 +275,12 @@ Singleton {
                 property JsonObject tooltips: JsonObject {
                     property bool clickToShow: false
                 }
+                property JsonObject crypto: JsonObject {
+                    property bool enable: true
+                    property list<string> coins: ["bitcoin"]
+                    property bool monochromeIcon: false
+                    property int refreshRate: 5 // minutes
+                }
             }
 
             property JsonObject battery: JsonObject {
