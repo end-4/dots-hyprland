@@ -524,6 +524,109 @@ def show_stats(period='today'):
             hours = duration // 3600
             minutes = (duration % 3600) // 60
             print(f"  • {app:20s} {hours}h {minutes}m")
+    
+    elif period == 'week-json':
+        # Output weekly data in JSON format for QML
+        import json
+        
+        # Get last 7 days
+        dates = [(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(6, -1, -1)]
+        day_names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        
+        week_data = []
+        total_week_usage = 0
+        app_colors = {}
+        # Bright, vibrant colors avoiding dark shades
+        color_palette = ["#FF7139", "#007ACC", "#5865F2", "#1DB954", "#FF9500", "#0088CC", 
+                        "#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8", "#6C5CE7",
+                        "#FF4757", "#2ED573", "#5F27CD", "#00D2D3", "#FFA502", "#FF6348",
+                        "#1E90FF", "#FF69B4", "#3742FA", "#70A1FF"]
+        color_index = 0
+        
+        for i, date in enumerate(dates):
+            cursor.execute('''
+                SELECT app_class, SUM(duration) as total
+                FROM app_usage
+                WHERE date = ?
+                GROUP BY app_class
+                ORDER BY total DESC
+            ''', (date,))
+            
+            apps_data = []
+            day_total = 0
+            
+            for app, duration in cursor.fetchall():
+                if app not in app_colors:
+                    app_colors[app] = color_palette[color_index % len(color_palette)]
+                    color_index += 1
+                
+                apps_data.append({
+                    "name": app,
+                    "time": duration,
+                    "color": app_colors[app]
+                })
+                day_total += duration
+            
+            total_week_usage += day_total
+            hours = day_total // 3600
+            minutes = (day_total % 3600) // 60
+            
+            # Use actual day name for today
+            day_label = "Today" if i == 6 else day_names[datetime.strptime(date, '%Y-%m-%d').weekday()]
+            
+            week_data.append({
+                "day": day_label,
+                "apps": apps_data[:5],  # Top 5 apps per day
+                "total": f"{hours}h {minutes}m"
+            })
+        
+        # Calculate daily average
+        avg_seconds = total_week_usage / 7 if week_data else 0
+        avg_hours = int(avg_seconds // 3600)
+        avg_minutes = int((avg_seconds % 3600) // 60)
+        daily_average = f"{avg_hours}h {avg_minutes}m"
+        
+        # Get previous week's average for comparison
+        prev_week_dates = [(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(13, 6, -1)]
+        cursor.execute(f'''
+            SELECT SUM(duration) FROM app_usage
+            WHERE date IN ({','.join(['?'] * len(prev_week_dates))})
+        ''', prev_week_dates)
+        prev_week_total = cursor.fetchone()[0] or 1
+        prev_week_avg = prev_week_total / 7
+        
+        # Calculate percent change
+        percent_change = 0
+        if prev_week_avg > 0:
+            percent_change = int(((avg_seconds - prev_week_avg) / prev_week_avg) * 100)
+        
+        # Get most used apps
+        cursor.execute('''
+            SELECT app_class, SUM(duration) as total
+            FROM app_usage
+            WHERE date IN ({})
+            GROUP BY app_class
+            ORDER BY total DESC
+            LIMIT 6
+        '''.format(','.join(['?'] * len(dates))), dates)
+        
+        most_used = []
+        for app, _ in cursor.fetchall():
+            if app in app_colors:
+                most_used.append({
+                    "name": app,
+                    "color": app_colors[app]
+                })
+        
+        result = {
+            "dailyAverage": daily_average,
+            "percentChange": percent_change,
+            "weekData": week_data,
+            "mostUsedApps": most_used,
+            "insights": f"Your screen time this week averaged {daily_average} per day."
+        }
+        
+        print(json.dumps(result, indent=2))
             
     elif period == 'week':
         start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')

@@ -15,6 +15,7 @@ import sqlite3
 CONFIG_DIR = Path.home() / ".config" / "hypr" / "productivity"
 DATA_DIR = Path.home() / ".local" / "share" / "digital-wellbeing"
 DB_PATH = DATA_DIR / "usage.db"
+SETTINGS_FILE = CONFIG_DIR / "wellbeing.json"
 FOCUS_MODE_SCRIPT = CONFIG_DIR / "focus-mode.sh"
 WELLBEING_SCRIPT = CONFIG_DIR / "digital-wellbeing.py"
 
@@ -53,6 +54,35 @@ class ProductivityDashboard(Gtk.Window):
         # Settings Tab
         settings_tab = self.create_settings_tab()
         notebook.append_page(settings_tab, Gtk.Label(label="Settings"))
+        
+        # Load saved settings
+        self.load_settings()
+        
+    def load_settings(self):
+        """Load settings from JSON file"""
+        if SETTINGS_FILE.exists():
+            try:
+                with open(SETTINGS_FILE, 'r') as f:
+                    settings = json.load(f)
+                    self.eye_care_switch.set_active(settings.get('eye_care', False))
+                    self.break_switch.set_active(settings.get('break_reminders', False))
+            except Exception as e:
+                print(f"Error loading settings: {e}")
+        
+    def save_settings(self):
+        """Save settings to JSON file"""
+        try:
+            settings = {
+                'eye_care': self.eye_care_switch.get_active(),
+                'break_reminders': self.break_switch.get_active()
+            }
+            CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            with open(SETTINGS_FILE, 'w') as f:
+                json.dump(settings, f, indent=2)
+            return True
+        except Exception as e:
+            print(f"Error saving settings: {e}")
+            return False
         
     def create_focus_mode_tab(self):
         """Create Focus Mode tab"""
@@ -158,12 +188,14 @@ class ProductivityDashboard(Gtk.Window):
         reminders_box.set_border_width(10)
         
         self.eye_care_switch = Gtk.Switch()
+        self.eye_care_switch.connect("notify::active", lambda x, y: self.save_settings())
         eye_care_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         eye_care_box.pack_start(Gtk.Label(label="Eye Care Reminders (20-20-20 rule)"), False, False, 0)
         eye_care_box.pack_end(self.eye_care_switch, False, False, 0)
         reminders_box.pack_start(eye_care_box, False, False, 0)
         
         self.break_switch = Gtk.Switch()
+        self.break_switch.connect("notify::active", lambda x, y: self.save_settings())
         break_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         break_box.pack_start(Gtk.Label(label="Break Reminders"), False, False, 0)
         break_box.pack_end(self.break_switch, False, False, 0)
@@ -402,16 +434,26 @@ class ProductivityDashboard(Gtk.Window):
         
     def on_save_settings(self, button):
         """Save settings"""
-        # This is a simplified version - in production, properly save to config
-        dialog = Gtk.MessageDialog(
-            transient_for=self,
-            flags=0,
-            message_type=Gtk.MessageType.INFO,
-            buttons=Gtk.ButtonsType.OK,
-            text="Settings saved successfully!",
-        )
-        dialog.run()
-        dialog.destroy()
+        if self.save_settings():
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.INFO,
+                buttons=Gtk.ButtonsType.OK,
+                text="Settings saved successfully!",
+            )
+            dialog.run()
+            dialog.destroy()
+        else:
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text="Failed to save settings!",
+            )
+            dialog.run()
+            dialog.destroy()
 
 
 def main():

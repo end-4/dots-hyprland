@@ -67,6 +67,20 @@ if [[ "$OS_GROUP_ID" == "gentoo" ]]; then
   v sudo chown -R $(whoami):$(whoami) ~/.local/
 fi
 
+# Setup Digital Wellbeing productivity features
+function setup_productivity_features(){
+  local productivity_dir="$XDG_CONFIG_HOME/hypr/productivity"
+  if [[ -f "$productivity_dir/install.sh" ]]; then
+    showfun "Setting up productivity features (Digital Wellbeing, Focus Mode)"
+    v bash "$productivity_dir/install.sh"
+  fi
+}
+
+if [[ ! -z $(systemctl --version) ]]; then
+  showfun setup_productivity_features
+  v setup_productivity_features
+fi
+
 v gsettings set org.gnome.desktop.interface font-name 'Google Sans Flex Medium 11 @opsz=11,wght=500'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 v kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly
