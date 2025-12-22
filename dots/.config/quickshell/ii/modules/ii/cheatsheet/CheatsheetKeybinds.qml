@@ -91,13 +91,14 @@ Item {
 
     ScrollView {
         id: scrollView
-        width: Screen.width
-        height: row.implicitHeight
-        contentWidth: row.implicitWidth
-        contentHeight: row.implicitHeight
+        anchors.fill: parent
+        contentWidth: Math.max(row.implicitWidth + leftPadding + rightPadding, width)
+        contentHeight: Math.max(row.implicitHeight + topPadding + bottomPadding, height)
         clip: true
-        bottomPadding: 20
-        leftPadding: 20
+        topPadding: 10
+        bottomPadding: 10
+        leftPadding: 30
+        rightPadding: 10
 
         ScrollBar.vertical: ScrollBar {
             policy: ScrollBar.AsNeeded
@@ -145,7 +146,6 @@ Item {
             delegate: Column { // Keybind sections
                 spacing: root.spacing
                 required property var modelData
-                anchors.top: row.top
 
                 Repeater {
                     model: modelData.children
@@ -158,7 +158,7 @@ Item {
 
                         Column {
                             id: sectionColumn
-                            anchors.centerIn: parent
+                            width: implicitWidth
                             spacing: root.titleSpacing
                             
                             StyledText {
