@@ -44,7 +44,7 @@ WChoiceButton {
             Layout.fillHeight: true
             horizontalPadding: 10
             verticalPadding: 11
-            implicitHeight: root.firstEntry ? 62 : 36
+            implicitHeight: Math.max(root.firstEntry ? 62 : 36, entryContentRow.implicitHeight + 8 * 2)
             implicitWidth: entryContentRow.implicitWidth + leftPadding + rightPadding
             topRightRadius: 0
             bottomRightRadius: 0
@@ -54,6 +54,7 @@ WChoiceButton {
                     id: entryContentRow
                     anchors {
                         left: parent.left
+                        right: parent.right
                         verticalCenter: parent.verticalCenter
                     }
                     spacing: 8
@@ -102,6 +103,7 @@ WChoiceButton {
             text: root.entry.name
             font.pixelSize: Looks.font.pixelSize.large
             maximumLineCount: 2
+            elide: Text.ElideRight
         }
 
         WText {
@@ -109,6 +111,7 @@ WChoiceButton {
             visible: root.firstEntry
             text: root.entry.type
             color: Looks.colors.accentUnfocused
+            elide: Text.ElideRight
         }
     }
 
