@@ -65,7 +65,7 @@ MouseArea {
         implicitHeight: notificationContent.implicitHeight + padding * 2
         implicitWidth: notificationContent.implicitWidth + padding * 2
         border.width: 1
-        border.color: ColorUtils.applyAlpha(Looks.colors.ambientShadow, 0.1)
+        border.color: root.isPopup ? Looks.colors.bg2Border : Looks.colors.bgPanelSeparator
 
         Behavior on x {
             animation: Looks.transition.enter.createObject(this)
