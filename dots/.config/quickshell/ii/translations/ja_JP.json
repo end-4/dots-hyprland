@@ -199,7 +199,7 @@
   "Use Levenshtein distance-based algorithm instead of fuzzy": "あいまい検索の代わりにレーベンシュタイン距離アルゴリズムを使用",
   "System prompt": "システムプロンプト",
   "12h AM/PM": "12時間（AM/PM）",
-  "Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)":"入力ミスが多い場合に便利ですが、結果が意図しないものになったり、略語（例：GIMP）が正しく検索できないことがあります",
+  "Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)": "入力ミスが多い場合に便利ですが、結果が意図しないものになったり、略語（例：GIMP）が正しく検索できないことがあります",
   "Critical warning": "重大な警告",
   "User agent (for services that require it)": "ユーザーエージェント（必要なサービス用）",
   "Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used.": "これらの領域は、画像や画面の一部など、まとまりのある部分を指します。\n必ずしも正確ではありません。\nAIではなく、ローカルで実行される画像処理アルゴリズムによって検出されます。",
@@ -428,5 +428,10 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "%1 updates available": "%1 件の更新があります",
+  "System Updates": "システムアップデート",
+  "Package Manager": "パッケージマネージャ",
+  "Show in bar": "バーに表示",
+  "Visibility Threshold": "表示しきい値"
 }

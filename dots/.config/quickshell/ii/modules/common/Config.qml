@@ -567,6 +567,9 @@ Singleton {
 
             property JsonObject updates: JsonObject {
                 property int checkInterval: 120 // minutes
+                property bool showInBar: true
+                property int notificationThreshold: 0 // packages
+                property string packageManager: "pacman" // "pacman", "yay", "paru"
                 property int adviseUpdateThreshold: 75 // packages
                 property int stronglyAdviseUpdateThreshold: 200 // packages
             }

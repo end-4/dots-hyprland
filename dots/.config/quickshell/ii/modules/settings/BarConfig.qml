@@ -252,6 +252,60 @@ ContentPage {
     }
 
     ContentSection {
+    ContentSection {
+        icon: "cached" // or "update"
+        title: Translation.tr("System Updates")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Show in bar")
+            checked: Config.options.updates.showInBar
+            onCheckedChanged: {
+                Config.options.updates.showInBar = checked;
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "notifications"
+            text: Translation.tr("Visibility Threshold")
+            value: Config.options.updates.notificationThreshold
+            from: 0
+            to: 1000
+            stepSize: 1
+            onValueChanged: {
+                Config.options.updates.notificationThreshold = value;
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Package Manager")
+            Layout.fillWidth: true
+
+            ConfigSelectionArray {
+                currentValue: Config.options.updates.packageManager
+                onSelected: newValue => {
+                    Config.options.updates.packageManager = newValue;
+                }
+                options: [
+                    {
+                        displayName: "pacman",
+                        icon: "inventory_2",
+                        value: "pacman"
+                    },
+                    {
+                        displayName: "yay",
+                        icon: "cloud_download",
+                        value: "yay"
+                    },
+                    {
+                        displayName: "paru",
+                        icon: "cloud_download",
+                        value: "paru"
+                    }
+                ]
+            }
+        }
+    }
         icon: "workspaces"
         title: Translation.tr("Workspaces")
 
