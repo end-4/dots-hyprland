@@ -100,8 +100,8 @@ RippleButton {
     }
 
     onClicked: {
-        GlobalStates.overviewOpen = false
         root.itemExecute()
+        GlobalStates.overviewOpen = false
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Delete && event.modifiers === Qt.ShiftModifier) {
