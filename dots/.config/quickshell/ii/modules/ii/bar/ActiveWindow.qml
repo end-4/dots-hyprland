@@ -25,7 +25,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: -4
-        anchors.leftMargin: 20
 
         StyledText {
             Layout.fillWidth: true
