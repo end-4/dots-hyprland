@@ -97,6 +97,7 @@ ShellRoot {
     PanelLoader { identifier: "wSessionScreen"; component: WaffleSessionScreen {} }
     PanelLoader { identifier: "wTaskView"; component: WaffleTaskView {} }
     ReloadPopup {}
+    OtherPopup {}
 
     component PanelLoader: LazyLoader {
         required property string identifier
