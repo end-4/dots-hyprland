@@ -4,5 +4,5 @@ import qs.modules.common
 Rectangle {
     id: contentItem
     anchors.fill: parent
-    color: Appearance.colors.colSurfaceContainer
+    color: Appearance.m3colors.m3surfaceContainer
 }

@@ -64,7 +64,7 @@ function showfun(){
 function pause(){
   if [ ! "$ask" == "false" ];then
     printf "${STY_FAINT}${STY_SLANT}"
-    local p; read -p "(Ctrl-C to abort, others to proceed)" p
+    local p; read -p "(Ctrl-C to abort, Enter to proceed)" p
     printf "${STY_RST}"
   fi
 }

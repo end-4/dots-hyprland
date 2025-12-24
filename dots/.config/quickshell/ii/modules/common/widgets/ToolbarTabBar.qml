@@ -12,18 +12,29 @@ Item {
     required property var tabButtonList
 
     function incrementCurrentIndex() {
-        tabBar.incrementCurrentIndex()
+        tabBar.incrementCurrentIndex();
     }
     function decrementCurrentIndex() {
-        tabBar.decrementCurrentIndex()
+        tabBar.decrementCurrentIndex();
     }
     function setCurrentIndex(index) {
-        tabBar.setCurrentIndex(index)
+        tabBar.setCurrentIndex(index);
     }
 
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     implicitWidth: contentItem.implicitWidth
     implicitHeight: 40
+
+    property Component delegate: ToolbarTabButton {
+        required property int index
+        required property var modelData
+        current: index == root.currentIndex
+        text: modelData.name
+        materialSymbol: modelData.icon
+        onClicked: {
+            root.setCurrentIndex(index);
+        }
+    }
 
     Row {
         id: contentItem
@@ -33,16 +44,7 @@ Item {
 
         Repeater {
             model: root.tabButtonList
-            delegate: ToolbarTabButton {
-                required property int index
-                required property var modelData
-                current: index == root.currentIndex
-                text: modelData.name
-                materialSymbol: modelData.icon
-                onClicked: {
-                    root.setCurrentIndex(index)
-                }
-            }
+            delegate: root.delegate
         }
     }
 
@@ -76,23 +78,23 @@ Item {
         z: 2
         acceptedButtons: Qt.NoButton
         cursorShape: Qt.PointingHandCursor
-        onWheel: (event) => {
+        onWheel: event => {
             if (event.angleDelta.y < 0) {
                 root.incrementCurrentIndex();
-            }
-            else {
+            } else {
                 root.decrementCurrentIndex();
             }
         }
     }
 
-    // TabBar doesn't allow tabs to be of different sizes. Literally unusable. 
+    // TabBar doesn't allow tabs to be of different sizes. That's what I thought...
     // We use it only for the logic and draw stuff manually
     TabBar {
         id: tabBar
         z: -1
         background: null
-        Repeater { // This is to fool the TabBar that it has tabs so it does the indices properly
+        Repeater {
+            // This is to fool the TabBar that it has tabs so it does the indices properly
             model: root.tabButtonList.length
             delegate: TabButton {
                 background: null
