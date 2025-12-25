@@ -1,11 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
-
-// Adjust path to point to your Appearance.qml
 import "modules/common" as Common
 
 Scope {
@@ -14,57 +11,44 @@ Scope {
     property string popupType: "neutral"
     property string title: ""
     property string message: ""
+    property string displayState: "hidden"
 
-    // --- RELOADPOPUP COLORS (Fixed for Bad/Good) ---
-    readonly property color bgBad: "#ffe99195"      // Pastel Red
-    readonly property color bgGood: "#ffD1E8D5"     // Pastel Green
-    readonly property color textBad: "#ff93000A"    // Dark Red Text
-    readonly property color textGood: "#ff0C1F13"   // Dark Green Text
+    readonly property bool isBottomPopup: (root.popupType === "submap" || root.popupType === "toggle")
 
-    // Access to Appearance Singleton/Component
+    property int rounding: 12
+    property int textOffset: (root.rounding / 2) - 1
+
+    readonly property color bgBad: "#ffe99195"
+    readonly property color bgGood: "#ffD1E8D5"
+    readonly property color textBad: "#ff93000A"
+    readonly property color textGood: "#ff0C1F13"
+
     property var themeColors: Common.Appearance.m3colors
-
-    // --- HELPERS ---
 
     function transparentize(color, alpha) {
         return Qt.rgba(color.r, color.g, color.b, alpha)
     }
 
-    // --- COLOR LOGIC ---
     function getBgColor() {
-        // Bad/Good: Fixed Pastel
         if (root.popupType === "bad")  return root.bgBad
-        if (root.popupType === "good") return root.bgGood
+            if (root.popupType === "good") return root.bgGood
 
-        // Submap: Theme Highlighted Gray
-        if (root.popupType === "submap")
-            return transparentize(root.themeColors.m3surfaceContainerHighest, 0.7)
+                if (root.isBottomPopup)
+                    return transparentize(root.themeColors.m3surfaceContainerHighest, 0.75)
 
-        // Neutral: Theme Standard Background
-        return transparentize(root.themeColors.m3surfaceContainer, 0.85)
+                    return transparentize(root.themeColors.m3surfaceContainer, 0.85)
     }
 
     function getTextColor() {
-        // Bad/Good: Fixed dark text for contrast
         if (root.popupType === "bad")  return root.textBad
-        if (root.popupType === "good") return root.textGood
-
-        // Submap/Neutral: Dynamic Theme Text (OnSurface)
-        return root.themeColors.m3onSurface
+            if (root.popupType === "good") return root.textGood
+                return root.themeColors.m3onSurface
     }
 
-    function getBorderColor() {
-        // No border for Neutral/Submap
-        if (root.popupType === "neutral" || root.popupType === "submap") return "transparent"
-        return "transparent"
-    }
-
-    // --- WATCHER (Log Listener) ---
     Process {
         id: watcher
         command: ["sh", "-c", "touch /tmp/qs_popup.log && stdbuf -oL tail -n 0 -f /tmp/qs_popup.log"]
         running: true
-
         stdout: SplitParser {
             onRead: (data) => {
                 var parts = data.trim().split("|");
@@ -72,33 +56,47 @@ Scope {
                     root.popupType = parts[0].toLowerCase();
                     root.title = parts[1];
                     root.message = parts[2];
-
-                    // Reset Loader to restart animations/timers
-                    popupLoader.active = false;
-                    popupLoader.active = true;
+                    root.displayState = "popup";
+                    popupTimer.restart();
                 }
+            }
+        }
+    }
+
+    Timer {
+        id: popupTimer
+        interval: root.isBottomPopup ? 1000 : (root.popupType === "bad" ? 5000 : 3000)
+        running: root.displayState === "popup"
+        onTriggered: {
+            if (root.popupType === "submap" && root.message.toLowerCase() !== "global") {
+                root.displayState = "indicator"
+            } else {
+                root.displayState = "hidden"
             }
         }
     }
 
     LazyLoader {
         id: popupLoader
-        active: false
+        active: root.displayState !== "hidden"
 
         PanelWindow {
             id: popup
             exclusiveZone: 0
 
-            // --- POSITIONING ---
-            // Submap at bottom, Alerts at top
-            anchors.top: root.popupType !== "submap"
-            anchors.bottom: root.popupType === "submap"
+            anchors.bottom: root.isBottomPopup
+            anchors.top: !root.isBottomPopup
 
-            margins.top: 10
-            margins.bottom: root.popupType === "submap" ? 80 : 20
+            // --- MARGIN LOGIC ---
+            // Bottom: Is like buried in the screen, so it doesn't show the bottom round corners
+            // Top: Uses a fixed small margin from the screen edge.
+            margins.bottom: root.isBottomPopup ? (root.displayState === "indicator" ? -root.rounding : 80) : 0
+            margins.top: !root.isBottomPopup ? 10 : 0
 
-            implicitWidth: rect.width + shadow.radius * 2
-            implicitHeight: rect.height + shadow.radius * 2
+            Behavior on margins.bottom { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+
+            implicitWidth: rect.width
+            implicitHeight: rect.height
 
             WlrLayershell.namespace: "quickshell:popup"
             color: "transparent"
@@ -107,34 +105,38 @@ Scope {
                 id: rect
                 anchors.centerIn: parent
 
-                color: root.getBgColor()
+                width: layout.implicitWidth + 60
 
-                border.width: 0
-                border.color: root.getBorderColor()
+                // If Indicator: small height adjustment.
+                // If Bottom Popup: Large padding (60).
+                // If Top Popup: Small padding (25).
+                height: {
+                    if (root.displayState === "indicator")
+                        return layout.implicitHeight + 20
 
-                // Adaptive size + Extra padding for Submap
-                implicitHeight: layout.implicitHeight + (root.popupType === "submap" ? 80 : 30)
-                implicitWidth: layout.implicitWidth + (root.popupType === "submap" ? 80 : 30)
-
-                radius: 12
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onPressed: popupLoader.active = false
+                        return layout.implicitHeight + (root.isBottomPopup ? 60 : 25)
                 }
+
+                radius: root.rounding
+                color: root.getBgColor()
 
                 ColumnLayout {
                     id: layout
-                    spacing: root.popupType === "submap" ? 2 : 5
+                    spacing: 0
                     anchors.centerIn: parent
+
+                    anchors.verticalCenterOffset: root.displayState === "indicator" ? -root.textOffset : 0
+
+                    Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 300 } }
 
                     Text {
                         // TITLE
+                        visible: root.displayState === "popup"
                         renderType: Text.NativeRendering
-                        font.family: root.popupType === "submap" ? "Iosevka Light" : "Iosevka Heavy"
-                        font.pointSize: root.popupType === "submap" ? 19 : 14
-                        font.bold: root.popupType !== "submap"
+
+                        font.family: root.isBottomPopup ? "Iosevka Light" : "Iosevka Heavy"
+                        font.pointSize: root.isBottomPopup ? 19 : 14
+                        font.bold: !root.isBottomPopup
 
                         text: root.title
                         color: root.getTextColor()
@@ -142,21 +144,31 @@ Scope {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.maximumWidth: 400
                         elide: Text.ElideRight
+
+                        opacity: visible ? 1 : 0
+                        Behavior on opacity { NumberAnimation { duration: 200 } }
                     }
 
                     Text {
                         // MESSAGE
+                        id: messageText
                         renderType: Text.NativeRendering
-                        font.family: root.popupType === "submap" ? "Iosevka Heavy" : "Iosevka"
-                        font.pointSize: root.popupType === "submap" ? 21 : 12
-                        font.bold: root.popupType === "submap"
+
+                        font.family: root.isBottomPopup ? "Iosevka Heavy" : "Iosevka"
+
+                        font.pointSize: {
+                            if (root.displayState === "indicator") return 16
+                                if (root.isBottomPopup) return 21
+                                    return 12
+                        }
+
+                        font.bold: (root.isBottomPopup && root.displayState !== "indicator")
 
                         text: root.message
                         color: root.getTextColor()
 
                         textFormat: Text.RichText
                         horizontalAlignment: Text.AlignHCenter
-
                         Layout.alignment: Qt.AlignHCenter
                         Layout.maximumWidth: 400
                         wrapMode: Text.WordWrap
@@ -164,26 +176,6 @@ Scope {
                         visible: text !== ""
                     }
                 }
-
-                // --- TIMER ---
-                Timer {
-                    // Submap: 1.2s | Bad: 5s | Others: 3s
-                    interval: root.popupType === "submap" ? 1200 : (root.popupType === "bad" ? 5000 : 3000)
-                    running: popupLoader.active
-                    onTriggered: popupLoader.active = false
-                }
-            }
-
-            DropShadow {
-                id: shadow
-                anchors.fill: rect
-                horizontalOffset: 0
-                verticalOffset: 4
-                radius: 8
-                samples: 16
-                color: Qt.rgba(0, 0, 0, 0.4)
-                source: rect
-                visible: root.popupType !== "neutral"
             }
         }
     }
