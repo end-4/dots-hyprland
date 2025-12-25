@@ -22,6 +22,9 @@ Singleton {
     // The ISP/organization name
     property string isp: ""
     
+    // The current internal IP address
+    property string internalIp: ""
+    
     // Loading state
     property bool loading: false
     
@@ -34,9 +37,38 @@ Singleton {
         fetcher.running = true;
     }
     
+    function getInternalIp() {
+        // Get internal IP from physical network interfaces (eno*, wlan*, eth*, wlp*, enp*)
+        // Excludes virtual interfaces like docker, loopback, etc.
+        internalIpFetcher.running = true;
+    }
+    
     Component.onCompleted: {
         console.info("[ExternalIpService] Starting external IP service.");
         root.getData();
+        // Fetch internal IP once on startup
+        getInternalIp();
+    }
+    
+    Process {
+        id: internalIpFetcher
+        command: ["bash", "-c", "ip addr show | grep -E '^[0-9]+: (eno|wlan|eth|wlp|enp)' -A 4 | grep -E 'inet ' | head -1 | awk '{print $2}' | cut -d/ -f1"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const fetchedInternalIp = text.trim();
+                if (fetchedInternalIp.length > 0) {
+                    root.internalIp = fetchedInternalIp;
+                    console.info(`[ExternalIpService] Fetched internal IP: ${fetchedInternalIp}`);
+                } else {
+                    console.warn("[ExternalIpService] Failed to fetch internal IP - empty response");
+                }
+            }
+        }
+        stderr: SplitParser {
+            onRead: line => {
+                console.error(`[ExternalIpService] Internal IP fetch error: ${line}`);
+            }
+        }
     }
     
     Process {

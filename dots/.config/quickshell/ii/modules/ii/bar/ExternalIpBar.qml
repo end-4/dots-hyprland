@@ -79,6 +79,13 @@ MouseArea {
             }
             
             StyledPopupValueRow {
+                visible: ExternalIp.internalIp && ExternalIp.internalIp.length > 0
+                icon: "devices"
+                label: Translation.tr("Internal IP:")
+                value: ExternalIp.internalIp
+            }
+            
+            StyledPopupValueRow {
                 visible: ExternalIp.isp && ExternalIp.isp.length > 0
                 icon: "router"
                 label: Translation.tr("ISP:")
