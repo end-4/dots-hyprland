@@ -1,0 +1,42 @@
+headerbar {
+  opacity: 0.5;
+}
+
+window#main-window {
+  background-color: #0000;
+  box-shadow: 0 0 1px 0;
+}
+
+columnview#search-window-column listview row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+label#above,
+label#below {
+  padding: 4px;
+  background: transparent;
+  color: {{colors.primary.default.hex}};
+  text-shadow:
+    /* Shadow */
+    0px 0px 12px {{colors.background.default.hex}},
+    /* Border */
+    -1px -1px 0px {{colors.primary_container.default.hex}},
+    1px -1px 0px {{colors.primary_container.default.hex}},
+    -1px 1px 0px {{colors.primary_container.default.hex}},
+    1px 1px 0px {{colors.primary_container.default.hex}},
+    /* Smoother border */
+    -1px -1px 2px {{colors.primary_container.default.hex}},
+    1px -1px 2px {{colors.primary_container.default.hex}},
+    -1px 1px 2px {{colors.primary_container.default.hex}},
+    1px 1px 2px {{colors.primary_container.default.hex}};
+}
+
+label#above {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+label#below {
+  font-size: 22px;
+}
