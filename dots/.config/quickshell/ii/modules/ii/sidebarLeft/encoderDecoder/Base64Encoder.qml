@@ -26,6 +26,10 @@ Item {
     property string decodedText: ""
     property bool isEncodeMode: true
 
+    onIsEncodeModeChanged: {
+        root.processText();
+    }
+
     onFocusChanged: (focus) => {
         if (focus) {
             root.inputField.forceActiveFocus()
@@ -94,7 +98,6 @@ Item {
                 toggled: root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = true;
-                    root.processText();
                 }
             }
 
@@ -104,7 +107,6 @@ Item {
                 toggled: !root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = false;
-                    root.processText();
                 }
             }
 
