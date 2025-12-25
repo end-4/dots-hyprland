@@ -39,9 +39,10 @@ Button {
         }
     }
     property color fgColor: {
+        if (!root.enabled) return root.colForegroundDisabled
         if (root.checked) return root.colForegroundToggled
         if (root.enabled) return root.colForeground
-        return root.colForegroundDisabled
+        return root.colForeground
     }
     property alias horizontalAlignment: buttonText.horizontalAlignment
     font {
