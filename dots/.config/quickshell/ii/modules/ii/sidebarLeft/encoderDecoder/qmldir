@@ -1,0 +1,4 @@
+module qs.modules.ii.sidebarLeft.encoderDecoder
+EncodingCanvas 1.0 EncodingCanvas.qml
+Base64Encoder 1.0 Base64Encoder.qml
+UrlEncoder 1.0 UrlEncoder.qml
