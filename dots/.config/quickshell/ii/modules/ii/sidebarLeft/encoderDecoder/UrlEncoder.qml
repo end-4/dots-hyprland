@@ -87,16 +87,10 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.normal
             }
 
-            ButtonGroup {
-                id: modeButtonGroup
-            }
-
             GroupButton {
                 id: encodeButton
                 text: Translation.tr("Encode")
-                ButtonGroup.group: modeButtonGroup
-                checkable: true
-                checked: root.isEncodeMode
+                toggled: root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = true;
                     root.processText();
@@ -106,9 +100,7 @@ Item {
             GroupButton {
                 id: decodeButton
                 text: Translation.tr("Decode")
-                ButtonGroup.group: modeButtonGroup
-                checkable: true
-                checked: !root.isEncodeMode
+                toggled: !root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = false;
                     root.processText();
