@@ -93,7 +93,7 @@ Item {
 
             GroupButton {
                 id: encodeButton
-                text: Translation.tr("Encode")
+                buttonText: Translation.tr("Encode")
                 toggled: root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = true;
@@ -102,7 +102,7 @@ Item {
 
             GroupButton {
                 id: decodeButton
-                text: Translation.tr("Decode")
+                buttonText: Translation.tr("Decode")
                 toggled: !root.isEncodeMode
                 onClicked: {
                     root.isEncodeMode = false;
