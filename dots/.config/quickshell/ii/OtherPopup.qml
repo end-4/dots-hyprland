@@ -52,8 +52,17 @@ Scope {
         stdout: SplitParser {
             onRead: (data) => {
                 var parts = data.trim().split("|");
+
                 if (parts.length >= 3) {
-                    root.popupType = parts[0].toLowerCase();
+                    var incomingType = parts[0].toLowerCase();
+
+                    var allowedTypes = ["neutral", "good", "bad", "toggle"];
+
+                    if (!allowedTypes.includes(incomingType)) {
+                        return;
+                    }
+
+                    root.popupType = incomingType;
                     root.title = parts[1];
                     root.message = parts[2];
                     root.displayState = "popup";
@@ -65,7 +74,7 @@ Scope {
 
     Timer {
         id: popupTimer
-        interval: root.isBottomPopup ? 1000 : (root.popupType === "bad" ? 5000 : 3000)
+        interval: root.isBottomPopup ? 1700 : (root.popupType === "bad" ? 5000 : 3000)
         running: root.displayState === "popup"
         onTriggered: {
             root.displayState = "hidden"
@@ -83,7 +92,6 @@ Scope {
             anchors.bottom: root.isBottomPopup
             anchors.top: !root.isBottomPopup
 
-            // --- MARGIN LOGIC ---
             // Bottom: Is like buried in the screen, so it doesn't show the bottom round corners
             // Top: Uses a fixed small margin from the screen edge.
             margins.bottom: root.isBottomPopup ? (root.displayState === "indicator" ? -root.rounding : 80) : 0
