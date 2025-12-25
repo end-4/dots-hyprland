@@ -13,7 +13,8 @@ Scope {
     property string message: ""
     property string displayState: "hidden"
 
-    readonly property bool isBottomPopup: (root.popupType === "submap" || root.popupType === "toggle")
+    // Removido "submap"
+    readonly property bool isBottomPopup: (root.popupType === "toggle")
 
     property int rounding: 12
     property int textOffset: (root.rounding / 2) - 1
@@ -68,11 +69,7 @@ Scope {
         interval: root.isBottomPopup ? 1000 : (root.popupType === "bad" ? 5000 : 3000)
         running: root.displayState === "popup"
         onTriggered: {
-            if (root.popupType === "submap" && root.message.toLowerCase() !== "global") {
-                root.displayState = "indicator"
-            } else {
-                root.displayState = "hidden"
-            }
+            root.displayState = "hidden"
         }
     }
 
