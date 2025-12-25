@@ -35,13 +35,15 @@ Scope { // Scope
                 right: true
             }
 
-            exclusiveZone: root.pinned ? implicitHeight - (Appearance.sizes.hyprlandGapsOut) - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
+            exclusiveZone: root.pinned ? implicitHeight : 0
+            exclusionMode: (root.pinned || !ToplevelManager.activeToplevel?.activated) ? ExclusionMode.Normal : ExclusionMode.Ignore
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
+            WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
-            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
+            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.hyprlandGapsOut
 
             mask: Region {
                 item: dockMouseArea
@@ -52,7 +54,7 @@ Scope { // Scope
                 height: parent.height
                 anchors {
                     top: parent.top
-                    topMargin: dockRoot.reveal ? 0 : Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
+                    topMargin: dockRoot.reveal ? 0 : (Config.options?.dock.hoverToReveal && !ToplevelManager.activeToplevel?.fullscreen) ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
                     horizontalCenter: parent.horizontalCenter
                 }
                 implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
@@ -72,21 +74,19 @@ Scope { // Scope
                         anchors {
                             top: parent.top
                             bottom: parent.bottom
+                            bottomMargin: Appearance.sizes.hyprlandGapsOut
                             horizontalCenter: parent.horizontalCenter
                         }
 
                         implicitWidth: dockRow.implicitWidth + 5 * 2
-                        height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
 
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
-                            property real margin: Appearance.sizes.elevationMargin
+                            property real margin: Appearance.sizes.hyprlandGapsOut
                             anchors.fill: parent
-                            anchors.topMargin: Appearance.sizes.elevationMargin
-                            anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
                             color: Appearance.colors.colLayer0
                             border.width: 1
                             border.color: Appearance.colors.colLayer0Border
@@ -102,7 +102,6 @@ Scope { // Scope
                             property real padding: 5
 
                             VerticalButtonGroup {
-                                Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
                                 GroupButton {
                                     // Pin button
                                     baseWidth: 35
@@ -129,8 +128,8 @@ Scope { // Scope
                             DockButton {
                                 Layout.fillHeight: true
                                 onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
-                                topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
-                                bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                topInset: dockRow.padding
+                                bottomInset: dockRow.padding
                                 contentItem: MaterialSymbol {
                                     anchors.fill: parent
                                     horizontalAlignment: Text.AlignHCenter
