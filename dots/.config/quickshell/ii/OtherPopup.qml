@@ -13,7 +13,6 @@ Scope {
     property string message: ""
     property string displayState: "hidden"
 
-    // Removido "submap"
     readonly property bool isBottomPopup: (root.popupType === "toggle")
 
     property int rounding: 12
