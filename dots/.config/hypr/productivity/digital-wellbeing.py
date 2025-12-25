@@ -64,23 +64,79 @@ class DigitalWellbeing:
         self.setup_database()
         self.running = True
         self.current_window = None
-        self.last_eye_care_reminder = time.time()
-        self.last_break_reminder = time.time()
+        
+        # Load last break times from database, or use current time as fallback
+        self.last_eye_care_reminder = self.get_last_break_time('eye_care')
+        self.last_break_reminder = self.get_last_break_time('break_reminder')
+        
         self.session_start = time.time()
         self.last_activity_time = time.time()
         self.last_update_time = time.time()
         self.is_idle = False
+        self.startup_grace_period = 60  # Don't trigger breaks for 60 seconds after startup
         
     def setup_directories(self):
         """Create necessary directories"""
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         DATA_DIR.mkdir(parents=True, exist_ok=True)
+    
+    def get_last_break_time(self, break_type):
+        """
+        Get the timestamp of the last break of a specific type from database
+        This prevents break timer resets on service restart
+        
+        Args:
+            break_type: "eye_care" or "break_reminder"
+            
+        Returns:
+            float: Unix timestamp of last break, or current time if none found
+        """
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute('''
+                SELECT timestamp FROM break_responses
+                WHERE break_type = ?
+                ORDER BY timestamp DESC
+                LIMIT 1
+            ''', (break_type,))
+            result = cursor.fetchone()
+            if result:
+                # Convert timestamp string to epoch time
+                last_break = datetime.fromisoformat(result[0])
+                return last_break.timestamp()
+        except Exception as e:
+            print(f"Warning: Could not load last break time for {break_type}: {e}")
+        
+        # Fallback to current time
+        return time.time()
         
     def load_config(self):
         """Load or create configuration"""
         if CONFIG_FILE.exists():
             with open(CONFIG_FILE, 'r') as f:
-                self.config = {**DEFAULT_CONFIG, **json.load(f)}
+                loaded_config = json.load(f)
+                
+                # Start with defaults
+                import copy
+                self.config = copy.deepcopy(DEFAULT_CONFIG)
+                
+                # Merge loaded config, handling both old and new formats
+                for key, value in loaded_config.items():
+                    if key in self.config:
+                        if isinstance(value, bool):
+                            # Legacy format: {"eye_care": true}
+                            # Convert to: {"eye_care": {"enabled": true, ...}}
+                            if isinstance(self.config[key], dict) and 'enabled' in self.config[key]:
+                                self.config[key]['enabled'] = value
+                        elif isinstance(value, dict):
+                            # New format: {"eye_care": {"enabled": true, ...}}
+                            self.config[key].update(value)
+                        else:
+                            self.config[key] = value
+                    else:
+                        self.config[key] = value
+                        
+                # DO NOT auto-save - respect user's config file format
         else:
             self.config = DEFAULT_CONFIG
             self.save_config()
@@ -123,6 +179,31 @@ class DigitalWellbeing:
                 type TEXT NOT NULL,
                 timestamp TIMESTAMP NOT NULL,
                 acknowledged BOOLEAN DEFAULT 0
+            )
+        ''')
+        
+        # Break enforcer questionnaire responses
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS break_responses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp TIMESTAMP NOT NULL,
+                break_type TEXT NOT NULL,
+                duration INTEGER NOT NULL,
+                question_id INTEGER NOT NULL,
+                answer_id INTEGER,
+                answer_value TEXT,
+                date TEXT NOT NULL
+            )
+        ''')
+        
+        # Break statistics for analysis
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS break_stats (
+                date TEXT PRIMARY KEY,
+                eye_care_count INTEGER DEFAULT 0,
+                break_reminder_count INTEGER DEFAULT 0,
+                avg_productivity_score REAL DEFAULT 0,
+                compliance_rate REAL DEFAULT 0
             )
         ''')
         
@@ -216,6 +297,10 @@ class DigitalWellbeing:
         """Check if it's time for eye care reminder"""
         if not self.config['eye_care']['enabled']:
             return
+        
+        # Skip if within startup grace period
+        if time.time() - self.session_start < self.startup_grace_period:
+            return
             
         current_time = time.time()
         interval = self.config['eye_care']['interval']
@@ -234,6 +319,10 @@ class DigitalWellbeing:
     def check_break_reminder(self):
         """Check if it's time for a break"""
         if not self.config['break_reminders']['enabled']:
+            return
+        
+        # Skip if within startup grace period
+        if time.time() - self.session_start < self.startup_grace_period:
             return
             
         current_time = time.time()
@@ -275,11 +364,35 @@ class DigitalWellbeing:
             self.send_limit_exceeded(total_hours, limit_hours)
             
     def send_eye_care_notification(self):
-        """Send eye care reminder notification"""
-        duration = self.config['eye_care']['reminder_duration']
-        distance = self.config['eye_care']['distance']
+        """
+        Send eye care reminder - launches break enforcer fullscreen overlay
+        Falls back to notification if break-enforcer.qml not found
+        """
+        duration = self.config['eye_care']['duration']
         
-        message = f"Time for eye care! 👁️\nLook {distance} feet away for {duration} seconds.\n(20-20-20 rule)"
+        # Check if break enforcer exists
+        enforcer_qml = CONFIG_DIR / "break-enforcer.qml"
+        if enforcer_qml.exists():
+            # Launch Quickshell break enforcer with environment variables
+            try:
+                env = os.environ.copy()
+                env['BREAK_DURATION'] = str(duration)
+                env['BREAK_TYPE'] = 'eye_care'
+                
+                # Verify Wayland display is available (prevents crash on early boot)
+                if 'WAYLAND_DISPLAY' not in env:
+                    print("Warning: WAYLAND_DISPLAY not set, skipping break enforcer", file=sys.stderr)
+                    return
+                
+                subprocess.Popen([
+                    'qs', '-p', str(enforcer_qml)
+                ], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return
+            except Exception as e:
+                print(f"Failed to launch break enforcer: {e}", file=sys.stderr)
+        
+        # Fallback to notification if enforcer not available
+        message = f"Time for eye care! 👁️\nLook 20 feet away for {duration} seconds.\n(20-20-20 rule)"
         
         subprocess.run([
             'notify-send',
@@ -296,10 +409,28 @@ class DigitalWellbeing:
                          stderr=subprocess.DEVNULL)
             
     def send_break_notification(self):
-        """Send break reminder notification"""
-        duration = self.config['break_reminders']['duration'] // 60
+        """Send break reminder - launches break enforcer"""
+        duration = self.config['break_reminders']['duration']
         
-        message = f"Time for a break! 🧘\nStand up, stretch, and rest for {duration} minutes."
+        # Check if break enforcer exists
+        enforcer_qml = CONFIG_DIR / "break-enforcer.qml"
+        if enforcer_qml.exists():
+            # Launch Quickshell break enforcer with environment variables
+            try:
+                env = os.environ.copy()
+                env['BREAK_DURATION'] = str(duration)
+                env['BREAK_TYPE'] = 'break_reminder'
+                
+                subprocess.Popen([
+                    'qs', '-p', str(enforcer_qml)
+                ], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return
+            except Exception as e:
+                print(f"Failed to launch break enforcer: {e}", file=sys.stderr)
+        
+        # Fallback to notification if enforcer not available
+        duration_min = duration // 60
+        message = f"Time for a break! 🧘\nStand up, stretch, and rest for {duration_min} minutes."
         
         subprocess.run([
             'notify-send',
@@ -453,11 +584,29 @@ class DigitalWellbeing:
 
 
 def start_service():
-    """Start the digital wellbeing service"""
+    """
+    Start the digital wellbeing service
+    Includes stale PID file detection to handle system reboots gracefully
+    """
     # Check if already running
     if PID_FILE.exists():
-        print("Digital Wellbeing service is already running")
-        return
+        try:
+            with open(PID_FILE, 'r') as f:
+                pid = int(f.read().strip())
+            
+            # Check if the process is actually running (not just PID file exists)
+            # os.kill with signal 0 doesn't actually send a signal, just checks existence
+            try:
+                os.kill(pid, 0)  # Signal 0 checks if process exists without killing it
+                print("Digital Wellbeing service is already running")
+                return
+            except OSError:
+                # Process doesn't exist, remove stale PID file from previous boot
+                print("Removing stale PID file")
+                PID_FILE.unlink()
+        except (ValueError, FileNotFoundError):
+            # Invalid or missing PID file, remove it
+            PID_FILE.unlink(missing_ok=True)
         
     wellbeing = DigitalWellbeing()
     

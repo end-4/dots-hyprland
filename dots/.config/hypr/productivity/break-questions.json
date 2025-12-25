@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Before this break, were you working on a productive task?",
+      "type": "single_choice",
+      "applies_to": ["eye_care", "break_reminder"],
+      "answers": [
+        {
+          "id": 1,
+          "text": "Yes, I was fully focused on important work",
+          "productivity_score": 10
+        },
+        {
+          "id": 2,
+          "text": "Yes, but I was somewhat distracted",
+          "productivity_score": 6
+        },
+        {
+          "id": 3,
+          "text": "No, I was procrastinating",
+          "productivity_score": 2
+        },
+        {
+          "id": 4,
+          "text": "No, I was on a break/personal time",
+          "productivity_score": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "How do you feel after this break?",
+      "type": "single_choice",
+      "applies_to": ["eye_care", "break_reminder"],
+      "answers": [
+        {
+          "id": 1,
+          "text": "Refreshed and ready to continue",
+          "effectiveness_score": 10
+        },
+        {
+          "id": 2,
+          "text": "Somewhat better",
+          "effectiveness_score": 6
+        },
+        {
+          "id": 3,
+          "text": "No different",
+          "effectiveness_score": 3
+        },
+        {
+          "id": 4,
+          "text": "More tired than before",
+          "effectiveness_score": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Rate your current energy level (1-10)",
+      "type": "scale",
+      "applies_to": ["break_reminder"],
+      "min_value": 1,
+      "max_value": 10,
+      "answers": []
+    }
+  ]
+}

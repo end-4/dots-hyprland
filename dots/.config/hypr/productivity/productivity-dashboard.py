@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 """
-Productivity Dashboard - GUI for Focus Mode and Digital Wellbeing
+Productivity Dashboard - GTK GUI for Digital Wellbeing Settings
+
+Features:
+- Focus Mode control (block distracting apps)
+- Digital Wellbeing service management
+- Usage statistics visualization
+- Settings editor with new nested config format support
+
+Config Format Support:
+- Old format: {"eye_care": true, "break_reminders": false}
+- New format: {"eye_care": {"enabled": true, "interval": 1200, ...}}
+- Preserves all settings when toggling switches
 """
 
 import gi
@@ -64,21 +75,65 @@ class ProductivityDashboard(Gtk.Window):
             try:
                 with open(SETTINGS_FILE, 'r') as f:
                     settings = json.load(f)
-                    self.eye_care_switch.set_active(settings.get('eye_care', False))
-                    self.break_switch.set_active(settings.get('break_reminders', False))
+                    
+                    # Handle both old and new config formats
+                    eye_care = settings.get('eye_care', False)
+                    if isinstance(eye_care, dict):
+                        eye_care = eye_care.get('enabled', False)
+                    
+                    break_reminders = settings.get('break_reminders', False)
+                    if isinstance(break_reminders, dict):
+                        break_reminders = break_reminders.get('enabled', False)
+                    
+                    self.eye_care_switch.set_active(eye_care)
+                    self.break_switch.set_active(break_reminders)
             except Exception as e:
                 print(f"Error loading settings: {e}")
         
     def save_settings(self):
-        """Save settings to JSON file"""
+        """Save settings to JSON file in the new format"""
         try:
-            settings = {
-                'eye_care': self.eye_care_switch.get_active(),
-                'break_reminders': self.break_switch.get_active()
-            }
+            # Load existing config to preserve all settings
+            existing_config = {}
+            if SETTINGS_FILE.exists():
+                with open(SETTINGS_FILE, 'r') as f:
+                    existing_config = json.load(f)
+            
+            # Update only the enabled flags, preserving other settings
+            eye_care_enabled = self.eye_care_switch.get_active()
+            break_enabled = self.break_switch.get_active()
+            
+            # Handle both old and new formats
+            if 'eye_care' not in existing_config or isinstance(existing_config.get('eye_care'), bool):
+                # If old format or missing, create new format
+                existing_config['eye_care'] = {
+                    "enabled": eye_care_enabled,
+                    "interval": 1200,
+                    "duration": 20
+                }
+            else:
+                # New format exists, just update enabled flag
+                existing_config['eye_care']['enabled'] = eye_care_enabled
+            
+            if 'break_reminders' not in existing_config or isinstance(existing_config.get('break_reminders'), bool):
+                existing_config['break_reminders'] = {
+                    "enabled": break_enabled,
+                    "interval": 3600,
+                    "duration": 300
+                }
+            else:
+                existing_config['break_reminders']['enabled'] = break_enabled
+            
+            # Ensure tracking settings exist
+            if 'tracking' not in existing_config:
+                existing_config['tracking'] = {
+                    "idle_threshold": 180,
+                    "update_interval": 30
+                }
+            
             CONFIG_DIR.mkdir(parents=True, exist_ok=True)
             with open(SETTINGS_FILE, 'w') as f:
-                json.dump(settings, f, indent=2)
+                json.dump(existing_config, f, indent=4)
             return True
         except Exception as e:
             print(f"Error saving settings: {e}")

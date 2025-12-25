@@ -1,0 +1,16 @@
+{
+    "eye_care": {
+        "enabled": true,
+        "interval": 1200,
+        "duration": 20
+    },
+    "break_reminders": {
+        "enabled": true,
+        "interval": 3600,
+        "duration": 300
+    },
+    "tracking": {
+        "idle_threshold": 180,
+        "update_interval": 30
+    }
+}
