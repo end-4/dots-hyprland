@@ -33,7 +33,7 @@ Item {
     }
 
     function encodeBase64(text) {
-        if (text.trim().length === 0) {
+        if (text.length === 0) {
             return "";
         }
         let encoded = "";
@@ -47,12 +47,12 @@ Item {
     }
 
     function decodeBase64(text) {
-        if (text.trim().length === 0) {
+        if (text.length === 0) {
             return "";
         }
         let decoded = "";
         try {
-            decoded = Qt.atob(text.trim());
+            decoded = Qt.atob(text);
         } catch (e) {
             decoded = "Error: Invalid Base64 string";
         }

@@ -33,7 +33,7 @@ Item {
     }
 
     function encodeUrl(text) {
-        if (text.trim().length === 0) {
+        if (text.length === 0) {
             return "";
         }
         let encoded = "";
@@ -46,12 +46,12 @@ Item {
     }
 
     function decodeUrl(text) {
-        if (text.trim().length === 0) {
+        if (text.length === 0) {
             return "";
         }
         let decoded = "";
         try {
-            decoded = decodeURIComponent(text.trim());
+            decoded = decodeURIComponent(text);
         } catch (e) {
             decoded = "Error: Invalid URL-encoded string";
         }
