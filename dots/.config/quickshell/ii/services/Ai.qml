@@ -348,6 +348,7 @@ Singleton {
     }
     property var modelList: Object.keys(root.models)
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
+    property var currentModel: models[currentModelId]
 
     property var apiStrategies: {
         "openai": openaiApiStrategy.createObject(this),
@@ -423,6 +424,10 @@ Singleton {
                     });
 
                     root.modelList = Object.keys(root.models);
+
+                    if (root.modelList.includes(root.currentModelId)) {
+                        root.setModel(root.currentModelId, false, false);
+                    }
 
                 } catch (e) {
                     console.log("Could not fetch Ollama models:", e);
@@ -542,6 +547,7 @@ Singleton {
             }
             if (setPersistentState) Persistent.states.ai.model = modelId;
             if (feedback) root.addMessage(Translation.tr("Model set to %1").arg(model.name), root.interfaceRole);
+            root.currentModel = model
             if (model.requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[model.key_id] || root.apiKeys[model.key_id].length === 0)) {
