@@ -348,7 +348,7 @@ Singleton {
     }
     property var modelList: Object.keys(root.models)
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
-    property var currentModel: models[currentModelId]
+    property var currentModel: models[currentModelId] || models[modelList[0]]
 
     property var apiStrategies: {
         "openai": openaiApiStrategy.createObject(this),
