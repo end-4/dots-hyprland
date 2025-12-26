@@ -320,7 +320,7 @@ Item { // Player instance
                         anchors.left: trackTime.right
                         anchors.right: sliderRow.right
                         anchors.leftMargin: 10
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: 4
 
                         visible: root.player !== null
 
