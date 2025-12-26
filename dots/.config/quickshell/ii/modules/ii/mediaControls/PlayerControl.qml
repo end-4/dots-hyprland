@@ -145,6 +145,36 @@ Item { // Player instance
             smoothing: root.visualizerSmoothing
             color: blendedColors.colPrimary
         }
+        
+        RippleButton {
+            id: playPauseButton
+            anchors.right: parent.right
+            anchors.top: background.top
+            anchors.topMargin: 16
+            anchors.rightMargin: 16
+            property real size: 44
+
+            implicitWidth: size
+            implicitHeight: size
+            downAction: () => root.player.togglePlaying();
+
+            buttonRadius: root.player?.isPlaying ? Appearance?.rounding.small : size / 2
+            colBackground: root.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
+            colBackgroundHover: root.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
+            colRipple: root.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
+
+            contentItem: MaterialSymbol {
+                iconSize: Appearance.font.pixelSize.huge
+                fill: 1
+                horizontalAlignment: Text.AlignHCenter
+                color: root.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
+                text: root.player?.isPlaying ? "pause" : "play_arrow"
+
+                Behavior on color {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
+            }
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -188,20 +218,76 @@ Item { // Player instance
                 Layout.fillHeight: true
                 spacing: 2
 
-                StyledText {
-                    id: trackTitle
+                Item {// Marquee Container
+                    id: titleContainer
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    color: blendedColors.colOnLayer0
-                    elide: Text.ElideRight
-                    text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
-                    animateChange: true
-                    animationDistanceX: 6
-                    animationDistanceY: 0
+                    Layout.preferredHeight: trackTitleMain.implicitHeight
+
+                    // Dynamic margin to prevent overlap with the floating play/pause button
+                    Layout.rightMargin: playPauseButton.width + 16 + 3
+                    clip: true
+
+                    property bool runMarquee: trackTitleMain.implicitWidth > width
+                    property real scrollSpeed: 30
+
+                    Row {
+                        id: movingRow
+                        spacing: 40
+                        x: 0
+
+                        SequentialAnimation {
+                            id: marqueeAnim // <--- ID ADICIONADO
+                            running: titleContainer.runMarquee
+                            loops: Animation.Infinite
+
+                            // 1. Reset position instantly
+                            PropertyAction {
+                                target: movingRow
+                                property: "x"
+                                value: 0
+                            }
+
+                            // 2. Initial delay before scrolling
+                            PauseAnimation { duration: 3000 }
+
+                            // 3. Scroll left until ghost text replaces main text
+                            NumberAnimation {
+                                target: movingRow
+                                property: "x"
+                                from: 0
+                                to: -(trackTitleMain.width + movingRow.spacing)
+                                duration: (trackTitleMain.width + movingRow.spacing) * (1000 / titleContainer.scrollSpeed)
+                                easing.type: Easing.Linear
+                            }
+                        }
+                        StyledText { // Main Text
+                            id: trackTitleMain
+                            font.pixelSize: Appearance.font.pixelSize.large
+                            color: blendedColors.colOnLayer0
+                            elide: Text.ElideNone
+                            animateChange: true
+                            text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
+
+                            // Reset visual position immediately when track changes
+                            onTextChanged: {
+                                movingRow.x = 0 
+                                marqueeAnim.restart()
+                            }
+                        }
+                        StyledText { // Ghost Text (for seamless looping)
+                            visible: titleContainer.runMarquee
+                            font: trackTitleMain.font
+                            color: trackTitleMain.color
+                            text: trackTitleMain.text
+                            elide: Text.ElideNone
+                        }
+                    }
                 }
                 StyledText {
                     id: trackArtist
                     Layout.fillWidth: true
+                    Layout.rightMargin: playPauseButton.width + 16 + 3
+                    clip: true
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
@@ -218,13 +304,50 @@ Item { // Player instance
                     StyledText {
                         id: trackTime
                         anchors.bottom: sliderRow.top
-                        anchors.bottomMargin: 5
                         anchors.left: parent.left
                         font.pixelSize: Appearance.font.pixelSize.small
                         color: blendedColors.colSubtext
                         elide: Text.ElideRight
                         text: `${StringUtils.friendlyTimeForSeconds(root.player?.position)} / ${StringUtils.friendlyTimeForSeconds(root.player?.length)}`
                     }
+
+                    RowLayout {
+                        anchors.bottom: sliderRow.top
+                        anchors.bottomMargin: -7
+
+                        anchors.left: trackTime.right
+                        anchors.right: sliderRow.right
+                        anchors.leftMargin: 10
+                        anchors.rightMargin: 5
+
+                        visible: root.player !== null
+
+                        MaterialSymbol {
+                            iconSize: Appearance.font.pixelSize.medium
+                            color: blendedColors.colSubtext
+                            text: {
+                                const vol = root.player?.volume ?? 1.0
+                                if (vol <= 0) return "volume_off"
+                                    if (vol < 0.5) return "volume_down"
+                                        return "volume_up"
+                            }
+                        }
+
+                        StyledSlider {
+                            Layout.preferredWidth: 120
+
+                            configuration: StyledSlider.Configuration.Wavy
+                            highlightColor: blendedColors.colPrimary
+                            trackColor: blendedColors.colSecondaryContainer
+                            handleColor: blendedColors.colPrimary
+                            value: root.player?.volume ?? 1.0
+
+                            onMoved: {
+                                if (root.player) root.player.volume = value;
+                            }
+                        }
+                    }
+
                     RowLayout {
                         id: sliderRow
                         anchors {
@@ -232,8 +355,10 @@ Item { // Player instance
                             left: parent.left
                             right: parent.right
                         }
+                        anchors.bottomMargin: -8
                         TrackChangeButton {
                             iconName: "skip_previous"
+                            Layout.leftMargin: -4
                             downAction: () => root.player?.previous()
                         }
                         Item {
@@ -273,7 +398,6 @@ Item { // Player instance
                                 }
                             }
 
-                            
                         }
                         TrackChangeButton {
                             iconName: "skip_next"
@@ -281,33 +405,6 @@ Item { // Player instance
                         }
                     }
 
-                    RippleButton {
-                        id: playPauseButton
-                        anchors.right: parent.right
-                        anchors.bottom: sliderRow.top
-                        anchors.bottomMargin: 5
-                        property real size: 44
-                        implicitWidth: size
-                        implicitHeight: size
-                        downAction: () => root.player.togglePlaying();
-
-                        buttonRadius: root.player?.isPlaying ? Appearance?.rounding.normal : size / 2
-                        colBackground: root.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
-                        colBackgroundHover: root.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
-                        colRipple: root.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
-
-                        contentItem: MaterialSymbol {
-                            iconSize: Appearance.font.pixelSize.huge
-                            fill: 1
-                            horizontalAlignment: Text.AlignHCenter
-                            color: root.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
-                            text: root.player?.isPlaying ? "pause" : "play_arrow"
-
-                            Behavior on color {
-                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                            }
-                        }
-                    }
                 }
             }
         }
