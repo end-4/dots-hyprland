@@ -227,7 +227,7 @@ Item { // Player instance
                     Layout.rightMargin: playPauseButton.width + 16 + 3
                     clip: true
 
-                    property bool runMarquee: trackTitleMain.implicitWidth > width
+                    property bool runMarquee: trackTitleMain.implicitWidth > width + 2
                     property real scrollSpeed: 30
 
                     Row {
@@ -236,7 +236,7 @@ Item { // Player instance
                         x: 0
 
                         SequentialAnimation {
-                            id: marqueeAnim // <--- ID ADICIONADO
+                            id: marqueeAnim 
                             running: titleContainer.runMarquee
                             loops: Animation.Infinite
 
@@ -271,7 +271,9 @@ Item { // Player instance
                             // Reset visual position immediately when track changes
                             onTextChanged: {
                                 movingRow.x = 0 
-                                marqueeAnim.restart()
+                               if (titleContainer.runMarquee) {
+                                    marqueeAnim.restart()
+                                }
                             }
                         }
                         StyledText { // Ghost Text (for seamless looping)
