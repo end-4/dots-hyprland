@@ -19,6 +19,7 @@ Singleton {
     property bool oskOpen: false
     property bool overlayOpen: false
     property bool overviewOpen: false
+    property bool taskViewOpen: false
     property bool regionSelectorOpen: false
     property bool searchOpen: false
     property bool screenLocked: false
@@ -55,6 +56,12 @@ Singleton {
         onReleased: {
             root.superDown = false
         }
+    }
+
+    GlobalShortcut {
+        name: "taskViewToggle"
+        description: "Toggle task view"
+        onPressed: root.taskViewOpen = !root.taskViewOpen
     }
 
     IpcHandler {
