@@ -32,6 +32,24 @@ Scope {
                 id: barRoot
                 screen: barLoader.modelData
 
+                Component.onCompleted: {
+                    // Save reference to bar window object
+                    GlobalStates.barWindowReferences = [
+                        ...GlobalStates.barWindowReferences, barRoot,
+                    ];
+                }
+
+                Component.onDestruction: {
+                    // Clear reference to bar window object
+                    const index = GlobalStates.barWindowReferences.indexOf(barRoot);
+                    if (index !== -1) {
+                        GlobalStates.barWindowReferences = [
+                            ...GlobalStates.barWindowReferences.slice(0, index),
+                            ...GlobalStates.barWindowReferences.slice(index + 1),
+                        ];
+                    }
+                }
+
                 property var brightnessMonitor: Brightness.getMonitorForScreen(barLoader.modelData)
                 
                 Timer {
