@@ -118,6 +118,23 @@ Scope {
                 }
             }
 
+            FocusedScrollMouseArea {
+                anchors.fill: parent
+                onScrollDown: Audio.decrementVolume();
+                onScrollUp: Audio.incrementVolume();
+
+                ColumnLayout {
+                    id: playerColumnLayouta
+                    anchors.fill: parent
+                    spacing: -Appearance.sizes.elevationMargin // Shadow overlap okay
+
+                    Repeater {
+                        model: ScriptModel { values: root.meaningfulPlayers }
+                        delegate: PlayerControl {}
+                    }
+                }
+            }
+
             ColumnLayout {
                 id: playerColumnLayout
                 anchors.fill: parent
