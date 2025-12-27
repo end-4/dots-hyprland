@@ -80,7 +80,7 @@ Button {
             root.down = false
             if (event.button != Qt.LeftButton) return;
             if (root.releaseAction) root.releaseAction();
-            root.click() // Because the MouseArea already consumed the event
+            Qt.callLater(root.click)
             if (!root.rippleEnabled) return;
             rippleFadeAnim.restart();
         }
