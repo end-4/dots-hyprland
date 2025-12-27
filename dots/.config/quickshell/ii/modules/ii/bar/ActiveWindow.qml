@@ -13,13 +13,13 @@ Item {
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
-    property var hyprlandDataMonitor: HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]
+    property var hyprlandDataMonitor: HyprlandData.monitors[root.monitor?.id]
     property bool activeIsSpecialWorkspace: Boolean(hyprlandDataMonitor?.specialWorkspace.id)
     property var currentWorkspaceID: activeIsSpecialWorkspace? hyprlandDataMonitor?.specialWorkspace.id : hyprlandDataMonitor?.activeWorkspace.id
     property var currentWorkspaceName: activeIsSpecialWorkspace? 
         capitalize(hyprlandDataMonitor?.specialWorkspace.name.replace("special:", "")) :
         hyprlandDataMonitor?.activeWorkspace.name
+    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(currentWorkspaceID)
     
     function capitalize(s) {
         return s.charAt(0).toUpperCase() + s.slice(1);
@@ -41,10 +41,11 @@ Item {
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
-                root.activeWindow?.appId :
-                activeIsSpecialWorkspace ? 
+                HyprlandData.activeWindow.class :
+                root.biggestWindow?.class ??
+                (activeIsSpecialWorkspace ? 
                     Translation.tr("Scratchpad") :
-                    root.biggestWindow?.class ?? Translation.tr("Desktop")
+                    root.biggestWindow?.class ?? Translation.tr("Desktop"))
         }
 
         StyledText {
@@ -52,11 +53,12 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID ? 
-                root.activeWindow?.title :
-                activeIsSpecialWorkspace ?
-                    `${Translation.tr("Workspace")} ${currentWorkspaceName}` :
-                    root.biggestWindow?.title ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
+            text: root.focusingThisMonitor && root.activeWindow?.activated && HyprlandData.activeWindow?.workspace?.id === root.currentWorkspaceID
+                ? HyprlandData.activeWindow.title
+                : root.biggestWindow?.title ??
+                    (activeIsSpecialWorkspace
+                    ? `${Translation.tr("Workspace")} ${currentWorkspaceName}`
+                    : `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`)
         }
 
     }
