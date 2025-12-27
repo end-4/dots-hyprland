@@ -15,11 +15,20 @@ BarGroup {
     readonly property bool hasPomo: TimerService.pomodoroSecondsLeft > 0 &&
     (TimerService.pomodoroSecondsLeft < TimerService.pomodoroLapDuration || pRunning)
 
-    visible: hasStop || hasPomo
+    property bool shouldShow: hasStop || hasPomo
 
-    implicitWidth: visible ? (mainRow.implicitWidth + 20) : 0
+    visible: shouldShow
+
+    implicitWidth: shouldShow ? (mainRow.implicitWidth + 20) : 0
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutQuart
+        }
+    }
     implicitHeight: Appearance.sizes.baseBarHeight
     Layout.preferredWidth: implicitWidth
+    Layout.alignment: Qt.AlignVCenter
 
     RowLayout {
         id: mainRow
