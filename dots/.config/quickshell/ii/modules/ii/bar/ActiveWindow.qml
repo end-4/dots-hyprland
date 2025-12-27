@@ -13,7 +13,7 @@ Item {
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var hyprlandDataMonitor: HyprlandData.monitors[root.monitor?.id]
+    property var hyprlandDataMonitor: HyprlandData.monitors.find(m => m.id === root.monitor?.id)
     property bool activeIsSpecialWorkspace: Boolean(hyprlandDataMonitor?.specialWorkspace.id)
     property var currentWorkspaceID: activeIsSpecialWorkspace? hyprlandDataMonitor?.specialWorkspace.id : hyprlandDataMonitor?.activeWorkspace.id
     property var currentWorkspaceName: activeIsSpecialWorkspace? 
