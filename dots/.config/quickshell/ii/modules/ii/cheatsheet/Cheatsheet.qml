@@ -18,9 +18,17 @@ Scope { // Scope
             "icon": "keyboard",
             "name": Translation.tr("Keybinds")
         },
-        {
+        /*{
             "icon": "experiment",
             "name": Translation.tr("Elements")
+        }, */
+        {
+            "icon": "translate",
+            "name": Translation.tr("Hiragana")
+        },
+        {
+            "icon": "translate",
+            "name": Translation.tr("Katakana")
         },
     ]
 
@@ -168,7 +176,9 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
-                        CheatsheetPeriodicTable {}
+                        CheatsheetHiragana {}
+                        CheatsheetKatakana {}
+                        //CheatsheetPeriodicTable {}
                     }
                 }
             }
