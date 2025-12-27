@@ -249,4 +249,41 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "vpn_lock"
+        title: Translation.tr("VPN")
+
+        ContentSubsection {
+            title: Translation.tr("Default VPN")
+            tooltip: Translation.tr("Select the VPN connection that will be activated by clicking on the VPN icon.")
+
+            StyledComboBox {
+                id: languageSelector
+                buttonIcon: "vpn_lock"
+                textRole: "displayName"
+
+                model: [
+                    {
+                        displayName: Translation.tr("Nothing"),
+                        value: ""
+                    },
+                    ...Network.vpnConnections.map(vpn => {
+                        return {
+                            displayName: vpn.name,
+                            value: vpn.name
+                        };
+                    })]
+
+                currentIndex: {
+                    const index = model.findIndex(item => item.value === Config.options.vpn.defaultVpn);
+                    return index !== -1 ? index : 0;
+                }
+
+                onActivated: index => {
+                    Config.options.vpn.defaultVpn = model[index].value;
+                }
+            }
+        }
+    }
 }

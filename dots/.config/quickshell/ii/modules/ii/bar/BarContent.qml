@@ -306,6 +306,13 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
+                        text: "vpn_lock"
+                        visible: Network.vpnEnabled
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                        Layout.leftMargin: indicatorsRowLayout.realSpacing
+                    }
+                    MaterialSymbol {
                         Layout.leftMargin: indicatorsRowLayout.realSpacing
                         visible: BluetoothStatus.available
                         text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
