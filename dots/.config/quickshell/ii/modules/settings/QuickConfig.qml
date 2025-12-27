@@ -218,6 +218,29 @@ ContentPage {
             ]
         }
 
+        ConfigRow{
+            Layout.fillWidth: true
+            ConfigSwitch {
+                buttonIcon: "shuffle"
+                text: Translation.tr("Wallpaper Slideshow")
+                checked: Config.options.background.enableSlideshow
+                onCheckedChanged: {
+                    Config.options.background.enableSlideshow = checked;
+                }
+            }
+            ConfigSpinBox {
+                icon: "timer"
+                text: Translation.tr("Change every (min)")
+                value: Config.options.background.slideshowInterval
+                from: 1
+                to: 1440
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.background.slideshowInterval = value;
+                }
+            }
+        }
+
         ConfigSwitch {
             buttonIcon: "ev_shadow"
             text: Translation.tr("Transparency")
