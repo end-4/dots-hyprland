@@ -13,6 +13,7 @@ Item {
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
+    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
     property var hyprlandDataMonitor: HyprlandData.monitors[HyprlandData.activeWorkspace?.monitorID]
     property bool activeIsSpecialWorkspace: Boolean(hyprlandDataMonitor?.specialWorkspace.id)
     property var currentWorkspaceID: activeIsSpecialWorkspace? hyprlandDataMonitor?.specialWorkspace.id : hyprlandDataMonitor?.activeWorkspace.id
@@ -43,7 +44,7 @@ Item {
                 root.activeWindow?.appId :
                 activeIsSpecialWorkspace ? 
                     Translation.tr("Scratchpad") :
-                    Translation.tr("Desktop")
+                    root.biggestWindow?.class ?? Translation.tr("Desktop")
         }
 
         StyledText {
@@ -55,7 +56,7 @@ Item {
                 root.activeWindow?.title :
                 activeIsSpecialWorkspace ?
                     `${Translation.tr("Workspace")} ${currentWorkspaceName}` :
-                    `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
+                    root.biggestWindow?.title ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
         }
 
     }
