@@ -35,17 +35,37 @@ Singleton {
         }
     }
 	function isRealPlayer(player) {
-        if (!Config.options.media.filterDuplicatePlayers) {
-            return true;
-        }
-        return (
-            // Remove unecessary native buses from browsers if there's plasma integration
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) && !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
-            // playerctld just copies other buses and we don't need duplicates
-            !player.dbusName?.startsWith('org.mpris.MediaPlayer2.playerctld') &&
-            // Non-instance mpd bus
-            !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
-    }
+	    if (!Config.options.media.filterDuplicatePlayers) {
+	        return true;
+	    }
+	
+	    const dbus = player.dbusName ?? "";
+	    const identity = player.identity?.toLowerCase() ?? "";
+	    const desktopEntry = player.desktopEntry?.toLowerCase() ?? "";
+	
+	    // Allowlist for Chromium-based media players
+	    const chromiumAllowlist = [
+	        "cider"
+	    ];
+	
+	    const isAllowedChromium =
+	        dbus.startsWith("org.mpris.MediaPlayer2.chromium.instance") &&
+	        chromiumAllowlist.some(name =>
+	            identity.includes(name) || desktopEntry.includes(name)
+	        );
+	
+	    return (
+	        // Remove unnecessary native buses from browsers if there's plasma integration
+	        !(hasPlasmaIntegration && dbus.startsWith("org.mpris.MediaPlayer2.firefox")) &&
+	        !(hasPlasmaIntegration && dbus.startsWith("org.mpris.MediaPlayer2.chromium") && !isAllowedChromium) &&
+	
+	        // playerctld just copies other buses and we don't need duplicates
+	        !dbus.startsWith("org.mpris.MediaPlayer2.playerctld") &&
+	
+	        // Non-instance mpd bus
+	        !(dbus.endsWith(".mpd") && !dbus.endsWith("MediaPlayer2.mpd"))
+	    );
+	}
 
 	// Original stuff from fox below
 	Instantiator {
