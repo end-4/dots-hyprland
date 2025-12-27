@@ -306,6 +306,17 @@ class DigitalWellbeing:
         interval = self.config['eye_care']['interval']
         
         if current_time - self.last_eye_care_reminder >= interval:
+            # Check if break reminder is also due (within 30 seconds)
+            # If both are due, skip eye care and let the longer break take priority
+            if self.config['break_reminders']['enabled']:
+                break_interval = self.config['break_reminders']['interval']
+                time_until_break = break_interval - (current_time - self.last_break_reminder)
+                
+                if abs(time_until_break) <= 30:  # Within 30 seconds of each other
+                    print("Break collision detected - skipping eye care in favor of longer break")
+                    self.last_eye_care_reminder = current_time  # Reset timer to prevent immediate re-trigger
+                    return
+            
             self.send_eye_care_notification()
             self.last_eye_care_reminder = current_time
             
@@ -331,6 +342,10 @@ class DigitalWellbeing:
         if current_time - self.last_break_reminder >= interval:
             self.send_break_notification()
             self.last_break_reminder = current_time
+            
+            # Reset eye care timer to prevent immediate trigger after long break
+            # The 5-minute break already includes eye rest
+            self.last_eye_care_reminder = current_time
             
             # Log reminder
             self.cursor.execute('''
