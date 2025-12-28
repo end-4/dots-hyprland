@@ -38,7 +38,7 @@ Scope { // Scope
             }
 
             exclusiveZone: root.pinned ? implicitHeight : 0
-            exclusionMode: (root.pinned || !ToplevelManager.activeToplevel?.activated) ? ExclusionMode.Normal : ExclusionMode.Ignore
+            exclusionMode: (root.pinned || !HyprlandData.windowList.some(w => w.workspace.id == currentWorkspaceID)) ? ExclusionMode.Normal : ExclusionMode.Ignore
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
