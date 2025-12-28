@@ -63,8 +63,6 @@ Wayland and X11.
 %endif
         -DBUILD_SHARED_LIBS=OFF \
         -DCMAKE_BUILD_TYPE=Release \
-        -DDISTRIBUTOR="Fedora COPR (errornointernet/quickshell)" \
-        -DDISTRIBUTOR_DEBUGINFO_AVAILABLE=YES \
         -DGIT_REVISION=%{commit} \
         -DINSTALL_QML_PREFIX=%{_lib}/qt6/qml
 %cmake_build
