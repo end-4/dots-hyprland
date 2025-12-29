@@ -31,9 +31,7 @@
 #
 set -euo pipefail
 
-# TODO: For Arch(-Linux) specific part please check if pacman exists first, if not it should be skipped.
-
-# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
+# Note: The detect_repo_structure function below auto-detects the folder layout
 # Try to find the packages directory (different names in different versions)
 if which pacman &>/dev/null; then
   if [[ -d "${REPO_ROOT}/dist-arch" ]]; then
@@ -56,7 +54,6 @@ declare -a IGNORE_SUBSTRING_PATTERNS=()
 # Track created directories to avoid redundant mkdir calls
 declare -A CREATED_DIRS
 
-# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Auto-detect repository structure
 detect_repo_structure() {
   local found_dirs=()
@@ -644,23 +641,41 @@ build_packages() {
     log_info "Building package: $pkg_name"
     
     if [[ "$DRY_RUN" == true ]]; then
-      log_info "[DRY-RUN] Would build package in directory: $pkg_dir"
+      log_info "[DRY-RUN] Would build package in temp directory and clean up after"
       continue
     fi
 
-    cd "$pkg_dir" || {
-      log_error "Failed to change to package directory: $pkg_dir"
+    # Create temp build directory to avoid polluting the repo
+    local build_tmp_dir
+    build_tmp_dir=$(mktemp -d "/tmp/pkgbuild-${pkg_name}-XXXXXX")
+    
+    # Copy package files to temp directory (using /. to include hidden files)
+    cp -r "$pkg_dir"/. "$build_tmp_dir/" || {
+      log_error "Failed to copy package files to temp directory"
+      rm -rf "$build_tmp_dir"
       continue
     }
 
-    if makepkg -si --noconfirm; then
+    cd "$build_tmp_dir" || {
+      log_error "Failed to change to temp build directory: $build_tmp_dir"
+      rm -rf "$build_tmp_dir"
+      continue
+    }
+
+    if makepkg -sCi --noconfirm; then
       log_success "Successfully built and installed $pkg_name"
-      ((rebuilt_packages++))
+      ((rebuilt_packages++)) || true
     else
       log_error "Failed to build package $pkg_name"
     fi
 
+    # Clean up temp build directory
     cd "$REPO_ROOT" || log_die "Failed to return to repository directory"
+    rm -rf "$build_tmp_dir"
+    log_info "Cleaned up temp build directory"
+    
+    # Also clean any old build artifacts in the original package directory
+    rm -rf "${pkg_dir}/src" "${pkg_dir}/pkg" "${pkg_dir}"/*.pkg.tar.* 2>/dev/null || true
   done
 
   if [[ $rebuilt_packages -eq 0 ]]; then
@@ -852,8 +867,12 @@ if git remote get-url origin &>/dev/null; then
         fi
       fi
     else
-      log_warning "Failed to pull changes from remote. Continuing with local repository..."
-      log_info "You may need to resolve conflicts manually later."
+      log_warning "Failed to pull changes from remote."
+      log_warning "This could be due to:"
+      log_warning "  - Network issues"
+      log_warning "  - Uncommitted local changes (use 'git stash' first)"
+      log_warning "  - Diverged history (may need 'git pull --rebase')"
+      log_info "Continuing with local repository state..."
     fi
   fi
 else
@@ -879,68 +898,70 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
   if [[ "$PKG_TOOLS_AVAILABLE" == true ]]; then
     if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdata/dist-arch). Skipping package management."
+      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdata/dist-arch)."
+      log_warning "Skipping package management."
     else
-    changed_pkgbuilds=()
-    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
-      if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
-        pkg_name=$(basename "$pkg_dir")
-        if check_pkgbuild_changed "$pkg_dir"; then
-          changed_pkgbuilds+=("$pkg_name")
-        fi
-      fi
-    done
-
-    if [[ ${#changed_pkgbuilds[@]} -gt 0 ]]; then
-      log_info "Found ${#changed_pkgbuilds[@]} package(s) with changed PKGBUILDs: ${changed_pkgbuilds[*]}"
-      echo
-      echo "Package build options:"
-      echo "1) Build only packages with changed PKGBUILDs"
-      echo "2) List all packages and select which to build"
-      echo "3) Build all packages"
-      echo "4) Skip package building"
-      echo
-
-      if [[ "$NON_INTERACTIVE" == true ]]; then
-        pkg_choice="1"
-        log_info "Non-interactive mode: Using default package option: $pkg_choice"
-      elif safe_read "Choose an option (1-4): " pkg_choice "1"; then
-        if [[ "$VERBOSE" == true ]]; then
-          log_info "User selected package option: $pkg_choice"
-        fi
-      else
-        log_warning "Failed to read input. Skipping package building."
-        pkg_choice=""
-      fi
-
-      if [[ -n "$pkg_choice" ]]; then
-        case $pkg_choice in
-        1) build_packages "changed" ;;
-        2)
-          if list_packages; then
-            build_packages "select"
+      # Scan for changed PKGBUILDs
+      changed_pkgbuilds=()
+      for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
+        if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
+          pkg_name=$(basename "$pkg_dir")
+          if check_pkgbuild_changed "$pkg_dir"; then
+            changed_pkgbuilds+=("$pkg_name")
           fi
-          ;;
-        3) build_packages "all" ;;
-        4 | *) log_info "Skipping package building" ;;
-        esac
-      fi
-    else
-      log_info "No PKGBUILDs have changed since last update."
-      echo
-      if [[ "$NON_INTERACTIVE" == true ]]; then
-        check_anyway="N"
-        log_info "Non-interactive mode: Using default for check packages anyway: $check_anyway"
-      elif safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
-        if [[ "$VERBOSE" == true ]]; then
-          log_info "User chose to check packages anyway: $check_anyway"
+        fi
+      done
+
+      if [[ ${#changed_pkgbuilds[@]} -gt 0 ]]; then
+        log_info "Found ${#changed_pkgbuilds[@]} package(s) with changed PKGBUILDs: ${changed_pkgbuilds[*]}"
+        echo
+        echo "Package build options:"
+        echo "1) Build only packages with changed PKGBUILDs"
+        echo "2) List all packages and select which to build"
+        echo "3) Build all packages"
+        echo "4) Skip package building"
+        echo
+
+        if [[ "$NON_INTERACTIVE" == true ]]; then
+          pkg_choice="1"
+          log_info "Non-interactive mode: Using default package option: $pkg_choice"
+        elif safe_read "Choose an option (1-4): " pkg_choice "1"; then
+          if [[ "$VERBOSE" == true ]]; then
+            log_info "User selected package option: $pkg_choice"
+          fi
+        else
+          log_warning "Failed to read input. Skipping package building."
+          pkg_choice=""
+        fi
+
+        if [[ -n "$pkg_choice" ]]; then
+          case $pkg_choice in
+            1) build_packages "changed" ;;
+            2)
+              if list_packages; then
+                build_packages "select"
+              fi
+              ;;
+            3) build_packages "all" ;;
+            4|*) log_info "Skipping package building" ;;
+          esac
         fi
       else
-        log_warning "Failed to read input. Skipping package management."
-        check_anyway=""
-      fi
+        log_info "No PKGBUILDs have changed since last update."
+        echo
+        if [[ "$NON_INTERACTIVE" == true ]]; then
+          check_anyway="N"
+          log_info "Non-interactive mode: Using default for check packages anyway: $check_anyway"
+        elif safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
+          if [[ "$VERBOSE" == true ]]; then
+            log_info "User chose to check packages anyway: $check_anyway"
+          fi
+        else
+          log_warning "Failed to read input. Skipping package management."
+          check_anyway=""
+        fi
 
-      if [[ -n "$check_anyway" && "$check_anyway" =~ ^[Yy]$ ]]; then
+        if [[ -n "$check_anyway" && "$check_anyway" =~ ^[Yy]$ ]]; then
           if list_packages; then
             echo
             echo "Package build options:"
@@ -950,9 +971,9 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
             if safe_read "Choose an option (1-3): " build_choice "3"; then
               case $build_choice in
-              1) build_packages "select" ;;
-              2) build_packages "all" ;;
-              3 | *) log_info "Skipping package building" ;;
+                1) build_packages "select" ;;
+                2) build_packages "all" ;;
+                3|*) log_info "Skipping package building" ;;
               esac
             else
               log_info "Skipping package building"
@@ -963,10 +984,10 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
         fi
       fi
     fi
-  else
-    log_header "Package Management"
-    log_info "Package checking disabled. Use -p or --packages flag to enable package management."
   fi
+else
+  log_header "Package Management"
+  log_info "Package checking disabled. Use -p or --packages flag to enable package management."
 fi
 
 # Step 3: Update configuration files
