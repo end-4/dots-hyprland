@@ -18,9 +18,10 @@ ColumnLayout {
     property color colText: Appearance.colors.colOnSecondaryContainer
     property var textHorizontalAlignment: Text.AlignHCenter
 
+    // Time
     ClockText {
         id: timeTextTop
-        text: clockColumn.isVertical ? DateTime.time.substring(0, 2) : DateTime.time
+        text: clockColumn.isVertical ? DateTime.time.split(":")[0].padStart(2, "0") : DateTime.time
         color: clockColumn.colText
         horizontalAlignment: Text.AlignHCenter
         font {
@@ -36,22 +37,20 @@ ColumnLayout {
 
     ClockText {
         id: timeTextBottom
-        text: DateTime.time.substring(3, 5)
+        text: DateTime.time.split(":")[1].split(" ")[0].padStart(2, "0")
         visible: clockColumn.isVertical
         color: clockColumn.colText
         Layout.topMargin: -40
         horizontalAlignment: Text.AlignHCenter
         font {
-            pixelSize: Config.options.background.widgets.clock.digital.font.size
-            weight: Config.options.background.widgets.clock.digital.font.weight
-            family: Config.options.background.widgets.clock.digital.font.family
-            variableAxes: ({
-                "wdth": Config.options.background.widgets.clock.digital.font.width,
-                "ROND": Config.options.background.widgets.clock.digital.font.roundness
-            })
+            pixelSize: timeTextTop.font.pixelSize
+            weight: timeTextTop.font.weight
+            family: timeTextTop.font.family
+            variableAxes: timeTextTop.font.variableAxes
         }
     }
     
+    // Date
     ClockText {
         visible: Config.options.background.widgets.clock.digital.showDate
         Layout.topMargin: -20
@@ -59,6 +58,7 @@ ColumnLayout {
         color: clockColumn.colText
         horizontalAlignment: clockColumn.textHorizontalAlignment
     }
+
     ClockText {
         visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
         font.pixelSize: Appearance.font.pixelSize.normal
