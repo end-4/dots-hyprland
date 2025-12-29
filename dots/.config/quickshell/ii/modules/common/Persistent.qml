@@ -78,6 +78,9 @@ Singleton {
                 property bool allowNsfw: false
                 property string provider: "yandere"
             }
+            property JsonObject wallpapers: JsonObject {  
+                property string provider: "unsplash"  
+            }
 
             property JsonObject idle: JsonObject {
                 property bool inhibit: false
