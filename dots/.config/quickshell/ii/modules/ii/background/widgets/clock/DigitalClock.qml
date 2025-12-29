@@ -1,14 +1,9 @@
 pragma ComponentBehavior: Bound
 
-//TODO: fix imports to only what is necessary
 import qs.services
 import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import Quickshell.Io
 
 ColumnLayout {
     id: clockColumn
@@ -59,6 +54,7 @@ ColumnLayout {
         horizontalAlignment: clockColumn.textHorizontalAlignment
     }
 
+    // Quote
     ClockText {
         visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
         font.pixelSize: Appearance.font.pixelSize.normal
