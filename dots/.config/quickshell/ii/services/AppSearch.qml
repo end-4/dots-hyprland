@@ -77,18 +77,15 @@ Singleton {
         // Use prepared names for consistency with default fuzzy mode
         const results = preppedNames.map(obj => {
             const fuzzyResult = Fuzzy.single(search, obj.name);
-            // fuzzysort returns .score as 0-1 where higher is better, or null if no match
             const fuzzyScore = fuzzyResult?.score ?? 0;
             const usageScore = AppUsage.getScore(obj.entry.id);
             return {
                 entry: obj.entry,
                 fuzzyScore: fuzzyScore,
                 usageScore: usageScore,
-                // Combine fuzzy match quality with usage frequency
-                // Weight: 70% match quality, 30% usage frequency
                 combinedScore: fuzzyScore * 0.7 + usageScore * 0.3
             };
-        }).filter(item => item.fuzzyScore > 0)
+        }).filter(item => item.fuzzyScore > root.scoreThreshold)
           .sort((a, b) => b.combinedScore - a.combinedScore)
           .map(item => item.entry);
 

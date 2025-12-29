@@ -16,6 +16,7 @@ Singleton {
     property var launchCounts: ({})
     property real maxCount: 1
     property bool ready: false
+    property bool writePending: false
 
     /**
      * Record an app launch - increments the count for the given app ID
@@ -60,19 +61,28 @@ Singleton {
         id: fileReloadTimer
         interval: 100
         repeat: false
-        onTriggered: usageFileView.reload()
+        onTriggered: {
+            // Skip reload if a local write is pending to avoid losing changes
+            if (!root.writePending) {
+                usageFileView.reload();
+            }
+        }
     }
 
     Timer {
         id: fileWriteTimer
         interval: 500 // Slightly longer delay to batch rapid launches
         repeat: false
-        onTriggered: usageFileView.writeAdapter()
+        onTriggered: {
+            usageFileView.writeAdapter();
+            root.writePending = false;
+        }
     }
 
     // Trigger save when counts change
     onLaunchCountsChanged: {
         if (root.ready) {
+            root.writePending = true;
             fileWriteTimer.restart();
         }
     }
