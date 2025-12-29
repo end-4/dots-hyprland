@@ -74,26 +74,22 @@ Singleton {
         }
 
         // Combine fuzzy score with usage frequency
-        const results = list.map(obj => {
+        // Use prepared names for consistency with default fuzzy mode
+        const results = preppedNames.map(obj => {
             const fuzzyResult = Fuzzy.single(search, obj.name);
-            const fuzzyScore = fuzzyResult?.score ?? -1000;
-            const usageScore = AppUsage.getScore(obj.id);
+            // fuzzysort returns .score as 0-1 where higher is better, or null if no match
+            const fuzzyScore = fuzzyResult?.score ?? 0;
+            const usageScore = AppUsage.getScore(obj.entry.id);
             return {
-                entry: obj,
+                entry: obj.entry,
                 fuzzyScore: fuzzyScore,
                 usageScore: usageScore,
-                // Normalize fuzzy score to 0-1 range and combine with usage
-                combinedScore: (fuzzyScore > -1000 ? 1 : 0) * 0.7 + usageScore * 0.3
+                // Combine fuzzy match quality with usage frequency
+                // Weight: 70% match quality, 30% usage frequency
+                combinedScore: fuzzyScore * 0.7 + usageScore * 0.3
             };
-        }).filter(item => item.fuzzyScore > -1000 || item.usageScore > 0)
-          .sort((a, b) => {
-              // First sort by whether there's a fuzzy match
-              if ((a.fuzzyScore > -1000) !== (b.fuzzyScore > -1000)) {
-                  return (b.fuzzyScore > -1000 ? 1 : 0) - (a.fuzzyScore > -1000 ? 1 : 0);
-              }
-              // Then by combined score
-              return b.combinedScore - a.combinedScore;
-          })
+        }).filter(item => item.fuzzyScore > 0)
+          .sort((a, b) => b.combinedScore - a.combinedScore)
           .map(item => item.entry);
 
         return results;
