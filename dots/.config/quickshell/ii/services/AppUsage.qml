@@ -84,7 +84,6 @@ Singleton {
         watchChanges: true
         onFileChanged: fileReloadTimer.restart()
         onLoaded: {
-            root.ready = true;
             // Recalculate maxCount from loaded data
             let max = 1;
             for (const appId in usageAdapter.counts) {
@@ -94,11 +93,15 @@ Singleton {
             }
             root.maxCount = max;
             root.launchCounts = usageAdapter.counts;
+            root.ready = true;
         }
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
                 root.ready = true;
                 fileWriteTimer.restart();
+            } else {
+                console.warn("AppUsage: Failed to load usage data:", error);
+                root.ready = true;
             }
         }
 
