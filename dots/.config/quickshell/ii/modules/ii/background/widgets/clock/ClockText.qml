@@ -9,8 +9,9 @@ StyledText {
         family: Appearance.font.family.expressive
         pixelSize: 20
         weight: 350
-        variableAxes: ({})
+        // Set empty to prevent conflicts, not meaningless
         styleName: ""
+        variableAxes: ({})
     }
     style: Text.Raised
     styleColor: Appearance.colors.colShadow
