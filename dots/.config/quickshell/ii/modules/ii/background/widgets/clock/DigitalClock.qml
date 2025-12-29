@@ -24,27 +24,30 @@ ColumnLayout {
             weight: Config.options.background.widgets.clock.digital.font.weight
             family: Config.options.background.widgets.clock.digital.font.family
             variableAxes: ({
-                "wdth": Config.options.background.widgets.clock.digital.font.width,
-                "ROND": Config.options.background.widgets.clock.digital.font.roundness
-            })
+                    "wdth": Config.options.background.widgets.clock.digital.font.width,
+                    "ROND": Config.options.background.widgets.clock.digital.font.roundness
+                })
         }
     }
 
-    ClockText {
-        id: timeTextBottom
-        text: DateTime.time.split(":")[1].split(" ")[0].padStart(2, "0")
-        visible: clockColumn.isVertical
-        color: clockColumn.colText
+    Loader {
         Layout.topMargin: -40
-        horizontalAlignment: Text.AlignHCenter
-        font {
-            pixelSize: timeTextTop.font.pixelSize
-            weight: timeTextTop.font.weight
-            family: timeTextTop.font.family
-            variableAxes: timeTextTop.font.variableAxes
+        active: clockColumn.isVertical
+        visible: active
+        sourceComponent: ClockText {
+            id: timeTextBottom
+            text: DateTime.time.split(":")[1].split(" ")[0].padStart(2, "0")
+            color: clockColumn.colText
+            horizontalAlignment: Text.AlignHCenter
+            font {
+                pixelSize: timeTextTop.font.pixelSize
+                weight: timeTextTop.font.weight
+                family: timeTextTop.font.family
+                variableAxes: timeTextTop.font.variableAxes
+            }
         }
     }
-    
+
     // Date
     ClockText {
         visible: Config.options.background.widgets.clock.digital.showDate
@@ -64,6 +67,3 @@ ColumnLayout {
         horizontalAlignment: clockColumn.textHorizontalAlignment
     }
 }
-
-
-    
