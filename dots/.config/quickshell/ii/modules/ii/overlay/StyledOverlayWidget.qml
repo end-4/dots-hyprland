@@ -190,7 +190,7 @@ AbstractOverlayWidget {
             fill: parent
             margins: root.resizeMargin
         }
-        color: ColorUtils.transparentize(Appearance.colors.colLayer1, (root.fancyBorders && GlobalStates.overlayOpen) ? 0 : 1)
+        color: ColorUtils.transparentize(Appearance.colors.colLayer1Base, (root.fancyBorders && GlobalStates.overlayOpen) ? 0 : 1)
         radius: root.radius
         border.color: ColorUtils.transparentize(Appearance.colors.colOutlineVariant, GlobalStates.overlayOpen ? 0 : 1)
         border.width: 1
@@ -217,7 +217,7 @@ AbstractOverlayWidget {
                 Layout.fillWidth: true
                 implicitWidth: titleBarRow.implicitWidth + root.padding * 2
                 implicitHeight: titleBarRow.implicitHeight + root.padding * 2
-                color: root.fancyBorders ? "transparent" : Appearance.colors.colLayer1
+                color: root.fancyBorders ? "transparent" : Appearance.colors.colLayer1Base
                 // border.color: Appearance.colors.colOutlineVariant
                 // border.width: 1
                 

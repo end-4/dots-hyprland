@@ -23,7 +23,7 @@ Item {
         Bluetooth.defaultAdapter.discovering = false;
     }
 
-    PageColumn {
+    WPanelPageColumn {
         anchors.fill: parent
 
         BodyRectangle {
@@ -96,10 +96,10 @@ Item {
             }
         }
 
-        Separator {}
+        WPanelSeparator {}
 
         FooterRectangle {
-            FooterMoreButton {
+            WTextButton {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
@@ -110,7 +110,7 @@ Item {
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth]);
                 }
             }
-            WPanelFooterButton {
+            WBorderlessButton {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12

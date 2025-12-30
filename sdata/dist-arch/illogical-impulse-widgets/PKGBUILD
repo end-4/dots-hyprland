@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=5
+pkgrel=6
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
@@ -14,4 +14,5 @@ depends=(
   songrec
   translate-shell
   wlogout
+  libqalculate
 )

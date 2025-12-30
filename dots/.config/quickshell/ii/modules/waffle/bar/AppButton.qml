@@ -54,7 +54,7 @@ BarButton {
 
     contentItem: Item {
         id: contentItem
-        anchors.centerIn: background
+        anchors.centerIn: root.background
 
         implicitHeight: iconWidget.implicitHeight
         implicitWidth: iconWidget.implicitWidth
@@ -66,7 +66,7 @@ BarButton {
             }
         }
 
-        AppIcon {
+        WAppIcon {
             id: iconWidget
             anchors.centerIn: parent
             iconName: root.iconName

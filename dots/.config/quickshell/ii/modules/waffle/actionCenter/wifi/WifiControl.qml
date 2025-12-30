@@ -19,7 +19,7 @@ Item {
         Network.rescanWifi();
     }
 
-    PageColumn {
+    WPanelPageColumn {
         anchors.fill: parent
 
         BodyRectangle {
@@ -86,10 +86,10 @@ Item {
             }
         }
 
-        Separator {}
+        WPanelSeparator {}
 
         FooterRectangle {
-            FooterMoreButton {
+            WTextButton {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
@@ -100,7 +100,7 @@ Item {
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.network]);
                 }
             }
-            WPanelFooterButton {
+            WBorderlessButton {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12

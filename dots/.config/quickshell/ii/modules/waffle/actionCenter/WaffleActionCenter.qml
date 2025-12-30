@@ -15,12 +15,13 @@ Scope {
         target: GlobalStates
 
         function onSidebarLeftOpenChanged() {
-            if (GlobalStates.sidebarLeftOpen) barLoader.active = true;
+            if (GlobalStates.sidebarLeftOpen)
+                panelLoader.active = true;
         }
     }
 
     Loader {
-        id: barLoader
+        id: panelLoader
         active: GlobalStates.sidebarLeftOpen
         sourceComponent: PanelWindow {
             id: panelWindow
@@ -35,38 +36,31 @@ Scope {
                 right: true
             }
 
-            implicitWidth: content.implicitWidth + content.visualMargin * 2
-            implicitHeight: content.implicitHeight + content.visualMargin * 2
+            implicitWidth: content.implicitWidth
+            implicitHeight: content.implicitHeight
 
             HyprlandFocusGrab {
                 id: focusGrab
                 active: true
                 windows: [panelWindow]
-                onCleared: content.close();
+                onCleared: content.close()
             }
 
             Connections {
                 target: GlobalStates
                 function onSidebarLeftOpenChanged() {
-                    if (!GlobalStates.sidebarLeftOpen) content.close();
+                    if (!GlobalStates.sidebarLeftOpen)
+                        content.close();
                 }
             }
 
             ActionCenterContent {
                 id: content
                 anchors.fill: parent
-                anchors.margins: visualMargin
-
-                focus: true
-                Keys.onPressed: event => { // Esc to close
-                    if (event.key === Qt.Key_Escape) {
-                        content.close()
-                    }
-                }
 
                 onClosed: {
                     GlobalStates.sidebarLeftOpen = false;
-                    barLoader.active = false;
+                    panelLoader.active = false;
                 }
             }
         }
@@ -88,6 +82,23 @@ Scope {
         name: "sidebarLeftToggle"
         description: "Toggles left sidebar on press"
 
-        onPressed: root.toggleOpen();
+        onPressed: root.toggleOpen()
+    }
+
+    IpcHandler {
+        target: "mediaControls"
+
+        function toggle(): void {
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        }
+    }
+
+    GlobalShortcut {
+        name: "mediaControlsToggle"
+        description: "Toggles media controls on press"
+
+        onPressed: {
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        }
     }
 }
