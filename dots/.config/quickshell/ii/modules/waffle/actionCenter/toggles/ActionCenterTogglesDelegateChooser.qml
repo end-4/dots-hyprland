@@ -33,7 +33,7 @@ DelegateChooser {
         roleValue: "autoRotate"
         ActionCenterToggleButton {
             toggleModel: AutoRotateToggle {}
-            icon: "sync"
+            icon: "repeat"
         }
     }
     DelegateChoice {

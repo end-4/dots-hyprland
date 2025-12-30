@@ -11,7 +11,7 @@ QuickToggleModel {
 
     available: AutoRotate.available
     toggled: AutoRotate.active
-    icon: "sync"
+    icon: "repeat"
 
     Component.onCompleted: {
         AutoRotate.fetchActiveState()
