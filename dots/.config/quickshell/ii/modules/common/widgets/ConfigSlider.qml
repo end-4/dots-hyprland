@@ -2,38 +2,47 @@ import qs.modules.common.widgets
 import qs.modules.common
 import QtQuick
 import QtQuick.Layouts
+import qs.services
 
 RowLayout {
     id: root
-    property string text: ""
-    property string icon
-    property alias value: spinBoxWidget.value
-    property alias stepSize: spinBoxWidget.stepSize
-    property alias from: spinBoxWidget.from
-    property alias to: spinBoxWidget.to
     spacing: 10
     Layout.leftMargin: 8
     Layout.rightMargin: 8
 
+    property string text: ""
+    property string buttonIcon: ""
+    property alias value: slider.value
+    property alias stopIndicatorValues: slider.stopIndicatorValues
+    property alias stepSize: slider.stepSize
+    property bool usePercentTooltip: true
+    property real from: slider.from
+    property real to: slider.to
+    property real textWidth: 120
+
     RowLayout {
+        id: row
         spacing: 10
+
         OptionalMaterialSymbol {
             id: iconWidget
-            icon: root.icon
-            opacity: root.enabled ? 1 : 0.4
+            icon: root.buttonIcon
+            iconSize: Appearance.font.pixelSize.larger
         }
         StyledText {
             id: labelWidget
-            Layout.minimumWidth: root.width * (1 - Appearance.sizes.settingsSliderFraction) - (iconWidget.width ? iconWidget.width + 10 : 0)
+            Layout.preferredWidth: root.textWidth
             text: root.text
             color: Appearance.colors.colOnSecondaryContainer
-            opacity: root.enabled ? 1 : 0.4
         }
     }
-
+    
     StyledSlider {
-        id: spinBoxWidget
-        Layout.fillWidth: true
+        id: slider
+        configuration: StyledSlider.Configuration.XS
+        usePercentTooltip: root.usePercentTooltip
         value: root.value
+        from: root.from
+        to: root.to
     }
 }
