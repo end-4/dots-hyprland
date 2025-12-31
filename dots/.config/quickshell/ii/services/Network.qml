@@ -31,6 +31,10 @@ Singleton {
         return b.strength - a.strength;
     })
     property string wifiStatus: "disconnected"
+    
+    // Map of SSID -> [UUIDs] for saved connection profiles
+    // Used for reliable deletion by UUID instead of by name
+    property var savedConnectionsMap: ({})
 
     property string networkName: ""
     property int networkStrength
@@ -69,35 +73,59 @@ Singleton {
     }
 
     function connectToWifiNetwork(accessPoint: WifiAccessPoint): void {
+        console.info("[Network] Connecting to:", accessPoint.ssid);
         accessPoint.askingPassword = false;
         root.wifiConnectTarget = accessPoint;
         // We use this instead of `nmcli connection up SSID` because this also creates a connection profile
-        connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid])
-
+        connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid]);
     }
 
     function disconnectWifiNetwork(): void {
         if (active) disconnectProc.exec(["nmcli", "connection", "down", active.ssid]);
     }
 
+    // Holy shit this was a nightmare to debug. NetworkManager creates ghost profiles,
+    // nmcli lies about what it deletes, and UUIDs are the only truth in this world.
+    // We fetch UUIDs from savedConnectionsMap and delete each one. F*** you, key-mgmt errors.
     function forgetWifiNetwork(accessPoint: WifiAccessPoint): void {
-        // Use a proper process to ensure the deletion completes before refreshing
-        forgetProc.exec(["nmcli", "connection", "delete", accessPoint.ssid]);
+        const ssid = accessPoint.ssid;
+        const uuids = root.savedConnectionsMap[ssid];
+        
+        if (!uuids || uuids.length === 0) {
+            // No profiles? Refresh the map and pray
+            getConnections.running = true;
+            return;
+        }
+        
+        // Delete each UUID - finally, something that actually works f me this mtf is hard
+        for (const uuid of uuids) {
+            forgetProc.exec(["nmcli", "connection", "delete", uuid]);
+        }
     }
 
     function openPublicWifiPortal() {
         Quickshell.execDetached(["xdg-open", "https://nmcheck.gnome.org/"]) // From some StackExchange thread, seems to work
     }
 
-    function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
+    // After hours of debugging, we discovered:
+    // 1. Failed connections create broken profiles
+    // 2. nmcli tries to reuse broken profiles instead of creating new ones
+    // 3. The only solution: DELETE EVERYTHING and start fresh. Beautiful.
+    function providePass(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
-        changePasswordProc.exec({
+        root.wifiConnectTarget = network;
+        // Nuke any existing profiles, then connect with fresh credentials
+        // This is the ONLY way to avoid the cursed "key-mgmt: property is missing" error
+        connectWithPasswordProc.exec({
             "environment": {
-                "PASSWORD": password
+                "LANG": "C",
+                "LC_ALL": "C",
+                "WIFI_SSID": network.ssid,
+                "WIFI_PASSWORD": password
             },
-            "command": ["bash", "-c", `nmcli connection modify ${network.ssid} wifi-sec.psk "$PASSWORD"`]
-        })
+            "command": ["bash", "-c", "nmcli connection delete \"$WIFI_SSID\" 2>/dev/null; nmcli dev wifi connect \"$WIFI_SSID\" password \"$WIFI_PASSWORD\""]
+        });
     }
 
     Process {
@@ -112,23 +140,43 @@ Singleton {
         })
         stdout: SplitParser {
             onRead: line => {
-                // print(line)
-                getNetworks.running = true
+                getNetworks.running = true;
             }
         }
         stderr: SplitParser {
             onRead: line => {
-                // print("err:", line)
                 if (line.includes("Secrets were required") && root.wifiConnectTarget) {
-                    root.wifiConnectTarget.askingPassword = true
+                    root.wifiConnectTarget.askingPassword = true;
                 }
             }
         }
         onExited: (exitCode, exitStatus) => {
             if (root.wifiConnectTarget) {
-                root.wifiConnectTarget.askingPassword = (exitCode !== 0)
+                root.wifiConnectTarget.askingPassword = (exitCode !== 0);
             }
-            root.wifiConnectTarget = null
+            root.wifiConnectTarget = null;
+        }
+    }
+
+    // This bad boy finally works after we figured out the environment variable nightmare
+    Process {
+        id: connectWithPasswordProc
+        stdout: SplitParser {
+            onRead: line => {
+                getNetworks.running = true;
+                getConnections.running = true;
+            }
+        }
+        stderr: SplitParser {
+            onRead: line => {}
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (root.wifiConnectTarget) {
+                root.wifiConnectTarget.askingPassword = (exitCode !== 0);
+            }
+            root.wifiConnectTarget = null;
+            getNetworks.running = true;
+            getConnections.running = true;
         }
     }
 
@@ -141,9 +189,20 @@ Singleton {
 
     Process {
         id: forgetProc
-        onExited: {
-            // Refresh network list after deletion completes
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: SplitParser {
+            onRead: line => {}
+        }
+        stderr: SplitParser {
+            onRead: line => {}
+        }
+        onExited: (exitCode, exitStatus) => {
+            // Victory lap - refresh everything
             getNetworks.running = true;
+            getConnections.running = true;
         }
     }
 
@@ -162,6 +221,41 @@ Singleton {
             onRead: {
                 wifiScanning = false;
                 getNetworks.running = true;
+            }
+        }
+    }
+
+    // Fetch saved connection profiles to build SSID -> UUID map
+    Process {
+        id: getConnections
+        running: true
+        command: ["nmcli", "-g", "NAME,UUID,TYPE", "connection", "show"]
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const newMap = {};
+                const lines = text.trim().split("\n");
+                for (const line of lines) {
+                    if (!line) continue;
+                    // Format: NAME:UUID:TYPE (escaping handled by -t flag)
+                    const parts = line.split(":");
+                    if (parts.length >= 3) {
+                        const name = parts[0];
+                        const uuid = parts[1];
+                        const type = parts[2];
+                        // Only track wifi connections
+                        if (type === "802-11-wireless") {
+                            if (!newMap[name]) {
+                                newMap[name] = [];
+                            }
+                            newMap[name].push(uuid);
+                        }
+                    }
+                }
+                root.savedConnectionsMap = newMap;
             }
         }
     }
