@@ -21,5 +21,5 @@ QuickToggleModel {
         AutoRotate.toggle()
     }
 
-    tooltipText: Translation.tr("Auto-Rotate")
+    tooltipText: available ? Translation.tr("Auto-Rotate") : Translation.tr("Auto-Rotate | Requires iio-hyprland")
 }
