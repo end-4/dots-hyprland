@@ -347,6 +347,15 @@ ContentPage {
         icon: "screenshot_frame_2"
         title: Translation.tr("Region selector (screen snipping/Google Lens)")
 
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr('Show only on focused monitor')
+            checked: Config.options.regionSelector.showOnlyOnFocusedMonitor
+            onCheckedChanged: {
+                Config.options.regionSelector.showOnlyOnFocusedMonitor = checked;
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Hint target regions")
             ConfigRow {
@@ -693,6 +702,14 @@ ContentPage {
             checked: Config.options.overview.enable
             onCheckedChanged: {
                 Config.options.overview.enable = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Show only on focused monitor")
+            checked: Config.options.overview.showOnlyOnFocusedMonitor
+            onCheckedChanged: {
+                Config.options.overview.showOnlyOnFocusedMonitor = checked;
             }
         }
         ConfigSwitch {
