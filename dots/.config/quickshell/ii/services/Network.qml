@@ -162,10 +162,7 @@ Singleton {
     Process {
         id: connectWithPasswordProc
         stdout: SplitParser {
-            onRead: line => {
-                getNetworks.running = true;
-                getConnections.running = true;
-            }
+            onRead: line => {}
         }
         stderr: SplitParser {
             onRead: line => {}
@@ -203,14 +200,6 @@ Singleton {
             // Victory lap - refresh everything
             getNetworks.running = true;
             getConnections.running = true;
-        }
-    }
-
-    Process {
-        id: changePasswordProc
-        onExited: { // Re-attempt connection after changing password
-            connectProc.running = false
-            connectProc.running = true
         }
     }
 
