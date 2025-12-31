@@ -81,9 +81,8 @@ Singleton {
     }
 
     function forgetWifiNetwork(accessPoint: WifiAccessPoint): void {
-        //Agreessive but yeah this is the only way i can think of to delete a connection profile.
-        Quickshell.execDetached(["nmcli", "connection", "delete", accessPoint.ssid]);
-        getNetworks.running = true;
+        // Use a proper process to ensure the deletion completes before refreshing
+        forgetProc.exec(["nmcli", "connection", "delete", accessPoint.ssid]);
     }
 
     function openPublicWifiPortal() {
@@ -138,6 +137,14 @@ Singleton {
         id: disconnectProc
         stdout: SplitParser {
             onRead: getNetworks.running = true
+        }
+    }
+
+    Process {
+        id: forgetProc
+        onExited: {
+            // Refresh network list after deletion completes
+            getNetworks.running = true;
         }
     }
 
