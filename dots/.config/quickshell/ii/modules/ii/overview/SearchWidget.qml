@@ -17,7 +17,7 @@ Item { // Wrapper
     property string searchingText: LauncherSearch.query
     property bool showResults: searchingText != ""
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
-    implicitHeight: searchBar.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
+    implicitHeight: searchWidgetContent.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
     function focusFirstItem() {
         appResults.currentIndex = 0;

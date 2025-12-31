@@ -25,7 +25,7 @@ WMouseAreaButton {
 
     property string iconName: AppSearch.guessIcon(hyprlandClient?.class)
 
-    color: drag.active ? ColorUtils.transparentize(Looks.colors.bg1Base) : (containsMouse ? Looks.colors.bg1Base : Looks.colors.bgPanelFooterBase)
+    color: drag.active ? ColorUtils.transparentize(Looks.colors.bg1Base) : (containsMouse ? Looks.colors.bg1Base : Looks.colors.bgPanelFooterBackground)
     borderColor: ColorUtils.transparentize(Looks.colors.bg2Border, drag.active ? 1 : 0)
     radius: Looks.radius.xLarge
 
