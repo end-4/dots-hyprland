@@ -16,9 +16,9 @@ Scope {
     property bool dontAutoCancelSearch: false
 
     PanelWindow {
-        id: root
+        id: panelWindow
         property string searchingText: ""
-        readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
+        readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
         property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
         visible: GlobalStates.overviewOpen
 
@@ -40,8 +40,8 @@ Scope {
 
         HyprlandFocusGrab {
             id: grab
-            windows: [root]
-            property bool canBeActive: root.monitorIsFocused
+            windows: [panelWindow]
+            property bool canBeActive: panelWindow.monitorIsFocused
             active: false
             onCleared: () => {
                 if (!active)
@@ -96,10 +96,10 @@ Scope {
                 if (event.key === Qt.Key_Escape) {
                     GlobalStates.overviewOpen = false;
                 } else if (event.key === Qt.Key_Left) {
-                    if (!root.searchingText)
+                    if (!panelWindow.searchingText)
                         Hyprland.dispatch("workspace r-1");
                 } else if (event.key === Qt.Key_Right) {
-                    if (!root.searchingText)
+                    if (!panelWindow.searchingText)
                         Hyprland.dispatch("workspace r+1");
                 }
             }
@@ -108,7 +108,7 @@ Scope {
                 id: searchWidget
                 anchors.horizontalCenter: parent.horizontalCenter
                 Synchronizer on searchingText {
-                    property alias source: root.searchingText
+                    property alias source: panelWindow.searchingText
                 }
             }
 
@@ -117,8 +117,8 @@ Scope {
                 anchors.horizontalCenter: parent.horizontalCenter
                 active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
                 sourceComponent: OverviewWidget {
-                    screen: root.screen
-                    visible: (root.searchingText == "")
+                    screen: panelWindow.screen
+                    visible: (panelWindow.searchingText == "")
                 }
             }
         }
@@ -129,15 +129,9 @@ Scope {
             GlobalStates.overviewOpen = false;
             return;
         }
-        for (let i = 0; i < overviewVariants.instances.length; i++) {
-            let panelWindow = overviewVariants.instances[i];
-            if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                overviewScope.dontAutoCancelSearch = true;
-                panelWindow.setSearchingText(Config.options.search.prefix.clipboard);
-                GlobalStates.overviewOpen = true;
-                return;
-            }
-        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.clipboard);
+        GlobalStates.overviewOpen = true;
     }
 
     function toggleEmojis() {
@@ -145,15 +139,9 @@ Scope {
             GlobalStates.overviewOpen = false;
             return;
         }
-        for (let i = 0; i < overviewVariants.instances.length; i++) {
-            let panelWindow = overviewVariants.instances[i];
-            if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                overviewScope.dontAutoCancelSearch = true;
-                panelWindow.setSearchingText(Config.options.search.prefix.emojis);
-                GlobalStates.overviewOpen = true;
-                return;
-            }
-        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.emojis);
+        GlobalStates.overviewOpen = true;
     }
 
     IpcHandler {
