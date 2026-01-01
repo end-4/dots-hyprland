@@ -13,8 +13,8 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    required property var panelWindow
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
+    required property var screen
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen)
     readonly property var toplevels: ToplevelManager.toplevels
     readonly property int workspacesShown: Config.options.overview.rows * Config.options.overview.columns
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
