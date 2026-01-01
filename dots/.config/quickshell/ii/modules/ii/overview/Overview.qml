@@ -23,7 +23,7 @@ Scope {
         visible: GlobalStates.overviewOpen
 
         WlrLayershell.namespace: "quickshell:overview"
-        WlrLayershell.layer: WlrLayer.Overlay
+        WlrLayershell.layer: WlrLayer.Top
         // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         color: "transparent"
 
@@ -38,43 +38,28 @@ Scope {
             right: true
         }
 
-        HyprlandFocusGrab {
-            id: grab
-            windows: [panelWindow]
-            property bool canBeActive: panelWindow.monitorIsFocused
-            active: false
-            onCleared: () => {
-                if (!active)
-                    GlobalStates.overviewOpen = false;
-            }
-        }
-
         Connections {
             target: GlobalStates
             function onOverviewOpenChanged() {
                 if (!GlobalStates.overviewOpen) {
                     searchWidget.disableExpandAnimation();
                     overviewScope.dontAutoCancelSearch = false;
+                    GlobalFocusGrab.dismiss();
                 } else {
                     if (!overviewScope.dontAutoCancelSearch) {
                         searchWidget.cancelSearch();
                     }
-                    delayedGrabTimer.start();
+                    GlobalFocusGrab.addDismissable(panelWindow);
                 }
             }
         }
 
-        Timer {
-            id: delayedGrabTimer
-            interval: Config.options.hacks.arbitraryRaceConditionDelay
-            repeat: false
-            onTriggered: {
-                if (!grab.canBeActive)
-                    return;
-                grab.active = GlobalStates.overviewOpen;
+        Connections {
+            target: GlobalFocusGrab
+            function onDismissed() {
+                GlobalStates.overviewOpen = false;
             }
         }
-
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
 
