@@ -112,7 +112,6 @@ Singleton {
     // 2. nmcli tries to reuse broken profiles instead of creating new ones
     // 3. The only solution: DELETE EVERYTHING and start fresh. Beautiful.
     function providePass(network: WifiAccessPoint, password: string, username = ""): void {
-        // TODO: enterprise wifi with username
         network.askingPassword = false;
         root.wifiConnectTarget = network;
         // Nuke any existing profiles, then connect with fresh credentials
