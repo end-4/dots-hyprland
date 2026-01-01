@@ -364,7 +364,7 @@ Item {
                 title: Translation.tr("Available Devices")
                 visible: (Bluetooth.defaultAdapter?.enabled ?? false)
                 
-                // Empty state - center it properly
+                // Empty state - center wifi needs to be centered soon considered TDO
                 Item {
                     visible: BluetoothStatus.friendlyDeviceList.length === 0 && !(Bluetooth.defaultAdapter?.discovering ?? false)
                     Layout.fillWidth: true
