@@ -232,6 +232,14 @@ Rectangle {
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colSubtext
                     }
+                    
+                    // Error message
+                    StyledText {
+                        visible: root.wifiNetwork?.connectionError?.length > 0
+                        text: root.wifiNetwork?.connectionError ?? ""
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.colors.colError
+                    }
                 }
             }
 
