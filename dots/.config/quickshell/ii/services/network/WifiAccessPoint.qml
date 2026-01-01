@@ -11,4 +11,5 @@ QtObject {
     readonly property bool isSecure: security.length > 0
 
     property bool askingPassword: false
+    property string connectionError: ""  // Stores error message for UI display
 }

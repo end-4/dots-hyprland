@@ -73,8 +73,8 @@ Singleton {
     }
 
     function connectToWifiNetwork(accessPoint: WifiAccessPoint): void {
-        console.info("[Network] Connecting to:", accessPoint.ssid);
         accessPoint.askingPassword = false;
+        accessPoint.connectionError = "";  // Clear any previous error
         root.wifiConnectTarget = accessPoint;
         // We use this instead of `nmcli connection up SSID` because this also creates a connection profile
         connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid]);
@@ -134,6 +134,7 @@ Singleton {
 
     Process {
         id: connectProc
+        property string lastError: ""
         environment: ({
             LANG: "C",
             LC_ALL: "C"
@@ -145,33 +146,70 @@ Singleton {
         }
         stderr: SplitParser {
             onRead: line => {
-                if (line.includes("Secrets were required") && root.wifiConnectTarget) {
-                    root.wifiConnectTarget.askingPassword = true;
-                }
+                connectProc.lastError = line;
             }
         }
         onExited: (exitCode, exitStatus) => {
-            if (root.wifiConnectTarget) {
-                root.wifiConnectTarget.askingPassword = (exitCode !== 0);
+            if (exitCode !== 0 && root.wifiConnectTarget) {
+                const err = connectProc.lastError;
+                // Password/secrets errors -> show password prompt
+                if (err.includes("Secrets were required") || err.includes("psk") || err.includes("password")) {
+                    root.wifiConnectTarget.askingPassword = true;
+                    root.wifiConnectTarget.connectionError = "";
+                }
+                // Network not found
+                else if (err.includes("No network") || err.includes("not found")) {
+                    root.wifiConnectTarget.connectionError = "Network not found";
+                }
+                // Device busy
+                else if (err.includes("busy") || err.includes("in use")) {
+                    root.wifiConnectTarget.connectionError = "Device busy, try again";
+                }
+                // Generic error
+                else {
+                    root.wifiConnectTarget.connectionError = "Connection failed";
+                }
+            } else if (root.wifiConnectTarget) {
+                // Success - clear any previous error
+                root.wifiConnectTarget.connectionError = "";
             }
             root.wifiConnectTarget = null;
+            connectProc.lastError = "";
         }
     }
 
     // This bad boy finally works after we figured out the environment variable nightmare
     Process {
         id: connectWithPasswordProc
+        property string lastError: ""
         stdout: SplitParser {
             onRead: line => {}
         }
         stderr: SplitParser {
-            onRead: line => {}
+            onRead: line => {
+                connectWithPasswordProc.lastError = line;
+            }
         }
         onExited: (exitCode, exitStatus) => {
-            if (root.wifiConnectTarget) {
-                root.wifiConnectTarget.askingPassword = (exitCode !== 0);
+            if (exitCode !== 0 && root.wifiConnectTarget) {
+                const err = connectWithPasswordProc.lastError;
+                // Wrong password - show password prompt again
+                if (err.includes("Secrets") || err.includes("psk") || err.includes("password") || err.includes("key-mgmt")) {
+                    root.wifiConnectTarget.askingPassword = true;
+                    root.wifiConnectTarget.connectionError = "Wrong password";
+                }
+                // Other errors - show error message, don't ask for password
+                else if (err.includes("No network") || err.includes("not found")) {
+                    root.wifiConnectTarget.connectionError = "Network not found";
+                }
+                else {
+                    root.wifiConnectTarget.connectionError = "Connection failed";
+                }
+            } else if (root.wifiConnectTarget) {
+                root.wifiConnectTarget.connectionError = "";
             }
             root.wifiConnectTarget = null;
+            connectWithPasswordProc.lastError = "";
             getNetworks.running = true;
             getConnections.running = true;
         }
