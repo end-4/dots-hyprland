@@ -85,6 +85,9 @@ Scope { // Scope
                 Keys.onPressed: event => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
                         cheatsheetRoot.hide();
+                    } else if (event.key === Qt.Key_Slash) {
+                        swipeView.currentItem.forceActiveFocus();
+                        event.accepted = true;
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
