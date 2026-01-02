@@ -55,7 +55,7 @@ Scope { // Scope
             Component.onDestruction: {
                 GlobalFocusGrab.removePersistent(oskRoot);
             }
-            
+
             // Content
             StyledRectangularShadow {
                 target: oskContent
