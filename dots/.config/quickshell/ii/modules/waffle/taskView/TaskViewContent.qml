@@ -231,7 +231,7 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: wsBorder.border.width
             radius: wsBorder.radius - wsBorder.border.width
-            color: Looks.colors.bgPanelFooterBase
+            color: Looks.colors.bgPanelFooterBackground
 
             implicitHeight: 174
 
