@@ -13,11 +13,15 @@ import Quickshell.Io
 
 Item { // Wrapper
     id: root
+
     readonly property string xdgConfigHome: Directories.config
+    readonly property int typingDebounceInterval: 200
+    readonly property int typingResultLimit: 15 // Should be enough to cover the whole view
+
     property string searchingText: LauncherSearch.query
     property bool showResults: searchingText != ""
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
-    implicitHeight: searchBar.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
+    implicitHeight: searchWidgetContent.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
     function focusFirstItem() {
         appResults.currentIndex = 0;
@@ -178,13 +182,26 @@ Item { // Wrapper
                     }
                 }
 
-                model: ScriptModel {
-                    id: model
-                    objectProp: "key"
-                    values: LauncherSearch.results
-                    onValuesChanged: {
-                        root.focusFirstItem();
+                Timer {
+                    id: debounceTimer
+                    interval: root.typingDebounceInterval
+                    onTriggered: {
+                        resultModel.values = LauncherSearch.results ?? [];
                     }
+                }
+
+                Connections {
+                    target: LauncherSearch
+                    function onResultsChanged() {
+                        resultModel.values = LauncherSearch.results.slice(0, root.typingResultLimit);
+                        root.focusFirstItem();
+                        debounceTimer.restart();
+                    }
+                }
+
+                model: ScriptModel {
+                    id: resultModel
+                    objectProp: "key"
                 }
 
                 delegate: SearchItem {
@@ -193,15 +210,7 @@ Item { // Wrapper
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData
-                    query: StringUtils.cleanOnePrefix(root.searchingText, [
-                        Config.options.search.prefix.action,
-                        Config.options.search.prefix.app,
-                        Config.options.search.prefix.clipboard,
-                        Config.options.search.prefix.emojis,
-                        Config.options.search.prefix.math,
-                        Config.options.search.prefix.shellCommand,
-                        Config.options.search.prefix.webSearch
-                    ])
+                    query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
                 }
             }
         }
