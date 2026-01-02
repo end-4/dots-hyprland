@@ -48,6 +48,14 @@ Scope { // Scope
                 item: oskContent
             }
 
+            // Make it usable with other panels
+            Component.onCompleted: {
+                GlobalFocusGrab.addPersistent(oskRoot);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removePersistent(oskRoot);
+            }
+            
             // Content
             StyledRectangularShadow {
                 target: oskContent
