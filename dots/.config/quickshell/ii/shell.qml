@@ -38,18 +38,22 @@ import qs.modules.waffle.polkit
 import qs.modules.waffle.startMenu
 import qs.modules.waffle.sessionScreen
 import qs.modules.waffle.taskView
+import "modules/common"
+import "services"
+import "panelFamilies"
 
 import QtQuick
 import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import qs.services
 
 ShellRoot {
     id: root
 
-    // Force initialization of some singletons
+    // Stuff for every panel family
+    ReloadPopup {}
+
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         Hyprsunset.load()
@@ -104,17 +108,30 @@ ShellRoot {
 
     // Panel families
     property list<string> families: ["ii", "waffle"]
-    property var panelFamilies: ({
-        "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wActionCenter", "wBar", "wBackground", "wLock", "wNotificationCenter", "wOnScreenDisplay", "wTaskView", "wPolkit", "wSessionScreen", "wStartMenu", "iiCheatsheet", "iiNotificationPopup", "iiOnScreenKeyboard", "iiOverlay", "iiRegionSelector", "iiWallpaperSelector"],
-    })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
         const nextIndex = (currentIndex + 1) % families.length
         Config.options.panelFamily = families[nextIndex]
-        Config.options.enabledPanels = panelFamilies[Config.options.panelFamily]
     }
 
+    component PanelFamilyLoader: LazyLoader {
+        required property string identifier
+        property bool extraCondition: true
+        active: Config.ready && Config.options.panelFamily === identifier && extraCondition
+    }
+    
+    PanelFamilyLoader {
+        identifier: "ii"
+        component: IllogicalImpulseFamily {}
+    }
+
+    PanelFamilyLoader {
+        identifier: "waffle"
+        component: WaffleFamily {}
+    }
+
+
+    // Shortcuts
     IpcHandler {
         target: "panelFamily"
 
