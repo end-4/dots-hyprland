@@ -10,8 +10,9 @@ Slider {
     id: root
 
     property real trackWidth: 4
-    // leftPadding: handle.width / 2
-    // rightPadding: handle.width / 2
+    property string tooltipContent: `${Math.round(value * 100)}`
+    property bool scrollable: false
+    stepSize: 0.02
     leftPadding: 0
     rightPadding: 0
 
@@ -23,9 +24,23 @@ Slider {
         }
     }
 
-    background: Item {
+    background: MouseArea {
         id: background
         anchors.fill: parent
+
+        onWheel: (event) => {
+            if (!root.scrollable) {
+                event.accepted = false;
+                return;
+            }
+            if (event.angleDelta.y > 0) {
+                root.value = Math.min(root.value + root.stepSize, 1)
+                root.moved()
+            } else {
+                root.value = Math.max(root.value - root.stepSize, 0)
+                root.moved()
+            }
+        }
 
         Rectangle {
             id: trackHighlight
@@ -76,6 +91,15 @@ Slider {
             Behavior on diameter {
                 animation: Looks.transition.enter.createObject(this)
             }
+        }
+
+        WToolTip {
+            id: tooltip
+            extraVisibleCondition: root.pressed
+            text: root.tooltipContent
+            font.pixelSize: Looks.font.pixelSize.larger
+            verticalPadding: 3
+            horizontalPadding: 8
         }
     }
 }

@@ -25,6 +25,10 @@ Rectangle {
     border.width: targeted ? 4 : 2
     radius: 4
 
+    Behavior on color {
+        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+    }
+
     visible: opacity > 0
     Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

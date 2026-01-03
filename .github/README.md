@@ -44,14 +44,14 @@
 <details>
   <summary>Software overview</summary>
 
-
   | Software | Purpose |
   | ------------- | ------------- |
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
+  | Others | See [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md) |
 
-  - For the full list of dependencies, see the [sdata/dist-arch folder](https://github.com/end-4/dots-hyprland/tree/main/sdata/dist-arch)
-  - THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR
+  _THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR_
+
 </details>
 
 <details>
@@ -80,8 +80,8 @@ Widget system: Quickshell | Support: Yes
 | AI, settings app | Some widgets |
 |:---|:---------------|
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ea0154a1-e984-4bb6-a424-23247cefe3c6" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eba0d57-2606-4cea-8993-e6f169e82e70" /> |
-| Window management | Weeb power |
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a7e6d29c-e82c-4934-98db-36c810ec999b" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c8544e99-8881-477f-b83a-d6e35c0184a1" /> |
+| Window management | Built with love |
+| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a7e6d29c-e82c-4934-98db-36c810ec999b" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1b806b53-9310-4c63-84a9-cec9e311d439" /> |
 
 ### Other styles: Available at the end of the readme.
 

@@ -1,4 +1,12 @@
-This file contains information about the dependencies, currently it describes about `sdata/dist-arch/`.
+This file contains information about the dependencies.
+
+It mainly describes about `sdata/dist-arch` which is actively maintained by the devs.
+
+Tips:
+- The packages which name has prefix `illogical-impulse-` are defined with local files `PKGBUILD`. There're two types:
+  - **Meta packages**, which do not have actual content but only include other packages specified in the array `depends`.
+  - **Actual packages**, which not only install dependencies listed in `depends`, but also build packages which have actual content to be installed later.
+- For each package included in the local `PKGBUILD`s which name does **not** have prefix `illogical-impulse-`, for example `rsync`, it's either from [Arch Linux Packages](https://archlinux.org/packages) or the [AUR](https://aur.archlinux.org/packages). Search the package name on them to get the info (e.g. what executable(s) the package provides).
 
 # Meta packages
 ## illogical-impulse-audio
@@ -183,6 +191,9 @@ This file contains information about the dependencies, currently it describes ab
   - Used in Quickshell config.
 - `wlogout`
   - Used in Hyprland config.
+- `libqalculate`
+  - Used in Quickshell config, providing math ability in searchbar.
+  - Note that `qalc` is the needed executable. In Arch Linux [libqalculate](https://archlinux.org/packages/extra/x86_64/libqalculate) provides it, but in Fedora [qalculate](https://packages.fedoraproject.org/pkgs/libqalculate/qalculate/fedora-43.html#files) does and [libqalculate](https://packages.fedoraproject.org/pkgs/libqalculate/libqalculate/fedora-43.html#files) does not.
 
 
 # Actual packages

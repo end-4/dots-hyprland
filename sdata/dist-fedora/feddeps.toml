@@ -1,0 +1,207 @@
+# COPR repositories list
+[copr]
+repos = [
+  "ririko66z/dots-hyprland",
+  "solopasha/hyprland",
+  "deltacopy/darkly",
+  "alternateved/eza",
+  "atim/starship"
+]
+
+# Fedora dependencies list
+
+# Audio
+[groups.audio]
+packages = [
+  "cava",
+  "pavucontrol",
+  "wireplumber",
+  "libdbusmenu-gtk3-devel",
+  "playerctl"
+]
+
+# Backlight
+[groups.backlight]
+packages = [
+  "geoclue2",
+  "brightnessctl",
+  "ddcutil"
+]
+install_opts = ["--setopt=install_weak_deps=False"]
+
+# Basic
+[groups.basic]
+packages = [
+  "bc",
+  "coreutils",
+  "cliphist",
+  "cmake",
+  "curl",
+  "wget2",
+  "ripgrep",
+  "jq",
+  "xdg-utils",
+  "rsync",
+  "yq"
+]
+
+# Cursor themes
+[groups.cursor_themes]
+packages = [
+  "bibata-cursor-theme"
+]
+
+# Fonts & Themes
+[groups.fonts_and_themes]
+packages = [
+  "adw-gtk3-theme",
+  "breeze-cursor-theme",
+  "grub2-breeze-theme",
+  "breeze-icon-theme",
+  "breeze-icon-theme-fedora",
+  "kf6-breeze-icons",
+  "sddm-breeze",
+  "breeze-plus-icon-theme",
+  "darkly",
+  "eza",
+  "fish",
+  "fontconfig",
+  "kitty",
+  "matugen",
+  "florian-karsten-space-grotesk-fonts",
+  "starship",
+  "jetbrains-mono-nerd-fonts",
+  "google-material-symbols-vf-rounded-fonts",
+  "material-icons-fonts",
+  "readex-pro-fonts-all",
+  "google-rubik-vf-fonts",
+  "twitter-twemoji-fonts",
+  "google-sans-flex-vf-fonts"
+]
+
+# Hyprland
+[groups.hyprland]
+packages = [
+  "hyprland",
+  "hyprland-qtutils",
+  "hyprsunset",
+  "wl-clipboard"
+]
+install_opts = ["--setopt=install_weak_deps=False"]
+
+# KDE
+[groups.kde]
+packages = [
+  "bluedevil",
+  "gnome-keyring",
+  "NetworkManager",
+  "plasma-nm",
+  "polkit-kde",
+  "dolphin",
+  "plasma-systemsettings"
+]
+
+# MicroTeX-git
+[groups.microtex]
+packages = [
+  "microtex"
+]
+
+# Portal
+[groups.portal]
+packages = [
+  "xdg-desktop-portal",
+  "xdg-desktop-portal-gtk",
+  "xdg-desktop-portal-kde",
+  "xdg-desktop-portal-hyprland"
+]
+
+# Python
+[groups.python]
+packages = [
+  "clang",
+  "uv",
+  "gtk4-devel",
+  "libadwaita-devel",
+  "libsoup3-devel",
+  "libportal-gtk4",
+  "gobject-introspection-devel",
+  "python3",
+  "python3.12",
+  "python3-devel",
+  "python3.12-devel"
+]
+install_opts = ["--setopt=install_weak_deps=False"]
+
+# Quickshell-git
+[groups.quickshell]
+packages = [
+  "qt6-qtdeclarative",
+  "qt6-qtbase",
+  "jemalloc",
+  "qt6-qtsvg",
+  "pipewire-libs",
+  "libxcb",
+  "wayland-devel",
+  "qt6-qtwayland",
+  "qt5-qtwayland",
+  "libdrm",
+  "breakpad",
+  "kf6-kirigami",
+  # NOTE: Below are custom dependencies of illogical-impulse
+  "qt6-qt5compat",
+  "qt6-qtimageformats",
+  "qt6-qtpositioning",
+  "qt6-qtquicktimeline",
+  "qt6-qtsensors",
+  "qt6-qttools",
+  "qt6-qttranslations",
+  "qt6-qtvirtualkeyboard",
+  "kdialog",
+  "kf6-syntax-highlighting"
+]
+
+# Screencapture
+[groups.screencapture]
+packages = [
+  "hyprshot",
+  "slurp",
+  "swappy",
+  "tesseract",
+  "tesseract-langpack-eng",
+  "tesseract-langpack-chi_sim",
+  "wf-recorder"
+]
+
+# Toolkit
+[groups.toolkit]
+packages = [
+  "upower",
+  "wtype",
+  "ydotool"
+]
+
+# Widgets
+[groups.widgets]
+packages = [
+  "fuzzel",
+  "glib2",
+  "ImageMagick",
+  "hypridle",
+  "hyprlock",
+  "hyprpicker",
+  "songrec",
+  "translate-shell",
+  "qalculate",
+  "wlogout"
+]
+
+# Extra
+[groups.extra]
+packages = [
+  "mpvpaper",
+  "plasma-systemmonitor",
+  "unzip"
+]
+install_opts = ["--setopt=install_weak_deps=False"]
+

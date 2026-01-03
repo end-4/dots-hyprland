@@ -63,10 +63,10 @@ Item {
 
     Process {
         id: translateProc
-        command: ["bash", "-c", `trans -no-theme -no-bidi`
+        command: ["bash", "-c", `trans -brief`
             + ` -source '${StringUtils.shellSingleQuoteEscape(root.sourceLanguage)}'`
             + ` -target '${StringUtils.shellSingleQuoteEscape(root.targetLanguage)}'`
-            + ` -no-ansi '${StringUtils.shellSingleQuoteEscape(root.inputField.text.trim())}'`]
+            + ` '${StringUtils.shellSingleQuoteEscape(root.inputField.text.trim())}'`]
         property string buffer: ""
         stdout: SplitParser {
             onRead: data => {
@@ -74,13 +74,8 @@ Item {
             }
         }
         onExited: (exitCode, exitStatus) => {
-            // 1. Split into sections by double newlines
-            const sections = translateProc.buffer.trim().split(/\n\s*\n/);
-            // console.log("BUFFER:", translateProc.buffer);
-            // console.log("SECTIONS:", sections);
-
-            // 2. Extract relevant data
-            root.translatedText = sections.length > 1 ? sections[1].trim() : "";
+            // With -brief mode, we get output with no metadata
+            root.translatedText = translateProc.buffer.trim();
         }
     }
 
