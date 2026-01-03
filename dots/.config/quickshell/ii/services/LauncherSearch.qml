@@ -247,6 +247,7 @@ Singleton {
                 iconType: LauncherSearchResult.IconType.System,
                 verb: Translation.tr("Open"),
                 execute: () => {
+                    AppUsage.recordLaunch(entry.id);
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
