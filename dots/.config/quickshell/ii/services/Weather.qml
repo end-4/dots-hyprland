@@ -14,12 +14,17 @@ Singleton {
     readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
     readonly property string city: Config.options.bar.weather.city
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
+    readonly property string timeFormat: Config.options.time.format
     property bool gpsActive: Config.options.bar.weather.enableGPS
 
     onUseUSCSChanged: {
         root.getData();
     }
     onCityChanged: {
+        root.getData();
+    }
+
+    onTimeFormatChanged: {
         root.getData();
     }
 
@@ -46,17 +51,53 @@ Singleton {
         lastRefresh: 0,
     })
 
+    function convertTo24Hour(time12h) {
+        if (!time12h || !time12h.includes(' ')) {
+            return "00:00";
+        }
+        const [time, modifier] = time12h.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (hours === '12') {
+            hours = '00';
+        }
+        if (modifier.toUpperCase() === 'PM') {
+            hours = parseInt(hours, 10) + 12;
+        }
+        return `${String(hours).padStart(2, '0')}:${minutes}`;
+    }
+
+    function convertTo12HourLowercase(time12h) {
+        if (!time12h || !time12h.includes(' ')) {
+            return "00:00";
+        }
+        let [time, modifier] = time12h.split(' ');
+        if (modifier.toUpperCase() === 'PM') {
+            modifier = 'pm';
+        } else if (modifier.toUpperCase() === 'AM'){
+            modifier = 'am';
+        }
+        return `${String(time)} ${modifier}`;
+    }
+
     function refineData(data) {
         let temp = {};
         temp.uv = data?.current?.uvIndex || 0;
         temp.humidity = (data?.current?.humidity || 0) + "%";
-        temp.sunrise = data?.astronomy?.sunrise || "0.0";
-        temp.sunset = data?.astronomy?.sunset || "0.0";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
         temp.city = data?.location?.areaName[0]?.value || "City";
         temp.temp = "";
         temp.tempFeelsLike = "";
+        if (root.timeFormat === "hh:mm") {
+            temp.sunrise = convertTo24Hour(data?.astronomy?.sunrise);
+            temp.sunset = convertTo24Hour(data?.astronomy?.sunset);
+        } else if (root.timeFormat === "h:mm ap") {
+            temp.sunrise = convertTo12HourLowercase(data?.astronomy?.sunrise);
+            temp.sunset = convertTo12HourLowercase(data?.astronomy?.sunset);
+        } else if (root.timeFormat === "h:mm AP") {
+            temp.sunrise = data?.astronomy?.sunrise;
+            temp.sunset = data?.astronomy?.sunset;
+        }
         if (root.useUSCS) {
             temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
             temp.precip = (data?.current?.precipInches || 0) + " in";
