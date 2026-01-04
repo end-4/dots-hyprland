@@ -76,7 +76,7 @@ Singleton {
             temp.temp += "°C";
             temp.tempFeelsLike += "°C";
         }
-        temp.lastRefresh = Qt.locale().toString(new Date(), (Config.options?.time.format ?? "hh:mm") + " - " + (Config.options?.time.dateWithYearFormat ?? "dd/MM/yyyy"));
+        temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
     }
 
