@@ -100,5 +100,35 @@ StyledPopup {
                 value: Weather.data.sunset
             }
         }
+
+        // Footer
+        ColumnLayout {
+            id: footer
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 2
+
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 6
+
+                StyledText {
+                    text: "Last Refresh:"
+                    font {
+                        weight: Font.Medium
+                        pixelSize: Appearance.font.pixelSize.smaller
+                    }
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+
+                StyledText {
+                    text: Weather.data.lastRefresh
+                    font {
+                        weight: Font.Medium
+                        pixelSize: Appearance.font.pixelSize.smaller
+                    }
+                    color: Appearance.colors.colOnSurfaceVariant
+                }
+            }
+        }
     }
 }
