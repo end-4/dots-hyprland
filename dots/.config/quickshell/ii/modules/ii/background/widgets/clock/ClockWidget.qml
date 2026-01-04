@@ -20,10 +20,20 @@ AbstractBackgroundWidget {
     readonly property bool forceCenter: (GlobalStates.screenLocked && Config.options.lock.centerClock)
     readonly property bool shouldShow: (!Config.options.background.widgets.clock.showOnlyWhenLocked || GlobalStates.screenLocked)
     property bool wallpaperSafetyTriggered: false
+    property bool hasActiveMusic: false
+    readonly property real musicOffset: hasActiveMusic ? -90 : 0 // Move up by 90px to center with music box (which is 180px below center)
     needsColText: clockStyle === "digital"
     x: forceCenter ? ((root.screenWidth - root.width) / 2) : targetX
-    y: forceCenter ? ((root.screenHeight - root.height) / 2) : targetY
+    y: forceCenter ? ((root.screenHeight - root.height) / 2 + musicOffset) : targetY
     visibleWhenLocked: true
+    
+    Behavior on y {
+        NumberAnimation {
+            duration: Appearance.animation.elementMove.duration
+            easing.type: Appearance.animation.elementMove.type
+            easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+        }
+    }
 
     property var textHorizontalAlignment: {
         if (!Config.options.background.widgets.clock.digital.adaptiveAlignment || root.forceCenter || Config.options.background.widgets.clock.digital.vertical) 
