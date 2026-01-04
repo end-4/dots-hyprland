@@ -1,15 +1,16 @@
+pragma ComponentBehavior: Bound
+
+import Qt.labs.synchronizer
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import Qt.labs.synchronizer
-import Qt5Compat.GraphicalEffects
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
 
 Item { // Wrapper
     id: root
@@ -205,12 +206,25 @@ Item { // Wrapper
                 }
 
                 delegate: SearchItem {
+                    id: searchItem
                     // The selectable item for each search result
                     required property var modelData
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData
                     query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+
+                    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Tab) {
+                            if (LauncherSearch.results.length === 0)
+                                return;
+                            const tabbedText = searchItem.modelData.name;
+                            LauncherSearch.query = tabbedText;
+                            searchBar.searchInput.text = tabbedText;
+                            event.accepted = true;
+                            root.focusSearchInput();
+                        }
+                    }
                 }
             }
         }
