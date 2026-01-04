@@ -101,34 +101,15 @@ StyledPopup {
             }
         }
 
-        // Footer
-        ColumnLayout {
-            id: footer
+        // Footer: last refresh
+        StyledText {
             Layout.alignment: Qt.AlignHCenter
-            spacing: 2
-
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 6
-
-                StyledText {
-                    text: "Last Refresh:"
-                    font {
-                        weight: Font.Medium
-                        pixelSize: Appearance.font.pixelSize.smaller
-                    }
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
-
-                StyledText {
-                    text: Weather.data.lastRefresh
-                    font {
-                        weight: Font.Medium
-                        pixelSize: Appearance.font.pixelSize.smaller
-                    }
-                    color: Appearance.colors.colOnSurfaceVariant
-                }
+            text: Translation.tr("Last refresh: %1").arg(Weather.data.lastRefresh)
+            font {
+                weight: Font.Medium
+                pixelSize: Appearance.font.pixelSize.smaller
             }
+            color: Appearance.colors.colOnSurfaceVariant
         }
     }
 }
