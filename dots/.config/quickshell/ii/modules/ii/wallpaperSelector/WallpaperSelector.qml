@@ -25,6 +25,7 @@ Scope {
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:wallpaperSelector"
             WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
             anchors.top: true
@@ -54,6 +55,7 @@ Scope {
 
             WallpaperSelectorContent {
                 id: content
+                focus: true
                 anchors {
                     fill: parent
                 }
