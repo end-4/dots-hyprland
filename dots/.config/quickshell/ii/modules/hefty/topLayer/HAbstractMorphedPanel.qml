@@ -15,8 +15,12 @@ Item {
     id: root
 
     // To be fed
-    required property int screenWidth
-    required property int screenHeight
+    property int screenWidth: QsWindow.window.width
+    property int screenHeight: QsWindow.window.height
+
+    // Signals
+    signal requestFocus()
+    signal dismissed()
 
     // Some info
     property int reservedTop: 0
