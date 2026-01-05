@@ -13,30 +13,32 @@ HAbstractMorphedPanel {
     property int edgeGap: Appearance.sizes.hyprlandGapsOut
     property real rounding: Appearance.rounding.windowRounding
     property real contentHeight: 300 // For now
+    property real contentWidth: root.screenWidth * 0.9
+    property real horizontalGap: (root.screenWidth - contentWidth) / 2
 
     // Background
     backgroundPolygon: MaterialShapes.customPolygon([
         // bottom-middle
         new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth / 2, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(0)),
         // bottom-left
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap + rounding, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap, edgeGap + root.contentHeight - rounding), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap + rounding, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap, edgeGap + root.contentHeight - rounding), new CornerRounding.CornerRounding(rounding)),
         // top-left
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap, edgeGap + rounding), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap, edgeGap), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(edgeGap + rounding, edgeGap), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap, edgeGap + rounding), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap, edgeGap), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(horizontalGap + rounding, edgeGap), new CornerRounding.CornerRounding(rounding)),
         // top-middle
         new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth / 2, edgeGap), new CornerRounding.CornerRounding(0)),
         // top-right
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap - rounding, edgeGap), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap, edgeGap), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap, edgeGap + rounding), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap - rounding, edgeGap), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap, edgeGap), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap, edgeGap + rounding), new CornerRounding.CornerRounding(rounding)),
 
         // bottom-right
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap, edgeGap + root.contentHeight - rounding), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
-        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - edgeGap - rounding, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap, edgeGap + root.contentHeight - rounding), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
+        new MaterialShapes.PointNRound(new Offset.Offset(root.screenWidth - horizontalGap - rounding, edgeGap + root.contentHeight), new CornerRounding.CornerRounding(rounding)),
     ], 1, new Offset.Offset(root.screenWidth / 2, edgeGap + contentHeight / 2))
 
     // Keybinds
@@ -70,6 +72,17 @@ HAbstractMorphedPanel {
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = false;
+        }
+    }
+
+    Connections {
+        target: GlobalStates
+        function onOverviewOpenChanged() {
+            if (GlobalStates.overviewOpen) {
+                root.requestFocus();
+            } else {
+                root.dismissed();
+            }
         }
     }
 }

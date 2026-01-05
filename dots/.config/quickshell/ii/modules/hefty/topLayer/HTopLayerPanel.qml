@@ -45,15 +45,11 @@ PanelWindow {
             easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
         }
-        // animation: SpringAnimation {
-        //     spring: 3.5
-        //     damping: 0.3
-        // }
         color: Appearance.colors.colLayer0
         borderWidth: (root.currentPanel === bar && Config.options.bar.cornerStyle !== 1) ? 0 : 1
         borderColor: Appearance.colors.colLayer0Border
         visible: false // cuz there's already the shadow
-        // debug: true
+        debug: true
     }
     DropShadow {
         id: shadow
@@ -87,27 +83,18 @@ PanelWindow {
 
     ////////////// Content: Panels ///////////////
 
+    function dismiss() {
+        root.currentPanel = bar;
+    }
+
     HBar {
         id: bar
-        screenWidth: root.width
-        screenHeight: root.height
     }
 
     HOverview {
         id: overview
-        screenWidth: root.width
-        screenHeight: root.height
-    }
-
-    Connections {
-        target: GlobalStates
-        function onOverviewOpenChanged() {
-            if (GlobalStates.overviewOpen) {
-                currentPanel = overview;
-            } else {
-                currentPanel = bar;
-            }
-        }
+        onRequestFocus: root.currentPanel = overview;
+        onDismissed: root.dismiss();
     }
 
     //////////////// Components /////////////////
