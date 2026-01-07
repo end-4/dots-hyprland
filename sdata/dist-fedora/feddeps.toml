@@ -85,7 +85,8 @@ packages = [
   "hyprland",
   "hyprland-qtutils",
   "hyprsunset",
-  "wl-clipboard"
+  "wl-clipboard",
+  "cpio"
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
 

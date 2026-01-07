@@ -16,4 +16,5 @@ RDEPEND="
 	gui-apps/hyprsunset
 	gui-wm/hyprland
 	gui-apps/wl-clipboard
+  app-arch/cpio
 "

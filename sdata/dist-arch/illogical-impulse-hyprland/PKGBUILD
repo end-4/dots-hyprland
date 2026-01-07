@@ -8,4 +8,5 @@ depends=(
   hyprland
   hyprsunset
   wl-clipboard
+  cpio
 )
