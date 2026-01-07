@@ -47,7 +47,6 @@ Item {
         z: -1  
         
         onPositionChanged: {
-            // Находим, над какой иконкой находится курсор
             const item = listView.itemAt(mouseX + listView.contentX, mouseY);
             if (item && item.buttonIndex !== undefined) {
                 root.hoveredIndex = item.buttonIndex;
