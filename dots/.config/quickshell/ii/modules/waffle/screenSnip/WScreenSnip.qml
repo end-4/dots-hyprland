@@ -26,7 +26,7 @@ Scope {
         active: GlobalStates.regionSelectorOpen
 
         sourceComponent: WRegionSelectionPanel {
-            onClosed: root.dismiss()
+            onRequestClose: root.dismiss()
         }
     }
 
