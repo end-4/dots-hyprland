@@ -291,7 +291,7 @@
   "Sides": "Seiten",
   "No active player": "Kein aktiver Player",
   "Not all options are available in this app. You should also check the config file by hitting the \"Config file\" button on the topleft corner or opening %1 manually.": "Nicht alle Optionen sind in dieser App verfügbar. Du solltest auch die Konfigurationsdatei überprüfen, indem du auf den \"Konfigurationsdatei\"-Button in der oberen linken Ecke klickst oder %1 manuell öffnest.",
-  "There might be a download in progress": "Es könnte ein Download läuft",
+  "There might be a download in progress": "Möglicherweise läuft gerade ein Download",
   "Math result": "Mathematik-Ergebnis",
   "Fidelity": "Wiedergabetreue",
   "Prefixes": "Präfixe",
