@@ -82,6 +82,7 @@ install-uv(){
 
 install-python-packages(){
   UV_NO_MODIFY_PATH=1
+  UV_VENV_CLEAR=1
   ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/quickshell/.venv
   x mkdir -p $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
