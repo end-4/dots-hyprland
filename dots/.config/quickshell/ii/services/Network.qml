@@ -223,7 +223,7 @@ Singleton {
     Process {
         id: updateNetworkName
         // Only returns a name if the connection type is NOT loopback
-        command: ["sh", "-c", "nmcli -t -f NAME,TYPE connection show --active | grep -v ':loopback' | cut -d: -f1 | head -1"]
+        command: ["sh", "-c", "nmcli -t -f NAME,TYPE connection show --active | grep -E -v ':(loopback|lo)$' | cut -d: -f1 | head -1"]
         running: true
         stdout: SplitParser {
             onRead: data => {
