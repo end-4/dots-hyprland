@@ -115,6 +115,11 @@ Item {
                         if (root.lastHoveredButton === parent.parent) {
                             root.buttonHovered = false;
                         }
+                        Qt.callLater(() => {
+                            if (!root.buttonHovered) {
+                                root.hoveredIndex = -1;
+                            }
+                        });
                     }
                     
                     onPositionChanged: {
@@ -192,6 +197,13 @@ Item {
                 const itemCenter = root.QsWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, 0);
                 return itemCenter.x - width / 2
             }
+            
+            onExited: {
+                if (!root.buttonHovered) {
+                    root.hoveredIndex = -1;
+                }
+            }
+            
             StyledRectangularShadow {
                 target: popupBackground
                 opacity: previewPopup.show ? 1 : 0
