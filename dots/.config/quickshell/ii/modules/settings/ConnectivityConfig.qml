@@ -116,6 +116,35 @@ Item {
                 }
             }
             
+            // Connected network
+            ContentSection {
+                icon: "wifi"
+                title: Translation.tr("Connected")
+                visible: Network.wifiEnabled && Network.active !== null
+                
+                ConnectivityWifiItem {
+                    wifiNetwork: Network.active
+                    Layout.fillWidth: true
+                }
+            }
+            
+            // Saved networks (not active)
+            ContentSection {
+                icon: "bookmark"
+                title: Translation.tr("Saved Networks")
+                visible: Network.wifiEnabled && Network.savedNetworks.length > 0
+                
+                Repeater {
+                    model: Network.savedNetworks
+                    
+                    ConnectivityWifiItem {
+                        required property var modelData
+                        wifiNetwork: modelData
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+            
             ContentSection {
                 icon: "wifi_find"
                 title: Translation.tr("Available Networks")
@@ -123,7 +152,7 @@ Item {
                 
                 // Empty state
                 ColumnLayout {
-                    visible: Network.friendlyWifiNetworks.length === 0 && !Network.wifiScanning
+                    visible: Network.availableNetworks.length === 0 && !Network.wifiScanning
                     Layout.fillWidth: true
                     Layout.topMargin: 20
                     Layout.bottomMargin: 20
@@ -146,7 +175,7 @@ Item {
                     
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: Translation.tr("No networks found")
+                        text: Translation.tr("No new networks found")
                         font.pixelSize: Appearance.font.pixelSize.normal
                         color: Appearance.colors.colOnLayer2
                     }
@@ -159,9 +188,9 @@ Item {
                     }
                 }
                 
-                // Network list
+                // Network list (available = not saved)
                 Repeater {
-                    model: Network.friendlyWifiNetworks
+                    model: Network.availableNetworks
                     
                     ConnectivityWifiItem {
                         required property var modelData

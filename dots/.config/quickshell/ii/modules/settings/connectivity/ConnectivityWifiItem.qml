@@ -324,6 +324,43 @@ Rectangle {
                     text: Translation.tr("Cancel")
                 }
             }
+
+            // Delete button (for saved networks, not active/connecting)
+            Item {
+                visible: (root.wifiNetwork?.isSaved ?? false) && !root.isActive && !root.isConnecting && !root.isAskingPassword
+                implicitWidth: 36
+                implicitHeight: 36
+                
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 18
+                    color: deleteMouseArea.containsMouse ? Appearance.colors.colErrorHover : Appearance.colors.colLayer3
+                    
+                    Behavior on color {
+                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                    }
+                }
+                
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    text: "delete"
+                    iconSize: 20
+                    color: deleteMouseArea.containsMouse ? Appearance.colors.colOnError : Appearance.colors.colOnLayer3
+                }
+                
+                MouseArea {
+                    id: deleteMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Network.forgetWifiNetwork(root.wifiNetwork)
+                }
+
+                StyledToolTip {
+                    extraVisibleCondition: deleteMouseArea.containsMouse
+                    text: Translation.tr("Forget network")
+                }
+            }
         }
 
         // Expanded details section (for connected network)

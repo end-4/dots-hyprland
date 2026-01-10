@@ -23,6 +23,11 @@ Singleton {
     property WifiAccessPoint wifiConnectTarget
     readonly property list<WifiAccessPoint> wifiNetworks: []
     readonly property WifiAccessPoint active: wifiNetworks.find(n => n.active) ?? null
+    
+    // Saved connection names (SSIDs with profiles)
+    property var savedConnectionNames: new Set()
+    
+    // Sorted and categorized network lists
     readonly property list<var> friendlyWifiNetworks: [...wifiNetworks].sort((a, b) => {
         if (a.active && !b.active)
             return -1;
@@ -30,6 +35,9 @@ Singleton {
             return 1;
         return b.strength - a.strength;
     })
+    readonly property list<var> savedNetworks: friendlyWifiNetworks.filter(n => n.isSaved && !n.active)
+    readonly property list<var> availableNetworks: friendlyWifiNetworks.filter(n => !n.isSaved && !n.active)
+    
     property string wifiStatus: "disconnected"
 
     property string networkName: ""
@@ -94,13 +102,25 @@ Singleton {
         network.askingPassword = false;
         network.connectionError = ""; // Clear previous errors
         root.wifiConnectTarget = network;
-        // Use 'nmcli dev wifi connect' with password - works for new AND existing networks
+        // Try to update saved password first, then connect
+        // This handles both: 1) saved networks with changed passwords, 2) new networks
         changePasswordProc.exec({
             "environment": {
                 "PASSWORD": password,
                 "SSID": network.ssid
             },
-            "command": ["bash", "-c", 'nmcli dev wifi connect "$SSID" password "$PASSWORD"']
+            // First try to modify existing profile, if that fails (no profile exists), 
+            // create new connection with password
+            "command": ["bash", "-c", `
+                if nmcli connection show "$SSID" &>/dev/null; then
+                    # Profile exists - update password and reconnect
+                    nmcli connection modify "$SSID" wifi-sec.psk "$PASSWORD" && \
+                    nmcli connection up "$SSID"
+                else
+                    # No profile - create new connection
+                    nmcli dev wifi connect "$SSID" password "$PASSWORD"
+                fi
+            `]
         })
         connectionTimeoutTimer.restart(); // Start timeout
     }
@@ -158,8 +178,8 @@ Singleton {
     Process {
         id: forgetProc
         onExited: {
-            // Refresh network list after deletion completes
-            getNetworks.running = true;
+            // Refresh saved connections and network list after deletion
+            getSavedConnections.running = true;
         }
     }
 
@@ -326,6 +346,31 @@ Singleton {
         }
     }
 
+    // Fetch saved Wi-Fi connection names
+    Process {
+        id: getSavedConnections
+        running: true
+        command: ["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const savedNames = new Set();
+                text.trim().split("\n").forEach(line => {
+                    const parts = line.split(":");
+                    if (parts[1] === "802-11-wireless") {
+                        savedNames.add(parts[0]);
+                    }
+                });
+                root.savedConnectionNames = savedNames;
+                // Re-fetch networks to update isSaved status
+                getNetworks.running = true;
+            }
+        }
+    }
+
     Process {
         id: getNetworks
         running: true
@@ -342,13 +387,15 @@ Singleton {
 
                 const allNetworks = text.trim().split("\n").map(n => {
                     const net = n.replace(rep, PLACEHOLDER).split(":");
+                    const ssid = net[3];
                     return {
                         active: net[0] === "yes",
                         strength: parseInt(net[1]),
                         frequency: parseInt(net[2]),
-                        ssid: net[3],
+                        ssid: ssid,
                         bssid: net[4]?.replace(rep2, ":") ?? "",
-                        security: net[5] || ""
+                        security: net[5] || "",
+                        isSaved: root.savedConnectionNames.has(ssid)
                     };
                 }).filter(n => n.ssid && n.ssid.length > 0);
 
