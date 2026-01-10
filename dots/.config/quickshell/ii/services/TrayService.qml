@@ -9,8 +9,13 @@ Singleton {
     id: root
 
     property bool smartTray: Config.options.tray.filterPassive
-    property list<var> itemsInUserList: SystemTray.items.values.filter(i => (Config.options.tray.pinnedItems.includes(i.id) && (!smartTray || i.status !== Status.Passive)))
-    property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => (!Config.options.tray.pinnedItems.includes(i.id) && (!smartTray || i.status !== Status.Passive)))
+
+    function getUniqueId(item) {
+        return item.id + "::" + item.tooltipTitle;
+    }
+    
+    property list<var> itemsInUserList: SystemTray.items.values.filter(i => (Config.options.tray.pinnedItems.includes(getUniqueId(i)) && (!smartTray || i.status !== Status.Passive)))
+    property list<var> itemsNotInUserList: SystemTray.items.values.filter(i => (!Config.options.tray.pinnedItems.includes(getUniqueId(i)) && (!smartTray || i.status !== Status.Passive)))
 
     property bool invertPins: Config.options.tray.invertPinnedItems
     property list<var> pinnedItems: invertPins ? itemsNotInUserList : itemsInUserList
@@ -24,21 +29,24 @@ Singleton {
         return result;
     }
 
-    // Pinning
-    function pin(itemId) {
+    /// Pinning
+    function pin(item) {
+        var uniqueId = getUniqueId(item);
         var pins = Config.options.tray.pinnedItems;
-        if (pins.includes(itemId)) return;
-        Config.options.tray.pinnedItems.push(itemId);
+        if (pins.includes(uniqueId)) return;
+        Config.options.tray.pinnedItems.push(uniqueId);
     }
-    function unpin(itemId) {
-        Config.options.tray.pinnedItems = Config.options.tray.pinnedItems.filter(id => id !== itemId);
+    function unpin(item) {
+        var uniqueId = getUniqueId(item);
+        Config.options.tray.pinnedItems = Config.options.tray.pinnedItems.filter(id => id !== uniqueId);
     }
-    function togglePin(itemId) {
+    function togglePin(item) {
+        var uniqueId = getUniqueId(item);
         var pins = Config.options.tray.pinnedItems;
-        if (pins.includes(itemId)) {
-            unpin(itemId)
+        if (pins.includes(uniqueId)) {
+            unpin(item)
         } else {
-            pin(itemId)
+            pin(item)
         }
     }
 
