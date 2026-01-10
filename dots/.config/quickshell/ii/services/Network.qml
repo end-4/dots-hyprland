@@ -92,12 +92,14 @@ Singleton {
     function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
+        root.wifiConnectTarget = network;
+        // Use 'nmcli dev wifi connect' with password - works for new AND existing networks
         changePasswordProc.exec({
             "environment": {
                 "PASSWORD": password,
                 "SSID": network.ssid
             },
-            "command": ["bash", "-c", 'nmcli connection modify "$SSID" wifi-sec.psk "$PASSWORD"']
+            "command": ["bash", "-c", 'nmcli dev wifi connect "$SSID" password "$PASSWORD"']
         })
     }
 
@@ -150,9 +152,14 @@ Singleton {
 
     Process {
         id: changePasswordProc
-        onExited: { // Re-attempt connection after changing password
-            connectProc.running = false
-            connectProc.running = true
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        onExited: (exitCode, exitStatus) => {
+            // Refresh networks after connection attempt
+            getNetworks.running = true;
+            root.wifiConnectTarget = null;
         }
     }
 
