@@ -287,6 +287,43 @@ Rectangle {
                     onClicked: Network.disconnectWifiNetwork()
                 }
             }
+
+            // Cancel button (when connecting)
+            Item {
+                visible: root.isConnecting
+                implicitWidth: 36
+                implicitHeight: 36
+                
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 18
+                    color: cancelMouseArea.containsMouse ? Appearance.colors.colLayer3Hover : Appearance.colors.colLayer3
+                    
+                    Behavior on color {
+                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                    }
+                }
+                
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    text: "close"
+                    iconSize: 20
+                    color: Appearance.colors.colOnLayer3
+                }
+                
+                MouseArea {
+                    id: cancelMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Network.cancelConnection()
+                }
+
+                StyledToolTip {
+                    extraVisibleCondition: root.isConnecting
+                    text: Translation.tr("Cancel")
+                }
+            }
         }
 
         // Expanded details section (for connected network)

@@ -55,6 +55,15 @@ DialogListItem {
             Layout.topMargin: 8
             visible: root.wifiNetwork?.askingPassword ?? false
 
+            // Error message
+            StyledText {
+                visible: (root.wifiNetwork?.connectionError ?? "").length > 0
+                text: root.wifiNetwork?.connectionError ?? ""
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colError
+                Layout.fillWidth: true
+            }
+
             MaterialTextField {
                 id: passwordField
                 Layout.fillWidth: true
@@ -80,6 +89,8 @@ DialogListItem {
                     buttonText: Translation.tr("Cancel")
                     onClicked: {
                         root.wifiNetwork.askingPassword = false;
+                        root.wifiNetwork.connectionError = "";
+                        passwordField.text = "";
                     }
                 }
 
