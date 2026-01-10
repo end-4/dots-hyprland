@@ -48,6 +48,7 @@ Item {
         spacing: sidebarPadding
 
         Toolbar {
+            visible: tabButtonList.length > 0
             Layout.alignment: Qt.AlignHCenter
             enableShadow: false
             ToolbarTabBar {
@@ -83,9 +84,10 @@ Item {
                 }
 
                 contentChildren: [
-                    ...((root.aiChatEnabled || (!root.translatorEnabled && !root.animeEnabled)) ? [aiChat.createObject()] : []),
+                    ...(root.aiChatEnabled ? [aiChat.createObject()] : []),
                     ...(root.translatorEnabled ? [translator.createObject()] : []),
-                    ...(root.animeEnabled ? [anime.createObject()] : [])
+                    ...(root.animeEnabled ? [anime.createObject()] : []),
+                    ...(root.tabButtonList.length === 0 ? [placeholder.createObject()] : [])
                 ]
             }
         }
@@ -102,6 +104,15 @@ Item {
             id: anime
             Anime {}
         }
-        
+        Component {
+            id: placeholder
+            Item {
+                StyledText {
+                    anchors.centerIn: parent
+                    text: Translation.tr("Enjoy your empty sidebar...")
+                    color: Appearance.colors.colSubtext
+                }
+            }
+        }
     }
 }
