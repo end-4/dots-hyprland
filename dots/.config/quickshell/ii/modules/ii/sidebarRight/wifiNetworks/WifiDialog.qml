@@ -3,6 +3,7 @@ import qs.services
 import qs.services.network
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions as CF
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -50,7 +51,8 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
-                Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`]);
+                const settingsPath = CF.FileUtils.trimFileProtocol(Directories.config) + "/quickshell/ii/settings.qml";
+                Quickshell.execDetached(["sh", "-c", "QS_SETTINGS_PAGE=1 QS_SETTINGS_TAB=0 quickshell -p '" + settingsPath + "'"]);
                 GlobalStates.sidebarRightOpen = false;
             }
         }
