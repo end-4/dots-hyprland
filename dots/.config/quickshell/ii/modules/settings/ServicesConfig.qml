@@ -114,14 +114,40 @@ ContentPage {
         icon: "search"
         title: Translation.tr("Search")
 
-        ConfigSwitch {
-            text: Translation.tr("Use Levenshtein distance-based algorithm instead of fuzzy")
-            checked: Config.options.search.sloppy
-            onCheckedChanged: {
-                Config.options.search.sloppy = checked;
-            }
-            StyledToolTip {
-                text: Translation.tr("Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)")
+        ContentSubsection {
+            title: Translation.tr("Search Algorithm")
+            tooltip: Translation.tr("Choose how app search results are ranked")
+
+            ConfigSelectionArray {
+                currentValue: {
+                    if (Config.options.search.frecency) return "frecency";
+                    if (Config.options.search.sloppy) return "sloppy";
+                    return "default";
+                }
+                onSelected: newValue => {
+                    Config.options.search.sloppy = (newValue === "sloppy");
+                    Config.options.search.frecency = (newValue === "frecency");
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Default (Fuzzy)"),
+                        icon: "search",
+                        value: "default",
+                        tooltip: Translation.tr("Standard fuzzy search.\nMatches partial text and acronyms well.")
+                    },
+                    {
+                        displayName: Translation.tr("Sloppy"),
+                        icon: "spellcheck",
+                        value: "sloppy",
+                        tooltip: Translation.tr("Levenshtein distance-based algorithm.\nBetter for typos, but may miss acronyms.")
+                    },
+                    {
+                        displayName: Translation.tr("Frecency"),
+                        icon: "trending_up",
+                        value: "frecency",
+                        tooltip: Translation.tr("Ranks by usage frequency + fuzzy match.\nFrequently used apps appear higher.")
+                    }
+                ]
             }
         }
 

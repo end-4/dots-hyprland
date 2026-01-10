@@ -11,6 +11,7 @@ import Quickshell
 Singleton {
     id: root
     property bool sloppySearch: Config.options?.search.sloppy ?? false
+    property bool frecencySearch: Config.options?.search.frecency ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
         "code-url-handler": "visual-studio-code",
@@ -58,7 +59,46 @@ Singleton {
         entry: a
     }))
 
+    /**
+     * Frecency search: combines fuzzy matching with app launch frequency
+     */
+    function frecencyQuery(search: string): var {
+        if (search === "") {
+            // When empty, show most frequently used apps
+            return list.map(obj => ({
+                entry: obj,
+                score: AppUsage.getScore(obj.id)
+            })).filter(item => item.score > 0)
+              .sort((a, b) => b.score - a.score)
+              .map(item => item.entry);
+        }
+
+        // Combine fuzzy score with usage frequency
+        // Use prepared names for consistency with default fuzzy mode
+        const results = preppedNames.map(obj => {
+            const fuzzyResult = Fuzzy.single(search, obj.name);
+            const fuzzyScore = fuzzyResult?.score ?? 0;
+            const usageScore = AppUsage.getScore(obj.entry.id);
+            return {
+                entry: obj.entry,
+                fuzzyScore: fuzzyScore,
+                usageScore: usageScore,
+                combinedScore: fuzzyScore * 0.7 + usageScore * 0.3
+            };
+        }).filter(item => item.fuzzyScore > root.scoreThreshold)
+          .sort((a, b) => b.combinedScore - a.combinedScore)
+          .map(item => item.entry);
+
+        return results;
+    }
+
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
+        // Frecency mode: combine fuzzy with usage frequency
+        if (root.frecencySearch) {
+            return frecencyQuery(search);
+        }
+
+        // Sloppy mode: levenshtein distance
         if (root.sloppySearch) {
             const results = list.map(obj => ({
                 entry: obj,
@@ -69,6 +109,7 @@ Singleton {
                 .map(item => item.entry)
         }
 
+        // Default: fuzzy sort
         return Fuzzy.go(search, preppedNames, {
             all: true,
             key: "name"
