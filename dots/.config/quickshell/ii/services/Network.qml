@@ -92,6 +92,7 @@ Singleton {
     function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
+        network.connectionError = ""; // Clear previous errors
         root.wifiConnectTarget = network;
         // Use 'nmcli dev wifi connect' with password - works for new AND existing networks
         changePasswordProc.exec({
@@ -101,6 +102,18 @@ Singleton {
             },
             "command": ["bash", "-c", 'nmcli dev wifi connect "$SSID" password "$PASSWORD"']
         })
+        connectionTimeoutTimer.restart(); // Start timeout
+    }
+
+    function cancelConnection(): void {
+        if (root.wifiConnectTarget) {
+            root.wifiConnectTarget.askingPassword = false;
+            root.wifiConnectTarget.connectionError = "";
+        }
+        connectionTimeoutTimer.stop();
+        connectProc.signal(15); // SIGTERM
+        changePasswordProc.signal(15);
+        root.wifiConnectTarget = null;
     }
 
     Process {
@@ -156,9 +169,44 @@ Singleton {
             LANG: "C",
             LC_ALL: "C"
         })
+        stderr: SplitParser {
+            onRead: line => {
+                // Capture common error messages
+                if (root.wifiConnectTarget) {
+                    if (line.includes("Secrets were required") || line.includes("No secrets")) {
+                        root.wifiConnectTarget.connectionError = "Wrong password";
+                        root.wifiConnectTarget.askingPassword = true;
+                    } else if (line.includes("Not authorized") || line.includes("not authorized")) {
+                        root.wifiConnectTarget.connectionError = "Not authorized";
+                    } else if (line.includes("No network")) {
+                        root.wifiConnectTarget.connectionError = "Network not found";
+                    } else if (line.includes("timeout") || line.includes("Timeout")) {
+                        root.wifiConnectTarget.connectionError = "Connection timed out";
+                    }
+                }
+            }
+        }
         onExited: (exitCode, exitStatus) => {
+            connectionTimeoutTimer.stop();
+            if (exitCode === 0 && root.wifiConnectTarget) {
+                // Success - clear any error
+                root.wifiConnectTarget.connectionError = "";
+            }
             // Refresh networks after connection attempt
             getNetworks.running = true;
+            root.wifiConnectTarget = null;
+        }
+    }
+
+    Timer {
+        id: connectionTimeoutTimer
+        interval: 30000 // 30 seconds timeout
+        onTriggered: {
+            if (root.wifiConnectTarget) {
+                root.wifiConnectTarget.connectionError = "Connection timed out";
+                root.wifiConnectTarget.askingPassword = false;
+            }
+            changePasswordProc.signal(15); // SIGTERM
             root.wifiConnectTarget = null;
         }
     }
