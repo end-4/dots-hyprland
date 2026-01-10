@@ -86,8 +86,8 @@ Item {
                 contentChildren: [
                     ...(root.aiChatEnabled ? [aiChat.createObject()] : []),
                     ...(root.translatorEnabled ? [translator.createObject()] : []),
+                    ...((root.tabButtonList.length === 0 || (!root.aiChatEnabled && !root.translatorEnabled && root.animeCloset)) ? [placeholder.createObject()] : []),
                     ...(root.animeEnabled ? [anime.createObject()] : []),
-                    ...(root.tabButtonList.length === 0 ? [placeholder.createObject()] : [])
                 ]
             }
         }
@@ -109,7 +109,7 @@ Item {
             Item {
                 StyledText {
                     anchors.centerIn: parent
-                    text: Translation.tr("Enjoy your empty sidebar...")
+                    text: root.animeCloset ? Translation.tr("Nothing") : Translation.tr("Enjoy your empty sidebar...")
                     color: Appearance.colors.colSubtext
                 }
             }
