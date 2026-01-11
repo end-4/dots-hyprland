@@ -94,7 +94,7 @@ Tips:
   - Font name: `Rubik`, `Rubik Light`
   - Used in Hyprland, kdeglobals, matugen, qt5ct, qt6ct and Quickshell config.
 - `ttf-twemoji`
-  - Not explicitly used, but it may help as fallback for displaying emoji charaters.
+  - Not explicitly used, but it may help as fallback for displaying emoji characters.
 
 ## illogical-impulse-hyprland
 - `hyprland`
