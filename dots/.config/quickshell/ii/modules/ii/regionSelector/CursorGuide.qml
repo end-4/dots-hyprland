@@ -65,7 +65,7 @@ Item {
         implicitWidth: root.showDescription ? contentRow.implicitWidth + padding * 2 : implicitHeight
         clip: true
 
-        topLeftRadius: root.showDescription ? implicitHeight / 2 : 6
+        topLeftRadius: 6
         bottomLeftRadius: implicitHeight - topLeftRadius
         bottomRightRadius: bottomLeftRadius
         topRightRadius: bottomLeftRadius
@@ -86,7 +86,7 @@ Item {
                 left: parent.left
                 leftMargin: content.padding
             }
-            spacing: 10
+            spacing: 12
 
             MaterialSymbol {
                 anchors.verticalCenter: parent.verticalCenter
