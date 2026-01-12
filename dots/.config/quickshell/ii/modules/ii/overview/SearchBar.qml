@@ -1,15 +1,12 @@
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
 import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import Qt5Compat.GraphicalEffects
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
 
 RowLayout {
     id: root
@@ -90,6 +87,16 @@ RowLayout {
                 if (firstItem && firstItem.clicked) {
                     firstItem.clicked();
                 }
+            }
+        }
+
+        Keys.onPressed: event => {
+            if (event.key === Qt.Key_Tab) {
+                if (LauncherSearch.results.length === 0) return;
+                const tabbedText = LauncherSearch.results[0].name;
+                LauncherSearch.query = tabbedText;
+                searchInput.text = tabbedText;
+                event.accepted = true;
             }
         }
     }
