@@ -53,8 +53,8 @@ Singleton {
     }
 
     function hasActive(element) {
-        return element.activeFocus || Array.from(
-            element.children
+        return element?.activeFocus || Array.from(
+            element?.children
         ).some(
             (child) => hasActive(child)
         );
@@ -62,7 +62,7 @@ Singleton {
 
     HyprlandFocusGrab {
         id: grab
-        windows: root.dismissable.some(w => hasActive(w.contentItem)) ? [...root.dismissable, ...root.persistent] : [...root.dismissable]
+        windows: root.dismissable.every(w => !w?.focusable) || root.dismissable.some(w => hasActive(w?.contentItem)) ? [...root.dismissable, ...root.persistent] : [...root.dismissable]
         active: root.dismissable.length > 0
         onCleared: () => {
             root.dismiss();
