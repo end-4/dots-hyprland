@@ -165,8 +165,8 @@ Singleton {
                 } else {
                     cmd.push("--class", "backlight");
                 }
+
                 cmd.push("s", valuePercent, "--quiet");
-                
                 setProc.exec(cmd);
             }
         }
