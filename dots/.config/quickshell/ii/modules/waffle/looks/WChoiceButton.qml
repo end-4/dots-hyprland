@@ -44,6 +44,7 @@ WButton {
         radius: Looks.radius.medium
         color: root.color
         Behavior on color {
+            enabled: root.animateChoiceHighlight
             animation: Looks.transition.color.createObject(this)
         }
 

@@ -6,6 +6,9 @@ import qs.modules.common.widgets
 import qs.services
 
 Item {
+    // Open add dialog on "N" (any modifiers)
+    // Close dialog on Esc if open
+
     id: root
 
     property var tabButtonList: [{
@@ -21,9 +24,6 @@ Item {
     property int fabMargins: 14
 
     Keys.onPressed: (event) => {
-        // Open add dialog on "N" (any modifiers)
-        // Close dialog on Esc if open
-
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageDown)
                 tabBar.incrementCurrentIndex();

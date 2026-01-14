@@ -64,7 +64,7 @@ function showfun(){
 function pause(){
   if [ ! "$ask" == "false" ];then
     printf "${STY_FAINT}${STY_SLANT}"
-    local p; read -p "(Ctrl-C to abort, others to proceed)" p
+    local p; read -p "(Ctrl-C to abort, Enter to proceed)" p
     printf "${STY_RST}"
   fi
 }
@@ -79,6 +79,50 @@ function prevent_sudo_or_root(){
   case $(whoami) in
     root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RST}";exit 1;;
   esac
+}
+
+# Initialize sudo session and keep it alive in background
+# Store PID in a global variable that can be accessed by trap
+declare -g SUDO_KEEPALIVE_PID=""
+
+function sudo_init_keepalive(){
+  # Check if sudo is available
+  if ! command -v sudo >/dev/null 2>&1; then
+    return 0
+  fi
+
+  # Skip if already initialized
+  if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    return 0
+  fi
+
+  # Prompt for sudo password once at the beginning
+  echo -e "${STY_CYAN}[$0]: Requesting sudo privileges for installation...${STY_RST}"
+  if ! sudo -v; then
+    echo -e "${STY_RED}[$0]: Failed to obtain sudo privileges. Aborting...${STY_RST}"
+    exit 1
+  fi
+
+  # Start background process to keep sudo session alive
+  # This updates the sudo timestamp every 60 seconds
+  (
+    while true; do
+      sleep 60
+      sudo -v 2>/dev/null || exit 0
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+
+  echo -e "${STY_GREEN}[$0]: Sudo session initialized and will be kept alive (PID: $SUDO_KEEPALIVE_PID)${STY_RST}"
+}
+
+# Stop the sudo keepalive background process
+function sudo_stop_keepalive(){
+  if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    SUDO_KEEPALIVE_PID=""
+  fi
 }
 function git_auto_unshallow(){
 # We need this function for latest_commit_hash to work properly
