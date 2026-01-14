@@ -18,7 +18,7 @@ Item {
     property int slotDuration: 60 // in minutes
     property int slotHeight: 60 // in pixels
     property int timeColumnWidth: 100
-    property real maxContentWidth: 1200
+    property real maxContentWidth: 2000
 
     readonly property int totalSlots: Math.floor(((endHour * 60) - (startHour * 60 + startMinute)) / slotDuration)
     readonly property real pixelsPerMinute: slotHeight / slotDuration
