@@ -29,12 +29,12 @@ GridLayout {
             name: Translation.tr("Creativity"),
             categories: ["AudioVideo", "Graphics"]
         }), aggAppCatComp.createObject(null, {
-            name: Translation.tr("Other"),
-            categories: ["Game"]
-        }), aggAppCatComp.createObject(null, {
             name: Translation.tr("System"),
             categories: ["Settings", "System"]
-        })
+        }), aggAppCatComp.createObject(null, {
+            name: Translation.tr("Other"),
+            categories: ["Game"]
+        }), 
     ]
 
     Repeater {

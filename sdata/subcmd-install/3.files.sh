@@ -118,7 +118,7 @@ function install_dir(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir $s $t
+  v rsync_dir $s $t
 }
 function install_dir__sync(){
   # NOTE: Do not add prefix `v` or `x` when using this function
@@ -127,7 +127,7 @@ function install_dir__sync(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir__sync $s $t
+  v rsync_dir__sync $s $t
 }
 function install_dir__skip_existed(){
   # NOTE: Do not add prefix `v` or `x` when using this function
@@ -150,7 +150,7 @@ function install_dir__sync_exclude(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir__sync_exclude $s $t "$@"
+  v rsync_dir__sync_exclude $s $t "$@"
 }
 function install_google_sans_flex(){
   local font_name="Google Sans Flex"
@@ -170,7 +170,7 @@ function install_google_sans_flex(){
   x fc-cache -fv
   x cd $REPO_ROOT
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+  realpath -se "$target_dir" >> "${INSTALLED_LISTFILE}"
 }
 
 #####################################################################################

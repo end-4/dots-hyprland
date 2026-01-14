@@ -33,22 +33,40 @@ Item {
     }
 
     // Selection border
-    Rectangle {
+    // Rectangle {
+    //     id: selectionBorder
+    //     z: 1
+    //     anchors {
+    //         left: parent.left
+    //         top: parent.top
+    //         leftMargin: root.regionX
+    //         topMargin: root.regionY
+    //     }
+    //     width: root.regionWidth
+    //     height: root.regionHeight
+    //     color: "transparent"
+    //     border.color: root.color
+    //     border.width: 2
+    //     // radius: root.standardRounding
+    //     radius: 0 // TODO: figure out how to make the overlay thing work with rounding
+    // }
+
+    DashedBorder {
         id: selectionBorder
-        z: 1
+        z: 9
         anchors {
             left: parent.left
             top: parent.top
-            leftMargin: root.regionX
-            topMargin: root.regionY
+            leftMargin: Math.round(root.regionX) - borderWidth
+            topMargin: Math.round(root.regionY) - borderWidth
         }
-        width: root.regionWidth
-        height: root.regionHeight
-        color: "transparent"
-        border.color: root.color
-        border.width: 2
-        // radius: root.standardRounding
-        radius: 0 // TODO: figure out how to make the overlay thing work with rounding
+        width: Math.round(root.regionWidth) + borderWidth * 2
+        height: Math.round(root.regionHeight) + borderWidth * 2
+
+        color: root.color
+        dashLength: 6
+        gapLength: 3
+        borderWidth: 1
     }
 
     StyledText {
