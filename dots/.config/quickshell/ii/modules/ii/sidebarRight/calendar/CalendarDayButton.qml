@@ -45,8 +45,8 @@ RippleButton {
             exclusiveZone: 0
             WlrLayershell.namespace: "quickshell:popup"
             WlrLayershell.layer: WlrLayer.Overlay
-            implicitWidth: sidebarRoot.width
-            implicitHeight: sidebarRoot.height
+            implicitWidth: panelWindow.width
+            implicitHeight: panelWindow.height
             property Rectangle dayPopRectProp: dayPopRect
 
               
