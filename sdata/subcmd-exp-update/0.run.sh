@@ -45,7 +45,9 @@ if which pacman &>/dev/null; then
   fi
 fi
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
-HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
+XDG_UPDATE_IGNORE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/illogical-impulse/updateignore"
+#TODO: remove in future and add script to migrate to XDG path
+HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore" # Legacy support 
 
 # Global arrays for cached ignore patterns (performance optimization)
 declare -a IGNORE_PATTERNS=()
@@ -156,7 +158,7 @@ load_ignore_patterns() {
   IGNORE_PATTERNS=()
   IGNORE_SUBSTRING_PATTERNS=()
   
-  for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
+  for ignore_file in "$UPDATE_IGNORE_FILE" "$XDG_UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
     [[ ! -f "$ignore_file" ]] && continue
     
     while IFS= read -r pattern || [[ -n "$pattern" ]]; do
@@ -450,10 +452,10 @@ handle_file_conflict() {
       i)
         local relative_path_to_home="${home_file#$HOME/}"
         if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
+          log_info "[DRY-RUN] Would add '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE"
         else
-          echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-          log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+          echo "$relative_path_to_home" >>"$XDG_UPDATE_IGNORE_FILE"
+          log_success "Added '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE and skipped."
         fi
         break
         ;;
@@ -478,10 +480,10 @@ handle_file_conflict() {
     7)
       local relative_path_to_home="${home_file#$HOME/}"
       if [[ "$DRY_RUN" == true ]]; then
-        log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
+        log_info "[DRY-RUN] Would add '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE"
       else
-        echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-        log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+        echo "$relative_path_to_home" >>"$XDG_UPDATE_IGNORE_FILE"
+        log_success "Added '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE and skipped."
       fi
       break
       ;;
@@ -1158,11 +1160,11 @@ if [[ "$process_files" == true ]]; then
   echo "- New files created: $files_created"
 fi
 
-if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
+if [[ ! -f "$XDG_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
   echo "  - Repository ignore: ${REPO_ROOT}/.updateignore"
-  echo "  - User ignore: ~/.updateignore"
+  echo "  - User ignore: ${XDG_UPDATE_IGNORE_FILE}"
   echo
   echo "Example patterns:"
   echo "  *.log                 # Ignore all .log files"
