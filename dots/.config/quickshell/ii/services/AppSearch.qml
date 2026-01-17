@@ -14,14 +14,14 @@ Singleton {
     property bool frecencySearch: Config.options?.search.frecency ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
-        "code-url-handler": "visual-studio-code",
-        "Code": "visual-studio-code",
-        "gnome-tweaks": "org.gnome.tweaks",
-        "pavucontrol-qt": "pavucontrol",
-        "wps": "wps-office2019-kprometheus",
-        "wpsoffice": "wps-office2019-kprometheus",
-        "footclient": "foot",
-    })
+            "code-url-handler": "visual-studio-code",
+            "Code": "visual-studio-code",
+            "gnome-tweaks": "org.gnome.tweaks",
+            "pavucontrol-qt": "pavucontrol",
+            "wps": "wps-office2019-kprometheus",
+            "wpsoffice": "wps-office2019-kprometheus",
+            "footclient": "foot"
+        })
     property var regexSubstitutions: [
         {
             "regex": /^steam_app_(\d+)$/,
@@ -42,45 +42,79 @@ Singleton {
     ]
 
     // Deduped list to fix double icons
-    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
-        .filter((app, index, self) => 
-            index === self.findIndex((t) => (
-                t.id === app.id
-            ))
-    )
-    
+    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values).filter((app, index, self) => index === self.findIndex(t => (t.id === app.id)))
+
     readonly property var preppedNames: list.map(a => ({
-        name: Fuzzy.prepare(`${a.name} `),
-        entry: a
-    }))
+                name: Fuzzy.prepare(`${a.name} `),
+                entry: a
+            }))
 
     readonly property var preppedIcons: list.map(a => ({
-        name: Fuzzy.prepare(`${a.icon} `),
-        entry: a
-    }))
+                name: Fuzzy.prepare(`${a.icon} `),
+                entry: a
+            }))
+
+    /**
+     * Get initials/acronym from an app name
+     * e.g., "Visual Studio Code" -> "vsc", "Discord" -> "d", "System Settings" -> "ss"
+     */
+    function getInitials(name: string): string {
+        // Split on spaces, hyphens, and underscores, get first letter of each word
+        const words = name.split(/[\s\-_]+/);
+        return words.map(w => w.charAt(0).toLowerCase()).join('');
+    }
+
+    /**
+     * Check if search matches the beginning of the name (prefix match)
+     */
+    function isPrefixMatch(name: string, search: string): bool {
+        return name.toLowerCase().startsWith(search.toLowerCase());
+    }
 
     /**
      * Get match score using either Levenshtein or Fuzzy algorithm
+     * Includes acronym/initial matching boost
      */
     function getMatchScore(appName: string, search: string): real {
+        const searchLower = search.toLowerCase();
+        const nameLower = appName.toLowerCase();
+
+        // Check for acronym match (e.g., "di" matches "Discord" initials)
+        const initials = getInitials(appName);
+        const acronymMatch = initials.startsWith(searchLower);
+
+        // Check for prefix match (e.g., "dis" matches "Discord")
+        const prefixMatch = nameLower.startsWith(searchLower);
+
+        // Get base score from fuzzy or levenshtein
+        let baseScore;
         if (root.levenshteinSearch) {
-            return Levendist.computeScore(appName.toLowerCase(), search.toLowerCase());
+            baseScore = Levendist.computeScore(nameLower, searchLower);
         } else {
             const prepped = preppedNames.find(p => p.entry.name === appName);
             const fuzzyResult = Fuzzy.single(search, prepped?.name);
-            return fuzzyResult?.score ?? 0;
+            baseScore = fuzzyResult?.score ?? 0;
         }
+
+        // Apply boosts for prefix and acronym matches
+        if (acronymMatch && searchLower === initials.substring(0, searchLower.length)) {
+            // Perfect acronym match gets significant boost
+            baseScore = Math.max(baseScore, 0.8) + 0.15;
+        } else if (prefixMatch) {
+            // Prefix match gets moderate boost
+            baseScore = Math.max(baseScore, 0.6) + 0.1;
+        }
+
+        return Math.min(baseScore, 1.0); // Cap at 1.0
     }
 
     function fuzzyQuery(search: string): var {
         // Empty search with frecency: show most used apps
         if (search === "" && root.frecencySearch) {
             return list.map(obj => ({
-                entry: obj,
-                score: AppUsage.getScore(obj.id)
-            })).filter(item => item.score > 0)
-              .sort((a, b) => b.score - a.score)
-              .map(item => item.entry);
+                        entry: obj,
+                        score: AppUsage.getScore(obj.id)
+                    })).filter(item => item.score > 0).sort((a, b) => b.score - a.score).map(item => item.entry);
         }
 
         // Empty search without frecency: return empty
@@ -113,9 +147,7 @@ Singleton {
                     usageScore: usageScore,
                     combinedScore: matchScore * matchWeight + usageScore * usageWeight
                 };
-            }).filter(item => item.matchScore > root.scoreThreshold)
-              .sort((a, b) => b.combinedScore - a.combinedScore)
-              .map(item => item.entry);
+            }).filter(item => item.matchScore > root.scoreThreshold).sort((a, b) => b.combinedScore - a.combinedScore).map(item => item.entry);
 
             return results;
         }
@@ -123,10 +155,9 @@ Singleton {
         // Levenshtein mode (without frecency)
         if (root.levenshteinSearch) {
             const results = list.map(obj => ({
-                entry: obj,
-                score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-            })).filter(item => item.score > root.scoreThreshold)
-                .sort((a, b) => b.score - a.score)
+                        entry: obj,
+                        score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
+                    })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score);
             return results.map(item => item.entry);
         }
 
@@ -135,18 +166,18 @@ Singleton {
             all: true,
             key: "name"
         }).map(r => {
-            return r.obj.entry
+            return r.obj.entry;
         });
     }
 
     function iconExists(iconName) {
-        if (!iconName || iconName.length == 0) return false;
-        return (Quickshell.iconPath(iconName, true).length > 0) 
-            && !iconName.includes("image-missing");
+        if (!iconName || iconName.length == 0)
+            return false;
+        return (Quickshell.iconPath(iconName, true).length > 0) && !iconName.includes("image-missing");
     }
 
     function getReverseDomainNameAppName(str) {
-        return str.split('.').slice(-1)[0]
+        return str.split('.').slice(-1)[0];
     }
 
     function getKebabNormalizedAppName(str) {
@@ -158,67 +189,77 @@ Singleton {
     }
 
     function guessIcon(str) {
-        if (!str || str.length == 0) return "image-missing";
+        if (!str || str.length == 0)
+            return "image-missing";
 
         // Quickshell's desktop entry lookup
         const entry = DesktopEntries.byId(str);
-        if (entry) return entry.icon;
+        if (entry)
+            return entry.icon;
 
         // Normal substitutions
-        if (substitutions[str]) return substitutions[str];
-        if (substitutions[str.toLowerCase()]) return substitutions[str.toLowerCase()];
+        if (substitutions[str])
+            return substitutions[str];
+        if (substitutions[str.toLowerCase()])
+            return substitutions[str.toLowerCase()];
 
         // Regex substitutions
         for (let i = 0; i < regexSubstitutions.length; i++) {
             const substitution = regexSubstitutions[i];
-            const replacedName = str.replace(
-                substitution.regex,
-                substitution.replace,
-            );
-            if (replacedName != str) return replacedName;
+            const replacedName = str.replace(substitution.regex, substitution.replace);
+            if (replacedName != str)
+                return replacedName;
         }
 
         // Icon exists -> return as is
-        if (iconExists(str)) return str;
-
+        if (iconExists(str))
+            return str;
 
         // Simple guesses
         const lowercased = str.toLowerCase();
-        if (iconExists(lowercased)) return lowercased;
+        if (iconExists(lowercased))
+            return lowercased;
 
         const reverseDomainNameAppName = getReverseDomainNameAppName(str);
-        if (iconExists(reverseDomainNameAppName)) return reverseDomainNameAppName;
+        if (iconExists(reverseDomainNameAppName))
+            return reverseDomainNameAppName;
 
         const lowercasedDomainNameAppName = reverseDomainNameAppName.toLowerCase();
-        if (iconExists(lowercasedDomainNameAppName)) return lowercasedDomainNameAppName;
+        if (iconExists(lowercasedDomainNameAppName))
+            return lowercasedDomainNameAppName;
 
         const kebabNormalizedGuess = getKebabNormalizedAppName(str);
-        if (iconExists(kebabNormalizedGuess)) return kebabNormalizedGuess;
+        if (iconExists(kebabNormalizedGuess))
+            return kebabNormalizedGuess;
 
         const undescoreToKebabGuess = getUndescoreToKebabAppName(str);
-        if (iconExists(undescoreToKebabGuess)) return undescoreToKebabGuess;
+        if (iconExists(undescoreToKebabGuess))
+            return undescoreToKebabGuess;
 
         // Search in desktop entries
         const iconSearchResults = Fuzzy.go(str, preppedIcons, {
             all: true,
             key: "name"
         }).map(r => {
-            return r.obj.entry
+            return r.obj.entry;
         });
         if (iconSearchResults.length > 0) {
-            const guess = iconSearchResults[0].icon
-            if (iconExists(guess)) return guess;
+            const guess = iconSearchResults[0].icon;
+            if (iconExists(guess))
+                return guess;
         }
 
         const nameSearchResults = root.fuzzyQuery(str);
         if (nameSearchResults.length > 0) {
-            const guess = nameSearchResults[0].icon
-            if (iconExists(guess)) return guess;
+            const guess = nameSearchResults[0].icon;
+            if (iconExists(guess))
+                return guess;
         }
 
         // Quickshell's desktop entry lookup
         const heuristicEntry = DesktopEntries.heuristicLookup(str);
-        if (heuristicEntry) return heuristicEntry.icon;
+        if (heuristicEntry)
+            return heuristicEntry.icon;
 
         // Give up
         return "application-x-executable";
