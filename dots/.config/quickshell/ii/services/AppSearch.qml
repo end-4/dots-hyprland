@@ -73,18 +73,19 @@ Singleton {
 
     /**
      * Get match score using either Levenshtein or Fuzzy algorithm
-     * Includes acronym/initial matching boost
+     * Includes prefix/acronym matching boost
      */
     function getMatchScore(appName: string, search: string): real {
         const searchLower = search.toLowerCase();
         const nameLower = appName.toLowerCase();
 
-        // Check for acronym match (e.g., "di" matches "Discord" initials)
+        // Check for prefix match (e.g., "di" matches "Discord")
+        // This is the most important match type for user intent
+        const prefixMatch = nameLower.startsWith(searchLower);
+
+        // Check for acronym match (e.g., "vsc" matches "Visual Studio Code")
         const initials = getInitials(appName);
         const acronymMatch = initials.startsWith(searchLower);
-
-        // Check for prefix match (e.g., "dis" matches "Discord")
-        const prefixMatch = nameLower.startsWith(searchLower);
 
         // Get base score from fuzzy or levenshtein
         let baseScore;
@@ -96,16 +97,18 @@ Singleton {
             baseScore = fuzzyResult?.score ?? 0;
         }
 
-        // Apply boosts for prefix and acronym matches
-        if (acronymMatch && searchLower === initials.substring(0, searchLower.length)) {
-            // Perfect acronym match gets significant boost
-            baseScore = Math.max(baseScore, 0.8) + 0.15;
-        } else if (prefixMatch) {
-            // Prefix match gets moderate boost
-            baseScore = Math.max(baseScore, 0.6) + 0.1;
+        // Apply boosts - prefix match is highest priority
+        if (prefixMatch) {
+            // Prefix match gets near-perfect score to override frecency
+            // Shorter names that match get slightly higher scores
+            const lengthBonus = 0.05 * (1 - Math.min(nameLower.length, 20) / 20);
+            return 0.95 + lengthBonus;
+        } else if (acronymMatch) {
+            // Acronym match gets high score
+            return Math.max(baseScore, 0.85);
         }
 
-        return Math.min(baseScore, 1.0); // Cap at 1.0
+        return baseScore;
     }
 
     function fuzzyQuery(search: string): var {
