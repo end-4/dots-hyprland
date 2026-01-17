@@ -92,15 +92,14 @@ Singleton {
         if (root.levenshteinSearch) {
             baseScore = Levendist.computeScore(nameLower, searchLower);
         } else {
-            const prepped = preppedNames.find(p => p.entry.name === appName);
-            const fuzzyResult = Fuzzy.single(search, prepped?.name);
+            // Use direct fuzzy matching instead of find() for better performance
+            const fuzzyResult = Fuzzy.single(search, appName);
             baseScore = fuzzyResult?.score ?? 0;
         }
 
         // Apply boosts - prefix match is highest priority
         if (prefixMatch) {
-            // Prefix match gets near-perfect score to override frecency
-            // Shorter names that match get slightly higher scores
+            // Prefix match gets near-perfect score
             const lengthBonus = 0.05 * (1 - Math.min(nameLower.length, 20) / 20);
             return 0.95 + lengthBonus;
         } else if (acronymMatch) {
