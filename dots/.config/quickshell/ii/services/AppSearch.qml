@@ -141,14 +141,26 @@ Singleton {
                 usageWeight = 0.3;
             }
 
+            const searchLower = search.toLowerCase();
             const results = list.map(obj => {
                 const matchScore = getMatchScore(obj.name, search);
                 const usageScore = AppUsage.getScore(obj.id);
+                let combinedScore = matchScore * matchWeight + usageScore * usageWeight;
+
+                // Prefix match boost - apps starting with search always rank highest
+                if (obj.name.toLowerCase().startsWith(searchLower)) {
+                    combinedScore = 2.0 + combinedScore; // Guaranteed to be higher than any non-prefix match
+                } else
+                // Acronym match boost
+                if (getInitials(obj.name).startsWith(searchLower)) {
+                    combinedScore = 1.5 + combinedScore;
+                }
+
                 return {
                     entry: obj,
                     matchScore: matchScore,
                     usageScore: usageScore,
-                    combinedScore: matchScore * matchWeight + usageScore * usageWeight
+                    combinedScore: combinedScore
                 };
             }).filter(item => item.matchScore > root.scoreThreshold).sort((a, b) => b.combinedScore - a.combinedScore).map(item => item.entry);
 
