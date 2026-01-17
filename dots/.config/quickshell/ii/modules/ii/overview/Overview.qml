@@ -14,116 +14,96 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
-    Variants {
-        id: overviewVariants
-        model: Quickshell.screens
-        PanelWindow {
-            id: root
-            required property var modelData
-            property string searchingText: ""
-            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
-            property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
-            screen: modelData
+
+    PanelWindow {
+        id: panelWindow
+        property string searchingText: ""
+        readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
+        property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
+        visible: GlobalStates.overviewOpen
+
+        WlrLayershell.namespace: "quickshell:overview"
+        WlrLayershell.layer: WlrLayer.Top
+        // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+        color: "transparent"
+
+        mask: Region {
+            item: GlobalStates.overviewOpen ? columnLayout : null
+        }
+
+        anchors {
+            top: true
+            bottom: true
+            left: true
+            right: true
+        }
+
+        Connections {
+            target: GlobalStates
+            function onOverviewOpenChanged() {
+                if (!GlobalStates.overviewOpen) {
+                    searchWidget.disableExpandAnimation();
+                    overviewScope.dontAutoCancelSearch = false;
+                    GlobalFocusGrab.dismiss();
+                } else {
+                    if (!overviewScope.dontAutoCancelSearch) {
+                        searchWidget.cancelSearch();
+                    }
+                    GlobalFocusGrab.addDismissable(panelWindow);
+                }
+            }
+        }
+
+        Connections {
+            target: GlobalFocusGrab
+            function onDismissed() {
+                GlobalStates.overviewOpen = false;
+            }
+        }
+        implicitWidth: columnLayout.implicitWidth
+        implicitHeight: columnLayout.implicitHeight
+
+        function setSearchingText(text) {
+            searchWidget.setSearchingText(text);
+            searchWidget.focusFirstItem();
+        }
+
+        Column {
+            id: columnLayout
             visible: GlobalStates.overviewOpen
-
-            WlrLayershell.namespace: "quickshell:overview"
-            WlrLayershell.layer: WlrLayer.Overlay
-            // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-            color: "transparent"
-
-            mask: Region {
-                item: GlobalStates.overviewOpen ? columnLayout : null
-            }
-
             anchors {
-                top: true
-                bottom: true
-                left: true
-                right: true
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
             }
+            spacing: -8
 
-            HyprlandFocusGrab {
-                id: grab
-                windows: [root]
-                property bool canBeActive: root.monitorIsFocused
-                active: false
-                onCleared: () => {
-                    if (!active)
-                        GlobalStates.overviewOpen = false;
-                }
-            }
-
-            Connections {
-                target: GlobalStates
-                function onOverviewOpenChanged() {
-                    if (!GlobalStates.overviewOpen) {
-                        searchWidget.disableExpandAnimation();
-                        overviewScope.dontAutoCancelSearch = false;
-                    } else {
-                        if (!overviewScope.dontAutoCancelSearch) {
-                            searchWidget.cancelSearch();
-                        }
-                        delayedGrabTimer.start();
-                    }
+            Keys.onPressed: event => {
+                if (event.key === Qt.Key_Escape) {
+                    GlobalStates.overviewOpen = false;
+                } else if (event.key === Qt.Key_Left) {
+                    if (!panelWindow.searchingText)
+                        Hyprland.dispatch("workspace r-1");
+                } else if (event.key === Qt.Key_Right) {
+                    if (!panelWindow.searchingText)
+                        Hyprland.dispatch("workspace r+1");
                 }
             }
 
-            Timer {
-                id: delayedGrabTimer
-                interval: Config.options.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    if (!grab.canBeActive)
-                        return;
-                    grab.active = GlobalStates.overviewOpen;
+            SearchWidget {
+                id: searchWidget
+                anchors.horizontalCenter: parent.horizontalCenter
+                Synchronizer on searchingText {
+                    property alias source: panelWindow.searchingText
                 }
             }
 
-            implicitWidth: columnLayout.implicitWidth
-            implicitHeight: columnLayout.implicitHeight
-
-            function setSearchingText(text) {
-                searchWidget.setSearchingText(text);
-                searchWidget.focusFirstItem();
-            }
-
-            Column {
-                id: columnLayout
-                visible: GlobalStates.overviewOpen
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
-                    top: parent.top
-                }
-                spacing: -8
-
-                Keys.onPressed: event => {
-                    if (event.key === Qt.Key_Escape) {
-                        GlobalStates.overviewOpen = false;
-                    } else if (event.key === Qt.Key_Left) {
-                        if (!root.searchingText)
-                            Hyprland.dispatch("workspace r-1");
-                    } else if (event.key === Qt.Key_Right) {
-                        if (!root.searchingText)
-                            Hyprland.dispatch("workspace r+1");
-                    }
-                }
-
-                SearchWidget {
-                    id: searchWidget
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Synchronizer on searchingText {
-                        property alias source: root.searchingText
-                    }
-                }
-
-                Loader {
-                    id: overviewLoader
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
-                    sourceComponent: OverviewWidget {
-                        panelWindow: root
-                        visible: (root.searchingText == "")
-                    }
+            Loader {
+                id: overviewLoader
+                anchors.horizontalCenter: parent.horizontalCenter
+                active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
+                sourceComponent: OverviewWidget {
+                    screen: panelWindow.screen
+                    visible: (panelWindow.searchingText == "")
                 }
             }
         }
@@ -134,15 +114,9 @@ Scope {
             GlobalStates.overviewOpen = false;
             return;
         }
-        for (let i = 0; i < overviewVariants.instances.length; i++) {
-            let panelWindow = overviewVariants.instances[i];
-            if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                overviewScope.dontAutoCancelSearch = true;
-                panelWindow.setSearchingText(Config.options.search.prefix.clipboard);
-                GlobalStates.overviewOpen = true;
-                return;
-            }
-        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.clipboard);
+        GlobalStates.overviewOpen = true;
     }
 
     function toggleEmojis() {
@@ -150,15 +124,9 @@ Scope {
             GlobalStates.overviewOpen = false;
             return;
         }
-        for (let i = 0; i < overviewVariants.instances.length; i++) {
-            let panelWindow = overviewVariants.instances[i];
-            if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                overviewScope.dontAutoCancelSearch = true;
-                panelWindow.setSearchingText(Config.options.search.prefix.emojis);
-                GlobalStates.overviewOpen = true;
-                return;
-            }
-        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.emojis);
+        GlobalStates.overviewOpen = true;
     }
 
     IpcHandler {
