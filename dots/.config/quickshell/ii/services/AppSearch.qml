@@ -61,6 +61,7 @@ Singleton {
 
     /**
      * Frecency search: combines fuzzy matching with app launch frequency
+     * Dynamically adjusts weights based on query length: 1-2 chars favor usage, 3 chars balanced, 4+ chars favor fuzzy
      */
     function frecencyQuery(search: string): var {
         if (search === "") {
@@ -73,6 +74,21 @@ Singleton {
               .map(item => item.entry);
         }
 
+        // Dynamic weighting based on query length
+        // Short queries = favor usage, long queries = favor fuzzy match
+        const queryLen = search.length;
+        let fuzzyWeight, usageWeight;
+        if (queryLen <= 2) {
+            fuzzyWeight = 0.3;
+            usageWeight = 0.7;
+        } else if (queryLen === 3) {
+            fuzzyWeight = 0.5;
+            usageWeight = 0.5;
+        } else {
+            fuzzyWeight = 0.7;
+            usageWeight = 0.3;
+        }
+
         // Combine fuzzy score with usage frequency
         // Use prepared names for consistency with default fuzzy mode
         const results = preppedNames.map(obj => {
@@ -83,7 +99,7 @@ Singleton {
                 entry: obj.entry,
                 fuzzyScore: fuzzyScore,
                 usageScore: usageScore,
-                combinedScore: fuzzyScore * 0.7 + usageScore * 0.3
+                combinedScore: fuzzyScore * fuzzyWeight + usageScore * usageWeight
             };
         }).filter(item => item.fuzzyScore > root.scoreThreshold)
           .sort((a, b) => b.combinedScore - a.combinedScore)
