@@ -82,7 +82,6 @@ ContentPage {
                 Config.options.resources.updateInterval = value;
             }
         }
-        
     }
 
     ContentSection {
@@ -98,7 +97,7 @@ ContentPage {
                 Config.options.screenRecord.savePath = text;
             }
         }
-        
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("Screenshot Path (leave empty to just copy)")
@@ -114,28 +113,25 @@ ContentPage {
         icon: "search"
         title: Translation.tr("Search")
 
-        ContentSubsection {
-            title: Translation.tr("Search Options")
-            tooltip: Translation.tr("Configure how app search works")
-
-            ConfigSwitch {
-                buttonIcon: "spellcheck"
-                text: Translation.tr("Typo-tolerant matching (Levenshtein)")
-                tooltip: Translation.tr("Use Levenshtein distance instead of fuzzy matching.\nBetter for typos like 'feridum' → 'ferdium'.\nMay miss some acronym matches.")
-                checked: Config.options.search.levenshtein
-                onCheckedChanged: {
-                    Config.options.search.levenshtein = checked;
-                }
+        ConfigSwitch {
+            text: Translation.tr("Use Levenshtein distance-based algorithm instead of fuzzy")
+            checked: Config.options.search.sloppy
+            onCheckedChanged: {
+                Config.options.search.sloppy = checked;
             }
+            StyledToolTip {
+                text: Translation.tr("Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)")
+            }
+        }
 
-            ConfigSwitch {
-                buttonIcon: "trending_up"
-                text: Translation.tr("Frecency ranking")
-                tooltip: Translation.tr("Rank results by usage frequency.\nFrequently launched apps appear higher.\nShort queries favor usage, long queries favor match quality.")
-                checked: Config.options.search.frecency
-                onCheckedChanged: {
-                    Config.options.search.frecency = checked;
-                }
+        ConfigSwitch {
+            text: Translation.tr("Enable frecency ranking")
+            checked: Config.options.search.frecency
+            onCheckedChanged: {
+                Config.options.search.frecency = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Rank results by usage frequency.\nFrequently launched apps appear higher.\nShort queries favor usage, long queries favor match quality.")
             }
         }
 
@@ -241,7 +237,7 @@ ContentPage {
                 }
             }
         }
-        
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("City name")
