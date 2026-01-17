@@ -39,12 +39,16 @@ Scope {
             implicitHeight: Appearance.sizes.wallpaperSelectorHeight
             implicitWidth: Appearance.sizes.wallpaperSelectorWidth
 
-            HyprlandFocusGrab { // Click outside to close
-                id: grab
-                windows: [ panelWindow ]
-                active: wallpaperSelectorLoader.active
-                onCleared: () => {
-                    if (!active) GlobalStates.wallpaperSelectorOpen = false;
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(panelWindow);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(panelWindow);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    GlobalStates.wallpaperSelectorOpen = false;
                 }
             }
 
