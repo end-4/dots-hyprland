@@ -10,7 +10,7 @@ import Quickshell
  */
 Singleton {
     id: root
-    property bool sloppySearch: Config.options?.search.sloppy ?? false
+    property bool levenshteinSearch: Config.options?.search.levenshtein ?? false
     property bool frecencySearch: Config.options?.search.frecency ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
@@ -60,12 +60,21 @@ Singleton {
     }))
 
     /**
-     * Frecency search: combines fuzzy matching with app launch frequency
-     * Dynamically adjusts weights based on query length: 1-2 chars favor usage, 3 chars balanced, 4+ chars favor fuzzy
+     * Get match score using either Levenshtein or Fuzzy algorithm
      */
-    function frecencyQuery(search: string): var {
-        if (search === "") {
-            // When empty, show most frequently used apps
+    function getMatchScore(appName: string, search: string): real {
+        if (root.levenshteinSearch) {
+            return Levendist.computeScore(appName.toLowerCase(), search.toLowerCase());
+        } else {
+            const prepped = preppedNames.find(p => p.entry.name === appName);
+            const fuzzyResult = Fuzzy.single(search, prepped?.name);
+            return fuzzyResult?.score ?? 0;
+        }
+    }
+
+    function fuzzyQuery(search: string): var {
+        // Empty search with frecency: show most used apps
+        if (search === "" && root.frecencySearch) {
             return list.map(obj => ({
                 entry: obj,
                 score: AppUsage.getScore(obj.id)
@@ -74,55 +83,51 @@ Singleton {
               .map(item => item.entry);
         }
 
-        // Dynamic weighting based on query length
-        // Short queries = favor usage, long queries = favor fuzzy match
-        const queryLen = search.length;
-        let fuzzyWeight, usageWeight;
-        if (queryLen <= 2) {
-            fuzzyWeight = 0.3;
-            usageWeight = 0.7;
-        } else if (queryLen === 3) {
-            fuzzyWeight = 0.5;
-            usageWeight = 0.5;
-        } else {
-            fuzzyWeight = 0.7;
-            usageWeight = 0.3;
+        // Empty search without frecency: return empty
+        if (search === "") {
+            return [];
         }
 
-        // Combine fuzzy score with usage frequency
-        // Use prepared names for consistency with default fuzzy mode
-        const results = preppedNames.map(obj => {
-            const fuzzyResult = Fuzzy.single(search, obj.name);
-            const fuzzyScore = fuzzyResult?.score ?? 0;
-            const usageScore = AppUsage.getScore(obj.entry.id);
-            return {
-                entry: obj.entry,
-                fuzzyScore: fuzzyScore,
-                usageScore: usageScore,
-                combinedScore: fuzzyScore * fuzzyWeight + usageScore * usageWeight
-            };
-        }).filter(item => item.fuzzyScore > root.scoreThreshold)
-          .sort((a, b) => b.combinedScore - a.combinedScore)
-          .map(item => item.entry);
-
-        return results;
-    }
-
-    function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
-        // Frecency mode: combine fuzzy with usage frequency
+        // Frecency mode: combine match score with usage frequency
         if (root.frecencySearch) {
-            return frecencyQuery(search);
+            // Dynamic weighting based on query length
+            const queryLen = search.length;
+            let matchWeight, usageWeight;
+            if (queryLen <= 2) {
+                matchWeight = 0.3;
+                usageWeight = 0.7;
+            } else if (queryLen === 3) {
+                matchWeight = 0.5;
+                usageWeight = 0.5;
+            } else {
+                matchWeight = 0.7;
+                usageWeight = 0.3;
+            }
+
+            const results = list.map(obj => {
+                const matchScore = getMatchScore(obj.name, search);
+                const usageScore = AppUsage.getScore(obj.id);
+                return {
+                    entry: obj,
+                    matchScore: matchScore,
+                    usageScore: usageScore,
+                    combinedScore: matchScore * matchWeight + usageScore * usageWeight
+                };
+            }).filter(item => item.matchScore > root.scoreThreshold)
+              .sort((a, b) => b.combinedScore - a.combinedScore)
+              .map(item => item.entry);
+
+            return results;
         }
 
-        // Sloppy mode: levenshtein distance
-        if (root.sloppySearch) {
+        // Levenshtein mode (without frecency)
+        if (root.levenshteinSearch) {
             const results = list.map(obj => ({
                 entry: obj,
                 score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
             })).filter(item => item.score > root.scoreThreshold)
                 .sort((a, b) => b.score - a.score)
-            return results
-                .map(item => item.entry)
+            return results.map(item => item.entry);
         }
 
         // Default: fuzzy sort

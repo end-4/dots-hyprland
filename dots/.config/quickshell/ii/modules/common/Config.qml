@@ -474,8 +474,8 @@ Singleton {
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
                 property list<string> excludedSites: ["quora.com", "facebook.com"]
-                property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
-                property bool frecency: false // Uses app launch frequency for ranking
+                property bool levenshtein: false // Use Levenshtein distance (typo-tolerant) instead of fuzzy matching
+                property bool frecency: false // Rank results by app launch frequency
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"

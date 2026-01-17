@@ -115,39 +115,27 @@ ContentPage {
         title: Translation.tr("Search")
 
         ContentSubsection {
-            title: Translation.tr("Search Algorithm")
-            tooltip: Translation.tr("Choose how app search results are ranked")
+            title: Translation.tr("Search Options")
+            tooltip: Translation.tr("Configure how app search works")
 
-            ConfigSelectionArray {
-                currentValue: {
-                    if (Config.options.search.frecency) return "frecency";
-                    if (Config.options.search.sloppy) return "sloppy";
-                    return "default";
+            ConfigSwitch {
+                buttonIcon: "spellcheck"
+                text: Translation.tr("Typo-tolerant matching (Levenshtein)")
+                tooltip: Translation.tr("Use Levenshtein distance instead of fuzzy matching.\nBetter for typos like 'feridum' → 'ferdium'.\nMay miss some acronym matches.")
+                checked: Config.options.search.levenshtein
+                onCheckedChanged: {
+                    Config.options.search.levenshtein = checked;
                 }
-                onSelected: newValue => {
-                    Config.options.search.sloppy = (newValue === "sloppy");
-                    Config.options.search.frecency = (newValue === "frecency");
+            }
+
+            ConfigSwitch {
+                buttonIcon: "trending_up"
+                text: Translation.tr("Frecency ranking")
+                tooltip: Translation.tr("Rank results by usage frequency.\nFrequently launched apps appear higher.\nShort queries favor usage, long queries favor match quality.")
+                checked: Config.options.search.frecency
+                onCheckedChanged: {
+                    Config.options.search.frecency = checked;
                 }
-                options: [
-                    {
-                        displayName: Translation.tr("Default (Fuzzy)"),
-                        icon: "search",
-                        value: "default",
-                        tooltip: Translation.tr("Standard fuzzy search.\nMatches partial text and acronyms well.")
-                    },
-                    {
-                        displayName: Translation.tr("Sloppy"),
-                        icon: "spellcheck",
-                        value: "sloppy",
-                        tooltip: Translation.tr("Levenshtein distance-based algorithm.\nBetter for typos, but may miss acronyms.")
-                    },
-                    {
-                        displayName: Translation.tr("Frecency"),
-                        icon: "trending_up",
-                        value: "frecency",
-                        tooltip: Translation.tr("Ranks by usage frequency + fuzzy match.\nFrequently used apps appear higher.")
-                    }
-                ]
             }
         }
 
