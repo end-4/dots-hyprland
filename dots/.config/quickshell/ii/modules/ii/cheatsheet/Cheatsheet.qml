@@ -19,6 +19,10 @@ Scope { // Scope
             "name": Translation.tr("Keybinds")
         },
         {
+            "icon": "text_fields",
+            "name": Translation.tr("ASCII")
+        },
+        {
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
@@ -171,6 +175,7 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
+                        ASCIITable {}
                         CheatsheetPeriodicTable {}
                     }
                 }
