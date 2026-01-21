@@ -7,11 +7,11 @@ output_path = '~/.local/state/quickshell/user/generated/colors.json'
 
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland/colors.conf'
-output_path = '~/.config/hypr/hyprland/colors.conf'
+output_path = '~/.config/hypr/illogical-impulse/colors.conf'
 
 [templates.hyprlock]
 input_path = '~/.config/matugen/templates/hyprland/hyprlock-colors.conf'
-output_path = '~/.config/hypr/hyprlock/colors.conf'
+output_path = '~/.config/hypr/illogical-impulse/colors-hyprlock.conf'
 
 [templates.fuzzel]
 input_path = '~/.config/matugen/templates/fuzzel/fuzzel_theme.ini'
