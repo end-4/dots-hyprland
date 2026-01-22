@@ -16,6 +16,10 @@ Options:
   -s, --skip-notice  Skip notice about script being untested
       --non-interactive
                      Run without prompting for user input
+      --default-choice=N
+                     Set default choice for file conflicts (1-8, used with --non-interactive)
+                     1=Replace local  2=Keep local  3=Backup as .old  4=Save as .new
+                     5=Show diff      6=Skip        7=Add to ignore   8=Backup and replace
 
 This script updates your dotfiles by:
   1. Auto-detecting repository structure (dots/ prefix or direct)
@@ -35,7 +39,7 @@ Ignore file patterns support:
 # `man getopt` to see more
 para=$(getopt \
   -o hfpnvs \
-  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive \
+  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive,default-choice: \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -58,6 +62,7 @@ DRY_RUN=false
 VERBOSE=false
 SKIP_NOTICE=false
 NON_INTERACTIVE=false
+DEFAULT_CHOICE=""
 
 eval set -- "$para"
 while true ; do
@@ -80,6 +85,13 @@ while true ; do
       ;;
     --non-interactive) NON_INTERACTIVE=true;shift
       log_info "Non-interactive mode enabled"
+      ;;
+    --default-choice) DEFAULT_CHOICE="$2";shift 2
+      if [[ ! "$DEFAULT_CHOICE" =~ ^[1-8]$ ]]; then
+        log_error "Invalid --default-choice value: $DEFAULT_CHOICE (must be 1-8)"
+        exit 1
+      fi
+      log_info "Default conflict choice set to: $DEFAULT_CHOICE"
       ;;
     
     ## Ending
