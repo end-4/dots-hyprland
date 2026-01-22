@@ -15,11 +15,10 @@ Options:
   -h, --help         Show this help message
   -s, --skip-notice  Skip notice about script being untested
       --non-interactive
-                     Run without prompting for user input
-      --default-choice=N
-                     Set default choice for file conflicts (1-8, used with --non-interactive)
-                     1=Replace local  2=Keep local  3=Backup as .old  4=Save as .new
-                     5=Show diff      6=Skip        7=Add to ignore   8=Backup and replace
+                     Set default choice for file conflicts (usually used with --non-interactive)
+                        replace: Replace local     keep: Keep local         old:  Backup as .old
+                        new:     Save as .new      diff: Show diff          skip: Skip
+                        ignore:  Add to ignore     backup: Backup and replace
 
 This script updates your dotfiles by:
   1. Auto-detecting repository structure (dots/ prefix or direct)
@@ -86,11 +85,23 @@ while true ; do
     --non-interactive) NON_INTERACTIVE=true;shift
       log_info "Non-interactive mode enabled"
       ;;
-    --default-choice) DEFAULT_CHOICE="$2";shift 2
-      if [[ ! "$DEFAULT_CHOICE" =~ ^[1-8]$ ]]; then
-        log_error "Invalid --default-choice value: $DEFAULT_CHOICE (must be 1-8)"
-        exit 1
-      fi
+    --default-choice)
+      case "$2" in
+        replace) DEFAULT_CHOICE="1" ;;
+        keep)    DEFAULT_CHOICE="2" ;;
+        old)     DEFAULT_CHOICE="3" ;;
+        new)     DEFAULT_CHOICE="4" ;;
+        diff)    DEFAULT_CHOICE="5" ;;
+        skip)    DEFAULT_CHOICE="6" ;;
+        ignore)  DEFAULT_CHOICE="7" ;;
+        backup)  DEFAULT_CHOICE="8" ;;
+        *)
+          log_error "Invalid --default-choice value: $2"
+          log_error "Valid values: replace, keep, old, new, diff, skip, ignore, backup"
+          exit 1
+          ;;
+      esac
+      shift 2
       log_info "Default conflict choice set to: $DEFAULT_CHOICE"
       ;;
     
