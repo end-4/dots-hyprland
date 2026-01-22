@@ -371,23 +371,23 @@ handle_file_conflict() {
     echo
 
     while true; do
-      if ! safe_read "Enter your choice (1-8) [${default_val}]: " choice "$default_val"; then
+      if ! safe_read "Enter your choice (1-8 or name) [${default_val}]: " choice "$default_val"; then
         echo
         log_warning "Failed to read input. Skipping file."
         return
       fi
 
       # Validate choice
-      if [[ "$choice" =~ ^[1-8]$ ]]; then
+      if [[ "$choice" =~ ^[1-8]$ ]] || [[ "$choice" =~ ^(replace|keep|old|new|diff|skip|ignore|backup)$ ]]; then
         break
       else
-        echo "Invalid choice. Please enter 1-8."
+        echo "Invalid choice. Please enter 1-8 or a valid name (replace, keep, old ...)."
       fi
     done
   fi
 
   case $choice in
-  1)
+  1|replace)
     if [[ "$DRY_RUN" == true ]]; then
       log_info "[DRY-RUN] Would replace $home_file with repository version"
     else
@@ -395,10 +395,10 @@ handle_file_conflict() {
       log_success "Replaced $home_file with repository version"
     fi
     ;;
-  2)
+  2|keep)
     log_info "Keeping local version of $home_file"
     ;;
-  3)
+  3|old)
     if [[ "$DRY_RUN" == true ]]; then
       log_info "[DRY-RUN] Would backup local file to ${filename}.old and update with repository version"
     else
@@ -407,7 +407,7 @@ handle_file_conflict() {
       log_success "Backed up local file to ${filename}.old and updated with repository version"
     fi
     ;;
-  4)
+  4|new)
     if [[ "$DRY_RUN" == true ]]; then
       log_info "[DRY-RUN] Would save repository version as ${filename}.new, keep local file"
     else
@@ -415,7 +415,7 @@ handle_file_conflict() {
       log_success "Saved repository version as ${filename}.new, kept local file"
     fi
     ;;
-  5)
+  5|diff)
     show_diff "$home_file" "$repo_file"
     echo
     echo "After reviewing the diff, choose:"
@@ -487,10 +487,10 @@ handle_file_conflict() {
       ;;
     esac
     ;;
-  6)
+  6|skip)
     log_info "Skipping $home_file"
     ;;
-  7)
+  7|ignore)
     local relative_path_to_home="${home_file#$HOME/}"
     if [[ "$DRY_RUN" == true ]]; then
       log_info "[DRY-RUN] Would add '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE"
@@ -499,7 +499,7 @@ handle_file_conflict() {
       log_success "Added '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE and skipped."
     fi
     ;;
-  8)
+  8|backup)
     if backup_file "$home_file"; then
       if [[ "$DRY_RUN" != true ]]; then
         cp -p "$repo_file" "$home_file"
