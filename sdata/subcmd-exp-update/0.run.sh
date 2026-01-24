@@ -1053,7 +1053,7 @@ if [[ "$process_files" == true ]]; then
 
     ensure_directory "$home_dir_path" || continue
 
-    while IFS= read -r -d '' repo_file; do
+    while IFS= read -r -d '' -u 9 repo_file; do
       # Calculate relative path from the repo source directory
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
@@ -1107,7 +1107,7 @@ if [[ "$process_files" == true ]]; then
         fi
         ((files_created++))
       fi
-    done < <(get_changed_files "$repo_dir_path") || true
+    done 9< <(get_changed_files "$repo_dir_path") || true
     echo
   done
 
