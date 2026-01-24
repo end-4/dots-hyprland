@@ -41,6 +41,7 @@ ExpandableChoiceButton {
                 elide: Text.ElideRight
                 font.pixelSize: Looks.font.pixelSize.large
                 text: root.device?.name || Translation.tr("Unknown device")
+                textFormat: Text.PlainText
             }
             WText { // Status
                 id: statusText
