@@ -28,8 +28,9 @@ Scope { // Scope
             visible: !GlobalStates.screenLocked
 
             property var hyprlandDataMonitor: HyprlandData.monitors.find(m => m.name === screen.name)
-            property var currentWorkspaceID: hyprlandDataMonitor?.specialWorkspace.id || hyprlandDataMonitor?.activeWorkspace.id
-            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || !(HyprlandData.windowList.some(w => w.workspace.id == currentWorkspaceID))
+            property int currentWorkspaceID: hyprlandDataMonitor?.specialWorkspace.id || hyprlandDataMonitor?.activeWorkspace.id
+            property bool windowOrPanelOpen: GlobalStates.oskOpen || HyprlandData.windowList.some(w => w.workspace.id == currentWorkspaceID)
+            property bool reveal: root.pinned || !windowOrPanelOpen || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow
 
             anchors {
                 bottom: true
@@ -38,7 +39,7 @@ Scope { // Scope
             }
 
             exclusiveZone: root.pinned ? implicitHeight : 0
-            exclusionMode: Config.options.bar.vertical || (root.pinned || !HyprlandData.windowList.some(w => w.workspace.id == currentWorkspaceID)) ? ExclusionMode.Normal : ExclusionMode.Ignore
+            exclusionMode: Config.options.bar.vertical || (root.pinned || !windowOrPanelOpen) ? ExclusionMode.Normal : ExclusionMode.Ignore
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
