@@ -12,6 +12,7 @@ WTextButton {
 
     property bool keyboardDown: false
     property alias focusRingRadius: focusRing.radius
+    fgColor: (root.pressed || root.keyboardDown) ? Looks.darkColors.fg1 : Looks.darkColors.fg
 
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -34,7 +35,7 @@ WTextButton {
         WText {
             id: buttonText
             anchors.fill: parent
-            color: (root.pressed || root.keyboardDown) ? Looks.colors.fg1 : Looks.colors.fg
+            color: root.fgColor
             text: root.text
             font.pixelSize: Looks.font.pixelSize.large
         }
