@@ -10,10 +10,12 @@ import qs.modules.waffle.looks
 
 Item {
     id: root
-    required property Item contentItem
+    property Item contentItem
     property real radius: Looks.radius.large
+    property alias color: contentRect.color
     property alias border: borderRect
     property alias borderColor: borderRect.border.color
+    property alias borderWidth: borderRect.border.width
 
     implicitWidth: borderRect.implicitWidth
     implicitHeight: borderRect.implicitHeight
@@ -41,7 +43,7 @@ Item {
         anchors.centerIn: parent
         z: 0
         
-        color: Looks.colors.bgPanelFooterBase
+        color: Looks.colors.bgPanelFooterBackground
         implicitWidth: contentItem.implicitWidth
         implicitHeight: contentItem.implicitHeight
         layer.enabled: true

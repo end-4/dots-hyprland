@@ -39,9 +39,10 @@ Button {
         }
     }
     property color fgColor: {
+        if (!root.enabled) return root.colForegroundDisabled
         if (root.checked) return root.colForegroundToggled
         if (root.enabled) return root.colForeground
-        return root.colForegroundDisabled
+        return root.colForeground
     }
     property alias horizontalAlignment: buttonText.horizontalAlignment
     font {
@@ -53,10 +54,11 @@ Button {
     // Hover stuff
     signal hoverTimedOut
     property bool shouldShowTooltip: false
+    ToolTip.delay: 400
     property Timer hoverTimer: Timer {
         id: hoverTimer
         running: root.hovered
-        interval: 400
+        interval: root.ToolTip.delay
         onTriggered: {
             root.hoverTimedOut();
         }
