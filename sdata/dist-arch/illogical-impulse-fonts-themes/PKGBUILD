@@ -13,7 +13,7 @@ depends=(
   fish
   fontconfig
   kitty
-  matugen-bin
+  matugen
   otf-space-grotesk
   starship
   ttf-jetbrains-mono-nerd
