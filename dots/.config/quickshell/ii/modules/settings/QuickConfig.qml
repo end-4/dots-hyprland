@@ -15,7 +15,7 @@ ContentPage {
         id: randomWallProc
         property string status: ""
         property string scriptPath: `${Directories.scriptPath}/colors/random/random_konachan_wall.sh`
-        command: ["bash", "-c", FileUtils.trimFileProtocol(randomWallProc.scriptPath)]
+        command: ["bash", "-c", FileUtils.trimFileProtocol(randomWallProc.scriptPath) + " " + Config.options.randomWall.savePath + " " + Config.options.randomWall.saveName]
         stdout: SplitParser {
             onRead: data => {
                 randomWallProc.status = data.trim();
@@ -100,7 +100,7 @@ ContentPage {
                         randomWallProc.running = true;
                     }
                     StyledToolTip {
-                        text: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
+                        text: Translation.tr("Random SFW Anime wallpaper from Konachan\nDefault save path is ~/Pictures/Wallpapers (change in Services)")
                     }
                 }
                 RippleButtonWithIcon {
@@ -115,7 +115,7 @@ ContentPage {
                         randomWallProc.running = true;
                     }
                     StyledToolTip {
-                        text: Translation.tr("Random osu! seasonal background\nImage is saved to ~/Pictures/Wallpapers")
+                        text: Translation.tr("Random osu! seasonal background\nDefault save path is ~/Pictures/Wallpapers (change in Services)")
                     }
                 }
                 RippleButtonWithIcon {
