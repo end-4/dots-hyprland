@@ -77,7 +77,12 @@ Scope {
         }
 
         function random(): void {
-            Wallpapers.randomFromCurrentFolder();
+            let monitorName = "";
+            if (Config.options.background?.multiMonitor?.enable) {
+                const focusedMonitor = Hyprland.focusedMonitor?.name;
+                monitorName = focusedMonitor;
+            }
+            Wallpapers.randomFromCurrentFolder(Appearance.m3colors.darkmode, monitorName);
         }
     }
 
@@ -93,7 +98,12 @@ Scope {
         name: "wallpaperSelectorRandom"
         description: "Select random wallpaper in current folder"
         onPressed: {
-            Wallpapers.randomFromCurrentFolder();
+            let monitorName = "";
+            if (Config.options.background?.multiMonitor?.enable) {
+                const focusedMonitor = Hyprland.focusedMonitor?.name;
+                monitorName = focusedMonitor;
+            }
+            Wallpapers.randomFromCurrentFolder(Appearance.m3colors.darkmode, monitorName);
         }
     }
 }

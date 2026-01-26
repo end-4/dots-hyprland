@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
@@ -10,6 +11,7 @@ import qs.modules.common.functions
 
 ContentPage {
     forceWidth: true
+    readonly property string currentScreenName: Window.window?.openedScreenName || ""
 
     Process {
         id: randomWallProc
@@ -67,14 +69,22 @@ ContentPage {
             Item {
                 implicitWidth: 340
                 implicitHeight: 200
-                
+
                 StyledImage {
                     id: wallpaperPreview
                     anchors.fill: parent
                     sourceSize.width: parent.implicitWidth
                     sourceSize.height: parent.implicitHeight
                     fillMode: Image.PreserveAspectCrop
-                    source: Config.options.background.wallpaperPath
+                    source: {
+                        // Show appropriate wallpaper based on mode and monitor
+                        if (Config.options.background.multiMonitor.enable) {
+                            const wallpaperData = WallpaperListener.effectivePerMonitor[currentScreenName]
+                            return wallpaperData?.path
+                        } else {
+                            return Config.options.background.wallpaperPath
+                        }
+                    }
                     cache: false
                     layer.enabled: true
                     layer.effect: OpacityMask {
@@ -170,6 +180,24 @@ ContentPage {
                     }
                 }
             }
+        }
+
+        // Wallpaper feature flags
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Per-monitor wallpapers")
+            checked: Config.options.background.multiMonitor.enable
+            onCheckedChanged: {
+                const wasEnabled = Config.options.background.multiMonitor.enable
+                Config.options.background.multiMonitor.enable = checked
+
+                // When disabling per-monitor mode, apply global wallpaper to all monitors
+                if (wasEnabled && !checked) {
+                    const globalPath = Config.options.background.wallpaperPath
+                    Wallpapers.apply(globalPath, Appearance.m3colors.darkmode)
+                }
+            }
+            StyledToolTip { text: Translation.tr("Enable assigning different wallpapers to each monitor.") }
         }
 
         ConfigSelectionArray {
@@ -322,7 +350,7 @@ ContentPage {
                     ]
                 }
             }
-            
+
         }
     }
 
