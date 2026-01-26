@@ -55,6 +55,7 @@ Singleton {
 
     property bool vpnEnabled: false
     readonly property list<VpnConnection> vpnConnections: []
+    readonly property list<var> vpnConnectionsVars: [...vpnConnections]
 
     // Control
     function enableWifi(enabled = true): void {
@@ -69,6 +70,10 @@ Singleton {
     function rescanWifi(): void {
         wifiScanning = true;
         rescanProcess.running = true;
+    }
+
+    function updateVpnList(): void {
+        getVpnConnections.running = true;
     }
 
     function connectToWifiNetwork(accessPoint: WifiAccessPoint): void {
