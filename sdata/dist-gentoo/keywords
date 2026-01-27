@@ -30,7 +30,6 @@ gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
 dev-libs/hyprland-protocols
-#gui-libs/aquamarine
 gui-libs/hyprutils::hyproverlay
 gui-libs/hyprwire::hyproverlay
 dev-util/hyprwayland-scanner
