@@ -52,3 +52,4 @@ media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
 app-misc/songrec
+dev-cpp/glaze::hyproverlay

@@ -26,6 +26,10 @@ if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
         v sudo eselect repository enable guru
 fi
 
+if [[ -z $(eselect repository list | grep -E ".*hyproverlay \*.*") ]]; then
+	v sudo eselect repository enable hyproverlay
+fi
+
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
