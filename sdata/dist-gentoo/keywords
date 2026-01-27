@@ -34,12 +34,12 @@ dev-libs/hyprland-protocols
 gui-libs/hyprutils::hyproverlay
 gui-libs/hyprwire::hyproverlay
 dev-util/hyprwayland-scanner
-#dev-libs/hyprgraphics
-#gui-libs/hyprcursor
 gui-libs/hyprland-qt-support
 gui-libs/hyprland-guiutils::hyproverlay
 gui-libs/hyprtoolkit::hyproverlay
-#gui-wm/hyprland
+gui-wm/hyprland::hyproverlay
+dev-libs/hyprgraphics::hyproverlay
+gui-libs/aquamarine::hyproverlay 
 x11-libs/libxkbcommon
 dev-util/breakpad
 dev-libs/linux-syscall-support
