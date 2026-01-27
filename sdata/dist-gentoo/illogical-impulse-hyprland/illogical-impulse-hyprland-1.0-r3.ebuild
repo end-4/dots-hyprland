@@ -14,6 +14,6 @@ RESTRICT="strip"
 DEPEND=""
 RDEPEND="
 	gui-apps/hyprsunset
-	gui-wm/hyprland
+	gui-wm/hyprland::hyproverlay
 	gui-apps/wl-clipboard
 "
