@@ -7,128 +7,127 @@ import QtQuick.Layouts
 Item {
     id: root
 
-    // Predefined ASCII table data (codes 32-126), arranged in 16 columns to make it more horizontal
+    // Predefined ASCII table data (codes 32-127), arranged in 16 columns to make it more horizontal
     readonly property var asciiTable: [
         [
-            { code: 32, char: "SPC", type: "char" },
-            { code: 33, char: "!", type: "char" },
-            { code: 34, char: "\"", type: "char" },
-            { code: 35, char: "#", type: "char" },
-            { code: 36, char: "$", type: "char" },
-            { code: 37, char: "%", type: "char" },
-            { code: 38, char: "&", type: "char" },
-            { code: 39, char: "'", type: "char" },
-            { code: 40, char: "(", type: "char" },
-            { code: 41, char: ")", type: "char" },
-            { code: 42, char: "*", type: "char" },
-            { code: 43, char: "+", type: "char" },
-            { code: 44, char: ",", type: "char" },
-            { code: 45, char: "-", type: "char" },
-            { code: 46, char: ".", type: "char" },
-            { code: 47, char: "/", type: "char" }
+            { code: 32, char: "SPC" },
+            { code: 33, char: "!" },
+            { code: 34, char: "\"" },
+            { code: 35, char: "#" },
+            { code: 36, char: "$" },
+            { code: 37, char: "%" },
+            { code: 38, char: "&" },
+            { code: 39, char: "'" },
+            { code: 40, char: "(" },
+            { code: 41, char: ")" },
+            { code: 42, char: "*" },
+            { code: 43, char: "+" },
+            { code: 44, char: "," },
+            { code: 45, char: "-" },
+            { code: 46, char: "." },
+            { code: 47, char: "/" }
         ],
         [
-            { code: 48, char: "0", type: "char" },
-            { code: 49, char: "1", type: "char" },
-            { code: 50, char: "2", type: "char" },
-            { code: 51, char: "3", type: "char" },
-            { code: 52, char: "4", type: "char" },
-            { code: 53, char: "5", type: "char" },
-            { code: 54, char: "6", type: "char" },
-            { code: 55, char: "7", type: "char" },
-            { code: 56, char: "8", type: "char" },
-            { code: 57, char: "9", type: "char" },
-            { code: 58, char: ":", type: "char" },
-            { code: 59, char: ";", type: "char" },
-            { code: 60, char: "<", type: "char" },
-            { code: 61, char: "=", type: "char" },
-            { code: 62, char: ">", type: "char" },
-            { code: 63, char: "?", type: "char" }
+            { code: 48, char: "0" },
+            { code: 49, char: "1" },
+            { code: 50, char: "2" },
+            { code: 51, char: "3" },
+            { code: 52, char: "4" },
+            { code: 53, char: "5" },
+            { code: 54, char: "6" },
+            { code: 55, char: "7" },
+            { code: 56, char: "8" },
+            { code: 57, char: "9" },
+            { code: 58, char: ":" },
+            { code: 59, char: ";" },
+            { code: 60, char: "<" },
+            { code: 61, char: "=" },
+            { code: 62, char: ">" },
+            { code: 63, char: "?" }
         ],
         [
-            { code: 64, char: "@", type: "char" },
-            { code: 65, char: "A", type: "char" },
-            { code: 66, char: "B", type: "char" },
-            { code: 67, char: "C", type: "char" },
-            { code: 68, char: "D", type: "char" },
-            { code: 69, char: "E", type: "char" },
-            { code: 70, char: "F", type: "char" },
-            { code: 71, char: "G", type: "char" },
-            { code: 72, char: "H", type: "char" },
-            { code: 73, char: "I", type: "char" },
-            { code: 74, char: "J", type: "char" },
-            { code: 75, char: "K", type: "char" },
-            { code: 76, char: "L", type: "char" },
-            { code: 77, char: "M", type: "char" },
-            { code: 78, char: "N", type: "char" },
-            { code: 79, char: "O", type: "char" }
+            { code: 64, char: "@" },
+            { code: 65, char: "A" },
+            { code: 66, char: "B" },
+            { code: 67, char: "C" },
+            { code: 68, char: "D" },
+            { code: 69, char: "E" },
+            { code: 70, char: "F" },
+            { code: 71, char: "G" },
+            { code: 72, char: "H" },
+            { code: 73, char: "I" },
+            { code: 74, char: "J" },
+            { code: 75, char: "K" },
+            { code: 76, char: "L" },
+            { code: 77, char: "M" },
+            { code: 78, char: "N" },
+            { code: 79, char: "O" }
         ],
         [
-            { code: 80, char: "P", type: "char" },
-            { code: 81, char: "Q", type: "char" },
-            { code: 82, char: "R", type: "char" },
-            { code: 83, char: "S", type: "char" },
-            { code: 84, char: "T", type: "char" },
-            { code: 85, char: "U", type: "char" },
-            { code: 86, char: "V", type: "char" },
-            { code: 87, char: "W", type: "char" },
-            { code: 88, char: "X", type: "char" },
-            { code: 89, char: "Y", type: "char" },
-            { code: 90, char: "Z", type: "char" },
-            { code: 91, char: "[", type: "char" },
-            { code: 92, char: "\\", type: "char" },
-            { code: 93, char: "]", type: "char" },
-            { code: 94, char: "^", type: "char" },
-            { code: 95, char: "_", type: "char" }
+            { code: 80, char: "P" },
+            { code: 81, char: "Q" },
+            { code: 82, char: "R" },
+            { code: 83, char: "S" },
+            { code: 84, char: "T" },
+            { code: 85, char: "U" },
+            { code: 86, char: "V" },
+            { code: 87, char: "W" },
+            { code: 88, char: "X" },
+            { code: 89, char: "Y" },
+            { code: 90, char: "Z" },
+            { code: 91, char: "[" },
+            { code: 92, char: "\\" },
+            { code: 93, char: "]" },
+            { code: 94, char: "^" },
+            { code: 95, char: "_" }
         ],
         [
-            { code: 96, char: "`", type: "char" },
-            { code: 97, char: "a", type: "char" },
-            { code: 98, char: "b", type: "char" },
-            { code: 99, char: "c", type: "char" },
-            { code: 100, char: "d", type: "char" },
-            { code: 101, char: "e", type: "char" },
-            { code: 102, char: "f", type: "char" },
-            { code: 103, char: "g", type: "char" },
-            { code: 104, char: "h", type: "char" },
-            { code: 105, char: "i", type: "char" },
-            { code: 106, char: "j", type: "char" },
-            { code: 107, char: "k", type: "char" },
-            { code: 108, char: "l", type: "char" },
-            { code: 109, char: "m", type: "char" },
-            { code: 110, char: "n", type: "char" },
-            { code: 111, char: "o", type: "char" }
+            { code: 96, char: "`" },
+            { code: 97, char: "a" },
+            { code: 98, char: "b" },
+            { code: 99, char: "c" },
+            { code: 100, char: "d" },
+            { code: 101, char: "e" },
+            { code: 102, char: "f" },
+            { code: 103, char: "g" },
+            { code: 104, char: "h" },
+            { code: 105, char: "i" },
+            { code: 106, char: "j" },
+            { code: 107, char: "k" },
+            { code: 108, char: "l" },
+            { code: 109, char: "m" },
+            { code: 110, char: "n" },
+            { code: 111, char: "o" }
         ],
         [
-            { code: 112, char: "p", type: "char" },
-            { code: 113, char: "q", type: "char" },
-            { code: 114, char: "r", type: "char" },
-            { code: 115, char: "s", type: "char" },
-            { code: 116, char: "t", type: "char" },
-            { code: 117, char: "u", type: "char" },
-            { code: 118, char: "v", type: "char" },
-            { code: 119, char: "w", type: "char" },
-            { code: 120, char: "x", type: "char" },
-            { code: 121, char: "y", type: "char" },
-            { code: 122, char: "z", type: "char" },
-            { code: 123, char: "{", type: "char" },
-            { code: 124, char: "|", type: "char" },
-            { code: 125, char: "}", type: "char" },
-            { code: 126, char: "~", type: "char" },
-            { code: undefined, char: "", type: "empty" }
+            { code: 112, char: "p" },
+            { code: 113, char: "q" },
+            { code: 114, char: "r" },
+            { code: 115, char: "s" },
+            { code: 116, char: "t" },
+            { code: 117, char: "u" },
+            { code: 118, char: "v" },
+            { code: 119, char: "w" },
+            { code: 120, char: "x" },
+            { code: 121, char: "y" },
+            { code: 122, char: "z" },
+            { code: 123, char: "{" },
+            { code: 124, char: "|" },
+            { code: 125, char: "}" },
+            { code: 126, char: "~" },
+            { code: 127, char: "DEL" }
         ]
     ]
 
     property real spacing: 5
-    property real titleSpacing: 7
-    property real tileSize: 35
+    property real tileSize: 0
     implicitWidth: columnLayout.implicitWidth
     implicitHeight: columnLayout.implicitHeight
 
     onWidthChanged: {
         if (width > 0) {
-            var availableWidth = width - (15 * spacing);
-            var calculatedSize = Math.max(30, Math.min(50, availableWidth / 16));
+             var availableWidth = panel.implicitWidth - (15 * spacing);
+            var calculatedSize = Math.max(30, availableWidth / 16);
             tileSize = calculatedSize;
         }
     }
@@ -137,11 +136,11 @@ Item {
         var panel = findParentWithProperty(this, "implicitWidth");
         if (panel && panel.implicitWidth > 0) {
             var availableWidth = panel.implicitWidth - (15 * spacing);
-            var calculatedSize = Math.max(30, Math.min(50, availableWidth / 16));
+            var calculatedSize = Math.max(30, availableWidth / 16);
             tileSize = calculatedSize;
         } else if (width > 0) {
             var availableWidth = width - (15 * spacing);
-            var calculatedSize = Math.max(30, Math.min(50, availableWidth / 16));
+            var calculatedSize = Math.max(30, availableWidth / 16);
             tileSize = calculatedSize;
         }
     }

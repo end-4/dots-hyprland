@@ -14,6 +14,11 @@ Rectangle {
     border.width: asciiInfo.code !== undefined ? 1 : 0
     radius: Appearance.rounding.small
 
+    MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
+    }
+
     Column {
         anchors.centerIn: parent
         spacing: Math.max(1, tileDim * 0.05)
