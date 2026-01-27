@@ -30,6 +30,7 @@ if [[ -z $(eselect repository list | grep -E ".*hyproverlay \*.*") ]]; then
 	v sudo eselect repository enable hyproverlay
 fi
 
+
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
@@ -62,6 +63,13 @@ v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
 v sudo emerge --depclean
+
+# Hard coded for now
+v sudo emerge -q '>=dev-cpp/glaze-6.1.0'
+v sudo emerge -q dev-libs/pugixml
+
+
+
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
