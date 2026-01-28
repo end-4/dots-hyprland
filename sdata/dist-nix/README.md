@@ -105,6 +105,6 @@ Find out a good method to avoid what @end-4 [mentioned](https://github.com/end-4
 
 Some information may help, e.g. @darsh032 [commented](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3336839862):
 
-> I mean thats not really needed you can use mkOutOfStoreSymlink or use hjem-impure to change the configs without rebuilding
+> I mean that's not really needed you can use mkOutOfStoreSymlink or use hjem-impure to change the configs without rebuilding
 
-And also the "hmrice" [mentioned](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3353345504) by @Markus328 , and the `flake.nix` (for quickshell only) [mentioned](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3354387126) by @darsh032 .
+And also the "hmrice" [mentioned](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3354725029) by @Markus328 , and the `flake.nix` (for quickshell only) [mentioned](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3354387126) by @darsh032 .

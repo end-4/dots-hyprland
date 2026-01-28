@@ -1,0 +1,3 @@
+[codespell]
+skip = ./.git,./cache,./diagnose.result,./LICENSE,./licenses,./dots/.config/quickshell/ii/modules/common/widgets/shapes
+ignore-words-list = ags,AGS,ans,rime

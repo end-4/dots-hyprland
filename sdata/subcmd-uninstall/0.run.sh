@@ -85,7 +85,7 @@ function deletion_prompt(){
     echo
     case "$choice" in
       q|Q)
-        printf "Quiting...\n"
+        printf "Quitting...\n"
         break
         ;;
       y|Y)
@@ -137,7 +137,7 @@ printf "${STY_CYAN}Undo install step 1...\n${STY_RST}"
 if test -f sdata/dist-$OS_GROUP_ID/uninstall-deps.sh; then
   source sdata/dist-$OS_GROUP_ID/uninstall-deps.sh
 else
-  printf "${STY_YELLOW}Automatic depedencies uninstallation is not yet avaible for your distro. Skipping...${STY_RST}\n"
+  printf "${STY_YELLOW}Automatic dependencies uninstallation is not yet available for your distro. Skipping...${STY_RST}\n"
 fi
 
 printf "${STY_CYAN}Uninstall script finished.\n${STY_RST}"
