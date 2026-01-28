@@ -88,6 +88,17 @@ ContentPage {
                 Config.options.appearance.wallpaperTheming.terminalGenerationProps.termFgBoost = value / 100;
             }
         }
+        ConfigSpinBox {
+            icon: "contrast"
+            text: Translation.tr("Terminal: Background tone (%)")
+            value: Config.options.appearance.wallpaperTheming.terminalGenerationProps.termBgTone * 100
+            from: 0
+            to: 100
+            stepSize: 5
+            onValueChanged: {
+                Config.options.appearance.wallpaperTheming.terminalGenerationProps.termBgTone = value / 100;
+            }
+        }
     }
 
 
