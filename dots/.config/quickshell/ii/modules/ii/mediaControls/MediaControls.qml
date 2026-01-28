@@ -17,40 +17,72 @@ Scope {
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property var realPlayers: MprisController.players
-    readonly property var meaningfulPlayers: filterDuplicatePlayers(realPlayers)
+    readonly property var meaningfulPlayers: processPlayers(realPlayers, activePlayer)
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
     property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
     property list<real> visualizerPoints: []
 
-    function filterDuplicatePlayers(players) {
-        let filtered = [];
-        let used = new Set();
+    function processPlayers(players, active) {
+        let playerList = [];
+        
+        // 1. Force add Active Player first (if exists)
+        if (active) {
+            playerList.push(active);
+        }
 
-        for (let i = 0; i < players.length; ++i) {
-            if (used.has(i))
-                continue;
-            let p1 = players[i];
-            let group = [i];
-
-            // Find duplicates by trackTitle prefix
-            for (let j = i + 1; j < players.length; ++j) {
-                let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
-                    group.push(j);
+        // 2. Add others from the controller list
+        if (players) {
+            for (let i = 0; i < players.length; i++) {
+                let p = players[i];
+                // Check if it's already in the list (avoid object duplicates)
+                let alreadyIn = false;
+                for (let j = 0; j < playerList.length; j++) {
+                    if (playerList[j] === p) {
+                        alreadyIn = true;
+                        break;
+                    }
+                }
+                if (!alreadyIn) {
+                    playerList.push(p);
                 }
             }
-
-            // Pick the one with non-empty trackArtUrl, or fallback to the first
-            let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
-            if (chosenIdx === undefined)
-                chosenIdx = group[0];
-
-            filtered.push(players[chosenIdx]);
-            group.forEach(idx => used.add(idx));
         }
-        return filtered;
+        
+        // 3. Deduplicate by metadata (Merging similar content)
+        let uniqueList = [];
+        let seenKeys = new Set();
+        
+        // Helper to normalize strings
+        const clean = (str) => str ? str.toLowerCase().trim() : "";
+        
+        for (let i = 0; i < playerList.length; i++) {
+             let p = playerList[i];
+             
+             let t = clean(p.trackTitle);
+             let a = clean(p.trackArtist);
+             
+             let key = "";
+             if (t) {
+                 // Valid title: Filter duplicates by Title + Artist
+                 key = "content:" + t + "|" + a;
+             } else {
+                 // No title: Filter duplicates by rough duration/position (Ghost players)
+                 // Round to 10s to catch lagging instances
+                 let d = Math.round(p.length / 10);
+                 let pos = Math.round(p.position / 10);
+                 key = "empty:" + d + "|" + pos;
+             }
+             
+             // Since 'active' (playing) is first in list, it claims the key first.
+             if (!seenKeys.has(key)) {
+                 seenKeys.add(key);
+                 uniqueList.push(p);
+             }
+        }
+        
+        return uniqueList;
     }
 
     Process {
