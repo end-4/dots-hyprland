@@ -15,3 +15,8 @@ __pycache__/
 
 # Emacs auto backup file
 *~
+
+
+# Ignore all dotfiles on root
+/.*
+!/.git*
