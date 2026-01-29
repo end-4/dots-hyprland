@@ -14,14 +14,16 @@ Singleton {
     id: root
     property string emojiScriptPath: `${Directories.config}/hypr/hyprland/scripts/fuzzel-emoji.sh`
 	property string lineBeforeData: "### DATA ###"
+    property bool levenshteinSearch: Config.options?.search.levenshtein ?? false
+    property real scoreThreshold: 0.2
     property list<var> list
     readonly property var preparedEntries: list.map(a => ({
         name: Fuzzy.prepare(`${a}`),
         entry: a
     }))
     function fuzzyQuery(search: string): var {
-        if (root.sloppySearch) {
-            const results = entries.slice(0, 100).map(str => ({
+        if (root.levenshteinSearch) {
+            const results = list.slice(0, 100).map(str => ({
                 entry: str,
                 score: Levendist.computeTextMatchScore(str.toLowerCase(), search.toLowerCase())
             })).filter(item => item.score > root.scoreThreshold)
