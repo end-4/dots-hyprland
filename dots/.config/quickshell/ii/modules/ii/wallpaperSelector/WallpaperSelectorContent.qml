@@ -9,12 +9,46 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 MouseArea {
     id: root
     property int columns: 4
     property real previewCellAspectRatio: 4 / 3
     property bool useDarkMode: Appearance.m3colors.darkmode
+
+    property var monitorNameList: (HyprlandData.monitors || []).map(m => m.name)
+    property string selectedMonitor: ""
+
+    // Update monitor selection when multiMonitor mode or focused monitor changes
+    Connections {
+        target: Config.options.background.multiMonitor
+        function onEnableChanged() {
+            root.updateMonitorSelection()
+        }
+    }
+
+    Connections {
+        target: Hyprland
+        function onFocusedMonitorChanged() {
+            root.updateMonitorSelection()
+        }
+    }
+
+    Component.onCompleted: {
+        root.updateMonitorSelection()
+    }
+
+    function updateMonitorSelection() {
+        if (Config.options.background.multiMonitor.enable) {
+            const focusedMonitor = Hyprland.focusedMonitor?.name
+            if (focusedMonitor && monitorNameList && monitorNameList.includes(focusedMonitor)) {
+                selectedMonitor = focusedMonitor
+                return
+            }
+        }
+        selectedMonitor = ""
+    }
 
     function updateThumbnails() {
         const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2
@@ -42,7 +76,7 @@ MouseArea {
 
     function selectWallpaperPath(filePath) {
         if (filePath && filePath.length > 0) {
-            Wallpapers.select(filePath, root.useDarkMode);
+            Wallpapers.select(filePath, root.useDarkMode, selectedMonitor);
             filterField.text = "";
         }
     }
@@ -164,13 +198,13 @@ MouseArea {
                         implicitWidth: 140
                         clip: true
                         model: [
-                            { icon: "home", name: "Home", path: Directories.home }, 
-                            { icon: "docs", name: "Documents", path: Directories.documents }, 
-                            { icon: "download", name: "Downloads", path: Directories.downloads }, 
-                            { icon: "image", name: "Pictures", path: Directories.pictures }, 
-                            { icon: "movie", name: "Videos", path: Directories.videos }, 
-                            { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
-                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
+                            { icon: "home", name: "Home", path: Directories.home },
+                            { icon: "docs", name: "Documents", path: Directories.documents },
+                            { icon: "download", name: "Downloads", path: Directories.downloads },
+                            { icon: "image", name: "Pictures", path: Directories.pictures },
+                            { icon: "movie", name: "Videos", path: Directories.videos },
+                            { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" },
+                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` },
                             ...(Config.options.policies.weeb === 1 ? [{ icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` }] : []),
                         ]
                         delegate: RippleButton {

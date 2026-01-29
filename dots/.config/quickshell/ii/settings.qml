@@ -22,6 +22,7 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 8
     property bool showNextTime: false
+    readonly property string openedScreenName: root.screen?.name || ""
     property var pages: [
         {
             name: Translation.tr("Quick"),

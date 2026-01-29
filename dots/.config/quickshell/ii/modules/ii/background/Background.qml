@@ -38,8 +38,12 @@ Variants {
         property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
         property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
         // Wallpaper
-        property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
-        property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
+        property bool wallpaperIsVideo: resolvedPath.endsWith(".mp4") || resolvedPath.endsWith(".webm") || resolvedPath.endsWith(".mkv") || resolvedPath.endsWith(".avi") || resolvedPath.endsWith(".mov")
+        property var wallpaperData: WallpaperListener.effectivePerMonitor[monitor.name] || { path: Config.options.background.wallpaperPath, workspaceFirst: 1, workspaceLast: 10 }
+        property string resolvedPath: wallpaperData.path || Config.options.background.wallpaperPath
+        property int wallpaperFirstWorkspace: wallpaperData.workspaceFirst || 1
+        property int wallpaperLastWorkspace: wallpaperData.workspaceLast || 10
+        property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : resolvedPath
         property bool wallpaperSafetyTriggered: {
             const enabled = Config.options.workSafety.enable.wallpaper;
             const sensitiveWallpaper = (CF.StringUtils.stringListContainsSubstring(wallpaperPath.toLowerCase(), Config.options.workSafety.triggerCondition.fileKeywords));
@@ -133,10 +137,17 @@ Variants {
                 opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
                 cache: false
                 smooth: false
-                // Range = groups that workspaces span on
-                property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
-                property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
-                property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize
+                // Use per-monitor workspace range if multiMonitor is enabled, otherwise use dynamic global range
+                property bool usePerMonitorRange: WallpaperListener.multiMonitorEnabled &&
+                    (wallpaperData.workspaceFirst !== undefined && wallpaperData.workspaceLast !== undefined)
+                property int chunkSize: usePerMonitorRange ? bgRoot.wallpaperLastWorkspace - bgRoot.wallpaperFirstWorkspace + 1 : 
+                    Config?.options.bar.workspaces.shown ?? 10
+                property int lower: usePerMonitorRange ?
+                    Math.floor(bgRoot.wallpaperFirstWorkspace / chunkSize) * chunkSize :
+                    Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
+                property int upper: usePerMonitorRange ?
+                    Math.ceil(bgRoot.wallpaperLastWorkspace / chunkSize) * chunkSize :
+                    Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize
                 property int range: upper - lower
                 property real valueX: {
                     let result = 0.5;
