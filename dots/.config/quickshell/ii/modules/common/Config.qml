@@ -543,6 +543,11 @@ Singleton {
                 }
             }
 
+            property JsonObject randomWall: JsonObject {
+                property string savePath: Directories.pictures.replace("file://","") + "/Wallpapers"
+                property string saveName: "random-wallpaper" // keep original name when empty
+            }
+
             property JsonObject screenRecord: JsonObject {
                 property string savePath: Directories.videos.replace("file://","") // strip "file://"
             }
