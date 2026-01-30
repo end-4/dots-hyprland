@@ -117,7 +117,10 @@ Singleton {
             const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             isDdc = !!match;
             busNum = match?.busNum ?? "";
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+
+            const device = Config.options.light.device;
+            const deviceFlag = device ? `-d '${device}'` : "";
+            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl ${deviceFlag} g) $(brightnessctl ${deviceFlag} m)"`];
             initProc.running = true;
         }
 
@@ -153,7 +156,18 @@ Singleton {
                 const valuePercentNumber = Math.floor(brightnessValue * 100);
                 let valuePercent = `${valuePercentNumber}%`;
                 if (valuePercentNumber == 0) valuePercent = "1"; // Prevent fully black
-                setProc.exec(["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"])
+
+                const device = Config.options.light.device;
+                const cmd = ["brightnessctl"];
+                
+                if (device) {
+                    cmd.push("-d", device);
+                } else {
+                    cmd.push("--class", "backlight");
+                }
+
+                cmd.push("s", valuePercent, "--quiet");
+                setProc.exec(cmd);
             }
         }
 
