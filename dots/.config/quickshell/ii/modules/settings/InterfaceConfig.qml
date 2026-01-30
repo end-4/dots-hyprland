@@ -684,6 +684,25 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "keyboard"
+        title: Translation.tr("On-screen keyboard")
+
+        ConfigSlider {
+            text: Translation.tr("Size")
+            value: Config.options.osk.maxWidthFraction
+            usePercentTooltip: true
+            buttonIcon: "zoom_out_map"
+            from: 0
+            to: 1
+            stepSize: 0.01
+            stopIndicatorValues: [0.6]
+            onValueChanged: {
+                Config.options.osk.maxWidthFraction = value;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "overview_key"
         title: Translation.tr("Overview")
 
