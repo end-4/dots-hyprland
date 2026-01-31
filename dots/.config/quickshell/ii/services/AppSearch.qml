@@ -27,6 +27,14 @@ Singleton {
             "replace": "steam_icon_$1"
         },
         {
+            "regex": /cs2/,
+            "replace": "steam_icon_730"
+        },
+        {
+            "regex": /HytaleClient/,
+            "replace": "com.hypixel.HytaleLauncher.png"
+        },
+        {
             "regex": /Minecraft.*/,
             "replace": "minecraft"
         },
