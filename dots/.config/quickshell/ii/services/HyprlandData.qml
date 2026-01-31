@@ -139,7 +139,9 @@ Singleton {
         stdout: StdioCollector {
             id: workspacesCollector
             onStreamFinished: {
-                root.workspaces = JSON.parse(workspacesCollector.text);
+                var rawWorkspaces = JSON.parse(workspacesCollector.text);
+                // Filter out invalid workspace ids (e.g. lock-screen temp workspace 2147483647 - N)
+                root.workspaces = rawWorkspaces.filter(ws => ws.id >= 1 && ws.id <= 100);
                 let tempWorkspaceById = {};
                 for (var i = 0; i < root.workspaces.length; ++i) {
                     var ws = root.workspaces[i];
