@@ -72,7 +72,7 @@ Scope {
                  // Round to 10s to catch lagging instances
                  let d = Math.round(p.length / 10);
                  let pos = Math.round(p.position / 10);
-                 key = "empty:" + d + "|" + pos;
+                 key = "empty:" + clean(p.identity) + "|" + d + "|" + pos;
              }
              
              // Since 'active' (playing) is first in list, it claims the key first.
