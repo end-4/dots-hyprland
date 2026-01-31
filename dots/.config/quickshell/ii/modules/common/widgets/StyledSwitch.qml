@@ -1,15 +1,13 @@
 import qs.modules.common
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 
 /**
  * Material 3 switch. See https://m3.material.io/components/switch/overview
  */
 Switch {
     id: root
-    property real scale: 0.6 // Default in m3 spec is huge af
+    property real scale: 0.75 // Default in m3 spec is huge af
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
     property color activeColor: Appearance?.colors.colPrimary ?? "#685496"
@@ -45,13 +43,25 @@ Switch {
         anchors.leftMargin: root.checked ? ((root.pressed || root.down) ? (22 * root.scale) : 24 * root.scale) : ((root.pressed || root.down) ? (2 * root.scale) : 8 * root.scale)
 
         Behavior on anchors.leftMargin {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            NumberAnimation {
+                duration: Appearance.animationCurves.expressiveFastSpatialDuration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+            }
         }
         Behavior on width {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            NumberAnimation {
+                duration: Appearance.animationCurves.expressiveFastSpatialDuration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+            }
         }
         Behavior on height {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            NumberAnimation {
+                duration: Appearance.animationCurves.expressiveFastSpatialDuration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+            }
         }
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

@@ -10,7 +10,8 @@ Rectangle {
 
     property bool show: false
     default property alias data: contentColumn.data
-    property real backgroundHeight: 600
+    property real backgroundHeight: dialogBackground.implicitHeight
+    property real backgroundWidth: 350
     property real backgroundAnimationMovementDistance: 60
     
     signal dismiss()
@@ -49,8 +50,8 @@ Rectangle {
         
         property real targetY: root.height / 2 - root.backgroundHeight / 2
         y: root.show ? targetY : (targetY - root.backgroundAnimationMovementDistance)
-        implicitWidth: 350
-        implicitHeight: 0
+        implicitWidth: root.backgroundWidth
+        implicitHeight: contentColumn.implicitHeight + dialogBackground.radius * 2
         Behavior on implicitHeight {
             NumberAnimation {
                 id: dialogBackgroundHeightAnimation

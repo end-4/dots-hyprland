@@ -12,7 +12,7 @@ import Quickshell.Widgets
  * It doesn't exactly match the spec because it does not make sense to have stuff on a computer that fucking huge.
  * Should be at 3/4 scale...
  */
- 
+
 Slider {
     id: root
 
@@ -46,7 +46,8 @@ Slider {
     property real handleWidth: root.pressed ? handlePressedWidth : handleDefaultWidth
     property real handleMargins: 4
     property real trackDotSize: 3
-    property string tooltipContent: `${Math.round(value * 100)}%`
+    property bool usePercentTooltip: true
+    property string tooltipContent: usePercentTooltip ? `${Math.round(((value - from) / (to - from)) * 100)}%` : `${Math.round(value)}`
     property bool wavy: configuration === StyledSlider.Configuration.Wavy // If true, the progress bar will have a wavy fill effect
     property bool animateWave: true
     property real waveAmplitudeMultiplier: wavy ? 0.5 : 0
@@ -73,12 +74,13 @@ Slider {
 
     component TrackDot: Rectangle {
         required property real value
+        property real normalizedValue: (value - root.from) / (root.to - root.from)
         anchors.verticalCenter: parent.verticalCenter
-        x: root.handleMargins + (value * root.effectiveDraggingWidth) - (root.trackDotSize / 2)
+        x: root.handleMargins + (normalizedValue * root.effectiveDraggingWidth) - (root.trackDotSize / 2)
         width: root.trackDotSize
         height: root.trackDotSize
         radius: Appearance.rounding.full
-        color: value > root.visualPosition ? root.dotColor : root.dotColorHighlighted
+        color: normalizedValue > root.visualPosition ? root.dotColor : root.dotColorHighlighted
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -187,6 +189,10 @@ Slider {
         StyledToolTip {
             extraVisibleCondition: root.pressed
             text: root.tooltipContent
+            font {
+                family: Appearance.font.family.numbers
+                variableAxes: Appearance.font.variableAxes.numbers
+            }
         }
     }
 }

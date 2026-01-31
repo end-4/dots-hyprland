@@ -27,7 +27,7 @@ Button {
     property real clickedWidth: baseWidth + (isAtSide ? 10 : 20)
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
-    property int indexInParent: parentGroup?.children.indexOf(root) ?? 0
+    property int indexInParent: parentGroup?.children.indexOf(root) ?? -1
     property int clickIndex: parentGroup?.clickIndex ?? -1
     property bool isAtSide: indexInParent === 0 || indexInParent === (parentGroup?.childrenCount - 1)
 
@@ -117,7 +117,7 @@ Button {
         };
     }
 
-
+    property bool tabbedTo: root.focus && (focusReason === Qt.TabFocusReason || focusReason === Qt.BacktabFocusReason)
     background: Rectangle {
         id: buttonBackground
         topLeftRadius: root.leftRadius
@@ -130,6 +130,9 @@ Button {
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
+
+        border.width: root.tabbedTo ? 2 : 0
+        border.color: Appearance.colors.colSecondary
     }
 
     contentItem: StyledText {

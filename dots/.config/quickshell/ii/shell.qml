@@ -3,59 +3,25 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 //@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 
-// Adjust this to make the shell smaller or larger
-//@ pragma Env QT_SCALE_FACTOR=1
+// Remove two slashes below and adjust the value to change the UI scale
+////@ pragma Env QT_SCALE_FACTOR=1
 
-
-import "./modules/common/"
-import "./modules/background/"
-import "./modules/bar/"
-import "./modules/cheatsheet/"
-import "./modules/crosshair/"
-import "./modules/dock/"
-import "./modules/lock/"
-import "./modules/mediaControls/"
-import "./modules/notificationPopup/"
-import "./modules/onScreenDisplay/"
-import "./modules/onScreenKeyboard/"
-import "./modules/overview/"
-import "./modules/regionSelector/"
-import "./modules/screenCorners/"
-import "./modules/sessionScreen/"
-import "./modules/sidebarLeft/"
-import "./modules/sidebarRight/"
-import "./modules/verticalBar/"
-import "./modules/wallpaperSelector/"
+import "modules/common"
+import "services"
+import "panelFamilies"
 
 import QtQuick
 import QtQuick.Window
 import Quickshell
-import "./services/"
+import Quickshell.Io
+import Quickshell.Hyprland
 
 ShellRoot {
-    // Enable/disable modules here. False = not loaded at all, so rest assured
-    // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
-    property bool enableBar: true
-    property bool enableBackground: true
-    property bool enableCheatsheet: true
-    property bool enableCrosshair: true
-    property bool enableDock: true
-    property bool enableLock: true
-    property bool enableMediaControls: true
-    property bool enableNotificationPopup: true
-    property bool enableOnScreenDisplay: true
-    property bool enableOnScreenKeyboard: true
-    property bool enableOverview: true
-    property bool enableRegionSelector: true
-    property bool enableReloadPopup: true
-    property bool enableScreenCorners: true
-    property bool enableSessionScreen: true
-    property bool enableSidebarLeft: true
-    property bool enableSidebarRight: true
-    property bool enableVerticalBar: true
-    property bool enableWallpaperSelector: true
+    id: root
 
-    // Force initialization of some singletons
+    // Stuff for every panel family
+    ReloadPopup {}
+
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         Hyprsunset.load()
@@ -63,26 +29,49 @@ ShellRoot {
         ConflictKiller.load()
         Cliphist.refresh()
         Wallpapers.load()
+        Updates.load()
     }
 
-    LazyLoader { active: enableBar && Config.ready && !Config.options.bar.vertical; component: Bar {} }
-    LazyLoader { active: enableBackground; component: Background {} }
-    LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
-    LazyLoader { active: enableCrosshair; component: Crosshair {} }
-    LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
-    LazyLoader { active: enableLock; component: Lock {} }
-    LazyLoader { active: enableMediaControls; component: MediaControls {} }
-    LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
-    LazyLoader { active: enableOnScreenDisplay; component: OnScreenDisplay {} }
-    LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
-    LazyLoader { active: enableOverview; component: Overview {} }
-    LazyLoader { active: enableRegionSelector; component: RegionSelector {} }
-    LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
-    LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
-    LazyLoader { active: enableSessionScreen; component: SessionScreen {} }
-    LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
-    LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
-    LazyLoader { active: enableVerticalBar && Config.ready && Config.options.bar.vertical; component: VerticalBar {} }
-    LazyLoader { active: enableWallpaperSelector; component: WallpaperSelector {} }
+
+    // Panel families
+    property list<string> families: ["ii", "waffle"]
+    function cyclePanelFamily() {
+        const currentIndex = families.indexOf(Config.options.panelFamily)
+        const nextIndex = (currentIndex + 1) % families.length
+        Config.options.panelFamily = families[nextIndex]
+    }
+
+    component PanelFamilyLoader: LazyLoader {
+        required property string identifier
+        property bool extraCondition: true
+        active: Config.ready && Config.options.panelFamily === identifier && extraCondition
+    }
+    
+    PanelFamilyLoader {
+        identifier: "ii"
+        component: IllogicalImpulseFamily {}
+    }
+
+    PanelFamilyLoader {
+        identifier: "waffle"
+        component: WaffleFamily {}
+    }
+
+
+    // Shortcuts
+    IpcHandler {
+        target: "panelFamily"
+
+        function cycle(): void {
+            root.cyclePanelFamily()
+        }
+    }
+
+    GlobalShortcut {
+        name: "panelFamilyCycle"
+        description: "Cycles panel family"
+
+        onPressed: root.cyclePanelFamily()
+    }
 }
 

@@ -146,14 +146,14 @@ Singleton {
 
     // Thumbnail generation
     function generateThumbnail(size: string) {
-        // console.log("[Wallpapers] Updating thumbnails")
         if (!["normal", "large", "x-large", "xx-large"].includes(size)) throw new Error("Invalid thumbnail size");
         thumbgenProc.directory = root.directory
         thumbgenProc.running = false
         thumbgenProc.command = [
             "bash", "-c",
-            `${thumbgenScriptPath} --size ${size} --machine_progress -d ${FileUtils.trimFileProtocol(root.directory)} || ${generateThumbnailsMagickScriptPath} --size ${size} -d ${root.directory}`,
+            `${thumbgenScriptPath} --size ${size} --machine_progress -d ${FileUtils.trimFileProtocol(root.directory)} || ${generateThumbnailsMagickScriptPath} --size ${size} -d ${FileUtils.trimFileProtocol(root.directory)}`,
         ]
+        // console.log("[Wallpapers] Updating thumbnails with command ", thumbgenProc.command.join(" "))
         root.thumbnailGenerationProgress = 0
         thumbgenProc.running = true
     }
@@ -177,7 +177,16 @@ Singleton {
             }
         }
         onExited: (exitCode, exitStatus) => {
+            // print("[Wallpapers] Thumbnail generation completed with exit code", exitCode)
             root.thumbnailGenerated(thumbgenProc.directory)
+        }
+    }
+
+    IpcHandler {
+        target: "wallpapers"
+
+        function apply(path: string): void {
+            root.apply(path);
         }
     }
 }

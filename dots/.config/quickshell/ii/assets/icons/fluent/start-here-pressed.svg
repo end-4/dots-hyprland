@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   fill="none"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="start-here-pressed.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="6.375"
+     inkscape:cx="32.156863"
+     inkscape:cy="28.862745"
+     inkscape:window-width="1164"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11" />
+  <g
+     id="g11"
+     transform="translate(0.5,0.5)">
+    <path
+       d="M 4,6.2 C 4,4.98497 4.98497,4 6.2,4 h 22 c 1.215,0 2.2,0.98497 2.2,2.2 v 22 c 0,1.215 -0.985,2.2 -2.2,2.2 H 6.2 C 4.98497,30.4 4,29.415 4,28.2 Z"
+       fill="url(#paint0_radial_520_19)"
+       id="path1"
+       style="fill:url(#paint0_radial_520_19)" />
+    <path
+       d="M 32.6,6.2 C 32.6,4.98497 33.585,4 34.8,4 h 22 C 58.015,4 59,4.98497 59,6.2 v 22 c 0,1.215 -0.985,2.2 -2.2,2.2 h -22 c -1.215,0 -2.2,-0.985 -2.2,-2.2 z"
+       fill="url(#paint1_radial_520_19)"
+       id="path2"
+       style="fill:url(#paint1_radial_520_19)" />
+    <path
+       d="m 32.6,34.8 c 0,-1.215 0.985,-2.2 2.2,-2.2 h 22 c 1.215,0 2.2,0.985 2.2,2.2 v 22 c 0,1.215 -0.985,2.2 -2.2,2.2 h -22 c -1.215,0 -2.2,-0.985 -2.2,-2.2 z"
+       fill="url(#paint2_radial_520_19)"
+       id="path3"
+       style="fill:url(#paint2_radial_520_19)" />
+    <path
+       d="m 4,34.8 c 0,-1.215 0.98497,-2.2 2.2,-2.2 h 22 c 1.215,0 2.2,0.985 2.2,2.2 v 22 c 0,1.215 -0.985,2.2 -2.2,2.2 H 6.2 C 4.98497,59 4,58.015 4,56.8 Z"
+       fill="url(#paint3_radial_520_19)"
+       id="path4"
+       style="fill:url(#paint3_radial_520_19)" />
+  </g>
+  <defs
+     id="defs11">
+    <radialGradient
+       id="paint0_radial_520_19"
+       cx="0"
+       cy="0"
+       r="1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(54.999968,54.999968,-54.999968,54.999968,4,4)">
+      <stop
+         stop-color="#0B9BFE"
+         id="stop4" />
+      <stop
+         offset="1"
+         stop-color="#0B9BFE"
+         id="stop5" />
+    </radialGradient>
+    <radialGradient
+       id="paint1_radial_520_19"
+       cx="0"
+       cy="0"
+       r="1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(54.999968,54.999968,-54.999968,54.999968,4,4)">
+      <stop
+         stop-color="#0B9BFE"
+         id="stop6" />
+      <stop
+         offset="1"
+         stop-color="#0B9BFE"
+         id="stop7" />
+    </radialGradient>
+    <radialGradient
+       id="paint2_radial_520_19"
+       cx="0"
+       cy="0"
+       r="1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(54.999968,54.999968,-54.999968,54.999968,4,4)">
+      <stop
+         stop-color="#0B9BFE"
+         id="stop8" />
+      <stop
+         offset="1"
+         stop-color="#0B9BFE"
+         id="stop9" />
+    </radialGradient>
+    <radialGradient
+       id="paint3_radial_520_19"
+       cx="0"
+       cy="0"
+       r="1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(54.999968,54.999968,-54.999968,54.999968,4,4)">
+      <stop
+         stop-color="#0B9BFE"
+         id="stop10" />
+      <stop
+         offset="1"
+         stop-color="#0B9BFE"
+         id="stop11" />
+    </radialGradient>
+  </defs>
+</svg>

@@ -16,6 +16,13 @@ Singleton {
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
     property bool gpsActive: Config.options.bar.weather.enableGPS
 
+    onUseUSCSChanged: {
+        root.getData();
+    }
+    onCityChanged: {
+        root.getData();
+    }
+
     property var location: ({
         valid: false,
         lat: 0,
@@ -35,7 +42,8 @@ Singleton {
         visib: 0,
         press: 0,
         temp: 0,
-        tempFeelsLike: 0
+        tempFeelsLike: 0,
+        lastRefresh: 0,
     })
 
     function refineData(data) {
@@ -68,6 +76,7 @@ Singleton {
             temp.temp += "°C";
             temp.tempFeelsLike += "°C";
         }
+        temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
     }
 

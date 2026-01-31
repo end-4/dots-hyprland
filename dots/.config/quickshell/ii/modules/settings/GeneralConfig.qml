@@ -165,13 +165,12 @@ ContentPage {
             title: Translation.tr("Interface Language")
             tooltip: Translation.tr("Select the language for the user interface.\n\"Auto\" will use your system's locale.")
 
-            ConfigSelectionArray {
+            StyledComboBox {
                 id: languageSelector
-                currentValue: Config.options.language.ui
-                onSelected: newValue => {
-                    Config.options.language.ui = newValue;
-                }
-                options: [
+                buttonIcon: "language"
+                textRole: "displayName"
+
+                model: [
                     {
                         displayName: Translation.tr("Auto (System)"),
                         value: "auto"
@@ -181,14 +180,22 @@ ContentPage {
                             displayName: lang,
                             value: lang
                         };
-                    })
-                ]
+                    })]
+
+                currentIndex: {
+                    const index = model.findIndex(item => item.value === Config.options.language.ui);
+                    return index !== -1 ? index : 0;
+                }
+
+                onActivated: index => {
+                    Config.options.language.ui = model[index].value;
+                }
             }
         }
         ContentSubsection {
             title: Translation.tr("Generate translation with Gemini")
             tooltip: Translation.tr("You'll need to enter your Gemini API key first.\nType /key on the sidebar for instructions.")
-            
+
             ConfigRow {
                 MaterialTextArea {
                     id: localeInput
@@ -223,7 +230,7 @@ ContentPage {
                 ContentSubsectionLabel {
                     text: Translation.tr("AI")
                 }
-                
+
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
                     onSelected: newValue => {
@@ -306,7 +313,7 @@ ContentPage {
             }
         }
     }
-    
+
     ContentSection {
         icon: "nest_clock_farsight_analog"
         title: Translation.tr("Time")
@@ -337,7 +344,6 @@ ContentPage {
                     }
 
                     Config.options.time.format = newValue;
-                    
                 }
                 options: [
                     {
@@ -353,6 +359,28 @@ ContentPage {
                         value: "h:mm AP"
                     },
                 ]
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "work_alert"
+        title: Translation.tr("Work safety")
+
+        ConfigSwitch {
+            buttonIcon: "assignment"
+            text: Translation.tr("Hide clipboard images copied from sussy sources")
+            checked: Config.options.workSafety.enable.clipboard
+            onCheckedChanged: {
+                Config.options.workSafety.enable.clipboard = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "wallpaper"
+            text: Translation.tr("Hide sussy/anime wallpapers")
+            checked: Config.options.workSafety.enable.wallpaper
+            onCheckedChanged: {
+                Config.options.workSafety.enable.wallpaper = checked;
             }
         }
     }

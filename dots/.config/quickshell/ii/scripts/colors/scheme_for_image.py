@@ -30,15 +30,20 @@ def image_colorfulness(image):
 # scheme-content respects the image's colors very well, but it might
 # look too saturated, so we only use it for not very colorful images to be safe
 def pick_scheme(colorfulness):
-    if colorfulness < 10:
-        # return "scheme-monochrome"
-        return "scheme-content"
-    elif colorfulness < 20:
-        return "scheme-content"
-    elif colorfulness < 50:
+    if colorfulness < 40:
         return "scheme-neutral"
     else:
         return "scheme-tonal-spot"
+
+def load_and_resize_image(img_path, max_dim=128):
+    img = cv2.imread(img_path)
+    if img is None:
+        return None
+    h, w = img.shape[:2]
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        img = cv2.resize(img, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
+    return img
 
 def main():
     colorfulness_mode = False
@@ -50,7 +55,7 @@ def main():
         print("scheme-tonal-spot")
         sys.exit(1)
     img_path = args[0]
-    img = cv2.imread(img_path)
+    img = load_and_resize_image(img_path)
     if img is None:
         print("scheme-tonal-spot")
         sys.exit(1)

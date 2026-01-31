@@ -40,9 +40,14 @@ Singleton {
         }
     ]
 
+    // Deduped list to fix double icons
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
-        .sort((a, b) => a.name.localeCompare(b.name))
-
+        .filter((app, index, self) => 
+            index === self.findIndex((t) => (
+                t.id === app.id
+            ))
+    )
+    
     readonly property var preppedNames: list.map(a => ({
         name: Fuzzy.prepare(`${a.name} `),
         entry: a
@@ -86,11 +91,15 @@ Singleton {
         return str.toLowerCase().replace(/\s+/g, "-");
     }
 
+    function getUndescoreToKebabAppName(str) {
+        return str.toLowerCase().replace(/_/g, "-");
+    }
+
     function guessIcon(str) {
         if (!str || str.length == 0) return "image-missing";
 
         // Quickshell's desktop entry lookup
-        const entry = DesktopEntries.heuristicLookup(str);
+        const entry = DesktopEntries.byId(str);
         if (entry) return entry.icon;
 
         // Normal substitutions
@@ -124,6 +133,8 @@ Singleton {
         const kebabNormalizedGuess = getKebabNormalizedAppName(str);
         if (iconExists(kebabNormalizedGuess)) return kebabNormalizedGuess;
 
+        const undescoreToKebabGuess = getUndescoreToKebabAppName(str);
+        if (iconExists(undescoreToKebabGuess)) return undescoreToKebabGuess;
 
         // Search in desktop entries
         const iconSearchResults = Fuzzy.go(str, preppedIcons, {
@@ -143,8 +154,11 @@ Singleton {
             if (iconExists(guess)) return guess;
         }
 
+        // Quickshell's desktop entry lookup
+        const heuristicEntry = DesktopEntries.heuristicLookup(str);
+        if (heuristicEntry) return heuristicEntry.icon;
 
         // Give up
-        return str;
+        return "application-x-executable";
     }
 }

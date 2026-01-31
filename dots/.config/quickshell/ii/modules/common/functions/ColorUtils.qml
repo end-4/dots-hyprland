@@ -124,4 +124,49 @@ Singleton {
         var a = Math.max(0, Math.min(1, alpha));
         return Qt.rgba(c.r, c.g, c.b, a);
     }
+
+    /**
+     * Returns true if the color is considered "dark" (hslLightness < 0.5).
+     *
+     * @param {string} color - The color to check (any Qt.color-compatible string).
+     * @returns {boolean} True if dark, false otherwise.
+     */
+    function isDark(color) {
+        var c = Qt.color(color);
+        return c.hslLightness < 0.5;
+    }
+
+    /**
+     * Clamps a value to the inclusive range [0, 1].
+     *
+     * @param {number} x - The value to clamp.
+     * @returns {number} The clamped value in the range [0, 1].
+     */
+    function clamp01(x) {
+        return Math.min(1, Math.max(0, x));
+    }
+
+    /**
+     * Solves for the solid overlay color that, when composited over a base color
+     * with a given opacity, yields the target color.
+     *
+     * The compositing equation is:
+     *   result = overlay * overlayOpacity + base * (1 - overlayOpacity)
+     *
+     * This function algebraically inverts that equation per channel.
+     *
+     * @param {Qt.rgba} baseColor - The base (background) color.
+     * @param {Qt.rgba} targetColor - The resulting color after compositing.
+     * @param {number} overlayOpacity - The overlay opacity (0-1).
+     * @returns {Qt.rgba} The solved overlay color
+     */
+    function solveOverlayColor(baseColor, targetColor, overlayOpacity) {
+        let invA = 1.0 - overlayOpacity;
+
+        let r = (targetColor.r - baseColor.r * invA) / overlayOpacity;
+        let g = (targetColor.g - baseColor.g * invA) / overlayOpacity;
+        let b = (targetColor.b - baseColor.b * invA) / overlayOpacity;
+
+        return Qt.rgba(clamp01(r), clamp01(g), clamp01(b), overlayOpacity);
+    }
 }
