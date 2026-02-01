@@ -18,6 +18,8 @@ Singleton {
     id: root
     signal brightnessChanged()
 
+    property real lastCommandTime: 0
+
     property var ddcMonitors: []
     readonly property list<BrightnessMonitor> monitors: Quickshell.screens.map(screen => monitorComp.createObject(root, {
         screen
@@ -28,6 +30,10 @@ Singleton {
     }
 
     function increaseBrightness(): void {
+        const currentTime = Date.now();
+        if (currentTime - lastCommandTime < 10) return; // Debounce
+        lastCommandTime = currentTime;
+
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
@@ -35,6 +41,10 @@ Singleton {
     }
 
     function decreaseBrightness(): void {
+        const currentTime = Date.now();
+        if (currentTime - lastCommandTime < 10) return; // Debounce
+        lastCommandTime = currentTime;
+
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
