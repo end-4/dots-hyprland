@@ -126,65 +126,74 @@ Variants {
             anchors.fill: parent
             clip: true
 
-            // Wallpaper
-            StyledImage {
-                id: wallpaper
-                visible: opacity > 0 && !blurLoader.active
-                opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
-                cache: false
-                smooth: false
-                // Range = groups that workspaces span on
-                property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
-                property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
-                property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize
-                property int range: upper - lower
-                property real valueX: {
-                    let result = 0.5;
-                    if (Config.options.background.parallax.enableWorkspace && !bgRoot.verticalParallax) {
-                        result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+            // Wallpaper - Rendered at native resolution to avoid pixelation from scaling
+            Item {
+                id: wallpaperContainer
+                anchors.fill: parent
+                clip: true
+
+                StyledImage {
+                    id: wallpaper
+                    visible: opacity > 0 && !blurLoader.active
+                    opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
+                    cache: false
+                    // Range = groups that workspaces span on
+                    property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
+                    property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
+                    property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize
+                    property int range: upper - lower
+                    property real valueX: {
+                        let result = 0.5;
+                        if (Config.options.background.parallax.enableWorkspace && !bgRoot.verticalParallax) {
+                            result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                        }
+                        if (Config.options.background.parallax.enableSidebar) {
+                            result += (0.15 * GlobalStates.sidebarRightOpen - 0.15 * GlobalStates.sidebarLeftOpen);
+                        }
+                        return result;
                     }
-                    if (Config.options.background.parallax.enableSidebar) {
-                        result += (0.15 * GlobalStates.sidebarRightOpen - 0.15 * GlobalStates.sidebarLeftOpen);
+                    property real valueY: {
+                        let result = 0.5;
+                        if (Config.options.background.parallax.enableWorkspace && bgRoot.verticalParallax) {
+                            result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                        }
+                        return result;
                     }
-                    return result;
-                }
-                property real valueY: {
-                    let result = 0.5;
-                    if (Config.options.background.parallax.enableWorkspace && bgRoot.verticalParallax) {
-                        result = ((bgRoot.monitor.activeWorkspace?.id - lower) / range);
+                    property real effectiveValueX: Math.max(0, Math.min(1, valueX))
+                    property real effectiveValueY: Math.max(0, Math.min(1, valueY))
+                    x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
+                    y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
+                    source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
+                    fillMode: Image.PreserveAspectCrop
+                    Behavior on x {
+                        NumberAnimation {
+                            duration: 600
+                            easing.type: Easing.OutCubic
+                        }
                     }
-                    return result;
-                }
-                property real effectiveValueX: Math.max(0, Math.min(1, valueX))
-                property real effectiveValueY: Math.max(0, Math.min(1, valueY))
-                x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
-                y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
-                source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
-                fillMode: Image.PreserveAspectCrop
-                Behavior on x {
-                    NumberAnimation {
-                        duration: 600
-                        easing.type: Easing.OutCubic
+                    Behavior on y {
+                        NumberAnimation {
+                            duration: 600
+                            easing.type: Easing.OutCubic
+                        }
                     }
-                }
-                Behavior on y {
-                    NumberAnimation {
-                        duration: 600
-                        easing.type: Easing.OutCubic
+                    // Calculate source size to render at full native resolution
+                    // This ensures the wallpaper is loaded at the highest quality possible
+                    sourceSize {
+                        // Use the screen's physical dimensions to ensure full resolution
+                        // regardless of the UI scale factor
+                        width: Math.round(bgRoot.screen.width * bgRoot.monitor.devicePixelRatio * bgRoot.effectiveWallpaperScale)
+                        height: Math.round(bgRoot.screen.height * bgRoot.monitor.devicePixelRatio * bgRoot.effectiveWallpaperScale)
                     }
+                    width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
+                    height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
                 }
-                sourceSize {
-                    width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
-                    height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
-                }
-                width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
-                height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
             }
 
             Loader {
                 id: blurLoader
                 active: Config.options.lock.blur.enable && (GlobalStates.screenLocked || scaleAnim.running)
-                anchors.fill: wallpaper
+                anchors.fill: wallpaperContainer
                 scale: GlobalStates.screenLocked ? Config.options.lock.blur.extraZoom : 1
                 Behavior on scale {
                     NumberAnimation {
@@ -195,7 +204,7 @@ Variants {
                     }
                 }
                 sourceComponent: GaussianBlur {
-                    source: wallpaper
+                    source: wallpaperContainer
                     radius: GlobalStates.screenLocked ? Config.options.lock.blur.radius : 0
                     samples: radius * 2 + 1
 
