@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -28,10 +30,6 @@ Scope {
             component: PanelWindow { // Bar window
                 id: barRoot
                 screen: barLoader.modelData
-
-                property var brightnessMonitor: Brightness.getMonitorForScreen(barLoader.modelData)
-                property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen.width) ? 1 : 0
-                readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
 
                 Timer {
                     id: showBarTimer
@@ -64,6 +62,7 @@ Scope {
                 }
                 color: "transparent"
 
+                // Positioning
                 anchors {
                     top: !Config.options.bar.bottom
                     bottom: Config.options.bar.bottom
@@ -74,6 +73,14 @@ Scope {
                 margins {
                     right: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * -1
                     bottom: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.bottom) * -1
+                }
+
+                // Include in focus grab
+                Component.onCompleted: {
+                    GlobalFocusGrab.addPersistent(barRoot);
+                }
+                Component.onDestruction: {
+                    GlobalFocusGrab.removePersistent(barRoot);
                 }
 
                 MouseArea  {

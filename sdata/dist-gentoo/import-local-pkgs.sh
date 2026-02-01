@@ -13,14 +13,12 @@ function import_ebuild(){
 }
 
 ############### FONTS AND THEMES
-import_ebuild "${FT_DIR}" "media-fonts" "gabarito"
 import_ebuild "${FT_DIR}" "media-fonts" "material-symbols-variable"
 import_ebuild "${FT_DIR}" "media-fonts" "readex-pro"
 import_ebuild "${FT_DIR}" "media-fonts" "rubik-vf"
 import_ebuild "${FT_DIR}" "media-fonts" "space-grotesk"
 import_ebuild "${FT_DIR}" "kde-plasma" "breeze-plus"
 import_ebuild "${FT_DIR}" "x11-themes" "darkly"
-import_ebuild "${FT_DIR}" "media-fonts" "roboto-flex"
 
 ############### WIDGETS
 import_ebuild "${WIDGETS_DIR}" "app-misc" "songrec"

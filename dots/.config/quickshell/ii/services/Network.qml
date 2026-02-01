@@ -23,6 +23,13 @@ Singleton {
     property WifiAccessPoint wifiConnectTarget
     readonly property list<WifiAccessPoint> wifiNetworks: []
     readonly property WifiAccessPoint active: wifiNetworks.find(n => n.active) ?? null
+    readonly property list<var> friendlyWifiNetworks: [...wifiNetworks].sort((a, b) => {
+        if (a.active && !b.active)
+            return -1;
+        if (!a.active && b.active)
+            return 1;
+        return b.strength - a.strength;
+    })
     property string wifiStatus: "disconnected"
 
     property string networkName: ""
@@ -82,9 +89,10 @@ Singleton {
         network.askingPassword = false;
         changePasswordProc.exec({
             "environment": {
-                "PASSWORD": password
+                "PASSWORD": password,
+                "SSID": network.ssid
             },
-            "command": ["bash", "-c", `nmcli connection modify ${network.ssid} wifi-sec.psk "$PASSWORD"`]
+            "command": ["bash", "-c", 'nmcli connection modify "$SSID" wifi-sec.psk "$PASSWORD"']
         })
     }
 

@@ -33,15 +33,14 @@ Item {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
-            text: DateTime.date
+            text: DateTime.longDate
         }
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
-        acceptedButtons: Qt.NoButton
+        hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
         ClockWidgetPopup {
             hoverTarget: mouseArea

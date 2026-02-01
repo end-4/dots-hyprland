@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.modules.common.functions
 
 Singleton {
     id: root
@@ -77,9 +78,7 @@ Singleton {
         JsonAdapter {
             id: configOptionsJsonAdapter
 
-            property list<string> enabledPanels: [
-                "iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"
-            ]
+            property string panelFamily: "ii" // "ii", "waffle"
 
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
@@ -108,6 +107,15 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+                property JsonObject fonts: JsonObject {
+                    property string main: "Google Sans Flex"
+                    property string numbers: "Google Sans Flex"
+                    property string title: "Google Sans Flex"
+                    property string iconNerd: "JetBrains Mono NF"
+                    property string monospace: "JetBrains Mono NF"
+                    property string reading: "Readex Pro"
+                    property string expressive: "Space Grotesk"
+                }
                 property JsonObject transparency: JsonObject {
                     property bool enable: false
                     property bool automatic: true
@@ -127,6 +135,7 @@ Singleton {
                 }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
+                    property string accentColor: ""
                 }
             }
 
@@ -142,10 +151,13 @@ Singleton {
 
             property JsonObject apps: JsonObject {
                 property string bluetooth: "kcmshell6 kcm_bluetooth"
-                property string network: "kitty -1 fish -c nmtui"
+                property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
+                property string network: "kcmshell6 kcm_networkmanagement"
+                property string manageUser: "kcmshell6 kcm_users"
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
                 property string taskManager: "plasma-systemmonitor --page-name Processes"
                 property string terminal: "kitty -1" // This is only for shell actions
+                property string update: "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'"
                 property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
@@ -157,7 +169,8 @@ Singleton {
                         property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
                         property real x: 100
                         property real y: 100
-                        property string style: "cookie" // Options: "cookie", "digital"
+                        property string style: "cookie"        // Options: "cookie", "digital"
+                        property string styleLocked: "cookie"  // Options: "cookie", "digital"
                         property JsonObject cookie: JsonObject {
                             property bool aiStyling: false
                             property int sides: 14
@@ -173,7 +186,17 @@ Singleton {
                             property bool useSineCookie: false
                         }
                         property JsonObject digital: JsonObject {
+                            property bool adaptiveAlignment: true
+                            property bool showDate: true
                             property bool animateChange: true
+                            property bool vertical: false
+                            property JsonObject font: JsonObject {
+                                property string family: "Google Sans Flex"
+                                property real weight: 350
+                                property real width: 100
+                                property real size: 90
+                                property real roundness: 0
+                            }
                         }
                         property JsonObject quote: JsonObject {
                             property bool enable: false
@@ -235,13 +258,6 @@ Singleton {
                     property bool showPerformanceProfileToggle: false
                     property bool showScreenRecord: false
                 }
-                property JsonObject tray: JsonObject {
-                    property bool monochromeIcons: true
-                    property bool showItemId: false
-                    property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
-                    property list<string> pinnedItems: [ ]
-                    property bool filterPassive: true
-                }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
                     property int shown: 10
@@ -263,6 +279,9 @@ Singleton {
                         property bool showUnreadCount: false
                     }
                 }
+                property JsonObject tooltips: JsonObject {
+                    property bool clickToShow: false
+                }
             }
 
             property JsonObject battery: JsonObject {
@@ -271,6 +290,10 @@ Singleton {
                 property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
+            }
+
+            property JsonObject calendar: JsonObject {
+                property string locale: "en-GB"
             }
 
             property JsonObject cheatsheet: JsonObject {
@@ -332,6 +355,10 @@ Singleton {
                 }
             }
 
+            property JsonObject launcher: JsonObject {
+                property list<string> pinnedApps: [ "org.kde.dolphin", "kitty", "cmake-gui"]
+            }
+
             property JsonObject light: JsonObject {
                 property JsonObject night: JsonObject {
                     property bool automatic: true
@@ -388,7 +415,7 @@ Singleton {
                 property bool darkenScreen: true
                 property real clickthroughOpacity: 0.8
                 property JsonObject floatingImage: JsonObject {
-                    property string imageSource: "https://cdn.discordapp.com/attachments/961693710968557598/1369635662390759434/image.gif?ex=6911cb1c&is=6910799c&hm=4450244066c0a7a6e5d2bdd195f47388eb5e7f9dd53d3931e99ad9642c638a00&"
+                    property string imageSource: "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif"
                     property real scale: 0.5
                 }
             }
@@ -398,6 +425,8 @@ Singleton {
                 property real scale: 0.18 // Relative to screen size
                 property real rows: 2
                 property real columns: 5
+                property bool orderRightLeft: false
+                property bool orderBottomUp: false
                 property bool centerIcons: true
             }
 
@@ -418,11 +447,22 @@ Singleton {
                     property int strokeWidth: 6
                     property int padding: 10
                 }
+                property JsonObject annotation: JsonObject {
+                    property bool useSatty: false
+                }
             }
 
             property JsonObject resources: JsonObject {
                 property int updateInterval: 3000
                 property int historyLength: 60
+            }
+
+            property JsonObject tray: JsonObject {
+                property bool monochromeIcons: true
+                property bool showItemId: false
+                property bool invertPinnedItems: true // Makes the below a whitelist for the tray and blacklist for the pinned area
+                property list<var> pinnedItems: [ "Fcitx" ]
+                property bool filterPassive: true
             }
 
             property JsonObject musicRecognition: JsonObject {
@@ -521,6 +561,7 @@ Singleton {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
                 property string shortDateFormat: "dd/MM"
+                property string dateWithYearFormat: "dd/MM/yyyy"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
                     property int breakTime: 300
@@ -529,6 +570,12 @@ Singleton {
                     property int longBreak: 900
                 }
                 property bool secondPrecision: false
+            }
+
+            property JsonObject updates: JsonObject {
+                property int checkInterval: 120 // minutes
+                property int adviseUpdateThreshold: 75 // packages
+                property int stronglyAdviseUpdateThreshold: 200 // packages
             }
             
             property JsonObject wallpaperSelector: JsonObject {
@@ -553,6 +600,27 @@ Singleton {
                     property list<string> networkNameKeywords: ["airport", "cafe", "college", "company", "eduroam", "free", "guest", "public", "school", "university"]
                     property list<string> fileKeywords: ["anime", "booru", "ecchi", "hentai", "yande.re", "konachan", "breast", "nipples", "pussy", "nsfw", "spoiler", "girl"]
                     property list<string> linkKeywords: ["hentai", "porn", "sukebei", "hitomi.la", "rule34", "gelbooru", "fanbox", "dlsite"]
+                }
+            }
+
+            property JsonObject waffles: JsonObject {
+                // Some spots are kinda janky/awkward. Setting the following to
+                // false will make (some) stuff also be like that for accuracy. 
+                // Example: the right-click menu of the Start button
+                property JsonObject tweaks: JsonObject {
+                    property bool switchHandlePositionFix: true
+                    property bool smootherMenuAnimations: true
+                    property bool smootherSearchBar: true
+                }
+                property JsonObject bar: JsonObject {
+                    property bool bottom: true
+                    property bool leftAlignApps: false
+                }
+                property JsonObject actionCenter: JsonObject {
+                    property list<string> toggles: [ "network", "bluetooth", "easyEffects", "powerProfile", "idleInhibitor", "nightLight", "darkMode", "antiFlashbang", "cloudflareWarp", "mic", "musicRecognition", "notifications", "onScreenKeyboard", "gameMode", "screenSnip", "colorPicker" ]
+                }
+                property JsonObject calendar: JsonObject {
+                    property bool force2CharDayOfWeek: true
                 }
             }
         }

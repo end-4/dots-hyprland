@@ -25,27 +25,31 @@ function print_os_group_id_unofficial(){
     printf "The support for your distro is provided by the community.\n"
     printf "It is not officially supported by github:end-4/dots-hyprland .\n"
     printf "${STY_BOLD}"
-    printf "If you find out any problems about it, PR is welcomed if you are able to address it. Or, create a discussion about it, but please do not submit issue, because the developers do not use this distro, therefore they cannot help.${STY_RST}\n"
+    printf "If you find out any problems about it, PR is welcomed if you are able to address it.\n"
+    printf "Or, create a discussion about it, but please do not submit issue, \n"
+    printf "because the developers do not use this distro, therefore they cannot help.${STY_RST}\n"
     printf "${STY_PURPLE}"
     printf "Proceed only at your own risk.\n"
     printf "============\n\n"
     printf "${STY_RST}"
 }
-function print_os_group_id_fallback(){
+function print_os_group_id_unsupported(){
     printf "${STY_RED}"
     printf "===CAUTION===\n"
-    printf "No support provided for your distro, using fallback method.\n"
+    printf "\"--via-nix\" is forcely specified \n"
+    printf "as the only way to try to install on your distro.\n"
+    printf "It is still experimental.\n"
+    printf "Some functionalities are missing.\n"
+    printf "It may also behave unexpectedly.\n"
     printf "Proceed only at your own risk.\n"
     printf "=============\n\n"
     printf "${STY_RST}"
+    sleep 3
 }
-function print_os_group_id_force_vianix(){
+function print_os_group_id_fallback(){
     printf "${STY_RED}"
     printf "===CAUTION===\n"
-    printf "\"--via-nix\" is forcely specified as the only method to support your distro.\n"
-    printf "It is still experimental and some functionalities are missing.\n"
-    printf "It may also behave unexpectedly.\n"
-    printf "Proceed only at your own risk.\n"
+    printf "Distro not recognized, determined as fallback.\n"
     printf "=============\n\n"
     printf "${STY_RST}"
 }
@@ -99,10 +103,18 @@ elif [[ "$OS_DISTRO_ID" == "fedora" ]]; then
 elif [[ "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
   OS_GROUP_ID="fedora"
   print_os_group_id_functions=(print_os_group_id{,_alike,_unofficial})
+elif [[ "$OS_DISTRO_ID" =~ ^(opensuse-leap|opensuse-tumbleweed)$ ]] || [[ "$OS_DISTRO_ID_LIKE" =~ ^(opensuse|suse)(\ (opensuse|suse))?$ ]]; then
+  OS_GROUP_ID="suse"
+  INSTALL_VIA_NIX=true
+  print_os_group_id_functions=(print_os_group_id{,_unsupported})
+elif [[ "$OS_DISTRO_ID" == "debian" || "$OS_DISTRO_ID_LIKE" == "debian" ]]; then
+  OS_GROUP_ID="debian"
+  INSTALL_VIA_NIX=true
+  print_os_group_id_functions=(print_os_group_id{,_unsupported})
 else
   OS_GROUP_ID="fallback"
   INSTALL_VIA_NIX=true
-  print_os_group_id_functions=(print_os_group_id{,_fallback,_force_vianix})
+  print_os_group_id_functions=(print_os_group_id{,_fallback,_unsupported})
 fi
 
 ####################

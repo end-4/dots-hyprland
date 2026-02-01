@@ -64,7 +64,7 @@ function showfun(){
 function pause(){
   if [ ! "$ask" == "false" ];then
     printf "${STY_FAINT}${STY_SLANT}"
-    local p; read -p "(Ctrl-C to abort, others to proceed)" p
+    local p; read -p "(Ctrl-C to abort, Enter to proceed)" p
     printf "${STY_RST}"
   fi
 }
@@ -79,6 +79,50 @@ function prevent_sudo_or_root(){
   case $(whoami) in
     root) echo -e "${STY_RED}[$0]: This script is NOT to be executed with sudo or as root. Aborting...${STY_RST}";exit 1;;
   esac
+}
+
+# Initialize sudo session and keep it alive in background
+# Store PID in a global variable that can be accessed by trap
+declare -g SUDO_KEEPALIVE_PID=""
+
+function sudo_init_keepalive(){
+  # Check if sudo is available
+  if ! command -v sudo >/dev/null 2>&1; then
+    return 0
+  fi
+
+  # Skip if already initialized
+  if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    return 0
+  fi
+
+  # Prompt for sudo password once at the beginning
+  echo -e "${STY_CYAN}[$0]: Requesting sudo privileges for installation...${STY_RST}"
+  if ! sudo -v; then
+    echo -e "${STY_RED}[$0]: Failed to obtain sudo privileges. Aborting...${STY_RST}"
+    exit 1
+  fi
+
+  # Start background process to keep sudo session alive
+  # This updates the sudo timestamp every 60 seconds
+  (
+    while true; do
+      sleep 60
+      sudo -v 2>/dev/null || exit 0
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+
+  echo -e "${STY_GREEN}[$0]: Sudo session initialized and will be kept alive (PID: $SUDO_KEEPALIVE_PID)${STY_RST}"
+}
+
+# Stop the sudo keepalive background process
+function sudo_stop_keepalive(){
+  if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    SUDO_KEEPALIVE_PID=""
+  fi
 }
 function git_auto_unshallow(){
 # We need this function for latest_commit_hash to work properly
@@ -343,4 +387,85 @@ function backup_clashing_targets(){
 
   x mkdir -p $backup_dir
   x rsync -av --progress "${args_includes[@]}" "$target_dir/" "$backup_dir/"
+}
+
+function install_cmds(){
+  case $OS_GROUP_ID in
+    "arch")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo pacman -Syu
+      v sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+      ;;
+    "debian")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo apt update -y
+      v sudo apt install -y "${pkgs[@]}"
+      ;;
+    "fedora")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo dnf install -y "${pkgs[@]}"
+      ;;
+    "suse")
+      local pkgs=()
+      for cmd in "$@";do
+        # For package name which is not cmd name, use "case" syntax to replace
+        case $cmd in
+          ip) pkgs+=(iproute2);;
+          *) pkgs+=($cmd) ;;
+        esac
+      done
+      v sudo zypper refresh
+      v sudo zypper -n install "${pkgs[@]}"
+      ;;
+    *)
+      printf "WARNING\n"
+      printf "No method found to install package providing the commands:\n"
+      printf "  $@\n"
+      printf "Please install by yourself.\n"
+      ;;
+  esac
+}
+
+function ensure_cmds(){
+  local not_found_cmds=()
+  for cmd in "$@"; do
+    if ! command -v $cmd >/dev/null 2>&1;then
+      not_found_cmds+=($cmd)
+    fi
+  done
+  if [[ ${#not_found_cmds[@]} -gt 0 ]]; then
+    echo -e "${STY_YELLOW}[$0]: Not found: ${not_found_cmds[*]}.${STY_RST}"
+    install_cmds "${not_found_cmds[@]}"
+  fi
+}
+
+function dedup_and_sort_listfile(){
+  if ! test -f "$1"; then
+    echo "File not found: $1" >&2; return 2
+  else
+    temp="$(mktemp)"
+    sort -u -- "$1" > "$temp"
+    mv -f -- "$temp" "$2"
+  fi
 }

@@ -4,8 +4,8 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Qt.labs.synchronizer
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland
@@ -54,13 +54,16 @@ Scope { // Scope
                 item: cheatsheetBackground
             }
 
-            HyprlandFocusGrab { // Click outside to close
-                id: grab
-                windows: [cheatsheetRoot]
-                active: cheatsheetRoot.visible
-                onCleared: () => {
-                    if (!active)
-                        cheatsheetRoot.hide();
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(cheatsheetRoot);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(cheatsheetRoot);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    cheatsheetRoot.hide();
                 }
             }
 
@@ -136,7 +139,10 @@ Scope { // Scope
                         ToolbarTabBar {
                             id: tabBar
                             tabButtonList: root.tabButtonList
-                            currentIndex: swipeView.currentIndex
+
+                            Synchronizer on currentIndex {
+                                property alias source: swipeView.currentIndex
+                            }
                         }
                     }
 
@@ -145,8 +151,11 @@ Scope { // Scope
                         Layout.topMargin: 5
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        currentIndex: tabBar.currentIndex
                         spacing: 10
+                        currentIndex: Persistent.states.cheatsheet.tabIndex
+                        onCurrentIndexChanged: {
+                            Persistent.states.cheatsheet.tabIndex = currentIndex;
+                        }
 
                         implicitWidth: Math.max.apply(null, contentChildren.map(child => child.implicitWidth || 0))
                         implicitHeight: Math.max.apply(null, contentChildren.map(child => child.implicitHeight || 0))

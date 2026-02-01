@@ -16,7 +16,7 @@ AbstractBackgroundWidget {
     implicitHeight: contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
 
-    readonly property string clockStyle: Config.options.background.widgets.clock.style
+    readonly property string clockStyle: GlobalStates.screenLocked ? Config.options.background.widgets.clock.styleLocked : Config.options.background.widgets.clock.style
     readonly property bool forceCenter: (GlobalStates.screenLocked && Config.options.lock.centerClock)
     readonly property bool shouldShow: (!Config.options.background.widgets.clock.showOnlyWhenLocked || GlobalStates.screenLocked)
     property bool wallpaperSafetyTriggered: false
@@ -26,7 +26,7 @@ AbstractBackgroundWidget {
     visibleWhenLocked: true
 
     property var textHorizontalAlignment: {
-        if (root.forceCenter)
+        if (!Config.options.background.widgets.clock.digital.adaptiveAlignment || root.forceCenter || Config.options.background.widgets.clock.digital.vertical) 
             return Text.AlignHCenter;
         if (root.x < root.scaledScreenWidth / 3)
             return Text.AlignLeft;
@@ -38,13 +38,15 @@ AbstractBackgroundWidget {
     Column {
         id: contentColumn
         anchors.centerIn: parent
-        spacing: 6
+        spacing: 10
 
         FadeLoader {
             id: cookieClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "cookie" && (root.shouldShow)
+            fade: false
             sourceComponent: Column {
+                spacing: 10
                 CookieClock {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -60,107 +62,75 @@ AbstractBackgroundWidget {
             id: digitalClockLoader
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "digital" && (root.shouldShow)
-            sourceComponent: ColumnLayout {
-                id: clockColumn
-                spacing: 6
-
-                ClockText {
-                    font.pixelSize: 90
-                    text: DateTime.time
-                }
-                ClockText {
-                    Layout.topMargin: -5
-                    text: DateTime.date
-                }
-                StyledText {
-                    // Somehow gets fucked up if made a ClockText???
-                    visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
-                    Layout.fillWidth: true
-                    horizontalAlignment: root.textHorizontalAlignment
-                    font {
-                        pixelSize: Appearance.font.pixelSize.normal
-                        weight: 350
-                    }
-                    color: root.colText
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.widgets.clock.quote.text
-                }
+            fade: false
+            sourceComponent: DigitalClock {
+                colText: root.colText
+                textHorizontalAlignment: root.textHorizontalAlignment
             }
         }
-        Item {
-            id: statusText
+        StatusRow {
             anchors.horizontalCenter: parent.horizontalCenter
-            implicitHeight: statusTextBg.implicitHeight
-            implicitWidth: statusTextBg.implicitWidth
-            StyledRectangularShadow {
-                target: statusTextBg
-                visible: statusTextBg.visible && root.clockStyle === "cookie"
-                opacity: statusTextBg.opacity
+        }
+    }
+
+    component StatusRow: Item {
+        id: statusText
+        implicitHeight: statusTextBg.implicitHeight
+        implicitWidth: statusTextBg.implicitWidth
+        StyledRectangularShadow {
+            target: statusTextBg
+            visible: statusTextBg.visible && root.clockStyle === "cookie"
+            opacity: statusTextBg.opacity
+        }
+        Rectangle {
+            id: statusTextBg
+            anchors.centerIn: parent
+            clip: true
+            opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
+            visible: opacity > 0
+            implicitHeight: statusTextRow.implicitHeight + 5 * 2
+            implicitWidth: statusTextRow.implicitWidth + 5 * 2
+            radius: Appearance.rounding.small
+            color: ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, root.clockStyle === "cookie" ? 0 : 1)
+
+            Behavior on implicitWidth {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
             }
-            Rectangle {
-                id: statusTextBg
+            Behavior on implicitHeight {
+                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            }
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+
+            RowLayout {
+                id: statusTextRow
                 anchors.centerIn: parent
-                clip: true
-                opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
-                visible: opacity > 0
-                implicitHeight: statusTextRow.implicitHeight + 5 * 2
-                implicitWidth: statusTextRow.implicitWidth + 5 * 2
-                radius: Appearance.rounding.small
-                color: ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, root.clockStyle === "cookie" ? 0 : 1)
-
-                Behavior on implicitWidth {
-                    animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                spacing: 14
+                Item {
+                    Layout.fillWidth: root.textHorizontalAlignment !== Text.AlignLeft
+                    implicitWidth: 1
                 }
-                Behavior on implicitHeight {
-                    animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                ClockStatusText {
+                    id: safetyStatusText
+                    shown: root.wallpaperSafetyTriggered
+                    statusIcon: "hide_image"
+                    statusText: Translation.tr("Wallpaper safety enforced")
                 }
-                Behavior on opacity {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                ClockStatusText {
+                    id: lockStatusText
+                    shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
+                    statusIcon: "lock"
+                    statusText: Translation.tr("Locked")
                 }
-
-                RowLayout {
-                    id: statusTextRow
-                    anchors.centerIn: parent
-                    spacing: 14
-                    Item {
-                        Layout.fillWidth: root.textHorizontalAlignment !== Text.AlignLeft
-                        implicitWidth: 1
-                    }
-                    ClockStatusText {
-                        id: safetyStatusText
-                        shown: root.wallpaperSafetyTriggered
-                        statusIcon: "hide_image"
-                        statusText: Translation.tr("Wallpaper safety enforced")
-                    }
-                    ClockStatusText {
-                        id: lockStatusText
-                        shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
-                        statusIcon: "lock"
-                        statusText: Translation.tr("Locked")
-                    }
-                    Item {
-                        Layout.fillWidth: root.textHorizontalAlignment !== Text.AlignRight
-                        implicitWidth: 1
-                    }
+                Item {
+                    Layout.fillWidth: root.textHorizontalAlignment !== Text.AlignRight
+                    implicitWidth: 1
                 }
             }
         }
     }
 
-    component ClockText: StyledText {
-        Layout.fillWidth: true
-        horizontalAlignment: root.textHorizontalAlignment
-        font {
-            family: Appearance.font.family.expressive
-            pixelSize: 20
-            weight: Font.DemiBold
-        }
-        color: root.colText
-        style: Text.Raised
-        styleColor: Appearance.colors.colShadow
-        animateChange: Config.options.background.widgets.clock.digital.animateChange
-    }
     component ClockStatusText: Row {
         id: statusTextRow
         property alias statusIcon: statusIconWidget.text
@@ -184,6 +154,7 @@ AbstractBackgroundWidget {
         ClockText {
             id: statusTextWidget
             color: statusTextRow.textColor
+            horizontalAlignment: root.textHorizontalAlignment
             anchors.verticalCenter: statusTextRow.verticalCenter
             font {
                 pixelSize: Appearance.font.pixelSize.large

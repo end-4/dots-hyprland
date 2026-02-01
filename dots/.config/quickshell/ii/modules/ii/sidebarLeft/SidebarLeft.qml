@@ -11,8 +11,52 @@ import Quickshell.Hyprland
 Scope { // Scope
     id: root
     property bool detach: false
+    property bool pin: false
     property Component contentComponent: SidebarLeftContent {}
     property Item sidebarContent
+
+    function toggleDetach() {
+        root.detach = !root.detach;
+    }
+
+    Process { // Dodge cursor away, pin, move cursor back
+        id: pinWithFunnyHyprlandWorkaroundProc
+        property var hook: null
+        property int cursorX;
+        property int cursorY;
+        function doIt() {
+            command = ["hyprctl", "cursorpos"]
+            hook = (output) => {
+                cursorX = parseInt(output.split(",")[0]);
+                cursorY = parseInt(output.split(",")[1]);
+                doIt2();
+            }
+            running = true;
+        }
+        function doIt2(output) {
+            command = ["bash", "-c", "hyprctl dispatch movecursor 9999 9999"];
+            hook = () => {
+                doIt3();
+            }
+            running = true;
+        }
+        function doIt3(output) {
+            root.pin = !root.pin;
+            command = ["bash", "-c", `sleep 0.01; hyprctl dispatch movecursor ${cursorX} ${cursorY}`];
+            hook = null
+            running = true;
+        }
+        stdout: StdioCollector {
+            onStreamFinished: {
+                pinWithFunnyHyprlandWorkaroundProc.hook(text);
+            }
+        }
+    }
+
+    function togglePin() {
+        if (!root.pin) pinWithFunnyHyprlandWorkaroundProc.doIt()
+        else root.pin = !root.pin;
+    }
 
     Component.onCompleted: {
         root.sidebarContent = contentComponent.createObject(null, {
@@ -40,22 +84,23 @@ Scope { // Scope
         active: true
         
         sourceComponent: PanelWindow { // Window
-            id: sidebarRoot
+            id: panelWindow
             visible: GlobalStates.sidebarLeftOpen
             
             property bool extend: false
-            property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
+            property real sidebarWidth: panelWindow.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
 
             function hide() {
                 GlobalStates.sidebarLeftOpen = false
             }
 
-            exclusiveZone: 0
+            exclusionMode: ExclusionMode.Normal
+            exclusiveZone: root.pin ? sidebarWidth : 0
             implicitWidth: Appearance.sizes.sidebarWidthExtended + Appearance.sizes.elevationMargin
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
-            // WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
             anchors {
@@ -68,15 +113,17 @@ Scope { // Scope
                 item: sidebarLeftBackground
             }
 
-            HyprlandFocusGrab { // Click outside to close
-                id: grab
-                windows: [ sidebarRoot ]
-                active: sidebarRoot.visible
-                onActiveChanged: { // Focus the selected tab
-                    if (active) sidebarLeftBackground.children[0].focusActiveItem()
+            onVisibleChanged: {
+                if (visible) {
+                    GlobalFocusGrab.addDismissable(panelWindow);
+                } else {
+                    GlobalFocusGrab.removeDismissable(panelWindow);
                 }
-                onCleared: () => {
-                    if (!active) sidebarRoot.hide()
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    panelWindow.hide();
                 }
             }
 
@@ -91,7 +138,7 @@ Scope { // Scope
                 anchors.left: parent.left
                 anchors.topMargin: Appearance.sizes.hyprlandGapsOut
                 anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
-                width: sidebarRoot.sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
+                width: panelWindow.sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 border.width: 1
@@ -104,14 +151,15 @@ Scope { // Scope
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
-                        sidebarRoot.hide();
+                        panelWindow.hide();
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_O) {
-                            sidebarRoot.extend = !sidebarRoot.extend;
-                        }
-                        else if (event.key === Qt.Key_P) {
-                            root.detach = !root.detach;
+                            panelWindow.extend = !panelWindow.extend;
+                        } else if (event.key === Qt.Key_D) {
+                            root.toggleDetach();
+                        } else if (event.key === Qt.Key_P) {
+                            root.togglePin();
                         }
                         event.accepted = true;
                     }
@@ -141,8 +189,8 @@ Scope { // Scope
 
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {
-                        if (event.key === Qt.Key_P) {
-                            root.detach = !root.detach;
+                        if (event.key === Qt.Key_D) {
+                            root.toggleDetach();
                         }
                         event.accepted = true;
                     }

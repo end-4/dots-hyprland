@@ -12,16 +12,17 @@ install-yay(){
   rm -rf /tmp/buildyay
 }
 
-# NOTE: `handle-deprecated-dependencies` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
-# However, let's just keep it as references for other distros writing their `sdata/dist-<DISTRO_ID>/install-deps.sh`, if they need it.
 remove_deprecated_dependencies(){
   printf "${STY_CYAN}[$0]: Removing deprecated dependencies:${STY_RST}\n"
   local list=()
   list+=(illogical-impulse-{microtex,pymyc-aur})
   list+=(hyprland-qtutils)
   list+=({quickshell,hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git)
+  list+=(matugen-bin)
   for i in ${list[@]};do try sudo pacman --noconfirm -Rdd $i;done
 }
+# NOTE: `implicitize_old_dependencies()` was for the old days when we just switch from dependencies.conf to local PKGBUILDs.
+# However, let's just keep it as references for other distros writing their `sdata/dist-<OS_GROUP_ID>/install-deps.sh`, if they need it.
 implicitize_old_dependencies(){
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
   remove_bashcomments_emptylines ./sdata/dist-arch/previous_dependencies.conf ./cache/old_deps_stripped.conf
@@ -41,6 +42,11 @@ implicitize_old_dependencies(){
 if ! command -v pacman >/dev/null 2>&1; then
   printf "${STY_RED}[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...${STY_RST}\n"
   exit 1
+fi
+
+# Keep makepkg from resetting sudo credentials
+if [[ -z "${PACMAN_AUTH:-}" ]]; then
+  export PACMAN_AUTH="sudo"
 fi
 
 showfun remove_deprecated_dependencies

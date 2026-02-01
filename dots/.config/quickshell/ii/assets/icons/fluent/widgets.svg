@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 27.927269 27.927269"
+   fill="none"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="widgets.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="4.6704546"
+     inkscape:cx="40.681265"
+     inkscape:cy="19.912409"
+     inkscape:window-width="1311"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <g
+     id="g6"
+     transform="translate(1.9636345,2.9636345)">
+    <rect
+       width="24"
+       height="22"
+       rx="1"
+       fill="url(#paint0_radial_110_367)"
+       id="rect1"
+       x="0"
+       y="0"
+       style="fill:url(#paint0_radial_110_367);stroke-width:1.00015;stroke-dasharray:none" />
+    <rect
+       x="2"
+       y="2"
+       width="9"
+       height="18"
+       fill="#f6f6f6"
+       id="rect2" />
+    <rect
+       x="13"
+       y="2"
+       width="9"
+       height="10"
+       fill="#67d7fd"
+       id="rect3" />
+    <rect
+       x="13"
+       y="12"
+       width="9"
+       height="4"
+       fill="#1ba9ff"
+       id="rect4" />
+    <rect
+       x="13"
+       y="16"
+       width="9"
+       height="4"
+       fill="#0086ed"
+       id="rect5" />
+  </g>
+  <defs
+     id="defs6">
+    <radialGradient
+       id="paint0_radial_110_367"
+       cx="0"
+       cy="0"
+       r="1"
+       gradientTransform="matrix(24,22,-24,22,0,0)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#0077D0"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#16458B"
+         id="stop6" />
+    </radialGradient>
+  </defs>
+</svg>

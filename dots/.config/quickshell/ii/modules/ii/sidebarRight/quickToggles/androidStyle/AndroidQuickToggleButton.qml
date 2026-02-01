@@ -2,28 +2,42 @@ import QtQuick
 import QtQuick.Layouts
 import qs.services
 import qs.modules.common
+import qs.modules.common.models.quickToggles
 import qs.modules.common.functions
 import qs.modules.common.widgets
 
 GroupButton {
     id: root
     
+    // Info to be passed to by repeater
     required property int buttonIndex
     required property var buttonData
     required property bool expandedSize
-    required property string buttonIcon
-    required property string name
-    required property var mainAction
-    property string statusText: toggled ? Translation.tr("Active") : Translation.tr("Inactive")
-
     required property real baseCellWidth
     required property real baseCellHeight
     required property real cellSpacing
     required property int cellSize
+
+    // Signals
+    signal openMenu()
+
+    // Declared in specific toggles
+    property QuickToggleModel toggleModel
+    property string name: toggleModel?.name ?? ""
+    property string statusText: (toggleModel?.hasStatusText) ? (toggleModel?.statusText || (toggled ? Translation.tr("Active") : Translation.tr("Inactive"))) : ""
+    property string tooltipText: toggleModel?.tooltipText ?? ""
+    property string buttonIcon: toggleModel?.icon ?? "close"
+    property bool available: toggleModel?.available ?? true
+    toggled: toggleModel?.toggled ?? false
+    property var mainAction: toggleModel?.mainAction ?? null
+    altAction: toggleModel?.hasMenu ? (() => root.openMenu()) : (toggleModel?.altAction ?? null)
+
+    // Edit mode state
+    property bool editMode: false
+
+    // Sizing shenanigans
     baseWidth: root.baseCellWidth * cellSize + cellSpacing * (cellSize - 1)
     baseHeight: root.baseCellHeight
-
-    property bool editMode: false
     enableImplicitWidthAnimation: !editMode && root.mouseArea.containsMouse
     enableImplicitHeightAnimation: !editMode && root.mouseArea.containsMouse
     Behavior on baseWidth {
@@ -40,8 +54,7 @@ GroupButton {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
-    signal openMenu()
-
+    enabled: available || editMode
     padding: 6
     horizontalPadding: padding
     verticalPadding: padding
@@ -52,8 +65,8 @@ GroupButton {
     colBackgroundToggledActive: (altAction && expandedSize) ? Appearance.colors.colLayer2Active : Appearance.colors.colPrimaryActive
     buttonRadius: toggled ? Appearance.rounding.large : height / 2
     buttonRadiusPressed: Appearance.rounding.normal
-    property color colText: (toggled && !(altAction && expandedSize)) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer2
-    property color colIcon: expandedSize ? (root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
+    property color colText: (toggled && !(altAction && expandedSize) && enabled) ? Appearance.colors.colOnPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7)
+    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
 
     onClicked: {
         if (root.expandedSize && root.altAction) root.altAction();
@@ -133,6 +146,8 @@ GroupButton {
             visible: root.expandedSize
             active: visible
             sourceComponent: Column {
+                spacing: -2
+
                 StyledText {
                     anchors {
                         left: parent.left
@@ -223,5 +238,10 @@ GroupButton {
             }
             event.accepted = true;
         }
+    }
+
+    StyledToolTip {
+        extraVisibleCondition: root.tooltipText !== ""
+        text: root.tooltipText
     }
 }
