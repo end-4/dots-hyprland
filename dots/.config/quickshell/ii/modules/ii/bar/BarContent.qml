@@ -84,9 +84,10 @@ Item { // Bar content region
         RowLayout {
             id: leftSectionRowLayout
             anchors.fill: parent
-            spacing: 10
+            spacing: 0
 
             LeftSidebarButton { // Left sidebar button
+                id: leftSidebarButton
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
@@ -94,6 +95,8 @@ Item { // Bar content region
 
             Item {
                 id: activeWindowWrapper
+                Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
+                Layout.rightMargin: Appearance.rounding.screenRounding
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 clip: true
@@ -101,7 +104,6 @@ Item { // Bar content region
                 ActiveWindow {
                     visible: root.useShortenedForm === 0
                     anchors.fill: parent
-                    anchors.rightMargin: Appearance.rounding.screenRounding
                 }
             }
         }

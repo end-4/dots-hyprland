@@ -61,6 +61,7 @@ ExpandableChoiceButton {
                 elide: Text.ElideRight
                 font.pixelSize: Looks.font.pixelSize.large
                 text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
+                textFormat: Text.PlainText
             }
             WText { // Status
                 id: statusText

@@ -1,8 +1,9 @@
 # COPR repositories list
+# "solopasha/hyprland" is not up to date to the current Hyprland version, replaced with the fork "sdegler/hyprland"
 [copr]
 repos = [
   "ririko66z/dots-hyprland",
-  "solopasha/hyprland",
+  "sdegler/hyprland",
   "deltacopy/darkly",
   "alternateved/eza",
   "atim/starship"
@@ -83,7 +84,7 @@ packages = [
 [groups.hyprland]
 packages = [
   "hyprland",
-  "hyprland-qtutils",
+  "hyprland-guiutils",
   "hyprsunset",
   "wl-clipboard"
 ]

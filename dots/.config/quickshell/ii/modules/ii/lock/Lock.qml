@@ -16,7 +16,6 @@ LockScreen {
     }
 
     // Push everything down
-    property var lastWorkspaceId: 1
     Variants {
         model: Quickshell.screens
         delegate: Scope {
@@ -25,13 +24,16 @@ LockScreen {
             property string targetMonitorName: modelData.name
             property int verticalMovementDistance: modelData.height
             property int horizontalSqueeze: modelData.width * 0.2
+            property int lastWorkspaceId
             onShouldPushChanged: {
                 if (shouldPush) {
-                    root.lastWorkspaceId = HyprlandData.activeWorkspace.id;
+                    // Save workspace
+                    print(targetMonitorName)
+                    lastWorkspaceId = HyprlandData.monitors.find(m => m.name == targetMonitorName).activeWorkspace.id
                     // Set anim to vertical and move to very very big workspace for a sliding up effect
-                    Quickshell.execDetached(["hyprctl", "--batch", "keyword animation workspaces,1,7,menu_decel,slidevert; dispatch workspace 2147483647"]);
+                    Quickshell.execDetached(["hyprctl", "--batch", `keyword animation workspaces,1,7,menu_decel,slidevert; dispatch workspace ${2147483647 - lastWorkspaceId}`]);
                 } else {
-                    Quickshell.execDetached(["hyprctl", "--batch", `dispatch workspace ${root.lastWorkspaceId}; reload`]);
+                    Quickshell.execDetached(["hyprctl", "--batch", `dispatch workspace ${lastWorkspaceId}; reload`]);
                 }
             }
         }

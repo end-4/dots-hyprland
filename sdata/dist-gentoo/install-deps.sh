@@ -26,6 +26,10 @@ if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
         v sudo eselect repository enable guru
 fi
 
+if [[ -z $(eselect repository list | grep -E ".*hyproverlay \*.*") ]]; then
+	v sudo eselect repository enable hyproverlay
+fi
+
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
@@ -40,15 +44,6 @@ x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/keywords-user
 v sudo cp ./sdata/dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
 
-# QT
-x sudo cp ./sdata/dist-gentoo/qt-keywords ./sdata/dist-gentoo/qt-keywords-user
-x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/qt-keywords-user
-v sudo cp ./sdata/dist-gentoo/qt-keywords-user /etc/portage/package.accept_keywords/qt
-
-########## IMPORT UNMASKS
-sudo mkdir -p /etc/portage/package.unmask/
-v sudo cp ./sdata/dist-gentoo/qt-unmasks /etc/portage/package.unmask/qt
-
 ########## IMPORT USEFLAGS
 v sudo cp ./sdata/dist-gentoo/useflags /etc/portage/package.use/illogical-impulse
 v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/package.use/illogical-impulse'
@@ -58,6 +53,10 @@ v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
 v sudo emerge --depclean
+
+# Hard coded for now
+v sudo emerge --update --quiet '>=dev-cpp/glaze-6.1.0'
+v sudo emerge --update --quiet dev-libs/pugixml
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
