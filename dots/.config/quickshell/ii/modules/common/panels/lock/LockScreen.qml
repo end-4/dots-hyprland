@@ -53,6 +53,7 @@ Scope {
             function onScreenLockedChanged() {
                 if (GlobalStates.screenLocked) {
                     lockContext.reset();
+                    lockContext.refreshFingerprintCheck();
                     lockContext.tryFingerUnlock();
                 }
             }
