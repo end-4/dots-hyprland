@@ -54,9 +54,6 @@ v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
 v sudo emerge --depclean
 
-# Hard coded for now
-v sudo emerge --update --quiet '>=dev-cpp/glaze-6.1.0'
-
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
 
