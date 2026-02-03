@@ -18,9 +18,11 @@ Item {
     property int screenWidth: QsWindow.window.width
     property int screenHeight: QsWindow.window.height
 
-    // Signals
+    // Signals & loading
     signal requestFocus()
     signal dismissed()
+    property bool load: true
+    property bool shown: true
 
     // Some info
     property int reservedTop: 0

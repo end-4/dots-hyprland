@@ -54,6 +54,7 @@ Scope {
                 margins: Appearance.sizes.hyprlandGapsOut
                 leftMargin: Appearance.sizes.elevationMargin
             }
+            asynchronous: true
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
 

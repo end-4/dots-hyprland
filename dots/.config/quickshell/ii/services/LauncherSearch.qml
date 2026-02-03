@@ -43,9 +43,9 @@ Singleton {
                 const actionName = fileName.replace(/\.[^/.]+$/, ""); // strip extension
                 actions.push({
                     action: actionName,
-                    execute: ((path) => (args) => {
-                        Quickshell.execDetached([path, ...(args ? args.split(" ") : [])]);
-                    })(FileUtils.trimFileProtocol(filePath.toString()))
+                    execute: (path => args => {
+                                Quickshell.execDetached([path, ...(args ? args.split(" ") : [])]);
+                            })(FileUtils.trimFileProtocol(filePath.toString()))
                 });
             }
         }
@@ -250,8 +250,8 @@ Singleton {
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
-                        // Probably needs more proper escaping, but this will do for now
-                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                        print([...Config.options.apps.terminal, "-e", ...entry.command])
+                        Quickshell.execDetached([...Config.options.apps.terminal, "-e", ...entry.command]);
                     }
                 },
                 comment: entry.comment,
@@ -267,7 +267,7 @@ Singleton {
                             if (!action.runInTerminal)
                                 action.execute();
                             else {
-                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                                Quickshell.execDetached([...Config.options.apps.terminal, "-e", ...action.command]);
                             }
                         }
                     });

@@ -1,8 +1,11 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import qs.modules.common
-import "../../common/widgets/shapes/material-shapes.js" as MaterialShapes
-import "../../common/widgets/shapes/shapes/corner-rounding.js" as CornerRounding
-import "../../common/widgets/shapes/geometry/offset.js" as Offset
+import qs.modules.common.widgets
+import "../../../common/widgets/shapes/material-shapes.js" as MaterialShapes
+import "../../../common/widgets/shapes/shapes/corner-rounding.js" as CornerRounding
+import "../../../common/widgets/shapes/geometry/offset.js" as Offset
+import ".."
 
 HAbstractMorphedPanel {
     id: root
@@ -129,6 +132,17 @@ HAbstractMorphedPanel {
             duration: 500
             easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+        }
+    }
+
+    FadeLazyLoader {
+        id: contentLoader
+        load: root.load
+        shown: root.shown
+        anchors.fill: parent
+        component: HBarContent {
+            parent: contentLoader
+            anchors.fill: parent
         }
     }
 }
