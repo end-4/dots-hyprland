@@ -10,6 +10,8 @@ import "../../common/widgets/shapes/material-shapes.js" as MaterialShapes
 import "../../common/widgets/shapes/shapes/corner-rounding.js" as CornerRounding
 import "../../common/widgets/shapes/geometry/offset.js" as Offset
 
+import "bar"
+
 /**
  * Fullscreen layer. Uses masking to not block clicks on windows n' stuff.
  */
@@ -35,15 +37,31 @@ PanelWindow {
     ///////////////// Content //////////////////
 
     property alias roundedPolygon: backgroundShape.roundedPolygon
+    property bool finishedMorphing: true
+    onRoundedPolygonChanged: finishedMorphing = false
+    Connections {
+        target: backgroundShape
+        function onProgressChanged() {
+            // While it overshoots because of the spring animation, waiting for the bounce to finish entirely would be too slow
+            // ^ (totally not an excuse for my laziness)
+            if (backgroundShape.progress >= 1.0) {
+                root.finishedMorphing = true
+            }
+        }
+    }
     S.ShapeCanvas {
         id: backgroundShape
         anchors.fill: parent
         polygonIsNormalized: false
         roundedPolygon: MaterialShapes.customPolygon([new MaterialShapes.PointNRound(new Offset.Offset(root.screen.width, 0), new CornerRounding.CornerRounding(9999)),])
-        animation: NumberAnimation {
-            duration: 500
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+        // animation: NumberAnimation {
+        //     duration: 500
+        //     easing.type: Easing.BezierSpline
+        //     easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+        // }
+        animation: SpringAnimation {
+            spring: 3.5
+            damping: 0.35
         }
         color: Appearance.colors.colLayer0
         borderWidth: (root.currentPanel === bar && Config.options.bar.cornerStyle !== 1) ? 0 : 1
@@ -60,7 +78,8 @@ PanelWindow {
         color: "#44000000"
     }
 
-    property HAbstractMorphedPanel currentPanel: bar
+    property HAbstractMorphedPanel currentPanel: null
+    Component.onCompleted: currentPanel = bar
     roundedPolygon: currentPanel.backgroundPolygon
 
     // Do we want to have reserved area always follow the bar or maybe differ per panel?
@@ -89,10 +108,14 @@ PanelWindow {
 
     HBar {
         id: bar
+        load: root.currentPanel === this
+        shown: root.finishedMorphing
     }
 
     HOverview {
         id: overview
+        load: root.currentPanel === this
+        shown: root.finishedMorphing
         onRequestFocus: root.currentPanel = overview;
         onDismissed: root.dismiss();
     }

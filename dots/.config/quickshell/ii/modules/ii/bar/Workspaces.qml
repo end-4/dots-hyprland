@@ -182,6 +182,7 @@ Item {
 
     // Workspaces - numbers
     Grid {
+        id: wsNumbers
         z: 3
 
         columns: root.vertical ? 1 : root.workspacesShown
@@ -210,6 +211,11 @@ Item {
                     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(button.workspaceValue)
                     property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
+                    property color numberColor: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
+                        Appearance.m3colors.m3onPrimary : 
+                        (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
+                            Appearance.colors.colOnLayer1Inactive)
+
                     StyledText { // Workspace number text
                         opacity: root.showNumbers
                             || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || root.showNumbers))
@@ -226,10 +232,7 @@ Item {
                         }
                         text: Config.options?.bar.workspaces.numberMap[button.workspaceValue - 1] || button.workspaceValue
                         elide: Text.ElideRight
-                        color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
-                            Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
-                                Appearance.colors.colOnLayer1Inactive)
+                        color: workspaceButtonBackground.numberColor
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -246,10 +249,7 @@ Item {
                         width: workspaceButtonWidth * 0.18
                         height: width
                         radius: width / 2
-                        color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
-                            Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
-                                Appearance.colors.colOnLayer1Inactive)
+                        color: workspaceButtonBackground.numberColor
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -309,12 +309,8 @@ Item {
                         }
                     }
                 }
-                
-
             }
-
         }
-
     }
 
 }
