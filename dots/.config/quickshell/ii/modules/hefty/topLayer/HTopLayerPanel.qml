@@ -108,7 +108,7 @@ PanelWindow {
 
     HBar {
         id: bar
-        load: root.currentPanel === this
+        load: root.currentPanel === this && root.finishedMorphing // the extra condition is to prevent workspace widget from acting up when switching horizontal/vertical... should be fixed later
         shown: root.finishedMorphing
     }
 
