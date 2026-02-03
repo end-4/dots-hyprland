@@ -250,7 +250,7 @@ Singleton {
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
-                        Quickshell.execDetached([Config.options.apps.terminal, "-e", ...entry.command]);
+                        Quickshell.execDetached([...Config.options.apps.terminal.trim().split(/\s+/), "-e", ...entry.command]);
                     }
                 },
                 comment: entry.comment,
@@ -266,7 +266,7 @@ Singleton {
                             if (!action.runInTerminal)
                                 action.execute();
                             else {
-                                Quickshell.execDetached([Config.options.apps.terminal, "-e", ...action.command]);
+                                Quickshell.execDetached([...Config.options.apps.terminal.trim().split(/\s+/), "-e", ...action.command]);
                             }
                         }
                     });
