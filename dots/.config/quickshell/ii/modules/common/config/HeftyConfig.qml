@@ -7,5 +7,6 @@ JsonObject {
         property list<var> leftWidgets: []
         property list<var> centerWidgets: []
         property list<var> rightWidgets: []
+        property bool m3ExpressiveGrouping: true
     }
 }
