@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import qs.services
-import qs.modules.common.widgets
+import qs.modules.common as C
 
 Item {
     id: root
@@ -11,13 +9,16 @@ Item {
         id: leftSide
         anchors.left: parent.left
         width: (parent.width - centerSide.width) / 2
+        HBarUserFallbackComponentRepeater {
+            componentNames: C.Config.options.hefty.bar.leftWidgets
+        }
     }
 
     Side {
         id: centerSide
         anchors.horizontalCenter: parent.horizontalCenter
         HBarUserFallbackComponentRepeater {
-            componentNames: [["Workspaces"]]
+            componentNames: C.Config.options.hefty.bar.centerWidgets
         }
     }
 
@@ -25,6 +26,9 @@ Item {
         id: rightSide
         anchors.right: parent.right
         width: (parent.width - centerSide.width) / 2
+        HBarUserFallbackComponentRepeater {
+            componentNames: C.Config.options.hefty.bar.rightWidgets
+        }
     }
 
     component Side: RowLayout {

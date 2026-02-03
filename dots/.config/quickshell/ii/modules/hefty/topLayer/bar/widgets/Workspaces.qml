@@ -5,7 +5,8 @@ import qs.modules.common as C
 
 IIBar.Workspaces {
     id: root
-    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-    implicitWidth: root.vertical ? C.Appearance.sizes.verticalBarWidth : (root.workspaceButtonWidth * root.workspacesShown - 2)
-    implicitHeight: root.vertical ? (root.workspaceButtonWidth * root.workspacesShown - 2) : C.Appearance.sizes.barHeight
+    vertical: C.Config.options.bar.vertical
+    Layout.alignment: vertical ? Qt.AlignHCenter : Qt.AlignVCenter
+    Layout.fillWidth: vertical
+    Layout.fillHeight: !vertical
 }

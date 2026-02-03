@@ -112,8 +112,8 @@ Item {
 
         rowSpacing: 0
         columnSpacing: 0
-        columns: root.vertical ? 1 : root.workspacesShown
-        rows: root.vertical ? root.workspacesShown : 1
+        columns: root.vertical ? 1 : -1
+        rows: root.vertical ? -1 : 1
 
         Repeater {
             model: root.workspacesShown
@@ -185,8 +185,8 @@ Item {
         id: wsNumbers
         z: 3
 
-        columns: root.vertical ? 1 : root.workspacesShown
-        rows: root.vertical ? root.workspacesShown : 1
+        columns: root.vertical ? 1 : -1
+        rows: root.vertical ? -1 : 1
         columnSpacing: 0
         rowSpacing: 0
 
