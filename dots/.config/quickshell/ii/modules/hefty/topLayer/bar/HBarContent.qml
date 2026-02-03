@@ -16,11 +16,8 @@ Item {
     Side {
         id: centerSide
         anchors.horizontalCenter: parent.horizontalCenter
-
-        FallbackLoader {
-            asynchronous: true
-            source: "/home/end/.config/quickshell/ii/modules/ii/bar/WrongModuleName"
-            fallbacks: ["/home/end/.config/quickshell/ii/modules/ii/bar/Workspaces.qml"]
+        HBarUserFallbackComponentRepeater {
+            componentNames: [["Workspaces"]]
         }
     }
 
