@@ -5,6 +5,8 @@ import Quickshell
 Singleton {
     id: root
     
+    signal requestCenter(string identifier)
+
     readonly property list<var> availableWidgets: [
         { identifier: "crosshair", materialSymbol: "point_scan" },
         { identifier: "fpsLimiter", materialSymbol: "animation" },
