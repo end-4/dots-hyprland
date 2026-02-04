@@ -1,0 +1,20 @@
+{
+  "extras": [
+    "lazyvim.plugins.extras.ai.copilot-chat",
+    "lazyvim.plugins.extras.coding.mini-surround",
+    "lazyvim.plugins.extras.lang.clangd",
+    "lazyvim.plugins.extras.lang.docker",
+    "lazyvim.plugins.extras.lang.markdown",
+    "lazyvim.plugins.extras.lang.prisma",
+    "lazyvim.plugins.extras.lang.python",
+    "lazyvim.plugins.extras.lang.sql",
+    "lazyvim.plugins.extras.lang.typst",
+    "lazyvim.plugins.extras.test.core",
+    "lazyvim.plugins.extras.util.rest"
+  ],
+  "install_version": 7,
+  "news": {
+    "NEWS.md": "11866"
+  },
+  "version": 8
+}

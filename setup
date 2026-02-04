@@ -11,8 +11,8 @@ prevent_sudo_or_root
 set -e
 
 #####################################################################################
-showhelp_global(){
-printf "${STY_CYAN}NOTE:
+showhelp_global() {
+    printf "${STY_CYAN}NOTE:
   The old \"./install.sh\"   is now \"./setup install\"
   The old \"./update.sh\"    is now \"./setup exp-update\"
   The old \"./uninstall.sh\" is now \"./setup uninstall\"${STY_RST}
@@ -46,29 +46,38 @@ ${STY_BOLD}${STY_CYAN}Access ${STY_UNDERLINE}https://ii.clsty.link${STY_RST} ${S
 "
 }
 case $1 in
-  # Global help
-  ""|help|--help|-h)showhelp_global;exit;;
-  # Correct subcommand
-  install|uninstall|exp-update|exp-merge|resetfirstrun|checkdeps|virtmon)
+# Global help
+"" | help | --help | -h)
+    showhelp_global
+    exit
+    ;;
+# Correct subcommand
+install | uninstall | exp-update | exp-merge | resetfirstrun | checkdeps | virtmon)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-$1
-    shift;;
-  # Correct subcommand but not using ./sdata/subcmd-$1
-  install-deps|install-setups|install-files)
+    shift
+    ;;
+# Correct subcommand but not using ./sdata/subcmd-$1
+install-deps | install-setups | install-files)
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-install
-    shift;;
-  # Wrong subcommand
-  *)printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n";showhelp_global;exit 1;;
+    shift
+    ;;
+# Wrong subcommand
+*)
+    printf "${STY_RED}Unknown subcommand \"$1\".${STY_RST}\n"
+    showhelp_global
+    exit 1
+    ;;
 esac
 #####################################################################################
-if [[ -f "${SUBCMD_DIR}/options.sh" ]];
-  then source "${SUBCMD_DIR}/options.sh"
+if [[ -f "${SUBCMD_DIR}/options.sh" ]]; then
+    source "${SUBCMD_DIR}/options.sh"
 fi
 case ${SUBCMD_NAME} in
-  install)
+install)
     for function in ${print_os_group_id_functions[@]}; do
-      $function
+        $function
     done
     pause
     # Initialize sudo keepalive for the entire install process
@@ -76,21 +85,21 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
-      source ${SUBCMD_DIR}/0.greeting.sh
+        source ${SUBCMD_DIR}/0.greeting.sh
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-router.sh
+        source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups.sh
+        source ${SUBCMD_DIR}/2.setups.sh
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      source ${SUBCMD_DIR}/3.files.sh
+        source ${SUBCMD_DIR}/3.files.sh
     fi
     ;;
-  install-deps)
+install-deps)
     for function in ${print_os_group_id_functions[@]}; do
-      $function
+        $function
     done
     pause
     # Initialize sudo keepalive for dependency installation
@@ -98,12 +107,12 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-router.sh
+        source ${SUBCMD_DIR}/1.deps-router.sh
     fi
     ;;
-  install-setups)
+install-setups)
     for function in ${print_os_group_id_functions[@]}; do
-      $function
+        $function
     done
     pause
     # Initialize sudo keepalive for setup steps
@@ -111,19 +120,19 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups.sh
+        source ${SUBCMD_DIR}/2.setups.sh
     fi
     ;;
-  install-files)
+install-files)
     for function in ${print_os_group_id_functions[@]}; do
-      $function
+        $function
     done
     pause
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      source ${SUBCMD_DIR}/3.files.sh
+        source ${SUBCMD_DIR}/3.files.sh
     fi
     ;;
-  *)
+*)
     source ${SUBCMD_DIR}/0.run.sh
     exit
     ;;
