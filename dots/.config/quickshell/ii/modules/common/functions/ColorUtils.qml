@@ -109,7 +109,8 @@ Singleton {
      */
     function transparentize(color, percentage = 1) {
         var c = Qt.color(color);
-        return Qt.rgba(c.r, c.g, c.b, c.a * (1 - percentage));
+        var a = c.a * (1 - clamp01(percentage));
+        return Qt.rgba(c.r, c.g, c.b, a);
     }
 
     /**
@@ -121,7 +122,7 @@ Singleton {
      */
     function applyAlpha(color, alpha) {
         var c = Qt.color(color);
-        var a = Math.max(0, Math.min(1, alpha));
+        var a = clamp01(alpha);
         return Qt.rgba(c.r, c.g, c.b, a);
     }
 

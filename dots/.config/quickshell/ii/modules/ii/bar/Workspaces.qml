@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import qs
 import qs.services
 import qs.modules.common
@@ -15,21 +16,22 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
     property bool vertical: false
-    property bool borderless: Config.options.bar.borderless
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-    
-    readonly property int workspacesShown: Config.options.bar.workspaces.shown
-    readonly property int workspaceGroup: Math.floor((monitor?.activeWorkspace?.id - 1) / root.workspacesShown)
-    property list<bool> workspaceOccupied: []
-    property int widgetPadding: 4
+    readonly property bool activeActuallyFocused: activeWindow?.activated ?? false
+
+    WorkspaceModel {
+        id: wsModel
+        monitor: root.monitor
+    }
+
     property int workspaceButtonWidth: 26
     property real activeWorkspaceMargin: 2
     property real workspaceIconSize: workspaceButtonWidth * 0.69
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
     property real workspaceIconMarginShrinked: -4
-    property int workspaceIndexInGroup: (monitor?.activeWorkspace?.id - 1) % root.workspacesShown
+    property int workspaceIndexInGroup: (monitor?.activeWorkspace?.id - 1) % wsModel.shownCount
 
     property bool showNumbers: false
     Timer {
@@ -55,33 +57,8 @@ Item {
         }
     }
 
-    // Function to update workspaceOccupied
-    function updateWorkspaceOccupied() {
-        workspaceOccupied = Array.from({ length: root.workspacesShown }, (_, i) => {
-            return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * root.workspacesShown + i + 1);
-        })
-    }
-
-    // Occupied workspace updates
-    Component.onCompleted: updateWorkspaceOccupied()
-    Connections {
-        target: Hyprland.workspaces
-        function onValuesChanged() {
-            updateWorkspaceOccupied();
-        }
-    }
-    Connections {
-        target: Hyprland
-        function onFocusedWorkspaceChanged() {
-            updateWorkspaceOccupied();
-        }
-    }
-    onWorkspaceGroupChanged: {
-        updateWorkspaceOccupied();
-    }
-
-    implicitWidth: root.vertical ? Appearance.sizes.verticalBarWidth : (root.workspaceButtonWidth * root.workspacesShown)
-    implicitHeight: root.vertical ? (root.workspaceButtonWidth * root.workspacesShown) : Appearance.sizes.barHeight
+    implicitWidth: root.vertical ? Appearance.sizes.verticalBarWidth : (root.workspaceButtonWidth * wsModel.shownCount)
+    implicitHeight: root.vertical ? (root.workspaceButtonWidth * wsModel.shownCount) : Appearance.sizes.barHeight
 
     // Scroll to switch workspaces
     WheelHandler {
@@ -115,15 +92,18 @@ Item {
         rows: root.vertical ? -1 : 1
 
         Repeater {
-            model: root.workspacesShown
+            model: wsModel.shownCount
 
-            Rectangle {
+            delegate: Rectangle {
+                required property int index
+
                 z: 1
-                implicitWidth: workspaceButtonWidth
-                implicitHeight: workspaceButtonWidth
+                implicitWidth: root.workspaceButtonWidth
+                implicitHeight: root.workspaceButtonWidth
                 radius: (width / 2)
-                property var previousOccupied: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index))
-                property var rightOccupied: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+2))
+                property bool thisOccupied: (wsModel.occupied[index] && !(!wsModel.currentWorkspaceNotFake && monitor?.activeWorkspace?.id === index+1))
+                property var previousOccupied: (wsModel.occupied[index-1] && !(!wsModel.currentWorkspaceNotFake && monitor?.activeWorkspace?.id === index))
+                property var rightOccupied: (wsModel.occupied[index+1] && !(!wsModel.currentWorkspaceNotFake && monitor?.activeWorkspace?.id === index+2))
                 property var radiusPrev: previousOccupied ? 0 : (width / 2)
                 property var radiusNext: rightOccupied ? 0 : (width / 2)
 
@@ -133,7 +113,7 @@ Item {
                 bottomRightRadius: radiusNext
                 
                 color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
-                opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor?.activeWorkspace?.id === index+1)) ? 1 : 0
+                opacity: thisOccupied ? 1 : 0
 
                 Behavior on opacity {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -168,9 +148,9 @@ Item {
             id: idxPair
             index: root.workspaceIndexInGroup
         }
-        property real indicatorPosition: Math.min(idxPair.idx1, idxPair.idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
-        property real indicatorLength: Math.abs(idxPair.idx1 - idxPair.idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2
-        property real indicatorThickness: workspaceButtonWidth - root.activeWorkspaceMargin * 2
+        property real indicatorPosition: Math.min(idxPair.idx1, idxPair.idx2) * root.workspaceButtonWidth + root.activeWorkspaceMargin
+        property real indicatorLength: Math.abs(idxPair.idx1 - idxPair.idx2) * root.workspaceButtonWidth + root.workspaceButtonWidth - root.activeWorkspaceMargin * 2
+        property real indicatorThickness: root.workspaceButtonWidth - root.activeWorkspaceMargin * 2
 
         x: root.vertical ? null : indicatorPosition
         implicitWidth: root.vertical ? indicatorThickness : indicatorLength
@@ -183,36 +163,35 @@ Item {
     Grid {
         id: wsNumbers
         z: 3
+        anchors.fill: parent
 
         columns: root.vertical ? 1 : -1
         rows: root.vertical ? -1 : 1
         columnSpacing: 0
         rowSpacing: 0
 
-        anchors.fill: parent
-
         Repeater {
-            model: root.workspacesShown
-
-            Button {
+            model: wsModel.shownCount
+            delegate: Button {
                 id: button
-                property int workspaceValue: workspaceGroup * root.workspacesShown + index + 1
+                required property int index
+                property int workspaceValue: wsModel.getWorkspaceIdAt(index)
                 implicitHeight: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.barHeight
                 implicitWidth: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.verticalBarWidth
                 onPressed: Hyprland.dispatch(`workspace ${workspaceValue}`)
-                width: vertical ? undefined : workspaceButtonWidth
-                height: vertical ? workspaceButtonWidth : undefined
+                width: vertical ? undefined : root.workspaceButtonWidth
+                height: vertical ? root.workspaceButtonWidth : undefined
 
                 background: Item {
                     id: workspaceButtonBackground
-                    implicitWidth: workspaceButtonWidth
-                    implicitHeight: workspaceButtonWidth
+                    implicitWidth: root.workspaceButtonWidth
+                    implicitHeight: root.workspaceButtonWidth
                     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(button.workspaceValue)
                     property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
                     property color numberColor: (monitor?.activeWorkspace?.id == button.workspaceValue) ? 
                         Appearance.m3colors.m3onPrimary : 
-                        (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
+                        (wsModel.occupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
                             Appearance.colors.colOnLayer1Inactive)
 
                     StyledText { // Workspace number text
@@ -245,7 +224,7 @@ Item {
                             ) ? 0 : 1
                         visible: opacity > 0
                         anchors.centerIn: parent
-                        width: workspaceButtonWidth * 0.18
+                        width: root.workspaceButtonWidth * 0.18
                         height: width
                         radius: width / 2
                         color: workspaceButtonBackground.numberColor
@@ -256,8 +235,8 @@ Item {
                     }
                     Item { // Main app icon
                         anchors.centerIn: parent
-                        width: workspaceButtonWidth
-                        height: workspaceButtonWidth
+                        width: root.workspaceButtonWidth
+                        height: root.workspaceButtonWidth
                         opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 :
                             (workspaceButtonBackground.biggestWindow && !root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                             1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
@@ -267,9 +246,9 @@ Item {
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
                             anchors.bottomMargin: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
-                                (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+                                (root.workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
                             anchors.rightMargin: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
-                                (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+                                (root.workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
                             source: workspaceButtonBackground.mainAppIconSource
                             implicitSize: (!root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked

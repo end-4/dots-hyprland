@@ -1,7 +1,7 @@
 import QtQuick
 
 Rectangle {
-    property double diameter
+    property real diameter
 
     implicitWidth: diameter
     implicitHeight: diameter

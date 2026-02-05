@@ -50,7 +50,7 @@ Item {
         id: layout
         columns: C.Config.options.bar.vertical ? 1 : -1
         anchors.centerIn: parent
-        property real spacing: 0
+        property real spacing: 4
         columnSpacing: spacing
         rowSpacing: spacing
     }

@@ -67,7 +67,7 @@ PanelWindow {
         borderWidth: (root.currentPanel === bar && Config.options.bar.cornerStyle !== 1) ? 0 : 1
         borderColor: Appearance.colors.colLayer0Border
         visible: false // cuz there's already the shadow
-        debug: true
+        // debug: true
     }
     DropShadow {
         id: shadow
