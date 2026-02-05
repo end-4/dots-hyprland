@@ -449,6 +449,7 @@ Singleton {
                 }
                 property JsonObject annotation: JsonObject {
                     property bool useSatty: false
+                    property bool autoOpenTool: true
                 }
             }
 

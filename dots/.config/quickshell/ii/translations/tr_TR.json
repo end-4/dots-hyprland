@@ -604,5 +604,7 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Annotation": "Ek Açıklama",
+  "Open annotation tool after copy": "Kopyalamadan sonra ek açıklama aracını aç"
 }

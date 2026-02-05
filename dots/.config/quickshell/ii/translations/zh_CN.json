@@ -718,5 +718,7 @@
   "No applications": "没有应用",
   "Creativity": "创意",
   "Move left": "左移",
-  "Pin to Start": "固定到“开始”屏幕"
+  "Pin to Start": "固定到“开始”屏幕",
+  "Annotation": "标注",
+  "Open annotation tool after copy": "复制后打开标注工具"
 }

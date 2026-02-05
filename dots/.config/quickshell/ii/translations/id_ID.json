@@ -488,5 +488,7 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Annotation": "Anotasi",
+  "Open annotation tool after copy": "Buka alat anotasi setelah menyalin"
 }

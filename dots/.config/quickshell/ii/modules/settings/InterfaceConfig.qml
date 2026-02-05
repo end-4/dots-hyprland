@@ -435,6 +435,19 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Annotation")
+            
+            ConfigSwitch {
+                buttonIcon: "edit"
+                text: Translation.tr("Open annotation tool after copy")
+                checked: Config.options.regionSelector.annotation.autoOpenTool
+                onCheckedChanged: {
+                    Config.options.regionSelector.annotation.autoOpenTool = checked;
+                }
+            }
+        }
     }
 
     ContentSection {

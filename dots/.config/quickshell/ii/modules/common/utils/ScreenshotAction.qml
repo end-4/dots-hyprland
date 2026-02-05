@@ -44,8 +44,11 @@ Singleton {
         switch (action) {
             case ScreenshotAction.Action.Copy:
                 if (saveDir === "") {
-                    // not saving the screenshot, just copy to clipboard
-                    return ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                    // copy to clipboard and open in swappy
+                    const cmd = Config.options.regionSelector.annotation.autoOpenTool
+                        ? `${cropToStdout} | tee >(wl-copy) | ${annotationCommand}`
+                        : `${cropToStdout} | wl-copy`;
+                    return ["bash", "-c", `${cmd} && ${cleanup}`]
                     break;
                 }
                 return [

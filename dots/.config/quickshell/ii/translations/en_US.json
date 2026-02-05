@@ -13,6 +13,8 @@
   "Attach a file. Only works with Gemini.": "Attach a file. Only works with Gemini.",
   "Reboot": "Reboot",
   "API key:\n\n```txt\n%1\n```": "API key:\n\n```txt\n%1\n```",
+  "Annotation": "Annotation",
+  "Open annotation tool after copy": "Open annotation tool after copy",
   "Pinned on startup": "Pinned on startup",
   "Right": "Right",
   "Reboot to firmware settings": "Reboot to firmware settings",
