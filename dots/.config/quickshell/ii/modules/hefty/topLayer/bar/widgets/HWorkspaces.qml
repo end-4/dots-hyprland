@@ -353,7 +353,7 @@ Item {
                     family: Config.options?.bar.workspaces.useNerdFont ? Appearance.font.family.iconNerd : defaultFont
                 }
                 color: wsNum.contentColor
-                text: wsNum.wsId
+                text: Config.options?.bar.workspaces.numberMap[wsNum.wsId - 1] || wsNum.wsId
             }
         }
     }
