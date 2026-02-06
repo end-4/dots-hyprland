@@ -136,6 +136,7 @@ Item {
         /////////////////// Hover ///////////////////
         ButtonMouseArea {
             id: interactionMouseArea
+            z: 3
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
@@ -162,7 +163,8 @@ Item {
                     radius: root.activeWorkspaceSize / 2
                     hover: interactionMouseArea.containsMouse
                     press: interactionMouseArea.containsPress
-                    contentColor: Appearance.colors.colPrimary
+                    drag: true // There are too many layers so we need to force this to be a lil more opaque
+                    contentColor: Appearance.colors.colTertiary
                 }
             }
         }

@@ -30,16 +30,10 @@ Item {
         anchors.right: !root.vertical ? centerSide.left : parent.right
         anchors.bottom: root.vertical ? parent.bottom : undefined
         HBarUserFallbackComponentRepeater {
-            componentNames: {
-                print(JSON.stringify([
+            componentNames: [
                 ...root.centerLeftWidgets,
                 ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
-            ], null, 2));
-                return [
-                    ...root.centerLeftWidgets,
-                    ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
-                ];
-            }
+            ]
         }
     }
 
