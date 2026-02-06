@@ -250,8 +250,7 @@ Singleton {
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
-                        print([...Config.options.apps.terminal, "-e", ...entry.command])
-                        Quickshell.execDetached([...Config.options.apps.terminal, "-e", ...entry.command]);
+                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
                     }
                 },
                 comment: entry.comment,
@@ -267,7 +266,7 @@ Singleton {
                             if (!action.runInTerminal)
                                 action.execute();
                             else {
-                                Quickshell.execDetached([...Config.options.apps.terminal, "-e", ...action.command]);
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
                             }
                         }
                     });
