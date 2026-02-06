@@ -9,13 +9,19 @@ Item {
     property bool vertical: C.Config.options.bar.vertical
     property real spacing: 4
 
+    property list<var> leftWidgets: C.Config.options.hefty.bar.leftWidgets
+    property list<var> centerLeftWidgets: C.Config.options.hefty.bar.centerLeftWidgets
+    property list<var> centerWidgets: C.Config.options.hefty.bar.centerWidgets
+    property list<var> centerRightWidgets: C.Config.options.hefty.bar.centerRightWidgets
+    property list<var> rightWidgets: C.Config.options.hefty.bar.rightWidgets
+
     Side {
         id: leftSide
         anchors.left: parent.left
         anchors.top: parent.top
 
         HBarUserFallbackComponentRepeater {
-            componentNames: C.Config.options.hefty.bar.leftWidgets
+            componentNames: root.leftWidgets
         }
     }
 
@@ -24,7 +30,16 @@ Item {
         anchors.right: !root.vertical ? centerSide.left : parent.right
         anchors.bottom: root.vertical ? parent.bottom : undefined
         HBarUserFallbackComponentRepeater {
-            componentNames: C.Config.options.hefty.bar.centerLeftWidgets
+            componentNames: {
+                print(JSON.stringify([
+                ...root.centerLeftWidgets,
+                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
+            ], null, 2));
+                return [
+                    ...root.centerLeftWidgets,
+                    ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
+                ];
+            }
         }
     }
 
@@ -33,7 +48,11 @@ Item {
         anchors.verticalCenter: root.vertical ? parent.verticalCenter : undefined
         anchors.horizontalCenter: !root.vertical ? parent.horizontalCenter : undefined
         HBarUserFallbackComponentRepeater {
-            componentNames: C.Config.options.hefty.bar.centerWidgets
+            componentNames: [
+                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
+                ...root.centerWidgets,
+                ...(root.centerRightWidgets.length > 0 ? [invisibleItem] : []),
+            ]
         }
     }
 
@@ -42,7 +61,10 @@ Item {
         anchors.left: !root.vertical ? centerSide.right : parent.left
         anchors.top: root.vertical ? parent.top : undefined
         HBarUserFallbackComponentRepeater {
-            componentNames: C.Config.options.hefty.bar.centerRightWidgets
+            componentNames: [
+                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
+                ...root.centerRightWidgets,
+            ]
         }
     }
 
@@ -51,7 +73,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         HBarUserFallbackComponentRepeater {
-            componentNames: C.Config.options.hefty.bar.rightWidgets
+            componentNames: root.rightWidgets
         }
     }
 

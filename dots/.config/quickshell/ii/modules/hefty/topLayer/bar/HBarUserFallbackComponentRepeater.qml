@@ -7,21 +7,25 @@ import qs.modules.common.widgets as W
 Repeater {
     id: root
 
+    readonly property string invisibleItem: "_invisible"
     required property list<var> componentNames
     property string context: Quickshell.shellPath("modules/hefty/topLayer/bar/widgets")
+
 
     model: {
         const m = componentNames.map(item => {
             if (item instanceof Array) 
                 return ({"type": "container", "value": item});
+            else if (item === root.invisibleItem)
+                return ({"type": "invisible", "value": item});
             else
                 return ({"type": "component", "value": item});
         });
         for (var i = 0;i < m.length; i++) {
             const item = m[i];
             if (item.type === "container") {
-                item.startSide = (i === 0) || (m[i - 1].type !== "container");
-                item.endSide = (i + 1 >= m.length) || (m[i + 1].type !== "container");
+                item.startSide = (i === 0) || (m[i - 1].type === "component");
+                item.endSide = (i + 1 >= m.length) || (m[i + 1].type === "component");
             }
         }
         // print(JSON.stringify(m, null, 2));
@@ -29,6 +33,11 @@ Repeater {
     }
     delegate: DelegateChooser {
         role: "type"
+
+        DelegateChoice {
+            roleValue: root.invisibleItem
+            delegate: Item { visible: false }
+        }
         
         DelegateChoice {
             roleValue: "component"

@@ -95,4 +95,15 @@ Singleton {
             }
         }
     }
+
+    function findParentWithProperty(obj, propertyName) {
+        let current = obj;
+        while (current) {
+            if (current.hasOwnProperty(propertyName)) {
+                return current;
+            }
+            current = current.parent;
+        }
+        return null;
+    }
 }

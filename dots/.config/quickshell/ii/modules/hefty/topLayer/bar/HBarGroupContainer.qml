@@ -22,10 +22,17 @@ Item {
     implicitWidth: vertical ? barUndirectionalWidth : layout.implicitWidth + padding * 2
     implicitHeight: vertical ? layout.implicitHeight + padding * 2 : barUndirectionalWidth
 
+    property alias startRadius: bg.startRadius
+    property alias endRadius: bg.endRadius
+    property alias topLeftRadius: bg.topLeftRadius
+    property alias topRightRadius: bg.topRightRadius
+    property alias bottomLeftRadius: bg.bottomLeftRadius
+    property alias bottomRightRadius: bg.bottomRightRadius
+
     W.AxisRectangle {
         id: bg
         anchors.centerIn: parent
-        contentLayer: W.StyledRectangle.ContentLayer.Pane
+        contentLayer: W.StyledRectangle.ContentLayer.Group
 
         width: root.vertical ? root.backgroundUndirectionalWidth : root.width
         height: root.vertical ? root.height : root.backgroundUndirectionalWidth
