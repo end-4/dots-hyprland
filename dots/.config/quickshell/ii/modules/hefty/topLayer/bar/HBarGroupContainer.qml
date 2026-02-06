@@ -17,17 +17,18 @@ Item {
     readonly property bool vertical: C.Config.options.bar.vertical
     readonly property bool m3eRadius: C.Config.options.hefty.bar.m3ExpressiveGrouping
     readonly property real barUndirectionalWidth: C.Config.options.bar.vertical ? C.Appearance.sizes.baseVerticalBarWidth : C.Appearance.sizes.baseBarHeight
+    readonly property real backgroundUndirectionalWidth: barUndirectionalWidth - margins * 2
 
-    implicitWidth: vertical ? barUndirectionalWidth : layout.implicitWidth + (padding + margins) * 2
-    implicitHeight: vertical ? layout.implicitHeight + (padding + margins) * 2 : barUndirectionalWidth
+    implicitWidth: vertical ? barUndirectionalWidth : layout.implicitWidth + padding * 2
+    implicitHeight: vertical ? layout.implicitHeight + padding * 2 : barUndirectionalWidth
 
-    W.StyledRectangle {
+    W.AxisRectangle {
         id: bg
         anchors.centerIn: parent
         contentLayer: W.StyledRectangle.ContentLayer.Pane
 
-        width: (root.vertical ? root.barUndirectionalWidth : root.width) - root.margins * 2
-        height: (root.vertical ? root.height : root.barUndirectionalWidth) - root.margins * 2
+        width: root.vertical ? root.backgroundUndirectionalWidth : root.width
+        height: root.vertical ? root.height : root.backgroundUndirectionalWidth
 
         property real fullRadius: Math.min(width, height) / 2
         function getRadius(atSide) {
@@ -38,12 +39,9 @@ Item {
                 return 12;
             }
         }
-        property real startRadius: getRadius(root.startSide)
-        property real endRadius: getRadius(root.endSide)
-        topLeftRadius: startRadius
-        topRightRadius: root.vertical ? startRadius : endRadius
-        bottomLeftRadius: root.vertical ? endRadius : startRadius
-        bottomRightRadius: endRadius
+        vertical: root.vertical
+        startRadius: getRadius(root.startSide)
+        endRadius: getRadius(root.endSide)
     }
 
     GridLayout {
