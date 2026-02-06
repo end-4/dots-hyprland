@@ -39,9 +39,9 @@ Item {
     implicitWidth: vertical ? Appearance.sizes.verticalBarWidth : occupiedIndicators.implicitWidth
     implicitHeight: vertical ? occupiedIndicators.implicitHeight : Appearance.sizes.barHeight
 
-    property real specialBlur: wsModel.specialWorkspaceActive ? 1 : 0
+    property real specialBlur: (wsModel.specialWorkspaceActive && !interactionMouseArea.containsMouse) ? 1 : 0
     Behavior on specialBlur {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
     }
 
     Item {
@@ -133,7 +133,7 @@ Item {
         }
 
         /////////////////// Hover ///////////////////
-        MouseArea {
+        ButtonMouseArea {
             id: interactionMouseArea
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
@@ -268,13 +268,10 @@ Item {
 
     FadeLoader {
         anchors.centerIn: parent
-        shown: wsModel.specialWorkspaceActive
-
+        shown: wsModel.specialWorkspaceActive && root.specialBlur > 0
         scale: 0.8 + 0.2 * root.specialBlur
-        // layer.enabled: true
-        // layer.smooth: true
 
-        Pill {
+        sourceComponent: Pill {
             anchors.centerIn: parent
             property real undirectionalWidth: root.activeWorkspaceSize
             property real undirectionalLength: {
