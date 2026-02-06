@@ -36,8 +36,9 @@ Item {
     Layout.alignment: vertical ? Qt.AlignHCenter : Qt.AlignVCenter
     Layout.fillWidth: vertical
     Layout.fillHeight: !vertical
-    implicitWidth: vertical ? Appearance.sizes.verticalBarWidth : occupiedIndicators.implicitWidth
-    implicitHeight: vertical ? occupiedIndicators.implicitHeight : Appearance.sizes.barHeight
+    readonly property real barThickness: vertical ? Appearance.sizes.verticalBarWidth : Appearance.sizes.barHeight
+    implicitWidth: vertical ? barThickness : occupiedIndicators.implicitWidth
+    implicitHeight: vertical ? occupiedIndicators.implicitHeight : barThickness
 
     property real specialBlur: (wsModel.specialWorkspaceActive && !interactionMouseArea.containsMouse) ? 1 : 0
     Behavior on specialBlur {
@@ -316,8 +317,8 @@ Item {
     component WorkspaceItem: Item {
         required property int index
         readonly property int wsId: wsModel.getWorkspaceIdAt(index)
-        implicitWidth: root.vertical ? Appearance.sizes.verticalBarWidth : root.workspaceButtonWidth
-        implicitHeight: root.vertical ? root.workspaceButtonWidth : Appearance.sizes.barHeight
+        implicitWidth: root.vertical ? root.barThickness : root.workspaceButtonWidth
+        implicitHeight: root.vertical ? root.workspaceButtonWidth : root.barThickness
     }
 
     component NumberWorkspaceItem: WorkspaceItem {
