@@ -59,10 +59,10 @@ W.ButtonMouseArea {
         sourceComponent: RowLayout {
             anchors.fill: parent
 
-            W.StyledText {
+            W.VisuallyCenteredStyledText {
                 Layout.leftMargin: root.layoutParentTopLeftRadius * root.parentRadiusToPaddingRatio
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                horizontalAlignment: Text.AlignHCenter
+                Layout.fillHeight: true
                 font.pixelSize: C.Appearance.font.pixelSize.large
                 color: C.Appearance.colors.colOnLayer1
                 text: S.DateTime.time
