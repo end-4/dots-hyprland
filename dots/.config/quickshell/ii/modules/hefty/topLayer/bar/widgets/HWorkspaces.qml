@@ -164,7 +164,7 @@ Item {
                     hover: interactionMouseArea.containsMouse
                     press: interactionMouseArea.containsPress
                     drag: true // There are too many layers so we need to force this to be a lil more opaque
-                    contentColor: Appearance.colors.colTertiary
+                    contentColor: Appearance.colors.colPrimary
                 }
             }
         }
@@ -221,16 +221,13 @@ Item {
                         visible: false // Prevent dupe: the colorizer already copies the icon
 
                         source: wsApp.mainAppIconSource
-                        implicitSize: NumberUtils.roundToEven((!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? root.workspaceIconSize : root.workspaceIconSizeShrinked)
+                        implicitSize: NumberUtils.roundToEven(root.workspaceIconSize)
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
                         Behavior on cornerMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        Behavior on implicitSize {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
                         }
                     }
 
@@ -254,9 +251,13 @@ Item {
                             (wsApp.biggestWindow && !root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? 
                             1 : wsApp.biggestWindow ? root.workspaceIconOpacityShrinked : 0
                         visible: opacity > 0
+                        scale: ((!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? root.workspaceIconSize : root.workspaceIconSizeShrinked) / root.workspaceIconSize
 
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Behavior on scale {
+                            animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
                         }
 
                         maskEnabled: true
@@ -304,10 +305,10 @@ Item {
     /////////////////// Components ///////////////////
     component WorkspaceLayout: Grid {
         anchors {
-            top: !vertical ? parent.top : undefined
-            bottom: !vertical ? parent.bottom : undefined
-            left: vertical ? parent.left : undefined
-            right: vertical ? parent.right : undefined
+            top: !root.vertical ? parent.top : undefined
+            bottom: !root.vertical ? parent.bottom : undefined
+            left: root.vertical ? parent.left : undefined
+            right: root.vertical ? parent.right : undefined
         }
 
         rowSpacing: 0
@@ -372,9 +373,10 @@ Item {
 
         StyledRectangle {
             id: indicatorRect
+
             anchors {
-                verticalCenter: vertical ? undefined : parent.verticalCenter
-                horizontalCenter: vertical ? parent.horizontalCenter : undefined
+                verticalCenter: root.vertical ? undefined : parent.verticalCenter
+                horizontalCenter: root.vertical ? parent.horizontalCenter : undefined
             }
 
             property real indicatorPosition: Math.min(idxPair.idx1, idxPair.idx2) * root.workspaceButtonWidth + root.activeWorkspaceMargin
