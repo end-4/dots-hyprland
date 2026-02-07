@@ -26,6 +26,10 @@ if [[ -z $(eselect repository list | grep -E ".*guru \*.*") ]]; then
         v sudo eselect repository enable guru
 fi
 
+if [[ -z $(eselect repository list | grep -E ".*hyproverlay \*.*") ]]; then
+	v sudo eselect repository enable hyproverlay
+fi
+
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
@@ -39,15 +43,6 @@ ebuild_dir="/var/db/repos/ii-dots"
 x sudo cp ./sdata/dist-gentoo/keywords ./sdata/dist-gentoo/keywords-user
 x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/keywords-user
 v sudo cp ./sdata/dist-gentoo/keywords-user /etc/portage/package.accept_keywords/illogical-impulse
-
-# QT
-x sudo cp ./sdata/dist-gentoo/qt-keywords ./sdata/dist-gentoo/qt-keywords-user
-x sed -i "s/$/ ~${arch}/" ./sdata/dist-gentoo/qt-keywords-user
-v sudo cp ./sdata/dist-gentoo/qt-keywords-user /etc/portage/package.accept_keywords/qt
-
-########## IMPORT UNMASKS
-sudo mkdir -p /etc/portage/package.unmask/
-v sudo cp ./sdata/dist-gentoo/qt-unmasks /etc/portage/package.unmask/qt
 
 ########## IMPORT USEFLAGS
 v sudo cp ./sdata/dist-gentoo/useflags /etc/portage/package.use/illogical-impulse

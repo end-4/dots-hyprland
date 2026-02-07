@@ -30,15 +30,15 @@ gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
 dev-libs/hyprland-protocols
-gui-libs/aquamarine
-gui-libs/hyprutils
+gui-libs/hyprutils::hyproverlay
+gui-libs/hyprwire::hyproverlay
 dev-util/hyprwayland-scanner
-dev-libs/hyprlang
-dev-libs/hyprgraphics
-gui-libs/hyprcursor
 gui-libs/hyprland-qt-support
-gui-libs/hyprland-qtutils
-gui-wm/hyprland
+gui-libs/hyprland-guiutils::hyproverlay
+gui-libs/hyprtoolkit::hyproverlay
+gui-wm/hyprland::hyproverlay
+dev-libs/hyprgraphics::hyproverlay
+gui-libs/aquamarine::hyproverlay 
 x11-libs/libxkbcommon
 dev-util/breakpad
 dev-libs/linux-syscall-support
@@ -51,3 +51,4 @@ media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
 app-misc/songrec
+dev-cpp/glaze::hyproverlay
