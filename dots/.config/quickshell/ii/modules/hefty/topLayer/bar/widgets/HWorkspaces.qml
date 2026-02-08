@@ -330,7 +330,8 @@ Item {
     component NumberWorkspaceItem: WorkspaceItem {
         id: wsNum
         property bool hasBiggestWindow: !!wsModel.biggestWindow[index]
-        property color contentColor: wsModel.occupied[wsNum.index] ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1Inactive
+        property int wsId: wsModel.getWorkspaceIdAt(index)
+        property color contentColor: (wsModel.occupied[wsNum.index] && wsId !== wsModel.fakeWorkspace) ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1Inactive
 
         FadeLoader {
             shown: !(Config.options?.bar.workspaces.alwaysShowNumbers
