@@ -272,8 +272,11 @@ Item {
 
     FadeLoader {
         anchors.centerIn: parent
-        shown: wsModel.specialWorkspaceActive && root.specialBlur > 0
+        shown: wsModel.specialWorkspaceActive
         scale: 0.8 + 0.2 * root.specialBlur
+
+        opacity: root.specialBlur
+        Behavior on opacity {} // Don't animate, as specialBlur is already animated
 
         sourceComponent: Pill {
             anchors.centerIn: parent
