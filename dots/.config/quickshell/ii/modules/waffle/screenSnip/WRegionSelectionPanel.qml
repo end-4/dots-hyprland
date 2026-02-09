@@ -36,7 +36,6 @@ PanelWindow {
         Window
     }
 
-    signal closed
     function close() {
         root.closed();
     }
