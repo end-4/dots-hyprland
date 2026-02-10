@@ -1,5 +1,62 @@
 # This script is meant to be sourced.
 # It's not for directly running.
+# -------------------------
+# CONFIG
+# -------------------------
+user_config="${REPO_ROOT}/sdata/dist-fedora/user_data.yaml"
+rpmbuildroot="${REPO_ROOT}/cache/rpmbuild"
+deps_data_file="${REPO_ROOT}/sdata/dist-fedora/feddeps.toml"
+
+# -------------------------
+# FUNCTIONS
+# -------------------------
+
+# Recording DNF Transaction ID
+function r() {
+  original_id=$(dnf history info | grep -Po '^Transaction ID\s+:\s+\K\d+')
+  "$@" || {
+    echo -e "${STY_RED}[$0]: Stack Exception...${STY_RST}"
+  }
+  last_id=$(dnf history info | grep -Po '^Transaction ID\s+:\s+\K\d+')
+  [ -f "$user_config" ] || { touch "$user_config" && yq -i ".dnf.original_transaction_id = $original_id" "$user_config"; } || :
+  [ "$original_id" == "$last_id" ] || yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config" || :
+}
+
+# Start building and install the missing RPM package locally.
+function install_RPMS() {
+  local local_specs local_rpms
+  rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
+
+  x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
+  x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
+
+  x cd $rpmbuildroot/SPECS
+
+  mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
+  for spec_file in ${local_specs[@]}; do
+    # Download sources
+    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
+    # Install build dependencies
+    r x sudo dnf builddep -y "$spec_file"
+    # Build the RPM package locally. If it fails, download it from COPR.
+    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
+      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
+      sudo dnf install -y $(basename "$spec_file" .spec)
+      nolock_qs=true
+    fi
+  done
+
+  mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
+  if [[ ${#local_rpms[@]} -ge 1 ]]; then
+    echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
+    r x sudo dnf install "${local_rpms[@]}" -y
+  fi
+  x cd ${REPO_ROOT}
+}
+
+# -------------------------
+# MAIN
+# -------------------------
 
 if ! command -v dnf >/dev/null 2>&1; then
   printf "${STY_RED}[$0]: dnf not found, it seems that the system is not Fedora 42 or later distros. Aborting...${STY_RST}\n"
@@ -8,120 +65,48 @@ fi
 
 # Update System
 case $SKIP_SYSUPDATE in
-  true) sleep 0;;
-  *) v sudo dnf upgrade --refresh -y;;
+  true) sleep 0 ;;
+  *) v sudo dnf upgrade --refresh -y ;;
 esac
 
 # Remove version lock
 v sudo dnf versionlock delete quickshell-git 2>/dev/null
 
-# Development-tools installation
-v sudo dnf install @development-tools fedora-packager rpmdevtools fonts-rpm-macros qt6-rpm-macros -y
+# Install yq for parsing config files
+v sudo dnf install yq -y
 
-# COPR repositories
-v sudo dnf copr enable solopasha/hyprland -y
-v sudo dnf copr enable errornointernet/quickshell -y
-v sudo dnf copr enable errornointernet/packages -y
-v sudo dnf copr enable deltacopy/darkly -y
-v sudo dnf copr enable alternateved/eza -y
-v sudo dnf copr enable atim/starship -y
+# Install development tools
+r v sudo dnf install @development-tools fedora-packager -y
 
-# Audio
-v sudo dnf install cava pavucontrol wireplumber libdbusmenu-gtk3-devel playerctl -y
+# Install COPR repositories
+copr_repos_json=$(yq -o=j '.copr.repos // []' "$deps_data_file")
+eval "$(jq -r '@sh "copr_repos_array+=(\(.[]))"' <<<"$copr_repos_json")" # Fedora distro contains jq
+for copr in ${copr_repos_array[@]}; do
+  v sudo dnf copr enable "$copr" -y
+done
 
-# Backlight
-v sudo dnf install geoclue2 brightnessctl ddcutil -y
-
-# Basic
-v sudo dnf install bc coreutils cliphist cmake curl wget2 ripgrep jq xdg-utils rsync yq -y
-
-# Fonts & Themes
-themes_deps=(
-  adw-gtk3-theme breeze-cursor-theme grub2-breeze-theme breeze-icon-theme{,-fedora} 
-  kf6-breeze-icons sddm-breeze darkly eza fish fontconfig kitty matugen starship 
-  jetbrains-mono-nl-fonts material-icons-fonts twitter-twemoji-fonts
-)
-v sudo dnf install ${themes_deps[@]} -y
-
-# Hyprland 
-hyprland_deps=(
-  hyprland
-  hyprsunset
-  wl-clipboard
-)
-v sudo dnf install --setopt="install_weak_deps=False" "${hyprland_deps[@]}" -y
-# hyprland-qt-support's build deps
-v sudo dnf install hyprlang-devel -y
-
-# KDE
-v sudo dnf install bluedevil gnome-keyring NetworkManager plasma-nm polkit-kde dolphin plasma-systemsettings -y
-
-# Microtex-git
-v sudo dnf install --setopt="install_weak_deps=False" tinyxml2-devel gtkmm3.0-devel gtksourceviewmm3-devel cairomm-devel -y
-
-# Portal
-v sudo dnf install xdg-desktop-portal{,-gtk,-kde,-hyprland} -y
-
-# Python
-v sudo dnf install --setopt="install_weak_deps=False" clang uv gtk4-devel libadwaita-devel \
-  libsoup3-devel libportal-gtk4 gobject-introspection-devel -y
-v sudo dnf install python3{,.12}{,-devel} -y
-
-# Quickshell-git
-quickshell_deps=(
-  qt6-qtdeclarative qt6-qtbase jemalloc qt6-qtsvg pipewire-libs
-  libxcb wayland-devel qt6-qtwayland qt5-qtwayland libdrm breakpad
-)
-# NOTE: Below are custom dependencies of illogical-impulse
-quickshell_custom_deps=(
-  qt6-qt5compat qt6-qtimageformats qt6-qtpositioning 
-  qt6-qtquicktimeline qt6-qtsensors qt6-qttools qt6-qttranslations 
-  qt6-qtvirtualkeyboard qt6-qtwayland kdialog kf6-syntax-highlighting 
-)
-quickshell_build_deps=(
-  breakpad-static breakpad-devel gcc-c++ ninja-build mesa-libgbm-devel cli11-devel glib2-devel
-  jemalloc-devel libdrm-devel pipewire-devel pam-devel polkit-devel wayland-devel wayland-protocols-devel
-  qt6-qtdeclarative-devel qt6-qtshadertools-devel qt6-qtbase-private-devel spirv-tools
-  libasan
-)
-v sudo dnf install "${quickshell_deps[@]}" -y
-v sudo dnf install "${quickshell_custom_deps[@]}" -y
-v sudo dnf install "${quickshell_build_deps[@]}" -y
-
-# Screencapture
-v sudo dnf install hyprshot slurp swappy tesseract tesseract-langpack-eng tesseract-langpack-chi_sim wf-recorder -y
-
-# Toolkit
-v sudo dnf install upower wtype ydotool -y
-
-# Widgets
-v sudo dnf install fuzzel glib2 ImageMagick hypridle hyprlock hyprpicker songrec translate-shell wlogout -y
-
-# Extra
-v sudo dnf install --setopt="install_weak_deps=False" mpvpaper plasma-systemmonitor unzip -y
-
-# Start building the missing RPM package locally.
-install_RPMS() {
-    rpmbuildroot=${REPO_ROOT}/cache/rpmbuild
-    x mkdir -p $rpmbuildroot/{BUILD,RPMS,SOURCES}
-    x cp -r ${REPO_ROOT}/sdata/dist-fedora/SPECS $rpmbuildroot/
-    x cd $rpmbuildroot/SPECS
-    mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
-    for spec_file in ${local_specs[@]}; do
-        x rpmbuild -bb --define "_topdir $rpmbuildroot" $spec_file
-    done
-    mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-    echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
-    x sudo dnf install "${local_rpms[@]}" -y
-    x cd ${REPO_ROOT}
-}
-
+# Build and install locally RPMS
 showfun install_RPMS
 v install_RPMS
 
+# Install packages from toml file
+deps_data=$(yq -o=j '.' "$deps_data_file")
+echo "Starting to install packages from $deps_data_file ..."
 
-# hyprland-qtutils depends on hyprland-qt-support
-v sudo dnf install hyprland-qtutils -y
+while IFS= read -r deps_list_key; do
+  echo "Installing package list: $deps_list_key"
+
+  install_opts=$(echo $deps_data | yq ".groups.\"$deps_list_key\" | select(has(\"install_opts\")) | .install_opts[]")
+  package_list=$(echo $deps_data | yq ".groups.\"$deps_list_key\".packages | unique | .[]")
+
+  r v sudo dnf install -y $install_opts $package_list </dev/tty
+
+  echo "----------------------------------------"
+done < <(echo "$deps_data" | yq '.groups | keys[]? | select(length > 0)')
 
 # Add back versionlock at the end
-v sudo dnf versionlock add quickshell-git
+[ -n $nolock_qs ] || v sudo dnf versionlock add quickshell-git || true
+
+echo -e "\n========================================"
+echo "All installations are completed."
+echo "========================================"

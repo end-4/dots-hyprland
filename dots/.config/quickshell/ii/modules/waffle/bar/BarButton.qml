@@ -5,48 +5,20 @@ import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.waffle.looks
 
-Button {
+AcrylicButton {
     id: root
 
-    signal altAction()
-    signal middleClickAction()
+    property var altAction: () => {}
+    property var middleClickAction: () => {}
 
-    property color colBackground
-    property color colBackgroundBorder
     Layout.fillHeight: true
     topInset: 4
     bottomInset: 4
+    leftInset: 0
+    rightInset: 0
+    horizontalPadding: 8
 
-    signal hoverTimedOut()
-    property bool shouldShowTooltip: false
-    property Timer hoverTimer: Timer {
-        id: hoverTimer
-        running: root.hovered
-        interval: 400
-        onTriggered: {
-            root.hoverTimedOut()
-        }
-    }
-    onHoverTimedOut: {
-        root.shouldShowTooltip = true
-    }
-    onHoveredChanged: {
-        if (!root.hovered) {
-            root.shouldShowTooltip = false
-            root.hoverTimer.stop()
-        }
-    }
-
-    colBackground: {
-        if (root.down) {
-            return Looks.colors.bg1Active
-        } else if ((root.hovered && !root.down) || root.checked) {
-            return Looks.colors.bg1Hover
-        } else {
-            return ColorUtils.transparentize(Looks.colors.bg1)
-        }
-    }
-    colBackgroundBorder: ColorUtils.transparentize(Looks.colors.bg1Border, root.checked ? Looks.contentTransparency : 1)
+    colBackground: ColorUtils.transparentize(Looks.colors.bg1)
 
     MouseArea {
         anchors.fill: parent
@@ -64,14 +36,4 @@ Button {
         }
     }
 
-    background: AcrylicRectangle {
-        shiny: ((root.hovered && !root.down) || root.checked)
-        color: root.colBackground
-        border.width: 1
-        border.color: root.colBackgroundBorder
-
-        Behavior on border.color {
-            animation: Looks.transition.color.createObject(this)
-        }
-    }
 }

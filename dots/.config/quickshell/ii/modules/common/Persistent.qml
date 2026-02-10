@@ -59,8 +59,12 @@ Singleton {
             property string hyprlandInstanceSignature: ""
 
             property JsonObject ai: JsonObject {
-                property string model
+                property string model: "gemini-2.5-flash"
                 property real temperature: 0.5
+            }
+
+            property JsonObject cheatsheet: JsonObject {
+                property int tabIndex: 0
             }
 
             property JsonObject sidebar: JsonObject {
@@ -130,6 +134,14 @@ Singleton {
                     property real width: 350
                     property real height: 600
                     property int tabIndex: 0
+                }
+                property JsonObject notes: JsonObject {
+                    property bool pinned: false
+                    property bool clickthrough: true
+                    property real x: 1400
+                    property real y: 42
+                    property real width: 460
+                    property real height: 330
                 }
             }
 

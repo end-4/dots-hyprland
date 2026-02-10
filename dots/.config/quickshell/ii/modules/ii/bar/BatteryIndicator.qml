@@ -16,7 +16,7 @@ MouseArea {
     implicitWidth: batteryProgress.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
 
-    hoverEnabled: true
+    hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
     ClippedProgressBar {
         id: batteryProgress
@@ -30,7 +30,11 @@ MouseArea {
             height: batteryProgress.valueBarHeight
 
             RowLayout {
-                anchors.centerIn: parent
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: (parent.height - height) / 2
+                }
                 spacing: 0
 
                 MaterialSymbol {

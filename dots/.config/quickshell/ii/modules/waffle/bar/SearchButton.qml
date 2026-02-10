@@ -9,11 +9,12 @@ import qs.modules.waffle.looks
 AppButton {
     id: root
 
-    iconName: "system-search"
+    iconName: checked ? "system-search-checked" : "system-search"
     separateLightDark: true
 
+    checked: GlobalStates.searchOpen && LauncherSearch.query !== ""
     onClicked: {
-        GlobalStates.overviewOpen = !GlobalStates.overviewOpen; // For now...
+        GlobalStates.searchOpen = !GlobalStates.searchOpen; // For now...
     }
 
     BarToolTip {

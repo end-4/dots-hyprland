@@ -20,6 +20,7 @@ ToolTip {
         hintingPreference: Font.PreferNoHinting // Prevent shaky text
     }
 
+    delay: 0
     visible: internalVisibleCondition
     
     contentItem: StyledToolTipContent {

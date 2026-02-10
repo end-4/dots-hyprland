@@ -1,10 +1,14 @@
-{ pkgs, quickshell, nixGLWrap, ... }:
+{ pkgs, quickshell, 
+#nixGLWrap,
+... }:
 let
-  qs = nixGLWrap quickshell.packages.x86_64-linux.default;
+  #qs = nixGLWrap quickshell.packages.x86_64-linux.default;
+  qs = quickshell.packages.x86_64-linux.default;
 in pkgs.stdenv.mkDerivation {
   name = "illogical-impulse-quickshell-wrapper";
   meta = with pkgs.lib; {
-    description = "Quickshell wrapped with NixGL + bundled Qt deps for home-manager usage";
+    #description = "Quickshell wrapped with NixGL + bundled Qt deps for home-manager usage";
+    description = "Quickshell bundled Qt deps for home-manager usage";
     license = licenses.gpl3Only;
   };
 
@@ -40,6 +44,7 @@ in pkgs.stdenv.mkDerivation {
     qt6.qttranslations #qt6-translations
     qt6.qtvirtualkeyboard #qt6-virtualkeyboard
     qt6.qtwayland #qt6-wayland
+    kdePackages.kirigami #kirigami
     kdePackages.kdialog #kdialog
     kdePackages.syntax-highlighting #syntax-highlighting
   ];

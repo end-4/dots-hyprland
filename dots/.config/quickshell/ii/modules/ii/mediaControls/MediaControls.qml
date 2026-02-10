@@ -16,7 +16,7 @@ Scope {
     id: root
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
-    readonly property var realPlayers: Mpris.players.values.filter(player => isRealPlayer(player))
+    readonly property var realPlayers: MprisController.players
     readonly property var meaningfulPlayers: filterDuplicatePlayers(realPlayers)
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
@@ -24,27 +24,6 @@ Scope {
     property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
     property list<real> visualizerPoints: []
 
-    property bool hasPlasmaIntegration: false
-    Process {
-        id: plasmaIntegrationAvailabilityCheckProc
-        running: true
-        command: ["bash", "-c", "command -v plasma-browser-integration-host"]
-        onExited: (exitCode, exitStatus) => {
-            root.hasPlasmaIntegration = (exitCode === 0);
-        }
-    }
-    function isRealPlayer(player) {
-        if (!Config.options.media.filterDuplicatePlayers) {
-            return true;
-        }
-        return (
-            // Remove unecessary native buses from browsers if there's plasma integration
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) && !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
-            // playerctld just copies other buses and we don't need duplicates
-            !player.dbusName?.startsWith('org.mpris.MediaPlayer2.playerctld') &&
-            // Non-instance mpd bus
-            !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
-    }
     function filterDuplicatePlayers(players) {
         let filtered = [];
         let used = new Set();
@@ -96,13 +75,13 @@ Scope {
         id: mediaControlsLoader
         active: GlobalStates.mediaControlsOpen
         onActiveChanged: {
-            if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
+            if (!mediaControlsLoader.active && root.realPlayers.length === 0) {
                 GlobalStates.mediaControlsOpen = false;
             }
         }
 
         sourceComponent: PanelWindow {
-            id: mediaControlsRoot
+            id: panelWindow
             visible: true
 
             exclusionMode: ExclusionMode.Ignore
@@ -119,9 +98,9 @@ Scope {
                 right: Config.options.bar.vertical && Config.options.bar.bottom
             }
             margins {
-                top: Config.options.bar.vertical ? ((mediaControlsRoot.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
+                top: Config.options.bar.vertical ? ((panelWindow.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
                 bottom: Appearance.sizes.barHeight
-                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth)
+                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((panelWindow.screen.width / 2) - (osdWidth / 2) - widgetWidth)
                 right: Appearance.sizes.barHeight
             }
 
@@ -129,13 +108,16 @@ Scope {
                 item: playerColumnLayout
             }
 
-            HyprlandFocusGrab {
-                windows: [mediaControlsRoot]
-                active: mediaControlsLoader.active
-                onCleared: () => {
-                    if (!active) {
-                        GlobalStates.mediaControlsOpen = false;
-                    }
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(panelWindow);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(panelWindow);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    GlobalStates.mediaControlsOpen = false;
                 }
             }
 
@@ -158,10 +140,13 @@ Scope {
                     }
                 }
 
-                Item { // No player placeholder
+                Item {
+                    // No player placeholder
                     Layout.alignment: {
-                        if (mediaControlsRoot.anchors.left) return Qt.AlignLeft;
-                        if (mediaControlsRoot.anchors.right) return Qt.AlignRight;
+                        if (panelWindow.anchors.left)
+                            return Qt.AlignLeft;
+                        if (panelWindow.anchors.right)
+                            return Qt.AlignRight;
                         return Qt.AlignHCenter;
                     }
                     Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
@@ -174,7 +159,7 @@ Scope {
                         target: placeholderBackground
                     }
 
-                    Rectangle { 
+                    Rectangle {
                         id: placeholderBackground
                         anchors.centerIn: parent
                         color: Appearance.colors.colLayer0

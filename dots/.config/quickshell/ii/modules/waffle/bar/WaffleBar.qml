@@ -9,12 +9,11 @@ import qs.modules.common
 import qs.modules.common.widgets
 
 Scope {
-    id: bar
-    property bool showBarBackground: Config.options.bar.showBackground
-
+    id: root
+    
     LazyLoader {
         id: barLoader
-        active: GlobalStates.barOpen && !GlobalStates.screenLocked
+        active: GlobalStates.barOpen
         component: Variants {
             model: Quickshell.screens
             delegate: PanelWindow { // Bar window

@@ -9,28 +9,31 @@ Rectangle {
     id: root
 
     property bool shiny: true // Top border
-    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Border, shiny ? Looks.contentTransparency : 1)
+    property color borderColor: ColorUtils.transparentize(Looks.colors.bg1Hover, 0.7)
+    property color internalBorderColor: ColorUtils.transparentize(borderColor, shiny ? 0.0 : 1)
     color: Looks.colors.bg1Hover
     radius: Looks.radius.medium
     Behavior on color {
         animation: Looks.transition.color.createObject(this)
     }
-    Behavior on borderColor {
+    Behavior on internalBorderColor {
         animation: Looks.transition.color.createObject(this)
     }
-    onBorderColorChanged: {
+    onInternalBorderColorChanged: {
         borderCanvas.requestPaint();
     }
     
-    // Top 1px border with color 
+    // 1px border at the top or bottom
     Canvas {
         id: borderCanvas
         anchors.fill: parent
+        // For dark mode we have a shiny top border, and for light mode we have sort of a shadow
+        rotation: Looks.dark ? 0 : 180
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
-            var borderColor = root.borderColor;
+            var borderColor = root.internalBorderColor;
 
             var r = root.radius;
             var fadeLength = Math.max(1, r);

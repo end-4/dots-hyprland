@@ -1,8 +1,13 @@
-{ config, lib, pkgs, nixgl, quickshell, home_attrs, ... }:
+{ config, lib, pkgs, 
+#nixgl, 
+quickshell, home_attrs, ... }:
 {
   programs.home-manager.enable = true;
-  nixGL.packages = nixgl.packages;
-  nixGL.defaultWrapper = "mesa";
+
+  # Necessary for non-NixOS to handle GPU (since home-manager version 25.11)
+  targets.genericLinux.enable = true;
+  #nixGL.packages = nixgl.packages;
+  #nixGL.defaultWrapper = "mesa";
 
   xdg.portal = {
     enable = true;
@@ -27,7 +32,8 @@
     systemd.enable = false; plugins = []; settings = {}; extraConfig = "";
     enable = true;
     ## Use NixGL
-    package = config.lib.nixGL.wrap pkgs.hyprland;
+    #package = config.lib.nixGL.wrap pkgs.hyprland;
+    package = pkgs.hyprland;
   };
 
   home = {
@@ -94,11 +100,9 @@
       matugen #matugen-bin (Used in Quickshell)
       #otf-space-grotesk (TODO: Not available as Nixpkg)
       starship #starship
-      #ttf-gabarito-git (TODO: Not available as Nixpkg)
       nerd-fonts.jetbrains-mono #ttf-jetbrains-mono-nerd
       material-symbols #ttf-material-symbols-variable-git
       #ttf-readex-pro (TODO: seems not available as nixpkg)
-      roboto-flex #ttf-roboto-flex
       rubik #ttf-rubik-vf
       twemoji-color-font #ttf-twemoji
 
@@ -169,6 +173,7 @@
       songrec #songrec
       translate-shell #translate-shell
       wlogout #wlogout
+      libqalculate #libqalculate
 
     ]
     ++ [
@@ -176,7 +181,9 @@
 
     ### illogical-impulse-quickshell-git
     #(config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
-    (import ./quickshell.nix { inherit pkgs quickshell; nixGLWrap = config.lib.nixGL.wrap; })
+    (import ./quickshell.nix { inherit pkgs quickshell; 
+    #nixGLWrap = config.lib.nixGL.wrap;
+    })
     ];
   }//home_attrs;
 }

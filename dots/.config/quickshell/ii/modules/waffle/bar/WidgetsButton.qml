@@ -18,6 +18,11 @@ AppButton {
     onClicked: {
         GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen
     }
+    onDownChanged: {
+        scaleAnim.duration = root.down ? 150 : 200
+        scaleAnim.easing.bezierCurve = root.down ? Looks.transition.easing.bezierCurve.easeIn : Looks.transition.easing.bezierCurve.easeOut
+        iconWidget.scale = root.down ? 5/6 : 1 // If/When we do dragging, the scale is 1.25
+    }
 
     contentItem: Item {
         anchors {
@@ -37,10 +42,17 @@ AppButton {
             }
             spacing: 6
 
-            AppIcon {
+            WAppIcon {
                 id: iconWidget
                 anchors.verticalCenter: parent.verticalCenter
                 iconName: root.iconName
+
+                Behavior on scale {
+                    NumberAnimation {
+                        id: scaleAnim
+                        easing.type: Easing.BezierSpline
+                    }
+                }
             }
 
             Column {

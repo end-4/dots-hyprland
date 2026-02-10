@@ -12,7 +12,7 @@ Scope {
     property int sidebarWidth: Appearance.sizes.sidebarWidth
 
     PanelWindow {
-        id: sidebarRoot
+        id: panelWindow
         visible: GlobalStates.sidebarRightOpen
 
         readonly property bool posRight: (!Config.options.bar.vertical || Config.options.bar.bottom)
@@ -31,14 +31,13 @@ Scope {
         }
 
         function hide() {
-            GlobalStates.sidebarRightOpen = false
+            GlobalStates.sidebarRightOpen = false;
         }
 
         exclusiveZone: 0
         implicitWidth: sidebarWidth
         WlrLayershell.namespace: "quickshell:sidebarRight"
-        // Hyprland 0.49: Focus is always exclusive and setting this breaks mouse focus grab
-        // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+        WlrLayershell.keyboardFocus: GlobalStates.sidebarRightOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         color: "transparent"
 
         anchors {
@@ -48,12 +47,17 @@ Scope {
             bottom: true
         }
 
-        HyprlandFocusGrab {
-            id: grab
-            windows: [ sidebarRoot ]
-            active: GlobalStates.sidebarRightOpen
-            onCleared: () => {
-                if (!active) sidebarRoot.hide()
+        onVisibleChanged: {
+            if (visible) {
+                GlobalFocusGrab.addDismissable(panelWindow);
+            } else {
+                GlobalFocusGrab.removeDismissable(panelWindow);
+            }
+        }
+        Connections {
+            target: GlobalFocusGrab
+            function onDismissed() {
+                panelWindow.hide();
             }
         }
 
@@ -70,16 +74,14 @@ Scope {
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
 
             focus: GlobalStates.sidebarRightOpen
-            Keys.onPressed: (event) => {
+            Keys.onPressed: event => {
                 if (event.key === Qt.Key_Escape) {
-                    sidebarRoot.hide();
+                    panelWindow.hide();
                 }
             }
 
             sourceComponent: SidebarRightContent {}
         }
-
-
     }
 
     IpcHandler {
@@ -122,5 +124,4 @@ Scope {
             GlobalStates.sidebarRightOpen = false;
         }
     }
-
 }

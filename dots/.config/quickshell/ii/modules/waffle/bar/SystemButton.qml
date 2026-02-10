@@ -3,14 +3,15 @@ import QtQuick.Layouts
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.waffle.looks
 
 BarButton {
     id: root
 
-    checked: GlobalStates.sidebarRightOpen
+    checked: GlobalStates.sidebarLeftOpen
     onClicked: {
-        GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen; // For now...
+        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
     }
 
     contentItem: Item {
@@ -30,7 +31,13 @@ BarButton {
                 id: internetHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: WIcons.internetIcon
+                    icon: "wifi-1"
+                    color: Looks.colors.inactiveIcon
+
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.internetIcon
+                    }
                 }
             }
 
@@ -38,31 +45,34 @@ BarButton {
                 id: volumeHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: {
-                        const muted = Audio.sink?.audio.muted ?? false;
-                        const volume = Audio.sink?.audio.volume ?? 0;
-                        if (muted)
-                            return volume > 0 ? "speaker-off" : "speaker-none";
-                        if (volume == 0)
-                            return "speaker-none";
-                        if (volume < 0.5)
-                            return "speaker-1";
-                        return "speaker";
+                    icon: "speaker"
+                    color: Looks.colors.inactiveIcon
+                    
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.volumeIcon
                     }
                 }
+                onScrollDown: Audio.decrementVolume();
+                onScrollUp: Audio.incrementVolume();
             }
 
             IconHoverArea {
                 id: batteryHoverArea
+                visible: Battery?.available ?? false
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: WIcons.batteryIcon
+                    icon: WIcons.batteryLevelIcon
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.batteryIcon
+                    }
                 }
             }
         }
     }
 
-    component IconHoverArea: MouseArea {
+    component IconHoverArea: FocusedScrollMouseArea {
         id: hoverArea
         required property var iconItem
         anchors {
@@ -85,11 +95,13 @@ BarButton {
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && volumeHoverArea.containsMouse
         text: Translation.tr("Speakers (%1): %2") //
-        .arg(Audio.sink?.nickname || Audio.sink?.description || Translation.tr("Unknown")) //
-        .arg(`${Math.round(Audio.sink?.audio.volume * 100) || 0}%`) //
+            .arg(Audio.sink?.nickname || Audio.sink?.description || Translation.tr("Unknown")) //
+            .arg(Audio.sink?.audio.muted ? Translation.tr("Muted") : `${Math.round(Audio.sink?.audio.volume * 100) || 0}%`) //
     }
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && batteryHoverArea.containsMouse
-        text: Translation.tr("Battery: %1").arg(`${Math.round(Battery.percentage * 100) || 0}%`)
+        text: Translation.tr("Battery: %1%2") //
+            .arg(`${Math.round(Battery.percentage * 100) || 0}%`) //
+            .arg(Battery.isPluggedIn ? (" " + Translation.tr("(Plugged in)")) : "")
     }
 }

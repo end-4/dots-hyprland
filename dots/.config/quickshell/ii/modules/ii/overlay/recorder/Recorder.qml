@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.ii.overlay
@@ -83,7 +84,7 @@ StyledOverlayWidget {
                     }
                     StyledText {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Open recordings folder")
+                        text: Translation.tr("Open recordings folder")
                     }
                 }
             }

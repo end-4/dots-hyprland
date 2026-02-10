@@ -64,26 +64,42 @@ elif [[ "$OS_GROUP_ID" =~ ^(arch|gentoo|fedora)$ ]]; then
     if [[ "${tmp_update_status}" =~ ^(OUTDATED|EMPTY_TARGET|EMPTY_SOURCE|FORCE_OUTDATED|WIP)$ ]]; then
       printf "${STY_RED}${STY_BOLD}===URGENT===${STY_RST}\n"
       printf "${STY_RED}"
-      printf "The community provided ./sdata/dist-${TARGET_ID}/ is outdated (status: ${tmp_update_status}),\n"
+      printf "Status code: ${tmp_update_status}\n"
+      printf "The community provided ./sdata/dist-${TARGET_ID}/ seems to be outdated,\n"
       printf "which means it probably does not reflect all latest changes of ./sdata/dist-arch/ .\n"
+      printf "In such case it may work unexpectedly.${STY_RST}\n"
       printf "\n"
-      printf "According to the actual changes, it may still works, but it can also work unexpectedly.\n"
-      printf "It's highly recommended to check the following links before continue:${STY_RST}\n"
-      printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RST}\n"
-      printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-arch${STY_RST}\n"
-      printf "${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-${TARGET_ID}${STY_RST}\n"
+      printf "${STY_RED}It's highly recommended to check the following links before continue.${STY_RST}\n"
+      printf "${STY_RED}1. Normally just check discussion#2140 to see if there's any valid update notice.${STY_RST}\n"
+      printf "   ${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/2140${STY_RST}\n"
+      printf "   ${STY_RED}Note that the timeliness relies on manual maintenance.${STY_RST}\n"
+      printf "${STY_RED}2. For details please compare the two lists of commit history:${STY_RST}\n"
+      printf "   ${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-arch${STY_RST}\n"
+      printf "   ${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/commits/main/sdata/dist-${TARGET_ID}${STY_RST}\n"
       printf "\n"
-      printf "${STY_PURPLE}${STY_INVERT}PR on ./sdata/dist-${TARGET_ID}/ to properly reflect the latest changes of ./sdata/dist-arch is welcomed.${STY_RST}\n"
+      printf "${STY_PURPLE}PR on ./sdata/dist-${TARGET_ID}/ to properly reflect the latest changes of ./sdata/dist-arch is welcomed.${STY_RST}\n"
+      printf "${STY_PURPLE}${STY_BOLD}Again, do not create any issue,${STY_RST}\n"
+      printf "${STY_PURPLE}but you can create a discussion under \"Extra Distros\" category: ${STY_RST}\n"
+      printf "${STY_PURPLE}${STY_UNDERLINE}https://github.com/end-4/dots-hyprland/discussions/new?category=extra-distros${STY_RST}\n"
       printf "\n"
-      if [ "$ask" = "false" ]; then
-        echo "Urgent problem encountered, aborting...";exit 1
-      else
-        printf "${STY_RED}Still proceed?${STY_RST}\n"
-        read -p "[y/N]: " p
-        case "$p" in
-          [yY])sleep 0;;
-          *)echo "Aborting...";exit 1;;
-        esac
+      if [[ "${tmp_update_status}" = "OUTDATED" ]]; then
+        printf "${STY_RED}NOTE: The conclusion above is determined automatically by comparing latest Git commit time,\n"
+        printf "however sometimes the changes on \"dist-arch\" are actually not needed for \"dist-${TARGET_ID}\",\n"
+        printf "in such case you should just ignore it and continue.\n"
+        printf "${STY_RST}\n"
+      fi
+      printf "\n"
+      if ! [[ "$IGNORE_OUTDATE_CHECK" = "true" ]]; then
+        if [ "$ask" = "false" ]; then
+          printf "${STY_RED}Urgent problem encountered, aborting...${STY_RST}\n";exit 1
+        else
+          printf "${STY_RED}Still proceed?${STY_RST}\n"
+          read -p "[y/N]: " p
+          case "$p" in
+            [yY])sleep 0;;
+            *)echo "Aborting...";exit 1;;
+          esac
+        fi
       fi
     fi
   fi
