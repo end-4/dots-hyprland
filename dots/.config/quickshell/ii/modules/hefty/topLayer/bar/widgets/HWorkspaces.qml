@@ -208,7 +208,7 @@ Item {
 
                     AppIcon {
                         id: appIcon
-                        property real cornerMargin: (!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? 
+                        property real cornerMargin: (!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons && wsApp.biggestWindow) ? 
                             (root.workspaceButtonWidth - root.workspaceIconSize) / 2 : root.workspaceIconMarginShrinked
                         anchors {
                             bottom: parent.bottom
