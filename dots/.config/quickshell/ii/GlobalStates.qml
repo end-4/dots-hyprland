@@ -37,14 +37,6 @@ Singleton {
         }
     }
 
-    property real screenZoom: 1
-    onScreenZoomChanged: {
-        Quickshell.execDetached(["hyprctl", "keyword", "cursor:zoom_factor", root.screenZoom.toString()]);
-    }
-    Behavior on screenZoom {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-
     GlobalShortcut {
         name: "workspaceNumber"
         description: "Hold to show workspace numbers, release to show icons"
@@ -56,16 +48,4 @@ Singleton {
             root.superDown = false
         }
     }
-
-    IpcHandler {
-		target: "zoom"
-
-		function zoomIn() {
-            screenZoom = Math.min(screenZoom + 0.4, 3.0)
-        }
-
-        function zoomOut() {
-            screenZoom = Math.max(screenZoom - 0.4, 1)
-        } 
-	}
 }

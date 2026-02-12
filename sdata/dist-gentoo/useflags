@@ -39,7 +39,7 @@ media-fonts/twemoji X
 ################### HYPRLAND ################### 
 #gui-apps/hypridle (no use flags)
 #gui-libs/hyprcursor (no use flags)
-gui-wm/hyprland X qtutils
+gui-wm/hyprland::hyproverlay X guiutils
 #gui-libs/hyprland-qtutils (no use flags)
 #gui-libs/hyprland-qt-support (no use flags)
 #dev-libs/hyprlang (no use flags)
