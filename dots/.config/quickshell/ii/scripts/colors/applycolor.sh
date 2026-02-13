@@ -57,6 +57,35 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
+apply_icon() {
+  enable_icon=$(jq -r '.appearance.wallpaperTheming.enableIcon // false' "$CONFIG_FILE")
+  user_icons=$(jq -r '.appearance.wallpaperTheming.userIcons // ""' "$CONFIG_FILE") # should be a path to the icon theme
+
+  # If wallpaper-based icon theming is disabled
+  if [ "$enable_icon" = "false" ]; then
+    if [ -n "$user_icons" ] && [ -d "$user_icons" ]; then
+      "$CONFIG_DIR/scripts/colors/set-icons.sh" "$user_icons"
+    fi
+    return
+  fi
+
+  # Get primary color
+  primary_color=$(awk -F': ' '/^\$primary:/ {gsub(/;/,"",$2); print $2}' \
+    "$STATE_DIR/user/generated/material_colors.scss")
+
+  if [ -z "$primary_color" ]; then
+    echo "Primary color not found. Skipping icon generation."
+    return
+  fi
+
+  primary_color="${primary_color#\#}"
+
+  "$CONFIG_DIR/scripts/colors/custom-tela" custom-tela "$primary_color"
+
+  "$CONFIG_DIR/scripts/colors/set-icons.sh" \
+    "$HOME/.local/share/icons/custom-tela"
+}
+
 # Check if terminal theming is enabled in config
 CONFIG_FILE="$XDG_CONFIG_HOME/illogical-impulse/config.json"
 if [ -f "$CONFIG_FILE" ]; then
@@ -64,6 +93,7 @@ if [ -f "$CONFIG_FILE" ]; then
   if [ "$enable_terminal" = "true" ]; then
     apply_term &
   fi
+  apply_icon
 else
   echo "Config file not found at $CONFIG_FILE. Applying terminal theming by default."
   apply_term &
