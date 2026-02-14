@@ -25,6 +25,14 @@ Scope {
             id: "brightness",
             sourceUrl: "indicators/BrightnessIndicator.qml"
         },
+        {
+            id: "capslock",
+            sourceUrl: "indicators/CapsLockIndicator.qml"
+        },
+        {
+            id: "numlock",
+            sourceUrl: "indicators/NumLockIndicator.qml"
+        },
     ]
 
     function triggerOsd() {
@@ -51,7 +59,21 @@ Scope {
             root.triggerOsd();
         }
     }
+    Connections {
+        target: KeyboardLocks
 
+        function onCapsLockOnChanged() {
+            root.protectionMessage = "";
+            root.currentIndicator = "capslock";
+            root.triggerOsd();
+        }
+
+        function onNumLockOnChanged() {
+            root.protectionMessage = "";
+            root.currentIndicator = "numlock";
+            root.triggerOsd();
+        }
+    }
     Connections {
         // Listen to volume changes
         target: Audio.sink?.audio ?? null
