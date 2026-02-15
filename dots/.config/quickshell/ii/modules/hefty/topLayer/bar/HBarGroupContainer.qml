@@ -28,30 +28,32 @@ Item {
     property alias topRightRadius: bg.topRightRadius
     property alias bottomLeftRadius: bg.bottomLeftRadius
     property alias bottomRightRadius: bg.bottomRightRadius
+    property real backgroundWidth: root.vertical ? root.backgroundUndirectionalWidth : root.width
+    property real backgroundHeight: root.vertical ? root.height : root.backgroundUndirectionalWidth
+    property real fullBackgroundRadius: Math.min(backgroundWidth, backgroundHeight) / 2
+    function getBackgroundRadius(atSide) {
+        if (root.m3eRadius) {
+            if (atSide) return fullBackgroundRadius;
+            else return C.Appearance.rounding.unsharpenmore;
+        } else {
+            return 12;
+        }
+    }
 
-    W.AxisRectangle {
+    property Item background: W.AxisRectangle {
         id: bg
         anchors.centerIn: parent
         contentLayer: W.StyledRectangle.ContentLayer.Group
 
-        width: root.vertical ? root.backgroundUndirectionalWidth : root.width
-        height: root.vertical ? root.height : root.backgroundUndirectionalWidth
+        width: root.backgroundWidth
+        height: root.backgroundHeight
 
-        property real fullRadius: Math.min(width, height) / 2
-        function getRadius(atSide) {
-            if (root.m3eRadius) {
-                if (atSide) return fullRadius;
-                else return C.Appearance.rounding.unsharpenmore;
-            } else {
-                return 12;
-            }
-        }
         vertical: root.vertical
-        startRadius: getRadius(root.startSide)
-        endRadius: getRadius(root.endSide)
+        startRadius: root.getBackgroundRadius(root.startSide)
+        endRadius: root.getBackgroundRadius(root.endSide)
     }
 
-    GridLayout {
+    property Item contentItem: GridLayout {
         id: layout
         columns: C.Config.options.bar.vertical ? 1 : -1
         anchors.centerIn: parent
@@ -59,4 +61,9 @@ Item {
         columnSpacing: spacing
         rowSpacing: spacing
     }
+
+    children: [
+        background,
+        contentItem
+    ]
 }

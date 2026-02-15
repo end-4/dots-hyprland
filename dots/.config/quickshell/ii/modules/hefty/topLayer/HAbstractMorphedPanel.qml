@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import qs.services as S
 
 /**
  * Abstract morphed panel to be used in TopLayerPanel.
@@ -21,6 +22,7 @@ Item {
     // Signals & loading
     signal requestFocus()
     signal dismissed()
+    signal focusGrabDismissed()
     property bool load: true
     property bool shown: true
 
@@ -32,7 +34,40 @@ Item {
 
     // Main stuff
     property var backgroundPolygon
+    property list<Item> baseMaskItems: [root]
+    property list<Item> attachedMaskItems: []
+    property list<Item> maskItems: [...baseMaskItems, ...attachedMaskItems]
     property Region maskRegion: Region {
-        item: root
+        regions: root.maskItems.map(item => regionComp.createObject(this, { "item": item }))
+    }
+
+    function addAttachedMaskItem(item) {
+        if (root.attachedMaskItems.includes(item)) return;
+        root.attachedMaskItems.push(item);
+    }
+
+    function removeAttachedMaskItem(item) {
+        root.attachedMaskItems = root.attachedMaskItems.filter(i => i !== item);
+    }
+
+    onAttachedMaskItemsChanged: {
+        if (attachedMaskItems.length > 0) {
+            S.GlobalFocusGrab.addDismissable(root.QsWindow.window);
+        } else {
+            S.GlobalFocusGrab.removeDismissable(root.QsWindow.window);
+        }
+    }
+
+    Connections {
+        target: S.GlobalFocusGrab
+        function onDismissed() {
+            root.attachedMaskItems = [];
+            root.focusGrabDismissed();
+        }
+    }
+
+    Component {
+        id: regionComp
+        Region {}
     }
 }

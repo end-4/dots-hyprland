@@ -1,7 +1,6 @@
-pragma ComponentBehavior: Bound
 import QtQuick
 
-StyledRectangle {
+RectangularContainerShape {
     property bool vertical: false
     property real startRadius
     property real endRadius

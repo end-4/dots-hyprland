@@ -29,9 +29,7 @@ PanelWindow {
         bottom: true
     }
 
-    mask: Region {
-        item: root.currentPanel
-    }
+    mask: root.currentPanel.maskRegion
     // HyprlandWindow.visibleMask: mask // TODO: use this later to optimize hyprland's rendering
 
     ///////////////// Content //////////////////
