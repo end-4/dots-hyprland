@@ -4,7 +4,7 @@ import QtQuick
 // The former animates faster than the latter, see the NumberAnimations below
 QtObject {
     id: root
-    required property int index
+    property int index
 
     property real idx1: index
     property real idx2: index

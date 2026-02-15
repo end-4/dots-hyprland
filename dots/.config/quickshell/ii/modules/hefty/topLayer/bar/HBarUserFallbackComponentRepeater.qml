@@ -23,9 +23,9 @@ Repeater {
         });
         for (var i = 0;i < m.length; i++) {
             const item = m[i];
-            if (item.type === "container") {
-                item.startSide = (i === 0) || (m[i - 1].type === "component");
-                item.endSide = (i + 1 >= m.length) || (m[i + 1].type === "component");
+            if (item.type === "container" || item.type === "component") {
+                item.startSide = (i === 0) || (m[i - 1].type !== m[i].type);
+                item.endSide = (i + 1 >= m.length) || (m[i + 1].type !== m[i].type);
             }
         }
         // print(JSON.stringify(m, null, 2));
@@ -43,8 +43,11 @@ Repeater {
             roleValue: "component"
             delegate: W.UserFallbackLoader {
                 required property var modelData
+                required property int index
                 componentName: modelData.value
                 context: root.context
+                property bool startSide: index === 0
+                property bool endSide: index === root.model.length - 1
             }
         }
 
@@ -57,11 +60,15 @@ Repeater {
                 endSide: modelData.endSide
                 
                 Repeater {
+                    id: containerRepeater
                     model: group.modelData.value
                     delegate: W.UserFallbackLoader {
                         required property var modelData
+                        required property int index
                         componentName: modelData
                         context: root.context
+                        property bool startSide: index === 0
+                        property bool endSide: index === group.modelData.value.length - 1
                     }
                 }
             }
