@@ -13,6 +13,7 @@ Singleton {
         { identifier: "resources", materialSymbol: "browse_activity" },
         { identifier: "notes", materialSymbol: "note_stack" },
         { identifier: "volumeMixer", materialSymbol: "volume_up" },
+        { identifier: "catwalk", materialSymbol: "pets" },
     ]
     
     readonly property bool hasPinnedWidgets: root.pinnedWidgetIdentifiers.length > 0
