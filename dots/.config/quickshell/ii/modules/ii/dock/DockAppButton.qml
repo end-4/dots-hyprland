@@ -22,10 +22,12 @@ DockButton {
 
     Timer {
         // Retry looking up the desktop entry if it failed (e.g. database not loaded yet)
+        property int retryCount: 0
         interval: 500
-        running: !root.isSeparator && root.desktopEntry === null
+        running: !root.isSeparator && root.desktopEntry === null && retryCount < 30
         repeat: true
         onTriggered: {
+            retryCount++;
             root.desktopEntry = DesktopEntries.heuristicLookup(root.appToplevel.appId);
         }
     }
