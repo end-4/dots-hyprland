@@ -573,6 +573,7 @@ Singleton {
             }
 
             property JsonObject updates: JsonObject {
+                property bool enableCheck: true
                 property int checkInterval: 120 // minutes
                 property int adviseUpdateThreshold: 75 // packages
                 property int stronglyAdviseUpdateThreshold: 200 // packages
