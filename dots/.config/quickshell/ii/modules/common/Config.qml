@@ -557,6 +557,11 @@ Singleton {
                 property string theme: "freedesktop"
             }
 
+            property JsonObject submaps: JsonObject {
+                property list<string> icons: ["aspect_ratio", "interactive_space"]
+                property list<string> names: ["resize", "virtual-machine"]
+            }
+            
             property JsonObject time: JsonObject {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"

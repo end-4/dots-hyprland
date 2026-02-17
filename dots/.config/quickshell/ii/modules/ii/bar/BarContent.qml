@@ -258,6 +258,11 @@ Item { // Bar content region
                     property real realSpacing: 15
                     spacing: 0
 
+                    HyprlandSubmapIndicator {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                        color: rightSidebarButton.colText
+                    }
                     Revealer {
                         reveal: Audio.sink?.audio?.muted ?? false
                         Layout.fillHeight: true
