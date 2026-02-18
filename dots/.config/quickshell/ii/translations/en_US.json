@@ -604,5 +604,11 @@
   "Recognize music": "Recognize music",
   "Stroke width": "Stroke width",
   "Use varying shapes for password characters": "Use varying shapes for password characters",
-  "Battery full": "Battery full"
+  "Battery full": "Battery full",
+  "Unknown VPN": "Unknown VPN",
+  "Default VPN": "Default VPN",
+  "Loading...": "Loading...",
+  "VPN Connections": "VPN Connections",
+  "Refresh": "Refresh",
+  "Select the VPN connection that will be activated by clicking on the VPN icon.": "Select the VPN connection that will be activated by clicking on the VPN icon."
 }
