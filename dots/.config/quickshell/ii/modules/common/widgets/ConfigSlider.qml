@@ -14,6 +14,7 @@ RowLayout {
     property string buttonIcon: ""
     property alias value: slider.value
     property alias stopIndicatorValues: slider.stopIndicatorValues
+    property alias stepSize: slider.stepSize
     property bool usePercentTooltip: true
     property real from: slider.from
     property real to: slider.to
