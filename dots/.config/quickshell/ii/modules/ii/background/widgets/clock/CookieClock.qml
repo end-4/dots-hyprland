@@ -66,16 +66,9 @@ Item {
         }
     }
 
-    Connections {
-        target: Config
-        function onReadyChanged() {
-            categoryFileView.path = Directories.generatedWallpaperCategoryPath
-        }
-    }
-
     FileView {
         id: categoryFileView
-        path: ""
+        path: Config.ready ? Directories.generatedWallpaperCategoryPath : ""
         watchChanges: true
         onFileChanged: reload()
         onLoaded: {
@@ -85,7 +78,7 @@ Item {
 
     property bool useSineCookie: Config.options.background.widgets.clock.cookie.useSineCookie
     StyledDropShadow {
-        target: useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
+        target: root.useSineCookie ? sineCookieLoader : roundedPolygonCookieLoader
 
         RotationAnimation on rotation {
             running: Config.options.background.widgets.clock.cookie.constantlyRotate
@@ -100,7 +93,7 @@ Item {
         id: sineCookieLoader
         z: 0
         visible: false // The DropShadow already draws it
-        active: useSineCookie
+        active: root.useSineCookie
         sourceComponent: SineCookie {
             implicitSize: root.implicitSize
             sides: Config.options.background.widgets.clock.cookie.sides
@@ -111,7 +104,7 @@ Item {
         id: roundedPolygonCookieLoader
         z: 0
         visible: false // The DropShadow already draws it
-        active: !useSineCookie
+        active: !root.useSineCookie
         sourceComponent: MaterialCookie {
             implicitSize: root.implicitSize
             sides: Config.options.background.widgets.clock.cookie.sides
