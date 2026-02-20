@@ -854,14 +854,19 @@ Singleton {
         blockLoading: true // Prevent race conditions
     }
 
+    FileView {
+        id: chatWriter
+    }
+
     /**
      * Saves chat to a JSON list of message objects.
      * @param chatName name of the chat
      */
     function saveChat(chatName) {
-        chatSaveFile.chatName = chatName.trim()
+        const filePath = `${Directories.aiChats}/${chatName.trim()}.json`
+        chatWriter.path = filePath
         const saveContent = JSON.stringify(root.chatToJson())
-        chatSaveFile.setText(saveContent)
+        chatWriter.setText(saveContent)
         getSavedChats.running = true;
     }
 
