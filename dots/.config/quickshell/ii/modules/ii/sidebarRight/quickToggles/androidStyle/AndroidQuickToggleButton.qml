@@ -178,15 +178,24 @@ GroupButton {
         }
     }
 
+    // Dynamic state
+    property bool isDynamic: false
+    signal requestResize()
+    signal requestVisibilityToggle()
+
     MouseArea { // Blocking MouseArea for edit interactions
         id: editModeInteraction
         visible: root.editMode
         anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
+        cursorShape: (root.isDynamic && !root.expandedSize) ? Qt.ArrowCursor : Qt.PointingHandCursor // Dynamic items are fixed at end for now
         hoverEnabled: true
         acceptedButtons: Qt.AllButtons
 
         function toggleEnabled() {
+            if (root.isDynamic) {
+                root.requestVisibilityToggle();
+                return; 
+            }
             const index = root.buttonIndex;
             const toggleList = Config.options.sidebar.quickToggles.android.toggles;
             const buttonType = root.buttonData.type;
@@ -198,6 +207,10 @@ GroupButton {
         }
 
         function toggleSize() {
+            if (root.isDynamic) {
+                root.requestResize();
+                return;
+            }
             const index = root.buttonIndex;
             const toggleList = Config.options.sidebar.quickToggles.android.toggles;
             const buttonType = root.buttonData.type;
@@ -206,6 +219,7 @@ GroupButton {
         }
 
         function movePositionBy(offset) {
+            if (root.isDynamic) return; // Cannot move dynamic toggles yet
             const index = root.buttonIndex;
             const toggleList = Config.options.sidebar.quickToggles.android.toggles;
             const buttonType = root.buttonData.type;
