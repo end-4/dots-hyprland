@@ -22,112 +22,30 @@ HBarWidgetContainer {
         target: root
         function onShowPopupChanged() {
             if (root.showPopup) {
-                morphedPanelParent.addAttachedMaskItem(bgShape);
+                containerRoot.morphedPanelParent.addAttachedMaskItem(bgShape);
             } else {
-                morphedPanelParent.removeAttachedMaskItem(bgShape);
+                containerRoot.morphedPanelParent.removeAttachedMaskItem(bgShape);
             }
         }
     }
     Connections {
-        target: morphedPanelParent
+        target: containerRoot.morphedPanelParent
         function onFocusGrabDismissed() {
             root.showPopup = false;
         }
     }
 
     // Background container shape
-    background: Shapes.ShapeCanvas {
+    background: HBarWidgetShapeBackground {
         id: bgShape
-        property real baseTopMargin: (parent.height - containerShape.height) / 2
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: {
-                if (!root.atBottom || !root.showPopup) return baseTopMargin;
-                else return baseTopMargin - popupShape.height - bgShape.spacing;
-            }
-        }
-        width: root.showPopup ? Math.max(containerShape.width, popupShape.width) : containerShape.width
-        height: root.showPopup ? (containerShape.height + popupShape.height + bgShape.spacing) : containerShape.height
-        color: root.showPopup || progress < 1 ? C.Appearance.colors.colLayer3Base : C.Appearance.colors.colLayer1
-        // color: "green"
-        // debug: true
-        xOffset: (width - containerShape.width) / 2
-        yOffset: root.atBottom ? (height - containerShape.height) : 0
-        animation: Anim {}
 
-        Behavior on width {
-            Anim {}
-        }
-        Behavior on height {
-            Anim {}
-        }
-        Behavior on anchors.topMargin {
-            Anim {}
-        }
-
-        // Rectangle {
-        //     anchors.fill: parent
-        // }
-
-        polygonIsNormalized: false
-        property real spacing: baseTopMargin * 2
-        W.AxisRectangularContainerShape {
-            id: containerShape
-            width: containerRoot.backgroundWidth
-            height: containerRoot.backgroundHeight
-            startRadius: containerRoot.getBackgroundRadius(containerRoot.startSide)
-            endRadius: containerRoot.getBackgroundRadius(containerRoot.endSide)
-        }
-        W.RectangularContainerShape {
-            id: popupShape
-            width: 400 // TODO
-            height: 500 // TODO
-            radius: C.Appearance.rounding.large
-            xOffset: -(width - containerShape.width) / 2
-            yOffset: root.atBottom ? -(popupShape.height + bgShape.spacing) : (containerShape.height + bgShape.spacing)
-        }
-
-        
-        roundedPolygon: {
-            if (!root.showPopup) return containerShape.getFullShape()
-            // return popupShape.getFullShape(); // debug
-            const points = [
-                ...(root.atBottom ? containerShape.getFirstBottomPoints() : [
-                    ...popupShape.getFirstBottomPoints(),
-                    popupShape.getBottomLeftPoint(),
-                    ...popupShape.leftPoints,
-                    popupShape.getTopLeftPoint(),
-                ]),
-                containerShape.getBottomLeftPoint(0, bgShape.spacing * (!root.atBottom ? 1 : 0), containerShape.radiusLimit),
-                // ...containerShape.leftPoints,
-                containerShape.getTopLeftPoint(0, bgShape.spacing * (root.atBottom ? -1 : 0), containerShape.radiusLimit),
-                ...(!root.atBottom ? containerShape.topPoints : [
-                    popupShape.getBottomLeftPoint(),
-                    ...popupShape.leftPoints,
-                    popupShape.getTopLeftPoint(),
-                    ...popupShape.topPoints,
-                    popupShape.getTopRightPoint(),
-                    ...popupShape.rightPoints,
-                    popupShape.getBottomRightPoint(),
-                ]),
-                containerShape.getTopRightPoint(0, bgShape.spacing * (root.atBottom ? -1 : 0), containerShape.radiusLimit),
-                // ...containerShape.rightPoints,
-                containerShape.getBottomRightPoint(0, bgShape.spacing * (!root.atBottom ? 1 : 0), containerShape.radiusLimit),
-                ...(root.atBottom ? containerShape.getLastBottomPoints() : [
-                    popupShape.getTopRightPoint(),
-                    ...popupShape.rightPoints,
-                    popupShape.getBottomRightPoint(),
-                    ...popupShape.getLastBottomPoints(),
-                ]),
-            ];
-            return MaterialShapes.customPolygon(points);
-        }
-
-        component Anim: SpringAnimation {
-            spring: 3.5
-            damping: 0.35
-        }
+        atBottom: root.atBottom
+        showPopup: root.showPopup
+        backgroundWidth: containerRoot.backgroundWidth
+        backgroundHeight: containerRoot.backgroundHeight
+        startRadius: containerRoot.getBackgroundRadius(containerRoot.startSide)
+        endRadius: containerRoot.getBackgroundRadius(containerRoot.endSide)
+        baseMargin: (parent.height - containerShape.height) / 2 // TODO vertical
     }
 
     // The button on the bar

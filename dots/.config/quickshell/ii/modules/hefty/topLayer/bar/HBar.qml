@@ -55,7 +55,6 @@ HAbstractMorphedPanel {
 
     // Background
     function getBackgroundPolygon() {
-        print("Generating background polygon for HBar")
         // It's certainly cleaner to have the below props declared outside, but we do this
         // to make sure a config change only makes this re-evaluate exactly once
         const bottom = root.atBottom

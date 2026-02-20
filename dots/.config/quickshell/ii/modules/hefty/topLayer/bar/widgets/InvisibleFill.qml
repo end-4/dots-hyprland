@@ -4,6 +4,6 @@ import QtQuick.Layouts
 
 Item {
     visible: false
-    Layout.fillWidth: false
-    Layout.fillHeight: false
+    Layout.fillHeight: true
+    Layout.fillWidth: true
 }
