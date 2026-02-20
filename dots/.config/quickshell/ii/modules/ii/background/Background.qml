@@ -13,6 +13,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Services.Mpris
 
 import qs.modules.ii.background.widgets
 import qs.modules.ii.background.widgets.clock
@@ -20,6 +21,14 @@ import qs.modules.ii.background.widgets.weather
 
 Variants {
     id: root
+    readonly property bool fixedClockPosition: Config.options.background.clock.fixedPosition
+    readonly property real fixedClockX: Config.options.background.clock.x
+    readonly property real fixedClockY: Config.options.background.clock.y
+    readonly property real clockSizePadding: 20
+    readonly property real screenSizePadding: 50
+    readonly property string clockStyle: Config.options.background.clock.style
+    readonly property bool showCookieQuote: Config.options.background.showQuote && Config.options.background.quote !== "" && !GlobalStates.screenLocked && Config.options.background.clock.style === "cookie"
+    readonly property real clockParallaxFactor: Config.options.background.parallax.clockFactor // 0 = full parallax, 1 = no parallax
     model: Quickshell.screens
 
     PanelWindow {
@@ -54,6 +63,18 @@ Variants {
         property real movableXSpace: ((wallpaperWidth / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.width) / 2
         property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
         readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
+        // Position
+        property real clockX: (modelData.width / 2)
+        property real clockY: (modelData.height / 2)
+        property var textHorizontalAlignment: {
+            if ((Config.options.lock.centerClock && GlobalStates.screenLocked) || wallpaperSafetyTriggered)
+                return Text.AlignHCenter;
+            if (clockX < screen.width / 3)
+                return Text.AlignLeft;
+            if (clockX > screen.width * 2 / 3)
+                return Text.AlignRight;
+            return Text.AlignHCenter;
+        }
         // Colors
         property bool shouldBlur: (GlobalStates.screenLocked && Config.options.lock.blur.enable)
         property color dominantColor: Appearance.colors.colPrimary // Default, to be changed
@@ -118,10 +139,49 @@ Variants {
                         // Oversized = can be zoomed for parallax, yay
                         bgRoot.effectiveWallpaperScale = Math.min(bgRoot.preferredWallpaperScale, width / screenWidth, height / screenHeight);
                     }
+
+                    bgRoot.updateClockPosition();
                 }
             }
         }
 
+        // Clock positioning
+        function updateClockPosition() {
+            // Somehow all this manual setting is needed to make the proc correctly use the new values
+            leastBusyRegionProc.path = bgRoot.wallpaperPath;
+            leastBusyRegionProc.contentWidth = clockLoader.implicitWidth + root.clockSizePadding * 2;
+            leastBusyRegionProc.contentHeight = clockLoader.implicitHeight + root.clockSizePadding * 2;
+            leastBusyRegionProc.horizontalPadding = bgRoot.movableXSpace + root.screenSizePadding * 2;
+            leastBusyRegionProc.verticalPadding = bgRoot.movableYSpace + root.screenSizePadding * 2;
+            leastBusyRegionProc.running = false;
+            leastBusyRegionProc.running = true;
+        }
+        Process {
+            id: leastBusyRegionProc
+            property string path: bgRoot.wallpaperPath
+            property int contentWidth: 300
+            property int contentHeight: 300
+            property int horizontalPadding: bgRoot.movableXSpace
+            property int verticalPadding: bgRoot.movableYSpace
+            command: [Quickshell.shellPath("scripts/images/least-busy-region-venv.sh"), "--screen-width", Math.round(bgRoot.screen.width / bgRoot.effectiveWallpaperScale), "--screen-height", Math.round(bgRoot.screen.height / bgRoot.effectiveWallpaperScale), "--width", contentWidth, "--height", contentHeight, "--horizontal-padding", horizontalPadding, "--vertical-padding", verticalPadding, path
+                // "--visual-output",
+                ,]
+            stdout: StdioCollector {
+                id: leastBusyRegionOutputCollector
+                onStreamFinished: {
+                    const output = leastBusyRegionOutputCollector.text;
+                    // console.log("[Background] Least busy region output:", output)
+                    if (output.length === 0)
+                        return;
+                    const parsedContent = JSON.parse(output);
+                    bgRoot.clockX = parsedContent.center_x * bgRoot.effectiveWallpaperScale;
+                    bgRoot.clockY = parsedContent.center_y * bgRoot.effectiveWallpaperScale;
+                    bgRoot.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary;
+                }
+            }
+        }
+
+        // Wallpaper
         Item {
             anchors.fill: parent
             clip: true
@@ -236,6 +296,11 @@ Variants {
                 }
                 width: wallpaper.width
                 height: wallpaper.height
+
+                // Music
+                property bool hasActiveMusic: GlobalStates.screenLocked && MprisController.activePlayer && MprisController.activePlayer.isPlaying
+                property real musicOffset: hasActiveMusic ? -80 : 0
+                
                 states: State {
                     name: "centered"
                     when: GlobalStates.screenLocked || bgRoot.wallpaperSafetyTriggered
@@ -290,6 +355,7 @@ Variants {
                         scaledScreenHeight: bgRoot.screen.height / bgRoot.effectiveWallpaperScale
                         wallpaperScale: bgRoot.effectiveWallpaperScale
                         wallpaperSafetyTriggered: bgRoot.wallpaperSafetyTriggered
+                        hasActiveMusic: widgetCanvas.hasActiveMusic
                     }
                 }
             }
