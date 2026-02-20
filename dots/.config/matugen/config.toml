@@ -32,3 +32,8 @@ output_path = '~/.local/state/quickshell/user/generated/color.txt'
 [templates.wallpaper]
 input_path = '~/.config/matugen/templates/wallpaper.txt'
 output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
+
+[templates.waylyrics]
+input_path = '~/.config/matugen/templates/waylyrics/ii-material.css'
+output_path = '~/.local/share/waylyrics/_themes/ii-material.css'
+post_hook = 'gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "reload-theme" [] {} || exit 0'
