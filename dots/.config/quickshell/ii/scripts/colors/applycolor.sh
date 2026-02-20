@@ -8,6 +8,7 @@ CONFIG_DIR="$XDG_CONFIG_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
 CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TELA_ICONS="$CONFIG_DIR/assets/tela-custom"
 
 term_alpha=100 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
@@ -80,7 +81,11 @@ apply_icon() {
 
   primary_color="${primary_color#\#}"
 
-  "$CONFIG_DIR/scripts/colors/custom-tela" custom-tela "$primary_color"
+  cd "$TELA_ICONS"
+
+  notify-send "ls" "$(ls)"
+  ./custom.sh custom-tela "$primary_color"
+  cd -
 
   "$CONFIG_DIR/scripts/colors/set-icons.sh" \
     "$HOME/.local/share/icons/custom-tela"
