@@ -274,6 +274,23 @@ Singleton {
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
+                property JsonObject homeAssistant: JsonObject {
+                    property bool enable: false
+                    property string url: ""
+                    property string token: ""
+                    property int fetchInterval: 15 // minutes
+                    // Optional external JSON path to keep personal HA setup out of git-tracked config
+                    property string configPath: ""
+
+                    // HomeKit-inspired categories for top bar Home popup.
+                    // Keep these empty in repo; put personal entities in external configPath.
+                    property list<string> cameras: []
+                    property list<string> lights: []
+                    property list<string> locks: []
+                    property list<string> covers: []
+                    property list<string> climate: []
+                    property list<string> appliances: []
+                }
                 property JsonObject indicators: JsonObject {
                     property JsonObject notifications: JsonObject {
                         property bool showUnreadCount: false

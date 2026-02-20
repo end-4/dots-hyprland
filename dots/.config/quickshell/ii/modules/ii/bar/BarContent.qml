@@ -1,4 +1,5 @@
 import qs.modules.ii.bar.weather
+import qs.modules.ii.bar.home
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -330,6 +331,15 @@ Item { // Bar content region
             }
 
             // Weather
+            Loader {
+                Layout.leftMargin: 4
+                active: Config.options.bar.homeAssistant.enable
+
+                sourceComponent: BarGroup {
+                    HomeBar {}
+                }
+            }
+
             Loader {
                 Layout.leftMargin: 4
                 active: Config.options.bar.weather.enable

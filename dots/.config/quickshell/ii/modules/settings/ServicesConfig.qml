@@ -249,4 +249,68 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "home"
+        title: Translation.tr("Home Assistant")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable Home panel")
+            checked: Config.options.bar.homeAssistant.enable
+            onCheckedChanged: {
+                Config.options.bar.homeAssistant.enable = checked;
+            }
+        }
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("External config path (default: ~/.config/illogical-impulse/homeassistant.json)")
+            text: Config.options.bar.homeAssistant.configPath
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.bar.homeAssistant.configPath = text.trim();
+            }
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            text: Translation.tr("Tip: keep personal entity names and tokens in the external JSON file instead of this repo-tracked config.")
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            color: Appearance.colors.colSubtext
+            wrapMode: Text.Wrap
+        }
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Base URL (e.g. https://your-home.ui.nabu.casa)")
+            text: Config.options.bar.homeAssistant.url
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.bar.homeAssistant.url = text.trim();
+            }
+        }
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Long-lived access token")
+            text: Config.options.bar.homeAssistant.token
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.bar.homeAssistant.token = text.trim();
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "av_timer"
+            text: Translation.tr("Polling interval (m)")
+            value: Config.options.bar.homeAssistant.fetchInterval
+            from: 1
+            to: 60
+            stepSize: 1
+            onValueChanged: {
+                Config.options.bar.homeAssistant.fetchInterval = value;
+            }
+        }
+    }
 }

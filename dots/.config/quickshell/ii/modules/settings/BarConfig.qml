@@ -252,6 +252,19 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "home"
+        title: Translation.tr("Home")
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable Home Assistant icon")
+            checked: Config.options.bar.homeAssistant.enable
+            onCheckedChanged: {
+                Config.options.bar.homeAssistant.enable = checked;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "workspaces"
         title: Translation.tr("Workspaces")
 
