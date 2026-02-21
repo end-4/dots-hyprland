@@ -108,6 +108,26 @@ ContentPage {
                 Config.options.screenSnip.savePath = text;
             }
         }
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Random Wallpaper Download Path")
+            text: Config.options.randomWall.savePath
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.randomWall.savePath = text
+            }
+        }
+
+        MaterialTextArea {
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("Random Wallpaper Download Name (leave empty for original name)")
+            text: Config.options.randomWall.saveName
+            wrapMode: TextEdit.Wrap
+            onTextChanged: {
+                Config.options.randomWall.saveName = text
+            }
+        }
     }
 
     ContentSection {
