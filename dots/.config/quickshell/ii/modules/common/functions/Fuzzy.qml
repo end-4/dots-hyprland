@@ -14,5 +14,9 @@ Singleton {
     function prepare(...args) {
         return FuzzySort.prepare(...args)
     }
+
+    function single(...args) {
+        return FuzzySort.single(...args)
+    }
 }
 

@@ -13,7 +13,7 @@ Singleton {
     property string cliphistBinary: "cliphist"
     property real pasteDelay: 0.05
     property string pressPasteCommand: "ydotool key -d 1 29:1 47:1 47:0 29:0"
-    property bool sloppySearch: Config.options?.search.sloppy ?? false
+    property bool levenshteinSearch: Config.options?.search.levenshtein ?? false
     property real scoreThreshold: 0.2
     property list<string> entries: []
     readonly property var preparedEntries: entries.map(a => ({
@@ -24,7 +24,7 @@ Singleton {
         if (search.trim() === "") {
             return entries;
         }
-        if (root.sloppySearch) {
+        if (root.levenshteinSearch) {
             const results = entries.slice(0, 100).map(str => ({
                 entry: str,
                 score: Levendist.computeTextMatchScore(str.toLowerCase(), search.toLowerCase())

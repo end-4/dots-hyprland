@@ -82,7 +82,6 @@ ContentPage {
                 Config.options.resources.updateInterval = value;
             }
         }
-        
     }
 
     ContentSection {
@@ -98,7 +97,7 @@ ContentPage {
                 Config.options.screenRecord.savePath = text;
             }
         }
-        
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("Screenshot Path (leave empty to just copy)")
@@ -122,6 +121,17 @@ ContentPage {
             }
             StyledToolTip {
                 text: Translation.tr("Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)")
+            }
+        }
+
+        ConfigSwitch {
+            text: Translation.tr("Enable frecency ranking")
+            checked: Config.options.search.frecency
+            onCheckedChanged: {
+                Config.options.search.frecency = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Rank results by usage frequency.\nFrequently launched apps appear higher.\nShort queries favor usage, long queries favor match quality.")
             }
         }
 
@@ -253,7 +263,7 @@ ContentPage {
                 }
             }
         }
-        
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("City name")
