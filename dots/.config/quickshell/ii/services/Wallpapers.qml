@@ -23,7 +23,7 @@ Singleton {
     property alias folderModel: folderModel // Expose for direct binding when needed
     property string searchQuery: ""
     readonly property list<string> extensions: [ // TODO: add videos
-        "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
+        "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg", "mp4", "mkv", "webm", "avi", "mov", "m4v", "ogv"
     ]
     property list<string> wallpapers: [] // List of absolute file paths (without file://)
     readonly property bool thumbnailGenerationRunning: thumbgenProc.running
@@ -35,9 +35,24 @@ Singleton {
 
     function load () {} // For forcing initialization
 
+    property list<string> videoExtensions: [
+        "mp4", "mkv", "webm", "avi", "mov", "m4v", "ogv"
+    ]
+    function isVideoFile(name) {
+        return videoExtensions.some(ext => name.endsWith("." + ext))
+    }
+
     // Executions
     Process {
         id: applyProc
+    }
+
+    Connections {
+        target: Config
+        function onReadyChanged() { // Apply wallpaper on config ready if it's a video
+            if (!Config.ready || !root.isVideoFile(Config.options.background.wallpaperPath.toLowerCase())) return;
+            root.apply(Config.options.background.wallpaperPath, Appearance.m3colors.darkmode);
+        }
     }
     
     function openFallbackPicker(darkMode = Appearance.m3colors.darkmode) {
