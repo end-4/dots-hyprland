@@ -385,7 +385,7 @@
   "Connected": "מחובר",
   "Hit \"/\" to search": "לחץ \"/\" לחיפוש",
   "Wallpaper & Colors": "רקע וצבעים",
-  "Change any time later with /dark, /light, /wallpaper in the launcher\nIf the shell's colors aren't changing:\n    1. Open the right sidebar with Super+N\n    2. Click \"Reload Hyprland & Quickshell\" in the top-right corner":   "ניתן לשנות בכל עת עם /dark, /light, /wallpaper במפעיל\nאם צבעי ה-shell לא משתנים:\n    1. פתח את הסרגל הצדדי הימני עם Super+N\n    2. לחץ על \"טען מחדש Hyprland & Quickshell\" בפינה הימנית העליונה",
+  "Change any time later with /dark, /light, /wallpaper in the launcher\nIf the shell's colors aren't changing:\n    1. Open the right sidebar with Super+N\n    2. Click \"Reload Hyprland & Quickshell\" in the top-right corner": "ניתן לשנות בכל עת עם /dark, /light, /wallpaper במפעיל\nאם צבעי ה-shell לא משתנים:\n    1. פתח את הסרגל הצדדי הימני עם Super+N\n    2. לחץ על \"טען מחדש Hyprland & Quickshell\" בפינה הימנית העליונה",
   "Launch on startup": "הפעל בעת הפעלה",
   "Terminal: Harmonize threshold": "טרמינל: Harmonize threshold",
   "Quick": "מהיר",
@@ -410,7 +410,7 @@
   "Thin": "דק",
   "Sides": "צדדים",
   "Hollow": "חלול",
-  "Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries":   "שימוש: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nהוסף <tt>i</tt> כאשר תרצה תמונות\nדוגמאות:\n<tt>%1superpaste 4i</tt> עבור 4 התמונות האחרונות\n<tt>%1superpaste 7</tt> עבור 7 הערכים האחרונים",
+  "Usage: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nSupply <tt>i</tt> when you want images\nExamples:\n<tt>%1superpaste 4i</tt> for the last 4 images\n<tt>%1superpaste 7</tt> for the last 7 entries": "שימוש: <tt>%1superpaste NUM_OF_ENTRIES[i]</tt>\nהוסף <tt>i</tt> כאשר תרצה תמונות\nדוגמאות:\n<tt>%1superpaste 4i</tt> עבור 4 התמונות האחרונות\n<tt>%1superpaste 7</tt> עבור 7 הערכים האחרונים",
   "Center clock": "מרכוז השעון",
   "Tip: Close a window with Super+Q": "טיפ: סגור חלון עם Super+Q",
   "Clock style": "סגנון השעון",
@@ -501,5 +501,10 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "%1 updates available": "%1 עדכונים זמינים",
+  "System Updates": "עדכוני מערכת",
+  "Package Manager": "מנהל חבילות",
+  "Show in bar": "הצג בסרגל",
+  "Visibility Threshold": "סף נראות"
 }

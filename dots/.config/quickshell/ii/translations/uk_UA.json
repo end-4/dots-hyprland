@@ -338,5 +338,10 @@
   "Tool set to: %1": "Інструмет вказано: %1",
   "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed": "Команди, редагування конфігурацій, пошук.\nВиконує додаткову дію для переходу в режим пошуку, якщо це потрібно",
   "To set an API key, pass it with the %4 command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3": "Щоб задати ключ API, передайте його командою %4\n\nЩоб переглянути ключ, передайте \"get\" командою<br/>\n\n### Для %1:\n\n**Лінк**: %2\n\n%3",
-  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді"
+  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді",
+  "%1 updates available": "Доступно %1 оновлень",
+  "System Updates": "Системні оновлення",
+  "Package Manager": "Менеджер пакетів",
+  "Show in bar": "Показувати в панелі",
+  "Visibility Threshold": "Поріг видимості"
 }

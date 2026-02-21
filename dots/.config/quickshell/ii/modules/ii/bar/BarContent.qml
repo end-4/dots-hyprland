@@ -150,9 +150,7 @@ Item { // Bar content region
             }
         }
 
-        VerticalBarSeparator {
-            visible: Config.options?.bar.borderless
-        }
+
 
         MouseArea {
             id: rightCenterGroup
@@ -178,6 +176,7 @@ Item { // Bar content region
                     visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
                     Layout.alignment: Qt.AlignVCenter
                 }
+
 
                 BatteryIndicator {
                     visible: (root.useShortenedForm < 2 && Battery.available)
@@ -327,6 +326,17 @@ Item { // Bar content region
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+            }
+
+            // Updates
+            Loader {
+                Layout.leftMargin: 4
+                active: Config.options.updates.showInBar && Updates.count >= Config.options.updates.notificationThreshold
+                visible: active
+                
+                sourceComponent: BarGroup {
+                    UpdatesButton {}
+                }
             }
 
             // Weather

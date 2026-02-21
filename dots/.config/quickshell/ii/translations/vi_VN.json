@@ -369,5 +369,10 @@
   "illogical-impulse Settings": "Cài đặt illogical-impulse",
   "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Trực tuyến | Model của Google\nMới hơn nhưng chậm hơn so với phiên bản trước nhưng nên cung cấp câu trả lời chất lượng cao hơn",
   "Preferred wallpaper zoom (%)": "Tỷ lệ thu phóng hình nền (%)",
-  "Function Response": "Phản hồi function"
+  "Function Response": "Phản hồi function",
+  "%1 updates available": "Có %1 bản cập nhật",
+  "System Updates": "Cập nhật hệ thống",
+  "Package Manager": "Trình quản lý gói",
+  "Show in bar": "Hiển thị trên thanh",
+  "Visibility Threshold": "Ngưỡng hiển thị"
 }
