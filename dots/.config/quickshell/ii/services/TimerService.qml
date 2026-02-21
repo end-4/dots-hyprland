@@ -22,7 +22,8 @@ Singleton {
     property bool pomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool pomodoroBreak: Persistent.states.timer.pomodoro.isBreak
     property bool pomodoroLongBreak: Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
-    property int pomodoroLapDuration: pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime // This is a binding that's to be kept
+    property int pomodoroTimeAdjustment: 0
+    property int pomodoroLapDuration: (pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime) + pomodoroTimeAdjustment
     property int pomodoroSecondsLeft: pomodoroLapDuration // Reasonable init value, to be changed
     property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
@@ -52,6 +53,7 @@ Singleton {
             // Reset counts
             Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
+            pomodoroTimeAdjustment = 0;
 
             // Send notification
             let notificationMessage;
@@ -97,7 +99,25 @@ Singleton {
         Persistent.states.timer.pomodoro.isBreak = false;
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
         Persistent.states.timer.pomodoro.cycle = 0;
+        pomodoroTimeAdjustment = 0;
         refreshPomodoro();
+    }
+
+    function adjustPomodoroTime(seconds) {
+        let baseDuration = pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime;
+        let newAdjustment = pomodoroTimeAdjustment + seconds;
+        let newLapDuration = baseDuration + newAdjustment;
+        let newSecondsLeft = pomodoroSecondsLeft + seconds;
+
+        // Don't allow lap duration below 1 minute or time to go negative
+        if (newLapDuration >= 60 && newSecondsLeft > 0) {
+            pomodoroTimeAdjustment = newAdjustment;
+            if (pomodoroRunning) {
+                refreshPomodoro();
+            } else {
+                pomodoroSecondsLeft = newSecondsLeft;
+            }
+        }
     }
 
     // Stopwatch
