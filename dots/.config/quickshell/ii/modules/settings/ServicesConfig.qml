@@ -263,6 +263,15 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "counter_1"
+            text: Translation.tr("Show online/total indicator")
+            checked: Config.options.bar.homeAssistant.showDeviceCounts
+            onCheckedChanged: {
+                Config.options.bar.homeAssistant.showDeviceCounts = checked;
+            }
+        }
+
         MaterialTextArea {
             Layout.fillWidth: true
             placeholderText: Translation.tr("External config path (default: ~/.config/illogical-impulse/homeassistant.json)")

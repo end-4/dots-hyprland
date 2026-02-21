@@ -43,6 +43,7 @@ MouseArea {
         }
 
         StyledText {
+            visible: Config.options.bar.homeAssistant.showDeviceCounts
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
             text: HomeAssistant.loading

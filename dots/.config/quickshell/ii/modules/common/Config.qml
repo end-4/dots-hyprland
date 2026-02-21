@@ -276,6 +276,7 @@ Singleton {
                 }
                 property JsonObject homeAssistant: JsonObject {
                     property bool enable: false
+                    property bool showDeviceCounts: true
                     property string url: ""
                     property string token: ""
                     property int fetchInterval: 15 // minutes
