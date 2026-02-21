@@ -12,6 +12,7 @@ import Quickshell.Hyprland
 Singleton {
     id: root
 
+    property alias active: grab.active
     signal dismissed()
 
     property list<var> persistent: []
