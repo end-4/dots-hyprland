@@ -104,13 +104,27 @@ Rectangle {
                         horizontalAlignment: Text.AlignLeft
                         text: PolkitService.cleanMessage
                     }
-
+                    WText {
+                        Layout.fillWidth: true
+                        wrapMode: Text.Wrap
+                        horizontalAlignment: Text.AlignHCenter
+                        text: PolkitService.flow.supplementaryMessage
+                    }
+                    WAppIcon {
+                        iconName: "fingerprint"
+                        isMask: PolkitService.flow?.iconName === ""
+                        tryCustomIcon: true
+                        Layout.fillWidth: true
+                        implicitSize: 40
+                        visible: PolkitService.isFingerprintCurrentlyOffered
+                    }
                     WTextField {
                         id: inputField
                         Layout.fillWidth: true
                         focus: true
                         enabled: PolkitService.interactionAvailable
                         placeholderText: PolkitService.cleanPrompt
+                        visible: !PolkitService.isFingerprintCurrentlyOffered
                         echoMode: root.usePasswordChars ? TextInput.Password : TextInput.Normal
                         onAccepted: PolkitService.submit(inputField.text)
 
