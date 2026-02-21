@@ -143,8 +143,18 @@ EOF
 
 set_wallpaper_path() {
     local path="$1"
+    local monitor="${2:-}"
+    local start_workspace="${3:-}"
+    local end_workspace="${4:-}"
     if [ -f "$SHELL_CONFIG_FILE" ]; then
-        jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        if [ -n "$monitor" ]; then
+            jq --arg name "$monitor" --arg path "$path" --argjson startWs "$start_workspace" --argjson endWs "$end_workspace" '
+                .background.wallpapersByMonitor = (
+                    (.background.wallpapersByMonitor // []) | map(select(.monitor != $name)) + [{"monitor": $name, "path": $path, "workspaceFirst": $startWs, "workspaceLast": $endWs}]
+                )' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        else
+            jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        fi
     fi
 }
 
@@ -167,6 +177,9 @@ switch() {
     type_flag="$3"
     color_flag="$4"
     color="$5"
+    target_monitor="$6"
+    start_workspace="${7:-}"
+    end_workspace="${8:-}"
 
     # Start Gemini auto-categorization if enabled
     aiStylingEnabled=$(jq -r '.background.widgets.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
@@ -222,11 +235,14 @@ switch() {
             fi
 
             # Set wallpaper path
-            set_wallpaper_path "$imgpath"
+            set_wallpaper_path "$imgpath" "$target_monitor" "$start_workspace" "$end_workspace"
 
             # Set video wallpaper
             local video_path="$imgpath"
             monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
+            if [ -n "$target_monitor" ]; then
+                monitors="$target_monitor"
+            fi
             for monitor in $monitors; do
                 mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
                 sleep 0.1
@@ -252,7 +268,7 @@ switch() {
             matugen_args=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
-            set_wallpaper_path "$imgpath"
+            set_wallpaper_path "$imgpath" "$target_monitor" "$start_workspace" "$end_workspace"
             remove_restore
         fi
     fi
@@ -321,6 +337,9 @@ main() {
     color_flag=""
     color=""
     noswitch_flag=""
+    target_monitor=""
+    start_workspace=""
+    end_workspace=""
 
     get_type_from_config() {
         jq -r '.appearance.palette.type' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "auto"
@@ -338,6 +357,28 @@ main() {
         source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
         "$SCRIPT_DIR"/scheme_for_image.py "$img" 2>/dev/null | tr -d '\n'
         deactivate
+    }
+
+    detect_monitor_workspace_range() {
+        local monitor="$1"
+        local workspace_rules=$(hyprctl workspacerules -j 2>/dev/null)
+        if [ -z "$workspace_rules" ] || [ "$workspace_rules" = "null" ]; then
+            echo "1 10"
+            return
+        fi
+
+        local workspaces=$(echo "$workspace_rules" | jq -r --arg mon "$monitor" \
+            '[.[] | select(.monitor == $mon) | .workspaceString | tonumber] | sort | .[]')
+        if [ -z "$workspaces" ]; then
+            echo "1 10"
+            return
+        fi
+
+        local start_ws=$(echo "$workspace_rules" | jq -r --arg mon "$monitor" \
+            '([.[] | select(.monitor == $mon and .default == true) | .workspaceString | tonumber] | .[0]) //
+             ([.[] | select(.monitor == $mon) | .workspaceString | tonumber] | sort | .[0])')
+        local end_ws=$(echo "$workspaces" | tail -1)
+        echo "$start_ws $end_ws"
     }
 
     while [[ $# -gt 0 ]]; do
@@ -366,9 +407,25 @@ main() {
                 imgpath="$2"
                 shift 2
                 ;;
+            --monitor)
+                target_monitor="$2"
+                shift 2
+                ;;
+            --start-workspace)
+                start_workspace="$2"
+                shift 2
+                ;;
+            --end-workspace)
+                end_workspace="$2"
+                shift 2
+                ;;
             --noswitch)
                 noswitch_flag="1"
-                imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                if [ -n "$target_monitor" ]; then
+                    imgpath=$(jq -r --arg mon "$target_monitor" '(.background.wallpapersByMonitor // [] | map(select(.monitor == $mon)) | .[0].path) // .background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                else
+                    imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                fi
                 shift
                 ;;
             *)
@@ -385,6 +442,11 @@ main() {
     if [[ "$config_color" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
         color_flag="1"
         color="$config_color"
+    fi
+
+    # Detect workspace range based on hyprctl workspacerules
+    if [[ -n "$target_monitor" && ( -z "$start_workspace" || -z "$end_workspace" ) ]]; then
+        read start_workspace end_workspace < <(detect_monitor_workspace_range "$target_monitor")
     fi
 
     # If type_flag is not set, get it from config
@@ -442,7 +504,7 @@ main() {
         fi
     fi
 
-    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
+    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color" "$target_monitor" "$start_workspace" "$end_workspace"
 }
 
 main "$@"
