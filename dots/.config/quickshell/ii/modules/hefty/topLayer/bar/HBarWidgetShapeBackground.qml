@@ -16,15 +16,16 @@ import "../../../common/widgets/shapes/geometry/offset.js" as Offset
 Shapes.ShapeCanvas {
     id: bgShape
 
-    property bool atBottom: root.atBottom
-    property bool showPopup: root.showPopup
-    property real backgroundWidth: containerRoot.backgroundWidth
-    property real backgroundHeight: containerRoot.backgroundHeight
+    required property bool vertical
+    required property bool atBottom
+    required property bool showPopup
+    required property real backgroundWidth
+    required property real backgroundHeight
     property real popupWidth: 400
     property real popupHeight: 500
-    property real startRadius: containerRoot.getBackgroundRadius(containerRoot.startSide)
-    property real endRadius: containerRoot.getBackgroundRadius(containerRoot.endSide)
-    property real baseMargin: (parent.height - containerShape.height) / 2
+    required property real startRadius
+    required property real endRadius
+    property real baseMargin: (parent.height - containerShape.height) / 2 // TODO vertical
 
     property alias containerShape: containerShape
     property alias popupShape: popupShape
