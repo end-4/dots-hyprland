@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import qs
+import qs.services
 import "../../common"
 import "../../common/widgets/shapes" as S
 import "../../common/widgets/shapes/material-shapes.js" as MaterialShapes
@@ -43,7 +44,7 @@ PanelWindow {
             // While it overshoots because of the spring animation, waiting for the bounce to finish entirely would be too slow
             // ^ (totally not an excuse for my laziness)
             if (backgroundShape.progress >= 1.0) {
-                root.finishedMorphing = true
+                root.finishedMorphing = true;
             }
         }
     }
@@ -104,18 +105,37 @@ PanelWindow {
         root.currentPanel = bar;
     }
 
-    HBar {
-        id: bar
-        load: root.currentPanel === this && root.finishedMorphing // the extra condition is to prevent workspace widget from acting up when switching horizontal/vertical... should be fixed later
-        shown: root.finishedMorphing
-    }
+    Item {
+        id: panelRootItem
+        anchors.fill: parent
 
-    HOverview {
-        id: overview
-        load: root.currentPanel === this
-        shown: root.finishedMorphing
-        onRequestFocus: root.currentPanel = overview;
-        onDismissed: root.dismiss();
+        Connections {
+            target: GlobalFocusGrab
+            function onActiveChanged() {
+                if (GlobalFocusGrab.active) {
+                    panelRootItem.focus = true
+                }
+            }
+        }
+        Keys.onPressed: (event) => { // Esc to close
+            if (event.key === Qt.Key_Escape) {
+                GlobalFocusGrab.dismiss();
+            }
+        }
+
+        HBar {
+            id: bar
+            load: root.currentPanel === this && root.finishedMorphing // the extra condition is to prevent workspace widget from acting up when switching horizontal/vertical... should be fixed later
+            shown: root.finishedMorphing
+        }
+
+        HOverview {
+            id: overview
+            load: root.currentPanel === this
+            shown: root.finishedMorphing
+            onRequestFocus: root.currentPanel = overview
+            onDismissed: root.dismiss()
+        }
     }
 
     //////////////// Components /////////////////
