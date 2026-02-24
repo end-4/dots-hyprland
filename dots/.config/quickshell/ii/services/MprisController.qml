@@ -18,7 +18,7 @@ Singleton {
 	id: root;
 	property list<MprisPlayer> players: Mpris.players.values.filter(player => isRealPlayer(player));
 	property MprisPlayer trackedPlayer: null;
-	property MprisPlayer activePlayer: trackedPlayer ?? Mpris.players.values[0] ?? null;
+	property MprisPlayer activePlayer: pickPreferredPlayer();
 	signal trackChanged(reverse: bool);
 
 	property bool __reverse: false;
@@ -40,6 +40,27 @@ Singleton {
             // Non-instance mpd bus
             !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
     }
+
+	function pickPreferredPlayer() {
+		const realPlayers = players;
+		if (!realPlayers || realPlayers.length === 0) {
+			return null;
+		}
+
+		const playingPlayers = realPlayers.filter(player => player?.playbackState?.isPlaying || player?.isPlaying);
+		if (playingPlayers.length > 0) {
+			if (trackedPlayer && playingPlayers.indexOf(trackedPlayer) !== -1) {
+				return trackedPlayer;
+			}
+			return playingPlayers[0];
+		}
+
+		if (trackedPlayer && realPlayers.indexOf(trackedPlayer) !== -1) {
+			return trackedPlayer;
+		}
+
+		return realPlayers[0];
+	}
 
 	// Original stuff from fox below
 	Instantiator {
@@ -71,7 +92,11 @@ Singleton {
 			}
 
 			function onPlaybackStateChanged() {
-				if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				if (modelData.playbackState.isPlaying || modelData.isPlaying) {
+					if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				} else if (root.trackedPlayer == null || !root.trackedPlayer.playbackState.isPlaying) {
+					root.trackedPlayer = modelData;
+				}
 			}
 		}
 	}
