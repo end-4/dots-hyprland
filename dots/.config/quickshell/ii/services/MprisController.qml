@@ -18,7 +18,7 @@ Singleton {
 	id: root;
 	property list<MprisPlayer> players: Mpris.players.values.filter(player => isRealPlayer(player));
 	property MprisPlayer trackedPlayer: null;
-	property MprisPlayer activePlayer: trackedPlayer ?? Mpris.players.values[0] ?? null;
+	property MprisPlayer activePlayer: pickPreferredPlayer();
 	signal trackChanged(reverse: bool);
 
 	property bool __reverse: false;
@@ -38,14 +38,37 @@ Singleton {
         if (!Config.options.media.filterDuplicatePlayers) {
             return true;
         }
+		const hasPlasmaBrowserBridge = Mpris.players.values.some(p => p?.dbusName?.startsWith('org.mpris.MediaPlayer2.plasma-browser-integration'));
+		const isNativeBrowserBus = player?.dbusName?.startsWith('org.mpris.MediaPlayer2.firefox') || player?.dbusName?.startsWith('org.mpris.MediaPlayer2.chromium');
         return (
-            // Remove unecessary native buses from browsers if there's plasma integration
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) && !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
+			// Remove unnecessary native browser buses only when plasma browser integration MPRIS is actually present
+			!(hasPlasmaIntegration && hasPlasmaBrowserBridge && isNativeBrowserBus) &&
             // playerctld just copies other buses and we don't need duplicates
             !player.dbusName?.startsWith('org.mpris.MediaPlayer2.playerctld') &&
             // Non-instance mpd bus
             !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
     }
+
+	function pickPreferredPlayer() {
+		const realPlayers = players;
+		if (!realPlayers || realPlayers.length === 0) {
+			return null;
+		}
+
+		const playingPlayers = realPlayers.filter(player => player?.playbackState?.isPlaying || player?.isPlaying);
+		if (playingPlayers.length > 0) {
+			if (trackedPlayer && playingPlayers.indexOf(trackedPlayer) !== -1) {
+				return trackedPlayer;
+			}
+			return playingPlayers[0];
+		}
+
+		if (trackedPlayer && realPlayers.indexOf(trackedPlayer) !== -1) {
+			return trackedPlayer;
+		}
+
+		return realPlayers[0];
+	}
 
 	// Original stuff from fox below
 	Instantiator {
@@ -77,7 +100,11 @@ Singleton {
 			}
 
 			function onPlaybackStateChanged() {
-				if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				if (modelData.playbackState.isPlaying || modelData.isPlaying) {
+					if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				} else if (root.trackedPlayer == null || !root.trackedPlayer.playbackState.isPlaying) {
+					root.trackedPlayer = modelData;
+				}
 			}
 		}
 	}
