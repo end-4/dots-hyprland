@@ -246,8 +246,8 @@ ContentPage {
                 value: Config.options.background.widgets.clock.digital.font.size
                 usePercentTooltip: false
                 buttonIcon: "format_size"
-                from: 70
-                to: 150
+                from: 50
+                to: 700
                 stopIndicatorValues: [90]
                 onValueChanged: {
                     Config.options.background.widgets.clock.digital.font.size = value;
