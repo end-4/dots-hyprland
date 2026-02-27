@@ -47,6 +47,7 @@ DialogListItem {
                     color: Appearance.colors.colOnSurfaceVariant
                     elide: Text.ElideRight
                     text: root.device?.name || Translation.tr("Unknown device")
+                    textFormat: Text.PlainText
                 }
                 StyledText {
                     visible: (root.device?.connected || root.device?.paired) ?? false
