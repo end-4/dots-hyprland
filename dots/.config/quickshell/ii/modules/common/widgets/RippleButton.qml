@@ -38,6 +38,8 @@ Button {
             colBackground), root.enabled ? 0 : 1)
     property color rippleColor: root.toggled ? colRippleToggled : colRipple
 
+    function cancelRipple() { rippleFadeAnim.restart(); }
+
     function startRipple(x, y) {
         const stateY = buttonBackground.y;
         rippleAnim.x = x;
