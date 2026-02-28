@@ -8,7 +8,8 @@ import qs.modules.common
 
 // Discovers all VPN and WireGuard connections from NetworkManager.
 // Each entry: { name: string, connectionType: "vpn"|"wireguard", active: bool }
-// All processes are stopped when enableVpnToggles is turned off in config.
+// Piggybacks on Network's existing nmcli monitor instead of spawning its own.
+// All activity stops when enableVpnToggles is turned off in config.
 Singleton {
     id: root
 
@@ -20,7 +21,6 @@ Singleton {
         if (enabled) {
             scanProcess.running = true
         } else {
-            monitorProcess.running = false
             scanProcess.running = false
             root.connections = []
         }
@@ -30,8 +30,13 @@ Singleton {
         return root.connections.find(c => c.name === name) ?? null
     }
 
-    function update() {
-        if (root.enabled) scanProcess.running = true
+    // Reuse Network's already-running nmcli monitor
+    Connections {
+        target: Network
+        enabled: root.enabled
+        function onMonitorChanged() {
+            scanProcess.running = true
+        }
     }
 
     // List all connections and their current state in one pass.
@@ -59,18 +64,7 @@ Singleton {
                     }
                 }
                 root.connections = newConns
-                // Start monitoring only after the first successful scan
-                if (!monitorProcess.running) monitorProcess.running = true
             }
-        }
-    }
-
-    Process {
-        id: monitorProcess
-        running: false
-        command: ["nmcli", "monitor"]
-        stdout: SplitParser {
-            onRead: root.update()
         }
     }
 }
