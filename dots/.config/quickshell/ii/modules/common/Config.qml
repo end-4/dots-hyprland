@@ -130,6 +130,7 @@ Singleton {
                         property real harmony: 0.6
                         property real harmonizeThreshold: 100
                         property real termFgBoost: 0.35
+                        property real termBgTone: 0.4
                         property bool forceDarkMode: false
                     }
                 }
