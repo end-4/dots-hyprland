@@ -14,7 +14,7 @@ QuickToggleModel {
     readonly property var _conn: Vpn.connectionFor(vpnName)
 
     name: vpnName
-    icon: _conn?.connectionType === "wireguard" ? "globe" : "vpn_key"
+    icon: _conn?.connectionType === "wireguard" ? "vpn_lock" : "vpn_key"
     statusText: root.toggled ? Translation.tr("Connected") : Translation.tr("Disconnected")
     tooltipText: Translation.tr("VPN · %1").arg(vpnName)
 
