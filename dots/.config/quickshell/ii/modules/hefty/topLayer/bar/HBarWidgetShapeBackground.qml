@@ -1,16 +1,11 @@
 pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 
 import qs.modules.common as C
-import qs.modules.common.functions as F
-import qs.services as S
 import qs.modules.common.widgets as W
 import qs.modules.common.widgets.shapes as Shapes
 import "../../../common/widgets/shapes/material-shapes.js" as MaterialShapes
-import "../../../common/widgets/shapes/shapes/corner-rounding.js" as CornerRounding
-import "../../../common/widgets/shapes/geometry/offset.js" as Offset
 
 // TODO: generalize this shi for vertical
 Shapes.ShapeCanvas {
@@ -21,11 +16,17 @@ Shapes.ShapeCanvas {
     required property bool showPopup
     required property real backgroundWidth
     required property real backgroundHeight
-    property real popupWidth: 400
-    property real popupHeight: 500
+    property real popupContentWidth: 400
+    property real popupContentHeight: 500
+    property real popupPadding: 10
+    property real popupWidth: popupContentWidth + popupPadding * 2
+    property real popupHeight: popupContentHeight + popupPadding * 2
     required property real startRadius
     required property real endRadius
     property real baseMargin: (parent.height - containerShape.height) / 2 // TODO vertical
+    readonly property real popupContentOffsetBase: -baseMargin + popupPadding
+    readonly property real popupContentOffsetY: spacing + popupContentOffsetBase + (atBottom ? -(popupHeight + backgroundHeight + spacing * 2) : 0)
+    readonly property real popupContentOffsetX: popupXOffset + popupContentOffsetBase
 
     property alias containerShape: containerShape
     property alias popupShape: popupShape
@@ -35,13 +36,13 @@ Shapes.ShapeCanvas {
     function updateXInGlobal() {
         xInGlobal = mapToGlobal(0, 0).x + xOffset;
     }
-    Component.onCompleted: updateXInGlobal();
-    onXChanged: updateXInGlobal();
+    Component.onCompleted: updateXInGlobal()
+    onXChanged: updateXInGlobal()
     readonly property real minPopupXOffset: -xInGlobal + baseMargin
     readonly property real maxPopupXOffset: {
         const maxPopupX = QsWindow.window.screen.width - popupWidth - baseMargin;
         const maxOffset = maxPopupX - xInGlobal;
-        return maxOffset
+        return maxOffset;
     }
     readonly property real popupXOffset: Math.min(Math.max(-(popupWidth - containerShape.width) / 2, minPopupXOffset), maxPopupXOffset)
 
@@ -108,6 +109,6 @@ Shapes.ShapeCanvas {
 
     component Anim: SpringAnimation {
         spring: 3.5
-        damping: 0.35
+        damping: 0.3
     }
 }
