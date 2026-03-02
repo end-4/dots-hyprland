@@ -1,0 +1,41 @@
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Layouts
+
+GridLayout {
+    id: root
+
+    property bool vertical: true
+    columns: vertical ? 1 : -1
+    property real totalDuration: 250
+    property real interval: totalDuration / count
+
+    default property list<AbstractChoreographable> choreographableChildren
+    readonly property int count: choreographableChildren.length
+    children: choreographableChildren
+
+    property bool shown: true
+    onShownChanged: {
+        // When hiding, hide all at once
+        if (!shown) {
+            for (var i = 0; i < count; i++) {
+                choreographableChildren[i].progress = 0;
+            }
+        }
+        // When showing, choreograph
+        root.choreographIndex = 0;
+    }
+    property int choreographIndex: count
+    Timer {
+        id: choreographTimer
+        interval: root.interval
+        property bool step: root.shown && root.choreographIndex < root.count
+        running: step
+        repeat: step
+        onTriggered: {
+            const index = root.choreographIndex;
+            root.choreographableChildren[index].progress = 1;
+            root.choreographIndex++;
+        }
+    }
+}

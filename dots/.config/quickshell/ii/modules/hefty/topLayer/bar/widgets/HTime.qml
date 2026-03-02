@@ -41,6 +41,8 @@ HBarWidgetContainer {
 
         backgroundWidth: root.backgroundWidth
         backgroundHeight: root.backgroundHeight
+        popupContentWidth: popupContent.implicitWidth
+        popupContentHeight: popupContent.implicitHeight
         startRadius: root.getBackgroundRadius(root.startSide)
         endRadius: root.getBackgroundRadius(root.endSide)
     }
@@ -57,6 +59,7 @@ HBarWidgetContainer {
         contentImplicitWidth: vertical ? verticalContent.implicitWidth : horizontalContent.implicitWidth
         contentImplicitHeight: vertical ? verticalContent.implicitHeight : horizontalContent.implicitHeight
 
+        // When horizontal
         W.FadeLoader {
             id: horizontalContent
             anchors.fill: parent
@@ -97,9 +100,40 @@ HBarWidgetContainer {
             }
         }
 
+        // When vertical
         W.FadeLoader {
             id: verticalContent
             anchors.fill: parent
+        }
+
+        // Popup content
+        W.ChoreographerGrid {
+            id: popupContent
+            anchors {
+                top: horizontalContent.bottom
+                topMargin: bgShape.popupContentOffsetY
+                left: horizontalContent.left
+                leftMargin: bgShape.popupContentOffsetX
+            }
+
+            shown: root.showPopup
+
+            W.FlyFadeEnterChoreographable {
+                W.StyledText {
+                    text: "Kalender"
+                    font.pixelSize: 25
+                }
+            }
+            W.FlyFadeEnterChoreographable {
+                W.StyledText {
+                    text: "Lorem ipsum okakumalum tung\ntung tung tung"
+                }
+            }
+            W.FlyFadeEnterChoreographable {
+                W.StyledText {
+                    text: "BAJLANDO\nUUOOOUUUOOOUUOOUOU"
+                }
+            }
         }
     }
 }
