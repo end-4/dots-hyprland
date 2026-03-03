@@ -155,6 +155,12 @@ set_thumbnail_path() {
     fi
 }
 
+categorize_wallpaper() {
+    img_cat=$("$SCRIPT_DIR/../ai/gemini-categorize-wallpaper.sh" "$1")
+    # notify-send "Wallpaper category" "$img_cat"
+    echo "$img_cat" > "$STATE_DIR/user/generated/wallpaper/category.txt"
+}
+
 switch() {
     imgpath="$1"
     mode_flag="$2"
@@ -163,9 +169,9 @@ switch() {
     color="$5"
 
     # Start Gemini auto-categorization if enabled
-    aiStylingEnabled=$(jq -r '.background.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
+    aiStylingEnabled=$(jq -r '.background.widgets.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
     if [[ "$aiStylingEnabled" == "true" ]]; then
-        "$SCRIPT_DIR/../ai/gemini-categorize-wallpaper.sh" "$imgpath" > "$STATE_DIR/user/generated/wallpaper/category.txt" &
+        categorize_wallpaper "$imgpath" &
     fi
 
     read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -404,6 +410,12 @@ main() {
     if [[ -z "$imgpath" && -z "$color_flag" && -z "$noswitch_flag" ]]; then
         cd "$(xdg-user-dir PICTURES)/Wallpapers/showcase" 2>/dev/null || cd "$(xdg-user-dir PICTURES)/Wallpapers" 2>/dev/null || cd "$(xdg-user-dir PICTURES)" || return 1
         imgpath="$(kdialog --getopenfilename . --title 'Choose wallpaper')"
+    fi
+
+    if [[ -n "$imgpath" && -z "$noswitch_flag" ]]; then
+        set_accent_color ""
+        color_flag=""
+        color=""
     fi
 
     # If type_flag is 'auto', detect scheme type from image (after imgpath is set)
