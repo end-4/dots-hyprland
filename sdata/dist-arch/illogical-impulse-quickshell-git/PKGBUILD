@@ -52,6 +52,7 @@ makedepends=(
   'ninja'
   'cmake'
   'git'
+  'vulkan-headers'
 )
 provides=("$_pkgname")
 conflicts=("$_pkgname")
