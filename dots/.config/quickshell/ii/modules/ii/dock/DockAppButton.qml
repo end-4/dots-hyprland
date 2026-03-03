@@ -31,6 +31,18 @@ DockButton {
         }
     }
 
+    Timer {
+        // Fallback: retry lookup if desktop entry remained null (e.g. applicationsChanged fired before this component existed)
+        property int retryCount: 5
+        interval: 1000
+        running: !root.isSeparator && root.desktopEntry === null && retryCount > 0
+        repeat: true
+        onTriggered: {
+            retryCount--;
+            root.desktopEntry = DesktopEntries.heuristicLookup(root.appToplevel.appId);
+        }
+    }
+
     // Drag-to-reorder
     readonly property bool isDragged: appListRoot.dragging && delegateIndex === appListRoot.dragSourceIndex
     readonly property real dragTranslateX: {
