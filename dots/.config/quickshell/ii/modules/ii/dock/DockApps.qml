@@ -19,15 +19,63 @@ Item {
 
     property Item lastHoveredButton
     property bool buttonHovered: false
-    property bool requestDockShow: previewPopup.show
+    property bool requestDockShow: previewPopup.show || contextMenu.isOpen
+
+    // Drag-to-reorder state
+    property bool dragging: false
+    property bool _reordering: false
+    property bool _suppressTranslateAnim: false
+    property int dragSourceIndex: -1
+    property real dragCursorX: 0
+    property real dragStartCursorX: 0
+    property real slotWidth: 0
+    property int dragTargetIndex: {
+        if (!dragging || slotWidth <= 0) return dragSourceIndex;
+        var delta = dragCursorX - dragStartCursorX;
+        var slots = Math.round(delta / slotWidth);
+        var pinnedCount = Config.options.dock.pinnedApps.length;
+        return Math.max(0, Math.min(dragSourceIndex + slots, pinnedCount - 1));
+    }
+
+    function finishDrag() {
+        _suppressTranslateAnim = true;
+        if (dragging && dragSourceIndex !== dragTargetIndex) {
+            _reordering = true;
+            TaskbarApps.reorderPinned(dragSourceIndex, dragTargetIndex);
+        }
+        dragging = false;
+        dragSourceIndex = -1;
+        dragCursorX = 0;
+        dragStartCursorX = 0;
+        Qt.callLater(function() {
+            _reordering = false;
+            _suppressTranslateAnim = false;
+        });
+    }
+
+    function cancelDrag() {
+        _suppressTranslateAnim = true;
+        dragging = false;
+        dragSourceIndex = -1;
+        dragCursorX = 0;
+        dragStartCursorX = 0;
+        Qt.callLater(function() { _suppressTranslateAnim = false; });
+    }
+
+    function openContextMenu(button, appToplevelData) {
+        contextMenu.open(button, appToplevelData);
+    }
 
     Layout.fillHeight: true
     Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
     implicitWidth: listView.implicitWidth
-    
+
     StyledListView {
         id: listView
         spacing: 2
+        clip: false
+        interactive: false
+        animateAppearance: !root._reordering
         orientation: ListView.Horizontal
         anchors {
             top: parent.top
@@ -45,8 +93,10 @@ Item {
         }
         delegate: DockAppButton {
             required property var modelData
+            required property int index
             appToplevel: modelData
             appListRoot: root
+            delegateIndex: index
 
             topInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
             bottomInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
@@ -61,7 +111,7 @@ Item {
             target: root
             function onLastHoveredButtonChanged() {
                 previewPopup.allPreviewsReady = false; // Reset readiness when the hovered button changes
-            } 
+            }
         }
         function updatePreviewReadiness() {
             for(var i = 0; i < previewRowLayout.children.length; i++) {
@@ -74,6 +124,7 @@ Item {
             allPreviewsReady = true;
         }
         property bool shouldShow: {
+            if (root.dragging) return false;
             const hoverConditions = (popupMouseArea.containsMouse || root.buttonHovered)
             return hoverConditions && allPreviewsReady;
         }
@@ -225,5 +276,9 @@ Item {
                 }
             }
         }
+    }
+
+    DockContextMenu {
+        id: contextMenu
     }
 }

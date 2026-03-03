@@ -12,6 +12,13 @@ Singleton {
         return Config.options.dock.pinnedApps.indexOf(appId) !== -1;
     }
 
+    function reorderPinned(from, to) {
+        var arr = Config.options.dock.pinnedApps.slice();
+        var item = arr.splice(from, 1)[0];
+        arr.splice(to, 0, item);
+        Config.options.dock.pinnedApps = arr;
+    }
+
     function togglePin(appId) {
         if (root.isPinned(appId)) {
             Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.filter(id => id !== appId)
