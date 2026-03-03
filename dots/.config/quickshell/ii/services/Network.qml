@@ -35,23 +35,23 @@ Singleton {
     property string networkName: ""
     property int networkStrength
     property string materialSymbol: root.ethernet
-        ? "lan"
-        : root.wifiEnabled
-            ? (
-                Network.networkStrength > 83 ? "signal_wifi_4_bar" :
-                Network.networkStrength > 67 ? "network_wifi" :
-                Network.networkStrength > 50 ? "network_wifi_3_bar" :
-                Network.networkStrength > 33 ? "network_wifi_2_bar" :
-                Network.networkStrength > 17 ? "network_wifi_1_bar" :
-                "signal_wifi_0_bar"
-            )
-            : (root.wifiStatus === "connecting")
-                ? "signal_wifi_statusbar_not_connected"
-                : (root.wifiStatus === "disconnected")
-                    ? "wifi_find"
-                    : (root.wifiStatus === "disabled")
-                        ? "signal_wifi_off"
-                        : "signal_wifi_bad"
+    ? "lan"
+    : (root.wifi && root.networkName !== "")
+    ? (
+        Network.networkStrength > 83 ? "signal_wifi_4_bar" :
+        Network.networkStrength > 67 ? "network_wifi" :
+        Network.networkStrength > 50 ? "network_wifi_3_bar" :
+        Network.networkStrength > 33 ? "network_wifi_2_bar" :
+        Network.networkStrength > 17 ? "network_wifi_1_bar" :
+        "signal_wifi_0_bar"
+    )
+    : (root.wifiStatus === "connecting")
+    ? "signal_wifi_statusbar_not_connected"
+    : (root.wifiStatus === "disconnected")
+    ? "wifi_find"
+    : (root.wifiStatus === "disabled")
+    ? "signal_wifi_off"
+    : "signal_wifi_bad"
 
     // Control
     function enableWifi(enabled = true): void {
@@ -185,24 +185,25 @@ Singleton {
         }
         onExited: (exitCode, exitStatus) => {
             const lines = updateConnectionType.buffer.trim().split('\n');
-            const connectivity = lines.pop() // none, limited, full
+            const connectivity = lines.pop();
             let hasEthernet = false;
             let hasWifi = false;
             let wifiStatus = "disconnected";
+
             lines.forEach(line => {
                 if (line.includes("ethernet") && line.includes("connected"))
                     hasEthernet = true;
                 else if (line.includes("wifi:")) {
                     if (line.includes("disconnected")) {
-                        wifiStatus = "disconnected"
+                        wifiStatus = "disconnected";
+                        root.networkName = "";
                     }
                     else if (line.includes("connected")) {
                         hasWifi = true;
-                        wifiStatus = "connected"
-
+                        wifiStatus = "connected";
                         if (connectivity === "limited") {
                             hasWifi = false;
-                            wifiStatus = "limited"
+                            wifiStatus = "limited";
                         }
                     }
                     else if (line.includes("connecting")) {
@@ -221,11 +222,12 @@ Singleton {
 
     Process {
         id: updateNetworkName
-        command: ["sh", "-c", "nmcli -t -f NAME c show --active | head -1"]
+        // Only returns a name if the connection type is NOT loopback
+        command: ["sh", "-c", "nmcli -t -f NAME,TYPE connection show --active | grep -E -v ':(loopback|lo)$' | cut -d: -f1 | head -1"]
         running: true
         stdout: SplitParser {
             onRead: data => {
-                root.networkName = data;
+                root.networkName = data.trim();
             }
         }
     }
