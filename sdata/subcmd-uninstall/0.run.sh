@@ -45,7 +45,12 @@ function delete_targets(){
       printf "${STY_YELLOW}Target \"$path\" inexists, skipping...${STY_RST}\n"
       continue
     elif [[ "$path" == "$HOME"* ]]; then
-      x rm -- "$path"
+      if [[ -d "$path" ]]; then
+		x rm -r -- "$path"
+	else
+		x rm -- "$path"
+	fi
+
     else
       while true; do
         printf "WARNING: Target \"$path\" is not under \$HOME. Still delete it?\ny=Yes, delete it;\nn=No, skip this one\n"
@@ -53,7 +58,11 @@ function delete_targets(){
         echo
         case "$ans" in
           y|Y)
-            x rm -- "$path"
+	    if [[ -d "$path" ]]; then
+		    x rm -r -- "$path"
+	    else
+		    x rm -- "$path"
+	    fi
             break 1
             ;;
           n|N)

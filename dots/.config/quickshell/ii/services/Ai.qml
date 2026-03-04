@@ -294,18 +294,6 @@ Singleton {
             "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
             "api_format": "mistral",
         }),
-        "openrouter-deepseek-r1": aiModelComponent.createObject(this, {
-            "name": "DeepSeek R1",
-            "icon": "deepseek-symbolic",
-            "description": Translation.tr("Online via %1 | %2's model").arg("OpenRouter").arg("DeepSeek"),
-            "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
-            "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-            "model": "deepseek/deepseek-r1:free",
-            "requires_key": true,
-            "key_id": "openrouter",
-            "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": Translation.tr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
-        }),
     }
     property var modelList: Object.keys(root.models)
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
