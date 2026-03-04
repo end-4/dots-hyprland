@@ -32,7 +32,7 @@ Item {
 
     Rectangle { // The dialog
         id: dialog
-        color: Appearance.colors.colSurfaceContainerHigh
+        color: Appearance.m3colors.m3surfaceContainerHigh
         radius: Appearance.rounding.normal
         anchors.fill: parent
         anchors.margins: dialogMargin

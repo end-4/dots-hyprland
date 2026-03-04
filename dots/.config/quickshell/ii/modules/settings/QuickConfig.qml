@@ -141,7 +141,7 @@ ContentPage {
                                     key: "Ctrl"
                                 }
                                 KeyboardKey {
-                                    key: "󰖳"
+                                    key: Config.options.cheatsheet.superKey ?? "󰖳"
                                 }
                                 StyledText {
                                     Layout.alignment: Qt.AlignVCenter
@@ -224,9 +224,6 @@ ContentPage {
             checked: Config.options.appearance.transparency.enable
             onCheckedChanged: {
                 Config.options.appearance.transparency.enable = checked;
-            }
-            StyledToolTip {
-                text: Translation.tr("Might look ass. Unsupported.")
             }
         }
     }

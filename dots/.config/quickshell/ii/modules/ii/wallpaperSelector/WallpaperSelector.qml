@@ -25,6 +25,7 @@ Scope {
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:wallpaperSelector"
             WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
             anchors.top: true
@@ -39,12 +40,16 @@ Scope {
             implicitHeight: Appearance.sizes.wallpaperSelectorHeight
             implicitWidth: Appearance.sizes.wallpaperSelectorWidth
 
-            HyprlandFocusGrab { // Click outside to close
-                id: grab
-                windows: [ panelWindow ]
-                active: wallpaperSelectorLoader.active
-                onCleared: () => {
-                    if (!active) GlobalStates.wallpaperSelectorOpen = false;
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(panelWindow);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(panelWindow);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    GlobalStates.wallpaperSelectorOpen = false;
                 }
             }
 
