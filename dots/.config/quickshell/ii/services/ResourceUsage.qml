@@ -20,6 +20,7 @@ Singleton {
 	property real swapUsed: swapTotal - swapFree
     property real swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property real cpuUsage: 0
+    property real cpuTemperature: 0
     property var previousCpuStats
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
@@ -28,6 +29,7 @@ Singleton {
 
     readonly property int historyLength: Config?.options.resources.historyLength ?? 60
     property list<real> cpuUsageHistory: []
+    property list<real> cpuTemperatureHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
 
@@ -53,10 +55,17 @@ Singleton {
             cpuUsageHistory.shift()
         }
     }
+    function updateCpuTemperatureHistory() {
+        cpuTemperatureHistory = [...cpuTemperatureHistory, cpuTemperature]
+        if (cpuTemperatureHistory.length > historyLength) {
+            cpuTemperatureHistory.shift()
+        }
+    }
     function updateHistories() {
         updateMemoryUsageHistory()
         updateSwapUsageHistory()
         updateCpuUsageHistory()
+        updateCpuTemperatureHistory()
     }
 
 	Timer {
@@ -67,6 +76,7 @@ Singleton {
             // Reload files
             fileMeminfo.reload()
             fileStat.reload()
+            cpuTempProc.running = true
 
             // Parse memory and swap usage
             const textMeminfo = fileMeminfo.text()
@@ -99,6 +109,20 @@ Singleton {
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
+
+    Process {
+        id: cpuTempProc
+        command: ["bash", "-c", "for zone in /sys/class/thermal/thermal_zone*; do [ \"$(cat $zone/type)\" = \"x86_pkg_temp\" ] && cat $zone/temp && break; done"]
+        stdout: StdioCollector {
+            id: tempCollector
+            onStreamFinished: {
+                const val = parseFloat(tempCollector.text)
+                if (!isNaN(val)) {
+                    root.cpuTemperature = val / 1000
+                }
+            }
+        }
+    }
 
     Process {
         id: findCpuMaxFreqProc

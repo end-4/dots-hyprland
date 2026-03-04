@@ -4,164 +4,182 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import QtPositioning
 
 import qs.modules.common
 
 Singleton {
     id: root
-    // 10 minute
-    readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
-    readonly property string city: Config.options.bar.weather.city
-    readonly property bool useUSCS: Config.options.bar.weather.useUSCS
-    property bool gpsActive: Config.options.bar.weather.enableGPS
 
-    onUseUSCSChanged: {
-        root.getData();
-    }
-    onCityChanged: {
-        root.getData();
+    property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
+    readonly property bool useUSCS: Config.options.bar.weather.useUSCS
+
+    onFetchIntervalChanged: {
+        refreshTimer.restart();
     }
 
     property var location: ({
         valid: false,
         lat: 0,
-        lon: 0
+        lon: 0,
+        city: "City"
     })
 
     property var data: ({
         uv: 0,
         humidity: 0,
-        sunrise: 0,
-        sunset: 0,
-        windDir: 0,
-        wCode: 0,
-        city: 0,
-        wind: 0,
-        precip: 0,
-        visib: 0,
-        press: 0,
-        temp: 0,
-        tempFeelsLike: 0,
-        lastRefresh: 0,
+        sunrise: "0:00",
+        sunset: "0:00",
+        windDir: "N",
+        wCode: "113",
+        city: "City",
+        wind: "0 km/h",
+        precip: "0 mm",
+        visib: "0 km",
+        press: "0 hPa",
+        temp: "0°C",
+        tempFeelsLike: "0°C",
+        lastRefresh: "Never",
     })
 
-    function refineData(data) {
+    function wmoToWwo(wmoCode) {
+        const mapping = {
+            0: "113", // Clear
+            1: "116", // Partly Cloudy
+            2: "119", // Cloudy
+            3: "122", // Overcast
+            45: "143", // Fog
+            48: "248", // Fog
+            51: "266", // Drizzle
+            53: "266",
+            55: "266",
+            56: "281", // Freezing Drizzle
+            57: "284",
+            61: "296", // Rain
+            63: "302",
+            65: "308",
+            66: "311", // Freezing Rain
+            67: "314",
+            71: "326", // Snow
+            73: "332",
+            75: "338",
+            77: "335", // Snow Grains
+            80: "353", // Showers
+            81: "356",
+            82: "359",
+            85: "368", // Snow Showers
+            86: "371",
+            95: "386", // Thunderstorm
+            96: "389",
+            99: "392"
+        };
+        return mapping[wmoCode] || "113";
+    }
+
+    function refineData(weatherJson) {
+        if (!weatherJson || !weatherJson.current) return;
+
         let temp = {};
-        temp.uv = data?.current?.uvIndex || 0;
-        temp.humidity = (data?.current?.humidity || 0) + "%";
-        temp.sunrise = data?.astronomy?.sunrise || "0.0";
-        temp.sunset = data?.astronomy?.sunset || "0.0";
-        temp.windDir = data?.current?.winddir16Point || "N";
-        temp.wCode = data?.current?.weatherCode || "113";
-        temp.city = data?.location?.areaName[0]?.value || "City";
-        temp.temp = "";
-        temp.tempFeelsLike = "";
+        const current = weatherJson.current;
+        const daily = weatherJson.daily;
+
+        temp.uv = current.uv_index || 0;
+        temp.humidity = (current.relative_humidity_2m || 0) + "%";
+        
+        // Extract time from ISO8601 string (e.g., "2024-05-23T05:56")
+        const formatTime = (isoStr) => isoStr ? isoStr.split("T")[1] : "0:00";
+        temp.sunrise = formatTime(daily.sunrise[0]);
+        temp.sunset = formatTime(daily.sunset[0]);
+        
+        // Wind direction simplified
+        const degToDir = (deg) => {
+            const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+            return dirs[Math.round(deg / 45) % 8];
+        };
+        temp.windDir = degToDir(current.wind_direction_10m || 0);
+        
+        temp.wCode = root.wmoToWwo(current.weather_code);
+        temp.city = root.location.city;
+
         if (root.useUSCS) {
-            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
-            temp.precip = (data?.current?.precipInches || 0) + " in";
-            temp.visib = (data?.current?.visibilityMiles || 0) + " m";
-            temp.press = (data?.current?.pressureInches || 0) + " psi";
-            temp.temp += (data?.current?.temp_F || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
-            temp.temp += "°F";
-            temp.tempFeelsLike += "°F";
+            temp.wind = Math.round(current.wind_speed_10m * 0.621371) + " mph";
+            temp.precip = current.precipitation + " in"; // Open-Meteo can be configured for inches, but we'll stick to metric internally or adjust URL
+            temp.visib = Math.round(current.visibility / 1609.34) + " mi";
+            temp.press = Math.round(current.pressure_msl * 0.0145038) + " psi";
+            temp.temp = Math.round(current.temperature_2m * 9/5 + 32) + "°F";
+            temp.tempFeelsLike = Math.round(current.apparent_temperature * 9/5 + 32) + "°F";
         } else {
-            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-            temp.precip = (data?.current?.precipMM || 0) + " mm";
-            temp.visib = (data?.current?.visibility || 0) + " km";
-            temp.press = (data?.current?.pressure || 0) + " hPa";
-            temp.temp += (data?.current?.temp_C || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
-            temp.temp += "°C";
-            temp.tempFeelsLike += "°C";
+            temp.wind = Math.round(current.wind_speed_10m) + " km/h";
+            temp.precip = current.precipitation + " mm";
+            temp.visib = Math.round(current.visibility / 1000) + " km";
+            temp.press = Math.round(current.pressure_msl) + " hPa";
+            temp.temp = Math.round(current.temperature_2m) + "°C";
+            temp.tempFeelsLike = Math.round(current.apparent_temperature) + "°C";
         }
+        
         temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
     }
 
     function getData() {
-        let command = "curl -s wttr.in";
-
-        if (root.gpsActive && root.location.valid) {
-            command += `/${root.location.lat},${root.location.long}`;
-        } else {
-            command += `/${formatCityName(root.city)}`;
-        }
-
-        // format as json
-        command += "?format=j1";
-        command += " | ";
-        // only take the current weather, location, asytronmy data
-        command += "jq '{current: .current_condition[0], location: .nearest_area[0], astronomy: .weather[0].astronomy[0]}'";
-        fetcher.command[2] = command;
-        fetcher.running = true;
-    }
-
-    function formatCityName(cityName) {
-        return cityName.trim().split(/\s+/).join('+');
-    }
-
-    Component.onCompleted: {
-        if (!root.gpsActive) return;
-        console.info("[WeatherService] Starting the GPS service.");
-        positionSource.start();
+        locationFetcher.running = true;
     }
 
     Process {
-        id: fetcher
-        command: ["bash", "-c", ""]
+        id: locationFetcher
+        command: ["curl", "-s", "http://ip-api.com/json"]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (text.length === 0)
-                    return;
+                if (text.length === 0) return;
                 try {
-                    const parsedData = JSON.parse(text);
-                    root.refineData(parsedData);
-                    // console.info(`[ data: ${JSON.stringify(parsedData)}`);
+                    const loc = JSON.parse(text);
+                    if (loc.status === "success") {
+                        root.location.lat = loc.lat;
+                        root.location.lon = loc.lon;
+                        root.location.city = loc.city;
+                        root.location.valid = true;
+                        
+                        // Now fetch weather
+                        weatherFetcher.fetch();
+                    }
                 } catch (e) {
-                    console.error(`[WeatherService] ${e.message}`);
+                    console.error(`[WeatherService] Location Error: ${e.message}`);
                 }
             }
         }
     }
 
-    PositionSource {
-        id: positionSource
-        updateInterval: root.fetchInterval
-
-        onPositionChanged: {
-            // update the location if the given location is valid
-            // if it fails getting the location, use the last valid location
-            if (position.latitudeValid && position.longitudeValid) {
-                root.location.lat = position.coordinate.latitude;
-                root.location.long = position.coordinate.longitude;
-                root.location.valid = true;
-                // console.info(`📍 Location: ${position.coordinate.latitude}, ${position.coordinate.longitude}`);
-                root.getData();
-                // if can't get initialized with valid location deactivate the GPS
-            } else {
-                root.gpsActive = root.location.valid ? true : false;
-                console.error("[WeatherService] Failed to get the GPS location.");
-            }
+    Process {
+        id: weatherFetcher
+        function fetch() {
+            let url = `https://api.open-meteo.com/v1/forecast?latitude=${root.location.lat}&longitude=${root.location.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,uv_index,visibility&daily=sunrise,sunset&timezone=auto&forecast_days=1`;
+            command = ["curl", "-s", url];
+            running = true;
         }
-
-        onValidityChanged: {
-            if (!positionSource.valid) {
-                positionSource.stop();
-                root.location.valid = false;
-                root.gpsActive = false;
-                Quickshell.execDetached(["notify-send", Translation.tr("Weather Service"), Translation.tr("Cannot find a GPS service. Using the fallback method instead."), "-a", "Shell"]);
-                console.error("[WeatherService] Could not aquire a valid backend plugin.");
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length === 0) return;
+                try {
+                    const weather = JSON.parse(text);
+                    root.refineData(weather);
+                } catch (e) {
+                    console.error(`[WeatherService] Weather Error: ${e.message}`);
+                }
             }
         }
     }
 
     Timer {
-        running: !root.gpsActive
-        repeat: true
+        id: refreshTimer
         interval: root.fetchInterval
-        triggeredOnStart: !root.gpsActive
+        repeat: true
+        running: true
+        triggeredOnStart: true
         onTriggered: root.getData()
+    }
+
+    onUseUSCSChanged: root.getData()
+
+    Component.onCompleted: {
+        console.info("[WeatherService] Initialized with ip-api and Open-Meteo.");
     }
 }
