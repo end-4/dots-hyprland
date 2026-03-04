@@ -9,7 +9,7 @@ DESCRIPTION="Toolkit for building desktop widgets using QtQuick"
 HOMEPAGE="https://quickshell.org/"
 
 EGIT_REPO_URI="https://github.com/quickshell-mirror/quickshell.git"
-EGIT_COMMIT="db1777c20b936a86528c1095cbcb1ebd92801402"
+EGIT_COMMIT="6e17efab83d3a5ad5d6e59bc08d26095c6660502"
 
 KEYWORDS="~amd64 ~arm64 ~x86"
 LICENSE="LGPL-3"
@@ -67,7 +67,7 @@ BDEPEND="
 	dev-vcs/git
 	virtual/pkgconfig
 	breakpad? ( dev-util/breakpad )
-
+	dev-util/vulkan-headers
 "
 
 src_configure(){
