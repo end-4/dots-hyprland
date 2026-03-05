@@ -336,6 +336,33 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "calendar_month"
+        title: Translation.tr("Date")
+
+        ContentSubsection {
+            title: Translation.tr("Format")
+            tooltip: ""
+
+            ConfigSelectionArray {
+                currentValue: Config.options.time.dateFormat
+                onSelected: newValue => {
+                    Config.options.time.dateFormat = newValue;  
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Date First dd/MM"),
+                        value: "ddd dd/MM"
+                    },
+                    {
+                        displayName: Translation.tr("Month First MM/dd"),
+                        value: "ddd MM/dd"
+                    }
+                ]
+            }
+        }
+    }
+
+    ContentSection {
         icon: "work_alert"
         title: Translation.tr("Work safety")
 
