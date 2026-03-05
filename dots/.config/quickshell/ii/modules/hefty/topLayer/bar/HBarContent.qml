@@ -28,12 +28,9 @@ Item {
     Side {
         id: centerLeftSide
         anchors.right: !root.vertical ? centerSide.left : parent.right
-        anchors.bottom: root.vertical ? parent.bottom : undefined
+        anchors.bottom: !root.vertical ? parent.bottom : centerSide.top
         HBarUserFallbackComponentRepeater {
-            componentNames: [
-                ...root.centerLeftWidgets,
-                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
-            ]
+            componentNames: [...root.centerLeftWidgets, ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),]
         }
     }
 
@@ -42,23 +39,16 @@ Item {
         anchors.verticalCenter: root.vertical ? parent.verticalCenter : undefined
         anchors.horizontalCenter: !root.vertical ? parent.horizontalCenter : undefined
         HBarUserFallbackComponentRepeater {
-            componentNames: [
-                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
-                ...root.centerWidgets,
-                ...(root.centerRightWidgets.length > 0 ? [invisibleItem] : []),
-            ]
+            componentNames: [...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []), ...root.centerWidgets, ...(root.centerRightWidgets.length > 0 ? [invisibleItem] : []),]
         }
     }
 
     Side {
         id: centerRightSide
         anchors.left: !root.vertical ? centerSide.right : parent.left
-        anchors.top: root.vertical ? parent.top : undefined
+        anchors.top: root.vertical ? parent.top : centerSide.bottom
         HBarUserFallbackComponentRepeater {
-            componentNames: [
-                ...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []),
-                ...root.centerRightWidgets,
-            ]
+            componentNames: [...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []), ...root.centerRightWidgets,]
         }
     }
 
