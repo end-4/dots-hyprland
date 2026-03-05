@@ -41,6 +41,10 @@ Variants {
             anchors.fill: parent
             source: Config.options.background.wallpaperPath
             fillMode: Image.PreserveAspectCrop
+            sourceSize.width: 0
+            sourceSize.height: 0
+            smooth: true
+            mipmap: true
         }
     }
 }
