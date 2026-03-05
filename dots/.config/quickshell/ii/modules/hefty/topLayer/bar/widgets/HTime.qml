@@ -15,6 +15,11 @@ HBarWidgetContainer {
     readonly property bool vertical: C.Config.options.bar.vertical
     readonly property bool atBottom: C.Config.options.bar.bottom
 
+    readonly property string timeFormatString: C.Config.options.time.format
+    readonly property bool is12h: timeFormatString.startsWith("h:")
+    readonly property bool hasAmPm: timeFormatString.toLowerCase().includes("ap") || timeFormatString.toLowerCase().endsWith("a")
+    readonly property bool capitalizedAmPm: timeFormatString.includes("AP") || timeFormatString.endsWith("A")
+
     // Interactions
     property var morphedPanelParent: F.ObjectUtils.findParentWithProperty(root, "maskItems")
     onShowPopupChanged: {
@@ -83,14 +88,14 @@ HBarWidgetContainer {
                         text: S.DateTime.time
                     }
 
-                    W.StyledText {
+                    W.VisuallyCenteredStyledText {
                         Layout.alignment: Qt.AlignVCenter
                         font.pixelSize: C.Appearance.font.pixelSize.small
                         color: C.Appearance.colors.colOnLayer1
                         text: "•"
                     }
 
-                    W.StyledText {
+                    W.VisuallyCenteredStyledText {
                         Layout.alignment: Qt.AlignVCenter
                         font.pixelSize: C.Appearance.font.pixelSize.small
                         color: C.Appearance.colors.colOnLayer1
@@ -104,15 +109,52 @@ HBarWidgetContainer {
         W.FadeLoader {
             id: verticalContent
             anchors.fill: parent
+            shown: contentRoot.vertical
+
+            sourceComponent: Item {
+                anchors.fill: parent
+                implicitWidth: contentLayoutVertical.implicitWidth
+                implicitHeight: contentLayoutVertical.implicitHeight
+
+                ColumnLayout {
+                    id: contentLayoutVertical
+                    anchors.fill: parent
+                    spacing: -6
+
+                    W.StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: C.Appearance.font.pixelSize.large
+                        color: C.Appearance.colors.colOnLayer1
+                        text: {
+                            var hrs = S.DateTime.clock.hours;
+                            if (root.is12h) hrs %= 12;
+                            return hrs.toString().padStart(2, '0')
+                        }
+                    }
+                    W.StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: C.Appearance.font.pixelSize.large
+                        color: C.Appearance.colors.colOnLayer1
+                        text: S.DateTime.clock.minutes.toString().padStart(2, '0')
+                    }
+                    W.StyledText {
+                        visible: root.hasAmPm
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: C.Appearance.font.pixelSize.smaller
+                        color: C.Appearance.colors.colOnLayer1
+                        text: Qt.locale().toString(S.DateTime.clock.date, root.capitalizedAmPm ? "AP" : "ap")
+                    }
+                }
+            }
         }
 
         // Popup content
         W.ChoreographerGrid {
             id: popupContent
             anchors {
-                top: horizontalContent.bottom
+                top: root.vertical ? verticalContent.top : horizontalContent.top
                 topMargin: bgShape.popupContentOffsetY
-                left: horizontalContent.left
+                left: root.vertical ? verticalContent.left : horizontalContent.left
                 leftMargin: bgShape.popupContentOffsetX
             }
 
