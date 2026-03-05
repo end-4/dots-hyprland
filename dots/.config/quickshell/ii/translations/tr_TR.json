@@ -604,5 +604,10 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "%1 updates available": "%1 güncelleme mevcut",
+  "System Updates": "Sistem Güncellemeleri",
+  "Package Manager": "Paket Yöneticisi",
+  "Show in bar": "Çubukta göster",
+  "Visibility Threshold": "Görünürlük Eşiği"
 }
