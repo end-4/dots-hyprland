@@ -260,4 +260,23 @@ DelegateChooser {
         cellSpacing: root.spacing
         cellSize: modelData.size
     } }
+
+    signal requestVpnResize(string name)
+    signal requestVpnVisibility(string name)
+
+    DelegateChoice { roleValue: "vpn"; AndroidVpnToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+        connectionName: modelData.name
+        onRequestResize: root.requestVpnResize(modelData.name)
+        onRequestVisibilityToggle: root.requestVpnVisibility(modelData.name)
+    } }
 }
