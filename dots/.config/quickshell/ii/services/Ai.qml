@@ -321,6 +321,13 @@ Singleton {
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
+        // Load extra models from config (onReadyChanged may not fire if Config is already ready)
+        if (Config?.options?.ai?.extraModels) {
+            Config.options.ai.extraModels.forEach(model => {
+                const safeModelName = root.safeModelName(model["model"]);
+                root.addModel(safeModelName, model)
+            });
+        }
     }
 
     function guessModelLogo(model) {
@@ -345,7 +352,9 @@ Singleton {
     }
 
     function addModel(modelName, data) {
-        root.models[modelName] = aiModelComponent.createObject(this, data);
+        root.models = Object.assign({}, root.models, {
+            [modelName]: aiModelComponent.createObject(this, data)
+        });
     }
 
     Process {
