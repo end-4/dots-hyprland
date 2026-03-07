@@ -54,6 +54,19 @@ DelegateChooser {
         }
     } }
 
+    DelegateChoice { roleValue: "autoRotate"; AndroidAutoRotateToggle {
+        required property int index
+        required property var modelData
+        buttonIndex: root.startingIndex + index
+        buttonData: modelData
+        editMode: root.editMode
+        expandedSize: modelData.size > 1
+        baseCellWidth: root.baseCellWidth
+        baseCellHeight: root.baseCellHeight
+        cellSpacing: root.spacing
+        cellSize: modelData.size
+    } }
+
     DelegateChoice { roleValue: "bluetooth"; AndroidBluetoothToggle {
         required property int index
         required property var modelData
