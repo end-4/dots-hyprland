@@ -1,15 +1,10 @@
 pragma ComponentBehavior: Bound
 import QtQml
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
-import qs
-import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
-import qs.modules.waffle.looks
 
 Item {
     id: root
@@ -36,15 +31,23 @@ Item {
         const diffWeeks = Math.round(diffMillis / root.millisPerWeek);
         root.targetWeekDiff += diffWeeks;
     }
+    function scrollToToday() {
+        root.targetWeekDiff = 0;
+    }
     property int weeksPerScroll: 1
     property real targetWeekDiff: 0
     property real weekDiff: targetWeekDiff
     property int contentWeekDiff: weekDiff // whole part of weekDiff
     property bool scrolling: false
 
+    property Animation scrollAnimation: NumberAnimation {
+        duration: Config.options.calendar.animate ? Appearance.animation.scroll.duration : 0
+        easing.type: Appearance.animation.scroll.type
+        easing.bezierCurve: Appearance.animation.scroll.bezierCurve
+    }
     Behavior on weekDiff {
         id: weekScrollBehavior
-        animation: Looks.transition.scroll.createObject(this)
+        animation: root.scrollAnimation
     }
     Timer {
         id: scrollAnimationCheckTimer
@@ -56,11 +59,19 @@ Item {
         scrollAnimationCheckTimer.restart();
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onWheel: wheel => {
-            root.targetWeekDiff += wheel.angleDelta.y / 120 * -root.weeksPerScroll; // Reverse cuz scrolling down should advance
+    property var wheelAction: (wheel) => {
+        // Reverse cuz scrolling down should advance
+        const sign = wheel.angleDelta.y / 120 * -1;
+        if (Config.options.calendar.weekScrollPrecision) {
+            root.targetWeekDiff += sign * root.weeksPerScroll;
+        } else {
+            scrollMonthsAndSnap(sign);
         }
+    }
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onWheel: (wheel) => root.wheelAction(wheel)
     }
 
     // Date calculations
@@ -82,14 +93,16 @@ Item {
         return DateUtils.getIthDayDateOfSameWeek(dateInTargetWeek, root.focusDayOfWeekIndex - root.locale.firstDayOfWeek, root.locale.firstdayOfWeek); // 4 = Thursday
     }
     property int focusedMonth: focusedDate.getMonth() + 1 // 0-indexed -> 1-indexed
+    property string title: locale.toString(focusedDate, "MMMM yyyy")
 
     // Sizes
     property real verticalPadding: 0
+    property real horizontalPadding: 0
     property real buttonSize: 40
     property real buttonSpacing: 2
     property real buttonVerticalSpacing: buttonSpacing
     implicitHeight: (6 * buttonSize) + (5 * buttonVerticalSpacing) + (2 * verticalPadding)
-    implicitWidth: weeksColumn.implicitWidth
+    implicitWidth: weeksColumn.implicitWidth + (2 * horizontalPadding)
     clip: true
     
     ColumnLayout {
@@ -97,6 +110,8 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
+            leftMargin: root.horizontalPadding
+            rightMargin: root.horizontalPadding
         }
         y: {
             const spacePerExtraRow = root.buttonSize + root.buttonVerticalSpacing;
