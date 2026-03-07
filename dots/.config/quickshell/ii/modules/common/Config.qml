@@ -301,6 +301,9 @@ Singleton {
 
             property JsonObject calendar: JsonObject {
                 property string locale: "en-GB"
+                property bool force2CharDayOfWeek: true
+                property bool animate: false // Disabled by default cuz laggy
+                property bool weekScrollPrecision: false // One scroll advances 1 week instead of 1 month
             }
 
             property JsonObject cheatsheet: JsonObject {

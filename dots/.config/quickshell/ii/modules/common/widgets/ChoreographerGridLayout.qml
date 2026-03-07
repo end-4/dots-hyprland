@@ -10,7 +10,7 @@ GridLayout {
     property real totalDuration: 250
     property real interval: totalDuration / count
 
-    default property list<AbstractChoreographable> choreographableChildren
+    default property list<QtObject> choreographableChildren
     readonly property int count: choreographableChildren.length
     children: choreographableChildren
 

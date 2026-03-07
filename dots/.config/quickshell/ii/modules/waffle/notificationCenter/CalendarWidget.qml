@@ -54,7 +54,7 @@ BodyRectangle {
                         anchors.centerIn: parent
                         text: {
                             var result = dayOfWeekItem.model.shortName;
-                            if (Config.options.waffles.calendar.force2CharDayOfWeek) result = result.substring(0,2);
+                            if (Config.options.calendar.force2CharDayOfWeek) result = result.substring(0,2);
                             return result;
                         }
                         color: Looks.colors.fg
@@ -70,6 +70,7 @@ BodyRectangle {
                 buttonSpacing: 6
                 buttonVerticalSpacing: 1
                 Layout.fillWidth: true
+                scrollAnimation: Looks.transition.scroll.createObject(this)
                 delegate: DayButton {}
             }
         }
