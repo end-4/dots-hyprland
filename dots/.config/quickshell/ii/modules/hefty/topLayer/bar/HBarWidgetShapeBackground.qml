@@ -225,9 +225,10 @@ Shapes.ShapeCanvas {
         return MaterialShapes.customPolygon(points);
     }
 
-    component Anim: SpringAnimation {
-        spring: 3.5
-        damping: 0.3
+    component Anim: NumberAnimation {
+        duration: C.Appearance.animation.elementMove.duration
+        easing.type: C.Appearance.animation.elementMove.type
+        easing.bezierCurve: C.Appearance.animation.elementMove.bezierCurve
     }
 
     Component {

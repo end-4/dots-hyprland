@@ -53,14 +53,10 @@ PanelWindow {
         anchors.fill: parent
         polygonIsNormalized: false
         roundedPolygon: MaterialShapes.customPolygon([new MaterialShapes.PointNRound(new Offset.Offset(root.screen.width, 0), new CornerRounding.CornerRounding(9999)),])
-        // animation: NumberAnimation {
-        //     duration: 500
-        //     easing.type: Easing.BezierSpline
-        //     easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
-        // }
-        animation: SpringAnimation {
-            spring: 3.5
-            damping: 0.35
+        animation: NumberAnimation {
+            duration: 500
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
         }
         color: Appearance.colors.colLayer0
         borderWidth: (root.currentPanel === bar && Config.options.bar.cornerStyle !== 1) ? 0 : 1
