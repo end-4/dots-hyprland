@@ -23,6 +23,10 @@ Flow {
     ]
     property var currentValue: null
 
+    function focusSelectedChild() {
+        children.find(c => c.value == currentValue).forceActiveFocus()
+    }
+
     signal selected(var newValue)
 
     Repeater {
@@ -31,6 +35,7 @@ Flow {
             id: paletteButton
             required property var modelData
             required property int index
+            readonly property var value: modelData.value
             onYChanged: {
                 if (index === 0) {
                     paletteButton.leftmost = true
