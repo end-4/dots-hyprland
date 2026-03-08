@@ -29,6 +29,7 @@ Button {
     property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
     property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
     property color colRippleToggled: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
+    property color colFocusRing: Appearance.colors.colOnSecondaryContainer
 
     opacity: root.enabled ? 1 : 0.4
     property color buttonColor: ColorUtils.transparentize(root.toggled ? 
@@ -177,6 +178,21 @@ Button {
                 x: -ripple.width / 2
                 y: -ripple.height / 2
             }
+        }
+    }
+
+    Rectangle {
+        id: focusRing
+        radius: buttonBackground.radius - anchors.margins
+        visible: root.visualFocus
+        color: "transparent"
+        anchors {
+            fill: parent
+            margins: -4
+        }
+        border {
+            color: root.colFocusRing
+            width: 2
         }
     }
 
