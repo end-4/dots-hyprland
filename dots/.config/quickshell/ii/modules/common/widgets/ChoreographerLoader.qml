@@ -3,5 +3,5 @@ import QtQuick
 
 FadeLoader {
     id: root    
-    onActiveChanged: item.shown = true
+    onActiveChanged: if (active) item.shown = true
 }
