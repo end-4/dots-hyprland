@@ -24,4 +24,19 @@ Singleton {
         targetDate.setDate(firstDayDate.getDate() + i);
         return targetDate;
     }
+
+    function formatDuration(seconds) {
+        const d = Math.floor(seconds / 86400);
+        const h = Math.floor((seconds % 86400) / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+
+        let str = "";
+        if (d > 0)
+            str += `${d}d`;
+        if (h > 0)
+            str += `${str ? ", " : ""}${h}h`;
+        if (m > 0 || !str)
+            str += `${str ? ", " : ""}${m}m`;
+        return str;
+    }
 }

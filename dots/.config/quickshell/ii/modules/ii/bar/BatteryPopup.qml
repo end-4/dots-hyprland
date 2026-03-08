@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
@@ -27,18 +28,10 @@ StyledPopup {
             icon: "schedule"
             label: Battery.isCharging ? Translation.tr("Time to full:") : Translation.tr("Time to empty:")
             value: {
-                function formatTime(seconds) {
-                    var h = Math.floor(seconds / 3600);
-                    var m = Math.floor((seconds % 3600) / 60);
-                    if (h > 0)
-                        return `${h}h, ${m}m`;
-                    else
-                        return `${m}m`;
-                }
                 if (Battery.isCharging)
-                    return formatTime(Battery.timeToFull);
+                    return DateUtils.formatDuration(Battery.timeToFull);
                 else
-                    return formatTime(Battery.timeToEmpty);
+                    return DateUtils.formatDuration(Battery.timeToEmpty);
             }
         }
 
@@ -54,13 +47,7 @@ StyledPopup {
                     return Translation.tr("Discharging:");
                 }
             }
-            value: {
-                if (Battery.chargeState == 4) {
-                    return "";
-                } else {
-                    return `${Battery.energyRate.toFixed(2)}W`;
-                }
-            }
+            value: `${Battery.energyRate.toFixed(2)}W`
         }
 
         StyledPopupValueRow {
