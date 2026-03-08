@@ -4,54 +4,20 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import qs.modules.common as C
-import qs.modules.common.functions as F
 import qs.services as S
 import qs.modules.common.widgets as W
 import ".."
 
-HBarWidgetContainer {
+HBarWidgetWithPopout {
     id: root
-
-    property bool showPopup: false
-    readonly property bool vertical: C.Config.options.bar.vertical
-    readonly property bool atBottom: C.Config.options.bar.bottom
 
     readonly property string timeFormatString: C.Config.options.time.format
     readonly property bool is12h: timeFormatString.startsWith("h:")
     readonly property bool hasAmPm: timeFormatString.toLowerCase().includes("ap") || timeFormatString.toLowerCase().endsWith("a")
     readonly property bool capitalizedAmPm: timeFormatString.includes("AP") || timeFormatString.endsWith("A")
 
-    // Interactions
-    property var morphedPanelParent: F.ObjectUtils.findParentWithProperty(root, "maskItems")
-    onShowPopupChanged: {
-        if (root.showPopup) {
-            root.morphedPanelParent.addAttachedMaskItem(bgShape);
-        } else {
-            root.morphedPanelParent.removeAttachedMaskItem(bgShape);
-        }
-    }
-    Connections {
-        target: root.morphedPanelParent
-        function onFocusGrabDismissed() {
-            root.showPopup = false;
-        }
-    }
-
-    // Background container shape
-    background: HBarWidgetShapeBackground {
-        id: bgShape
-
-        vertical: root.vertical
-        atBottom: root.atBottom
-        showPopup: root.showPopup
-
-        backgroundWidth: root.backgroundWidth
-        backgroundHeight: root.backgroundHeight
-        popupContentWidth: popupContent.implicitWidth
-        popupContentHeight: popupContent.implicitHeight
-        startRadius: root.getBackgroundRadius(root.startSide)
-        endRadius: root.getBackgroundRadius(root.endSide)
-    }
+    popupContentWidth: popupContent.implicitWidth
+    popupContentHeight: popupContent.implicitHeight
 
     // The button on the bar
     HBarWidgetContent {
@@ -62,8 +28,10 @@ HBarWidgetContainer {
         showPopup: root.showPopup
 
         onClicked: root.showPopup = !showPopup
-        contentImplicitWidth: vertical ? verticalContent.implicitWidth : horizontalContent.implicitWidth
-        contentImplicitHeight: vertical ? verticalContent.implicitHeight : horizontalContent.implicitHeight
+        contentImplicitWidth: activeItem.implicitWidth
+        contentImplicitHeight: activeItem.implicitHeight
+
+        property Item activeItem: vertical ? verticalContent : horizontalContent
 
         // When horizontal
         W.FadeLoader {
@@ -71,9 +39,7 @@ HBarWidgetContainer {
             anchors.fill: parent
             shown: !contentRoot.vertical
 
-            sourceComponent: HorizontalClock {
-                anchors.fill: parent
-            }
+            sourceComponent: HorizontalClock {}
         }
 
         // When vertical
@@ -82,9 +48,7 @@ HBarWidgetContainer {
             anchors.fill: parent
             shown: contentRoot.vertical
 
-            sourceComponent: VerticalClock {
-                anchors.fill: parent
-            }
+            sourceComponent: VerticalClock {}
         }
 
         // Popup content
@@ -92,9 +56,9 @@ HBarWidgetContainer {
             id: popupContent
             anchors {
                 top: root.vertical ? verticalContent.top : horizontalContent.top
-                topMargin: bgShape.popupContentOffsetY
+                topMargin: root.popupContentOffsetY
                 left: root.vertical ? verticalContent.left : horizontalContent.left
-                leftMargin: bgShape.popupContentOffsetX
+                leftMargin: root.popupContentOffsetX
             }
 
             shown: root.showPopup
@@ -109,13 +73,19 @@ HBarWidgetContainer {
             id: contentLayout
             anchors.fill: parent
 
-            W.VisuallyCenteredStyledText {
+            W.FixedWidthTextContainer {
                 Layout.leftMargin: contentRoot.layoutParentTopLeftRadius * contentRoot.parentRadiusToPaddingRatio
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.fillHeight: true
-                font.pixelSize: C.Appearance.font.pixelSize.large
-                color: C.Appearance.colors.colOnLayer1
-                text: S.DateTime.time
+                longestText: Qt.locale().toString(new Date(1984, 6, 9, 00, 00, 00), root.timeFormatString)
+                font: clockText.font
+                W.VisuallyCenteredStyledText {
+                    id: clockText
+                    anchors.fill: parent
+                    font.pixelSize: C.Appearance.font.pixelSize.large
+                    color: C.Appearance.colors.colOnLayer1
+                    text: S.DateTime.time
+                }
             }
 
             W.VisuallyCenteredStyledText {
@@ -191,10 +161,11 @@ HBarWidgetContainer {
         property real buttonSize: C.Appearance.rounding.normal * 2
         property real buttonSpacing: 4
 
-        rowSpacing: 0
+        rowSpacing: 4
 
         W.FlyFadeEnterChoreographable {
             Layout.fillWidth: true
+            Layout.bottomMargin: 4
 
             RowLayout {
                 width: parent.width
@@ -234,23 +205,24 @@ HBarWidgetContainer {
             }
         }
         W.FlyFadeEnterChoreographable {
-            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
 
-            DayOfWeekRow {
-                id: dayOfWeekRow
-                width: parent.width
+            W.CalendarDaysOfWeek {
                 locale: calendarView.locale
                 spacing: popupRoot.buttonSpacing
                 delegate: Item {
-                    id: dayOfWeekItem
+                    id: dowItem
                     required property var model
-                    implicitHeight: popupRoot.buttonSize
                     implicitWidth: popupRoot.buttonSize
+                    implicitHeight: dowText.implicitHeight
 
                     W.VisuallyCenteredStyledText {
+                        id: dowText
                         anchors.centerIn: parent
+                        font.pixelSize: C.Appearance.font.pixelSize.smaller
+                        color: C.Appearance.colors.colOutline
                         text: {
-                            var result = dayOfWeekItem.model.shortName;
+                            var result = dowItem.model.shortName;
                             if (C.Config.options.calendar.force2CharDayOfWeek)
                                 result = result.substring(0, 2);
                             return result;
@@ -273,7 +245,7 @@ HBarWidgetContainer {
                     buttonSpacing: popupRoot.buttonSpacing
                     buttonVerticalSpacing: popupRoot.buttonSpacing
                     Layout.fillWidth: true
-                    
+
                     delegate: W.StyledButton {
                         id: dayButton
                         required property var model
@@ -291,7 +263,8 @@ HBarWidgetContainer {
                             target: popupRoot
                             enabled: dayButton.model.today
                             function onShownChanged() {
-                                if (popupRoot.shown) dayButton.forceActiveFocus();
+                                if (popupRoot.shown)
+                                    dayButton.forceActiveFocus();
                             }
                         }
 
