@@ -42,6 +42,7 @@ Button {
     property color colBackgroundToggled: Appearance?.colors.colPrimary ?? "#65558F"
     property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
     property color colBackgroundToggledActive: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
+    property color colFocusRing: Appearance.colors.colOnSecondaryContainer
 
     property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property real leftRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
@@ -117,7 +118,6 @@ Button {
         };
     }
 
-    property bool tabbedTo: root.focus && (focusReason === Qt.TabFocusReason || focusReason === Qt.BacktabFocusReason)
     background: Rectangle {
         id: buttonBackground
         topLeftRadius: root.leftRadius
@@ -130,9 +130,24 @@ Button {
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
+    }
 
-        border.width: root.tabbedTo ? 2 : 0
-        border.color: Appearance.colors.colSecondary
+    Rectangle {
+        id: focusRing
+        topLeftRadius: root.leftRadius - anchors.margins
+        topRightRadius: root.rightRadius - anchors.margins
+        bottomLeftRadius: root.leftRadius - anchors.margins
+        bottomRightRadius: root.rightRadius - anchors.margins
+        visible: root.visualFocus
+        color: "transparent"
+        anchors {
+            fill: parent
+            margins: -4
+        }
+        border {
+            color: root.colFocusRing
+            width: 2
+        }
     }
 
     contentItem: StyledText {
