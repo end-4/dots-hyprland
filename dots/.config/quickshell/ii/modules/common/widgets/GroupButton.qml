@@ -132,6 +132,7 @@ Button {
         }
     }
 
+    z: visualFocus ? 1 : 0
     Rectangle {
         id: focusRing
         topLeftRadius: root.leftRadius - anchors.margins

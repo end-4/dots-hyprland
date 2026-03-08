@@ -58,6 +58,8 @@ Button {
         }
     }
 
+    z: visualFocus ? 1 : 0
+
     contentItem: Item {
         implicitWidth: buttonText.implicitWidth
         implicitHeight: buttonText.implicitHeight
