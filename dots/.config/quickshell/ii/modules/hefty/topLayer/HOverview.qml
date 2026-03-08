@@ -47,48 +47,48 @@ HAbstractMorphedPanel {
         return MaterialShapes.customPolygon(points, 1, new Offset.Offset(root.screenWidth / 2, edgeGap + contentHeight / 2))
     }
 
-    // Keybinds
-    GlobalShortcut {
-        name: "searchToggle"
-        description: "Toggles search on press"
+    // // Keybinds
+    // GlobalShortcut {
+    //     name: "searchToggle"
+    //     description: "Toggles search on press"
 
-        onPressed: {
-            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
-        }
-    }
-    GlobalShortcut {
-        name: "searchToggleRelease"
-        description: "Toggles search on release"
+    //     onPressed: {
+    //         GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+    //     }
+    // }
+    // GlobalShortcut {
+    //     name: "searchToggleRelease"
+    //     description: "Toggles search on release"
 
-        onPressed: {
-            GlobalStates.superReleaseMightTrigger = true;
-        }
+    //     onPressed: {
+    //         GlobalStates.superReleaseMightTrigger = true;
+    //     }
 
-        onReleased: {
-            if (!GlobalStates.superReleaseMightTrigger) {
-                GlobalStates.superReleaseMightTrigger = true;
-                return;
-            }
-            GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
-        }
-    }
-    GlobalShortcut {
-        name: "searchToggleReleaseInterrupt"
-        description: "Interrupts possibility of search being toggled on release. " + "This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. " + "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
+    //     onReleased: {
+    //         if (!GlobalStates.superReleaseMightTrigger) {
+    //             GlobalStates.superReleaseMightTrigger = true;
+    //             return;
+    //         }
+    //         GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+    //     }
+    // }
+    // GlobalShortcut {
+    //     name: "searchToggleReleaseInterrupt"
+    //     description: "Interrupts possibility of search being toggled on release. " + "This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. " + "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
 
-        onPressed: {
-            GlobalStates.superReleaseMightTrigger = false;
-        }
-    }
+    //     onPressed: {
+    //         GlobalStates.superReleaseMightTrigger = false;
+    //     }
+    // }
 
-    Connections {
-        target: GlobalStates
-        function onOverviewOpenChanged() {
-            if (GlobalStates.overviewOpen) {
-                root.requestFocus();
-            } else {
-                root.dismissed();
-            }
-        }
-    }
+    // Connections {
+    //     target: GlobalStates
+    //     function onOverviewOpenChanged() {
+    //         if (GlobalStates.overviewOpen) {
+    //             root.requestFocus();
+    //         } else {
+    //             root.dismissed();
+    //         }
+    //     }
+    // }
 }
