@@ -29,19 +29,17 @@ HBarWidgetWithPopout {
         onClicked: root.showPopup = !root.showPopup
         property var activeItem: vertical ? verticalContent : horizontalContent
 
-        W.FadeLoader {
+        Loader {
             id: horizontalContent
             anchors.fill: parent
-            shown: !contentRoot.vertical
-
+            active: !contentRoot.vertical
             sourceComponent: HorizontalSysInfo {}
         }
 
-        W.FadeLoader {
+        Loader {
             id: verticalContent
             anchors.fill: parent
-            shown: contentRoot.vertical
-
+            active: contentRoot.vertical
             sourceComponent: HorizontalSysInfo {}
         }
 
@@ -135,43 +133,46 @@ HBarWidgetWithPopout {
         }
     }
 
-    component SysInfoPopupContent: W.ChoreographerGridLayout {
-        id: popupRoot
-        rowSpacing: 8
+    component SysInfoPopupContent: W.ChoreographerLoader {
+        sourceComponent: W.ChoreographerGridLayout {
+            id: popupRoot
+            rowSpacing: 8
 
-        onShownChanged: {
-            if (shown) {
-                powerProfileSelection.focusSelectedChild()
+            onShownChanged: {
+                if (shown) {
+                    powerProfileSelection.focusSelectedChild();
+                }
             }
-        }
 
-        W.FlyFadeEnterChoreographable {
-            Layout.fillWidth: true
+            W.FlyFadeEnterChoreographable {
+                Layout.fillWidth: true
 
-            RowLayout {
-                spacing: 10
+                RowLayout {
+                    spacing: 10
+                    width: parent.width
 
-                W.CircularProgress {
-                    implicitSize: 46
-                    lineWidth: 3
-                    value: S.Battery.percentage
-                    W.MaterialSymbol {
-                        anchors.centerIn: parent
-                        iconSize: 22
-                        text: {
-                            if (root.chargingAndNotFull)
-                                return "battery_android_plus";
-                            if (root.powerSaving)
-                                return "energy_savings_leaf";
-                            return "battery_android_full";
+                    W.CircularProgress {
+                        implicitSize: notSoImportantBatteryStats.implicitHeight
+                        lineWidth: 3
+                        value: S.Battery.percentage
+                        W.MaterialSymbol {
+                            anchors.centerIn: parent
+                            iconSize: 22
+                            fill: 1
+                            animateChange: true
+                            text: {
+                                if (root.chargingAndNotFull)
+                                    return "bolt";
+                                if (root.powerSaving)
+                                    return "energy_savings_leaf";
+                                if (PowerProfiles.profile == PowerProfile.Performance)
+                                    return "local_fire_department";
+                                return "battery_android_full";
+                            }
                         }
                     }
-                }
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 0
                     RowLayout {
-                        Layout.fillWidth: true
+                        Layout.fillWidth: false
                         spacing: 4
                         W.StyledText {
                             Layout.alignment: Qt.AlignBaseline
@@ -182,55 +183,59 @@ HBarWidgetWithPopout {
                         W.StyledText {
                             Layout.alignment: Qt.AlignBaseline
                             text: {
-                                if (!S.Battery.knownEnergyRate) 
+                                if (!S.Battery.knownEnergyRate)
                                     return S.Battery.isCharging ? S.Translation.tr("Charging") : S.Translation.tr("Discharging");
                                 return S.Battery.isCharging ? S.Translation.tr("to full") : S.Translation.tr("remaining");
                             }
                         }
                     }
-                    RowLayout {
+                    Item {
                         Layout.fillWidth: true
+                    }
+                    ColumnLayout {
+                        id: notSoImportantBatteryStats
+                        Layout.fillWidth: false
+                        spacing: 4
                         StatWithIcon {
                             visible: S.Battery.knownEnergyRate
-                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignLeft
                             icon: "bolt"
-                            value: `${S.Battery.energyRate.toFixed(2)}W`
+                            value: `${S.Battery.energyRate.toFixed(1)}W`
+                            longestValueString: "69.0W"
                         }
                         StatWithIcon {
-                            Layout.fillWidth: true
-                            icon: "heart_check"
-                            value: `${(S.Battery.health).toFixed(1)}%`
+                            Layout.alignment: Qt.AlignLeft
+                            icon: "favorite"
+                            value: `${(S.Battery.health).toFixed(1 * (S.Battery.health < 100))}%`
+                            longestValueString: "69.0%"
                         }
                     }
                 }
             }
-        }
 
-        W.FlyFadeEnterChoreographable {
-            Layout.fillWidth: true
-            W.ConfigSelectionArray {
-                id: powerProfileSelection
-                currentValue: PowerProfiles.profile
-                onSelected: newValue => {
-                    PowerProfiles.profile = newValue
-                }
-                options: [
-                    {
-                        displayName: S.Translation.tr("Power saver"),
-                        // icon: "line_curve",
-                        value: PowerProfile.PowerSaver
-                    },
-                    {
-                        displayName: S.Translation.tr("Balanced"),
-                        // icon: "page_header",
-                        value: PowerProfile.Balanced
-                    },
-                    {
-                        displayName: S.Translation.tr("Performance"),
-                        // icon: "toolbar",
-                        value: PowerProfile.Performance
+            W.FlyFadeEnterChoreographable {
+                Layout.fillWidth: true
+                W.ConfigSelectionArray {
+                    id: powerProfileSelection
+                    currentValue: PowerProfiles.profile
+                    onSelected: newValue => {
+                        PowerProfiles.profile = newValue;
                     }
-                ]
+                    options: [
+                        {
+                            displayName: S.Translation.tr("Power saver"),
+                            value: PowerProfile.PowerSaver
+                        },
+                        {
+                            displayName: S.Translation.tr("Balanced"),
+                            value: PowerProfile.Balanced
+                        },
+                        {
+                            displayName: S.Translation.tr("Performance"),
+                            value: PowerProfile.Performance
+                        }
+                    ]
+                }
             }
         }
     }
@@ -239,6 +244,7 @@ HBarWidgetWithPopout {
         id: statItem
         required property string icon
         required property string value
+        property string longestValueString
         implicitWidth: statRow.implicitWidth
         implicitHeight: statRow.implicitHeight
         RowLayout {
@@ -249,11 +255,16 @@ HBarWidgetWithPopout {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignVCenter
                 text: statItem.icon
+                fill: 1
+                iconSize: 16
             }
-            W.VisuallyCenteredStyledText {
-                Layout.fillWidth: false
-                Layout.fillHeight: true
-                text: statItem.value
+            W.FixedWidthTextContainer {
+                longestText: statItem.longestValueString
+                W.VisuallyCenteredStyledText {
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignLeft
+                    text: statItem.value
+                }
             }
             Item {
                 Layout.fillWidth: true

@@ -14,7 +14,7 @@ GridLayout {
     readonly property int count: choreographableChildren.length
     children: choreographableChildren
 
-    property bool shown: true
+    property bool shown: false
     onShownChanged: {
         // When hiding, hide all at once
         if (!shown) {
