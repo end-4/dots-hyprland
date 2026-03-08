@@ -161,11 +161,11 @@ HBarWidgetWithPopout {
         property real buttonSize: C.Appearance.rounding.normal * 2
         property real buttonSpacing: 4
 
-        rowSpacing: 4
+        rowSpacing: 2
 
         W.FlyFadeEnterChoreographable {
             Layout.fillWidth: true
-            Layout.bottomMargin: 4
+            Layout.bottomMargin: 6
 
             RowLayout {
                 width: parent.width
