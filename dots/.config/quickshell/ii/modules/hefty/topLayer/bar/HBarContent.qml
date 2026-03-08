@@ -46,7 +46,7 @@ Item {
     Side {
         id: centerRightSide
         anchors.left: !root.vertical ? centerSide.right : parent.left
-        anchors.top: root.vertical ? parent.top : centerSide.bottom
+        anchors.top: !root.vertical ? parent.top : centerSide.bottom
         HBarUserFallbackComponentRepeater {
             componentNames: [...(root.centerLeftWidgets.length > 0 ? [invisibleItem] : []), ...root.centerRightWidgets,]
         }
