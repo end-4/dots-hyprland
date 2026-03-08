@@ -23,7 +23,7 @@ Text {
 
     component Anim: NumberAnimation {
         target: root
-        duration: 300 / 2
+        duration: 130
         easing.type: Easing.BezierSpline
         easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
     }
@@ -55,7 +55,8 @@ Text {
                 Anim {
                     property: "opacity"
                     to: 0
-                    easing.type: Easing.InSine
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
             PropertyAction {} // Tie the text update to this point (we don't want it to happen during the first slide+fade)
@@ -83,7 +84,8 @@ Text {
                 Anim {
                     property: "opacity"
                     to: 1
-                    easing.type: Easing.OutSine
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }
