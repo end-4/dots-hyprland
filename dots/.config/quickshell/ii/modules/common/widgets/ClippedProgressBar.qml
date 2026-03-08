@@ -3,7 +3,7 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 /**
  * A progress bar with both ends rounded and text acts as clipping like OneUI 7's battery indicator.
@@ -16,15 +16,17 @@ ProgressBar {
     property color highlightColor: Appearance?.colors.colOnSecondaryContainer ?? "#685496"
     property color trackColor: ColorUtils.transparentize(highlightColor, 0.5) ?? "#F1D3F9"
     property alias radius: contentItem.radius
+    property alias progressRadius: progressFill.radius
     property string text
     default property Item textMask: Item {
-        width: valueBarWidth
-        height: valueBarHeight
-        StyledText {
-            anchors.centerIn: parent
+        width: root.valueBarWidth
+        height: root.valueBarHeight
+        VisuallyCenteredStyledText {
+            anchors.fill: parent
             font: root.font
             text: root.text
         }
+        layer.enabled: true
     }
 
     text: Math.round(value * 100)
@@ -80,22 +82,40 @@ ProgressBar {
         }
     }
 
-    OpacityMask {
-        id: roundingMask
+    Rectangle {
+        id: contentMaskRect
+        anchors.fill: contentItem
+        width: contentItem.width
+        height: contentItem.height
+        radius: contentItem.radius
+        layer.enabled: true
         visible: false
-        anchors.fill: parent
-        source: contentItem
-        maskSource: Rectangle {
-            width: contentItem.width
-            height: contentItem.height
-            radius: contentItem.radius
-        }
     }
 
-    OpacityMask {
-        anchors.fill: parent
-        source: roundingMask
-        invert: true
-        maskSource: root.textMask
+    Item {
+        // textMask has to be rendered somewhere so we put it in a practically invisible item
+        anchors.centerIn: parent
+        opacity: 0
+        Component.onCompleted: root.textMask.layer.enabled = true // for multieffect masking
+        children: [root.textMask]
     }
+
+    MaskMultiEffect {
+        id: boxClip
+        anchors.fill: parent
+        source: contentItem
+        maskSource: contentMaskRect
+        visible: false
+    }
+
+    MaskMultiEffect {
+        id: textClip
+        anchors.fill: parent
+        implicitWidth: contentItem.implicitWidth
+        implicitHeight: contentItem.implicitHeight
+        source: boxClip
+        maskSource: root.textMask
+        maskInverted: true
+    }
+
 }
