@@ -147,7 +147,7 @@ HBarWidgetWithPopout {
                 W.CircularProgress {
                     implicitSize: 46
                     lineWidth: 3
-                    value: S.Battery.health / 100
+                    value: S.Battery.percentage
                     W.MaterialSymbol {
                         anchors.centerIn: parent
                         iconSize: 22
@@ -164,17 +164,21 @@ HBarWidgetWithPopout {
                     Layout.fillWidth: true
                     spacing: 0
                     RowLayout {
-                        visible: S.Battery.knownEnergyRate
                         Layout.fillWidth: true
                         spacing: 4
                         W.StyledText {
                             Layout.alignment: Qt.AlignBaseline
+                            visible: S.Battery.knownEnergyRate
                             text: F.DateUtils.formatDuration(S.Battery.isCharging ? S.Battery.timeToFull : S.Battery.timeToEmpty)
                             font.pixelSize: C.Appearance.font.pixelSize.title
                         }
                         W.StyledText {
                             Layout.alignment: Qt.AlignBaseline
-                            text: S.Battery.isCharging ? S.Translation.tr("to full") : S.Translation.tr("remaining")
+                            text: {
+                                if (!S.Battery.knownEnergyRate) 
+                                    return S.Battery.isCharging ? S.Translation.tr("Charging") : S.Translation.tr("Discharging");
+                                return S.Battery.isCharging ? S.Translation.tr("to full") : S.Translation.tr("remaining");
+                            }
                         }
                     }
                     RowLayout {
