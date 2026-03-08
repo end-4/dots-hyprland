@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Item {
     id: root
 
+    property alias textWidget: textWidget
     property alias text: textWidget.text
     property alias horizontalAlignment: textWidget.horizontalAlignment
     property alias verticalAlignment: textWidget.verticalAlignment
@@ -27,7 +28,10 @@ Item {
 
     StyledText {
         id: textWidget
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            left: parent.left
+            right: parent.right
+        }
         y: {
             const value = (parent.height - textMetrics.height) / 2;
             return root.lowerBias ? Math.ceil(value) : Math.round(value);

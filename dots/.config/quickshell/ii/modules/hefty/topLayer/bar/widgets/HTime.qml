@@ -34,20 +34,18 @@ HBarWidgetWithPopout {
         property Item activeItem: vertical ? verticalContent : horizontalContent
 
         // When horizontal
-        W.FadeLoader {
+        Loader {
             id: horizontalContent
             anchors.fill: parent
-            shown: !contentRoot.vertical
-
+            active: !contentRoot.vertical
             sourceComponent: HorizontalClock {}
         }
 
         // When vertical
-        W.FadeLoader {
+        Loader {
             id: verticalContent
             anchors.fill: parent
-            shown: contentRoot.vertical
-
+            active: contentRoot.vertical
             sourceComponent: VerticalClock {}
         }
 
@@ -155,124 +153,126 @@ HBarWidgetWithPopout {
         }
     }
 
-    component PopupContent: W.ChoreographerGridLayout {
-        id: popupRoot
+    component PopupContent: W.ChoreographerLoader {
+        sourceComponent: W.ChoreographerGridLayout {
+            id: popupRoot
 
-        property real buttonSize: C.Appearance.rounding.normal * 2
-        property real buttonSpacing: 4
+            property real buttonSize: C.Appearance.rounding.normal * 2
+            property real buttonSpacing: 4
 
-        rowSpacing: 2
+            rowSpacing: 2
 
-        W.FlyFadeEnterChoreographable {
-            Layout.fillWidth: true
-            Layout.bottomMargin: 6
+            W.FlyFadeEnterChoreographable {
+                Layout.fillWidth: true
+                Layout.bottomMargin: 6
 
-            RowLayout {
-                width: parent.width
-                spacing: 0
+                RowLayout {
+                    width: parent.width
+                    spacing: 0
 
-                W.StyledText {
-                    Layout.leftMargin: 6
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    text: calendarView.title
-                    font.pixelSize: C.Appearance.font.pixelSize.larger
-                    elide: Text.ElideRight
-                    color: C.Appearance.colors.colSecondary
-                }
-                W.StyledIconButton {
-                    implicitSize: 30
-                    text: "chevron_left"
-                    iconSize: 20
-                    onClicked: calendarView.scrollMonthsAndSnap(-1)
-                    colForeground: C.Appearance.colors.colPrimary
-                }
-                W.StyledIconButton {
-                    implicitSize: 30
-                    text: "chevron_right"
-                    iconSize: 20
-                    onClicked: calendarView.scrollMonthsAndSnap(1)
-                    colForeground: C.Appearance.colors.colPrimary
-                }
-                W.StyledIconButton {
-                    implicitSize: 30
-                    text: "rotate_left"
-                    iconSize: 20
-                    onClicked: calendarView.scrollToToday()
-                    colForeground: C.Appearance.colors.colPrimary
-                    enabled: calendarView.targetWeekDiff != 0
+                    W.StyledText {
+                        Layout.leftMargin: 6
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        text: calendarView.title
+                        font.pixelSize: C.Appearance.font.pixelSize.larger
+                        elide: Text.ElideRight
+                        color: C.Appearance.colors.colSecondary
+                    }
+                    W.StyledIconButton {
+                        implicitSize: 30
+                        text: "chevron_left"
+                        iconSize: 20
+                        onClicked: calendarView.scrollMonthsAndSnap(-1)
+                        colForeground: C.Appearance.colors.colPrimary
+                    }
+                    W.StyledIconButton {
+                        implicitSize: 30
+                        text: "chevron_right"
+                        iconSize: 20
+                        onClicked: calendarView.scrollMonthsAndSnap(1)
+                        colForeground: C.Appearance.colors.colPrimary
+                    }
+                    W.StyledIconButton {
+                        implicitSize: 30
+                        text: "rotate_left"
+                        iconSize: 20
+                        onClicked: calendarView.scrollToToday()
+                        colForeground: C.Appearance.colors.colPrimary
+                        enabled: calendarView.targetWeekDiff != 0
+                    }
                 }
             }
-        }
-        W.FlyFadeEnterChoreographable {
-            Layout.alignment: Qt.AlignHCenter
+            W.FlyFadeEnterChoreographable {
+                Layout.alignment: Qt.AlignHCenter
 
-            W.CalendarDaysOfWeek {
-                locale: calendarView.locale
-                spacing: popupRoot.buttonSpacing
-                delegate: Item {
-                    id: dowItem
-                    required property var model
-                    implicitWidth: popupRoot.buttonSize
-                    implicitHeight: dowText.implicitHeight
+                W.CalendarDaysOfWeek {
+                    locale: calendarView.locale
+                    spacing: popupRoot.buttonSpacing
+                    delegate: Item {
+                        id: dowItem
+                        required property var model
+                        implicitWidth: popupRoot.buttonSize
+                        implicitHeight: dowText.implicitHeight
 
-                    W.VisuallyCenteredStyledText {
-                        id: dowText
-                        anchors.centerIn: parent
-                        font.pixelSize: C.Appearance.font.pixelSize.smaller
-                        color: C.Appearance.colors.colOutline
-                        text: {
-                            var result = dowItem.model.shortName;
-                            if (C.Config.options.calendar.force2CharDayOfWeek)
-                                result = result.substring(0, 2);
-                            return result;
+                        W.VisuallyCenteredStyledText {
+                            id: dowText
+                            anchors.centerIn: parent
+                            font.pixelSize: C.Appearance.font.pixelSize.smaller
+                            color: C.Appearance.colors.colOutline
+                            text: {
+                                var result = dowItem.model.shortName;
+                                if (C.Config.options.calendar.force2CharDayOfWeek)
+                                    result = result.substring(0, 2);
+                                return result;
+                            }
                         }
                     }
                 }
             }
-        }
-        W.FlyFadeEnterChoreographable {
-            Item {
-                implicitWidth: calendarView.implicitWidth - calendarView.horizontalPadding * 2
-                implicitHeight: calendarView.implicitHeight - calendarView.verticalPadding * 2
-                W.CalendarView {
-                    id: calendarView
-                    anchors.centerIn: parent
-                    locale: Qt.locale(C.Config.options.calendar.locale)
-                    verticalPadding: 4
-                    horizontalPadding: 4
-                    buttonSize: popupRoot.buttonSize
-                    buttonSpacing: popupRoot.buttonSpacing
-                    buttonVerticalSpacing: popupRoot.buttonSpacing
-                    Layout.fillWidth: true
+            W.FlyFadeEnterChoreographable {
+                Item {
+                    implicitWidth: calendarView.implicitWidth - calendarView.horizontalPadding * 2
+                    implicitHeight: calendarView.implicitHeight - calendarView.verticalPadding * 2
+                    W.CalendarView {
+                        id: calendarView
+                        anchors.centerIn: parent
+                        locale: Qt.locale(C.Config.options.calendar.locale)
+                        verticalPadding: 4
+                        horizontalPadding: 4
+                        buttonSize: popupRoot.buttonSize
+                        buttonSpacing: popupRoot.buttonSpacing
+                        buttonVerticalSpacing: popupRoot.buttonSpacing
+                        Layout.fillWidth: true
 
-                    delegate: W.StyledButton {
-                        id: dayButton
-                        required property var model
+                        delegate: W.StyledButton {
+                            id: dayButton
+                            required property var model
 
-                        focus: model.today
-                        checked: model.today
-                        enabled: model.month === calendarView.focusedMonth
-                        implicitWidth: popupRoot.buttonSize
-                        implicitHeight: popupRoot.buttonSize
-                        width: implicitWidth
-                        height: implicitHeight
-                        text: model.day
+                            focus: model.today
+                            checked: model.today
+                            enabled: model.month === calendarView.focusedMonth
+                            implicitWidth: popupRoot.buttonSize
+                            implicitHeight: popupRoot.buttonSize
+                            width: implicitWidth
+                            height: implicitHeight
+                            text: model.day
 
-                        Connections {
-                            target: popupRoot
-                            enabled: dayButton.model.today
-                            function onShownChanged() {
-                                if (popupRoot.shown)
-                                    dayButton.forceActiveFocus();
+                            Connections {
+                                target: popupRoot
+                                enabled: dayButton.model.today
+                                function onShownChanged() {
+                                    if (popupRoot.shown)
+                                        dayButton.forceActiveFocus();
+                                }
                             }
-                        }
 
-                        contentItem: Item {
-                            W.VisuallyCenteredStyledText {
-                                anchors.centerIn: parent
-                                text: dayButton.text
-                                color: dayButton.colForeground
+                            contentItem: Item {
+                                W.VisuallyCenteredStyledText {
+                                    anchors.centerIn: parent
+                                    text: dayButton.text
+                                    color: dayButton.colForeground
+                                }
                             }
                         }
                     }
