@@ -136,12 +136,19 @@ HBarWidgetWithPopout {
     }
 
     component SysInfoPopupContent: W.ChoreographerGridLayout {
+        id: popupRoot
+        rowSpacing: 8
+
+        onShownChanged: {
+            if (shown) {
+                powerProfileSelection.focusSelectedChild()
+            }
+        }
 
         W.FlyFadeEnterChoreographable {
             Layout.fillWidth: true
 
             RowLayout {
-                anchors.fill: parent
                 spacing: 10
 
                 W.CircularProgress {
@@ -196,6 +203,34 @@ HBarWidgetWithPopout {
                         }
                     }
                 }
+            }
+        }
+
+        W.FlyFadeEnterChoreographable {
+            Layout.fillWidth: true
+            W.ConfigSelectionArray {
+                id: powerProfileSelection
+                currentValue: PowerProfiles.profile
+                onSelected: newValue => {
+                    PowerProfiles.profile = newValue
+                }
+                options: [
+                    {
+                        displayName: S.Translation.tr("Power saver"),
+                        // icon: "line_curve",
+                        value: PowerProfile.PowerSaver
+                    },
+                    {
+                        displayName: S.Translation.tr("Balanced"),
+                        // icon: "page_header",
+                        value: PowerProfile.Balanced
+                    },
+                    {
+                        displayName: S.Translation.tr("Performance"),
+                        // icon: "toolbar",
+                        value: PowerProfile.Performance
+                    }
+                ]
             }
         }
     }
