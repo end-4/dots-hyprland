@@ -27,20 +27,11 @@ HBarWidgetWithPopout {
         contentImplicitWidth: activeItem.implicitWidth
         contentImplicitHeight: activeItem.implicitHeight
         onClicked: root.showPopup = !root.showPopup
-        property var activeItem: vertical ? verticalContent : horizontalContent
+        property var activeItem: sysInfoContent
 
-        Loader {
-            id: horizontalContent
+        SysInfoContent {
+            id: sysInfoContent
             anchors.fill: parent
-            active: !contentRoot.vertical
-            sourceComponent: HorizontalSysInfo {}
-        }
-
-        Loader {
-            id: verticalContent
-            anchors.fill: parent
-            active: contentRoot.vertical
-            sourceComponent: HorizontalSysInfo {}
         }
 
         SysInfoPopupContent {
@@ -56,23 +47,40 @@ HBarWidgetWithPopout {
         }
     }
 
-    component HorizontalSysInfo: Item {
-        implicitWidth: row.implicitWidth + row.anchors.leftMargin + row.anchors.rightMargin
-        implicitHeight: row.implicitHeight + row.anchors.topMargin + row.anchors.bottomMargin
+    component SysInfoContent: Item {
+        implicitWidth: contentGrid.implicitWidth + contentGrid.anchors.leftMargin + contentGrid.anchors.rightMargin
+        implicitHeight: contentGrid.implicitHeight + contentGrid.anchors.topMargin + contentGrid.anchors.bottomMargin
 
-        RowLayout {
-            id: row
+        GridLayout {
+            id: contentGrid
+            columns: root.vertical ? 1 : -1
             anchors.fill: parent
-            anchors.leftMargin: root.startSide ? 8 : 6
-            anchors.rightMargin: root.endSide ? 0 : -3
 
-            Battery {}
+            Battery {
+                Layout.leftMargin: !root.vertical ? (root.startSide ? 8 : 6) : 0
+                Layout.rightMargin: !root.vertical ? (root.endSide ? 0 : -3) : 0
+                Layout.bottomMargin: root.vertical ? (root.endSide ? 4 : 2) : 0
+                Layout.topMargin: root.vertical ? 2 : 0
+                Layout.fillWidth: root.vertical
+                Layout.fillHeight: !root.vertical
+            }
         }
     }
 
-    component Battery: Row {
-        spacing: 1.5
+    component Battery: Item {
+        implicitWidth: !root.vertical ? battShape.implicitWidth : battShape.implicitHeight
+        implicitHeight: !root.vertical ? battShape.implicitHeight : battShape.implicitWidth
+
+        BatteryShape {
+            id: battShape
+            anchors.centerIn: parent
+        }
+    }
+
+    component BatteryShape: Row {
         Layout.fillHeight: true
+        spacing: 1.5
+        rotation: -90 * root.vertical
 
         W.ClippedProgressBar {
             id: batteryProgress
@@ -89,6 +97,7 @@ HBarWidgetWithPopout {
                 layer.enabled: true
                 width: batteryProgress.valueBarWidth
                 height: batteryProgress.valueBarHeight
+
                 RowLayout {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
@@ -102,6 +111,7 @@ HBarWidgetWithPopout {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.leftMargin: -2
                         Layout.rightMargin: -2
+                        rotation: 90 * root.vertical
                         fill: 1 * (text == "bolt")
                         fillAnimation: null
                         text: {
@@ -116,7 +126,9 @@ HBarWidgetWithPopout {
                         visible: root.chargingAndNotFull || root.powerSaving
                     }
                     W.VisuallyCenteredStyledText {
+                        visible: batteryProgress.value < 1
                         Layout.fillHeight: true
+                        rotation: 90 * root.vertical
                         font: batteryProgress.font
                         text: batteryProgress.text
                     }
@@ -152,7 +164,7 @@ HBarWidgetWithPopout {
                     width: parent.width
 
                     W.CircularProgress {
-                        implicitSize: notSoImportantBatteryStats.implicitHeight
+                        implicitSize: Math.max(notSoImportantBatteryStats.implicitHeight, 44)
                         lineWidth: 3
                         value: S.Battery.percentage
                         W.MaterialSymbol {
