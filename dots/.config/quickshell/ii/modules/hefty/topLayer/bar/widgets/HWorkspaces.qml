@@ -242,30 +242,33 @@ HBarWidgetContainer {
                             diameter: appIcon.implicitSize
                         }
 
-                        Colorizer {
+                        Loader { // Somehow putting this multieffect in a loader prevents it from not showing up
+                            id: colorizer
                             anchors.fill: appIcon
-                            implicitWidth: appIcon.implicitWidth
-                            implicitHeight: appIcon.implicitHeight
-                            colorizationColor: Appearance.m3colors.darkmode ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
-                            colorization: Config.options.bar.workspaces.monochromeIcons ? 0.8 : 0.5
-                            brightness: 0
-                            source: appIcon
+                            sourceComponent: Colorizer {
+                                implicitWidth: appIcon.implicitWidth
+                                implicitHeight: appIcon.implicitHeight
+                                colorizationColor: Appearance.m3colors.darkmode ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
+                                colorization: Config.options.bar.workspaces.monochromeIcons ? 0.8 : 0.5
+                                brightness: 0
+                                source: appIcon
 
-                            opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 : (wsApp.biggestWindow && !root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? 1 : wsApp.biggestWindow ? root.workspaceIconOpacityShrinked : 0
-                            visible: opacity > 0
-                            scale: ((!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? root.workspaceIconSize : root.workspaceIconSizeShrinked) / root.workspaceIconSize
+                                opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 : (wsApp.biggestWindow && !root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? 1 : wsApp.biggestWindow ? root.workspaceIconOpacityShrinked : 0
+                                visible: opacity > 0
+                                scale: ((!root.superPressAndHeld && Config.options?.bar.workspaces.showAppIcons) ? root.workspaceIconSize : root.workspaceIconSizeShrinked) / root.workspaceIconSize
 
-                            Behavior on opacity {
-                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                                Behavior on opacity {
+                                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                                }
+                                Behavior on scale {
+                                    animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
+                                }
+
+                                maskEnabled: true
+                                maskSource: iconMask
+                                maskThresholdMin: 0.5
+                                maskSpreadAtMin: 1
                             }
-                            Behavior on scale {
-                                animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
-                            }
-
-                            maskEnabled: true
-                            maskSource: iconMask
-                            maskThresholdMin: 0.5
-                            maskSpreadAtMin: 1
                         }
                     }
                 }
