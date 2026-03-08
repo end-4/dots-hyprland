@@ -37,7 +37,7 @@ Scope {
     PanelLoader { component: OnScreenDisplay {} }
     PanelLoader { component: OnScreenKeyboard {} }
     PanelLoader { component: Overlay {} }
-    // PanelLoader { component: Overview {} }
+    PanelLoader { component: Overview {} }
     PanelLoader { component: Polkit {} }
     PanelLoader { component: RegionSelector {} }
     PanelLoader { component: ScreenCorners {} }

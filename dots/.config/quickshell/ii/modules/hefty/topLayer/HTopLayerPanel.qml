@@ -2,8 +2,8 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
-import qs
+import qs.modules.common
+import qs.modules.common.widgets
 import qs.services
 import "../../common"
 import "../../common/widgets/shapes" as S
@@ -33,6 +33,18 @@ PanelWindow {
     mask: root.currentPanel.maskRegion
     // HyprlandWindow.visibleMask: mask // TODO: use this later to optimize hyprland's rendering
 
+    ///////////////// Focus dim //////////////////
+
+    FadeLoader {
+        z: 0
+        anchors.fill: parent
+        shown: GlobalFocusGrab.active
+        sourceComponent: Rectangle {
+            opacity: 0.4
+            color: Appearance.m3colors.m3scrim
+        }
+    }
+
     ///////////////// Content //////////////////
 
     property alias roundedPolygon: backgroundShape.roundedPolygon
@@ -50,6 +62,7 @@ PanelWindow {
     }
     S.ShapeCanvas {
         id: backgroundShape
+        z: 1
         anchors.fill: parent
         polygonIsNormalized: false
         roundedPolygon: MaterialShapes.customPolygon([new MaterialShapes.PointNRound(new Offset.Offset(root.screen.width, 0), new CornerRounding.CornerRounding(9999)),])
@@ -125,13 +138,13 @@ PanelWindow {
             shown: root.finishedMorphing
         }
 
-        HOverview {
-            id: overview
-            load: root.currentPanel === this
-            shown: root.finishedMorphing
-            onRequestFocus: root.currentPanel = overview
-            onDismissed: root.dismiss()
-        }
+        // HOverview {
+        //     id: overview
+        //     load: root.currentPanel === this
+        //     shown: root.finishedMorphing
+        //     onRequestFocus: root.currentPanel = overview
+        //     onDismissed: root.dismiss()
+        // }
     }
 
     //////////////// Components /////////////////
