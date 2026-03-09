@@ -51,9 +51,9 @@ HBarWidgetWithPopout {
         implicitWidth: contentGrid.implicitWidth + contentGrid.anchors.leftMargin + contentGrid.anchors.rightMargin
         implicitHeight: contentGrid.implicitHeight + contentGrid.anchors.topMargin + contentGrid.anchors.bottomMargin
 
-        GridLayout {
+        W.BoxLayout {
             id: contentGrid
-            columns: root.vertical ? 1 : -1
+            vertical: root.vertical
             anchors.fill: parent
 
             Battery {
@@ -164,7 +164,7 @@ HBarWidgetWithPopout {
                     width: parent.width
 
                     W.CircularProgress {
-                        implicitSize: Math.max(notSoImportantBatteryStats.implicitHeight, 44)
+                        implicitSize: 44
                         lineWidth: 3
                         value: S.Battery.percentage
                         W.MaterialSymbol {
