@@ -7,7 +7,7 @@ JsonObject {
         property list<var> leftWidgets: ["HWindowInfo"]
         property list<var> centerLeftWidgets: ["HTime"]
         property list<var> centerWidgets: ["HWorkspaces"]
-        property list<var> centerRightWidgets: ["HSystemInfo"]
+        property list<var> centerRightWidgets: ["HResources"]
         property list<var> rightWidgets: []
         property bool m3ExpressiveGrouping: true
     }
