@@ -2,166 +2,186 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import Quickshell
-import Quickshell.Io
 import QtQuick
-import QtPositioning
-
 import qs.modules.common
+import qs.services
 
 Singleton {
     id: root
-    // 10 minute
+
     readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
-    readonly property string city: Config.options.bar.weather.city
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
+    
+    // For backward compatibility and UI settings
     property bool gpsActive: Config.options.bar.weather.enableGPS
+    readonly property string city: Config.options.bar.weather.city
 
-    onUseUSCSChanged: {
-        root.getData();
+    onUseUSCSChanged: getData()
+    onCityChanged: getData()
+    onGpsActiveChanged: getData()
+    onFetchIntervalChanged: {
+        timer.restart();
     }
-    onCityChanged: {
-        root.getData();
-    }
-
-    property var location: ({
-        valid: false,
-        lat: 0,
-        lon: 0
-    })
 
     property var data: ({
         uv: 0,
-        humidity: 0,
-        sunrise: 0,
-        sunset: 0,
-        windDir: 0,
-        wCode: 0,
-        city: 0,
-        wind: 0,
-        precip: 0,
-        visib: 0,
-        press: 0,
-        temp: 0,
-        tempFeelsLike: 0,
-        lastRefresh: 0,
+        humidity: "0%",
+        sunrise: "00:00",
+        sunset: "00:00",
+        windDir: "N",
+        wCode: 113,
+        city: "City",
+        wind: "0 km/h",
+        precip: "0 mm",
+        visib: "0 km",
+        press: "0 hPa",
+        temp: "0°C",
+        tempFeelsLike: "0°C",
+        lastRefresh: "00:00",
     })
 
-    function refineData(data) {
+    function wmoToWwo(wmo) {
+        if (wmo === 0 || wmo === 1) return 113; // Clear
+        if (wmo === 2) return 116; // Partly Cloudy
+        if (wmo === 3) return 122; // Overcast
+        if (wmo === 45 || wmo === 48) return 248; // Fog
+        if (wmo === 51 || wmo === 53 || wmo === 55) return 266; // Drizzle
+        if (wmo === 56 || wmo === 57) return 284; // Freezing Drizzle
+        if (wmo === 61 || wmo === 63 || wmo === 65) return 296; // Rain
+        if (wmo === 66 || wmo === 67) return 311; // Freezing Rain
+        if (wmo === 71 || wmo === 73 || wmo === 75 || wmo === 77) return 332; // Snow
+        if (wmo === 80 || wmo === 81 || wmo === 82) return 353; // Rain Showers
+        if (wmo === 85 || wmo === 86) return 368; // Snow Showers
+        if (wmo === 95) return 386; // Thunderstorm
+        if (wmo === 96 || wmo === 99) return 389; // Thunderstorm with hail
+        return 113;
+    }
+
+    function degreesToCompass(deg) {
+        const val = Math.floor((deg / 22.5) + 0.5);
+        const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+        return arr[(val % 16)];
+    }
+
+    function formatTime(isoStr) {
+        if (!isoStr) return "00:00";
+        const parts = isoStr.split("T");
+        if (parts.length < 2) return isoStr;
+        return parts[1];
+    }
+
+    function refineData(wData, cityName) {
         let temp = {};
-        temp.uv = data?.current?.uvIndex || 0;
-        temp.humidity = (data?.current?.humidity || 0) + "%";
-        temp.sunrise = data?.astronomy?.sunrise || "0.0";
-        temp.sunset = data?.astronomy?.sunset || "0.0";
-        temp.windDir = data?.current?.winddir16Point || "N";
-        temp.wCode = data?.current?.weatherCode || "113";
-        temp.city = data?.location?.areaName[0]?.value || "City";
-        temp.temp = "";
-        temp.tempFeelsLike = "";
+        const current = wData.current;
+        const daily = wData.daily;
+
+        temp.uv = current.uv_index;
+        temp.humidity = current.relative_humidity_2m + "%";
+        temp.sunrise = formatTime(daily.sunrise[0]);
+        temp.sunset = formatTime(daily.sunset[0]);
+        temp.windDir = degreesToCompass(current.wind_direction_10m);
+        temp.wCode = wmoToWwo(current.weather_code);
+        temp.city = cityName;
+        
         if (root.useUSCS) {
-            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
-            temp.precip = (data?.current?.precipInches || 0) + " in";
-            temp.visib = (data?.current?.visibilityMiles || 0) + " m";
-            temp.press = (data?.current?.pressureInches || 0) + " psi";
-            temp.temp += (data?.current?.temp_F || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
-            temp.temp += "°F";
-            temp.tempFeelsLike += "°F";
+            temp.wind = Math.round(current.wind_speed_10m) + " mph";
+            temp.precip = current.precipitation.toFixed(2) + " in";
+            temp.visib = (current.visibility / 1609.34).toFixed(1) + " mi";
+            temp.press = Math.round(current.pressure_msl) + " hPa"; 
+            temp.temp = Math.round(current.temperature_2m) + "°F";
+            temp.tempFeelsLike = Math.round(current.apparent_temperature) + "°F";
         } else {
-            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-            temp.precip = (data?.current?.precipMM || 0) + " mm";
-            temp.visib = (data?.current?.visibility || 0) + " km";
-            temp.press = (data?.current?.pressure || 0) + " hPa";
-            temp.temp += (data?.current?.temp_C || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
-            temp.temp += "°C";
-            temp.tempFeelsLike += "°C";
+            temp.wind = Math.round(current.wind_speed_10m) + " km/h";
+            temp.precip = current.precipitation.toFixed(1) + " mm";
+            temp.visib = (current.visibility / 1000).toFixed(1) + " km";
+            temp.press = Math.round(current.pressure_msl) + " hPa";
+            temp.temp = Math.round(current.temperature_2m) + "°C";
+            temp.tempFeelsLike = Math.round(current.apparent_temperature) + "°C";
         }
+        
         temp.lastRefresh = DateTime.time + " • " + DateTime.date;
         root.data = temp;
     }
 
     function getData() {
-        let command = "curl -s wttr.in";
-
-        if (root.gpsActive && root.location.valid) {
-            command += `/${root.location.lat},${root.location.long}`;
+        if (root.city !== "" && !root.gpsActive) {
+            // If manual city is set and GPS is off, use geocoding
+            fetchCoordinates(root.city);
         } else {
-            command += `/${formatCityName(root.city)}`;
+            // Default to ip-api for automatic location
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        try {
+                            const loc = JSON.parse(xhr.responseText);
+                            if (loc.status === "success") {
+                                fetchWeather(loc.lat, loc.lon, loc.city);
+                            } else {
+                                console.error("[WeatherService] ip-api failed:", loc.message);
+                            }
+                        } catch (e) {
+                            console.error("[WeatherService] Failed to parse location:", e);
+                        }
+                    }
+                }
+            };
+            xhr.open("GET", "http://ip-api.com/json/");
+            xhr.send();
         }
-
-        // format as json
-        command += "?format=j1";
-        command += " | ";
-        // only take the current weather, location, asytronmy data
-        command += "jq '{current: .current_condition[0], location: .nearest_area[0], astronomy: .weather[0].astronomy[0]}'";
-        fetcher.command[2] = command;
-        fetcher.running = true;
     }
 
-    function formatCityName(cityName) {
-        return cityName.trim().split(/\s+/).join('+');
-    }
-
-    Component.onCompleted: {
-        if (!root.gpsActive) return;
-        console.info("[WeatherService] Starting the GPS service.");
-        positionSource.start();
-    }
-
-    Process {
-        id: fetcher
-        command: ["bash", "-c", ""]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (text.length === 0)
-                    return;
-                try {
-                    const parsedData = JSON.parse(text);
-                    root.refineData(parsedData);
-                    // console.info(`[ data: ${JSON.stringify(parsedData)}`);
-                } catch (e) {
-                    console.error(`[WeatherService] ${e.message}`);
+    function fetchCoordinates(cityName) {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.results && res.results.length > 0) {
+                            const loc = res.results[0];
+                            fetchWeather(loc.latitude, loc.longitude, loc.name);
+                        } else {
+                            console.error("[WeatherService] Geocoding failed for:", cityName);
+                        }
+                    } catch (e) {
+                        console.error("[WeatherService] Failed to parse geocoding:", e);
+                    }
                 }
             }
-        }
+        };
+        xhr.open("GET", url);
+        xhr.send();
     }
 
-    PositionSource {
-        id: positionSource
-        updateInterval: root.fetchInterval
-
-        onPositionChanged: {
-            // update the location if the given location is valid
-            // if it fails getting the location, use the last valid location
-            if (position.latitudeValid && position.longitudeValid) {
-                root.location.lat = position.coordinate.latitude;
-                root.location.long = position.coordinate.longitude;
-                root.location.valid = true;
-                // console.info(`📍 Location: ${position.coordinate.latitude}, ${position.coordinate.longitude}`);
-                root.getData();
-                // if can't get initialized with valid location deactivate the GPS
-            } else {
-                root.gpsActive = root.location.valid ? true : false;
-                console.error("[WeatherService] Failed to get the GPS location.");
+    function fetchWeather(lat, lon, cityName) {
+        const units = root.useUSCS ? "&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch" : "";
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,uv_index,visibility&daily=sunrise,sunset&timezone=auto${units}`;
+        
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        const weather = JSON.parse(xhr.responseText);
+                        root.refineData(weather, cityName);
+                    } catch (e) {
+                        console.error("[WeatherService] Failed to parse weather:", e);
+                    }
+                }
             }
-        }
-
-        onValidityChanged: {
-            if (!positionSource.valid) {
-                positionSource.stop();
-                root.location.valid = false;
-                root.gpsActive = false;
-                Quickshell.execDetached(["notify-send", Translation.tr("Weather Service"), Translation.tr("Cannot find a GPS service. Using the fallback method instead."), "-a", "Shell"]);
-                console.error("[WeatherService] Could not aquire a valid backend plugin.");
-            }
-        }
+        };
+        xhr.open("GET", url);
+        xhr.send();
     }
 
     Timer {
-        running: !root.gpsActive
+        id: timer
+        running: Config.options.bar.weather.enable
         repeat: true
         interval: root.fetchInterval
-        triggeredOnStart: !root.gpsActive
+        triggeredOnStart: true
         onTriggered: root.getData()
     }
 }
