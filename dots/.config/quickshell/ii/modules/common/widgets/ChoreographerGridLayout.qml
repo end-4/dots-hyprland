@@ -2,11 +2,10 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 
-GridLayout {
+BoxLayout {
     id: root
 
-    property bool vertical: true
-    columns: vertical ? 1 : -1
+    vertical: true
     property real totalDuration: 250
     property real interval: totalDuration / count
 

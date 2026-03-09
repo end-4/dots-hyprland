@@ -65,9 +65,9 @@ Item {
         }
     }
 
-    GridLayout {
+    BoxLayout {
         id: gridLayout
-        columns: root.vertical ? 1 : -1
+        vertical: root.vertical
         anchors.fill: parent
         rowSpacing: 8
         columnSpacing: 15

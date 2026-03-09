@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 
@@ -23,9 +24,9 @@ Item {
         radius: Appearance.rounding.small
     }
 
-    GridLayout {
+    BoxLayout {
         id: gridLayout
-        columns: root.vertical ? 1 : -1
+        vertical: root.vertical
         anchors {
             verticalCenter: root.vertical ? undefined : parent.verticalCenter
             horizontalCenter: root.vertical ? parent.horizontalCenter : undefined
