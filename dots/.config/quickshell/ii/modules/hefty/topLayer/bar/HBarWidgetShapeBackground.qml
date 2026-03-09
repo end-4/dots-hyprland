@@ -111,12 +111,12 @@ Shapes.ShapeCanvas {
     }
     color: bgShape.showPopup || progress < 1 ? C.Appearance.colors.colLayer3Base : C.Appearance.colors.colLayer1
     xOffset: {
-        if (!vertical) return showPopup ? -popupXOffset : 0;
+        if (!vertical) return showPopup ? Math.max(-popupXOffset, 0) : 0;
         else return bgShape.atBottom ? (width - containerShape.width) : 0;
     }
     yOffset: {
         if (!vertical) return bgShape.atBottom ? (height - containerShape.height) : 0;
-        else return showPopup ? -popupYOffset : 0;
+        else return showPopup ? Math.max(-popupYOffset, 0) : 0;
     }
     animation: Anim {}
 
@@ -161,64 +161,64 @@ Shapes.ShapeCanvas {
     roundedPolygon: {
         var points = [];
         if (!bgShape.showPopup) return containerShape.getFullShape();
-        if (!bgShape.vertical) {    
+        
+        const joinRadiusOverride = containerShape.radiusLimit;
+        if (!bgShape.vertical) {
+            const popupBigger = bgShape.popupWidth > bgShape.backgroundWidth;
             // Inline comment spam to mitigate qmlls' sabotaging of the (code) layout
             points = [
                 ...(bgShape.atBottom ? containerShape.getFirstBottomPoints() : [ //
                     ...popupShape.getFirstBottomPoints(), popupShape.getBottomLeftPoint(),  //
                     ...popupShape.leftPoints,  //
-                    popupShape.getTopLeftPoint(), //
+                    popupShape.getTopLeftPoint(0, -bgShape.spacing * (!popupBigger), joinRadiusOverride), //
                 ]),  //
-                containerShape.getBottomLeftPoint(0, bgShape.spacing * (!bgShape.atBottom ? 1 : 0), containerShape.radiusLimit), //
-                containerShape.getTopLeftPoint(0, bgShape.spacing * (bgShape.atBottom ? -1 : 0), containerShape.radiusLimit),  //
+                containerShape.getBottomLeftPoint(0, bgShape.spacing * (!bgShape.atBottom && popupBigger), joinRadiusOverride), //
+                containerShape.getTopLeftPoint(0, -bgShape.spacing * (bgShape.atBottom && popupBigger), joinRadiusOverride),  //
                 ...(!bgShape.atBottom ? containerShape.topPoints : [ //
-                    popupShape.getBottomLeftPoint(), //
+                    popupShape.getBottomLeftPoint(0, bgShape.spacing * (!popupBigger), joinRadiusOverride), //
                     ...popupShape.leftPoints,  //
                     popupShape.getTopLeftPoint(),  //
                     ...popupShape.topPoints,  //
                     popupShape.getTopRightPoint(),  //
                     ...popupShape.rightPoints,  //
-                    popupShape.getBottomRightPoint(), //
+                    popupShape.getBottomRightPoint(0, bgShape.spacing * (!popupBigger), joinRadiusOverride), //
                 ]),  //
-                containerShape.getTopRightPoint(0, bgShape.spacing * (bgShape.atBottom ? -1 : 0), containerShape.radiusLimit), //
-                containerShape.getBottomRightPoint(0, bgShape.spacing * (!bgShape.atBottom ? 1 : 0), containerShape.radiusLimit),  //
+                containerShape.getTopRightPoint(0, -bgShape.spacing * (bgShape.atBottom && popupBigger), joinRadiusOverride), //
+                containerShape.getBottomRightPoint(0, bgShape.spacing * (!bgShape.atBottom && popupBigger), joinRadiusOverride),  //
                 ...(bgShape.atBottom ? containerShape.getLastBottomPoints() : [ //
-                    popupShape.getTopRightPoint(),  //
+                    popupShape.getTopRightPoint(0, -bgShape.spacing * (!popupBigger), joinRadiusOverride),  //
                     ...popupShape.rightPoints,  //
                     popupShape.getBottomRightPoint(), //
                     ...popupShape.getLastBottomPoints(), //
                 ]),
             ];
         } else {
+            const popupBigger = bgShape.popupHeight > bgShape.backgroundHeight;
             points = [ //
                 ...containerShape.getFirstBottomPoints(), //
-                containerShape.getBottomLeftPoint(), //
+                containerShape.getBottomLeftPoint(-bgShape.spacing * (popupBigger && bgShape.atBottom), 0, joinRadiusOverride), //
                 ...(!bgShape.atBottom ? containerShape.leftPoints : [ //
-                    containerShape.getBottomLeftPoint(-bgShape.spacing, 0, containerShape.radiusLimit), //
-                    popupShape.getBottomRightPoint(), //
+                    popupShape.getBottomRightPoint(bgShape.spacing * (!popupBigger)), //
                     ...popupShape.bottomPoints, //
                     popupShape.getBottomLeftPoint(), //
                     ...popupShape.leftPoints, //
                     popupShape.getTopLeftPoint(), //
                     ...popupShape.topPoints, //
-                    popupShape.getTopRightPoint(), //
-                    containerShape.getTopLeftPoint(-bgShape.spacing, 0, containerShape.radiusLimit), //
+                    popupShape.getTopRightPoint(bgShape.spacing * (!popupBigger)), //
                 ]), //
-                containerShape.getTopLeftPoint(), //
+                containerShape.getTopLeftPoint(-bgShape.spacing * (popupBigger && bgShape.atBottom), 0, joinRadiusOverride), //
                 ...containerShape.topPoints, //
-                containerShape.getTopRightPoint(), //
+                containerShape.getTopRightPoint(bgShape.spacing * (popupBigger && !bgShape.atBottom), 0, joinRadiusOverride), //
                 ...(bgShape.atBottom ? containerShape.rightPoints : [ //
-                    containerShape.getTopRightPoint(bgShape.spacing, 0, containerShape.radiusLimit), //
-                    popupShape.getTopLeftPoint(), //
+                    popupShape.getTopLeftPoint(-bgShape.spacing * (!popupBigger), 0, joinRadiusOverride), //
                     ...popupShape.topPoints, //
                     popupShape.getTopRightPoint(), //
                     ...popupShape.rightPoints, //
                     popupShape.getBottomRightPoint(), //
                     ...popupShape.bottomPoints, //
-                    popupShape.getBottomLeftPoint(), //
-                    containerShape.getBottomRightPoint(bgShape.spacing, 0, containerShape.radiusLimit), //
+                    popupShape.getBottomLeftPoint(-bgShape.spacing * (!popupBigger), 0, joinRadiusOverride), //
                 ]), //
-                containerShape.getBottomRightPoint(), //
+                containerShape.getBottomRightPoint(bgShape.spacing * (popupBigger && !bgShape.atBottom), 0, joinRadiusOverride), //
                 ...containerShape.getLastBottomPoints(), //
             ];
         }
