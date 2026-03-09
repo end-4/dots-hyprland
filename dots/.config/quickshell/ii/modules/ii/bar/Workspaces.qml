@@ -82,14 +82,13 @@ Item {
     }
 
     // Workspaces - background
-    Grid {
+    Box {
         z: 1
         anchors.centerIn: parent
 
         rowSpacing: 0
         columnSpacing: 0
-        columns: root.vertical ? 1 : -1
-        rows: root.vertical ? -1 : 1
+        vertical: root.vertical
 
         Repeater {
             model: wsModel.shownCount
@@ -160,13 +159,12 @@ Item {
     }
 
     // Workspaces - numbers
-    Grid {
+    Box {
         id: wsNumbers
         z: 3
         anchors.fill: parent
 
-        columns: root.vertical ? 1 : -1
-        rows: root.vertical ? -1 : 1
+        vertical: root.vertical
         columnSpacing: 0
         rowSpacing: 0
 

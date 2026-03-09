@@ -339,7 +339,7 @@ HBarWidgetContainer {
     }
 
     /////////////////// Components ///////////////////
-    component WorkspaceLayout: Grid {
+    component WorkspaceLayout: Box {
         anchors {
             top: !root.vertical ? parent.top : undefined
             bottom: !root.vertical ? parent.bottom : undefined
@@ -349,8 +349,7 @@ HBarWidgetContainer {
 
         rowSpacing: 0
         columnSpacing: 0
-        columns: root.vertical ? 1 : -1
-        rows: root.vertical ? -1 : 1
+        vertical: root.vertical
     }
 
     component WorkspaceItem: Item {
