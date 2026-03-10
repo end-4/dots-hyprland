@@ -109,7 +109,10 @@ Shapes.ShapeCanvas {
         if (!vertical) return bgShape.showPopup ? (containerShape.height + popupShape.height + bgShape.spacing) : containerShape.height;
         else return bgShape.showPopup ? Math.max(backgroundHeight, popupHeight) : backgroundHeight;
     }
-    color: bgShape.showPopup || progress < 1 ? C.Appearance.colors.colLayer3Base : C.Appearance.colors.colLayer1
+    property bool popupHiding: false
+    onShowPopupChanged: popupHiding = true
+    onProgressChanged: if (progress == 1) popupHiding = false
+    color: showPopup || popupHiding ? C.Appearance.colors.colLayer3Base : C.Appearance.colors.colLayer1
     xOffset: {
         if (!vertical) return showPopup ? Math.max(-popupXOffset, 0) : 0;
         else return bgShape.atBottom ? (width - containerShape.width) : 0;
