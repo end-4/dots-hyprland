@@ -185,7 +185,7 @@ HBarWidgetWithPopout {
                                     return "energy_savings_leaf";
                                 if (PowerProfiles.profile == PowerProfile.Performance)
                                     return "local_fire_department";
-                                return "battery_android_full";
+                                return C.Icons.getBatteryIcon(battCircProg.value * 100);
                             }
                         }
                     }
