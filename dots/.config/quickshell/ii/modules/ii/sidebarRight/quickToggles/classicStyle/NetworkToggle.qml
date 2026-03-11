@@ -11,7 +11,7 @@ import Quickshell.Hyprland
 
 QuickToggleButton {
     toggled: Network.wifiStatus !== "disabled"
-    buttonIcon: Network.materialSymbol
+    buttonIcon: Icons.getNetworkMaterialSymbol()
     onClicked: Network.toggleWifi()
     altAction: () => {
         Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`])

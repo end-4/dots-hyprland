@@ -303,7 +303,7 @@ Item { // Bar content region
                         }
                     }
                     MaterialSymbol {
-                        text: Network.materialSymbol
+                        text: Icons.getNetworkMaterialSymbol()
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
