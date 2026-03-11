@@ -104,6 +104,7 @@ HBarWidgetWithPopout {
                         bottom: parent.bottom
                         bottomMargin: (parent.height - height) / 2
                     }
+                    rotation: 180 * root.vertical
                     spacing: 0
 
                     W.MaterialSymbol {
@@ -111,24 +112,26 @@ HBarWidgetWithPopout {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.leftMargin: -2
                         Layout.rightMargin: -2
-                        rotation: 90 * root.vertical
+                        rotation: -90 * root.vertical
                         fill: 1 * (text == "bolt")
                         fillAnimation: null
                         text: {
+                            if (batteryProgress.value == 1)
+                                return "check";
                             if (root.chargingAndNotFull)
                                 return "bolt";
                             if (root.powerSaving)
                                 return "nest_eco_leaf";
-                            return "circle";
+                            return "";
                         }
                         iconSize: C.Appearance.font.pixelSize.small
                         font.weight: Font.DemiBold
-                        visible: root.chargingAndNotFull || root.powerSaving
+                        visible: text != ""
                     }
                     W.VisuallyCenteredStyledText {
                         visible: batteryProgress.value < 1
                         Layout.fillHeight: true
-                        rotation: 90 * root.vertical
+                        rotation: -90 * root.vertical
                         font: batteryProgress.font
                         text: batteryProgress.text
                     }
@@ -164,6 +167,7 @@ HBarWidgetWithPopout {
                     width: parent.width
 
                     W.CircularProgress {
+                        id: battCircProg
                         implicitSize: 44
                         lineWidth: 3
                         value: S.Battery.percentage
@@ -173,6 +177,8 @@ HBarWidgetWithPopout {
                             fill: 1
                             animateChange: true
                             text: {
+                                if (battCircProg.value == 1)
+                                    return "check";
                                 if (root.chargingAndNotFull)
                                     return "bolt";
                                 if (root.powerSaving)
