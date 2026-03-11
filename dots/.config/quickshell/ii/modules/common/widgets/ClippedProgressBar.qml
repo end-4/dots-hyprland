@@ -40,10 +40,9 @@ ProgressBar {
         implicitWidth: valueBarWidth
     }
 
-    contentItem: Rectangle {
+    contentItem: Pill {
         id: contentItem
         anchors.fill: parent
-        radius: 9999
         color: root.trackColor
         visible: false
 

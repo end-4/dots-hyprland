@@ -42,8 +42,7 @@ Item {
         active: root.fill
         anchors.fill: parent
         
-        sourceComponent: Rectangle {
-            radius: 9999
+        sourceComponent: Circle {
             color: root.colSecondary
         }
     }
