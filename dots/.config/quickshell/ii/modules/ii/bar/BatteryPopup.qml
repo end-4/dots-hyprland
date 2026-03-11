@@ -15,7 +15,7 @@ StyledPopup {
 
         // Header
         StyledPopupHeaderRow {
-            icon: "battery_android_full"
+            icon: Icons.getBatteryIcon(Battery.percentage * 100)
             label: Translation.tr("Battery")
         }
 

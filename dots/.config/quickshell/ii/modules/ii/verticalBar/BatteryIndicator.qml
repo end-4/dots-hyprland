@@ -44,7 +44,7 @@ MouseArea {
                     id: boltIcon
                     Layout.alignment: Qt.AlignHCenter
                     fill: 1
-                    text: isCharging ? "bolt" : "battery_android_full"
+                    text: isCharging ? "bolt" : Icons.getBatteryIcon(Battery.percentage * 100)
                     iconSize: Appearance.font.pixelSize.normal
                     animateChange: true
                 }
