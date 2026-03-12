@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Services.UPower
 
+import qs
 import qs.services as S
 import qs.modules.common as C
 import qs.modules.common.functions as F
@@ -26,7 +27,7 @@ HBarWidgetWithPopout {
         showPopup: root.showPopup
         contentImplicitWidth: activeItem.implicitWidth
         contentImplicitHeight: activeItem.implicitHeight
-        // onClicked: root.showPopup = !root.showPopup
+        onClicked: GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen; // TODO: use own popup
         property var activeItem: content
 
         SystemIndicatorsContent {
