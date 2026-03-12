@@ -162,6 +162,102 @@ HBarWidgetWithPopout {
             W.FlyFadeEnterChoreographable {
                 Layout.fillWidth: true
 
+                Column {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+
+                    spacing: 2
+
+                    Item {
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        implicitHeight: memUsed.implicitHeight
+
+                        BigSmallTextPair {
+                            id: memUsed
+                            materialSymbol: "memory"
+                            bigText: S.ResourceUsage.kbToGbString(S.ResourceUsage.memoryUsed, false)
+                            smallText: {
+                                const total = S.ResourceUsage.kbToGbString(S.ResourceUsage.memoryTotal, false);
+                                return S.Translation.tr("%1").arg(`/ ${total}`)
+                            }
+                            W.StyledText {
+                                Layout.alignment: Qt.AlignBaseline
+                                text: S.Translation.tr("Memory")
+                                color: C.Appearance.colors.colOutline
+                            }
+                        }
+                        BigSmallTextPair {
+                            id: swapUsed
+                            TextMetrics {
+                                id: plusTextMetric
+                                font: swapUsed.bigFont
+                                text: "+"
+                            }
+                            property real halfWidthOfAPlus: plusTextMetric.width / 2
+                            x: Math.min(memProg.availableWidth * memProg.visualEnds[0] - halfWidthOfAPlus, parent.width - width)
+                            bigText: "+ " + S.ResourceUsage.kbToGbString(S.ResourceUsage.swapUsed, false)
+                            smallText: {
+                                const total = S.ResourceUsage.kbToGbString(S.ResourceUsage.swapTotal, false);
+                                return `/ ${total} GB`
+                            }
+                        }
+                        
+                    }
+                    W.StyledCombinedProgressBar {
+                        id: memProg
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        valueWeights: [S.ResourceUsage.memoryTotal, S.ResourceUsage.swapTotal]
+                        values: [S.ResourceUsage.memoryUsedPercentage, S.ResourceUsage.swapUsedPercentage]
+                    }
+                }
+            }
+
+            W.FlyFadeEnterChoreographable {
+                Layout.fillWidth: true
+
+                Column {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+
+                    spacing: 2
+
+                    BigSmallTextPair {
+                        spacing: 0
+                        materialSymbol: "developer_board"
+                        bigText: Math.round(S.ResourceUsage.cpuUsage * 100)
+                        smallText: "%"
+                        W.StyledText {
+                            Layout.alignment: Qt.AlignBaseline
+                            text: " " + S.Translation.tr("CPU")
+                            color: C.Appearance.colors.colOutline
+                        }
+                    }
+                    W.StyledCombinedProgressBar {
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        property bool useSingleAggregate: S.ResourceUsage.cpuCoreUsages.length > 8
+                        valueWeights: useSingleAggregate ? [1] : S.ResourceUsage.cpuCoreFreqCaps
+                        values: useSingleAggregate ? [S.ResourceUsage.cpuUsage] : S.ResourceUsage.cpuCoreUsages
+                    }
+                }
+            }
+
+            W.FlyFadeEnterChoreographable {
+                Layout.topMargin: 8
+                Layout.fillWidth: true
+
                 RowLayout {
                     spacing: 10
                     width: parent.width
@@ -255,6 +351,36 @@ HBarWidgetWithPopout {
                     ]
                 }
             }
+        }
+    }
+
+    component BigSmallTextPair: RowLayout {
+        id: txtPair
+        property string materialSymbol: ""
+        property string bigText: ""
+        property string smallText: ""
+        property alias bigFont: bigTxt.font
+        property alias smallFont: smallTxt.font
+        spacing: 6
+
+        W.MaterialSymbol {
+            Layout.rightMargin: 6 - spacing
+            visible: text.length > 0
+            Layout.alignment: Qt.AlignVCenter
+            text: txtPair.materialSymbol
+            fill: 1
+            iconSize: 24
+        }
+        W.StyledText {
+            id: bigTxt
+            Layout.alignment: Qt.AlignBaseline
+            font.pixelSize: C.Appearance.font.pixelSize.title
+            text: txtPair.bigText
+        }
+        W.StyledText {
+            id: smallTxt
+            Layout.alignment: Qt.AlignBaseline
+            text: txtPair.smallText
         }
     }
 

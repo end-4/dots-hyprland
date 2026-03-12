@@ -20,6 +20,8 @@ Singleton {
 	property real swapUsed: swapTotal - swapFree
     property real swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property real cpuUsage: 0
+    property list<real> cpuCoreUsages: []
+    property list<real> cpuCoreFreqCaps: []
     property var previousCpuStats
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
@@ -31,9 +33,12 @@ Singleton {
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
 
-    function kbToGbString(kb) {
-        return (kb / (1024 * 1024)).toFixed(1) + " GB";
+    function kbToGbString(kb, attachUnit = true) {
+        return (kb / (1024 * 1024)).toFixed(1) + (attachUnit ? " GB" : "");
     }
+
+    // onCpuCoreUsagesChanged: print(cpuCoreUsages)
+    // onCpuCoreFreqCapsChanged: print(cpuCoreFreqCaps)
 
     function updateMemoryUsageHistory() {
         memoryUsageHistory = [...memoryUsageHistory, memoryUsedPercentage]
@@ -77,20 +82,36 @@ Singleton {
 
             // Parse CPU usage
             const textStat = fileStat.text()
-            const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/)
-            if (cpuLine) {
-                const stats = cpuLine.slice(1).map(Number)
-                const total = stats.reduce((a, b) => a + b, 0)
-                const idle = stats[3]
+            const lines = textStat.split("\n")
+            const currentStats = {}
+            const coreUsages = []
 
-                if (previousCpuStats) {
-                    const totalDiff = total - previousCpuStats.total
-                    const idleDiff = idle - previousCpuStats.idle
-                    cpuUsage = totalDiff > 0 ? (1 - idleDiff / totalDiff) : 0
+            for (const line of lines) {
+                const match = line.match(/^(cpu\d*)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/)
+                if (match) {
+                    const name = match[1]
+                    const stats = match.slice(2).map(Number)
+                    const total = stats.reduce((a, b) => a + b, 0)
+                    const idle = stats[3]
+
+                    let usage = 0
+                    if (previousCpuStats && previousCpuStats[name]) {
+                        const totalDiff = total - previousCpuStats[name].total
+                        const idleDiff = idle - previousCpuStats[name].idle
+                        usage = totalDiff > 0 ? (1 - idleDiff / totalDiff) : 0
+                    }
+
+                    currentStats[name] = { total, idle }
+
+                    if (name === "cpu") {
+                        cpuUsage = usage
+                    } else {
+                        coreUsages.push(usage)
+                    }
                 }
-
-                previousCpuStats = { total, idle }
             }
+            previousCpuStats = currentStats
+            cpuCoreUsages = coreUsages
 
             root.updateHistories()
             interval = Config.options?.resources?.updateInterval ?? 3000
@@ -106,12 +127,19 @@ Singleton {
             LANG: "C",
             LC_ALL: "C"
         })
-        command: ["bash", "-c", "lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
+        command: ["bash", "-c", "cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq 2>/dev/null || lscpu | grep 'CPU max MHz' | awk '{print $4 * 1000}'"]
         running: true
         stdout: StdioCollector {
             id: outputCollector
             onStreamFinished: {
-                root.maxAvailableCpuString = (parseFloat(outputCollector.text) / 1000).toFixed(0) + " GHz"
+                const lines = outputCollector.text.trim().split("\n")
+                const caps = lines.map(line => parseFloat(line)).filter(val => !isNaN(val))
+                
+                if (caps.length > 0) {
+                    root.cpuCoreFreqCaps = caps
+                    const maxFreq = Math.max(...caps)
+                    root.maxAvailableCpuString = (maxFreq / 1000000).toFixed(1) + " GHz"
+                }
             }
         }
     }
