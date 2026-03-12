@@ -718,5 +718,10 @@
   "No applications": "没有应用",
   "Creativity": "创意",
   "Move left": "左移",
-  "Pin to Start": "固定到“开始”屏幕"
+  "Pin to Start": "固定到“开始”屏幕",
+  "%1 updates available": "有 %1 个更新可用",
+  "System Updates": "系统更新",
+  "Package Manager": "包管理器",
+  "Show in bar": "在栏中显示",
+  "Visibility Threshold": "可见性阈值"
 }
