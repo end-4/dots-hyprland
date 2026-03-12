@@ -87,7 +87,22 @@ ContentPage {
                 }
             }
 
-            ColumnLayout {
+            ColumnLayout {                
+                RippleButtonWithIcon {
+                    enabled: !randomWallProc.running
+                    Layout.fillWidth: true
+                    buttonRadius: Appearance.rounding.small
+                    materialIcon: "wallpaper"
+                    mainText: randomWallProc.running ? Translation.tr("Applying...") : Translation.tr("Default Wallpaper")
+                    onClicked: {
+                        randomWallProc.scriptPath = `${Directories.scriptPath}/colors/random/set_default_wall.sh`;
+                        randomWallProc.running = true;
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Reset to the default theme wallpaper")
+                    }
+                }
                 RippleButtonWithIcon {
                     enabled: !randomWallProc.running
                     visible: Config.options.policies.weeb === 1
