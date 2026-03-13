@@ -19,6 +19,24 @@ function setup_user_group(){
     x sudo usermod -aG video,i2c,input "$(whoami)"
   fi
 }
+
+function setup_kill_fprintd_service(){
+  # Fix fingerprint bug when sleeping
+  # Fprintd waits 30 seconds after a successful login before quitting, so sleeping during that time period may cause fprintd to break.
+  if [[ ! -f "/etc/systemd/system/kill-fprintd.service" ]]; then
+    x sudo tee /etc/systemd/system/kill-fprintd.service > /dev/null << 'EOF'
+[Unit]
+Description=Kill fprintd before sleep
+Before=sleep.target
+
+[Service]
+ExecStart=killall fprintd
+
+[Install]
+WantedBy=sleep.target
+EOF
+  fi
+}
 #####################################################################################
 # These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
 showfun install-python-packages
@@ -48,6 +66,10 @@ if [[ ! -z $(systemctl --version) ]]; then
     fi
   fi
   v sudo systemctl enable bluetooth --now
+  # Fix fingerprint bug when sleeping by killing fprintd before sleep
+  showfun setup_kill_fprintd_service
+  v setup_kill_fprintd_service
+  v sudo systemctl enable kill-fprintd.service
 elif [[ ! -z $(openrc --version) ]]; then
   v bash -c "echo 'modules=i2c-dev' | sudo tee -a /etc/conf.d/modules"
   v sudo rc-update add modules boot
