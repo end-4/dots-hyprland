@@ -27,16 +27,20 @@ CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-mkdir -p "$PICTURES_DIR/Wallpapers"
+mkdir -p "$1"
 page=$((1 + RANDOM % 1000));
 response=$(curl "https://konachan.net/post.json?tags=rating%3Asafe&limit=1&page=$page")
 link=$(echo "$response" | jq '.[0].file_url' -r);
 ext=$(echo "$link" | awk -F. '{print $NF}')
-downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper.$ext"
 illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
 currentWallpaperPath=$(jq -r '.background.wallpaperPath' $illogicalImpulseConfigPath)
-if [ "$downloadPath" == "$currentWallpaperPath" ]; then
-    downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper-1.$ext"
+downloadName="$(python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))" "$(basename $link)")"
+if [ "$#" -ge 2 ]; then
+    downloadName="$2.$ext"
+    if [ "${1%/}/$downloadName" == "$currentWallpaperPath" ]; then
+        downloadName="${2}-1.$ext"
+    fi
 fi
+downloadPath="${1%/}/$downloadName"
 curl "$link" -o "$downloadPath"
 "$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath"
