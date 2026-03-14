@@ -46,7 +46,10 @@ LockScreen {
                     openAnim.restart();
                 }
             }
-            sourceSize: Qt.size(lockSurfaceItem.width, lockSurfaceItem.height)
+            sourceSize.width: 0
+            sourceSize.height: 0
+            smooth: true
+            mipmap: true
             source: Config.options.background.wallpaperPath
             fillMode: Image.PreserveAspectCrop
 
