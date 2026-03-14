@@ -24,9 +24,9 @@ Singleton {
     property string internetIcon: {
         if (Network.ethernet)
             return "ethernet";
-        if (Network.wifiEnabled) {
+        if (Network.wifiEnabled && Network.wifiStatus === "connected") {
             const strength = Network.networkStrength;
-            return wifiIconForStrength(strength);
+            return root.wifiIconForStrength(strength);
         }
         if (Network.wifiStatus === "connecting")
             return "wifi-4";
