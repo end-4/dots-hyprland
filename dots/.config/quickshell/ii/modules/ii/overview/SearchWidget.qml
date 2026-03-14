@@ -95,6 +95,25 @@ Item { // Wrapper
                 root.focusFirstItem();
             }
         }
+
+        // Ctrl+N / Ctrl+P navigation
+        if (event.modifiers & Qt.ControlModifier) {
+            if (event.key === Qt.Key_N) {
+                if (appResults.visible && appResults.count > 0) {
+                    // Wrap around the list rather than the default arrow key behaviour
+                    appResults.currentIndex = appResults.count - 1 == appResults.currentIndex ? 0 : appResults.currentIndex + 1
+                    event.accepted = true;
+                    return;
+                }
+            } else if (event.key === Qt.Key_P) {
+                if (appResults.visible && appResults.count > 0) {
+                    // Wrap around too
+                    appResults.currentIndex = 0 == appResults.currentIndex ? appResults.count-1 : appResults.currentIndex - 1
+                    event.accepted = true;
+                    return;
+                }
+            }
+        }
     }
 
     StyledRectangularShadow {
