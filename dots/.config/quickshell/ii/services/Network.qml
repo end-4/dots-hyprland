@@ -33,7 +33,7 @@ Singleton {
     property string wifiStatus: "disconnected"
 
     property string networkName: ""
-    property int networkStrength
+    property int networkStrength: active?.strength ?? 0
 
     // Control
     function enableWifi(enabled = true): void {
@@ -139,7 +139,6 @@ Singleton {
         updateConnectionType.startCheck();
         wifiStatusProcess.running = true
         updateNetworkName.running = true;
-        updateNetworkStrength.running = true;
     }
 
     Process {
@@ -208,17 +207,6 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.networkName = data;
-            }
-        }
-    }
-
-    Process {
-        id: updateNetworkStrength
-        running: true
-        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\\*/{if (NR!=1) {print $2}}'"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.networkStrength = parseInt(data);
             }
         }
     }
