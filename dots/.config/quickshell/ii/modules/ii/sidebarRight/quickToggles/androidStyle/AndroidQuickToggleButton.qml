@@ -34,6 +34,8 @@ GroupButton {
 
     // Edit mode state
     property bool editMode: false
+    property int  dragIndex: -1
+    readonly property bool isBeingDragged: editMode && dragIndex >= 0 && dragIndex === buttonIndex
 
     // Sizing shenanigans
     baseWidth: root.baseCellWidth * cellSize + cellSpacing * (cellSize - 1)
@@ -54,12 +56,17 @@ GroupButton {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    scale: isBeingDragged ? 1.06 : 1.0
+    Behavior on scale {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
     enabled: available || editMode
     padding: 6
     horizontalPadding: padding
     verticalPadding: padding
 
-    colBackground: Appearance.colors.colLayer2
+    colBackground: isBeingDragged ? Appearance.colors.colLayer3 : Appearance.colors.colLayer2
     colBackgroundToggled: (altAction && expandedSize) ? Appearance.colors.colLayer2 : Appearance.colors.colPrimary
     colBackgroundToggledHover: (altAction && expandedSize) ? Appearance.colors.colLayer2Hover : Appearance.colors.colPrimaryHover
     colBackgroundToggledActive: (altAction && expandedSize) ? Appearance.colors.colLayer2Active : Appearance.colors.colPrimaryActive

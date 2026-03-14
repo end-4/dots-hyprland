@@ -39,6 +39,46 @@ AbstractQuickPanel {
     }
     readonly property list<var> unusedToggleRows: toggleRowsForList(unusedToggles)
 
+    property int dragIndex: -1  // flat config index of item being dragged (-1 = none)
+
+    // Map (x, y) in usedRows coordinates → flat config index.
+    // Uses the same stride math as the RowLayout so no item references are needed.
+    function toggleIndexAt(x, y) {
+        const rowH = root.baseCellHeight + root.spacing
+        const rowIdx = Math.max(0, Math.min(root.toggleRows.length - 1, Math.floor(y / rowH)))
+        if (root.toggleRows.length === 0) return -1
+        let flatStart = 0
+        for (let r = 0; r < rowIdx; r++) flatStart += root.toggleRows[r].length
+        const row = root.toggleRows[rowIdx]
+        if (!row || row.length === 0) return -1
+        // Each column slot is (baseCellWidth + spacing) wide; a size-2 button takes 2 slots.
+        const stride = root.baseCellWidth + root.spacing
+        let accumulated = 0
+        for (let c = 0; c < row.length; c++) {
+            accumulated += row[c].size * stride
+            // Drop target switches at the midpoint of the gap between buttons
+            if (x < accumulated - root.spacing / 2 || c === row.length - 1) return flatStart + c
+        }
+        return flatStart + row.length - 1
+    }
+
+    function swapToggles(fromIdx, toIdx) {
+        const list = Config.options.sidebar.quickToggles.android.toggles
+        const temp = list[fromIdx]
+        list[fromIdx] = list[toIdx]
+        list[toIdx] = temp
+    }
+
+    function removeToggleAt(index) {
+        Config.options.sidebar.quickToggles.android.toggles.splice(index, 1)
+    }
+
+    function resizeToggleAt(index) {
+        const list = Config.options.sidebar.quickToggles.android.toggles
+        if (index < 0 || index >= list.length) return
+        list[index] = { type: list[index].type, size: 3 - list[index].size }
+    }
+
     function toggleRowsForList(togglesList) {
         var rows = [];
         var row = [];
@@ -98,6 +138,7 @@ AbstractQuickPanel {
                         delegate: AndroidToggleDelegateChooser {
                             startingIndex: toggleRow.startingIndex
                             editMode: root.editMode
+                            dragIndex: root.dragIndex
                             baseCellWidth: root.baseCellWidth
                             baseCellHeight: root.baseCellHeight
                             spacing: root.spacing
@@ -160,4 +201,80 @@ AbstractQuickPanel {
             }
         }
     }
+
+    // ── Edit-mode drag overlay ───────────────────────────────────────────────
+    // Direct child of root so it floats above contentItem (z:100).
+    // Positioned to exactly cover usedRows in root's coordinate space:
+    //   contentItem has margins=root.padding, usedRows is contentItem's first child.
+    // Intercepts all pointer events on the used-section buttons so drag, click,
+    // and resize are all handled here. Unused-section buttons sit below this
+    // overlay's height, so their own editModeInteraction MouseArea still fires.
+    MouseArea {
+        id: editDragOverlay
+        z: 100
+        x: root.padding
+        y: root.padding
+        width:  usedRows.width
+        height: usedRows.height
+        visible: root.editMode
+        enabled: root.editMode
+        hoverEnabled: true
+        cursorShape: root.dragIndex >= 0 ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+
+        property int  sourceIndex:   -1
+        property bool dragActive:    false
+        property real pressX:        0
+        property real pressY:        0
+        property int  pressedButton: Qt.NoButton
+        readonly property real dragThreshold: 6
+
+        onPressed: (mouse) => {
+            pressX        = mouse.x
+            pressY        = mouse.y
+            dragActive    = false
+            pressedButton = mouse.button
+            sourceIndex   = root.toggleIndexAt(mouse.x, mouse.y)
+            if (mouse.button === Qt.RightButton && sourceIndex >= 0) {
+                root.resizeToggleAt(sourceIndex)
+                sourceIndex = -1
+            }
+        }
+
+        onPositionChanged: (mouse) => {
+            if (!dragActive && pressedButton === Qt.LeftButton) {
+                const dx = mouse.x - pressX
+                const dy = mouse.y - pressY
+                if (Math.sqrt(dx * dx + dy * dy) > dragThreshold) {
+                    dragActive     = true
+                    root.dragIndex = sourceIndex
+                }
+            }
+            if (dragActive && root.dragIndex >= 0) {
+                const targetIdx = root.toggleIndexAt(mouse.x, mouse.y)
+                if (targetIdx >= 0 && targetIdx !== root.dragIndex) {
+                    root.swapToggles(root.dragIndex, targetIdx)
+                    root.dragIndex = targetIdx   // follow the dragged item
+                }
+            }
+        }
+
+        onPressAndHold: {
+            if (sourceIndex >= 0 && !dragActive) {
+                root.resizeToggleAt(sourceIndex)
+                sourceIndex = -1   // suppress the upcoming release click
+            }
+        }
+
+        onReleased: (mouse) => {
+            if (!dragActive && mouse.button === Qt.LeftButton && sourceIndex >= 0)
+                root.removeToggleAt(sourceIndex)
+            root.dragIndex = -1
+            sourceIndex    = -1
+            dragActive     = false
+        }
+
+        // Consume wheel events — scroll-to-reorder is replaced by drag
+        onWheel: (wheel) => wheel.accepted = true
+    }
+    // ────────────────────────────────────────────────────────────────────────
 }
