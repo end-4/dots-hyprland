@@ -33,6 +33,7 @@ RippleButton {
         }
         StyledSwitch {
             id: switchWidget
+            focusPolicy: Qt.NoFocus
             down: root.down
             Layout.fillWidth: false
             checked: root.checked

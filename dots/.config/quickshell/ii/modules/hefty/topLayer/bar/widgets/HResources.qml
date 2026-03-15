@@ -54,16 +54,89 @@ HBarWidgetWithPopout {
         W.BoxLayout {
             id: contentGrid
             vertical: root.vertical
-            anchors.fill: parent
+            property int visibleChildren: children.filter(child => child.shown).length
+            property bool hasResourceIndicators: visibleChildren > 1 || (visibleChildren > 0 && !S.Battery.available)
+            anchors {
+                fill: parent
+                leftMargin: !root.vertical ? (hasResourceIndicators ? 1 : 4) : 0
+                topMargin: root.vertical ? 2 : 0
+                rightMargin: !root.vertical ? (root.endSide ? 1 : (battLoader.visible ? 0 : -3)) : 0
+                bottomMargin: root.vertical ? (root.endSide ? 4 : 2) : 0
+            }
+            spacing: 4
 
-            Battery {
-                Layout.leftMargin: !root.vertical ? (root.startSide ? 8 : 6) : 0
-                Layout.rightMargin: !root.vertical ? (root.endSide ? 0 : -3) : 0
-                Layout.bottomMargin: root.vertical ? (root.endSide ? 4 : 2) : 0
-                Layout.topMargin: root.vertical ? 2 : 0
+            AlignedFadeLoader {
+                shown: C.Config.options.hefty.bar.resources.showMemory || (
+                    !battLoader.visible
+                    && !C.Config.options.hefty.bar.resources.showRam
+                    && !C.Config.options.hefty.bar.resources.showSwap
+                    && !C.Config.options.hefty.bar.resources.showCpu
+                )
+                sourceComponent: Memory {}
+            }
+
+            AlignedFadeLoader {
+                shown: C.Config.options.hefty.bar.resources.showRam
+                sourceComponent: RamOnly {}
+            }
+
+            AlignedFadeLoader {
+                shown: C.Config.options.hefty.bar.resources.showSwap
+                sourceComponent: SwapOnly {}
+            }
+
+            AlignedFadeLoader {
+                shown: C.Config.options.hefty.bar.resources.showCpu
+                sourceComponent: Cpu {}
+            }
+
+            AlignedFadeLoader {
+                id: battLoader
+                shown: S.Battery.available
                 Layout.fillWidth: root.vertical
                 Layout.fillHeight: !root.vertical
+                sourceComponent: Battery {}
             }
+        }
+    }
+
+    component AlignedFadeLoader: W.FadeLoader {
+        Layout.alignment: root.vertical ? Qt.AlignHCenter : Qt.AlignVCenter
+    }
+
+    component Memory: SysResourceProgress {
+        valueWeights: [S.ResourceUsage.memoryTotal, S.ResourceUsage.swapTotal]
+        values: [S.ResourceUsage.memoryUsedPercentage, S.ResourceUsage.swapUsedPercentage]
+        centerChar: S.Translation.tr("Memory")[0]
+    }
+
+    component RamOnly: SysResourceProgress {
+        values: [S.ResourceUsage.memoryUsedPercentage]
+        centerChar: S.Translation.tr("RAM")[0]
+    }
+
+    component SwapOnly: SysResourceProgress {
+        values: [S.ResourceUsage.swapUsedPercentage]
+        centerChar: S.Translation.tr("Swap")[0]
+    }
+
+    component Cpu: SysResourceProgress {
+        values: [S.ResourceUsage.cpuUsage]
+        centerChar: S.Translation.tr("CPU")[0]
+    }
+
+    component SysResourceProgress: W.CombinedCircularProgress {
+        id: sysResProg
+        implicitSize: 22
+        valueHighlights: [C.Appearance.colors.colPrimary]
+        valueTroughs: [C.Appearance.colors.colSecondaryContainer]
+        property string centerChar: ""
+
+        W.StyledText {
+            renderType: Text.QtRendering
+            anchors.centerIn: parent
+            text: sysResProg.centerChar
+            font.pixelSize: 9
         }
     }
 
@@ -105,7 +178,7 @@ HBarWidgetWithPopout {
                         bottomMargin: (parent.height - height) / 2
                     }
                     rotation: 180 * root.vertical
-                    spacing: 0
+                    spacing: 4
 
                     W.MaterialSymbol {
                         id: boltIcon
@@ -125,6 +198,7 @@ HBarWidgetWithPopout {
                             return "";
                         }
                         iconSize: C.Appearance.font.pixelSize.small
+                        renderType: Text.QtRendering // Better than Native for small sizes
                         font.weight: Font.DemiBold
                         visible: text != ""
                     }
@@ -149,13 +223,61 @@ HBarWidgetWithPopout {
     }
 
     component SysInfoPopupContent: W.ChoreographerLoader {
+        id: sysInfoPopupContent
+        property bool showSettings: false
+
         sourceComponent: W.ChoreographerGridLayout {
             id: popupRoot
-            rowSpacing: 8
+            rowSpacing: 10
 
             onShownChanged: {
                 if (shown) {
                     powerProfileSelection.focusSelectedChild();
+                }
+            }
+
+            W.FlyFadeEnterChoreographable {
+                z: 1
+                Layout.fillWidth: true
+                Item {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+                    implicitHeight: popupHeaderLayout.implicitHeight
+                    ColumnLayout {
+                        anchors {
+                            top: parent.top
+                            left: parent.left
+                            right: parent.right
+                        }
+                        spacing: 10
+
+                        RowLayout {
+                            id: popupHeaderLayout
+                            Layout.fillWidth: true
+                            W.StyledText {
+                                Layout.fillWidth: true
+                                text: S.Translation.tr("Resources")
+                                elide: Text.ElideRight
+                                font.pixelSize: C.Appearance.font.pixelSize.title
+                            }
+
+                            W.StyledIconButton {
+                                implicitSize: C.Appearance.rounding.normal * 2
+                                text: "settings"
+                                iconSize: 20
+                                onClicked: sysInfoPopupContent.showSettings = !sysInfoPopupContent.showSettings;
+                                checked: sysInfoPopupContent.showSettings
+                            }
+                        }
+
+                        W.FadeLoader {
+                            shown: sysInfoPopupContent.showSettings
+                            Layout.fillWidth: true
+                            sourceComponent: SysInfoPopupConfig {}
+                        }
+                    }
                 }
             }
 
@@ -349,6 +471,55 @@ HBarWidgetWithPopout {
                             value: PowerProfile.Performance
                         }
                     ]
+                }
+            }
+        }
+    }
+
+    component SysInfoPopupConfig: Rectangle {
+        implicitWidth: sysConfLayout.implicitWidth
+        implicitHeight: sysConfLayout.implicitHeight
+        radius: C.Appearance.rounding.normal
+        color: C.Appearance.colors.colLayer4Base
+
+        W.StyledRectangularShadow {
+            target: parent
+            z: -1
+        }
+
+        ColumnLayout {
+            id: sysConfLayout
+            anchors.fill: parent
+            W.ConfigSwitch {
+                buttonIcon: "pie_chart"
+                text: S.Translation.tr("Show memory usage")
+                checked: C.Config.options.hefty.bar.resources.showMemory
+                onCheckedChanged: {
+                    C.Config.options.hefty.bar.resources.showMemory = checked;
+                }
+            }
+            W.ConfigSwitch {
+                buttonIcon: "memory"
+                text: S.Translation.tr("Show physical memory usage")
+                checked: C.Config.options.hefty.bar.resources.showRam
+                onCheckedChanged: {
+                    C.Config.options.hefty.bar.resources.showRam = checked;
+                }
+            }
+            W.ConfigSwitch {
+                buttonIcon: "swap_horiz"
+                text: S.Translation.tr("Show swap")
+                checked: C.Config.options.hefty.bar.resources.showSwap
+                onCheckedChanged: {
+                    C.Config.options.hefty.bar.resources.showSwap = checked;
+                }
+            }
+            W.ConfigSwitch {
+                buttonIcon: "planner_review"
+                text: S.Translation.tr("Show CPU usage")
+                checked: C.Config.options.hefty.bar.resources.showCpu
+                onCheckedChanged: {
+                    C.Config.options.hefty.bar.resources.showCpu = checked;
                 }
             }
         }
