@@ -198,7 +198,6 @@ HBarWidgetWithPopout {
                             return "";
                         }
                         iconSize: C.Appearance.font.pixelSize.small
-                        renderType: Text.QtRendering // Better than Native for small sizes
                         font.weight: Font.DemiBold
                         visible: text != ""
                     }
