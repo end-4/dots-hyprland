@@ -40,7 +40,7 @@ PanelWindow {
         anchors.fill: parent
         shown: GlobalFocusGrab.active
         sourceComponent: Rectangle {
-            opacity: 0.4
+            opacity: 0.2
             color: Appearance.m3colors.m3scrim
         }
     }
