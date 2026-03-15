@@ -223,11 +223,11 @@ HBarWidgetWithPopout {
 
     component SysInfoPopupContent: W.ChoreographerLoader {
         id: sysInfoPopupContent
-        property bool showSettings: false
 
         sourceComponent: W.ChoreographerGridLayout {
             id: popupRoot
             rowSpacing: 10
+            property bool showSettings: false
 
             onShownChanged: {
                 if (shown) {
@@ -266,13 +266,13 @@ HBarWidgetWithPopout {
                                 implicitSize: C.Appearance.rounding.normal * 2
                                 text: "settings"
                                 iconSize: 20
-                                onClicked: sysInfoPopupContent.showSettings = !sysInfoPopupContent.showSettings;
-                                checked: sysInfoPopupContent.showSettings
+                                onClicked: popupRoot.showSettings = !popupRoot.showSettings;
+                                checked: popupRoot.showSettings
                             }
                         }
 
                         W.FadeLoader {
-                            shown: sysInfoPopupContent.showSettings
+                            shown: popupRoot.showSettings
                             Layout.fillWidth: true
                             sourceComponent: SysInfoPopupConfig {}
                         }
