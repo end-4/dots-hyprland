@@ -65,14 +65,23 @@ Shapes.ShapeCanvas {
         const maxOffset = maxPopupY - yInGlobal;
         return maxOffset;
     }
+    property bool lockPopupX: false
+    property bool lockPopupY: false
     readonly property real popupXOffset: {
+        // print("popupXOffset", popupXOffset, "lock", lockPopupX)
+        if (bgShape.lockPopupX) return;
+        // if (bgShape.showPopup) lockPopupX = true;
         if (!vertical) return Math.min(Math.max(-(popupWidth - containerShape.width) / 2, minPopupXOffset), maxPopupXOffset);
         else return atBottom ? -(popupShape.width + spacing) : (containerShape.width + spacing);
     }
+    onPopupXOffsetChanged: if (bgShape.showPopup) lockPopupX = true;
     readonly property real popupYOffset: {
+        if (bgShape.lockPopupY) return;
+        // if (bgShape.showPopup) lockPopupY = true;
         if (!vertical) return atBottom ? -(popupShape.height + spacing) : (containerShape.height + spacing);
         else return Math.min(Math.max(-(popupHeight - containerShape.height) / 2, minPopupYOffset), maxPopupYOffset)
     }
+    onPopupYOffsetChanged: if (bgShape.showPopup) lockPopupY = true;
 
     // Positioning
     readonly property real popupContentOffsetBase: -baseMargin + popupPadding
@@ -111,7 +120,18 @@ Shapes.ShapeCanvas {
     }
     property bool popupHiding: false
     onShowPopupChanged: popupHiding = true
-    onProgressChanged: if (progress == 1) popupHiding = false
+    onProgressChanged: {
+        if (progress == 1) {
+            popupHiding = false
+            if (showPopup) {
+                lockPopupX = true;
+                lockPopupY = true;
+            } else {
+                lockPopupX = false;
+                lockPopupY = false;
+            }
+        }
+    }
     color: showPopup || popupHiding ? C.Appearance.colors.colLayer3Base : C.Appearance.colors.colLayer1
     xOffset: {
         if (!vertical) return showPopup ? Math.max(-popupXOffset, 0) : 0;
