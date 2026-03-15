@@ -9,16 +9,16 @@ TMP_RAW="$TMP_PATH/recording.raw"
 TMP_MP3="$TMP_PATH/recording.mp3"
 
 while getopts "i:t:s:" opt; do
-  case $opt in
-    i) INTERVAL=$OPTARG ;;
-    t) TOTAL_DURATION=$OPTARG ;;
-    s) SOURCE_TYPE=$OPTARG ;;
-    *) exit 1 ;;
-  esac
+    case $opt in
+        i) INTERVAL=$OPTARG ;;
+        t) TOTAL_DURATION=$OPTARG ;;
+        s) SOURCE_TYPE=$OPTARG ;;
+        *) exit 1 ;;
+    esac
 done
 if [ "$SOURCE_TYPE" = "monitor" ]; then
     MONITOR_SOURCE=$(pactl get-default-sink).monitor
-elif [ "$SOURCE_TYPE" = "input" ]; then
+    elif [ "$SOURCE_TYPE" = "input" ]; then
     MONITOR_SOURCE=$(pactl info | grep "Default Source:" | awk '{print $3}' || true)
 else
     echo "Invalid source type"
@@ -47,14 +47,14 @@ while true; do
     sleep "$INTERVAL"
     CURRENT_TIME=$(date +%s)
     ELAPSED=$((CURRENT_TIME - START_TIME))
-
+    
     if (( ELAPSED >= TOTAL_DURATION )); then
         exit 0
     fi
-
+    
     ffmpeg -f s16le -ar 44100 -ac 2 -i "$TMP_RAW" -acodec libmp3lame -y -hide_banner -loglevel error "$TMP_MP3" 2>/dev/null
-    RESULT=$(songrec audio-file-to-recognized-song "$TMP_MP3" 2>/dev/null || true)
-
+    RESULT=$(songrec recognize --json "$TMP_MP3" 2>/dev/null || true)
+    
     if echo "$RESULT" | grep -q '"matches": \[' && [ ${#RESULT} -gt $MIN_VALID_RESULT_LENGTH ]; then
         echo "$RESULT"
         exit 0
