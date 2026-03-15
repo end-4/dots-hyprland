@@ -56,7 +56,13 @@ Item {
     property Item contentItem: GridLayout {
         id: layout
         columns: C.Config.options.bar.vertical ? 1 : -1
-        anchors.centerIn: parent
+        anchors {
+            fill: parent
+            leftMargin: root.vertical ? 0 : root.padding
+            rightMargin: root.vertical ? 0 : root.padding
+            topMargin: root.vertical ? root.padding : 0
+            bottomMargin: root.vertical ? root.padding : 0
+        }
         property real spacing: 4
         columnSpacing: spacing
         rowSpacing: spacing

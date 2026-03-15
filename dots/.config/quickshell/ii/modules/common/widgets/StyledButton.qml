@@ -22,6 +22,13 @@ Button {
     hoverEnabled: true
     opacity: root.enabled ? 1 : 0.5
 
+    Behavior on colBackground {
+        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+    }
+    Behavior on colForeground {
+        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+    }
+
     HoverHandler {
         cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
     }

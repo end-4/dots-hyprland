@@ -33,10 +33,6 @@ AbstractCombinedProgressBar {
                 required property var modelData
 
                 visible: !root.isNegligibleSegment(modelData)
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                }
                 property bool atStart: index == 0
                 property bool atEnd: index == root.visualSegments.length - 1
                 property real displaySegStart: { // swallow previous segments if they're "negligible"
@@ -44,6 +40,11 @@ AbstractCombinedProgressBar {
                     while ((i > 0 && root.isNegligibleSegment(root.visualSegments[i-1])))
                         i--;
                     return root.visualSegments[i][0]
+                }
+
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
                 }
 
                 x: {
