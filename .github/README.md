@@ -35,7 +35,7 @@
    - **Default keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
      - `Super`+`/` = keybind list
      - `Super`+`Enter` = terminal
-     - If for whatever reason the keybind list widget does not work, here's an image:
+     - Should look something like this:
      <img width="1412" height="828" alt="image" src="https://github.com/user-attachments/assets/8f7bd216-9e03-47e3-8709-0008772a4133" />
 
 
@@ -50,7 +50,7 @@
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
   | Others | See [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md) |
 
-  _THERE IS NO WAYBAR STOP FUCKING CALLING EVERY BAR WAYBAR_
+  [not every bar is waybar] [not every bar is waybar] [not every bar is waybar] [not every bar is waybar] [not every bar is waybar] 
 
 </details>
 
@@ -83,7 +83,7 @@ Widget system: Quickshell | Support: Yes
 | Window management | Built with love |
 | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a7e6d29c-e82c-4934-98db-36c810ec999b" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1b806b53-9310-4c63-84a9-cec9e311d439" /> |
 
-### Other styles: Available at the end of the readme.
+#### Other older styles are available at the end of the readme
 
 <div align="center">
     <h2>• thank you •</h2>
@@ -102,21 +102,11 @@ Widget system: Quickshell | Support: Yes
     <h3></h3>
 </div>
 
-- If you would like to give me some milk😳 (i dont drink coffee): https://github.com/sponsors/end-4
-- Virtual tentacle cat website points chart
+- I promise not to attempt an +ULTRARICOSHOT irl... Coins can go here: https://github.com/sponsors/end-4
+- Tentacle cat hub twinkle internet points
 
 [![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
 
-
-<div align="center">
-    <h2>• inspirations/copying •</h2>
-    <h3></h3>
-</div>
-
- - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
- - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (maybe unless you loudly do weird stuff and violate the license) <sub>(some people actually had to ask smh)</sub>
-
----
 
 ---
 
@@ -125,9 +115,9 @@ Widget system: Quickshell | Support: Yes
     <h3></h3>
 </div>
 
-- Source for illogical-impulse AGS available in the `ii-ags` branch, others in the `archive` branch.
-- The list goes from newest to the oldest, and the code quality is worse the older a style is
-- No bug fix or official support will be provided.
+- **Source**: illogical-impulse AGS in `ii-ags` branch, others in `archive` branch.
+- **No support** will be provided
+- **Reverse chronological order** list. Older = more naive & spaghetti code
 
 ### illogical-impulse<sup>AGS</sup>
 
@@ -141,33 +131,43 @@ Widget system: AGS | Support: No
 
 #### m3ww
 
-   Widget system: EWW | Support: No, dead
+Widget system: EWW | Support: No, dead
 
-   <a href="https://streamable.com/85ch8x">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-   </a>
+<a href="https://streamable.com/85ch8x">
+<img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
+</a>
 
 #### NovelKnock
 
-   Widget system: EWW | Support: No
+Widget system: EWW | Support: No
 
-   <a href="https://streamable.com/7vo61k">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-   </a>
+<a href="https://streamable.com/7vo61k">
+<img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
+</a>
 
 #### Hybrid
 
-   Widget system: EWW | Support: No
-   
-   <a href="https://streamable.com/4oogot">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-   </a>
+Widget system: EWW | Support: No
+
+<a href="https://streamable.com/4oogot">
+<img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
+</a>
 
 #### Windoes
 
-   Widget system: EWW | Support: No
-   
-   <a href="https://streamable.com/5qx614">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-   </a>
+Widget system: EWW | Support: No
 
+<a href="https://streamable.com/5qx614">
+<img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
+</a>
+
+
+
+<div align="center">
+    <h2>• inspirations/copying •</h2>
+    <h3></h3>
+</div>
+
+ - Inspiration: osu!lazer (Hybrid), Windows 11 (Windoes), AvdanOS (NovelKnock), Material Design 3 (m3ww & later)
+ - Copying: Absolutely, feel free. Just follow the license and it's all good
+ 
