@@ -33,12 +33,25 @@ Singleton {
     function unpin(itemId) {
         Config.options.tray.pinnedItems = Config.options.tray.pinnedItems.filter(id => id !== itemId);
     }
+    function isPinned(itemId) {
+        for (var i = 0; i < root.pinnedItems.length; i++) {
+            if (root.pinnedItems[i].id === itemId)
+                return true;
+        }
+        return false;
+    }
+
     function togglePin(itemId) {
-        var pins = Config.options.tray.pinnedItems;
-        if (pins.includes(itemId)) {
-            unpin(itemId)
+        if (root.isPinned(itemId)) {
+            if (!root.invertPins)
+                unpin(itemId);
+            else
+                pin(itemId);
         } else {
-            pin(itemId)
+            if (!root.invertPins)
+                pin(itemId);
+            else
+                unpin(itemId);
         }
     }
 
