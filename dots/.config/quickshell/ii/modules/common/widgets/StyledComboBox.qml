@@ -192,7 +192,7 @@ ComboBox {
                 id: popupBackground
                 anchors.fill: parent
                 radius: Appearance.rounding.normal
-                color: Appearance.colors.colSurfaceContainerHigh
+                color: Appearance.m3colors.m3surfaceContainerHigh
             }
         }
 

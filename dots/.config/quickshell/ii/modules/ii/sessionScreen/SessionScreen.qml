@@ -45,9 +45,7 @@ Scope {
             WlrLayershell.namespace: "quickshell:session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            // This is a big surface so we needa carefully choose the transparency,
-            // or we'll get a large scary rgb blob
-            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.04 : 0.12)
+            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.05 : 0.12)
 
             anchors {
                 top: true
@@ -240,7 +238,7 @@ Scope {
                 }
             }
 
-            RowLayout {
+            ColumnLayout {
                 anchors {
                     top: contentColumn.bottom
                     topMargin: 10
@@ -249,19 +247,22 @@ Scope {
                 spacing: 10
 
                 Loader {
-                    active: SessionWarnings.packageManagerRunning
+                    Layout.alignment: Qt.AlignHCenter
+                    active: SessionWarnings.downloadRunning
                     visible: active
                     sourceComponent: DescriptionLabel {
-                        text: Translation.tr("Your package manager is running")
+                        text: Translation.tr("There might be a download in progress. Check your Downloads folder.")
                         textColor: Appearance.m3colors.m3onErrorContainer
                         color: Appearance.m3colors.m3errorContainer
                     }
                 }
+
                 Loader {
-                    active: SessionWarnings.downloadRunning
+                    Layout.alignment: Qt.AlignHCenter
+                    active: SessionWarnings.packageManagerRunning
                     visible: active
                     sourceComponent: DescriptionLabel {
-                        text: Translation.tr("There might be a download in progress")
+                        text: Translation.tr("Your package manager is running")
                         textColor: Appearance.m3colors.m3onErrorContainer
                         color: Appearance.m3colors.m3errorContainer
                     }

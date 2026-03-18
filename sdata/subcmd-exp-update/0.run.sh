@@ -31,9 +31,7 @@
 #
 set -euo pipefail
 
-# TODO: For Arch(-Linux) specific part please check if pacman exists first, if not it should be skipped.
-
-# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
+# Note: The detect_repo_structure function below auto-detects the folder layout
 # Try to find the packages directory (different names in different versions)
 if which pacman &>/dev/null; then
   if [[ -d "${REPO_ROOT}/dist-arch" ]]; then
@@ -47,7 +45,9 @@ if which pacman &>/dev/null; then
   fi
 fi
 UPDATE_IGNORE_FILE="${REPO_ROOT}/.updateignore"
-HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
+XDG_UPDATE_IGNORE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/illogical-impulse/updateignore"
+#TODO: remove in future and add script to migrate to XDG path
+HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore" # Legacy support 
 
 # Global arrays for cached ignore patterns (performance optimization)
 declare -a IGNORE_PATTERNS=()
@@ -56,7 +56,6 @@ declare -a IGNORE_SUBSTRING_PATTERNS=()
 # Track created directories to avoid redundant mkdir calls
 declare -A CREATED_DIRS
 
-# TODO: Is this really needed? `git pull` should do a full upgrade, not partially, which means this script will be updated along with the folder structure together.
 # Auto-detect repository structure
 detect_repo_structure() {
   local found_dirs=()
@@ -114,7 +113,16 @@ safe_read() {
 
   echo -n "$prompt"
   
-  # Try to read from terminal with better detection
+  # First, try reading from stdin (supports piped input like "yes 1 |")
+  if read -r -t 0.1 input_value 2>/dev/null; then
+    # Successfully read from stdin (piped input)
+    if [[ -n "$input_value" ]]; then
+      printf -v "$varname" '%s' "$input_value"
+      return 0
+    fi
+  fi
+  
+  # If stdin had no data, try interactive terminal
   if [[ -t 0 ]]; then
     # stdin is a terminal
     read -r input_value
@@ -159,7 +167,7 @@ load_ignore_patterns() {
   IGNORE_PATTERNS=()
   IGNORE_SUBSTRING_PATTERNS=()
   
-  for ignore_file in "$UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
+  for ignore_file in "$UPDATE_IGNORE_FILE" "$XDG_UPDATE_IGNORE_FILE" "$HOME_UPDATE_IGNORE_FILE"; do
     [[ ! -f "$ignore_file" ]] && continue
     
     while IFS= read -r pattern || [[ -n "$pattern" ]]; do
@@ -340,168 +348,166 @@ handle_file_conflict() {
   local home_file="$2"
   local filename=$(basename "$home_file")
   local dirname=$(dirname "$home_file")
+  local choice=""
+  local default_val="${DEFAULT_CHOICE:-6}"  # Use DEFAULT_CHOICE or 6 (skip) as fallback
 
-  echo -e "\n${STY_YELLOW}Conflict detected:${STY_RST} $home_file"
-  echo "Repository version differs from your local version."
-  echo
-  echo "Choose an action:"
-  echo "1) Replace local file with repository version"
-  echo "2) Keep local file unchanged"
-  echo "3) Backup local file as ${filename}.old, use repository version"
-  echo "4) Save repository version as ${filename}.new, keep local file"
-  echo "5) Show diff and decide"
-  echo "6) Skip this file"
-  echo "7) Add to ignore and skip"
-  echo "8) Backup to .update-backups/ and replace with repository version"
-  echo
+  # In non-interactive mode, use default directly (acts like pressing Enter)
+  if [[ "$NON_INTERACTIVE" == true ]]; then
+    choice="$default_val"
+    log_info "Using choice $choice for: $home_file"
+  else
+    echo -e "\n${STY_YELLOW}Conflict detected:${STY_RST} $home_file"
+    echo "Repository version differs from your local version."
+    echo
+    echo "Choose an action:"
+    echo "1) Replace local file with repository version"
+    echo "2) Keep local file unchanged"
+    echo "3) Backup local file as ${filename}.old, use repository version"
+    echo "4) Save repository version as ${filename}.new, keep local file"
+    echo "5) Show diff and decide"
+    echo "6) Skip this file"
+    echo "7) Add to ignore and skip"
+    echo "8) Backup to .update-backups/ and replace with repository version"
+    echo
 
-  while true; do
-    if ! safe_read "Enter your choice (1-8): " choice "6"; then
+    while true; do
+      if ! safe_read "Enter your choice (1-8 or name) [${default_val}]: " choice "$default_val"; then
+        echo
+        log_warning "Failed to read input. Skipping file."
+        return
+      fi
+
+      # Validate choice
+      if [[ "$choice" =~ ^[1-8]$ ]] || [[ "$choice" =~ ^(replace|keep|old|new|diff|skip|ignore|backup)$ ]]; then
+        break
+      else
+        echo "Invalid choice. Please enter 1-8 or a valid name (replace, keep, old ...)."
+      fi
+    done
+  fi
+
+  case $choice in
+  1|replace)
+    if [[ "$DRY_RUN" == true ]]; then
+      log_info "[DRY-RUN] Would replace $home_file with repository version"
+    else
+      cp -p "$repo_file" "$home_file"
+      log_success "Replaced $home_file with repository version"
+    fi
+    ;;
+  2|keep)
+    log_info "Keeping local version of $home_file"
+    ;;
+  3|old)
+    if [[ "$DRY_RUN" == true ]]; then
+      log_info "[DRY-RUN] Would backup local file to ${filename}.old and update with repository version"
+    else
+      mv "$home_file" "${dirname}/${filename}.old"
+      cp -p "$repo_file" "$home_file"
+      log_success "Backed up local file to ${filename}.old and updated with repository version"
+    fi
+    ;;
+  4|new)
+    if [[ "$DRY_RUN" == true ]]; then
+      log_info "[DRY-RUN] Would save repository version as ${filename}.new, keep local file"
+    else
+      cp -p "$repo_file" "${dirname}/${filename}.new"
+      log_success "Saved repository version as ${filename}.new, kept local file"
+    fi
+    ;;
+  5|diff)
+    show_diff "$home_file" "$repo_file"
+    echo
+    echo "After reviewing the diff, choose:"
+    echo "r) Replace with repository version"
+    echo "k) Keep local version"
+    echo "b) Backup local and use repository version"
+    echo "n) Save repository version as .new"
+    echo "s) Skip this file"
+    echo "i) Add to ignore and skip"
+    echo "B) Backup to .update-backups/ and replace"
+
+    if ! safe_read "Enter your choice (r/k/b/n/s/i/B): " subchoice "s"; then
       echo
       log_warning "Failed to read input. Skipping file."
       return
     fi
 
-    case $choice in
-    1)
+    case $subchoice in
+    r)
       if [[ "$DRY_RUN" == true ]]; then
         log_info "[DRY-RUN] Would replace $home_file with repository version"
       else
         cp -p "$repo_file" "$home_file"
         log_success "Replaced $home_file with repository version"
       fi
-      break
       ;;
-    2)
+    k)
       log_info "Keeping local version of $home_file"
-      break
       ;;
-    3)
+    b)
       if [[ "$DRY_RUN" == true ]]; then
-        log_info "[DRY-RUN] Would backup local file to ${filename}.old and update with repository version"
+        log_info "[DRY-RUN] Would backup local file to ${filename}.old and update"
       else
         mv "$home_file" "${dirname}/${filename}.old"
         cp -p "$repo_file" "$home_file"
-        log_success "Backed up local file to ${filename}.old and updated with repository version"
+        log_success "Backed up local file to ${filename}.old and updated"
       fi
-      break
       ;;
-    4)
+    n)
       if [[ "$DRY_RUN" == true ]]; then
-        log_info "[DRY-RUN] Would save repository version as ${filename}.new, keep local file"
+        log_info "[DRY-RUN] Would save repository version as ${filename}.new"
       else
         cp -p "$repo_file" "${dirname}/${filename}.new"
-        log_success "Saved repository version as ${filename}.new, kept local file"
+        log_success "Saved repository version as ${filename}.new"
       fi
-      break
       ;;
-    5)
-      show_diff "$home_file" "$repo_file"
-      echo
-      echo "After reviewing the diff, choose:"
-      echo "r) Replace with repository version"
-      echo "k) Keep local version"
-      echo "b) Backup local and use repository version"
-      echo "n) Save repository version as .new"
-      echo "s) Skip this file"
-      echo "i) Add to ignore and skip"
-      echo "B) Backup to .update-backups/ and replace"
-
-      if ! safe_read "Enter your choice (r/k/b/n/s/i/B): " subchoice "s"; then
-        echo
-        log_warning "Failed to read input. Skipping file."
-        return
-      fi
-
-      case $subchoice in
-      r)
-        if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would replace $home_file with repository version"
-        else
-          cp -p "$repo_file" "$home_file"
-          log_success "Replaced $home_file with repository version"
-        fi
-        break
-        ;;
-      k)
-        log_info "Keeping local version of $home_file"
-        break
-        ;;
-      b)
-        if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would backup local file to ${filename}.old and update"
-        else
-          mv "$home_file" "${dirname}/${filename}.old"
-          cp -p "$repo_file" "$home_file"
-          log_success "Backed up local file to ${filename}.old and updated"
-        fi
-        break
-        ;;
-      n)
-        if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would save repository version as ${filename}.new"
-        else
-          cp -p "$repo_file" "${dirname}/${filename}.new"
-          log_success "Saved repository version as ${filename}.new"
-        fi
-        break
-        ;;
-      s)
-        log_info "Skipping $home_file"
-        break
-        ;;
-      i)
-        local relative_path_to_home="${home_file#$HOME/}"
-        if [[ "$DRY_RUN" == true ]]; then
-          log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
-        else
-          echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-          log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
-        fi
-        break
-        ;;
-      B)
-        if backup_file "$home_file"; then
-          if [[ "$DRY_RUN" != true ]]; then
-            cp -p "$repo_file" "$home_file"
-            log_success "Replaced $home_file with repository version"
-          fi
-        fi
-        break
-        ;;
-      *)
-        echo "Invalid choice. Please try again."
-        ;;
-      esac
-      ;;
-    6)
+    s)
       log_info "Skipping $home_file"
-      break
       ;;
-    7)
+    i)
       local relative_path_to_home="${home_file#$HOME/}"
       if [[ "$DRY_RUN" == true ]]; then
-        log_info "[DRY-RUN] Would add '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE"
+        log_info "[DRY-RUN] Would add '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE"
       else
-        echo "$relative_path_to_home" >>"$HOME_UPDATE_IGNORE_FILE"
-        log_success "Added '$relative_path_to_home' to $HOME_UPDATE_IGNORE_FILE and skipped."
+        echo "$relative_path_to_home" >>"$XDG_UPDATE_IGNORE_FILE"
+        log_success "Added '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE and skipped."
       fi
-      break
       ;;
-    8)
+    B)
       if backup_file "$home_file"; then
         if [[ "$DRY_RUN" != true ]]; then
           cp -p "$repo_file" "$home_file"
           log_success "Replaced $home_file with repository version"
         fi
       fi
-      break
       ;;
     *)
-      echo "Invalid choice. Please enter 1-8."
+      log_info "Skipping $home_file"
       ;;
     esac
-  done
+    ;;
+  6|skip)
+    log_info "Skipping $home_file"
+    ;;
+  7|ignore)
+    local relative_path_to_home="${home_file#$HOME/}"
+    if [[ "$DRY_RUN" == true ]]; then
+      log_info "[DRY-RUN] Would add '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE"
+    else
+      echo "$relative_path_to_home" >>"$XDG_UPDATE_IGNORE_FILE"
+      log_success "Added '$relative_path_to_home' to $XDG_UPDATE_IGNORE_FILE and skipped."
+    fi
+    ;;
+  8|backup)
+    if backup_file "$home_file"; then
+      if [[ "$DRY_RUN" != true ]]; then
+        cp -p "$repo_file" "$home_file"
+        log_success "Replaced $home_file with repository version"
+      fi
+    fi
+    ;;
+  esac
 }
 
 # Function to check if PKGBUILD has changed
@@ -644,23 +650,41 @@ build_packages() {
     log_info "Building package: $pkg_name"
     
     if [[ "$DRY_RUN" == true ]]; then
-      log_info "[DRY-RUN] Would build package in directory: $pkg_dir"
+      log_info "[DRY-RUN] Would build package in temp directory and clean up after"
       continue
     fi
 
-    cd "$pkg_dir" || {
-      log_error "Failed to change to package directory: $pkg_dir"
+    # Create temp build directory to avoid polluting the repo
+    local build_tmp_dir
+    build_tmp_dir=$(mktemp -d "/tmp/pkgbuild-${pkg_name}-XXXXXX")
+    
+    # Copy package files to temp directory (using /. to include hidden files)
+    cp -r "$pkg_dir"/. "$build_tmp_dir/" || {
+      log_error "Failed to copy package files to temp directory"
+      rm -rf "$build_tmp_dir"
       continue
     }
 
-    if makepkg -si --noconfirm; then
+    cd "$build_tmp_dir" || {
+      log_error "Failed to change to temp build directory: $build_tmp_dir"
+      rm -rf "$build_tmp_dir"
+      continue
+    }
+
+    if makepkg -sCi --noconfirm; then
       log_success "Successfully built and installed $pkg_name"
-      ((rebuilt_packages++))
+      ((rebuilt_packages++)) || true
     else
       log_error "Failed to build package $pkg_name"
     fi
 
+    # Clean up temp build directory
     cd "$REPO_ROOT" || log_die "Failed to return to repository directory"
+    rm -rf "$build_tmp_dir"
+    log_info "Cleaned up temp build directory"
+    
+    # Also clean any old build artifacts in the original package directory
+    rm -rf "${pkg_dir}/src" "${pkg_dir}/pkg" "${pkg_dir}"/*.pkg.tar.* 2>/dev/null || true
   done
 
   if [[ $rebuilt_packages -eq 0 ]]; then
@@ -852,8 +876,12 @@ if git remote get-url origin &>/dev/null; then
         fi
       fi
     else
-      log_warning "Failed to pull changes from remote. Continuing with local repository..."
-      log_info "You may need to resolve conflicts manually later."
+      log_warning "Failed to pull changes from remote."
+      log_warning "This could be due to:"
+      log_warning "  - Network issues"
+      log_warning "  - Uncommitted local changes (use 'git stash' first)"
+      log_warning "  - Diverged history (may need 'git pull --rebase')"
+      log_info "Continuing with local repository state..."
     fi
   fi
 else
@@ -879,68 +907,70 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
   if [[ "$PKG_TOOLS_AVAILABLE" == true ]]; then
     if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
-      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdata/dist-arch). Skipping package management."
+      log_warning "No packages directory found (tried: dist-arch, arch-packages, sdata/dist-arch)."
+      log_warning "Skipping package management."
     else
-    changed_pkgbuilds=()
-    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
-      if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
-        pkg_name=$(basename "$pkg_dir")
-        if check_pkgbuild_changed "$pkg_dir"; then
-          changed_pkgbuilds+=("$pkg_name")
-        fi
-      fi
-    done
-
-    if [[ ${#changed_pkgbuilds[@]} -gt 0 ]]; then
-      log_info "Found ${#changed_pkgbuilds[@]} package(s) with changed PKGBUILDs: ${changed_pkgbuilds[*]}"
-      echo
-      echo "Package build options:"
-      echo "1) Build only packages with changed PKGBUILDs"
-      echo "2) List all packages and select which to build"
-      echo "3) Build all packages"
-      echo "4) Skip package building"
-      echo
-
-      if [[ "$NON_INTERACTIVE" == true ]]; then
-        pkg_choice="1"
-        log_info "Non-interactive mode: Using default package option: $pkg_choice"
-      elif safe_read "Choose an option (1-4): " pkg_choice "1"; then
-        if [[ "$VERBOSE" == true ]]; then
-          log_info "User selected package option: $pkg_choice"
-        fi
-      else
-        log_warning "Failed to read input. Skipping package building."
-        pkg_choice=""
-      fi
-
-      if [[ -n "$pkg_choice" ]]; then
-        case $pkg_choice in
-        1) build_packages "changed" ;;
-        2)
-          if list_packages; then
-            build_packages "select"
+      # Scan for changed PKGBUILDs
+      changed_pkgbuilds=()
+      for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
+        if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
+          pkg_name=$(basename "$pkg_dir")
+          if check_pkgbuild_changed "$pkg_dir"; then
+            changed_pkgbuilds+=("$pkg_name")
           fi
-          ;;
-        3) build_packages "all" ;;
-        4 | *) log_info "Skipping package building" ;;
-        esac
-      fi
-    else
-      log_info "No PKGBUILDs have changed since last update."
-      echo
-      if [[ "$NON_INTERACTIVE" == true ]]; then
-        check_anyway="N"
-        log_info "Non-interactive mode: Using default for check packages anyway: $check_anyway"
-      elif safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
-        if [[ "$VERBOSE" == true ]]; then
-          log_info "User chose to check packages anyway: $check_anyway"
+        fi
+      done
+
+      if [[ ${#changed_pkgbuilds[@]} -gt 0 ]]; then
+        log_info "Found ${#changed_pkgbuilds[@]} package(s) with changed PKGBUILDs: ${changed_pkgbuilds[*]}"
+        echo
+        echo "Package build options:"
+        echo "1) Build only packages with changed PKGBUILDs"
+        echo "2) List all packages and select which to build"
+        echo "3) Build all packages"
+        echo "4) Skip package building"
+        echo
+
+        if [[ "$NON_INTERACTIVE" == true ]]; then
+          pkg_choice="1"
+          log_info "Non-interactive mode: Using default package option: $pkg_choice"
+        elif safe_read "Choose an option (1-4): " pkg_choice "1"; then
+          if [[ "$VERBOSE" == true ]]; then
+            log_info "User selected package option: $pkg_choice"
+          fi
+        else
+          log_warning "Failed to read input. Skipping package building."
+          pkg_choice=""
+        fi
+
+        if [[ -n "$pkg_choice" ]]; then
+          case $pkg_choice in
+            1) build_packages "changed" ;;
+            2)
+              if list_packages; then
+                build_packages "select"
+              fi
+              ;;
+            3) build_packages "all" ;;
+            4|*) log_info "Skipping package building" ;;
+          esac
         fi
       else
-        log_warning "Failed to read input. Skipping package management."
-        check_anyway=""
-      fi
+        log_info "No PKGBUILDs have changed since last update."
+        echo
+        if [[ "$NON_INTERACTIVE" == true ]]; then
+          check_anyway="N"
+          log_info "Non-interactive mode: Using default for check packages anyway: $check_anyway"
+        elif safe_read "Do you want to check and build packages anyway? (y/N): " check_anyway "N"; then
+          if [[ "$VERBOSE" == true ]]; then
+            log_info "User chose to check packages anyway: $check_anyway"
+          fi
+        else
+          log_warning "Failed to read input. Skipping package management."
+          check_anyway=""
+        fi
 
-      if [[ -n "$check_anyway" && "$check_anyway" =~ ^[Yy]$ ]]; then
+        if [[ -n "$check_anyway" && "$check_anyway" =~ ^[Yy]$ ]]; then
           if list_packages; then
             echo
             echo "Package build options:"
@@ -950,9 +980,9 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
 
             if safe_read "Choose an option (1-3): " build_choice "3"; then
               case $build_choice in
-              1) build_packages "select" ;;
-              2) build_packages "all" ;;
-              3 | *) log_info "Skipping package building" ;;
+                1) build_packages "select" ;;
+                2) build_packages "all" ;;
+                3|*) log_info "Skipping package building" ;;
               esac
             else
               log_info "Skipping package building"
@@ -963,10 +993,10 @@ if [[ "$CHECK_PACKAGES" == true ]]; then
         fi
       fi
     fi
-  else
-    log_header "Package Management"
-    log_info "Package checking disabled. Use -p or --packages flag to enable package management."
   fi
+else
+  log_header "Package Management"
+  log_info "Package checking disabled. Use -p or --packages flag to enable package management."
 fi
 
 # Step 3: Update configuration files
@@ -1023,7 +1053,7 @@ if [[ "$process_files" == true ]]; then
 
     ensure_directory "$home_dir_path" || continue
 
-    while IFS= read -r -d '' repo_file; do
+    while IFS= read -r -d '' -u 9 repo_file; do
       # Calculate relative path from the repo source directory
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
@@ -1077,7 +1107,7 @@ if [[ "$process_files" == true ]]; then
         fi
         ((files_created++))
       fi
-    done < <(get_changed_files "$repo_dir_path") || true
+    done 9< <(get_changed_files "$repo_dir_path") || true
     echo
   done
 
@@ -1137,11 +1167,11 @@ if [[ "$process_files" == true ]]; then
   echo "- New files created: $files_created"
 fi
 
-if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
+if [[ ! -f "$XDG_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
   echo "  - Repository ignore: ${REPO_ROOT}/.updateignore"
-  echo "  - User ignore: ~/.updateignore"
+  echo "  - User ignore: ${XDG_UPDATE_IGNORE_FILE}"
   echo
   echo "Example patterns:"
   echo "  *.log                 # Ignore all .log files"

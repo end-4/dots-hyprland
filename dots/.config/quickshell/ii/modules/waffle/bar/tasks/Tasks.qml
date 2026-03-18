@@ -9,8 +9,8 @@ MouseArea {
     id: root
 
     Layout.fillHeight: true
-    implicitHeight: row.implicitHeight
-    implicitWidth: row.implicitWidth
+    implicitHeight: appRow.implicitHeight
+    implicitWidth: appRow.implicitWidth
     hoverEnabled: true
 
     function showPreviewPopup(appEntry, button) {
@@ -21,31 +21,31 @@ MouseArea {
         animation: Looks.transition.move.createObject(this)
     }
 
-    // Apps row
-    RowLayout {
-        id: row
+    WListView {
+        id: appRow
         anchors {
             top: parent.top
             bottom: parent.bottom
         }
+        orientation: Qt.Horizontal
         spacing: 0
+        implicitWidth: contentWidth
+        clip: true
+        interactive: false
+        // TODO: Include only apps (and windows) in current workspace only | wait, does that even make sense in a Hyprland workflow?
+        model: ScriptModel {
+            objectProp: "appId"
+            values: TaskbarApps.apps.filter(app => app.appId !== "SEPARATOR")
+        }
+        delegate: TaskAppButton {
+            required property var modelData
+            appEntry: modelData
 
-        Repeater {
-            // TODO: Include only apps (and windows) in current workspace only | wait, does that even make sense in a Hyprland workflow?
-            model: ScriptModel {
-                objectProp: "appId"
-                values: TaskbarApps.apps.filter(app => app.appId !== "SEPARATOR")
+            onHoverPreviewRequested: {
+                root.showPreviewPopup(appEntry, this);
             }
-            delegate: TaskAppButton {
-                required property var modelData
-                appEntry: modelData
-
-                onHoverPreviewRequested: {
-                    root.showPreviewPopup(appEntry, this)
-                }
-                onHoverPreviewDismissed: {
-                    previewPopup.close()
-                }
+            onHoverPreviewDismissed: {
+                previewPopup.close();
             }
         }
     }
@@ -56,5 +56,4 @@ MouseArea {
         tasksHovered: root.containsMouse
         anchor.window: root.QsWindow.window
     }
-
 }

@@ -67,7 +67,8 @@ BodyRectangle {
                 locale: root.locale
                 verticalPadding: 2
                 buttonSize: 41 // ???
-                buttonSpacing: 1
+                buttonSpacing: 6
+                buttonVerticalSpacing: 1
                 Layout.fillWidth: true
                 delegate: DayButton {}
             }
@@ -78,7 +79,7 @@ BodyRectangle {
         id: dayButton
         required property var model
         checked: model.today
-        enabled: hovered || calendarView.scrolling || checked || model.month === calendarView.focusedMonth
+        enabled: hovered || checked || model.month === calendarView.focusedMonth
         implicitWidth: calendarView.buttonSize
         implicitHeight: calendarView.buttonSize
         radius: height / 2
@@ -90,7 +91,7 @@ BodyRectangle {
                 anchors.centerIn: parent
                 text: dayButton.model.day
                 color: dayButton.fgColor
-                font.pixelSize: Looks.font.pixelSize.large
+                font.pixelSize: Looks.font.pixelSize.larger
             }
         }
     }

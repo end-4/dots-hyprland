@@ -111,6 +111,14 @@ ApiStrategy {
                 return ({})
             }
 
+            // Error response handling
+            if (dataJson.error) {
+                const errorMsg = `**Error ${dataJson.error.code}**: ${dataJson.error.message}`;
+                message.rawContent += errorMsg;
+                message.content += errorMsg;
+                return { finished: true };
+            }
+
             // No candidates?
             if (!dataJson.candidates) return {};
             

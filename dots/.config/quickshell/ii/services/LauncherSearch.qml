@@ -4,6 +4,7 @@ import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
 import QtQuick
+import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
 
@@ -30,6 +31,34 @@ Singleton {
         }
         return acc;
     }, []).sort()
+
+    // Load user action scripts from ~/.config/illogical-impulse/actions/
+    // Uses FolderListModel to auto-reload when scripts are added/removed
+    property var userActionScripts: {
+        const actions = [];
+        for (let i = 0; i < userActionsFolder.count; i++) {
+            const fileName = userActionsFolder.get(i, "fileName");
+            const filePath = userActionsFolder.get(i, "filePath");
+            if (fileName && filePath) {
+                const actionName = fileName.replace(/\.[^/.]+$/, ""); // strip extension
+                actions.push({
+                    action: actionName,
+                    execute: ((path) => (args) => {
+                        Quickshell.execDetached([path, ...(args ? args.split(" ") : [])]);
+                    })(FileUtils.trimFileProtocol(filePath.toString()))
+                });
+            }
+        }
+        return actions;
+    }
+
+    FolderListModel {
+        id: userActionsFolder
+        folder: Qt.resolvedUrl(Directories.userActions)
+        showDirs: false
+        showHidden: false
+        sortField: FolderListModel.Name
+    }
 
     property var searchActions: [
         {
@@ -89,6 +118,9 @@ Singleton {
             }
         },
     ]
+
+    // Combined built-in and user actions
+    property var allActions: searchActions.concat(userActionScripts)
 
     property string mathResult: ""
     property bool clipboardWorkSafetyActive: {
@@ -273,7 +305,7 @@ Singleton {
                 Qt.openUrlExternally(url);
             }
         });
-        const launcherActionObjects = root.searchActions.map(action => {
+        const launcherActionObjects = root.allActions.map(action => {
             const actionString = `${Config.options.search.prefix.action}${action.action}`;
             if (actionString.startsWith(root.query) || root.query.startsWith(actionString)) {
                 return resultComp.createObject(null, {

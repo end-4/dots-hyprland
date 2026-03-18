@@ -126,7 +126,7 @@ Button {
                     opacity: root.showActions ? 1 : 0
                     visible: opacity > 0
                     radius: Appearance.rounding.small
-                    color: Appearance.colors.colSurfaceContainer
+                    color: Appearance.m3colors.m3surfaceContainer
                     implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
                     implicitWidth: contextMenuColumnLayout.implicitWidth
 

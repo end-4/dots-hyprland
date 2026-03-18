@@ -64,7 +64,7 @@ function showfun(){
 function pause(){
   if [ ! "$ask" == "false" ];then
     printf "${STY_FAINT}${STY_SLANT}"
-    local p; read -p "(Ctrl-C to abort, others to proceed)" p
+    local p; read -p "(Ctrl-C to abort, Enter to proceed)" p
     printf "${STY_RST}"
   fi
 }
@@ -119,8 +119,8 @@ function sudo_init_keepalive(){
 # Stop the sudo keepalive background process
 function sudo_stop_keepalive(){
   if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
-    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
-    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
     SUDO_KEEPALIVE_PID=""
   fi
 }

@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import Quickshell.Hyprland
 
 /**
@@ -20,6 +21,30 @@ Singleton {
     property var activeWorkspace: null
     property var monitors: []
     property var layers: ({})
+
+    // Convenient stuff
+
+    function toplevelsForWorkspace(workspace) {
+        return ToplevelManager.toplevels.values.filter(toplevel => {
+            const address = `0x${toplevel.HyprlandToplevel?.address}`;
+            var win = HyprlandData.windowByAddress[address];
+            return win?.workspace?.id === workspace;
+        })
+    }
+
+    function hyprlandClientsForWorkspace(workspace) {
+        return root.windowList.filter(win => win.workspace.id === workspace);
+    }
+
+    function clientForToplevel(toplevel) {
+        if (!toplevel || !toplevel.HyprlandToplevel) {
+            return null;
+        }
+        const address = `0x${toplevel?.HyprlandToplevel?.address}`;
+        return root.windowByAddress[address];
+    }
+
+    // Internals
 
     function updateWindowList() {
         getClients.running = true;
@@ -63,6 +88,7 @@ Singleton {
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
+            if (["openlayer", "closelayer", "screencast"].includes(event.name)) return;
             updateAll()
         }
     }
@@ -113,7 +139,9 @@ Singleton {
         stdout: StdioCollector {
             id: workspacesCollector
             onStreamFinished: {
-                root.workspaces = JSON.parse(workspacesCollector.text);
+                var rawWorkspaces = JSON.parse(workspacesCollector.text);
+                // Filter out invalid workspace ids (e.g. lock-screen temp workspace 2147483647 - N)
+                root.workspaces = rawWorkspaces.filter(ws => ws.id >= 1 && ws.id <= 100);
                 let tempWorkspaceById = {};
                 for (var i = 0; i < root.workspaces.length; ++i) {
                     var ws = root.workspaces[i];

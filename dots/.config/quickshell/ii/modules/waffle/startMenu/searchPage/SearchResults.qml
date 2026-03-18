@@ -15,6 +15,7 @@ RowLayout {
     id: root
 
     property int maxResultsPerCategory: 4
+    property int resultLimit: 20
     property StartMenuContext context
     property int currentIndex: context.currentIndex
     onCurrentIndexChanged: {
@@ -99,21 +100,33 @@ RowLayout {
 
             // Collect max 4 per category
             var categorizedResults = [];
-            categories.forEach(category => {
+            let categoriesArray = Array.from(categories);
+            let totalCount = 0;
+            for (let c = 0; c < categoriesArray.length; c++) {
+                let category = categoriesArray[c];
                 let count = 0;
                 for (let i = 0; i < allResults.length; i++) {
                     if (allResults[i].type === category) {
+                        if (totalCount >= root.resultLimit) {
+                            break;
+                        }
                         const entry = allResults[i];
                         const tweakedEntry = searchResultComp.createObject(null, Object.assign({}, entry));
-                        tweakedEntry.category = categorizedResults.length === 0 ? Translation.tr("Best match") : entry.type
+                        tweakedEntry.category = categorizedResults.length === 0 ? Translation.tr("Best match") : entry.type;
+
                         categorizedResults.push(tweakedEntry); // Section header
                         count++;
+                        totalCount++;
                         if (count >= root.maxResultsPerCategory) {
                             break;
                         }
                     }
                 }
-            });
+                if (totalCount >= root.resultLimit) {
+                    break;
+                }
+            }
+            
             // print(JSON.stringify(categorizedResults, null, 2));
             return categorizedResults;
         }
