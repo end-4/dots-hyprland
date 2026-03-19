@@ -15,3 +15,7 @@ __pycache__/
 
 # Emacs auto backup file
 *~
+
+# Agent and IDE directories
+.agent/
+.vscode/
