@@ -42,16 +42,11 @@ Singleton {
     }
 
     function togglePin(itemId) {
-        if (root.isPinned(itemId)) {
-            if (!root.invertPins)
-                unpin(itemId);
-            else
-                pin(itemId);
+        var pins = Config.options.tray.pinnedItems;
+        if (pins.includes(itemId)) {
+            unpin(itemId)
         } else {
-            if (!root.invertPins)
-                pin(itemId);
-            else
-                unpin(itemId);
+            pin(itemId)
         }
     }
 
