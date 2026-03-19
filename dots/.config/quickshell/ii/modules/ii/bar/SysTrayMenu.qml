@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -184,12 +186,8 @@ PopupWindow {
             Layout.bottomMargin: 0
             Layout.fillWidth: true
 
-            visible: root.trayItemId !== undefined && root.trayItemId.length > 0
-
-            releaseAction: () => {
-                TrayService.togglePin(root.trayItemId);
-                root.close();
-            }
+            visible: root.trayItemId !== undefined && root.trayItemId.length > 0 && stackView.depth === 1
+            releaseAction: () => TrayService.togglePin(root.trayItemId);
 
             contentItem: RowLayout {
                 anchors {
