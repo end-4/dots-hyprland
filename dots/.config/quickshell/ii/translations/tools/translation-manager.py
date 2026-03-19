@@ -15,6 +15,11 @@ from typing import Dict, Set, List, Tuple
 import tempfile
 import subprocess
 
+# Add path validation utility - go up two levels from translations/tools to ii, then into scripts/utils
+_scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'scripts')
+sys.path.insert(0, _scripts_dir)
+from utils.path_utils import validate_path
+
 class TranslationManager:
     def __init__(self, translations_dir: str, source_dir: str, yes_mode: bool = False):
         self.translations_dir = Path(translations_dir)
@@ -229,16 +234,12 @@ def main():
     
     args = parser.parse_args()
     
-    # Convert to absolute paths
-    translations_dir = os.path.abspath(args.translations_dir)
-    source_dir = os.path.abspath(args.source_dir)
-    
-    print(f"Translation directory: {translations_dir}")
-    print(f"Source code directory: {source_dir}")
-    
-    # Check if directories exist
-    if not os.path.exists(source_dir):
-        print(f"Error: Source code directory does not exist: {source_dir}")
+    # Convert to absolute paths and validate
+    try:
+        translations_dir = validate_path(os.path.abspath(args.translations_dir))
+        source_dir = validate_path(os.path.abspath(args.source_dir), must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid path - {e}")
         sys.exit(1)
     
     # Create manager

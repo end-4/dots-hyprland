@@ -25,7 +25,7 @@ Singleton {
     property bool isLowAndNotCharging: isLow && !isCharging
     property bool isCriticalAndNotCharging: isCritical && !isCharging
     property bool isSuspendingAndNotCharging: allowAutomaticSuspend && isSuspending && !isCharging
-    property bool isFullAndCharging: isFull && isCharging
+    property bool isFullAndCharging: isFull && isPluggedIn
 
     property real energyRate: UPower.displayDevice.changeRate
     property real timeToEmpty: UPower.displayDevice.timeToEmpty

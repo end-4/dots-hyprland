@@ -1,9 +1,19 @@
 import re
 import os
+import sys
+
+# Add the scripts directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.path_utils import validate_file_path
 
 def get_colors_from_scss(scss_file):
     colors = {}
-    with open(scss_file, 'r') as file:
+    try:
+        validated_path = validate_file_path(scss_file, must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid scss file path - {e}", file=sys.stderr)
+        sys.exit(1)
+    with open(validated_path, 'r') as file:
         for line in file:
             match = re.match(r'\$(\w+):\s*(#[0-9A-Fa-f]{6});', line)
             if match:
@@ -11,8 +21,18 @@ def get_colors_from_scss(scss_file):
     return colors
 
 def update_config_colors(config_file, colors, mappings):
-    with open(config_file, 'r') as file:
-        config_content = file.read()
+    try:
+        validated_path = validate_file_path(config_file)
+    except ValueError as e:
+        print(f"Error: Invalid config file path - {e}", file=sys.stderr)
+        sys.exit(1)
+        
+    # Read file (create if doesn't exist)
+    try:
+        with open(validated_path, 'r') as file:
+            config_content = file.read()
+    except FileNotFoundError:
+        config_content = ""
 
     for key, variable in mappings.items():
         if variable in colors:
@@ -24,7 +44,7 @@ def update_config_colors(config_file, colors, mappings):
             else:
                 config_content += f"\n{key}={color}"
 
-    with open(config_file, 'w') as file:
+    with open(validated_path, 'w') as file:
         file.write(config_content)
 
 if __name__ == "__main__":

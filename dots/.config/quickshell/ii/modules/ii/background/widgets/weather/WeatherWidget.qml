@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs
 import qs.services
 import qs.modules.common
@@ -6,53 +7,105 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.modules.common.widgets.widgetCanvas
 import qs.modules.ii.background.widgets
+import qs.modules.ii.bar.weather
 
 AbstractBackgroundWidget {
     id: root
 
     configEntryName: "weather"
+    needsColText: true
 
-    implicitHeight: backgroundShape.implicitHeight
-    implicitWidth: backgroundShape.implicitWidth
+    implicitHeight: card.implicitHeight
+    implicitWidth: card.implicitWidth
+
+    // Secondary color with slightly less contrast for subtitles
+    property color colTextSecondary: ColorUtils.transparentize(colText, 0.3)
 
     StyledDropShadow {
-        target: backgroundShape
+        target: card
     }
 
-    MaterialShape {
-        id: backgroundShape
-        anchors.fill: parent
-        shape: MaterialShape.Shape.Pill
-        color: Appearance.colors.colPrimaryContainer
-        implicitSize: 200
+    // Card background with transparent/adaptive styling
+    Rectangle {
+        id: card
+        implicitWidth: 180
+        implicitHeight: contentLayout.implicitHeight + 24
+        radius: Appearance.rounding.large
+        color: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer, 0.5)
+        border.width: 1
+        border.color: ColorUtils.transparentize(root.colText, 0.8)
+        layer.enabled: false
 
-        StyledText {
-            font {
-                pixelSize: 80
-                family: Appearance.font.family.expressive
-                weight: Font.Medium
-            }
-            color: Appearance.colors.colPrimary
-            text: Weather.data?.temp.substring(0,Weather.data?.temp.length - 1) ?? "--°"
+        ColumnLayout {
+            id: contentLayout
             anchors {
-                right: parent.right
-                top: parent.top
-                rightMargin: 16
-                topMargin: 20
+                fill: parent
+                margins: 12
+            }
+            spacing: 8
+
+            // Weather icon + Temperature row
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+
+                MaterialSymbol {
+                    iconSize: 48
+                    color: root.colText
+                    text: Icons.getWeatherIcon(Weather.data.wCode) ?? "cloud"
+                }
+
+                StyledText {
+                    font {
+                        pixelSize: 42
+                        family: Appearance.font.family.expressive
+                        weight: Font.Medium
+                    }
+                    color: root.colText
+                    text: Weather.data?.temp ?? "--°"
+                }
+            }
+
+            // Weather condition
+            StyledText {
+                font {
+                    pixelSize: Appearance.font.pixelSize.normal
+                    weight: Font.Medium
+                }
+                color: root.colTextSecondary
+                text: Weather.data?.wText ?? "Loading..."
+            }
+
+            // Location row
+            RowLayout {
+                spacing: 4
+
+                MaterialSymbol {
+                    iconSize: Appearance.font.pixelSize.small
+                    color: root.colTextSecondary
+                    text: "location_on"
+                }
+
+                StyledText {
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: root.colTextSecondary
+                    text: Weather.data?.city ?? "Unknown"
+                }
             }
         }
 
-        MaterialSymbol {
-            iconSize: 80
-            color: Appearance.colors.colOnPrimaryContainer
-            text: Icons.getWeatherIcon(Weather.data.wCode) ?? "cloud"
-            anchors {
-                left: parent.left
-                bottom: parent.bottom
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton
+            propagateComposedEvents: true
 
-                leftMargin: 16
-                bottomMargin: 20
-            }
+            onEntered: weatherPopup.open()
+            onExited: weatherPopup.close()
+        }
+
+        WeatherPopup {
+            id: weatherPopup
         }
     }
 }

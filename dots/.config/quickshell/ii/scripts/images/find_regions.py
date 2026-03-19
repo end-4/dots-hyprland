@@ -5,6 +5,11 @@ import cv2
 import json
 import numpy as np
 import sys
+import os
+
+# Add the scripts directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.path_utils import validate_file_path
 
 DEFAULT_IMAGE_PATH = '/tmp/quickshell/media/screenshot/image'
 
@@ -94,8 +99,15 @@ def main():
     parser.add_argument('--hyprctl', action='store_true', help='Mimics hyprctl\'s window output, like {"at": [x, y], "size": [w, h]}')
     args = parser.parse_args()
 
+    # Validate image path
+    try:
+        validated_image = validate_file_path(args.image, must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid image path - {e}", file=sys.stderr)
+        sys.exit(1)
+
     regions, image = find_regions(
-        args.image,
+        validated_image,
         min_width=args.min_width,
         min_height=args.min_height,
         max_width=args.max_width,
@@ -113,7 +125,12 @@ def main():
         regions = [{"at": [r['x'], r['y']], "size": [r['width'], r['height']]} for r in regions]
     print(json.dumps(regions))
     if args.debug_output:
-        draw_regions(image, regions, args.debug_output)
+        try:
+            validated_debug_output = validate_file_path(args.debug_output)
+        except ValueError as e:
+            print(f"Error: Invalid debug output path - {e}", file=sys.stderr)
+            sys.exit(1)
+        draw_regions(image, regions, validated_debug_output)
 
 if __name__ == '__main__':
     main()

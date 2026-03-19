@@ -44,6 +44,7 @@ Singleton {
         temp: 0,
         tempFeelsLike: 0,
         lastRefresh: 0,
+        wText: ""
     })
 
     function refineData(data) {
@@ -54,6 +55,7 @@ Singleton {
         temp.sunset = data?.astronomy?.sunset || "0.0";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
+        temp.wText = data?.current?.weatherDesc?.[0]?.value || "Unknown";
         temp.city = data?.location?.areaName[0]?.value || "City";
         temp.temp = "";
         temp.tempFeelsLike = "";

@@ -29,6 +29,7 @@ StyledImage {
     mipmap: false
 
     opacity: status === Image.Ready ? 1 : 0
+    visible: status !== Image.Error
     Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
@@ -42,8 +43,18 @@ StyledImage {
         id: thumbnailGeneration
         command: {
             const maxSize = Images.thumbnailSizes[root.thumbnailSizeName];
-            return ["bash", "-c", 
-                `[ -f '${FileUtils.trimFileProtocol(root.thumbnailPath)}' ] && exit 0 || { magick '${root.sourcePath}' -resize ${maxSize}x${maxSize} '${FileUtils.trimFileProtocol(root.thumbnailPath)}' && exit 1; }`
+            const thumbPath = FileUtils.trimFileProtocol(root.thumbnailPath);
+            const srcPath = root.sourcePath;
+            const isVideo = Images.isValidVideoByName(srcPath);
+            if (isVideo) {
+                // Use ffmpeg for video thumbnails
+                return ["bash", "-c",
+                    `[ -f '${thumbPath}' ] && exit 0 || { mkdir -p "$(dirname '${thumbPath}')" && ffmpeg -y -i '${srcPath}' -ss 00:00:01 -vframes 1 -vf "scale=${maxSize}:${maxSize}:force_original_aspect_ratio=decrease" '${thumbPath}' 2>/dev/null && exit 1; }`
+                ]
+            }
+            // Use magick for image thumbnails
+            return ["bash", "-c",
+                `[ -f '${thumbPath}' ] && exit 0 || { mkdir -p "$(dirname '${thumbPath}')" && magick '${srcPath}' -resize ${maxSize}x${maxSize} '${thumbPath}' && exit 1; }`
             ]
         }
         onExited: (exitCode, exitStatus) => {

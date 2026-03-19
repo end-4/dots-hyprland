@@ -7,6 +7,11 @@ import cv2
 import numpy as np
 import argparse
 import json
+import sys
+
+# Add the scripts directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.path_utils import validate_file_path
 
 def center_crop(img, target_w, target_h):
     h, w = img.shape[:2]
@@ -324,9 +329,16 @@ def main():
     parser.add_argument("--busiest", action="store_true", help="Find the busiest region instead of the least busy")
     args = parser.parse_args()
 
+    # Validate image path
+    try:
+        validated_image_path = validate_file_path(args.image_path, must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid image path - {e}", file=sys.stderr)
+        sys.exit(1)
+
     if args.largest_region:
         center, size, var = find_largest_region(
-            args.image_path,
+            validated_image_path,
             screen_width=args.screen_width,
             screen_height=args.screen_height,
             verbose=args.verbose,
@@ -339,14 +351,14 @@ def main():
         )
         if center:
             if args.visual_output:
-                draw_largest_region(args.image_path, center, size, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
+                draw_largest_region(validated_image_path, center, size, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
             # Extract dominant color
             cx, cy = center
             region_w, region_h = size
             x1 = cx - region_w // 2
             y1 = cy - region_h // 2
             dominant_color = get_dominant_color(
-                args.image_path, x1, y1, region_w, region_h,
+                validated_image_path, x1, y1, region_w, region_h,
                 screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode
             )
             dominant_color_hex = '#{:02x}{:02x}{:02x}'.format(*dominant_color)
@@ -363,7 +375,7 @@ def main():
         return
 
     coords, variance = find_least_busy_region(
-        args.image_path,
+        validated_image_path,
         region_width=args.width,
         region_height=args.height,
         screen_width=args.screen_width,
@@ -376,12 +388,12 @@ def main():
         busiest=args.busiest
     )
     if args.visual_output:
-        draw_region(args.image_path, coords, region_width=args.width, region_height=args.height, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
+        draw_region(validated_image_path, coords, region_width=args.width, region_height=args.height, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
     # Output JSON with center point
     center_x = coords[0] + args.width // 2
     center_y = coords[1] + args.height // 2
     dominant_color = get_dominant_color(
-        args.image_path, coords[0], coords[1], args.width, args.height,
+        validated_image_path, coords[0], coords[1], args.width, args.height,
         screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode
     )
     dominant_color_hex = '#{:02x}{:02x}{:02x}'.format(*dominant_color)

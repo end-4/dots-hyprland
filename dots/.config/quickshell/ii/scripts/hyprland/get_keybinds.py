@@ -2,8 +2,13 @@
 import argparse
 import re
 import os
+import sys
 from os.path import expandvars as os_expandvars
 from typing import Dict, List
+
+# Add the scripts directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.path_utils import validate_file_path
 
 TITLE_REGEX = "#+!"
 HIDE_COMMENT = "[hidden]"
@@ -36,9 +41,15 @@ class Section(dict):
 
 
 def read_content(path: str) -> str:
-    if (not os.access(os.path.expanduser(os.path.expandvars(path)), os.R_OK)):
-        return ("error")
-    with open(os.path.expanduser(os.path.expandvars(path)), "r") as file:
+    expanded_path = os.path.expanduser(os.path.expandvars(path))
+    try:
+        validated_path = validate_file_path(expanded_path, must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid path - {e}", file=sys.stderr)
+        return "error"
+    if not os.access(validated_path, os.R_OK):
+        return "error"
+    with open(validated_path, "r") as file:
         return file.read()
 
 

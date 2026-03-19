@@ -2,8 +2,14 @@
 import argparse
 import math
 import json
+import os
+import sys
 from PIL import Image
 from materialyoucolor.quantize import QuantizeCelebi
+
+# Add the scripts directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.path_utils import validate_file_path
 from materialyoucolor.score.score import Score
 from materialyoucolor.hct import Hct
 from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
@@ -62,7 +68,12 @@ darkmode = (args.mode == 'dark')
 transparent = (args.transparency == 'transparent')
 
 if args.path is not None:
-    image = Image.open(args.path)
+    try:
+        validated_path = validate_file_path(args.path, must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid path - {e}", file=sys.stderr)
+        sys.exit(1)
+    image = Image.open(validated_path)
 
     if image.format == "GIF":
         image.seek(1)
@@ -77,7 +88,12 @@ if args.path is not None:
     argb = Score.score(colors)[0]
 
     if args.cache is not None:
-        with open(args.cache, 'w') as file:
+        try:
+            validated_cache = validate_file_path(args.cache)
+        except ValueError as e:
+            print(f"Error: Invalid cache path - {e}", file=sys.stderr)
+            sys.exit(1)
+        with open(validated_cache, 'w') as file:
             file.write(argb_to_hex(argb))
     hct = Hct.from_int(argb)
     if(args.smart):
@@ -133,7 +149,12 @@ else:
 
 # Terminal Colors
 if args.termscheme is not None:
-    with open(args.termscheme, 'r') as f:
+    try:
+        validated_termscheme = validate_file_path(args.termscheme, allowed_extensions=['.json'], must_exist=True)
+    except ValueError as e:
+        print(f"Error: Invalid termscheme path - {e}", file=sys.stderr)
+        sys.exit(1)
+    with open(validated_termscheme, 'r') as f:
         json_termscheme = f.read()
     term_source_colors = json.loads(json_termscheme)['dark' if darkmode else 'light']
 

@@ -65,23 +65,56 @@ ContentPage {
             Layout.fillWidth: true
 
             Item {
+                id: wallpaperPreviewContainer
                 implicitWidth: 340
                 implicitHeight: 200
-                
-                StyledImage {
-                    id: wallpaperPreview
+
+                property bool isVideo: Images.isValidVideoByName(Config.options.background.wallpaperPath)
+
+                // Image preview (for static images)
+                Loader {
                     anchors.fill: parent
-                    sourceSize.width: parent.implicitWidth
-                    sourceSize.height: parent.implicitHeight
-                    fillMode: Image.PreserveAspectCrop
-                    source: Config.options.background.wallpaperPath
-                    cache: false
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Rectangle {
-                            width: 360
-                            height: 200
-                            radius: Appearance.rounding.normal
+                    active: !wallpaperPreviewContainer.isVideo
+                    sourceComponent: StyledImage {
+                        id: wallpaperPreview
+                        anchors.fill: parent
+                        sourceSize.width: wallpaperPreviewContainer.implicitWidth
+                        sourceSize.height: wallpaperPreviewContainer.implicitHeight
+                        fillMode: Image.PreserveAspectCrop
+                        source: Config.options.background.wallpaperPath
+                        cache: false
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: 360
+                                height: 200
+                                radius: Appearance.rounding.normal
+                            }
+                        }
+                    }
+                }
+
+                // Video thumbnail preview (for videos)
+                Loader {
+                    anchors.fill: parent
+                    active: wallpaperPreviewContainer.isVideo
+                    sourceComponent: ThumbnailImage {
+                        id: videoThumbnailPreview
+                        anchors.fill: parent
+                        sourcePath: Config.options.background.wallpaperPath
+                        generateThumbnail: true
+                        fillMode: Image.PreserveAspectCrop
+                        // Use large thumbnail size (256) since that's what we generate
+                        sourceSize.width: 256
+                        sourceSize.height: 256
+                        cache: false
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: 360
+                                height: 200
+                                radius: Appearance.rounding.normal
+                            }
                         }
                     }
                 }
@@ -224,6 +257,9 @@ ContentPage {
             checked: Config.options.appearance.transparency.enable
             onCheckedChanged: {
                 Config.options.appearance.transparency.enable = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Might look ass. Unsupported.")
             }
         }
     }

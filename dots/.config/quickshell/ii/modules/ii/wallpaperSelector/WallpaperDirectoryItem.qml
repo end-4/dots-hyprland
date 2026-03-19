@@ -10,7 +10,7 @@ MouseArea {
     id: root
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
-    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
+    property bool useThumbnail: Images.isValidMediaByName(fileModelData.fileName)
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -104,6 +104,20 @@ MouseArea {
                         fileModelData: root.fileModelData
                         sourceSize.width: wallpaperItemColumnLayout.width
                         sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
+                    }
+                }
+                
+                // Fallback placeholder when icon fails to load
+                Rectangle {
+                    anchors.fill: parent
+                    radius: Appearance.rounding.small
+                    color: Appearance.colors.colSurfaceContainerHigh
+                    visible: iconLoader.active && iconLoader.item && iconLoader.item.status === Image.Error
+                    
+                    Text {
+                        anchors.centerIn: parent
+                        text: root.isDirectory ? "📁" : "📄"
+                        font.pixelSize: parent.height * 0.4
                     }
                 }
             }
