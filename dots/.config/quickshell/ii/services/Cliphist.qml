@@ -13,7 +13,7 @@ Singleton {
     property string cliphistBinary: "cliphist"
     property real pasteDelay: 0.05
     property string pressPasteCommand: "ydotool key -d 1 29:1 47:1 47:0 29:0"
-    property bool levenshteinSearch: Config.options?.search.levenshtein ?? false
+    property bool levenshteinSearch: (Config.options?.search.levenshtein ?? false) || (Config.options?.search.algorithm === "levenshtein")
     property real scoreThreshold: 0.2
     property list<string> entries: []
     readonly property var preparedEntries: entries.map(a => ({

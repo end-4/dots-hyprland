@@ -263,7 +263,10 @@ Singleton {
                 return guess;
         }
 
-        const nameSearchResults = root.fuzzyQuery(str);
+        const nameSearchResults = Fuzzy.go(str, preppedNames, {
+            all: true,
+            key: "name"
+        }).map(r => r.obj.entry);
         if (nameSearchResults.length > 0) {
             const guess = nameSearchResults[0].icon;
             if (iconExists(guess))

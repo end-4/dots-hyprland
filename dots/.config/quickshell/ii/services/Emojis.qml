@@ -14,7 +14,7 @@ Singleton {
     id: root
     property string emojiScriptPath: `${Directories.config}/hypr/hyprland/scripts/fuzzel-emoji.sh`
 	property string lineBeforeData: "### DATA ###"
-    property bool levenshteinSearch: Config.options?.search.levenshtein ?? false
+    property bool levenshteinSearch: (Config.options?.search.levenshtein ?? false) || (Config.options?.search.algorithm === "levenshtein")
     property real scoreThreshold: 0.2
     property list<var> list
     readonly property var preparedEntries: list.map(a => ({
