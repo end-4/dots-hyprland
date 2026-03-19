@@ -42,7 +42,7 @@ WindowDialog {
                 right: parent.right
             }
             iconSize: Appearance.font.pixelSize.larger
-            buttonIcon: "lightbulb"
+            buttonIcon: "check"
             text: Translation.tr("Enable now")
             checked: Hyprsunset.active
             onCheckedChanged: {
@@ -102,14 +102,32 @@ WindowDialog {
                 right: parent.right
             }
             iconSize: Appearance.font.pixelSize.larger
-            buttonIcon: "flash_off"
-            text: Translation.tr("Enable")
+            buttonIcon: "filter"
+            text: Translation.tr("Content adjustment")
+            checked: HyprlandAntiFlashbangShader.enabled
+            onCheckedChanged: {
+                if (checked) HyprlandAntiFlashbangShader.enable()
+                else HyprlandAntiFlashbangShader.disable()
+            }
+            StyledToolTip {
+                text: Translation.tr("<b>Dims screen content</b> as needed.<br><br>Pros: Immediately responsive<br>Cons: Expensive and can hurt color accuracy<br><br><i>Uses a Hyprland screen shader</i>")
+            }
+        }
+
+        ConfigSwitch {
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            iconSize: Appearance.font.pixelSize.larger
+            buttonIcon: "light_mode"
+            text: Translation.tr("Brightness adjustment")
             checked: Config.options.light.antiFlashbang.enable
             onCheckedChanged: {
                 Config.options.light.antiFlashbang.enable = checked;
             }
             StyledToolTip {
-                text: Translation.tr("Example use case: eroge on one workspace, dark Discord window on another")
+                text: Translation.tr("Adapts the <b>display (physical screen) brightness</b><br><br>Pros: Less expensive, retains colors<br>Cons: Not immediately responsive<br><br><i>Adjusts display brightness after each Hyprland IPC event</i>")
             }
         }
     }
