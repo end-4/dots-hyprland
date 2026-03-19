@@ -178,7 +178,7 @@ HBarWidgetWithPopout {
                         bottomMargin: (parent.height - height) / 2
                     }
                     rotation: 180 * root.vertical
-                    spacing: 4
+                    spacing: 0
 
                     W.MaterialSymbol {
                         id: boltIcon
