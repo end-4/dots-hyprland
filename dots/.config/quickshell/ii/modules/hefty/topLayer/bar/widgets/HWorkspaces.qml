@@ -141,6 +141,7 @@ HBarWidgetContainer {
                 z: 3
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 hoverEnabled: true
                 property int hoverIndex: {
                     const position = root.vertical ? mouseY : mouseX;
@@ -150,8 +151,13 @@ HBarWidgetContainer {
                 function switchWorkspaceToHovered() {
                     Hyprland.dispatch(`workspace ${wsModel.getWorkspaceIdAt(hoverIndex)}`)
                 }
-                onPressed: switchWorkspaceToHovered()
-                onWheel: event => {
+                onPressed: (mouse) => {
+                    if (mouse.button == Qt.LeftButton)
+                        switchWorkspaceToHovered()
+                    else if (mouse.button == Qt.RightButton)
+                        GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+                }
+                onWheel: (event) => {
                     if (event.angleDelta.y < 0)
                         Hyprland.dispatch(`workspace r+1`);
                     else if (event.angleDelta.y > 0)
