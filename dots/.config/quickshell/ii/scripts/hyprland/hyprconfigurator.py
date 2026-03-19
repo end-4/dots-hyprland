@@ -2,6 +2,7 @@
 import argparse
 import re
 import os
+import tempfile
 
 def edit_hyprland_config(file_path, set_args, reset_args):
     try:
@@ -54,8 +55,19 @@ def edit_hyprland_config(file_path, set_args, reset_args):
                     new_lines[-1] += '\n'
                 new_lines.append(f"{key} = {value}\n")
                 
-    with open(file_path, 'w') as file:
-        file.writelines(new_lines)
+    dir_name = os.path.dirname(os.path.abspath(file_path))
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', dir=dir_name, delete=False) as temp_file:
+            temp_file.writelines(new_lines)
+            temp_path = temp_file.name
+        os.chmod(temp_path, os.stat(file_path).st_mode)
+        os.replace(temp_path, file_path)
+    except Exception as e:
+        if temp_path and os.path.exists(temp_path):
+            os.remove(temp_path)
+        print(f"Error saving file: {e}")
+        return
         
     for key in reset_set:
         print(f"Removed '{key}' from '{file_path}'")
