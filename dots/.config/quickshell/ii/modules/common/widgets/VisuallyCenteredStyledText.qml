@@ -11,6 +11,9 @@ Item {
     property alias verticalAlignment: textWidget.verticalAlignment
     property alias font: textWidget.font
     property alias color: textWidget.color
+    property alias elide: textWidget.elide
+    property alias wrapMode: textWidget.wrapMode
+    property alias animateChange: textWidget.animateChange
 
     // In many cases the baseline is a bit high to accomodate the dangling parts of "g" and "y", 
     // making most text (especiall number-only text) not well-balanced.
