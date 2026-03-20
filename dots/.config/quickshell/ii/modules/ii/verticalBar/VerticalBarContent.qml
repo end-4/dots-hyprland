@@ -67,12 +67,6 @@ Item { // Bar content region
             anchors.fill: parent
             spacing: 10
 
-            Bar.LeftSidebarButton { // Left sidebar button
-                Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: (Appearance.sizes.baseVerticalBarWidth - implicitWidth) / 2 + Appearance.sizes.hyprlandGapsOut
-                colBackground: barTopSectionMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-            }
-
             Item {
                 Layout.fillHeight: true
             }
