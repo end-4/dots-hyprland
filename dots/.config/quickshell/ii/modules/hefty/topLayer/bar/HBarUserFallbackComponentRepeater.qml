@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import qs.modules.common as C
 import qs.modules.common.widgets as W
@@ -48,6 +49,11 @@ Repeater {
                 context: root.context
                 property bool startSide: index === 0
                 property bool endSide: index === root.model.length - 1
+
+                Layout.fillWidth: item.Layout.fillWidth
+                Layout.fillHeight: item.Layout.fillHeight
+                Layout.maximumWidth: item.Layout.maximumWidth
+                Layout.maximumHeight: item.Layout.maximumHeight
             }
         }
 

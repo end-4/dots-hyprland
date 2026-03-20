@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import qs.modules.common as C
+import qs.modules.common.widgets as W
 
 Item {
     id: root
@@ -19,9 +20,16 @@ Item {
         id: leftSide
         anchors.left: parent.left
         anchors.top: parent.top
+        anchors.right: !root.vertical ? centerLeftSide.left : parent.right
+        anchors.bottom: !root.vertical ? parent.bottom : centerLeftSide.top
 
         HBarUserFallbackComponentRepeater {
             componentNames: root.leftWidgets
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
 
@@ -56,12 +64,20 @@ Item {
         id: rightSide
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        anchors.left: !root.vertical ? centerRightSide.right : parent.left
+        anchors.top: !root.vertical ? parent.top : centerRightSide.bottom
+
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
         HBarUserFallbackComponentRepeater {
             componentNames: root.rightWidgets
         }
     }
 
-    component Side: GridLayout {
+    component Side: W.BoxLayout {
         anchors {
             top: !root.vertical ? parent.top : undefined
             bottom: !root.vertical ? parent.bottom : undefined
@@ -73,9 +89,7 @@ Item {
             rightMargin: root.spacing * !root.vertical
         }
 
-        columns: C.Config.options.bar.vertical ? 1 : -1
-        property real spacing: root.spacing
-        columnSpacing: spacing
-        rowSpacing: spacing
+        vertical: C.Config.options.bar.vertical
+        spacing: root.spacing
     }
 }
