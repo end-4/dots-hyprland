@@ -111,12 +111,12 @@ Shapes.ShapeCanvas {
         }
     }
     width: {
-        if (!vertical) return bgShape.showPopup ? Math.max(backgroundWidth, popupWidth) : backgroundWidth;
+        if (!vertical) return bgShape.showPopup ? Math.max(backgroundWidth, popupWidth + popupContentOffsetX * 2) : backgroundWidth;
         else return bgShape.showPopup ? (containerShape.width + popupShape.width + bgShape.spacing) : containerShape.width;
     }
     height: {
         if (!vertical) return bgShape.showPopup ? (containerShape.height + popupShape.height + bgShape.spacing) : containerShape.height;
-        else return bgShape.showPopup ? Math.max(backgroundHeight, popupHeight) : backgroundHeight;
+        else return bgShape.showPopup ? Math.max(backgroundHeight, popupHeight + popupContentOffsetY * 2) : backgroundHeight;
     }
     property bool popupHiding: false
     onShowPopupChanged: popupHiding = true
