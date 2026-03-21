@@ -26,7 +26,6 @@ if declare -f custom_packages > /dev/null; then
     printf "${STY_CYAN}[$0]: Running custom_packages()...\n${STY_RST}"
     # Read lines from function that start with # and aren't the function definition
     # Extract package names (remove leading # and trim whitespace)
-    local -a custom_packages=()
     while IFS= read -r line; do
         # Remove leading # and trim
         line="${line#\#}"

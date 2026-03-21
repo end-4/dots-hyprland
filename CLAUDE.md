@@ -804,11 +804,18 @@ qs -c ii
 
 ### Panel Family: Waffle
 
-Windows 11-inspired panel family accessible via `panelFamilyCycle` (Ctrl+Super+P).
+Windows 11-inspired panel family accessible via `panelFamilyCycle`.
 
 **Activation**:
-- Switch: `Super+Alt+W` or cycle with `Ctrl+Super+P`
+- Cycle: `Ctrl+Super+P` (cycles through all families: ii → waffle → ii...)
+- Switch directly: `Super+W` (cycles panel family)
 - IPC: `qs -c ii ipc call panelFamily cycle`
+
+**Architecture**:
+- Panel families defined in `dots/.config/quickshell/ii/panelFamilies/`
+- `IllogicalImpulseFamily.qml` = ii style (bar, sidebars, overview, etc.)
+- `WaffleFamily.qml` = Windows 11 style (taskbar, start menu, action center)
+- Add new families: create new `*Family.qml` file, add to `shell.qml`'s `families` list
 
 **Components**:
 - Taskbar (bottom) with centered/start-aligned apps

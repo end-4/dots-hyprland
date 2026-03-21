@@ -51,7 +51,32 @@
       "Bash(do echo:*)",
       "Read(//home/om/dots-hyprland/**)",
       "Bash(done)",
-      "Bash(bash -n \"$f\")"
+      "Bash(bash -n \"$f\")",
+      "Bash(bash -c 'source sdata/subcmd-install/4.custom.sh')",
+      "Bash(echo \"EXIT CODE: $?\")",
+      "Bash(bash -c '\nSTY_CYAN=\"\\\\033[0;36m\" STY_RST=\"\\\\033[0m\" STY_YELLOW=\"\\\\033[0;33m\" STY_BLUE=\"\\\\033[0;34m\" STY_GREEN=\"\\\\033[0;32m\"\nsource sdata/subcmd-install/4.custom.sh\n' 2>&1)",
+      "Bash(ollama --help)",
+      "WebSearch",
+      "Bash(ollama list:*)",
+      "Bash(timeout 5 ollama launch claude)",
+      "Bash(timeout 5 ollama launch claude --model gpt-oss:20b-cloud)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(curl -s --max-time 2 http://localhost:11434)",
+      "Bash(timeout 5 ollama launch claude --model minimax-2.7:cloud)",
+      "Bash(timeout 5 ollama launch claude --model minimax-2.7)",
+      "Bash(timeout 10 ollama launch claude --model minimax-2.7 --yes)",
+      "Bash(timeout 10 ollama launch claude --model minimax-m2.7 --yes)",
+      "Bash(timeout 5 ollama launch claude --model minimax-m2.7:cloud)",
+      "Bash(ollama launch:*)",
+      "Bash(claude --version)",
+      "Bash(qs:*)",
+      "Bash(ls:*)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(jq '.options.panelFamily = \"\"\"\"ten\"\"\"\"')",
+      "Bash(mv /tmp/ten_config.json ~/.config/quickshell/ii/config.json)",
+      "Bash(mkdir -p ~/.config/quickshell/ii/modules/ten)",
+      "Bash(cp -r /home/om/dots-hyprland/dots/.config/quickshell/ii/modules/ten/* ~/.config/quickshell/ii/modules/ten/)",
+      "Bash(strings /run/user/1000/quickshell/by-id/*/log.qslog)"
     ]
   }
 }
