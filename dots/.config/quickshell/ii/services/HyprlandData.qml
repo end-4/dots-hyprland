@@ -16,6 +16,7 @@ Singleton {
     property var addresses: []
     property var windowByAddress: ({})
     property var workspaces: []
+    property var specialWorkspaces: []
     property var workspaceIds: []
     property var workspaceById: ({})
     property var activeWorkspace: null
@@ -70,8 +71,28 @@ Singleton {
         updateWorkspaces();
     }
 
-    function biggestWindowForWorkspace(workspaceId) {
-        const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == workspaceId);
+    function monitorDataFor(monitor) {
+        if (!monitor) return null;
+        return root.monitors.find(m => m.id === monitor.id || m.name === monitor.name) || null;
+    }
+
+    function biggestWindowForWorkspace(workspaceIdOrWorkspace) {
+        let workspaceId = workspaceIdOrWorkspace;
+        if (typeof workspaceIdOrWorkspace === 'object' && workspaceIdOrWorkspace !== null) {
+            workspaceId = workspaceIdOrWorkspace.id;
+        }
+        if (workspaceId === undefined || workspaceId === null) return null;
+        const windowsInThisWorkspace = root.windowList.filter(w => w.workspace.id == workspaceId);
+        return windowsInThisWorkspace.reduce((maxWin, win) => {
+            const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0);
+            const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0);
+            return winArea > maxArea ? win : maxWin;
+        }, null);
+    }
+
+    function biggestWindowForWorkspaceByName(workspaceName) {
+        if (!workspaceName || typeof workspaceName !== 'string') return null;
+        const windowsInThisWorkspace = root.windowList.filter(w => w.workspace?.name === workspaceName);
         return windowsInThisWorkspace.reduce((maxWin, win) => {
             const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0);
             const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0);
@@ -142,6 +163,8 @@ Singleton {
                 var rawWorkspaces = JSON.parse(workspacesCollector.text);
                 // Filter out invalid workspace ids (e.g. lock-screen temp workspace 2147483647 - N)
                 root.workspaces = rawWorkspaces.filter(ws => ws.id >= 1 && ws.id <= 100);
+                // Special workspaces have name starting with "special:" (id is typically negative)
+                root.specialWorkspaces = rawWorkspaces.filter(ws => ws.name && String(ws.name).startsWith("special:"));
                 let tempWorkspaceById = {};
                 for (var i = 0; i < root.workspaces.length; ++i) {
                     var ws = root.workspaces[i];

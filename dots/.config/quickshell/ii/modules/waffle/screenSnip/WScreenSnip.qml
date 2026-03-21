@@ -17,8 +17,38 @@ import Quickshell.Hyprland
 Scope {
     id: root
 
+    // Initial state for region selector - set before opening, applied when loader creates item
+    property int initialMediaType: WRegionSelectionPanel.MediaType.Image
+    property int initialImageAction: WRegionSelectionPanel.ImageAction.Copy
+    property string _pendingRecordAction: ""
+
     function dismiss() {
         GlobalStates.regionSelectorOpen = false;
+    }
+
+    function _doRecord() {
+        root.initialMediaType = WRegionSelectionPanel.MediaType.Video;
+        GlobalStates.regionSelectorOpen = true;
+    }
+    function _doRecordWithSound() {
+        root.initialMediaType = WRegionSelectionPanel.MediaType.Video;
+        GlobalStates.regionSelectorOpen = true;
+    }
+
+    Process {
+        id: checkRecordingProc
+        command: ["pgrep", "-f", "gpu-screen-recorder"]
+        onExited: (exitCode) => {
+            if (exitCode === 0) {
+                Quickshell.execDetached([Directories.recordScriptPath, "--config", FileUtils.trimFileProtocol(Directories.shellConfigPath)]);
+                root.dismiss();
+            } else if (root._pendingRecordAction === "record") {
+                root._doRecord();
+            } else if (root._pendingRecordAction === "recordWithSound") {
+                root._doRecordWithSound();
+            }
+            root._pendingRecordAction = "";
+        }
     }
 
     Loader {
@@ -27,35 +57,42 @@ Scope {
 
         sourceComponent: WRegionSelectionPanel {
             onClosed: root.dismiss()
+
+            Component.onCompleted: {
+                mediaType = root.initialMediaType;
+                imageAction = root.initialImageAction;
+            }
         }
     }
 
     function screenshot() {
+        root.initialMediaType = WRegionSelectionPanel.MediaType.Image;
+        root.initialImageAction = WRegionSelectionPanel.ImageAction.Copy;
         GlobalStates.regionSelectorOpen = true;
     }
 
     function ocr() {
+        root.initialMediaType = WRegionSelectionPanel.MediaType.Image;
+        root.initialImageAction = WRegionSelectionPanel.ImageAction.CharRecognition;
         GlobalStates.regionSelectorOpen = true;
-        regionSelectorLoader.item.mediaType = WRegionSelectionPanel.MediaType.Image;
-        regionSelectorLoader.item.imageAction = WRegionSelectionPanel.ImageAction.CharRecognition;
     }
 
     function record() {
-        GlobalStates.regionSelectorOpen = true;
-        regionSelectorLoader.item.mediaType = WRegionSelectionPanel.MediaType.Video;
-        regionSelectorLoader.item.videoAction = WRegionSelectionPanel.VideoAction.Record;
+        if (checkRecordingProc.running) return;
+        root._pendingRecordAction = "record";
+        checkRecordingProc.running = true;
     }
 
     function recordWithSound() {
-        GlobalStates.regionSelectorOpen = true;
-        regionSelectorLoader.item.mediaType = WRegionSelectionPanel.MediaType.Video;
-        regionSelectorLoader.item.videoAction = WRegionSelectionPanel.VideoAction.RecordWithSound;
+        if (checkRecordingProc.running) return;
+        root._pendingRecordAction = "recordWithSound";
+        checkRecordingProc.running = true;
     }
 
     function search() {
+        root.initialMediaType = WRegionSelectionPanel.MediaType.Image;
+        root.initialImageAction = WRegionSelectionPanel.ImageAction.Search;
         GlobalStates.regionSelectorOpen = true;
-        regionSelectorLoader.item.mediaType = WRegionSelectionPanel.MediaType.Image;
-        regionSelectorLoader.item.imageAction = WRegionSelectionPanel.ImageAction.Search;
     }
 
     IpcHandler {

@@ -14,9 +14,11 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    readonly property var focusedScreen: Quickshell.screens.find(s => Hyprland.monitorFor(s)?.id === Hyprland.focusedMonitor?.id) ?? Quickshell.primaryScreen ?? (Quickshell.screens.length > 0 ? Quickshell.screens[0] : null)
 
     PanelWindow {
         id: panelWindow
+        screen: overviewScope.focusedScreen
         property string searchingText: ""
         readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
         property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
@@ -46,7 +48,11 @@ Scope {
                     overviewScope.dontAutoCancelSearch = false;
                     GlobalFocusGrab.dismiss();
                 } else {
-                    if (!overviewScope.dontAutoCancelSearch) {
+                    if (GlobalStates.overviewOpenWithAllApps) {
+                        overviewScope.dontAutoCancelSearch = true;
+                        panelWindow.setSearchingText(Config.options.search.prefix.allApps);
+                        GlobalStates.overviewOpenWithAllApps = false;
+                    } else if (!overviewScope.dontAutoCancelSearch) {
                         searchWidget.cancelSearch();
                     }
                     GlobalFocusGrab.addDismissable(panelWindow);
@@ -129,6 +135,16 @@ Scope {
         GlobalStates.overviewOpen = true;
     }
 
+    function toggleAllApps() {
+        if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
+            GlobalStates.overviewOpen = false;
+            return;
+        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.allApps);
+        GlobalStates.overviewOpen = true;
+    }
+
     IpcHandler {
         target: "search"
 
@@ -149,6 +165,9 @@ Scope {
         }
         function clipboardToggle() {
             overviewScope.toggleClipboard();
+        }
+        function allAppsToggle() {
+            overviewScope.toggleAllApps();
         }
     }
 
@@ -215,6 +234,15 @@ Scope {
 
         onPressed: {
             overviewScope.toggleEmojis();
+        }
+    }
+
+    GlobalShortcut {
+        name: "overviewAllAppsToggle"
+        description: "Open app launcher with all apps (no overview)"
+
+        onPressed: {
+            overviewScope.toggleAllApps();
         }
     }
 }

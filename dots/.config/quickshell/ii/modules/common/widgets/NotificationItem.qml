@@ -12,6 +12,15 @@ import Quickshell.Services.Notifications
 Item { // Notification item area
     id: root
     property var notificationObject
+    property var notificationGroupParent: null
+    property int cachedNotificationId: -1
+    property string cachedAppIcon: ""
+    property string cachedSummary: ""
+    property string cachedImage: ""
+    property var cachedUrgency: NotificationUrgency.Normal
+    property bool dismissing: false
+    property int dismissNotificationId: -1
+    property QtObject frozenIcon: null
     property bool expanded: false
     property bool onlyNotification: false
     property real fontSize: Appearance.font.pixelSize.small
@@ -31,10 +40,95 @@ Item { // Notification item area
 
     implicitHeight: background.implicitHeight
 
-    function destroyWithAnimation(left = false) {
+    component FrozenIcon: QtObject {
+        property string image: ""
+        property string appIcon: ""
+        property string summary: ""
+        property int urgency: NotificationUrgency.Normal
+    }
+    Component {
+        id: frozenIconComponent
+        FrozenIcon {}
+    }
+    function syncCachedNotificationData() {
+        if (root.dismissing)
+            return;
+        const notif = root.notificationObject;
+        if (!notif)
+            return;
+
+        const notifId = notif.notificationId ?? -1;
+        const isNewNotification = notifId !== root.cachedNotificationId;
+        if (isNewNotification) {
+            root.cachedNotificationId = notifId;
+            root.cachedAppIcon = notif.appIcon ?? "";
+            root.cachedSummary = notif.summary ?? "";
+            root.cachedImage = notif.image ?? "";
+        } else {
+            if (notif.appIcon !== undefined && notif.appIcon !== "")
+                root.cachedAppIcon = notif.appIcon;
+            if (notif.summary !== undefined && notif.summary !== "")
+                root.cachedSummary = notif.summary;
+            if (notif.image !== undefined && notif.image !== "")
+                root.cachedImage = notif.image;
+        }
+
+        root.cachedUrgency = notif.urgency === NotificationUrgency.Critical.toString() ?
+            NotificationUrgency.Critical : NotificationUrgency.Normal;
+    }
+    function cacheDismissState() {
+        const notif = root.notificationObject;
+        root.dismissNotificationId = notif?.notificationId ?? root.cachedNotificationId;
+        const img = (notif?.image !== undefined && notif?.image !== null && String(notif.image).length > 0) ?
+            notif.image : root.cachedImage;
+        const icon = (notif?.appIcon !== undefined && notif?.appIcon !== null && String(notif.appIcon).length > 0) ?
+            notif.appIcon : root.cachedAppIcon;
+        const sum = (notif?.summary !== undefined && notif?.summary !== null) ?
+            (notif.summary ?? "") : root.cachedSummary;
+        const urg = notif?.urgency === NotificationUrgency.Critical.toString() ?
+            NotificationUrgency.Critical : root.cachedUrgency;
+        root.frozenIcon = frozenIconComponent.createObject(root, {
+            image: img || "",
+            appIcon: icon || "",
+            summary: sum || "",
+            urgency: (urg === NotificationUrgency.Critical) ? NotificationUrgency.Critical : NotificationUrgency.Normal
+        });
+    }
+
+    onNotificationObjectChanged: root.syncCachedNotificationData()
+    Component.onCompleted: root.syncCachedNotificationData()
+
+    Connections {
+        target: root.notificationObject
+        ignoreUnknownSignals: true
+        enabled: !!root.notificationObject
+        function onAppIconChanged() { root.syncCachedNotificationData(); }
+        function onSummaryChanged() { root.syncCachedNotificationData(); }
+        function onImageChanged() { root.syncCachedNotificationData(); }
+        function onUrgencyChanged() { root.syncCachedNotificationData(); }
+    }
+
+    function destroyWithAnimation(left = false, fromDrag = false) {
+        root.syncCachedNotificationData()
+        root.cacheDismissState()
+        root.dismissing = true
+        if (root.onlyNotification && root.notificationGroupParent) {
+            root.notificationGroupParent.cacheDismissIconState()
+            root.notificationGroupParent.dismissing = true
+        }
+        const currentLeftMargin = background.anchors.leftMargin
+        const dismissDirectionSign = fromDrag ?
+            (currentLeftMargin >= 0 ? 1 : -1) :
+            (left ? -1 : 1)
+        background.anchors.leftMargin = currentLeftMargin; // Break binding at current drag position
         root.qmlParent.resetDrag()
-        background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
-        destroyAnimation.left = left;
+        const targetLeftMargin = (root.width + root.dismissOvershoot) * dismissDirectionSign
+        const remainingDistance = Math.abs(targetLeftMargin - currentLeftMargin)
+        destroyAnimation.fromDrag = fromDrag
+        destroyAnimation.slideDuration = fromDrag ?
+            Math.max(80, Math.min(190, Math.round(remainingDistance / 3.2))) :
+            Appearance.animation.elementMoveExit.duration
+        destroyAnimation.left = dismissDirectionSign < 0;
         destroyAnimation.running = true;
     }
 
@@ -47,18 +141,20 @@ Item { // Notification item area
     SequentialAnimation { // Drag finish animation
         id: destroyAnimation
         property bool left: true
+        property bool fromDrag: false
+        property int slideDuration: Appearance.animation.elementMoveExit.duration
         running: false
 
         NumberAnimation {
             target: background.anchors
             property: "leftMargin"
             to: (root.width + root.dismissOvershoot) * (destroyAnimation.left ? -1 : 1)
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            duration: destroyAnimation.slideDuration
+            easing.type: destroyAnimation.fromDrag ? Easing.OutCubic : Appearance.animation.elementMoveExit.type
+            easing.bezierCurve: destroyAnimation.fromDrag ? [] : Appearance.animation.elementMoveExit.bezierCurve
         }
         onFinished: () => {
-            Notifications.discardNotification(notificationObject.notificationId);
+            Notifications.discardNotification(root.dismissNotificationId);
         }
     }
 
@@ -88,7 +184,7 @@ Item { // Notification item area
 
         onDragReleased: (diffX, diffY) => {
             if (Math.abs(diffX) > root.dragConfirmThreshold)
-                root.destroyWithAnimation(diffX < 0);
+                root.destroyWithAnimation(diffX < 0, true);
             else 
                 dragManager.resetDrag();
         }
@@ -96,14 +192,18 @@ Item { // Notification item area
 
     NotificationAppIcon { // App icon
         id: notificationIcon
-        opacity: (!onlyNotification && notificationObject.image != "" && expanded) ? 1 : 0
+        readonly property string _img: root.dismissing && root.frozenIcon ? root.frozenIcon.image : root.cachedImage
+        opacity: (!onlyNotification && _img !== "" && expanded) ? 1 : 0
         visible: opacity > 0
 
         Behavior on opacity {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
 
-        image: notificationObject.image
+        image: _img
+        appIcon: root.dismissing && root.frozenIcon ? root.frozenIcon.appIcon : root.cachedAppIcon
+        summary: root.dismissing && root.frozenIcon ? root.frozenIcon.summary : root.cachedSummary
+        urgency: root.dismissing && root.frozenIcon ? root.frozenIcon.urgency : root.cachedUrgency
         anchors.right: background.left
         anchors.top: background.top
         anchors.rightMargin: 10
@@ -117,7 +217,7 @@ Item { // Notification item area
         anchors.leftMargin: root.xOffset
 
         Behavior on anchors.leftMargin {
-            enabled: !dragManager.dragging
+            enabled: !dragManager.dragging && !destroyAnimation.running
             NumberAnimation {
                 duration: Appearance.animation.elementMove.duration
                 easing.type: Appearance.animation.elementMove.type

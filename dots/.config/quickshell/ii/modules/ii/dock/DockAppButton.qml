@@ -16,6 +16,7 @@ DockButton {
     property real countDotWidth: 10
     property real countDotHeight: 4
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+    readonly property bool previewHover: !!hoverTrackingLoader.item && hoverTrackingLoader.item.containsMouse
 
     readonly property bool isSeparator: appToplevel.appId === "SEPARATOR"
     property var desktopEntry: DesktopEntries.heuristicLookup(appToplevel.appId)
@@ -46,6 +47,7 @@ DockButton {
     }
 
     Loader {
+        id: hoverTrackingLoader
         anchors.fill: parent
         active: appToplevel.toplevels.length > 0
         sourceComponent: MouseArea {
@@ -55,14 +57,32 @@ DockButton {
             acceptedButtons: Qt.NoButton
             onEntered: {
                 appListRoot.lastHoveredButton = root
-                appListRoot.buttonHovered = true
                 lastFocused = appToplevel.toplevels.length - 1
             }
             onExited: {
-                if (appListRoot.lastHoveredButton === root) {
-                    appListRoot.buttonHovered = false
-                }
+                // Hover state is derived from containsMouse in DockApps to avoid stale state.
+                if (appListRoot.lastHoveredButton === root && appToplevel.toplevels.length === 0)
+                    appListRoot.lastHoveredButton = null;
             }
+        }
+    }
+
+    Connections {
+        target: hoverTrackingLoader.item
+        function onContainsMouseChanged() {
+            if (!hoverTrackingLoader.item)
+                return;
+
+            if (hoverTrackingLoader.item.containsMouse) {
+                appListRoot.lastHoveredButton = root;
+                lastFocused = appToplevel.toplevels.length - 1;
+            }
+        }
+    }
+
+    onAppToplevelChanged: {
+        if (appListRoot.lastHoveredButton === root && appToplevel.toplevels.length === 0) {
+            appListRoot.lastHoveredButton = null;
         }
     }
 

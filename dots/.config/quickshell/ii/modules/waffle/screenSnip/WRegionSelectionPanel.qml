@@ -27,10 +27,6 @@ PanelWindow {
         CharRecognition,
         Search
     }
-    enum VideoAction {
-        Record,
-        RecordWithSound
-    }
     enum SelectionMode {
         Rect,
         Window
@@ -103,12 +99,7 @@ PanelWindow {
             }
             break;
         case WRegionSelectionPanel.MediaType.Video:
-            switch (root.videoAction) {
-            case WRegionSelectionPanel.VideoAction.Record:
-                return ScreenshotAction.Action.Record;
-            case WRegionSelectionPanel.VideoAction.RecordWithSound:
-                return ScreenshotAction.Action.RecordWithSound;
-            }
+            return ScreenshotAction.Action.RecordWithSound;
         }
     }
 
@@ -209,10 +200,16 @@ PanelWindow {
             WToolbarIconTabButton {
                 icon.name: "camera"
                 icon.color: Looks.colors.fg
+                WToolTip {
+                    text: Translation.tr("Screenshot")
+                }
             }
             WToolbarIconTabButton {
                 icon.name: "video"
                 icon.color: Looks.colors.fg
+                WToolTip {
+                    text: Translation.tr("Record")
+                }
             }
             onCurrentIndexChanged: {
                 switch (currentIndex) {
@@ -223,10 +220,6 @@ PanelWindow {
                     root.mediaType = WRegionSelectionPanel.MediaType.Video;
                     break;
                 }
-            }
-
-            WToolTip {
-                text: Translation.tr("Snip")
             }
         }
 

@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -12,18 +13,52 @@ import qs.modules.common.functions
 
 Item {
     id: root
+    property var screen
     property real maxWindowPreviewHeight: 200
     property real maxWindowPreviewWidth: 300
     property real windowControlsHeight: 30
     property real buttonPadding: 5
 
     property Item lastHoveredButton
-    property bool buttonHovered: false
+    readonly property bool buttonHovered: !!lastHoveredButton && !!lastHoveredButton.previewHover
     property bool requestDockShow: previewPopup.show
 
     Layout.fillHeight: true
     Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
     implicitWidth: listView.implicitWidth
+    readonly property var monitor: Hyprland.monitorFor(screen)
+    readonly property var visibleApps: {
+        if (!(Config.options?.dock.perMonitorAppIcons ?? false)) {
+            return TaskbarApps.apps;
+        }
+
+        const monitorId = monitor?.id;
+        if (monitorId === undefined || monitorId === null) {
+            return TaskbarApps.apps;
+        }
+
+        const apps = [];
+        for (const app of TaskbarApps.apps) {
+            if (app.appId === "SEPARATOR") {
+                apps.push(app);
+                continue;
+            }
+
+            const toplevels = app.toplevels.filter(toplevel => {
+                const client = HyprlandData.clientForToplevel(toplevel);
+                return client?.monitor === monitorId;
+            });
+
+            if (app.pinned || toplevels.length > 0) {
+                apps.push({
+                    appId: app.appId,
+                    pinned: app.pinned,
+                    toplevels: toplevels
+                });
+            }
+        }
+        return apps;
+    }
     
     StyledListView {
         id: listView
@@ -41,7 +76,7 @@ Item {
 
         model: ScriptModel {
             objectProp: "appId"
-            values: TaskbarApps.apps
+            values: root.visibleApps
         }
         delegate: DockAppButton {
             required property var modelData
@@ -57,6 +92,9 @@ Item {
         id: previewPopup
         property var appTopLevel: root.lastHoveredButton?.appToplevel
         property bool allPreviewsReady: false
+        property bool mapped: false
+        // Delay capture to avoid focus leaking to window on brief hovers (Hyprland toplevel export side effect)
+        property bool captureReady: false
         Connections {
             target: root
             function onLastHoveredButtonChanged() {
@@ -73,19 +111,82 @@ Item {
             }
             allPreviewsReady = true;
         }
+        // Only accept popupMouseArea hovers during grace period after leaving icon - prevents
+        // invisible mapped popup from phantom-triggering preview when mouse passes through
+        property bool previewSessionActive: false
         property bool shouldShow: {
-            const hoverConditions = (popupMouseArea.containsMouse || root.buttonHovered)
-            return hoverConditions && allPreviewsReady;
+            if (root.buttonHovered) return true;
+            // Only let popup hover keep it alive once it is actually shown.
+            // This prevents rapid flyovers from latching an invisible mapped popup.
+            return previewPopup.show && popupMouseArea.containsMouse && previewPopup.previewSessionActive;
         }
         property bool show: false
 
+        Connections {
+            target: root
+            function onButtonHoveredChanged() {
+                if (root.buttonHovered) {
+                    previewSessionTimer.stop();
+                    previewPopup.previewSessionActive = true;
+                } else {
+                    previewSessionTimer.restart();
+                }
+            }
+        }
+        Connections {
+            target: popupMouseArea
+            function onContainsMouseChanged() {
+                if (popupMouseArea.containsMouse && previewPopup.previewSessionActive) {
+                    previewSessionTimer.stop();
+                } else if (!root.buttonHovered) {
+                    previewSessionTimer.restart();
+                }
+            }
+        }
+        Timer {
+            id: previewSessionTimer
+            interval: 400
+            onTriggered: previewPopup.previewSessionActive = false
+        }
+
+        onShowChanged: {
+            if (show) {
+                mapped = true;
+                hideTimer.stop();
+                captureReady = false;
+                captureDelayTimer.restart();
+            } else {
+                captureDelayTimer.stop();
+                captureReady = false;
+                hideTimer.restart();
+            }
+        }
+        Timer {
+            id: hideTimer
+            // Keep popup mapped briefly so opacity fade-out can complete.
+            interval: 170
+            onTriggered: {
+                if (!previewPopup.show && !previewPopup.shouldShow) {
+                    previewPopup.mapped = false;
+                    if (!root.buttonHovered && !popupMouseArea.containsMouse) {
+                        root.lastHoveredButton = null;
+                    }
+                }
+            }
+        }
+        Timer {
+            id: captureDelayTimer
+            interval: 150
+            onTriggered: previewPopup.captureReady = true
+        }
+
         onShouldShowChanged: {
             if (shouldShow) {
-                // show = true;
-                updateTimer.restart();
-            } else {
-                updateTimer.restart();
+                mapped = true;
+                hideTimer.stop();
             }
+            // Match working version behavior: debounce via a single fast timer.
+            updateTimer.restart();
         }
         Timer {
             id: updateTimer
@@ -101,20 +202,30 @@ Item {
             edges: Edges.Top | Edges.Left
 
         }
-        visible: popupBackground.visible
+        // Stay mapped when lastHoveredButton set so opacity exit animation can complete (grace period prevents phantom hovers)
+        visible: mapped
         color: "transparent"
-        implicitWidth: root.QsWindow.window?.width ?? 1
-        implicitHeight: popupMouseArea.implicitHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
+        implicitWidth: previewPopup.show ? (root.QsWindow.window?.width ?? 1) : 1
+        implicitHeight: previewPopup.show ? (popupMouseArea.implicitHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2) : 1
+        mask: Region {
+            item: popupMouseArea
+        }
 
         MouseArea {
             id: popupMouseArea
+            enabled: previewPopup.show
+            acceptedButtons: Qt.NoButton
             anchors.bottom: parent.bottom
-            implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
-            implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
-            hoverEnabled: true
+            implicitWidth: previewPopup.show ? (popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2) : 0
+            implicitHeight: previewPopup.show ? (root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2) : 0
+            hoverEnabled: previewPopup.show
             x: {
-                const itemCenter = root.QsWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, 0);
-                return itemCenter.x - width / 2
+                if (!root.QsWindow || !root.lastHoveredButton) {
+                    return 0;
+                }
+
+                const itemCenter = root.QsWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, 0);
+                return itemCenter.x - width / 2;
             }
             StyledRectangularShadow {
                 target: popupBackground
@@ -203,9 +314,10 @@ Item {
                                 }
                                 ScreencopyView {
                                     id: screencopyView
-                                    captureSource: previewPopup ? windowButton.modelData : null
+                                    // Only capture when preview is shown - avoids focus leaking to captured window on hover
+                                    captureSource: previewPopup.show ? windowButton.modelData : null
                                     live: true
-                                    paintCursor: true
+                                    paintCursor: false
                                     constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
                                     onHasContentChanged: {
                                         previewPopup.updatePreviewReadiness();

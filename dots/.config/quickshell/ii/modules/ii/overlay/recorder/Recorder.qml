@@ -5,6 +5,7 @@ import Quickshell
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.modules.ii.overlay
 
@@ -58,7 +59,7 @@ StyledOverlayWidget {
                     name: "Record screen"
                     onClicked: {
                         GlobalStates.overlayOpen = false;
-                        Quickshell.execDetached([Directories.recordScriptPath, "--fullscreen", "--sound"]);
+                        Quickshell.execDetached([Directories.recordScriptPath, "--config", FileUtils.trimFileProtocol(Directories.shellConfigPath), "--fullscreen", "--sound"]);
                     }
                 }
             }

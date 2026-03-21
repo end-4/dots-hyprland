@@ -14,9 +14,29 @@ Item {
 
     property string activeWindowAddress: `0x${activeWindow?.HyprlandToplevel?.address}`
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
+    property var monitorData: HyprlandData.monitorDataFor(monitor)
+    readonly property var specialWorkspace: monitorData?.specialWorkspace ?? null
+    readonly property bool specialWorkspaceOpen: (specialWorkspace?.id ?? 0) < 0 && (specialWorkspace?.name ?? "") !== ""
+    readonly property var effectiveActiveWorkspace: root.specialWorkspaceOpen
+        ? root.specialWorkspace
+        : (monitorData?.activeWorkspace ?? null)
+    property var biggestWindow: {
+        const ws = root.effectiveActiveWorkspace;
+        if (!ws) return null;
+        if (ws.name && String(ws.name).startsWith("special:"))
+            return HyprlandData.biggestWindowForWorkspaceByName(ws.name);
+        return HyprlandData.biggestWindowForWorkspace(ws.id);
+    }
 
     implicitWidth: colLayout.implicitWidth
+
+    function workspaceFallbackTitle(workspace) {
+        if (!workspace) return Translation.tr("Workspace") + " 1";
+        if (workspace.name && String(workspace.name).startsWith("special:")) {
+            return String(workspace.name).replace(/^special:/, "");
+        }
+        return Translation.tr("Workspace") + " " + (workspace.id ?? 1);
+    }
 
     ColumnLayout {
         id: colLayout
@@ -31,7 +51,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated ?
                 root.activeWindow?.appId :
                 (root.biggestWindow?.class) ?? Translation.tr("Desktop")
 
@@ -42,9 +62,9 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated ?
                 root.activeWindow?.title :
-                (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
+                (root.biggestWindow?.title) ?? root.workspaceFallbackTitle(root.effectiveActiveWorkspace)
         }
 
     }

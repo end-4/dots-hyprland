@@ -22,6 +22,7 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 8
     property bool showNextTime: false
+    property string startupPageRequest: (Quickshell.env("QS_SETTINGS_PAGE") || "").trim().toLowerCase()
     property var pages: [
         {
             name: Translation.tr("Quick"),
@@ -43,6 +44,16 @@ ApplicationWindow {
             name: Translation.tr("Background"),
             icon: "texture",
             component: "modules/settings/BackgroundConfig.qml"
+        },
+        {
+            name: Translation.tr("Displays"),
+            icon: "monitor",
+            component: "modules/settings/DisplaysConfig.qml"
+        },
+        {
+            name: Translation.tr("System"),
+            icon: "computer",
+            component: "modules/settings/SystemConfig.qml"
         },
         {
             name: Translation.tr("Interface"),
@@ -67,6 +78,24 @@ ApplicationWindow {
     ]
     property int currentPage: 0
 
+    function startupPageIndexFromRequest(requestedPage) {
+        const normalized = (requestedPage || "").trim().toLowerCase();
+        if (normalized.length === 0) return -1;
+        const aliases = {
+            "quick": 0,
+            "general": 1,
+            "bar": 2,
+            "background": 3,
+            "displays": 4,
+            "system": 5,
+            "interface": 6,
+            "services": 7,
+            "advanced": 8,
+            "about": 9,
+        };
+        return aliases[normalized] !== undefined ? aliases[normalized] : -1;
+    }
+
     visible: true
     onClosing: Qt.quit()
     title: "illogical-impulse Settings"
@@ -74,6 +103,9 @@ ApplicationWindow {
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
+        const startupPage = startupPageIndexFromRequest(startupPageRequest);
+        if (startupPage >= 0 && startupPage < pages.length)
+            currentPage = startupPage;
     }
 
     minimumWidth: 750
@@ -203,27 +235,32 @@ ApplicationWindow {
                         }
                     }
 
-                    NavigationRailTabArray {
-                        currentIndex: root.currentPage
-                        expanded: navRail.expanded
-                        Repeater {
-                            model: root.pages
-                            NavigationRailButton {
-                                required property var index
-                                required property var modelData
-                                toggled: root.currentPage === index
-                                onPressed: root.currentPage = index;
-                                expanded: navRail.expanded
-                                buttonIcon: modelData.icon
-                                buttonIconRotation: modelData.iconRotation || 0
-                                buttonText: modelData.name
-                                showToggledHighlight: false
+                    ScrollView {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.minimumHeight: 120
+                        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                        clip: true
+
+                        NavigationRailTabArray {
+                            currentIndex: root.currentPage
+                            expanded: navRail.expanded
+                            width: navRail.expanded ? 130 : fab.baseSize
+                            Repeater {
+                                model: root.pages
+                                NavigationRailButton {
+                                    required property var index
+                                    required property var modelData
+                                    toggled: root.currentPage === index
+                                    onPressed: root.currentPage = index;
+                                    expanded: navRail.expanded
+                                    buttonIcon: modelData.icon
+                                    buttonIconRotation: modelData.iconRotation || 0
+                                    buttonText: modelData.name
+                                    showToggledHighlight: false
+                                }
                             }
                         }
-                    }
-
-                    Item {
-                        Layout.fillHeight: true
                     }
                 }
             }
@@ -238,9 +275,13 @@ ApplicationWindow {
                     anchors.fill: parent
                     opacity: 1.0
 
-                    active: Config.ready
+                    active: true
                     Component.onCompleted: {
-                        source = root.pages[0].component
+                        source = root.pages[root.currentPage].component
+                    }
+                    onLoaded: {
+                        if (item && typeof item.forceActiveFocus === "function") item.forceActiveFocus();
+                        if (item && item.setPopupOverlay) item.setPopupOverlay(root.overlay);
                     }
 
                     Connections {

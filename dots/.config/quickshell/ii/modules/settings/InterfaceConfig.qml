@@ -139,6 +139,14 @@ ContentPage {
                 Config.options.dock.monochromeIcons = checked;
             }
         }
+        ConfigSwitch {
+            buttonIcon: "screenshot_monitor"
+            text: Translation.tr("Per monitor app icons")
+            checked: Config.options.dock.perMonitorAppIcons
+            onCheckedChanged: {
+                Config.options.dock.perMonitorAppIcons = checked;
+            }
+        }
     }
 
     ContentSection {
@@ -776,6 +784,25 @@ ContentPage {
                         value: 1
                     }
                 ]
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "grid_view"
+            text: Translation.tr("Show special workspaces")
+            checked: Config.options.overview.showSpecialWorkspaces
+            onCheckedChanged: {
+                Config.options.overview.showSpecialWorkspaces = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "delete"
+            text: Translation.tr("Show uninstall button in launcher")
+            checked: Config.options.launcher.showUninstallButton
+            onCheckedChanged: {
+                Config.options.launcher.showUninstallButton = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Show trash icon to uninstall apps in search and launcher results")
             }
         }
     }

@@ -46,6 +46,10 @@ Item {
 
     property int draggingFromWorkspace: -1
     property int draggingTargetWorkspace: -1
+    property string draggingTargetSpecialWorkspace: ""
+
+    readonly property real gridImplicitWidth: Config.options.overview.columns * root.workspaceImplicitWidth + (Config.options.overview.columns - 1) * workspaceSpacing
+    readonly property real gridImplicitHeight: Config.options.overview.rows * root.workspaceImplicitHeight + (Config.options.overview.rows - 1) * workspaceSpacing
 
     implicitWidth: overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
@@ -66,6 +70,15 @@ Item {
     function getWsInCell(ri, ci) {
         // 1-indexed workspace, 0-indexed row and column index
         return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - ri - 1 : ri) * Config.options.overview.columns + (Config.options.overview.orderRightLeft ? Config.options.overview.columns - ci - 1 : ci) + 1
+    }
+    function isSpecialWorkspace(win) {
+        return win?.workspace?.name && String(win.workspace.name).startsWith("special:")
+    }
+    function specialWorkspaceIndex(wsName) {
+        const list = HyprlandData.specialWorkspaces || []
+        for (var i = 0; i < list.length; i++)
+            if (list[i].name === wsName) return i
+        return 0
     }
 
     StyledRectangularShadow {
@@ -150,6 +163,7 @@ Item {
                             DropArea {
                                 anchors.fill: parent
                                 onEntered: {
+                                    root.draggingTargetSpecialWorkspace = ""
                                     root.draggingTargetWorkspace = workspace.workspaceValue
                                     if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
                                     hoveredWhileDragging = true
@@ -164,23 +178,87 @@ Item {
                     }
                 }
             }
+
+            Row {
+                id: specialWorkspacesRow
+                visible: (Config.options.overview.showSpecialWorkspaces ?? false) && HyprlandData.specialWorkspaces.length > 0
+                spacing: workspaceSpacing
+                Repeater {
+                    model: visible ? HyprlandData.specialWorkspaces : []
+                    delegate: Rectangle {
+                        id: specialWs
+                        required property var modelData
+                        property string wsName: modelData.name || ""
+                        property string displayName: wsName.replace(/^special:/, "")
+                        implicitWidth: root.workspaceImplicitWidth
+                        implicitHeight: root.workspaceImplicitHeight
+                        color: hoveredWhileDragging ? hoveredSpecialColor : defaultSpecialColor
+                        property bool hoveredWhileDragging: false
+                        property color defaultSpecialColor: Appearance.colors.colSurfaceContainerLow
+                        property color hoveredSpecialColor: ColorUtils.mix(defaultSpecialColor, Appearance.colors.colLayer1Hover, 0.1)
+                        border.width: 2
+                        border.color: hoveredWhileDragging ? Appearance.colors.colLayer2Hover : "transparent"
+                        radius: root.smallWorkspaceRadius
+
+                        DropArea {
+                            anchors.fill: parent
+                            onEntered: {
+                                root.draggingTargetWorkspace = -1
+                                root.draggingTargetSpecialWorkspace = specialWs.wsName
+                                hoveredWhileDragging = true
+                            }
+                            onExited: {
+                                hoveredWhileDragging = false
+                                if (root.draggingTargetSpecialWorkspace === specialWs.wsName) root.draggingTargetSpecialWorkspace = ""
+                            }
+                        }
+
+                        StyledText {
+                            anchors.centerIn: parent
+                            text: specialWs.displayName
+                            font {
+                                pixelSize: Math.min(root.workspaceNumberSize * root.scale * 0.6, 14)
+                                weight: Font.DemiBold
+                                family: Appearance.font.family.expressive
+                            }
+                            color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, 0.8)
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton
+                            hoverEnabled: true
+                            onPressed: {
+                                GlobalStates.overviewOpen = false
+                                Hyprland.dispatch(`workspace ${specialWs.wsName}`)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         Item { // Windows & focused workspace indicator
             id: windowSpace
-            anchors.centerIn: parent
-            implicitWidth: workspaceColumnLayout.implicitWidth
-            implicitHeight: workspaceColumnLayout.implicitHeight
+            anchors.top: workspaceColumnLayout.top
+            anchors.left: workspaceColumnLayout.left
+            implicitWidth: root.gridImplicitWidth
+            implicitHeight: (Config.options.overview.showSpecialWorkspaces && HyprlandData.specialWorkspaces.length > 0)
+                ? (root.gridImplicitHeight + root.workspaceImplicitHeight + root.workspaceSpacing)
+                : root.gridImplicitHeight
 
             Repeater { // Window repeater
                 model: ScriptModel {
                     values: {
-                        // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return ToplevelManager.toplevels.values.filter((toplevel) => {
                             const address = `0x${toplevel.HyprlandToplevel?.address}`
                             var win = windowByAddress[address]
-                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
-                            return inWorkspaceGroup;
+                            if (!win) return false
+                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win.workspace?.id && win.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inSpecialWorkspace = (Config.options.overview.showSpecialWorkspaces ?? false) && root.isSpecialWorkspace(win)
+                            return inWorkspaceGroup || inSpecialWorkspace
                         })
                     }
                 }
@@ -197,19 +275,20 @@ Item {
                     windowData: windowByAddress[address]
 
                     property bool atInitPosition: (initX == x && initY == y)
+                    property bool isSpecial: root.isSpecialWorkspace(windowData)
 
-                    // Offset on the canvas
-                    property int workspaceColIndex: getWsColumn(windowData?.workspace.id)
-                    property int workspaceRowIndex: getWsRow(windowData?.workspace.id)
+                    // Offset on the canvas (special workspaces go in the extra row below the grid)
+                    property int workspaceColIndex: isSpecial ? root.specialWorkspaceIndex(windowData?.workspace?.name) : getWsColumn(windowData?.workspace?.id)
+                    property int workspaceRowIndex: isSpecial ? Config.options.overview.rows : getWsRow(windowData?.workspace?.id)
                     xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex
-                    yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex
+                    yOffset: isSpecial ? (root.gridImplicitHeight + workspaceSpacing) : ((root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex)
                     property real xWithinWorkspaceWidget: Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0)
                     property real yWithinWorkspaceWidget: Math.max((windowData?.at[1] - (monitor?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0)
 
                     // Radius
                     property real minRadius: Appearance.rounding.small
                     property bool workspaceAtLeft: workspaceColIndex === 0
-                    property bool workspaceAtRight: workspaceColIndex === Config.options.overview.columns - 1
+                    property bool workspaceAtRight: isSpecial ? (workspaceColIndex === HyprlandData.specialWorkspaces.length - 1) : (workspaceColIndex === Config.options.overview.columns - 1)
                     property bool workspaceAtTop: workspaceRowIndex === 0
                     property bool workspaceAtBottom: workspaceRowIndex === Config.options.overview.rows - 1
                     property bool workspaceAtTopLeft: (workspaceAtLeft && workspaceAtTop) 
@@ -262,10 +341,15 @@ Item {
                         }
                         onReleased: {
                             const targetWorkspace = root.draggingTargetWorkspace
+                            const targetSpecial = root.draggingTargetSpecialWorkspace
                             window.pressed = false
                             window.Drag.active = false
                             root.draggingFromWorkspace = -1
-                            if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
+                            if (targetSpecial !== "" && targetSpecial !== windowData?.workspace?.name) {
+                                Hyprland.dispatch(`movetoworkspacesilent ${targetSpecial}, address:${window.windowData?.address}`)
+                                root.draggingTargetSpecialWorkspace = ""
+                                updateWindowPosition.restart()
+                            } else if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace?.id) {
                                 Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace}, address:${window.windowData?.address}`)
                                 updateWindowPosition.restart()
                             }
@@ -274,9 +358,19 @@ Item {
                                     updateWindowPosition.restart()
                                     return
                                 }
-                                const percentageX = Math.round((window.x - xOffset) / root.workspaceImplicitWidth * 100)
-                                const percentageY = Math.round((window.y - yOffset) / root.workspaceImplicitHeight * 100)
-                                Hyprland.dispatch(`movewindowpixel exact ${percentageX}% ${percentageY}%, address:${window.windowData?.address}`)
+                                // Use pixels on the window's monitor so the window stays on that monitor (percentages use focused monitor in Hyprland)
+                                const winMon = window.monitorData
+                                if (!winMon) return
+                                const fracX = (window.x - xOffset) / root.workspaceImplicitWidth
+                                const fracY = (window.y - yOffset) / root.workspaceImplicitHeight
+                                const w = (winMon.transform & 1) ? (winMon.height ?? 0) : (winMon.width ?? 0)
+                                const h = (winMon.transform & 1) ? (winMon.width ?? 0) : (winMon.height ?? 0)
+                                const r = winMon.reserved ?? [0, 0, 0, 0]
+                                const workW = Math.max(1, w - (r[0] ?? 0) - (r[2] ?? 0))
+                                const workH = Math.max(1, h - (r[1] ?? 0) - (r[3] ?? 0))
+                                const px = Math.round((winMon.x ?? 0) + (r[0] ?? 0) + fracX * workW)
+                                const py = Math.round((winMon.y ?? 0) + (r[1] ?? 0) + fracY * workH)
+                                Hyprland.dispatch(`movewindowpixel exact ${px} ${py}, address:${window.windowData?.address}`)
                             }
                         }
                         onClicked: (event) => {
