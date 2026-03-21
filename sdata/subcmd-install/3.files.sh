@@ -212,6 +212,11 @@ fi
 
 #####################################################################################
 
+# Run custom additions
+if [[ -f "./sdata/subcmd-install/4.custom.sh" ]]; then
+    source ./sdata/subcmd-install/4.custom.sh
+fi
+
 v gen_firstrun
 v dedup_and_sort_listfile "${INSTALLED_LISTFILE}" "${INSTALLED_LISTFILE}"
 
