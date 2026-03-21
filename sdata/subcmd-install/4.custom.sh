@@ -41,8 +41,8 @@ if declare -f custom_packages > /dev/null; then
     done < <(type custom_packages | tail -n +3)  # Skip function definition lines
 
     if [[ ${#custom_packages[@]} -gt 0 ]]; then
-        printf "${STY_GREEN}[$0]: Installing ${#custom_packages[@]} custom package(s)\n${STY_RST}"
-        install_cmds "${custom_packages[@]}"
+        printf "${STY_GREEN}[$0]: Installing ${#custom_packages[@]} custom package(s) with yay\n${STY_RST}"
+        v yay -S --noconfirm "${custom_packages[@]}"
     fi
 fi
 
