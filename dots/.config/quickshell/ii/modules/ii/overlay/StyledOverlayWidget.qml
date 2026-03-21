@@ -105,15 +105,6 @@ AbstractOverlayWidget {
         reportClickableState();
     }
 
-    Connections {
-        target: OverlayContext
-        function onRequestCenter(identifier) {
-            if (identifier === root.identifier) {
-                root.center()
-            }
-        }
-    }
-
     // Hooks
     onPressed: (event) => {
         // We're only interested in handling resize here

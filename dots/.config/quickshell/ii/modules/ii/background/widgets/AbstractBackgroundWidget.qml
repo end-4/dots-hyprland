@@ -18,8 +18,20 @@ AbstractWidget {
     property bool visibleWhenLocked: false
     property var configEntry: Config.options.background.widgets[configEntryName]
     property string placementStrategy: configEntry.placementStrategy
-    property real targetX: Math.max(0, Math.min(configEntry.x, scaledScreenWidth - width))
-    property real targetY : Math.max(0, Math.min(configEntry.y, scaledScreenHeight - height))
+    // Relative position 0-1: same relative spot on all monitors. Bounds use monitor resolution.
+    property real targetX: {
+        const useRel = configEntry.relX >= 0 && configEntry.relX <= 1 && configEntry.relY >= 0 && configEntry.relY <= 1;
+        const maxX = Math.max(0, screenWidth - width);
+        const maxY = Math.max(0, screenHeight - height);
+        if (useRel) return Math.max(0, Math.min(configEntry.relX * maxX, maxX));
+        return Math.max(0, Math.min(configEntry.x, maxX));
+    }
+    property real targetY: {
+        const useRel = configEntry.relX >= 0 && configEntry.relX <= 1 && configEntry.relY >= 0 && configEntry.relY <= 1;
+        const maxY = Math.max(0, screenHeight - height);
+        if (useRel) return Math.max(0, Math.min(configEntry.relY * maxY, maxY));
+        return Math.max(0, Math.min(configEntry.y, maxY));
+    }
     x: targetX
     y: targetY
     visible: opacity > 0
@@ -33,11 +45,36 @@ AbstractWidget {
     }
 
     draggable: placementStrategy === "free"
-    onReleased: {
-        root.targetX = root.x;
-        root.targetY = root.y;
-        configEntry.x = root.targetX;
-        configEntry.y = root.targetY;
+    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+    drag.target: draggable && !middleButtonPressed ? root : undefined
+    property bool middleButtonPressed: false
+
+    function centerHorizontally() {
+        const centerX = (screenWidth - width) / 2;
+        const maxX = Math.max(0, screenWidth - width);
+        configEntry.x = Math.max(0, Math.min(centerX, maxX));
+        configEntry.relX = 0.5;
+    }
+
+    onPressed: (event) => {
+        if (event.button === Qt.MiddleButton) {
+            middleButtonPressed = true;
+            centerHorizontally();
+            event.accepted = true;
+        }
+    }
+    onReleased: (event) => {
+        if (event.button === Qt.MiddleButton) {
+            middleButtonPressed = false;
+        }
+        const px = root.x;
+        const py = root.y;
+        const maxX = Math.max(0, screenWidth - width);
+        const maxY = Math.max(0, screenHeight - height);
+        configEntry.x = px;
+        configEntry.y = py;
+        configEntry.relX = maxX > 0 ? Math.max(0, Math.min(1, px / maxX)) : 0.5;
+        configEntry.relY = maxY > 0 ? Math.max(0, Math.min(1, py / maxY)) : 0.5;
     }
 
     property bool needsColText: false
@@ -74,8 +111,8 @@ AbstractWidget {
         property int horizontalPadding: 200
         property int verticalPadding: 200
         command: [Quickshell.shellPath("scripts/images/least-busy-region-venv.sh") // Comments to force the formatter to break lines
-            , "--screen-width", Math.round(root.scaledScreenWidth) //
-            , "--screen-height", Math.round(root.scaledScreenHeight) //
+            , "--screen-width", Math.round(root.screenWidth) //
+            , "--screen-height", Math.round(root.screenHeight) //
             , "--width", contentWidth //
             , "--height", contentHeight //
             , "--horizontal-padding", horizontalPadding //
@@ -93,8 +130,17 @@ AbstractWidget {
                 const parsedContent = JSON.parse(output);
                 root.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary;
                 if (root.placementStrategy === "free") return;
-                root.targetX = parsedContent.center_x * root.wallpaperScale - root.width / 2;
-                root.targetY  = parsedContent.center_y * root.wallpaperScale - root.height / 2;
+                // Script returns monitor-space coordinates (not wallpaper-space)
+                const newX = parsedContent.center_x - root.width / 2;
+                const newY = parsedContent.center_y - root.height / 2;
+                const maxX = Math.max(0, root.screenWidth - root.width);
+                const maxY = Math.max(0, root.screenHeight - root.height);
+                const clampedX = Math.max(0, Math.min(newX, maxX));
+                const clampedY = Math.max(0, Math.min(newY, maxY));
+                root.configEntry.x = clampedX;
+                root.configEntry.y = clampedY;
+                root.configEntry.relX = maxX > 0 ? Math.max(0, Math.min(1, clampedX / maxX)) : 0.5;
+                root.configEntry.relY = maxY > 0 ? Math.max(0, Math.min(1, clampedY / maxY)) : 0.5;
             }
         }
     }

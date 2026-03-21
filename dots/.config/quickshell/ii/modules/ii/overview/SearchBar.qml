@@ -19,10 +19,11 @@ RowLayout {
         searchInput.forceActiveFocus();
     }
 
-    enum SearchPrefixType { Action, App, Clipboard, Emojis, Math, ShellCommand, WebSearch, DefaultSearch }
+    enum SearchPrefixType { Action, AllApps, App, Clipboard, Emojis, Math, ShellCommand, WebSearch, DefaultSearch }
 
     property var searchPrefixType: {
         if (root.searchingText.startsWith(Config.options.search.prefix.action)) return SearchBar.SearchPrefixType.Action;
+        if (root.searchingText.startsWith(Config.options.search.prefix.allApps)) return SearchBar.SearchPrefixType.AllApps;
         if (root.searchingText.startsWith(Config.options.search.prefix.app)) return SearchBar.SearchPrefixType.App;
         if (root.searchingText.startsWith(Config.options.search.prefix.clipboard)) return SearchBar.SearchPrefixType.Clipboard;
         if (root.searchingText.startsWith(Config.options.search.prefix.emojis)) return SearchBar.SearchPrefixType.Emojis;
@@ -38,6 +39,7 @@ RowLayout {
         iconSize: Appearance.font.pixelSize.huge
         shape: switch(root.searchPrefixType) {
             case SearchBar.SearchPrefixType.Action: return MaterialShape.Shape.Pill;
+            case SearchBar.SearchPrefixType.AllApps: return MaterialShape.Shape.Clover4Leaf;
             case SearchBar.SearchPrefixType.App: return MaterialShape.Shape.Clover4Leaf;
             case SearchBar.SearchPrefixType.Clipboard: return MaterialShape.Shape.Gem;
             case SearchBar.SearchPrefixType.Emojis: return MaterialShape.Shape.Sunny;
@@ -48,6 +50,7 @@ RowLayout {
         }
         text: switch (root.searchPrefixType) {
             case SearchBar.SearchPrefixType.Action: return "settings_suggest";
+            case SearchBar.SearchPrefixType.AllApps: return "grid_view";
             case SearchBar.SearchPrefixType.App: return "apps";
             case SearchBar.SearchPrefixType.Clipboard: return "content_paste_search";
             case SearchBar.SearchPrefixType.Emojis: return "add_reaction";

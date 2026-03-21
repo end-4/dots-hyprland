@@ -158,7 +158,7 @@ Item { // Wrapper
                 color: Appearance.colors.colOutlineVariant
             }
 
-            ListView { // App results
+            ListView { // App results (when searching or when using all-apps prefix "!")
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
@@ -175,26 +175,21 @@ Item { // Wrapper
                         appResults.currentIndex = 1;
                 }
 
-                Connections {
-                    target: root
-                    function onSearchingTextChanged() {
-                        if (appResults.count > 0)
-                            appResults.currentIndex = 0;
-                    }
-                }
-
                 Timer {
                     id: debounceTimer
                     interval: root.typingDebounceInterval
                     onTriggered: {
-                        resultModel.values = LauncherSearch.results ?? [];
+                        const res = LauncherSearch.results ?? [];
+                        const isAllApps = LauncherSearch.query.startsWith(Config.options.search.prefix.allApps);
+                        resultModel.values = isAllApps ? res : res.slice(0, root.typingResultLimit);
                     }
                 }
 
                 Connections {
                     target: LauncherSearch
                     function onResultsChanged() {
-                        resultModel.values = LauncherSearch.results.slice(0, root.typingResultLimit);
+                        const isAllApps = LauncherSearch.query.startsWith(Config.options.search.prefix.allApps);
+                        resultModel.values = isAllApps ? LauncherSearch.results : LauncherSearch.results.slice(0, root.typingResultLimit);
                         root.focusFirstItem();
                         debounceTimer.restart();
                     }
@@ -212,7 +207,7 @@ Item { // Wrapper
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData
-                    query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+                    query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.allApps, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
 
                     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Tab) {

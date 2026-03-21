@@ -12,18 +12,20 @@ StyledFlickable {
     default property alias data: contentColumn.data
 
     clip: true
-    contentHeight: contentColumn.implicitHeight + root.bottomContentPadding // Add some padding at the bottom
+    focus: true
+    contentWidth: width
+    contentHeight: contentColumn.implicitHeight + root.bottomContentPadding
     implicitWidth: contentColumn.implicitWidth
-    
+    interactive: contentHeight > height
+
     ColumnLayout {
         id: contentColumn
         width: root.forceWidth ? root.baseWidth : Math.max(root.baseWidth, implicitWidth)
-        anchors {
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
-            margins: 20
-        }
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.leftMargin: 20
+        anchors.rightMargin: 20
         spacing: 30
     }
-
 }

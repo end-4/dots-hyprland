@@ -16,6 +16,8 @@ Item { // Bar content region
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
     readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+    readonly property real barMediaMinWidth: 160
+    readonly property bool hasActiveMedia: (MprisController.activePlayer?.trackTitle?.length ?? 0) > 0
 
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
@@ -116,11 +118,13 @@ Item { // Bar content region
             Resources {
                 alwaysShowAllResources: root.useShortenedForm === 2
                 Layout.fillWidth: root.useShortenedForm === 2
+                Layout.maximumWidth: root.centerSideModuleWidth - (root.hasActiveMedia ? root.barMediaMinWidth : 0)
             }
 
             Media {
                 visible: root.useShortenedForm < 2
                 Layout.fillWidth: true
+                Layout.minimumWidth: root.hasActiveMedia ? root.barMediaMinWidth : 0
             }
         }
 

@@ -1,5 +1,3 @@
-pragma ComponentBehavior: Bound
-
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -11,7 +9,6 @@ import Quickshell
 PopupWindow {
     id: root
     required property QsMenuHandle trayItemMenuHandle
-    property string trayItemId: ""
     property real popupBackgroundMargin: 0
 
     signal menuClosed
@@ -175,48 +172,6 @@ PopupWindow {
                     }
                 }
             }
-        }
-        RippleButton {
-            id: pinEntry
-            buttonRadius: popupBackground.radius - popupBackground.padding
-            horizontalPadding: 12
-            implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
-            implicitHeight: 36
-            Layout.topMargin: 0
-            Layout.bottomMargin: 0
-            Layout.fillWidth: true
-
-            visible: root.trayItemId !== undefined && root.trayItemId.length > 0 && stackView.depth === 1
-            releaseAction: () => TrayService.togglePin(root.trayItemId);
-
-            contentItem: RowLayout {
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: pinEntry.horizontalPadding
-                    rightMargin: pinEntry.horizontalPadding
-                }
-                spacing: 8
-
-                MaterialSymbol {
-                    iconSize: 18
-                    text: "push_pin"
-                }
-
-                StyledText {
-                    Layout.fillWidth: true
-                    text: TrayService.isPinned(root.trayItemId) ? Translation.tr("Unpin") : Translation.tr("Pin")
-                }
-            }
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            implicitHeight: 1
-            color: Appearance.colors.colSubtext
-            Layout.topMargin: 4
-            Layout.bottomMargin: 4
         }
 
         Repeater {

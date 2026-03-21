@@ -29,17 +29,18 @@ Item {
     }
 
     function setExtraWindowAndGrabFocus(window) {
-        if (root.activeMenu && root.activeMenu !== window) {
-            if (typeof root.activeMenu.close === "function")
-                root.activeMenu.close();
-            root.activeMenu = null;
-        }
         root.activeMenu = window;
         root.grabFocus();
     }
 
     function releaseFocus() {
         focusGrab.active = false;
+        // When menu closes (e.g. user clicked an item that changed focus), close overflow too.
+        // onCleared won't fire when we deactivate the grab, so we must do it explicitly.
+        root.trayOverflowOpen = false;
+        if (root.activeMenu) {
+            root.activeMenu = null;  // Menu is already closed by SysTrayMenu
+        }
     }
 
     function closeOverflowMenu() {

@@ -23,7 +23,8 @@ Item {
         radius: Appearance.rounding.full
         color: Appearance.colors.colSecondaryContainer
         implicitHeight: root.expanded ? itemHeight : baseHighlightHeight
-        implicitWidth: tabBarColumn?.children[root.currentIndex]?.visualWidth ?? 100
+        // When collapsed, use fixed icon width so highlight doesn't stretch (e.g. when Repeater is first child)
+        implicitWidth: root.expanded ? (tabBarColumn?.children[root.currentIndex]?.visualWidth ?? 100) : itemHeight
 
         Behavior on anchors.topMargin {
             NumberAnimation {

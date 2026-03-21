@@ -92,6 +92,53 @@ Singleton {
     function stringifyList(list) {
         return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
     }
+
+    function _hintValue(notification, keys) {
+        const hints = notification?.hints;
+        if (!hints) return undefined;
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            const value = hints[key];
+            if (value !== undefined && value !== null) return value;
+        }
+        return undefined;
+    }
+
+    function _hintTruthy(notification, keys) {
+        const value = _hintValue(notification, keys);
+        if (value === undefined || value === null) return false;
+        if (typeof value === "boolean") return value;
+        if (typeof value === "number") return value !== 0;
+        if (typeof value === "string") {
+            const normalized = value.trim().toLowerCase();
+            return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
+        }
+        return true;
+    }
+
+    function _hintHasText(notification, keys) {
+        const value = _hintValue(notification, keys);
+        return typeof value === "string" && value.trim().length > 0;
+    }
+
+    function _isMutedApp(appName) {
+        const normalizedAppName = (appName ?? "").toString().trim().toLowerCase();
+        if (normalizedAppName.length === 0) return false;
+        const mutedApps = Config.options?.sounds?.notification?.mutedApps ?? [];
+        for (let i = 0; i < mutedApps.length; i++) {
+            const muted = (mutedApps[i] ?? "").toString().trim().toLowerCase();
+            if (muted.length > 0 && muted === normalizedAppName) return true;
+        }
+        return false;
+    }
+
+    function shouldPlayNotificationSound(notification, appName) {
+        if (_isMutedApp(appName)) return false;
+        if (_hintTruthy(notification, ["suppress-sound", "suppress_sound", "suppressSound"])) return false;
+        if (_hintHasText(notification, ["sound-name", "sound_name", "soundName"])) return false;
+        if (_hintHasText(notification, ["sound-file", "sound_file", "soundFile"])) return false;
+        return true;
+    }
     
     onListChanged: {
         // Update latest time for each app
@@ -144,6 +191,7 @@ Singleton {
     signal initDone();
     signal notify(notification: var);
     signal discard(id: int);
+    signal aboutToDiscardAll();
     signal discardAll();
     signal timeout(id: var);
 
@@ -170,6 +218,8 @@ Singleton {
 
             // Popup
             if (!root.popupInhibited) {
+                if (root.shouldPlayNotificationSound(notification, newNotifObject.appName))
+                    Audio.playNotificationSound();
                 newNotifObject.popup = true;
                 if (notification.expireTimeout != 0) {
                     newNotifObject.timer = notifTimerComponent.createObject(root, {
@@ -205,6 +255,7 @@ Singleton {
     }
 
     function discardAllNotifications() {
+        root.aboutToDiscardAll()
         root.list = []
         triggerListChange()
         notifFileView.setText(stringifyList(root.list));

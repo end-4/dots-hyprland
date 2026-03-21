@@ -284,6 +284,80 @@ ContentPage {
                 }
             }
         }
+        ContentSubsection {
+            title: Translation.tr("Startup sound")
+
+            ConfigSwitch {
+                buttonIcon: "play_circle"
+                text: Translation.tr("Enable startup sound")
+                checked: Config.options.sounds.startup.enable ?? true
+                onCheckedChanged: {
+                    Config.options.sounds.startup.enable = checked;
+                }
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                enabled: Config.options.sounds.startup.enable ?? true
+                placeholderText: Translation.tr("Startup sound file path")
+                text: Config.options.sounds.startup.path ?? "/usr/share/sounds/ii/stereo/startup.oga"
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.sounds.startup.path = text;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Notification sound")
+
+            ConfigSwitch {
+                buttonIcon: "notifications_active"
+                text: Translation.tr("Enable notification sound")
+                checked: Config.options.sounds.notification.enable ?? true
+                onCheckedChanged: {
+                    Config.options.sounds.notification.enable = checked;
+                }
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                enabled: Config.options.sounds.notification.enable ?? true
+                placeholderText: Translation.tr("Notification sound file path")
+                text: Config.options.sounds.notification.path ?? "/usr/share/sounds/ii/stereo/notify.oga"
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.sounds.notification.path = text;
+                }
+            }
+
+            MaterialTextArea {
+                id: mutedNotificationAppsField
+                Layout.fillWidth: true
+                enabled: Config.options.sounds.notification.enable ?? true
+                placeholderText: Translation.tr("Muted apps (one per line)")
+                property bool _skipSync: false
+                text: mutedNotificationAppsText
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    if (_skipSync) return
+                    _skipSync = true
+                    const lines = text.split(/\n|,/)
+                    const newList = []
+                    const seen = {}
+                    for (let i = 0; i < lines.length; i++) {
+                        const app = lines[i].trim()
+                        const key = app.toLowerCase()
+                        if (app.length > 0 && !seen[key]) {
+                            seen[key] = true
+                            newList.push(app)
+                        }
+                    }
+                    Config.options.sounds.notification.mutedApps = newList
+                    Qt.callLater(function() { _skipSync = false })
+                }
+            }
+        }
     }
 
     ContentSection {
@@ -332,6 +406,20 @@ ContentPage {
                     },
                 ]
             }
+        }
+    }
+
+    property string mutedNotificationAppsText: {
+        try {
+            const apps = Config.options?.sounds?.notification?.mutedApps ?? []
+            const out = []
+            for (let i = 0; i < apps.length; i++) {
+                const app = (apps[i] ?? "").toString().trim()
+                if (app.length > 0) out.push(app)
+            }
+            return out.join("\n")
+        } catch (e) {
+            return ""
         }
     }
 

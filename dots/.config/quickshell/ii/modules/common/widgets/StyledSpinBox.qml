@@ -8,6 +8,8 @@ import QtQuick.Controls
  */
 SpinBox {
     id: root
+    property string valueSuffix: ""
+    property string zeroDisplay: ""
 
     property real baseHeight: 35
     property real radius: Appearance.rounding.small
@@ -28,14 +30,19 @@ SpinBox {
         StyledTextInput {
             id: labelText
             anchors.centerIn: parent
-            text: root.value // displayText would make the numbers weird like 1,000 instead of 1000
+            text: (root.zeroDisplay && root.value === 0) ? root.zeroDisplay : (root.value + root.valueSuffix)
             color: Appearance.colors.colOnLayer2
             font.family: Appearance.font.family.numbers
             font.variableAxes: Appearance.font.variableAxes.numbers
             font.pixelSize: Appearance.font.pixelSize.small
             validator: root.validator
             onTextChanged: {
-                root.value = parseFloat(text);
+                if (root.zeroDisplay && text === root.zeroDisplay) {
+                    root.value = 0;
+                } else {
+                    const v = parseFloat(text);
+                    if (!isNaN(v)) root.value = v;
+                }
             }
         }
     }

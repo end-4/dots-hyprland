@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -23,6 +24,32 @@ ContentPage {
     ContentSection {
         icon: "spoke"
         title: Translation.tr("Positioning")
+
+        ContentSubsection {
+            title: Translation.tr("Bar display assignment")
+            tooltip: Translation.tr("Which displays show the bar.")
+
+            Repeater {
+                model: Quickshell.screens
+                    delegate: ConfigSwitch {
+                        required property var modelData
+                        property bool _checked: !Config.options.bar.screenList || Config.options.bar.screenList.length === 0 || (Config.options.bar.screenList && Config.options.bar.screenList.includes(modelData.name))
+                        text: modelData.description || modelData.model || modelData.name || Translation.tr("Display")
+                        checked: _checked
+                        onCheckedChanged: {
+                            _checked = checked;
+                            var list = Config.options.bar.screenList ? [...Config.options.bar.screenList] : [];
+                            if (checked) {
+                                if (!list.includes(modelData.name)) list.push(modelData.name);
+                            } else {
+                                list = list.filter(s => s !== modelData.name);
+                            }
+                            Config.options.bar.screenList = list;
+                            Qt.callLater(Config.forceSave);
+                        }
+                    }
+            }
+        }
 
         ConfigRow {
             ContentSubsection {
@@ -234,6 +261,51 @@ ContentPage {
                 onCheckedChanged: {
                     Config.options.bar.utilButtons.showScreenRecord = checked;
                 }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "memory"
+        title: Translation.tr("Resources")
+        ConfigSwitch {
+            buttonIcon: "memory"
+            text: Translation.tr("Show RAM")
+            checked: Config.options?.bar?.resources?.showRam ?? true
+            onCheckedChanged: {
+                if (Config.options.bar.resources) Config.options.bar.resources.showRam = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "swap_horiz"
+            text: Translation.tr("Show Swap")
+            checked: Config.options?.bar?.resources?.showSwap ?? true
+            onCheckedChanged: {
+                if (Config.options.bar.resources) Config.options.bar.resources.showSwap = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "planner_review"
+            text: Translation.tr("Show CPU")
+            checked: Config.options?.bar?.resources?.showCpu ?? true
+            onCheckedChanged: {
+                if (Config.options.bar.resources) Config.options.bar.resources.showCpu = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "storage"
+            text: Translation.tr("Show Disk")
+            checked: Config.options?.bar?.resources?.showDisk ?? true
+            onCheckedChanged: {
+                if (Config.options.bar.resources) Config.options.bar.resources.showDisk = checked;
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "videogame_asset"
+            text: Translation.tr("Show GPU")
+            checked: Config.options?.bar?.resources?.showGpu ?? true
+            onCheckedChanged: {
+                if (Config.options.bar.resources) Config.options.bar.resources.showGpu = checked;
             }
         }
     }
