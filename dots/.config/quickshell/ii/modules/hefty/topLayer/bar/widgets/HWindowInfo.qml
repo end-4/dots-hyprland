@@ -94,14 +94,14 @@ HBarWidgetWithPopout {
                 diameter: appIcon.implicitSize
             }
             Loader {
+                id: renderedIconLoader
                 anchors.fill: appIcon
-                Colorizer {
-                    id: renderedIcon
+                visible: root.activeWindow
+                sourceComponent: Colorizer {
                     implicitWidth: appIcon.implicitWidth
                     implicitHeight: appIcon.implicitHeight
-                    colorizationColor: Appearance.colors.colOnLayer0
-                    // colorization: Config.options.bar.workspaces.monochromeIcons ? 0.8 : 0.5
-                    colorization: 1
+                    colorizationColor: Appearance.m3colors.darkmode ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
+                    colorization: Config.options.bar.workspaces.monochromeIcons ? 0.8 : 0.5
                     brightness: 0
                     source: appIcon
 
@@ -110,13 +110,12 @@ HBarWidgetWithPopout {
                     maskThresholdMin: 0.5
                     maskSpreadAtMin: 1
 
-                    visible: root.activeWindow
                 }
             }
 
             MaterialSymbol {
                 anchors.centerIn: parent
-                visible: !renderedIcon.visible
+                visible: !renderedIconLoader.visible
                 text: "overview_key"
                 iconSize: 16
             }
