@@ -2,6 +2,7 @@
 
 QUICKSHELL_CONFIG_NAME="ii"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+ILLOGICAL_IMPULSE_VIRTUAL_ENV="${ILLOGICAL_IMPULSE_VIRTUAL_ENV:-$HOME/.local/state/quickshell/.venv}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIG_DIR="$XDG_CONFIG_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
@@ -181,10 +182,8 @@ switch() {
     cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
     cursorposy_inverted=$((screensizey - cursorposy))
 
-    matugen_args=(--source-color-index 0)
-
     if [[ "$color_flag" == "1" ]]; then
-        matugen_args+=(color hex "$color")
+        matugen_args=(color hex "$color")
         generate_colors_material_args=(--color "$color")
     else
         if [[ -z "$imgpath" ]]; then
@@ -242,7 +241,7 @@ switch() {
             set_thumbnail_path "$thumbnail"
 
             if [ -f "$thumbnail" ]; then
-                matugen_args+=(image "$thumbnail")
+                matugen_args=(image "$thumbnail")
                 generate_colors_material_args=(--path "$thumbnail")
                 create_restore_script "$video_path"
             else
@@ -251,7 +250,7 @@ switch() {
                 exit 1
             fi
         else
-            matugen_args+=(image "$imgpath")
+            matugen_args=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
             set_wallpaper_path "$imgpath"
@@ -303,10 +302,37 @@ switch() {
         [[ "$term_fg_boost" != "null" && -n "$term_fg_boost" ]] && generate_colors_material_args+=(--term_fg_boost "$term_fg_boost")
     fi
 
-    matugen "${matugen_args[@]}"
+    matugen "${matugen_args[@]}" || true
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
+    # Quickshell reads colors from generated/colors.json. If matugen fails to
+    # refresh it (common on some images/environments), rebuild it from SCSS.
+    python3 - "$STATE_DIR"/user/generated/material_colors.scss "$STATE_DIR"/user/generated/colors.json <<'PY'
+import json
+import re
+import sys
+from pathlib import Path
+
+scss_path = Path(sys.argv[1])
+json_path = Path(sys.argv[2])
+
+if not scss_path.exists():
+    sys.exit(0)
+
+colors = {}
+line_re = re.compile(r'^\$([A-Za-z0-9_]+)\s*:\s*(#[0-9A-Fa-f]{6})\s*;\s*$')
+for line in scss_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+    m = line_re.match(line.strip())
+    if m:
+        colors[m.group(1)] = m.group(2)
+
+if colors:
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = json_path.with_suffix(".json.tmp")
+    tmp_path.write_text(json.dumps(colors, indent=2) + "\n", encoding="utf-8")
+    tmp_path.replace(json_path)
+PY
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
 
@@ -371,6 +397,13 @@ main() {
             --noswitch)
                 noswitch_flag="1"
                 imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                # For no-wallpaper-change operations (dark/light toggle, palette updates),
+                # prefer the last successful seed color to avoid hard failure on unreadable images.
+                cached_seed_color="$(tr -d '[:space:]' < "$STATE_DIR/user/generated/color.txt" 2>/dev/null || true)"
+                if [[ "$cached_seed_color" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
+                    color_flag="1"
+                    color="$cached_seed_color"
+                fi
                 shift
                 ;;
             *)
@@ -387,6 +420,13 @@ main() {
     if [[ "$config_color" =~ ^#?[A-Fa-f0-9]{6}$ ]]; then
         color_flag="1"
         color="$config_color"
+    fi
+
+    # Final fallback for --noswitch when there is no valid cached/accent color.
+    # This guarantees theme mode toggles still work instead of silently doing nothing.
+    if [[ -n "$noswitch_flag" && -z "$color_flag" ]]; then
+        color_flag="1"
+        color="#6750A4"
     fi
 
     # If type_flag is not set, get it from config

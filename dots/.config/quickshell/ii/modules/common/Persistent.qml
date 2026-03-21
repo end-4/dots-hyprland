@@ -79,6 +79,10 @@ Singleton {
                 property string provider: "yandere"
             }
 
+            property JsonObject search: JsonObject {
+                property list<var> appClickStats: []
+            }
+
             property JsonObject idle: JsonObject {
                 property bool inhibit: false
             }

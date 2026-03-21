@@ -63,7 +63,7 @@ Item {
 
     Process {
         id: translateProc
-        command: ["bash", "-c", `trans -brief -no-bidi`
+        command: ["bash", "-c", `trans -brief`
             + ` -source '${StringUtils.shellSingleQuoteEscape(root.sourceLanguage)}'`
             + ` -target '${StringUtils.shellSingleQuoteEscape(root.targetLanguage)}'`
             + ` '${StringUtils.shellSingleQuoteEscape(root.inputField.text.trim())}'`]

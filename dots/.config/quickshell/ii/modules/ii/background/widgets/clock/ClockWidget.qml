@@ -28,9 +28,9 @@ AbstractBackgroundWidget {
     property var textHorizontalAlignment: {
         if (!Config.options.background.widgets.clock.digital.adaptiveAlignment || root.forceCenter || Config.options.background.widgets.clock.digital.vertical) 
             return Text.AlignHCenter;
-        if (root.x < root.scaledScreenWidth / 3)
+        if (root.x < root.screenWidth / 3)
             return Text.AlignLeft;
-        if (root.x > root.scaledScreenWidth * 2 / 3)
+        if (root.x > root.screenWidth * 2 / 3)
             return Text.AlignRight;
         return Text.AlignHCenter;
     }

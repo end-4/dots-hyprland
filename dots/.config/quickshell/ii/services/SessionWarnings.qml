@@ -23,7 +23,7 @@ Singleton {
 
     Process {
         id: detectPackageManagerProc
-        command: ["bash", "-c", "pidof yay paru dnf zypper apt apx xbps snap apk yum epsi pikman || ls /var/lib/pacman/db.lck"]
+        command: ["bash", "-c", "pidof pacman yay paru dnf zypper apt apx xbps snap apk yum epsi pikman"]
         onExited: (exitCode, exitStatus) => {
             root.packageManagerRunning = (exitCode === 0);
         }

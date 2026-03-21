@@ -13,8 +13,259 @@ Singleton {
 
     property string query: ""
 
+    function normalizeSearchTerm(value) {
+        const normalized = (value || "").trim().toLowerCase().replace(/\s+/g, " ");
+        if (!normalized)
+            return "";
+        return normalized.split(" ").map(token => normalizeToken(token)).join(" ");
+    }
+
+    function getSmartSearchRecords() {
+        return Persistent.states.search?.appClickStats || [];
+    }
+
+    function normalizeToken(token) {
+        if (!token)
+            return "";
+
+        if (token.endsWith("ies") && token.length > 3)
+            return token.slice(0, -3) + "y";
+        if (token.endsWith("es") && token.length > 3)
+            return token.slice(0, -2);
+        if (token.endsWith("s") && token.length > 3 && !token.endsWith("ss"))
+            return token.slice(0, -1);
+        return token;
+    }
+
+    function tokenSet(text) {
+        return Array.from(new Set((text || "").split(" ").filter(Boolean)));
+    }
+
+    function jaccardSimilarity(setAList, setBList) {
+        if (!setAList.length || !setBList.length)
+            return 0;
+
+        let overlap = 0;
+        for (const a of setAList) {
+            if (setBList.includes(a))
+                overlap++;
+        }
+        const union = Array.from(new Set(setAList.concat(setBList))).length;
+        return union > 0 ? overlap / union : 0;
+    }
+
+    function querySimilarity(a, b) {
+        if (!a || !b)
+            return 0;
+        if (a === b)
+            return 1;
+        return jaccardSimilarity(tokenSet(a), tokenSet(b));
+    }
+
+    function signatureSimilarity(currentIds, historicalSignature) {
+        if (!currentIds.length || !historicalSignature)
+            return 0;
+        const historicalIds = historicalSignature.split("|").filter(Boolean);
+        return jaccardSimilarity(currentIds, historicalIds);
+    }
+
+    function resultSignature(appIds) {
+        if (!appIds || appIds.length === 0)
+            return "";
+        return appIds.slice().sort().join("|");
+    }
+
+    function exactAppMatchScore(entry, normalizedSearch) {
+        if (!normalizedSearch)
+            return 0;
+
+        const name = (entry.name || "").trim().toLowerCase();
+        const genericName = (entry.genericName || "").trim().toLowerCase();
+        if (name === normalizedSearch)
+            return 3;
+        if (genericName === normalizedSearch)
+            return 2;
+        if (name.startsWith(normalizedSearch))
+            return 1;
+        return 0;
+    }
+
+    readonly property int smartSearchHeavyThreshold: 8
+
+    function exactQueryClickCount(entryId, normalizedSearch, records) {
+        if (!entryId || !normalizedSearch || !records)
+            return 0;
+        let total = 0;
+        for (const rec of records) {
+            if (rec.appId === entryId && rec.query === normalizedSearch)
+                total += Number(rec.count) || 0;
+        }
+        return total;
+    }
+
+    function smartSearchScore(entry, normalizedSearch, candidateIds, signature, records) {
+        if (!Config.options.search.smartSearch)
+            return 0;
+
+        const entryId = entry?.id || "";
+        if (!entryId)
+            return 0;
+
+        let score = 0;
+        for (const rec of records) {
+            if (rec.appId !== entryId)
+                continue;
+            const clicks = Number(rec.count) || 0;
+            if (clicks <= 0)
+                continue;
+            if (normalizedSearch && rec.query && rec.query.startsWith(normalizedSearch) && rec.query !== normalizedSearch) {
+                // Short prefix intent, e.g. "disc" should inherit from frequent "discord" selections.
+                score += clicks * 95;
+            }
+            if (normalizedSearch && rec.query === normalizedSearch) {
+                score += clicks * 100;
+            } else {
+                const qSimilarity = querySimilarity(normalizedSearch, rec.query || "");
+                if (qSimilarity >= 0.5)
+                    score += clicks * qSimilarity * 70;
+            }
+            if (signature && rec.signature === signature) {
+                score += clicks * 80;
+            } else {
+                const sSimilarity = signatureSimilarity(candidateIds, rec.signature || "");
+                if (sSimilarity >= 0.5)
+                    score += clicks * sSimilarity * 75;
+            }
+        }
+        return score;
+    }
+
+    function getInjectedPrefixEntries(normalizedSearch, existingEntries, records) {
+        if (!Config.options.search.smartSearch)
+            return [];
+        if (!normalizedSearch || normalizedSearch.length < 2)
+            return [];
+
+        const existingIds = new Set((existingEntries || []).map(entry => entry.id || "").filter(Boolean));
+        const aggregated = ({});
+        for (const rec of records) {
+            const recQuery = rec.query || "";
+            const appId = rec.appId || "";
+            const clicks = Number(rec.count) || 0;
+            if (!appId || clicks <= 0 || existingIds.has(appId))
+                continue;
+            if (!recQuery.startsWith(normalizedSearch) || recQuery === normalizedSearch)
+                continue;
+
+            if (!aggregated[appId]) {
+                aggregated[appId] = {
+                    appId: appId,
+                    score: 0,
+                    lastUsed: 0
+                };
+            }
+            aggregated[appId].score += clicks;
+            aggregated[appId].lastUsed = Math.max(aggregated[appId].lastUsed, Number(rec.lastUsed) || 0);
+        }
+
+        const topIds = Object.values(aggregated)
+            .sort((a, b) => {
+                if (a.score !== b.score)
+                    return b.score - a.score;
+                return b.lastUsed - a.lastUsed;
+            })
+            .slice(0, 3)
+            .map(item => item.appId);
+
+        const byId = ({});
+        for (const app of AppSearch.list) {
+            byId[app.id] = app;
+        }
+        return topIds.map(id => byId[id]).filter(Boolean);
+    }
+
+    function rankAppEntries(entries, rawSearchTerm) {
+        if (!entries)
+            return [];
+
+        const normalizedSearch = normalizeSearchTerm(rawSearchTerm);
+        const records = getSmartSearchRecords();
+        let candidateEntries = entries.slice();
+        const injectedEntries = getInjectedPrefixEntries(normalizedSearch, candidateEntries, records);
+        candidateEntries = candidateEntries.concat(injectedEntries);
+        if (candidateEntries.length <= 1)
+            return candidateEntries;
+
+        const candidateIds = candidateEntries.map(entry => entry.id || "").filter(Boolean);
+        const signature = resultSignature(candidateIds);
+
+        const threshold = root.smartSearchHeavyThreshold;
+        return candidateEntries
+            .map((entry, index) => {
+                const exactScore = exactAppMatchScore(entry, normalizedSearch);
+                const smartScore = smartSearchScore(entry, normalizedSearch, candidateIds, signature, records);
+                const exactQueryClicks = exactQueryClickCount(entry.id || "", normalizedSearch, records);
+                const heavyForExactQuery = exactQueryClicks >= threshold;
+                const combinedScore = (heavyForExactQuery ? 5000 : 0) + exactScore * 1000 + smartScore;
+                return {
+                    entry: entry,
+                    index: index,
+                    exactScore: exactScore,
+                    smartScore: smartScore,
+                    combinedScore: combinedScore
+                };
+            })
+            .sort((a, b) => {
+                if (a.combinedScore !== b.combinedScore)
+                    return b.combinedScore - a.combinedScore;
+                return a.index - b.index;
+            })
+            .map(item => item.entry);
+    }
+
+    function registerAppClick(rawSearchTerm, candidateIds, selectedId) {
+        if (!Config.options.search.smartSearch || !selectedId)
+            return;
+
+        const normalizedSearch = normalizeSearchTerm(rawSearchTerm);
+        const signature = resultSignature(candidateIds || []);
+        const records = getSmartSearchRecords().slice();
+        const now = Date.now();
+        let matched = false;
+
+        for (let i = 0; i < records.length; i++) {
+            const rec = records[i];
+            if (rec.appId === selectedId && rec.query === normalizedSearch && rec.signature === signature) {
+                records[i] = {
+                    appId: rec.appId,
+                    query: rec.query,
+                    signature: rec.signature,
+                    count: (Number(rec.count) || 0) + 1,
+                    lastUsed: now
+                };
+                matched = true;
+                break;
+            }
+        }
+        if (!matched) {
+            records.push({
+                appId: selectedId,
+                query: normalizedSearch,
+                signature: signature,
+                count: 1,
+                lastUsed: now
+            });
+        }
+
+        if (records.length > 500) {
+            records.sort((a, b) => (Number(b.lastUsed) || 0) - (Number(a.lastUsed) || 0));
+            records.length = 500;
+        }
+        Persistent.states.search.appClickStats = records;
+    }
+
     function ensurePrefix(prefix) {
-        if ([Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
+        if ([Config.options.search.prefix.action, Config.options.search.prefix.allApps, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
             root.query = prefix + root.query.slice(1);
         } else {
             root.query = prefix + root.query;
@@ -169,6 +420,47 @@ Singleton {
         if (root.query == "")
             return [];
 
+        ///////////// All apps (no overview, same size as search) ///////////////
+        if (root.query.startsWith(Config.options.search.prefix.allApps)) {
+            const cleaned = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.allApps);
+            const appEntries = rankAppEntries(cleaned === "" ? AppSearch.list : AppSearch.fuzzyQuery(cleaned), cleaned);
+            const candidateIds = appEntries.map(entry => entry.id || "").filter(Boolean);
+            return appEntries.map(entry => resultComp.createObject(null, {
+                type: Translation.tr("App"),
+                id: entry.id,
+                name: entry.name,
+                iconName: entry.icon,
+                iconType: LauncherSearchResult.IconType.System,
+                verb: Translation.tr("Open"),
+                execute: () => {
+                    root.registerAppClick(cleaned, candidateIds, entry.id);
+                    if (!entry.runInTerminal)
+                        entry.execute();
+                    else {
+                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                    }
+                },
+                comment: entry.comment,
+                runInTerminal: entry.runInTerminal,
+                genericName: entry.genericName,
+                keywords: entry.keywords,
+                actions: entry.actions.map(action => {
+                    return resultComp.createObject(null, {
+                        name: action.name,
+                        iconName: action.icon,
+                        iconType: LauncherSearchResult.IconType.System,
+                        execute: () => {
+                            if (!action.runInTerminal)
+                                action.execute();
+                            else {
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                            }
+                        }
+                    });
+                })
+            }));
+        }
+
         ///////////// Special cases ///////////////
         if (root.query.startsWith(Config.options.search.prefix.clipboard)) {
             // Clipboard
@@ -238,7 +530,10 @@ Singleton {
                 Quickshell.clipboardText = root.mathResult;
             }
         });
-        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
+        const appSearchTerm = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app);
+        const appEntries = rankAppEntries(AppSearch.fuzzyQuery(appSearchTerm), appSearchTerm);
+        const appCandidateIds = appEntries.map(entry => entry.id || "").filter(Boolean);
+        const appResultObjects = appEntries.map(entry => {
             return resultComp.createObject(null, {
                 type: Translation.tr("App"),
                 id: entry.id,
@@ -247,6 +542,7 @@ Singleton {
                 iconType: LauncherSearchResult.IconType.System,
                 verb: Translation.tr("Open"),
                 execute: () => {
+                    root.registerAppClick(appSearchTerm, appCandidateIds, entry.id);
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
@@ -354,6 +650,48 @@ Singleton {
 
         return result;
     }
+
+    property list<var> allAppResults: (function() {
+        const list = AppSearch.list;
+        const arr = [];
+        for (let i = 0; i < list.length; i++) {
+            const entry = list[i];
+            arr.push(resultComp.createObject(null, {
+                type: Translation.tr("App"),
+                id: entry.id,
+                name: entry.name,
+                iconName: entry.icon,
+                iconType: LauncherSearchResult.IconType.System,
+                verb: Translation.tr("Open"),
+                execute: () => {
+                    if (!entry.runInTerminal)
+                        entry.execute();
+                    else {
+                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                    }
+                },
+                comment: entry.comment,
+                runInTerminal: entry.runInTerminal,
+                genericName: entry.genericName,
+                keywords: entry.keywords,
+                actions: entry.actions.map(action => {
+                    return resultComp.createObject(null, {
+                        name: action.name,
+                        iconName: action.icon,
+                        iconType: LauncherSearchResult.IconType.System,
+                        execute: () => {
+                            if (!action.runInTerminal)
+                                action.execute();
+                            else {
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                            }
+                        }
+                    });
+                })
+            }));
+        }
+        return arr;
+    })()
 
     Component {
         id: resultComp

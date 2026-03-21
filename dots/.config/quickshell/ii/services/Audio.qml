@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.modules.common
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Pipewire
 
 /**
@@ -16,6 +17,7 @@ Singleton {
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
     readonly property real hardMaxValue: 2.00 // People keep joking about setting volume to 5172% so...
+    readonly property int startupAndNotificationVolumePercent: 65
     property string audioTheme: Config.options.sounds.theme
     property real value: sink?.audio.volume ?? 0
     
@@ -135,5 +137,57 @@ Singleton {
             oggPath
         ];
         Quickshell.execDetached(command);
+    }
+
+    function playFile(path, volumePercent) {
+        if (!path || typeof path !== "string" || path.trim().length === 0) return;
+        const safeVolume = Math.max(0, Math.min(100, Math.round(
+            volumePercent === undefined ? 100 : volumePercent
+        )));
+        Quickshell.execDetached([
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            "-loglevel",
+            "quiet",
+            "-sync",
+            "audio",
+            "-volume",
+            `${safeVolume}`,
+            path.trim(),
+        ]);
+    }
+
+    function playStartupSound() {
+        const enabled = Config.options?.sounds?.startup?.enable ?? true;
+        if (!enabled) return;
+        const path = Config.options?.sounds?.startup?.path ?? "/usr/share/sounds/ii/stereo/startup.oga";
+        playFile(path, root.startupAndNotificationVolumePercent);
+    }
+
+    function playNotificationSound() {
+        const enabled = Config.options?.sounds?.notification?.enable ?? true;
+        if (!enabled) return;
+        const path = Config.options?.sounds?.notification?.path ?? "/usr/share/sounds/ii/stereo/notify.oga";
+        if (notificationSoundProcess.running) return;
+        notificationSoundProcess.command = [
+            "ffplay",
+            "-nodisp",
+            "-autoexit",
+            "-loglevel",
+            "quiet",
+            "-sync",
+            "audio",
+            "-volume",
+            `${root.startupAndNotificationVolumePercent}`,
+            path.trim(),
+        ];
+        notificationSoundProcess.running = true;
+    }
+
+    Process {
+        id: notificationSoundProcess
+        running: false
+        command: []
     }
 }

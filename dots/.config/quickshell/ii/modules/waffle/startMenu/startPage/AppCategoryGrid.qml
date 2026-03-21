@@ -324,6 +324,13 @@ Rectangle {
                     TaskbarApps.togglePin(smallGridAppButton.desktopEntry.id);
                 }
             }
+            WMenuItem {
+                icon.name: "trash"
+                text: Translation.tr("Uninstall")
+                onTriggered: {
+                    LauncherApps.uninstallApp(smallGridAppButton.desktopEntry.id);
+                }
+            }
         }
     }
 

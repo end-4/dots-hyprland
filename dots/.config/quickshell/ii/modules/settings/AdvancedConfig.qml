@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -90,6 +91,51 @@ ContentPage {
         }
     }
 
+    ContentSection {
+        icon: "terminal"
+        title: Translation.tr("Commands")
 
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: Translation.tr("Run once (per session): Commands below run once after login when the shell starts.")
+            color: Appearance.colors.colSubtext
+            font.pixelSize: Appearance.font.pixelSize.smallie
+        }
 
+        MaterialTextArea {
+            id: runOnceField
+            Layout.fillWidth: true
+            placeholderText: Translation.tr("One command per line, e.g.:\nhyprctl dispatch exec '[workspace special:browser silent] firefox'\n~/scripts/my-app.sh")
+            property bool _skipSync: false
+            text: runOnceCommandsText
+            wrapMode: TextEdit.NoWrap
+            onTextChanged: {
+                if (_skipSync) return
+                _skipSync = true
+                var lines = text.trim().split("\n")
+                var newList = []
+                for (var i = 0; i < lines.length; i++) {
+                    var s = lines[i].trim()
+                    if (s.length > 0) newList.push(s)
+                }
+                if (Config.options && Config.options.startup)
+                    Config.options.startup.postLoginCommands = newList
+                Qt.callLater(function() { _skipSync = false })
+            }
+        }
+    }
+
+    property string runOnceCommandsText: {
+        try {
+            if (!Config.options || !Config.options.startup || !Config.options.startup.postLoginCommands)
+                return ""
+            var cmds = Config.options.startup.postLoginCommands
+            var out = []
+            for (var i = 0; i < cmds.length; i++) out.push(cmds[i])
+            return out.join("\n")
+        } catch (e) {
+            return ""
+        }
+    }
 }

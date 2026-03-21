@@ -23,7 +23,33 @@ Scope {
 
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
-    
+    property string _pendingRecordAction: ""
+
+    function _doRecord() {
+        root.action = RegionSelection.SnipAction.RecordWithSound
+        root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        GlobalStates.regionSelectorOpen = true
+    }
+    function _doRecordWithSound() {
+        root._doRecord()
+    }
+
+    Process {
+        id: checkRecordingProc
+        command: ["pgrep", "-f", "gpu-screen-recorder"]
+        onExited: (exitCode) => {
+            if (exitCode === 0) {
+                Quickshell.execDetached([Directories.recordScriptPath, "--config", FileUtils.trimFileProtocol(Directories.shellConfigPath)])
+                root.dismiss()
+            } else if (root._pendingRecordAction === "record") {
+                root._doRecord()
+            } else if (root._pendingRecordAction === "recordWithSound") {
+                root._doRecordWithSound()
+            }
+            root._pendingRecordAction = ""
+        }
+    }
+
     Variants {
         model: Quickshell.screens
         delegate: Loader {
@@ -63,15 +89,15 @@ Scope {
     }
 
     function record() {
-        root.action = RegionSelection.SnipAction.Record
-        root.selectionMode = RegionSelection.SelectionMode.RectCorners
-        GlobalStates.regionSelectorOpen = true
+        if (checkRecordingProc.running) return
+        root._pendingRecordAction = "record"
+        checkRecordingProc.running = true
     }
 
     function recordWithSound() {
-        root.action = RegionSelection.SnipAction.RecordWithSound
-        root.selectionMode = RegionSelection.SelectionMode.RectCorners
-        GlobalStates.regionSelectorOpen = true
+        if (checkRecordingProc.running) return
+        root._pendingRecordAction = "recordWithSound"
+        checkRecordingProc.running = true
     }
 
     IpcHandler {

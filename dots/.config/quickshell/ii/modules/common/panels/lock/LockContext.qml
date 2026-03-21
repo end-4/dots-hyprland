@@ -39,6 +39,7 @@ Scope {
         root.resetTargetAction();
         root.clearText();
         root.unlockInProgress = false;
+        GlobalStates.screenUnlockFailed = false;
         stopFingerPam();
     }
 

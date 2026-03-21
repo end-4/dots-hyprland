@@ -16,19 +16,25 @@ DockButton {
     property real countDotWidth: 10
     property real countDotHeight: 4
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+    readonly property bool previewHover: !!hoverTrackingLoader.item && hoverTrackingLoader.item.containsMouse
 
     readonly property bool isSeparator: appToplevel.appId === "SEPARATOR"
     property var desktopEntry: DesktopEntries.heuristicLookup(appToplevel.appId)
-    enabled: !isSeparator
-    implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
-    Connections {
-        target: DesktopEntries
-
-        function onApplicationsChanged() {
-            root.desktopEntry = DesktopEntries.heuristicLookup(appToplevel.appId);
+    Timer {
+        // Retry looking up the desktop entry if it failed (e.g. database not loaded yet)
+        property int retryCount: 5
+        interval: 1000
+        running: !root.isSeparator && root.desktopEntry === null && retryCount > 0
+        repeat: true
+        onTriggered: {
+            retryCount--;
+            root.desktopEntry = DesktopEntries.heuristicLookup(root.appToplevel.appId);
         }
     }
+
+    enabled: !isSeparator
+    implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
     Loader {
         active: isSeparator
@@ -41,6 +47,7 @@ DockButton {
     }
 
     Loader {
+        id: hoverTrackingLoader
         anchors.fill: parent
         active: appToplevel.toplevels.length > 0
         sourceComponent: MouseArea {
@@ -50,14 +57,32 @@ DockButton {
             acceptedButtons: Qt.NoButton
             onEntered: {
                 appListRoot.lastHoveredButton = root
-                appListRoot.buttonHovered = true
                 lastFocused = appToplevel.toplevels.length - 1
             }
             onExited: {
-                if (appListRoot.lastHoveredButton === root) {
-                    appListRoot.buttonHovered = false
-                }
+                // Hover state is derived from containsMouse in DockApps to avoid stale state.
+                if (appListRoot.lastHoveredButton === root && appToplevel.toplevels.length === 0)
+                    appListRoot.lastHoveredButton = null;
             }
+        }
+    }
+
+    Connections {
+        target: hoverTrackingLoader.item
+        function onContainsMouseChanged() {
+            if (!hoverTrackingLoader.item)
+                return;
+
+            if (hoverTrackingLoader.item.containsMouse) {
+                appListRoot.lastHoveredButton = root;
+                lastFocused = appToplevel.toplevels.length - 1;
+            }
+        }
+    }
+
+    onAppToplevelChanged: {
+        if (appListRoot.lastHoveredButton === root && appToplevel.toplevels.length === 0) {
+            appListRoot.lastHoveredButton = null;
         }
     }
 

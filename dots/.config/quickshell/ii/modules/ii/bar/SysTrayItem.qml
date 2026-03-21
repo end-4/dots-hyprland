@@ -1,4 +1,3 @@
-pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
@@ -27,11 +26,7 @@ MouseArea {
             item.activate();
             break;
         case Qt.RightButton:
-            if (item.hasMenu)
-                if (menu.active && menu.item && typeof menu.item.close === "function")
-                    menu.item.close();
-                else 
-                    menu.open();
+            if (item.hasMenu) menu.open();
             break;
         }
         event.accepted = true;
@@ -49,16 +44,14 @@ MouseArea {
         sourceComponent: SysTrayMenu {
             Component.onCompleted: this.open();
             trayItemMenuHandle: root.item.menu
-            trayItemId: root.item.id
             anchor {
                 window: root.QsWindow.window
-                item: root
-                gravity: Config.options.bar.vertical
-                    ? (Config.options.bar.bottom ? Edges.Left : Edges.Right)
-                    : (Config.options.bar.bottom ? Edges.Top : Edges.Bottom)
-                edges: Config.options.bar.vertical
-                    ? (Config.options.bar.bottom ? Edges.Left : Edges.Right)
-                    : (Config.options.bar.bottom ? Edges.Top : Edges.Bottom)
+                rect.x: root.x + (Config.options.bar.vertical ? 0 : QsWindow.window?.width)
+                rect.y: root.y + (Config.options.bar.vertical ? QsWindow.window?.height : 0)
+                rect.height: root.height
+                rect.width: root.width
+                edges: Config.options.bar.bottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Right)
+                gravity: Config.options.bar.bottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Right)
             }
             onMenuOpened: (window) => root.menuOpened(window);
             onMenuClosed: {

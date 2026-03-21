@@ -94,5 +94,12 @@ WButton {
                 TaskbarApps.togglePin(root.desktopEntry.id);
             }
         }
+        WMenuItem {
+            icon.name: "trash"
+            text: Translation.tr("Uninstall")
+            onTriggered: {
+                LauncherApps.uninstallApp(root.desktopEntry.id);
+            }
+        }
     }
 }

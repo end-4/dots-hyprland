@@ -16,9 +16,14 @@ Singleton {
     property bool mediaControlsOpen: false
     property bool osdBrightnessOpen: false
     property bool osdVolumeOpen: false
+    // Volume OSD overrides (when set from IPC: app name, 0-1 value, muted)
+    property string volumeOsdAppName: ""
+    property real volumeOsdValue: -1
+    property bool volumeOsdMuted: false
     property bool oskOpen: false
     property bool overlayOpen: false
     property bool overviewOpen: false
+    property bool overviewOpenWithAllApps: false
     property bool regionSelectorOpen: false
     property bool searchOpen: false
     property bool screenLocked: false

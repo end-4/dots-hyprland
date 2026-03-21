@@ -5,12 +5,14 @@ import qs.modules.common.functions
 import Quickshell
 
 /**
- * - Eases fuzzy searching for applications by name
- * - Guesses icon name for window class name
+ * - Eases fuzzy searching for applications
+ * - Modes: Exact (name only), Normal (name + genericName + comment), Sloppy (+ keywords, categories)
+ * - Levenshtein toggle applies to all modes
  */
 Singleton {
     id: root
-    property bool sloppySearch: Config.options?.search.sloppy ?? false
+    readonly property string searchMode: Config.options?.search?.mode ?? "exact"
+    readonly property bool useLevenshtein: Config.options?.search?.sloppy ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
         "code-url-handler": "visual-studio-code",
@@ -47,9 +49,41 @@ Singleton {
                 t.id === app.id
             ))
     )
+
+    /** Normal scope: name + genericName + comment only */
+    function searchableTextNormal(entry) {
+        const parts = [
+            entry.name || "",
+            entry.genericName || "",
+            entry.comment || ""
+        ];
+        return parts.filter(Boolean).join(" ");
+    }
+
+    /** Sloppy scope: name + comment + genericName + keywords + categories */
+    function searchableText(entry) {
+        const parts = [
+            entry.name || "",
+            entry.comment || "",
+            entry.genericName || "",
+            (entry.keywords || []).join(" "),
+            (entry.categories || []).join(" ")
+        ];
+        return parts.filter(Boolean).join(" ");
+    }
     
     readonly property var preppedNames: list.map(a => ({
         name: Fuzzy.prepare(`${a.name} `),
+        entry: a
+    }))
+
+    readonly property var preppedSearchTextNormal: list.map(a => ({
+        name: Fuzzy.prepare(searchableTextNormal(a) + " "),
+        entry: a
+    }))
+
+    readonly property var preppedSearchText: list.map(a => ({
+        name: Fuzzy.prepare(searchableText(a) + " "),
         entry: a
     }))
 
@@ -58,23 +92,79 @@ Singleton {
         entry: a
     }))
 
+    function normalizeSearchTerm(search) {
+        return (search || "").trim().toLowerCase();
+    }
+
+    function exactMatchScore(entry, normalizedSearch) {
+        if (!normalizedSearch)
+            return 0;
+
+        const name = (entry.name || "").trim().toLowerCase();
+        const genericName = (entry.genericName || "").trim().toLowerCase();
+        if (name === normalizedSearch)
+            return 3;
+        if (genericName === normalizedSearch)
+            return 2;
+        if (name.startsWith(normalizedSearch))
+            return 1;
+        return 0;
+    }
+
+    function prioritizeExactMatches(search, entries) {
+        const normalizedSearch = normalizeSearchTerm(search);
+        if (!normalizedSearch || !entries || entries.length <= 1)
+            return entries;
+
+        return entries
+            .map((entry, index) => ({
+                entry: entry,
+                index: index,
+                score: exactMatchScore(entry, normalizedSearch)
+            }))
+            .sort((a, b) => {
+                if (a.score !== b.score)
+                    return b.score - a.score;
+                return a.index - b.index;
+            })
+            .map(item => item.entry);
+    }
+
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
-        if (root.sloppySearch) {
+        const mode = root.searchMode;
+        const useLev = root.useLevenshtein;
+
+        function runLevenshtein(getText) {
             const results = list.map(obj => ({
                 entry: obj,
-                score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
+                score: Levendist.computeScore(getText(obj).toLowerCase(), search.toLowerCase())
             })).filter(item => item.score > root.scoreThreshold)
                 .sort((a, b) => b.score - a.score)
-            return results
-                .map(item => item.entry)
+            return results.map(item => item.entry)
         }
 
-        return Fuzzy.go(search, preppedNames, {
-            all: true,
-            key: "name"
-        }).map(r => {
-            return r.obj.entry
-        });
+        function runFuzzy(prepped, useConfigThreshold) {
+            const opts = { all: true, key: "name" };
+            if (useConfigThreshold) {
+                const t = (Config.options?.search?.fuzzyThreshold ?? 25) / 100;
+                if (t > 0) opts.threshold = t;
+            }
+            return Fuzzy.go(search, prepped, opts).map(r => r.obj.entry)
+        }
+
+        // Exact: name only (no threshold)
+        if (mode === "exact") {
+            const matches = useLev ? runLevenshtein(e => e.name) : runFuzzy(preppedNames, false);
+            return prioritizeExactMatches(search, matches);
+        }
+        // Normal: name + genericName + comment — use fuzzy threshold to avoid false positives
+        if (mode === "normal") {
+            const matches = useLev ? runLevenshtein(searchableTextNormal) : runFuzzy(preppedSearchTextNormal, true);
+            return prioritizeExactMatches(search, matches);
+        }
+        // Sloppy: name + comment + genericName + keywords + categories
+        const matches = useLev ? runLevenshtein(searchableText) : runFuzzy(preppedSearchText, true);
+        return prioritizeExactMatches(search, matches);
     }
 
     function iconExists(iconName) {

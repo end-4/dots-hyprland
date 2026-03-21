@@ -305,18 +305,14 @@ Singleton {
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
-    function addUserModels() {
-        (Config?.options.ai?.extraModels ?? []).forEach(model => {
-            const safeModelName = root.safeModelName(model["model"]);
-            root.addModel(safeModelName, model)
-        });
-    }
-
     Connections {
         target: Config
         function onReadyChanged() {
             if (!Config.ready) return;
-            root.addUserModels()
+            (Config?.options.ai?.extraModels ?? []).forEach(model => {
+                const safeModelName = root.safeModelName(model["model"]);
+                root.addModel(safeModelName, model)
+            });
         }
     }
 
@@ -325,7 +321,6 @@ Singleton {
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
-        root.addUserModels() // Config onReadyChanged above might not fire if config is loaded before this service
     }
 
     function guessModelLogo(model) {
@@ -350,9 +345,7 @@ Singleton {
     }
 
     function addModel(modelName, data) {
-        root.models = Object.assign({}, root.models, {
-            [modelName]: aiModelComponent.createObject(this, data)
-        });
+        root.models[modelName] = aiModelComponent.createObject(this, data);
     }
 
     Process {

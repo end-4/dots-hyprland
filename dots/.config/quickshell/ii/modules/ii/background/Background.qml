@@ -35,8 +35,15 @@ Variants {
         // Workspaces
         property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
         property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor?.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
-        property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
-        property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
+        // Workspace ID range for this monitor (for parallax). Use workspaces bound to this monitor (e.g. nwg-displays 1-5 / 6-10).
+        property var monitorWorkspaceIds: {
+            var arr = [];
+            for (var i = 0; i < workspacesForMonitor.length; i++)
+                arr.push(workspacesForMonitor[i].id);
+            return arr;
+        }
+        property int firstWorkspaceId: monitorWorkspaceIds.length > 0 ? Math.min.apply(null, monitorWorkspaceIds) : (relevantWindows[0]?.workspace?.id ?? 1)
+        property int lastWorkspaceId: monitorWorkspaceIds.length > 0 ? Math.max.apply(null, monitorWorkspaceIds) : (relevantWindows[relevantWindows.length - 1]?.workspace?.id ?? 10)
         // Wallpaper
         property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
         property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
@@ -48,12 +55,22 @@ Variants {
         }
         property real wallpaperToScreenRatio: Math.min(wallpaperWidth / screen.width, wallpaperHeight / screen.height)
         property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
+        readonly property bool parallaxEnabled: Config.options.background.parallax.enable
         property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
         property real movableXSpace: ((wallpaperWidth / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.width) / 2
         property real movableYSpace: ((wallpaperHeight / wallpaperToScreenRatio * effectiveWallpaperScale) - screen.height) / 2
         readonly property bool verticalParallax: (Config.options.background.parallax.autoVertical && wallpaperHeight > wallpaperWidth) || Config.options.background.parallax.vertical
+        readonly property string wallpaperFit: Config.options.background.wallpaperFit || "fill"
+        readonly property int wallpaperFillMode: {
+            const fit = wallpaperFit;
+            if (fit === "stretch") return Image.Stretch;
+            if (fit === "fit") return Image.PreserveAspectFit;
+            if (fit === "tile") return Image.Tile;
+            return Image.PreserveAspectCrop; // "fill"
+        }
+        readonly property bool wallpaperUsesParallax: wallpaperFit === "fill" && parallaxEnabled
         // Colors
         property bool shouldBlur: (GlobalStates.screenLocked && Config.options.lock.blur.enable)
         property color dominantColor: Appearance.colors.colPrimary // Default, to be changed
@@ -112,11 +129,15 @@ Variants {
                     bgRoot.wallpaperHeight = height;
 
                     if (width <= screenWidth || height <= screenHeight) {
-                        // Undersized/perfectly sized wallpapers
+                        // Undersized/perfectly sized wallpapers: scale up to cover
                         bgRoot.effectiveWallpaperScale = Math.max(screenWidth / width, screenHeight / height);
                     } else {
-                        // Oversized = can be zoomed for parallax, yay
-                        bgRoot.effectiveWallpaperScale = Math.min(bgRoot.preferredWallpaperScale, width / screenWidth, height / screenHeight);
+                        // Oversized: with parallax use workspaceZoom for extra zoom; without parallax use 1 (regular cover)
+                        if (bgRoot.parallaxEnabled) {
+                            bgRoot.effectiveWallpaperScale = Math.min(bgRoot.preferredWallpaperScale, width / screenWidth, height / screenHeight);
+                        } else {
+                            bgRoot.effectiveWallpaperScale = 1;
+                        }
                     }
                 }
             }
@@ -133,7 +154,19 @@ Variants {
                 opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
                 cache: false
                 smooth: false
-                // Range = groups that workspaces span on
+                // Full resolution: do not limit sourceSize so the image stays sharp (no downscaling)
+                source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
+                fillMode: bgRoot.wallpaperFillMode
+                // For stretch/fit/tile: fill parent. For fill: use parallax positioning.
+                anchors.left: bgRoot.wallpaperUsesParallax ? undefined : parent.left
+                anchors.right: bgRoot.wallpaperUsesParallax ? undefined : parent.right
+                anchors.top: bgRoot.wallpaperUsesParallax ? undefined : parent.top
+                anchors.bottom: bgRoot.wallpaperUsesParallax ? undefined : parent.bottom
+                x: bgRoot.wallpaperUsesParallax ? -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace : 0
+                y: bgRoot.wallpaperUsesParallax ? -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace : 0
+                width: bgRoot.wallpaperUsesParallax ? (bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale) : undefined
+                height: bgRoot.wallpaperUsesParallax ? (bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale) : undefined
+                // Range = groups that workspaces span on (parallax only)
                 property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
                 property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
                 property int upper: Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize
@@ -157,10 +190,6 @@ Variants {
                 }
                 property real effectiveValueX: Math.max(0, Math.min(1, valueX))
                 property real effectiveValueY: Math.max(0, Math.min(1, valueY))
-                x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
-                y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
-                source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
-                fillMode: Image.PreserveAspectCrop
                 Behavior on x {
                     NumberAnimation {
                         duration: 600
@@ -173,12 +202,6 @@ Variants {
                         easing.type: Easing.OutCubic
                     }
                 }
-                sourceSize {
-                    width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
-                    height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
-                }
-                width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
-                height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
             }
 
             Loader {
@@ -217,16 +240,8 @@ Variants {
                     horizontalCenter: undefined
                     verticalCenter: undefined
                     readonly property real parallaxFactor: Config.options.background.parallax.widgetsFactor
-                    leftMargin: {
-                        const xOnWallpaper = bgRoot.movableXSpace;
-                        const extraMove = (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (parallaxFactor - 1);
-                        return xOnWallpaper - extraMove;
-                    }
-                    topMargin: {
-                        const yOnWallpaper = bgRoot.movableYSpace;
-                        const extraMove = (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (parallaxFactor - 1);
-                        return yOnWallpaper - extraMove;
-                    }
+                    leftMargin: bgRoot.wallpaperUsesParallax ? (bgRoot.movableXSpace - (wallpaper.effectiveValueX * 2 * bgRoot.movableXSpace) * (parallaxFactor - 1)) : 0
+                    topMargin: bgRoot.wallpaperUsesParallax ? (bgRoot.movableYSpace - (wallpaper.effectiveValueY * 2 * bgRoot.movableYSpace) * (parallaxFactor - 1)) : 0
                     Behavior on leftMargin {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }

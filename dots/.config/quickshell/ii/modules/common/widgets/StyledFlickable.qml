@@ -12,6 +12,7 @@ Flickable {
     property real mouseScrollDeltaThreshold: Config?.options.interactions.scrolling.mouseScrollDeltaThreshold ?? 120
     // Accumulated scroll destination so wheel deltas stack while animating
     property real scrollTargetY: 0
+    property bool wheelEnabled: true
 
     ScrollBar.vertical: StyledScrollBar {}
 
@@ -20,6 +21,7 @@ Flickable {
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
         onWheel: function(wheelEvent) {
+            if (!root.wheelEnabled) { wheelEvent.accepted = true; return; }
             const delta = wheelEvent.angleDelta.y / root.mouseScrollDeltaThreshold;
             // The angleDelta.y of a touchpad is usually small and continuous,
             // while that of a mouse wheel is typically in multiples of ±120.

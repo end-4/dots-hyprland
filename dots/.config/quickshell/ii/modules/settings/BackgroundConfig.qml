@@ -8,10 +8,55 @@ ContentPage {
     forceWidth: true
 
     ContentSection {
+        icon: "wallpaper"
+        title: Translation.tr("Wallpaper")
+
+        ConfigSelectionArray {
+            Layout.fillWidth: false
+            currentValue: Config.options.background.wallpaperFit || "fill"
+            onSelected: newValue => {
+                Config.options.background.wallpaperFit = newValue;
+            }
+            options: [
+                {
+                    displayName: Translation.tr("Fill (zoom to cover)"),
+                    icon: "fit_screen",
+                    value: "fill"
+                },
+                {
+                    displayName: Translation.tr("Stretch"),
+                    icon: "aspect_ratio",
+                    value: "stretch"
+                },
+                {
+                    displayName: Translation.tr("Fit (letterbox)"),
+                    icon: "fit_screen",
+                    value: "fit"
+                },
+                {
+                    displayName: Translation.tr("Tile"),
+                    icon: "grid_on",
+                    value: "tile"
+                }
+            ]
+        }
+    }
+
+    ContentSection {
         icon: "sync_alt"
         title: Translation.tr("Parallax")
 
         ConfigSwitch {
+            buttonIcon: "view_in_ar"
+            text: Translation.tr("Enable parallax (extra zoom + movement)")
+            checked: Config.options.background.parallax.enable
+            onCheckedChanged: {
+                Config.options.background.parallax.enable = checked;
+            }
+        }
+
+        ConfigSwitch {
+            enabled: Config.options.background.parallax.enable
             buttonIcon: "unfold_more_double"
             text: Translation.tr("Vertical")
             checked: Config.options.background.parallax.vertical
@@ -23,6 +68,7 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
+                enabled: Config.options.background.parallax.enable
                 buttonIcon: "counter_1"
                 text: Translation.tr("Depends on workspace")
                 checked: Config.options.background.parallax.enableWorkspace
@@ -31,6 +77,7 @@ ContentPage {
                 }
             }
             ConfigSwitch {
+                enabled: Config.options.background.parallax.enable
                 buttonIcon: "side_navigation"
                 text: Translation.tr("Depends on sidebars")
                 checked: Config.options.background.parallax.enableSidebar
@@ -40,6 +87,7 @@ ContentPage {
             }
         }
         ConfigSpinBox {
+            enabled: Config.options.background.parallax.enable
             icon: "loupe"
             text: Translation.tr("Preferred wallpaper zoom (%)")
             value: Config.options.background.parallax.workspaceZoom * 100

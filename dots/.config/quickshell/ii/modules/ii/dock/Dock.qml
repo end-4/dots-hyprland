@@ -16,6 +16,51 @@ Scope { // Scope
     id: root
     property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
 
+    // Hyprland workaround: moving cursor away before toggling pin avoids exclusive zone
+    // changes leaving input stuck on one monitor (bottom becomes non-interactable)
+    Process {
+        id: pinWithHyprlandWorkaroundProc
+        property var cursorHook: null
+        property int cursorX: 0
+        property int cursorY: 0
+        function doIt() {
+            cursorHook = (output) => {
+                const parts = output.trim().split(",")
+                cursorX = parseInt(parts[0]) || 0
+                cursorY = parseInt(parts[1]) || 0
+                doIt2()
+            }
+            command = ["hyprctl", "cursorpos"]
+            running = true
+        }
+        function doIt2() {
+            cursorHook = () => doIt3()
+            command = ["bash", "-c", "hyprctl dispatch movecursor 9999 9999"]
+            running = true
+        }
+        function doIt3() {
+            root.pinned = !root.pinned
+            if (Config.options?.dock) Config.options.dock.pinnedOnStartup = root.pinned
+            cursorHook = null
+            command = ["bash", "-c", `sleep 0.02; hyprctl dispatch movecursor ${cursorX} ${cursorY}`]
+            running = true
+        }
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (pinWithHyprlandWorkaroundProc.cursorHook)
+                    pinWithHyprlandWorkaroundProc.cursorHook(text)
+            }
+        }
+    }
+
+    function togglePin() {
+        if (!root.pinned) pinWithHyprlandWorkaroundProc.doIt()
+        else {
+            root.pinned = false
+            if (Config.options?.dock) Config.options.dock.pinnedOnStartup = false
+        }
+    }
+
     Variants {
         // For each monitor
         model: Quickshell.screens
@@ -28,6 +73,7 @@ Scope { // Scope
             visible: !GlobalStates.screenLocked
 
             property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
+            onRevealChanged: revealSettleTimer.restart()
 
             anchors {
                 bottom: true
@@ -39,12 +85,34 @@ Scope { // Scope
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
+            // Explicit None to avoid layer-shell focus getting stuck (Hyprland OnDemand bugs)
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
             color: "transparent"
 
             implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
 
             mask: Region {
+                id: dockMask
                 item: dockMouseArea
+            }
+
+            Connections {
+                target: GlobalStates
+                function onSidebarLeftOpenChanged() {
+                    Qt.callLater(() => dockMask.changed())
+                }
+                function onSidebarRightOpenChanged() {
+                    Qt.callLater(() => dockMask.changed())
+                }
+            }
+
+            // Refresh Region after reveal animation completes. Rapid hover (before animation
+            // plays) can leave the input region in a broken state; this ensures we resync.
+            Timer {
+                id: revealSettleTimer
+                interval: 250  // elementMoveFast is 200ms, add buffer
+                repeat: false
+                onTriggered: dockMask.changed()
             }
 
             MouseArea {
@@ -111,7 +179,7 @@ Scope { // Scope
                                     clickedHeight: baseHeight + 20
                                     buttonRadius: Appearance.rounding.normal
                                     toggled: root.pinned
-                                    onClicked: root.pinned = !root.pinned
+                                    onClicked: root.togglePin()
                                     contentItem: MaterialSymbol {
                                         text: "keep"
                                         horizontalAlignment: Text.AlignHCenter
@@ -123,6 +191,7 @@ Scope { // Scope
                             DockSeparator {}
                             DockApps {
                                 id: dockApps
+                                screen: dockRoot.screen
                                 buttonPadding: dockRow.padding
                             }
                             DockSeparator {}
