@@ -24,4 +24,7 @@ custom_packages() {
     # Add your packages below, one per line, keeping the # prefix:
     # example-package
     # another-package
+
+    # Leave this no-op command to prevent syntax errors
+    :
 }

@@ -31,4 +31,7 @@ custom_files() {
     # cp_file "dots/custom/files/.config/app.conf" "$HOME/.config/app.conf"
 
     # Add your custom file operations below:
+
+    # Leave this no-op command to prevent syntax errors
+    :
 }

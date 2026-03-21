@@ -25,4 +25,7 @@ custom_commands() {
     # Add your commands below, one per line, keeping the # prefix:
     # systemctl --user enable myservice
     # chmod +x ~/.local/bin/myscript
+
+    # Leave this no-op command to prevent syntax errors
+    :
 }

@@ -23,4 +23,7 @@ custom_misc() {
     # chmod +x "$HOME/.local/bin/my-script"
 
     # Add your miscellaneous customizations below:
+
+    # Leave this no-op command to prevent syntax errors
+    :
 }
