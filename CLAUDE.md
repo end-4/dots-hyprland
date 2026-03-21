@@ -82,6 +82,18 @@ The `setup` script sources these libraries from `sdata/lib/`:
 
 Subcommands are in `sdata/subcmd-*/` directories.
 
+### Custom Additions (`dots/custom/`)
+
+Personal additions can be made in `dots/custom/` which runs at the end of `./setup install`:
+- `packages.sh` - Extra packages to install via `yay -S`
+- `files.sh` - Extra files to copy (use `cp_file` or `rsync_dir`)
+- `commands.sh` - Extra shell commands to run
+- `misc.sh` - Miscellaneous custom items
+
+Each file contains a template function (`custom_packages()`, `custom_files()`, etc.) that gets executed by `sdata/subcmd-install/4.custom.sh`.
+
+**Usage:** Edit the functions in `dots/custom/*.sh` and run `./setup install`.
+
 ### Dependencies
 
 **Python packages** are managed via `uv` in a virtual environment at `$XDG_STATE_HOME/quickshell/.venv` with Python 3.12. Requirements are in `sdata/uv/requirements.txt`.
@@ -103,6 +115,8 @@ Run `git submodule update --init --recursive` after cloning.
 | `setup` | Main entry point for installation |
 | `sdata/deps-info.md` | Detailed dependency information |
 | `sdata/dist-arch/install-deps.sh` | Arch dependency installation |
+| `sdata/subcmd-install/4.custom.sh` | Custom additions runner |
+| `dots/custom/` | Personal additions (packages, files, commands) |
 | `dots/.config/quickshell/ii/shell.qml` | Quickshell entry point |
 | `dots/.config/quickshell/ii/GlobalStates.qml` | Global state management |
 | `dots/.config/quickshell/ii/settings.qml` | Settings application |
