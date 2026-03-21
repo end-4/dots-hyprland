@@ -22,22 +22,51 @@ MouseArea {
 
         Item {
             visible: NetworkTraffic.available
-            implicitWidth: speedTextMetrics.width * 2 + speedIconWidth * 2 + 8
+            implicitWidth: speedMeasure.implicitWidth
             implicitHeight: Appearance.sizes.barHeight
             Layout.rightMargin: visible ? 16 : 0
             clip: true
 
-            property int speedIconWidth: Appearance.font.pixelSize.normal + 2
-
             TextMetrics {
                 id: speedTextMetrics
-                text: "999G/s"
+                text: "8888G/s"
                 font.pixelSize: Appearance.font.pixelSize.small
                 font.family: Appearance.font.family.main
                 font.variableAxes: Appearance.font.variableAxes.main
             }
 
             RowLayout {
+                id: speedMeasure
+                visible: false
+
+                MaterialSymbol {
+                    text: "south"
+                    iconSize: Appearance.font.pixelSize.normal
+                }
+
+                Item {
+                    implicitWidth: speedTextMetrics.width
+                    implicitHeight: 1
+                }
+
+                Item {
+                    implicitWidth: 2
+                    implicitHeight: 1
+                }
+
+                MaterialSymbol {
+                    text: "north"
+                    iconSize: Appearance.font.pixelSize.normal
+                }
+
+                Item {
+                    implicitWidth: speedTextMetrics.width
+                    implicitHeight: 1
+                }
+            }
+
+            RowLayout {
+                id: speedRow
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 2
