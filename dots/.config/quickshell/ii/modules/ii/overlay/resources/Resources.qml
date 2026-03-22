@@ -34,6 +34,18 @@ StyledOverlayWidget {
             "history": ResourceUsage.swapUsageHistory,
             "maxAvailableString": ResourceUsage.maxAvailableSwapString
         },
+        {
+            "icon": "storage",
+            "name": Translation.tr("Disk"),
+            "history": ResourceUsage.diskUsageHistory,
+            "maxAvailableString": ResourceUsage.maxAvailableDiskString
+        },
+        {
+            "icon": "videogame_asset",
+            "name": Translation.tr("GPU"),
+            "history": ResourceUsage.gpuUsageHistory,
+            "maxAvailableString": ResourceUsage.maxAvailableGpuString
+        },
     ]
 
     contentItem: OverlayBackground {
@@ -86,7 +98,7 @@ StyledOverlayWidget {
         ColumnLayout {
             spacing: 2
             StyledText {
-                text: (resourceSummary.history[resourceSummary.history.length - 1] * 100).toFixed(1) + "%"
+                text: (resourceSummary.history.length > 0 ? (resourceSummary.history[resourceSummary.history.length - 1] * 100) : 0).toFixed(1) + "%"
                 font {
                     family: Appearance.font.family.numbers
                     variableAxes: Appearance.font.variableAxes.numbers

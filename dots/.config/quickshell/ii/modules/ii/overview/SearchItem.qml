@@ -6,6 +6,7 @@ import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
@@ -32,16 +33,27 @@ RippleButton {
     property string itemClickActionName: entry?.verb ?? "Open"
     property string bigText: entry?.iconType === LauncherSearchResult.IconType.Text ? entry?.iconName ?? "" : ""
     property string materialSymbol: entry.iconType === LauncherSearchResult.IconType.Material ? entry?.iconName ?? "" : ""
+    property string itemComment: entry?.comment ?? ""
+    property string itemGenericName: entry?.genericName ?? ""
+    property string appDescription: {
+        const comment = (root.itemComment || "").trim();
+        if (comment.length > 0)
+            return comment;
+        return (root.itemGenericName || "").trim();
+    }
     property string cliphistRawString: entry?.rawValue ?? ""
     property bool blurImage: entry?.blurImage ?? false
     
     visible: root.entryShown
     property int horizontalMargin: 10
     property int buttonHorizontalPadding: 10
-    property int buttonVerticalPadding: 6
+    property int buttonVerticalPadding: 7
     property bool keyboardDown: false
 
-    implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
+    implicitHeight: Math.max(
+        rowLayout.implicitHeight + root.buttonVerticalPadding * 2,
+        root.isAppEntry ? 58 : 0
+    )
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
     colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colPrimaryContainerActive : 
@@ -92,6 +104,9 @@ RippleButton {
     }
     
     PointingHandInteraction {}
+
+    property bool isAppEntry: root.entry && (root.itemType === Translation.tr("App")) && (root.entry.id || "").length > 0
+    property bool showUninstallButton: Config?.options?.launcher?.showUninstallButton ?? true
 
     background {
         anchors.fill: root
@@ -180,7 +195,7 @@ RippleButton {
             id: contentColumn
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
-            spacing: 0
+            spacing: 2
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colSubtext
@@ -225,6 +240,15 @@ RippleButton {
                     text: `${root.displayContent}`
                 }
             }
+            StyledText { // App description/subtitle
+                Layout.fillWidth: true
+                visible: root.itemType === Translation.tr("App") && root.appDescription.length > 0
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colSubtext
+                elide: Text.ElideRight
+                maximumLineCount: 1
+                text: root.appDescription
+            }
             Loader { // Clipboard image preview
                 active: root.cliphistRawString && Cliphist.entryIsImage(root.cliphistRawString)
                 sourceComponent: CliphistImage {
@@ -237,7 +261,7 @@ RippleButton {
             }
         }
 
-        // Action text
+        // Action text (Open)
         StyledText {
             Layout.fillWidth: false
             visible: (root.hovered || root.focus)
@@ -249,10 +273,29 @@ RippleButton {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignTop
-            Layout.topMargin: root.buttonVerticalPadding
-            Layout.bottomMargin: -root.buttonVerticalPadding // Why is this necessary? Good question.
+            Layout.alignment: Qt.AlignVCenter
             spacing: 4
+            // Uninstall (app entries only; aligned with other secondary action buttons)
+            RippleButton {
+                id: uninstallButton
+                visible: root.showUninstallButton && root.isAppEntry && (root.hovered || root.focus)
+                implicitWidth: 34
+                implicitHeight: 34
+                buttonRadius: Appearance.rounding.full
+                colBackground: ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1)
+                colBackgroundHover: Appearance.colors.colSurfaceContainerHigh
+                colRipple: Appearance.colors.colSurfaceContainerHigh
+                contentItem: MaterialSymbol {
+                    anchors.centerIn: parent
+                    text: "delete"
+                    iconSize: 20
+                    color: uninstallButton.hovered ? Appearance.colors.colError : Appearance.colors.colOnSurfaceVariant
+                }
+                onClicked: uninstallConfirmPopup.open()
+                StyledToolTip {
+                    text: Translation.tr("Uninstall")
+                }
+            }
             Repeater {
                 model: (root.entry.actions ?? []).slice(0, 4)
                 delegate: RippleButton {
@@ -297,5 +340,123 @@ RippleButton {
             }
         }
 
+    // Uninstall confirmation (themed, animated, centered on screen)
+    property var popupContainer: root.Window?.window?.contentItem ?? root
+    Popup {
+        id: uninstallConfirmPopup
+        parent: popupContainer
+        modal: true
+        dim: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        x: parent ? (parent.width - width) / 2 : 0
+        y: parent ? (parent.height - height) / 2 : 0
+        width: 360
+        padding: 0
+        leftPadding: 20
+        rightPadding: 20
+        topPadding: 20
+        bottomPadding: 20
+
+        background: Item {
+            opacity: uninstallConfirmPopup.visible ? 1 : 0
+            scale: uninstallConfirmPopup.visible ? 1 : 0.92
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
+            Behavior on scale {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveEnter.duration
+                    easing.type: Appearance.animation.elementMoveEnter.type
+                    easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                }
+            }
+            StyledRectangularShadow { target: confirmBg }
+            Rectangle {
+                id: confirmBg
+                anchors.fill: parent
+                radius: Appearance.rounding.large
+                color: Appearance.colors.colBackgroundSurfaceContainer
+            }
+        }
+
+        contentItem: Item {
+            opacity: uninstallConfirmPopup.visible ? 1 : 0
+            scale: uninstallConfirmPopup.visible ? 1 : 0.92
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
+            Behavior on scale {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveEnter.duration
+                    easing.type: Appearance.animation.elementMoveEnter.type
+                    easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                }
+            }
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 16
+                StyledText {
+                    Layout.fillWidth: true
+                    Layout.topMargin: 4
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    color: Appearance.m3colors.m3onSurface
+                    text: Translation.tr("Are you sure you want to uninstall %1?").arg(root.itemName || root.entry?.id || "")
+                }
+                RowLayout {
+                    Layout.topMargin: 8
+                    spacing: 12
+                    Layout.alignment: Qt.AlignRight
+                RippleButton {
+                    buttonText: Translation.tr("Cancel")
+                    implicitWidth: 100
+                    implicitHeight: 40
+                    buttonRadius: Appearance.rounding.small
+                    colBackground: ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1)
+                    colBackgroundHover: Appearance.colors.colSurfaceContainerHigh
+                    colRipple: Appearance.colors.colSurfaceContainerHigh
+                    contentItem: Item {
+                        anchors.fill: parent
+                        StyledText {
+                            anchors.centerIn: parent
+                            text: parent.parent.buttonText
+                            color: Appearance.colors.colOnSurface
+                        }
+                    }
+                    onClicked: uninstallConfirmPopup.close()
+                }
+                RippleButton {
+                    buttonText: Translation.tr("Uninstall")
+                    implicitWidth: 110
+                    implicitHeight: 40
+                    buttonRadius: Appearance.rounding.small
+                    colBackground: Appearance.colors.colErrorContainer
+                    colBackgroundHover: Appearance.colors.colErrorContainerHover
+                    colRipple: Appearance.colors.colErrorContainerActive
+                    contentItem: Item {
+                        anchors.fill: parent
+                        StyledText {
+                            anchors.centerIn: parent
+                            text: parent.parent.buttonText
+                            color: Appearance.colors.colOnErrorContainer
+                        }
+                    }
+                    onClicked: {
+                        LauncherApps.uninstallApp(root.entry?.id ?? "");
+                        uninstallConfirmPopup.close();
+                    }
+                }
+            }
+            }
+        }
+        }
     }
 }

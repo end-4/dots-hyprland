@@ -93,9 +93,7 @@ WBarAttachedPanelContent {
                 }
                 focus: true
                 text: root.searchText
-                onTextChanged: {
-                    LauncherSearch.query = text;
-                }
+                onTextChanged: LauncherSearch.query = text
                 onAccepted: {
                     context.accepted();
                 }

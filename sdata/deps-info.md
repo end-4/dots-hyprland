@@ -101,6 +101,9 @@ Tips:
   - Surely needed.
 - `hyprsunset`
   - Used in Quickshell config.
+- `snappy-switcher`
+  - Hyprland Alt-Tab window switcher; used in `hypr/custom/keybinds.conf` and `exec-once = snappy-wrapper` in `hypr/custom/execs.conf`.
+  - [AUR](https://aur.archlinux.org/packages/snappy-switcher) on Arch. Not packaged in Fedora repos as of this writing (install from [upstream](https://github.com/OpalAayan/snappy-switcher) or a COPR if available).
 - `wl-clipboard`
   - Surely needed.
 
@@ -153,13 +156,15 @@ Tips:
 - `slurp`
   - Used in Hyprland and Quickshell config.
 - `swappy`
-  - Used in Quickshell config.
+  - Used in Quickshell config; default config is installed to `~/.config/swappy` from `dots/.config/swappy` during `./setup install-files`.
 - `tesseract`
   - Used in Quickshell and Hyprland config.
 - `tesseract-data-eng`
   - Used as data for tesseract.
-- `wf-recorder`
-  - Used in Quickshell config.
+- `gpu-screen-recorder`
+  - Used by Quickshell `record.sh` for screen recording (video).
+  - On Fedora, the install script enables COPR `brycensranch/gpu-screen-recorder-git` and installs `gpu-screen-recorder-ui` (provides the `gpu-screen-recorder` binary).
+  - On Gentoo, this package is provided via the [GURU](https://wiki.gentoo.org/wiki/Project:GURU) overlay (`eselect repository enable guru`).
 
 
 ## illogical-impulse-toolkit

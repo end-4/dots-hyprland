@@ -11,6 +11,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import Quickshell.Services.Pipewire
 
 Item { // Player instance
     id: root
@@ -25,8 +26,156 @@ Item { // Player instance
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
+    readonly property string cavaBaseConfigPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`
+    property string cavaPulseSource: ""
+    property string cavaCommand: {
+        const sourceLine = root.cavaPulseSource.length > 0 ? `source = ${root.cavaPulseSource}\n` : "";
+        return `cava -p <(cat '${root.cavaBaseConfigPath}'; printf '\\n[input]\\nmethod = pulse\\n${sourceLine}')`;
+    }
 
     property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+
+    function normalizeToken(value) {
+        return (value ?? "").toString().toLowerCase().replace(/[^a-z0-9]+/g, "");
+    }
+
+    function playerMatchTokens() {
+        const tokens = new Set();
+        const raw = [
+            root.player?.identity,
+            root.player?.desktopEntry,
+            root.player?.dbusName,
+            root.player?.trackArtist,
+            root.player?.trackTitle
+        ];
+        for (const item of raw) {
+            const normalized = normalizeToken(item);
+            if (normalized.length > 0) {
+                tokens.add(normalized);
+            }
+            const text = (item ?? "").toString().toLowerCase();
+            if (text.length > 0) {
+                for (const part of text.split(/[^a-z0-9]+/g)) {
+                    const normalizedPart = normalizeToken(part);
+                    if (normalizedPart.length >= 3) {
+                        tokens.add(normalizedPart);
+                    }
+                }
+            }
+        }
+        return [...tokens];
+    }
+
+    function streamMatchScore(node, tokens) {
+        const properties = node?.properties ?? {};
+        const fields = [
+            properties["application.name"],
+            properties["application.process.binary"],
+            properties["media.name"],
+            properties["node.name"],
+            node?.name,
+            node?.description
+        ];
+        let score = 0;
+        for (const field of fields) {
+            const normalizedField = normalizeToken(field);
+            if (normalizedField.length === 0) {
+                continue;
+            }
+            for (const token of tokens) {
+                if (token.length > 0 && normalizedField.includes(token)) {
+                    score += token.length;
+                }
+            }
+        }
+        return score;
+    }
+
+    function findOwnStreamNode() {
+        const nodes = Audio.outputAppNodes ?? [];
+        if (nodes.length === 0) {
+            return null;
+        }
+
+        const tokens = playerMatchTokens();
+        if (tokens.length === 0) {
+            return null;
+        }
+
+        let bestNode = null;
+        let bestScore = 0;
+        for (const node of nodes) {
+            const score = streamMatchScore(node, tokens);
+            if (score > bestScore) {
+                bestScore = score;
+                bestNode = node;
+            }
+        }
+        return bestScore > 0 ? bestNode : null;
+    }
+
+    function resolveSinkForStream(streamNode) {
+        if (!streamNode) {
+            return null;
+        }
+
+        const linkGroups = Pipewire.linkGroups?.values ?? [];
+        for (const linkGroup of linkGroups) {
+            const sourceNode = linkGroup?.source;
+            const targetNode = linkGroup?.target;
+            if (sourceNode?.id === streamNode.id && targetNode?.isSink && !targetNode?.isStream) {
+                return targetNode;
+            }
+            if (targetNode?.id === streamNode.id && sourceNode?.isSink && !sourceNode?.isStream) {
+                return sourceNode;
+            }
+        }
+
+        const streamProps = streamNode?.properties ?? {};
+        const hint = (streamProps["target.object"] ?? streamProps["node.target"] ?? "").toString();
+        if (hint.length === 0) {
+            return null;
+        }
+
+        const devices = Audio.outputDevices ?? [];
+        for (const device of devices) {
+            const deviceProps = device?.properties ?? {};
+            const candidates = [
+                device?.name,
+                device?.nickname,
+                device?.description,
+                deviceProps["node.name"],
+                deviceProps["node.nick"],
+                deviceProps["object.path"]
+            ];
+            if (candidates.some(candidate => (candidate ?? "").toString() === hint)) {
+                return device;
+            }
+        }
+        return null;
+    }
+
+    function resolvePulseMonitorSource() {
+        const streamNode = findOwnStreamNode();
+        const sinkNode = resolveSinkForStream(streamNode);
+        const sinkName = sinkNode?.properties?.["node.name"] ?? sinkNode?.name ?? "";
+        if (!sinkName || sinkName.length === 0) {
+            return "";
+        }
+        return sinkName.endsWith(".monitor") ? sinkName : `${sinkName}.monitor`;
+    }
+
+    function refreshVisualizerSource() {
+        const newSource = resolvePulseMonitorSource();
+        if (newSource === root.cavaPulseSource) {
+            return;
+        }
+        root.cavaPulseSource = newSource;
+        if (cavaProc.running) {
+            cavaProc.running = false;
+            cavaProc.running = true;
+        }
+    }
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -82,6 +231,34 @@ Item { // Player instance
             root.downloaded = true
         }
     }
+
+    Process {
+        id: cavaProc
+        running: root.visible && root.player != null
+        command: ["bash", "-lc", root.cavaCommand]
+        onRunningChanged: {
+            if (!cavaProc.running) {
+                root.visualizerPoints = [];
+            }
+        }
+        stdout: SplitParser {
+            onRead: data => {
+                const points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                root.visualizerPoints = points;
+            }
+        }
+    }
+
+    Timer {
+        running: cavaProc.running
+        repeat: true
+        interval: 1200
+        onTriggered: root.refreshVisualizerSource()
+    }
+
+    onPlayerChanged: root.refreshVisualizerSource()
+
+    Component.onCompleted: root.refreshVisualizerSource()
 
     ColorQuantizer {
         id: colorQuantizer

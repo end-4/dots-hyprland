@@ -13,6 +13,10 @@ Singleton {
     property int readWriteDelay: 50 // milliseconds
     property bool blockWrites: false
 
+    function forceSave() {
+        configFileView.writeAdapter();
+    }
+
     function setNestedValue(nestedKey, value) {
         let keys = nestedKey.split(".");
         let obj = root.options;
@@ -79,6 +83,11 @@ Singleton {
             id: configOptionsJsonAdapter
 
             property string panelFamily: "ii" // "ii", "waffle"
+
+            property JsonObject startup: JsonObject {
+                property int delaySeconds: 8
+                property list<string> postLoginCommands: []
+            }
 
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
@@ -169,6 +178,8 @@ Singleton {
                         property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
                         property real x: 100
                         property real y: 100
+                        property real relX: -1
+                        property real relY: -1
                         property string style: "cookie"        // Options: "cookie", "digital"
                         property string styleLocked: "cookie"  // Options: "cookie", "digital"
                         property JsonObject cookie: JsonObject {
@@ -208,12 +219,16 @@ Singleton {
                         property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
                         property real x: 400
                         property real y: 100
+                        property real relX: -1
+                        property real relY: -1
                     }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
+                property string wallpaperFit: "fill" // "fill" | "stretch" | "fit" | "tile"
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
+                    property bool enable: false // When off, fill uses regular cover (no extra zoom). When on, uses workspaceZoom + movement.
                     property bool vertical: false
                     property bool autoVertical: false
                     property bool enableWorkspace: true
@@ -247,6 +262,12 @@ Singleton {
                     property int memoryWarningThreshold: 95
                     property int swapWarningThreshold: 85
                     property int cpuWarningThreshold: 90
+                    property int gpuWarningThreshold: 90
+                    property bool showRam: true
+                    property bool showSwap: true
+                    property bool showCpu: true
+                    property bool showDisk: true
+                    property bool showGpu: true
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
                 property JsonObject utilButtons: JsonObject {
@@ -271,6 +292,7 @@ Singleton {
                     property bool enable: false
                     property bool enableGPS: true // gps based location
                     property string city: "" // When 'enableGPS' is false
+                    property string provider: "wttr" // "wttr" | "open" (Open-Meteo)
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
@@ -325,6 +347,7 @@ Singleton {
             property JsonObject dock: JsonObject {
                 property bool enable: false
                 property bool monochromeIcons: true
+                property bool perMonitorAppIcons: true
                 property real height: 60
                 property real hoverRegionHeight: 2
                 property bool pinnedOnStartup: false
@@ -341,6 +364,18 @@ Singleton {
                     property int mouseScrollFactor: 120
                     property int touchpadScrollFactor: 450
                 }
+                property JsonObject autoscroll: JsonObject {
+                    property int pollIntervalMs: 4
+                    property int emitIntervalMs: 1
+                    property int deadzonePx: 1
+                    property int activationRadiusPx: 18
+                    property int maxDistancePx: 180
+                    property real minLinesPerSecond: 1.2
+                    property real maxLinesPerSecond: 22
+                    property real responseCurve: 1.05
+                    property bool invertY: false
+                    property int wheelUnitsPerStep: 1
+                }
                 property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
                     property bool enable: false
                 }
@@ -356,6 +391,7 @@ Singleton {
             }
 
             property JsonObject launcher: JsonObject {
+                property bool showUninstallButton: true
                 property list<string> pinnedApps: [ "org.kde.dolphin", "kitty", "cmake-gui"]
             }
 
@@ -428,6 +464,7 @@ Singleton {
                 property bool orderRightLeft: false
                 property bool orderBottomUp: false
                 property bool centerIcons: true
+                property bool showSpecialWorkspaces: false
             }
 
             property JsonObject regionSelector: JsonObject {
@@ -473,11 +510,15 @@ Singleton {
             property JsonObject search: JsonObject {
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
-                property list<string> excludedSites: ["quora.com", "facebook.com"]
-                property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
+                property list<string> excludedSites: []
+                property bool sloppy: false // Use Levenshtein distance for all search modes (app launcher + clipboard)
+                property string mode: "exact" // "exact" | "normal" | "sloppy" — which fields are searched (name only / +genericName+comment / +keywords+categories)
+                property int fuzzyThreshold: 25 // 0–100; used for Normal/Sloppy to filter weak fuzzy matches. Higher = stricter.
+                property bool smartSearch: false
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"
+                    property string allApps: "!"
                     property string app: ">"
                     property string clipboard: ";"
                     property string emojis: ":"
@@ -545,6 +586,17 @@ Singleton {
 
             property JsonObject screenRecord: JsonObject {
                 property string savePath: Directories.videos.replace("file://","") // strip "file://"
+                property bool recordDesktopAudio: true
+                property bool recordMicAudio: false
+                property string desktopAudioSource: ""  // Empty = auto-detect default monitor
+                property string micAudioSource: ""     // Empty = default input
+                property string encoder: "nvenc"      // "nvenc" = NVIDIA, "vaapi" = AMD/Intel, "software" = libx264
+                property int framerate: 0   // 0 = variable (default), 30/60 for constant (lower = less lag)
+                property int bitrate: 0    // kbps, 0 = default/crf
+                property string x264Preset: ""  // libx264 preset: ultrafast, superfast, veryfast, fast, medium
+                property string nvencPreset: "" // h264_nvenc preset: p1..p7
+                property string vaapiPreset: "" // quality profile mapped to qp values in record.sh
+                property string preset: ""      // legacy fallback for old configs
             }
 
             property JsonObject screenSnip: JsonObject {
@@ -555,6 +607,15 @@ Singleton {
                 property bool battery: false
                 property bool pomodoro: false
                 property string theme: "freedesktop"
+                property JsonObject startup: JsonObject {
+                    property bool enable: true
+                    property string path: "~/.local/share/sounds/ii/stereo/startup.oga"
+                }
+                property JsonObject notification: JsonObject {
+                    property bool enable: true
+                    property string path: "~/.local/share/sounds/ii/stereo/notify.oga"
+                    property list<string> mutedApps: []
+                }
             }
 
             property JsonObject time: JsonObject {
@@ -575,6 +636,7 @@ Singleton {
             property JsonObject updates: JsonObject {
                 property bool enableCheck: true
                 property int checkInterval: 120 // minutes
+                property bool notifyAvailableInBackground: false
                 property int adviseUpdateThreshold: 75 // packages
                 property int stronglyAdviseUpdateThreshold: 200 // packages
             }

@@ -7,6 +7,8 @@ RowLayout {
     id: root
     property string text: ""
     property string icon
+    property string valueSuffix: ""
+    property string zeroDisplay: ""
     property alias value: spinBoxWidget.value
     property alias stepSize: spinBoxWidget.stepSize
     property alias from: spinBoxWidget.from
@@ -23,7 +25,6 @@ RowLayout {
         }
         StyledText {
             id: labelWidget
-            Layout.fillWidth: true
             text: root.text
             color: Appearance.colors.colOnSecondaryContainer
             opacity: root.enabled ? 1 : 0.4
@@ -33,6 +34,7 @@ RowLayout {
     StyledSpinBox {
         id: spinBoxWidget
         Layout.fillWidth: false
-        value: root.value
+        valueSuffix: root.valueSuffix
+        zeroDisplay: root.zeroDisplay
     }
 }

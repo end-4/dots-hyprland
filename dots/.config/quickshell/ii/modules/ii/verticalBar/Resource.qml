@@ -8,8 +8,10 @@ Item {
     required property string iconName
     required property double percentage
     property int warningThreshold: 100
-    implicitHeight: resourceProgress.implicitHeight
-    implicitWidth: Appearance.sizes.verticalBarWidth
+    property bool shown: true
+    implicitHeight: shown ? resourceProgress.implicitHeight : 0
+    implicitWidth: shown ? Appearance.sizes.verticalBarWidth : 0
+    visible: shown
 
     property bool warning: percentage * 100 >= warningThreshold
 

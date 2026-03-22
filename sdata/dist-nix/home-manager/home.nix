@@ -110,6 +110,7 @@ quickshell, home_attrs, ... }:
       ### illogical-impulse-hyprland
       #hyprland
       hyprsunset #hyprsunset
+      # snappy-switcher # TODO: add when available in nixpkgs (Hyprland Alt-Tab; see hypr/custom/keybinds.conf)
       wl-clipboard #wl-clipboard
 
 
@@ -154,7 +155,7 @@ quickshell, home_attrs, ... }:
       swappy #swappy
       tesseract #tesseract
       #tesseract-data-eng (TODO: Seems not available as nixpkg)
-      wf-recorder #wf-recorder
+      gpu-screen-recorder #gpu-screen-recorder
 
 
       ### illogical-impulse-toolkit

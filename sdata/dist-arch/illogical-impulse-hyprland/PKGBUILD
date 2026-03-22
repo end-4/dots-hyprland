@@ -1,11 +1,12 @@
 pkgname=illogical-impulse-hyprland
 pkgver=1.0
-pkgrel=4
+pkgrel=5
 pkgdesc='Illogical Impulse Hyprland relatated packages'
 arch=(any)
 license=(None)
 depends=(
   hyprland
   hyprsunset
+  snappy-switcher
   wl-clipboard
 )

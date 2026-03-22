@@ -84,7 +84,7 @@ net-libs/libsoup brotli introspection ssl
 gui-apps/slurp -man
 #gui-apps/swappy (no use flags)
 app-text/tesseract jpeg openmp png webp
-gui-apps/wf-recorder pipewire
+media-video/gpu-screen-recorder pipewire
 
 
 ################### TOOLKIT ###################

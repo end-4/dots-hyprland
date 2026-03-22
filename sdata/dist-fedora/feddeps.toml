@@ -6,7 +6,8 @@ repos = [
   "sdegler/hyprland",
   "deltacopy/darkly",
   "alternateved/eza",
-  "atim/starship"
+  "atim/starship",
+  "brycensranch/gpu-screen-recorder-git"
 ]
 
 # Fedora dependencies list
@@ -171,7 +172,7 @@ packages = [
   "tesseract",
   "tesseract-langpack-eng",
   "tesseract-langpack-chi_sim",
-  "wf-recorder"
+  "gpu-screen-recorder-ui"
 ]
 
 # Toolkit

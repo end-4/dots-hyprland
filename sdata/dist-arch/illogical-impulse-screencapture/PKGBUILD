@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-screencapture
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Illogical Impulse Screenshot and Recording Dependencies'
 arch=(any)
 license=(None)
@@ -10,5 +10,5 @@ depends=(
   swappy
   tesseract
   tesseract-data-eng
-  wf-recorder
+  gpu-screen-recorder
 )

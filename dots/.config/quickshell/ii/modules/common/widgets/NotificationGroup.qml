@@ -13,6 +13,11 @@ import Quickshell.Services.Notifications
 MouseArea { // Notification group area
     id: root
     property var notificationGroup
+    property string cachedGroupAppIcon: ""
+    property bool cachedGroupUseImage: false
+    property string cachedGroupImage: ""
+    property bool dismissing: false
+    property QtObject frozenHeaderIcon: null
     property var notifications: notificationGroup?.notifications ?? []
     property int notificationCount: notifications.length
     property bool multipleNotifications: notificationCount > 1
@@ -32,10 +37,68 @@ MouseArea { // Notification group area
         dragIndexDiff == 1 ? (parentDragDistance * 0.3) :
         dragIndexDiff == 2 ? (parentDragDistance * 0.1) : 0
 
-    function destroyWithAnimation(left = false) {
+    component FrozenHeaderIcon: QtObject {
+        property bool useImage: false
+        property string image: ""
+        property string appIcon: ""
+    }
+    Component {
+        id: frozenHeaderIconComponent
+        FrozenHeaderIcon {}
+    }
+    function syncCachedGroupVisuals() {
+        if (root.dismissing) return;
+        const group = root.notificationGroup;
+        const groupNotifications = group?.notifications ?? [];
+        if (!group || groupNotifications.length === 0)
+            return;
+
+        root.cachedGroupAppIcon = group.appIcon ?? "";
+        const useImage = groupNotifications.length <= 1;
+        root.cachedGroupUseImage = useImage;
+        root.cachedGroupImage = useImage ? (groupNotifications[0]?.image ?? "") : "";
+    }
+    function cacheDismissIconState() {
+        const group = root.notificationGroup;
+        const groupNotifications = group?.notifications ?? [];
+        const useImage = groupNotifications.length <= 1;
+        const img = useImage ? (groupNotifications[0]?.image ?? root.cachedGroupImage ?? "") : "";
+        const icon = group?.appIcon ?? root.cachedGroupAppIcon ?? "";
+        root.frozenHeaderIcon = frozenHeaderIconComponent.createObject(root, {
+            useImage: useImage,
+            image: (img && String(img).length > 0) ? img : "",
+            appIcon: icon || ""
+        });
+    }
+
+    onNotificationGroupChanged: root.syncCachedGroupVisuals()
+    onNotificationsChanged: root.syncCachedGroupVisuals()
+    Component.onCompleted: root.syncCachedGroupVisuals()
+
+    Connections {
+        target: Notifications
+        function onAboutToDiscardAll() {
+            root.cacheDismissIconState()
+            root.dismissing = true
+        }
+    }
+
+    function destroyWithAnimation(left = false, fromDrag = false) {
+        root.cacheDismissIconState()
+        root.dismissing = true
+        const currentLeftMargin = background.anchors.leftMargin
+        const dismissDirectionSign = fromDrag ?
+            (currentLeftMargin >= 0 ? 1 : -1) :
+            (left ? -1 : 1)
+        background.anchors.leftMargin = currentLeftMargin; // Break binding at current drag position
         root.qmlParent.resetDrag()
-        background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
-        destroyAnimation.left = left;
+        const targetLeftMargin = (root.width + root.dismissOvershoot) * dismissDirectionSign
+        const remainingDistance = Math.abs(targetLeftMargin - currentLeftMargin)
+        destroyAnimation.fromDrag = fromDrag
+        destroyAnimation.slideDuration = fromDrag ?
+            Math.max(80, Math.min(190, Math.round(remainingDistance / 3.2))) :
+            Appearance.animation.elementMoveExit.duration
+        destroyAnimation.left = dismissDirectionSign < 0;
         destroyAnimation.running = true;
     }
 
@@ -53,15 +116,17 @@ MouseArea { // Notification group area
     SequentialAnimation { // Drag finish animation
         id: destroyAnimation
         property bool left: true
+        property bool fromDrag: false
+        property int slideDuration: Appearance.animation.elementMoveExit.duration
         running: false
 
         NumberAnimation {
             target: background.anchors
             property: "leftMargin"
             to: (root.width + root.dismissOvershoot) * (destroyAnimation.left ? -1 : 1)
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            duration: destroyAnimation.slideDuration
+            easing.type: destroyAnimation.fromDrag ? Easing.OutCubic : Appearance.animation.elementMoveExit.type
+            easing.bezierCurve: destroyAnimation.fromDrag ? [] : Appearance.animation.elementMoveExit.bezierCurve
         }
         onFinished: () => {
             root.notifications.forEach((notif) => {
@@ -107,7 +172,7 @@ MouseArea { // Notification group area
 
         onDragReleased: (diffX, diffY) => {
             if (Math.abs(diffX) > root.dragConfirmThreshold)
-                root.destroyWithAnimation(diffX < 0);
+                root.destroyWithAnimation(diffX < 0, true);
             else 
                 dragManager.resetDrag();
         }
@@ -126,7 +191,7 @@ MouseArea { // Notification group area
         anchors.leftMargin: root.xOffset
 
         Behavior on anchors.leftMargin {
-            enabled: !dragManager.dragging
+            enabled: !dragManager.dragging && !destroyAnimation.running
             NumberAnimation {
                 duration: Appearance.animation.elementMove.duration
                 easing.type: Appearance.animation.elementMove.type
@@ -155,8 +220,11 @@ MouseArea { // Notification group area
             NotificationAppIcon { // Icons
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
-                image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
-                appIcon: root.notificationGroup?.appIcon
+                readonly property string _img: root.dismissing && root.frozenHeaderIcon ?
+                    (root.frozenHeaderIcon.useImage ? root.frozenHeaderIcon.image : "") :
+                    (root.multipleNotifications ? "" : root.notificationGroup?.notifications[0]?.image ?? "")
+                image: _img
+                appIcon: root.dismissing && root.frozenHeaderIcon ? root.frozenHeaderIcon.appIcon : root.cachedGroupAppIcon
                 summary: root.notificationGroup?.notifications[root.notificationCount - 1]?.summary
                 urgency: root.notifications.some(n => n.urgency === NotificationUrgency.Critical.toString()) ? 
                     NotificationUrgency.Critical : NotificationUrgency.Normal
@@ -244,6 +312,7 @@ MouseArea { // Notification group area
                         required property int index
                         required property var modelData
                         notificationObject: modelData
+                        notificationGroupParent: root
                         expanded: root.expanded
                         onlyNotification: (root.notificationCount === 1)
                         opacity: (!root.expanded && index == 1 && root.notificationCount > 2) ? 0.5 : 1

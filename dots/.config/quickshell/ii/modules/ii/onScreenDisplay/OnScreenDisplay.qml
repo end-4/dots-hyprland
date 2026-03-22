@@ -16,6 +16,10 @@ Scope {
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
     property string currentIndicator: "volume"
+    // Volume OSD overrides when shown via IPC showVolume(); passed to indicator so it shows app name and value
+    property string volumeOsdAppName: ""
+    property real volumeOsdValue: -1
+    property bool volumeOsdMuted: false
     property var indicators: [
         {
             id: "volume",
@@ -40,6 +44,10 @@ Scope {
         onTriggered: {
             GlobalStates.osdVolumeOpen = false;
             root.protectionMessage = "";
+            root.volumeOsdAppName = "";
+            root.volumeOsdValue = -1;
+            GlobalStates.volumeOsdAppName = "";
+            GlobalStates.volumeOsdValue = -1;
         }
     }
 
@@ -144,6 +152,9 @@ Scope {
                         Loader {
                             id: osdIndicatorLoader
                             source: root.indicators.find(i => i.id === root.currentIndicator)?.sourceUrl
+                            property string volumeOsdAppName: root.volumeOsdAppName
+                            property real volumeOsdValue: root.volumeOsdValue
+                            property bool volumeOsdMuted: root.volumeOsdMuted
                         }
 
                         Item {
@@ -194,6 +205,24 @@ Scope {
         target: "osdVolume"
 
         function trigger() {
+            root.volumeOsdAppName = "";
+            root.volumeOsdValue = -1;
+            GlobalStates.volumeOsdAppName = "";
+            GlobalStates.volumeOsdValue = -1;
+            root.triggerOsd();
+        }
+
+        // Show volume OSD with app name and value (value 0–1, muted bool). Called e.g. from pc_remote.sh.
+        // Update overrides in place; do not close/reopen so the OSD stays mounted and animates smoothly
+        // while volume changes rapidly (same behavior as Quickshell keyboard volume keys).
+        function showVolume(appName: string, value: real, muted: bool): void {
+            root.volumeOsdAppName = appName ?? "";
+            root.volumeOsdValue = (value !== undefined && value !== null) ? Number(value) : -1;
+            root.volumeOsdMuted = Boolean(muted);
+            GlobalStates.volumeOsdAppName = root.volumeOsdAppName;
+            GlobalStates.volumeOsdValue = root.volumeOsdValue;
+            GlobalStates.volumeOsdMuted = root.volumeOsdMuted;
+            root.currentIndicator = "volume";
             root.triggerOsd();
         }
 

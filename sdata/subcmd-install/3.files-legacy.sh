@@ -5,6 +5,7 @@
 
 #####################################################################################
 # MISC (For dots/.config/* but not quickshell, not fish, not Hyprland, not fontconfig)
+# Includes swappy, fuzzel, wlogout, etc. (anything present under dots/.config).
 case "${SKIP_MISCCONF}" in
   true) sleep 0;;
   *)
@@ -16,6 +17,9 @@ case "${SKIP_MISCCONF}" in
       fi
     done
     install_dir "dots/.local/share/konsole" "${XDG_DATA_HOME}"/konsole
+    if [ -d "dots/.local/share/sounds" ]; then
+      install_dir__sync "dots/.local/share/sounds" "${XDG_DATA_HOME}"/sounds
+    fi
     ;;
 esac
 

@@ -16,5 +16,5 @@ RDEPEND="
 	gui-apps/slurp
 	gui-apps/swappy
 	app-text/tesseract
-	gui-apps/wf-recorder
+	media-video/gpu-screen-recorder
 "
