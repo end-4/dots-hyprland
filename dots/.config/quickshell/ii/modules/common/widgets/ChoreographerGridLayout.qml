@@ -9,9 +9,10 @@ GridLayout {
     property real totalDuration: 250
     property real interval: totalDuration / count
 
-    default property list<QtObject> choreographableChildren
+    property list<QtObject> choreographableChildren: children.filter(c => {
+        return c.hasOwnProperty("progress")
+    })
     readonly property int count: choreographableChildren.length
-    children: choreographableChildren
 
     property bool shown: false
     onShownChanged: {

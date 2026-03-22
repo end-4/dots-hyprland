@@ -32,6 +32,9 @@ W.ButtonMouseArea {
     Layout.fillWidth: vertical
     Layout.fillHeight: !vertical
 
+    property alias hover: hoverOverlay.hover
+    property alias press: hoverOverlay.press
+
     W.StateOverlay {
         id: hoverOverlay
         anchors.fill: parent
