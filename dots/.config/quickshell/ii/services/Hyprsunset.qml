@@ -80,28 +80,21 @@ Singleton {
         }
     }
 
-    function load() { } // Dummy to force init
+    function load() {
+        Quickshell.execDetached(["bash", "-c", `pidof hyprsunset || hyprsunset`]);
+    }
 
     function enableTemperature() {
         root.temperatureActive = true;
         // console.log("[Hyprsunset] Enabling");
-        Quickshell.execDetached(["bash", "-c", `
-            if pidof hyprsunset > /dev/null; then
-                hyprctl hyprsunset temperature ${root.colorTemperature};
-            else
-                hyprsunset --temperature ${root.colorTemperature};
-            fi
-        `]);
+        root.load();
+        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.colorTemperature}`]);
     }
 
     function disableTemperature() {
         root.temperatureActive = false;
         // console.log("[Hyprsunset] Disabling");
-        if (root.gamma === 100) {
-            Quickshell.execDetached(["bash", "-c", `pkill hyprsunset`]);
-        } else {
-            Quickshell.execDetached(["hyprctl", "hyprsunset", "identity"]);
-        }
+        Quickshell.execDetached(["hyprctl", "hyprsunset", "identity"]);
     }
 
     function setGamma(gamma) {
@@ -109,22 +102,8 @@ Singleton {
 
         root.gammaChangeAttempt();
 
-        if (root.gamma !== 100) {
-            // console.log("[Hyprsunset] Enabling");
-            Quickshell.execDetached(["bash", "-c", `
-                if pidof hyprsunset > /dev/null; then
-                    hyprctl hyprsunset gamma ${root.gamma};
-                else
-                    hyprsunset --gamma ${root.gamma};
-                fi
-            `]);
-        } else {
-            if (!root.temperatureActive) {
-                Quickshell.execDetached(["bash", "-c", `pkill hyprsunset`]);
-            } else {
-                Quickshell.execDetached(["hyprctl", "hyprsunset", "gamma", "100"]);
-            }
-        }
+        root.load();
+        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset gamma ${root.gamma}`]);
     }
 
     function fetchState() {
