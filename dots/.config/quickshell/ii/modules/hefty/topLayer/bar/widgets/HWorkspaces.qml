@@ -13,7 +13,7 @@ import Quickshell.Hyprland
 import ".."
 
 HBarWidgetContainer {
-    Item {
+    ButtonMouseArea {
         id: root
 
         readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
@@ -42,11 +42,36 @@ HBarWidgetContainer {
         implicitWidth: vertical ? barThickness : occupiedIndicators.implicitWidth
         implicitHeight: vertical ? occupiedIndicators.implicitHeight : barThickness
 
-        property real specialBlur: (wsModel.specialWorkspaceActive && !interactionMouseArea.containsMouse) ? 1 : 0
+        property real specialBlur: (wsModel.specialWorkspaceActive && !containsMouse) ? 1 : 0
         Behavior on specialBlur {
             animation: Appearance.animation.elementMoveSmall.numberAnimation.createObject(this)
         }
 
+        // Interactions
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        hoverEnabled: true
+        property int hoverIndex: {
+            const position = root.vertical ? mouseY : mouseX;
+            return Math.floor(position / root.workspaceButtonWidth);
+        }
+
+        function switchWorkspaceToHovered() {
+            Hyprland.dispatch(`workspace ${wsModel.getWorkspaceIdAt(hoverIndex)}`)
+        }
+        onPressed: (mouse) => {
+            if (mouse.button == Qt.LeftButton)
+                switchWorkspaceToHovered()
+            else if (mouse.button == Qt.RightButton)
+                GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+        }
+        onWheel: (event) => {
+            if (event.angleDelta.y < 0)
+                Hyprland.dispatch(`workspace r+1`);
+            else if (event.angleDelta.y > 0)
+                Hyprland.dispatch(`workspace r-1`);
+        }
+
+        // Indications
         Item {
             id: regularWorkspaces
             anchors.fill: parent
@@ -136,47 +161,19 @@ HBarWidgetContainer {
             }
 
             /////////////////// Hover ///////////////////
-            ButtonMouseArea {
-                id: interactionMouseArea
+            TrailingIndicator {
+                id: interactionIndicator
                 z: 3
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                hoverEnabled: true
-                property int hoverIndex: {
-                    const position = root.vertical ? mouseY : mouseX;
-                    return Math.floor(position / root.workspaceButtonWidth);
-                }
-
-                function switchWorkspaceToHovered() {
-                    Hyprland.dispatch(`workspace ${wsModel.getWorkspaceIdAt(hoverIndex)}`)
-                }
-                onPressed: (mouse) => {
-                    if (mouse.button == Qt.LeftButton)
-                        switchWorkspaceToHovered()
-                    else if (mouse.button == Qt.RightButton)
-                        GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
-                }
-                onWheel: (event) => {
-                    if (event.angleDelta.y < 0)
-                        Hyprland.dispatch(`workspace r+1`);
-                    else if (event.angleDelta.y > 0)
-                        Hyprland.dispatch(`workspace r-1`);
-                }
-
-                TrailingIndicator {
-                    id: interactionIndicator
-                    index: interactionMouseArea.containsMouse ? interactionMouseArea.hoverIndex : root.workspaceIndexInGroup
-                    color: "transparent"
-                    StateOverlay {
-                        id: hoverOverlay
-                        anchors.fill: interactionIndicator.indicatorRectangle
-                        radius: root.activeWorkspaceSize / 2
-                        hover: interactionMouseArea.containsMouse
-                        press: interactionMouseArea.containsPress
-                        drag: true // There are too many layers so we need to force this to be a lil more opaque
-                        contentColor: Appearance.colors.colPrimary
-                    }
+                index: root.containsMouse ? root.hoverIndex : root.workspaceIndexInGroup
+                color: "transparent"
+                StateOverlay {
+                    id: hoverOverlay
+                    anchors.fill: interactionIndicator.indicatorRectangle
+                    radius: root.activeWorkspaceSize / 2
+                    hover: root.containsMouse
+                    press: root.containsPress
+                    drag: true // There are too many layers so we need to force this to be a lil more opaque
+                    contentColor: Appearance.colors.colPrimary
                 }
             }
 
