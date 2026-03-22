@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /home/om/dots-hyprland/dots -type f \\\\\\(-name *.conf -o -name *.toml -o -name *.ini -o -name *.json -o -name *.fish -o -name *.sh -o -name *.css -o -name *.py -o -name *.md \\\\\\))"
+    ]
+  }
+}
