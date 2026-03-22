@@ -37,7 +37,7 @@ Item { // Wrapper
     }
 
     function cancelSearch() {
-        searchBar.searchInput.selectAll();
+        searchBar.searchInput.text = "";
         LauncherSearch.query = "";
         searchBar.animateWidth = true;
     }
