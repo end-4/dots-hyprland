@@ -44,9 +44,9 @@ WindowDialog {
             iconSize: Appearance.font.pixelSize.larger
             buttonIcon: "check"
             text: Translation.tr("Enable now")
-            checked: Hyprsunset.active
+            checked: Hyprsunset.temperatureActive
             onCheckedChanged: {
-                Hyprsunset.toggle(checked)
+                Hyprsunset.toggleTemperature(checked)
             }
         }
 

@@ -3,7 +3,7 @@ import QtQml
 import QtQuick
 import Quickshell.Io
 import qs.services
-import "../"
+import ".."
 
 NestableObject {
     id: root
