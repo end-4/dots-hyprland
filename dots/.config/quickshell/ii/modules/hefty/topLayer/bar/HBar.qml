@@ -174,8 +174,8 @@ HAbstractMorphedPanel {
     anchors {
         top: parent.top
         bottom: undefined
-        left: parent.left
-        right: parent.right
+        left: undefined
+        right: undefined
     }
     states: [
         State {
