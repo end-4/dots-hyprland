@@ -7,8 +7,10 @@ import Quickshell
 import Quickshell.Services.Pipewire
 import Qt5Compat.GraphicalEffects
 
-Item {
+MouseArea {
     id: root
+    cursorShape: Qt.PointingHandCursor
+    onClicked: root.node.audio.muted = !root.node.audio.muted
     required property PwNode node
     PwObjectTracker {
         objects: [root.node]
@@ -47,25 +49,27 @@ Item {
                 anchors.fill: iconImg
                 source: iconImg
                 desaturation: root.node?.audio.muted ? 1.0 : 0.0
-                visible: iconImg.source != ""
+                visible: iconImg.source !== ""
                 opacity: root.node?.audio.muted ? 0.4 : 1.0
-                
-                Behavior on opacity { NumberAnimation { duration: 150 } }
-                Behavior on desaturation { NumberAnimation { duration: 150 } }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 150
+                    }
+                }
+                Behavior on desaturation {
+                    NumberAnimation {
+                        duration: 150
+                    }
+                }
             }
 
             MaterialSymbol {
                 anchors.centerIn: parent
                 visible: root.node?.audio.muted ?? false
                 text: root.node?.isSink ? "volume_off" : "mic_off"
-                font.pixelSize: 22
-                color: Appearance.colors.colError
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: root.node.audio.muted = !root.node.audio.muted
+                iconSize: 22
+                color: Appearance.colors.colOnLayer1
             }
         }
 
