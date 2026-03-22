@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /home/om/dots-hyprland/sdata/subcmd-install -name *.sh -type f)",
+      "Bash(find . -name *.log -o -name *.txt)",
+      "Bash(chmod:*)",
+      "Bash(bash -n /home/om/dots-hyprland/dots/custom/updater.sh)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(bash dots/custom/updater.sh -n)",
+      "Bash(bash dots/custom/updater.sh -y)",
+      "Bash(pkill qs:*)",
+      "Bash(qs -c ii)"
+    ]
+  }
+}
