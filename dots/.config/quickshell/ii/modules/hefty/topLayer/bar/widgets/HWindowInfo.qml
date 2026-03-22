@@ -33,7 +33,7 @@ HBarWidgetWithPopout {
 
     property real fontPixelSize: Appearance.font.pixelSize.smaller
 
-    Layout.maximumWidth: implicitWidth
+    Layout.maximumWidth: vertical ? -1 : implicitWidth
     Layout.fillWidth: true
 
     popupContentWidth: popupContent.implicitWidth

@@ -21,6 +21,8 @@ W.ButtonMouseArea {
     property real layoutParentBottomRightRadius: layoutParent.bottomRightRadius
 
     readonly property real barThickness: vertical ? C.Appearance.sizes.verticalBarWidth : C.Appearance.sizes.barHeight
+    readonly property real barVisualThickness: vertical ? C.Appearance.sizes.baseVerticalBarWidth : C.Appearance.sizes.baseBarHeight
+    readonly property real barGap: (barThickness - barVisualThickness) / 2
     required property real contentImplicitWidth
     required property real contentImplicitHeight
     property real parentRadiusToPaddingRatio: 0.3
@@ -33,7 +35,7 @@ W.ButtonMouseArea {
     W.StateOverlay {
         id: hoverOverlay
         anchors.fill: parent
-        property real parentMargins: 4
+        property real parentMargins: 4 + root.barGap
         property real ownMargins: 2
         property real edgeMargins: parentMargins + ownMargins
         property real sideMargins: -2

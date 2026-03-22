@@ -8,10 +8,10 @@ import qs.modules.common.widgets as W
 Repeater {
     id: root
 
+    readonly property bool vertical: C.Config.options.bar.vertical
     readonly property string invisibleItem: "_invisible"
     required property list<var> componentNames
     property string context: Quickshell.shellPath("modules/hefty/topLayer/bar/widgets")
-
 
     model: {
         const m = componentNames.map(item => {
@@ -50,8 +50,8 @@ Repeater {
                 property bool startSide: index === 0
                 property bool endSide: index === root.model.length - 1
 
-                Layout.fillWidth: item.Layout.fillWidth
-                Layout.fillHeight: item.Layout.fillHeight
+                Layout.fillWidth: root.vertical ? true : item.Layout.fillWidth
+                Layout.fillHeight: !root.vertical ? true : item.Layout.fillHeight
                 Layout.maximumWidth: item.Layout.maximumWidth
                 Layout.maximumHeight: item.Layout.maximumHeight
             }
