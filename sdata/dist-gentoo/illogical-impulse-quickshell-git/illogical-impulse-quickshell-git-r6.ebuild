@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 LICENSE="LGPL-3"
 SLOT="0"
 # Upstream recommends leaving all build options enabled by default
-IUSE="+breakpad +jemalloc +sockets +wayland +layer-shell +session-lock +toplevel-management +screencopy +X +pipewire +tray +mpris +pam +hyprland +hyprland-global-shortcuts +hyprland-focus-grab +i3 +i3-ipc +bluetooth"
+IUSE="-breakpad +jemalloc +sockets +wayland +layer-shell +session-lock +toplevel-management +screencopy +X +pipewire +tray +mpris +pam +hyprland +hyprland-global-shortcuts +hyprland-focus-grab -i3 -i3-ipc +bluetooth"
 
 RDEPEND="
 	dev-qt/qtbase:6
