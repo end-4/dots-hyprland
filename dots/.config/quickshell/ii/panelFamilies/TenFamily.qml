@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 
+import qs.modules.common
 import qs.modules.ten.actionCenter
 import qs.modules.ten.background
 import qs.modules.ten.bar
