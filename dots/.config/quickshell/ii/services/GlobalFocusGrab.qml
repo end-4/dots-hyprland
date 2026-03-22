@@ -19,6 +19,11 @@ Singleton {
     property list<var> dismissable: []
 
     function dismiss() {
+        for (var i = 0; i < root.dismissable.length; i++) {
+            const item = dismissable[i];
+            if (item.close)
+                item.close();
+        }
         root.dismissable = [];
         root.dismissed();
     }
