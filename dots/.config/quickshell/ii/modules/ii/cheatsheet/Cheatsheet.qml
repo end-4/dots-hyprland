@@ -54,13 +54,16 @@ Scope { // Scope
                 item: cheatsheetBackground
             }
 
-            HyprlandFocusGrab { // Click outside to close
-                id: grab
-                windows: [cheatsheetRoot]
-                active: cheatsheetRoot.visible
-                onCleared: () => {
-                    if (!active)
-                        cheatsheetRoot.hide();
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(cheatsheetRoot);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(cheatsheetRoot);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    cheatsheetRoot.hide();
                 }
             }
 

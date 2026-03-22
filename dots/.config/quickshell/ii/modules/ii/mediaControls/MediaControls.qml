@@ -81,7 +81,7 @@ Scope {
         }
 
         sourceComponent: PanelWindow {
-            id: mediaControlsRoot
+            id: panelWindow
             visible: true
 
             exclusionMode: ExclusionMode.Ignore
@@ -98,9 +98,9 @@ Scope {
                 right: Config.options.bar.vertical && Config.options.bar.bottom
             }
             margins {
-                top: Config.options.bar.vertical ? ((mediaControlsRoot.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
+                top: Config.options.bar.vertical ? ((panelWindow.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
                 bottom: Appearance.sizes.barHeight
-                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth)
+                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((panelWindow.screen.width / 2) - (osdWidth / 2) - widgetWidth)
                 right: Appearance.sizes.barHeight
             }
 
@@ -108,13 +108,16 @@ Scope {
                 item: playerColumnLayout
             }
 
-            HyprlandFocusGrab {
-                windows: [mediaControlsRoot]
-                active: mediaControlsLoader.active
-                onCleared: () => {
-                    if (!active) {
-                        GlobalStates.mediaControlsOpen = false;
-                    }
+            Component.onCompleted: {
+                GlobalFocusGrab.addDismissable(panelWindow);
+            }
+            Component.onDestruction: {
+                GlobalFocusGrab.removeDismissable(panelWindow);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    GlobalStates.mediaControlsOpen = false;
                 }
             }
 
@@ -137,10 +140,13 @@ Scope {
                     }
                 }
 
-                Item { // No player placeholder
+                Item {
+                    // No player placeholder
                     Layout.alignment: {
-                        if (mediaControlsRoot.anchors.left) return Qt.AlignLeft;
-                        if (mediaControlsRoot.anchors.right) return Qt.AlignRight;
+                        if (panelWindow.anchors.left)
+                            return Qt.AlignLeft;
+                        if (panelWindow.anchors.right)
+                            return Qt.AlignRight;
                         return Qt.AlignHCenter;
                     }
                     Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
@@ -153,7 +159,7 @@ Scope {
                         target: placeholderBackground
                     }
 
-                    Rectangle { 
+                    Rectangle {
                         id: placeholderBackground
                         anchors.centerIn: parent
                         color: Appearance.colors.colLayer0

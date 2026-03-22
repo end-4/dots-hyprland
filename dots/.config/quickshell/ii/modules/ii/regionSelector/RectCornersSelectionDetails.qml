@@ -14,11 +14,14 @@ Item {
     required property color overlayColor
     property bool showAimLines: Config.options.regionSelector.rect.showAimLines
 
+    property bool breathingBorderOnly: false
+
     // Overlay to darken screen
     // Base dark overlay around region
     Rectangle {
         id: darkenOverlay
         z: 1
+        visible: !root.breathingBorderOnly
         anchors {
             left: parent.left
             top: parent.top
@@ -32,27 +35,36 @@ Item {
         border.width: Math.max(root.width, root.height)
     }
 
-    // Selection border
-    Rectangle {
+    DashedBorder {
         id: selectionBorder
-        z: 1
+        z: 9
         anchors {
             left: parent.left
             top: parent.top
-            leftMargin: root.regionX
-            topMargin: root.regionY
+            leftMargin: Math.round(root.regionX) - borderWidth
+            topMargin: Math.round(root.regionY) - borderWidth
         }
-        width: root.regionWidth
-        height: root.regionHeight
-        color: "transparent"
-        border.color: root.color
-        border.width: 2
-        // radius: root.standardRounding
-        radius: 0 // TODO: figure out how to make the overlay thing work with rounding
+        width: Math.round(root.regionWidth) + borderWidth * 2
+        height: Math.round(root.regionHeight) + borderWidth * 2
+
+        color: root.color
+        dashLength: 8
+        gapLength: 4
+        borderWidth: 1
+
+        // Breathing
+        opacity: 0.9
+        SequentialAnimation on opacity {
+            running: root.breathingBorderOnly
+            loops: Animation.Infinite
+            NumberAnimation { from: 0.9; to: 0.3; duration: 1200; easing.type: Easing.InOutQuad }
+            NumberAnimation { from: 0.3; to: 0.9; duration: 1200; easing.type: Easing.InOutQuad }
+        }
     }
 
     StyledText {
         z: 2
+        visible: !root.breathingBorderOnly
         anchors {
             top: selectionBorder.bottom
             right: selectionBorder.right
@@ -64,7 +76,7 @@ Item {
 
     // Coord lines
     Rectangle { // Vertical
-        visible: root.showAimLines
+        visible: root.showAimLines && !root.breathingBorderOnly
         opacity: 0.2
         z: 2
         x: root.mouseX
@@ -76,7 +88,7 @@ Item {
         color: root.color
     }
     Rectangle { // Horizontal
-        visible: root.showAimLines
+        visible: root.showAimLines && !root.breathingBorderOnly
         opacity: 0.2
         z: 2
         y: root.mouseY

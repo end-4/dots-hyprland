@@ -32,13 +32,14 @@ ColumnLayout {
 
     Loader {
         Layout.topMargin: -40
+        Layout.fillWidth: true
         active: clockColumn.isVertical
         visible: active
         sourceComponent: ClockText {
             id: timeTextBottom
             text: DateTime.time.split(":")[1].split(" ")[0].padStart(2, "0")
             color: clockColumn.colText
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: clockColumn.textHorizontalAlignment
             font {
                 pixelSize: timeTextTop.font.pixelSize
                 weight: timeTextTop.font.weight
@@ -52,6 +53,7 @@ ColumnLayout {
     ClockText {
         visible: Config.options.background.widgets.clock.digital.showDate
         Layout.topMargin: -20
+        Layout.fillWidth: true
         text: DateTime.longDate
         color: clockColumn.colText
         horizontalAlignment: clockColumn.textHorizontalAlignment
