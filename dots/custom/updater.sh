@@ -39,8 +39,8 @@ Examples:
 EOF
 }
 
-# Detect repo root
-cd "$(dirname "$0")/.."
+# Detect repo root - script is in dots/custom/, so go up two levels to repo root
+cd "$(dirname "$0")/../.."
 REPO_ROOT="$(pwd)"
 
 # Source library functions
@@ -117,8 +117,8 @@ if [[ "$DRY_RUN" == true ]]; then
   echo -e "${STY_CYAN}[DRY RUN] Would perform the following actions:${STY_RST}"
 fi
 
-# Confirmation prompt
-if [[ "$AUTO_CONFIRM" != true ]]; then
+# Confirmation prompt (skip if dry-run)
+if [[ "$AUTO_CONFIRM" != true ]] && [[ "$DRY_RUN" != true ]]; then
   echo -e "${STY_YELLOW}WARNING: This script will overwrite existing configs!${STY_RST}"
   if [[ "$SKIP_BACKUP" == true ]]; then
     echo -e "${STY_RED}BACKUP IS DISABLED!${STY_RST}"
@@ -253,7 +253,7 @@ if [[ "$ONLY_QUICKSHELL" == false ]] && [[ "$ONLY_HYPRLAND" == false ]]; then
 
   # Misc configs (excluding quickshell, fish, hypr, fontconfig)
   for item in "${REPO_ROOT}/dots/.config/"*/; do
-    local name=$(basename "$item")
+    name=$(basename "$item")
     if [[ "$name" != "quickshell" ]] && [[ "$name" != "fish" ]] && [[ "$name" != "hypr" ]] && [[ "$name" != "fontconfig" ]]; then
       update_dir "$item" "$XDG_CONFIG_HOME/$name"
     fi
