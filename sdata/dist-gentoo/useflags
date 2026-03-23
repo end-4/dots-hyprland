@@ -115,5 +115,5 @@ dev-libs/glib dbus elf introspection mime xattr
 #gui-apps/wlogout (no use flags)
 media-gfx/imagemagick xml
 
-################### WIDGETS ###################
+################### OTHER ###################
 dev-cpp/cpptrace unwind
