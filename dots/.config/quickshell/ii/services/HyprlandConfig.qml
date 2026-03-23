@@ -17,7 +17,7 @@ Singleton {
     signal reloaded()
 
     readonly property string configuratorScriptPath: Quickshell.shellPath("scripts/hyprland/hyprconfigurator.py")
-    readonly property string shellOverridesPath: FileUtils.trimFileProtocol(`${Directories.config}/hypr/hyprland/shellOverrides/main.conf`)
+    readonly property string shellOverridesPath: FileUtils.trimFileProtocol(`${Directories.config}/hypr/shellOverrides/main.conf`)
 
     function set(key: string, value: var) {
         Quickshell.execDetached(["bash", "-c", //

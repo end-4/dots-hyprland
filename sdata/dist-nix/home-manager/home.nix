@@ -110,7 +110,7 @@ quickshell, home_attrs, ... }:
       ### illogical-impulse-hyprland
       #hyprland
       hyprsunset #hyprsunset
-      # snappy-switcher # TODO: add when available in nixpkgs (Hyprland Alt-Tab; see hypr/custom/keybinds.conf)
+      # snappy-switcher # TODO: add when available in nixpkgs (Hyprland Alt-Tab; see hypr/ii/keybinds.local.conf)
       wl-clipboard #wl-clipboard
 
 

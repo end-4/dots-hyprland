@@ -21,7 +21,7 @@ For summary:
 - They will be installed to the virtual environment `$ILLOGICAL_IMPULSE_VIRTUAL_ENV`.
 - The default value of `$ILLOGICAL_IMPULSE_VIRTUAL_ENV` is `$XDG_STATE_HOME/quickshell/.venv`.
   - The default value of `$XDG_STATE_HOME` is `$HOME/.local/state`.
-- Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/hyprland/env.conf` to set this environment variable.[^2]
+- Currently we use `env = ILLOGICAL_IMPULSE_VIRTUAL_ENV, ~/.local/state/quickshell/.venv` in `~/.config/hypr/end4/env.conf` to set this environment variable.[^2]
 
 For details: see the function `install-python-packages()` defined in `/sdata/lib/package-installers.sh`.
 

@@ -51,7 +51,8 @@ esac
 case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
-    install_dir__sync dots/.config/hypr/hyprland "$XDG_CONFIG_HOME"/hypr/hyprland
+    install_dir__sync dots/.config/hypr/ii "$XDG_CONFIG_HOME"/hypr/ii
+    install_dir__sync dots/.config/hypr/shellOverrides "$XDG_CONFIG_HOME"/hypr/shellOverrides
     for i in hypr{land,lock}.conf {monitors,workspaces}.conf ; do
       install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
@@ -63,10 +64,8 @@ case "${SKIP_HYPRLAND}" in
       fi
     done
     if [ "$OS_GROUP_ID" = "fedora" ];then
-      v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/hyprland/execs.conf"
+      v bash -c "printf \"# For fedora to setup polkit\nexec-once = /usr/libexec/kf6/polkit-kde-authentication-agent-1\n\" >> ${XDG_CONFIG_HOME}/hypr/ii/execs.conf"
     fi
-
-    install_dir__skip_existed "dots/.config/hypr/custom" "${XDG_CONFIG_HOME}/hypr/custom"
     ;;
 esac
 

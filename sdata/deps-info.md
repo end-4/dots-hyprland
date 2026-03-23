@@ -102,7 +102,7 @@ Tips:
 - `hyprsunset`
   - Used in Quickshell config.
 - `snappy-switcher`
-  - Hyprland Alt-Tab window switcher; used in `hypr/custom/keybinds.conf` and `exec-once = snappy-wrapper` in `hypr/custom/execs.conf`.
+  - Hyprland Alt-Tab window switcher; used in `hypr/ii/custom/keybinds.conf` and `exec-once = snappy-wrapper` in `hypr/ii/custom/execs.conf`.
   - [AUR](https://aur.archlinux.org/packages/snappy-switcher) on Arch. Not packaged in Fedora repos as of this writing (install from [upstream](https://github.com/OpalAayan/snappy-switcher) or a COPR if available).
 - `wl-clipboard`
   - Surely needed.
