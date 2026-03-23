@@ -36,7 +36,7 @@ urlencode() {
     for ((i=0; i<${#str}; i++)); do
         c="${str:$i:1}"
         case "$c" in
-            [a-zA-Z0-9.~_-]|/) encoded+="$c" ;;
+            [a-zA-Z0-9.~_-]|/|'('|')'|'*') encoded+="$c" ;;
             *) printf -v hex '%%%02X' "'${c}'"; encoded+="$hex" ;;
         esac
     done
