@@ -610,5 +610,7 @@
   "Loading...": "Loading...",
   "VPN Connections": "VPN Connections",
   "Refresh": "Refresh",
-  "Select the VPN connection that will be activated by clicking on the VPN icon.": "Select the VPN connection that will be activated by clicking on the VPN icon."
+  "Select the VPN connection that will be activated by clicking on the VPN icon.": "Select the VPN connection that will be activated by clicking on the VPN icon.",
+  "Pin": "Pin",
+  "Unpin": "Unpin"
 }
