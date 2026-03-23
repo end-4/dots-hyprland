@@ -7,10 +7,8 @@ import Quickshell
 import Quickshell.Services.Pipewire
 import Qt5Compat.GraphicalEffects
 
-MouseArea {
+Item {
     id: root
-    cursorShape: Qt.PointingHandCursor
-    onClicked: root.node.audio.muted = !root.node.audio.muted
     required property PwNode node
     PwObjectTracker {
         objects: [root.node]
@@ -23,11 +21,20 @@ MouseArea {
         anchors.fill: parent
         spacing: 6
 
-        Item {
+        MouseArea {
             property real size: 36
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.preferredWidth: size
             Layout.preferredHeight: size
+
+            cursorShape: Qt.PointingHandCursor
+            onClicked: root.node.audio.muted = !root.node.audio.muted
+
+            hoverEnabled: true
+            property bool hovered: containsMouse
+            StyledToolTip {
+                text: root.node?.audio.muted ? Translation.tr("Click to unmute") : Translation.tr("Click to mute")
+            }
 
             Image {
                 id: iconImg
