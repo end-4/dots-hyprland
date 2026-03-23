@@ -81,7 +81,8 @@
       "Read(//home/om/.config/quickshell/ii/modules/ii/**)",
       "Bash(rm -rf /home/om/.config/quickshell/ii/modules/ten /home/om/.config/quickshell/ii/panelFamilies/TenFamily.qml)",
       "Bash(sed -i 's/\"\"ii\"\", \"\"waffle\"\", \"\"ten\"\"/\"\"ii\"\", \"\"waffle\"\"/' /home/om/.config/quickshell/ii/shell.qml)",
-      "Bash(sed -i '/identifier: \"\"ten\"\"/,/component: TenFamily {}/d' /home/om/.config/quickshell/ii/shell.qml)"
+      "Bash(sed -i '/identifier: \"\"ten\"\"/,/component: TenFamily {}/d' /home/om/.config/quickshell/ii/shell.qml)",
+      "Bash(git show:*)"
     ]
   }
 }
