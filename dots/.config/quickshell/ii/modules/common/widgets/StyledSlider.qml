@@ -102,8 +102,9 @@ Slider {
         width: root.width
         implicitHeight: trackWidth
         property var normalized: root.dividerValues.map(v => (v - root.from) / (root.to - root.from))
-        property var leftValues: [0, ...normalized.filter(v => v < root.visualPosition), root.visualPosition]
-        property var rightValues: [root.visualPosition, ...normalized.filter(v => v > root.visualPosition), 1]
+        property var filtered: normalized.filter(v => Math.abs(v - root.visualPosition) * effectiveDraggingWidth > handleMargins + handleWidth / 2 - dividerMargins)
+        property var leftValues: [0, ...filtered.filter(v => v < root.visualPosition), root.visualPosition]
+        property var rightValues: [root.visualPosition, ...filtered.filter(v => v > root.visualPosition), 1]
         property var leftWidths: leftValues.map((v, i, a) => a[i + 1] - v).slice(0, -1)
         property var rightWidths: rightValues.map((v, i, a) => a[i + 1] - v).slice(0, -1)
 
