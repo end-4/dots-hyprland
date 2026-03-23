@@ -1,4 +1,4 @@
-_commit='6e17efab83d3a5ad5d6e59bc08d26095c6660502'
+_commit='7511545ee20664e3b8b8d3322c0ffe7567c56f7a'
 # Useful links:
 # https://git.outfoxxed.me/quickshell/quickshell/commits/branch/master
 # https://aur.archlinux.org/packages/quickshell-git
@@ -16,16 +16,16 @@ url='https://git.outfoxxed.me/quickshell/quickshell'
 options=(!strip)
 license=('LGPL-3.0-only')
 depends=(
+  'cpptrace'
+  'jemalloc'
+  'mesa'
   'qt6-declarative'
   'qt6-base'
-  'jemalloc'
   'qt6-svg'
+  'libdrm'
   'libpipewire'
   'libxcb'
   'wayland'
-  'libdrm'
-  'mesa'
-  'google-breakpad'
   # NOTE: Below are custom dependencies of illogical-impulse
   qt6-5compat 
   qt6-avif-image-plugin
@@ -44,15 +44,15 @@ depends=(
   syntax-highlighting
 )
 makedepends=(
-  'spirv-tools'
-  'qt6-shadertools'
-  'wayland'
-  'wayland-protocols'
   'cli11'
-  'ninja'
   'cmake'
   'git'
+  'ninja'
+  'qt6-shadertools'
+  'spirv-tools'
   'vulkan-headers'
+  'wayland'
+  'wayland-protocols'
 )
 provides=("$_pkgname")
 conflicts=("$_pkgname")

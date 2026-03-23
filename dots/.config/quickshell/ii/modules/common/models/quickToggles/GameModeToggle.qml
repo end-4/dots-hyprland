@@ -1,11 +1,12 @@
 import QtQuick
 import Quickshell.Io
+import qs.modules.common.models.hyprland
 import qs.services
 
 QuickToggleModel {
     id: root
     name: Translation.tr("Game mode")
-    toggled: toggled
+    toggled: !confOpt.value
     icon: "gamepad"
 
     mainAction: () => {
@@ -34,13 +35,11 @@ QuickToggleModel {
             ]);
         }
     }
-    Process {
-        id: fetchActiveState
-        running: true
-        command: ["bash", "-c", `test "$(hyprctl getoption animations:enabled -j | jq ".int")" -ne 0`]
-        onExited: (exitCode, exitStatus) => {
-            root.toggled = exitCode !== 0; // Inverted because enabled = nonzero exit
-        }
+
+    HyprlandConfigOption {
+        id: confOpt
+        key: "animations:enabled"
     }
+
     tooltipText: Translation.tr("Game mode")
 }
