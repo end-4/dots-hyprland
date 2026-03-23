@@ -102,6 +102,7 @@ Rectangle {
         property string secondaryMaterialSymbol
         configuration: StyledSlider.Configuration.M
         stopIndicatorValues: []
+        dividerValues: secondaryMaterialSymbol.length > 0 ? [secondaryIcon.iconLocation] : []
         
         MaterialSymbol {
             id: icon
@@ -127,11 +128,11 @@ Rectangle {
             id: secondaryIcon
             visible: secondaryMaterialSymbol.length > 0
             property real iconLocation: 0.3
-            property bool nearIcon: iconLocation - quickSlider.value <= 0.1 && iconLocation - quickSlider.value > -0.03
+            property bool nearIcon: iconLocation - quickSlider.value <= 0.1 && iconLocation - quickSlider.value > (quickSlider.rightPadding - 7) / quickSlider.effectiveDraggingWidth
             anchors {
                 verticalCenter: quickSlider.verticalCenter
                 right: nearIcon ? quickSlider.handle.right : quickSlider.right
-                rightMargin: nearIcon ? 14 : (1 - iconLocation) * quickSlider.width
+                rightMargin: nearIcon ? 14 : (1 - iconLocation) * quickSlider.width + 7
             }
             iconSize: 20
             color: quickSlider.value >= iconLocation - 0.1 ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer

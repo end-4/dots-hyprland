@@ -17,6 +17,7 @@ Slider {
     id: root
 
     property list<real> stopIndicatorValues: [1]
+    property list<real> dividerValues: []
     enum Configuration {
         Wavy = 4,
         XS = 12,
@@ -45,6 +46,7 @@ Slider {
     property real handleHeight: (configuration === StyledSlider.Configuration.Wavy) ? 24 : Math.max(33, trackWidth + 9)
     property real handleWidth: root.pressed ? handlePressedWidth : handleDefaultWidth
     property real handleMargins: 4
+    property real dividerMargins: 2
     property real trackDotSize: 3
     property bool usePercentTooltip: true
     property string tooltipContent: usePercentTooltip ? `${Math.round(((value - from) / (to - from)) * 100)}%` : `${Math.round(value)}`
@@ -94,71 +96,99 @@ Slider {
     }
 
     background: Item {
+        id: background
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: root.effectiveDraggingWidth
         implicitHeight: trackWidth
-        
+        property var normalized: root.dividerValues.map(v => (v - root.from) / (root.to - root.from))
+        property var leftValues: [0, ...normalized.filter(v => v < root.visualPosition), root.visualPosition]
+        property var rightValues: [root.visualPosition, ...normalized.filter(v => v > root.visualPosition), 1]
+        property var leftWidths: leftValues.map((v, i, a) => a[i + 1] - v).slice(0, -1)
+        property var rightWidths: rightValues.map((v, i, a) => a[i + 1] - v).slice(0, -1)
+
         // Fill left
-        Loader {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-            }
-            width: root.handleMargins + (root.visualPosition * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
-            height: root.trackWidth
-            active: !root.wavy
-            sourceComponent: Rectangle {
-                color: root.highlightColor
-                topLeftRadius: root.trackRadius
-                bottomLeftRadius: root.trackRadius
-                topRightRadius: root.unsharpenRadius
-                bottomRightRadius: root.unsharpenRadius
+        Repeater {
+            model: background.leftWidths.length
+
+            Loader {
+                required property real index
+                anchors {
+                    verticalCenter: background.verticalCenter
+                }
+                property real leftMargin: index > 0 ? root.dividerMargins : 0
+                property real rightMargin: index < background.leftWidths.length - 1 ? root.dividerMargins : root.handleMargins
+                x: background.leftValues[index] * root.effectiveDraggingWidth + leftMargin
+                width: background.leftWidths[index] * root.effectiveDraggingWidth - leftMargin - rightMargin - (index === background.leftWidths.length - 1 ? handleWidth / 2 : 0)
+                height: root.trackWidth
+                active: !root.wavy
+                sourceComponent: Rectangle {
+                    color: root.highlightColor
+                    topLeftRadius: index === 0 ? root.trackRadius : root.unsharpenRadius
+                    bottomLeftRadius: index === 0 ? root.trackRadius : root.unsharpenRadius
+                    topRightRadius: root.unsharpenRadius
+                    bottomRightRadius: root.unsharpenRadius
+                }
             }
         }
 
-        Loader {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-            }
-            width: root.handleMargins + (root.visualPosition * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
-            height: root.height
-            active: root.wavy
-            sourceComponent: WavyLine {
-                id: wavyFill
-                frequency: root.waveFrequency
-                fullLength: root.width
-                color: root.highlightColor
-                amplitudeMultiplier: root.wavy ? 0.5 : 0
-                width: root.handleMargins + (root.visualPosition * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
-                height: root.trackWidth
-                Connections {
-                    target: root
-                    function onValueChanged() { wavyFill.requestPaint(); }
-                    function onHighlightColorChanged() { wavyFill.requestPaint(); }
+        Repeater {
+            model: background.leftWidths.length
+
+            Loader {
+                required property int index
+                anchors {
+                    verticalCenter: background.verticalCenter
                 }
-                FrameAnimation {
-                    running: root.animateWave
-                    onTriggered: {
-                        wavyFill.requestPaint()
+                property real leftMargin: index > 0 ? root.dividerMargins : 0
+                property real rightMargin: index < background.leftWidths.length - 1 ? root.dividerMargins : root.handleMargins
+                x: background.leftValues[index] * root.effectiveDraggingWidth + leftMargin
+                width: background.leftWidths[index] * root.effectiveDraggingWidth - leftMargin - rightMargin - (index === background.leftWidths.length - 1 ? handleWidth / 2 : 0)
+                height: root.height
+                active: root.wavy
+                sourceComponent: WavyLine {
+                    id: wavyFill
+                    frequency: root.waveFrequency
+                    fullLength: root.width
+                    color: root.highlightColor
+                    amplitudeMultiplier: root.wavy ? 0.5 : 0
+                    width: parent.width
+                    height: root.trackWidth
+                    Connections {
+                        target: root
+                        function onValueChanged() { wavyFill.requestPaint(); }
+                        function onHighlightColorChanged() { wavyFill.requestPaint(); }
+                    }
+                    FrameAnimation {
+                        running: root.animateWave
+                        onTriggered: {
+                            wavyFill.requestPaint()
+                        }
                     }
                 }
-            }   
+            }
         }
 
         // Fill right
-        Rectangle {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                right: parent.right
+        Repeater {
+            model: background.rightWidths.length
+
+            Rectangle {
+                required property int index
+                anchors {
+                    verticalCenter: background.verticalCenter
+                }
+                property real leftMargin: index > 0 ? root.dividerMargins : root.handleMargins
+                property real rightMargin: index < background.rightWidths.length - 1 ? root.dividerMargins : 0
+                x: background.rightValues[index] * root.effectiveDraggingWidth + leftMargin + (index === 0 ? handleWidth / 2 : 0)
+                width: background.rightWidths[index] * root.effectiveDraggingWidth - leftMargin - rightMargin - (index === 0 ? handleWidth / 2 : 0)
+                height: trackWidth
+                color: root.trackColor
+                topRightRadius: index === background.rightWidths.length - 1 ? root.trackRadius : root.unsharpenRadius
+                bottomRightRadius: index === background.rightWidths.length - 1 ? root.trackRadius : root.unsharpenRadius
+                topLeftRadius: root.unsharpenRadius
+                bottomLeftRadius: root.unsharpenRadius
             }
-            width: root.handleMargins + ((1 - root.visualPosition) * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
-            height: trackWidth
-            color: root.trackColor
-            topRightRadius: root.trackRadius
-            bottomRightRadius: root.trackRadius
-            topLeftRadius: root.unsharpenRadius
-            bottomLeftRadius: root.unsharpenRadius
         }
 
         // Stop indicators
