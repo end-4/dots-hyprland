@@ -21,8 +21,9 @@ custom_packages() {
     # Example: uncomment the line below to install firefox
       zen-browser
       vlc-plugins-all
-      claude
-      
+      claude-code
+      antigravity
+      ollama
 
     # Add your packages below, one per line, keeping the # prefix:
     # example-package
