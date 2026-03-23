@@ -24,6 +24,8 @@ custom_packages() {
       claude-code
       antigravity
       ollama
+      obs-studio
+      vlc
 
     # Add your packages below, one per line, keeping the # prefix:
     # example-package
