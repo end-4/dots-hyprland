@@ -333,6 +333,8 @@ Important shell scripts:
 - `keyring/*.sh` - Keyring unlock/lookup scripts
 - `thumbnails/*.sh` - Thumbnail generation
 - `musicRecognition/recognize-music.sh` - Song recognition
+- `hyprland/scripts/launch_first_available.sh` - Launch first available app from a list
+- `hyprland/scripts/workspace_action.sh` - Helper for workspace switching/moving
 
 #### Configuration System
 
@@ -410,11 +412,16 @@ hypr/
 - `Super+N` - Right sidebar (toggles)
 - `Super+V` - Clipboard history
 - `Super+.` - Emoji picker
+- `Super+W` - Cycle panel family (ii → waffle)
+- `Super+Space` - Launch AI assistant (ollama)
 - `Super+Shift+S` - Screenshot region
 - `Super+Shift+X/T` - OCR (text recognition)
 - `Ctrl+Super+T` - Wallpaper selector
+- `Ctrl+Super+Alt+T` - Random wallpaper
 - `Ctrl+Super+R` - Restart Quickshell
 - `Ctrl+Super+P` - Cycle panel families
+- `Ctrl+Super+/` - Edit shell config
+- `Super+B` - Launch browser (first available from list)
 
 **Window Management:**
 - `Super+Q` - Close window
@@ -504,10 +511,14 @@ hypr/
 **Location**: `dots/custom/`
 
 **Files**:
+- `README.md` - Documentation for the custom additions system
+- `WRITEABLE.md` - Complete reference of all user-editable locations
 - `packages.sh` - Extra packages to install via `yay -S`
 - `files.sh` - Extra files to copy (use `cp_file` or `rsync_dir`)
 - `commands.sh` - Extra shell commands to run
 - `misc.sh` - Miscellaneous customizations
+- `updater.sh` - Force-update script to sync configs from repo to live system
+- `files/` - Storage for custom files to be copied during install
 
 **Usage Pattern**:
 ```bash
@@ -692,6 +703,10 @@ XDG_CURRENT_DESKTOP=Hyprland
 | `sdata/dist-arch/install-deps.sh` | Arch dependency installation |
 | `sdata/subcmd-install/4.custom.sh` | Custom additions runner |
 | `dots/custom/README.md` | Custom additions documentation |
+| `dots/custom/WRITEABLE.md` | Complete user-editable files reference |
+| `dots/custom/updater.sh` | Force-update script for configs |
+| `dots/.claude/settings.local.json` | Claude Code permissions (dotfiles repo) |
+| `dots/custom/.claude/settings.local.json` | Claude Code permissions (custom) |
 | `dots/.config/quickshell/ii/shell.qml` | Quickshell entry point |
 | `dots/.config/quickshell/ii/settings.qml` | Settings application |
 | `dots/.config/quickshell/ii/modules/common/Config.qml` | Main configuration singleton |
@@ -733,6 +748,26 @@ The `panelFamily` option in `Config.options` can be set to `"ii"` (default) or `
 - Layers (0-4) for elevation
 - Transparency auto-calculated from wallpaper vibrancy
 - Override in `Appearance.qml` for development
+
+### Claude Code Configuration
+
+**Settings files:**
+- `.claude/settings.local.json` - Repository-wide permissions
+- `dots/custom/.claude/settings.local.json` - Custom additions permissions
+
+**Purpose:** Configure Claude Code permissions (allowed bash commands, etc.)
+
+**Example structure:**
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(command)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
+```
 
 ## Troubleshooting
 
