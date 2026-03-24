@@ -114,9 +114,7 @@ Slider {
 
             Loader {
                 required property real index
-                anchors {
-                    verticalCenter: background.verticalCenter
-                }
+                anchors.verticalCenter: background.verticalCenter
                 property real leftMargin: index > 0 ? root.dividerMargins : 0
                 property real rightMargin: index < background.leftWidths.length - 1 ? root.dividerMargins : root.handleMargins
                 x: background.leftValues[index] * root.effectiveDraggingWidth + leftMargin + (index > 0 ? leftPadding : 0)
@@ -138,9 +136,7 @@ Slider {
 
             Loader {
                 required property int index
-                anchors {
-                    verticalCenter: background.verticalCenter
-                }
+                anchors.verticalCenter: background.verticalCenter
                 property real leftMargin: index > 0 ? root.dividerMargins : 0
                 property real rightMargin: index < background.leftWidths.length - 1 ? root.dividerMargins : root.handleMargins
                 x: background.leftValues[index] * root.effectiveDraggingWidth + leftMargin + (index > 0 ? leftPadding : 0)
