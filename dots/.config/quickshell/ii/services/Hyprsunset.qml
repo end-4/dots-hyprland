@@ -80,14 +80,30 @@ Singleton {
         }
     }
 
-    function load() {
+    function startHyprsunset() {
         Quickshell.execDetached(["bash", "-c", `pidof hyprsunset || hyprsunset`]);
+    }
+
+    function load() {
+        root.startHyprsunset();
+        updateHyprsunset.restart();
+    }
+
+    Timer {
+        id: updateHyprsunset
+        interval: 100
+        repeat: false
+        onTriggered: {
+            root.ensureState();
+            root.setGamma(root.gamma);
+        }
     }
 
     function enableTemperature() {
         root.temperatureActive = true;
+
         // console.log("[Hyprsunset] Enabling");
-        root.load();
+        root.startHyprsunset();
         Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.colorTemperature}`]);
     }
 
@@ -102,7 +118,7 @@ Singleton {
 
         root.gammaChangeAttempt();
 
-        root.load();
+        root.startHyprsunset();
         Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset gamma ${root.gamma}`]);
     }
 
