@@ -34,7 +34,7 @@ HBarWidgetWithPopout {
         contentImplicitHeight: trayContent.implicitHeight
 
         hoverEnabled: false
-        parentRadiusToPaddingRatio: 0.9
+        parentRadiusToPaddingRatio: 0.45
 
         hover: trayContent.moreHovered
         press: trayContent.morePressed
@@ -68,6 +68,7 @@ HBarWidgetWithPopout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             hoverEnabled: true
+            acceptedButtons: Qt.AllButtons
 
             implicitWidth: 20 - parent.spacing
             implicitHeight: 20 - parent.spacing
