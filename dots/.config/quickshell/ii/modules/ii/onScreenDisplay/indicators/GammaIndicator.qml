@@ -8,7 +8,6 @@ OsdValueIndicator {
     id: rotateIcon
 
     icon: "wb_twilight"
-    scaleIcon: true
     name: Translation.tr("Gamma")
     value: Hyprsunset.gamma / 100 ?? 0.5
 }
