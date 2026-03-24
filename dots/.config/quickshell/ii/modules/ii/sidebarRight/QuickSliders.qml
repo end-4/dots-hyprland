@@ -128,11 +128,11 @@ Rectangle {
             id: secondaryIcon
             visible: secondaryMaterialSymbol.length > 0
             property real iconLocation: 0.3
-            property bool nearIcon: iconLocation - quickSlider.value <= 0.1 && iconLocation - quickSlider.value > (quickSlider.rightPadding - 7) / quickSlider.effectiveDraggingWidth
+            property bool nearIcon: iconLocation - quickSlider.value <= 0.1 && iconLocation - quickSlider.value > (quickSlider.handleWidth + 8 - 14) / quickSlider.effectiveDraggingWidth
             anchors {
                 verticalCenter: quickSlider.verticalCenter
                 right: nearIcon ? quickSlider.handle.right : quickSlider.right
-                rightMargin: nearIcon ? 14 : (1 - iconLocation) * quickSlider.width + 7
+                rightMargin: nearIcon ? 14 : (1 - iconLocation) * quickSlider.effectiveDraggingWidth + quickSlider.rightPadding + 8
             }
             iconSize: 20
             color: quickSlider.value >= iconLocation - 0.1 ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
