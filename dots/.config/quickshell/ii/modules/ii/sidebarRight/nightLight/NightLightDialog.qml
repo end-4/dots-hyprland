@@ -182,8 +182,10 @@ WindowDialog {
                 leftMargin: 4
                 rightMargin: 4
             }
+            from: Hyprsunset.gammaLowerLimit / 100
             value: Hyprsunset.gamma / 100
             onMoved: Hyprsunset.setGamma(value * 100)
+            tooltipContent: `${Math.round(value * 100)}%`
         }
     }
     

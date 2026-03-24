@@ -15,6 +15,8 @@ Singleton {
     id: root
     signal gammaChangeAttempt()
 
+    readonly property real gammaLowerLimit: 25
+
     property string from: Config.options?.light?.night?.from ?? "19:00" 
     property string to: Config.options?.light?.night?.to ?? "06:30"
     property bool automatic: Config.options?.light?.night?.automatic && (Config?.ready ?? true)
@@ -114,7 +116,7 @@ Singleton {
     }
 
     function setGamma(gamma) {
-        root.gamma = Math.max(0, Math.min(100, gamma));
+        root.gamma = Math.max(root.gammaLowerLimit, Math.min(100, gamma));
 
         root.gammaChangeAttempt();
 
