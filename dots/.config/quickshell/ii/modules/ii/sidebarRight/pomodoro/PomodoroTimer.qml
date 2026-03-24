@@ -40,6 +40,7 @@ Item {
                         return `${minutes}:${seconds}`;
                     }
                     font.pixelSize: 40
+                    font.features: { "tnum": 1 }
                     color: Appearance.m3colors.m3onSurface
                 }
                 StyledText {
