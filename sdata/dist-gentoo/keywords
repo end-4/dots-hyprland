@@ -54,3 +54,5 @@ media-fonts/readex-pro
 media-fonts/rubik-vf
 app-misc/songrec
 dev-cpp/glaze
+dev-cpp/cpptrace
+dev-libs/libdwarf
