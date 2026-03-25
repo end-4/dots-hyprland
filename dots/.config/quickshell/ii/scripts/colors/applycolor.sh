@@ -40,6 +40,9 @@ apply_kitty() {
   for i in "${!colorlist[@]}"; do
     sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
   done
+
+  # Reload
+  kill -SIGUSR1 $(pidof kitty)
 }
 
 apply_anyterm() {
