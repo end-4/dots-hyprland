@@ -16,98 +16,112 @@ DialogListItem {
     component ActionButton: DialogButton {
         colBackground: Appearance.colors.colPrimary
         colBackgroundHover: Appearance.colors.colPrimaryHover
-        colRipple: Appearance.colors.colPrimaryActive
+        colRipple: Appearance.colors.colPrimaryHover
         colText: Appearance.colors.colOnPrimary
     }
 
+
+    buttonRadius: 20
+
+    colBackground: expanded ? Appearance.colors.colPrimaryContainer : "transparent"
+    colBackgroundHover: expanded ? Appearance.colors.colPrimaryContainer : Appearance.colors.colLayer3Hover
+
     contentItem: ColumnLayout {
-        anchors {
-            fill: parent
-            topMargin: root.verticalPadding
-            leftMargin: root.horizontalPadding
-            rightMargin: root.horizontalPadding
-        }
-        spacing: 0
-
-        RowLayout {
-            // Name
-            spacing: 10
-
-            MaterialSymbol {
-                iconSize: Appearance.font.pixelSize.larger
-                text: Icons.getBluetoothDeviceMaterialSymbol(root.device?.icon || "")
-                color: Appearance.colors.colOnSurfaceVariant
+            anchors {
+                fill: parent
+                topMargin: root.verticalPadding
+                leftMargin: 12
+                rightMargin: 12
             }
+            spacing: 0
 
-            ColumnLayout {
-                spacing: 2
-                Layout.fillWidth: true
-                StyledText {
-                    Layout.fillWidth: true
-                    color: Appearance.colors.colOnSurfaceVariant
-                    elide: Text.ElideRight
-                    text: root.device?.name || Translation.tr("Unknown device")
-                    textFormat: Text.PlainText
+            RowLayout {
+                spacing: 16
+
+                Rectangle {
+                    width: 28
+                    height: 28
+                    radius: 14
+                    color: root.device?.icon.includes('input') ? Appearance.colors.colPrimary 
+                    : root.device?.icon.includes('audio') ? Appearance.colors.colTertiary
+                    : Appearance.colors.colSecondary
+
+                    MaterialSymbol {
+                        anchors.centerIn: parent
+                        iconSize: Appearance.font.pixelSize.larger
+                        text: Icons.getBluetoothDeviceMaterialSymbol(root.device?.icon || "")
+                        color: root.device?.icon.includes('input') ? Appearance.colors.colOnPrimary 
+                        : root.device?.icon.includes('audio') ? Appearance.colors.colOnTertiary
+                        : Appearance.colors.colOnSecondary
+                    }
                 }
-                StyledText {
-                    visible: (root.device?.connected || root.device?.paired) ?? false
+
+                ColumnLayout {
+                    spacing: 2
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.smaller
-                    color: Appearance.colors.colSubtext
-                    elide: Text.ElideRight
-                    text: {
-                        if (!root.device?.paired) return "";
-                        let statusText = root.device?.connected ? Translation.tr("Connected") : Translation.tr("Paired");
-                        if (!root.device?.batteryAvailable) return statusText;
-                        statusText += ` • ${Math.round(root.device?.battery * 100)}%`;
-                        return statusText;
+                    StyledText {
+                        Layout.fillWidth: true
+                        color: Appearance.colors.colOnSurface
+                        elide: Text.ElideRight
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        text: root.device?.name || Translation.tr("Unknown device")
+                        textFormat: Text.PlainText
+                    }
+                    StyledText {
+                        visible: (root.device?.connected || root.device?.paired) ?? false
+                        Layout.fillWidth: true
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.colors.colOnSurface
+                        elide: Text.ElideRight
+                        text: {
+                            if (!root.device?.paired) return "";
+                            let statusText = root.device?.connected ? Translation.tr("Connected") : Translation.tr("Paired");
+                            if (!root.device?.batteryAvailable) return statusText;
+                            statusText += ` • ${Math.round(root.device?.battery * 100)}%`;
+                            return statusText;
+                        }
+                    }
+                }
+
+                MaterialSymbol {
+                    text: "keyboard_arrow_down"
+                    iconSize: Appearance.font.pixelSize.larger
+                    color: Appearance.colors.colOnLayer3
+                    rotation: root.expanded ? 180 : 0
+                    Behavior on rotation {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                 }
             }
 
-            MaterialSymbol {
-                text: "keyboard_arrow_down"
-                iconSize: Appearance.font.pixelSize.larger
-                color: Appearance.colors.colOnLayer3
-                rotation: root.expanded ? 180 : 0
-                Behavior on rotation {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            RowLayout {
+                visible: root.expanded
+                Layout.topMargin: 8
+                Item {
+                    Layout.fillWidth: true
+                }
+                ActionButton {
+                    buttonText: root.device?.connected ? Translation.tr("Disconnect") : Translation.tr("Connect")
+
+                    onClicked: {
+                        if (root.device?.connected) {
+                            root.device.disconnect();
+                        } else {
+                            root.device.connect();
+                        }
+                    }
+                }
+                ActionButton {
+                    visible: root.device?.paired ?? false
+
+                    buttonText: Translation.tr("Forget")
+                    onClicked: {
+                        root.device?.forget();
+                    }
                 }
             }
-        }
-
-        RowLayout {
-            visible: root.expanded
-            Layout.topMargin: 8
             Item {
-                Layout.fillWidth: true
-            }
-            ActionButton {
-                buttonText: root.device?.connected ? Translation.tr("Disconnect") : Translation.tr("Connect")
-
-                onClicked: {
-                    if (root.device?.connected) {
-                        root.device.disconnect();
-                    } else {
-                        root.device.connect();
-                    }
-                }
-            }
-            ActionButton {
-                visible: root.device?.paired ?? false
-                colBackground: Appearance.colors.colError
-                colBackgroundHover: Appearance.colors.colErrorHover
-                colRipple: Appearance.colors.colErrorActive
-                colText: Appearance.colors.colOnError
-
-                buttonText: Translation.tr("Forget")
-                onClicked: {
-                    root.device?.forget();
-                }
+                Layout.fillHeight: true
             }
         }
-        Item {
-            Layout.fillHeight: true
-        }
-    }
 }
