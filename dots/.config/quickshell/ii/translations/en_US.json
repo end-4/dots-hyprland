@@ -607,5 +607,7 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Auto-Rotate": "Auto-Rotate",
+  "Auto-Rotate | Requires iio-hyprland": "Auto-Rotate | Requires iio-hyprland"
 }
