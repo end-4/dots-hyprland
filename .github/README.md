@@ -209,13 +209,39 @@ Properly re-executes `nmcli connect` after a WiFi password change.
 
 ---
 
-## 📦 Apply All Features Script
+## 📦 Apply Features
 
-[`apply-all-features.sh`](https://github.com/tslove923/dots-hyprland/blob/feature/gpu-npu-monitoring/apply-all-features.sh) merges all branches above into a single integration and deploys to your live config.
+Two scripts on [`feature/apply-script`](https://github.com/tslove923/dots-hyprland/tree/feature/apply-script) merge and deploy feature branches to your live config.
+
+| Script | Description |
+|--------|-------------|
+| `apply-features.sh` | **Interactive TUI** — select which features to apply (dialog/whiptail/plain fallback) |
+| `apply-all-features.sh` | Apply all features without prompting |
+
+### Usage
+
+```bash
+# Interactive TUI — pick features from a checklist
+./apply-features.sh
+
+# Apply everything (no TUI)
+./apply-features.sh --all
+# or
+./apply-all-features.sh
+
+# Preview only — create integration branch without deploying
+./apply-features.sh --dry-run
+
+# Deploy without AI assistant
+./apply-features.sh --no-ai-assistant
+
+# Keep integration branch after deploy for inspection
+./apply-features.sh --keep-branch
+```
 
 ### Merge Order
 
-The script merges in dependency-aware order to minimize conflicts:
+The scripts merge in dependency-aware order to minimize conflicts:
 
 | # | Branch | Merges cleanly? |
 |---|--------|-----------------|
@@ -229,32 +255,14 @@ The script merges in dependency-aware order to minimize conflicts:
 
 ### What It Does
 
-1. Creates a temporary integration branch from `main`
-2. Sequentially merges all feature branches
-3. Auto-resolves known conflicts (READMEs → accept theirs, keybinds → custom-configs version for custom, accept theirs for hyprland core)
-4. Backs up `~/.config` to `~/.config-backup-features-<timestamp>`
-5. Deploys merged configs via rsync (quickshell, hypr, fish, overlay QML, etc.)
-6. Optionally installs the AI assistant wake-word systemd service
-7. Verifies critical files and reloads Hyprland
-
-### Usage
-
-```bash
-# Full deploy (recommended for fresh install)
-./apply-all-features.sh
-
-# Preview only — create integration branch without deploying
-./apply-all-features.sh --dry-run
-
-# Deploy without AI assistant
-./apply-all-features.sh --no-ai-assistant
-
-# Keep integration branch after deploy for inspection
-./apply-all-features.sh --keep-branch
-
-# Skip backup (not recommended)
-./apply-all-features.sh --no-backup
-```
+1. Presents a TUI checklist to select features (or applies all via `--all`)
+2. Creates a temporary integration branch from `main`
+3. Sequentially merges selected feature branches
+4. Auto-resolves known conflicts (READMEs, keybinds, BarContent)
+5. Backs up `~/.config` to `~/.config-backup-features-<timestamp>`
+6. Deploys merged configs via rsync
+7. Optionally installs the AI assistant wake-word systemd service
+8. Verifies critical files and reloads Hyprland
 
 ### Restoring from Backup
 

@@ -104,16 +104,21 @@ cd dots-hyprland
 ./setup install
 ```
 
-### 2. Apply all features
+### 2. Apply features
 
 ```bash
+# Interactive TUI — pick which features to apply
+./apply-features.sh
+
+# Or apply everything at once
 ./apply-all-features.sh
 ```
 
-This merges all feature branches in the correct order, auto-resolves conflicts, backs up your config, and deploys everything. See [.github/README.md](.github/README.md) for full details and flags.
+This merges selected feature branches in the correct order, auto-resolves conflicts, backs up your config, and deploys. See [.github/README.md](.github/README.md) for full details.
 
 | Flag | Description |
 |------|-------------|
+| `--all` | Apply all features without TUI (apply-features.sh) |
 | `--no-ai-assistant` | Skip AI assistant installation |
 | `--no-backup` | Skip backing up current config |
 | `--dry-run` | Create integration branch but don't deploy |
