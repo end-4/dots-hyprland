@@ -12,7 +12,7 @@ Tips:
 ## illogical-impulse-audio
 - `cava`
   - Used in Quickshell config.
-- `pavucontrol-qt`
+- `pavucontrol`
   - Used in Hyprland and Quickshell config.
 - `wireplumber`
   - Not explicitly used.
