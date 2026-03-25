@@ -96,50 +96,37 @@ Fixes a bug where WiFi failed to reconnect after entering a new password.
 
 ## 📦 Installation
 
-### Use All Features
+### 1. Install the base shell
+
 ```bash
-# Clone this repository
 git clone https://github.com/tslove923/dots-hyprland
 cd dots-hyprland
-
-# Merge all features into a combined branch
-git checkout -b all-features
-git merge feature/vpn-indicator
-git merge feature/copilot-integration
-git merge feature/custom-configs
-git merge feature/custom-view
-git merge feature/gpu-npu-monitoring
-git merge feature/ai-assistant
-git merge fix/wifi-reconnect-after-password
-
-# Then install using the upstream installer
 ./setup install
 ```
 
-### Use Individual Features
-Each feature branch has its own installation instructions. Visit the branch README for details.
+### 2. Apply all features
 
 ```bash
-# Example: Install just GPU/NPU monitoring
+./apply-all-features.sh
+```
+
+This merges all feature branches in the correct order, auto-resolves conflicts, backs up your config, and deploys everything. See [.github/README.md](.github/README.md) for full details and flags.
+
+| Flag | Description |
+|------|-------------|
+| `--no-ai-assistant` | Skip AI assistant installation |
+| `--no-backup` | Skip backing up current config |
+| `--dry-run` | Create integration branch but don't deploy |
+| `--keep-branch` | Preserve the integration branch after deploying |
+
+### Use Individual Features
+
+Each feature branch can also be used independently:
+
+```bash
 git clone -b feature/gpu-npu-monitoring https://github.com/tslove923/dots-hyprland
 cd dots-hyprland
 # Follow instructions in GPU_NPU_MONITORING.md
-```
-
-### Development Workflow
-For development and testing individual features against a live system:
-
-```bash
-# Sync a feature to your live config
-bash scripts/sync_and_test.sh gpu-npu    # GPU/NPU monitoring
-bash scripts/sync_and_test.sh vpn        # VPN indicator
-bash scripts/sync_and_test.sh copilot    # Copilot integration
-bash scripts/sync_and_test.sh keybinds   # Custom keybinds
-
-# Pull changes back from live config
-bash scripts/sync_and_test.sh pull
-
-# Reload Quickshell to test: Super+Shift+R
 ```
 
 ## 🔄 Staying Updated

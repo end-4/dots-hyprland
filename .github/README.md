@@ -107,8 +107,6 @@ Personal keybinds, service toggles, and startup scripts.
 - **Super+Alt+D** — Toggle Docker on/off
 - **Super+Alt+V** — VPN toggle (polkit GUI auth)
 - **Super+Alt+P** — Proxy toggle with notification
-- **Super+Alt+A/Z** — Nova wake word / TTS toggle
-- **Super+A** — Nova type command
 - **Super+C/V/X** — Universal copy/paste/cut (sendshortcut)
 - **Super+Alt+B** — Bluetooth TUI
 - Startup apps script, nm-applet as headless secret agent
@@ -199,26 +197,7 @@ Fixes media player selection so the currently playing source takes priority.
 
 ---
 
-### 📧 Email/Todo Click-to-Open — [`feature/nova-email-todo-open`](https://github.com/tslove923/dots-hyprland/tree/feature/nova-email-todo-open)
-
-Click email items in the todo sidebar to open them, plus auto-refresh.
-
-- Click email todos to open in Evolution or Outlook Web
-- EWS email click-to-open via cached message URLs
-- Auto-refresh todo file without restarting Quickshell
-- *Also includes*: GPU/NPU monitoring, VPN indicator, AI assistant (branch lineage)
-
-<details>
-<summary>Files changed</summary>
-
-- `modules/ii/sidebarRight/todo/TaskList.qml`
-- `services/Todo.qml`
-- `services/ResourceUsage.qml` (GPU/NPU)
-</details>
-
----
-
-### 📶 WiFi Reconnect Fix — [`fix/wifi-reconnect-after-password`](https://github.com/tslove923/dots-hyprland/tree/fix/wifi-reconnect-after-password)
+###  WiFi Reconnect Fix — [`fix/wifi-reconnect-after-password`](https://github.com/tslove923/dots-hyprland/tree/fix/wifi-reconnect-after-password)
 
 Properly re-executes `nmcli connect` after a WiFi password change.
 
@@ -247,12 +226,11 @@ The script merges in dependency-aware order to minimize conflicts:
 | 5 | `feature/us-clock-view-worldclocks` | ⚡ Keybinds conflict → auto-resolved |
 | 6 | `feature/homeassistant-integration` | ⚡ README conflict → auto-resolved |
 | 7 | `feature/overview-monitor-binding-dropdown` | ⚡ Keybinds conflict → auto-resolved |
-| 8 | `feature/nova-email-todo-open` | ⚡ README conflicts → auto-resolved |
 
 ### What It Does
 
 1. Creates a temporary integration branch from `main`
-2. Sequentially merges all 8 feature branches
+2. Sequentially merges all feature branches
 3. Auto-resolves known conflicts (READMEs → accept theirs, keybinds → custom-configs version for custom, accept theirs for hyprland core)
 4. Backs up `~/.config` to `~/.config-backup-features-<timestamp>`
 5. Deploys merged configs via rsync (quickshell, hypr, fish, overlay QML, etc.)
