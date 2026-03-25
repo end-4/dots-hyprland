@@ -303,7 +303,7 @@ ContentPage {
                     Config.options.background.widgets.clock.cookie.useSineCookie = checked;
                 }
                 StyledToolTip {
-                    text: "Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing"
+                    text: Translation.tr("Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing")
                 }
             }
 
@@ -327,7 +327,7 @@ ContentPage {
                     Config.options.background.widgets.clock.cookie.constantlyRotate = checked;
                 }
                 StyledToolTip {
-                    text: "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical."
+                    text: Translation.tr("Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical.")
                 }
             }
 
@@ -345,7 +345,7 @@ ContentPage {
                         Config.options.background.widgets.clock.cookie.hourMarks = checked;
                     }
                     StyledToolTip {
-                        text: "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons"
+                        text: Translation.tr("Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons")
                     }
                 }
 
@@ -361,7 +361,7 @@ ContentPage {
                         Config.options.background.widgets.clock.cookie.timeIndicators = checked;
                     }
                     StyledToolTip {
-                        text: "Can't be turned on when using 'Numbers' dial style for aesthetic reasons"
+                        text: Translation.tr("Can't be turned on when using 'Numbers' dial style for aesthetic reasons")
                     }
                 }
             }
