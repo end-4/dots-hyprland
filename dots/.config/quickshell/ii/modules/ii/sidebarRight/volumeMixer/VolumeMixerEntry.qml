@@ -89,12 +89,7 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.small
                 color: Appearance.colors.colSubtext
                 elide: Text.ElideRight
-                text: {
-                    // application.name -> description -> name
-                    const app = Audio.appNodeDisplayName(root.node);
-                    const media = root.node.properties["media.name"];
-                    return media != undefined ? `${app} • ${media}` : app;
-                }
+                text: Audio.appStreamRowTitle(root.node)
             }
 
             StyledSlider {

@@ -10,8 +10,23 @@ import Quickshell.Services.Pipewire
 ColumnLayout {
     id: root
     required property bool isSink
-    readonly property list<var> appPwNodes: isSink ? Audio.outputAppNodes : Audio.inputAppNodes
-    readonly property list<var> devices: isSink ? Audio.outputDevices : Audio.inputDevices
+    readonly property list<var> appPwNodes: {
+        const vm = Config.options.audio.volumeMixer
+        const _dep = JSON.stringify(vm.hiddenMixerPlaybackStreamKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerRecordStreamKeys ?? [])
+        void _dep
+        return isSink ? Audio.mixerOutputAppNodes : Audio.mixerInputAppNodes
+    }
+    readonly property list<var> devices: {
+        const vm = Config.options.audio.volumeMixer
+        const _dep = JSON.stringify(vm.hiddenMixerOutputDeviceKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerInputDeviceKeys ?? [])
+        void _dep
+        const _pw = Pipewire.nodes?.values?.length ?? 0
+        void _pw
+        void Pipewire.defaultAudioSink
+        void Pipewire.defaultAudioSource
+        return isSink ? Audio.mixerOutputDevices : Audio.mixerInputDevices
+    }
+    readonly property var deviceComboLabels: devices.map(node => Audio.friendlyDeviceName(node))
     readonly property bool hasApps: appPwNodes.length > 0
     spacing: 16
 
@@ -43,7 +58,7 @@ ColumnLayout {
         Layout.fillHeight: false
         Layout.fillWidth: true
         Layout.bottomMargin: 6
-        model: root.devices.map(node => Audio.friendlyDeviceName(node))
+        model: root.deviceComboLabels
         currentIndex: root.devices.findIndex(item => {
             if (root.isSink) {
                 return item.id === Pipewire.defaultAudioSink?.id

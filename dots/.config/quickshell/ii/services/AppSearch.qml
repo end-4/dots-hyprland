@@ -157,7 +157,7 @@ Singleton {
             const matches = useLev ? runLevenshtein(e => e.name) : runFuzzy(preppedNames, false);
             return prioritizeExactMatches(search, matches);
         }
-        // Normal: name + genericName + comment — use fuzzy threshold to avoid false positives
+        // Normal: name + genericName + comment, use fuzzy threshold to avoid false positives
         if (mode === "normal") {
             const matches = useLev ? runLevenshtein(searchableTextNormal) : runFuzzy(preppedSearchTextNormal, true);
             return prioritizeExactMatches(search, matches);

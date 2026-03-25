@@ -97,12 +97,16 @@ ApplicationWindow {
     }
 
     visible: true
-    onClosing: Qt.quit()
+    onClosing: {
+        Config.forceSave();
+        Qt.quit();
+    }
     title: "illogical-impulse Settings"
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
+        // Batch config writes so rapid toggles (e.g. stream hide switches) don't sync JSON on every click and freeze the UI.
+        Config.readWriteDelay = 120
         const startupPage = startupPageIndexFromRequest(startupPageRequest);
         if (startupPage >= 0 && startupPage < pages.length)
             currentPage = startupPage;

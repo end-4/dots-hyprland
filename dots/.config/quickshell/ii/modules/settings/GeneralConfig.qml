@@ -2,13 +2,56 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import QtQuick.Layouts
+import Quickshell.Services.Pipewire
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
+    id: generalRoot
     forceWidth: true
+
+    property int mixerUiEpoch: 0
+    /** 0 playback streams, 1 record streams, 2 output devices, 3 input devices */
+    property int mixerPanelTab: 0
+
+    readonly property list<var> mixerPanelMainNodes: {
+        mixerUiEpoch
+        mixerPanelTab
+        switch (mixerPanelTab) {
+        case 0:
+            return Audio.outputAppNodes
+        case 1:
+            return Audio.inputAppNodes
+        case 2:
+            return Audio.outputDevices
+        case 3:
+            return Audio.inputDevices
+        default:
+            return []
+        }
+    }
+    readonly property list<string> mixerPanelOrphans: {
+        mixerUiEpoch
+        mixerPanelTab
+        Config.options.audio.volumeMixer.hiddenMixerPlaybackStreamKeys
+        Config.options.audio.volumeMixer.hiddenMixerRecordStreamKeys
+        Config.options.audio.volumeMixer.hiddenMixerOutputDeviceKeys
+        Config.options.audio.volumeMixer.hiddenMixerInputDeviceKeys
+        switch (mixerPanelTab) {
+        case 0:
+            return Audio.orphanStreamHideKeys(true)
+        case 1:
+            return Audio.orphanStreamHideKeys(false)
+        case 2:
+            return Audio.orphanDeviceHideKeys(true)
+        case 3:
+            return Audio.orphanDeviceHideKeys(false)
+        default:
+            return []
+        }
+    }
 
     Process {
         id: translationProc
@@ -53,6 +96,418 @@ ContentPage {
                 stepSize: 2
                 onValueChanged: {
                     Config.options.audio.protection.maxAllowed = value;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Volume mixer")
+            tooltip: Translation.tr("Hide streams or devices from the bar and quick-panel mixers. Stream rules use app/binary identity; devices use PipeWire serial or node name so they survive restarts. The default output/input device always stays visible.")
+
+            ConfigSwitch {
+                buttonIcon: "subtitles"
+                text: Translation.tr("Show application name with media title")
+                checked: Config.options.audio.volumeMixer.showAppNameWithMedia ?? true
+                onCheckedChanged: {
+                    Config.options.audio.volumeMixer.showAppNameWithMedia = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("When off, stream rows show only the media title (e.g. \"Spotify\") instead of \"spotify • Spotify\".")
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "compare_arrows"
+                text: Translation.tr("Omit app name when it matches the media title")
+                checked: Config.options.audio.volumeMixer.hideAppNameWhenSameAsMedia ?? true
+                onCheckedChanged: {
+                    Config.options.audio.volumeMixer.hideAppNameWhenSameAsMedia = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("When showing app + media, use a single label if both are the same (e.g. only \"Spotify\" instead of \"Spotify • Spotify\").")
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: streamMixerCardCol.implicitHeight + 24
+                color: Appearance.colors.colLayer1
+                radius: Appearance.rounding.small
+                border.width: 1
+                border.color: Appearance.m3colors.m3outlineVariant
+
+                ColumnLayout {
+                    id: streamMixerCardCol
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: 12
+                    spacing: 12
+
+                    // Row 1: mode + refresh (single horizontal strip)
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        ConfigSelectionArray {
+                            Layout.fillWidth: true
+                            currentValue: generalRoot.mixerPanelTab
+                            onSelected: newValue => {
+                                generalRoot.mixerPanelTab = newValue;
+                            }
+                            options: [
+                                {
+                                    displayName: Translation.tr("Playback"),
+                                    icon: "media_output",
+                                    value: 0
+                                },
+                                {
+                                    displayName: Translation.tr("Recording"),
+                                    icon: "mic",
+                                    value: 1
+                                },
+                                {
+                                    displayName: Translation.tr("Output devices"),
+                                    icon: "speaker",
+                                    value: 2
+                                },
+                                {
+                                    displayName: Translation.tr("Input devices"),
+                                    icon: "mic_external_on",
+                                    value: 3
+                                }
+                            ]
+                        }
+
+                        RippleButton {
+                            Layout.alignment: Qt.AlignVCenter
+                            implicitWidth: 40
+                            implicitHeight: 40
+                            buttonRadius: Appearance.rounding.full
+                            colBackground: Appearance.colors.colLayer2
+                            onClicked: generalRoot.mixerUiEpoch++
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: "sync"
+                                iconSize: 22
+                                color: Appearance.colors.colOnLayer2
+                            }
+                            StyledToolTip {
+                                text: Translation.tr("Refresh list")
+                            }
+                        }
+                    }
+
+                    // Row 2: list OR empty (never stacked - no overlay)
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 280
+                        color: Appearance.colors.colLayer0
+                        radius: Appearance.rounding.small
+                        border.width: 1
+                        border.color: Appearance.m3colors.m3outlineVariant
+
+                        StackLayout {
+                            anchors.fill: parent
+                            anchors.margins: 6
+                            currentIndex: generalRoot.mixerPanelMainNodes.length > 0 ? 0 : 1
+
+                            ListView {
+                                id: streamListView
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                clip: true
+                                spacing: 0
+                                model: ScriptModel {
+                                    values: generalRoot.mixerPanelMainNodes
+                                }
+                                delegate: Column {
+                                    required property int index
+                                    required property var modelData
+                                    width: streamListView.width
+                                    spacing: 0
+
+                                    Loader {
+                                        width: parent.width
+                                        active: generalRoot.mixerPanelTab < 2
+                                        sourceComponent: StreamMixerHideRow {
+                                            node: modelData
+                                            isPlayback: generalRoot.mixerPanelTab === 0
+                                        }
+                                    }
+                                    Loader {
+                                        width: parent.width
+                                        active: generalRoot.mixerPanelTab >= 2
+                                        sourceComponent: DeviceMixerHideRow {
+                                            node: modelData
+                                            isOutputDevice: generalRoot.mixerPanelTab === 2
+                                        }
+                                    }
+                                    Rectangle {
+                                        width: parent.width
+                                        height: 1
+                                        visible: index < streamListView.count - 1
+                                        color: Appearance.m3colors.m3outlineVariant
+                                    }
+                                }
+                            }
+
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                spacing: 10
+
+                                Item {
+                                    Layout.fillHeight: true
+                                    Layout.minimumHeight: 8
+                                }
+                                MaterialSymbol {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    text: generalRoot.mixerPanelTab < 2 ? "graphic_eq" : "speaker_group"
+                                    iconSize: 36
+                                    color: Appearance.colors.colSubtext
+                                    opacity: 0.45
+                                }
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignHCenter
+                                    wrapMode: Text.Wrap
+                                    text: generalRoot.mixerPanelTab < 2 ? Translation.tr("No streams right now - start audio and tap refresh.") : Translation.tr("No devices listed - check PipeWire and tap refresh.")
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                }
+                                Item {
+                                    Layout.fillHeight: true
+                                    Layout.minimumHeight: 8
+                                }
+                            }
+                        }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        visible: generalRoot.mixerPanelOrphans.length > 0
+                        spacing: 6
+                        StyledText {
+                            Layout.fillWidth: true
+                            text: Translation.tr("Still hidden (not connected) - remove if you change your mind:")
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.colors.colSubtext
+                            wrapMode: Text.Wrap
+                        }
+                        Repeater {
+                            model: ScriptModel {
+                                values: generalRoot.mixerPanelOrphans
+                            }
+                            delegate: RowLayout {
+                                required property var modelData
+                                spacing: 6
+                                Layout.fillWidth: true
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    text: String(modelData)
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    color: Appearance.colors.colOnLayer1
+                                    elide: Text.ElideMiddle
+                                }
+                                RippleButton {
+                                    implicitHeight: 32
+                                    implicitWidth: 32
+                                    buttonRadius: Appearance.rounding.full
+                                    colBackground: Appearance.colors.colLayer2
+                                    onClicked: {
+                                        const k = String(modelData);
+                                        const t = generalRoot.mixerPanelTab;
+                                        if (t < 2)
+                                            Audio.removeStreamHideKey(k, t === 0);
+                                        else
+                                            Audio.removeDeviceHideKey(k, t === 2);
+                                    }
+                                    contentItem: MaterialSymbol {
+                                        anchors.centerIn: parent
+                                        text: "close"
+                                        iconSize: 18
+                                        color: Appearance.colors.colOnLayer2
+                                    }
+                                    StyledToolTip {
+                                        text: Translation.tr("Stop hiding this entry")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    component StreamMixerHideRow: ColumnLayout {
+        required property var node
+        required property bool isPlayback
+        property int _hideSwitchGuard: 0
+        spacing: 6
+        Layout.fillWidth: true
+        Layout.leftMargin: 4
+        Layout.rightMargin: 4
+        Layout.topMargin: 6
+        Layout.bottomMargin: 6
+
+        readonly property string streamPersistKey: Audio.streamPersistHideKey(node)
+
+        readonly property string streamSubline: {
+            const m = node?.properties?.["media.name"];
+            if (m !== undefined && m !== null && String(m).length > 0)
+                return String(m);
+            return streamPersistKey.length > 0 ? streamPersistKey : "";
+        }
+
+        PwObjectTracker {
+            objects: [node]
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            text: Audio.appNodeDisplayName(node)
+            font.pixelSize: Appearance.font.pixelSize.normal
+            elide: Text.ElideRight
+            color: Appearance.colors.colOnLayer1
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            visible: streamSubline.length > 0
+            text: streamSubline
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            color: Appearance.colors.colSubtext
+            elide: Text.ElideRight
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 8
+
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignVCenter
+                text: "visibility_off"
+                iconSize: 20
+                color: Appearance.colors.colSubtext
+            }
+
+            StyledText {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                text: Translation.tr("Hide from mixer")
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colSubtext
+                wrapMode: Text.Wrap
+            }
+
+            Item {
+                Layout.preferredWidth: 52
+                Layout.preferredHeight: 34
+                Layout.alignment: Qt.AlignVCenter
+                StyledSwitch {
+                    anchors.centerIn: parent
+                    enabled: streamPersistKey.length > 0
+                    checked: Audio.streamMixerIsHidden(node, isPlayback, true, streamPersistKey)
+                    onCheckedChanged: {
+                        if (_hideSwitchGuard > 0)
+                            return;
+                        const wantHidden = checked;
+                        const curHidden = Audio.streamMixerIsHidden(node, isPlayback, true, streamPersistKey);
+                        if (wantHidden === curHidden)
+                            return;
+                        _hideSwitchGuard++;
+                        Audio.setStreamHiddenForMixer(node, isPlayback, wantHidden);
+                        Qt.callLater(() => {
+                            _hideSwitchGuard--;
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    component DeviceMixerHideRow: ColumnLayout {
+        required property var node
+        required property bool isOutputDevice
+        property int _hideSwitchGuard: 0
+        spacing: 6
+        Layout.fillWidth: true
+        Layout.leftMargin: 4
+        Layout.rightMargin: 4
+        Layout.topMargin: 6
+        Layout.bottomMargin: 6
+
+        readonly property var devKeys: Audio.collectDeviceHideKeys(node)
+        readonly property string devKey: devKeys.length > 0 ? devKeys[0] : Audio.mixerDeviceStableId(node)
+        readonly property bool isDefaultDevice: {
+            const def = isOutputDevice ? Pipewire.defaultAudioSink : Pipewire.defaultAudioSource;
+            return !!(def && node && def.id !== undefined && node.id !== undefined && String(def.id) === String(node.id));
+        }
+
+        PwObjectTracker {
+            objects: [node]
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            text: Audio.friendlyDeviceName(node)
+            font.pixelSize: Appearance.font.pixelSize.normal
+            elide: Text.ElideRight
+            color: Appearance.colors.colOnLayer1
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            visible: devKey.length > 0
+            text: isDefaultDevice ? Translation.tr("Default device - always shown in mixers") : devKey
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            color: Appearance.colors.colSubtext
+            elide: Text.ElideRight
+            wrapMode: Text.Wrap
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 8
+
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignVCenter
+                text: "visibility_off"
+                iconSize: 20
+                color: Appearance.colors.colSubtext
+            }
+
+            StyledText {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                text: Translation.tr("Hide from mixer")
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colSubtext
+                wrapMode: Text.Wrap
+            }
+
+            Item {
+                Layout.preferredWidth: 52
+                Layout.preferredHeight: 34
+                Layout.alignment: Qt.AlignVCenter
+                StyledSwitch {
+                    anchors.centerIn: parent
+                    enabled: devKeys.length > 0 && !isDefaultDevice
+                    checked: Audio.deviceMixerIsHidden(node, isOutputDevice)
+                    onCheckedChanged: {
+                        if (_hideSwitchGuard > 0)
+                            return;
+                        const wantHidden = checked;
+                        const curHidden = Audio.deviceMixerIsHidden(node, isOutputDevice);
+                        if (wantHidden === curHidden)
+                            return;
+                        _hideSwitchGuard++;
+                        Audio.setDeviceHiddenForMixer(node, isOutputDevice, wantHidden);
+                        Qt.callLater(() => {
+                            _hideSwitchGuard--;
+                        });
+                    }
                 }
             }
         }

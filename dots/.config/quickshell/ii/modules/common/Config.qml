@@ -156,6 +156,18 @@ Singleton {
                     property real maxAllowedIncrease: 10
                     property real maxAllowed: 99
                 }
+                property JsonObject volumeMixer: JsonObject {
+                    // When true: "app • media.name"; when false: "media.name" only (fallback: app name)
+                    property bool showAppNameWithMedia: true
+                    // When showAppNameWithMedia: omit "app •" when media title matches the app name (e.g. Spotify / Spotify)
+                    property bool hideAppNameWhenSameAsMedia: true
+                    // Keys from Audio.streamPersistHideKey() - hide app streams in bar/quick panel mixers
+                    property list<string> hiddenMixerPlaybackStreamKeys: []
+                    property list<string> hiddenMixerRecordStreamKeys: []
+                    // Keys from Audio.mixerDeviceStableId() - hide hardware devices from mixers (default device always stays)
+                    property list<string> hiddenMixerOutputDeviceKeys: []
+                    property list<string> hiddenMixerInputDeviceKeys: []
+                }
             }
 
             property JsonObject apps: JsonObject {
@@ -167,7 +179,7 @@ Singleton {
                 property string taskManager: "plasma-systemmonitor --page-name Processes"
                 property string terminal: "kitty -1" // This is only for shell actions
                 property string update: "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'"
-                property string volumeMixer: `~/.config/hypr/ii/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
+                property string volumeMixer: `~/.config/hypr/ii/scripts/launch_first_available.sh "pavucontrol" "pavucontrol-qt"`
             }
 
             property JsonObject background: JsonObject {
@@ -512,7 +524,7 @@ Singleton {
                 property string engineBaseUrl: "https://www.google.com/search?q="
                 property list<string> excludedSites: []
                 property bool sloppy: false // Use Levenshtein distance for all search modes (app launcher + clipboard)
-                property string mode: "exact" // "exact" | "normal" | "sloppy" — which fields are searched (name only / +genericName+comment / +keywords+categories)
+                property string mode: "exact" // "exact" | "normal" | "sloppy" - which fields are searched (name only / +genericName+comment / +keywords+categories)
                 property int fuzzyThreshold: 25 // 0–100; used for Normal/Sloppy to filter weak fuzzy matches. Higher = stricter.
                 property bool smartSearch: false
                 property JsonObject prefix: JsonObject {

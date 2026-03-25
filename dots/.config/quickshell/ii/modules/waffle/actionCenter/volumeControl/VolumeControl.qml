@@ -63,7 +63,7 @@ Item {
 
                 onClicked: {
                     Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "sidebarLeft", "toggle"]);
-                    Quickshell.execDetached(["bash", "-c", Config.options.apps.volumeMixer]);
+                    Audio.launchConfigurableShellCommand(Config.options.apps.volumeMixer);
                 }
 
                 contentItem: Item {
@@ -83,13 +83,27 @@ Item {
     component AudioChoices: ColumnLayout {
         spacing: 4
 
+        readonly property list<var> filteredAppStreamNodes: {
+            const vm = Config.options.audio.volumeMixer
+            const _dep = JSON.stringify(vm.hiddenMixerPlaybackStreamKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerRecordStreamKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerOutputDeviceKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerInputDeviceKeys ?? [])
+            void _dep
+            return root.output ? Audio.mixerOutputAppNodes : Audio.mixerInputAppNodes
+        }
+
+        readonly property list<var> filteredDeviceNodes: {
+            const vm = Config.options.audio.volumeMixer
+            const _dep = JSON.stringify(vm.hiddenMixerPlaybackStreamKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerRecordStreamKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerOutputDeviceKeys ?? []) + "|" + JSON.stringify(vm.hiddenMixerInputDeviceKeys ?? [])
+            void _dep
+            return root.output ? Audio.mixerOutputDevices : Audio.mixerInputDevices
+        }
+
         SectionText {
             text: root.output ? Translation.tr("Output device") : Translation.tr("Input device")
         }
 
         Repeater {
             model: ScriptModel {
-                values: root.output ? Audio.outputDevices : Audio.inputDevices
+                values: root.filteredDeviceNodes
             }
             delegate: WChoiceButton {
                 required property var modelData
@@ -148,7 +162,7 @@ Item {
 
         Repeater {
             model: ScriptModel {
-                values: root.output ? Audio.outputAppNodes : Audio.inputAppNodes
+                values: root.filteredAppStreamNodes
             }
             delegate: VolumeEntry {
                 required property var modelData

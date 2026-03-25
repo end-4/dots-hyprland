@@ -130,7 +130,9 @@ ContentPage {
                 RippleButtonWithIcon {
                     materialIcon: "volume_up"
                     mainText: Translation.tr("Volume mixer")
-                    onClicked: Quickshell.execDetached(["bash", "-c", Config.options.apps.volumeMixer])
+                    onClicked: {
+                        Audio.launchConfigurableShellCommand(Config.options.apps.volumeMixer);
+                    }
                 }
                 RippleButtonWithIcon {
                     materialIcon: "terminal"
