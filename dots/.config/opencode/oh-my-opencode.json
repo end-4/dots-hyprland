@@ -1,0 +1,71 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "opencode/mimo-v2-pro-free",
+      "variant": "max"
+    },
+    "hephaestus": {
+      "model": "opencode/minimax-m2.5-free",
+      "variant": "medium"
+    },
+    "oracle": {
+      "model": "opencode/nemotron-3-super-free",
+      "variant": "high"
+    },
+    "librarian": {
+      "model": "opencode/minimax-m2.5-free"
+    },
+    "explore": {
+      "model": "opencode/mimo-v2-omni-free"
+    },
+    "multimodal-looker": {
+      "model": "opencode/mimo-v2-omni-free"
+    },
+    "prometheus": {
+      "model": "opencode/nemotron-3-super-free",
+      "variant": "max"
+    },
+    "metis": {
+      "model": "opencode/mimo-v2-pro-free",
+      "variant": "max"
+    },
+    "momus": {
+      "model": "opencode/mimo-v2-omni-free",
+      "variant": "medium"
+    },
+    "atlas": {
+      "model": "opencode/minimax-m2.5-free"
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "kilo/arcee-ai/trinity-large-preview:free",
+      "variant": "high"
+    },
+    "ultrabrain": {
+      "model": "kilo/arcee-ai/trinity-large-preview:free",
+      "variant": "xhigh"
+    },
+    "deep": {
+      "model": "opencode/minimax-m2.5-free",
+      "variant": "medium"
+    },
+    "artistry": {
+      "model": "opencode/mimo-v2-pro-free",
+      "variant": "high"
+    },
+    "quick": {
+      "model": "opencode/mimo-v2-omni-free"
+    },
+    "unspecified-low": {
+      "model": "opencode/minimax-m2.5-free"
+    },
+    "unspecified-high": {
+      "model": "opencode/nemotron-3-super-free"
+    },
+    "writing": {
+      "model": "opencode/mimo-v2-omni-free"
+    }
+  }
+}

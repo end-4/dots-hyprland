@@ -1,0 +1,9 @@
+pkgname=illogical-impulse-ghostty
+pkgver=1.0
+pkgrel=1
+pkgdesc='Ghostty terminal emulator'
+arch=(any)
+license=(None)
+depends=(
+  ghostty
+)

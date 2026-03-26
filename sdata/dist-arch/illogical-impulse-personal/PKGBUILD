@@ -1,0 +1,12 @@
+pkgname=illogical-impulse-personal
+pkgver=1.0
+pkgrel=1
+pkgdesc='Personal tools (browser, note-taking, reference manager, messenger)'
+arch=(any)
+license=(None)
+depends=(
+  zen-browser-bin
+  obsidian
+  zotero-bin
+  feishu-bin
+)

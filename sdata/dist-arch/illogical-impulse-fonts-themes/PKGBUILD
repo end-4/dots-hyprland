@@ -10,9 +10,7 @@ depends=(
   breeze-plus
   darkly-bin
   eza
-  fish
   fontconfig
-  kitty
   matugen
   otf-space-grotesk
   starship

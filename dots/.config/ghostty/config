@@ -1,0 +1,133 @@
+# Font Configuration
+font-family = Fira Code
+font-size = 18
+
+theme = Catppuccin Mocha
+# Window Configuration
+window-decoration = false
+window-padding-x = 12
+window-padding-y = 12
+background-opacity = 0.90
+background-blur-radius = 32
+
+# Cursor Configuration
+cursor-style = block
+cursor-style-blink = true
+
+# Scrollback
+scrollback-limit = 3023
+
+# Terminal features
+mouse-hide-while-typing = true
+copy-on-select = false
+confirm-close-surface = false
+
+# Disable annoying copied to clipboard
+app-notifications = no-clipboard-copy,no-config-reload
+
+# Key bindings for common actions
+#keybind = ctrl+c=copy_to_clipboard
+#keybind = ctrl+v=paste_from_clipboard
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+t=new_tab
+keybind = ctrl+shift+w=close_surface
+
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+zero=reset_font_size
+keybind = ctrl+shift+f=write_scrollback_file:open
+keybind = ctrl+alt+f=write_screen_file:open
+# ============================================
+# 分屏管理
+# ============================================
+# 创建分屏
+keybind = alt+v=new_split:right
+keybind = alt+s=new_split:down
+
+# 切换分屏 (Alt+hjkl)
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+l=goto_split:right
+
+# 分屏大小调整
+keybind = alt+shift+h=resize_split:left,10
+keybind = alt+shift+j=resize_split:down,10
+keybind = alt+shift+k=resize_split:up,10
+keybind = alt+shift+l=resize_split:right,10
+
+# 分屏管理
+keybind = alt+equal=equalize_splits
+keybind = alt+z=toggle_split_zoom
+keybind = alt+x=close_surface
+
+# ============================================
+# 标签页管理
+# ============================================
+# 创建/关闭标签页
+keybind = ctrl+t=new_tab
+keybind = ctrl+shift+w=close_tab
+# 切换标签页（左右）
+keybind = ctrl+shift+left=previous_tab
+keybind = ctrl+shift+right=next_tab
+# 快速跳转到标签页
+keybind = alt+1=goto_tab:0
+keybind = alt+2=goto_tab:1
+keybind = alt+3=goto_tab:2
+keybind = alt+4=goto_tab:3
+keybind = alt+5=goto_tab:4
+keybind = alt+6=goto_tab:5
+keybind = alt+7=goto_tab:6
+keybind = alt+8=goto_tab:7
+keybind = alt+9=goto_tab:8
+
+# ============================================
+# 窗口管理
+# ============================================
+# 新建窗口
+keybind = ctrl+shift+n=new_window
+# 切换窗口
+keybind = ctrl+shift+j=goto_window:next
+keybind = ctrl+shift+k=goto_window:previous
+
+# ============================================
+# 复制/粘贴
+# ============================================
+# 退出复制模式（进入后按 ESC）
+# 复制当前屏幕/滚回缓存到文件
+keybind = ctrl+shift+f=write_scrollback_file:open
+keybind = ctrl+alt+f=write_screen_file:open
+
+# ============================================
+# 字体调整
+# ============================================
+# 增大字体
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+equal=increase_font_size:1
+# 减小字体
+keybind = ctrl+minus=decrease_font_size:1
+# 重置字体
+keybind = ctrl+zero=reset_font_size
+
+# ============================================
+# 高级功能
+# ============================================
+# TBA: 未来扩展
+# keybind = ctrl+shift+p=open_search_forward
+# keybind = ctrl+shift+o=open_search_backward
+
+# Material 3 UI elements
+unfocused-split-opacity = 0.7
+unfocused-split-fill = #44464f
+
+# Tab configuration
+gtk-titlebar = false
+
+# Shell integration
+shell-integration = detect
+shell-integration-features = cursor,sudo,title,no-cursor
+keybind = shift+enter=text:\n
+
+# Dank color generation
+config-file = ./config-dankcolors
+term = xterm-256color

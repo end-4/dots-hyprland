@@ -90,7 +90,7 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./sdata/dist-arch/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
+metapkgs=(./sdata/dist-arch/illogical-impulse-{audio,backlight,basic,fonts-themes,ghostty,kde,portal,python,screencapture,toolkit,widgets,personal})
 metapkgs+=(./sdata/dist-arch/illogical-impulse-hyprland)
 metapkgs+=(./sdata/dist-arch/illogical-impulse-microtex-git)
 metapkgs+=(./sdata/dist-arch/illogical-impulse-quickshell-git)

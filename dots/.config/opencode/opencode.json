@@ -1,0 +1,61 @@
+{
+  "plugin": [
+    "oh-my-opencode"
+  ],
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "memory": {
+      "type": "local",
+      "command": [
+        "bunx",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "enabled": true
+    },
+    "thinking": {
+      "type": "local",
+      "command": [
+        "bunx",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "bunx",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/ryou/Documents",
+        "/home/ryou/myworkspace/"
+      ],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "bunx",
+        "@playwright/mcp@latest"
+      ],
+      "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+    "ai-game-developer": {
+      "enabled": false,
+      "type": "remote",
+      "url": "http://localhost:21917"
+    },
+    "pencil": {
+      "command": [
+        "/home/ryou/.vscode/extensions/highagency.pencildev-0.6.36/out/mcp-server-linux-x64",
+        "--app",
+        "visual_studio_code"
+      ],
+      "enabled": true,
+      "type": "local"
+    }
+  }
+}
