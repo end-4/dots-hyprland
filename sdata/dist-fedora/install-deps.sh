@@ -25,7 +25,7 @@ function r() {
 
 # Start building and install the missing RPM package locally.
 function install_RPMS() {
-  local local_rpms
+  local local_specs local_rpms
   rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
 
   x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
