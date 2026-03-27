@@ -5,6 +5,7 @@
 # -------------------------
 user_config="${REPO_ROOT}/sdata/dist-fedora/user_data.yaml"
 rpmbuildroot="${REPO_ROOT}/cache/rpmbuild"
+rpm_specs="${REPO_ROOT}/sdata/dist-fedora/SPECS"
 deps_data_file="${REPO_ROOT}/sdata/dist-fedora/feddeps.toml"
 
 # -------------------------
@@ -24,15 +25,20 @@ function r() {
 
 # Start building and install the missing RPM package locally.
 function install_RPMS() {
-  local local_specs local_rpms
+  local local_rpms
   rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
 
   x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
   x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
 
   x cd $rpmbuildroot/SPECS
-
-  mapfile -t -d '' local_specs < <(find "$rpmbuildroot/SPECS" -maxdepth 1 -type f -name "*.spec" -print0)
+   
+  # we need cpptrace BEFORE quickshell-git
+  local_specs=(
+    "$rpm_specs/cpptrace.spec"
+    "$rpm_specs/quickshell-git.spec"
+    "$rpm_specs/hyprland-qt-support.spec"
+  )
   for spec_file in ${local_specs[@]}; do
     # Download sources
     x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
