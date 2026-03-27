@@ -497,10 +497,10 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             RowLayout { // Input field and send button
                 id: inputFieldRowLayout
                 anchors {
-                    top: attachedFileIndicator.bottom
+                    bottom: commandButtonsRow.top
                     left: parent.left
                     right: parent.right
-                    topMargin: 5
+                    bottomMargin: 5
                 }
                 spacing: 0
 
