@@ -110,7 +110,7 @@ case $SKIP_PLASMAINTG in
   true) sleep 0;;
   *)
     if $ask;then
-      echo -e "${STY_YELLOW}[$0]: NOTE: The size of \"plasma-browser-integration\" is about 600 MiB.${STY_RST}"
+      echo -e "${STY_YELLOW}[$0]: NOTE: The size of \"plasma-browser-integration\" is ~600 KiB, but if you don't yet have KDE on your system it'll pull an extra ~600MiB of packages.${STY_RST}"
       echo -e "${STY_YELLOW}It is needed if you want playtime of media in Firefox to be shown on the music controls widget.${STY_RST}"
       echo -e "${STY_YELLOW}Install it? [y/N]${STY_RST}"
       read -p "====> " p
