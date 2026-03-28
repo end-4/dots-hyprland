@@ -209,6 +209,17 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject visualizer: JsonObject {
+                        property bool showWhenLocked: false
+                        property bool enable: false
+                        property int height: 200 // in pixels
+                        property real barRounding: 0.4
+                        property real smoothing: 1.0
+                        property real opacity: 1
+                        property real barSpacing: 5 // in pixels
+                        property int targetBarWidth: 50 // in pixles, rough target
+                        property bool mono: true 
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""

@@ -614,4 +614,123 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "equalizer"
+        title: Translation.tr("Widget: Visualizer")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable Visualizer")
+            checked: Config.options.background.widgets.visualizer.enable
+            onCheckedChanged: Config.options.background.widgets.visualizer.enable = checked
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            visible: Config.options.background.widgets.visualizer.enable
+            spacing: 16
+
+            ContentSubsection {
+                title: Translation.tr("Behavior")
+                Layout.fillWidth: true
+
+                ConfigRow {
+                    uniform: true
+                    ConfigSwitch {
+                        buttonIcon: "lock"
+                        text: Translation.tr("Show when locked")
+                        checked: Config.options.background.widgets.visualizer.showWhenLocked
+                        onCheckedChanged: {
+                            Config.options.background.widgets.visualizer.showWhenLocked = checked
+                        }
+                    }
+                    ConfigSwitch {
+                        buttonIcon: "flare"
+                        text: Translation.tr("Mono / Mirrored")
+                        checked: Config.options.background.widgets.visualizer.mono
+                        onCheckedChanged: {
+                            Config.options.background.widgets.visualizer.mono = checked
+                        }
+                    }
+                }
+            }
+
+            ContentSubsection {
+                title: Translation.tr("Sizing")
+                Layout.fillWidth: true
+
+                ConfigRow {
+                    uniform: true
+                    ConfigSpinBox {
+                        icon: "height"
+                        text: Translation.tr("Max Height (px)")
+                        value: Config.options.background.widgets.visualizer.height
+                        from: 60; to: 1080; stepSize: 10
+                        onValueChanged: {
+                            Config.options.background.widgets.visualizer.height = value
+                        }
+                    }
+
+                    ConfigSpinBox {
+                        icon: "view_column"
+                        text: Translation.tr("Target Bar Width")
+                        value: Config.options.background.widgets.visualizer.targetBarWidth
+                        from: 1; to: 200; stepSize: 1
+                        onValueChanged: { 
+                            Config.options.background.widgets.visualizer.targetBarWidth = value
+                        }
+                    }
+                }
+
+                ConfigSpinBox {
+                    icon: "space_bar"
+                    text: Translation.tr("Gap between bars (px)")
+                    value: Config.options.background.widgets.visualizer.barSpacing
+                    from: 0; to: 100; stepSize: 1
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.barSpacing = value
+                    }
+                }
+            }
+
+            ContentSubsection {
+                title: Translation.tr("Style")
+                Layout.fillWidth: true
+
+                ConfigSlider {
+                    buttonIcon: "blur_on"
+                    text: Translation.tr("Smoothing")
+                    value: Config.options.background.widgets.visualizer.smoothing * 100
+                    from: 10; to: 300
+                    stopIndicatorValues: [100]
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.smoothing = value / 100
+                    }
+                }
+
+                ConfigSlider {
+                    buttonIcon: "opacity"
+                    text: Translation.tr("Opacity")
+                    value: Config.options.background.widgets.visualizer.opacity * 100
+                    from: 0; to: 100
+                    stopIndicatorValues: [25, 50, 75]
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.opacity = value / 100
+                    }
+                }
+
+                ConfigSlider {
+                    buttonIcon: "rounded_corner"
+                    text: Translation.tr("Bar Roundness")
+                    value: Config.options.background.widgets.visualizer.barRounding * 100
+                    stopIndicatorValues: [25]
+                    from: 0; to: 50
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.barRounding = value / 100
+                    }
+                }
+            }
+        }
+    }
 }
