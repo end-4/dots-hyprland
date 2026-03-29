@@ -818,9 +818,6 @@ ContentPage {
             onCheckedChanged: {
                 Config.options.altTab.contextGrouping = checked;
             }
-            StyledToolTip {
-                text: Translation.tr("Combine tiled windows of the same app on one workspace into a single tile")
-            }
         }
         ConfigSwitch {
             buttonIcon: "image"
@@ -828,9 +825,6 @@ ContentPage {
             checked: Config.options.altTab.showPreviews
             onCheckedChanged: {
                 Config.options.altTab.showPreviews = checked;
-            }
-            StyledToolTip {
-                text: Translation.tr("Live thumbnails when supported. Previews are always off during game mode.")
             }
         }
         ConfigSwitch {
@@ -840,41 +834,32 @@ ContentPage {
             onCheckedChanged: {
                 Config.options.altTab.perMonitor = checked;
             }
-            StyledToolTip {
-                text: Translation.tr("Alt+Tab lists only windows on the monitor that has keyboard focus")
+        }
+        ConfigSwitch {
+            buttonIcon: "mouse"
+            text: Translation.tr("Classic mouse behavior")
+            checked: Config.options.altTab.classicMouseBehavior
+            onCheckedChanged: {
+                Config.options.altTab.classicMouseBehavior = checked;
             }
         }
-        ContentSubsection {
-            title: Translation.tr("Initial highlight")
-            tooltip: Translation.tr("Where the highlight starts when you open the switcher")
-            ConfigSelectionArray {
-                Layout.fillWidth: true
-                currentValue: Config.options.altTab.initialSelection
-                onSelected: newValue => {
-                    Config.options.altTab.initialSelection = newValue;
-                }
-                options: [
-                    {
-                        displayName: Translation.tr("After last switch"),
-                        icon: "history",
-                        value: "lastAltTab"
-                    },
-                    {
-                        displayName: Translation.tr("Classic (2nd MRU)"),
-                        icon: "undo",
-                        value: "previousFocus"
-                    }
-                ]
+        ConfigSwitch {
+            buttonIcon: "dashboard"
+            text: Translation.tr("Smart layout")
+            checked: Config.options.altTab.smartLayout
+            onCheckedChanged: {
+                Config.options.altTab.smartLayout = checked;
             }
         }
         ContentSubsection {
             title: Translation.tr("Layout & thumbnails")
-            tooltip: Translation.tr("One control per row. Tab-without-Alt hold uses the delay/repeat below; Alt+Tab repeat follows Hyprland key repeat (binde).")
+            tooltip: Translation.tr("Manual sizing when smart layout is off. Tab without Alt uses the system key-repeat rate.")
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 6
                 ConfigSpinBox {
                     Layout.fillWidth: true
+                    enabled: !Config.options.altTab.smartLayout
                     icon: "splitscreen_right"
                     text: Translation.tr("Max tiles per row")
                     value: Config.options.altTab.maxItemsPerRow
@@ -887,6 +872,7 @@ ContentPage {
                 }
                 ConfigSpinBox {
                     Layout.fillWidth: true
+                    enabled: !Config.options.altTab.smartLayout
                     icon: "width"
                     text: Translation.tr("Max thumbnail width (px)")
                     value: Config.options.altTab.maxThumbnailWidth
@@ -899,6 +885,7 @@ ContentPage {
                 }
                 ConfigSpinBox {
                     Layout.fillWidth: true
+                    enabled: !Config.options.altTab.smartLayout
                     icon: "height"
                     text: Translation.tr("Max thumbnail height (px)")
                     value: Config.options.altTab.maxThumbnailHeight
@@ -931,30 +918,6 @@ ContentPage {
                     stepSize: 2
                     onValueChanged: {
                         Config.options.altTab.gap = value;
-                    }
-                }
-                ConfigSpinBox {
-                    Layout.fillWidth: true
-                    icon: "hourglass_empty"
-                    text: Translation.tr("Hold Tab: delay before repeat (ms)")
-                    value: Config.options.altTab.tabHoldDelayMs
-                    from: 200
-                    to: 1200
-                    stepSize: 20
-                    onValueChanged: {
-                        Config.options.altTab.tabHoldDelayMs = value;
-                    }
-                }
-                ConfigSpinBox {
-                    Layout.fillWidth: true
-                    icon: "av_timer"
-                    text: Translation.tr("Hold Tab: repeat interval (ms)")
-                    value: Config.options.altTab.tabHoldRepeatMs
-                    from: 80
-                    to: 600
-                    stepSize: 10
-                    onValueChanged: {
-                        Config.options.altTab.tabHoldRepeatMs = value;
                     }
                 }
             }

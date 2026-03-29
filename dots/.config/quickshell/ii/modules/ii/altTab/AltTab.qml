@@ -30,12 +30,18 @@ Scope {
     // local mouse coords under a stationary cursor and was falsely arming selection.)
     property bool altTabMouseSelectionArmed: false
     property point altTabPointerGlobalAnchor: Qt.point(-1, -1)
+    property int altTabMouseHoverIndex: -1
+    property var closingGhosts: []
     readonly property real altTabMouseMoveThreshold: 6
+    readonly property bool altTabClassicMouse: Config.options.altTab?.classicMouseBehavior === true
 
     readonly property var activeToplevel: ToplevelManager.activeToplevel
     readonly property string focusedClientAddress: root.activeToplevel?.HyprlandToplevel?.address !== undefined ? `0x${root.activeToplevel.HyprlandToplevel.address}` : ""
 
     readonly property var focusedScreen: Quickshell.screens.find(s => Hyprland.monitorFor(s)?.id === Hyprland.focusedMonitor?.id) ?? Quickshell.primaryScreen ?? (Quickshell.screens.length > 0 ? Quickshell.screens[0] : null)
+    readonly property var altTabHyprMonitor: Hyprland.monitorFor(root.focusedScreen)
+    readonly property real altTabHyprScale: Math.max(1, root.altTabHyprMonitor?.scale ?? 1)
+    readonly property bool altTabSmartLayout: Config.options.altTab?.smartLayout !== false
 
     HyprlandConfigOption {
         id: gameModeAnim
@@ -45,15 +51,45 @@ Scope {
     readonly property bool gameModeActive: gameModeAnim.value === 0 || gameModeAnim.value === false
     readonly property bool effectiveShowPreviews: (Config.options.altTab?.showPreviews !== false) && !root.gameModeActive
     readonly property int effectiveGap: Config.options.altTab?.gap ?? 16
-    readonly property int perRowSetting: Math.max(2, Math.min(12, Config.options.altTab?.maxItemsPerRow ?? 5))
-    readonly property int estCellWidth: (Config.options.altTab?.maxThumbnailWidth ?? 680) + root.effectiveGap + 48
+    readonly property int smartLayoutPerRow: {
+        const n = root.cards.length;
+        if (n <= 0)
+            return 5;
+        if (n <= 6)
+            return n;
+        return 5;
+    }
+    readonly property int manualMaxItemsPerRow: Math.max(2, Math.min(12, Config.options.altTab?.maxItemsPerRow ?? 5))
+    readonly property int perRowSetting: root.altTabSmartLayout ? root.smartLayoutPerRow : root.manualMaxItemsPerRow
+    readonly property int smartThumbMaxW: {
+        if (!root.altTabSmartLayout)
+            return 0;
+        const n = root.cards.length;
+        const M = n <= 0 ? 5 : (n <= 6 ? n : 5);
+        const pw = Math.max(400, panelWindow.width);
+        const usable = Math.min(2360, pw * 0.90) - 88;
+        const g = root.effectiveGap;
+        const approxChrome = 52 + 2 * root.tileFramePad + 2 * root.tileCellOuterPad;
+        const slot = (usable - Math.max(0, M - 1) * g) / Math.max(1, M);
+        var w = Math.floor(slot - approxChrome);
+        const boost = Math.min(1.35, Math.sqrt(root.altTabHyprScale));
+        w = Math.round(w * boost);
+        return Math.max(112, Math.min(560, w));
+    }
+    readonly property int smartThumbMaxH: {
+        if (!root.altTabSmartLayout)
+            return 0;
+        const h = Math.round(root.smartThumbMaxW * 0.68);
+        return Math.max(80, Math.min(440, h));
+    }
+    readonly property int effectiveMaxThumbnailWidth: root.altTabSmartLayout ? root.smartThumbMaxW : (Config.options.altTab?.maxThumbnailWidth ?? 680)
+    readonly property int effectiveMaxThumbnailHeight: root.altTabSmartLayout ? root.smartThumbMaxH : (Config.options.altTab?.maxThumbnailHeight ?? 520)
+    readonly property int estCellWidth: root.effectiveMaxThumbnailWidth + root.effectiveGap + 48
     readonly property int flowWidthByCount: perRowSetting * estCellWidth
     readonly property int innerMaxWidth: Math.min(Math.min(2400, flowWidthByCount), Math.max(400, panelWindow.width - 96))
     readonly property int titleBarH: Config.options.altTab?.titleBarHeight ?? 44
     // Space to leave for overlaid close control (button ≈ titleBarH−10, chrome inset); avoid over-reserving → premature "…"
     readonly property int altTabCloseTitleReserve: Math.max(root.titleBarH - 8, 24)
-    readonly property int tabHoldRepeatMs: Math.max(80, Config.options.altTab?.tabHoldRepeatMs ?? 240)
-    readonly property int tabHoldDelayMs: Math.max(200, Config.options.altTab?.tabHoldDelayMs ?? 520)
     readonly property int iconOnlyTileW: Math.max(96, Config.options.altTab?.iconOnlyTileWidth ?? 132)
     readonly property int iconOnlyAreaH: Math.max(64, Config.options.altTab?.iconOnlyAreaHeight ?? 92)
     // Fixed chrome so selection/highlight never changes tile bounds (no layout jump or scroll nudge).
@@ -118,8 +154,8 @@ Scope {
     }
 
     function groupPreviewSlotDims(card) {
-        const mx = Config.options.altTab?.maxThumbnailWidth ?? 680;
-        const my = Config.options.altTab?.maxThumbnailHeight ?? 520;
+        const mx = root.effectiveMaxThumbnailWidth;
+        const my = root.effectiveMaxThumbnailHeight;
         const members = card.groupMembers;
         const n = members?.length ?? 0;
         if (!members || n <= 1) {
@@ -236,8 +272,8 @@ Scope {
 
     // Scale each window into the max thumbnail box; same aspect ratio, no letterboxing inside pvSlot.
     function thumbDimsFit(sw, sh) {
-        const mx = Config.options.altTab?.maxThumbnailWidth ?? 680;
-        const my = Config.options.altTab?.maxThumbnailHeight ?? 520;
+        const mx = root.effectiveMaxThumbnailWidth;
+        const my = root.effectiveMaxThumbnailHeight;
         const ssw = Math.max(Number(sw) || 520, 48);
         const ssh = Math.max(Number(sh) || 380, 48);
         const scale = Math.min(mx / ssw, my / ssh);
@@ -287,16 +323,6 @@ Scope {
 
     function addrsMatch(a, b) {
         return String(a ?? "").toLowerCase() === String(b ?? "").toLowerCase();
-    }
-
-    function initialSelectionMode() {
-        let m = Config.options.altTab?.initialSelection;
-        if (m === undefined || m === null)
-            m = "lastAltTab";
-        m = String(m).trim().toLowerCase().replace(/-/g, "");
-        if (m === "previousfocus" || m === "classic" || m === "secondmru")
-            return "previousFocus";
-        return "lastAltTab";
     }
 
     function updateCardRowsAndPanelMetrics() {
@@ -387,14 +413,52 @@ Scope {
         return ordered.concat(rest);
     }
 
+    function cloneAltTabCard(c) {
+        const members = [];
+        if (c.groupMembers) {
+            for (let i = 0; i < c.groupMembers.length; i++)
+                members.push(Object.assign({}, c.groupMembers[i]));
+        }
+        return {
+            address: c.address,
+            title: c.title,
+            className: c.className,
+            workspaceId: c.workspaceId,
+            floating: !!c.floating,
+            groupCount: c.groupCount ?? 1,
+            sw: c.sw,
+            sh: c.sh,
+            repFocusHist: c.repFocusHist,
+            groupMembers: members,
+            _altTabExiting: true
+        };
+    }
+
+    function mergeClosingGhostsIntoOrdered(ordered) {
+        let out = ordered.slice();
+        const ghosts = root.closingGhosts.slice().sort((a, b) => b.originalIndex - a.originalIndex);
+        for (let i = 0; i < ghosts.length; i++) {
+            const g = ghosts[i];
+            const present = out.some(c => root.addrsMatch(c.address, g.address));
+            if (!present) {
+                const at = Math.max(0, Math.min(g.originalIndex, out.length));
+                out = out.slice(0, at).concat([g.card], out.slice(at));
+            }
+        }
+        return out;
+    }
+
     function rebuildCards() {
         const sorted = root.sortWindows(HyprlandData.windowList);
         const useCtx = Config.options.altTab?.contextGrouping !== false;
         const pool = useCtx ? root.buildContextCards(sorted) : root.buildFlatCards(sorted);
         if (root.stableOrder.length === 0 && pool.length > 0)
             root.stableOrder = pool.map(c => c.address);
-        root.cards = root.orderCardsStable(pool);
+        const ordered = root.orderCardsStable(pool);
+        root.cards = root.mergeClosingGhostsIntoOrdered(ordered);
         root.updateCardRowsAndPanelMetrics();
+        if (GlobalStates.altTabOpen && root.altTabMouseHoverIndex >= root.cards.length)
+            root.altTabMouseHoverIndex = -1;
     }
 
     function rebuildCardsReselecting(prevAddr) {
@@ -425,9 +489,6 @@ Scope {
     }
 
     function initialIndexForOpen(n) {
-        const mode = root.initialSelectionMode();
-        if (mode === "previousFocus")
-            return n > 1 ? 1 : 0;
         if (!root.lastAltTabAddress)
             return n > 1 ? 1 : 0;
         const idx = root.cards.findIndex(c => root.addrsMatch(c.address, root.lastAltTabAddress));
@@ -477,15 +538,42 @@ Scope {
         GlobalStates.altTabOpen = false;
     }
 
+    function removeClosingGhost(addr) {
+        if (!addr)
+            return;
+        root.closingGhosts = root.closingGhosts.filter(g => !root.addrsMatch(g.address, addr));
+        root.rebuildCards();
+        if (root.cards.length === 0) {
+            GlobalStates.altTabStickyMode = false;
+            GlobalStates.altTabOpen = false;
+            return;
+        }
+        root.selectedIndex = Math.max(0, Math.min(root.selectedIndex, root.cards.length - 1));
+        if (root.altTabClassicMouse && root.altTabMouseHoverIndex >= root.cards.length)
+            root.altTabMouseHoverIndex = -1;
+        root.scheduleScrollToSelected();
+    }
+
     function closeWindowForAddress(addr) {
         if (!addr || !GlobalStates.altTabOpen)
             return;
+        if (root.closingGhosts.some(g => root.addrsMatch(g.address, addr)))
+            return;
+        const idx = root.cards.findIndex(c => root.addrsMatch(c.address, addr));
+        if (idx >= 0 && !root.gameModeActive)
+            root.closingGhosts = root.closingGhosts.concat([{
+                    address: addr,
+                    originalIndex: idx,
+                    card: root.cloneAltTabCard(root.cards[idx])
+                }]);
         Hyprland.dispatch(`closewindow address:${addr}`);
     }
 
     function disarmAltTabMouseHover() {
         root.altTabMouseSelectionArmed = false;
         root.altTabPointerGlobalAnchor = Qt.point(-1, -1);
+        if (root.altTabClassicMouse)
+            root.altTabMouseHoverIndex = -1;
     }
 
     function scheduleScrollToSelected() {
@@ -520,11 +608,6 @@ Scope {
         const maxY = Math.max(0, flick.contentHeight - vh);
         flick.contentX = Math.max(0, Math.min(nx, maxX));
         flick.contentY = Math.max(0, Math.min(ny, maxY));
-    }
-
-    function tabHoldStop() {
-        tabHoldInitial.stop();
-        tabHoldRepeat.stop();
     }
 
     function globalAltTabStep(delta) {
@@ -608,28 +691,12 @@ Scope {
         onTriggered: root.scrollToSelected()
     }
 
-    Timer {
-        id: tabHoldInitial
-        interval: root.tabHoldDelayMs
-        repeat: false
-        onTriggered: tabHoldRepeat.restart()
-    }
-
-    Timer {
-        id: tabHoldRepeat
-        interval: root.tabHoldRepeatMs
-        repeat: true
-        onTriggered: {
-            if (GlobalStates.altTabOpen)
-                root.performStep(root.tabHoldDirection);
-        }
-    }
-
     PanelWindow {
         id: panelWindow
         screen: root.focusedScreen
         visible: GlobalStates.altTabOpen
         color: "transparent"
+        exclusionMode: ExclusionMode.Ignore
 
         WlrLayershell.namespace: "quickshell:altTab"
         WlrLayershell.layer: WlrLayer.Overlay
@@ -644,6 +711,18 @@ Scope {
 
         mask: Region {
             item: GlobalStates.altTabOpen ? dismissMouseCatcher : null
+        }
+
+        Connections {
+            target: panelWindow
+            function onWidthChanged() {
+                if (GlobalStates.altTabOpen)
+                    root.updateCardRowsAndPanelMetrics();
+            }
+            function onHeightChanged() {
+                if (GlobalStates.altTabOpen)
+                    root.updateCardRowsAndPanelMetrics();
+            }
         }
 
         Rectangle {
@@ -665,6 +744,7 @@ Scope {
                 if (GlobalStates.altTabOpen) {
                     root.altTabMouseSelectionArmed = false;
                     root.altTabPointerGlobalAnchor = Qt.point(-1, -1);
+                    root.altTabMouseHoverIndex = -1;
                     root.rebuildCards();
                     if (root.cards.length === 0) {
                         GlobalStates.altTabStickyMode = false;
@@ -677,9 +757,10 @@ Scope {
                     flickFocusTimer.restart();
                     root.scheduleScrollToSelected();
                 } else {
-                    root.tabHoldStop();
                     GlobalStates.altTabStickyMode = false;
                     root.altTabPointerGlobalAnchor = Qt.point(-1, -1);
+                    root.altTabMouseHoverIndex = -1;
+                    root.closingGhosts = [];
                     root.tileByIndex = ({});
                 }
             }
@@ -749,12 +830,7 @@ Scope {
                                 event.accepted = true;
                                 return;
                             }
-                            if (event.isAutoRepeat) {
-                                event.accepted = true;
-                                return;
-                            }
                             root.performStep(root.tabHoldDirection);
-                            tabHoldInitial.restart();
                             event.accepted = true;
                         } else if (event.key === Qt.Key_Left) {
                             if (navNeedsAlt && !(event.modifiers & Qt.AltModifier))
@@ -777,11 +853,6 @@ Scope {
                             root.moveSelectionRowDelta(1);
                             event.accepted = true;
                         }
-                    }
-
-                    Keys.onReleased: event => {
-                        if (event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab)
-                            root.tabHoldStop();
                     }
 
                     Item {
@@ -819,30 +890,87 @@ Scope {
                                                 id: cardRoot
                                             required property int modelData
                                             readonly property int tileIndex: modelData
+                                            readonly property var card: root.cards[tileIndex]
 
                                             width: cardChrome.width + 2 * root.tileCellOuterPad
                                             height: cardChrome.height + 2 * root.tileCellOuterPad
+                                            opacity: 1
+                                            property real exitShrink: 1
+                                            property bool exitSequenceActive: false
+                                            property string capturedExitAddr: ""
+
+                                            function tryKickExit() {
+                                                const c = cardRoot.card;
+                                                if (!c || c._altTabExiting !== true || root.gameModeActive || cardRoot.exitSequenceActive)
+                                                    return;
+                                                cardRoot.exitSequenceActive = true;
+                                                cardRoot.capturedExitAddr = c.address;
+                                                cardRoot.opacity = 1;
+                                                cardRoot.exitShrink = 1;
+                                                tileExitAnim.stop();
+                                                tileExitAnim.start();
+                                            }
+
+                                            SequentialAnimation {
+                                                id: tileExitAnim
+                                                ParallelAnimation {
+                                                    NumberAnimation {
+                                                        target: cardRoot
+                                                        property: "opacity"
+                                                        from: 1
+                                                        to: 0
+                                                        duration: 130
+                                                        easing.type: Easing.OutCubic
+                                                    }
+                                                    NumberAnimation {
+                                                        target: cardRoot
+                                                        property: "exitShrink"
+                                                        from: 1
+                                                        to: 0.92
+                                                        duration: 130
+                                                        easing.type: Easing.OutCubic
+                                                    }
+                                                }
+                                                ScriptAction {
+                                                    script: {
+                                                        const a = cardRoot.capturedExitAddr;
+                                                        root.removeClosingGhost(a);
+                                                    }
+                                                }
+                                            }
+
+                                            readonly property bool cardIsExiting: !!(cardRoot.card && cardRoot.card._altTabExiting)
+                                            onCardIsExitingChanged: {
+                                                if (cardRoot.cardIsExiting)
+                                                    Qt.callLater(cardRoot.tryKickExit);
+                                                else {
+                                                    cardRoot.exitSequenceActive = false;
+                                                    tileExitAnim.stop();
+                                                    cardRoot.opacity = 1;
+                                                    cardRoot.exitShrink = 1;
+                                                }
+                                            }
 
                                             transform: [
                                                 Scale {
                                                     id: cardFocusScale
                                                     origin.x: cardRoot.width * 0.5
                                                     origin.y: cardRoot.height * 0.5
-                                                    xScale: cardRoot.isSelected ? 1.03 : 1
-                                                    yScale: cardRoot.isSelected ? 1.03 : 1
+                                                    xScale: ((cardRoot.isSelected || cardRoot.isMouseOnlyHover) ? 1.03 : 1) * cardRoot.exitShrink
+                                                    yScale: ((cardRoot.isSelected || cardRoot.isMouseOnlyHover) ? 1.03 : 1) * cardRoot.exitShrink
                                                     Behavior on xScale {
-                                                        enabled: !root.gameModeActive
+                                                        enabled: !root.gameModeActive && !(cardRoot.card && cardRoot.card._altTabExiting)
                                                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(cardFocusScale)
                                                     }
                                                     Behavior on yScale {
-                                                        enabled: !root.gameModeActive
+                                                        enabled: !root.gameModeActive && !(cardRoot.card && cardRoot.card._altTabExiting)
                                                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(cardFocusScale)
                                                     }
                                                 }
                                             ]
 
-                                            readonly property var card: root.cards[tileIndex]
                                             readonly property bool isSelected: GlobalStates.altTabOpen && root.selectedIndex === tileIndex
+                                            readonly property bool isMouseOnlyHover: cardRoot.cardMouseHoverClassic && !cardRoot.isSelected
                                             readonly property var toplevel: root.toplevelForAddressStr(card.address)
                                             readonly property string iconPath: Quickshell.iconPath(AppSearch.guessIcon(card.className), "image-missing")
                                             readonly property var pvDims: root.groupPreviewSlotDims(card)
@@ -850,8 +978,13 @@ Scope {
                                             readonly property real previewW: showPv ? pvDims.w : root.iconOnlyTileW
                                             readonly property real previewH: showPv ? pvDims.h : root.iconOnlyAreaH
                                             readonly property real cardRadius: Appearance.rounding.small
+                                            readonly property bool cardMouseHoverClassic: root.altTabClassicMouse && GlobalStates.altTabOpen && root.altTabMouseHoverIndex === tileIndex
+                                            readonly property bool titleBarHoverDim: cardRoot.cardMouseHoverClassic || (!root.altTabClassicMouse && (tileHoverArea.containsMouse || closeSlotMouse.containsMouse))
 
-                                            Component.onCompleted: root.registerTile(tileIndex, cardRoot)
+                                            Component.onCompleted: {
+                                                root.registerTile(tileIndex, cardRoot);
+                                                Qt.callLater(cardRoot.tryKickExit);
+                                            }
                                             Component.onDestruction: root.unregisterTile(tileIndex)
 
                                             Rectangle {
@@ -859,66 +992,115 @@ Scope {
                                                 anchors.centerIn: parent
                                                 width: col.implicitWidth + 2 * root.tileFramePad
                                                 height: col.implicitHeight + 2 * root.tileFramePad
+                                                readonly property real colPadTop: Math.max(0, (height - col.height) / 2)
+                                                readonly property real colPadSide: Math.max(0, (width - col.width) / 2)
                                                 radius: cardRoot.cardRadius + 4
-                                                color: Appearance.colors.colBackgroundSurfaceContainer
-                                                border.width: 2
-                                                border.color: cardRoot.isSelected ? ColorUtils.transparentize(Appearance.colors.colSecondary, 0.35) : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.88)
+                                                color: cardRoot.isSelected ? Appearance.colors.colBackgroundSurfaceContainer : "transparent"
+                                                border.width: cardRoot.isSelected ? 2 : 0
+                                                border.color: ColorUtils.transparentize(Appearance.colors.colSecondary, 0.35)
                                                 Behavior on border.color {
                                                     enabled: !root.gameModeActive
                                                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(cardChrome)
+                                                }
+                                                Behavior on border.width {
+                                                    enabled: !root.gameModeActive
+                                                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(cardChrome)
                                                 }
 
                                                 Column {
                                                     id: col
                                                     anchors.centerIn: parent
-                                                    spacing: 8
+                                                    spacing: 0
                                                     width: root.tileContentWidth(card)
 
-                                                    RowLayout {
-                                                        id: titleRow
+                                                    Rectangle {
+                                                        id: titleBarBg
                                                         width: parent.width
-                                                        spacing: 10
-                                                        height: root.titleBarH
-
-                                                        Image {
-                                                            Layout.preferredWidth: 26
-                                                            Layout.preferredHeight: 26
-                                                            Layout.alignment: Qt.AlignVCenter
-                                                            source: cardRoot.iconPath
-                                                            sourceSize: Qt.size(26, 26)
-                                                        }
-                                                        Text {
-                                                            Layout.fillWidth: true
-                                                            Layout.preferredWidth: 0
-                                                            Layout.minimumWidth: 0
-                                                            Layout.alignment: Qt.AlignVCenter
-                                                            text: card.title || card.className || ""
-                                                            elide: Text.ElideRight
-                                                            maximumLineCount: 1
-                                                            wrapMode: Text.NoWrap
-                                                            font.pixelSize: Appearance.font.pixelSize.normal
-                                                            font.weight: Font.Medium
-                                                            color: Appearance.colors.colOnLayer1
+                                                        height: root.titleBarH + 8
+                                                        color: cardRoot.titleBarHoverDim ? ColorUtils.mix(Appearance.colors.colSurfaceContainerLow, Appearance.colors.colLayer1Hover, 0.38) : Appearance.colors.colSurfaceContainerLow
+                                                        topLeftRadius: cardRoot.cardRadius + 4
+                                                        topRightRadius: cardRoot.cardRadius + 4
+                                                        bottomLeftRadius: 0
+                                                        bottomRightRadius: 0
+                                                        Behavior on color {
+                                                            enabled: !root.gameModeActive
+                                                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(titleBarBg)
                                                         }
 
-                                                        // Reserve width for overlaid close only (see altTabCloseTitleReserve)
-                                                        Item {
-                                                            Layout.preferredWidth: root.altTabCloseTitleReserve
-                                                            Layout.preferredHeight: 1
+                                                        RowLayout {
+                                                            id: titleRow
+                                                            anchors.left: parent.left
+                                                            anchors.right: parent.right
+                                                            anchors.top: parent.top
+                                                            anchors.margins: 4
+                                                            spacing: 10
+                                                            height: root.titleBarH
+
+                                                            Item {
+                                                                Layout.preferredWidth: 26
+                                                                Layout.preferredHeight: 26
+                                                                Layout.alignment: Qt.AlignVCenter
+
+                                                                Image {
+                                                                    anchors.fill: parent
+                                                                    source: cardRoot.iconPath
+                                                                    sourceSize: Qt.size(26, 26)
+                                                                }
+                                                                Rectangle {
+                                                                    visible: card.groupCount > 1
+                                                                    z: 1
+                                                                    anchors.bottom: parent.bottom
+                                                                    anchors.right: parent.right
+                                                                    anchors.margins: -5
+                                                                    height: Math.min(18, parent.height + 4)
+                                                                    width: grpCountLbl.width + 8
+                                                                    radius: height * 0.5
+                                                                    color: Appearance.colors.colSecondaryContainer
+
+                                                                    Text {
+                                                                        id: grpCountLbl
+                                                                        anchors.centerIn: parent
+                                                                        text: card.groupCount
+                                                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                                                        font.weight: Font.DemiBold
+                                                                        color: Appearance.colors.colOnSecondaryContainer
+                                                                    }
+                                                                }
+                                                            }
+                                                            Text {
+                                                                Layout.fillWidth: true
+                                                                Layout.preferredWidth: 0
+                                                                Layout.minimumWidth: 0
+                                                                Layout.alignment: Qt.AlignVCenter
+                                                                text: card.title || card.className || ""
+                                                                elide: Text.ElideRight
+                                                                maximumLineCount: 1
+                                                                wrapMode: Text.NoWrap
+                                                                font.pixelSize: Appearance.font.pixelSize.normal
+                                                                font.weight: Font.Medium
+                                                                color: Appearance.colors.colOnLayer1
+                                                            }
+
+                                                            Item {
+                                                                Layout.preferredWidth: root.altTabCloseTitleReserve
+                                                                Layout.preferredHeight: 1
+                                                            }
                                                         }
                                                     }
 
                                                     Item {
                                                         id: pvSlot
-                                                        width: cardRoot.previewW
+                                                        width: parent.width
                                                         height: cardRoot.previewH
-                                                        anchors.horizontalCenter: parent.horizontalCenter
                                                         clip: true
 
                                                         Rectangle {
                                                             anchors.fill: parent
                                                             visible: cardRoot.showPv
-                                                            radius: cardRoot.cardRadius
+                                                            topLeftRadius: 0
+                                                            topRightRadius: 0
+                                                            bottomLeftRadius: cardRoot.cardRadius
+                                                            bottomRightRadius: cardRoot.cardRadius
                                                             color: Appearance.colors.colLayer1
                                                         }
 
@@ -958,8 +1140,11 @@ Scope {
                                                             z: 1
                                                             anchors.fill: parent
                                                             visible: cardRoot.showPv
-                                                            radius: cardRoot.cardRadius
-                                                            color: ColorUtils.transparentize(Appearance.colors.colLayer2, cardRoot.isSelected ? 0.94 : 0.98)
+                                                            topLeftRadius: 0
+                                                            topRightRadius: 0
+                                                            bottomLeftRadius: cardRoot.cardRadius
+                                                            bottomRightRadius: cardRoot.cardRadius
+                                                            color: ColorUtils.transparentize(Appearance.colors.colLayer2, cardRoot.isSelected ? 0.94 : cardRoot.isMouseOnlyHover ? 0.93 : 0.98)
                                                             Behavior on color {
                                                                 enabled: !root.gameModeActive && cardRoot.showPv
                                                                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(previewTint)
@@ -971,7 +1156,10 @@ Scope {
                                                             visible: !cardRoot.showPv
                                                             Rectangle {
                                                                 anchors.fill: parent
-                                                                radius: cardRoot.cardRadius
+                                                                topLeftRadius: 0
+                                                                topRightRadius: 0
+                                                                bottomLeftRadius: cardRoot.cardRadius
+                                                                bottomRightRadius: cardRoot.cardRadius
                                                                 color: Appearance.colors.colSurfaceContainerLow
                                                                 border.color: ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.85)
                                                                 border.width: 1
@@ -984,41 +1172,24 @@ Scope {
                                                                 sourceSize: Qt.size(56, 56)
                                                             }
                                                         }
-
-                                                        Rectangle {
-                                                            visible: card.groupCount > 1
-                                                            anchors.top: parent.top
-                                                            anchors.right: parent.right
-                                                            anchors.margins: 6
-                                                            height: 22
-                                                            width: countLbl.width + 12
-                                                            radius: 11
-                                                            color: Appearance.colors.colSecondaryContainer
-                                                            z: 2
-
-                                                            Text {
-                                                                id: countLbl
-                                                                anchors.centerIn: parent
-                                                                text: card.groupCount
-                                                                font.pixelSize: Appearance.font.pixelSize.smaller
-                                                                font.weight: Font.DemiBold
-                                                                color: Appearance.colors.colOnSecondaryContainer
-                                                            }
-                                                        }
                                                     }
                                                 }
                                             }
 
                                             MouseArea {
+                                                id: tileHoverArea
                                                 z: 1
                                                 anchors.fill: parent
-                                                hoverEnabled: true
+                                                hoverEnabled: !root.altTabClassicMouse
+                                                enabled: !(cardRoot.card && cardRoot.card._altTabExiting)
                                                 acceptedButtons: Qt.LeftButton
                                                 onEntered: {
                                                     if (root.altTabMouseSelectionArmed)
                                                         root.selectedIndex = tileIndex;
                                                 }
                                                 onPositionChanged: {
+                                                    if (root.altTabClassicMouse)
+                                                        return;
                                                     const g = parent.mapToGlobal(Qt.point(mouseX, mouseY));
                                                     if (root.altTabPointerGlobalAnchor.x < 0) {
                                                         root.altTabPointerGlobalAnchor = g;
@@ -1037,30 +1208,64 @@ Scope {
                                                 }
                                             }
 
-                                            ButtonGroup {
+                                            Item {
+                                                id: closeSlot
                                                 z: 2
+                                                width: root.titleBarH + 2
+                                                height: root.titleBarH + 2
+                                                visible: (!root.altTabClassicMouse || cardRoot.cardMouseHoverClassic) && !(cardRoot.card && cardRoot.card._altTabExiting)
                                                 anchors.top: cardChrome.top
                                                 anchors.right: cardChrome.right
-                                                anchors.topMargin: root.tileFramePad + 2
-                                                anchors.rightMargin: root.tileFramePad + 2
-                                                padding: 0
-                                                spacing: 0
+                                                anchors.topMargin: cardChrome.colPadTop + 2
+                                                anchors.rightMargin: cardChrome.colPadSide + 2
 
-                                                GroupButton {
-                                                    colBackground: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
-                                                    baseWidth: root.titleBarH - 10
-                                                    baseHeight: root.titleBarH - 10
-                                                    buttonRadius: Appearance.rounding.full
-                                                    contentItem: MaterialSymbol {
-                                                        anchors.centerIn: parent
-                                                        horizontalAlignment: Text.AlignHCenter
-                                                        text: "close"
-                                                        iconSize: Appearance.font.pixelSize.smaller
-                                                        color: Appearance.m3colors.m3onSurface
+                                                MaterialSymbol {
+                                                    id: closeIcon
+                                                    anchors.centerIn: parent
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    verticalAlignment: Text.AlignVCenter
+                                                    text: "close"
+                                                    iconSize: Math.max(18, root.titleBarH - 12)
+                                                    color: Appearance.colors.colError
+                                                }
+
+                                                MouseArea {
+                                                    id: closeSlotMouse
+                                                    anchors.fill: parent
+                                                    cursorShape: Qt.PointingHandCursor
+                                                    enabled: !(cardRoot.card && cardRoot.card._altTabExiting)
+                                                    onClicked: root.closeWindowForAddress(card.address)
+                                                }
+                                            }
+
+                                            MouseArea {
+                                                id: tileHoverProbe
+                                                z: 6
+                                                anchors.fill: parent
+                                                enabled: GlobalStates.altTabOpen && root.altTabClassicMouse && !(cardRoot.card && cardRoot.card._altTabExiting)
+                                                hoverEnabled: true
+                                                acceptedButtons: Qt.NoButton
+                                                propagateComposedEvents: true
+                                                onEntered: {
+                                                    if (root.altTabMouseSelectionArmed)
+                                                        root.altTabMouseHoverIndex = tileIndex;
+                                                }
+                                                onPositionChanged: {
+                                                    const g = parent.mapToGlobal(Qt.point(mouseX, mouseY));
+                                                    if (root.altTabPointerGlobalAnchor.x < 0) {
+                                                        root.altTabPointerGlobalAnchor = g;
+                                                        return;
                                                     }
-                                                    onClicked: {
-                                                        root.closeWindowForAddress(card.address);
-                                                    }
+                                                    const dx = g.x - root.altTabPointerGlobalAnchor.x;
+                                                    const dy = g.y - root.altTabPointerGlobalAnchor.y;
+                                                    if (dx * dx + dy * dy < root.altTabMouseMoveThreshold * root.altTabMouseMoveThreshold)
+                                                        return;
+                                                    root.altTabMouseSelectionArmed = true;
+                                                    root.altTabMouseHoverIndex = tileIndex;
+                                                }
+                                                onExited: {
+                                                    if (root.altTabMouseHoverIndex === tileIndex)
+                                                        root.altTabMouseHoverIndex = -1;
                                                 }
                                             }
                                         }
@@ -1123,7 +1328,6 @@ Scope {
         description: "Release Alt to confirm alt-tab selection"
 
         onReleased: {
-            root.tabHoldStop();
             if (!GlobalStates.altTabStickyMode)
                 root.focusSelectedAndClose();
         }

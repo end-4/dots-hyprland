@@ -24,6 +24,10 @@ Singleton {
     property bool overlayOpen: false
     property bool overviewOpen: false
     property bool overviewOpenWithAllApps: false
+    // True when overview search field uses the all-apps prefix (e.g. "!"); used by dock launcher toggle.
+    property bool overviewLauncherActive: false
+    // Incremented by dock while overview is open to force applying the all-apps prefix.
+    property int overviewApplyAllAppsNonce: 0
     property bool altTabOpen: false
     // Alt+Ctrl+Tab "sticky" switcher: release modifiers and use arrows / Enter / Esc / Delete
     property bool altTabStickyMode: false

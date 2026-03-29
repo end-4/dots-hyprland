@@ -20,6 +20,14 @@ Scope {
         id: panelWindow
         screen: overviewScope.focusedScreen
         property string searchingText: ""
+        readonly property string allAppsPrefix: Config.options.search.prefix.allApps
+
+        Binding {
+            target: GlobalStates
+            property: "overviewLauncherActive"
+            value: GlobalStates.overviewOpen && panelWindow.searchingText.startsWith(panelWindow.allAppsPrefix)
+        }
+
         readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
         property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
         visible: GlobalStates.overviewOpen
@@ -61,6 +69,16 @@ Scope {
                     }
                     GlobalFocusGrab.addDismissable(panelWindow);
                 }
+            }
+        }
+
+        Connections {
+            target: GlobalStates
+            function onOverviewApplyAllAppsNonceChanged() {
+                if (!GlobalStates.overviewOpen)
+                    return;
+                overviewScope.dontAutoCancelSearch = true;
+                panelWindow.setSearchingText(Config.options.search.prefix.allApps);
             }
         }
 
