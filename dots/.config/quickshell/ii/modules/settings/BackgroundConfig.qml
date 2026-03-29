@@ -672,7 +672,7 @@ ContentPage {
                             }
                         }
                         StyledToolTip {
-                            text: Translation.tr("Hide the visualizer when a window is in fullscreen or maximized mode. (Reccomended)")
+                            text: Translation.tr("Hide the visualizer when a window is in fullscreen or maximized mode. (Recommended)")
                         }
                     }
                 }
