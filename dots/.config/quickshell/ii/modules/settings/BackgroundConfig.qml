@@ -704,6 +704,36 @@ ContentPage {
             }
 
             ContentSubsection {
+                visible: Config.options.background.widgets.visualizer.mode === "wave"
+                title: Translation.tr("Performance limiter")
+                tooltip: Translation.tr("Reduces CPU/GPU usage by skipping rendering frames. Only affects 'Wave' mode.")
+
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.widgets.visualizer.renderEveryXFrames
+                    onSelected: newValue => {
+                        Config.options.background.widgets.visualizer.renderEveryXFrames = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Full speed"),
+                            icon: "sprint",
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Half speed"),
+                            icon: "directions_run",
+                            value: 2
+                        },
+                        {
+                            displayName: Translation.tr("Low speed"),
+                            icon: "directions_walk",
+                            value: 3
+                        }
+                    ]
+                }
+            }
+
+            ContentSubsection {
                 title: Translation.tr("Behavior & Processing")
                 
                 ConfigRow {
@@ -717,7 +747,7 @@ ContentPage {
                         }
                     }
                     ConfigSwitch {
-                        buttonIcon: "flare"
+                        buttonIcon: "flip"
                         text: Translation.tr("Mono / Mirrored")
                         checked: Config.options.background.widgets.visualizer.mono
                         onCheckedChanged: {

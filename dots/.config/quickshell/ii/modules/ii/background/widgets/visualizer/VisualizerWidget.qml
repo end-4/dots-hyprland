@@ -29,7 +29,8 @@ PinnedWidget {
         mono: configEntry?.mono ?? true,
         mode: configEntry?.mode ?? "wave",
         waveFillOpacity: configEntry?.waveFillOpacity ?? 0.5,
-        waveBorderWidth: configEntry?.waveBorderWidth ?? 3
+        waveBorderWidth: configEntry?.waveBorderWidth ?? 3,
+        renderEveryXFrames: (configEntry?.renderEveryXFrames ?? 1) - 1
     })
 
     readonly property color waveFillColor: Qt.rgba(primaryColor.r, primaryColor.g, primaryColor.b, config.waveFillOpacity)
@@ -105,18 +106,19 @@ PinnedWidget {
         onWidthChanged: requestPaint()
         onHeightChanged: requestPaint()
 
-property int frames: 0
+        property int frames: 0
 
         onPaint: {
-            if (waveCanvas.frames >= 2) {
+            if (waveCanvas.frames >= config.renderEveryXFrames) {
                 waveCanvas.frames = 0;
             }
             else {
-                waveCanvas.frames += 1
-                return
+                waveCanvas.frames += 1;
+                return;
             }
-            
+
             var ctx = getContext("2d");
+
             var ph = root.pixelHeights;
             if (!ph || ph.length < 2) return;
 
