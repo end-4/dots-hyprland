@@ -331,14 +331,36 @@ Scope {
         const M = root.perRowSetting;
         const g = root.effectiveGap;
         const rows = [];
+        const rowBudget = root.innerMaxWidth;
         let i = 0;
-        while (i < n) {
-            const take = Math.min(M, n - i);
-            const rowIdx = [];
-            for (let j = 0; j < take; j++)
-                rowIdx.push(i + j);
-            rows.push(rowIdx);
-            i += take;
+        if (root.altTabSmartLayout) {
+            while (i < n) {
+                const rowIdx = [];
+                let wsum = 0;
+                while (i < n && rowIdx.length < M) {
+                    const tw = root.tileOuterWidth(list[i]);
+                    const need = tw + (rowIdx.length > 0 ? g : 0);
+                    if (rowIdx.length > 0 && wsum + need > rowBudget)
+                        break;
+                    rowIdx.push(i);
+                    wsum += need;
+                    i++;
+                }
+                if (rowIdx.length === 0) {
+                    rowIdx.push(i);
+                    i++;
+                }
+                rows.push(rowIdx);
+            }
+        } else {
+            while (i < n) {
+                const take = Math.min(M, n - i);
+                const rowIdx = [];
+                for (let j = 0; j < take; j++)
+                    rowIdx.push(i + j);
+                rows.push(rowIdx);
+                i += take;
+            }
         }
         root.cardRows = rows;
 
