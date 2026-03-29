@@ -479,6 +479,22 @@ Singleton {
                 property bool showSpecialWorkspaces: false
             }
 
+            property JsonObject altTab: JsonObject {
+                property bool contextGrouping: true
+                property bool showPreviews: true
+                property bool perMonitor: false
+                property string initialSelection: "lastAltTab"
+                property int maxItemsPerRow: 5
+                property int maxThumbnailWidth: 680
+                property int maxThumbnailHeight: 520
+                property int titleBarHeight: 44
+                property int gap: 16
+                property int iconOnlyTileWidth: 132
+                property int iconOnlyAreaHeight: 92
+                property int tabHoldRepeatMs: 240
+                property int tabHoldDelayMs: 520
+            }
+
             property JsonObject regionSelector: JsonObject {
                 property JsonObject targetRegions: JsonObject {
                     property bool windows: true

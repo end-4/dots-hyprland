@@ -808,6 +808,160 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "tab"
+        title: Translation.tr("Alt+Tab switcher")
+
+        ConfigSwitch {
+            buttonIcon: "merge"
+            text: Translation.tr("Context grouping")
+            checked: Config.options.altTab.contextGrouping
+            onCheckedChanged: {
+                Config.options.altTab.contextGrouping = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Combine tiled windows of the same app on one workspace into a single tile")
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "image"
+            text: Translation.tr("Window previews")
+            checked: Config.options.altTab.showPreviews
+            onCheckedChanged: {
+                Config.options.altTab.showPreviews = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Live thumbnails when supported. Previews are always off during game mode.")
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Current monitor only")
+            checked: Config.options.altTab.perMonitor
+            onCheckedChanged: {
+                Config.options.altTab.perMonitor = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Alt+Tab lists only windows on the monitor that has keyboard focus")
+            }
+        }
+        ContentSubsection {
+            title: Translation.tr("Initial highlight")
+            tooltip: Translation.tr("Where the highlight starts when you open the switcher")
+            ConfigSelectionArray {
+                Layout.fillWidth: true
+                currentValue: Config.options.altTab.initialSelection
+                onSelected: newValue => {
+                    Config.options.altTab.initialSelection = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("After last switch"),
+                        icon: "history",
+                        value: "lastAltTab"
+                    },
+                    {
+                        displayName: Translation.tr("Classic (2nd MRU)"),
+                        icon: "undo",
+                        value: "previousFocus"
+                    }
+                ]
+            }
+        }
+        ContentSubsection {
+            title: Translation.tr("Layout & thumbnails")
+            tooltip: Translation.tr("One control per row. Tab-without-Alt hold uses the delay/repeat below; Alt+Tab repeat follows Hyprland key repeat (binde).")
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 6
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "splitscreen_right"
+                    text: Translation.tr("Max tiles per row")
+                    value: Config.options.altTab.maxItemsPerRow
+                    from: 2
+                    to: 12
+                    stepSize: 1
+                    onValueChanged: {
+                        Config.options.altTab.maxItemsPerRow = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "width"
+                    text: Translation.tr("Max thumbnail width (px)")
+                    value: Config.options.altTab.maxThumbnailWidth
+                    from: 120
+                    to: 640
+                    stepSize: 10
+                    onValueChanged: {
+                        Config.options.altTab.maxThumbnailWidth = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "height"
+                    text: Translation.tr("Max thumbnail height (px)")
+                    value: Config.options.altTab.maxThumbnailHeight
+                    from: 80
+                    to: 480
+                    stepSize: 10
+                    onValueChanged: {
+                        Config.options.altTab.maxThumbnailHeight = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "title"
+                    text: Translation.tr("Title bar height (px)")
+                    value: Config.options.altTab.titleBarHeight
+                    from: 28
+                    to: 64
+                    stepSize: 2
+                    onValueChanged: {
+                        Config.options.altTab.titleBarHeight = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "space_bar"
+                    text: Translation.tr("Gap between tiles (px)")
+                    value: Config.options.altTab.gap
+                    from: 4
+                    to: 32
+                    stepSize: 2
+                    onValueChanged: {
+                        Config.options.altTab.gap = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "hourglass_empty"
+                    text: Translation.tr("Hold Tab: delay before repeat (ms)")
+                    value: Config.options.altTab.tabHoldDelayMs
+                    from: 200
+                    to: 1200
+                    stepSize: 20
+                    onValueChanged: {
+                        Config.options.altTab.tabHoldDelayMs = value;
+                    }
+                }
+                ConfigSpinBox {
+                    Layout.fillWidth: true
+                    icon: "av_timer"
+                    text: Translation.tr("Hold Tab: repeat interval (ms)")
+                    value: Config.options.altTab.tabHoldRepeatMs
+                    from: 80
+                    to: 600
+                    stepSize: 10
+                    onValueChanged: {
+                        Config.options.altTab.tabHoldRepeatMs = value;
+                    }
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "wallpaper_slideshow"
         title: Translation.tr("Wallpaper selector")
 

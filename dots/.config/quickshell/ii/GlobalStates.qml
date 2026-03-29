@@ -24,6 +24,9 @@ Singleton {
     property bool overlayOpen: false
     property bool overviewOpen: false
     property bool overviewOpenWithAllApps: false
+    property bool altTabOpen: false
+    // Alt+Ctrl+Tab "sticky" switcher: release modifiers and use arrows / Enter / Esc / Delete
+    property bool altTabStickyMode: false
     property bool regionSelectorOpen: false
     property bool searchOpen: false
     property bool screenLocked: false

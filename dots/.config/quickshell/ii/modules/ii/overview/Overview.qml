@@ -43,6 +43,10 @@ Scope {
         Connections {
             target: GlobalStates
             function onOverviewOpenChanged() {
+                if (GlobalStates.overviewOpen) {
+                    GlobalStates.altTabOpen = false;
+                    GlobalStates.altTabStickyMode = false;
+                }
                 if (!GlobalStates.overviewOpen) {
                     searchWidget.disableExpandAnimation();
                     overviewScope.dontAutoCancelSearch = false;
