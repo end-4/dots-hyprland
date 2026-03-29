@@ -461,6 +461,27 @@ Scope {
             root.altTabMouseHoverIndex = -1;
     }
 
+    function findCardIndexForAddress(addr) {
+        if (!addr)
+            return -1;
+        const n = root.cards.length;
+        for (let i = 0; i < n; i++) {
+            const c = root.cards[i];
+            if (!c)
+                continue;
+            if (root.addrsMatch(c.address, addr))
+                return i;
+            const mem = c.groupMembers;
+            if (!mem)
+                continue;
+            for (let j = 0; j < mem.length; j++) {
+                if (root.addrsMatch(mem[j].address, addr))
+                    return i;
+            }
+        }
+        return -1;
+    }
+
     function rebuildCardsReselecting(prevAddr) {
         root.rebuildCards();
         if (root.cards.length === 0) {
@@ -469,7 +490,7 @@ Scope {
             return;
         }
         if (prevAddr) {
-            const ni = root.cards.findIndex(c => root.addrsMatch(c.address, prevAddr));
+            const ni = root.findCardIndexForAddress(prevAddr);
             if (ni >= 0)
                 root.selectedIndex = ni;
             else
@@ -491,7 +512,7 @@ Scope {
     function initialIndexForOpen(n) {
         if (!root.lastAltTabAddress)
             return n > 1 ? 1 : 0;
-        const idx = root.cards.findIndex(c => root.addrsMatch(c.address, root.lastAltTabAddress));
+        const idx = root.findCardIndexForAddress(root.lastAltTabAddress);
         if (idx < 0)
             return n > 1 ? 1 : 0;
         return (idx + 1) % n;
@@ -523,7 +544,8 @@ Scope {
             GlobalStates.altTabOpen = false;
             return;
         }
-        const addr = root.cards[root.selectedIndex]?.address;
+        const idx = Math.max(0, Math.min(root.selectedIndex, root.cards.length - 1));
+        const addr = root.cards[idx]?.address;
         GlobalStates.altTabStickyMode = false;
         GlobalStates.altTabOpen = false;
         if (addr) {
@@ -1285,13 +1307,24 @@ Scope {
         return s.startsWith("0x") ? s.slice(2) : s;
     }
 
+    Timer {
+        id: windowListReselectCoalesce
+        interval: 50
+        repeat: false
+        onTriggered: {
+            if (!GlobalStates.altTabOpen)
+                return;
+            const prevAddr = root.cards[root.selectedIndex]?.address;
+            root.rebuildCardsReselecting(prevAddr);
+        }
+    }
+
     Connections {
         target: HyprlandData
         function onWindowListChanged() {
             if (!GlobalStates.altTabOpen)
                 return;
-            const prevAddr = root.cards[root.selectedIndex]?.address;
-            root.rebuildCardsReselecting(prevAddr);
+            windowListReselectCoalesce.restart();
         }
     }
 
