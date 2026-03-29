@@ -84,9 +84,9 @@ Scope {
     }
     readonly property int effectiveMaxThumbnailWidth: root.altTabSmartLayout ? root.smartThumbMaxW : (Config.options.altTab?.maxThumbnailWidth ?? 680)
     readonly property int effectiveMaxThumbnailHeight: root.altTabSmartLayout ? root.smartThumbMaxH : (Config.options.altTab?.maxThumbnailHeight ?? 520)
-    readonly property int estCellWidth: root.effectiveMaxThumbnailWidth + root.effectiveGap + 48
-    readonly property int flowWidthByCount: perRowSetting * estCellWidth
-    readonly property int innerMaxWidth: Math.min(Math.min(2400, flowWidthByCount), Math.max(400, panelWindow.width - 96))
+    // Panel-usable width only — do not cap by perRow * estCellWidth (that breaks greedy row pack when
+    // two real tiles are wider than 2 * estimate, e.g. only 2 windows open).
+    readonly property int innerMaxWidth: Math.min(2400, Math.max(400, panelWindow.width - 96))
     readonly property int titleBarH: Config.options.altTab?.titleBarHeight ?? 44
     // Space to leave for overlaid close control (button ≈ titleBarH−10, chrome inset); avoid over-reserving → premature "…"
     readonly property int altTabCloseTitleReserve: Math.max(root.titleBarH - 8, 24)
