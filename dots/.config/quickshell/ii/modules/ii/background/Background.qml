@@ -18,6 +18,7 @@ import Quickshell.Hyprland
 import qs.modules.ii.background.widgets
 import qs.modules.ii.background.widgets.clock
 import qs.modules.ii.background.widgets.weather
+import qs.modules.common.models.hyprland
 
 Scope {
     id: root
@@ -71,7 +72,7 @@ Scope {
     // Cava process
     Process {
         id: cavaProc
-        running: (Config?.options?.background?.widgets?.visualizer?.enable ?? false) && root.isVisualizerNeeded
+        running: (Config?.options?.background?.widgets?.visualizer?.enable ?? false) && root.isVisualizerNeeded && enableAnimations.value
         onRunningChanged: {
             // Reset bars to zero when cava stops
             if (!cavaProc.running)
@@ -85,6 +86,11 @@ Scope {
                     root.visualizerPoints = points;
             }
         }
+    }
+
+    HyprlandConfigOption {
+        id: enableAnimations
+        key: "animations:enabled"
     }
 
     // Per-monitor windows
