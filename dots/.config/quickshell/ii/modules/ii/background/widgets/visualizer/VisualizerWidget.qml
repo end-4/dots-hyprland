@@ -7,6 +7,7 @@ import qs.modules.common.functions as CF
 import qs.modules.common.widgets
 import qs.modules.common.widgets.widgetCanvas
 import qs.modules.ii.background.widgets
+import qs.modules.common.models.hyprland
 
 PinnedWidget {
     id: root
