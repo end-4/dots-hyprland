@@ -27,9 +27,11 @@ HBarWidgetWithPopout {
 
     HBarWidgetContent {
         id: contentRoot
+
         vertical: root.vertical
         atBottom: root.atBottom
         showPopup: root.showPopup
+
         contentImplicitWidth: trayContent.implicitWidth
         contentImplicitHeight: trayContent.implicitHeight
 
@@ -67,6 +69,8 @@ HBarWidgetWithPopout {
             visible: TrayService.unpinnedItems.length > 0
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: 4 * root.vertical
+            Layout.leftMargin: 4 * !root.vertical
             hoverEnabled: true
             acceptedButtons: Qt.AllButtons
 

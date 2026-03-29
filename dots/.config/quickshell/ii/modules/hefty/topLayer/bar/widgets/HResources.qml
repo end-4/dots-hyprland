@@ -66,6 +66,8 @@ HBarWidgetWithPopout {
             }
             spacing: 4
 
+            Item {} // Trick for extra spacing
+
             AlignedFadeLoader {
                 shown: C.Config.options.hefty.bar.resources.showMemory || (
                     !battLoader.visible
@@ -98,6 +100,8 @@ HBarWidgetWithPopout {
                 Layout.fillHeight: !root.vertical
                 sourceComponent: Battery {}
             }
+
+            Item {}
         }
     }
 
@@ -500,7 +504,7 @@ HBarWidgetWithPopout {
             }
             W.ConfigSwitch {
                 buttonIcon: "memory"
-                text: S.Translation.tr("Show physical memory usage")
+                text: S.Translation.tr("Show RAM usage")
                 checked: C.Config.options.hefty.bar.resources.showRam
                 onCheckedChanged: {
                     C.Config.options.hefty.bar.resources.showRam = checked;

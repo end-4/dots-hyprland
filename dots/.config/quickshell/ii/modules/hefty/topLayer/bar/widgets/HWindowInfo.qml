@@ -30,6 +30,7 @@ HBarWidgetWithPopout {
             return root.activeWindow?.appId;
         return Translation.tr("Options")
     }
+    onPrimaryTextChanged: showPopup = false;
 
     property real fontPixelSize: Appearance.font.pixelSize.smaller
 
