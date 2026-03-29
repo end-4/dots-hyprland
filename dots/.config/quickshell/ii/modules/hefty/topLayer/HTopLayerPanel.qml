@@ -2,9 +2,10 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Wayland
+import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.services
 import "../../common"
 import "../../common/widgets/shapes" as S
 import "../../common/widgets/shapes/material-shapes.js" as MaterialShapes
@@ -20,6 +21,10 @@ PanelWindow {
     id: root
 
     ///////////////// Window //////////////////
+    property real opacity: 1 * (GlobalStates.barOpen && !GlobalStates.screenLocked)
+    Behavior on opacity {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
     color: "transparent"
     WlrLayershell.namespace: "quickshell:topLayerPanel"
     exclusionMode: ExclusionMode.Ignore
@@ -72,6 +77,7 @@ PanelWindow {
             easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
         }
         color: Appearance.colors.colLayer0
+        opacity: root.opacity
         borderWidth: (root.currentPanel === bar && Config.options.bar.cornerStyle !== 1) ? 0 : 1
         borderColor: Appearance.colors.colLayer0Border
         visible: false // cuz there's already the shadow
@@ -79,6 +85,7 @@ PanelWindow {
     }
     DropShadow {
         id: shadow
+        opacity: root.opacity
         source: backgroundShape
         anchors.fill: backgroundShape
         radius: 10
@@ -134,12 +141,14 @@ PanelWindow {
 
         HBar {
             id: bar
+            opacity: root.opacity
             load: root.currentPanel === this && root.finishedMorphing // the extra condition is to prevent workspace widget from acting up when switching horizontal/vertical... should be fixed later
             shown: root.finishedMorphing
         }
 
         // HOverview {
         //     id: overview
+        //     opacity: root.opacity
         //     load: root.currentPanel === this
         //     shown: root.finishedMorphing
         //     onRequestFocus: root.currentPanel = overview
