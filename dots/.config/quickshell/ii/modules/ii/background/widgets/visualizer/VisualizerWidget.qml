@@ -106,6 +106,14 @@ PinnedWidget {
         onHeightChanged: requestPaint()
 
         onPaint: {
+            if (waveCanvas.frames >= 2) {
+                waveCanvas.frames = 0;
+            }
+            else {
+                waveCanvas.frames += 1
+                return
+            }
+            
             var ctx = getContext("2d");
             var ph = root.pixelHeights;
             if (!ph || ph.length < 2) return;
