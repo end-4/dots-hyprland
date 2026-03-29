@@ -616,14 +616,34 @@ ContentPage {
     }
 
     ContentSection {
+        id: visualizerSection
         icon: "equalizer"
         title: Translation.tr("Widget: Visualizer")
+        
+        readonly property bool isWave: Config.options.background.widgets.visualizer.mode === "wave"
 
-        ConfigSwitch {
-            buttonIcon: "check"
-            text: Translation.tr("Enable Visualizer")
-            checked: Config.options.background.widgets.visualizer.enable
-            onCheckedChanged: Config.options.background.widgets.visualizer.enable = checked
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.visualizer.enable
+                onCheckedChanged: Config.options.background.widgets.visualizer.enable = checked
+            }
+            Item { Layout.fillWidth: true }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.visualizer.mode
+                onSelected: newValue => {
+                    Config.options.background.widgets.visualizer.mode = newValue;
+                }
+                options: [
+                    { displayName: Translation.tr("Bars"), icon: "equalizer", value: "bars" },
+                    { displayName: Translation.tr("Wave"), icon: "airwave", value: "wave" }
+                ]
+            }
         }
 
         ColumnLayout {
@@ -632,9 +652,8 @@ ContentPage {
             spacing: 16
 
             ContentSubsection {
-                title: Translation.tr("Behavior")
-                Layout.fillWidth: true
-
+                title: Translation.tr("Behavior & Processing")
+                
                 ConfigRow {
                     uniform: true
                     ConfigSwitch {
@@ -654,78 +673,129 @@ ContentPage {
                         }
                     }
                 }
+
+                ConfigSlider {
+                    buttonIcon: "waves"
+                    text: Translation.tr("Data Averaging")
+                    value: (Config.options.background.widgets.visualizer.dataSmoothing ?? 0.5) * 100
+                    from: 0; to: 100
+                    stopIndicatorValues: [50]
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.dataSmoothing = value / 100
+                    }
+                }
             }
 
             ContentSubsection {
-                title: Translation.tr("Sizing")
-                Layout.fillWidth: true
+                title: Translation.tr("Sizing & Resolution")
 
                 ConfigRow {
                     uniform: true
                     ConfigSpinBox {
                         icon: "height"
-                        text: Translation.tr("Max Height (px)")
+                        text: Translation.tr("Max Height")
                         value: Config.options.background.widgets.visualizer.height
                         from: 60; to: 1080; stepSize: 10
                         onValueChanged: {
                             Config.options.background.widgets.visualizer.height = value
                         }
                     }
-
                     ConfigSpinBox {
                         icon: "view_column"
-                        text: Translation.tr("Target Bar Width")
+                        text: visualizerSection.isWave ? Translation.tr("Point Width") : Translation.tr("Bar Width")
                         value: Config.options.background.widgets.visualizer.targetBarWidth
-                        from: 1; to: 200; stepSize: 1
-                        onValueChanged: { 
+                        from: 1; to: 200
+                        onValueChanged: {
                             Config.options.background.widgets.visualizer.targetBarWidth = value
                         }
                     }
                 }
 
-                ConfigSpinBox {
-                    icon: "space_bar"
-                    text: Translation.tr("Gap between bars (px)")
-                    value: Config.options.background.widgets.visualizer.barSpacing
-                    from: 0; to: 100; stepSize: 1
-                    onValueChanged: {
-                        Config.options.background.widgets.visualizer.barSpacing = value
+                ConfigRow {
+                    uniform: true
+                    ConfigSpinBox {
+                        icon: "space_bar"
+                        text: visualizerSection.isWave ? Translation.tr("Point Gap") : Translation.tr("Bar Gap")
+                        value: Config.options.background.widgets.visualizer.barSpacing
+                        from: 0; to: 100
+                        onValueChanged: {
+                            Config.options.background.widgets.visualizer.barSpacing = value
+                        }
+                    }
+                    ConfigSpinBox {
+                        icon: "line_weight"
+                        text: visualizerSection.isWave ? Translation.tr("Line Thickness") : Translation.tr("Border Width")
+                        value: Config.options.background.widgets.visualizer.waveBorderWidth
+                        from: 0; to: 20
+                        onValueChanged: {
+                            Config.options.background.widgets.visualizer.waveBorderWidth = value
+                        }
                     }
                 }
             }
 
             ContentSubsection {
-                title: Translation.tr("Style")
-                Layout.fillWidth: true
+                title: Translation.tr("Appearance")
 
-                ConfigSlider {
-                    buttonIcon: "blur_on"
-                    text: Translation.tr("Smoothing")
-                    value: Config.options.background.widgets.visualizer.smoothing * 100
-                    from: 10; to: 300
-                    stopIndicatorValues: [100]
-                    onValueChanged: {
-                        Config.options.background.widgets.visualizer.smoothing = value / 100
+                ConfigRow {
+                    uniform: true
+                    ConfigSlider {
+                        buttonIcon: "opacity"
+                        text: Translation.tr("Master Opacity")
+                        value: Config.options.background.widgets.visualizer.opacity * 100
+                        from: 0; to: 100
+                        stopIndicatorValues: [50]
+                        onValueChanged: {
+                            Config.options.background.widgets.visualizer.opacity = value / 100
+                        }
+                    }
+                }
+
+                ConfigRow {
+                    uniform: true
+                    ConfigSlider {
+                        buttonIcon: "speed"
+                        text: Translation.tr("Smoothing")
+                        value: Config.options.background.widgets.visualizer.smoothing * 100
+                        from: 0; to: 20
+                        stopIndicatorValues: [5]
+                        onValueChanged: {
+                            Config.options.background.widgets.visualizer.smoothing = value / 100
+                        }
                     }
                 }
 
                 ConfigSlider {
-                    buttonIcon: "opacity"
-                    text: Translation.tr("Opacity")
-                    value: Config.options.background.widgets.visualizer.opacity * 100
+                    visible: visualizerSection.isWave
+                    buttonIcon: "format_color_fill"
+                    text: Translation.tr("Fill Opacity")
+                    value: Config.options.background.widgets.visualizer.waveFillOpacity * 100
                     from: 0; to: 100
-                    stopIndicatorValues: [25, 50, 75]
+                    stopIndicatorValues: [50]
                     onValueChanged: {
-                        Config.options.background.widgets.visualizer.opacity = value / 100
+                        Config.options.background.widgets.visualizer.waveFillOpacity = value / 100
                     }
                 }
 
                 ConfigSlider {
+                    visible: !visualizerSection.isWave
+                    buttonIcon: "format_color_reset"
+                    text: Translation.tr("Border Opacity")
+                    value: Config.options.background.widgets.visualizer.waveFillOpacity * 100
+                    from: 0; to: 100
+                    stopIndicatorValues: [50]
+                    onValueChanged: {
+                        Config.options.background.widgets.visualizer.waveFillOpacity = value / 100
+                    }
+                }
+
+                ConfigSlider {
+                    visible: !visualizerSection.isWave
                     buttonIcon: "rounded_corner"
                     text: Translation.tr("Bar Roundness")
                     value: Config.options.background.widgets.visualizer.barRounding * 100
-                    stopIndicatorValues: [25]
                     from: 0; to: 50
+                    stopIndicatorValues: [25]
                     onValueChanged: {
                         Config.options.background.widgets.visualizer.barRounding = value / 100
                     }

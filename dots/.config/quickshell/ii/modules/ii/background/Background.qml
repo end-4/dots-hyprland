@@ -356,15 +356,20 @@ Scope {
                         points: root.visualizerPoints
                         primaryColor: Appearance.colors.colPrimary
 
-                        targetHeight: visualizerLoader.vizConfig?.height ?? 200
+                        targetHeight: visualizerLoader.vizConfig?.height ?? 600
                         targetBarWidth: visualizerLoader.vizConfig?.targetBarWidth ?? 50
-                        barSpacing: visualizerLoader.vizConfig?.barSpacing ?? 5
-                        barRounding: visualizerLoader.vizConfig?.barRounding ?? 0.4
-                        smoothing: visualizerLoader.vizConfig?.smoothing ?? 1.0
+                        barSpacing: visualizerLoader.vizConfig?.barSpacing ?? 10
+                        barRounding: visualizerLoader.vizConfig?.barRounding ?? 0.5
+                        dataSmoothing: visualizerLoader.vizConfig?.dataSmoothing ?? 0.5
+                        smoothing: visualizerLoader.vizConfig?.smoothing ?? 0.18
                         visualOpacity: visualizerLoader.vizConfig?.opacity ?? 1.0
                         isMono: visualizerLoader.vizConfig?.mono ?? true
-                        shown: visualizerLoader.shown
+                        shown: visualizerLoader.shown ?? false
 
+                        property string visualizerMode: visualizerLoader.vizConfig?.mode ?? "wave"
+                        property real waveFillOpacity: visualizerLoader.vizConfig?.waveFillOpacity ?? 0.5
+                        property int waveBorderWidth: visualizerLoader.vizConfig?.waveBorderWidth ?? 3
+                    
                         // Screen metrics for this monitor
                         screenWidth: bgRoot.screen.width
                         screenHeight: bgRoot.screen.height
