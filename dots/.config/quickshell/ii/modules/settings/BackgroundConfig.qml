@@ -633,16 +633,21 @@ ContentPage {
                 onCheckedChanged: Config.options.background.widgets.visualizer.enable = checked
             }
             Item { Layout.fillWidth: true }
-            ConfigSelectionArray {
+            ContentSubsection {
+                title: Translation.tr("Visualizer style")
                 Layout.fillWidth: false
-                currentValue: Config.options.background.widgets.visualizer.mode
-                onSelected: newValue => {
-                    Config.options.background.widgets.visualizer.mode = newValue;
+                visible: Config.options.background.widgets.visualizer.enable
+                ConfigSelectionArray {
+                    Layout.fillWidth: false
+                    currentValue: Config.options.background.widgets.visualizer.mode
+                    onSelected: newValue => {
+                        Config.options.background.widgets.visualizer.mode = newValue;
+                    }
+                    options: [
+                        { displayName: Translation.tr("Bars"), icon: "equalizer", value: "bars" },
+                        { displayName: Translation.tr("Wave"), icon: "airwave", value: "wave" }
+                    ]
                 }
-                options: [
-                    { displayName: Translation.tr("Bars"), icon: "equalizer", value: "bars" },
-                    { displayName: Translation.tr("Wave"), icon: "airwave", value: "wave" }
-                ]
             }
         }
 
@@ -650,6 +655,53 @@ ContentPage {
             Layout.fillWidth: true
             visible: Config.options.background.widgets.visualizer.enable
             spacing: 16
+
+            ContentSubsection {
+                title: Translation.tr("Visibility")
+                
+                ConfigRow {
+                    uniform: true
+                    ConfigSwitch {
+                        buttonIcon: "crop_free"
+                        text: Translation.tr("Hide when fullscreen/maximized")
+                        checked: Config.options.background.widgets.visualizer.hideWhenFullscreen
+                        onCheckedChanged: {
+                            Config.options.background.widgets.visualizer.hideWhenFullscreen = checked
+                            if (!checked) {
+                                Config.options.background.widgets.visualizer.hideWhenCovered = false
+                            }
+                        }
+                        StyledToolTip {
+                            text: Translation.tr("Hide the visualizer when a window is in fullscreen or maximized mode. (Reccomended)")
+                        }
+                    }
+                }
+
+                ConfigRow {
+                    uniform: true
+                    ConfigSwitch {
+                        id: hideWhenCoveredSwitch
+                        buttonIcon: "lock"
+                        visible: Config.options.background.widgets.visualizer.hideWhenFullscreen
+                        text: Translation.tr("Also hide when covered")
+                        checked: Config.options.background.widgets.visualizer.hideWhenCovered
+                        onCheckedChanged: {
+                            Config.options.background.widgets.visualizer.hideWhenCovered = checked
+                        }
+                        StyledToolTip {
+                            text: Translation.tr("Hide the visualizer when covered by tiled windows.")
+                        }
+                    }
+                    
+                    // Ensure that "hide when covered" is visibly off when hide when fullscreen is turned off
+                    Binding {
+                        target: hideWhenCoveredSwitch
+                        property: "checked"
+                        value: Config.options.background.widgets.visualizer.hideWhenCovered
+                        when: !hideWhenCoveredSwitch.pressed
+                    }
+                }
+            }
 
             ContentSubsection {
                 title: Translation.tr("Behavior & Processing")

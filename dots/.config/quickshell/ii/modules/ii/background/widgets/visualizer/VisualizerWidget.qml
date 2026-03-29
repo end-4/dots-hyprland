@@ -15,30 +15,33 @@ PinnedWidget {
 
     property list<real> points: []
     property color primaryColor: Appearance.colors.colPrimary
-    property int targetHeight: configEntry?.height ?? 600
-    property int targetBarWidth: configEntry?.targetBarWidth ?? 50
-    property int barSpacing: configEntry?.barSpacing ?? 10
-    property real barRounding: configEntry?.barRounding ?? 0.5
-    property real smoothing: configEntry?.smoothing ?? 0.18
-    property real dataSmoothing: configEntry?.dataSmoothing ?? 0.5
-    property real visualOpacity: configEntry?.opacity ?? 1.0
-    property bool isMono: configEntry?.mono ?? true
     property bool shown: false
-    
-    property string visualizerMode: configEntry?.mode ?? "wave"
-    property real waveFillOpacity: configEntry?.waveFillOpacity ?? 0.5
-    property int waveBorderWidth: configEntry?.waveBorderWidth ?? 3
 
-    readonly property color waveFillColor: Qt.rgba(primaryColor.r, primaryColor.g, primaryColor.b, waveFillOpacity)
+    // Consolidated config properties from configEntry
+    readonly property var config: ({
+        height: configEntry?.height ?? 600,
+        targetBarWidth: configEntry?.targetBarWidth ?? 50,
+        barSpacing: configEntry?.barSpacing ?? 10,
+        barRounding: configEntry?.barRounding ?? 0.5,
+        smoothing: configEntry?.smoothing ?? 0.18,
+        dataSmoothing: configEntry?.dataSmoothing ?? 0.5,
+        opacity: configEntry?.opacity ?? 1.0,
+        mono: configEntry?.mono ?? true,
+        mode: configEntry?.mode ?? "wave",
+        waveFillOpacity: configEntry?.waveFillOpacity ?? 0.5,
+        waveBorderWidth: configEntry?.waveBorderWidth ?? 3
+    })
+
+    readonly property color waveFillColor: Qt.rgba(primaryColor.r, primaryColor.g, primaryColor.b, config.waveFillOpacity)
     property var pixelHeights: []
 
-    height: targetHeight
+    height: config.height
     opacity: (shown && baseVisibility) ? 1 : 0
     visible: opacity > 0
     Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
 
-    readonly property int barCount: Math.max(1, Math.floor(width / (targetBarWidth + barSpacing)))
-    readonly property real exactWidth: (width - (barSpacing * (barCount - 1))) / barCount
+    readonly property int barCount: Math.max(1, Math.floor(width / (config.targetBarWidth + config.barSpacing)))
+    readonly property real exactWidth: (width - (config.barSpacing * (barCount - 1))) / barCount
     
     property real activityOpacity: 0
     Behavior on activityOpacity { NumberAnimation { duration: 500; easing.type: Easing.OutCubic } }
@@ -54,14 +57,14 @@ PinnedWidget {
 
         for (let i = 0; i < count; i++) {
             let progress = i / (count - 1 || 1);
-            let relPos = isMono ? (Math.abs(progress - 0.5) * 2) * rawLenM1 : progress * rawLenM1;
+            let relPos = config.mono ? (Math.abs(progress - 0.5) * 2) * rawLenM1 : progress * rawLenM1;
             let low = Math.floor(relPos), high = Math.ceil(relPos), mix = relPos - low;
             mapped[i] = (raw[low] * (1 - mix)) + (raw[high] * (high < raw.length ? mix : 0));
         }
 
-        if (root.dataSmoothing <= 0) return mapped;
+        if (config.dataSmoothing <= 0) return mapped;
         let smoothed = new Array(count);
-        let sW = root.dataSmoothing * 0.25; 
+        let sW = config.dataSmoothing * 0.25; 
         for (let j = 0; j < count; j++) {
             let p = mapped[Math.max(0, j - 1)];
             let n = mapped[Math.min(count - 1, j + 1)];
@@ -73,7 +76,7 @@ PinnedWidget {
     Row {
         id: visualizerRow
         anchors.fill: parent
-        spacing: root.barSpacing
+        spacing: root.config.barSpacing
         opacity: 0
         visible: opacity > 0
         
@@ -83,12 +86,12 @@ PinnedWidget {
                 width: root.exactWidth
                 height: Math.max(2, (root.targetPoints[index] / 1000) * root.height)
                 anchors.bottom: parent.bottom
-                radius: width * root.barRounding
+                radius: width * root.config.barRounding
                 color: root.primaryColor
-                border.width: root.waveBorderWidth
+                border.width: root.config.waveBorderWidth
                 border.color: root.waveFillColor
 
-                Behavior on height { NumberAnimation { duration: root.smoothing * 1000; easing.type: Easing.Linear } }
+                Behavior on height { NumberAnimation { duration: root.config.smoothing * 1000; easing.type: Easing.Linear } }
             }
         }
     }
@@ -130,9 +133,9 @@ PinnedWidget {
             ctx.fillStyle = root.waveFillColor;
             ctx.fill();
 
-            if (root.waveBorderWidth > 0) {
+            if (root.config.waveBorderWidth > 0) {
                 ctx.strokeStyle = root.primaryColor;
-                ctx.lineWidth = root.waveBorderWidth;
+                ctx.lineWidth = root.config.waveBorderWidth;
                 ctx.lineCap = "round"; ctx.lineJoin = "round";
                 ctx.stroke();
             }
@@ -142,15 +145,15 @@ PinnedWidget {
     states: [
         State {
             name: "bars"
-            when: root.visualizerMode === "bars"
-            PropertyChanges { target: visualizerRow; opacity: root.visualOpacity * root.activityOpacity }
+            when: root.config.mode === "bars"
+            PropertyChanges { target: visualizerRow; opacity: root.config.opacity * root.activityOpacity }
             PropertyChanges { target: waveCanvas; opacity: 0 }
         },
         State {
             name: "wave"
-            when: root.visualizerMode === "wave"
+            when: root.config.mode === "wave"
             PropertyChanges { target: visualizerRow; opacity: 0 }
-            PropertyChanges { target: waveCanvas; opacity: root.visualOpacity * root.activityOpacity }
+            PropertyChanges { target: waveCanvas; opacity: root.config.opacity * root.activityOpacity }
         }
     ]
 
@@ -173,7 +176,7 @@ PinnedWidget {
                 return;
             }
 
-            let lerpFactor = Math.min(1.0, (frameTime * 1000) / Math.max(1, root.smoothing * 1000));
+            let lerpFactor = Math.min(1.0, (frameTime * 1000) / Math.max(1, root.config.smoothing * 1000));
             let nextPoints = new Array(count);
             let nextPixels = new Array(count);
 

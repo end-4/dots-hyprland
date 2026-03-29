@@ -24,23 +24,54 @@ Scope {
 
     property list<real> visualizerPoints: Array.from({length: 50}, () => 0)
 
-    // shut off cava when no monitor is showing the BG
-    readonly property bool anyMonitorShowingBackground: {
+    // Helper function to check if a specific monitor is showing background/visualizer
+    function isMonitorShowingBackground(monitor) {
+        if (!monitor || !monitor.activeWorkspace) return true;
+
+        let coveringCount = 0;
+        let hasFullscreen = false;
+
+        HyprlandData.windowList.forEach(win => {
+            const winWsId = win.workspace?.id ?? win.workspace; 
+            if (win.monitor == monitor.id && winWsId == monitor.activeWorkspace.id) {
+                const isMax = (win.maximized || win.wayland?.maximized);
+                const isFS = (win.fullscreen || win.wayland?.fullscreen);
+                
+                if (win.floating === false || isMax || isFS) {
+                    coveringCount++;
+                    if (isFS) hasFullscreen = true;
+                }
+            }
+        });
+
+        const hideCovered = Config?.options?.background?.widgets?.visualizer?.hideWhenCovered ?? true;
+        const hideFull = Config?.options?.background?.widgets?.visualizer?.hideWhenFullscreen ?? true;
+
+        if (hideCovered && coveringCount > 0) return false;
+        if (hideFull && hasFullscreen) return false;
+        return true;
+    }
+
+    readonly property bool isVisualizerNeeded: {
+        if (!(Config?.options?.background?.widgets?.visualizer?.enable ?? false)) return false;
+
         return Quickshell.screens.some(screen => {
             const monitor = Hyprland.monitorFor(screen);
-            const workspaces = Hyprland.workspaces.values.filter(ws => ws.monitor && ws.monitor.name === monitor.name);
-            const activeWS = workspaces.find(ws => ws.active);
-            if (!activeWS) return true;
+            if (!monitor) return false;
 
-            const hasFullscreen = activeWS.toplevels.values.some(win => win.wayland?.fullscreen);
-            return GlobalStates.screenLocked || !hasFullscreen || !Config?.options.background.hideWhenFullscreen;
+            // If screen is locked, check if visualizer is allowed on lockscreen
+            if (GlobalStates.screenLocked) {
+                return Config?.options?.background?.widgets?.visualizer?.showWhenLocked ?? true;
+            }
+
+            return root.isMonitorShowingBackground(monitor);
         });
     }
 
     // Cava process
     Process {
         id: cavaProc
-        running: (Config?.options?.background?.widgets?.visualizer?.enable ?? false) && root.anyMonitorShowingBackground
+        running: (Config?.options?.background?.widgets?.visualizer?.enable ?? false) && root.isVisualizerNeeded
         onRunningChanged: {
             // Reset bars to zero when cava stops
             if (!cavaProc.running)
@@ -63,6 +94,12 @@ Scope {
 
         PanelWindow {
             id: bgRoot
+
+            // Per-monitor background visibility
+            readonly property bool isBackgroundVisible: {
+                if (GlobalStates.screenLocked) return true;
+                return root.isMonitorShowingBackground(monitor);
+            }
 
             required property var modelData
 
@@ -347,35 +384,17 @@ Scope {
                     height: Config.options.background.widgets.visualizer.height
 
                     readonly property var vizConfig: Config?.options?.background?.widgets?.visualizer
-                    shown: vizConfig?.enable && (!GlobalStates.screenLocked || vizConfig?.showWhenLocked)
+                    shown: vizConfig?.enable && bgRoot.isBackgroundVisible && (!GlobalStates.screenLocked || vizConfig?.showWhenLocked)
 
                     sourceComponent: VisualizerWidget {
                         anchors.fill: parent
 
-                        // Bar data
                         points: root.visualizerPoints
                         primaryColor: Appearance.colors.colPrimary
-
-                        targetHeight: visualizerLoader.vizConfig?.height ?? 600
-                        targetBarWidth: visualizerLoader.vizConfig?.targetBarWidth ?? 50
-                        barSpacing: visualizerLoader.vizConfig?.barSpacing ?? 10
-                        barRounding: visualizerLoader.vizConfig?.barRounding ?? 0.5
-                        dataSmoothing: visualizerLoader.vizConfig?.dataSmoothing ?? 0.5
-                        smoothing: visualizerLoader.vizConfig?.smoothing ?? 0.18
-                        visualOpacity: visualizerLoader.vizConfig?.opacity ?? 1.0
-                        isMono: visualizerLoader.vizConfig?.mono ?? true
-                        shown: visualizerLoader.shown ?? false
-
-                        property string visualizerMode: visualizerLoader.vizConfig?.mode ?? "wave"
-                        property real waveFillOpacity: visualizerLoader.vizConfig?.waveFillOpacity ?? 0.5
-                        property int waveBorderWidth: visualizerLoader.vizConfig?.waveBorderWidth ?? 3
+                        shown: visualizerLoader.shown
                     
-                        // Screen metrics for this monitor
-                        screenWidth: bgRoot.screen.width
-                        screenHeight: bgRoot.screen.height
                         scaledScreenWidth: bgRoot.screen.width / bgRoot.effectiveWallpaperScale
                         scaledScreenHeight: bgRoot.screen.height / bgRoot.effectiveWallpaperScale
-                        wallpaperScale: bgRoot.effectiveWallpaperScale
                     }
                 }
             }

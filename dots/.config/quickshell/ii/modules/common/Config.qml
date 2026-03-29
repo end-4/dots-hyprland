@@ -210,8 +210,10 @@ Singleton {
                         property real y: 100
                     }
                     property JsonObject visualizer: JsonObject {
-                        property bool showWhenLocked: false
                         property bool enable: false
+                        property bool showWhenLocked: false
+                        property bool hideWhenCovered: true
+                        property bool hideWhenFullscreen: true
                         property int height: 600 // in pixels
                         property real barRounding: 0.5
                         property real smoothing: 0.05
