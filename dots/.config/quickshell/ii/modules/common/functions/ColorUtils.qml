@@ -162,11 +162,13 @@ Singleton {
      * @returns {Qt.rgba} The solved overlay color
      */
     function solveOverlayColor(baseColor, targetColor, overlayOpacity) {
+        const bc = Qt.color(baseColor);
+        const tc = Qt.color(targetColor);
         let invA = 1.0 - overlayOpacity;
 
-        let r = (targetColor.r - baseColor.r * invA) / overlayOpacity;
-        let g = (targetColor.g - baseColor.g * invA) / overlayOpacity;
-        let b = (targetColor.b - baseColor.b * invA) / overlayOpacity;
+        let r = (tc.r - bc.r * invA) / overlayOpacity;
+        let g = (tc.g - bc.g * invA) / overlayOpacity;
+        let b = (tc.b - bc.b * invA) / overlayOpacity;
 
         return Qt.rgba(clamp01(r), clamp01(g), clamp01(b), overlayOpacity);
     }
