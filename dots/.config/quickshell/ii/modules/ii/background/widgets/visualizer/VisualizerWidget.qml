@@ -38,7 +38,7 @@ PinnedWidget {
     property var pixelHeights: []
 
     height: config.height
-    opacity: (shown && baseVisibility) ? 1 : 0
+    opacity: (shown && baseVisibility && enableAnimations.value) ? 1 : 0
     visible: opacity > 0
     Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
 
