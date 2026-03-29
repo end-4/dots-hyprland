@@ -27,14 +27,10 @@ Shapes.ShapeCanvas {
     required property real startRadius
     required property real endRadius
     property real baseMargin: {
-        print("calculating new base margin (vertical, parent height, container height) = ", vertical, parent.height, containerShape.height)
         if (!vertical)
             return parent.anchors.topMargin
         else
             return parent.anchors.leftMargin
-    }
-    onBaseMarginChanged: {
-        print(baseMargin)
     }
 
     property alias containerShape: containerShape
@@ -88,16 +84,18 @@ Shapes.ShapeCanvas {
     onPopupYOffsetChanged: if (bgShape.showPopup) lockPopupY = true;
 
     // Positioning
-    readonly property real popupContentOffsetBase: popupPadding + baseMargin
+    readonly property real popupContentOffsetBase: popupPadding
+    readonly property real popupContentOffsetBaseX: popupContentOffsetBase + parent.anchors.leftMargin
+    readonly property real popupContentOffsetBaseY: popupContentOffsetBase + parent.anchors.topMargin
     readonly property real paddedContainerHeight: containerShape.height
     readonly property real paddedContainerWidth: containerShape.width
-    readonly property real popupContentOffsetY: {
-        if (!vertical) return paddedContainerHeight + spacing + popupContentOffsetBase + (atBottom * -(popupHeight + backgroundHeight + spacing * 2))
-        else return popupYOffset + popupContentOffsetBase;
-    }
     readonly property real popupContentOffsetX: {
-        if (!vertical) return popupXOffset + popupContentOffsetBase;
-        else return paddedContainerWidth + spacing + popupContentOffsetBase + (atBottom * -(popupWidth + backgroundWidth + spacing * 2));
+        if (!vertical) return popupXOffset + popupContentOffsetBaseX;
+        else return paddedContainerWidth + spacing + popupContentOffsetBaseX + (atBottom * -(popupWidth + backgroundWidth + spacing * 2));
+    }
+    readonly property real popupContentOffsetY: {
+        if (!vertical) return paddedContainerHeight + spacing + popupContentOffsetBaseY + (atBottom * -(popupHeight + backgroundHeight + spacing * 2))
+        else return popupYOffset + popupContentOffsetBaseY;
     }
 
     anchors {

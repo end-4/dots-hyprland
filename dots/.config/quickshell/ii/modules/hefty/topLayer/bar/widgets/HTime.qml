@@ -53,9 +53,9 @@ HBarWidgetWithPopout {
         PopupContent {
             id: popupContent
             anchors {
-                top: root.vertical ? verticalContent.top : horizontalContent.top
+                top: parent.top
+                left: parent.left
                 topMargin: root.popupContentOffsetY
-                left: root.vertical ? verticalContent.left : horizontalContent.left
                 leftMargin: root.popupContentOffsetX
             }
 

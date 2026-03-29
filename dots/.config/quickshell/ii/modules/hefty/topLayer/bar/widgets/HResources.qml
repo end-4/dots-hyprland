@@ -21,13 +21,14 @@ HBarWidgetWithPopout {
 
     HBarWidgetContent {
         id: contentRoot
+
         vertical: root.vertical
         atBottom: root.atBottom
         showPopup: root.showPopup
-        contentImplicitWidth: activeItem.implicitWidth
-        contentImplicitHeight: activeItem.implicitHeight
         onClicked: root.showPopup = !root.showPopup
-        property var activeItem: sysInfoContent
+
+        contentImplicitWidth: sysInfoContent.implicitWidth
+        contentImplicitHeight: sysInfoContent.implicitHeight
 
         SysInfoContent {
             id: sysInfoContent
@@ -37,9 +38,9 @@ HBarWidgetWithPopout {
         SysInfoPopupContent {
             id: popupContent
             anchors {
-                top: root.vertical ? contentRoot.activeItem.top : contentRoot.activeItem.top
+                top: parent.top
+                left: parent.left
                 topMargin: root.popupContentOffsetY
-                left: root.vertical ? contentRoot.activeItem.left : contentRoot.activeItem.left
                 leftMargin: root.popupContentOffsetX
             }
 
