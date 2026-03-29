@@ -99,7 +99,10 @@ PinnedWidget {
                 width: root.exactWidth
                 height: Math.max(2, (root.targetPoints[index] / 1000) * root.height)
                 anchors.bottom: parent.bottom
-                radius: width * root.config.barRounding
+                topLeftRadius: width * root.config.barRounding
+                topRightRadius: width * root.config.barRounding
+                bottomLeftRadius: 0
+                bottomRightRadius: 0
                 color: root.primaryColor
                 border.width: root.config.waveBorderWidth
                 border.color: root.waveFillColor
