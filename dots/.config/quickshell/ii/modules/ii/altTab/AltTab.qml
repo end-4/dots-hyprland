@@ -117,74 +117,9 @@ Scope {
         };
     }
 
-    function groupLayoutKind(members) {
-        const n = members?.length ?? 0;
-        if (n <= 1)
-            return "single";
-        let minX = 1e12;
-        let maxX = -1e12;
-        let minY = 1e12;
-        let maxY = -1e12;
-        for (let i = 0; i < n; i++) {
-            const m = members[i];
-            const w = Math.max(m.sw ?? 400, 48);
-            const h = Math.max(m.sh ?? 300, 48);
-            const cx = (m.at0 ?? 0) + w * 0.5;
-            const cy = (m.at1 ?? 0) + h * 0.5;
-            minX = Math.min(minX, cx);
-            maxX = Math.max(maxX, cx);
-            minY = Math.min(minY, cy);
-            maxY = Math.max(maxY, cy);
-        }
-        const spreadX = maxX - minX;
-        const spreadY = maxY - minY;
-        return spreadX >= spreadY ? "row" : "column";
-    }
-
-    function distributeIntegerWeights(total, weights) {
-        const n = weights.length;
-        if (n === 0)
-            return [];
-        const sum = weights.reduce((a, b) => a + Math.max(b, 1e-9), 0);
-        const raw = weights.map(w => total * Math.max(w, 1e-9) / sum);
-        const floors = raw.map(x => Math.floor(x));
-        let rem = total - floors.reduce((a, b) => a + b, 0);
-        const fracs = raw.map((x, i) => ({
-                i,
-                f: x - Math.floor(x)
-            }));
-        fracs.sort((a, b) => b.f - a.f);
-        let ri = 0;
-        while (rem > 0) {
-            floors[fracs[ri % n].i]++;
-            rem--;
-            ri++;
-        }
-        return floors;
-    }
-
-    function sortMembersByLayout(members, kind) {
-        const copy = members.slice();
-        if (kind === "column") {
-            copy.sort((a, b) => {
-                const acy = (a.at1 ?? 0) + Math.max(a.sh ?? 300, 48) * 0.5;
-                const bcy = (b.at1 ?? 0) + Math.max(b.sh ?? 300, 48) * 0.5;
-                return acy - bcy;
-            });
-        } else {
-            copy.sort((a, b) => {
-                const acx = (a.at0 ?? 0) + Math.max(a.sw ?? 400, 48) * 0.5;
-                const bcx = (b.at0 ?? 0) + Math.max(b.sw ?? 400, 48) * 0.5;
-                return acx - bcx;
-            });
-        }
-        return copy;
-    }
-
     function groupPreviewSlotDims(card) {
         const mx = Config.options.altTab?.maxThumbnailWidth ?? 680;
         const my = Config.options.altTab?.maxThumbnailHeight ?? 520;
-        const g = root.effectiveGap;
         const members = card.groupMembers;
         const n = members?.length ?? 0;
         if (!members || n <= 1) {
@@ -205,61 +140,64 @@ Scope {
                 gap: 0
             };
         }
-        const kind = root.groupLayoutKind(members);
-        const ordered = root.sortMembersByLayout(members, kind);
-        if (kind === "row") {
-            const availW = mx - (n - 1) * g;
-            const sws = ordered.map(m => Math.max(m.sw ?? 400, 48));
-            const totalSw = sws.reduce((a, b) => a + b, 0);
-            const cellWidths = root.distributeIntegerWeights(availW, sws);
-            const shRef = Math.max(...ordered.map(m => Math.max(m.sh ?? 300, 48)));
-            let cellH = Math.round((availW * shRef) / totalSw);
-            cellH = Math.min(Math.max(cellH, 48), my);
-            const rowXOffsets = [];
-            let acc = 0;
-            for (let i = 0; i < n; i++) {
-                rowXOffsets.push(acc);
-                acc += cellWidths[i];
-                if (i < n - 1)
-                    acc += g;
-            }
-            return {
-                w: acc,
-                h: cellH,
-                layout: "row",
-                members: ordered,
-                gap: g,
-                cellWidths: cellWidths,
-                rowXOffsets: rowXOffsets,
-                cellH: cellH,
-                cellW: cellWidths[0] ?? 48
-            };
+        const rects = members.map(m => ({
+                m,
+                ax: m.at0 ?? 0,
+                ay: m.at1 ?? 0,
+                aw: Math.max(m.sw ?? 400, 48),
+                ah: Math.max(m.sh ?? 300, 48)
+            }));
+        let minX = 1e12;
+        let minY = 1e12;
+        let maxX = -1e12;
+        let maxY = -1e12;
+        for (let i = 0; i < rects.length; i++) {
+            const r = rects[i];
+            minX = Math.min(minX, r.ax);
+            minY = Math.min(minY, r.ay);
+            maxX = Math.max(maxX, r.ax + r.aw);
+            maxY = Math.max(maxY, r.ay + r.ah);
         }
-        const availH = my - (n - 1) * g;
-        const shs = ordered.map(m => Math.max(m.sh ?? 300, 48));
-        const totalSh = shs.reduce((a, b) => a + b, 0);
-        const cellHeights = root.distributeIntegerWeights(availH, shs);
-        const swRef = Math.max(...ordered.map(m => Math.max(m.sw ?? 400, 48)));
-        let cellW = Math.round((availH * swRef) / totalSh);
-        cellW = Math.min(Math.max(cellW, 48), mx);
-        const columnYOffsets = [];
-        let yAcc = 0;
-        for (let i = 0; i < n; i++) {
-            columnYOffsets.push(yAcc);
-            yAcc += cellHeights[i];
-            if (i < n - 1)
-                yAcc += g;
+        const bboxW = Math.max(1, maxX - minX);
+        const bboxH = Math.max(1, maxY - minY);
+        const scale = Math.min(mx / bboxW, my / bboxH);
+        rects.sort((a, b) => {
+            const dy = a.ay - b.ay;
+            if (dy !== 0)
+                return dy;
+            return a.ax - b.ax;
+        });
+        let extR = 0;
+        let extB = 0;
+        const placed = [];
+        for (let i = 0; i < rects.length; i++) {
+            const r = rects[i];
+            const px = Math.round((r.ax - minX) * scale);
+            const py = Math.round((r.ay - minY) * scale);
+            const pw = Math.max(48, Math.round(r.aw * scale));
+            const ph = Math.max(48, Math.round(r.ah * scale));
+            placed.push({
+                address: r.m.address,
+                sw: r.m.sw,
+                sh: r.m.sh,
+                at0: r.m.at0,
+                at1: r.m.at1,
+                px: px,
+                py: py,
+                pw: pw,
+                ph: ph
+            });
+            extR = Math.max(extR, px + pw);
+            extB = Math.max(extB, py + ph);
         }
         return {
-            w: cellW,
-            h: yAcc,
-            layout: "column",
-            members: ordered,
-            gap: g,
-            cellHeights: cellHeights,
-            columnYOffsets: columnYOffsets,
-            cellW: cellW,
-            cellH: cellHeights[0] ?? 48
+            w: Math.min(mx, extR),
+            h: Math.min(my, extB),
+            layout: "spatial",
+            members: placed,
+            gap: 0,
+            cellW: Math.min(mx, extR),
+            cellH: Math.min(my, extB)
         };
     }
 
@@ -911,7 +849,6 @@ Scope {
                                             readonly property bool showPv: root.effectiveShowPreviews
                                             readonly property real previewW: showPv ? pvDims.w : root.iconOnlyTileW
                                             readonly property real previewH: showPv ? pvDims.h : root.iconOnlyAreaH
-                                            readonly property bool pvIsColumn: showPv && pvDims.layout === "column"
                                             readonly property real cardRadius: Appearance.rounding.small
 
                                             Component.onCompleted: root.registerTile(tileIndex, cardRoot)
@@ -992,12 +929,11 @@ Scope {
                                                                 required property int index
                                                                 required property var modelData
 
-                                                                readonly property bool useRowVarWidth: !!cardRoot.pvDims.cellWidths && cardRoot.pvDims.cellWidths.length > 0
-                                                                readonly property bool useColVarHeight: !!cardRoot.pvDims.cellHeights && cardRoot.pvDims.cellHeights.length > 0
-                                                                readonly property real thisCellW: useRowVarWidth ? cardRoot.pvDims.cellWidths[index] : cardRoot.pvDims.cellW
-                                                                readonly property real thisCellH: useColVarHeight ? cardRoot.pvDims.cellHeights[index] : cardRoot.pvDims.cellH
-                                                                readonly property real cx: cardRoot.pvIsColumn ? (parent.width - cardRoot.pvDims.cellW) / 2 : (useRowVarWidth ? (parent.width - cardRoot.pvDims.w) / 2 + cardRoot.pvDims.rowXOffsets[index] : index * (cardRoot.pvDims.cellW + cardRoot.pvDims.gap) + (parent.width - cardRoot.pvDims.w) / 2)
-                                                                readonly property real cy: cardRoot.pvIsColumn ? (useColVarHeight ? (parent.height - cardRoot.pvDims.h) / 2 + cardRoot.pvDims.columnYOffsets[index] : index * (cardRoot.pvDims.cellH + cardRoot.pvDims.gap) + (parent.height - cardRoot.pvDims.h) / 2) : (parent.height - cardRoot.pvDims.cellH) / 2
+                                                                readonly property bool spatialPlaced: cardRoot.pvDims.layout === "spatial"
+                                                                readonly property real thisCellW: spatialPlaced ? modelData.pw : cardRoot.pvDims.cellW
+                                                                readonly property real thisCellH: spatialPlaced ? modelData.ph : cardRoot.pvDims.cellH
+                                                                readonly property real cx: spatialPlaced ? (parent.width - cardRoot.pvDims.w) / 2 + modelData.px : (parent.width - cardRoot.pvDims.w) / 2
+                                                                readonly property real cy: spatialPlaced ? (parent.height - cardRoot.pvDims.h) / 2 + modelData.py : (parent.height - cardRoot.pvDims.h) / 2
 
                                                                 x: cx
                                                                 y: cy
