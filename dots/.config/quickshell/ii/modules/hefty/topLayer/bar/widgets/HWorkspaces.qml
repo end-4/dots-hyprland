@@ -373,9 +373,15 @@ HBarWidgetContainer {
         property bool hasBiggestWindow: !!wsModel.biggestWindow[index]
         property int wsId: wsModel.getWorkspaceIdAt(index)
         property color contentColor: (wsModel.occupied[wsNum.index] && wsId !== wsModel.fakeWorkspace) ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1Inactive
+        property bool showingNumbers: {
+            if (root.superPressAndHeld) return true;
+            if (GlobalStates.screenLocked) return false;
+            if (Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !wsNum.hasBiggestWindow)) return true;
+            return false;
+        }
 
         FadeLoader {
-            shown: !(Config.options?.bar.workspaces.alwaysShowNumbers || root.superPressAndHeld || (Config.options?.bar.workspaces.showAppIcons && wsNum.hasBiggestWindow))
+            shown: !wsNum.showingNumbers
             anchors.centerIn: parent
             Circle {
                 anchors.centerIn: parent
@@ -384,7 +390,7 @@ HBarWidgetContainer {
             }
         }
         FadeLoader {
-            shown: root.superPressAndHeld || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !wsNum.hasBiggestWindow || root.showNumbers)) || (root.superPressAndHeld && !Config.options?.bar.workspaces.showAppIcons))
+            shown: wsNum.showingNumbers
             anchors.centerIn: parent
             StyledText {
                 anchors.centerIn: parent
