@@ -672,7 +672,7 @@ ContentPage {
                             }
                         }
                         StyledToolTip {
-                            text: Translation.tr("Hide the visualizer when a window is in fullscreen or maximized mode. (Recommended)")
+                            text: Translation.tr("Hide the visualizer when a window is in fullscreen or maximized mode. (Reccomended)")
                         }
                     }
                 }
@@ -705,8 +705,8 @@ ContentPage {
 
             ContentSubsection {
                 visible: Config.options.background.widgets.visualizer.mode === "wave"
-                title: Translation.tr("Performance limiter")
-                tooltip: Translation.tr("Reduces CPU/GPU usage by skipping rendering frames. Only affects 'Wave' mode.")
+                title: Translation.tr("Performance mode")
+                tooltip: Translation.tr("Note: Auto mode requires 'power-profiles-daemon' (Arch) package")
 
                 ConfigSelectionArray {
                     currentValue: Config.options.background.widgets.visualizer.renderEveryXFrames
@@ -715,19 +715,24 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: Translation.tr("Full speed"),
-                            icon: "sprint",
+                            displayName: Translation.tr("Auto"),
+                            icon: "auto_fix_high",
+                            value: -1,
+                        },
+                        {
+                            displayName: Translation.tr("Smooth mode"),
+                            icon: "speed",
                             value: 1
                         },
                         {
-                            displayName: Translation.tr("Half speed"),
-                            icon: "directions_run",
+                            displayName: Translation.tr("Balanced mode"),
+                            icon: "balance",
                             value: 2
                         },
                         {
-                            displayName: Translation.tr("Low speed"),
-                            icon: "directions_walk",
-                            value: 3
+                            displayName: Translation.tr("Efficiency mode"),
+                            icon: "energy_savings_leaf",
+                            value: 4
                         }
                     ]
                 }

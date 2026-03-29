@@ -8,6 +8,7 @@ import qs.modules.common.widgets
 import qs.modules.common.widgets.widgetCanvas
 import qs.modules.ii.background.widgets
 import qs.modules.common.models.hyprland
+import Quickshell.Services.UPower
 
 PinnedWidget {
     id: root
@@ -17,6 +18,16 @@ PinnedWidget {
     property list<real> points: []
     property color primaryColor: Appearance.colors.colPrimary
     property bool shown: false
+
+    property var currentPowerProfile: PowerProfiles.profile
+    readonly property int autoRenderEveryXFrames: {
+        switch(PowerProfiles.profile) {
+            case 2: return 1  // Performance
+            case 1: return 2  // Balanced
+            case 0: return 4  // Power Saver
+            default: return 2
+        }
+    }
 
     // Consolidated config properties from configEntry
     readonly property var config: ({
@@ -31,7 +42,7 @@ PinnedWidget {
         mode: configEntry?.mode ?? "wave",
         waveFillOpacity: configEntry?.waveFillOpacity ?? 0.5,
         waveBorderWidth: configEntry?.waveBorderWidth ?? 3,
-        renderEveryXFrames: (configEntry?.renderEveryXFrames ?? 1) - 1
+        renderEveryXFrames: (configEntry?.renderEveryXFrames ?? -1) === -1 ? (autoRenderEveryXFrames - 1) : (configEntry.renderEveryXFrames - 1)
     })
 
     readonly property color waveFillColor: Qt.rgba(primaryColor.r, primaryColor.g, primaryColor.b, config.waveFillOpacity)
