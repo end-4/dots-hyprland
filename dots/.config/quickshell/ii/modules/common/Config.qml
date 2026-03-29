@@ -225,7 +225,7 @@ Singleton {
                         property real waveFillOpacity: 0.5
                         property real dataSmoothing: 0.5
                         property int waveBorderWidth: 3    // 0 = no border
-                        property int renderEveryXFrames: 2  // 1 = every frame, 2 = every other frame, etc. Only for "wave" mode
+                        property int renderEveryXFrames: -1  // -1 = auto (System), 1 = every frame, 2 = every other frame, etc. Only for "wave" mode
                     }
                 }
                 property string wallpaperPath: ""
