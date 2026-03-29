@@ -13,8 +13,14 @@ import Quickshell.Hyprland
 import ".."
 
 HBarWidgetContainer {
+    id: containerRoot
     ButtonMouseArea {
         id: root
+
+        Layout.topMargin: (5 + 5 * containerRoot.startSide) * containerRoot.vertical
+        Layout.bottomMargin: (5 + 5 * containerRoot.endSide) * containerRoot.vertical
+        Layout.leftMargin: (3 + 4 * containerRoot.startSide) * !containerRoot.vertical
+        Layout.rightMargin: (3 + 4 * containerRoot.endSide) * !containerRoot.vertical
 
         readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
         WorkspaceModel {

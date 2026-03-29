@@ -37,12 +37,13 @@ HBarWidgetWithPopout {
 
     HBarWidgetContent {
         id: contentRoot
+        parentRadiusToPaddingRatio: 0
         vertical: root.vertical
         atBottom: root.atBottom
         contentImplicitWidth: 14
         contentImplicitHeight: 14
-        implicitWidth: 24
-        implicitHeight: 30 // note that vertical bar is more thicc than horizz
+        implicitWidth: 40
+        implicitHeight: 46
         showPopup: false
         onClicked: GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
 
