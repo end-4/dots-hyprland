@@ -105,6 +105,8 @@ PinnedWidget {
         onWidthChanged: requestPaint()
         onHeightChanged: requestPaint()
 
+property int frames: 0
+
         onPaint: {
             if (waveCanvas.frames >= 2) {
                 waveCanvas.frames = 0;
