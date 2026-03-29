@@ -214,4 +214,9 @@ PinnedWidget {
             silenceTimer.restart();
         }
     }
+    
+    HyprlandConfigOption {
+        id: enableAnimations
+        key: "animations:enabled"
+    }
 }
