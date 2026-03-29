@@ -22,7 +22,9 @@ Item {
         anchors.top: parent.top
         anchors.right: !root.vertical ? centerLeftSide.left : parent.right
         anchors.bottom: !root.vertical ? parent.bottom : centerLeftSide.top
-        anchors.leftMargin: 0 // For accessibility
+        // For accessibility
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
 
         HBarUserFallbackComponentRepeater {
             componentNames: root.leftWidgets
@@ -67,7 +69,9 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: !root.vertical ? centerRightSide.right : parent.left
         anchors.top: !root.vertical ? parent.top : centerRightSide.bottom
-        anchors.rightMargin: 0 // For accessibility
+        // For accessibility
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
 
         Item {
             Layout.fillWidth: true

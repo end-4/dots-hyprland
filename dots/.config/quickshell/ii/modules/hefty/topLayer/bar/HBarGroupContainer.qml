@@ -19,8 +19,8 @@ Item {
     readonly property real barUndirectionalWidth: C.Config.options.bar.vertical ? C.Appearance.sizes.baseVerticalBarWidth : C.Appearance.sizes.baseBarHeight
     readonly property real backgroundUndirectionalWidth: barUndirectionalWidth - margins * 2
 
-    implicitWidth: vertical ? barUndirectionalWidth : layout.implicitWidth + padding * 2
-    implicitHeight: vertical ? layout.implicitHeight + padding * 2 : barUndirectionalWidth
+    implicitWidth: vertical ? barUndirectionalWidth : layout.implicitWidth
+    implicitHeight: vertical ? layout.implicitHeight : barUndirectionalWidth
 
     property alias startRadius: bg.startRadius
     property alias endRadius: bg.endRadius
@@ -28,8 +28,10 @@ Item {
     property alias topRightRadius: bg.topRightRadius
     property alias bottomLeftRadius: bg.bottomLeftRadius
     property alias bottomRightRadius: bg.bottomRightRadius
-    property real backgroundWidth: root.vertical ? root.backgroundUndirectionalWidth : root.width
-    property real backgroundHeight: root.vertical ? root.height : root.backgroundUndirectionalWidth
+    property real backgroundWidth: root.vertical ? root.backgroundUndirectionalWidth : (root.width - margins * (startSide + endSide))
+    property real backgroundHeight: !root.vertical ? root.backgroundUndirectionalWidth : (root.height - margins * (startSide + endSide))
+    property real backgroundTopMargin: root.margins * (!root.vertical || root.startSide)
+    property real backgroundLeftMargin: root.margins * (root.vertical || root.startSide)
     property real fullBackgroundRadius: Math.min(backgroundWidth, backgroundHeight) / 2
     function getBackgroundRadius(atSide) {
         if (root.m3eRadius) {
@@ -42,7 +44,12 @@ Item {
 
     property Item background: W.AxisRectangle {
         id: bg
-        anchors.centerIn: parent
+        anchors {
+            top: parent?.top
+            left: parent?.left
+            topMargin: root.backgroundTopMargin
+            leftMargin: root.backgroundLeftMargin
+        }
         contentLayer: W.StyledRectangle.ContentLayer.Group
 
         width: root.backgroundWidth
@@ -56,13 +63,7 @@ Item {
     property Item contentItem: GridLayout {
         id: layout
         columns: C.Config.options.bar.vertical ? 1 : -1
-        anchors {
-            fill: parent
-            leftMargin: root.vertical ? 0 : root.padding
-            rightMargin: root.vertical ? 0 : root.padding
-            topMargin: root.vertical ? root.padding : 0
-            bottomMargin: root.vertical ? root.padding : 0
-        }
+        anchors.fill: parent
         property real spacing: 4
         columnSpacing: spacing
         rowSpacing: spacing

@@ -14,11 +14,11 @@ W.ButtonMouseArea {
     required property bool atBottom
     required property bool showPopup
 
-    property var layoutParent: F.ObjectUtils.findParentWithProperty(root, "startSide")
-    property real layoutParentTopLeftRadius: layoutParent.topLeftRadius
-    property real layoutParentTopRightRadius: layoutParent.topRightRadius
-    property real layoutParentBottomLeftRadius: layoutParent.bottomLeftRadius
-    property real layoutParentBottomRightRadius: layoutParent.bottomRightRadius
+    readonly property var layoutParent: F.ObjectUtils.findParentWithProperty(root, "startSide")
+    readonly property real layoutParentTopLeftRadius: layoutParent.topLeftRadius
+    readonly property real layoutParentTopRightRadius: layoutParent.topRightRadius
+    readonly property real layoutParentBottomLeftRadius: layoutParent.bottomLeftRadius
+    readonly property real layoutParentBottomRightRadius: layoutParent.bottomRightRadius
 
     readonly property real barThickness: vertical ? C.Appearance.sizes.verticalBarWidth : C.Appearance.sizes.barHeight
     readonly property real barVisualThickness: vertical ? C.Appearance.sizes.baseVerticalBarWidth : C.Appearance.sizes.baseBarHeight
@@ -26,8 +26,22 @@ W.ButtonMouseArea {
     required property real contentImplicitWidth
     required property real contentImplicitHeight
     property real parentRadiusToPaddingRatio: 0.3
-    implicitWidth: vertical ? barThickness : (contentImplicitWidth + (layoutParentTopLeftRadius + layoutParentBottomRightRadius) * parentRadiusToPaddingRatio)
-    implicitHeight: !vertical ? barThickness : (contentImplicitHeight + (layoutParentTopLeftRadius + layoutParentBottomRightRadius) * parentRadiusToPaddingRatio)
+    implicitWidth: {
+        if (vertical) {
+            return barThickness;
+        } else {
+            const roundingPadding = (layoutParentTopLeftRadius + layoutParentBottomRightRadius) * parentRadiusToPaddingRatio;
+            return (contentImplicitWidth + roundingPadding + 4 * 2);
+        }
+    }
+    implicitHeight: {
+        if (!vertical) {
+            return barThickness;
+        } else {
+            const roundingPadding = (layoutParentTopLeftRadius + layoutParentBottomRightRadius) * parentRadiusToPaddingRatio;
+            return (contentImplicitHeight + roundingPadding + 4 * 2);
+        }
+    }
     Layout.alignment: vertical ? Qt.AlignHCenter : Qt.AlignVCenter
     Layout.fillWidth: vertical
     Layout.fillHeight: !vertical
@@ -41,12 +55,12 @@ W.ButtonMouseArea {
         property real parentMargins: 4 + root.barGap
         property real ownMargins: 2
         property real edgeMargins: parentMargins + ownMargins
-        property real sideMargins: -2
+        property real sideMargins: 2
         anchors {
-            leftMargin: root.vertical ? edgeMargins : sideMargins
-            rightMargin: root.vertical ? edgeMargins : sideMargins
-            topMargin: root.vertical ? sideMargins : edgeMargins
-            bottomMargin: root.vertical ? sideMargins : edgeMargins
+            leftMargin: (root.vertical ? edgeMargins : sideMargins) + parentMargins * (!root.vertical && root.layoutParent.startSide)
+            rightMargin: (root.vertical ? edgeMargins : sideMargins) + parentMargins * (!root.vertical && root.layoutParent.endSide)
+            topMargin: (root.vertical ? sideMargins : edgeMargins) + parentMargins * (root.vertical && root.layoutParent.startSide)
+            bottomMargin: (root.vertical ? sideMargins : edgeMargins) + parentMargins * (root.vertical && root.layoutParent.endSide)
         }
         topLeftRadius: root.layoutParentTopLeftRadius - ownMargins
         topRightRadius: root.layoutParentTopRightRadius - ownMargins

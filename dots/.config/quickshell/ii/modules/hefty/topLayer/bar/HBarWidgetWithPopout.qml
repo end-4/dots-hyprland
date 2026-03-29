@@ -38,16 +38,28 @@ HBarWidgetContainer {
     property alias popupContentHeight: bgShape.popupContentHeight
     property alias popupContentOffsetX: bgShape.popupContentOffsetX
     property alias popupContentOffsetY: bgShape.popupContentOffsetY
-    background: HBarWidgetShapeBackground {
-        id: bgShape
 
-        vertical: root.vertical
-        atBottom: root.atBottom
-        showPopup: root.showPopup
+    background: Item {
+        anchors {
+            top: parent.top
+            left: parent.left
+            topMargin: root.backgroundTopMargin
+            leftMargin: root.backgroundLeftMargin
+        }
+        implicitWidth: root.backgroundWidth
+        implicitHeight: root.backgroundHeight
 
-        backgroundWidth: root.backgroundWidth
-        backgroundHeight: root.backgroundHeight
-        startRadius: root.getBackgroundRadius(root.startSide)
-        endRadius: root.getBackgroundRadius(root.endSide)
+        HBarWidgetShapeBackground {
+            id: bgShape
+
+            vertical: root.vertical
+            atBottom: root.atBottom
+            showPopup: root.showPopup
+            
+            backgroundWidth: root.backgroundWidth
+            backgroundHeight: root.backgroundHeight
+            startRadius: root.getBackgroundRadius(root.startSide)
+            endRadius: root.getBackgroundRadius(root.endSide)
+        }
     }
 }

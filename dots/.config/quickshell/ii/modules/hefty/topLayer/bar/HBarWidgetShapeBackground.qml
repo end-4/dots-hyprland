@@ -27,10 +27,14 @@ Shapes.ShapeCanvas {
     required property real startRadius
     required property real endRadius
     property real baseMargin: {
+        print("calculating new base margin (vertical, parent height, container height) = ", vertical, parent.height, containerShape.height)
         if (!vertical)
-            return (parent.height - containerShape.height) / 2;
+            return parent.anchors.topMargin
         else
-            return (parent.width - containerShape.width) / 2;
+            return parent.anchors.leftMargin
+    }
+    onBaseMarginChanged: {
+        print(baseMargin)
     }
 
     property alias containerShape: containerShape
@@ -53,15 +57,15 @@ Shapes.ShapeCanvas {
     Component.onCompleted: updatePosInGlobal()
     onXChanged: updatePosInGlobal()
     onYChanged: updatePosInGlobal()
-    readonly property real minPopupXOffset: -xInGlobal + baseMargin
-    readonly property real minPopupYOffset: -yInGlobal + baseMargin
+    readonly property real minPopupXOffset: -xInGlobal
+    readonly property real minPopupYOffset: -yInGlobal
     readonly property real maxPopupXOffset: {
-        const maxPopupX = QsWindow.window.screen.width - popupWidth - baseMargin;
+        const maxPopupX = QsWindow.window.screen.width - popupWidth;
         const maxOffset = maxPopupX - xInGlobal;
         return maxOffset;
     }
     readonly property real maxPopupYOffset: {
-        const maxPopupY = QsWindow.window.screen.height - popupHeight - baseMargin;
+        const maxPopupY = QsWindow.window.screen.height - popupHeight;
         const maxOffset = maxPopupY - yInGlobal;
         return maxOffset;
     }
@@ -70,44 +74,44 @@ Shapes.ShapeCanvas {
     readonly property real popupXOffset: {
         // print("popupXOffset", popupXOffset, "lock", lockPopupX)
         if (bgShape.lockPopupX) return;
-        // if (bgShape.showPopup) lockPopupX = true;
         if (!vertical) return Math.min(Math.max(-(popupWidth - containerShape.width) / 2, minPopupXOffset), maxPopupXOffset);
         else return atBottom ? -(popupShape.width + spacing) : (containerShape.width + spacing);
+        if (bgShape.showPopup) lockPopupX = true;
     }
     onPopupXOffsetChanged: if (bgShape.showPopup) lockPopupX = true;
     readonly property real popupYOffset: {
         if (bgShape.lockPopupY) return;
-        // if (bgShape.showPopup) lockPopupY = true;
         if (!vertical) return atBottom ? -(popupShape.height + spacing) : (containerShape.height + spacing);
         else return Math.min(Math.max(-(popupHeight - containerShape.height) / 2, minPopupYOffset), maxPopupYOffset)
+        if (bgShape.showPopup) lockPopupY = true;
     }
     onPopupYOffsetChanged: if (bgShape.showPopup) lockPopupY = true;
 
     // Positioning
-    readonly property real popupContentOffsetBase: -baseMargin + popupPadding
-    readonly property real paddedContainerHeight: containerShape.height + baseMargin * 2
-    readonly property real paddedContainerWidth: containerShape.width + baseMargin * 2
+    readonly property real popupContentOffsetBase: popupPadding + baseMargin
+    readonly property real paddedContainerHeight: containerShape.height
+    readonly property real paddedContainerWidth: containerShape.width
     readonly property real popupContentOffsetY: {
-        if (!vertical) return paddedContainerHeight + spacing + popupContentOffsetBase + (atBottom ? -(popupHeight + backgroundHeight + spacing * 2) : 0)
+        if (!vertical) return paddedContainerHeight + spacing + popupContentOffsetBase + (atBottom * -(popupHeight + backgroundHeight + spacing * 2))
         else return popupYOffset + popupContentOffsetBase;
     }
     readonly property real popupContentOffsetX: {
         if (!vertical) return popupXOffset + popupContentOffsetBase;
-        else return paddedContainerWidth + spacing + popupContentOffsetBase + (atBottom ? -(popupWidth + backgroundWidth + spacing * 2) : 0);
+        else return paddedContainerWidth + spacing + popupContentOffsetBase + (atBottom * -(popupWidth + backgroundWidth + spacing * 2));
     }
 
     anchors {
         left: parent.left
         leftMargin: {
             if (!vertical) return -xOffset;
-            if (!bgShape.atBottom || !bgShape.showPopup) return baseMargin;
-            return baseMargin - popupShape.width - bgShape.spacing;
+            if (!bgShape.atBottom || !bgShape.showPopup) return 0;
+            return -popupShape.width - bgShape.spacing;
         }
         top: parent.top
         topMargin: {
             if (vertical) return -yOffset;
-            if (!bgShape.atBottom || !bgShape.showPopup) return baseMargin;
-            return baseMargin - popupShape.height - bgShape.spacing;
+            if (!bgShape.atBottom || !bgShape.showPopup) return 0;
+            return -popupShape.height - bgShape.spacing;
         }
     }
     width: {
@@ -123,10 +127,7 @@ Shapes.ShapeCanvas {
     onProgressChanged: {
         if (progress == 1) {
             popupHiding = false
-            if (showPopup) {
-                lockPopupX = true;
-                lockPopupY = true;
-            } else {
+            if (!showPopup) {
                 lockPopupX = false;
                 lockPopupY = false;
             }
