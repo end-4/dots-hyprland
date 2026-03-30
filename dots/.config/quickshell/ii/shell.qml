@@ -30,6 +30,8 @@ ShellRoot {
         Cliphist.refresh()
         Wallpapers.load()
         Updates.load()
+        Emojis.load()
+        // WallpaperSlideshow restores its own state from Config when Config becomes ready
     }
 
 

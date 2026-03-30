@@ -45,6 +45,11 @@ ApplicationWindow {
             component: "modules/settings/BackgroundConfig.qml"
         },
         {
+            name: Translation.tr("Slideshow"),
+            icon: "slideshow",
+            component: "modules/settings/WallpaperSlideshowConfig.qml"
+        },
+        {
             name: Translation.tr("Interface"),
             icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
@@ -53,6 +58,16 @@ ApplicationWindow {
             name: Translation.tr("Services"),
             icon: "settings",
             component: "modules/settings/ServicesConfig.qml"
+        },
+        {
+            name: Translation.tr("Downloader"),
+            icon: "download",
+            component: "modules/settings/YtDownloaderConfig.qml"
+        },
+        {
+            name: Translation.tr("Tools"),
+            icon: "build",
+            component: "modules/settings/ToolsConfig.qml"
         },
         {
             name: Translation.tr("Advanced"),
@@ -69,7 +84,7 @@ ApplicationWindow {
 
     visible: true
     onClosing: Qt.quit()
-    title: "illogical-impulse Settings"
+    title: "illogical-impulse Settings — Shell Configurator"
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
