@@ -7,6 +7,42 @@ All changes relative to upstream `end-4/dots-hyprland`. Entries are in **reverse
 
 ---
 
+## [NEW] Power Profile Cycling (Fn+Q)
+
+**Date:** 2026-03-30
+
+### What changed
+
+Added a **Power Profile Service** that lets you cycle between Power Saver → Balanced → Performance with **Fn+Q** (or via IPC). Shows a desktop notification on each switch. Also added a full profile selector UI to the System Settings → Power page.
+
+### Files affected
+
+#### New
+- `ii/services/PowerProfileService.qml` — Singleton with `GlobalShortcut`, `IpcHandler`, cycle/set functions, notify-send feedback
+
+#### Modified
+- `ii/modules/sysSettings/PowerSettings.qml` — Added Power Profile section with radio-style profile selector and Fn+Q tip
+- `custom/keybinds.conf` — Added `XF86Launch4` → `qs ipc call powerProfile cycle` binding
+
+### How to run
+
+```bash
+# Fn+Q on your keyboard (if XF86Launch4 maps correctly — use `wev` to check)
+# Or via IPC:
+qs ipc call powerProfile cycle
+
+# Or set directly:
+qs ipc call powerProfile set balanced
+qs ipc call powerProfile set performance
+qs ipc call powerProfile set power-saver
+
+# Requires power-profiles-daemon:
+yay -S power-profiles-daemon
+sudo systemctl enable --now power-profiles-daemon
+```
+
+---
+
 ## [NEW] System Settings App + Feature Modules
 
 **Date:** 2026-03-30
