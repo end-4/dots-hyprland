@@ -98,7 +98,7 @@ ContentPage {
             text: Translation.tr("Low battery (%)")
             value: Config.options.battery.low
             from: 5; to: 50; stepSize: 5
-            onValueChanged: { Config.options.battery.low = value }
+            onValueChanged: { Config.options.battery.low = value; Config.save() }
         }
 
         ConfigSpinBox {
@@ -106,7 +106,7 @@ ContentPage {
             text: Translation.tr("Critical battery (%)")
             value: Config.options.battery.critical
             from: 1; to: 20; stepSize: 1
-            onValueChanged: { Config.options.battery.critical = value }
+            onValueChanged: { Config.options.battery.critical = value; Config.save() }
         }
 
         ConfigSpinBox {
@@ -114,7 +114,7 @@ ContentPage {
             text: Translation.tr("Full notification threshold (%)")
             value: Config.options.battery.full
             from: 80; to: 101; stepSize: 1
-            onValueChanged: { Config.options.battery.full = value }
+            onValueChanged: { Config.options.battery.full = value; Config.save() }
             StyledToolTip { text: Translation.tr("Set to 101 to disable full-charge notification") }
         }
     }
@@ -127,7 +127,7 @@ ContentPage {
             buttonIcon: "bedtime"
             text: Translation.tr("Auto-suspend on critical battery")
             checked: Config.options.battery.automaticSuspend
-            onCheckedChanged: { Config.options.battery.automaticSuspend = checked }
+            onCheckedChanged: { Config.options.battery.automaticSuspend = checked; Config.save() }
         }
 
         ConfigSpinBox {
@@ -136,7 +136,7 @@ ContentPage {
             value: Config.options.battery.suspend
             from: 1; to: 15; stepSize: 1
             enabled: Config.options.battery.automaticSuspend
-            onValueChanged: { Config.options.battery.suspend = value }
+            onValueChanged: { Config.options.battery.suspend = value; Config.save() }
         }
     }
 
@@ -148,25 +148,25 @@ ContentPage {
             buttonIcon: "lock"
             text: Translation.tr("Use Hyprlock (instead of built-in)")
             checked: Config.options.lock.useHyprlock
-            onCheckedChanged: { Config.options.lock.useHyprlock = checked }
+            onCheckedChanged: { Config.options.lock.useHyprlock = checked; Config.save() }
         }
         ConfigSwitch {
             buttonIcon: "play_arrow"
             text: Translation.tr("Launch lock screen on startup")
             checked: Config.options.lock.launchOnStartup
-            onCheckedChanged: { Config.options.lock.launchOnStartup = checked }
+            onCheckedChanged: { Config.options.lock.launchOnStartup = checked; Config.save() }
         }
         ConfigSwitch {
             buttonIcon: "blur_on"
             text: Translation.tr("Blur background when locked")
             checked: Config.options.lock.blur.enable
-            onCheckedChanged: { Config.options.lock.blur.enable = checked }
+            onCheckedChanged: { Config.options.lock.blur.enable = checked; Config.save() }
         }
         ConfigSwitch {
             buttonIcon: "key"
             text: Translation.tr("Require password for power actions")
             checked: Config.options.lock.security.requirePasswordToPower
-            onCheckedChanged: { Config.options.lock.security.requirePasswordToPower = checked }
+            onCheckedChanged: { Config.options.lock.security.requirePasswordToPower = checked; Config.save() }
         }
     }
 }

@@ -20,7 +20,7 @@ ContentPage {
             buttonIcon: "swipe_up"
             text: Translation.tr("Faster touchpad scroll")
             checked: Config.options.interactions.scrolling.fasterTouchpadScroll
-            onCheckedChanged: { Config.options.interactions.scrolling.fasterTouchpadScroll = checked }
+            onCheckedChanged: { Config.options.interactions.scrolling.fasterTouchpadScroll = checked; Config.save() }
         }
 
         ConfigSpinBox {
@@ -28,7 +28,7 @@ ContentPage {
             text: Translation.tr("Mouse scroll delta threshold")
             value: Config.options.interactions.scrolling.mouseScrollDeltaThreshold
             from: 10; to: 500; stepSize: 10
-            onValueChanged: { Config.options.interactions.scrolling.mouseScrollDeltaThreshold = value }
+            onValueChanged: { Config.options.interactions.scrolling.mouseScrollDeltaThreshold = value; Config.save() }
             StyledToolTip { text: Translation.tr("Delta ≥ this value is detected as mouse scroll instead of touchpad") }
         }
 
@@ -37,7 +37,7 @@ ContentPage {
             text: Translation.tr("Mouse scroll factor")
             value: Config.options.interactions.scrolling.mouseScrollFactor
             from: 10; to: 500; stepSize: 10
-            onValueChanged: { Config.options.interactions.scrolling.mouseScrollFactor = value }
+            onValueChanged: { Config.options.interactions.scrolling.mouseScrollFactor = value; Config.save() }
         }
 
         ConfigSpinBox {
@@ -45,7 +45,7 @@ ContentPage {
             text: Translation.tr("Touchpad scroll factor")
             value: Config.options.interactions.scrolling.touchpadScrollFactor
             from: 50; to: 1000; stepSize: 50
-            onValueChanged: { Config.options.interactions.scrolling.touchpadScrollFactor = value }
+            onValueChanged: { Config.options.interactions.scrolling.touchpadScrollFactor = value; Config.save() }
         }
     }
 
@@ -57,7 +57,7 @@ ContentPage {
             buttonIcon: "grid_3x3"
             text: Translation.tr("Dead pixel workaround")
             checked: Config.options.interactions.deadPixelWorkaround.enable
-            onCheckedChanged: { Config.options.interactions.deadPixelWorkaround.enable = checked }
+            onCheckedChanged: { Config.options.interactions.deadPixelWorkaround.enable = checked; Config.save() }
             StyledToolTip { text: Translation.tr("Hyprland leaves 1 pixel on the right edge for interactions — enable if you experience this") }
         }
     }

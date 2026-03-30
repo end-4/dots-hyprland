@@ -3,6 +3,8 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
+import Quickshell.Hyprland
 import Quickshell.Services.UPower
 import qs.modules.common
 import qs.modules.common.functions
@@ -111,11 +113,11 @@ Singleton {
     IpcHandler {
         target: "powerProfile"
 
-        function cycle() {
+        function cycle(): void {
             root.cycle()
         }
 
-        function set(profileName) {
+        function set(profileName: string): void {
             root.setProfile(profileName)
         }
     }

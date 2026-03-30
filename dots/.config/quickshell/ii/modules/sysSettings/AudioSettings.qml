@@ -95,7 +95,7 @@ ContentPage {
             buttonIcon: "hearing"
             text: Translation.tr("Earbang protection")
             checked: Config.options.audio.protection.enable
-            onCheckedChanged: { Config.options.audio.protection.enable = checked }
+            onCheckedChanged: { Config.options.audio.protection.enable = checked; Config.save() }
             StyledToolTip { text: Translation.tr("Prevents abrupt volume increments and restricts max allowed volume") }
         }
 

@@ -51,14 +51,14 @@ ContentPage {
             Layout.fillWidth: true
             placeholderText: Translation.tr("Layout (e.g. qwerty_full)")
             text: Config.options.osk.layout
-            onTextChanged: { Qt.callLater(() => { Config.options.osk.layout = text }) }
+            onTextChanged: { Qt.callLater(() => { Config.options.osk.layout = text; Config.save() }) }
         }
 
         ConfigSwitch {
             buttonIcon: "push_pin"
             text: Translation.tr("Pinned on startup")
             checked: Config.options.osk.pinnedOnStartup
-            onCheckedChanged: { Config.options.osk.pinnedOnStartup = checked }
+            onCheckedChanged: { Config.options.osk.pinnedOnStartup = checked; Config.save() }
         }
     }
 }

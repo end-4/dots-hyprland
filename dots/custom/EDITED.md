@@ -7,6 +7,21 @@ All changes relative to upstream `end-4/dots-hyprland`. Entries are in **reverse
 
 ---
 
+## [FIX] System Settings Persistence
+
+**Date:** 2026-03-30
+
+### What changed
+
+Fixed an issue where changes made in the new System Settings app (`SystemSettings.qml`) were not being saved to `config.json` because deeply nested property modifications in QML do not trigger `JsonAdapter` update signals. Added an explicit `save()` wrapper to `Config.qml` and appended it to all input property changes.
+
+### Files affected
+
+#### Modified
+- `ii/modules/common/Config.qml` — Added an explicit `save()` function that calls `configFileView.writeAdapter()`.
+- `ii/modules/sysSettings/*.qml` (`MouseSettings`, `KeyboardSettings`, `PowerSettings`, `DisplaySettings`, `AudioSettings`, `DateTimeSettings`) — Appended `Config.save()` to the `onValueChanged`, `onCheckedChanged`, and `onTextChanged` signal handlers of all settings inputs.
+
+---
 ## [NEW] Power Profile Cycling (Fn+Q)
 
 **Date:** 2026-03-30

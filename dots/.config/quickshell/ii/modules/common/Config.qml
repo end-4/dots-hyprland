@@ -43,6 +43,10 @@ Singleton {
         obj[keys[keys.length - 1]] = convertedValue;
     }
 
+    function save() {
+        configFileView.writeAdapter()
+    }
+
     Timer {
         id: fileReloadTimer
         interval: root.readWriteDelay

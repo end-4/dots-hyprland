@@ -137,7 +137,7 @@ ContentPage {
             buttonIcon: "check"
             text: Translation.tr("Automatic (sunset/sunrise)")
             checked: Config.options.light.night.automatic
-            onCheckedChanged: { Config.options.light.night.automatic = checked }
+            onCheckedChanged: { Config.options.light.night.automatic = checked; Config.save() }
         }
 
         ConfigRow {
@@ -147,13 +147,13 @@ ContentPage {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("From (HH:MM)")
                 text: Config.options.light.night.from
-                onTextChanged: { Qt.callLater(() => { Config.options.light.night.from = text }) }
+                onTextChanged: { Qt.callLater(() => { Config.options.light.night.from = text; Config.save() }) }
             }
             MaterialTextArea {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("To (HH:MM)")
                 text: Config.options.light.night.to
-                onTextChanged: { Qt.callLater(() => { Config.options.light.night.to = text }) }
+                onTextChanged: { Qt.callLater(() => { Config.options.light.night.to = text; Config.save() }) }
             }
         }
 
@@ -162,7 +162,7 @@ ContentPage {
             text: Translation.tr("Color temperature (K)")
             value: Config.options.light.night.colorTemperature
             from: 1000; to: 6500; stepSize: 100
-            onValueChanged: { Config.options.light.night.colorTemperature = value }
+            onValueChanged: { Config.options.light.night.colorTemperature = value; Config.save() }
         }
     }
 }

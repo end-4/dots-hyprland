@@ -53,10 +53,10 @@ Singleton {
         }
     }
 
-    on downloadPathChanged: _saveConfig()
-    on qualityChanged:      _saveConfig()
-    on formatChanged:       _saveConfig()
-    on addMetadataChanged:  _saveConfig()
+    onDownloadPathChanged: _saveConfig()
+    onQualityChanged:      _saveConfig()
+    onFormatChanged:       _saveConfig()
+    onAddMetadataChanged:  _saveConfig()
 
     // ── Build yt-dlp command ──────────────────────────────────────────────
     function _buildCommand(url, itemId) {

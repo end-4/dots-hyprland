@@ -33,7 +33,7 @@ Singleton {
         when: Config.ready
         value: Config.options.wallpaperSlideshow?.enabled ?? false
     }
-    on enabledChanged: {
+    onEnabledChanged: {
         if (Config.ready) Config.options.wallpaperSlideshow.enabled = root.enabled
         if (root.enabled) {
             slideshowTimer.restart()
@@ -52,7 +52,7 @@ Singleton {
         when: Config.ready
         value: Config.options.wallpaperSlideshow?.intervalMinutes ?? 5
     }
-    on intervalMinutesChanged: {
+    onIntervalMinutesChanged: {
         if (Config.ready) Config.options.wallpaperSlideshow.intervalMinutes = root.intervalMinutes
         slideshowTimer.interval = root.intervalMinutes * 60 * 1000
         root.secondsRemaining = root.intervalMinutes * 60
@@ -63,7 +63,7 @@ Singleton {
         when: Config.ready
         value: Config.options.wallpaperSlideshow?.folder ?? (FileUtils.trimFileProtocol(Directories.pictures) + "/Wallpapers")
     }
-    on folderChanged: {
+    onFolderChanged: {
         if (Config.ready) Config.options.wallpaperSlideshow.folder = root.folder
         Wallpapers.setDirectory(root.folder)
     }
