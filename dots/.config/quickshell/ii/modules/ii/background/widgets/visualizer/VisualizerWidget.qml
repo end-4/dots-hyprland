@@ -159,8 +159,18 @@ PinnedWidget {
 
             ctx.fillStyle = root.waveFillColor;
             ctx.fill();
-
+            
             if (root.config.waveBorderWidth > 0) {
+                ctx.beginPath();
+                ctx.moveTo(0, h - ph[0]);
+                for (let i = 0; i < ph.length - 1; i++) {
+                    let x1 = i * step;
+                    let x2 = (i + 1) * step;
+                    let y1 = h - ph[i];
+                    let y2 = h - ph[i + 1];
+                    let cx = (x1 + x2) / 2;
+                    ctx.bezierCurveTo(cx, y1, cx, y2, x2, y2);
+                }
                 ctx.strokeStyle = root.primaryColor;
                 ctx.lineWidth = root.config.waveBorderWidth;
                 ctx.lineCap = "round"; ctx.lineJoin = "round";
