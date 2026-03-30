@@ -88,7 +88,7 @@ Singleton {
 
     function load() {
         root.startHyprsunset();
-        updateHyprsunset.restart();
+        root.ensureState();
     }
 
     Timer {
