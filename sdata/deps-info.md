@@ -219,6 +219,11 @@ Extra dependencies.
 - `kirigami`
 - `kdialog`
 - `syntax-highlighting`
+- `vulkan-headers`
+- `libdrm`
+- `cpptrace`
+- `jemalloc`
+- `mesa`
 
 ## illogical-impulse-bibata-modern-classic-bin
 - [source](https://github.com/ful1e5/Bibata_Cursor)
