@@ -127,7 +127,7 @@ viewswitcher button:hover {
 }
 
 #NautilusPathBar #NautilusPathButton {
-	background: @secondary_sidebar_bg_color;
+	background: @accent_active_color;
 	border-radius: 4px;
 	margin: 0;
 	margin-right: 2px;
@@ -135,10 +135,6 @@ viewswitcher button:hover {
 
 #NautilusPathBar #NautilusPathButton:hover {
 	background: @accent_hover_color;
-}
-
-#NautilusPathBar #NautilusPathButton:active {
-	background: @accent_active_color;
 }
 
 #NautilusPathBar {
@@ -154,13 +150,11 @@ viewswitcher button:hover {
 }
 
 #NautilusPathBar #NautilusPathButton.current-dir.current-dir {
-	background: @accent_active_color;
 	border-radius: 999px;
 }
 
-#NautilusPathBar #NautilusPathButton.current-dir.current-dir * {
+#NautilusPathBar #NautilusPathButton * {
 	color: @sidebar_row_active_fg_color;
-	opacity: 1;
 }
 
 #NautilusPathBar .dim-label {
@@ -331,21 +325,21 @@ toast * {
     padding-bottom: 0;
 }
 
-tabbox, tabboxchild {
+tabbox {
 	padding: 0;
 }
 
 tabbox tabboxchild tab, tabbox tabboxchild {
 	background: transparent;
-	padding: 0;
-	border-radius: 0px;
+	padding: 0 8px 3px;
+	border-radius: 999px;
 }
 
 tab:hover {
 	background: @accent_hover_color;
 }
 
-tab:active {
+tab:active, tab:selected {
 	background: @accent_active_color;
 }
 
@@ -358,12 +352,11 @@ tab:hover .tab-title {
 }
 
 tab .tab-title label {
-	border-bottom: transparent 3px solid;
+border: none;
 	font-weight: 500;
 }
 
 tab:selected .tab-title label {
-	padding: 10px 0;
-	border-bottom-color: @accent_color;
+	padding: 6px 0;
 	color: @accent_color;
 }
