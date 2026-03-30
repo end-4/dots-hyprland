@@ -154,13 +154,12 @@ viewswitcher button:hover {
 }
 
 #NautilusPathBar #NautilusPathButton.current-dir.current-dir {
-	background: @accent_bg_color;
-	color: @accent_fg_color;
+	background: @accent_active_color;
 	border-radius: 999px;
 }
 
 #NautilusPathBar #NautilusPathButton.current-dir.current-dir * {
-	color: @accent_fg_color;
+	color: @sidebar_row_active_fg_color;
 	opacity: 1;
 }
 
