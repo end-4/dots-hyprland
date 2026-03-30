@@ -326,3 +326,44 @@ toast * {
 	font-weight: 400;
 	font-size: 12px;
 }
+
+.collapse-spacing.vertical {
+    padding-bottom: 0;
+}
+
+tabbox, tabboxchild {
+	padding: 0;
+}
+
+tabbox tabboxchild tab, tabbox tabboxchild {
+	background: transparent;
+	padding: 0;
+	border-radius: 0px;
+}
+
+tab:hover {
+	background: @accent_hover_color;
+}
+
+tab:active {
+	background: @accent_active_color;
+}
+
+tab .tab-title {
+	padding: 0 12px;
+	color: @secondary_sidebar_fg_color;
+}
+
+tab:hover .tab-title {
+}
+
+tab .tab-title label {
+	border-bottom: transparent 3px solid;
+	font-weight: 500;
+}
+
+tab:selected .tab-title label {
+	padding: 10px 0;
+	border-bottom-color: @accent_color;
+	color: @accent_color;
+}
