@@ -52,7 +52,6 @@ v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/packag
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
-v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
@@ -66,3 +65,5 @@ for i in "${metapkgs[@]}"; do
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
 	v sudo emerge --update --quiet app-misc/${i}
 done
+
+v sudo emerge --depclean
