@@ -232,6 +232,11 @@ Extra dependencies.
 - `kirigami`
 - `kdialog`
 - `syntax-highlighting`
+- `vulkan-headers`
+- `libdrm`
+- `cpptrace`
+- `jemalloc`
+- `mesa`
 
 ## illogical-impulse-bibata-modern-classic-bin
 
@@ -242,24 +247,3 @@ Extra dependencies.
 
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
-
-## illogical-impulse-oneui4-icons-git
-
-- [source](https://github.com/end-4/OneUI4-Icons)
-- Customed version of normal oneui4-icons.
-
-## illogical-impulse-productivity
-
-- Focus Mode and Digital Wellbeing features for productivity and health
-- **Focus Mode**: Temporarily blocks distracting applications
-- **Digital Wellbeing**: Tracks application usage and provides eye care/break reminders
-- Dependencies:
-  - `python` - For tracking service
-  - `python-gobject` - GTK bindings for GUI
-  - `gtk3` - GUI toolkit
-  - `jq` - JSON processing for window queries
-  - `libnotify` - Desktop notifications
-  - `sqlite` - Database for usage tracking
-  - `libpulse` - Audio notifications (optional)
-- Scripts located in `~/.config/hypr/productivity/`
-- See `PRODUCTIVITY_FEATURES.md` for full documentation

@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Pipewire
+import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -20,19 +21,62 @@ Item {
         anchors.fill: parent
         spacing: 6
 
-        Image {
+        MouseArea {
             property real size: 36
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: source != ""
-            sourceSize.width: size
-            sourceSize.height: size
-            source: {
-                let icon;
-                icon = AppSearch.guessIcon(root.node?.properties["application.icon-name"] ?? "");
-                if (AppSearch.iconExists(icon))
+            Layout.preferredWidth: size
+            Layout.preferredHeight: size
+
+            cursorShape: Qt.PointingHandCursor
+            onClicked: root.node.audio.muted = !root.node.audio.muted
+
+            hoverEnabled: true
+            property bool hovered: containsMouse
+            StyledToolTip {
+                text: root.node?.audio.muted ? Translation.tr("Click to unmute") : Translation.tr("Click to mute")
+            }
+
+            Image {
+                id: iconImg
+                anchors.fill: parent
+                visible: false
+                sourceSize.width: parent.size
+                sourceSize.height: parent.size
+                source: {
+                    let icon;
+                    icon = AppSearch.guessIcon(root.node?.properties["application.icon-name"] ?? "");
+                    if (AppSearch.iconExists(icon))
+                        return Quickshell.iconPath(icon, "image-missing");
+                    icon = AppSearch.guessIcon(root.node?.properties["node.name"] ?? "");
                     return Quickshell.iconPath(icon, "image-missing");
-                icon = AppSearch.guessIcon(root.node?.properties["node.name"] ?? "");
-                return Quickshell.iconPath(icon, "image-missing");
+                }
+            }
+
+            Desaturate {
+                anchors.fill: iconImg
+                source: iconImg
+                desaturation: root.node?.audio.muted ? 1.0 : 0.0
+                visible: iconImg.source !== ""
+                opacity: root.node?.audio.muted ? 0.4 : 1.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 150
+                    }
+                }
+                Behavior on desaturation {
+                    NumberAnimation {
+                        duration: 150
+                    }
+                }
+            }
+
+            MaterialSymbol {
+                anchors.centerIn: parent
+                visible: root.node?.audio.muted ?? false
+                text: root.node?.isSink ? "volume_off" : "mic_off"
+                iconSize: 22
+                color: Appearance.colors.colOnLayer1
             }
         }
 
