@@ -291,6 +291,7 @@ PanelWindow {
         Quickshell.execDetached(command);
         if (root.action == RegionSelection.SnipAction.Record || root.action == RegionSelection.SnipAction.RecordWithSound) {
             root.phase = RegionSelection.Phase.Post
+            root.selectionMode = RegionSelection.SelectionMode.RectCorners
         } else {
             root.dismiss();
         }
