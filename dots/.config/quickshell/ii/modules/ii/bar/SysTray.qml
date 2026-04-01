@@ -29,6 +29,11 @@ Item {
     }
 
     function setExtraWindowAndGrabFocus(window) {
+        if (root.activeMenu && root.activeMenu !== window) {
+            if (typeof root.activeMenu.close === "function")
+                root.activeMenu.close();
+            root.activeMenu = null;
+        }
         root.activeMenu = window;
         root.grabFocus();
     }

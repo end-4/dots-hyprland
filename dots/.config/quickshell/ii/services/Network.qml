@@ -38,13 +38,13 @@ Singleton {
     property int networkStrength
     property string materialSymbol: root.ethernet
         ? "lan"
-        : root.wifiEnabled
+        : (root.wifiEnabled && root.wifiStatus === "connected")
             ? (
-                Network.networkStrength > 83 ? "signal_wifi_4_bar" :
-                Network.networkStrength > 67 ? "network_wifi" :
-                Network.networkStrength > 50 ? "network_wifi_3_bar" :
-                Network.networkStrength > 33 ? "network_wifi_2_bar" :
-                Network.networkStrength > 17 ? "network_wifi_1_bar" :
+                (root.active?.strength ?? 0) > 83 ? "signal_wifi_4_bar" :
+                (root.active?.strength ?? 0) > 67 ? "network_wifi" :
+                (root.active?.strength ?? 0) > 50 ? "network_wifi_3_bar" :
+                (root.active?.strength ?? 0) > 33 ? "network_wifi_2_bar" :
+                (root.active?.strength ?? 0) > 17 ? "network_wifi_1_bar" :
                 "signal_wifi_0_bar"
             )
             : (root.wifiStatus === "connecting")
@@ -238,7 +238,7 @@ Singleton {
     Process {
         id: updateNetworkStrength
         running: true
-        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\*/{if (NR!=1) {print $2}}'"]
+        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\\*/{if (NR!=1) {print $2}}'"]
         stdout: SplitParser {
             onRead: data => {
                 root.networkStrength = parseInt(data);
