@@ -49,6 +49,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	rm -rf "${ED}/usr/$(get_libdir)/cmake" || die
 }
 
