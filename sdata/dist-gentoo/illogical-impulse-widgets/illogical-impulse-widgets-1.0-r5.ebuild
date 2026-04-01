@@ -18,7 +18,7 @@ RDEPEND="
 	gui-apps/hypridle
 	gui-apps/hyprlock
 	gui-apps/hyprpicker
-	app-misc/songrec
+	media-sound/songrec
 	app-i18n/translate-shell
 	gui-apps/wlogout
 	sci-libs/libqalculate
