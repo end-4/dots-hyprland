@@ -18,7 +18,7 @@ QuickToggleModel {
     statusText: root.toggled ? Translation.tr("Connected") : Translation.tr("Disconnected")
     tooltipText: Translation.tr("VPN · %1").arg(vpnName)
 
-    available: _conn !== null
+    available: _conn !== null && Vpn.nmRunning
     toggled: _conn?.active ?? false
 
     mainAction: () => {

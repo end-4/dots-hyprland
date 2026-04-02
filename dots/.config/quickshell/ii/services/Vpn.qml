@@ -14,6 +14,7 @@ Singleton {
     id: root
 
     property var connections: []
+    property bool nmRunning: true
 
     readonly property bool enabled: Config.ready && Config.options.sidebar.quickToggles.enableVpnToggles
 
@@ -22,6 +23,7 @@ Singleton {
             scanProcess.running = true
         } else {
             scanProcess.running = false
+            retryTimer.stop()
             root.connections = []
         }
     }
@@ -39,6 +41,26 @@ Singleton {
         }
     }
 
+    // When a scan returns 0 VPN connections but we previously had some,
+    // NetworkManager likely just restarted and hasn't re-registered
+    // connections yet. Retry a few times with a delay.
+    Timer {
+        id: retryTimer
+        property int retries: 0
+        interval: 1500
+        repeat: true
+        onTriggered: {
+            scanProcess.running = true
+            retries++
+            if (retries >= 5) {
+                // NM is not coming back — accept it's down
+                stop()
+                root.nmRunning = false
+                root.connections = root.connections.map(c => ({ name: c.name, connectionType: c.connectionType, active: false }))
+            }
+        }
+    }
+
     // List all connections and their current state in one pass.
     // Parse from the end of each line so colons inside connection names
     // (which nmcli escapes as \:) don't break the split.
@@ -47,6 +69,13 @@ Singleton {
         running: root.enabled
         command: ["nmcli", "-t", "-f", "NAME,TYPE,STATE", "connection", "show"]
         environment: ({ LANG: "C", LC_ALL: "C" })
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                // nmcli failed — NM is not running
+                root.nmRunning = false
+                root.connections = root.connections.map(c => ({ name: c.name, connectionType: c.connectionType, active: false }))
+            }
+        }
         stdout: StdioCollector {
             onStreamFinished: {
                 const newConns = []
@@ -63,7 +92,17 @@ Singleton {
                         newConns.push({ name, connectionType: connType, active: state === "activated" })
                     }
                 }
-                root.connections = newConns
+                if (newConns.length === 0 && root.connections.length > 0) {
+                    // NM likely restarting — keep old connections and retry
+                    if (!retryTimer.running) {
+                        retryTimer.retries = 0
+                        retryTimer.start()
+                    }
+                } else {
+                    retryTimer.stop()
+                    root.nmRunning = true
+                    root.connections = newConns
+                }
             }
         }
     }
