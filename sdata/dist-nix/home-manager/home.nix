@@ -128,10 +128,6 @@ quickshell, home_attrs, ... }:
       # TODO: Not available as nixpkg
 
 
-      ### illogical-impulse-oneui4-icons-git
-      # TODO: Customed version of normal oneui4-icons, need to make a package
-
-
       ### illogical-impulse-portal
       #xdg-desktop-portal (Included elsewhere)
       #xdg-desktop-portal-kde (Included elsewhere)
