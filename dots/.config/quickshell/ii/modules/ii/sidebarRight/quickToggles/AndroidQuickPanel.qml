@@ -32,9 +32,24 @@ AbstractQuickPanel {
     readonly property list<string> availableToggleTypes: ["network", "bluetooth", "idleInhibitor", "easyEffects", "nightLight", "darkMode", "cloudflareWarp", "gameMode", "screenSnip", "colorPicker", "onScreenKeyboard", "mic", "audio", "notifications", "powerProfile","musicRecognition", "antiFlashbang"]
     readonly property int columns: Config.options.sidebar.quickToggles.android.columns
     readonly property list<var> toggles: Config.ready ? Config.options.sidebar.quickToggles.android.toggles : []
-    readonly property list<var> toggleRows: toggleRowsForList(toggles)
+    // Filter out ghost items (config entries with types that have no matching delegate).
+    // Each entry carries its original config-array index so edit operations can target
+    // the right slot even when ghosts are interspersed.
+    readonly property list<var> validToggles: {
+        const result = []
+        const seen = new Set()
+        for (let i = 0; i < toggles.length; i++) {
+            const t = toggles[i]
+            if (t && availableToggleTypes.includes(t.type) && !seen.has(t.type)) {
+                result.push({ type: t.type, size: t.size, _configIndex: i })
+                seen.add(t.type)
+            }
+        }
+        return result
+    }
+    readonly property list<var> toggleRows: toggleRowsForList(validToggles)
     readonly property list<var> unusedToggles: {
-        const types = availableToggleTypes.filter(type => !toggles.some(toggle => (toggle && toggle.type === type)))
+        const types = availableToggleTypes.filter(type => !validToggles.some(toggle => toggle.type === type))
         return types.map(type => { return { type: type, size: 1 } })
     }
     readonly property list<var> unusedToggleRows: toggleRowsForList(unusedToggles)
@@ -57,26 +72,38 @@ AbstractQuickPanel {
         for (let c = 0; c < row.length; c++) {
             accumulated += row[c].size * stride
             // Drop target switches at the midpoint of the gap between buttons
-            if (x < accumulated - root.spacing / 2 || c === row.length - 1) return flatStart + c
+            if (x < accumulated - root.spacing / 2) return flatStart + c
         }
-        return flatStart + row.length - 1
+        return -1  // Click is in empty space past all buttons in this row
+    }
+
+    // Map a visual flat index (into validToggles) to the real config-array index.
+    function configIndexAt(visualIndex) {
+        if (visualIndex < 0 || visualIndex >= validToggles.length) return -1
+        return validToggles[visualIndex]._configIndex
     }
 
     function swapToggles(fromIdx, toIdx) {
+        const fromConfig = configIndexAt(fromIdx)
+        const toConfig   = configIndexAt(toIdx)
+        if (fromConfig < 0 || toConfig < 0) return
         const list = Config.options.sidebar.quickToggles.android.toggles
-        const temp = list[fromIdx]
-        list[fromIdx] = list[toIdx]
-        list[toIdx] = temp
+        const temp = list[fromConfig]
+        list[fromConfig] = list[toConfig]
+        list[toConfig] = temp
     }
 
     function removeToggleAt(index) {
-        Config.options.sidebar.quickToggles.android.toggles.splice(index, 1)
+        const configIdx = configIndexAt(index)
+        if (configIdx < 0) return
+        Config.options.sidebar.quickToggles.android.toggles.splice(configIdx, 1)
     }
 
     function resizeToggleAt(index) {
+        const configIdx = configIndexAt(index)
+        if (configIdx < 0) return
         const list = Config.options.sidebar.quickToggles.android.toggles
-        if (index < 0 || index >= list.length) return
-        list[index] = { type: list[index].type, size: 3 - list[index].size }
+        list[configIdx] = { type: list[configIdx].type, size: 3 - list[configIdx].size }
     }
 
     function toggleRowsForList(togglesList) {
@@ -202,7 +229,7 @@ AbstractQuickPanel {
         }
     }
 
-    // ── Edit-mode drag overlay ───────────────────────────────────────────────
+    // Edit-mode drag overlay
     // Direct child of root so it floats above contentItem (z:100).
     // Positioned to exactly cover usedRows in root's coordinate space:
     //   contentItem has margins=root.padding, usedRows is contentItem's first child.
@@ -218,6 +245,7 @@ AbstractQuickPanel {
         height: usedRows.height
         visible: root.editMode
         enabled: root.editMode
+        acceptedButtons: Qt.AllButtons
         hoverEnabled: true
         cursorShape: root.dragIndex >= 0 ? Qt.ClosedHandCursor : Qt.OpenHandCursor
 

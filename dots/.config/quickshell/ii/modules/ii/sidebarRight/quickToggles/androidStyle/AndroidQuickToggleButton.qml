@@ -43,16 +43,19 @@ GroupButton {
     enableImplicitWidthAnimation: !editMode && root.mouseArea.containsMouse
     enableImplicitHeightAnimation: !editMode && root.mouseArea.containsMouse
     Behavior on baseWidth {
+        enabled: !root.editMode
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
     Behavior on baseHeight {
+        enabled: !root.editMode
         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
     }
-    opacity: 0
+    opacity: editMode ? 1 : 0
     Component.onCompleted: {
         opacity = 1
     }
     Behavior on opacity {
+        enabled: !root.editMode
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
