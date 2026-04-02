@@ -21,7 +21,7 @@ secrets_owner=$(busctl --user get-property org.freedesktop.secrets \
     /org/freedesktop/secrets org.freedesktop.DBus.Peer GetMachineId 2>/dev/null)
 
 # Only use the gnome-keyring-daemon unlock flow if it's the active provider
-if pgrep -u "$(whoami)" -x gnome-keyring-daemon &>/dev/null; then
+if pgrep -u "$(whoami)" -f gnome-keyring-daemon &>/dev/null; then
     killall -q -u "$(whoami)" gnome-keyring-daemon
     eval $(echo -n "${UNLOCK_PASSWORD}" \
                | gnome-keyring-daemon --daemonize --login \
