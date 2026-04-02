@@ -16,7 +16,7 @@ LockScreen {
 
     Timer {
         id: restoreTimer
-        interval: 150
+        interval: 0
         repeat: false
         onTriggered: {
             var primaryName = Quickshell.primaryScreen?.name
@@ -31,6 +31,9 @@ LockScreen {
                 batch += "dispatch focusmonitor " + screenName + "; "
 
                 if (saved.special) {
+                    if (saved.id !== undefined) {
+                        batch += "dispatch workspace " + saved.id + "; "
+                    }
                     batch += "dispatch togglespecialworkspace " + saved.special + "; "
                 } else if (saved.id !== undefined) {
                     batch += "dispatch workspace " + saved.id + "; "
@@ -50,7 +53,9 @@ LockScreen {
             }
 
             if (batch.length > 0) {
-                Quickshell.execDetached(["hyprctl", "--batch", batch + "reload"])
+                // Revert lock-time workspace animation tweak without a full config reload
+                batch += "keyword animation workspaces,1,7,menu_decel,slide; "
+                Quickshell.execDetached(["hyprctl", "--batch", batch])
             }
         }
     }
@@ -80,9 +85,17 @@ LockScreen {
             var wsId = Math.max(1, mData.activeWorkspace.id ?? 1)
             var wsName = mData.activeWorkspace.name ?? ""
 
-            // Detect special workspace (Hyprland uses "special:<name>")
             var special = null
-            if (wsName.startsWith("special:")) {
+            var sw = mData.specialWorkspace
+            var swId = sw?.id ?? 0
+            var swName = sw?.name ?? ""
+            if (swId < 0 && swName !== "") {
+                if (String(swName).startsWith("special:")) {
+                    special = String(swName).substring(8)
+                } else {
+                    special = String(swName)
+                }
+            } else if (wsName.startsWith("special:")) {
                 special = wsName.substring(8)
             }
 
