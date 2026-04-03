@@ -528,28 +528,12 @@ PanelWindow {
                 }
                 onDismiss: root.dismiss();
             }
-            Item {
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                }
-                implicitWidth: closeFab.implicitWidth
-                implicitHeight: closeFab.implicitHeight
-                StyledRectangularShadow {
-                    target: closeFab
-                    radius: closeFab.buttonRadius
-                }
-                FloatingActionButton {
-                    id: closeFab
-                    baseSize: 48
-                    iconText: "close"
-                    onClicked: root.dismiss();
-                    StyledToolTip {
-                        text: Translation.tr("Close")
-                    }
-                    colBackground: Appearance.colors.colTertiaryContainer
-                    colBackgroundHover: Appearance.colors.colTertiaryContainerHover
-                    colRipple: Appearance.colors.colTertiaryContainerActive
-                    colOnBackground: Appearance.colors.colOnTertiaryContainer
+            ToolbarPairedFab {
+                anchors.verticalCenter: parent.verticalCenter
+                iconText: "close"
+                onClicked: root.dismiss();
+                StyledToolTip {
+                    text: Translation.tr("Close")
                 }
             }
         }
