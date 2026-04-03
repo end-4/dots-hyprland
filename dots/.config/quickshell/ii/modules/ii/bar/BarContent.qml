@@ -154,6 +154,15 @@ Item { // Bar content region
             visible: Config.options?.bar.borderless
         }
 
+        OrbitbarButton {
+            anchors.verticalCenter: parent.verticalCenter
+            visible: true
+        }
+
+        VerticalBarSeparator {
+            visible: Config.options?.bar.borderless
+        }
+
         MouseArea {
             id: rightCenterGroup
             anchors.verticalCenter: parent.verticalCenter

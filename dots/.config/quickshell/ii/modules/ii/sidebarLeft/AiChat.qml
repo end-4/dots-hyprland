@@ -16,6 +16,14 @@ Item {
     property real padding: 4
     property var inputField: messageInputField
     property string commandPrefix: "/"
+    readonly property var quickStartLines: [
+        Translation.tr("/model to switch between Codex, Gemini, Claude, Kimi Code, and Kimi API"),
+        Translation.tr("/cwd to choose the current project for CLI providers"),
+        Translation.tr("/key only when Kimi API is selected"),
+        Translation.tr("Ctrl+O to expand sidebar"),
+        Translation.tr("Ctrl+P to pin sidebar"),
+        Translation.tr("Ctrl+D to detach sidebar"),
+    ]
 
     property var suggestionQuery: ""
     property var suggestionList: []
@@ -44,33 +52,10 @@ Item {
 
     property var allCommands: [
         {
-            name: "attach",
-            description: Translation.tr("Attach a file. Only works with Gemini."),
-            execute: args => {
-                Ai.attachFile(args.join(" ").trim());
-            }
-        },
-        {
             name: "model",
             description: Translation.tr("Choose model"),
             execute: args => {
                 Ai.setModel(args[0]);
-            }
-        },
-        {
-            name: "tool",
-            description: Translation.tr("Set the tool to use for the model."),
-            execute: args => {
-                // console.log(args)
-                if (args.length == 0 || args[0] == "get") {
-                    Ai.addMessage(Translation.tr("Usage: %1tool TOOL_NAME").arg(root.commandPrefix), Ai.interfaceRole);
-                } else {
-                    const tool = args[0];
-                    const switched = Ai.setTool(tool);
-                    if (switched) {
-                        Ai.addMessage(Translation.tr("Tool set to: %1").arg(tool), Ai.interfaceRole);
-                    }
-                }
             }
         },
         {
@@ -86,13 +71,24 @@ Item {
         },
         {
             name: "key",
-            description: Translation.tr("Set API key"),
+            description: Translation.tr("Set API key for Kimi API"),
             execute: args => {
                 if (args[0] == "get") {
                     Ai.printApiKey();
                 } else {
                     Ai.setApiKey(args[0]);
                 }
+            }
+        },
+        {
+            name: "cwd",
+            description: Translation.tr("Get or set the current CLI workspace"),
+            execute: args => {
+                if (args.length === 0 || args[0] === "get") {
+                    Ai.printWorkspacePath();
+                    return;
+                }
+                Ai.setWorkspacePath(args.join(" "));
             }
         },
         {
@@ -128,7 +124,7 @@ Item {
         },
         {
             name: "temp",
-            description: Translation.tr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
+            description: Translation.tr("Set temperature (randomness) of the model. Default is 0.5."),
             execute: args => {
                 // console.log(args)
                 if (args.length == 0 || args[0] == "get") {
@@ -324,11 +320,14 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     spacing: 10
 
                     StatusItem {
+                        visible: Ai.getModel().requires_key
                         icon: Ai.currentModelHasApiKey ? "key" : "key_off"
                         statusText: ""
-                        description: Ai.currentModelHasApiKey ? Translation.tr("API key is set\nChange with /key YOUR_API_KEY") : Translation.tr("No API key\nSet it with /key YOUR_API_KEY")
+                        description: Ai.currentModelHasApiKey ? Translation.tr("API key is set for %1\nChange with /key YOUR_API_KEY").arg(Ai.getModel().name) : Translation.tr("No API key for %1\nSet it with /key YOUR_API_KEY").arg(Ai.getModel().name)
                     }
-                    StatusSeparator {}
+                    StatusSeparator {
+                        visible: Ai.getModel().requires_key
+                    }
                     StatusItem {
                         icon: "device_thermostat"
                         statusText: Ai.temperature.toFixed(1)
@@ -393,13 +392,78 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
             }
 
-            PagePlaceholder {
+            ColumnLayout {
                 z: 2
-                shown: Ai.messageIDs.length === 0
-                icon: "neurology"
-                title: Translation.tr("Large language models")
-                description: Translation.tr("Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar")
-                shape: MaterialShape.Shape.PixelCircle
+                anchors.centerIn: parent
+                width: Math.min(parent.width - 28, 360)
+                spacing: 10
+                visible: Ai.messageIDs.length === 0
+
+                MaterialShapeWrappedMaterialSymbol {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "neurology"
+                    shape: MaterialShape.Shape.PixelCircle
+                    padding: 12
+                    iconSize: 56
+                }
+
+                StyledText {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: Translation.tr("CLI-first AI")
+                    font {
+                        family: Appearance.font.family.title
+                        pixelSize: Appearance.font.pixelSize.larger
+                        variableAxes: Appearance.font.variableAxes.title
+                    }
+                    color: Appearance.m3colors.m3outline
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    color: Appearance.colors.colLayer2
+                    radius: Appearance.rounding.normal
+                    implicitHeight: quickStartColumn.implicitHeight + 12 * 2
+
+                    ColumnLayout {
+                        id: quickStartColumn
+                        anchors {
+                            fill: parent
+                            margins: 12
+                        }
+                        spacing: 6
+
+                        StyledText {
+                            text: Translation.tr("Quick start")
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: Appearance.colors.colSubtext
+                        }
+
+                        Repeater {
+                            model: root.quickStartLines
+                            delegate: RowLayout {
+                                required property string modelData
+                                Layout.fillWidth: true
+                                spacing: 6
+
+                                MaterialSymbol {
+                                    text: "chevron_right"
+                                    iconSize: Appearance.font.pixelSize.normal
+                                    color: Appearance.colors.colSubtext
+                                    Layout.alignment: Qt.AlignTop
+                                }
+
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    text: modelData
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colOnLayer2
+                                    wrapMode: Text.Wrap
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             ScrollToBottomButton {
@@ -547,7 +611,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 });
                             } else if (messageInputField.text.startsWith(`${root.commandPrefix}prompt`)) {
                                 root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
-                                const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.promptFiles.map(file => {
+                const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.promptFiles.map(file => {
                                     return {
                                         name: Fuzzy.prepare(file),
                                         obj: file
@@ -563,6 +627,24 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                         description: Translation.tr("Load prompt from %1").arg(file.target)
                                     };
                                 });
+                            } else if (messageInputField.text.startsWith(`${root.commandPrefix}cwd`)) {
+                                const currentWords = messageInputField.text.trim().split(/\s+/);
+                                const query = currentWords.length > 1 ? currentWords.slice(1).join(" ") : "";
+                                root.suggestionQuery = query;
+                                root.suggestionList = [
+                                    {
+                                        name: `${root.commandPrefix}cwd get`,
+                                        description: Translation.tr("Show the current workspace used by the selected CLI provider")
+                                    },
+                                    {
+                                        name: `${root.commandPrefix}cwd ${Ai.currentWorkspacePath()}`,
+                                        description: Translation.tr("Reuse the current workspace path")
+                                    },
+                                    {
+                                        name: `${root.commandPrefix}cwd ${FileUtils.trimFileProtocol(Directories.home)}`,
+                                        description: Translation.tr("Set workspace back to your home directory")
+                                    },
+                                ].filter(item => query.length === 0 || item.name.toLowerCase().includes(query.toLowerCase()));
                             } else if (messageInputField.text.startsWith(`${root.commandPrefix}save`)) {
                                 root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
                                 const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.savedChats.map(file => {
@@ -599,25 +681,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                         name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "load ") : ""}${chatName}`,
                                         displayName: `${chatName}`,
                                         description: Translation.tr(`Load chat from %1`).arg(file.target)
-                                    };
-                                });
-                            } else if (messageInputField.text.startsWith(`${root.commandPrefix}tool`)) {
-                                root.suggestionQuery = messageInputField.text.split(" ")[1] ?? "";
-                                const toolResults = Fuzzy.go(root.suggestionQuery, Ai.availableTools.map(tool => {
-                                    return {
-                                        name: Fuzzy.prepare(tool),
-                                        obj: tool
-                                    };
-                                }), {
-                                    all: true,
-                                    key: "name"
-                                });
-                                root.suggestionList = toolResults.map(tool => {
-                                    const toolName = tool.target;
-                                    return {
-                                        name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "tool ") : ""}${tool.target}`,
-                                        displayName: toolName,
-                                        description: Ai.toolDescriptions[toolName]
                                     };
                                 });
                             } else if (messageInputField.text.startsWith(root.commandPrefix)) {
@@ -750,14 +813,25 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     // Model indicator
                     icon: "api"
                     text: Ai.getModel().name
+                    maxTextWidth: 110
                     tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
                 }
 
                 ApiInputBoxIndicator {
-                    // Tool indicator
-                    icon: "service_toolbox"
-                    text: Ai.currentTool.charAt(0).toUpperCase() + Ai.currentTool.slice(1)
-                    tooltipText: Translation.tr("Current tool: %1\nSet it with %2tool TOOL").arg(Ai.currentTool).arg(root.commandPrefix)
+                    icon: Ai.getModel().requires_key ? "cloud" : "terminal"
+                    text: Ai.getModel().requires_key ? Translation.tr("API") : Translation.tr("CLI")
+                    maxTextWidth: 38
+                    tooltipText: Ai.getModel().requires_key
+                        ? Translation.tr("Kimi API is the only retained network-backed provider.")
+                        : Translation.tr("This model runs through a local CLI wrapper.")
+                }
+
+                ApiInputBoxIndicator {
+                    visible: !Ai.getModel().requires_key
+                    icon: "folder_code"
+                    text: FileUtils.fileNameForPath(Ai.currentWorkspacePath()) || Ai.currentWorkspacePath()
+                    maxTextWidth: 90
+                    tooltipText: Translation.tr("Current workspace: %1\nChange it with %2cwd /path/to/project").arg(Ai.currentWorkspacePath()).arg(root.commandPrefix)
                 }
 
                 Item {

@@ -10,19 +10,24 @@ import QtQuick
 import qs.services.ai
 
 /**
- * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
- * Supports Gemini and OpenAI models.
- * Limitations:
- * - For now functions only work with Gemini API format
+ * CLI-first chat service for shell-native AI providers.
+ * Visible providers are intentionally curated:
+ * - Codex CLI
+ * - Gemini CLI
+ * - Claude Code
+ * - Kimi Code CLI
+ * - Kimi API
  */
 Singleton {
     id: root
 
     property Component aiMessageComponent: AiMessageData {}
     property Component aiModelComponent: AiModel {}
-    property Component geminiApiStrategy: GeminiApiStrategy {}
-    property Component openaiApiStrategy: OpenAiApiStrategy {}
-    property Component mistralApiStrategy: MistralApiStrategy {}
+    property Component claudeCliStrategy: ClaudeCliStrategy {}
+    property Component codexCliStrategy: CodexCliStrategy {}
+    property Component geminiCliStrategy: GeminiCliStrategy {}
+    property Component kimiApiStrategy: KimiApiStrategy {}
+    property Component kimiCliStrategy: KimiCliStrategy {}
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
@@ -62,10 +67,6 @@ Singleton {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
     }
 
-    function safeModelName(modelName) {
-        return modelName.replace(/:/g, "_").replace(/ /g, "-").replace(/\//g, "-")
-    }
-
     property list<var> defaultPrompts: []
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
@@ -78,313 +79,131 @@ Singleton {
         "{DE}": `${SystemInfo.desktopEnvironment} (${SystemInfo.windowingSystem})` 
     }
 
-    // Gemini: https://ai.google.dev/gemini-api/docs/function-calling
-    // OpenAI: https://platform.openai.com/docs/guides/function-calling
-    property string currentTool: Config?.options.ai.tool ?? "search"
+    property string currentTool: Config?.options.ai.tool ?? "none"
     property var tools: {
-        "gemini": {
-            "functions": [{"functionDeclarations": [
-                {
-                    "name": "switch_to_search_mode",
-                    "description": "Search the web",
-                },
-                {
-                    "name": "get_shell_config",
-                    "description": "Get the desktop shell config file contents",
-                },
-                {
-                    "name": "set_shell_config",
-                    "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "key": {
-                                "type": "string",
-                                "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
-                            },
-                            "value": {
-                                "type": "string",
-                                "description": "The value to set, e.g. `true`"
-                            }
-                        },
-                        "required": ["key", "value"]
-                    }
-                },
-                {
-                    "name": "run_shell_command",
-                    "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "command": {
-                                "type": "string",
-                                "description": "The bash command to run",
-                            },
-                        },
-                        "required": ["command"]
-                    }
-                },
-            ]}],
-            "search": [{
-                "google_search": {}
-            }],
-            "none": []
-        },
-        "openai": {
-            "functions": [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "get_shell_config",
-                        "description": "Get the desktop shell config file contents",
-                        "parameters": {}
-                    },
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "set_shell_config",
-                        "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "key": {
-                                    "type": "string",
-                                    "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
-                                },
-                                "value": {
-                                    "type": "string",
-                                    "description": "The value to set, e.g. `true`"
-                                }
-                            },
-                            "required": ["key", "value"]
-                        }
-                    }
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "run_shell_command",
-                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "command": {
-                                    "type": "string",
-                                    "description": "The bash command to run",
-                                },
-                            },
-                            "required": ["command"]
-                        }
-                    },
-                },
-            ],
+        "codex_cli": {
+            "functions": [],
             "search": [],
             "none": [],
         },
-        "mistral": {
-            "functions": [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "get_shell_config",
-                        "description": "Get the desktop shell config file contents",
-                        "parameters": {}
-                    },
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "set_shell_config",
-                        "description": "Set a field in the desktop graphical shell config file. Must only be used after `get_shell_config`.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "key": {
-                                    "type": "string",
-                                    "description": "The key to set, e.g. `bar.borderless`. MUST NOT BE GUESSED, use `get_shell_config` to see what keys are available before setting.",
-                                },
-                                "value": {
-                                    "type": "string",
-                                    "description": "The value to set, e.g. `true`"
-                                }
-                            },
-                            "required": ["key", "value"]
-                        }
-                    }
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "run_shell_command",
-                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "command": {
-                                    "type": "string",
-                                    "description": "The bash command to run",
-                                },
-                            },
-                            "required": ["command"]
-                        }
-                    },
-                },
-            ],
+        "claude_cli": {
+            "functions": [],
+            "search": [],
+            "none": [],
+        },
+        "gemini_cli": {
+            "functions": [],
+            "search": [],
+            "none": [],
+        },
+        "kimi_api": {
+            "functions": [],
+            "search": [],
+            "none": [],
+        },
+        "kimi_cli": {
+            "functions": [],
             "search": [],
             "none": [],
         }
     }
-    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
+    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format] ?? { "none": [] })
     property var toolDescriptions: {
-        "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
-        "search": Translation.tr("Gives the model search capabilities (immediately)"),
-        "none": Translation.tr("Disable tools")
+        "none": Translation.tr("CLI-first mode. Shared skills/actions will be added on top of providers instead of API function calling.")
     }
 
-    // Model properties:
-    // - name: Name of the model
-    // - icon: Icon name of the model
-    // - description: Description of the model
-    // - endpoint: Endpoint of the model
-    // - model: Model name of the model
-    // - requires_key: Whether the model requires an API key
-    // - key_id: The identifier of the API key. Use the same identifier for models that can be accessed with the same key.
-    // - key_get_link: Link to get an API key
-    // - key_get_description: Description of pricing and how to get an API key
-    // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
-    // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
     property var models: Config.options.policies.ai === 2 ? {} : {
-        "gemini-2.5-flash": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers"),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent",
-            "model": "gemini-2.5-flash",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
+        "codex": aiModelComponent.createObject(this, {
+            "name": "Codex CLI",
+            "icon": "openai-symbolic",
+            "description": Translation.tr("Local coding agent via Codex CLI | Uses your ChatGPT login"),
+            "homepage": "https://developers.openai.com/codex/",
+            "endpoint": "",
+            "model": "codex",
+            "requires_key": false,
+            "api_format": "codex_cli",
+            "extraParams": {
+                "cwd": CF.FileUtils.trimFileProtocol(Directories.home),
+                "approval_mode": "suggest",
+            },
         }),
-        "gemini-3-flash": aiModelComponent.createObject(this, {
-            "name": "Gemini 3 Flash",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nPro-level intelligence at the speed and pricing of Flash."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:streamGenerateContent",
-            "model": "gemini-3-flash-preview",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
+        "claude-cli": aiModelComponent.createObject(this, {
+            "name": "Claude Code",
+            "icon": "openai-symbolic",
+            "description": Translation.tr("Local coding agent via Claude Code | Read-only by default"),
+            "homepage": "https://code.claude.com/docs/en/cli-usage",
+            "endpoint": "",
+            "model": "sonnet",
+            "requires_key": false,
+            "api_format": "claude_cli",
+            "extraParams": {
+                "cwd": CF.FileUtils.trimFileProtocol(Directories.home),
+                "binary_path": `${CF.FileUtils.trimFileProtocol(Directories.home)}/.npm-global/bin/claude`,
+                "permission_mode": "plan",
+            },
         }),
-        "mistral-medium-3": aiModelComponent.createObject(this, {
-            "name": "Mistral Medium 3",
+        "gemini-cli": aiModelComponent.createObject(this, {
+            "name": "Gemini CLI",
+            "icon": "google-gemini-symbolic",
+            "description": Translation.tr("Local coding/research agent via Gemini CLI | Uses your Google login"),
+            "homepage": "https://github.com/google-gemini/gemini-cli",
+            "endpoint": "",
+            "model": "gemini-2.5-pro",
+            "requires_key": false,
+            "api_format": "gemini_cli",
+            "extraParams": {
+                "cwd": CF.FileUtils.trimFileProtocol(Directories.home),
+                "binary_path": `${CF.FileUtils.trimFileProtocol(Directories.home)}/.npm-global/bin/gemini`,
+            },
+        }),
+        "kimi-cli": aiModelComponent.createObject(this, {
+            "name": "Kimi Code CLI",
             "icon": "mistral-symbolic",
-            "description": Translation.tr("Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls").arg("Mistral"),
-            "homepage": "https://mistral.ai/news/mistral-medium-3",
-            "endpoint": "https://api.mistral.ai/v1/chat/completions",
-            "model": "mistral-medium-2505",
+            "description": Translation.tr("Local agent via Kimi CLI | Uses your Moonshot login | Print mode may auto-approve tools"),
+            "homepage": "https://moonshotai.github.io/kimi-cli/en/reference/kimi-command.html",
+            "endpoint": "",
+            "model": "kimi-k2",
+            "requires_key": false,
+            "api_format": "kimi_cli",
+            "extraParams": {
+                "cwd": CF.FileUtils.trimFileProtocol(Directories.home),
+                "binary_path": `${CF.FileUtils.trimFileProtocol(Directories.home)}/.local/bin/kimi`,
+            },
+        }),
+        "kimi-api": aiModelComponent.createObject(this, {
+            "name": "Kimi API",
+            "icon": "mistral-symbolic",
+            "description": Translation.tr("Network fallback via Kimi API | Best for broad research when you want an explicit API path"),
+            "homepage": "https://platform.moonshot.ai",
+            "endpoint": "https://api.moonshot.ai/v1/chat/completions",
+            "model": "kimi-k2.5",
             "requires_key": true,
-            "key_id": "mistral",
-            "key_get_link": "https://console.mistral.ai/api-keys",
-            "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
-            "api_format": "mistral",
+            "key_id": "moonshot",
+            "key_get_link": "https://platform.moonshot.ai/console/api-keys",
+            "key_get_description": Translation.tr("**Instructions**: Create a Moonshot API key and paste it with `/key YOUR_API_KEY` when Kimi API is selected."),
+            "api_format": "kimi_api",
         }),
     }
     property var modelList: Object.keys(root.models)
-    property var currentModelId: Persistent.states?.ai?.model || modelList[0]
+    property string defaultModelId: "codex"
+    property var currentModelId: (Persistent.states?.ai?.model && (Persistent.states.ai.model in root.models))
+        ? Persistent.states.ai.model
+        : ((defaultModelId in root.models) ? defaultModelId : modelList[0])
 
     property var apiStrategies: {
-        "openai": openaiApiStrategy.createObject(this),
-        "gemini": geminiApiStrategy.createObject(this),
-        "mistral": mistralApiStrategy.createObject(this),
+        "claude_cli": claudeCliStrategy.createObject(this),
+        "gemini_cli": geminiCliStrategy.createObject(this),
+        "kimi_api": kimiApiStrategy.createObject(this),
+        "kimi_cli": kimiCliStrategy.createObject(this),
+        "codex_cli": codexCliStrategy.createObject(this),
     }
-    property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
-
-    function addUserModels() {
-        (Config?.options.ai?.extraModels ?? []).forEach(model => {
-            const safeModelName = root.safeModelName(model["model"]);
-            root.addModel(safeModelName, model)
-        });
-    }
-
-    Connections {
-        target: Config
-        function onReadyChanged() {
-            if (!Config.ready) return;
-            root.addUserModels()
-        }
-    }
+    property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "codex_cli"]
 
     property string requestScriptFilePath: "/tmp/quickshell/ai/request.sh"
     property string pendingFilePath: ""
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
-        root.addUserModels() // Config onReadyChanged above might not fire if config is loaded before this service
-    }
-
-    function guessModelLogo(model) {
-        if (model.includes("llama")) return "ollama-symbolic";
-        if (model.includes("gemma")) return "google-gemini-symbolic";
-        if (model.includes("deepseek")) return "deepseek-symbolic";
-        if (/^phi\d*:/i.test(model)) return "microsoft-symbolic";
-        return "ollama-symbolic";
-    }
-
-    function guessModelName(model) {
-        const replaced = model.replace(/-/g, ' ').replace(/:/g, ' ');
-        let words = replaced.split(' ');
-        words[words.length - 1] = words[words.length - 1].replace(/(\d+)b$/, (_, num) => `${num}B`)
-        words = words.map((word) => {
-            return (word.charAt(0).toUpperCase() + word.slice(1))
-        });
-        if (words[words.length - 1] === "Latest") words.pop();
-        else words[words.length - 1] = `(${words[words.length - 1]})`; // Surround the last word with square brackets
-        const result = words.join(' ');
-        return result;
-    }
-
-    function addModel(modelName, data) {
-        root.models = Object.assign({}, root.models, {
-            [modelName]: aiModelComponent.createObject(this, data)
-        });
-    }
-
-    Process {
-        id: getOllamaModels
-        running: true
-        command: ["bash", "-c", `${Directories.scriptPath}/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
-        stdout: SplitParser {
-            onRead: data => {
-                try {
-                    if (data.length === 0) return;
-                    const dataJson = JSON.parse(data);
-                    root.modelList = [...root.modelList, ...dataJson];
-                    dataJson.forEach(model => {
-                        const safeModelName = root.safeModelName(model);
-                        root.addModel(safeModelName, {
-                            "name": guessModelName(model),
-                            "icon": guessModelLogo(model),
-                            "description": Translation.tr("Local Ollama model | %1").arg(model),
-                            "homepage": `https://ollama.com/library/${model}`,
-                            "endpoint": "http://localhost:11434/v1/chat/completions",
-                            "model": model,
-                            "requires_key": false,
-                        })
-                    });
-
-                    root.modelList = Object.keys(root.models);
-
-                } catch (e) {
-                    console.log("Could not fetch Ollama models:", e);
-                }
-            }
-        }
     }
 
     Process {
@@ -443,6 +262,33 @@ Singleton {
         root.addMessage(Translation.tr("The current system prompt is\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
     }
 
+    function currentWorkspacePath() {
+        return models[currentModelId]?.extraParams?.cwd ?? CF.FileUtils.trimFileProtocol(Directories.home);
+    }
+
+    function printWorkspacePath() {
+        root.addMessage(Translation.tr("Current workspace:\n\n```txt\n%1\n```").arg(root.currentWorkspacePath()), root.interfaceRole);
+    }
+
+    function setWorkspacePath(path) {
+        const model = models[currentModelId];
+        if (!model || model.requires_key) {
+            root.addMessage(Translation.tr("Workspace context is only used by local CLI providers."), root.interfaceRole);
+            return;
+        }
+
+        const trimmedPath = CF.FileUtils.trimFileProtocol(path).trim();
+        if (trimmedPath.length === 0) {
+            root.addMessage(Translation.tr("Usage: /cwd /path/to/project"), root.interfaceRole);
+            return;
+        }
+
+        model.extraParams = Object.assign({}, model.extraParams, {
+            "cwd": trimmedPath,
+        });
+        root.addMessage(Translation.tr("Workspace set to:\n\n```txt\n%1\n```").arg(trimmedPath), root.interfaceRole);
+    }
+
     function loadPrompt(filePath) {
         promptLoader.path = "" // Unload
         promptLoader.path = filePath; // Load
@@ -489,7 +335,8 @@ Singleton {
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
             // See if policy prevents online models
-            if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
+            const isLocalModel = !model.requires_key && (!model.endpoint || model.endpoint.length === 0 || model.endpoint.includes("localhost"));
+            if (Config.options.policies.ai === 2 && !isLocalModel) {
                 root.addMessage(
                     Translation.tr("Online models disallowed\n\nControlled by `policies.ai` config option"),
                     root.interfaceRole
@@ -497,6 +344,9 @@ Singleton {
                 return;
             }
             if (setPersistentState) Persistent.states.ai.model = modelId;
+            const providerTools = root.tools[model.api_format] ?? { "none": [] };
+            if (!(root.currentTool in providerTools))
+                Config.options.ai.tool = "none";
             if (feedback) root.addMessage(Translation.tr("Model set to %1").arg(model.name), root.interfaceRole);
             if (model.requires_key) {
                 // If key not there show advice
@@ -535,7 +385,7 @@ Singleton {
     function setApiKey(key) {
         const model = models[currentModelId];
         if (!model.requires_key) {
-            root.addMessage(Translation.tr("%1 does not require an API key").arg(model.name), Ai.interfaceRole);
+            root.addMessage(Translation.tr("API keys are only used by Kimi API. Switch to `kimi-api` first if you want to configure one."), Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
@@ -557,7 +407,7 @@ Singleton {
                 root.addMessage(Translation.tr("No API key set for %1").arg(model.name), Ai.interfaceRole);
             }
         } else {
-            root.addMessage(Translation.tr("%1 does not require an API key").arg(model.name), Ai.interfaceRole);
+            root.addMessage(Translation.tr("API keys are only used by Kimi API."), Ai.interfaceRole);
         }
     }
 
@@ -582,6 +432,7 @@ Singleton {
         property list<string> baseCommand: ["bash"]
         property AiMessageData message
         property ApiStrategy currentStrategy
+        workingDirectory: CF.FileUtils.trimFileProtocol(Directories.home)
 
         function markDone() {
             requester.message.done = true;
@@ -601,6 +452,7 @@ Singleton {
             
             requester.currentStrategy = root.currentApiStrategy;
             requester.currentStrategy.reset(); // Reset strategy state
+            requester.workingDirectory = CF.FileUtils.trimFileProtocol(Directories.home);
 
             /* Put API key in environment variable */
             if (model.requires_key) requester.environment[`${root.apiKeyEnvVarName}`] = root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : ""
@@ -609,7 +461,14 @@ Singleton {
             const endpoint = root.currentApiStrategy.buildEndpoint(model);
             const messageArray = root.messageIDs.map(id => root.messageByID[id]);
             const filteredMessageArray = messageArray.filter(message => message.role !== Ai.interfaceRole);
-            const data = root.currentApiStrategy.buildRequestData(model, filteredMessageArray, root.systemPrompt, root.temperature, root.tools[model.api_format][root.currentTool], root.pendingFilePath);
+            const data = root.currentApiStrategy.buildRequestData(
+                model,
+                filteredMessageArray,
+                root.systemPrompt,
+                root.temperature,
+                root.tools[model.api_format]?.[root.currentTool] ?? [],
+                root.pendingFilePath
+            );
             // console.log("[Ai] Request data: ", JSON.stringify(data, null, 2));
 
             let requestHeaders = {
@@ -628,6 +487,98 @@ Singleton {
             const id = idForMessage(requester.message);
             root.messageIDs = [...root.messageIDs, id];
             root.messageByID[id] = requester.message;
+
+            if (model.api_format === "codex_cli") {
+                requester.workingDirectory = data.cwd && data.cwd.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.cwd)
+                    : CF.FileUtils.trimFileProtocol(Directories.home);
+                requester.command = [
+                    "codex",
+                    "exec",
+                    "--json",
+                    "--skip-git-repo-check",
+                    "-C",
+                    requester.workingDirectory,
+                    data.prompt
+                ];
+                requester.running = true;
+                return;
+            }
+
+            if (model.api_format === "gemini_cli") {
+                requester.workingDirectory = data.cwd && data.cwd.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.cwd)
+                    : CF.FileUtils.trimFileProtocol(Directories.home);
+                requester.environment["II_GEMINI_PROMPT"] = data.prompt;
+                requester.environment["II_GEMINI_MODEL"] = data.model && data.model.length > 0 ? data.model : "gemini-2.5-pro";
+                requester.environment["II_GEMINI_BIN"] = data.binaryPath && data.binaryPath.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.binaryPath)
+                    : "gemini";
+                requester.command = [
+                    "bash",
+                    "-lc",
+                    "GEMINI_BIN=\"$II_GEMINI_BIN\"; " +
+                    "if [ ! -x \"$GEMINI_BIN\" ]; then GEMINI_BIN=\"$(command -v gemini 2>/dev/null || true)\"; fi; " +
+                    "if [ -z \"$GEMINI_BIN\" ]; then " +
+                        "printf '{\"type\":\"result\",\"text\":\"**Error**: Gemini CLI is not installed. Install it with `npm install -g @google/gemini-cli` and run `gemini` once to sign in.\",\"done\":true}\\n'; " +
+                        "exit 0; " +
+                    "fi; " +
+                    "exec \"$GEMINI_BIN\" -p \"$II_GEMINI_PROMPT\" --output-format stream-json -m \"$II_GEMINI_MODEL\"",
+                ];
+                if (root.pendingFilePath.length > 0)
+                    root.pendingFilePath = "";
+                requester.running = true;
+                return;
+            }
+
+            if (model.api_format === "claude_cli") {
+                requester.workingDirectory = data.cwd && data.cwd.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.cwd)
+                    : CF.FileUtils.trimFileProtocol(Directories.home);
+                requester.environment["II_CLAUDE_PROMPT"] = data.prompt;
+                requester.environment["II_CLAUDE_MODEL"] = data.model && data.model.length > 0 ? data.model : "sonnet";
+                requester.environment["II_CLAUDE_BIN"] = data.binaryPath && data.binaryPath.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.binaryPath)
+                    : "claude";
+                requester.environment["II_CLAUDE_PERMISSION_MODE"] = data.permissionMode && data.permissionMode.length > 0 ? data.permissionMode : "plan";
+                requester.command = [
+                    "bash",
+                    "-lc",
+                    "CLAUDE_BIN=\"$II_CLAUDE_BIN\"; " +
+                    "if [ ! -x \"$CLAUDE_BIN\" ]; then CLAUDE_BIN=\"$(command -v claude 2>/dev/null || true)\"; fi; " +
+                    "if [ -z \"$CLAUDE_BIN\" ]; then " +
+                        "printf '{\"type\":\"result\",\"result\":\"**Error**: Claude Code is not installed. Install it with `npm install -g @anthropic-ai/claude-code` and run `claude auth login`.\",\"done\":true}\\n'; " +
+                        "exit 0; " +
+                    "fi; " +
+                    "exec \"$CLAUDE_BIN\" -p \"$II_CLAUDE_PROMPT\" --model \"$II_CLAUDE_MODEL\" --output-format stream-json --permission-mode \"$II_CLAUDE_PERMISSION_MODE\"",
+                ];
+                requester.running = true;
+                return;
+            }
+
+            if (model.api_format === "kimi_cli") {
+                requester.workingDirectory = data.cwd && data.cwd.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.cwd)
+                    : CF.FileUtils.trimFileProtocol(Directories.home);
+                requester.environment["II_KIMI_PROMPT"] = data.prompt;
+                requester.environment["II_KIMI_MODEL"] = data.model && data.model.length > 0 ? data.model : "kimi-k2";
+                requester.environment["II_KIMI_BIN"] = data.binaryPath && data.binaryPath.length > 0
+                    ? CF.FileUtils.trimFileProtocol(data.binaryPath)
+                    : "kimi";
+                requester.command = [
+                    "bash",
+                    "-lc",
+                    "KIMI_BIN=\"$II_KIMI_BIN\"; " +
+                    "if [ ! -x \"$KIMI_BIN\" ]; then KIMI_BIN=\"$(command -v kimi 2>/dev/null || true)\"; fi; " +
+                    "if [ -z \"$KIMI_BIN\" ]; then " +
+                        "printf '{\"type\":\"result\",\"text\":\"**Error**: Kimi CLI is not installed. Install it first, then run `kimi login`.\",\"done\":true}\\n'; " +
+                        "exit 0; " +
+                    "fi; " +
+                    "exec \"$KIMI_BIN\" --print --output-format stream-json --final-message-only -m \"$II_KIMI_MODEL\" -w \"$PWD\" -p \"$II_KIMI_PROMPT\"",
+                ];
+                requester.running = true;
+                return;
+            }
 
             /* Build header string for curl */ 
             let headerString = Object.entries(requestHeaders)
@@ -719,7 +670,25 @@ Singleton {
 
     function sendUserMessage(message) {
         if (message.length === 0) return;
-        root.addMessage(message, "user");
+        if (root.pendingFilePath.length > 0 && root.getModel()?.api_format !== "gemini_cli") {
+            root.addMessage(
+                Translation.tr("Attached screenshots currently work only with Gemini CLI. Switch to `gemini-cli` or remove the attachment first."),
+                root.interfaceRole
+            );
+            return;
+        }
+
+        const userMessage = root.aiMessageComponent.createObject(root, {
+            "role": "user",
+            "content": message,
+            "rawContent": message,
+            "localFilePath": root.pendingFilePath,
+            "thinking": false,
+            "done": true,
+        });
+        const id = idForMessage(userMessage);
+        root.messageIDs = [...root.messageIDs, id];
+        root.messageByID[id] = userMessage;
         requester.makeRequest();
     }
 

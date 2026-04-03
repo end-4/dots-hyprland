@@ -28,6 +28,7 @@ ShellRoot {
         FirstRunExperience.load()
         ConflictKiller.load()
         Cliphist.refresh()
+        Orbitbar.load()
         Wallpapers.load()
         Updates.load()
     }
@@ -74,4 +75,3 @@ ShellRoot {
         onPressed: root.cyclePanelFamily()
     }
 }
-

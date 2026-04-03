@@ -9,8 +9,9 @@ Item { // Model indicator
     property string icon: "api"
     property string text: ""
     property string tooltipText: ""
+    property real maxTextWidth: -1
     implicitHeight: rowLayout.implicitHeight + 4 * 2
-    implicitWidth: rowLayout.implicitWidth + 4 * 2
+    implicitWidth: Math.min(rowLayout.implicitWidth + 4 * 2, (root.maxTextWidth > 0 ? root.maxTextWidth + 26 : rowLayout.implicitWidth + 4 * 2))
 
     RowLayout {
         id: rowLayout
@@ -25,6 +26,7 @@ Item { // Model indicator
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.m3colors.m3onSurface
             elide: Text.ElideRight
+            Layout.maximumWidth: root.maxTextWidth > 0 ? root.maxTextWidth : implicitWidth
             text: root.text
             animateChange: true
         }
