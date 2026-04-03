@@ -51,7 +51,7 @@ PanelWindow {
     property color imageFillColor: ColorUtils.transparentize(imageBorderColor, 0.85)
     property color onBorderColor: "#ff000000"
     property real targetRegionOpacity: Config.options.regionSelector.targetRegions.opacity
-    property bool contentRegionOpacity: Config.options.regionSelector.targetRegions.contentRegionOpacity
+    property real contentRegionOpacity: Config.options.regionSelector.targetRegions.contentRegionOpacity
 
     // Vars for indicators
     readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
@@ -220,18 +220,27 @@ PanelWindow {
 
     Process {
         id: imageDetectionProcess
-        command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
+        command: [
+            "bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
             + `--hyprctl ` 
             + `--image '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}' ` 
             + `--max-width ${Math.round(root.screen.width * root.falsePositivePreventionRatio)} ` 
-            + `--max-height ${Math.round(root.screen.height * root.falsePositivePreventionRatio)} `]
+            + `--max-height ${Math.round(root.screen.height * root.falsePositivePreventionRatio)} ` 
+        ]
         stdout: StdioCollector {
             id: imageDimensionCollector
             onStreamFinished: {
                 imageRegions = RegionFunctions.filterImageRegions(
-                    JSON.parse(imageDimensionCollector.text),
-                    root.windowRegions
-                );
+                        JSON.parse(imageDimensionCollector.text).map(r => {
+                            return {
+                                x: Math.round(r.x / root.monitorScale),
+                                y: Math.round(r.y / root.monitorScale),
+                                width: Math.round(r.width / root.monitorScale),
+                                height: Math.round(r.height / root.monitorScale)
+                            }
+                        }),
+                        root.windowRegions
+                    );
             }
         }
     }
@@ -427,10 +436,10 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0] //
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.targetRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.targetRegionOpacity
                 borderColor: root.windowBorderColor
                 fillColor: targeted ? root.windowFillColor : "transparent"
-                text: `${modelData.class}`
+                text: `${modelData.class} ${modelData.title}`
                 radius: Appearance.rounding.windowRounding
             }
         }
@@ -456,7 +465,7 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0]
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.targetRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.targetRegionOpacity
                 borderColor: root.windowBorderColor
                 fillColor: targeted ? root.windowFillColor : "transparent"
                 text: `${modelData.namespace}`
@@ -485,7 +494,7 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0]
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.contentRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.contentRegionOpacity
                 borderColor: root.imageBorderColor
                 fillColor: targeted ? root.imageFillColor : "transparent"
                 text: Translation.tr("Content region")
