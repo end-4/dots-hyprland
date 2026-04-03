@@ -307,7 +307,7 @@ Singleton {
 
     function addUserModels() {
         (Config?.options.ai?.extraModels ?? []).forEach(model => {
-            const safeModelName = root.safeModelName(model["model"]);
+            const safeModelName = root.safeModelName(model["model"]).toLowerCase();
             root.addModel(safeModelName, model)
         });
     }
@@ -366,7 +366,7 @@ Singleton {
                     const dataJson = JSON.parse(data);
                     root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
-                        const safeModelName = root.safeModelName(model);
+                        const safeModelName = root.safeModelName(model).toLowerCase();
                         root.addModel(safeModelName, {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
@@ -485,7 +485,7 @@ Singleton {
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
-        modelId = modelId.toLowerCase()
+        modelId = root.safeModelName(modelId).toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
             // See if policy prevents online models
