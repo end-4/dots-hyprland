@@ -11,12 +11,27 @@ Scope {
     function dismiss() {
         GlobalStates.screenTranslatorOpen = false
     }
+
+    readonly property var currentScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
     
     Loader {
         id: translatorLoader
-        active: GlobalStates.screenTranslatorOpen
+        property var lockedScreen
+        active: false
+        Connections {
+            target: GlobalStates
+            function onScreenTranslatorOpenChanged() {
+                if (!GlobalStates.screenTranslatorOpen) {
+                    translatorLoader.active = false;
+                } else {
+                    translatorLoader.lockedScreen = root.currentScreen
+                    translatorLoader.active = true
+                }
+            }
+        }
 
         sourceComponent: ScreenTranslatorPanel {
+            screen: translatorLoader.lockedScreen
             onDismiss: root.dismiss()
         }
     }
