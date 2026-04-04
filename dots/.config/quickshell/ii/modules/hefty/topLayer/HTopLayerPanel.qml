@@ -165,5 +165,6 @@ PanelWindow {
         mask: Region {
             item: null
         }
+        screen: root.screen
     }
 }
