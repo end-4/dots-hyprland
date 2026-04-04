@@ -160,19 +160,50 @@ GroupButton {
                     text: root.name
                 }
 
-                StyledText {
+                Rectangle {
+                    id: statusTextContainer
                     visible: root.statusText
                     anchors {
                         left: parent.left
                         right: parent.right
                     }
-                    font {
-                        pixelSize: Appearance.font.pixelSize.smaller
-                        weight: 100
+                    height: statusTextObject.height
+                    color: "transparent"
+                    clip: true
+
+                    StyledText {
+                        id: statusTextObject
+                        font {
+                            pixelSize: Appearance.font.pixelSize.smaller
+                            weight: 100
+                        }
+                        color: root.colText
+                        text: root.statusText
+
+                        readonly property bool needsScrolling: implicitWidth > statusTextContainer.width
+                        readonly property real scrollDistance: implicitWidth - statusTextContainer.width
+
+                        SequentialAnimation on x {
+                            loops: Animation.Infinite
+                            running: statusTextObject.needsScrolling && statusTextContainer.width > 0
+
+                            PropertyAction { value: 0 }
+                            PauseAnimation { duration: 2000 }
+                            NumberAnimation {
+                                from: 0
+                                to: -statusTextObject.scrollDistance
+                                duration: 3000
+                                easing.type: Easing.InOutQuad
+                            }
+                            PauseAnimation { duration: 1000 }
+                            NumberAnimation {
+                                from: -statusTextObject.scrollDistance
+                                to: 0
+                                duration: 3000
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
                     }
-                    color: root.colText
-                    elide: Text.ElideRight
-                    text: root.statusText
                 }
             }
         }
