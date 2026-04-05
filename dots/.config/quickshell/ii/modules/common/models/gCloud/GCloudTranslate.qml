@@ -5,16 +5,8 @@ import qs.modules.common.utils
 import qs.services
 import ".."
 
-NestableObject {
+GCloudApi {
     id: root
-
-    enum State {
-        Done, Preparing, Processing
-    }
-
-    signal finished()
-    property var outputData
-    property var state: GCloudTranslate.State.Done
 
     property list<string> pendingStrings
     property bool setupReady: false
@@ -24,13 +16,13 @@ NestableObject {
         GoogleCloud.load();
         root.setupReady = false;
         root.pendingStrings = strings;
-        root.state = GCloudTranslate.State.Preparing;
+        root.state = GCloudApi.State.Preparing;
         root.setupReady = true;
     }
 
     onPreparationReadyChanged: {
         if (!preparationReady) return;
-        root.state = GCloudTranslate.State.Processing;
+        root.state = GCloudApi.State.Processing;
 
         const targetLang = Translation.languageCode;
         const payload = {
@@ -53,11 +45,7 @@ NestableObject {
         ]);
 
         seq.push(((out) => {
-            // print(out)
-            root.outputData = JSON.parse(out);
-            root.pendingStrings = [];
-            root.finished();
-            root.state = GCloudTranslate.State.Done;
+            root.handleApiOutput(out);
         }));
 
         multiproc.runSequence(seq);
