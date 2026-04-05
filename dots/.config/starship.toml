@@ -19,8 +19,8 @@ style = 'fg:245'
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[ ](bold fg:255)"
-error_symbol = "[ ](bold fg:249)"
+success_symbol = "[ ](bold fg:243)"
+error_symbol = "[ ](bold fg:244)"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -83,7 +83,7 @@ show_always = true
 [directory]
 home_symbol = " "
 read_only = "  "
-style = "bg:255 fg:black"
+style = "bg:255 fg:240"
 truncation_length = 2
 truncation_symbol = ".../"
 format = '[](bold fg:255)[󰉋 → $path]($style)[](bold fg:255)'
