@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import calendar
 import sys
 import json
 import google.auth.transport.requests
@@ -16,8 +17,15 @@ def get_token(json_str):
         # Refresh to get the access token
         request = google.auth.transport.requests.Request()
         scoped_creds.refresh(request)
+
+        token = scoped_creds.token
+        expiry = int(calendar.timegm(scoped_creds.expiry.utctimetuple()))
         
-        print(scoped_creds.token)
+        print(json.dumps({
+            "token": token,
+            "expiry": expiry
+        }))
+
     except Exception as e:
         sys.stderr.write(f"Error: {str(e)}\n")
         sys.exit(1)
