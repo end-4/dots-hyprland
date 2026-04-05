@@ -8,7 +8,7 @@ Singleton {
     id: root
 
     property var keyContent: ({})
-    property string keyProjectId: keyContent.project_id
+    property string keyProjectId: keyContent?.project_id
     property bool keyError: false
     property bool keyReady: false
     property string token: ""
@@ -32,9 +32,17 @@ Singleton {
         }
     }
 
+    function unready() {
+        root.keyReady = false;
+        root.tokenReady = false;
+        root.keyError = false;
+        root.tokenError = false;
+    }
+
     function setKeyJson(str: string): bool {
         try {
             var keyData = JSON.parse(str)
+            root.unready();
             KeyringStorage.setNestedField(["googleCloud", "serviceAccountKey"], keyData);
             return true;
         } catch(e) {
@@ -65,6 +73,7 @@ Singleton {
                 } catch(e) {
                     root.tokenError = true;
                     print("[GoogleCloud] Failed to parse token response: " + e)
+                    print("[GoogleCloud] Failed to parse token response: " + e + "\n" + out)
                 }
                 root.tokenReady = true;
             }

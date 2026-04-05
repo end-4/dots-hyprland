@@ -34,6 +34,7 @@ Item {
     }
 
     property bool error: false
+    property string errorMessage: ""
     function showError() {
         error = true;
     }
@@ -45,13 +46,17 @@ Item {
         cloudVision.annotateImage(screenshotPath);
     }
 
+    function reattemptAsNeeded() {
+        if (root.visionParagraphs == [] && GoogleCloud.tokenReady && !GoogleCloud.tokenError) {
+            root.error = false;
+            cloudVision.annotateImage(root.screenshotPath);
+        }
+    }
+
     Connections {
         target: GoogleCloud
-        function onTokenChanged() {
-            if (GoogleCloud.tokenReady && !GoogleCloud.tokenError) {
-                root.error = false;
-                cloudVision.annotateImage(root.screenshotPath);
-            }
+        function onTokenReadyChanged() {
+            root.reattemptAsNeeded();
         }
     }
 
@@ -76,15 +81,15 @@ Item {
             StyledText {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: {
-                    if (cloudVision.state == GCloudVision.State.Uploading)
+                    if (cloudVision.state == GCloudApi.State.Preparing)
                         return Translation.tr("Uploading image");
-                    else if (cloudVision.state == GCloudVision.State.Processing)
+                    else if (cloudVision.state == GCloudApi.State.Processing)
                         return Translation.tr("Reading image");
-                    else if (cloudVision.state == GCloudVision.State.Error)
+                    else if (cloudVision.state == GCloudApi.State.Error)
                         return Translation.tr("Error");
-                    else if (cloudTrans.state == GCloudTranslate.State.Preparing)
+                    else if (cloudTrans.state == GCloudApi.State.Preparing)
                         return Translation.tr("Getting ready to translate");
-                    else if (cloudTrans.state == GCloudTranslate.State.Processing)
+                    else if (cloudTrans.state == GCloudApi.State.Processing)
                         return Translation.tr("Translating");
                     else
                         return " ";
@@ -111,19 +116,19 @@ Item {
             }
             StyledText {
                 anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.min(root.windowWidth / 2, 800) * root.scaleFactor
                 horizontalAlignment: Text.AlignHCenter
                 textFormat: Text.MarkdownText
-                text: `**${Translation.tr("Screen Translator")}**\n\n${Translation.tr("Set your Google Cloud service account key")}\n\n__[${Translation.tr("See how on the wiki")}](${root.wikiLink})__`
+                wrapMode: Text.Wrap
+                text: `**${Translation.tr("Screen Translator")}**\n\n${root.errorMessage}\n\n__[${Translation.tr("See setup instructions on the wiki")}](${root.wikiLink})__`
                 font.pixelSize: Appearance.font.pixelSize.small * root.scaleFactor
                 color: root.textColor
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        Qt.openUrlExternally(root.wikiLink)
-                        GlobalStates.screenTranslatorOpen = false
-                    }
+                onLinkActivated: (link) => {
+                    Qt.openUrlExternally(link)
+                    GlobalStates.screenTranslatorOpen = false
                 }
+
+                PointingHandLinkHover {}
             }
         }
     }
@@ -132,10 +137,16 @@ Item {
         id: gcr
     }
 
+    function handleError(msg) {
+        if (msg?.length > 0) root.errorMessage = msg;
+        else root.errorMessage = Translation.tr("Set your Google Cloud service account key");
+        root.showError();
+    }
+
     GCloudVision {
         id: cloudVision
-        onError: {
-            root.showError();
+        onError: (msg) => {
+            root.handleError(msg);
         }
         onFinished: {
             gcr.initializeWithData(outputData);
@@ -149,6 +160,9 @@ Item {
 
     GCloudTranslate {
         id: cloudTrans
+        onError: (msg) => {
+            root.handleError(msg);
+        }
         onFinished: {
             var values = outputData.translations.map(translation => translation.translatedText);
             const keys = root.translationKeys;
