@@ -7,6 +7,7 @@
     /* Accents */
     @define-color accent_color {{colors.primary.light.hex}};
     @define-color accent_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.08);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.14);
     @define-color accent_active_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.1);
     @define-color accent_fg_color {{colors.on_primary.light.hex}};
     @define-color accent_bg_color {{colors.primary.light.hex}};
@@ -53,6 +54,7 @@
     /* Accents */
     @define-color accent_color {{colors.primary.dark.hex}};
     @define-color accent_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.08);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.14);
     @define-color accent_active_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.1);
     @define-color accent_fg_color {{colors.on_primary.dark.hex}};
     @define-color accent_bg_color {{colors.primary.dark.hex}};
