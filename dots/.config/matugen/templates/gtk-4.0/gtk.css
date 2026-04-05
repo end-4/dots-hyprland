@@ -40,6 +40,7 @@
     /* Popups */
     @define-color popover_bg_color {{colors.surface_container_highest.light.hex}};
     @define-color popover_fg_color {{colors.on_surface.light.hex}};
+    @define-color popover_fg_hover_color rgba({{colors.on_surface.light.red}}, {{colors.on_surface.light.green}}, {{colors.on_surface.light.blue}}, 0.08);
     @define-color dialog_bg_color {{colors.surface_container_high.light.hex}};
     @define-color dialog_fg_color {{colors.on_surface.light.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.light.hex}};
@@ -85,6 +86,7 @@
     /* Popups */
     @define-color popover_bg_color {{colors.surface_container_highest.dark.hex}};
     @define-color popover_fg_color {{colors.on_surface.dark.hex}};
+    @define-color popover_fg_hover_color rgba({{colors.on_surface.dark.red}}, {{colors.on_surface.dark.green}}, {{colors.on_surface.dark.blue}}, 0.08);
     @define-color dialog_bg_color {{colors.surface_container_high.dark.hex}};
     @define-color dialog_fg_color {{colors.on_surface.dark.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.dark.hex}};
@@ -97,23 +99,13 @@ window {
   background: @window_bg_color;
 }
 
-viewswitcher button {
-  padding: 6px 0;
-  font-size: 14px;
-  font-weight: 500;
+.text-button {
   border-radius: 999px;
 }
 
-viewswitcher button:hover {
-  background-color: @accent_hover_color;
-}
-
-.text-button {
-	border-radius: 999px;
-}
-
-.text-button, .text-button * {
-	font-weight: 500;
+.text-button,
+.text-button * {
+  font-weight: 500;
 }
 
 .popup-menu-item {
@@ -122,85 +114,86 @@ viewswitcher button:hover {
 }
 
 #NautilusPathBar #NautilusPathButton * {
-	color: @accent_color;
-	font-weight: 400;
+  color: @accent_color;
+  font-weight: 400;
 }
 
 #NautilusPathBar #NautilusPathButton {
-	background: @accent_active_color;
-	border-radius: 4px;
-	margin: 0;
-	margin-right: 2px;
+  background: @accent_active_color;
+  border-radius: 4px;
+  margin: 0;
+  margin-right: 2px;
 }
 
 #NautilusPathBar #NautilusPathButton:hover {
-	background: @accent_hover_color;
+  background: @accent_vibrant_hover_color;
 }
 
 #NautilusPathBar {
-	background: transparent;
+  background: transparent;
 }
 
 #NautilusPathBar box box:first-child #NautilusPathButton {
-	border-radius: 24px 4px 4px 24px;
+  border-radius: 24px 4px 4px 24px;
 }
 
 #NautilusPathBar box box:last-child #NautilusPathButton {
-	border-radius: 4px 24px 24px 4px;
+  border-radius: 4px 24px 24px 4px;
 }
 
 #NautilusPathBar #NautilusPathButton.current-dir.current-dir {
-	border-radius: 999px;
+  border-radius: 999px;
 }
 
 #NautilusPathBar #NautilusPathButton * {
-	color: @sidebar_row_active_fg_color;
+  color: @sidebar_row_active_fg_color;
 }
 
 #NautilusPathBar .dim-label {
-	font-size: 0;
+  font-size: 0;
 }
 
 #NautilusPathBar button .dim-label {
-	font-size: 14px;
-	opacity: 100%;
+  font-size: 14px;
+  opacity: 100%;
 }
 
-.nautilus-list-view, .nautilus-grid-view {
-    background: @secondary_sidebar_bg_color;
-    border-radius: 16px;
+.nautilus-list-view,
+.nautilus-grid-view {
+  background: @secondary_sidebar_bg_color;
+  border-radius: 16px;
 }
 
 .navigation-sidebar row * {
   color: @sidebar_fg_color;
-	font-weight: 500;
-	font-size: 13px;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .navigation-sidebar row {
-	border-radius: 999px;
+  border-radius: 999px;
 }
 
 .navigation-sidebar row:hover {
-	background: @accent_hover_color;
+  background: @accent_hover_color;
 }
 
 .navigation-sidebar row:active {
-	background: @accent_active_color;
+  background: @accent_active_color;
 }
 
 .navigation-sidebar row:selected {
-	background: @sidebar_row_active_bg_color;
+  background: @sidebar_row_active_bg_color;
 }
 
 .navigation-sidebar row:selected * {
-	color: @sidebar_row_active_fg_color;
+  color: @sidebar_row_active_fg_color;
 }
 
 banner widget {
-	border-radius: 16px 0 0 16px;
-	margin-bottom: 8px;
-	background-color: @secondary_sidebar_bg_color;
+  border-radius: 16px 0 0 16px;
+  margin-bottom: 8px;
+  background-color: @secondary_sidebar_bg_color;
 }
 
 .boxed-list {
@@ -208,155 +201,189 @@ banner widget {
 }
 
 .boxed-list row {
-	background: @card_bg_color;
-	border-radius: 4px;
-	border: none;
-	margin-bottom: 2px;
+  background: @card_bg_color;
+  border-radius: 4px;
+  border: none;
+  margin-bottom: 2px;
 }
 
 .boxed-list row.activatable:hover {
-	background-color: @accent_hover_color;
+  background-color: @thumbnail_bg_color;
 }
 
 .boxed-list row.activatable:active {
-	background-color: @accent_active_color;
+  background-color: @popover_bg_color;
+}
+
+.horizontal>listview>row {
+  background-color: transparent;
 }
 
 .boxed-list row:insensitive {
-	background-color: @card_bg_color; 
+  background-color: @card_bg_color;
 }
 
 .text-button.toggle {
-	border-radius: 4px;
+  border-radius: 4px;
 }
 
 .text-button.toggle * {
-	font-weight: 500;
+  font-weight: 500;
 }
 
 .boxed-list row:first-child {
-	border-radius: 16px 16px 4px 4px;
+  border-radius: 16px 16px 4px 4px;
 }
 
 .boxed-list row:last-child {
-	border-radius: 4px 4px 16px 16px;
-	margin-bottom: 0;
+  border-radius: 4px 4px 16px 16px;
+  margin-bottom: 0;
 }
 
 .text-button.toggle:first-child {
-	border-radius: 16px 4px 4px 16px;
+  border-radius: 16px 4px 4px 16px;
 }
 
 .text-button.toggle:last-child {
-	border-radius: 4px 16px 16px 4px;
+  border-radius: 4px 16px 16px 4px;
 }
 
 .boxed-list row:first-child:last-child,
 .text-button.toggle:first-child:last-child {
-	border-radius: 16px;
+  border-radius: 16px;
 }
 
 .text-button.toggle:checked {
-	background-color: @accent_bg_color;
-	border-radius: 999px;
-	color: @accent_fg_color;
+  background-color: @accent_bg_color;
+  border-radius: 999px;
+  color: @accent_fg_color;
 }
 
 button.back {
-	border-radius: 999px;
-	background-color: @secondary_sidebar_bg_color;
-	padding-left: 4px;
-	padding-right: 6px;
+  border-radius: 999px;
+  background-color: @accent_hover_color;
+  padding-left: 4px;
+  padding-right: 6px;
 }
 
 button.back * {
-	font-size: 12px;
+  font-size: 12px;
 }
 
 button.back:hover {
-	background-color: @accent_hover_color;
+  background-color: @accent_hover_color;
 }
 
 button.back:active {
-	background-color: @accent_active_color;
+  background-color: @accent_active_color;
 }
 
 /* switch */
 
 switch {
-	background: @secondary_sidebar_bg_color;
-	border: #90878f 2px solid;
-	padding: 0;
+  background: @secondary_sidebar_bg_color;
+  border: #90878f 2px solid;
+  padding: 0;
 }
 
 switch:checked {
-	background: @accent_color;
-	border-color: @accent_color;
+  background: @accent_color;
+  border-color: @accent_color;
 }
 
-slider {
-	background: #90878f;
-	border: @secondary_sidebar_bg_color 2px solid;
-	min-width: 4px;
-	min-height: 4px;
+switch slider {
+  background: #90878f;
+  outline: @secondary_sidebar_bg_color 2px solid;
+  margin: 2px;
+  min-width: 0;
+  min-height: 0;
 }
 
 switch:checked slider {
-	background: @accent_fg_color;
-	border: none;
+  background: @accent_fg_color;
+  outline: none;
+  margin: 0;
 }
 
 /* toast */
 
 toast {
-	border-radius: 999px;
-	padding: 2px 6px;
-	margin: 8px;
-	background-color: @toast_bg_color;
-	color: @toast_fg_color;
+  border-radius: 999px;
+  padding: 2px 6px;
+  margin: 8px;
+  background-color: @toast_bg_color;
+  color: @toast_fg_color;
 }
 
 toast * {
-	font-weight: 400;
-	font-size: 12px;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 .collapse-spacing.vertical {
-    padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 tabbox {
-	padding: 0;
+  padding: 0;
 }
 
-tabbox tabboxchild tab, tabbox tabboxchild {
-	background: transparent;
-	padding: 0 8px 3px;
-	border-radius: 999px;
+tabbox tabboxchild tab,
+tabbox tabboxchild {
+  background: transparent;
+  padding: 0 8px 3px;
+  border-radius: 999px;
+}
+
+tabbox tabboxchild tab {
+  padding: 3px 8px;
 }
 
 tab:hover {
-	background: @accent_hover_color;
+  background: @accent_hover_color;
 }
 
-tab:active, tab:selected {
-	background: @accent_active_color;
+tab:active,
+tab:selected {
+  background: @accent_active_color;
 }
 
 tab .tab-title {
-	padding: 0 12px;
-	color: @secondary_sidebar_fg_color;
-}
-
-tab:hover .tab-title {
+  padding: 0 12px;
+  color: @secondary_sidebar_fg_color;
 }
 
 tab .tab-title label {
-border: none;
-	font-weight: 500;
+  border: none;
+  font-weight: 500;
 }
 
 tab:selected .tab-title label {
-	padding: 6px 0;
-	color: @accent_color;
+  padding: 6px 0;
+  color: @accent_color;
+}
+
+/* popup menu */
+
+popover contents {
+  background: @secondary_sidebar_bg_color;
+}
+
+modelbutton {
+  padding: 2px 10px;
+}
+
+modelbutton * {
+  color: @popover_fg_color;
+}
+
+modelbutton:hover {
+  background-color: @popover_fg_hover_color;
+}
+
+tooltip {
+  background-color: #e3e1e9;
+  font-size: 11px;
+  padding: 5px 9px;
+  color: #393a40;
 }
