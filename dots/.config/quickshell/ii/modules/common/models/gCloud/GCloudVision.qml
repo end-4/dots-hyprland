@@ -7,17 +7,8 @@ import qs.services
 import qs.modules.common
 import ".."
 
-NestableObject {
+GCloudApi {
     id: root
-
-    enum State {
-        Done, Uploading, Processing, Error
-    }
-
-    signal finished()
-    signal error()
-    property var outputData
-    property var state: GCloudVision.State.Done
 
     readonly property string imageBase64FilePath: `${Directories.screenshotTemp}/vision_base64.txt`
     readonly property string payloadFilePath: `${Directories.screenshotTemp}/vision_payload.json`
@@ -28,7 +19,8 @@ NestableObject {
     readonly property bool preparationReady: tokenReady && onlineImageReady
 
     function annotateImage(imageUri: string) {
-        root.state = GCloudVision.State.Uploading;
+        resetState();
+        root.state = GCloudApi.State.Preparing;
         root.onlineImageReady = false
         GoogleCloud.load();
 
@@ -49,11 +41,11 @@ NestableObject {
     onPreparationReadyChanged: {
         if (!preparationReady) return;
         if (GoogleCloud.tokenError || GoogleCloud.keyError) {
-            root.state = GCloudVision.State.Error;
-            root.error();
+            root.state = GCloudApi.State.Error;
+            root.error(Translation.tr("Set your Google Cloud service account key"));
             return;
         }
-        root.state = GCloudVision.State.Processing;
+        root.state = GCloudApi.State.Processing;
         var seq = []; // command sequence
 
         // Construct the JSON payload using jq to read from the base64 file
@@ -75,9 +67,7 @@ https://vision.googleapis.com/v1/images:annotate \
         ]);
 
         seq.push((out) => {
-            root.outputData = JSON.parse(out);
-            root.finished();
-            root.state = GCloudVision.State.Done;
+            root.handleApiOutput(out);
         });
 
         lookMultiproc.runSequence(seq);
