@@ -82,6 +82,7 @@
   "Corner open": "Apertura por esquina",
   "Reload Hyprland & Quickshell": "Recargar Hyprland y Quickshell",
   ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!": ". Notas para Zerochan:\n- Debes ingresar un color\n- Configura tu nombre de usuario de Zerochan en la opción `sidebar.booru.zerochan.username`. ¡[Podrías ser baneado si no lo haces](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!",
+  ". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.": ". Notas para Gelbooru:\n- Debes ingresar credenciales de API en las opciones de configuración `sidebar.booru.gelbooru.userId` y `sidebar.booru.gelbooru.apiKey`. Puedes obtenerlas en la [configuración de tu cuenta](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) en Gelbooru.",
   "No": "No",
   "Mic toggle": "Alternar micrófono",
   "Snipping area": "Área de recorte",
