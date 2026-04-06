@@ -404,6 +404,7 @@
   "Reject": "Ablehnen",
   "Set API key": "API-Schlüssel setzen",
   ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!": ". Hinweise für Zerochan:\n- Du musst eine Farbe eingeben\n- Setze deinen Zerochan-Benutzernamen in der Konfigurationsoption `sidebar.booru.zerochan.username`. Du [könntest gesperrt werden, wenn du das nicht tust](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!",
+  ". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.": ". Hinweise für Gelbooru:\n- Du musst API-Zugangsdaten in den Konfigurationsoptionen `sidebar.booru.gelbooru.userId` und `sidebar.booru.gelbooru.apiKey` eingeben. Diese findest du in deinen [Kontoeinstellungen](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) auf Gelbooru.",
   "Content": "Inhalt",
   "Pomodoro": "Pomodoro",
   "Vertical": "Vertikal",
