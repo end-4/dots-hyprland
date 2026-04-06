@@ -7,8 +7,9 @@
     /* Accents */
     @define-color accent_color {{colors.primary.light.hex}};
     @define-color accent_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.08);
-    @define-color accent_vibrant_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.14);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.18);
     @define-color accent_active_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.1);
+    @define-color accent_vibrant_active_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.26);
     @define-color accent_fg_color {{colors.on_primary.light.hex}};
     @define-color accent_bg_color {{colors.primary.light.hex}};
     @define-color destructive_bg_color {{colors.error_container.light.hex}};
@@ -48,14 +49,18 @@
     @define-color thumbnail_fg_color {{colors.on_surface.light.hex}};
     @define-color toast_bg_color {{colors.primary_container.light.hex}};
     @define-color toast_gg_color {{colors.on_primary_container.light.hex}};
+
+    @define-color scrollbar_color {{colors.outline.light.hex}};
+    @define-color scrollbar_hover_color {{colors.outline_variant.light.hex}};
 }
 
 @media (prefers-color-scheme: dark) {
     /* Accents */
     @define-color accent_color {{colors.primary.dark.hex}};
     @define-color accent_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.08);
-    @define-color accent_vibrant_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.14);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.18);
     @define-color accent_active_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.1);
+    @define-color accent_vibrant_active_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.2);
     @define-color accent_fg_color {{colors.on_primary.dark.hex}};
     @define-color accent_bg_color {{colors.primary.dark.hex}};
     @define-color destructive_bg_color {{colors.error_container.dark.hex}};
@@ -95,10 +100,33 @@
     @define-color thumbnail_fg_color {{colors.on_surface.dark.hex}};
     @define-color toast_bg_color {{colors.primary_container.dark.hex}};
     @define-color toast_gg_color {{colors.on_primary_container.dark.hex}};
+
+    @define-color scrollbar_color {{colors.outline.dark.hex}};
+    @define-color scrollbar_hover_color {{colors.outline_variant.dark.hex}};
 }
 
 window {
   background: @window_bg_color;
+}
+
+scrollbar * {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+
+scrollbar slider {
+  background: @scrollbar_color;
+  border-radius: 999px;
+  min-width: 4px;
+}
+
+scrollbar trough {
+  background: transparent;
+  padding: 1px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .text-button {
@@ -127,8 +155,20 @@ window {
   margin-right: 2px;
 }
 
+.nautilus-window headerbar button:hover {
+  background: @accent_hover_color;
+}
+
+.nautilus-window headerbar button:active {
+  background: @accent_active_color;
+}
+
 #NautilusPathBar #NautilusPathButton:hover {
   background: @accent_vibrant_hover_color;
+}
+
+#NautilusPathBar #NautilusPathButton:active {
+  background: @accent_vibrant_active_color;
 }
 
 #NautilusPathBar {
@@ -160,8 +200,25 @@ window {
   opacity: 100%;
 }
 
+#NautilusPathBar button {
+  border-radius: 8px;
+}
+
+
+#NautilusPathBar button:checked {
+  background: @accent_vibrant_hover_color;
+}
+
+headerbar >windowhandle box stack > box:nth-child(2) {
+	background: @accent_active_color;
+	border-radius: 8px;
+}
+
 .nautilus-list-view,
 .nautilus-grid-view {
+  
+  /* search */
+  
   background: @secondary_sidebar_bg_color;
   border-radius: 16px;
 }
@@ -367,7 +424,8 @@ tab:selected .tab-title label {
 
 /* popup menu */
 
-popover contents {
+popover contents,
+popover arrow {
   background: @secondary_sidebar_bg_color;
 }
 
@@ -388,4 +446,13 @@ tooltip {
   font-size: 11px;
   padding: 5px 9px;
   color: #393a40;
+}
+
+/* search */
+
+.entry-completion.entry-completion.entry-completion contents {
+	padding: 0;
+}
+.image-button.flat arrow {
+background: transparent;
 }
