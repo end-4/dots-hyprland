@@ -404,6 +404,7 @@
   "Reject": "Tolak",
   "Set API key": "Atur kunci API",
   ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!": ". Catatan untuk Zerochan:\n- Anda harus memasukkan warna\n- Atur nama pengguna zerochan Anda di opsi konfigurasi `sidebar.booru.zerochan.username`. [Akses Anda mungkin akan ditangguhkan jika tidak dilakukan](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!",
+  ". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.": ". Catatan untuk Gelbooru:\n- Anda harus memasukkan kredensial API di opsi konfigurasi `sidebar.booru.gelbooru.userId` dan `sidebar.booru.gelbooru.apiKey`. Anda bisa mendapatkannya dari [pengaturan akun](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) di Gelbooru.",
   "Content": "Konten",
   "Pomodoro": "Pomodoro",
   "Vertical": "Vertikal",
