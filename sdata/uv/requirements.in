@@ -16,3 +16,5 @@ pygobject
 tqdm
 numpy
 opencv-contrib-python
+google-auth
+requests
