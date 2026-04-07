@@ -155,22 +155,6 @@ window {
   margin-right: 2px;
 }
 
-.nautilus-window headerbar button:hover {
-  background: @accent_hover_color;
-}
-
-.nautilus-window headerbar button:active {
-  background: @accent_active_color;
-}
-
-#NautilusPathBar #NautilusPathButton:hover {
-  background: @accent_vibrant_hover_color;
-}
-
-#NautilusPathBar #NautilusPathButton:active {
-  background: @accent_vibrant_active_color;
-}
-
 #NautilusPathBar {
   background: transparent;
 }
@@ -207,6 +191,10 @@ window {
 
 #NautilusPathBar button:checked {
   background: @accent_vibrant_hover_color;
+}
+
+headerbar button {
+  border-radius: 999px;
 }
 
 headerbar >windowhandle box stack > box:nth-child(2) {
