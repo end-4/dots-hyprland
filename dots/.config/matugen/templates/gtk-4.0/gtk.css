@@ -47,14 +47,19 @@
     @define-color dialog_fg_color {{colors.on_surface.light.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.light.hex}};
     @define-color thumbnail_fg_color {{colors.on_surface.light.hex}};
-    @define-color toast_bg_color {{colors.primary_container.light.hex}};
-    @define-color toast_gg_color {{colors.on_primary_container.light.hex}};
-
-    @define-color scrollbar_color {{colors.outline.light.hex}};
-    @define-color scrollbar_hover_color {{colors.outline_variant.light.hex}};
 
     /* Material */
+    @define-color inverse_on_surface {{colors.inverse_on_surface.light.hex}};
+    @define-color inverse_primary {{colors.inverse_primary.light.hex}};
+    @define-color inverse_surface {{colors.inverse_surface.light.hex}};
+
     @define-color outline {{colors.outline.light.hex}};
+
+    /* Material state layers */
+    @define-color inverse_on_surface_hover rgba({{colors.inverse_on_surface.light.red}}, {{colors.inverse_on_surface.light.green}}, {{colors.inverse_on_surface.light.blue}}, 0.08);
+    @define-color inverse_on_surface_active rgba({{colors.inverse_on_surface.light.red}}, {{colors.inverse_on_surface.light.green}}, {{colors.inverse_on_surface.light.blue}}, 0.18);
+    @define-color inverse_primary_hover rgba({{colors.inverse_primary.light.red}}, {{colors.inverse_primary.light.green}}, {{colors.inverse_primary.light.blue}}, 0.08);
+    @define-color inverse_primary_active rgba({{colors.inverse_primary.light.red}}, {{colors.inverse_primary.light.green}}, {{colors.inverse_primary.light.blue}}, 0.18);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -101,14 +106,19 @@
     @define-color dialog_fg_color {{colors.on_surface.dark.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.dark.hex}};
     @define-color thumbnail_fg_color {{colors.on_surface.dark.hex}};
-    @define-color toast_bg_color {{colors.primary_container.dark.hex}};
-    @define-color toast_gg_color {{colors.on_primary_container.dark.hex}};
-
-    @define-color scrollbar_color {{colors.outline.dark.hex}};
-    @define-color scrollbar_hover_color {{colors.outline_variant.dark.hex}};
 
     /* Material */
+    @define-color inverse_on_surface {{colors.inverse_on_surface.dark.hex}};
+    @define-color inverse_primary {{colors.inverse_primary.dark.hex}};
+    @define-color inverse_surface {{colors.inverse_surface.dark.hex}};
+
     @define-color outline {{colors.outline.dark.hex}};
+
+    /* Material state layers */
+    @define-color inverse_on_surface_hover rgba({{colors.inverse_on_surface.dark.red}}, {{colors.inverse_on_surface.dark.green}}, {{colors.inverse_on_surface.dark.blue}}, 0.08);
+    @define-color inverse_on_surface_active rgba({{colors.inverse_on_surface.dark.red}}, {{colors.inverse_on_surface.dark.green}}, {{colors.inverse_on_surface.dark.blue}}, 0.18);
+    @define-color inverse_primary_hover rgba({{colors.inverse_primary.dark.red}}, {{colors.inverse_primary.dark.green}}, {{colors.inverse_primary.dark.blue}}, 0.08);
+    @define-color inverse_primary_active rgba({{colors.inverse_primary.dark.red}}, {{colors.inverse_primary.dark.green}}, {{colors.inverse_primary.dark.blue}}, 0.18);
 }
 
 * {
@@ -356,16 +366,35 @@ switch:checked slider {
 /* toast */
 
 toast {
-  border-radius: 999px;
-  padding: 2px 6px;
-  margin: 8px;
-  background-color: @toast_bg_color;
-  color: @toast_fg_color;
+  border-radius: 4px;
+  padding: 6px;
+  background-color: @inverse_surface;
+  color: @inverse_on_surface;
 }
 
-toast * {
-  font-weight: 400;
-  font-size: 12px;
+toast button {
+  background-color: transparent;
+  color: @inverse_primary;
+}
+
+toast button:hover {
+  background-color: @inverse_primary_hover;
+}
+
+toast button:active {
+  background-color: @inverse_primary_active;
+}
+
+toast button:last-child {
+  color: @inverse_on_surface;
+}
+
+toast button:last-child:hover {
+  background-color: @inverse_on_surface_hover;
+}
+
+toast button:last-child:active {
+  background-color: @inverse_on_surface_active;
 }
 
 .collapse-spacing.vertical {
@@ -443,5 +472,5 @@ tooltip {
 	padding: 0;
 }
 .image-button.flat arrow {
-background: transparent;
+  background: transparent;
 }
