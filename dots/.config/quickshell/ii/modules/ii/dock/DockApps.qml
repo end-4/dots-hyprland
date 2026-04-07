@@ -23,6 +23,33 @@ Item {
 
     Layout.fillHeight: true
     Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
+    
+    property var processedApps: []
+
+    function updateModel() {
+        const apps = TaskbarApps.apps || [];
+        const newModel = [];
+
+        for (let i = 0; i < apps.length; i++) {
+            const app = apps[i];
+            newModel.push({
+                uniqueKey: app.appId, 
+                appData: app          
+            });
+        }
+        
+        processedApps = newModel;
+    }
+
+    Connections {
+        target: TaskbarApps
+        function onAppsChanged() {
+            updateModel();
+        }
+    }
+
+    Component.onCompleted: updateModel()     // Load model at start
+
     implicitWidth: listView.implicitWidth
     
     StyledListView {
@@ -40,19 +67,18 @@ Item {
         }
 
         model: ScriptModel {
-            objectProp: "appId"
-            values: TaskbarApps.apps
+            objectProp: "uniqueKey" // Use uniqueKey for identity
+            values: root.processedApps
         }
+        
         delegate: DockAppButton {
             required property var modelData
-            appToplevel: modelData
+            appToplevel: modelData.appData
             appListRoot: root
-
             topInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
             bottomInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
         }
     }
-
     PopupWindow {
         id: previewPopup
         property var appTopLevel: root.lastHoveredButton?.appToplevel
