@@ -161,6 +161,18 @@ Singleton {
                 property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
+            property JsonObject scratchpads: JsonObject {
+                property JsonObject music: JsonObject {
+                    property bool enable: true
+                    property string app: "youtube-music" // "youtube-music" or "spotify"
+                    property bool alwaysInSpecial: false // When true, skips searching other workspaces
+                }
+                property JsonObject discord: JsonObject {
+                    property bool enable: true
+                    property bool alwaysInSpecial: false
+                }
+            }
+
             property JsonObject background: JsonObject {
                 property JsonObject widgets: JsonObject {
                     property JsonObject clock: JsonObject {
