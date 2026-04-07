@@ -45,6 +45,13 @@ MouseArea {
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold
         }
 
+        Resource {
+            iconName: "hard_drive_2"
+            percentage: ResourceUsage.diskUsedPercentage
+            shown: true
+            warningThreshold: 90
+        }
+
     }
 
     ResourcesPopup {

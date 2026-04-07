@@ -22,6 +22,11 @@ Singleton {
     property real cpuUsage: 0
     property var previousCpuStats
 
+    property real diskTotal: 1
+    property real diskUsed: 0
+    property real diskUsedPercentage: diskTotal > 0 ? (diskUsed / diskTotal) : 0
+    property string maxAvailableDiskString: "--"
+
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
     property string maxAvailableCpuString: "--"
@@ -30,6 +35,7 @@ Singleton {
     property list<real> cpuUsageHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
+    property list<real> diskUsageHistory: []
 
     function kbToGbString(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
@@ -53,10 +59,17 @@ Singleton {
             cpuUsageHistory.shift()
         }
     }
+    function updateDiskUsageHistory() {
+        diskUsageHistory = [...diskUsageHistory, diskUsedPercentage]
+        if (diskUsageHistory.length > historyLength) {
+            diskUsageHistory.shift()
+        }
+    }
     function updateHistories() {
         updateMemoryUsageHistory()
         updateSwapUsageHistory()
         updateCpuUsageHistory()
+        updateDiskUsageHistory()
     }
 
 	Timer {
@@ -67,6 +80,7 @@ Singleton {
             // Reload files
             fileMeminfo.reload()
             fileStat.reload()
+            findDiskUsageProc.running = true
 
             // Parse memory and swap usage
             const textMeminfo = fileMeminfo.text()
@@ -99,6 +113,27 @@ Singleton {
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
+
+    Process {
+        id: findDiskUsageProc
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        command: ["bash", "-c", "df -Pk / | awk 'NR==2 {print $2, $3}'"]
+        running: true
+        stdout: StdioCollector {
+            id: diskOutputCollector
+            onStreamFinished: {
+                const parts = diskOutputCollector.text.trim().split(/\s+/)
+                if (parts.length >= 2) {
+                    diskTotal = Number(parts[0])
+                    diskUsed = Number(parts[1])
+                    root.maxAvailableDiskString = (diskTotal / (1024 * 1024)).toFixed(1) + " GB"
+                }
+            }
+        }
+    }
 
     Process {
         id: findCpuMaxFreqProc
