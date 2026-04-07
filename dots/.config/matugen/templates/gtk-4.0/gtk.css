@@ -470,10 +470,10 @@ modelbutton:hover {
 }
 
 tooltip {
-  background-color: #e3e1e9;
+  background-color: @inverse_surface;
+  color: @inverse_on_surface;
   font-size: 11px;
   padding: 5px 9px;
-  color: #393a40;
 }
 
 /* search */
