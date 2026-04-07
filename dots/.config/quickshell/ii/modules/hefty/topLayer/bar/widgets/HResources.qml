@@ -30,6 +30,8 @@ HBarWidgetWithPopout {
         contentImplicitWidth: sysInfoContent.implicitWidth
         contentImplicitHeight: sysInfoContent.implicitHeight
 
+        parentRadiusToPaddingRatio: 0
+
         SysInfoContent {
             id: sysInfoContent
             anchors.fill: parent
@@ -67,6 +69,9 @@ HBarWidgetWithPopout {
             spacing: 4
 
             Item {} // Trick for extra spacing
+            Item {
+                visible: root.startSide
+            }
 
             AlignedFadeLoader {
                 shown: C.Config.options.hefty.bar.resources.showMemory || (
