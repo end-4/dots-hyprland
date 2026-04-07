@@ -72,7 +72,6 @@ Singleton {
                     root.tokenError = false;
                 } catch(e) {
                     root.tokenError = true;
-                    print("[GoogleCloud] Failed to parse token response: " + e)
                     print("[GoogleCloud] Failed to parse token response: " + e + "\n" + out)
                 }
                 root.tokenReady = true;
