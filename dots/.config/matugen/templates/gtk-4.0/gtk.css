@@ -105,6 +105,10 @@
     @define-color scrollbar_hover_color {{colors.outline_variant.dark.hex}};
 }
 
+* {
+  caret-color: @accent_color;
+}
+
 window {
   background: @window_bg_color;
 }
@@ -352,7 +356,6 @@ switch:checked {
 
 switch slider {
   background: #90878f;
-  outline: @secondary_sidebar_bg_color 2px solid;
   margin: 2px;
   min-width: 0;
   min-height: 0;
@@ -360,8 +363,8 @@ switch slider {
 
 switch:checked slider {
   background: @accent_fg_color;
-  outline: none;
-  margin: 0;
+  outline: transparent 2px solid;
+  margin: 0px;
 }
 
 /* toast */
