@@ -52,6 +52,9 @@
 
     @define-color scrollbar_color {{colors.outline.light.hex}};
     @define-color scrollbar_hover_color {{colors.outline_variant.light.hex}};
+
+    /* Material */
+    @define-color outline {{colors.outline.light.hex}};
 }
 
 @media (prefers-color-scheme: dark) {
@@ -103,6 +106,9 @@
 
     @define-color scrollbar_color {{colors.outline.dark.hex}};
     @define-color scrollbar_hover_color {{colors.outline_variant.dark.hex}};
+
+    /* Material */
+    @define-color outline {{colors.outline.dark.hex}};
 }
 
 * {
@@ -345,7 +351,7 @@ button.back:active {
 
 switch {
   background: @secondary_sidebar_bg_color;
-  border: #90878f 2px solid;
+  border: @outline 2px solid;
   padding: 0;
 }
 
@@ -355,8 +361,8 @@ switch:checked {
 }
 
 switch slider {
-  background: #90878f;
-  margin: 2px;
+  background: @outline;
+  margin: 3px;
   min-width: 0;
   min-height: 0;
 }
