@@ -119,26 +119,6 @@ window {
   background: @window_bg_color;
 }
 
-scrollbar * {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
- 
-
-scrollbar slider {
-  background: @scrollbar_color;
-  border-radius: 999px;
-  min-width: 4px;
-}
-
-scrollbar trough {
-  background: transparent;
-  padding: 1px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-
 .text-button {
   border-radius: 999px;
 }
