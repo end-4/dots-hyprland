@@ -185,7 +185,7 @@ LockScreen {
         id: iconIndicator
         required property string baseIcon
         required property string icon
-        default property alias data: iconWidget.data
+        default property alias indicatorData: iconWidget.data
         implicitWidth: 40
         implicitHeight: 40
         FluentIcon {
