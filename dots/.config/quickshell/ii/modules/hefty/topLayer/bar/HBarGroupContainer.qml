@@ -12,7 +12,7 @@ Item {
     property alias color: bg.color
     property real margins: 4
     property real padding: 4
-    default property alias data: layout.data
+    default property alias groupData: layout.data
 
     readonly property bool vertical: C.Config.options.bar.vertical
     readonly property bool m3eRadius: C.Config.options.hefty.bar.m3ExpressiveGrouping
