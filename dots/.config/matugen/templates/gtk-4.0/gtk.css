@@ -452,9 +452,24 @@ tab:selected .tab-title label {
 
 /* popup menu */
 
+popover listview.view row,
+popover listview.view row:first-child,
+popover listview.view row:last-child {
+  background: transparent;
+  border-radius: 8px;
+}
+
 popover contents,
 popover arrow {
   background: @secondary_sidebar_bg_color;
+}
+
+popover listview.view row:hover {
+  background: @popover_fg_hover_color;
+}
+
+popover listview.view row:active {
+  background: @popover_fg_active_color;
 }
 
 modelbutton {
