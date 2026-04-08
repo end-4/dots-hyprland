@@ -119,6 +119,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
 
         toggled: Persistent.states.overlay.open.includes(identifier)
+        altAction: () => OverlayContext.requestCenter(identifier)
         onClicked: {
             if (widgetButton.toggled) {
                 Persistent.states.overlay.open = Persistent.states.overlay.open.filter(type => type !== identifier);

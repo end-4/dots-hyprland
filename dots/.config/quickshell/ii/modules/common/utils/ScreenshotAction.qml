@@ -32,7 +32,7 @@ Singleton {
         const rw = Math.round(width);
         const rh = Math.round(height);
         const cropBase = `magick ${StringUtils.shellSingleQuoteEscape(screenshotPath)} `
-            + `-crop ${rw}x${rh}+${rx}+${ry}`
+            + `-crop ${rw}x${rh}+${rx}+${ry} +repage`
         const cropToStdout = `${cropBase} -`
         const cropInPlace = `${cropBase} '${StringUtils.shellSingleQuoteEscape(screenshotPath)}'`
         const cleanup = `rm '${StringUtils.shellSingleQuoteEscape(screenshotPath)}'`

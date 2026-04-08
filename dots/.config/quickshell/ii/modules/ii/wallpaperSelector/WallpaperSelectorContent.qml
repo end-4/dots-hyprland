@@ -17,20 +17,20 @@ MouseArea {
     property bool useDarkMode: Appearance.m3colors.darkmode
 
     function updateThumbnails() {
-        const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2
-        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions(grid.cellWidth - totalImageMargin, grid.cellHeight - totalImageMargin)
-        Wallpapers.generateThumbnail(thumbnailSizeName)
+        const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2;
+        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions(grid.cellWidth - totalImageMargin, grid.cellHeight - totalImageMargin);
+        Wallpapers.generateThumbnail(thumbnailSizeName);
     }
 
     Connections {
         target: Wallpapers
         function onDirectoryChanged() {
-            root.updateThumbnails()
+            root.updateThumbnails();
         }
     }
 
     function handleFilePasting(event) {
-        const currentClipboardEntry = Cliphist.entries[0]
+        const currentClipboardEntry = Cliphist.entries[0];
         if (/^\d+\tfile:\/\/\S+/.test(currentClipboardEntry)) {
             const url = StringUtils.cleanCliphistEntry(currentClipboardEntry);
             Wallpapers.setDirectory(FileUtils.trimFileProtocol(decodeURIComponent(url)));
@@ -164,15 +164,48 @@ MouseArea {
                         implicitWidth: 140
                         clip: true
                         model: [
-                            { icon: "home", name: "Home", path: Directories.home }, 
-                            { icon: "docs", name: "Documents", path: Directories.documents }, 
-                            { icon: "download", name: "Downloads", path: Directories.downloads }, 
-                            { icon: "image", name: "Pictures", path: Directories.pictures }, 
-                            { icon: "movie", name: "Videos", path: Directories.videos }, 
-                            { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
-                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
-                            ...(Config.options.policies.weeb === 1 ? [{ icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` }] : []),
-                        ]
+                            {
+                                icon: "home",
+                                name: "Home",
+                                path: Directories.home
+                            },
+                            {
+                                icon: "docs",
+                                name: "Documents",
+                                path: Directories.documents
+                            },
+                            {
+                                icon: "download",
+                                name: "Downloads",
+                                path: Directories.downloads
+                            },
+                            {
+                                icon: "image",
+                                name: "Pictures",
+                                path: Directories.pictures
+                            },
+                            {
+                                icon: "movie",
+                                name: "Videos",
+                                path: Directories.videos
+                            },
+                            {
+                                icon: "",
+                                name: "---",
+                                path: "INTENTIONALLY_INVALID_DIR"
+                            },
+                            {
+                                icon: "wallpaper",
+                                name: "Wallpapers",
+                                path: `${Directories.pictures}/Wallpapers`
+                            },
+                            ...(Config.options.policies.weeb === 1 ? [
+                                    {
+                                        icon: "favorite",
+                                        name: "Homework",
+                                        path: `${Directories.pictures}/homework`
+                                    }
+                                ] : []),]
                         delegate: RippleButton {
                             id: quickDirButton
                             required property var modelData
@@ -267,7 +300,7 @@ MouseArea {
                         ScrollBar.vertical: StyledScrollBar {}
 
                         Component.onCompleted: {
-                            root.updateThumbnails()
+                            root.updateThumbnails();
                         }
 
                         function moveSelection(delta) {
@@ -276,7 +309,7 @@ MouseArea {
                         }
 
                         function activateCurrent() {
-                            const filePath = grid.model.get(currentIndex, "filePath")
+                            const filePath = grid.model.get(currentIndex, "filePath");
                             root.selectWallpaperPath(filePath);
                         }
 
@@ -294,7 +327,7 @@ MouseArea {
                             onEntered: {
                                 grid.currentIndex = index;
                             }
-                            
+
                             onActivated: {
                                 root.selectWallpaperPath(fileModelData.filePath);
                             }
@@ -310,92 +343,91 @@ MouseArea {
                         }
                     }
 
-                    Toolbar {
+                    Row {
                         id: extraOptions
                         anchors {
                             bottom: parent.bottom
                             horizontalCenter: parent.horizontalCenter
                             bottomMargin: 8
                         }
+                        spacing: 6
+                        Toolbar {
 
-                        IconToolbarButton {
-                            implicitWidth: height
-                            onClicked: {
-                                Wallpapers.openFallbackPicker(root.useDarkMode);
-                                GlobalStates.wallpaperSelectorOpen = false;
-                            }
-                            altAction: () => {
-                                Wallpapers.openFallbackPicker(root.useDarkMode);
-                                GlobalStates.wallpaperSelectorOpen = false;
-                                Config.options.wallpaperSelector.useSystemFileDialog = true
-                            }
-                            text: "open_in_new"
-                            StyledToolTip {
-                                text: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
-                            }
-                        }
-
-                        IconToolbarButton {
-                            implicitWidth: height
-                            onClicked: {
-                                Wallpapers.randomFromCurrentFolder();
-                            }
-                            text: "ifl"
-                            StyledToolTip {
-                                text: Translation.tr("Pick random from this folder")
-                            }
-                        }
-
-                        IconToolbarButton {
-                            implicitWidth: height
-                            onClicked: root.useDarkMode = !root.useDarkMode
-                            text: root.useDarkMode ? "dark_mode" : "light_mode"
-                            StyledToolTip {
-                                text: Translation.tr("Click to toggle light/dark mode\n(applied when wallpaper is chosen)")
-                            }
-                        }
-
-                        ToolbarTextField {
-                            id: filterField
-                            placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
-
-                            // Style
-                            clip: true
-                            font.pixelSize: Appearance.font.pixelSize.small
-
-                            // Search
-                            onTextChanged: {
-                                Wallpapers.searchQuery = text;
-                            }
-
-                            Keys.onPressed: event => {
-                                if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers
-                                    root.handleFilePasting(event);
-                                    return;
+                            IconToolbarButton {
+                                implicitWidth: height
+                                onClicked: {
+                                    Wallpapers.openFallbackPicker(root.useDarkMode);
+                                    GlobalStates.wallpaperSelectorOpen = false;
                                 }
-                                else if (text.length !== 0) {
-                                    // No filtering, just navigate grid
-                                    if (event.key === Qt.Key_Down) {
-                                        grid.moveSelection(grid.columns);
-                                        event.accepted = true;
-                                        return;
-                                    }
-                                    if (event.key === Qt.Key_Up) {
-                                        grid.moveSelection(-grid.columns);
-                                        event.accepted = true;
-                                        return;
-                                    }
+                                altAction: () => {
+                                    Wallpapers.openFallbackPicker(root.useDarkMode);
+                                    GlobalStates.wallpaperSelectorOpen = false;
+                                    Config.options.wallpaperSelector.useSystemFileDialog = true;
                                 }
-                                event.accepted = false;
+                                text: "open_in_new"
+                                StyledToolTip {
+                                    text: Translation.tr("Use the system file picker instead\nRight-click to make this the default behavior")
+                                }
+                            }
+
+                            IconToolbarButton {
+                                implicitWidth: height
+                                onClicked: {
+                                    Wallpapers.randomFromCurrentFolder();
+                                }
+                                text: "ifl"
+                                StyledToolTip {
+                                    text: Translation.tr("Pick random from this folder")
+                                }
+                            }
+
+                            IconToolbarButton {
+                                implicitWidth: height
+                                onClicked: root.useDarkMode = !root.useDarkMode
+                                text: root.useDarkMode ? "dark_mode" : "light_mode"
+                                StyledToolTip {
+                                    text: Translation.tr("Click to toggle light/dark mode\n(applied when wallpaper is chosen)")
+                                }
+                            }
+
+                            ToolbarTextField {
+                                id: filterField
+                                placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
+
+                                // Style
+                                clip: true
+                                font.pixelSize: Appearance.font.pixelSize.small
+
+                                // Search
+                                onTextChanged: {
+                                    Wallpapers.searchQuery = text;
+                                }
+
+                                Keys.onPressed: event => {
+                                    if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers
+                                        root.handleFilePasting(event);
+                                        return;
+                                    } else if (text.length !== 0) {
+                                        // No filtering, just navigate grid
+                                        if (event.key === Qt.Key_Down) {
+                                            grid.moveSelection(grid.columns);
+                                            event.accepted = true;
+                                            return;
+                                        }
+                                        if (event.key === Qt.Key_Up) {
+                                            grid.moveSelection(-grid.columns);
+                                            event.accepted = true;
+                                            return;
+                                        }
+                                    }
+                                    event.accepted = false;
+                                }
                             }
                         }
 
-                        IconToolbarButton {
-                            implicitWidth: height
-                            onClicked: {
-                                GlobalStates.wallpaperSelectorOpen = false;
-                            }
-                            text: "close"
+                        ToolbarPairedFab {
+                            iconText: "close"
+                            onClicked: GlobalStates.wallpaperSelectorOpen = false;
                             StyledToolTip {
                                 text: Translation.tr("Cancel wallpaper selection")
                             }

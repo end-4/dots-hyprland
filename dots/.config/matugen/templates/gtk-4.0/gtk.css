@@ -1,44 +1,83 @@
 /*
-* GTK Colors
-* Generated with Matugen
+* GTK colors generated with Matugen
+* The source template is here: ~/.config/matugen/templates/gtk-4.0/gtk.css
 */
 
 @media (prefers-color-scheme: light) {
+    /* Accents */
     @define-color accent_color {{colors.primary.light.hex}};
     @define-color accent_fg_color {{colors.on_primary.light.hex}};
     @define-color accent_bg_color {{colors.primary.light.hex}};
+    @define-color destructive_bg_color {{colors.error_container.light.hex}};
+    @define-color destructive_fg_color {{colors.on_error_container.light.hex}};
+    @define-color destructive_color {{colors.error.light.hex}};
+    @define-color success_bg_color #B5CCBA;
+    @define-color success_fg_color #213528;
+    @define-color success_color #374B3E;
+    /* Base surfaces */
     @define-color window_bg_color {{colors.background.light.hex}};
     @define-color window_fg_color {{colors.on_background.light.hex}};
-    @define-color headerbar_bg_color {{colors.surface_dim.light.hex}};
+    @define-color headerbar_bg_color {{colors.surface_container.light.hex}};
+    @define-color headerbar_backdrop_color {{colors.surface_container.light.hex}};
     @define-color headerbar_fg_color {{colors.on_surface.light.hex}};
-    @define-color popover_bg_color {{colors.surface_dim.light.hex}};
-    @define-color popover_fg_color {{colors.on_surface.light.hex}};
-    @define-color view_bg_color {{colors.surface.light.hex}};
-    @define-color view_fg_color {{colors.on_surface.light.hex}};
-    @define-color card_bg_color {{colors.surface.light.hex}};
+    @define-color card_bg_color {{colors.surface_container.light.hex}};
     @define-color card_fg_color {{colors.on_surface.light.hex}};
-    @define-color sidebar_bg_color @window_bg_color;
-    @define-color sidebar_fg_color @window_fg_color;
-    @define-color sidebar_border_color @window_bg_color;
-    @define-color sidebar_backdrop_color @window_bg_color;
+    @define-color sidebar_bg_color {{colors.surface_container.light.hex}};
+    @define-color sidebar_fg_color {{colors.on_surface.light.hex}};
+    @define-color secondary_sidebar_bg_color {{colors.surface_container_low.light.hex}};
+    @define-color secondary_sidebar_backdrop_color {{colors.surface_container_low.light.hex}};
+    @define-color secondary_sidebar_fg_color {{colors.on_surface.light.hex}};
+    @define-color sidebar_border_color @sidebar_bg_color;
+    @define-color sidebar_backdrop_color @sidebar_bg_color;
+    @define-color view_bg_color {{colors.surface_container_lowest.light.hex}};
+    @define-color view_fg_color {{colors.on_surface.light.hex}};
+    @define-color overview_bg_color {{colors.surface_container_lowest.light.hex}};
+    @define-color overview_fg_color {{colors.on_surface.light.hex}};
+    /* Popups */
+    @define-color popover_bg_color {{colors.surface_container_highest.light.hex}};
+    @define-color popover_fg_color {{colors.on_surface.light.hex}};
+    @define-color dialog_bg_color {{colors.surface_container_high.light.hex}};
+    @define-color dialog_fg_color {{colors.on_surface.light.hex}};
+    @define-color thumbnail_bg_color {{colors.surface_container_high.light.hex}};
+    @define-color thumbnail_fg_color {{colors.on_surface.light.hex}};
 }
 
 @media (prefers-color-scheme: dark) {
+
+    /* Accents */
     @define-color accent_color {{colors.primary.dark.hex}};
     @define-color accent_fg_color {{colors.on_primary.dark.hex}};
     @define-color accent_bg_color {{colors.primary.dark.hex}};
+    @define-color destructive_bg_color {{colors.error_container.dark.hex}};
+    @define-color destructive_fg_color {{colors.on_error_container.dark.hex}};
+    @define-color destructive_color {{colors.error.dark.hex}};
+    @define-color success_bg_color #374B3E;
+    @define-color success_fg_color #D1E9D6;
+    @define-color success_color #B5CCBA;
+    /* Base surfaces */
     @define-color window_bg_color {{colors.background.dark.hex}};
     @define-color window_fg_color {{colors.on_background.dark.hex}};
-    @define-color headerbar_bg_color {{colors.surface_dim.dark.hex}};
+    @define-color headerbar_bg_color {{colors.surface_container.dark.hex}};
+    @define-color headerbar_backdrop_color {{colors.surface_container.dark.hex}};
     @define-color headerbar_fg_color {{colors.on_surface.dark.hex}};
-    @define-color popover_bg_color {{colors.surface_dim.dark.hex}};
-    @define-color popover_fg_color {{colors.on_surface.dark.hex}};
-    @define-color view_bg_color {{colors.surface.dark.hex}};
-    @define-color view_fg_color {{colors.on_surface.dark.hex}};
-    @define-color card_bg_color {{colors.surface.dark.hex}};
+    @define-color card_bg_color {{colors.surface_container.dark.hex}};
     @define-color card_fg_color {{colors.on_surface.dark.hex}};
-    @define-color sidebar_bg_color @window_bg_color;
-    @define-color sidebar_fg_color @window_fg_color;
-    @define-color sidebar_border_color @window_bg_color;
-    @define-color sidebar_backdrop_color @window_bg_color;
+    @define-color sidebar_bg_color {{colors.surface_container.dark.hex}};
+    @define-color sidebar_fg_color {{colors.on_surface.dark.hex}};
+    @define-color secondary_sidebar_bg_color {{colors.surface_container_low.dark.hex}};
+    @define-color secondary_sidebar_backdrop_color {{colors.surface_container_low.dark.hex}};
+    @define-color secondary_sidebar_fg_color {{colors.on_surface.dark.hex}};
+    @define-color sidebar_border_color @sidebar_bg_color;
+    @define-color sidebar_backdrop_color @sidebar_bg_color;
+    @define-color view_bg_color {{colors.surface_container_lowest.dark.hex}};
+    @define-color view_fg_color {{colors.on_surface.dark.hex}};
+    @define-color overview_bg_color {{colors.surface_container_lowest.dark.hex}};
+    @define-color overview_fg_color {{colors.on_surface.dark.hex}};
+    /* Popups */
+    @define-color popover_bg_color {{colors.surface_container_highest.dark.hex}};
+    @define-color popover_fg_color {{colors.on_surface.dark.hex}};
+    @define-color dialog_bg_color {{colors.surface_container_high.dark.hex}};
+    @define-color dialog_fg_color {{colors.on_surface.dark.hex}};
+    @define-color thumbnail_bg_color {{colors.surface_container_high.dark.hex}};
+    @define-color thumbnail_fg_color {{colors.on_surface.dark.hex}};
 }

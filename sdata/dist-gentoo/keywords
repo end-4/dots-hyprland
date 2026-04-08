@@ -6,7 +6,6 @@ app-misc/illogical-impulse-fonts-themes
 app-misc/illogical-impulse-hyprland
 app-misc/illogical-impulse-kde
 app-misc/illogical-impulse-microtex-git
-app-misc/illogical-impulse-oneui4-icons-git
 app-misc/illogical-impulse-portal
 app-misc/illogical-impulse-python
 app-misc/illogical-impulse-quickshell-git
@@ -19,26 +18,27 @@ app-misc/brightnessctl
 app-misc/cliphist
 gui-apps/hypridle
 gui-apps/hyprlock
+dev-libs/hyprlang
 gui-apps/hyprpicker
 gui-apps/hyprsunset
 gui-libs/xdg-desktop-portal-hyprland
 gui-apps/hyprshot
+gui-libs/hyprcursor
 gui-apps/wf-recorder
 gui-apps/wtype
 gui-apps/fuzzel
-gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
 dev-libs/hyprland-protocols
-gui-libs/aquamarine
 gui-libs/hyprutils
+gui-libs/hyprwire
 dev-util/hyprwayland-scanner
-dev-libs/hyprlang
-dev-libs/hyprgraphics
-gui-libs/hyprcursor
 gui-libs/hyprland-qt-support
-gui-libs/hyprland-qtutils
+gui-libs/hyprland-guiutils
+gui-libs/hyprtoolkit
 gui-wm/hyprland
+dev-libs/hyprgraphics
+gui-libs/aquamarine
 x11-libs/libxkbcommon
 dev-util/breakpad
 dev-libs/linux-syscall-support
@@ -50,4 +50,7 @@ media-fonts/space-grotesk
 media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
-app-misc/songrec
+media-sound/songrec
+dev-cpp/glaze
+dev-cpp/cpptrace
+dev-libs/libdwarf

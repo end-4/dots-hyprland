@@ -9,7 +9,7 @@ Rectangle {
     id: root
 
     property bool show: false
-    default property alias data: contentColumn.data
+    default property alias contentData: contentColumn.data
     property real backgroundHeight: dialogBackground.implicitHeight
     property real backgroundWidth: 350
     property real backgroundAnimationMovementDistance: 60
