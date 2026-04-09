@@ -221,6 +221,8 @@ Singleton {
                     property bool enableSidebar: true
                     property real widgetsFactor: 1.2
                 }
+                property bool enableSlideshow: false
+                property int slideshowInterval: 5
             }
 
             property JsonObject bar: JsonObject {
