@@ -223,9 +223,9 @@ Singleton {
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
-                    property bool enableWorkspace: true
-                    property real workspaceZoom: 1.0 // Relative to wallpaper size
-                    property bool enableSidebar: true
+                    property bool enableWorkspace: false
+                    property real workspaceZoom: 1.07 // Relative to wallpaper size
+                    property bool enableSidebar: false
                     property real widgetsFactor: 1.2
                 }
             }
