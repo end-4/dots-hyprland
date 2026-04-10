@@ -38,7 +38,7 @@ Scope { // Scope
                 right: true
             }
 
-            exclusiveZone: root.pinned ? implicitHeight : 0
+            exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.elevationMargin : 0
             exclusionMode: Config.options.bar.vertical || (root.pinned || !windowOrPanelOpen) ? ExclusionMode.Normal : ExclusionMode.Ignore
 
             implicitWidth: dockBackground.implicitWidth
@@ -46,7 +46,7 @@ Scope { // Scope
             WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
-            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.hyprlandGapsOut
+            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
 
             mask: Region {
                 item: dockMouseArea
@@ -77,6 +77,7 @@ Scope { // Scope
                         anchors {
                             top: parent.top
                             bottom: parent.bottom
+                            topMargin: Appearance.sizes.elevationMargin
                             bottomMargin: Appearance.sizes.hyprlandGapsOut
                             horizontalCenter: parent.horizontalCenter
                         }
