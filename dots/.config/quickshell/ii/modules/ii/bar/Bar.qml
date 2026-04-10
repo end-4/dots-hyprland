@@ -93,7 +93,7 @@ Scope {
                         bottomMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.bottom) * 1
                     }
 
-                    layer.enabled: Config.options.bar.shadow
+                    layer.enabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
                     layer.effect: MultiEffect {
                         shadowEnabled: true
                         shadowColor: Appearance.colors.colShadow
