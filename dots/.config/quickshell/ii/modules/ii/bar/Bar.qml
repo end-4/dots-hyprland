@@ -97,7 +97,7 @@ Scope {
                     layer.effect: MultiEffect {
                         shadowEnabled: true
                         shadowColor: Appearance.colors.colShadow
-                        shadowBlur: 1
+                        shadowBlur: 0.5
                     }
 
                     Item {
