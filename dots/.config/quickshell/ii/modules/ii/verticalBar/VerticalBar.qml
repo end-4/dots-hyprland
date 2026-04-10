@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -86,6 +87,13 @@ Scope {
                     id: hoverRegion
                     hoverEnabled: true
                     anchors.fill: parent
+
+                    layer.enabled: Config.options.bar.shadow
+                    layer.effect: MultiEffect {
+                        shadowEnabled: true
+                        shadowColor: Appearance.colors.colShadow
+                        shadowBlur: 1
+                    }
 
                     Item {
                         id: hoverMaskRegion

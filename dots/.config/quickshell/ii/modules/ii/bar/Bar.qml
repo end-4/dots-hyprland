@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -90,6 +91,13 @@ Scope {
                         fill: parent
                         rightMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * 1
                         bottomMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.bottom) * 1
+                    }
+
+                    layer.enabled: Config.options.bar.shadow
+                    layer.effect: MultiEffect {
+                        shadowEnabled: true
+                        shadowColor: Appearance.colors.colShadow
+                        shadowBlur: 1
                     }
 
                     Item {
