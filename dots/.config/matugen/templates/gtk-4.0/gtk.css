@@ -266,6 +266,7 @@ banner widget {
 }
 
 .boxed-list {
+  box-shadow: none;
   background-color: @window_bg_color;
 }
 
