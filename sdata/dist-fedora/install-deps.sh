@@ -38,6 +38,7 @@ function install_RPMS() {
     "$rpm_specs/cpptrace.spec"
     "$rpm_specs/quickshell-git.spec"
     "$rpm_specs/hyprland-qt-support.spec"
+    "$rpm_specs/matugen.spec"
   )
   for spec_file in ${local_specs[@]}; do
     # Download sources
