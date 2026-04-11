@@ -378,9 +378,13 @@ switch:checked slider {
 
 toast {
   border-radius: 999px;
-  padding: 6px;
+  padding: 3px 6px;
   background-color: @inverse_surface;
   color: @inverse_on_surface;
+}
+
+toast .heading {
+  font-weight: 400;
 }
 
 toast button {
