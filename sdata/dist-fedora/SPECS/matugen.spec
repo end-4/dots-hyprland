@@ -1,5 +1,3 @@
-# Original-Spec: https://copr-dist-git.fedorainfracloud.org/packages/errornointernet/quickshell/quickshell-git.git/plain/quickshell-git.spec?h=master
-
 %global commit      e65259d68edc034905da477b6c1a349e89e2aa8d
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global commits     719
@@ -20,8 +18,7 @@ BuildRequires:  cargo
 BuildRequires:  gcc
 
 %description
-Flexible toolkit for making desktop shells with QtQuick, targeting
-Wayland and X11.
+A cross-platform material you and base16 color generation tool
 
 %prep
 %autosetup -n matugen-%{commit} -p1
