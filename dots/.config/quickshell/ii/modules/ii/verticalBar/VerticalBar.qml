@@ -83,35 +83,36 @@ Scope {
                     GlobalFocusGrab.removePersistent(barRoot);
                 }
 
+                MultiEffect {
+                    source: hoverRegion
+                    anchors.fill: hoverRegion
+                    shadowEnabled: targetShadowEnabled || shadowDisableTimer.running
+                    shadowColor: Appearance.colors.colShadow
+                    shadowBlur: targetShadowEnabled ? 0.6 : 0
+                    shadowOpacity: targetShadowEnabled ? 1 : 0
+
+                    property bool targetShadowEnabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
+                    Timer {
+                        id: shadowDisableTimer
+                        interval: Appearance.animation.elementMoveFast.duration
+                        repeat: false
+                    }
+                    onTargetShadowEnabledChanged: {
+                        if (!targetShadowEnabled) { shadowDisableTimer.start(); }
+                    }
+
+                    Behavior on shadowBlur {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                    Behavior on shadowOpacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                }
+
                 MouseArea  {
                     id: hoverRegion
                     hoverEnabled: true
                     anchors.fill: parent
-
-                    layer.enabled: true
-                    layer.effect: MultiEffect {
-                        shadowEnabled: targetShadowEnabled || shadowDisableTimer.running
-                        shadowColor: Appearance.colors.colShadow
-                        shadowBlur: targetShadowEnabled ? 0.6 : 0
-                        shadowOpacity: targetShadowEnabled ? 1 : 0
-
-                        property bool targetShadowEnabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
-                        Timer {
-                            id: shadowDisableTimer
-                            interval: Appearance.animation.elementMoveFast.duration
-                            repeat: false
-                        }
-                        onTargetShadowEnabledChanged: {
-                            if (!targetShadowEnabled) { shadowDisableTimer.start(); }
-                        }
-
-                        Behavior on shadowBlur {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        Behavior on shadowOpacity {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                    }
 
                     Item {
                         id: hoverMaskRegion
