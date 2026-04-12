@@ -68,7 +68,6 @@ packages = [
   "fish",
   "fontconfig",
   "kitty",
-  "matugen",
   "florian-karsten-space-grotesk-fonts",
   "starship",
   "jetbrains-mono-nerd-fonts",
