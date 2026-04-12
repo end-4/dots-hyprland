@@ -102,6 +102,18 @@ Scope {
                     visible: false
                 }
 
+                ShaderEffectSource {
+                    id: barShadowMask
+                    sourceItem: barSource
+                    visible: false
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        blurEnabled: true
+                        blur: 0.05
+                        blurMax: 3
+                    }
+                }
+
                 MultiEffect {
                     source: barSource
                     anchors.fill: barSource
@@ -112,10 +124,10 @@ Scope {
                     autoPaddingEnabled: false
 
                     maskEnabled: true
-                    maskSource: barSource
+                    maskSource: barShadowMask
                     maskInverted: true
-                    maskThresholdMin: 0.1
-                    maskSpreadAtMin: 0.1
+                    maskThresholdMin: (1 - Appearance.backgroundTransparency) * 3/4
+                    maskSpreadAtMin: (1 - Appearance.backgroundTransparency) * 1/4
                     maskThresholdMax: 1.0
 
                     property bool targetShadowEnabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
