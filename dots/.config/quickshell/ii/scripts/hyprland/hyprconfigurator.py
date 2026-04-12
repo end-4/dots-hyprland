@@ -5,12 +5,11 @@ import os
 import tempfile
 
 def edit_hyprland_config(file_path, set_args, reset_args):
-    try:
+    if os.path.exists(file_path):
         with open(file_path, 'r') as file:
             lines = file.readlines()
-    except FileNotFoundError:
-        print(f"Error: File '{file_path}' not found.")
-        return
+    else:
+        lines = []
     
     set_dict = {k: v for k, v in set_args} if set_args else {}
     reset_set = set(reset_args) if reset_args else set()
@@ -56,12 +55,18 @@ def edit_hyprland_config(file_path, set_args, reset_args):
                 new_lines.append(f"{key} = {value}\n")
                 
     dir_name = os.path.dirname(os.path.abspath(file_path))
+    os.makedirs(dir_name, exist_ok=True)
     temp_path = None
     try:
         with tempfile.NamedTemporaryFile(mode='w', dir=dir_name, delete=False) as temp_file:
             temp_file.writelines(new_lines)
             temp_path = temp_file.name
-        os.chmod(temp_path, os.stat(file_path).st_mode)
+        
+        if os.path.exists(file_path):
+            os.chmod(temp_path, os.stat(file_path).st_mode)
+        else:
+            os.chmod(temp_path, 0o644)
+            
         os.replace(temp_path, file_path)
     except Exception as e:
         if temp_path and os.path.exists(temp_path):

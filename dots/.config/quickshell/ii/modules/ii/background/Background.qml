@@ -48,9 +48,9 @@ Variants {
             const sensitiveNetwork = (CF.StringUtils.stringListContainsSubstring(Network.networkName.toLowerCase(), Config.options.workSafety.triggerCondition.networkNameKeywords));
             return enabled && sensitiveWallpaper && sensitiveNetwork;
         }
-        readonly property real parallaxRation: 1.1
-        readonly property real additionalScaleFactor: Config.options.background.parallax.workspaceZoom
-        property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
+        readonly property real parallaxRation: Config.options.background.parallax.workspaceZoom
+        property real minSuitableScale: 1 // Some reasonable init, to be updated
+        property real effectiveWallpaperScale: minSuitableScale * parallaxRation
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
         property real scaledWallpaperWidth: wallpaperWidth * effectiveWallpaperScale
@@ -119,8 +119,7 @@ Variants {
                     // Small picture; scale > 1; will zoom in the picture
                     // Big picture; scale < 1; will zoom out the picture
                     // Choose max number so every side will fit
-                    const minSuitableScale = Math.max(screenWidth / width, screenHeight / height);
-                    bgRoot.effectiveWallpaperScale = minSuitableScale * bgRoot.additionalScaleFactor * bgRoot.parallaxRation;
+                    bgRoot.minSuitableScale = Math.max(screenWidth / width, screenHeight / height);
                 }
             }
         }
@@ -167,16 +166,16 @@ Variants {
                 }
 
                 x: {
-                    if (bgRoot.screen.width > bgRoot.scaledWallpaperWidth) {
+                    if (bgRoot.screen.width > width) {
                         // Center the picture
-                        return (bgRoot.screen.width - bgRoot.scaledWallpaperWidth) / 2;
+                        return (bgRoot.screen.width - width) / 2;
                     }
                     return - bgRoot.parallaxTotalPixelsX * usedFractionX;
                 }
                 y: {
-                    if (bgRoot.screen.height > bgRoot.scaledWallpaperHeight) {
+                    if (bgRoot.screen.height > height) {
                         // Center the picture
-                        return (bgRoot.screen.height - bgRoot.scaledWallpaperHeight) / 2;
+                        return (bgRoot.screen.height - height) / 2;
                     }
                     return - bgRoot.parallaxTotalPixelsY * usedFractionY;
                 }
@@ -235,10 +234,10 @@ Variants {
                 height: parent.height
                 readonly property real parallaxFactor: {
                     var f = Config.options.background.parallax.widgetsFactor;
-                    return f / Config.options.background.parallax.workspaceZoom;
+                    return f / bgRoot.parallaxRation;
                 }
-                readonly property real baseWallpaperOffsetX: (bgRoot.screen.width - bgRoot.scaledWallpaperWidth) / 2
-                readonly property real baseWallpaperOffsetY: (bgRoot.screen.height - bgRoot.scaledWallpaperHeight) / 2
+                readonly property real baseWallpaperOffsetX: (bgRoot.screen.width - wallpaper.width) / 2
+                readonly property real baseWallpaperOffsetY: (bgRoot.screen.height - wallpaper.height) / 2
                 readonly property real wallpaperTotalOffsetX: wallpaper.x - baseWallpaperOffsetX
                 readonly property real wallpaperTotalOffsetY: wallpaper.y - baseWallpaperOffsetY
                 readonly property bool locked: GlobalStates.screenLocked
