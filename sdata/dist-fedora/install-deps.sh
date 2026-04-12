@@ -23,33 +23,64 @@ function r() {
   [ "$original_id" == "$last_id" ] || yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config" || :
 }
 
-# Start building and install the missing RPM package locally.
+function build_RPM() {
+  [[ -z "$1" ]] && {
+    echo "No package provided"
+    return 1
+  }
+
+  local package=$1
+  local spec_file="${REPO_ROOT}/sdata/dist-fedora/SPECS/$package.spec"
+
+  # Download sources
+  x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
+  # Install build dependencies
+  r x sudo dnf builddep -y "$spec_file"
+  # Build the RPM package locally. If it fails, download it from COPR.
+  if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
+    printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
+    sudo dnf install -y $(basename "$spec_file" .spec)
+    nolock_qs=true
+  fi
+}
+
 function install_RPMS() {
-  local local_specs local_rpms
-  rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
+  local rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
+
+  if [[ -d "$rpmbuildroot/RPMS" ]]; then
+    rm -rf -- $rpmbuildroot/RPMS
+  fi
 
   x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
   x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
+  x mkdir -p "$rpmbuildroot/RPMS/x86_64"
 
-  x cd $rpmbuildroot/SPECS
-   
-  # we need cpptrace BEFORE quickshell-git
-  local_specs=(
-    "$rpm_specs/cpptrace.spec"
-    "$rpm_specs/quickshell-git.spec"
-    "$rpm_specs/hyprland-qt-support.spec"
-    "$rpm_specs/matugen.spec"
+  local packages=(
+    "cpptrace"
+    "quickshell-git"
+    "hyprland-qt-support"
+    "matugen"
   )
-  for spec_file in ${local_specs[@]}; do
-    # Download sources
-    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
-    # Install build dependencies
-    r x sudo dnf builddep -y "$spec_file"
-    # Build the RPM package locally. If it fails, download it from COPR.
-    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
-      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
-      sudo dnf install -y $(basename "$spec_file" .spec)
-      nolock_qs=true
+
+  local rpm rpm_stamp spec spec_stamp
+  for package in "${packages[@]}"; do
+    rpm=$(find "${REPO_ROOT}/sdata/dist-fedora/RPMS" -name "$package*.rpm" | head -n 1)
+    
+    if [[ -n "$rpm" && -f "$rpm" ]]; then
+      rpm_stamp=$(rpm -qp --qf '%{NVRA}\n' "$rpm")
+    else
+      rpm_stamp=""
+    fi
+
+    spec="${rpm_specs}/$package.spec"
+    spec_stamp=$(rpmspec --srpm --query --qf "%{NVRA}\n" "$spec")
+
+    if [[ "$rpm_stamp" == "$spec_stamp" ]]; then
+      printf "$package already built. Copying it to $rpmbuildroot/RPMS/x86_64\n"
+      cp "$rpm" "$rpmbuildroot/RPMS/x86_64"
+    else
+      printf "$package is missing or outdated. Building it now.\n"
+      build_RPM "$package"
     fi
   done
 
