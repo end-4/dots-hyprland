@@ -6,11 +6,10 @@ pkgdesc='Illogical Impulse KDE Dependencies'
 arch=(any)
 license=(None)
 depends=(
-  bluedevil
+  blueman
   gnome-keyring
   networkmanager
-  plasma-nm
-  polkit-kde-agent
-  dolphin
-  systemsettings
+  network-manager-applet
+  nm-connection-editor
+  thunar
 )

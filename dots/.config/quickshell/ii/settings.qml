@@ -60,6 +60,11 @@ ApplicationWindow {
             component: "modules/settings/AdvancedConfig.qml"
         },
         {
+            name: Translation.tr("Tuneables"),
+            icon: "tune",
+            component: "modules/settings/TuneablesConfig.qml"
+        },
+        {
             name: Translation.tr("About"),
             icon: "info",
             component: "modules/settings/About.qml"
