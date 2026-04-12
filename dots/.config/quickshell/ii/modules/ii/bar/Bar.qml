@@ -84,13 +84,39 @@ Scope {
                     GlobalFocusGrab.removePersistent(barRoot);
                 }
 
+                ShaderEffectSource {
+                    id: barSource
+                    property real padding: 10 // extra space for shadow
+                    anchors {
+                        fill: hoverRegion
+                        margins: -padding
+                    }
+                    sourceItem: hoverRegion
+                    sourceRect: Qt.rect(
+                        -padding,
+                        -padding,
+                        hoverRegion.width + padding * 2,
+                        hoverRegion.height + padding * 2
+                    )
+                    samples: 4
+                    visible: false
+                }
+
                 MultiEffect {
-                    source: hoverRegion
-                    anchors.fill: hoverRegion
+                    source: barSource
+                    anchors.fill: barSource
                     shadowEnabled: targetShadowEnabled || shadowDisableTimer.running
                     shadowColor: Appearance.colors.colShadow
                     shadowBlur: targetShadowEnabled ? 0.6 : 0
                     shadowOpacity: targetShadowEnabled ? 1 : 0
+                    autoPaddingEnabled: false
+
+                    maskEnabled: true
+                    maskSource: barSource
+                    maskInverted: true
+                    maskThresholdMin: 0.1
+                    maskSpreadAtMin: 0.1
+                    maskThresholdMax: 1.0
 
                     property bool targetShadowEnabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
                     Timer {
