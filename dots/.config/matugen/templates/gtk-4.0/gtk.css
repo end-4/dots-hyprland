@@ -52,6 +52,10 @@
     @define-color inverse_on_surface {{colors.inverse_on_surface.light.hex}};
     @define-color inverse_primary {{colors.inverse_primary.light.hex}};
     @define-color inverse_surface {{colors.inverse_surface.light.hex}};
+    @define-color surface_container_highest {{colors.surface_container_highest.light.hex}};
+    @define-color surface_container_high {{colors.surface_container_high.light.hex}};
+    @define-color on_surface_variant {{colors.on_surface_variant.light.hex}};
+    @define-color surface_variant {{colors.surface_variant.light.hex}};
 
     @define-color outline {{colors.outline.light.hex}};
 
@@ -111,6 +115,10 @@
     @define-color inverse_on_surface {{colors.inverse_on_surface.dark.hex}};
     @define-color inverse_primary {{colors.inverse_primary.dark.hex}};
     @define-color inverse_surface {{colors.inverse_surface.dark.hex}};
+    @define-color surface_container_highest {{colors.surface_container_highest.dark.hex}};
+    @define-color surface_container_high {{colors.surface_container_high.dark.hex}};
+    @define-color on_surface_variant {{colors.on_surface_variant.dark.hex}};
+    @define-color surface_variant {{colors.surface_variant.dark.hex}};
 
     @define-color outline {{colors.outline.dark.hex}};
 
@@ -226,9 +234,6 @@ headerbar >windowhandle box stack > box:nth-child(2) {
 
 .nautilus-list-view,
 .nautilus-grid-view {
-  
-  /* search */
-  
   background: @secondary_sidebar_bg_color;
   border-radius: 16px;
 }
@@ -241,6 +246,7 @@ headerbar >windowhandle box stack > box:nth-child(2) {
 
 .navigation-sidebar row {
   border-radius: 999px;
+  padding: 2px;
 }
 
 .navigation-sidebar row:hover {
@@ -295,10 +301,21 @@ banner widget {
 
 .text-button.toggle {
   border-radius: 4px;
+  background-color: @surface_container_highest;
+  margin-left: 2px;
+}
+
+.text-button.toggle:hover {
+  background-color: @surface_variant;
+}
+
+.text-button.toggle:active {
+  background-color: @surface_container_highest;
 }
 
 .text-button.toggle * {
-  font-weight: 500;
+  color: @on_surface_variant;
+  font-weight: 400;
 }
 
 .boxed-list row:first-child {
@@ -326,7 +343,11 @@ banner widget {
 .text-button.toggle:checked {
   background-color: @accent_bg_color;
   border-radius: 999px;
+}
+
+.text-button.toggle:checked * {
   color: @accent_fg_color;
+  font-weight: 500;
 }
 
 button.back {
