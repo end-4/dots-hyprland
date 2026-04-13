@@ -47,6 +47,11 @@ in pkgs.stdenv.mkDerivation {
     kdePackages.kirigami #kirigami
     kdePackages.kdialog #kdialog
     kdePackages.syntax-highlighting #syntax-highlighting
+    vulkan-headers #vulkan-headers
+    libdrm #libdrm
+    cpptrace #cpptrace
+    jemalloc #jemalloc
+    mesa #mesa
   ];
 
   installPhase = ''

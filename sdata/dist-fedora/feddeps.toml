@@ -68,7 +68,6 @@ packages = [
   "fish",
   "fontconfig",
   "kitty",
-  "matugen",
   "florian-karsten-space-grotesk-fonts",
   "starship",
   "jetbrains-mono-nerd-fonts",
@@ -149,6 +148,7 @@ packages = [
   "libdrm",
   "breakpad",
   "kf6-kirigami",
+  "libunwind-devel",
   # NOTE: Below are custom dependencies of illogical-impulse
   "qt6-qt5compat",
   "qt6-qtimageformats",
