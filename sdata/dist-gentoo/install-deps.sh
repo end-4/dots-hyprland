@@ -33,7 +33,7 @@ fi
 arch=$(portageq envvar ACCEPT_KEYWORDS)
 
 # Exclude hyprland, will deal with that separately
-metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,oneui4-icons-git,portal,python,quickshell-git,screencapture,toolkit,widgets})
+metapkgs=(illogical-impulse-{audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,hyprland,kde,microtex-git,portal,python,quickshell-git,screencapture,toolkit,widgets})
 
 ebuild_dir="/var/db/repos/ii-dots"
 
@@ -52,7 +52,6 @@ v sudo sh -c 'cat ./sdata/dist-gentoo/additional-useflags >> /etc/portage/packag
 v sudo emerge --sync
 v sudo emerge --quiet --newuse --update --deep @world
 v sudo emerge --quiet @smart-live-rebuild
-v sudo emerge --depclean
 
 # Remove old ebuilds (if this isn't done the wildcard will fuck upon a version change)
 x sudo rm -fr ${ebuild_dir}/app-misc/illogical-impulse-*
@@ -66,3 +65,5 @@ for i in "${metapkgs[@]}"; do
 	v sudo ebuild ${ebuild_dir}/app-misc/${i}/*.ebuild digest
 	v sudo emerge --update --quiet app-misc/${i}
 done
+
+v sudo emerge --depclean
