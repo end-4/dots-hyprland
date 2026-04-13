@@ -6,6 +6,10 @@
 @media (prefers-color-scheme: light) {
     /* Accents */
     @define-color accent_color {{colors.primary.light.hex}};
+    @define-color accent_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.08);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.18);
+    @define-color accent_active_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.1);
+    @define-color accent_vibrant_active_color rgba({{colors.primary.light.red}}, {{colors.primary.light.green}}, {{colors.primary.light.blue}}, 0.26);
     @define-color accent_fg_color {{colors.on_primary.light.hex}};
     @define-color accent_bg_color {{colors.primary.light.hex}};
     @define-color destructive_bg_color {{colors.error_container.light.hex}};
@@ -22,11 +26,13 @@
     @define-color headerbar_fg_color {{colors.on_surface.light.hex}};
     @define-color card_bg_color {{colors.surface_container.light.hex}};
     @define-color card_fg_color {{colors.on_surface.light.hex}};
-    @define-color sidebar_bg_color {{colors.surface_container.light.hex}};
+    @define-color sidebar_bg_color {{colors.background.light.hex}};
     @define-color sidebar_fg_color {{colors.on_surface.light.hex}};
+    @define-color sidebar_row_active_bg_color {{colors.secondary_container.light.hex}};
+    @define-color sidebar_row_active_fg_color {{colors.on_secondary_container.light.hex}};
     @define-color secondary_sidebar_bg_color {{colors.surface_container_low.light.hex}};
     @define-color secondary_sidebar_backdrop_color {{colors.surface_container_low.light.hex}};
-    @define-color secondary_sidebar_fg_color {{colors.on_surface.light.hex}};
+    @define-color secondary_sidebar_fg_color {{colors.on_surface_variant.light.hex}};
     @define-color sidebar_border_color @sidebar_bg_color;
     @define-color sidebar_backdrop_color @sidebar_bg_color;
     @define-color view_bg_color {{colors.surface_container_lowest.light.hex}};
@@ -36,16 +42,37 @@
     /* Popups */
     @define-color popover_bg_color {{colors.surface_container_highest.light.hex}};
     @define-color popover_fg_color {{colors.on_surface.light.hex}};
+    @define-color popover_fg_hover_color rgba({{colors.on_surface.light.red}}, {{colors.on_surface.light.green}}, {{colors.on_surface.light.blue}}, 0.08);
     @define-color dialog_bg_color {{colors.surface_container_high.light.hex}};
     @define-color dialog_fg_color {{colors.on_surface.light.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.light.hex}};
     @define-color thumbnail_fg_color {{colors.on_surface.light.hex}};
+
+    /* Material */
+    @define-color inverse_on_surface {{colors.inverse_on_surface.light.hex}};
+    @define-color inverse_primary {{colors.inverse_primary.light.hex}};
+    @define-color inverse_surface {{colors.inverse_surface.light.hex}};
+    @define-color surface_container_highest {{colors.surface_container_highest.light.hex}};
+    @define-color surface_container_high {{colors.surface_container_high.light.hex}};
+    @define-color on_surface_variant {{colors.on_surface_variant.light.hex}};
+    @define-color surface_variant {{colors.surface_variant.light.hex}};
+
+    @define-color outline {{colors.outline.light.hex}};
+
+    /* Material state layers */
+    @define-color inverse_on_surface_hover rgba({{colors.inverse_on_surface.light.red}}, {{colors.inverse_on_surface.light.green}}, {{colors.inverse_on_surface.light.blue}}, 0.08);
+    @define-color inverse_on_surface_active rgba({{colors.inverse_on_surface.light.red}}, {{colors.inverse_on_surface.light.green}}, {{colors.inverse_on_surface.light.blue}}, 0.18);
+    @define-color inverse_primary_hover rgba({{colors.inverse_primary.light.red}}, {{colors.inverse_primary.light.green}}, {{colors.inverse_primary.light.blue}}, 0.08);
+    @define-color inverse_primary_active rgba({{colors.inverse_primary.light.red}}, {{colors.inverse_primary.light.green}}, {{colors.inverse_primary.light.blue}}, 0.18);
 }
 
 @media (prefers-color-scheme: dark) {
-
     /* Accents */
     @define-color accent_color {{colors.primary.dark.hex}};
+    @define-color accent_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.08);
+    @define-color accent_vibrant_hover_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.18);
+    @define-color accent_active_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.1);
+    @define-color accent_vibrant_active_color rgba({{colors.primary.dark.red}}, {{colors.primary.dark.green}}, {{colors.primary.dark.blue}}, 0.2);
     @define-color accent_fg_color {{colors.on_primary.dark.hex}};
     @define-color accent_bg_color {{colors.primary.dark.hex}};
     @define-color destructive_bg_color {{colors.error_container.dark.hex}};
@@ -62,11 +89,13 @@
     @define-color headerbar_fg_color {{colors.on_surface.dark.hex}};
     @define-color card_bg_color {{colors.surface_container.dark.hex}};
     @define-color card_fg_color {{colors.on_surface.dark.hex}};
-    @define-color sidebar_bg_color {{colors.surface_container.dark.hex}};
+    @define-color sidebar_bg_color {{colors.background.dark.hex}};
     @define-color sidebar_fg_color {{colors.on_surface.dark.hex}};
+    @define-color sidebar_row_active_bg_color {{colors.secondary_container.dark.hex}};
+    @define-color sidebar_row_active_fg_color {{colors.on_secondary_container.dark.hex}};
     @define-color secondary_sidebar_bg_color {{colors.surface_container_low.dark.hex}};
     @define-color secondary_sidebar_backdrop_color {{colors.surface_container_low.dark.hex}};
-    @define-color secondary_sidebar_fg_color {{colors.on_surface.dark.hex}};
+    @define-color secondary_sidebar_fg_color {{colors.on_surface_variant.dark.hex}};
     @define-color sidebar_border_color @sidebar_bg_color;
     @define-color sidebar_backdrop_color @sidebar_bg_color;
     @define-color view_bg_color {{colors.surface_container_lowest.dark.hex}};
@@ -76,8 +105,423 @@
     /* Popups */
     @define-color popover_bg_color {{colors.surface_container_highest.dark.hex}};
     @define-color popover_fg_color {{colors.on_surface.dark.hex}};
+    @define-color popover_fg_hover_color rgba({{colors.on_surface.dark.red}}, {{colors.on_surface.dark.green}}, {{colors.on_surface.dark.blue}}, 0.08);
     @define-color dialog_bg_color {{colors.surface_container_high.dark.hex}};
     @define-color dialog_fg_color {{colors.on_surface.dark.hex}};
     @define-color thumbnail_bg_color {{colors.surface_container_high.dark.hex}};
     @define-color thumbnail_fg_color {{colors.on_surface.dark.hex}};
+
+    /* Material */
+    @define-color inverse_on_surface {{colors.inverse_on_surface.dark.hex}};
+    @define-color inverse_primary {{colors.inverse_primary.dark.hex}};
+    @define-color inverse_surface {{colors.inverse_surface.dark.hex}};
+    @define-color surface_container_highest {{colors.surface_container_highest.dark.hex}};
+    @define-color surface_container_high {{colors.surface_container_high.dark.hex}};
+    @define-color on_surface_variant {{colors.on_surface_variant.dark.hex}};
+    @define-color surface_variant {{colors.surface_variant.dark.hex}};
+
+    @define-color outline {{colors.outline.dark.hex}};
+
+    /* Material state layers */
+    @define-color inverse_on_surface_hover rgba({{colors.inverse_on_surface.dark.red}}, {{colors.inverse_on_surface.dark.green}}, {{colors.inverse_on_surface.dark.blue}}, 0.08);
+    @define-color inverse_on_surface_active rgba({{colors.inverse_on_surface.dark.red}}, {{colors.inverse_on_surface.dark.green}}, {{colors.inverse_on_surface.dark.blue}}, 0.18);
+    @define-color inverse_primary_hover rgba({{colors.inverse_primary.dark.red}}, {{colors.inverse_primary.dark.green}}, {{colors.inverse_primary.dark.blue}}, 0.08);
+    @define-color inverse_primary_active rgba({{colors.inverse_primary.dark.red}}, {{colors.inverse_primary.dark.green}}, {{colors.inverse_primary.dark.blue}}, 0.18);
+}
+
+* {
+  caret-color: @accent_color;
+}
+
+window {
+  background: @window_bg_color;
+}
+
+.text-button {
+  border-radius: 999px;
+}
+
+.text-button,
+.text-button * {
+  font-weight: 500;
+}
+
+splitbutton {
+  background-color: transparent;
+}
+
+splitbutton button {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+splitbutton separator {
+  color: transparent;
+}
+
+splitbutton menubutton {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
+.popup-menu-item {
+  background-color: transparent;
+  border-radius: 999px;
+}
+
+#NautilusPathBar #NautilusPathButton * {
+  color: @accent_color;
+  font-weight: 400;
+}
+
+#NautilusPathBar #NautilusPathButton {
+  background: @accent_active_color;
+  border-radius: 4px;
+  margin: 0;
+  margin-right: 2px;
+}
+
+#NautilusPathBar {
+  background: transparent;
+}
+
+#NautilusPathBar box box:first-child #NautilusPathButton {
+  border-radius: 24px 4px 4px 24px;
+}
+
+#NautilusPathBar box box:last-child #NautilusPathButton {
+  border-radius: 4px 24px 24px 4px;
+}
+
+#NautilusPathBar #NautilusPathButton.current-dir.current-dir {
+  border-radius: 999px;
+}
+
+#NautilusPathBar #NautilusPathButton * {
+  color: @sidebar_row_active_fg_color;
+}
+
+#NautilusPathBar .dim-label {
+  font-size: 0;
+}
+
+#NautilusPathBar button .dim-label {
+  font-size: 14px;
+  opacity: 100%;
+}
+
+#NautilusPathBar button {
+  border-radius: 8px;
+}
+
+
+#NautilusPathBar button:checked {
+  background: @accent_vibrant_hover_color;
+}
+
+headerbar button {
+  border-radius: 999px;
+}
+
+headerbar >windowhandle box stack > box:nth-child(2) {
+	background: @accent_active_color;
+	border-radius: 8px;
+}
+
+.nautilus-list-view,
+.nautilus-grid-view {
+  background: @secondary_sidebar_bg_color;
+  border-radius: 16px;
+}
+
+.navigation-sidebar row * {
+  color: @sidebar_fg_color;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.navigation-sidebar row {
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.navigation-sidebar row:hover {
+  background: @accent_hover_color;
+}
+
+.navigation-sidebar row:active {
+  background: @accent_active_color;
+}
+
+.navigation-sidebar row:selected {
+  background: @sidebar_row_active_bg_color;
+}
+
+.navigation-sidebar row:selected * {
+  color: @sidebar_row_active_fg_color;
+}
+
+banner widget {
+  border-radius: 16px 0 0 16px;
+  margin-bottom: 8px;
+  background-color: @secondary_sidebar_bg_color;
+}
+
+.boxed-list {
+  box-shadow: none;
+  background-color: @window_bg_color;
+}
+
+.boxed-list row {
+  background: @card_bg_color;
+  border-radius: 4px;
+  border: none;
+  margin-bottom: 2px;
+}
+
+.boxed-list row.activatable:hover {
+  background-color: @thumbnail_bg_color;
+}
+
+.boxed-list row.activatable:active {
+  background-color: @popover_bg_color;
+}
+
+.horizontal>listview>row {
+  background-color: transparent;
+}
+
+.boxed-list row:insensitive {
+  background-color: @card_bg_color;
+}
+
+.text-button.toggle {
+  border-radius: 4px;
+  background-color: @surface_container_highest;
+  margin-left: 2px;
+}
+
+.text-button.toggle:hover {
+  background-color: @surface_variant;
+}
+
+.text-button.toggle:active {
+  background-color: @surface_container_highest;
+}
+
+.text-button.toggle * {
+  color: @on_surface_variant;
+  font-weight: 400;
+}
+
+.boxed-list row:first-child {
+  border-radius: 16px 16px 4px 4px;
+}
+
+.boxed-list row:last-child {
+  border-radius: 4px 4px 16px 16px;
+  margin-bottom: 0;
+}
+
+.text-button.toggle:first-child {
+  border-radius: 16px 4px 4px 16px;
+}
+
+.text-button.toggle:last-child {
+  border-radius: 4px 16px 16px 4px;
+}
+
+.boxed-list row:first-child:last-child,
+.text-button.toggle:first-child:last-child {
+  border-radius: 16px;
+}
+
+.text-button.toggle:checked {
+  background-color: @accent_bg_color;
+  border-radius: 999px;
+}
+
+.text-button.toggle:checked * {
+  color: @accent_fg_color;
+  font-weight: 500;
+}
+
+button.back {
+  border-radius: 999px;
+  background-color: @accent_hover_color;
+  padding-left: 4px;
+  padding-right: 6px;
+}
+
+button.back * {
+  font-size: 12px;
+}
+
+button.back:hover {
+  background-color: @accent_hover_color;
+}
+
+button.back:active {
+  background-color: @accent_active_color;
+}
+
+/* switch */
+
+switch {
+  background: @secondary_sidebar_bg_color;
+  border: @outline 2px solid;
+  padding: 0;
+}
+
+switch:checked {
+  background: @accent_color;
+  border-color: @accent_color;
+}
+
+switch slider {
+  background: @outline;
+  margin: 3px;
+  min-width: 0;
+  min-height: 0;
+}
+
+switch:checked slider {
+  background: @accent_fg_color;
+  outline: transparent 2px solid;
+  margin: 0px;
+}
+
+/* toast */
+
+toast {
+  border-radius: 999px;
+  padding: 6px 6px 6px 10px;
+  background-color: @inverse_surface;
+  color: @inverse_on_surface;
+}
+
+toast .heading {
+  font-weight: 400;
+}
+
+toast button {
+  background-color: transparent;
+  color: @inverse_primary;
+}
+
+toast button:hover {
+  background-color: @inverse_primary_hover;
+}
+
+toast button:active {
+  background-color: @inverse_primary_active;
+}
+
+toast button:last-child {
+  color: @inverse_on_surface;
+}
+
+toast button:last-child:hover {
+  background-color: @inverse_on_surface_hover;
+}
+
+toast button:last-child:active {
+  background-color: @inverse_on_surface_active;
+}
+
+.collapse-spacing.vertical {
+  padding-bottom: 0;
+}
+
+tabbox {
+  padding: 0;
+}
+
+tabbox tabboxchild tab,
+tabbox tabboxchild {
+  background: transparent;
+  padding: 0 8px 3px;
+  border-radius: 999px;
+}
+
+tabbox tabboxchild tab {
+  padding: 3px 8px;
+}
+
+tab:hover {
+  background: @accent_hover_color;
+}
+
+tab:active,
+tab:selected {
+  background: @accent_active_color;
+}
+
+tab .tab-title {
+  padding: 0 12px;
+  color: @secondary_sidebar_fg_color;
+}
+
+tab .tab-title label {
+  border: none;
+  font-weight: 500;
+}
+
+tab:selected .tab-title label {
+  padding: 6px 0;
+  color: @accent_color;
+}
+
+/* popup menu */
+
+popover listview.view row,
+popover listview.view row:first-child,
+popover listview.view row:last-child {
+  background: transparent;
+  border-radius: 8px;
+}
+
+popover contents,
+popover arrow {
+  background: @secondary_sidebar_bg_color;
+}
+
+popover listview.view row:hover {
+  background: @popover_fg_hover_color;
+}
+
+popover listview.view row:active {
+  background: @popover_fg_active_color;
+}
+
+modelbutton {
+  padding: 2px 10px;
+}
+
+modelbutton * {
+  color: @popover_fg_color;
+}
+
+modelbutton:hover {
+  background-color: @popover_fg_hover_color;
+}
+
+tooltip {
+  background-color: @inverse_surface;
+  color: @inverse_on_surface;
+  font-size: 11px;
+  padding: 5px 9px;
+}
+
+/* search */
+
+.entry-completion.entry-completion.entry-completion contents {
+	padding: 0;
+}
+.image-button.flat arrow {
+  background: transparent;
 }
