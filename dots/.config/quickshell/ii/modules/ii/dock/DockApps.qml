@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -27,8 +28,8 @@ Item {
 
     function popupCenterXForButton(button) {
         if (!button || !root.QsWindow)
-            return 0
-        return root.QsWindow.mapFromItem(button, button.width / 2, 0).x
+            return 0;
+        return root.QsWindow.mapFromItem(button, button.width / 2, 0).x;
     }
 
     StyledListView {
@@ -63,10 +64,7 @@ Item {
         id: previewPopup
         property var appTopLevel: root.lastHoveredButton?.appToplevel
 
-        property bool shouldShow: (popupMouseArea.containsMouse || root.buttonHovered)
-            && appTopLevel
-            && appTopLevel.toplevels
-            && appTopLevel.toplevels.length > 0
+        property bool shouldShow: (popupMouseArea.containsMouse || root.buttonHovered) && appTopLevel && appTopLevel.toplevels && appTopLevel.toplevels.length > 0
 
         property bool show: false
         property real cachedCenterX: 0
@@ -75,24 +73,24 @@ Item {
             target: root
             function onLastHoveredButtonChanged() {
                 if (root.lastHoveredButton && root.QsWindow)
-                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton)
+                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton);
             }
             function onButtonHoveredChanged() {
                 if (root.buttonHovered && root.lastHoveredButton && root.QsWindow)
-                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton)
-                updateTimer.restart()
+                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton);
+                updateTimer.restart();
             }
         }
 
         onShouldShowChanged: {
-            updateTimer.restart()
+            updateTimer.restart();
         }
 
         Timer {
             id: updateTimer
             interval: 100
             onTriggered: {
-                previewPopup.show = previewPopup.shouldShow
+                previewPopup.show = previewPopup.shouldShow;
             }
         }
 
@@ -157,6 +155,7 @@ Item {
                         }
                         RippleButton {
                             id: windowButton
+                            Layout.fillHeight: true
                             required property var modelData
                             padding: 0
                             middleClickAction: () => {
@@ -182,8 +181,8 @@ Item {
                                     GroupButton {
                                         id: closeButton
                                         colBackground: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
-                                        baseWidth: windowControlsHeight
-                                        baseHeight: windowControlsHeight
+                                        baseWidth: root.windowControlsHeight
+                                        baseHeight: root.windowControlsHeight
                                         buttonRadius: Appearance.rounding.full
                                         contentItem: MaterialSymbol {
                                             anchors.centerIn: parent
@@ -197,18 +196,25 @@ Item {
                                         }
                                     }
                                 }
-                                ScreencopyView {
-                                    id: screencopyView
-                                    captureSource: windowButton.modelData
-                                    live: true
-                                    paintCursor: true
-                                    constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
-                                    layer.enabled: true
-                                    layer.effect: OpacityMask {
-                                        maskSource: Rectangle {
-                                            width: screencopyView.width
-                                            height: screencopyView.height
-                                            radius: Appearance.rounding.small
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    implicitHeight: screencopyView.height
+                                    implicitWidth: screencopyView.width
+                                    ScreencopyView {
+                                        id: screencopyView
+                                        anchors.centerIn: parent
+                                        captureSource: windowButton.modelData
+                                        live: true
+                                        paintCursor: true
+                                        constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
+                                        layer.enabled: true
+                                        layer.effect: OpacityMask {
+                                            maskSource: Rectangle {
+                                                width: screencopyView.width
+                                                height: screencopyView.height
+                                                radius: Appearance.rounding.small
+                                            }
                                         }
                                     }
                                 }
