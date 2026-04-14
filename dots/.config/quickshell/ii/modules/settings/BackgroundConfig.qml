@@ -614,4 +614,114 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "bluetooth"
+        title: Translation.tr("Widget: Bluetooth devices")
+
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.bluetooth.enable
+                onCheckedChanged: {
+                    Config.options.background.widgets.bluetooth.enable = checked;
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.bluetooth.placementStrategy
+                onSelected: newValue => {
+                    Config.options.background.widgets.bluetooth.placementStrategy = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Draggable"),
+                        icon: "drag_pan",
+                        value: "free"
+                    },
+                    {
+                        displayName: Translation.tr("Least busy"),
+                        icon: "category",
+                        value: "leastBusy"
+                    },
+                    {
+                        displayName: Translation.tr("Most busy"),
+                        icon: "shapes",
+                        value: "mostBusy"
+                    },
+                ]
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "schedule"
+            text: Translation.tr("Refresh every (minutes)")
+            value: Config.options.background.widgets.bluetooth.refreshIntervalMinutes
+            from: 1
+            to: 60
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.widgets.bluetooth.refreshIntervalMinutes = Math.round(value);
+            }
+        }
+
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.bluetooth.listOrientation
+                onSelected: newValue => {
+                    Config.options.background.widgets.bluetooth.listOrientation = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Horizontal list"),
+                        icon: "view_carousel",
+                        value: "horizontal"
+                    },
+                    {
+                        displayName: Translation.tr("Vertical list"),
+                        icon: "view_agenda",
+                        value: "vertical"
+                    }
+                ]
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+        }
+
+        ConfigSlider {
+            text: Translation.tr("Background opacity")
+            value: Config.options.background.widgets.bluetooth.opacity * 100
+            usePercentTooltip: false
+            buttonIcon: "opacity"
+            from: 20
+            to: 100
+            onValueChanged: {
+                Config.options.background.widgets.bluetooth.opacity = Math.max(0.2, Math.min(1, value / 100));
+            }
+        }
+
+        ConfigSpinBox {
+            icon: "devices_wearables"
+            text: Translation.tr("Max shown devices")
+            value: Config.options.background.widgets.bluetooth.maxVisibleDevices
+            from: 1
+            to: 16
+            stepSize: 1
+            onValueChanged: {
+                Config.options.background.widgets.bluetooth.maxVisibleDevices = Math.round(value);
+            }
+        }
+    }
 }
