@@ -113,10 +113,6 @@ AbstractBackgroundWidget {
                 Layout.fillWidth: true
                 spacing: 8
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 Rectangle {
                     width: 36
                     height: 36
@@ -138,6 +134,10 @@ AbstractBackgroundWidget {
                     color: root.textPrimaryColor
                     font.pixelSize: Appearance.font.pixelSize.large
                     font.weight: Font.DemiBold
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
 
                 StyledText {
@@ -315,7 +315,7 @@ AbstractBackgroundWidget {
 
             StyledText {
                 Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideRight
                 text: chip.device?.name || Translation.tr("Unknown")
                 textFormat: Text.PlainText
@@ -351,7 +351,7 @@ AbstractBackgroundWidget {
             StyledText {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                horizontalAlignment: Text.AlignRight
+                horizontalAlignment: Text.AlignLeft
                 text: rowCard.device?.name || Translation.tr("Unknown")
                 textFormat: Text.PlainText
                 color: root.textPrimaryColor

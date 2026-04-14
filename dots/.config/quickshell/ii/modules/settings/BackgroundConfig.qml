@@ -701,7 +701,8 @@ ContentPage {
         }
 
         ConfigSlider {
-            text: Translation.tr("Background opacity")
+            text: Translation.tr("Opacity")
+            textWidth: 86
             value: Config.options.background.widgets.bluetooth.opacity * 100
             usePercentTooltip: false
             buttonIcon: "opacity"
