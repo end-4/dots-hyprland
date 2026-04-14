@@ -31,9 +31,6 @@ mkdir -p "$PICTURES_DIR/Wallpapers"
 page=$((1 + RANDOM % 1000));
 illogicalImpulseConfigPath="$HOME/.config/illogical-impulse/config.json"
 userAgent=$(jq -r '.networking.userAgent // empty' "$illogicalImpulseConfigPath" 2>/dev/null)
-if [ -z "$userAgent" ]; then
-    userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-fi
 response=$(curl -A "$userAgent" "https://konachan.net/post.json?tags=rating%3Asafe&limit=1&page=$page")
 link=$(echo "$response" | jq '.[0].file_url' -r);
 ext=$(echo "$link" | awk -F. '{print $NF}')
