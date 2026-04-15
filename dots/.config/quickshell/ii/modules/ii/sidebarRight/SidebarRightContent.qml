@@ -97,6 +97,7 @@ Item {
             }
 
             CenterWidgetGroup {
+                Layout.minimumHeight: 250
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
