@@ -190,19 +190,19 @@ Singleton {
         "waifu.im": {
             "name": "waifu.im",
             "url": "https://waifu.im",
-            "api": "https://api.waifu.im/search",
+            "api": "https://api.waifu.im/images",
             "description": Translation.tr("Waifus only | Excellent quality, limited quantity"),
             "mapFunc": (response) => {
-                response = response.images
+                response = response.items
                 return response.map(item => {
                     return {
-                        "id": item.image_id,
+                        "id": item.id,
                         "width": item.width,
                         "height": item.height,
                         "aspect_ratio": item.width / item.height,
                         "tags": item.tags.map(tag => {return tag.name}).join(" "),
-                        "rating": item.is_nsfw ? "e" : "s",
-                        "is_nsfw": item.is_nsfw,
+                        "rating": item.isNsfw ? "e" : "s",
+                        "is_nsfw": item.isNsfw,
                         "md5": item.md5,
                         "preview_url": item.sample_url ?? item.url, // preview_url just says access denied (maybe i fucked up and sent too many requests idk)
                         "sample_url": item.url,
@@ -212,10 +212,9 @@ Singleton {
                     }
                 })
             },
-            "tagSearchTemplate": "https://api.waifu.im/tags",
+            "tagSearchTemplate": "https://api.waifu.im/tags?Name={{query}}",
             "tagMapFunc": (response) => {
-                return [...response.versatile.map(item => {return {"name": item}}), 
-                    ...response.nsfw.map(item => {return {"name": item}})]
+                return response.items.map(item => {return {"name": item.name}})
             }
         },
         "t.alcy.cc": {
@@ -332,7 +331,7 @@ Singleton {
             tagsArray.forEach(tag => {
                 params.push("included_tags=" + encodeURIComponent(tag));
             });
-            params.push("limit=" + Math.min(limit, 30)) // Only admin can do > 30
+            params.push("PageSize=" + Math.min(limit, 30)) // Only admin can do > 30
             params.push("is_nsfw=" + (nsfw ? "null" : "false")) // null is random
         }
         else if (currentProvider === "t.alcy.cc") {
