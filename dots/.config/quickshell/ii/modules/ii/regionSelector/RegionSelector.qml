@@ -1,17 +1,9 @@
 pragma ComponentBehavior: Bound
 import qs
 import qs.modules.common
-import qs.modules.common.functions
-import qs.modules.common.widgets
-import qs.services
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
-import Quickshell.Widgets
 import Quickshell.Hyprland
 
 Scope {
@@ -65,12 +57,16 @@ Scope {
     function record() {
         root.action = RegionSelection.SnipAction.Record
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        // If already open then re-trigger to stop recording
+        if (GlobalStates.regionSelectorOpen) GlobalStates.regionSelectorOpen = false
         GlobalStates.regionSelectorOpen = true
     }
 
     function recordWithSound() {
         root.action = RegionSelection.SnipAction.RecordWithSound
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        // If already open then re-trigger to stop recording
+        if (GlobalStates.regionSelectorOpen) GlobalStates.regionSelectorOpen = false
         GlobalStates.regionSelectorOpen = true
     }
 

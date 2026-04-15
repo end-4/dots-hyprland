@@ -98,7 +98,7 @@ function sudo_init_keepalive(){
 
   # Prompt for sudo password once at the beginning
   echo -e "${STY_CYAN}[$0]: Requesting sudo privileges for installation...${STY_RST}"
-  if ! sudo -v; then
+  if ! sudo true; then
     echo -e "${STY_RED}[$0]: Failed to obtain sudo privileges. Aborting...${STY_RST}"
     exit 1
   fi
@@ -108,7 +108,7 @@ function sudo_init_keepalive(){
   (
     while true; do
       sleep 60
-      sudo -v 2>/dev/null || exit 0
+      sudo true 2>/dev/null || exit 0
     done
   ) &
   SUDO_KEEPALIVE_PID=$!
@@ -119,8 +119,8 @@ function sudo_init_keepalive(){
 # Stop the sudo keepalive background process
 function sudo_stop_keepalive(){
   if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
-    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
-    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
     SUDO_KEEPALIVE_PID=""
   fi
 }

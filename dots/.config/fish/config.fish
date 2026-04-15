@@ -18,9 +18,11 @@ if status is-interactive # Commands to run in interactive sessions can go here
     # end
 
     # Aliases
-    alias pamcan pacman
-    alias ls 'eza --icons'
+    # kitty doesn't clear properly so we need to do this weird printing
     alias clear "printf '\033[2J\033[3J\033[1;1H'"
+    alias celar "printf '\033[2J\033[3J\033[1;1H'"
+    alias claer "printf '\033[2J\033[3J\033[1;1H'"
+    alias pamcan pacman
     alias q 'qs -c ii'
     alias n touch
     alias code 'cd /run/media/ym/DATA/Code/'

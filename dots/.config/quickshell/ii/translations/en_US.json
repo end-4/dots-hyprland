@@ -81,6 +81,7 @@
   "Unknown function call: %1": "Unknown function call: %1",
   "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls": "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls",
   "Volume": "Volume",
+  "Gamma": "Gamma",
   "Medium": "Medium",
   "Copy code": "Copy code",
   "Exceeded max allowed": "Exceeded max allowed",
@@ -359,6 +360,10 @@
   "Connect to Wi-Fi": "Connect to Wi-Fi",
   "... and %1 more": "... and %1 more",
   "Cookie clock settings": "Cookie clock settings",
+  "Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing": "Looks a bit softer and more consistent with different number of sides,\nbut has less impressive morphing",
+  "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical.": "Makes the clock always rotate. This is extremely expensive\n(expect 50% usage on Intel UHD Graphics) and thus impractical.",
+  "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons": "Can only be turned on using the 'Dots' or 'Full' dial style for aesthetic reasons",
+  "Can't be turned on when using 'Numbers' dial style for aesthetic reasons": "Can't be turned on when using 'Numbers' dial style for aesthetic reasons",
   "Brightness and volume": "Brightness and volume",
   "Choose file": "Choose file",
   "Invalid model. Supported: \n```": "Invalid model. Supported: \n```",
@@ -604,5 +609,7 @@
   "Recognize music": "Recognize music",
   "Stroke width": "Stroke width",
   "Use varying shapes for password characters": "Use varying shapes for password characters",
-  "Battery full": "Battery full"
+  "Battery full": "Battery full",
+  "Pin": "Pin",
+  "Unpin": "Unpin"
 }
