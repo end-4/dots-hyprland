@@ -102,7 +102,6 @@ MouseArea { // Notification group area
         }
 
         onDragDiffXChanged: () => {
-            if (!dragging) return;
             root.qmlParent.dragDistance = dragDiffX;
         }
 
