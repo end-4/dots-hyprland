@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -17,14 +18,20 @@ Item {
     property real windowControlsHeight: 30
     property real buttonPadding: 5
 
-    property Item lastHoveredButton
+    property Item lastHoveredButton: null
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
 
     Layout.fillHeight: true
-    Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
+    Layout.topMargin: Appearance.sizes.hyprlandGapsOut
     implicitWidth: listView.implicitWidth
-    
+
+    function popupCenterXForButton(button) {
+        if (!button || !root.QsWindow)
+            return 0;
+        return root.QsWindow.mapFromItem(button, button.width / 2, 0).x;
+    }
+
     StyledListView {
         id: listView
         spacing: 2
@@ -56,52 +63,45 @@ Item {
     PopupWindow {
         id: previewPopup
         property var appTopLevel: root.lastHoveredButton?.appToplevel
-        property bool allPreviewsReady: false
+
+        property bool shouldShow: (popupMouseArea.containsMouse || root.buttonHovered) && appTopLevel && appTopLevel.toplevels && appTopLevel.toplevels.length > 0
+
+        property bool show: false
+        property real cachedCenterX: 0
+
         Connections {
             target: root
             function onLastHoveredButtonChanged() {
-                previewPopup.allPreviewsReady = false; // Reset readiness when the hovered button changes
-            } 
-        }
-        function updatePreviewReadiness() {
-            for(var i = 0; i < previewRowLayout.children.length; i++) {
-                const view = previewRowLayout.children[i];
-                if (view.hasContent === false) {
-                    allPreviewsReady = false;
-                    return;
-                }
+                if (root.lastHoveredButton && root.QsWindow)
+                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton);
             }
-            allPreviewsReady = true;
+            function onButtonHoveredChanged() {
+                if (root.buttonHovered && root.lastHoveredButton && root.QsWindow)
+                    previewPopup.cachedCenterX = root.popupCenterXForButton(root.lastHoveredButton);
+                updateTimer.restart();
+            }
         }
-        property bool shouldShow: {
-            const hoverConditions = (popupMouseArea.containsMouse || root.buttonHovered)
-            return hoverConditions && allPreviewsReady;
-        }
-        property bool show: false
 
         onShouldShowChanged: {
-            if (shouldShow) {
-                // show = true;
-                updateTimer.restart();
-            } else {
-                updateTimer.restart();
-            }
+            updateTimer.restart();
         }
+
         Timer {
             id: updateTimer
             interval: 100
             onTriggered: {
-                previewPopup.show = previewPopup.shouldShow
+                previewPopup.show = previewPopup.shouldShow;
             }
         }
+
         anchor {
             window: root.QsWindow.window
             adjustment: PopupAdjustment.None
             gravity: Edges.Top | Edges.Right
             edges: Edges.Top | Edges.Left
-
         }
-        visible: popupBackground.visible
+
+        visible: popupBackground.opacity > 0
         color: "transparent"
         implicitWidth: root.QsWindow.window?.width ?? 1
         implicitHeight: popupMouseArea.implicitHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
@@ -112,10 +112,8 @@ Item {
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
             implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
             hoverEnabled: true
-            x: {
-                const itemCenter = root.QsWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, 0);
-                return itemCenter.x - width / 2
-            }
+            x: previewPopup.cachedCenterX - width / 2
+
             StyledRectangularShadow {
                 target: popupBackground
                 opacity: previewPopup.show ? 1 : 0
@@ -124,6 +122,7 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
             }
+
             Rectangle {
                 id: popupBackground
                 property real padding: 5
@@ -156,6 +155,7 @@ Item {
                         }
                         RippleButton {
                             id: windowButton
+                            Layout.fillHeight: true
                             required property var modelData
                             padding: 0
                             middleClickAction: () => {
@@ -181,8 +181,8 @@ Item {
                                     GroupButton {
                                         id: closeButton
                                         colBackground: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
-                                        baseWidth: windowControlsHeight
-                                        baseHeight: windowControlsHeight
+                                        baseWidth: root.windowControlsHeight
+                                        baseHeight: root.windowControlsHeight
                                         buttonRadius: Appearance.rounding.full
                                         contentItem: MaterialSymbol {
                                             anchors.centerIn: parent
@@ -196,21 +196,25 @@ Item {
                                         }
                                     }
                                 }
-                                ScreencopyView {
-                                    id: screencopyView
-                                    captureSource: previewPopup ? windowButton.modelData : null
-                                    live: true
-                                    paintCursor: true
-                                    constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
-                                    onHasContentChanged: {
-                                        previewPopup.updatePreviewReadiness();
-                                    }
-                                    layer.enabled: true
-                                    layer.effect: OpacityMask {
-                                        maskSource: Rectangle {
-                                            width: screencopyView.width
-                                            height: screencopyView.height
-                                            radius: Appearance.rounding.small
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    implicitHeight: screencopyView.height
+                                    implicitWidth: screencopyView.width
+                                    ScreencopyView {
+                                        id: screencopyView
+                                        anchors.centerIn: parent
+                                        captureSource: windowButton.modelData
+                                        live: true
+                                        paintCursor: true
+                                        constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
+                                        layer.enabled: true
+                                        layer.effect: OpacityMask {
+                                            maskSource: Rectangle {
+                                                width: screencopyView.width
+                                                height: screencopyView.height
+                                                radius: Appearance.rounding.small
+                                            }
                                         }
                                     }
                                 }
