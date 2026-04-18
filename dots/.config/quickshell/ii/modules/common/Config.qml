@@ -568,6 +568,7 @@ Singleton {
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
                     property int longBreak: 900
+                    property int alarmVolume: 100 // 0–100, controls ffplay -volume for the pomodoro alarm
                 }
                 property bool secondPrecision: false
             }
