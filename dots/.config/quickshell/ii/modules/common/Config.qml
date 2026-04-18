@@ -209,6 +209,24 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject visualizer: JsonObject {
+                        property bool enable: false
+                        property bool showWhenLocked: false
+                        property bool hideWhenCovered: true
+                        property bool hideWhenFullscreen: true
+                        property int height: 600 // in pixels
+                        property real barRounding: 0.5
+                        property real smoothing: 0.05
+                        property real opacity: 1
+                        property real barSpacing: 10 // in pixels
+                        property int targetBarWidth: 50 // in pixles, rough target
+                        property bool mono: true
+                        property string mode: "bars" // "bars" or "wave"
+                        property real waveFillOpacity: 0.5
+                        property real dataSmoothing: 0.5
+                        property int waveBorderWidth: 3    // 0 = no border
+                        property int renderEveryXFrames: -1  // -1 = auto (System), 1 = every frame, 2 = every other frame, etc. Only for "wave" mode
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
