@@ -19,28 +19,28 @@ WindowDialog {
 
     WindowDialogTitle {
         text: Translation.tr("Bluetooth devices")
+        anchors.horizontalCenter: parent.horizontalCenter
     }
-    WindowDialogSeparator {
-        visible: !(Bluetooth.defaultAdapter?.discovering ?? false)
+    Text {
+        text: Translation.tr("Tap to connect or disconnect a device")
+        font.pixelSize: Appearance.font.pixelSize.smaller
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: Appearance.colors.colOnSurface
+        Layout.topMargin: -8
     }
     StyledIndeterminateProgressBar {
+        Layout.maximumWidth: 160
         visible: Bluetooth.defaultAdapter?.discovering ?? false
-        Layout.fillWidth: true
-        Layout.topMargin: -8
+        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.topMargin: -4
         Layout.bottomMargin: -8
-        Layout.leftMargin: -Appearance.rounding.large
-        Layout.rightMargin: -Appearance.rounding.large
+        
     }
     StyledListView {
         Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.topMargin: -15
-        Layout.bottomMargin: -16
-        Layout.leftMargin: -Appearance.rounding.large
-        Layout.rightMargin: -Appearance.rounding.large
-
         clip: true
-        spacing: 0
+        spacing: 8
         animateAppearance: false
 
         model: ScriptModel {
@@ -55,8 +55,9 @@ WindowDialog {
             }
         }
     }
-    WindowDialogSeparator {}
     WindowDialogButtonRow {
+        Layout.margins: 4
+
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
@@ -72,6 +73,9 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Done")
             onClicked: root.dismiss()
+            colBackground: Appearance.colors.colPrimary
+            colText: Appearance.colors.colOnPrimary
+            colBackgroundHover: Appearance.colors.colPrimaryHover
         }
     }
 }
