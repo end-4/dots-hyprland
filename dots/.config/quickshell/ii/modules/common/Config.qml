@@ -493,6 +493,7 @@ Singleton {
 
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
+                property string topIcon: "distro" // Options: "distro" or any icon name in ~/.config/quickshell/ii/assets/icons
                 property JsonObject translator: JsonObject {
                     property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
