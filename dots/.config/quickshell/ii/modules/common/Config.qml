@@ -352,6 +352,7 @@ Singleton {
                     property string engine: "auto" // Run `trans -list-engines` for available engines. auto should use google
                     property string targetLanguage: "auto" // Run `trans -list-all` for available languages
                     property string sourceLanguage: "auto"
+                    property list<string> history: []
                 }
             }
 
