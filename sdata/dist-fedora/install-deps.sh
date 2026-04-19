@@ -28,26 +28,46 @@ function install_RPMS() {
   local local_specs local_rpms
   rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
 
+  x rm -rf "${REPO_ROOT}/cache/rpmbuild"
   x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
   x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
 
   x cd $rpmbuildroot/SPECS
    
-  # we need cpptrace BEFORE quickshell-git
-  local_specs=(
-    "$rpm_specs/cpptrace.spec"
-    "$rpm_specs/quickshell-git.spec"
-    "$rpm_specs/hyprland-qt-support.spec"
+  packages=(
+    "cpptrace"
+    "quickshell-git"
+    "hyprland-qt-support"
+    "matugen"
   )
-  for spec_file in ${local_specs[@]}; do
+  for package in "${packages[@]}"; do
+  	echo "start $package"
+  
+    spec="$rpm_specs/$package.spec"
+    installed_rpm_stamp=$(rpm -q --qf '%{NVRA}\n' "$package" 2>/dev/null || true)
+    spec_stamp=$(rpmspec -q --qf '%{NVRA}\n' "$spec")
+    
+    [[ -f "$spec" ]] || {
+      echo "Missing spec: $spec"
+      continue
+    }
+    
+    echo "rpm_specs=$rpm_specs"
+    echo "spec=$spec"
+    echo "spec_stamp=$spec_stamp"
+    
+    if [[ "$installed_rpm_stamp" == "$spec_stamp" ]]; then
+    	printf "$installed_rpm_stamp is installed and up to date. Skipping.\n"
+    	continue
+    fi
     # Download sources
-    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
+    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec"
     # Install build dependencies
-    r x sudo dnf builddep -y "$spec_file"
+    r x sudo dnf builddep -y "$spec"
     # Build the RPM package locally. If it fails, download it from COPR.
-    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
-      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
-      sudo dnf install -y $(basename "$spec_file" .spec)
+    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec"; then
+      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
+      sudo dnf install -y $(basename "$spec" .spec)
       nolock_qs=true
     fi
   done
