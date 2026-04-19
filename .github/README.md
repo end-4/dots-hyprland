@@ -17,7 +17,16 @@
     <h3></h3>
 </div>
 
- <details> 
+<details> 
+  <summary>What this is/isn't</summary>
+
+  - Technically, configuration files
+  - Realistically, mostly the custom graphical shell
+  - NOT a system setup script: no graphic drivers, no zram setup, etc.
+  
+</details>
+
+<details> 
   <summary>Notable features</summary>
      
   - **Overview**: Shows open apps with live previews
@@ -26,6 +35,7 @@
   - **Material themes**: Choose your wallpaper, done, enjoy
   - **Transparent installation**: Every command is shown before it's run
 </details>
+
 <details> 
   <summary>Installation</summary>
 
@@ -65,8 +75,6 @@
 <div align="center">
     <img src="assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:400;">
 </div>
-
-### illogical-impulse<sup>Quickshell</sup>
 
 Widget system: Quickshell | Support: Yes
 
@@ -112,7 +120,7 @@ Widget system: Quickshell | Support: Yes
 - **Source**: illogical-impulse AGS in `ii-ags` branch, others in `archive` branch.
 - List is in reverse chronological order
 
-### illogical-impulse<sup>AGS</sup>
+### illogical-impulse (AGS)
 
 Widget system: AGS | Support: No
 
@@ -124,7 +132,7 @@ Widget system: AGS | Support: No
 
 #### m3ww
 
-Widget system: EWW | Support: No, dead
+Widget system: EWW | Support: No
 
 <a href="https://streamable.com/85ch8x">
 <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
