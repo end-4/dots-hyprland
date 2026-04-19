@@ -39,8 +39,8 @@ _exec() {
 _check_distro_id() {
   OS_RELEASE_FILE=/etc/os-release
   if [[ -f "$OS_RELEASE_FILE" ]]; then
-    OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
-    OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub("\"","",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
+    OS_DISTRO_ID=$(awk -F'=' '/^ID=/ { gsub(/["\x27]/,"",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
+    OS_DISTRO_ID_LIKE=$(awk -F'=' '/^ID_LIKE=/ { gsub(/["\x27]/,"",$2); print tolower($2) }' ${OS_RELEASE_FILE} 2> /dev/null)
     echo "distro ID: $OS_DISTRO_ID"
     echo "distro ID_LIKE: $OS_DISTRO_ID_LIKE"
   else

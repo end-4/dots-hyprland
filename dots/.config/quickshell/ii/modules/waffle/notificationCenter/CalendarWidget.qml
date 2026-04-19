@@ -79,7 +79,7 @@ BodyRectangle {
         id: dayButton
         required property var model
         checked: model.today
-        enabled: hovered || calendarView.scrolling || checked || model.month === calendarView.focusedMonth
+        enabled: hovered || checked || model.month === calendarView.focusedMonth
         implicitWidth: calendarView.buttonSize
         implicitHeight: calendarView.buttonSize
         radius: height / 2

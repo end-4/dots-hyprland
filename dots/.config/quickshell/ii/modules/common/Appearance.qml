@@ -295,6 +295,20 @@ Singleton {
             }
         }
 
+        property QtObject elementMoveSmall: QtObject {
+            property int duration: animationCurves.expressiveFastSpatialDuration
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.expressiveFastSpatial
+            property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementMoveSmall.duration
+                    easing.type: root.animation.elementMoveSmall.type
+                    easing.bezierCurve: root.animation.elementMoveSmall.bezierCurve
+                }
+            }
+        }
+
         property QtObject elementMoveEnter: QtObject {
             property int duration: 400
             property int type: Easing.BezierSpline
@@ -374,7 +388,7 @@ Singleton {
         property QtObject scroll: QtObject {
             property int duration: 200
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.standardDecel
+            property list<real> bezierCurve: root.animationCurves.standardDecel
         }
 
         property QtObject menuDecel: QtObject {

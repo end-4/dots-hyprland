@@ -94,7 +94,7 @@ Tips:
   - Font name: `Rubik`, `Rubik Light`
   - Used in Hyprland, kdeglobals, matugen, qt5ct, qt6ct and Quickshell config.
 - `ttf-twemoji`
-  - Not explicitly used, but it may help as fallback for displaying emoji charaters.
+  - Not explicitly used, but it may help as fallback for displaying emoji characters.
 
 ## illogical-impulse-hyprland
 - `hyprland`
@@ -106,13 +106,13 @@ Tips:
 
 ## illogical-impulse-kde
 - `bluedevil`
-  - Seems not being used anywhere, maybe a part of KDE settings panel.
+  - Provide command `kcmshell6 kcm_bluetooth` used by Quickshell bluetooth functionality.
 - `gnome-keyring`
   - Provide executable `gnome-keyring-daemon`, used in Hyprland and Quickshell config.
 - `networkmanager`
   - Basic component.
 - `plasma-nm`
-  - Seems not being used anywhere, maybe a part of KDE settings panel.
+  - Provide command `kcmshell6 kcm_networkmanagement` used by Quickshell network functionality.
 - `polkit-kde-agent`
   - Basic component.
 - `dolphin`
@@ -219,6 +219,11 @@ Extra dependencies.
 - `kirigami`
 - `kdialog`
 - `syntax-highlighting`
+- `vulkan-headers`
+- `libdrm`
+- `cpptrace`
+- `jemalloc`
+- `mesa`
 
 ## illogical-impulse-bibata-modern-classic-bin
 - [source](https://github.com/ful1e5/Bibata_Cursor)
@@ -227,7 +232,3 @@ Extra dependencies.
 ## illogical-impulse-microtex-git
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
-
-## illogical-impulse-oneui4-icons-git
-- [source](https://github.com/end-4/OneUI4-Icons)
-- Customed version of normal oneui4-icons.

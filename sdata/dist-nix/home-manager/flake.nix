@@ -13,7 +13,7 @@
     };
     #nixgl.url = "github:nix-community/nixGL";
     quickshell = {
-      url = "github:quickshell-mirror/quickshell/db1777c20b936a86528c1095cbcb1ebd92801402";
+      url = "github:quickshell-mirror/quickshell/7511545ee20664e3b8b8d3322c0ffe7567c56f7a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

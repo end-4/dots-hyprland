@@ -28,6 +28,12 @@ Singleton {
     }
 
     function increaseBrightness(): void {
+        // if gamma is not yet 100, first increase gamma
+        if (Hyprsunset.gamma !== 100) {
+            Hyprsunset.setGamma(Hyprsunset.gamma + 5);
+            return;
+        }
+
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
@@ -37,8 +43,12 @@ Singleton {
     function decreaseBrightness(): void {
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
-        if (monitor)
+        if (monitor && monitor.brightness > 0) 
             monitor.setBrightness(monitor.brightness - 0.05);
+        // if brightness is 0, then decrease gamma
+        else {
+            Hyprsunset.setGamma(Hyprsunset.gamma - 5);
+        }
     }
 
     reloadableId: "brightness"
@@ -148,14 +158,12 @@ Singleton {
             const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
             if (isDdc) {
                 const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
-                setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
-                setProc.startDetached();
+                setProc.exec(["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded]);
             } else {
                 const valuePercentNumber = Math.floor(brightnessValue * 100);
                 let valuePercent = `${valuePercentNumber}%`;
                 if (valuePercentNumber == 0) valuePercent = "1"; // Prevent fully black
-                setProc.command = ["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"];
-                setProc.startDetached();
+                setProc.exec(["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"])
             }
         }
 
