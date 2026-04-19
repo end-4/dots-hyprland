@@ -404,6 +404,7 @@
   "Reject": "Reddet",
   "Set API key": "API anahtarını ayarla",
   ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!": ". Zerochan için notlar:\n- Bir renk girmelisiniz\n- `sidebar.booru.zerochan.username` yapılandırma seçeneğinde zerochan kullanıcı adınızı ayarlayın. [Bunu yapmazsanız yasaklanabilirsiniz](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!",
+  ". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.": ". Gelbooru için notlar:\n- `sidebar.booru.gelbooru.userId` ve `sidebar.booru.gelbooru.apiKey` yapılandırma seçeneklerine API kimlik bilgilerini girmelisiniz. Bunları Gelbooru'daki [hesap ayarlarınızdan](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) alabilirsiniz.",
   "Content": "İçerik",
   "Pomodoro": "Pomodoro",
   "Vertical": "Dikey",
