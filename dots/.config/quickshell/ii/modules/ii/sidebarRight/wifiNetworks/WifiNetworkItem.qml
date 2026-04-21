@@ -40,6 +40,7 @@ DialogListItem {
                 color: Appearance.colors.colOnSurfaceVariant
                 elide: Text.ElideRight
                 text: root.wifiNetwork?.ssid ?? Translation.tr("Unknown")
+                textFormat: Text.PlainText
             }
             MaterialSymbol {
                 visible: (root.wifiNetwork?.isSecure || root.wifiNetwork?.active) ?? false

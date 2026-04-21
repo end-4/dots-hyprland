@@ -37,21 +37,12 @@ WindowDialog {
         spacing: 0
 
         model: ScriptModel {
-            values: [...Network.wifiNetworks].sort((a, b) => {
-                if (a.active && !b.active)
-                    return -1;
-                if (!a.active && b.active)
-                    return 1;
-                return b.strength - a.strength;
-            })
+            values: Network.friendlyWifiNetworks
         }
         delegate: WifiNetworkItem {
             required property WifiAccessPoint modelData
             wifiNetwork: modelData
-            anchors {
-                left: parent?.left
-                right: parent?.right
-            }
+            width: ListView.view.width
         }
     }
     WindowDialogSeparator {}

@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
@@ -47,6 +48,7 @@ DialogListItem {
                     color: Appearance.colors.colOnSurfaceVariant
                     elide: Text.ElideRight
                     text: root.device?.name || Translation.tr("Unknown device")
+                    textFormat: Text.PlainText
                 }
                 StyledText {
                     visible: (root.device?.connected || root.device?.paired) ?? false
@@ -82,6 +84,22 @@ DialogListItem {
                 Layout.fillWidth: true
             }
             ActionButton {
+                readonly property bool p: root.device?.paired ?? false
+                colBackground: p ? Appearance.colors.colError : ColorUtils.transparentize(Appearance.colors.colLayer3, 1)
+                colBackgroundHover: p ? Appearance.colors.colErrorHover : ColorUtils.transparentize(Appearance.colors.colLayer3, 1)
+                colRipple: p ? Appearance.colors.colErrorActive : Appearance.colors.colLayer3Hover
+                colText: p ? Appearance.colors.colOnError : Appearance.colors.colPrimary
+
+                buttonText: p ? Translation.tr("Forget") : Translation.tr("Always connect")
+                onClicked: {
+                    if (root.device?.paired) {
+                        root.device?.forget();
+                    } else {
+                        root.device?.pair();
+                    }
+                }
+            }
+            ActionButton {
                 buttonText: root.device?.connected ? Translation.tr("Disconnect") : Translation.tr("Connect")
 
                 onClicked: {
@@ -90,18 +108,6 @@ DialogListItem {
                     } else {
                         root.device.connect();
                     }
-                }
-            }
-            ActionButton {
-                visible: root.device?.paired ?? false
-                colBackground: Appearance.colors.colError
-                colBackgroundHover: Appearance.colors.colErrorHover
-                colRipple: Appearance.colors.colErrorActive
-                colText: Appearance.colors.colOnError
-
-                buttonText: Translation.tr("Forget")
-                onClicked: {
-                    root.device?.forget();
                 }
             }
         }

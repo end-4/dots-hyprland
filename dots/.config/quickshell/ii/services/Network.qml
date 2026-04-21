@@ -23,19 +23,26 @@ Singleton {
     property WifiAccessPoint wifiConnectTarget
     readonly property list<WifiAccessPoint> wifiNetworks: []
     readonly property WifiAccessPoint active: wifiNetworks.find(n => n.active) ?? null
+    readonly property list<var> friendlyWifiNetworks: [...wifiNetworks].sort((a, b) => {
+        if (a.active && !b.active)
+            return -1;
+        if (!a.active && b.active)
+            return 1;
+        return b.strength - a.strength;
+    })
     property string wifiStatus: "disconnected"
 
     property string networkName: ""
     property int networkStrength
     property string materialSymbol: root.ethernet
         ? "lan"
-        : root.wifiEnabled
+        : (root.wifiEnabled && root.wifiStatus === "connected")
             ? (
-                Network.networkStrength > 83 ? "signal_wifi_4_bar" :
-                Network.networkStrength > 67 ? "network_wifi" :
-                Network.networkStrength > 50 ? "network_wifi_3_bar" :
-                Network.networkStrength > 33 ? "network_wifi_2_bar" :
-                Network.networkStrength > 17 ? "network_wifi_1_bar" :
+                (root.active?.strength ?? 0) > 83 ? "signal_wifi_4_bar" :
+                (root.active?.strength ?? 0) > 67 ? "network_wifi" :
+                (root.active?.strength ?? 0) > 50 ? "network_wifi_3_bar" :
+                (root.active?.strength ?? 0) > 33 ? "network_wifi_2_bar" :
+                (root.active?.strength ?? 0) > 17 ? "network_wifi_1_bar" :
                 "signal_wifi_0_bar"
             )
             : (root.wifiStatus === "connecting")
@@ -82,9 +89,10 @@ Singleton {
         network.askingPassword = false;
         changePasswordProc.exec({
             "environment": {
-                "PASSWORD": password
+                "PASSWORD": password,
+                "SSID": network.ssid
             },
-            "command": ["bash", "-c", `nmcli connection modify ${network.ssid} wifi-sec.psk "$PASSWORD"`]
+            "command": ["bash", "-c", 'nmcli connection modify "$SSID" wifi-sec.psk "$PASSWORD"']
         })
     }
 
@@ -225,7 +233,7 @@ Singleton {
     Process {
         id: updateNetworkStrength
         running: true
-        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\*/{if (NR!=1) {print $2}}'"]
+        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\\*/{if (NR!=1) {print $2}}'"]
         stdout: SplitParser {
             onRead: data => {
                 root.networkStrength = parseInt(data);

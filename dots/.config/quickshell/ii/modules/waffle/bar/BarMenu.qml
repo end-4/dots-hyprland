@@ -40,6 +40,7 @@ BarPopup {
                     WButton {
                         id: btn
                         Layout.fillWidth: true
+                        inset: 2
 
                         required property var modelData
                         forceShowIcon: root.hasIcons

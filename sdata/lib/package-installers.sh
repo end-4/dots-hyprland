@@ -16,7 +16,6 @@ install-Rubik(){
 	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
 	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
   x fc-cache -fv
-  x gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
   x cd $REPO_ROOT
 }
 
@@ -31,20 +30,6 @@ install-Gabarito(){
 	x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
 	x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
   x fc-cache -fv
-  x cd $REPO_ROOT
-}
-
-install-OneUI(){
-  x mkdir -p $REPO_ROOT/cache/OneUI4-Icons
-  x cd $REPO_ROOT/cache/OneUI4-Icons
-  try git init -b main
-  try git remote add origin https://github.com/end-4/OneUI4-Icons.git
-# try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
-  x git pull origin main && git submodule update --init --recursive
-  x sudo mkdir -p /usr/local/share/icons
-  x sudo cp -r OneUI /usr/local/share/icons
-  x sudo cp -r OneUI-dark /usr/local/share/icons
-  x sudo cp -r OneUI-light /usr/local/share/icons
   x cd $REPO_ROOT
 }
 
@@ -86,7 +71,7 @@ install-python-packages(){
   ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/quickshell/.venv
   x mkdir -p $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
-  x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
+  try uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   if [[ "$INSTALL_VIA_NIX" = true ]]; then
     x nix-shell ${REPO_ROOT}/sdata/uv/shell.nix --run "uv pip install -r ${REPO_ROOT}/sdata/uv/requirements.txt"

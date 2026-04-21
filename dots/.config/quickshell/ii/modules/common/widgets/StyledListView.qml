@@ -54,6 +54,7 @@ ListView {
     Behavior on contentY {
         NumberAnimation {
             id: scrollAnim
+            alwaysRunToEnd: true
             duration: Appearance.animation.scroll.duration
             easing.type: Appearance.animation.scroll.type
             easing.bezierCurve: Appearance.animation.scroll.bezierCurve
@@ -99,7 +100,7 @@ ListView {
                 to: 1,
             }),
         ] : []
-    } 
+    }
 
     move: Transition {
         animations: root.animateMovement ? [

@@ -24,3 +24,4 @@ Note:
 +    "bluetooth": "kcmshell6 kcm_bluetooth",
 +    "network": "plasmawindowed org.kde.plasma.networkmanagement",
 ```
+

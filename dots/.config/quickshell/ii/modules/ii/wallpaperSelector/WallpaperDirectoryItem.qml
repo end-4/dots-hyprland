@@ -73,7 +73,7 @@ MouseArea {
                             target: Wallpapers
                             function onThumbnailGenerated(directory) {
                                 if (thumbnailImage.status !== Image.Error) return;
-                                if (FileUtils.parentDirectory(thumbnailImage.sourcePath) !== directory) return;
+                                if (FileUtils.parentDirectory(thumbnailImage.sourcePath) !== FileUtils.trimFileProtocol(directory)) return;
                                 thumbnailImage.source = "";
                                 thumbnailImage.source = thumbnailImage.thumbnailPath;
                             }

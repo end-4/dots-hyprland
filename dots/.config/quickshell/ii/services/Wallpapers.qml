@@ -181,4 +181,12 @@ Singleton {
             root.thumbnailGenerated(thumbgenProc.directory)
         }
     }
+
+    IpcHandler {
+        target: "wallpapers"
+
+        function apply(path: string): void {
+            root.apply(path);
+        }
+    }
 }

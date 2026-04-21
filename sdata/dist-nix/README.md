@@ -37,8 +37,38 @@ As [commented](https://github.com/end-4/dots-hyprland/issues/1061#issuecomment-3
 
 See also [caelestia-dots/shell#668](https://github.com/caelestia-dots/shell/issues/668).
 
-### NixGL
-On non-NixOS distros, packages installed via home-manager have problem accessing GPU, especially Hyprland because it requires GPU acceleration to launch. `nixGL` should be used to address the problem.
+### GPU
+On non-NixOS distros, packages installed via home-manager have problem accessing GPU, especially Hyprland because it requires GPU acceleration to launch.
+
+~~`nixGL` should be used to address the problem.~~
+
+Since home-manager 25.11, for non-NixOS just set the following:
+```nix
+targets.genericLinux.enable = true;
+```
+Then during building, home-manager will show a message to tell you running a command manually to configure GPU, like:
+```bash
+sudo /nix/store/<HASH>-non-nixos-gpu/bin/non-nixos-gpu-setup
+```
+It runs a bash script with following content:
+```
+#!/nix/store/<HASH>-bash-<VERSION>/bin/bash
+
+set -e
+
+# Install the systemd service file and ensure that the store path won't be
+# garbage-collected as long as it's installed.
+unit_path=/etc/systemd/system/non-nixos-gpu.service
+ln -sf /nix/store/<HASH>-non-nixos-gpu/resources/non-nixos-gpu.service "$unit_path"
+ln -sf "$unit_path" "/nix/var/nix"/gcroots/non-nixos-gpu.service
+
+systemctl daemon-reload
+systemctl enable non-nixos-gpu.service
+systemctl restart non-nixos-gpu.service
+```
+_Note: it uses `systemctl`, maybe won't work for OpenRC..._
+
+See [gpu-non-nixos](https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos).
 
 # Handling dot files
 ## Status

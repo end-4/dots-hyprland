@@ -2,6 +2,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
@@ -12,38 +13,49 @@ import Quickshell.Hyprland
 
 RippleButton {
     id: root
-    property var entry
+    property LauncherSearchResult entry
     property string query
     property bool entryShown: entry?.shown ?? true
     property string itemType: entry?.type ?? Translation.tr("App")
     property string itemName: entry?.name ?? ""
-    property string itemIcon: entry?.icon ?? ""
+    property var iconType: entry?.iconType
+    property string iconName: entry?.iconName ?? ""
     property var itemExecute: entry?.execute
-    property string fontType: entry?.fontType ?? "main"
-    property string itemClickActionName: entry?.clickActionName ?? "Open"
-    property string bigText: entry?.bigText ?? ""
-    property string materialSymbol: entry?.materialSymbol ?? ""
-    property string cliphistRawString: entry?.cliphistRawString ?? ""
+    property var fontType: switch(entry?.fontType) {
+        case LauncherSearchResult.FontType.Monospace:
+            return "monospace"
+        case LauncherSearchResult.FontType.Normal:
+            return "main"
+        default:
+            return "main"
+    }
+    property string itemClickActionName: entry?.verb ?? "Open"
+    property string bigText: entry?.iconType === LauncherSearchResult.IconType.Text ? entry?.iconName ?? "" : ""
+    property string materialSymbol: entry.iconType === LauncherSearchResult.IconType.Material ? entry?.iconName ?? "" : ""
+    property string cliphistRawString: entry?.rawValue ?? ""
     property bool blurImage: entry?.blurImage ?? false
-    property string blurImageText: entry?.blurImageText ?? "Image hidden"
     
     visible: root.entryShown
     property int horizontalMargin: 10
     property int buttonHorizontalPadding: 10
     property int buttonVerticalPadding: 6
     property bool keyboardDown: false
+    readonly property bool selected: (root.hovered || root.focus)
 
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
     colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colPrimaryContainerActive : 
-        ((root.hovered || root.focus) ? Appearance.colors.colPrimaryContainer : 
+        (selected ? Appearance.colors.colPrimaryContainer : 
         ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1))
     colBackgroundHover: Appearance.colors.colPrimaryContainer
     colRipple: Appearance.colors.colPrimaryContainerActive
+    property color colForeground: selected ? Appearance.colors.colOnPrimaryContainer : Appearance.m3colors.m3onSurface
 
-    property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
-    property string highlightSuffix: `</font></u>`
+    readonly property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
+    readonly property string highlightSuffix: `</font></u>`
+    // Note that this highlighting is independent from the search
+    // It's close, but does not accurately represent how the fuzzy algorithm works
     function highlightContent(content, query) {
         if (!query || query.length === 0 || content == query || fontType === "monospace")
             return StringUtils.escapeHtml(content);
@@ -97,7 +109,7 @@ RippleButton {
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Delete && event.modifiers === Qt.ShiftModifier) {
-            const deleteAction = root.entry.actions.find(action => action.name == "Delete");
+            const deleteAction = root.entry.actions.find(action => action.name == Translation.tr("Delete"));
 
             if (deleteAction) {
                 deleteAction.execute()
@@ -126,16 +138,24 @@ RippleButton {
         Loader {
             id: iconLoader
             active: true
-            sourceComponent: root.materialSymbol !== "" ? materialSymbolComponent :
-                root.bigText ? bigTextComponent :
-                root.itemIcon !== "" ? iconImageComponent : 
-                null
+            sourceComponent: switch(root.iconType) {
+                case LauncherSearchResult.IconType.Material:
+                    return materialSymbolComponent
+                case LauncherSearchResult.IconType.Text:
+                    return bigTextComponent
+                case LauncherSearchResult.IconType.System:
+                    return iconImageComponent
+                case LauncherSearchResult.IconType.None:
+                    return null
+                default:
+                    return null
+            }
         }
 
         Component {
             id: iconImageComponent
             IconImage {
-                source: Quickshell.iconPath(root.itemIcon, "image-missing")
+                source: Quickshell.iconPath(root.iconName, "image-missing")
                 width: 35
                 height: 35
             }
@@ -146,7 +166,7 @@ RippleButton {
             MaterialSymbol {
                 text: root.materialSymbol
                 iconSize: 30
-                color: Appearance.m3colors.m3onSurface
+                color: root.colForeground
             }
         }
 
@@ -155,7 +175,7 @@ RippleButton {
             StyledText {
                 text: root.bigText
                 font.pixelSize: Appearance.font.pixelSize.larger
-                color: Appearance.m3colors.m3onSurface
+                color: root.colForeground
             }
         }
 
@@ -167,7 +187,7 @@ RippleButton {
             spacing: 0
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colSubtext
+                color: root.selected ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colSubtext
                 visible: root.itemType && root.itemType != Translation.tr("App")
                 text: root.itemType
             }
@@ -203,10 +223,10 @@ RippleButton {
                     textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
                     font.pixelSize: Appearance.font.pixelSize.small
                     font.family: Appearance.font.family[root.fontType]
-                    color: Appearance.m3colors.m3onSurface
+                    color: root.colForeground
                     horizontalAlignment: Text.AlignLeft
                     elide: Text.ElideRight
-                    text: `${root.displayContent}`
+                    text: root.selected ? root.itemName : root.displayContent
                 }
             }
             Loader { // Clipboard image preview
@@ -217,7 +237,6 @@ RippleButton {
                     maxWidth: contentColumn.width
                     maxHeight: 140
                     blur: root.blurImage
-                    blurText: root.blurImageText
                 }
             }
         }
@@ -225,7 +244,7 @@ RippleButton {
         // Action text
         StyledText {
             Layout.fillWidth: false
-            visible: (root.hovered || root.focus)
+            visible: root.selected
             id: clickAction
             font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnPrimaryContainer
@@ -243,8 +262,8 @@ RippleButton {
                 delegate: RippleButton {
                     id: actionButton
                     required property var modelData
-                    property string iconName: modelData.icon ?? ""
-                    property string materialIconName: modelData.materialIcon ?? ""
+                    property var iconType: modelData.iconType
+                    property string iconName: modelData.iconName ?? ""
                     implicitHeight: 34
                     implicitWidth: 34
 
@@ -256,16 +275,16 @@ RippleButton {
                         anchors.centerIn: parent
                         Loader {
                             anchors.centerIn: parent
-                            active: !(actionButton.iconName !== "") || actionButton.materialIconName
+                            active: actionButton.iconType === LauncherSearchResult.IconType.Material || actionButton.iconName === ""
                             sourceComponent: MaterialSymbol {
-                                text: actionButton.materialIconName || "video_settings"
+                                text: actionButton.iconName || "video_settings"
                                 font.pixelSize: Appearance.font.pixelSize.hugeass
-                                color: Appearance.m3colors.m3onSurface
+                                color: root.colForeground
                             }
                         }
                         Loader {
                             anchors.centerIn: parent
-                            active: actionButton.materialIconName.length == 0 && actionButton.iconName && actionButton.iconName !== ""
+                            active: actionButton.iconType === LauncherSearchResult.IconType.System && actionButton.iconName !== ""
                             sourceComponent: IconImage {
                                 source: Quickshell.iconPath(actionButton.iconName)
                                 implicitSize: 20

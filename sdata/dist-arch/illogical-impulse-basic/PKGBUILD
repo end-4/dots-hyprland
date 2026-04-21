@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-basic
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Illogical Impulse Basic Dependencies'
 arch=(any)
 license=(None)

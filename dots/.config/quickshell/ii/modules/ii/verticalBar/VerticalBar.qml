@@ -66,11 +66,20 @@ Scope {
                 }
                 color: "transparent"
 
+                // Positioning
                 anchors {
                     left: !Config.options.bar.bottom
                     right: Config.options.bar.bottom
                     top: true
                     bottom: true
+                }
+
+                // Include in focus grab
+                Component.onCompleted: {
+                    GlobalFocusGrab.addPersistent(barRoot);
+                }
+                Component.onDestruction: {
+                    GlobalFocusGrab.removePersistent(barRoot);
                 }
 
                 MouseArea  {

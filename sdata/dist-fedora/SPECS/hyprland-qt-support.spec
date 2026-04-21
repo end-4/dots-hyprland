@@ -25,7 +25,6 @@ BuildRequires:  pkgconfig(hyprlang)
 %{summary}.
 
 %prep
-wget --content-disposition -q -N -P %{_sourcedir} %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 %autosetup -p1
 
 %build

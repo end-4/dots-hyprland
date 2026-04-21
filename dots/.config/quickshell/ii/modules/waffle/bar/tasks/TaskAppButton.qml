@@ -12,7 +12,20 @@ AppButton {
 
     required property var appEntry
     readonly property bool isSeparator: appEntry.appId === "SEPARATOR"
-    readonly property var desktopEntry: DesktopEntries.heuristicLookup(appEntry.appId)
+    property var desktopEntry: DesktopEntries.heuristicLookup(appEntry.appId)
+
+    Timer {
+        // Retry looking up the desktop entry if it failed (e.g. database not loaded yet)
+        property int retryCount: 5
+        interval: 1000
+        running: !root.isSeparator && root.desktopEntry === null && retryCount > 0
+        repeat: true
+        onTriggered: {
+            retryCount--;
+            root.desktopEntry = DesktopEntries.heuristicLookup(root.appEntry.appId);
+        }
+    }
+
     property bool active: root.appEntry.toplevels.some(t => t.activated)
     property bool hasWindows: appEntry.toplevels.length > 0
 
@@ -85,6 +98,7 @@ AppButton {
 
     BarMenu {
         id: contextMenu
+        noSmoothClosing: false // On the real thing this is always smooth
 
         model: [
             ...((root.desktopEntry?.actions.length > 0) ? root.desktopEntry.actions.map(action =>({
@@ -106,14 +120,14 @@ AppButton {
             },
             {
                 iconName: root.appEntry.pinned ? "pin-off" : "pin",
-                text: root.appEntry.pinned ? qsTr("Unpin from taskbar") : qsTr("Pin to taskbar"),
+                text: root.appEntry.pinned ? Translation.tr("Unpin from taskbar") : Translation.tr("Pin to taskbar"),
                 action: () => {
                     TaskbarApps.togglePin(root.appEntry.appId);
                 }
             },
             ...(root.appEntry.toplevels.length > 0 ? [{
                 iconName: "dismiss",
-                text: root.multiple ? qsTr("Close all windows") : qsTr("Close window"),
+                text: root.multiple ? Translation.tr("Close all windows") : Translation.tr("Close window"),
                 action: () => {
                     for (let toplevel of root.appEntry.toplevels) {
                         toplevel.close();

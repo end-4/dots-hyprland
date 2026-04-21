@@ -11,14 +11,73 @@ import Quickshell.Services.Pipewire
 Singleton {
     id: root
 
+    // Misc props
     property bool ready: Pipewire.defaultAudioSink?.ready ?? false
     property PwNode sink: Pipewire.defaultAudioSink
     property PwNode source: Pipewire.defaultAudioSource
     readonly property real hardMaxValue: 2.00 // People keep joking about setting volume to 5172% so...
     property string audioTheme: Config.options.sounds.theme
+    property real value: sink?.audio.volume ?? 0
+    
+    function friendlyDeviceName(node) {
+        return (node.nickname || node.description || Translation.tr("Unknown"));
+    }
+    function appNodeDisplayName(node) {
+        return (node.properties["application.name"] || node.description || node.name)
+    }
 
+    // Lists
+    function correctType(node, isSink) {
+        return (node.isSink === isSink) && node.audio
+    }
+    function appNodes(isSink) {
+        return Pipewire.nodes.values.filter((node) => { // Should be list<PwNode> but it breaks ScriptModel
+            return root.correctType(node, isSink) && node.isStream
+        })
+    }
+    function devices(isSink) {
+        return Pipewire.nodes.values.filter(node => {
+            return root.correctType(node, isSink) && !node.isStream
+        })
+    }
+    readonly property list<var> outputAppNodes: root.appNodes(true)
+    readonly property list<var> inputAppNodes: root.appNodes(false)
+    readonly property list<var> outputDevices: root.devices(true)
+    readonly property list<var> inputDevices: root.devices(false)
+
+    // Signals
     signal sinkProtectionTriggered(string reason);
 
+    // Controls
+    function toggleMute() {
+        Audio.sink.audio.muted = !Audio.sink.audio.muted
+    }
+
+    function toggleMicMute() {
+        Audio.source.audio.muted = !Audio.source.audio.muted
+    }
+
+    function incrementVolume() {
+        const currentVolume = Audio.value;
+        const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+        Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
+    }
+    
+    function decrementVolume() {
+        const currentVolume = Audio.value;
+        const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+        Audio.sink.audio.volume -= step;
+    }
+
+    function setDefaultSink(node) {
+        Pipewire.preferredDefaultAudioSink = node;
+    }
+
+    function setDefaultSource(node) {
+        Pipewire.preferredDefaultAudioSource = node;
+    }
+
+    // Internals
     PwObjectTracker {
         objects: [sink, source]
     }

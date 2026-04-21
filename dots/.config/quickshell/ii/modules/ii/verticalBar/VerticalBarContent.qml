@@ -54,8 +54,8 @@ Item { // Bar content region
         height: (root.height - middleSection.height) / 2
         width: Appearance.sizes.verticalBarWidth
 
-        onScrollDown: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05)
-        onScrollUp: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness + 0.05)
+        onScrollDown: Brightness.decreaseBrightness()
+        onScrollUp: Brightness.increaseBrightness()
         onMovedAway: GlobalStates.osdBrightnessOpen = false
         onPressed: event => {
             if (event.button === Qt.LeftButton)
@@ -140,13 +140,6 @@ Item { // Bar content region
                 Layout.fillHeight: false
             }
 
-            HorizontalBarSeparator {}
-
-            VerticalDateWidget {
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-            }
-
             HorizontalBarSeparator {
                 visible: Battery.available
             }
@@ -171,16 +164,8 @@ Item { // Bar content region
         implicitWidth: Appearance.sizes.baseVerticalBarWidth
         implicitHeight: bottomSectionColumnLayout.implicitHeight
         
-        onScrollDown: {
-            const currentVolume = Audio.value;
-            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
-            Audio.sink.audio.volume -= step;
-        }
-        onScrollUp: {
-            const currentVolume = Audio.value;
-            const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
-            Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
-        }
+        onScrollDown: Audio.decrementVolume();
+        onScrollUp: Audio.incrementVolume();
         onMovedAway: GlobalStates.osdVolumeOpen = false;
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
@@ -288,12 +273,12 @@ Item { // Bar content region
                         }
                     }
                     MaterialSymbol {
-                        Layout.bottomMargin: indicatorsColumnLayout.realSpacing
                         text: Network.materialSymbol
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
+                        Layout.topMargin: indicatorsColumnLayout.realSpacing
                         visible: BluetoothStatus.available
                         text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
                         iconSize: Appearance.font.pixelSize.larger

@@ -469,7 +469,7 @@ test_shellcheck() {
     return 0
   fi
   
-  if shellcheck -e SC1090,SC1091,SC2148,SC2034,SC2155,SC2164 setup then
+  if shellcheck -e SC1090,SC1091,SC2148,SC2034,SC2155,SC2164 setup; then
     log_pass "shellcheck passed"
     return 0
   else

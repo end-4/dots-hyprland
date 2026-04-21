@@ -217,16 +217,16 @@ for pattern in "${patterns[@]}"; do
   case "$mode" in
     "sync")
       if [[ -d "$from" ]]; then
-        warning_rsync_delete
+        warning_overwrite
         v rsync -av --delete "${excludes[@]}" "$from/" "$to/"
       else
-        warning_rsync_normal
+        warning_overwrite
         # For files, don't use trailing slash and don't use --delete
         v rsync -av "${excludes[@]}" "$from" "$to"
       fi
       ;;
     "soft")
-      warning_rsync_normal
+      warning_overwrite
       if [[ -d "$from" ]]; then
         v rsync -av "${excludes[@]}" "$from/" "$to/"
       else
