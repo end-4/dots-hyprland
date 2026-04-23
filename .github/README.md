@@ -61,27 +61,6 @@ VPN connection indicator in the system bar with click-to-toggle.
 
 ---
 
-### 🤖 AI Assistant — [`feature/ai-assistant`](https://github.com/tslove923/dots-hyprland/tree/feature/ai-assistant)
-
-Voice-activated AI assistant with wake word detection and agent-based task automation.
-
-- **Wake word**: "Hey Jarvis" via openwakeword (~80ms latency, 5-10% CPU)
-- **Voice-to-text**: voxd streaming transcription
-- **Aurora glow**: Visual feedback effect on AI panel activation
-- **Agent system**: Web search, Spotify, email, browser tab agents
-- **NPU acceleration**: Optional OpenVINO-accelerated wake word detection
-- All processing runs locally — no cloud dependencies
-
-<details>
-<summary>Files changed</summary>
-
-- `ai-assistant/` — wake word detector, event handler, systemd service, install script
-- `dots/quickshell/ii/services/AIAssistantState.qml` (new)
-- `dots/quickshell/ii/modules/ii/sidebarLeft/AuroraGlow.qml` (new)
-</details>
-
----
-
 ### 💬 GitHub Copilot Integration — [`feature/copilot-integration`](https://github.com/tslove923/dots-hyprland/tree/feature/copilot-integration)
 
 GitHub Copilot as an AI backend in the Quickshell AI chat panel.
@@ -162,23 +141,6 @@ Home Assistant panel in the top bar for smart home control.
 
 ---
 
-### 🖥️ Overview Monitor Binding — [`feature/overview-monitor-binding-dropdown`](https://github.com/tslove923/dots-hyprland/tree/feature/overview-monitor-binding-dropdown)
-
-Workspace monitor binding dropdown in the overview widget, plus universal copy/paste keybinds.
-
-- Dropdown to bind workspaces to monitors in overview
-- **Super+C/V** — universal copy/paste via ydotool
-- **Super+Shift+V** — clipboard history (moved from Super+V)
-
-<details>
-<summary>Files changed</summary>
-
-- `modules/ii/overview/OverviewWidget.qml` — monitor binding dropdown
-- `dots/.config/hypr/hyprland/keybinds.conf` — universal copy/paste
-</details>
-
----
-
 ### 🎵 MPRIS Active Player Fix — [`feature/mpris-active-player-fix-main`](https://github.com/tslove923/dots-hyprland/tree/feature/mpris-active-player-fix-main)
 
 Fixes media player selection so the currently playing source takes priority.
@@ -232,7 +194,7 @@ Two scripts on [`feature/apply-script`](https://github.com/tslove923/dots-hyprla
 # Preview only — create integration branch without deploying
 ./apply-features.sh --dry-run
 
-# Deploy without AI assistant
+# Deploy without AI assistant prompt
 ./apply-features.sh --no-ai-assistant
 
 # Keep integration branch after deploy for inspection
@@ -251,7 +213,6 @@ The scripts merge in dependency-aware order to minimize conflicts:
 | 4 | `feature/custom-configs` | ⚡ README conflicts → auto-resolved |
 | 5 | `feature/us-clock-view-worldclocks` | ⚡ Keybinds conflict → auto-resolved |
 | 6 | `feature/homeassistant-integration` | ⚡ README conflict → auto-resolved |
-| 7 | `feature/overview-monitor-binding-dropdown` | ⚡ Keybinds conflict → auto-resolved |
 
 ### What It Does
 
@@ -261,7 +222,7 @@ The scripts merge in dependency-aware order to minimize conflicts:
 4. Auto-resolves known conflicts (READMEs, keybinds, BarContent)
 5. Backs up `~/.config` to `~/.config-backup-features-<timestamp>`
 6. Deploys merged configs via rsync
-7. Optionally installs the AI assistant wake-word systemd service
+7. Optionally runs post-deploy hooks
 8. Verifies critical files and reloads Hyprland
 
 ### Restoring from Backup

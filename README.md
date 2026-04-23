@@ -23,20 +23,6 @@ Real-time GPU and NPU usage indicators in the Quickshell bar, tailored for Intel
 
 ---
 
-### 🎙️ [AI Assistant](../../tree/feature/ai-assistant)
-Voice-activated AI assistant with wake word detection and NPU acceleration.
-
-- **Wake word**: "Hey Jarvis" via openwakeword (~80ms latency, ~5-10% CPU)
-- **NPU acceleration**: Optional OpenVINO backend for Intel Lunar Lake NPU
-- **Audio coordination**: State machine prevents mic conflicts between wake word and voxd
-- **Visual feedback**: Aurora glow effect on the AI panel when activated
-- **Agent system** (WIP): Intent-based routing for web search, Spotify, email, browser tabs
-- Packaged as an Arch Linux PKGBUILD with systemd user service
-
-**Branch**: [`feature/ai-assistant`](../../tree/feature/ai-assistant) · [Documentation](AI-ASSISTANT-README.md)
-
----
-
 ### 🔒 [VPN Indicator](../../tree/feature/vpn-indicator)
 Real-time VPN status indicator in the Quickshell bar.
 
@@ -119,7 +105,7 @@ This merges selected feature branches in the correct order, auto-resolves confli
 | Flag | Description |
 |------|-------------|
 | `--all` | Apply all features without TUI (apply-features.sh) |
-| `--no-ai-assistant` | Skip AI assistant installation |
+
 | `--no-backup` | Skip backing up current config |
 | `--dry-run` | Create integration branch but don't deploy |
 | `--keep-branch` | Preserve the integration branch after deploying |
