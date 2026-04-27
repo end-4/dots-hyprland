@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-backlight
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Illogical Impulse Backlight Dependencies'
 arch=(any)
 license=(None)

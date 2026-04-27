@@ -12,11 +12,11 @@ QuickToggleModel {
     name: Translation.tr("Night Light")
     statusText: (auto ? Translation.tr("Auto, ") : "") + (toggled ? Translation.tr("Active") : Translation.tr("Inactive"))
 
-    toggled: Hyprsunset.active
+    toggled: Hyprsunset.temperatureActive
     icon: auto ? "night_sight_auto" : "bedtime"
     
     mainAction: () => {
-        Hyprsunset.toggle()
+        Hyprsunset.toggleTemperature()
     }
     hasMenu: true
 

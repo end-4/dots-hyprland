@@ -219,6 +219,11 @@ Extra dependencies.
 - `kirigami`
 - `kdialog`
 - `syntax-highlighting`
+- `vulkan-headers`
+- `libdrm`
+- `cpptrace`
+- `jemalloc`
+- `mesa`
 
 ## illogical-impulse-bibata-modern-classic-bin
 - [source](https://github.com/ful1e5/Bibata_Cursor)
@@ -227,7 +232,3 @@ Extra dependencies.
 ## illogical-impulse-microtex-git
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
-
-## illogical-impulse-oneui4-icons-git
-- [source](https://github.com/end-4/OneUI4-Icons)
-- Customed version of normal oneui4-icons.

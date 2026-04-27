@@ -1,31 +1,32 @@
-_commit='db1777c20b936a86528c1095cbcb1ebd92801402'
+_commit='7511545ee20664e3b8b8d3322c0ffe7567c56f7a'
 # Useful links:
 # https://git.outfoxxed.me/quickshell/quickshell/commits/branch/master
 # https://aur.archlinux.org/packages/quickshell-git
 
+groups=(illogical-impulse)
 _prefix='illogical-impulse'
 conflicts=("quickshell-git")
 
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=6
+pkgrel=7
 pkgdesc="$_pkgname-git pinned commit and extra deps for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
 options=(!strip)
 license=('LGPL-3.0-only')
 depends=(
+  'cpptrace'
+  'jemalloc'
+  'mesa'
   'qt6-declarative'
   'qt6-base'
-  'jemalloc'
   'qt6-svg'
+  'libdrm'
   'libpipewire'
   'libxcb'
   'wayland'
-  'libdrm'
-  'mesa'
-  'google-breakpad'
   # NOTE: Below are custom dependencies of illogical-impulse
   qt6-5compat 
   qt6-avif-image-plugin
@@ -44,14 +45,15 @@ depends=(
   syntax-highlighting
 )
 makedepends=(
-  'spirv-tools'
-  'qt6-shadertools'
-  'wayland'
-  'wayland-protocols'
   'cli11'
-  'ninja'
   'cmake'
   'git'
+  'ninja'
+  'qt6-shadertools'
+  'spirv-tools'
+  'vulkan-headers'
+  'wayland'
+  'wayland-protocols'
 )
 provides=("$_pkgname")
 conflicts=("$_pkgname")
