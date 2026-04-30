@@ -15,7 +15,11 @@ import Quickshell.Services.Mpris
 Item { // Player instance
     id: root
     required property MprisPlayer player
-    property var artUrl: player?.trackArtUrl
+    // Fall back to a YouTube cover URL when the player exposes no mpris:artUrl
+    // (Firefox MPRIS bridge and plasma-browser-integration both omit it on YT Music).
+    property var artUrl: (player?.trackArtUrl && player.trackArtUrl.length > 0)
+        ? player.trackArtUrl
+        : StringUtils.getYoutubeArtUrl(player?.metadata?.["xesam:url"] ?? "")
     property string artDownloadLocation: Directories.coverArt
     property string artFileName: Qt.md5(artUrl)
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
@@ -77,7 +81,18 @@ Item { // Player instance
         id: coverArtDownloader
         property string targetFile: root.artUrl
         property string artFilePath: root.artFilePath
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'` ]
+        // For oEmbed URLs (returned by StringUtils.getYoutubeArtUrl for
+        // playlist / channel links), resolve the JSON `thumbnail_url` field
+        // first, then download the resulting image with the same curl call.
+        command: [ "bash", "-c", `
+            out='${artFilePath}'
+            url='${targetFile}'
+            if [ -z "$url" ] || [ -f "$out" ]; then exit 0; fi
+            case "$url" in *"/oembed?"*)
+                url=$(curl -4 -fsSL "$url" | sed -n 's/.*"thumbnail_url":"\\([^"]*\\)".*/\\1/p') ;;
+            esac
+            if [ -n "$url" ]; then curl -4 -fsSL "$url" -o "$out"; fi
+        ` ]
         onExited: (exitCode, exitStatus) => {
             root.downloaded = true
         }
