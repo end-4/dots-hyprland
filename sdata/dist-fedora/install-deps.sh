@@ -37,7 +37,6 @@ function install_RPMS() {
   packages=(
     "cpptrace"
     "quickshell-git"
-    "hyprland-qt-support"
     "matugen"
   )
   for package in "${packages[@]}"; do
