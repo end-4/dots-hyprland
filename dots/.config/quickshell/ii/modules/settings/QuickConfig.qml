@@ -118,6 +118,26 @@ ContentPage {
                         text: Translation.tr("Random osu! seasonal background\nImage is saved to ~/Pictures/Wallpapers")
                     }
                 }
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.randomWallRating
+                    onSelected: newValue => {
+                        Config.options.background.randomWallRating = newValue;
+                    }
+                    options: [
+                        {
+                            "value": "safe",
+                            "displayName": Translation.tr("Safe")
+                        },
+                        {
+                            "value": "questionable",
+                            "displayName": Translation.tr("Questionable")
+                        },
+                        {
+                            "value": "explicit",
+                            "displayName": Translation.tr("Explicit")
+                        },
+                    ]
+                }
                 RippleButtonWithIcon {
                     Layout.fillWidth: true
                     materialIcon: "wallpaper"
