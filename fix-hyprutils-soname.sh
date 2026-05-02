@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "=== Fixing libhyprutils.so.10 -> .so.11 breakage ==="
+echo "=== Fixing libhyprutils.so.xx -> .so.xx breakage ==="
 echo ""
 
 # 1. Replace stale hyprgraphics-git (built against .so.10) with official repo version
 #    The repo version is already compiled against .so.11.
 #    If you prefer to keep the -git version, replace this block with:
+echo "[1/3] Rebuilding hyprgraphics-git..."
 yay -S --rebuildtree hyprgraphics-git
-echo "[1/3] Replacing hyprgraphics-git with official hyprgraphics..."
+# echo "[1/3] Replacing hyprgraphics-git with official hyprgraphics..."
 # sudo pacman -S --noconfirm hyprgraphics
 
 # 2. Reinstall hyprtoolkit from repo (should be rebuilt against .so.11)
