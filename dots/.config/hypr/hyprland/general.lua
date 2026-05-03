@@ -9,18 +9,17 @@ hl.monitor({
 hl.gesture({ fingers = 3, direction = "swipe",      action = "move" })
 hl.gesture({ fingers = 3, direction = "pinch",      action = "float" })
 hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
--- maybe need to make a function if these two don't work
-hl.gesture({ fingers = 4, direction = "up",     action = function() global, quickshell:overviewWorkspacesToggle end })
-hl.gesture({ fingers = 4, direction = "down",   action = function() global, quickshell:overviewWorkspacesClose end  })
--- couldn't find anything about this in the old or the new syntax wiki (plugin?)
-hl.gesture({
-    workspace_swipe_distance = 700
-    workspace_swipe_cancel_ratio = 0.2
-    workspace_swipe_min_speed_to_force = 5
-    workspace_swipe_direction_lock = true
-    workspace_swipe_direction_lock_threshold = 10
-    workspace_swipe_create_new = true
-})
+hl.gesture({ fingers = 4, direction = "up",     action = hl.dsp.global("quickshell:overviewWorkspacesToggle") })
+hl.gesture({ fingers = 4, direction = "down",   action = hl.dsp.global("quickshell:overviewWorkspacesClose")  })
+-- couldn't find anything about this in the old or the new syntax wiki (plugin?) had to comment gave error
+--hl.gesture({
+--    workspace_swipe_distance = 700,
+--    workspace_swipe_cancel_ratio = 0.2,
+--    workspace_swipe_min_speed_to_force = 5,
+--    workspace_swipe_direction_lock = true,
+--    workspace_swipe_direction_lock_threshold = 10,
+--    workspace_swipe_create_new = true,
+--})
 
 hl.config({
     general = {
@@ -40,22 +39,13 @@ hl.config({
 
         no_focus_fallback = true,
         allow_tearing = true, -- This just allows the `immediate` window rule to work
+        snap = {
+            enabled = true,
+            window_gap = 4,
+            monitor_gap = 5,
+            respect_gaps = true,
+        },
     },
-
-    snap = {
-        enabled = true,
-        window_gap = 4,
-        monitor_gap = 5,
-        respect_gaps = true,
-    },
-
-    dwindle = {
-        preserve_split = true,
-        smart_split = false,
-        smart_resizing = false,
-        --precise_mouse_move = true,
-    },
-
     decoration = {
         -- 2 = circle, higher = squircle, 4 = very obvious squircle
         -- Clear squircles look really off; we use only extra .4 here to make the rounding feel more continuous
@@ -81,9 +71,9 @@ hl.config({
         },
         shadow = {
             enabled = true,
-            ignore_window = true,
+            --ignore_window = true, -- deprecated??
             range = 20,
-            offset = 0 2,
+            offset = {0, 2},
             render_power = 10,
             color = "rgba(00000020)",
 
@@ -95,6 +85,12 @@ hl.config({
     },
     animations = {
         enabled = true,
+    },
+    dwindle = {
+        preserve_split = true,
+        smart_split = false,
+        smart_resizing = false,
+        --precise_mouse_move = true,
     },
 })
 -- Curves
@@ -151,7 +147,7 @@ hl.config({
     misc = {
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
-        vfr = 1,
+        --vfr = 1, --deprecated??
         vrr = 0,
         mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,
