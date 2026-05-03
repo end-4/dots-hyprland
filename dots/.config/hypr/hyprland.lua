@@ -2,48 +2,48 @@
 -- You wanna add your stuff in files in `custom`
 
 -- --- Environment variables ---
-require("hyprland/env.lua")
+require("hyprland/env")
 -- hyprlang noerror true
-require("custom/env.lua")
+require("custom/env")
 -- hyprlang noerror false
 
 -- --- Other vars ---
-require("hyprland/variables.lua")
+require("hyprland/variables")
 -- hyprlang noerror true
-require("custom/variables.lua")
+require("custom/variables")
 -- hyprlang noerror false
 
 -- --- Defaults ---
 -- hyprlang if !dontLoadDefaultExecs
-require("hyprland/execs.lua")
+require("hyprland/execs")
 -- hyprlang endif
 -- hyprlang if !dontLoadDefaultGeneral
-require("hyprland/general.lua")
+require("hyprland/general")
 -- hyprlang endif
 -- hyprlang if !dontLoadDefaultRules
-require("hyprland/rules.lua")
+require("hyprland/rules")
 -- hyprlang endif
 -- hyprlang if !dontLoadDefaultColors
-require("hyprland/colors.lua")
+require("hyprland/colors")
 -- hyprlang endif
 -- hyprlang if !dontLoadDefaultKeybinds
-require("hyprland/keybinds.lua")
+require("hyprland/keybinds")
 -- hyprlang endif
 
 -- --- Custom ---
 -- hyprlang noerror true
-require("custom/execs.lua")
+require("custom/execs")
 -- hyprlang noerror true
-require("custom/general.lua")
+require("custom/general")
 -- hyprlang noerror true
-require("custom/rules.lua")
+require("custom/rules")
 -- hyprlang noerror true
-require("custom/keybinds.lua")
+require("custom/keybinds")
 -- hyprlang noerror false
 
 -- --- nwg-displays support ---
-require("workspaces.lua")
-require("monitors.lua")
+require("workspaces")
+require("monitors")
 
 -- --- Shell overrides ---
-require("hyprland/shellOverrides/main.lua")
+require("hyprland/shellOverrides/main")
