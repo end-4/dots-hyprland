@@ -14,9 +14,9 @@ hl.bind("SUPER + SUPER_R",                      hl.dsp.global("quickshell:search
 hl.bind("SUPER + SUPER_L",                      hl.dsp.exec_cmd("qs -c $qsConfig ipc call TEST_ALIVE || pkill fuzzel || fuzzel")                                                                                                        ) -- # [hidden] Launcher (fallback)
 hl.bind("SUPER + SUPER_R",                      hl.dsp.exec_cmd("qs -c $qsConfig ipc call TEST_ALIVE || pkill fuzzel || fuzzel")                                                                                                        ) -- # [hidden] Launcher (fallback)
 -- This is required for catchall to work
-hl.define_submap("global", function() -- can't seem to get it to work when adding SUPER
-    hl.bind("catchall",                     hl.dsp.global("quickshell:searchToggleReleaseInterrupt"),                                                                   {ignore_mods = true, transparent = true, non_consuming = true}  ) -- # [hidden]
-end)
+--hl.define_submap("global", function() -- can't seem to get it to work when adding SUPER
+--    hl.bind("catchall",                     hl.dsp.global("quickshell:searchToggleReleaseInterrupt"),                                                                   {ignore_mods = true, transparent = true, non_consuming = true}  ) -- # [hidden]
+--end)
 hl.bind("CTRL + SUPER_L",                       hl.dsp.global("quickshell:searchToggleReleaseInterrupt")                                                                                                                                ) -- # [hidden]
 hl.bind("CTRL + SUPER_R",                       hl.dsp.global("quickshell:searchToggleReleaseInterrupt")                                                                                                                                ) -- # [hidden]
 hl.bind("SUPER + mouse:272",                    hl.dsp.global("quickshell:searchToggleReleaseInterrupt")                                                                                                                                ) -- # [hidden]
@@ -225,10 +225,10 @@ hl.bind("CTRL + SUPER + Up",                    hl.dsp.window.move({workspace = 
 hl.bind("CTRL + SUPER + Down",                  hl.dsp.window.move({workspace = "r+5"})                                                                                                                                                 ) -- # [hidden]
 
 --##! Virtual machines
-hl.bind("SUPER + ALT + F1",                     hl.dsp.exec_cmd("notify-send 'Entered Virtual Machine submap' 'Keybinds disabled. Hit SUPER+ALT+F1 to escape' -a 'Hyprland' && hyprctl dispatch submap virtual-machine")                ) -- Disable keybinds
-hl.define_submap("virtual-machine", function() end)
-hl.bind("SUPER + ALT + F1",                     hl.dsp.exec_cmd("notify-send 'Exited Virtual Machine submap' 'Keybinds re-enabled' -a 'Hyprland' && hyprctl dispatch submap global")                                                    ) -- # [hidden]
-hl.define_submap("global", function() end)
+--hl.bind("SUPER + ALT + F1",                     hl.dsp.exec_cmd("notify-send 'Entered Virtual Machine submap' 'Keybinds disabled. Hit SUPER+ALT+F1 to escape' -a 'Hyprland' && hyprctl dispatch submap virtual-machine")                ) -- Disable keybinds
+--hl.define_submap("virtual-machine", function() end)
+--hl.bind("SUPER + ALT + F1",                     hl.dsp.exec_cmd("notify-send 'Exited Virtual Machine submap' 'Keybinds re-enabled' -a 'Hyprland' && hyprctl dispatch submap global")                                                    ) -- # [hidden]
+--hl.define_submap("global", function() end)
 
 --#!
 --# Testing
