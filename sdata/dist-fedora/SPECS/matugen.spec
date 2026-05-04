@@ -1,11 +1,10 @@
-%global commit      e65259d68edc034905da477b6c1a349e89e2aa8d
+%global commit      4112d352914742ba69f6380fd07984adba02d376
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global commits     719
-%global snapdate    20260213
-%global tag         4.0.0
+%global snapdate    20260322
+%global tag         4.1.0
 
 Name:               matugen
-Version:            %{tag}^%{commits}.%{shortcommit}
+Version:            %{tag}.%{shortcommit}
 Release:            0%{?dist}
 Summary:            A cross-platform material you and base16 color generation tool
 
