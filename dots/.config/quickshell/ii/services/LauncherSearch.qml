@@ -3,11 +3,12 @@ pragma Singleton
 import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
+import qs.services
 import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
+
 
 Singleton {
     id: root
@@ -20,6 +21,27 @@ Singleton {
         } else {
             root.query = prefix + root.query;
         }
+    }
+
+    function getFileSearchQuery() {
+        if (!Config.options.search.fileSearch.enable) return "";
+        const prefixes = [
+            Config.options.search.prefix.action,
+            Config.options.search.prefix.app,
+            Config.options.search.prefix.clipboard,
+            Config.options.search.prefix.emojis,
+            Config.options.search.prefix.math,
+            Config.options.search.prefix.shellCommand,
+            Config.options.search.prefix.webSearch,
+        ];
+        for (let i = 0; i < prefixes.length; i++) {
+            if (root.query.startsWith(prefixes[i])) return "";
+        }
+        return root.query.trim();
+    }
+
+    onQueryChanged: {
+        FileSearch.search(getFileSearchQuery());
     }
 
     // https://specifications.freedesktop.org/menu/latest/category-registry.html
@@ -109,7 +131,7 @@ Singleton {
         {
             action: "wallpaper",
             execute: () => {
-                Hyprland.dispatch("global quickshell:wallpaperSelectorToggle")
+                GlobalStates.wallpaperSelectorOpen = true;
             }
         },
         {
@@ -162,6 +184,40 @@ Singleton {
                 root.mathResult = data;
             }
         }
+    }
+
+
+    property list<var> fileResults: {
+        if (!Config.options.search.fileSearch.enable) return [];
+        if (!FileSearch.results || FileSearch.results.length === 0) return [];
+
+        return FileSearch.results.map(path => {
+            const trimmed = FileUtils.trimFileProtocol(path.path);
+            const isDir = path.isDir;
+            const displayName = isDir ? FileUtils.folderNameForPath(trimmed) : FileUtils.fileNameForPath(trimmed);
+            const parentDir = FileUtils.parentDirectory(trimmed);
+            return resultComp.createObject(null, {
+                rawValue: trimmed,
+                name: displayName || trimmed,
+                verb: Translation.tr("Open"),
+                type: isDir ? Translation.tr("Folder") : Translation.tr("File"),
+                iconName: isDir ? "folder" : "description",
+                iconType: LauncherSearchResult.IconType.Material,
+                execute: () => {
+                    Qt.openUrlExternally(`file://${trimmed}`);
+                },
+                actions: [resultComp.createObject(null, {
+                        name: Translation.tr("Open Parent folder"),
+                        iconName: "folder_open",
+                        iconType: LauncherSearchResult.IconType.Material,
+                        execute: () => {
+                            if (parentDir) {
+                                Qt.openUrlExternally(`file://${parentDir}`);
+                            }
+                        }
+                    })]
+            });
+        });
     }
 
     property list<var> results: {
@@ -339,6 +395,7 @@ Singleton {
 
         //////////////// Apps //////////////////
         result = result.concat(appResultObjects);
+        result = result.concat(fileResults);
 
         ////////// Launcher actions ////////////
         result = result.concat(launcherActionObjects);
