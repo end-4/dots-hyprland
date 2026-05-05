@@ -13,8 +13,8 @@ user_preferences:
   keybindings: "default" # default | vim
 patterns:
   # Always install these files
-  - from: "dots/.config/quickshell"
-    to: "$XDG_CONFIG_HOME/quickshell"
+  - from: "dots/.config/quickshell/ii"
+    to: "$XDG_CONFIG_HOME/quickshell/ii"
     mode: "sync"
   # Conditionally install these files
   - from: "dots/.config/fish"
@@ -46,11 +46,8 @@ patterns:
   - from: "dots/.config/hypr"
     to: "$XDG_CONFIG_HOME/hypr"
     mode: "sync"
-    excludes: ["custom", "hyprlock.conf", "hypridle.conf", "hyprland.conf"]
+    excludes: ["custom", "hyprlock.conf", "hypridle.conf", "monitors.conf", "workspaces.conf"]
   # Hyprland special files
-  - from: "dots/.config/hypr/hyprland.conf"
-    to: "$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    mode: "hard-backup"
   - from: "dots/.config/hypr/hypridle.conf"
     to: "$XDG_CONFIG_HOME/hypr/hypridle.conf"
     mode: "soft-backup"

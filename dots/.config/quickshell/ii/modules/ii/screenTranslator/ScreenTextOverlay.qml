@@ -186,7 +186,6 @@ Item {
         asynchronous: false
         width: root.windowWidth
         height: root.windowHeight
-        sourceSize: Qt.size(root.windowWidth, root.windowHeight)
         source: Qt.resolvedUrl(root.screenshotPath)
         visible: false
     }
@@ -274,6 +273,17 @@ Item {
         property real unscaledY: boundingVertices[0].y
         property real unscaledWidth: boundingVertices[1].x - boundingVertices[0].x
         property real unscaledHeight: boundingVertices[3].y - boundingVertices[0].y
+        
+        // Calculate rotation based on first two vertices (top-left to top-right)
+        property real dx: boundingVertices[1].x - boundingVertices[0].x
+        property real dy: boundingVertices[1].y - boundingVertices[0].y
+        transformOrigin: Item.TopLeft
+        rotation: {
+            // Note rotation in qml is degrees clockwise
+            var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            return angle;
+        }
+        
         x: unscaledX * scaleFactor
         y: unscaledY * scaleFactor
         width: unscaledWidth * scaleFactor
