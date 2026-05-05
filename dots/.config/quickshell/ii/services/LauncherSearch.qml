@@ -3,12 +3,11 @@ pragma Singleton
 import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
-import qs.services
 import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
-
+import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -22,26 +21,8 @@ Singleton {
             root.query = prefix + root.query;
         }
     }
-
-    function getFileSearchQuery() {
-        if (!Config.options.search.fileSearch.enable) return "";
-        const prefixes = [
-            Config.options.search.prefix.action,
-            Config.options.search.prefix.app,
-            Config.options.search.prefix.clipboard,
-            Config.options.search.prefix.emojis,
-            Config.options.search.prefix.math,
-            Config.options.search.prefix.shellCommand,
-            Config.options.search.prefix.webSearch,
-        ];
-        for (let i = 0; i < prefixes.length; i++) {
-            if (root.query.startsWith(prefixes[i])) return "";
-        }
-        return root.query.trim();
-    }
-
     onQueryChanged: {
-        FileSearch.search(getFileSearchQuery());
+        FileSearch.search(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app));
     }
 
     // https://specifications.freedesktop.org/menu/latest/category-registry.html
@@ -131,7 +112,7 @@ Singleton {
         {
             action: "wallpaper",
             execute: () => {
-                GlobalStates.wallpaperSelectorOpen = true;
+                Hyprland.dispatch("global quickshell:wallpaperSelectorToggle")
             }
         },
         {
@@ -185,9 +166,7 @@ Singleton {
             }
         }
     }
-
-
-    property list<var> fileResults: {
+       property list<var> fileResults: {
         if (!Config.options.search.fileSearch.enable) return [];
         if (!FileSearch.results || FileSearch.results.length === 0) return [];
 
@@ -331,6 +310,7 @@ Singleton {
                 })
             });
         });
+
         const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
             verb: Translation.tr("Run"),
@@ -396,6 +376,7 @@ Singleton {
         //////////////// Apps //////////////////
         result = result.concat(appResultObjects);
         result = result.concat(fileResults);
+
 
         ////////// Launcher actions ////////////
         result = result.concat(launcherActionObjects);
