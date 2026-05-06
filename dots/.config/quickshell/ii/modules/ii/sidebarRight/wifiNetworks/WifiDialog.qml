@@ -13,13 +13,14 @@ WindowDialog {
 
     WindowDialogTitle {
         text: Translation.tr("Connect to Wi-Fi")
+        anchors.horizontalCenter: parent.horizontalCenter
     }
     WindowDialogSeparator {
         visible: !Network.wifiScanning
     }
     StyledIndeterminateProgressBar {
         visible: Network.wifiScanning
-        Layout.fillWidth: true
+        anchors.horizontalCenter: parent.horizontalCenter
         Layout.topMargin: -8
         Layout.bottomMargin: -8
         Layout.leftMargin: -Appearance.rounding.large
@@ -45,8 +46,8 @@ WindowDialog {
             width: ListView.view.width
         }
     }
-    WindowDialogSeparator {}
     WindowDialogButtonRow {
+        Layout.margins: 4
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
@@ -62,6 +63,9 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Done")
             onClicked: root.dismiss()
+            colBackground: Appearance.colors.colPrimary
+            colText: Appearance.colors.colOnPrimary
+            colBackgroundHover: Appearance.colors.colPrimaryHover
         }
     }
 }
