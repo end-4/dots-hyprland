@@ -106,7 +106,7 @@ Item {
                 }
                 text: Translation.tr("More Bluetooth settings")
                 onClicked: {
-                    Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "sidebarLeft", "toggle"]);
+                    GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
                     Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth]);
                 }
             }
