@@ -9,8 +9,8 @@ hl.monitor({
 hl.gesture({ fingers = 3, direction = "swipe",      action = "move" })
 hl.gesture({ fingers = 3, direction = "pinch",      action = "float" })
 hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
-hl.gesture({ fingers = 4, direction = "up",     action = hl.dsp.global("quickshell:overviewWorkspacesToggle") })
-hl.gesture({ fingers = 4, direction = "down",   action = hl.dsp.global("quickshell:overviewWorkspacesClose")  })
+hl.gesture({ fingers = 4, direction = "up",     action = function() hl.dsp.global("quickshell:overviewWorkspacesToggle") end })
+hl.gesture({ fingers = 4, direction = "down",   action = function() hl.dsp.global("quickshell:overviewWorkspacesClose") end })
 -- couldn't find anything about this in the old or the new syntax wiki (plugin?) had to comment gave error
 --hl.gesture({
 --    workspace_swipe_distance = 700,
@@ -168,7 +168,7 @@ hl.config({
     },
 
     cursor = {
-        zoom_factor = 1,
+        --zoom_factor = 1,
         zoom_rigid = false,
         zoom_disable_aa = true,
         hotspot_padding = 1,
