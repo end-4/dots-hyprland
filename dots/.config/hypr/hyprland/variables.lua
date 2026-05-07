@@ -18,7 +18,7 @@ hl.env("taskManager", "$HOME/.config/hypr/hyprland/scripts/launch_first_availabl
 
 
 -- Leave blank like this to load default config. Set to anything to not.
-global dontLoadDefaultExecs = ""
-global dontLoadDefaultGeneral = ""
-global dontLoadDefaultRules = ""
-global dontLoadDefaultKeybinds = ""
+local dontLoadDefaultExecs = ""
+local dontLoadDefaultGeneral = ""
+local dontLoadDefaultRules = ""
+local dontLoadDefaultKeybinds = ""

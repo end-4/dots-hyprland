@@ -1,7 +1,7 @@
 -- ######## Window rules ########
 
 -- Disable blur for xwayland context menus
-hl.window_rule({match = {class = "^()$" }, match = {title = "^()$" }, no_blur = true })
+hl.window_rule({match = {class = "^()$", title = "^()$" },                                                      no_blur = true })
 
 -- Disable blur for every window
 hl.window_rule({match = {class = ".*" }, no_blur = true })
@@ -78,7 +78,7 @@ hl.window_rule({match = {title = ".*minecraft.*" },                             
 hl.window_rule({match = {class = "^(steam_app).*" },                                                            immediate = true})
 
 -- Fix Jetbrain IDEs focus/rerendering problem
-hl.window_rule({match = {class = "^jetbrains-.*$" }, match = {float = 1 }, match = {title = "^$|^\\s$|^win\\d+$" }, no_initial_focus = true})
+hl.window_rule({match = {class = "^jetbrains-.*$", float = 1, title = "^$|^\\s$|^win\\d+$" },                   no_initial_focus = true})
 
 -- No shadow for tiled windows (matches windows that are not floating).
 hl.window_rule({match = {float = 0 },                                                                           no_shadow = true})
@@ -88,22 +88,22 @@ hl.workspace_rule({ workspace = "special:special", gaps_out = 30 })
 
 -- ######## Layer rules ########
 hl.layer_rule({ match = { namespace = ".*" },                                                                   xray = true})
---hl.layer_rule({ match = { namespace = ".*" },                                                                   no_anim = true})
-hl.layer_rule({ match = { namespace = walker },                                                                 no_anim = true})
-hl.layer_rule({ match = { namespace = selection },                                                              no_anim = true})
-hl.layer_rule({ match = { namespace = overview },                                                               no_anim = true})
-hl.layer_rule({ match = { namespace = anyrun },                                                                 no_anim = true})
+--hl.layer_rule({ match = { namespace = ".*" },                                                                 no_anim = true})
+hl.layer_rule({ match = { namespace = "walker" },                                                               no_anim = true})
+hl.layer_rule({ match = { namespace = "selection" },                                                            no_anim = true})
+hl.layer_rule({ match = { namespace = "overview" },                                                             no_anim = true})
+hl.layer_rule({ match = { namespace = "anyrun" },                                                               no_anim = true})
 hl.layer_rule({ match = { namespace = "indicator.*" },                                                          no_anim = true})
-hl.layer_rule({ match = { namespace = osk },                                                                    no_anim = true})
-hl.layer_rule({ match = { namespace = hyprpicker },                                                             no_anim = true})
+hl.layer_rule({ match = { namespace = "osk" },                                                                  no_anim = true})
+hl.layer_rule({ match = { namespace = "hyprpicker" },                                                           no_anim = true})
 
-hl.layer_rule({ match = { namespace = noanim },                                                                 no_anim = true})
+hl.layer_rule({ match = { namespace = "noanim" },                                                               no_anim = true})
 hl.layer_rule({ match = { namespace = "gtk-layer-shell" },                                                      blur = true})
 hl.layer_rule({ match = { namespace = "gtk-layer-shell" },                                                      ignore_alpha = 0})
-hl.layer_rule({ match = { namespace = launcher },                                                               blur = true})
-hl.layer_rule({ match = { namespace = launcher },                                                               ignore_alpha = 0.5})
-hl.layer_rule({ match = { namespace = notifications },                                                          blur = true})
-hl.layer_rule({ match = { namespace = notifications },                                                          ignore_alpha = 0.69})
+hl.layer_rule({ match = { namespace = "launcher" },                                                             blur = true})
+hl.layer_rule({ match = { namespace = "launcher" },                                                             ignore_alpha = 0.5})
+hl.layer_rule({ match = { namespace = "notifications" },                                                        blur = true})
+hl.layer_rule({ match = { namespace = "notifications" },                                                        ignore_alpha = 0.69})
 --hl.layer_rule({ match = { namespace = logout_dialog }, -- wlogout                                               blur = true})
 
 -- ags

@@ -128,7 +128,7 @@ hl.animation({ leaf = "zoomFactor",         enabled = true,  speed = 3,     bezi
 
 hl.config({
     input = {
-        kb_layout = us,
+        kb_layout = "us",
         numlock_by_default = true,
         repeat_delay = 250,
         repeat_rate = 35,
@@ -137,7 +137,7 @@ hl.config({
         off_window_axis_events = 2,
 
         touchpad = {
-            natural_scroll = yes,
+            natural_scroll = "yes",
             disable_while_typing = true,
             clickfinger_behavior = true,
             scroll_factor = 0.7,
