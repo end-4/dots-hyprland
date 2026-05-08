@@ -86,7 +86,7 @@ Item {
                         delegate: ContextMenuItem {
                             required property var modelData
                             Layout.fillWidth: true
-                            iconName: modelData.icon ?? ""
+                            iconName: Icons.getDesktopActionMaterialSymbol(modelData.icon ?? "")
                             label: modelData.name
                             onClicked: {
                                 modelData.execute();

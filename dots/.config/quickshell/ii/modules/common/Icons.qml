@@ -19,6 +19,17 @@ Singleton {
         return "battery_android_0";
     }
 
+    function getDesktopActionMaterialSymbol(icon: string): string {
+        // Some apps ship custom icon names in their desktop-entry actions
+        // (e.g. VS Code uses "vscode", Telegram uses non-Material names).
+        // Map known cases to Material Symbols; fall through unchanged otherwise.
+        switch (icon) {
+            case "vscode": return "code";
+            case "application-exit": return "exit_to_app";
+        }
+        return icon;
+    }
+
     function getBluetoothDeviceMaterialSymbol(systemIconName: string): string {
         if (systemIconName.includes("headset") || systemIconName.includes("headphones"))
             return "headphones";
