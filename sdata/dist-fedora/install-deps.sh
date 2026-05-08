@@ -23,61 +23,20 @@ function r() {
   [ "$original_id" == "$last_id" ] || yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config" || :
 }
 
-# Start building and install the missing RPM package locally.
-function install_RPMS() {
-  local local_specs local_rpms
-  rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
+# Init local RPM repo and download rpms from releases there.
+function init_local_repo() {
+    url="https://api.github.com/repos/end-4/ii-package-builds/releases/tags/packages-fedora"
+    path="$HOME/.cache/illogical-impulse-repo"
 
-  x rm -rf "${REPO_ROOT}/cache/rpmbuild"
-  x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
-  x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
+    rm -rf -- "$path"
+    mkdir -p "$path"
 
-  x cd $rpmbuildroot/SPECS
-   
-  packages=(
-    "cpptrace"
-    "quickshell-git"
-    "matugen"
-  )
-  for package in "${packages[@]}"; do
-  	echo "start $package"
-  
-    spec="$rpm_specs/$package.spec"
-    installed_rpm_stamp=$(rpm -q --qf '%{NVRA}\n' "$package" 2>/dev/null || true)
-    spec_stamp=$(rpmspec -q --qf '%{NVRA}\n' "$spec")
-    arch=$(rpm --eval "%_arch") # if we somehow want aarch64??
-    built_rpm_path="$rpmbuildroot/RPMS/$arch/$spec_stamp.rpm"
-
-    [[ -f "$spec" ]] || {
-      echo "Missing spec: $spec"
-      continue
-    }
-    
-    echo "rpm_specs=$rpm_specs"
-    echo "spec=$spec"
-    echo "spec_stamp=$spec_stamp"
-    
-    if [[ "$installed_rpm_stamp" == "$spec_stamp" ]]; then
-    	printf "$installed_rpm_stamp is installed and up to date. Skipping.\n"
-    	continue
-    fi
-    # Download sources
-    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec"
-    # Install build dependencies
-    r x sudo dnf builddep -y "$spec"
-    # Build the RPM package locally. If it fails, download it from COPR.
-    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec"; then
-      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
-      sudo dnf install -y $(basename "$spec" .spec)
-      nolock_qs=true
-    fi
-
-    if [[ -f "$rpmbuildroot/RPMS/x86_64/$spec_stamp.rpm" ]]; then
-	echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install $rpmbuildroot/RPMS/x86_64/$spec_stamp.rpm -y"
-    	r x sudo dnf install "$rpmbuildroot/RPMS/x86_64/$spec_stamp.rpm" -y
-    fi
-  done
-  x cd ${REPO_ROOT}
+    for file in $(curl -s "$url" | jq -r '.assets[].browser_download_url'); do
+        name=$(basename "$file")
+        echo "Downloading $file"
+        curl --max-time 10 -L --fail --show-error --progress-bar -o "$path/$name" "$file"
+        createrepo_c "$path"
+    done
 }
 
 # -------------------------
@@ -102,7 +61,7 @@ v sudo dnf versionlock delete quickshell-git 2>/dev/null
 v sudo dnf install yq -y
 
 # Install development tools
-r v sudo dnf install @development-tools fedora-packager -y
+r v sudo dnf install createrepo_c -y
 
 # Install COPR repositories
 copr_repos_json=$(yq -o=j '.copr.repos // []' "$deps_data_file")
@@ -111,9 +70,9 @@ for copr in ${copr_repos_array[@]}; do
   v sudo dnf copr enable "$copr" -y
 done
 
-# Build and install locally RPMS
-showfun install_RPMS
-v install_RPMS
+# Init local repo with prebuilt rpms
+showfun init_local_repo
+v init_local_repo
 
 # Install packages from toml file
 deps_data=$(yq -o=j '.' "$deps_data_file")
@@ -124,6 +83,10 @@ while IFS= read -r deps_list_key; do
 
   install_opts=$(echo $deps_data | yq ".groups.\"$deps_list_key\" | select(has(\"install_opts\")) | .install_opts[]")
   package_list=$(echo $deps_data | yq ".groups.\"$deps_list_key\".packages | unique | .[]")
+
+  if [[ $deps_list_key == 'illogical-impulse' ]]; then
+      install_opts="$install_opts --repofrompath=illogical-impulse,file://$HOME/.cache/illogical-impulse-repo --nogpgcheck"
+  fi
 
   r v sudo dnf install -y $install_opts $package_list </dev/tty
 
