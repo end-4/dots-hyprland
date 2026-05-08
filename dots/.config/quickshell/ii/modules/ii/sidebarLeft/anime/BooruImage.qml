@@ -67,8 +67,6 @@ Button {
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
             source: modelData.preview_url
-            sourceSize.width: root.rowHeight * modelData.aspect_ratio
-            sourceSize.height: root.rowHeight
 
             layer.enabled: true
             layer.effect: OpacityMask {

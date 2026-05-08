@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=6
+pkgrel=7
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)

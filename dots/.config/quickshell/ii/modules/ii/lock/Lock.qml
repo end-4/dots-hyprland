@@ -48,6 +48,9 @@ LockScreen {
                 for (var i = 0; i < Quickshell.screens.length; ++i) {
                     var mon = Quickshell.screens[i].name
                     var mData = HyprlandData.monitors.find(m => m.name === mon)
+                    if (mData?.activeWorkspace == undefined) {
+                        return;
+                    }
                     var ws = (mData?.activeWorkspace?.id ?? 1)
                     next[mon] = ws
                     batch += "dispatch focusmonitor " + mon + "; dispatch workspace " + (2147483647 - ws) + "; "

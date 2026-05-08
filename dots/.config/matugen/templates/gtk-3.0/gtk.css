@@ -1,22 +1,38 @@
 /*
-* GTK Colors
-* Generated with Matugen
+* GTK colors generated with Matugen
+* The source template is here: ~/.config/matugen/templates/gtk-3.0/gtk.css
 */
 
+/* Accents */
 @define-color accent_color {{colors.primary.default.hex}};
 @define-color accent_fg_color {{colors.on_primary.default.hex}};
 @define-color accent_bg_color {{colors.primary.default.hex}};
+@define-color destructive_bg_color {{colors.error_container.default.hex}};
+@define-color destructive_fg_color {{colors.on_error_container.default.hex}};
+@define-color destructive_color {{colors.error.default.hex}};
+@define-color success_bg_color #374B3E;
+@define-color success_fg_color #D1E9D6;
+@define-color success_color #B5CCBA;
+/* Base surfaces */
 @define-color window_bg_color {{colors.background.default.hex}};
 @define-color window_fg_color {{colors.on_background.default.hex}};
-@define-color headerbar_bg_color {{colors.surface_dim.default.hex}};
+@define-color headerbar_bg_color {{colors.surface_container.default.hex}};
+@define-color headerbar_backdrop_color {{colors.surface_container.default.hex}};
 @define-color headerbar_fg_color {{colors.on_surface.default.hex}};
-@define-color popover_bg_color {{colors.surface_dim.default.hex}};
-@define-color popover_fg_color {{colors.on_surface.default.hex}};
-@define-color view_bg_color {{colors.surface.default.hex}};
-@define-color view_fg_color {{colors.on_surface.default.hex}};
-@define-color card_bg_color {{colors.surface.default.hex}};
+@define-color card_bg_color {{colors.surface_container.default.hex}};
 @define-color card_fg_color {{colors.on_surface.default.hex}};
-@define-color sidebar_bg_color @window_bg_color;
-@define-color sidebar_fg_color @window_fg_color;
-@define-color sidebar_border_color @window_bg_color;
-@define-color sidebar_backdrop_color @window_bg_color;
+@define-color sidebar_bg_color {{colors.surface_container.default.hex}};
+@define-color sidebar_fg_color {{colors.on_surface.default.hex}};
+@define-color secondary_sidebar_bg_color {{colors.surface_container_low.default.hex}};
+@define-color secondary_sidebar_fg_color {{colors.on_surface.default.hex}};
+@define-color sidebar_border_color @sidebar_bg_color;
+@define-color sidebar_backdrop_color @sidebar_bg_color;
+@define-color view_bg_color {{colors.surface_container_lowest.default.hex}};
+@define-color view_fg_color {{colors.on_surface.default.hex}};
+@define-color overview_bg_color {{colors.surface_container_lowest.default.hex}};
+@define-color overview_fg_color {{colors.on_surface.default.hex}};
+/* Popups */
+@define-color popover_bg_color {{colors.surface_container_highest.default.hex}};
+@define-color popover_fg_color {{colors.on_surface.default.hex}};
+@define-color dialog_bg_color {{colors.surface_container_high.default.hex}};
+@define-color dialog_fg_color {{colors.on_surface.default.hex}};

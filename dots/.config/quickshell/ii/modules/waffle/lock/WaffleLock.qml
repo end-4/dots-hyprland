@@ -33,7 +33,7 @@ LockScreen {
             interactables.switchToFocusedView();
         }
 
-        Image {
+        StyledImage {
             id: bg
             z: 0
             width: parent.width
@@ -46,7 +46,6 @@ LockScreen {
                     openAnim.restart();
                 }
             }
-            sourceSize: Qt.size(lockSurfaceItem.width, lockSurfaceItem.height)
             source: Config.options.background.wallpaperPath
             fillMode: Image.PreserveAspectCrop
 
@@ -185,7 +184,7 @@ LockScreen {
         id: iconIndicator
         required property string baseIcon
         required property string icon
-        default property alias data: iconWidget.data
+        default property alias indicatorData: iconWidget.data
         implicitWidth: 40
         implicitHeight: 40
         FluentIcon {
