@@ -137,7 +137,7 @@ hl.config({
         off_window_axis_events = 2,
 
         touchpad = {
-            natural_scroll = "yes",
+            natural_scroll = true,
             disable_while_typing = true,
             clickfinger_behavior = true,
             scroll_factor = 0.7,
