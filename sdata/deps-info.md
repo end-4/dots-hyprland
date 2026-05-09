@@ -107,8 +107,8 @@ Tips:
 ## illogical-impulse-kde
 - `bluedevil`
   - Provide command `kcmshell6 kcm_bluetooth` used by Quickshell bluetooth functionality.
-- `gnome-keyring`
-  - Provide executable `gnome-keyring-daemon`, used in Hyprland and Quickshell config.
+- `gnome-keyring` (optional, or any freedesktop secrets provider like KeePassXC)
+  - Provide executable `gnome-keyring-daemon`, used as default secrets provider. Set `KEYRING_DAEMON_CMD` env var to use an alternative, or pre-start your provider before Hyprland.
 - `networkmanager`
   - Basic component.
 - `plasma-nm`
