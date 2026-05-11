@@ -25,16 +25,14 @@ hl.gesture({
     fingers = 4,
     direction = "up",
     action = function()
-        -- For whatever reason hl.dsp.global doesn't work here???
-        hl.exec_cmd("qs -c $qsConfig ipc call search workspacesToggle")
+        hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
     end
 })
 hl.gesture({
     fingers = 4,
     direction = "down",
     action = function()
-        -- For whatever reason hl.dsp.global doesn't work here???
-        hl.exec_cmd("qs -c $qsConfig ipc call search workspacesToggle")
+        hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
     end
 })
 
