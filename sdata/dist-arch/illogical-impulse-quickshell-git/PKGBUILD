@@ -5,12 +5,10 @@ _commit='7511545ee20664e3b8b8d3322c0ffe7567c56f7a'
 
 groups=(illogical-impulse)
 _prefix='illogical-impulse'
-conflicts=("quickshell-git")
-
 _pkgname=quickshell
 pkgname="$_prefix-$_pkgname-git"
 pkgver=0.1.0.r1
-pkgrel=7
+pkgrel=8
 pkgdesc="$_pkgname-git pinned commit and extra deps for $_prefix"
 arch=(x86_64 aarch64)
 url='https://git.outfoxxed.me/quickshell/quickshell'
@@ -55,8 +53,8 @@ makedepends=(
   'wayland'
   'wayland-protocols'
 )
-provides=("$_pkgname")
-conflicts=("$_pkgname")
+provides=("$_pkgname" "$_pkgname-git")
+conflicts=("$_pkgname" "$_pkgname-git")
 
 _pkgsrc="$_pkgname"
 source=("$_pkgsrc::git+$url.git#commit=$_commit"
