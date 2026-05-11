@@ -13,7 +13,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("sleep 1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP") -- Some fix idk
 
     -- Audio
-    --hl.exec_cmd("easyeffects --hide-window --service-mode")
+    hl.exec_cmd("easyeffects --hide-window --service-mode")
 
     -- Clipboard: history
     --hl.exec_cmd("wl-paste --watch cliphist store")
@@ -22,9 +22,4 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
-
-    -- Fix dock pinned apps not launching properly (https://github.com/end-4/dots-hyprland/issues/2200)
-    -- This causes https://github.com/end-4/dots-hyprland/issues/2427
-    -- hl.exec_cmd("sleep 3.5 && hyprctl reload && sleep 0.5 && touch ~/.config/quickshell/ii/shell.qml")
-
 end)
