@@ -12,8 +12,8 @@ float overlayOpacityForBrightness(float x) {
     // float y = pow(x, 2.0) * 0.75;
     // float y = (1.0 - exp(-x))*1.15;
     // float y = (1.0 - exp(-pow((x-0.15), 0.6)))*1.18;
-    float y = x*0.75;
 
+    float y = x*0.75;
     return min(max(y, 0.001), 1.0);
 }
 
