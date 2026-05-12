@@ -5,7 +5,7 @@ import qs.modules.common.functions
 import Quickshell
 
 /**
- * - Eases fuzzy searching for applications by name
+ * - Eases fuzzy searching for applications by name and keywords
  * - Guesses icon name for window class name
  */
 Singleton {
@@ -42,12 +42,9 @@ Singleton {
 
     // Deduped list to fix double icons
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
-        .filter((app, index, self) => 
-            index === self.findIndex((t) => (
-                t.id === app.id
-            ))
-    )
-    
+        .filter((app, index, self) => index === self.findIndex(t => t.id === app.id))
+
+   
     readonly property var preppedNames: list.map(a => ({
         name: Fuzzy.prepare(`${a.name} `),
         entry: a
@@ -58,23 +55,52 @@ Singleton {
         entry: a
     }))
 
-    function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
+    readonly property var searchEntries: list.map(app => ({
+        namePrepared: Fuzzy.prepare(app.name),
+        keywordsPrepared: Fuzzy.prepare(app.keywords ? app.keywords.join(' ') : ''),
+        genericNamePrepared: Fuzzy.prepare(app.genericName || ''),
+        entry: app
+    }))
+
+    function simpleMatch(search, str) {
+        if (!str) return false;
+        return str.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+    }
+
+    function fuzzyQuery(search) {
+        if (!search || search.length === 0) return [];
+
         if (root.sloppySearch) {
-            const results = list.map(obj => ({
-                entry: obj,
-                score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-            })).filter(item => item.score > root.scoreThreshold)
-                .sort((a, b) => b.score - a.score)
-            return results
-                .map(item => item.entry)
+            const lowerSearch = search.toLowerCase();
+            const results = [];
+            for (let i = 0; i < list.length; i++) {
+                const app = list[i];
+                if (simpleMatch(lowerSearch, app.name) ||
+                    (app.keywords && app.keywords.some(k => lowerSearch === k.toLowerCase())) ||
+                    simpleMatch(lowerSearch, app.genericName)) {
+                    results.push(app);
+                }
+            }
+            return results;
         }
 
-        return Fuzzy.go(search, preppedNames, {
+        const results = Fuzzy.go(search, root.searchEntries, {
             all: true,
-            key: "name"
-        }).map(r => {
-            return r.obj.entry
+            keys: ['namePrepared', 'keywordsPrepared', 'genericNamePrepared'],
+            scoreFn: (matchResults) => {
+                let total = 0;
+                let count = 0;
+                for (let i = 0; i < matchResults.length; i++) {
+                    if (matchResults[i] && matchResults[i].score > 0) {
+                        total += matchResults[i].score * (i === 0 ? 1.0 : 0.8);
+                        count++;
+                    }
+                }
+                return count ? total / count : 0;
+            }
         });
+
+        return results && results.length ? results.map(r => r.obj.entry) : [];
     }
 
     function iconExists(iconName) {
