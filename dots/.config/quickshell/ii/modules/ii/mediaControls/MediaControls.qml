@@ -28,16 +28,41 @@ Scope {
         let filtered = [];
         let used = new Set();
 
+        function normalized(text) {
+            return (text || "").toString().trim().toLowerCase();
+        }
+
+        function likelyDuplicate(p1, p2) {
+            if (!p1 || !p2)
+                return false;
+
+            const sameBus = p1.dbusName && p2.dbusName && p1.dbusName === p2.dbusName;
+            const title1 = normalized(p1.trackTitle);
+            const title2 = normalized(p2.trackTitle);
+            const artist1 = normalized(p1.trackArtist);
+            const artist2 = normalized(p2.trackArtist);
+
+            const titleSimilar = title1.length > 0 && title2.length > 0 && (title1 === title2 || (title1.length >= 12 && title2.length >= 12 && (title1.includes(title2) || title2.includes(title1))));
+            const artistSimilar = artist1.length > 0 && artist2.length > 0 && artist1 === artist2;
+            const length1 = Number(p1.length || 0);
+            const length2 = Number(p2.length || 0);
+            const position1 = Number(p1.position || 0);
+            const position2 = Number(p2.position || 0);
+            const timingSimilar = length1 > 0 && length2 > 0 && Math.abs(length1 - length2) <= 2 && Math.abs(position1 - position2) <= 2;
+
+            return sameBus || (titleSimilar && (artistSimilar || timingSimilar));
+        }
+
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i))
                 continue;
             let p1 = players[i];
             let group = [i];
 
-            // Find duplicates by trackTitle prefix
+            // Find likely duplicates (browser + plasma bridge, mirrored backends, etc.)
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+                if (likelyDuplicate(p1, p2)) {
                     group.push(j);
                 }
             }

@@ -1,174 +1,251 @@
-<div align="center">
-    <h1>【 end_4's Hyprland dotfiles 】</h1>
-    <h3></h3>
-</div>
+# dots-hyprland (tslove923 fork)
 
-<div align="center"> 
-
-![](https://img.shields.io/github/last-commit/end-4/dots-hyprland?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)
-![](https://img.shields.io/github/stars/end-4/dots-hyprland?style=for-the-badge&logo=andela&color=86dbd7&logoColor=D9E0EE&labelColor=1E202B)
-![](https://img.shields.io/github/repo-size/end-4/dots-hyprland?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B)
-<a href="https://discord.gg/GtdRBXgMwq"> <img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Finvites%2FGtdRBXgMwq%3Fwith_counts%3Dtrue&query=approximate_member_count&style=for-the-badge&logo=discord&logoColor=D9E0EE&label=discord&labelColor=%231E202B&color=86dbc0&link=https%3A%2F%2Fdiscord.gg%2FGtdRBXgMwq"> </a>
-
-</div>
-
-<div align="center">
-    <h2>• overview •</h2>
-    <h3></h3>
-</div>
-
-<details> 
-  <summary>What this is/isn't</summary>
-
-  - Technically, configuration files
-  - Realistically, mostly the custom graphical shell
-  - NOT a system setup script: no graphic drivers, no zram setup, etc.
-  
-</details>
-
-<details> 
-  <summary>Notable features</summary>
-     
-  - **Overview**: Shows open apps with live previews
-  - **AI**: Gemini, Ollama, and more
-  - **QoL**: screen translation, anti-flashbang, Google Lens
-  - **Material themes**: Choose your wallpaper, done, enjoy
-  - **Transparent installation**: Every command is shown before it's run
-</details>
-
-<details> 
-  <summary>Installation</summary>
-
-   - _If you're new to Linux and decide to use Hyprland, you're in for a tough ride._
-   - Just run `bash <(curl -s https://ii.clsty.link/get)`
-     - Or, clone this repo and run `./setup install`
-     - See [the wiki](https://ii.clsty.link/en/ii-qs/01setup/) for more details
-   - **Keybinds**: Should be somewhat familiar to Windows or GNOME users. Important ones:
-     - `Super`+`/` = keybind list
-     - `Super`+`Enter` = terminal
-
-
-</details>
-
-<details>
-  <summary>Software overview</summary>
-
-  | Software | Purpose |
-  | ------------- | ------------- |
-  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (manages and renders windows) |
-  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, used for the status bar, sidebars, etc. |
-  | Others | See [deps-info.md](https://github.com/end-4/dots-hyprland/blob/main/sdata/deps-info.md) |
-
-</details>
-
-<details>
-    <summary>Discord</summary>
-        <a href="https://discord.gg/GtdRBXgMwq"> Server link</a> | I hope this provides a friendlier environment for support without needing me to personally accept every friend request/DM. For real issues, prefer GitHub
-
-</details>
-
-<div align="center">
-    <h2>• screenshots •</h2>
-    <h3></h3>
-</div>
-
-<div align="center">
-    <img src="assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:400;">
-</div>
-
-Widget system: Quickshell | Support: Yes
-
-[Showcase video](https://www.youtube.com/watch?v=RPwovTInagE)
-
-| AI, settings app | Some widgets |
-|:---|:---------------|
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5d4e7d07-d0b4-4406-a4c9-ed7ba90e3fe4" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6a32395f-9437-4192-8faf-2951a9e84cbe" /> |
-| Window management | wow look its orange |
-| <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c51bed8b-3670-4d4c-9074-873be224fb8e" /> | <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/98703a66-0743-439f-a721-cef7afa6ab95" /> |
-
-<div align="center">
-    <h2>• thank you •</h2>
-    <h3></h3>
-</div>
-
- - [@clsty](https://github.com/clsty) for making the dotfiles accessible by taking care of the install script and many other things
- - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
- - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
- - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
- - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
- - EWW: [fufexan](https://github.com/fufexan/dotfiles)
-
-<div align="center">
-    <h2>• stonks •</h2>
-    <h3></h3>
-</div>
-
-- I promise not to attempt an +ULTRARICOSHOT irl... Coins can go here: https://github.com/sponsors/end-4
-- Tentacle cat hub twinkle internet points
-
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
-
+> **Fork of**: [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) · illogical-impulse  
+> Custom features for Intel Lunar Lake laptops, voice AI, home automation, and daily-driver QoL
 
 ---
 
-<div align="center">
-    <h2>• previous styles •</h2>
-    <h3></h3>
-</div>
+## 🚀 Quick Start — Apply All Features
 
-- **Unsupported!**
-- **Source**: illogical-impulse AGS in `ii-ags` branch, others in `archive` branch.
-- List is in reverse chronological order
+After a fresh `./setup install` from `main`, run one script to merge and deploy every feature branch:
 
-### illogical-impulse (AGS)
+```bash
+./apply-all-features.sh
+```
 
-Widget system: AGS | Support: No
+This creates a temporary integration branch, merges all 8 feature branches in the correct order, auto-resolves conflicts, backs up your config, and deploys everything. See [Apply All Features](#-apply-all-features-script) below for details.
 
-| AI | Common widgets |
-|:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
-| Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
+---
 
-#### m3ww
+## ✨ Feature Branches
 
-Widget system: EWW | Support: No
+### 🎮 GPU & NPU Monitoring — [`feature/gpu-npu-monitoring`](https://github.com/tslove923/dots-hyprland/tree/feature/gpu-npu-monitoring)
 
-<a href="https://streamable.com/85ch8x">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-</a>
+Real-time GPU and NPU usage indicators for Intel Lunar Lake SoCs in the Quickshell status bar.
 
-#### NovelKnock
+- **GPU**: DRM cycle counter monitoring (render, video, compute engines) with live frequency
+- **NPU**: `npu_busy_time_us` delta method for granular utilization %, frequency, memory
+- **UI**: Indicators in bar, vertical bar, popup tooltip, and full overlay
+- **Config**: Adjustable warning thresholds (default 90%), always-show toggles
 
-Widget system: EWW | Support: No
+<details>
+<summary>Files changed</summary>
 
-<a href="https://streamable.com/7vo61k">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-</a>
+| File | Description |
+|------|-------------|
+| `services/ResourceUsage.qml` | GPU/NPU monitoring logic with DRM fdinfo parsing |
+| `modules/ii/bar/Resources.qml` | GPU/NPU indicators in horizontal bar |
+| `modules/ii/verticalBar/Resources.qml` | GPU/NPU indicators in vertical bar |
+| `modules/ii/bar/ResourcesPopup.qml` | GPU/NPU info in hover tooltip |
+| `modules/ii/overlay/resources/Resources.qml` | GPU/NPU tabs with usage graphs |
+| `modules/common/Config.qml` | Config options (thresholds, always-show) |
+</details>
 
-#### Hybrid
+---
 
-Widget system: EWW | Support: No
+### 🔒 VPN Status Indicator — [`feature/vpn-indicator`](https://github.com/tslove923/dots-hyprland/tree/feature/vpn-indicator)
 
-<a href="https://streamable.com/4oogot">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-</a>
+VPN connection indicator in the system bar with click-to-toggle.
 
-#### Windoes
+- 🟢 Green when connected, ⚫ grey when disconnected
+- Click to toggle VPN via user script
+- Detects OpenVPN, WireGuard, and tun0 interfaces
+- 5-second polling interval
 
-Widget system: EWW | Support: No
+<details>
+<summary>Files changed</summary>
 
-<a href="https://streamable.com/5qx614">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-</a>
+- `dots/quickshell/ii/services/VpnStatus.qml` (new)
+- `dots/quickshell/ii/modules/ii/bar/BarContent.qml` (modified)
+</details>
 
+---
 
+### 💬 GitHub Copilot Integration — [`feature/copilot-integration`](https://github.com/tslove923/dots-hyprland/tree/feature/copilot-integration)
 
-<div align="center">
-    <h2>• inspirations/copying •</h2>
-    <h3></h3>
-</div>
+GitHub Copilot as an AI backend in the Quickshell AI chat panel.
 
- - Inspiration: osu!lazer (Hybrid), Windows 11 (Windoes), AvdanOS (NovelKnock), Material Design 3 (m3ww & later)
- - Copying: Absolutely, feel free. Just follow the license and it's all good
- 
+- Routes AI panel queries through `gh copilot` CLI
+- Seamless integration with existing AI chat UI
+- External config for API settings
+
+<details>
+<summary>Files changed</summary>
+
+- `dots/quickshell/ii/services/Ai.qml` (new overlay)
+- `dots/quickshell/ii/services/ai/CopilotCliApiStrategy.qml` (new)
+- `dots/illogical-impulse/config.json` (new — Copilot config)
+</details>
+
+---
+
+### ⌨️ Custom Configs & Keybinds — [`feature/custom-configs`](https://github.com/tslove923/dots-hyprland/tree/feature/custom-configs)
+
+Personal keybinds, service toggles, and startup scripts.
+
+- **Super+Alt+D** — Toggle Docker on/off
+- **Super+Alt+V** — VPN toggle (polkit GUI auth)
+- **Super+Alt+P** — Proxy toggle with notification
+- **Super+C/V/X** — Universal copy/paste/cut (sendshortcut)
+- **Super+Alt+B** — Bluetooth TUI
+- Startup apps script, nm-applet as headless secret agent
+
+<details>
+<summary>Files changed</summary>
+
+- `dots/.config/hypr/custom/keybinds.conf`
+- `dots/.config/hypr/custom/execs.conf`
+- `dots/.config/hypr/custom/scripts/` — toggle_docker.sh, nova_toggle_wake.sh, nova_toggle_tts.sh, startup-apps.sh
+- `dots/.config/hypr/hyprland/keybinds.conf` — Super+C/V remapping
+</details>
+
+---
+
+### 🕐 US Date Format & World Clocks — [`feature/us-clock-view-worldclocks`](https://github.com/tslove923/dots-hyprland/tree/feature/us-clock-view-worldclocks)
+
+US-style date formatting and world clock panel in the right sidebar.
+
+- Top bar date changed to MM/dd format
+- World clocks panel in sidebar (sorted by UTC offset)
+- Consistent "City, XX" label format
+
+<details>
+<summary>Files changed</summary>
+
+- `modules/common/Config.qml` — date format strings
+- `modules/ii/bar/ClockWidget.qml` — work week display
+- `modules/ii/sidebarRight/SidebarRightContent.qml` — world clocks integration
+- `modules/ii/sidebarRight/WorldClocks.qml` (new)
+- `services/DateTime.qml` — date formatting
+</details>
+
+---
+
+### 🏠 Home Assistant Integration — [`feature/homeassistant-integration`](https://github.com/tslove923/dots-hyprland/tree/feature/homeassistant-integration)
+
+Home Assistant panel in the top bar for smart home control.
+
+- HomeKit-inspired entity categories (cameras, lights, locks, covers, climate, appliances)
+- Configurable polling interval, external config file support
+- Device count indicator (toggleable)
+- Settings UI in Quickshell settings panel
+
+<details>
+<summary>Files changed</summary>
+
+- `services/HomeAssistant.qml` (new)
+- `modules/ii/bar/BarContent.qml`, `modules/ii/bar/home/HomeBar.qml`, `modules/ii/bar/home/HomePopup.qml` (new)
+- `modules/settings/BarConfig.qml`, `modules/settings/ServicesConfig.qml` (new)
+- `modules/common/Config.qml` — homeAssistant config block
+</details>
+
+---
+
+### 🎵 MPRIS Active Player Fix — [`feature/mpris-active-player-fix-main`](https://github.com/tslove923/dots-hyprland/tree/feature/mpris-active-player-fix-main)
+
+Fixes media player selection so the currently playing source takes priority.
+
+- Browser media (Chromium, Firefox) now properly detected
+- Active player prioritized over paused/stopped players
+- 3-file fix, minimal and clean
+
+<details>
+<summary>Files changed</summary>
+
+- `modules/ii/bar/Media.qml`
+- `modules/ii/mediaControls/MediaControls.qml`
+- `services/MprisController.qml`
+</details>
+
+---
+
+###  WiFi Reconnect Fix — [`fix/wifi-reconnect-after-password`](https://github.com/tslove923/dots-hyprland/tree/fix/wifi-reconnect-after-password)
+
+Properly re-executes `nmcli connect` after a WiFi password change.
+
+<details>
+<summary>Files changed</summary>
+
+- `services/Network.qml` — 1 file, 5 lines changed
+</details>
+
+---
+
+## 📦 Apply Features
+
+Two scripts on [`feature/apply-script`](https://github.com/tslove923/dots-hyprland/tree/feature/apply-script) merge and deploy feature branches to your live config.
+
+| Script | Description |
+|--------|-------------|
+| `apply-features.sh` | **Interactive TUI** — select which features to apply (dialog/whiptail/plain fallback) |
+| `apply-all-features.sh` | Apply all features without prompting |
+
+### Usage
+
+```bash
+# Interactive TUI — pick features from a checklist
+./apply-features.sh
+
+# Apply everything (no TUI)
+./apply-features.sh --all
+# or
+./apply-all-features.sh
+
+# Preview only — create integration branch without deploying
+./apply-features.sh --dry-run
+
+# Deploy without AI assistant prompt
+./apply-features.sh --no-ai-assistant
+
+# Keep integration branch after deploy for inspection
+./apply-features.sh --keep-branch
+```
+
+### Merge Order
+
+The scripts merge in dependency-aware order to minimize conflicts:
+
+| # | Branch | Merges cleanly? |
+|---|--------|-----------------|
+| 1 | `fix/wifi-reconnect-after-password` | ✅ Clean |
+| 2 | `feature/mpris-active-player-fix-main` | ✅ Clean |
+| 3 | `feature/copilot-integration` | ⚡ README conflicts → auto-resolved |
+| 4 | `feature/custom-configs` | ⚡ README conflicts → auto-resolved |
+| 5 | `feature/us-clock-view-worldclocks` | ⚡ Keybinds conflict → auto-resolved |
+| 6 | `feature/homeassistant-integration` | ⚡ README conflict → auto-resolved |
+
+### What It Does
+
+1. Presents a TUI checklist to select features (or applies all via `--all`)
+2. Creates a temporary integration branch from `main`
+3. Sequentially merges selected feature branches
+4. Auto-resolves known conflicts (READMEs, keybinds, BarContent)
+5. Backs up `~/.config` to `~/.config-backup-features-<timestamp>`
+6. Deploys merged configs via rsync
+7. Optionally runs post-deploy hooks
+8. Verifies critical files and reloads Hyprland
+
+### Restoring from Backup
+
+```bash
+cp -a ~/.config-backup-features-<timestamp>/.config/* ~/.config/
+hyprctl reload
+```
+
+---
+
+## 🔧 Requirements
+
+- [Hyprland](https://hyprland.org/) with [Quickshell](https://github.com/quickshell-mirror/quickshell)
+- Arch Linux (tested), Fedora (partial support)
+- Intel Lunar Lake SoC (for GPU/NPU monitoring; other features work on any hardware)
+- Optional: `intel-gpu-tools`, `openwakeword`, `voxd`, `gh` CLI (for Copilot)
+
+## 📜 License
+
+Same as base repository — see [LICENSE](../LICENSE)
+
+---
+
+**Upstream**: [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)  
+**Fork by**: tslove923
