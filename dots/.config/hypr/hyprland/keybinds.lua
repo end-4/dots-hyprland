@@ -113,9 +113,9 @@ hl.bind("SUPER + Semicolon", hl.dsp.layout("splitratio -0.1"), {repeating = true
 hl.bind("SUPER + Apostrophe", hl.dsp.layout("splitratio +0.1"), {repeating = true} )
 --# Positioning mode
 hl.bind("SUPER + ALT + Space", hl.dsp.window.float({action = "toggle"}), {description = "Float/Tile"} )
-hl.bind("SUPER + D", hl.dsp.window.fullscreen({mode = "maximized"}), {description = "Maximize"})
-hl.bind("SUPER + F", hl.dsp.window.fullscreen({mode ="fullscreen"}), {description = "Fullscreen"})
-hl.bind("SUPER + ALT + F", hl.dsp.window.fullscreen_state({internal = 0, client = 3}), {description = "Fullscreen spoof"})
+hl.bind("SUPER + D", hl.dsp.window.fullscreen({mode = "maximized", action = "toggle"}), {description = "Maximize"} )
+hl.bind("SUPER + F", hl.dsp.window.fullscreen({mode = "fullscreen", action = "toggle"}), {description = "Fullscreen"} )
+hl.bind("SUPER + ALT + F", hl.dsp.window.fullscreen_state({internal = 0, client = 3, action = "toggle"}), {description = "Fullscreen spoof"} )
 hl.bind("SUPER + P", hl.dsp.window.pin(), {description = "Pin"} )
 
 --#/# bind = SUPER+ALT, Hash,, -- Send to workspace -- (1, 2, 3,...)
