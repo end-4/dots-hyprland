@@ -48,7 +48,10 @@ case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
     install_dir__sync dots/.config/hypr/hyprland "$XDG_CONFIG_HOME"/hypr/hyprland
-    mv "${XDG_CONFIG_HOME}/hypr/hyprland.conf" "${XDG_CONFIG_HOME}/hypr/hyprland.conf.old" # disable old config
+    if [ -f "${XDG_CONFIG_HOME}/hypr/hyprland.conf" ]; then
+      mv "${XDG_CONFIG_HOME}/hypr/hyprland.conf" "${XDG_CONFIG_HOME}/hypr/hyprland.conf.old" # disable old config
+      echo 'hyprland.conf has been renamed to hyprland.conf.old. This is to allow the new lua config to load.'
+    fi
     for i in hyprlock.conf ; do
       install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
