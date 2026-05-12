@@ -230,7 +230,7 @@ HBarWidgetWithPopout {
                     materialSymbol: toFloat ? "picture_in_picture_center" : "side_navigation"
                     text: toFloat ? Translation.tr("Float") : Translation.tr("Tile")
                     onClicked: {
-                        Hyprland.dispatch(`togglefloating address:${root.activeHyprlandClient.address}`)
+                        Hyprland.dispatch(`hl.dsp.window.float({action = "toggle", window = {address=${root.activeHyprlandClient.address}}})`)
                         HyprlandData.updateWindowList()
                     }
                 }
@@ -244,7 +244,7 @@ HBarWidgetWithPopout {
                     colBackground: Appearance.colors.colError
                     colForeground: Appearance.colors.colOnError
                     onClicked: {
-                        Hyprland.dispatch(`killwindow address:${root.activeHyprlandClient.address}`)
+                        Hyprland.dispatch(`hl.dsp.window.kill({window = {address=${root.activeHyprlandClient.address}}})`)
                         HyprlandData.updateWindowList()
                     }
                 }

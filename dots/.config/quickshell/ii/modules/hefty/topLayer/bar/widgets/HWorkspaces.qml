@@ -62,7 +62,7 @@ HBarWidgetContainer {
         }
 
         function switchWorkspaceToHovered() {
-            Hyprland.dispatch(`workspace ${wsModel.getWorkspaceIdAt(hoverIndex)}`)
+            Hyprland.dispatch(`hl.dsp.focus({workspace = ${wsModel.getWorkspaceIdAt(hoverIndex)}})`)
         }
         onPressed: (mouse) => {
             if (mouse.button == Qt.LeftButton)
@@ -72,9 +72,9 @@ HBarWidgetContainer {
         }
         onWheel: (event) => {
             if (event.angleDelta.y < 0)
-                Hyprland.dispatch(`workspace r+1`);
+                Hyprland.dispatch(`hl.dsp.focus({workspace = "r+1"})`);
             else if (event.angleDelta.y > 0)
-                Hyprland.dispatch(`workspace r-1`);
+                Hyprland.dispatch(`hl.dsp.focus({workspace = "r-1"})`);
         }
 
         // Indications
