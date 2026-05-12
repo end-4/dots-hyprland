@@ -48,6 +48,7 @@ case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
     install_dir__sync dots/.config/hypr/hyprland "$XDG_CONFIG_HOME"/hypr/hyprland
+    mv "${XDG_CONFIG_HOME}/hypr/hyprland.conf" "${XDG_CONFIG_HOME}/hypr/hyprland.conf.old" # disable old config
     for i in hyprlock.conf ; do
       install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
