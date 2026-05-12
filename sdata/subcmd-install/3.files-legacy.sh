@@ -48,10 +48,10 @@ case "${SKIP_HYPRLAND}" in
   true) sleep 0;;
   *)
     install_dir__sync dots/.config/hypr/hyprland "$XDG_CONFIG_HOME"/hypr/hyprland
-    for i in hyprlock.conf {monitors,workspaces}.conf ; do
+    for i in hyprlock.conf ; do
       install_file__auto_backup "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i"
     done
-    for i in hyprland.conf ; do
+    for i in hyprland.lua ; do
       case "${SKIP_HYPRLAND_ENTRY}" in
         true) sleep 0;;
         *) install_file "dots/.config/hypr/$i" "${XDG_CONFIG_HOME}/hypr/$i" ;;
