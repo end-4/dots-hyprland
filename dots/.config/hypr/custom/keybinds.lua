@@ -13,4 +13,4 @@ hl.bind("CTRL + SUPER", "S", hl.dsp.togglespecialworkspace(""))
 hl.bind("SUPER", "Space", hl.dsp.exec_cmd("ollama launch claude --model minimax-m2.7:cloud"))
 
 --! Power
-hl.bind("", "XF86Launch4", hl.dsp.exec_cmd("qs ipc call powerProfile cycle"), {description = "Cycle power profile (Fn+Q)"})
+hl.bind("", "XF86Launch4", hl.dsp.exec_cmd("qs ipc call powerProfile cycle"), {description = "Cycle power profile (Fn+Q)"})hl.bind("CTRL+SUPER+ALT+Slash", hl.dsp.exec_cmd("xdg-open ~/.config/hypr/custom/keybinds.lua"), {description = "Edit user keybinds"} )
