@@ -10,7 +10,7 @@ float overlayOpacityForBrightness(float x) {
     
     // Will a fancy curve help?... I'll have to experiment more at night
     // float y = pow(x, 2.0) * 0.75;
-    float y = (1.0 - exp(-x))*1.19;
+    // float y = (1.0 - exp(-x))*1.19;
     // float y = (1.0 - exp(-pow((x-0.15), 0.6)))*1.18;
 
     float y = x*0.75;
