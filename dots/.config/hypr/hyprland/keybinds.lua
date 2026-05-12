@@ -13,6 +13,8 @@ hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd(qsIsAlive.." || pkill fuzzel || fuzze
 
 hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), {ignore_mods = true, transparent = true} )
 hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), {ignore_mods = true, transparent = true} )
+hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), {ignore_mods = true, transparent = true, release = true} )
+hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), {ignore_mods = true, transparent = true, release = true} )
 hl.bind("SUPER + Tab", hl.dsp.global("quickshell:overviewWorkspacesToggle"), {description = "Toggle overview"} )
 hl.bind("SUPER + V", hl.dsp.global("quickshell:overviewClipboardToggle"), {description = "Clipboard history >> clipboard"} )
 hl.bind("SUPER + Period", hl.dsp.global("quickshell:overviewEmojiToggle"), {description = "Emoji >> clipboard"} )
