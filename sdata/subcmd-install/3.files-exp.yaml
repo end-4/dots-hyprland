@@ -46,7 +46,7 @@ patterns:
   - from: "dots/.config/hypr"
     to: "$XDG_CONFIG_HOME/hypr"
     mode: "sync"
-    excludes: ["custom", "hyprlock.conf", "hypridle.conf", "monitors.conf", "workspaces.conf"]
+    excludes: ["custom", "hyprlock.conf", "hypridle.conf"]
   # Hyprland special files
   - from: "dots/.config/hypr/hypridle.conf"
     to: "$XDG_CONFIG_HOME/hypr/hypridle.conf"
