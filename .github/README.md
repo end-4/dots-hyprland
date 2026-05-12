@@ -17,6 +17,13 @@
     <h3></h3>
 </div>
 
+> [!WARNING]  
+> Hyprland 0.55 update:
+> If your distro has not shipped Hyprland 0.55 and/or you're not ready for it, you should switch to the Pre-Hyprland Luaification release. Example installation:
+> ```
+> git clone --recursive https://github.com/end-4/dots-hyprland && cd dots-hyprland && git checkout 2026.05.11 && ./setup install
+> ```
+
 <details> 
   <summary>What this is/isn't</summary>
 
