@@ -11,7 +11,7 @@ Note:
 - Author: [ririko6z](https://github.com/ririko6z)
 
 ## Tested
-- It has been tested on Fedora 43 (KDE Plasma Desktop Edition) on the `x86_64` platform.
+- It has been tested on Fedora Everything 44 on the `x86_64` platform.
 
 ## Post installation
 - Fix the issue of the right column crashing when clicking the `Details` button in Wi-Fi mode. Edit this file: `~/.config/illogical-impulse/config.json`
@@ -24,4 +24,3 @@ Note:
 +    "bluetooth": "kcmshell6 kcm_bluetooth",
 +    "network": "plasmawindowed org.kde.plasma.networkmanagement",
 ```
-
