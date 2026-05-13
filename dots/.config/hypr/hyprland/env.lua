@@ -4,7 +4,10 @@ local home_dir = os.getenv("HOME")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 -- Applications
-hl.env("XDG_DATA_DIRS", home_dir .. "/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share")
+hl.env(
+	"XDG_DATA_DIRS",
+	"$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
+)
 
 -- Themes
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
