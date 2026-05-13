@@ -84,9 +84,9 @@ while IFS= read -r deps_list_key; do
   install_opts=$(echo $deps_data | yq ".groups.\"$deps_list_key\" | select(has(\"install_opts\")) | .install_opts[]")
   package_list=$(echo $deps_data | yq ".groups.\"$deps_list_key\".packages | unique | .[]")
 
-  if [[ $deps_list_key == 'illogical-impulse' ]]; then
-      install_opts="$install_opts --repofrompath=illogical-impulse,file://$HOME/.cache/illogical-impulse-repo --nogpgcheck"
-  fi
+#  if [[ $deps_list_key == 'illogical-impulse' ]]; then
+#      install_opts="$install_opts --repofrompath=illogical-impulse,file://$HOME/.cache/illogical-impulse-repo --nogpgcheck"
+#  fi
 
   r v sudo dnf install -y $install_opts $package_list </dev/tty
 
