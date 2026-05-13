@@ -24,20 +24,20 @@ function r() {
 }
 
 # Init local RPM repo and download rpms from releases there.
-function init_local_repo() {
-    url="https://api.github.com/repos/end-4/ii-package-builds/releases/tags/packages-fedora"
-    path="$HOME/.cache/illogical-impulse-repo"
-
-    rm -rf -- "$path"
-    mkdir -p "$path"
-
-    for file in $(curl -s "$url" | jq -r '.assets[].browser_download_url'); do
-        name=$(basename "$file")
-        echo "Downloading $file"
-        curl --max-time 10 -L --fail --show-error --progress-bar -o "$path/$name" "$file"
-        createrepo_c "$path"
-    done
-}
+#function init_local_repo() {
+#    url="https://api.github.com/repos/end-4/ii-package-builds/releases/tags/packages-fedora"
+#    path="$HOME/.cache/illogical-impulse-repo"
+#
+#    rm -rf -- "$path"
+#    mkdir -p "$path"
+#
+#    for file in $(curl -s "$url" | jq -r '.assets[].browser_download_url'); do
+#        name=$(basename "$file")
+#        echo "Downloading $file"
+#        curl --max-time 10 -L --fail --show-error --progress-bar -o "$path/$name" "$file"
+#        createrepo_c "$path"
+#    done
+#}
 
 # -------------------------
 # MAIN
@@ -71,8 +71,8 @@ for copr in ${copr_repos_array[@]}; do
 done
 
 # Init local repo with prebuilt rpms
-showfun init_local_repo
-v init_local_repo
+#showfun init_local_repo
+#v init_local_repo
 
 # Install packages from toml file
 deps_data=$(yq -o=j '.' "$deps_data_file")
