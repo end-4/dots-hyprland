@@ -17,6 +17,10 @@
     <h3></h3>
 </div>
 
+> [!WARNING]  
+> Hyprland 0.55 update:
+> If your distro has not shipped Hyprland 0.55 and/or you're not ready for it, you should switch to the Pre-Hyprland Luaification release (or not update yet, if you're going to do that). See the wiki for more info: [Install](https://ii.clsty.link/en/ii-qs/01setup/#automated-installation) | [Update](https://ii.clsty.link/en/ii-qs/01setup/#updating)
+
 <details> 
   <summary>What this is/isn't</summary>
 
@@ -39,7 +43,7 @@
 <details> 
   <summary>Installation</summary>
 
-   - _If you're new to Linux and decide to use Hyprland, you're in for a tough ride._
+   - **IMPORTANT: Hyprland 0.55 Update**: If your distro has not shipped Hyprland 0.55 and/or you're not ready for it, you should switch to the Pre-Hyprland Luaification release. See [the wiki](https://ii.clsty.link/en/ii-qs/01setup/) for more info
    - Just run `bash <(curl -s https://ii.clsty.link/get)`
      - Or, clone this repo and run `./setup install`
      - See [the wiki](https://ii.clsty.link/en/ii-qs/01setup/) for more details
