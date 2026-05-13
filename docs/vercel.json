@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run sync && npm run build",
+  "outputDirectory": "dist",
+  "framework": "astro"
+}

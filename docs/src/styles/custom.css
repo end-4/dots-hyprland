@@ -1,0 +1,54 @@
+/* Catppuccin Mocha overrides for Starlight */
+:root {
+  --sl-color-accent-low: #1e1e2e;
+  --sl-color-accent: #cba6f7;
+  --sl-color-accent-high: #f5e0dc;
+  --sl-color-white: #cdd6f4;
+  --sl-color-gray-1: #bac2de;
+  --sl-color-gray-2: #a6adc8;
+  --sl-color-gray-3: #6c7086;
+  --sl-color-gray-4: #45475a;
+  --sl-color-gray-5: #313244;
+  --sl-color-gray-6: #1e1e2e;
+  --sl-color-black: #11111b;
+  --sl-color-bg-sidebar: #181825;
+  --sl-color-bg-nav: #11111b;
+  --sl-color-hairline-shade: #313244;
+  --sl-color-hairline-light: #45475a;
+  --sl-color-text: #cdd6f4;
+  --sl-color-text-accent: #cba6f7;
+  --sl-font-system: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+[data-theme='light'] {
+  --sl-color-accent-low: #eff1f5;
+  --sl-color-accent: #8839ef;
+  --sl-color-accent-high: #4c4f69;
+  --sl-color-white: #4c4f69;
+  --sl-color-gray-1: #5c5f77;
+  --sl-color-gray-2: #6c6f85;
+  --sl-color-gray-3: #9ca0b0;
+  --sl-color-gray-4: #bcc0cc;
+  --sl-color-gray-5: #ccd0da;
+  --sl-color-gray-6: #eff1f5;
+  --sl-color-black: #dce0e8;
+  --sl-color-bg-sidebar: #e6e9ef;
+  --sl-color-bg-nav: #eff1f5;
+}
+
+/* Code block styling */
+.expressive-code pre {
+  border: 1px solid var(--sl-color-hairline-shade);
+  border-radius: 8px;
+}
+
+/* Sidebar active link highlight */
+nav.sidebar a[aria-current='page'] {
+  background: rgba(203, 166, 247, 0.12);
+  border-radius: 6px;
+}
+
+/* Smooth link transitions */
+a {
+  transition: color 0.15s ease;
+}

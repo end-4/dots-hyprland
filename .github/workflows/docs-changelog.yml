@@ -1,0 +1,84 @@
+name: Generate Changelog Entry
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    # Skip if the push only touched changelog files (prevent loop)
+    if: >-
+      !startsWith(github.event.head_commit.message, 'docs(changelog):')
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if only changelog files changed
+        id: check
+        run: |
+          files=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          if echo "$files" | grep -qvE '^docs/src/content/docs/ai-agents/changelog/'; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate changelog entry
+        if: steps.check.outputs.should_run == 'true'
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          COMMIT_DATE=$(git log -1 --format='%cs' "$COMMIT_SHA")
+          COMMIT_SUBJECT=$(git log -1 --format='%s' "$COMMIT_SHA")
+          COMMIT_BODY=$(git log -1 --format='%b' "$COMMIT_SHA")
+          COMMIT_AUTHOR=$(git log -1 --format='%an' "$COMMIT_SHA")
+
+          FILENAME="docs/src/content/docs/ai-agents/changelog/${COMMIT_DATE}-${SHORT_SHA}.md"
+          mkdir -p "$(dirname "$FILENAME")"
+
+          # Get changed files
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | sed 's/^/- `/' | sed 's/$/`/')
+
+          {
+            echo "---"
+            echo "title: \"${COMMIT_SUBJECT}\""
+            echo "date: ${COMMIT_DATE}"
+            echo "commit: ${COMMIT_SHA}"
+            echo "author: ${COMMIT_AUTHOR}"
+            echo "---"
+            echo ""
+            echo "## Changed Files"
+            echo ""
+            echo "$CHANGED_FILES"
+            echo ""
+            echo "## Commit Message"
+            echo ""
+            echo '```'
+            if [ -n "$COMMIT_BODY" ]; then
+              echo "$COMMIT_BODY"
+            else
+              echo "$COMMIT_SUBJECT"
+            fi
+            echo '```'
+            echo ""
+            echo "## AI Agent Notes"
+            echo ""
+            echo "<!-- AI agents: fill this in after working on related code."
+            echo "     Explain WHY changes were made, any gotchas, and what"
+            echo "     other agents should know about this change. -->"
+          } > "$FILENAME"
+
+      - name: Commit and push
+        if: steps.check.outputs.should_run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/src/content/docs/ai-agents/changelog/
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(changelog): add entry for $(git log -1 --format='%h' ${{ github.sha }})"
+          git push

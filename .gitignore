@@ -15,3 +15,10 @@ __pycache__/
 
 # Emacs auto backup file
 *~
+
+# Documentation site
+docs/node_modules/
+docs/dist/
+docs/.astro/
+docs/src/content/docs/custom/
+!docs/src/content/docs/custom/.gitkeep
