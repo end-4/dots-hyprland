@@ -77,9 +77,6 @@ hl.window_rule({match = {title = ".*\\.exe" }, immediate = true})
 hl.window_rule({match = {title = ".*minecraft.*" }, immediate = true})
 hl.window_rule({match = {class = "^(steam_app).*" }, immediate = true})
 
--- Fix Jetbrain IDEs focus/rerendering problem
-hl.window_rule({match = {class = "^jetbrains-.*$", float = 1, title = "^$|^\\s$|^win\\d+$" }, no_initial_focus = true})
-
 -- No shadow for tiled windows
 hl.window_rule({match = {float = 0 }, no_shadow = true})
 
