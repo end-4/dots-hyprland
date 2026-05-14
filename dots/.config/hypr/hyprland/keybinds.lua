@@ -175,7 +175,7 @@ for i = 1, 6 do
 end
 
 hl.bind("SUPER + ALT + S",
-    hl.dsp.window.move({ workspace = "special:special", follow = false, description = "Window: Send to scratchpad" }))
+    hl.dsp.window.move({ workspace = "special:special", follow = false }), {description = "Window: Send to scratchpad"})
 hl.bind("CTRL + SUPER + S", hl.dsp.workspace.toggle_special("special"))
 
 --##! Workspace
