@@ -1,3 +1,4 @@
+require("hyprland.lib")
 require("hyprland.variables")
 require("custom.variables")
 
@@ -5,13 +6,6 @@ local qsScripts = "$HOME/.config/quickshell/$qsConfig/scripts"
 local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
-
-function WorkspaceInGroup(i)
-    local curr = hl.get_active_workspace().id
-    local newVal = math.floor((curr - 1) / workspaceGroupSize) * workspaceGroupSize + i
-    -- hl.notification.create({ text = "curr " .. curr .. " floor " .. math.floor(curr / 10) .. " new " .. newVal, duration = 5000 })
-    return newVal
-end
 
 hl.bind("SUPER + SUPER_L", hl.dsp.global("quickshell:searchToggleRelease"), { description = "Shell: Toggle search" })
 hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
@@ -152,14 +146,14 @@ hl.bind("SUPER + P", hl.dsp.window.pin(), { description = "Window: Pin" })
 for i = 1, 10 do
     local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
     hl.bind("SUPER + ALT + code:" .. numberkey[i], function()
-        hl.dispatch(hl.dsp.window.move({ workspace = WorkspaceInGroup(i), follow = false }))
+        hl.dispatch(hl.dsp.window.move({ workspace = workspace_in_group(i), follow = false }))
     end)
 end
 --# keypad numbers
 for i = 1, 10 do
     local numpadkey = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
     hl.bind("SUPER + ALT + code:" .. numpadkey[i], function()
-        hl.dispatch(hl.dsp.window.move({ workspace = WorkspaceInGroup(i), follow = false }))
+        hl.dispatch(hl.dsp.window.move({ workspace = workspace_in_group(i), follow = false }))
     end)
 end
 
@@ -191,14 +185,14 @@ hl.bind("CTRL + SUPER + S", hl.dsp.workspace.toggle_special("special"))
 for i = 1, 10 do
     local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
     hl.bind("SUPER + code:" .. numberkey[i], function()
-        hl.dispatch(hl.dsp.focus({ workspace = WorkspaceInGroup(i) }))
+        hl.dispatch(hl.dsp.focus({ workspace = workspace_in_group(i) }))
     end)
 end
 --# keypad numbers
 for i = 1, 10 do
     local numpadkey = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
     hl.bind("SUPER + code:" .. numpadkey[i], function()
-        hl.dispatch(hl.dsp.focus({ workspace = WorkspaceInGroup(i) }))
+        hl.dispatch(hl.dsp.focus({ workspace = workspace_in_group(i) }))
     end)
 end
 
