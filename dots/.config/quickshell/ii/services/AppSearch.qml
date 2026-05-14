@@ -61,6 +61,11 @@ Singleton {
         entry: app
     }))
 
+    function computeScoreForQuery(query, target) {
+        if (!target) return 0;
+        return Levendist.computeScore(target.toLowerCase(), query.toLowerCase());
+    }
+
     function simpleMatch(search, str) {
         if (!str) return false;
         return str.toLowerCase().indexOf(search.toLowerCase()) !== -1;
@@ -74,13 +79,22 @@ Singleton {
             const results = [];
             for (let i = 0; i < list.length; i++) {
                 const app = list[i];
-                if (simpleMatch(lowerSearch, app.name) ||
-                    (app.keywords && app.keywords.some(k => lowerSearch === k.toLowerCase())) ||
-                    simpleMatch(lowerSearch, app.genericName)) {
-                    results.push(app);
+                let bestScore = computeScoreForQuery(lowerSearch, app.name);
+                if (app.keywords) {
+                    for (let k = 0; k < app.keywords.length; k++) {
+                        const kwScore = computeScoreForQuery(lowerSearch, app.keywords[k]);
+                        if (kwScore > bestScore) bestScore = kwScore;
+                    }
+                }
+                const genericScore = computeScoreForQuery(lowerSearch, app.genericName);
+                if (genericScore > bestScore) bestScore = genericScore;
+                
+                if (bestScore > root.scoreThreshold) {
+                    results.push({ entry: app, score: bestScore });
                 }
             }
-            return results;
+            results.sort((a, b) => b.score - a.score);
+            return results.map(item => item.entry);
         }
 
         const results = Fuzzy.go(search, root.searchEntries, {
