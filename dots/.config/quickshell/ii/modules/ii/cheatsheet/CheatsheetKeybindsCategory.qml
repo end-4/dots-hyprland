@@ -61,11 +61,11 @@ Column {
     property var keyBlacklist: ["SUPER_L", "SUPER_R"]
     property var keySubstitutions: Object.assign({
         "Super": "",
-        "mouse_up": "Scroll ↓",    // ikr, weird
-        "mouse_down": "Scroll ↑",  // trust me bro
-        "mouse:272": "LMB",
-        "mouse:273": "RMB",
-        "mouse:275": "MouseBack",
+        "Mouse_up": "Scroll ↓",    // ikr, weird
+        "Mouse_down": "Scroll ↑",  // trust me bro
+        "Mouse:272": "LMB",
+        "Mouse:273": "RMB",
+        "Mouse:275": "MouseBack",
         "Slash": "/",
         "Hash": "#",
         "Return": "Enter",
@@ -152,7 +152,10 @@ Column {
                     id: keybindKey
                     anchors.verticalCenter: parent.verticalCenter
                     visible: !keyBlacklist.includes(bindLine.keyData.key)
-                    key: StringUtils.toTitleCase(root.keySubstitutions[bindLine.keyData.key] || bindLine.keyData.key)
+                    key: {
+                        const k = StringUtils.toTitleCase(bindLine.keyData.key)
+                        return root.keySubstitutions[k] || k
+                    }
                     pixelSize: Config.options.cheatsheet.fontSize.key
                     color: Appearance.colors.colOnLayer0
                 }

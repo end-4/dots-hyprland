@@ -24,7 +24,7 @@ Item {
             id: flow
             height: flickable.height
             flow: Flow.TopToBottom
-            spacing: 12
+            spacing: 10
             Repeater {
                 model: [...HyprlandKeybinds.keybindCategories, ""]
                 delegate: CheatsheetKeybindsCategory {
