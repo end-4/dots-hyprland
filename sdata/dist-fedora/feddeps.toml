@@ -6,7 +6,7 @@ repos = [
   "sdegler/hyprland",
   "deltacopy/darkly",
   "alternateved/eza",
-  "atim/starship"
+  "atim/starship",
   "ririko66z/dots-hyprland"
 ]
 
