@@ -286,8 +286,13 @@ Singleton {
         provider = provider.toLowerCase()
         if (providerList.indexOf(provider) !== -1) {
             Persistent.states.booru.provider = provider
-            root.addSystemMessage(Translation.tr("Provider set to ") + providers[provider].name
-                + (provider == "zerochan" ? Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
+            var providerMessage = Translation.tr("Provider set to ") + providers[provider].name
+            if (provider == "zerochan") {
+                providerMessage += Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!")
+            } else if (provider == "gelbooru") {
+                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.")
+            }
+            root.addSystemMessage(providerMessage)
         } else {
             root.addSystemMessage(Translation.tr("Invalid API provider. Supported: \n- ") + providerList.join("\n- "))
         }
@@ -319,6 +324,15 @@ Singleton {
                 tagString += " rating:safe";
         }
         var params = []
+
+        // Add Gelbooru API credentials if needed
+        var gelbooruApiKey = Config.options?.sidebar?.booru?.gelbooru?.apiKey || ""
+        var gelbooruUserId = Config.options?.sidebar?.booru?.gelbooru?.userId || ""
+        if (currentProvider === "gelbooru" && gelbooruApiKey && gelbooruUserId) {
+            params.push("api_key=" + gelbooruApiKey);
+            params.push("user_id=" + gelbooruUserId);
+        }
+
         // Tags & limit
         if (currentProvider === "zerochan") {
             params.push("c=" + tagString) // zerochan doesn't have search in api, so we use color
@@ -468,4 +482,3 @@ Singleton {
         } 
     }
 }
-
