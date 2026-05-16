@@ -8,6 +8,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
+// Notes:
+// We deal with keybinds being numbered 1, 2, etc by discarding 2+, keeping 1 and replacing it with a generic "<Number>"
 Column {
     id: root
     required property string categoryName
@@ -61,11 +63,11 @@ Column {
     property var keyBlacklist: ["SUPER_L", "SUPER_R"]
     property var keySubstitutions: Object.assign({
         "Super": "",
-        "Mouse_up": "Scroll ↓",    // ikr, weird
-        "Mouse_down": "Scroll ↑",  // trust me bro
-        "Mouse:272": "LMB",
-        "Mouse:273": "RMB",
-        "Mouse:275": "MouseBack",
+        "mouse_up": "Scroll ↓",    // ikr, weird
+        "mouse_down": "Scroll ↑",  // trust me bro
+        "mouse:272": "LMB",
+        "mouse:273": "RMB",
+        "mouse:275": "MouseBack",
         "Slash": "/",
         "Hash": "#",
         "Return": "Enter",
@@ -93,6 +95,7 @@ Column {
         return list;
     }
 
+    visible: repeater.model.length > 0
     spacing: titleSpacing
 
     StyledText {
@@ -100,14 +103,59 @@ Column {
         font.pixelSize: Appearance.font.pixelSize.title
     }
 
+    function hasDescription(bind) {
+        return bind.description?.length > 0;
+    }
+
+    function isCategory(bind, categoryName) {
+        return bind.description.substring(0, bind.description.indexOf(":")) === categoryName;
+    }
+
+    function isUncategorized(bind) {
+        return bind.description.indexOf(":") === -1;
+    }
+
+    function containsNonFirstRepetitive(bind) {
+        const key = bind.key;
+        if (key.includes("mouse") || key.includes("page")) return false;
+        // Contains non-1 number
+        if (/\d/.test(key) && !key.includes("1")) return true;
+        // Contains non-left direction
+        if (/^(right|up|down)\b/i.test(key)) return true;
+        return false;
+    }
+
+    function containsFirstRepetitive(bind) {
+        const key = bind.key;
+        return key.includes("1") || /left/i.test(key);
+    }
+
+    function transformKey(key) {
+        const replaced = root.keySubstitutions[key] || key;
+        const denumbered = replaced.replace("1", "<Number>");
+        const dedirectioned = denumbered.replace("Left", "<Direction>");
+        return dedirectioned;
+    }
+
+    function transformDescription(bind, categoryName) {
+        const description = bind.description
+        const regex = new RegExp("\\s*" + categoryName + "\\s*:\\s*");
+        const decategorized = description.replace(regex, "");
+        if (!containsFirstRepetitive(bind)) return decategorized;
+        const denumbered = decategorized.replace("1", "<Number>");
+        const dedirectioned = denumbered.replace(/ \b(left|right|up|down)\b/i, " <Direction>");
+        return dedirectioned;
+    }
+
     Column {
         spacing: 4
         Repeater {
+            id: repeater
             model: {
                 if (!root.isCategorized) {
-                    return HyprlandKeybinds.keybinds.filter(bind => bind.description?.length > 0 && bind.description.indexOf(":") === -1);
+                    return HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isUncategorized(bind) && !root.containsNonFirstRepetitive(bind));
                 }
-                return HyprlandKeybinds.keybinds.filter(bind => bind.description?.length > 0 && bind.description.substring(0, bind.description.indexOf(":")) === root.categoryName);
+                return HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isCategory(bind, root.categoryName) && !root.containsNonFirstRepetitive(bind));
             }
             delegate: BindLine {
                 required property var modelData
@@ -138,7 +186,7 @@ Column {
                     }
                     delegate: KeyboardKey {
                         required property var modelData
-                        key: modelData
+                        key: root.transformKey(modelData)
                         pixelSize: Config.options.cheatsheet.fontSize.key
                     }
                 }
@@ -152,10 +200,7 @@ Column {
                     id: keybindKey
                     anchors.verticalCenter: parent.verticalCenter
                     visible: !keyBlacklist.includes(bindLine.keyData.key)
-                    key: {
-                        const k = StringUtils.toTitleCase(bindLine.keyData.key)
-                        return root.keySubstitutions[k] || k
-                    }
+                    key: root.transformKey(bindLine.keyData.key)
                     pixelSize: Config.options.cheatsheet.fontSize.key
                     color: Appearance.colors.colOnLayer0
                 }
@@ -169,10 +214,7 @@ Column {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     font.pixelSize: Config.options.cheatsheet.fontSize.comment || Appearance.font.pixelSize.smaller
-                    text: {
-                        const regex = new RegExp("\\s*" + bindLine.categoryName + "\\s*:\\s*");
-                        return bindLine.keyData.description.replace(regex, "");
-                    }
+                    text: root.transformDescription(bindLine.keyData, bindLine.categoryName)
                 }
             }
         }
