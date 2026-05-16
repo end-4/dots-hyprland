@@ -62,8 +62,8 @@ Singleton {
             temp.precip = (data?.current?.precipInches || 0) + " in";
             temp.visib = (data?.current?.visibilityMiles || 0) + " m";
             temp.press = (data?.current?.pressureInches || 0) + " psi";
-            temp.temp += (data?.current?.temp_F || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
+            temp.temp += Math.round(data?.current?.temp_F || 0) + 0;
+            temp.tempFeelsLike += Math.round(data?.current?.FeelsLikeF || 0) + 0;
             temp.temp += "°F";
             temp.tempFeelsLike += "°F";
         } else {
@@ -71,8 +71,8 @@ Singleton {
             temp.precip = (data?.current?.precipMM || 0) + " mm";
             temp.visib = (data?.current?.visibility || 0) + " km";
             temp.press = (data?.current?.pressure || 0) + " hPa";
-            temp.temp += (data?.current?.temp_C || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
+            temp.temp += Math.round(data?.current?.temp_C || 0) + 0;
+            temp.tempFeelsLike += Math.round(data?.current?.FeelsLikeC || 0) + 0;
             temp.temp += "°C";
             temp.tempFeelsLike += "°C";
         }
