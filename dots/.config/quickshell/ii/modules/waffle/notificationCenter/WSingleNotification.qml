@@ -102,8 +102,6 @@ MouseArea {
                         readonly property int size: 48
                         width: size
                         height: size
-                        sourceSize.width: size
-                        sourceSize.height: size
                         source: root.notification.image
                         fillMode: Image.PreserveAspectFit
                     }
