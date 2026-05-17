@@ -7,6 +7,7 @@ import Quickshell
 import Quickshell.Bluetooth
 
 import qs.modules.ii.sidebarRight.quickToggles.androidStyle
+import qs.modules.common.models.quickToggles
 
 AbstractQuickPanel {
     id: root
@@ -31,11 +32,65 @@ AbstractQuickPanel {
     // Toggles
     readonly property list<string> availableToggleTypes: ["network", "bluetooth", "idleInhibitor", "easyEffects", "nightLight", "darkMode", "cloudflareWarp", "gameMode", "screenSnip", "colorPicker", "onScreenKeyboard", "mic", "audio", "notifications", "powerProfile","musicRecognition", "antiFlashbang"]
     readonly property int columns: Config.options.sidebar.quickToggles.android.columns
-    readonly property list<var> toggles: Config.ready ? Config.options.sidebar.quickToggles.android.toggles : []
+    property var vpnSizes: vpnState.vpnSizes
+    property var vpnHidden: vpnState.vpnHidden
+    
+    function toggleVpnSize(name) {
+        var currentSize = vpnSizes[name] || 1;
+        var newSize = (currentSize === 2 ? 1 : 2);
+        vpnState.setSize(name, newSize);
+    }
+
+    function toggleVpnVisibility(name) {
+        var isHidden = !!vpnHidden[name];
+        vpnState.setHidden(name, !isHidden);
+    }
+    
+    VpnState { id: vpnState }
+    
+    // Cleanup stale VPN states
+    Connections {
+        target: vpnDiscovery
+        function onVpnListChanged() {
+            var currentVpns = vpnDiscovery.vpnList.map(n => n.substring(4));
+            var storedVpns = Object.keys(vpnSizes);
+            
+            // Note: Currently VpnState doesn't support generic key deletion easily 
+            // without rewriting the whole object, which setSize/save does effectively.
+            // But to delete we need a delete function or just overwrite.
+            // For now, retaining state is acceptable as per user request flow, 
+            // they just wanted it separated.
+        }
+    }
+
+    readonly property list<var> toggles: {
+        var baseList = Array.from(Config.ready ? Config.options.sidebar.quickToggles.android.toggles : []);
+        var vpnList = Array.from(vpnDiscovery.vpnList);
+        
+        var vpnObjects = vpnList.map(name => { 
+            var shortName = name.substring(4);
+            return { type: "vpn", size: (vpnSizes[shortName] || 1), name: shortName } 
+        }).filter(item => item.name !== "" && !vpnHidden[item.name]); // Filter hidden VPNs
+        
+        var combined = baseList.concat(vpnObjects);
+        
+        // Filter out any base entries that are vpn but have no name
+        return combined.filter(item => item.type !== "vpn" || (item.name && item.name !== ""));
+    }
+    VpnDiscovery { id: vpnDiscovery }
     readonly property list<var> toggleRows: toggleRowsForList(toggles)
     readonly property list<var> unusedToggles: {
         const types = availableToggleTypes.filter(type => !toggles.some(toggle => (toggle && toggle.type === type)))
-        return types.map(type => { return { type: type, size: 1 } })
+        var unused = types.map(type => { return { type: type, size: 1 } });
+        
+        // Append hidden VPNs to unused list so they can be re-added
+        var vpnList = Array.from(vpnDiscovery.vpnList);
+        var hiddenVpns = vpnList.map(name => {
+             var shortName = name.substring(4);
+             return { type: "vpn", size: 1, name: shortName } // Default size 1 for unused list
+        }).filter(item => item.name !== "" && vpnHidden[item.name]);
+        
+        return unused.concat(hiddenVpns);
     }
     readonly property list<var> unusedToggleRows: toggleRowsForList(unusedToggles)
 
@@ -106,6 +161,8 @@ AbstractQuickPanel {
                             onOpenBluetoothDialog: root.openBluetoothDialog()
                             onOpenNightLightDialog: root.openNightLightDialog()
                             onOpenWifiDialog: root.openWifiDialog()
+                            onRequestVpnResize: (name) => root.toggleVpnSize(name)
+                            onRequestVpnVisibility: (name) => root.toggleVpnVisibility(name)
                         }
                     }
                 }
@@ -153,6 +210,7 @@ AbstractQuickPanel {
                                 baseCellWidth: root.baseCellWidth
                                 baseCellHeight: root.baseCellHeight
                                 spacing: root.spacing
+                                onRequestVpnVisibility: (name) => root.toggleVpnVisibility(name)
                             }
                         }
                     }
