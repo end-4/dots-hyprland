@@ -406,8 +406,8 @@ Singleton {
         }
 
         try {
-            // Required for danbooru
-            if (currentProvider == "danbooru") {
+            // Required for danbooru and konachan
+            if (["danbooru", "konachan"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             else if (currentProvider == "zerochan") {
@@ -458,8 +458,8 @@ Singleton {
         }
 
         try {
-            // Required for danbooru
-            if (currentProvider == "danbooru") {
+            // Required for danbooru and konachan
+            if (["danbooru", "konachan"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()
