@@ -227,7 +227,10 @@ Item {
         sourceComponent: SelectionDialog {
             id: languageSelectorDialog
             titleText: Translation.tr("Select Language")
-            items: root.languages
+            items: [root.languages[0]] // keep "auto" the first
+                .concat(Config.options.language.translator.history)
+                .concat(root.languages.slice(1))
+            
             defaultChoice: root.languageSelectorTarget ? root.targetLanguage : root.sourceLanguage
             onCanceled: () => {
                 root.showLanguageSelector = false;
@@ -235,6 +238,20 @@ Item {
             onSelected: (result) => {
                 root.showLanguageSelector = false;
                 if (!result || result.length === 0) return; // No selection made
+
+                if (!Config.options.language.translator) {
+                    Config.options.language.translator = {}
+                }
+
+                let history =  Config.options.language.translator.history || []
+
+                history = history.filter(lang => lang !== result)
+
+                history.unshift(result)
+
+                history = history.slice(0, 5)
+
+                Config.options.language.translator.history = history
 
                 if (root.languageSelectorTarget) {
                     root.targetLanguage = result;
