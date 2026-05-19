@@ -78,10 +78,7 @@ Singleton {
         JsonAdapter {
             id: configOptionsJsonAdapter
 
-            property list<string> enabledPanels: [
-                "iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"
-            ]
-            property string panelFamily: "ii" // "ii", "w"
+            property string panelFamily: "ii" // "ii", "waffle"
 
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
@@ -89,7 +86,7 @@ Singleton {
             }
 
             property JsonObject ai: JsonObject {
-                property string systemPrompt: "## Style\n- Use casual tone, don't be formal! Make sure you answer precisely without hallucination and prefer bullet points over walls of text. You can have a friendly greeting at the beginning of the conversation, but don't repeat the user's question\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a {DISTRO} Linux system\n- Desktop environment: {DE}\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with h2 headers and a relevant emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless you're offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the user's use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX '$$' delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n"
+                property string systemPrompt: "## Style\n- Use casual tone, don't be formal!\n- Always be brief and to the point, unless asked otherwise\n- Don't repeat the user's question\n- Be approachable: Avoid using overly complicated, domain-specific terms and provide analogies when asked to explain a concept\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a {DISTRO} Linux system\n- Desktop environment: {DE}\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with h2 headers and a relevant emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless you're offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the user's use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX '$$' delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n\nThanks!\n"
                 property string tool: "functions" // search, functions, or none
                 property list<var> extraModels: [
                     {
@@ -189,7 +186,17 @@ Singleton {
                             property bool useSineCookie: false
                         }
                         property JsonObject digital: JsonObject {
+                            property bool adaptiveAlignment: true
+                            property bool showDate: true
                             property bool animateChange: true
+                            property bool vertical: false
+                            property JsonObject font: JsonObject {
+                                property string family: "Google Sans Flex"
+                                property real weight: 350
+                                property real width: 100
+                                property real size: 90
+                                property real roundness: 0
+                            }
                         }
                         property JsonObject quote: JsonObject {
                             property bool enable: false
@@ -209,9 +216,9 @@ Singleton {
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false
-                    property bool enableWorkspace: true
-                    property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
-                    property bool enableSidebar: true
+                    property bool enableWorkspace: false
+                    property real workspaceZoom: 1.07 // Relative to wallpaper size
+                    property bool enableSidebar: false
                     property real widgetsFactor: 1.2
                 }
             }
@@ -392,6 +399,10 @@ Singleton {
 
             property JsonObject notifications: JsonObject {
                 property int timeout: 7000
+                property JsonObject monitor: JsonObject {
+                    property bool enable: false
+                    property string name: "" // Name of the monitor to show notifications on, like "eDP-1". Find out with 'hyprctl monitors' command
+                }
             }
 
             property JsonObject osd: JsonObject {
@@ -418,6 +429,8 @@ Singleton {
                 property real scale: 0.18 // Relative to screen size
                 property real rows: 2
                 property real columns: 5
+                property bool orderRightLeft: false
+                property bool orderBottomUp: false
                 property bool centerIcons: true
             }
 
@@ -564,6 +577,7 @@ Singleton {
             }
 
             property JsonObject updates: JsonObject {
+                property bool enableCheck: true
                 property int checkInterval: 120 // minutes
                 property int adviseUpdateThreshold: 75 // packages
                 property int stronglyAdviseUpdateThreshold: 200 // packages

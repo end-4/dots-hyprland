@@ -25,6 +25,10 @@ Scope {
             id: "brightness",
             sourceUrl: "indicators/BrightnessIndicator.qml"
         },
+        {
+            id: "gamma",
+            sourceUrl: "indicators/GammaIndicator.qml"
+        },
     ]
 
     function triggerOsd() {
@@ -48,6 +52,15 @@ Scope {
         function onBrightnessChanged() {
             root.protectionMessage = "";
             root.currentIndicator = "brightness";
+            root.triggerOsd();
+        }
+    }
+
+    Connections {
+        target: Hyprsunset
+        function onGammaChangeAttempt() {
+            root.protectionMessage = "";
+            root.currentIndicator = "gamma";
             root.triggerOsd();
         }
     }

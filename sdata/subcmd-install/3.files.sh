@@ -57,6 +57,13 @@ rsync_dir(){
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
   rsync -a --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
+rsync_dir__ignore_existing(){
+  # NOTE: This function is only for using in other functions
+  x mkdir -p "$2"
+  local dest="$(realpath -se $2)"
+  x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
+  rsync -a --ignore-existing --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+}
 rsync_dir__sync(){
   # NOTE: This function is only for using in other functions
   # `--delete' for rsync to make sure that
@@ -118,7 +125,7 @@ function install_dir(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir $s $t
+  v rsync_dir $s $t
 }
 function install_dir__sync(){
   # NOTE: Do not add prefix `v` or `x` when using this function
@@ -127,9 +134,9 @@ function install_dir__sync(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir__sync $s $t
+  v rsync_dir__sync $s $t
 }
-function install_dir__skip_existed(){
+function install_dir__skip_ifexist(){
   # NOTE: Do not add prefix `v` or `x` when using this function
   local s=$1
   local t=$2
@@ -138,6 +145,17 @@ function install_dir__skip_existed(){
   else
     echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
     v rsync_dir $s $t
+  fi
+}
+function install_dir__ignore_existing(){
+  # NOTE: Do not add prefix `v` or `x` when using this function
+  local s=$1
+  local t=$2
+  if [ -d $t ];then
+    echo -e "${STY_BLUE}[$0]: \"$t\" already exists, will not do anything.${STY_RST}"
+  else
+    echo -e "${STY_YELLOW}[$0]: \"$t\" does not exist yet.${STY_RST}"
+    v rsync_dir__ignore_existing $s $t
   fi
 }
 function install_dir__sync_exclude(){
@@ -150,7 +168,7 @@ function install_dir__sync_exclude(){
   if [ -d $t ];then
     warning_overwrite
   fi
-  rsync_dir__sync_exclude $s $t "$@"
+  v rsync_dir__sync_exclude $s $t "$@"
 }
 function install_google_sans_flex(){
   local font_name="Google Sans Flex"
@@ -170,7 +188,7 @@ function install_google_sans_flex(){
   x fc-cache -fv
   x cd $REPO_ROOT
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  realpath -se "$2" >> "${INSTALLED_LISTFILE}"
+  realpath -se "$target_dir" >> "${INSTALLED_LISTFILE}"
 }
 
 #####################################################################################

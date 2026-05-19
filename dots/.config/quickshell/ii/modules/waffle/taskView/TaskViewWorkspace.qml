@@ -16,6 +16,7 @@ WMouseAreaButton {
 
     required property int workspace
     property bool newWorkspace: false
+    property bool droppable: false
 
     readonly property bool isActiveWorkspace: HyprlandData.activeWorkspace?.id === root.workspace
     readonly property real screenWidth: QsWindow.window?.width ?? 0
@@ -28,12 +29,7 @@ WMouseAreaButton {
     height: ListView.view?.height ?? 100
     implicitWidth: 244 // for now
 
-    onClicked: {
-        GlobalStates.overviewOpen = false;
-        Hyprland.dispatch(`workspace ${root.workspace}`);
-    }
-
-    colBackground: ColorUtils.transparentize(Looks.colors.bg2, isActiveWorkspace ? 0 : 1)
+    colBackground: ColorUtils.transparentize(Looks.colors.bg2, (isActiveWorkspace || droppable) ? 0 : 1)
     Behavior on color {
         animation: Looks.transition.color.createObject(this)
     }
@@ -89,7 +85,6 @@ WMouseAreaButton {
                 active: !root.newWorkspace
                 sourceComponent: StyledImage {
                     cache: true
-                    sourceSize: Qt.size(root.screenAspectRatio * root.wallpaperHeight, root.wallpaperHeight)
                     source: Config.options.background.wallpaperPath
                     fillMode: Image.PreserveAspectCrop
 
@@ -118,6 +113,14 @@ WMouseAreaButton {
                 sourceComponent: FluentIcon {
                     icon: "add"
                 }
+            }
+
+            Rectangle {
+                z: 2
+                visible: root.droppable && !root.newWorkspace
+                anchors.fill: parent
+                color: Looks.colors.accent
+                opacity: 0.2
             }
         }
     }

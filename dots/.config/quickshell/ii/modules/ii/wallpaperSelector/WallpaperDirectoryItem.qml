@@ -66,14 +66,12 @@ MouseArea {
                         cache: false
                         fillMode: Image.PreserveAspectCrop
                         clip: true
-                        sourceSize.width: wallpaperItemColumnLayout.width
-                        sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
 
                         Connections {
                             target: Wallpapers
                             function onThumbnailGenerated(directory) {
                                 if (thumbnailImage.status !== Image.Error) return;
-                                if (FileUtils.parentDirectory(thumbnailImage.sourcePath) !== directory) return;
+                                if (FileUtils.parentDirectory(thumbnailImage.sourcePath) !== FileUtils.trimFileProtocol(directory)) return;
                                 thumbnailImage.source = "";
                                 thumbnailImage.source = thumbnailImage.thumbnailPath;
                             }
@@ -102,8 +100,6 @@ MouseArea {
                     anchors.fill: parent
                     sourceComponent: DirectoryIcon {
                         fileModelData: root.fileModelData
-                        sourceSize.width: wallpaperItemColumnLayout.width
-                        sourceSize.height: wallpaperItemColumnLayout.height - wallpaperItemColumnLayout.spacing - wallpaperItemName.height
                     }
                 }
             }

@@ -13,11 +13,13 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    required property var panelWindow
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
+    required property var screen
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen)
     readonly property var toplevels: ToplevelManager.toplevels
+    // Clamp to avoid lock-screen temp workspace (2147483647 - N) leaking into UI
+    readonly property int effectiveActiveWorkspaceId: Math.max(1, Math.min(100, monitor?.activeWorkspace?.id ?? 1))
     readonly property int workspacesShown: Config.options.overview.rows * Config.options.overview.columns
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
+    readonly property int workspaceGroup: Math.floor((effectiveActiveWorkspaceId - 1) / workspacesShown)
     property bool monitorIsFocused: (Hyprland.focusedMonitor?.name == monitor.name)
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
@@ -50,6 +52,21 @@ Item {
 
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
+    
+    function getWsRow(ws) {
+        // 1-indexed workspace, 0-indexed row
+        var normalRow = Math.floor((ws - 1) / Config.options.overview.columns) % Config.options.overview.rows;
+        return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - normalRow - 1 : normalRow);
+    }
+    function getWsColumn(ws) {
+        // 1-indexed workspace, 0-indexed column
+        var normalCol = (ws - 1) % Config.options.overview.columns;
+        return (Config.options.overview.orderRightLeft ? Config.options.overview.columns - normalCol - 1 : normalCol);
+    }
+    function getWsInCell(ri, ci) {
+        // 1-indexed workspace, 0-indexed row and column index
+        return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - ri - 1 : ri) * Config.options.overview.columns + (Config.options.overview.orderRightLeft ? Config.options.overview.columns - ci - 1 : ci) + 1
+    }
 
     StyledRectangularShadow {
         target: overviewBackground
@@ -85,8 +102,8 @@ Item {
                             id: workspace
                             required property int index
                             property int colIndex: index
-                            property int workspaceValue: root.workspaceGroup * root.workspacesShown + row.index * Config.options.overview.columns + colIndex + 1
-                            property color defaultWorkspaceColor: ColorUtils.mix(Appearance.colors.colBackgroundSurfaceContainer, Appearance.colors.colSurfaceContainerHigh, 0.8)
+                            property int workspaceValue: root.workspaceGroup * root.workspacesShown + getWsInCell(row.index, colIndex)
+                            property color defaultWorkspaceColor: Appearance.colors.colSurfaceContainerLow
                             property color hoveredWorkspaceColor: ColorUtils.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
                             property bool hoveredWhileDragging: false
@@ -125,7 +142,7 @@ Item {
                                 onPressed: {
                                     if (root.draggingTargetWorkspace === -1) {
                                         GlobalStates.overviewOpen = false
-                                        Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
+                                        Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspace.workspaceValue} })`)
                                     }
                                 }
                             }
@@ -182,8 +199,8 @@ Item {
                     property bool atInitPosition: (initX == x && initY == y)
 
                     // Offset on the canvas
-                    property int workspaceColIndex: (windowData?.workspace.id - 1) % Config.options.overview.columns
-                    property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / Config.options.overview.columns)
+                    property int workspaceColIndex: getWsColumn(windowData?.workspace.id)
+                    property int workspaceRowIndex: getWsRow(windowData?.workspace.id)
                     xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex
                     yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex
                     property real xWithinWorkspaceWidget: Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0)
@@ -223,7 +240,7 @@ Item {
                         }
                     }
 
-                    z: Drag.active ? root.windowDraggingZ : (root.windowZ + windowData?.floating)
+                    z: Drag.active ? root.windowDraggingZ : (root.windowZ + windowData?.floating + windowData?.fullscreen * 2)
                     Drag.hotSpot.x: width / 2
                     Drag.hotSpot.y: height / 2
                     MouseArea {
@@ -249,7 +266,7 @@ Item {
                             window.Drag.active = false
                             root.draggingFromWorkspace = -1
                             if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
-                                Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace}, address:${window.windowData?.address}`)
+                                Hyprland.dispatch(`hl.dsp.window.move({ workspace = ${targetWorkspace}, follow = false, window = "address:${window.windowData?.address}" })`)
                                 updateWindowPosition.restart()
                             }
                             else {
@@ -257,9 +274,9 @@ Item {
                                     updateWindowPosition.restart()
                                     return
                                 }
-                                const percentageX = Math.round((window.x - xOffset) / root.workspaceImplicitWidth * 100)
-                                const percentageY = Math.round((window.y - yOffset) / root.workspaceImplicitHeight * 100)
-                                Hyprland.dispatch(`movewindowpixel exact ${percentageX}% ${percentageY}%, address:${window.windowData?.address}`)
+                                const percentageX = (window.x - xOffset) / root.workspaceImplicitWidth
+                                const percentageY = (window.y - yOffset) / root.workspaceImplicitHeight
+                                Hyprland.dispatch(`hl.dsp.window.move({ x = "${percentageX * root.screen.width}", y = "${percentageY * root.screen.height}", window = "address:${window.windowData?.address}" })`)
                             }
                         }
                         onClicked: (event) => {
@@ -267,10 +284,10 @@ Item {
 
                             if (event.button === Qt.LeftButton) {
                                 GlobalStates.overviewOpen = false
-                                Hyprland.dispatch(`focuswindow address:${windowData.address}`)
+                                Hyprland.dispatch(`hl.dsp.focus({window = "address:${windowData.address}"})`)
                                 event.accepted = true
                             } else if (event.button === Qt.MiddleButton) {
-                                Hyprland.dispatch(`closewindow address:${windowData.address}`)
+                                Hyprland.dispatch(`hl.dsp.window.close({window = "address:${windowData.address}"})`)
                                 event.accepted = true
                             }
                         }
@@ -286,9 +303,8 @@ Item {
 
             Rectangle { // Focused workspace indicator
                 id: focusedWorkspaceIndicator
-                property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
-                property int rowIndex: Math.floor((activeWorkspaceInGroup - 1) / Config.options.overview.columns)
-                property int colIndex: (activeWorkspaceInGroup - 1) % Config.options.overview.columns
+                property int rowIndex: getWsRow(root.effectiveActiveWorkspaceId)
+                property int colIndex: getWsColumn(root.effectiveActiveWorkspaceId)
                 x: (root.workspaceImplicitWidth + workspaceSpacing) * colIndex
                 y: (root.workspaceImplicitHeight + workspaceSpacing) * rowIndex
                 z: root.windowZ

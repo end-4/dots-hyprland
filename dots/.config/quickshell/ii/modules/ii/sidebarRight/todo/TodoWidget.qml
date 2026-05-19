@@ -139,7 +139,7 @@ Item {
             anchors.margins: root.dialogMargins
             implicitHeight: dialogColumnLayout.implicitHeight
 
-            color: Appearance.colors.colSurfaceContainerHigh
+            color: Appearance.m3colors.m3surfaceContainerHigh
             radius: Appearance.rounding.normal
 
             function addTask() {

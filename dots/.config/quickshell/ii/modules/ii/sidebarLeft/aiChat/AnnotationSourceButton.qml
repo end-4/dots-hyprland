@@ -1,10 +1,9 @@
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
-import qs.services
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Hyprland
+
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
 
 RippleButton {
     id: root

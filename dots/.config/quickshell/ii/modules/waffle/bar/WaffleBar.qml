@@ -13,7 +13,7 @@ Scope {
     
     LazyLoader {
         id: barLoader
-        active: GlobalStates.barOpen && !GlobalStates.screenLocked
+        active: GlobalStates.barOpen
         component: Variants {
             model: Quickshell.screens
             delegate: PanelWindow { // Bar window

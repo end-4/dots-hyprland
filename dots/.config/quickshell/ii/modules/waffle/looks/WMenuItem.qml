@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Hyprland
 import qs.modules.common
 import qs.modules.common.functions
+import qs.modules.common.widgets
 import qs.modules.waffle.looks
 
 MenuItem {
@@ -14,11 +15,11 @@ MenuItem {
     property color colBackground: ColorUtils.transparentize(Looks.colors.bg1)
     property color colBackgroundHover: Looks.colors.bg2Hover
     property color colBackgroundActive: Looks.colors.bg2Active
-    property color colBackgroundToggled: Looks.colors.accent
-    property color colBackgroundToggledHover: Looks.colors.accentHover
-    property color colBackgroundToggledActive: Looks.colors.accentActive
+    property color colBackgroundToggled: Looks.colors.bg2Hover
+    property color colBackgroundToggledHover: Looks.colors.bg2Active
+    property color colBackgroundToggledActive: Looks.colors.bg2Hover
     property color colForeground: Looks.colors.fg
-    property color colForegroundToggled: Looks.colors.accentFg
+    property color colForegroundToggled: Looks.colors.fg
     property color colForegroundDisabled: ColorUtils.transparentize(Looks.colors.subfg, 0.4)
     property color color: {
         if (!root.enabled)
@@ -70,27 +71,57 @@ MenuItem {
     implicitHeight: Math.max(28, contentItem.implicitHeight) + topInset + bottomInset
     implicitWidth: contentItem.implicitWidth + leftInset + rightInset + leftPadding + rightPadding
 
-    contentItem: RowLayout {
-        id: contentLayout
-        spacing: 12
-        FluentIcon {
-            id: buttonIcon
-            monochrome: true
-            implicitSize: 20
-            Layout.fillWidth: false
-            Layout.alignment: Qt.AlignVCenter
-            color: root.fgColor
-            visible: root.icon.name !== "";
-            icon: root.icon.name
+    contentItem: Item {
+        implicitWidth: contentLayout.implicitWidth
+        implicitHeight: contentLayout.implicitHeight
+
+        RowLayout {
+            id: contentLayout
+            anchors.fill: parent
+            spacing: 12
+            FluentIcon {
+                id: buttonIcon
+                monochrome: true
+                implicitSize: 20
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignVCenter
+                color: root.fgColor
+                visible: root.icon.name !== ""
+                icon: root.icon.name
+            }
+            WText {
+                id: buttonText
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: root.text
+                horizontalAlignment: Text.AlignLeft
+                font.pixelSize: Looks.font.pixelSize.large
+                color: root.fgColor
+            }
         }
-        WText {
-            id: buttonText
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: root.text
-            horizontalAlignment: Text.AlignLeft
-            font.pixelSize: Looks.font.pixelSize.large
-            color: root.fgColor
+
+        WFadeLoader {
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: -root.leftPadding + width
+            }
+            shown: root.checked
+            sourceComponent: Rectangle {
+                implicitWidth: 3
+                implicitHeight: 3
+                radius: width / 2
+                color: Looks.colors.accent
+                property bool forceZeroHeight: true
+                height: forceZeroHeight ? 0 : Math.max(root.down ? 10 : 16, root.background.height - 18 * 2)
+                Component.onCompleted: {
+                    forceZeroHeight = false;
+                }
+
+                Behavior on height {
+                    animation: Looks.transition.resize.createObject(this)
+                }
+            }
         }
     }
 }

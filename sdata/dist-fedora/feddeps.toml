@@ -1,3 +1,14 @@
+# COPR repositories list
+# "solopasha/hyprland" is not up to date to the current Hyprland version, replaced with the fork "sdegler/hyprland"
+[copr]
+repos = [
+  "ririko66z/dots-hyprland",
+  "sdegler/hyprland",
+  "deltacopy/darkly",
+  "alternateved/eza",
+  "atim/starship"
+]
+
 # Fedora dependencies list
 
 # Audio
@@ -17,6 +28,7 @@ packages = [
   "brightnessctl",
   "ddcutil"
 ]
+install_opts = ["--setopt=install_weak_deps=False"]
 
 # Basic
 [groups.basic]
@@ -56,7 +68,6 @@ packages = [
   "fish",
   "fontconfig",
   "kitty",
-  "matugen",
   "florian-karsten-space-grotesk-fonts",
   "starship",
   "jetbrains-mono-nerd-fonts",
@@ -72,7 +83,8 @@ packages = [
 [groups.hyprland]
 packages = [
   "hyprland",
-  "hyprland-qtutils",
+  "hyprland-guiutils",
+  "hyprland-qt-support",
   "hyprsunset",
   "wl-clipboard"
 ]
@@ -122,32 +134,10 @@ packages = [
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
 
-# Quickshell-git
-[groups.quickshell]
+[groups.illogical-impulse]
 packages = [
-  "qt6-qtdeclarative",
-  "qt6-qtbase",
-  "jemalloc",
-  "qt6-qtsvg",
-  "pipewire-libs",
-  "libxcb",
-  "wayland-devel",
-  "qt6-qtwayland",
-  "qt5-qtwayland",
-  "libdrm",
-  "breakpad",
-  "kf6-kirigami",
-  # NOTE: Below are custom dependencies of illogical-impulse
-  "qt6-qt5compat",
-  "qt6-qtimageformats",
-  "qt6-qtpositioning",
-  "qt6-qtquicktimeline",
-  "qt6-qtsensors",
-  "qt6-qttools",
-  "qt6-qttranslations",
-  "qt6-qtvirtualkeyboard",
-  "kdialog",
-  "kf6-syntax-highlighting"
+    "quickshell-git",
+    "matugen"
 ]
 
 # Screencapture
@@ -193,4 +183,3 @@ packages = [
   "unzip"
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
-

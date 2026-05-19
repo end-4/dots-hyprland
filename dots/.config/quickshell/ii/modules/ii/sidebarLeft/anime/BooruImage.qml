@@ -67,8 +67,6 @@ Button {
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
             source: modelData.preview_url
-            sourceSize.width: root.rowHeight * modelData.aspect_ratio
-            sourceSize.height: root.rowHeight
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -126,7 +124,7 @@ Button {
                     opacity: root.showActions ? 1 : 0
                     visible: opacity > 0
                     radius: Appearance.rounding.small
-                    color: Appearance.colors.colSurfaceContainer
+                    color: Appearance.m3colors.m3surfaceContainer
                     implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
                     implicitWidth: contextMenuColumnLayout.implicitWidth
 
@@ -149,9 +147,9 @@ Button {
                             buttonText: Translation.tr("Open file link")
                             onClicked: {
                                 root.showActions = false
-                                Hyprland.dispatch("keyword cursor:no_warps true")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = true}})")
                                 Qt.openUrlExternally(root.imageData.file_url)
-                                Hyprland.dispatch("keyword cursor:no_warps false")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = false}})")
                             }
                         }
                         MenuButton {
@@ -162,9 +160,9 @@ Button {
                             enabled: root.imageData.source && root.imageData.source.length > 0
                             onClicked: {
                                 root.showActions = false
-                                Hyprland.dispatch("keyword cursor:no_warps true")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = true}})")
                                 Qt.openUrlExternally(root.imageData.source)
-                                Hyprland.dispatch("keyword cursor:no_warps false")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = false}})")
                             }
                         }
                         MenuButton {

@@ -9,7 +9,7 @@ OsdValueIndicator {
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
     property var brightnessMonitor: Brightness.getMonitorForScreen(focusedScreen)
 
-    icon: Hyprsunset.active ? "routine" : "light_mode"
+    icon: Hyprsunset.temperatureActive ? "routine" : "light_mode"
     rotateIcon: true
     scaleIcon: true
     name: Translation.tr("Brightness")

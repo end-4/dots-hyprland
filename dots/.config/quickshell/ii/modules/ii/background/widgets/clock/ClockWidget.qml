@@ -26,7 +26,7 @@ AbstractBackgroundWidget {
     visibleWhenLocked: true
 
     property var textHorizontalAlignment: {
-        if (root.forceCenter)
+        if (!Config.options.background.widgets.clock.digital.adaptiveAlignment || root.forceCenter || Config.options.background.widgets.clock.digital.vertical) 
             return Text.AlignHCenter;
         if (root.x < root.scaledScreenWidth / 3)
             return Text.AlignLeft;
@@ -63,32 +63,9 @@ AbstractBackgroundWidget {
             anchors.horizontalCenter: parent.horizontalCenter
             shown: root.clockStyle === "digital" && (root.shouldShow)
             fade: false
-            sourceComponent: ColumnLayout {
-                id: clockColumn
-                spacing: 6
-
-                ClockText {
-                    font.pixelSize: 90
-                    text: DateTime.time
-                }
-                ClockText {
-                    Layout.topMargin: -5
-                    text: DateTime.longDate
-                }
-                StyledText {
-                    // Somehow gets fucked up if made a ClockText???
-                    visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
-                    Layout.fillWidth: true
-                    horizontalAlignment: root.textHorizontalAlignment
-                    font {
-                        pixelSize: Appearance.font.pixelSize.normal
-                        weight: 350
-                    }
-                    color: root.colText
-                    style: Text.Raised
-                    styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.widgets.clock.quote.text
-                }
+            sourceComponent: DigitalClock {
+                colText: root.colText
+                textHorizontalAlignment: root.textHorizontalAlignment
             }
         }
         StatusRow {
@@ -154,19 +131,6 @@ AbstractBackgroundWidget {
         }
     }
 
-    component ClockText: StyledText {
-        Layout.fillWidth: true
-        horizontalAlignment: root.textHorizontalAlignment
-        font {
-            family: Appearance.font.family.expressive
-            pixelSize: 20
-            weight: Font.DemiBold
-        }
-        color: root.colText
-        style: Text.Raised
-        styleColor: Appearance.colors.colShadow
-        animateChange: Config.options.background.widgets.clock.digital.animateChange
-    }
     component ClockStatusText: Row {
         id: statusTextRow
         property alias statusIcon: statusIconWidget.text
@@ -190,6 +154,7 @@ AbstractBackgroundWidget {
         ClockText {
             id: statusTextWidget
             color: statusTextRow.textColor
+            horizontalAlignment: root.textHorizontalAlignment
             anchors.verticalCenter: statusTextRow.verticalCenter
             font {
                 pixelSize: Appearance.font.pixelSize.large
