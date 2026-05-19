@@ -23,41 +23,20 @@ function r() {
   [ "$original_id" == "$last_id" ] || yq -i ".dnf.transaction_ids += [ $last_id ]" "$user_config" || :
 }
 
-# Start building and install the missing RPM package locally.
-function install_RPMS() {
-  local local_specs local_rpms
-  rpmbuildroot="${rpmbuildroot:-${REPO_ROOT}/cache/rpmbuild}"
+# Init local RPM repo and download rpms from releases there.
+function init_local_repo() {
+    url="https://api.github.com/repos/end-4/ii-package-builds/releases/tags/packages-fedora"
+    path="$HOME/.cache/illogical-impulse-repo"
 
-  x mkdir -p "$rpmbuildroot"/{BUILD,RPMS,SOURCES}
-  x cp -r "${REPO_ROOT}/sdata/dist-fedora/SPECS" "$rpmbuildroot/"
+    rm -rf -- "$path"
+    mkdir -p "$path"
 
-  x cd $rpmbuildroot/SPECS
-   
-  # we need cpptrace BEFORE quickshell-git
-  local_specs=(
-    "$rpm_specs/cpptrace.spec"
-    "$rpm_specs/quickshell-git.spec"
-    "$rpm_specs/hyprland-qt-support.spec"
-  )
-  for spec_file in ${local_specs[@]}; do
-    # Download sources
-    x spectool -g -C "$rpmbuildroot/SOURCES" "$spec_file"
-    # Install build dependencies
-    r x sudo dnf builddep -y "$spec_file"
-    # Build the RPM package locally. If it fails, download it from COPR.
-    if ! rpmbuild -bb --define "_topdir $rpmbuildroot" --define "debug_package %{nil}" "$spec_file"; then
-      printf "${STY_RED}Local build encountered an issue. Downloading $(basename "$spec_file" .spec) from COPR. Report the issue to Discussions pls.${STY_RST}\n"
-      sudo dnf install -y $(basename "$spec_file" .spec)
-      nolock_qs=true
-    fi
-  done
-
-  mapfile -t -d '' local_rpms < <(find "$rpmbuildroot/RPMS" -maxdepth 2 -type f -name '*.rpm' -not -name '*debug*' -print0)
-  if [[ ${#local_rpms[@]} -ge 1 ]]; then
-    echo -e "${STY_BLUE}Next command:${STY_RST} sudo dnf install ${local_rpms[@]} -y"
-    r x sudo dnf install "${local_rpms[@]}" -y
-  fi
-  x cd ${REPO_ROOT}
+    for file in $(curl -s "$url" | jq -r '.assets[].browser_download_url'); do
+        name=$(basename "$file")
+        echo "Downloading $file"
+        curl --max-time 10 -L --fail --show-error --progress-bar -o "$path/$name" "$file"
+        createrepo_c "$path"
+    done
 }
 
 # -------------------------
@@ -82,7 +61,7 @@ v sudo dnf versionlock delete quickshell-git 2>/dev/null
 v sudo dnf install yq -y
 
 # Install development tools
-r v sudo dnf install @development-tools fedora-packager -y
+r v sudo dnf install createrepo_c -y
 
 # Install COPR repositories
 copr_repos_json=$(yq -o=j '.copr.repos // []' "$deps_data_file")
@@ -91,9 +70,9 @@ for copr in ${copr_repos_array[@]}; do
   v sudo dnf copr enable "$copr" -y
 done
 
-# Build and install locally RPMS
-showfun install_RPMS
-v install_RPMS
+# Init local repo with prebuilt rpms
+showfun init_local_repo
+v init_local_repo
 
 # Install packages from toml file
 deps_data=$(yq -o=j '.' "$deps_data_file")
@@ -104,6 +83,10 @@ while IFS= read -r deps_list_key; do
 
   install_opts=$(echo $deps_data | yq ".groups.\"$deps_list_key\" | select(has(\"install_opts\")) | .install_opts[]")
   package_list=$(echo $deps_data | yq ".groups.\"$deps_list_key\".packages | unique | .[]")
+
+  if [[ $deps_list_key == 'illogical-impulse' ]]; then
+      install_opts="$install_opts --repofrompath=illogical-impulse,file://$HOME/.cache/illogical-impulse-repo --nogpgcheck"
+  fi
 
   r v sudo dnf install -y $install_opts $package_list </dev/tty
 
