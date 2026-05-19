@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-bibata-modern-classic-bin
 pkgver=2.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Material Based Cursor Theme, installed for illogical-impulse dotfiles"
 arch=('any')
 url="https://github.com/ful1e5/Bibata_Cursor"

@@ -7,7 +7,7 @@ Rectangle {
     id: root
     property alias materialIcon: icon.text
     property alias text: noticeText.text
-    default property alias data: buttonRow.data
+    default property alias boxData: buttonRow.data
 
     radius: Appearance.rounding.normal
     color: Appearance.colors.colPrimaryContainer

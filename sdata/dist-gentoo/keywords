@@ -6,7 +6,6 @@ app-misc/illogical-impulse-fonts-themes
 app-misc/illogical-impulse-hyprland
 app-misc/illogical-impulse-kde
 app-misc/illogical-impulse-microtex-git
-app-misc/illogical-impulse-oneui4-icons-git
 app-misc/illogical-impulse-portal
 app-misc/illogical-impulse-python
 app-misc/illogical-impulse-quickshell-git
@@ -28,7 +27,6 @@ gui-libs/hyprcursor
 gui-apps/wf-recorder
 gui-apps/wtype
 gui-apps/fuzzel
-gui-apps/quickshell **
 gui-apps/wlogout
 dev-cpp/sdbus-c++
 dev-libs/hyprland-protocols
@@ -52,5 +50,7 @@ media-fonts/space-grotesk
 media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
-app-misc/songrec
+media-sound/songrec
 dev-cpp/glaze
+dev-cpp/cpptrace
+dev-libs/libdwarf

@@ -15,7 +15,7 @@ WindowDialog {
     id: root
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
-    backgroundHeight: 600
+    backgroundHeight: 700
 
     WindowDialogTitle {
         text: Translation.tr("Eye protection")
@@ -44,9 +44,9 @@ WindowDialog {
             iconSize: Appearance.font.pixelSize.larger
             buttonIcon: "check"
             text: Translation.tr("Enable now")
-            checked: Hyprsunset.active
+            checked: Hyprsunset.temperatureActive
             onCheckedChanged: {
-                Hyprsunset.toggle(checked)
+                Hyprsunset.toggleTemperature(checked)
             }
         }
 
@@ -146,6 +146,33 @@ WindowDialog {
         id: brightnessColumn
         Layout.topMargin: -16
         Layout.fillWidth: true
+
+        WindowDialogSlider {
+            anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin: 4
+                rightMargin: 4
+            }
+            value: root.brightnessMonitor.brightness
+            onMoved: root.brightnessMonitor.setBrightness(value)
+        }
+    }
+
+    WindowDialogSectionHeader {
+        text: Translation.tr("Gamma")
+    }
+
+    WindowDialogSeparator {
+        Layout.topMargin: -22
+        Layout.leftMargin: 0
+        Layout.rightMargin: 0
+    }
+
+    Column {
+        id: gammaColumn
+        Layout.topMargin: -16
+        Layout.fillWidth: true
         Layout.fillHeight: true
 
         WindowDialogSlider {
@@ -155,9 +182,10 @@ WindowDialog {
                 leftMargin: 4
                 rightMargin: 4
             }
-            // text: Translation.tr("Brightness")
-            value: root.brightnessMonitor.brightness
-            onMoved: root.brightnessMonitor.setBrightness(value)
+            from: Hyprsunset.gammaLowerLimit / 100
+            value: Hyprsunset.gamma / 100
+            onMoved: Hyprsunset.setGamma(value * 100)
+            tooltipContent: `${Math.round(value * 100)}%`
         }
     }
     

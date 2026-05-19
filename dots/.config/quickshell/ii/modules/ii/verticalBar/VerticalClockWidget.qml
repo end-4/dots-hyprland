@@ -8,25 +8,43 @@ import qs.modules.ii.bar as Bar
 Item {
     id: root
     property bool borderless: Config.options.bar.borderless
-    implicitHeight: clockColumn.implicitHeight
+    implicitHeight: column.implicitHeight
     implicitWidth: Appearance.sizes.verticalBarWidth
 
-    ColumnLayout {
-        id: clockColumn
-        anchors.centerIn: parent
-        spacing: 0
+    readonly property string dateTimeString: DateTime.time
+    readonly property bool hasAmPm: dateTimeString.toLowerCase().includes("am") || dateTimeString.toLowerCase().includes("pm")
 
-        Repeater {
-            model: DateTime.time.split(/[: ]/)
-            delegate: StyledText {
-                required property string modelData
-                Layout.alignment: Qt.AlignHCenter
-                font.pixelSize: modelData.match(/am|pm/i) ? 
-                    Appearance.font.pixelSize.smaller // Smaller "am"/"pm" text
-                    : Appearance.font.pixelSize.large
-                color: Appearance.colors.colOnLayer1
-                text: modelData.padStart(2, "0")
+    Column {
+        id: column
+        anchors.centerIn: parent
+        spacing: root.hasAmPm ? 6 : 0
+
+        Column {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: -4
+
+            Repeater {
+                model: root.dateTimeString.split(/[: ]/)
+                delegate: StyledText {
+                    required property string modelData
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: {
+                        if (modelData.match(/am|pm/i))
+                            return Appearance.font.pixelSize.smaller;
+                        else
+                            // Smaller "am"/"pm" text
+                            return Appearance.font.pixelSize.large;
+                    }
+                    color: Appearance.colors.colOnLayer1
+                    text: modelData.padStart(2, "0")
+                }
             }
+        }
+        StyledText {
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: Appearance.font.pixelSize.smallest
+            color: Appearance.colors.colOnLayer1
+            text: DateTime.shortDate
         }
     }
 
