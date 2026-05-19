@@ -399,6 +399,10 @@ Singleton {
 
             property JsonObject notifications: JsonObject {
                 property int timeout: 7000
+                property JsonObject monitor: JsonObject {
+                    property bool enable: false
+                    property string name: "" // Name of the monitor to show notifications on, like "eDP-1". Find out with 'hyprctl monitors' command
+                }
             }
 
             property JsonObject osd: JsonObject {

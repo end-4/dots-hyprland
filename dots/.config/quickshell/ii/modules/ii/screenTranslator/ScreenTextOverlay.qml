@@ -186,7 +186,6 @@ Item {
         asynchronous: false
         width: root.windowWidth
         height: root.windowHeight
-        sourceSize: Qt.size(root.windowWidth, root.windowHeight)
         source: Qt.resolvedUrl(root.screenshotPath)
         visible: false
     }
