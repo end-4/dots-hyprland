@@ -28,6 +28,15 @@ Item {
     property bool showNightLightDialog: false
     property bool showWifiDialog: false
     property bool editMode: false
+    property bool dialogsPreloaded: false
+
+    Timer {
+        id: dialogsPreloadTimer
+        interval: 2500
+        running: Config?.options?.sidebar?.keepRightSidebarLoaded ?? false
+        repeat: false
+        onTriggered: root.dialogsPreloaded = true
+    }
 
     Connections {
         target: GlobalStates
@@ -160,10 +169,16 @@ Item {
         readonly property bool shown: root[shownPropertyString]
         anchors.fill: parent
 
-        onShownChanged: if (shown) toggleDialogLoader.active = true;
-        active: shown
+        active: shown || root.dialogsPreloaded
+        asynchronous: !shown
+        onShownChanged: {
+            if (shown && item) {
+                item.show = true;
+                item.forceActiveFocus();
+            }
+        }
         onActiveChanged: {
-            if (active) {
+            if (active && shown && item) {
                 item.show = true;
                 item.forceActiveFocus();
             }
@@ -175,7 +190,11 @@ Item {
                 root[toggleDialogLoader.shownPropertyString] = false;
             }
             function onVisibleChanged() {
-                if (!toggleDialogLoader.item.visible && !root[toggleDialogLoader.shownPropertyString]) toggleDialogLoader.active = false;
+                if (!toggleDialogLoader.item.visible
+                    && !root[toggleDialogLoader.shownPropertyString]
+                    && !root.dialogsPreloaded) {
+                    toggleDialogLoader.active = false;
+                }
             }
         }
     }

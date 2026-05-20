@@ -12,12 +12,21 @@ LazyLoader {
     property Item hoverTarget
     default property Item contentItem
     property real popupBackgroundMargin: 0
+    property bool preloaded: false
 
-    active: hoverTarget && hoverTarget.containsMouse
+    Timer {
+        interval: 2500
+        running: !root.preloaded && (Config?.options?.bar?.preloadPopups ?? true)
+        repeat: false
+        onTriggered: root.preloaded = true
+    }
+
+    active: (hoverTarget && hoverTarget.containsMouse) || root.preloaded
 
     component: PanelWindow {
         id: popupWindow
         color: "transparent"
+        visible: root.hoverTarget && root.hoverTarget.containsMouse
 
         anchors.left: !Config.options.bar.vertical || (Config.options.bar.vertical && !Config.options.bar.bottom)
         anchors.right: Config.options.bar.vertical && Config.options.bar.bottom

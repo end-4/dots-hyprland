@@ -241,6 +241,7 @@ Singleton {
                 property bool showBackground: true
                 property bool verbose: true
                 property bool vertical: false
+                property bool preloadPopups: true // Idle-time eager load of bar popups so first hover is instant
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true
