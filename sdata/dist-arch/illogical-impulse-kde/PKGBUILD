@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-kde
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Illogical Impulse KDE Dependencies'
 arch=(any)
 license=(None)

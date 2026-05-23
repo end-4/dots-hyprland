@@ -170,13 +170,9 @@ MouseArea {
             }
 
             // Shake when wrong password
-            SequentialAnimation {
+            ErrorShakeAnimation {
                 id: wrongPasswordShakeAnim
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 30; duration: 50 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: -15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 15; duration: 40 }
-                NumberAnimation { target: passwordBox; property: "Layout.leftMargin"; to: 0; duration: 30 }
+                target: passwordBox
             }
             Connections {
                 target: GlobalStates

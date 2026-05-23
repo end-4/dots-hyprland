@@ -77,7 +77,7 @@ Item { // Player instance
         id: coverArtDownloader
         property string targetFile: root.artUrl
         property string artFilePath: root.artFilePath
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -sSL '${targetFile}' -o '${artFilePath}'` ]
+        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'` ]
         onExited: (exitCode, exitStatus) => {
             root.downloaded = true
         }
@@ -113,12 +113,10 @@ Item { // Player instance
             }
         }
 
-        Image {
+        StyledImage {
             id: blurredArt
             anchors.fill: parent
             source: root.displayedArtFilePath
-            sourceSize.width: background.width
-            sourceSize.height: background.height
             fillMode: Image.PreserveAspectCrop
             cache: false
             antialiasing: true
@@ -179,8 +177,6 @@ Item { // Player instance
 
                     width: size
                     height: size
-                    sourceSize.width: size
-                    sourceSize.height: size
                 }
             }
 

@@ -36,9 +36,8 @@ PanelWindow {
         Window
     }
 
-    signal requestClose
     function close() {
-        root.requestClose();
+        root.closed();
     }
 
     property var mediaType: WRegionSelectionPanel.MediaType.Image
@@ -340,7 +339,7 @@ PanelWindow {
             icon.name: "eyedropper"
             onClicked: {
                 Quickshell.execDetached(["bash", "-c", "sleep 0.2; hyprpicker -a"]);
-                root.requestClose();
+                root.closed();
             }
             WToolTip {
                 text: Translation.tr("Color picker")

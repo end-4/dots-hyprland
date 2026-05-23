@@ -34,7 +34,7 @@ Scope { // Scope
             running = true;
         }
         function doIt2(output) {
-            command = ["bash", "-c", "hyprctl dispatch movecursor 9999 9999"];
+            command = ["bash", "-c", "hyprctl dispatch 'hl.dsp.cursor.move({x=9999,y=9999})'"];
             hook = () => {
                 doIt3();
             }
@@ -42,7 +42,7 @@ Scope { // Scope
         }
         function doIt3(output) {
             root.pin = !root.pin;
-            command = ["bash", "-c", `sleep 0.01; hyprctl dispatch movecursor ${cursorX} ${cursorY}`];
+            command = ["bash", "-c", `sleep 0.01; hyprctl dispatch 'hl.dsp.cursor.move({x=${cursorX},y=${cursorY}})'`];
             hook = null
             running = true;
         }
@@ -67,6 +67,7 @@ Scope { // Scope
 
     onDetachChanged: {
         if (root.detach) {
+            GlobalFocusGrab.removeDismissable(sidebarLoader.item) // Remove sidebar from the focus grab system
             sidebarContent.parent = null; // Detach content from sidebar
             sidebarLoader.active = false; // Unload sidebar
             detachedSidebarLoader.active = true; // Load detached window

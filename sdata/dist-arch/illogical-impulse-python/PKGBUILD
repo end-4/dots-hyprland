@@ -1,6 +1,7 @@
+groups=(illogical-impulse)
 pkgname=illogical-impulse-python
 pkgver=1.1
-pkgrel=4
+pkgrel=5
 pkgdesc='Illogical Impulse Python Dependencies'
 arch=(any)
 license=(None)

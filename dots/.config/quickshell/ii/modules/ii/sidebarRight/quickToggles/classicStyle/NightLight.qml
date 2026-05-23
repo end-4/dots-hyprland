@@ -6,10 +6,10 @@ import Quickshell.Io
 
 QuickToggleButton {
     id: nightLightButton
-    toggled: Hyprsunset.active
+    toggled: Hyprsunset.temperatureActive
     buttonIcon: Config.options.light.night.automatic ? "night_sight_auto" : "bedtime"
     onClicked: {
-        Hyprsunset.toggle()
+        Hyprsunset.toggleTemperature()
     }
 
     altAction: () => {
