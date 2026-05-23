@@ -80,6 +80,7 @@ Singleton {
 
             property string panelFamily: "ii" // "ii", "waffle"
 
+
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
                 property int weeb: 1 // 0: No | 1: Open | 2: Closet

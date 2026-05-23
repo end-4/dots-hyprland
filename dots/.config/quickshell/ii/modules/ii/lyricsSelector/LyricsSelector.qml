@@ -141,7 +141,7 @@ Scope {
 
                     StyledText {
                         Layout.fillWidth: true
-                        visible: LyricsService.loading
+                        visible: LyricsService.selectorLoading
                         color: Appearance.colors.colSubtext
                         text: Translation.tr("Fetching lyric matches…")
                         font.pixelSize: Appearance.font.pixelSize.small
@@ -149,9 +149,9 @@ Scope {
 
                     StyledText {
                         Layout.fillWidth: true
-                        visible: !LyricsService.loading && LyricsService.error.length > 0
+                        visible: !LyricsService.selectorLoading && LyricsService.selectorError.length > 0
                         color: Appearance.colors.colSubtext
-                        text: LyricsService.error
+                        text: LyricsService.selectorError
                         font.pixelSize: Appearance.font.pixelSize.small
                     }
 
@@ -159,7 +159,7 @@ Scope {
                         id: optionsColumn
                         Layout.fillWidth: true
                         spacing: 6
-                        visible: !LyricsService.loading && LyricsService.options.length > 0
+                        visible: !LyricsService.selectorLoading && LyricsService.options.length > 0
 
                         Repeater {
                             model: LyricsService.options
