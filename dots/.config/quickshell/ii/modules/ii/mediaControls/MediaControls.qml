@@ -135,7 +135,7 @@ Scope {
                 }
             }
             onMouseInPopupChanged: {
-                if (Config?.options.bar.autoHide.enable && !mouseInPopup) {
+                if (Config?.options.bar.autoHide.enable && Config?.options.bar.autoHide.dismissPopups && !mouseInPopup) {
                     autoHideDismissTimer.restart();
                 } else {
                     autoHideDismissTimer.stop();

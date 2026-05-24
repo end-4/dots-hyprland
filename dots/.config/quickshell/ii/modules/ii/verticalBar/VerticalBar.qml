@@ -54,7 +54,7 @@ Scope {
                     }
                 }
                 property bool superShow: false
-                property bool mustShow: hoverRegion.containsMouse || superShow || GlobalStates.mediaControlsOpen
+                property bool mustShow: hoverRegion.containsMouse || superShow || (GlobalStates.mediaControlsOpen && Config?.options.bar.autoHide.dismissPopups)
                 exclusionMode: ExclusionMode.Ignore
                 exclusiveZone: (Config?.options.bar.autoHide.enable && (!mustShow || !Config?.options.bar.autoHide.pushWindows)) ? 0 :
                     Appearance.sizes.baseVerticalBarWidth + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
