@@ -123,10 +123,10 @@ Scope {
 
             // Auto-hide integration: close media controls when mouse leaves popup
             // and is not on the bar, so the bar can then auto-hide too
-            property bool mouseInPopup: mediaControlsHoverArea.containsMouse
+            property bool mouseInPopup: mediaControlsHoverHandler.hovered
             Timer {
                 id: autoHideDismissTimer
-                interval: 300
+                interval: 100
                 repeat: false
                 onTriggered: {
                     if (!panelWindow.mouseInPopup) {
@@ -142,13 +142,8 @@ Scope {
                 }
             }
 
-            MouseArea {
-                id: mediaControlsHoverArea
-                anchors.fill: parent
-                hoverEnabled: true
-                // Pass through all clicks to the content underneath
-                propagateComposedEvents: true
-                acceptedButtons: Qt.NoButton
+            HoverHandler {
+                id: mediaControlsHoverHandler
             }
 
             ColumnLayout {
