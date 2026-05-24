@@ -121,6 +121,36 @@ Scope {
                 }
             }
 
+            // Auto-hide integration: close media controls when mouse leaves popup
+            // and is not on the bar, so the bar can then auto-hide too
+            property bool mouseInPopup: mediaControlsHoverArea.containsMouse
+            Timer {
+                id: autoHideDismissTimer
+                interval: 300
+                repeat: false
+                onTriggered: {
+                    if (!panelWindow.mouseInPopup) {
+                        GlobalStates.mediaControlsOpen = false;
+                    }
+                }
+            }
+            onMouseInPopupChanged: {
+                if (Config?.options.bar.autoHide.enable && !mouseInPopup) {
+                    autoHideDismissTimer.restart();
+                } else {
+                    autoHideDismissTimer.stop();
+                }
+            }
+
+            MouseArea {
+                id: mediaControlsHoverArea
+                anchors.fill: parent
+                hoverEnabled: true
+                // Pass through all clicks to the content underneath
+                propagateComposedEvents: true
+                acceptedButtons: Qt.NoButton
+            }
+
             ColumnLayout {
                 id: playerColumnLayout
                 anchors.fill: parent
