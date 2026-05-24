@@ -33,8 +33,12 @@ if is_file_exists(HOME .. "/.config/hypr/custom/keybinds.lua") then
 end
 
 -- nwg-displays support --
-require("workspaces")
-require("monitors")
+if is_file_exists(HOME .. "/.config/hypr/workspaces.lua") then
+    require("workspaces")
+end
+if is_file_exists(HOME .. "/.config/hypr/monitors.lua") then
+    require("monitors")
+end
 
 -- Shell overrides --
 require("hyprland.shellOverrides.main")
