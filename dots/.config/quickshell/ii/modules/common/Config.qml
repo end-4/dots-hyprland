@@ -135,6 +135,7 @@ Singleton {
                 }
                 property JsonObject openrgb: JsonObject {
                     property bool enable: false
+                    property bool applyOnStartup: true
                     property real fadeDuration: 0.5
                     property real interpolationSteps: 100
                     property list<var> devices: []

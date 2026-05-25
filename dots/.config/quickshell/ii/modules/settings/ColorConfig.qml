@@ -11,11 +11,29 @@ ContentPage {
     id: root
     forceWidth: true
 
-    property var openRgbConfig: Config.options.appearance.openrgb
-    property var openRgbDevices: openRgbConfig.devices
+    property var openRgbConfig: ({
+            enable: false,
+            applyOnStartup: false,
+            devices: []
+        })
+    property var openRgbDevices: []
     property string openRgbListScript: FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/openrgb-list-devices.sh`)
     property string openRgbError: ""
     property bool openRgbRefreshing: false
+
+    function defaultOpenRgbConfig() {
+        return {
+            enable: false,
+            applyOnStartup: true,
+            devices: []
+        };
+    }
+
+    function refreshOpenRgbConfig() {
+        const appearance = JSON.parse(JSON.stringify(Config.options.appearance || {}));
+        openRgbConfig = Object.assign(defaultOpenRgbConfig(), appearance.openrgb || {});
+        openRgbDevices = openRgbConfig.devices || [];
+    }
 
     function updateDevice(deviceId, patch) {
         const devices = [...(openRgbDevices || [])];
@@ -29,7 +47,9 @@ ContentPage {
         } else {
             devices[index] = Object.assign({}, devices[index], patch);
         }
-        Config.options.appearance.openrgb.devices = devices;
+        openRgbDevices = devices;
+        openRgbConfig.devices = devices;
+        Config.setNestedValue("appearance.openrgb.devices", devices);
     }
 
     function refreshDevices() {
@@ -38,6 +58,16 @@ ContentPage {
         openRgbDeviceProc.command = ["bash", openRgbListScript];
         openRgbDeviceProc.running = false;
         openRgbDeviceProc.running = true;
+    }
+
+    Component.onCompleted: refreshOpenRgbConfig()
+
+    Connections {
+        target: Config
+        function onReadyChanged() {
+            if (Config.ready)
+                root.refreshOpenRgbConfig();
+        }
     }
 
     Process {
@@ -186,9 +216,10 @@ ContentPage {
             ConfigSwitch {
                 buttonIcon: "lightbulb"
                 text: Translation.tr("Enable OpenRGB theming")
-                checked: Config.options.appearance.openrgb.enable
+                checked: openRgbConfig.enable
                 onCheckedChanged: {
-                    Config.options.appearance.openrgb.enable = checked;
+                    openRgbConfig.enable = checked;
+                    Config.setNestedValue("appearance.openrgb.enable", checked);
                 }
             }
             RippleButtonWithIcon {
@@ -214,6 +245,20 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "power_settings_new"
+            text: Translation.tr("Apply on startup")
+            checked: openRgbConfig.applyOnStartup
+            enabled: openRgbConfig.enable
+            onCheckedChanged: {
+                openRgbConfig.applyOnStartup = checked;
+                Config.setNestedValue("appearance.openrgb.applyOnStartup", checked);
+            }
+            StyledToolTip {
+                text: Translation.tr("Runs the OpenRGB apply script after startup once config is loaded.")
+            }
+        }
+
         NoticeBox {
             Layout.fillWidth: true
             visible: openRgbError.length > 0
@@ -235,7 +280,7 @@ ContentPage {
                 buttonIcon: "memory"
                 text: modelData.name && modelData.name.length > 0 ? modelData.name : Translation.tr("Device %1").arg(modelData.id)
                 checked: modelData.enabled === true
-                enabled: Config.options.appearance.openrgb.enable
+                enabled: openRgbConfig.enable
                 onCheckedChanged: {
                     root.updateDevice(modelData.id, {
                         enabled: checked,

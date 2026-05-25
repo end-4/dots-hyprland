@@ -309,9 +309,6 @@ switch() {
         > "$STATE_DIR"/user/generated/material_colors.scss
     deactivate
     "$SCRIPT_DIR"/applycolor.sh
-    if [ -f "$SCRIPT_DIR/openrgb-apply.sh" ]; then
-        bash "$SCRIPT_DIR/openrgb-apply.sh" &
-    fi
 
     # Pass screen width, height, and wallpaper path to post_process
     max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
