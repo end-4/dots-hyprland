@@ -307,8 +307,8 @@ switch() {
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
-    "$SCRIPT_DIR"/applycolor.sh
     deactivate
+    "$SCRIPT_DIR"/applycolor.sh
 
     # Pass screen width, height, and wallpaper path to post_process
     max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
@@ -441,6 +441,30 @@ main() {
         else
             echo "[switchwall] Warning: No image to auto-detect scheme from, defaulting to 'scheme-tonal-spot'" >&2
             type_flag="scheme-tonal-spot"
+        fi
+    fi
+
+    # If mode_flag is dark or light, try to find a variant with that mode suffix
+    if [[ "$mode_flag" == "dark" || "$mode_flag" == "light" ]]; then
+        # Get directory, filename without extension, and extension
+        local imgdir="$(dirname "$imgpath")"
+        local imgbase="$(basename "$imgpath")"
+        local imgname="${imgbase%.*}"
+        local imgext="${imgbase##*.}"
+
+        # Strip existing -dark or -light suffix
+        local stripped_name="${imgname%-dark}"
+        stripped_name="${stripped_name%-light}"
+
+        # Construct the new path with the requested mode suffix
+        local new_imgpath="${imgdir}/${stripped_name}-${mode_flag}.${imgext}"
+        local new_stripped_imgpath="${imgdir}/${stripped_name}.${imgext}"
+
+        # If the variant exists, use it
+        if [[ -f "$new_imgpath" ]]; then
+            imgpath="$new_imgpath"
+        elif [[ -f "$new_stripped_imgpath" ]]; then
+            imgpath="$new_stripped_imgpath"
         fi
     fi
 

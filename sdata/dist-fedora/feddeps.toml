@@ -134,33 +134,10 @@ packages = [
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
 
-# Quickshell-git
-[groups.quickshell]
+[groups.illogical-impulse]
 packages = [
-  "qt6-qtdeclarative",
-  "qt6-qtbase",
-  "jemalloc",
-  "qt6-qtsvg",
-  "pipewire-libs",
-  "libxcb",
-  "wayland-devel",
-  "qt6-qtwayland",
-  "qt5-qtwayland",
-  "libdrm",
-  "breakpad",
-  "kf6-kirigami",
-  "libunwind-devel",
-  # NOTE: Below are custom dependencies of illogical-impulse
-  "qt6-qt5compat",
-  "qt6-qtimageformats",
-  "qt6-qtpositioning",
-  "qt6-qtquicktimeline",
-  "qt6-qtsensors",
-  "qt6-qttools",
-  "qt6-qttranslations",
-  "qt6-qtvirtualkeyboard",
-  "kdialog",
-  "kf6-syntax-highlighting"
+    "quickshell-git",
+    "matugen"
 ]
 
 # Screencapture
