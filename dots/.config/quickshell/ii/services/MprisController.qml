@@ -41,6 +41,47 @@ Singleton {
             !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
     }
 
+	// Last non-empty trackArtUrl seen per player (keyed by uniqueId). Some
+	// MPRIS players (Firefox via firefox-mpris, Spotify) emit transient empty
+	// trackArtUrl between/during tracks. Consumers like PlayerControl that get
+	// recreated on panel open/close need a stable fallback so the cover
+	// doesn't vanish whenever they happen to mount during an empty window.
+	property var stableArtUrlByPlayer: ({})
+
+	function _captureArtUrl(player) {
+		if (player?.trackArtUrl?.length > 0 && player?.uniqueId !== undefined) {
+			const map = Object.assign({}, root.stableArtUrlByPlayer);
+			map[player.uniqueId] = player.trackArtUrl;
+			root.stableArtUrlByPlayer = map;
+		}
+	}
+
+	// Best (largest) downloaded cover file seen per player for the current
+	// track, keyed by uniqueId. Persists across PlayerControl lifecycles so
+	// reopening the panel doesn't downgrade to a thumbnail when Firefox
+	// happens to be sitting on its low-res variant. Entry shape:
+	//   { trackKey: string, artFilePath: string, artBytes: number }
+	property var bestArtByPlayer: ({})
+
+	function rememberBestArt(player, trackKey, artFilePath, artBytes) {
+		const id = player?.uniqueId;
+		if (id === undefined || artBytes <= 0 || !artFilePath) return;
+		const existing = root.bestArtByPlayer[id];
+		// Same track and existing is already >= new size: nothing to do.
+		if (existing && existing.trackKey === trackKey && existing.artBytes >= artBytes) return;
+		const map = Object.assign({}, root.bestArtByPlayer);
+		map[id] = { trackKey: trackKey, artFilePath: artFilePath, artBytes: artBytes };
+		root.bestArtByPlayer = map;
+	}
+
+	function getBestArt(player, trackKey) {
+		const id = player?.uniqueId;
+		if (id === undefined) return null;
+		const entry = root.bestArtByPlayer[id];
+		if (!entry || entry.trackKey !== trackKey) return null;
+		return entry;
+	}
+
 	// Original stuff from fox below
 	Instantiator {
 		model: Mpris.players;
@@ -53,6 +94,7 @@ Singleton {
 				if (root.trackedPlayer == null || modelData.isPlaying) {
 					root.trackedPlayer = modelData;
 				}
+				root._captureArtUrl(modelData);
 			}
 
 			Component.onDestruction: {
@@ -72,6 +114,10 @@ Singleton {
 
 			function onPlaybackStateChanged() {
 				if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+			}
+
+			function onTrackArtUrlChanged() {
+				root._captureArtUrl(modelData);
 			}
 		}
 	}
