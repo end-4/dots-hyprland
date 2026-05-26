@@ -63,7 +63,7 @@ Singleton {
     }
 
     function safeModelName(modelName) {
-        return modelName.replace(/:/g, "_").replace(/ /g, "-").replace(/\//g, "-")
+        return modelName.replace(/:/g, "_").replace(/ /g, "-").replace(/\//g, "-").toLowerCase()
     }
 
     property list<var> defaultPrompts: []
@@ -485,7 +485,7 @@ Singleton {
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
-        modelId = modelId.toLowerCase()
+        modelId = root.safeModelName(modelId)
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
             // See if policy prevents online models
