@@ -444,6 +444,30 @@ main() {
         fi
     fi
 
+    # If mode_flag is dark or light, try to find a variant with that mode suffix
+    if [[ "$mode_flag" == "dark" || "$mode_flag" == "light" ]]; then
+        # Get directory, filename without extension, and extension
+        local imgdir="$(dirname "$imgpath")"
+        local imgbase="$(basename "$imgpath")"
+        local imgname="${imgbase%.*}"
+        local imgext="${imgbase##*.}"
+
+        # Strip existing -dark or -light suffix
+        local stripped_name="${imgname%-dark}"
+        stripped_name="${stripped_name%-light}"
+
+        # Construct the new path with the requested mode suffix
+        local new_imgpath="${imgdir}/${stripped_name}-${mode_flag}.${imgext}"
+        local new_stripped_imgpath="${imgdir}/${stripped_name}.${imgext}"
+
+        # If the variant exists, use it
+        if [[ -f "$new_imgpath" ]]; then
+            imgpath="$new_imgpath"
+        elif [[ -f "$new_stripped_imgpath" ]]; then
+            imgpath="$new_stripped_imgpath"
+        fi
+    fi
+
     switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
 }
 
