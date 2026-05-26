@@ -30,8 +30,30 @@ Item { // Player instance
     //   - players that emit multiple sizes per track (Firefox: 544x544 then
     //     60x60 thumbnail; Chromium: several near-identical tmp files) —
     //     bestArtByPlayer keeps the largest.
+    // Cache the last non-empty trackTitle/trackArtist. Some players
+    // (pear-desktop / youtube-music) clear metadata briefly during a track
+    // change before emitting the new track's values; binding the UI
+    // directly to player.trackTitle would make the title flash to
+    // "Untitled" mid-skip and would also invalidate the trackKey, dropping
+    // the cover image.
+    property string _stableTitle: ""
+    property string _stableArtist: ""
+    Connections {
+        target: root.player
+        function onTrackTitleChanged() {
+            if (root.player?.trackTitle) root._stableTitle = root.player.trackTitle;
+        }
+        function onTrackArtistChanged() {
+            if (root.player?.trackArtist) root._stableArtist = root.player.trackArtist;
+        }
+    }
+    Component.onCompleted: {
+        if (root.player?.trackTitle) _stableTitle = root.player.trackTitle;
+        if (root.player?.trackArtist) _stableArtist = root.player.trackArtist;
+    }
+
     // title|artist only; see MprisController._trackKeyOf for why album is omitted.
-    readonly property string _trackKey: `${player?.trackTitle ?? ""}|${player?.trackArtist ?? ""}`
+    readonly property string _trackKey: `${_stableTitle}|${_stableArtist}`
     readonly property string displayedArtFilePath: {
         const entry = MprisController.getBestArt(player, _trackKey);
         return entry ? Qt.resolvedUrl(entry.artFilePath) : "";
@@ -175,7 +197,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: blendedColors.colOnLayer0
                     elide: Text.ElideRight
-                    text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
+                    text: StringUtils.cleanMusicTitle(root._stableTitle) || "Untitled"
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
@@ -186,7 +208,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
-                    text: root.player?.trackArtist
+                    text: root._stableArtist
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
