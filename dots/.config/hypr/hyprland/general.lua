@@ -3,7 +3,7 @@ hl.monitor({
     output = "",
     mode = "preferred",
     position = "auto",
-    scale = "1"
+    scale = 1
 })
 
 hl.gesture({
