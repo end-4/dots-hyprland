@@ -17,14 +17,45 @@ Scope {
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property var realPlayers: MprisController.players
-    // Hide Stopped players from the panel. Chromium (and others) leave a
-    // ghost MPRIS registration behind after a tab closes — still on D-Bus,
-    // state=Stopped, often retaining a stale mpris:artUrl with no title.
-    // There's nothing the panel can do with a Stopped player anyway (no
-    // resume position, no controls work).
-    readonly property var meaningfulPlayers: filterDuplicatePlayers(
-        realPlayers.filter(p => p?.playbackState !== MprisPlaybackState.Stopped)
+    // Hide ghost players: Stopped AND no title. Chromium (and others) leave
+    // an MPRIS registration on D-Bus after a tab closes — still owns the
+    // bus name, playbackState=Stopped, no title/artist, sometimes a stale
+    // mpris:artUrl. Filtering on Stopped alone is too aggressive: real
+    // players (e.g. pear-desktop / youtube-music) transition through
+    // Stopped during track changes while keeping the previous trackTitle
+    // set, and filtering them produces a brief "No active player"
+    // placeholder flash mid-skip.
+    readonly property var _rawMeaningfulPlayers: filterDuplicatePlayers(
+        realPlayers.filter(p => !(p?.playbackState === MprisPlaybackState.Stopped && !p?.trackTitle))
     )
+
+    // Stabilized view: holds the previous non-empty list for a brief grace
+    // window when the raw list goes empty, so we don't destroy/recreate
+    // PlayerControl delegates (and shrink/grow the panel) during normal
+    // track changes. Real "all players gone" states get through after the
+    // timer fires.
+    property var meaningfulPlayers: _rawMeaningfulPlayers
+    property bool noActivePlayers: false
+    on_RawMeaningfulPlayersChanged: {
+        if (_rawMeaningfulPlayers.length > 0) {
+            meaningfulPlayers = _rawMeaningfulPlayers;
+            noActivePlayers = false;
+            noActivePlayerDelay.stop();
+        } else {
+            noActivePlayerDelay.restart();
+        }
+    }
+    Timer {
+        id: noActivePlayerDelay
+        interval: 800
+        repeat: false
+        onTriggered: {
+            if (root._rawMeaningfulPlayers.length === 0) {
+                root.meaningfulPlayers = [];
+                root.noActivePlayers = true;
+            }
+        }
+    }
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
@@ -180,7 +211,7 @@ Scope {
                     }
                     Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
                     Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
-                    visible: root.meaningfulPlayers.length === 0
+                    visible: root.noActivePlayers
                     implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
                     implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
 
