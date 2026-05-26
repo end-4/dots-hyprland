@@ -17,7 +17,14 @@ Scope {
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property var realPlayers: MprisController.players
-    readonly property var meaningfulPlayers: filterDuplicatePlayers(realPlayers)
+    // Hide Stopped players from the panel. Chromium (and others) leave a
+    // ghost MPRIS registration behind after a tab closes — still on D-Bus,
+    // state=Stopped, often retaining a stale mpris:artUrl with no title.
+    // There's nothing the panel can do with a Stopped player anyway (no
+    // resume position, no controls work).
+    readonly property var meaningfulPlayers: filterDuplicatePlayers(
+        realPlayers.filter(p => p?.playbackState !== MprisPlaybackState.Stopped)
+    )
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
@@ -28,24 +35,46 @@ Scope {
         let filtered = [];
         let used = new Set();
 
+        // Higher rank wins when picking the canonical player from a duplicate
+        // group. A stale Stopped player with a non-empty artUrl should never
+        // mask a live Playing one (Chromium leaves behind such ghosts).
+        const playRank = p => (p?.playbackState === MprisPlaybackState.Playing) ? 2
+                            : (p?.playbackState === MprisPlaybackState.Paused)  ? 1 : 0;
+        const hasArt = p => !!(p?.trackArtUrl && p.trackArtUrl.length > 0);
+
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i))
                 continue;
             let p1 = players[i];
             let group = [i];
 
-            // Find duplicates by trackTitle prefix
+            // Find duplicates: matching titles, OR same playback state plus
+            // near-identical position/length (plasma-browser-integration vs
+            // the native browser bus). Use absolute differences — the
+            // original `<= 2` on raw subtraction is true for any negative
+            // diff, so a Stopped player at position=0/length=0 incorrectly
+            // matches every Playing player.
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+                const titleMatch = p1.trackTitle && p2.trackTitle &&
+                    (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle));
+                const motionMatch = p1.playbackState === p2.playbackState &&
+                    Math.abs(p1.position - p2.position) <= 2 &&
+                    Math.abs(p1.length - p2.length) <= 2;
+                if (titleMatch || motionMatch) {
                     group.push(j);
                 }
             }
 
-            // Pick the one with non-empty trackArtUrl, or fallback to the first
-            let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
-            if (chosenIdx === undefined)
-                chosenIdx = group[0];
+            // Tiebreaker: highest play-state rank, then non-empty trackArtUrl,
+            // then first encountered.
+            let chosenIdx = group[0];
+            for (let k = 1; k < group.length; ++k) {
+                const cand = players[group[k]];
+                const best = players[chosenIdx];
+                if (playRank(cand) > playRank(best)) chosenIdx = group[k];
+                else if (playRank(cand) === playRank(best) && hasArt(cand) && !hasArt(best)) chosenIdx = group[k];
+            }
 
             filtered.push(players[chosenIdx]);
             group.forEach(idx => used.add(idx));
