@@ -15,39 +15,27 @@ import Quickshell.Services.Mpris
 Item { // Player instance
     id: root
     required property MprisPlayer player
-    // Some MPRIS players (Firefox via firefox-mpris, Spotify) emit empty
-    // trackArtUrl between/during tracks. MprisController persists the last
-    // non-empty value per player so we can fall back to it when the panel is
-    // (re)opened during an empty window.
-    property string artUrl: {
-        const cur = player?.trackArtUrl ?? "";
-        if (cur.length > 0) return cur;
-        const id = player?.uniqueId;
-        if (id === undefined) return "";
-        return MprisController.stableArtUrlByPlayer[id] ?? "";
-    }
-    property string artDownloadLocation: Directories.coverArt
-    property string artFileName: Qt.md5(artUrl)
-    property string artFilePath: artUrl.length > 0 ? `${artDownloadLocation}/${artFileName}` : ""
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
 
-    // Only advances when a new file is confirmed on disk. Never clears, so the
-    // cover stays visible across track changes (transient empty trackArtUrl
-    // from Spotify/browsers) and panel close/reopen (cached file already on
-    // disk; previous design reset `downloaded` to false on every remount).
-    property string displayedArtFilePath: ""
-
-    // Track identity used to decide whether to reset best-quality tracking.
-    // Firefox emits multiple artUrls per song at different resolutions (e.g.,
-    // 544x544 followed by a 60x60 thumbnail); without this we'd swap to the
-    // smaller thumbnail and the cover would visibly degrade.
-    readonly property string _trackKey: `${player?.trackTitle ?? ""}|${player?.trackArtist ?? ""}|${player?.trackAlbum ?? ""}`
-    property int _bestArtBytes: 0
-    on_TrackKeyChanged: { _bestArtBytes = 0; refreshArt(); }
+    // Cover art is downloaded centrally by MprisController (per-player Process
+    // that runs regardless of panel state), and tracked there as the
+    // highest-quality variant seen for each (player, track) pair. We just
+    // read that cache. This survives both:
+    //   - panel close/reopen (we weren't here to receive emissions; the
+    //     central downloader was)
+    //   - players that emit multiple sizes per track (Firefox: 544x544 then
+    //     60x60 thumbnail; Chromium: several near-identical tmp files) —
+    //     bestArtByPlayer keeps the largest.
+    // title|artist only; see MprisController._trackKeyOf for why album is omitted.
+    readonly property string _trackKey: `${player?.trackTitle ?? ""}|${player?.trackArtist ?? ""}`
+    readonly property string displayedArtFilePath: {
+        const entry = MprisController.getBestArt(player, _trackKey);
+        return entry ? Qt.resolvedUrl(entry.artFilePath) : "";
+    }
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -77,68 +65,6 @@ Item { // Player instance
         repeat: true
         onTriggered: {
             root.player.positionChanged()
-        }
-    }
-
-    function refreshArt() {
-        if (root.artUrl.length === 0) return;
-        // Compute the path here rather than reading root.artFilePath: on
-        // onArtUrlChanged, QML may fire this handler before the chained
-        // artFilePath binding re-evaluates, giving us a stale (often empty)
-        // path. Deriving from artUrl directly avoids that race.
-        const path = `${root.artDownloadLocation}/${Qt.md5(root.artUrl)}`;
-        coverArtDownloader.targetFile = root.artUrl;
-        coverArtDownloader.artFilePath = path;
-        coverArtDownloader.running = true;
-    }
-
-    // Trigger on artUrl change AND on (re)mount, so a cached file on disk
-    // surfaces immediately when the panel is reopened. On mount we also
-    // consult MprisController's per-player best-art cache so reopening the
-    // panel doesn't downgrade to a thumbnail when the current trackArtUrl
-    // points at a low-res variant the player emitted later (Firefox).
-    Component.onCompleted: {
-        const best = MprisController.getBestArt(root.player, root._trackKey);
-        if (best) {
-            root._bestArtBytes = best.artBytes;
-            root.displayedArtFilePath = Qt.resolvedUrl(best.artFilePath);
-        }
-        refreshArt();
-    }
-    onArtUrlChanged: refreshArt()
-
-    Process { // Cover art downloader. Emits the file size on stdout so we can
-              // pick the highest-quality variant when a player advertises
-              // multiple sizes for one track (Firefox does this).
-        id: coverArtDownloader
-        property string targetFile
-        property string artFilePath
-        property int sizeBytes: 0
-        stdout: SplitParser {
-            onRead: data => {
-                const n = parseInt(data.trim());
-                if (!isNaN(n)) coverArtDownloader.sizeBytes = n;
-            }
-        }
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'; stat -c %s '${artFilePath}' 2>/dev/null` ]
-        onExited: (exitCode, exitStatus) => {
-            if (exitCode !== 0 || artFilePath.length === 0 || sizeBytes <= 0) return;
-            // Never downgrade or rerun-flicker: only swap when the new file is
-            // strictly larger than the best we've seen for this track.
-            // _trackKey changes reset _bestArtBytes to 0 so a new track always
-            // accepts the first hit. Strict > also rejects same-size
-            // re-emissions (Chromium emits several near-identical tmp files
-            // per track) which would otherwise cause StyledImage opacity flicker.
-            if (sizeBytes <= root._bestArtBytes) return;
-            root._bestArtBytes = sizeBytes;
-            const url = Qt.resolvedUrl(artFilePath);
-            if (root.displayedArtFilePath.toString() !== url.toString()) {
-                root.displayedArtFilePath = url;
-            }
-            // Persist into MprisController so a panel close/reopen on the same
-            // track can restore this best variant directly, bypassing whatever
-            // (possibly lower-res) URL the player is currently advertising.
-            MprisController.rememberBestArt(root.player, root._trackKey, artFilePath, sizeBytes);
         }
     }
 
