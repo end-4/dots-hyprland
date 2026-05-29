@@ -54,7 +54,7 @@ v remove_deprecated_dependencies
 
 # Issue #363
 case $SKIP_SYSUPDATE in
-  true) sleep 0;;
+  true) true;;
   *) v sudo pacman -Syu;;
 esac
 
@@ -105,7 +105,7 @@ done
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
 case $SKIP_PLASMAINTG in
-  true) sleep 0;;
+  true) true;;
   *)
     if $ask;then
       echo -e "${STY_YELLOW}[$0]: NOTE: The size of \"plasma-browser-integration\" is ~600 KiB, but if you don't yet have KDE on your system it'll pull an extra ~600MiB of packages.${STY_RST}"
