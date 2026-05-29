@@ -88,8 +88,32 @@ ContentPage {
                 Config.options.appearance.wallpaperTheming.terminalGenerationProps.termFgBoost = value / 100;
             }
         }
+
+        ConfigSwitch {
+            id: openRGB_toggle
+            buttonIcon: "highlight"
+            text: Translation.tr("OpenRGB")
+            checked: Config.options.appearance.openRGB.enabled
+            onCheckedChanged: {
+                Config.options.appearance.openRGB.enabled = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Update OpenRGB colors (SDK server must be started in OpenRGB!)")
+            }
+        }
+        ConfigSpinBox {
+            icon: "av_timer"
+            text: Translation.tr("OpenRGB: Fade duration (ms)")
+            value: Config.options.appearance.openRGB.fadeDuration * 1000
+            from: 0
+            to: 10000
+            stepSize: 100
+            enabled: openRGB_toggle.checked
+            onValueChanged: {
+                Config.options.appearance.openRGB.fadeDuration = value / 1000;
+            }
+        }
+
+        
     }
-
-
-
 }

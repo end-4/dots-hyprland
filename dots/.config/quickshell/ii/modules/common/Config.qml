@@ -137,6 +137,12 @@ Singleton {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                     property string accentColor: ""
                 }
+
+                property JsonObject openRGB: JsonObject {
+                    property bool enabled: false
+                    property real fadeDuration: 0.5
+                    property real interpolationSteps: 100
+                }
             }
 
             property JsonObject audio: JsonObject {
