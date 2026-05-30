@@ -27,7 +27,7 @@ Singleton {
     property string purity: "100" // sfw
     property string sorting: "relevance"
     property string order: "desc"
-    property string topRange: "1M"
+    property string topRange: "1y" // wider window so toplist (esp. with a color filter) isn't starved
     property string seed: ""
     property string minResolution: ""
     property string ratios: ""

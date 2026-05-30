@@ -22,7 +22,6 @@ Item {
     property bool loading: WallhavenSearch.fetching
     property bool downloading: false
     property string downloadingId: ""
-    property bool showColors: false // color palette strip toggle
 
     signal wallpaperApplied()
 
@@ -231,12 +230,82 @@ Item {
                 }
 
                 IconToolbarButton {
+                    id: paletteButton
                     implicitWidth: height
                     text: "palette"
-                    toggled: root.showColors || WallhavenSearch.colors.length > 0
-                    onClicked: root.showColors = !root.showColors
+                    toggled: colorMenu.visible || WallhavenSearch.colors.length > 0
+                    onClicked: colorMenu.visible ? colorMenu.close() : colorMenu.open()
                     StyledToolTip {
                         text: Translation.tr("Filter by color")
+                    }
+
+                    // Drop-down color grid
+                    Popup {
+                        id: colorMenu
+                        y: paletteButton.height + 6
+                        x: paletteButton.width - width
+                        padding: 10
+                        modal: false
+                        focus: true
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                        enter: Transition { NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 } }
+                        exit: Transition { NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 100 } }
+
+                        background: Rectangle {
+                            color: Appearance.colors.colLayer1
+                            radius: Appearance.rounding.normal
+                            border.width: 1
+                            border.color: Appearance.colors.colLayer0Border
+                        }
+
+                        contentItem: ColumnLayout {
+                            spacing: 8
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    text: Translation.tr("Filter by color")
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                }
+                                // Clear / any-color
+                                RippleButton {
+                                    visible: WallhavenSearch.colors.length > 0
+                                    implicitHeight: 24
+                                    leftPadding: 8
+                                    rightPadding: 8
+                                    buttonRadius: height / 2
+                                    onClicked: { WallhavenSearch.setColor(""); colorMenu.close() }
+                                    contentItem: StyledText {
+                                        text: Translation.tr("Clear")
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        color: Appearance.colors.colOnLayer1
+                                    }
+                                }
+                            }
+
+                            Grid {
+                                columns: 6
+                                spacing: 6
+                                Repeater {
+                                    model: WallhavenSearch.paletteColors
+                                    delegate: Rectangle {
+                                        required property string modelData
+                                        width: 30; height: 30; radius: Appearance.rounding.small
+                                        color: "#" + modelData
+                                        border.width: WallhavenSearch.colors === modelData ? 3 : 1
+                                        border.color: WallhavenSearch.colors === modelData ? Appearance.colors.colPrimary : Appearance.colors.colLayer0Border
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: { WallhavenSearch.setColor(parent.modelData); colorMenu.close() }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -255,59 +324,6 @@ Item {
                     onClicked: root.useDarkMode = !root.useDarkMode
                     StyledToolTip {
                         text: Translation.tr("Toggle light/dark mode for applied wallpaper")
-                    }
-                }
-            }
-        }
-
-        // Color palette filter strip (toggled by the palette button)
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.topMargin: root.showColors ? 4 : 0
-            Layout.preferredHeight: root.showColors ? (swatchFlow.implicitHeight + 16) : 0
-            visible: root.showColors
-            color: Appearance.colors.colLayer1
-            radius: Appearance.rounding.normal
-            clip: true
-
-            Flow {
-                id: swatchFlow
-                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 8 }
-                spacing: 6
-
-                // Clear / none
-                Rectangle {
-                    width: 26; height: 26; radius: height / 2
-                    color: "transparent"
-                    border.width: 2
-                    border.color: WallhavenSearch.colors.length === 0 ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
-                    MaterialSymbol {
-                        anchors.centerIn: parent
-                        text: "format_color_reset"
-                        iconSize: 16
-                        color: Appearance.colors.colOnLayer1
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: WallhavenSearch.setColor("")
-                    }
-                    StyledToolTip { text: Translation.tr("Any color") }
-                }
-
-                Repeater {
-                    model: WallhavenSearch.paletteColors
-                    delegate: Rectangle {
-                        required property string modelData
-                        width: 26; height: 26; radius: height / 2
-                        color: "#" + modelData
-                        border.width: WallhavenSearch.colors === modelData ? 3 : 1
-                        border.color: WallhavenSearch.colors === modelData ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: WallhavenSearch.setColor(parent.modelData)
-                        }
                     }
                 }
             }
