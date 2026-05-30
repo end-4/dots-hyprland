@@ -593,6 +593,7 @@ Singleton {
                 property string wallhavenSorting: "relevance"
                 property string wallhavenOrder: "desc"
                 property string wallhavenRatios: ""
+                property string wallhavenColors: "" // palette filter, single hex without '#'
                 property string wallhavenQuery: ""
             }
             

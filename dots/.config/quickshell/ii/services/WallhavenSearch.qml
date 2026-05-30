@@ -32,6 +32,15 @@ Singleton {
     property string minResolution: ""
     property string ratios: ""
     property string apiKey: ""
+    property string colors: "" // wallhaven palette filter, single hex without '#'
+
+    // Wallhaven's fixed searchable palette (hex without '#')
+    readonly property var paletteColors: [
+        "660000", "990000", "cc0000", "cc3333", "ea4c88", "993399", "663399", "333399",
+        "0066cc", "0099cc", "66cccc", "77cc33", "669900", "336600", "666600", "999900",
+        "cccc33", "ffff00", "ffcc33", "ff9900", "ff6600", "cc6633", "996633", "663300",
+        "000000", "999999", "cccccc", "ffffff", "424153"
+    ]
 
     // Download directory
     readonly property string downloadDirectory: `${FileUtils.trimFileProtocol(Directories.pictures)}/Wallpapers`
@@ -55,6 +64,7 @@ Singleton {
         sorting = cfg.wallhavenSorting || "relevance"
         order = cfg.wallhavenOrder || "desc"
         ratios = cfg.wallhavenRatios || ""
+        colors = cfg.wallhavenColors || ""
         currentQuery = cfg.wallhavenQuery || ""
     }
 
@@ -67,6 +77,7 @@ Singleton {
         cfg.wallhavenSorting = sorting
         cfg.wallhavenOrder = order
         cfg.wallhavenRatios = ratios
+        cfg.wallhavenColors = colors
         cfg.wallhavenQuery = currentQuery
     }
 
@@ -105,6 +116,10 @@ Singleton {
 
         if (ratios){
             params.push("ratios=" + ratios)
+        }
+
+        if (colors){
+            params.push("colors=" + colors)
         }
 
         if (apiKey){
@@ -230,6 +245,22 @@ Singleton {
             `mkdir -p '${downloadDirectory}' && curl -L -s -o '${localPath}' '${url}'`
         ]
         downloadProc.running = true
+    }
+
+    // Predefined browse without typing a query (e.g. toplist / latest / random).
+    function browse(sortMode) {
+        currentQuery = ""
+        sorting = sortMode || "toplist"
+        if (sortMode === "random") seed = ""
+        saveToConfig()
+        search("", 1)
+    }
+
+    // Toggle a palette-color filter (pass "" to clear) and re-search.
+    function setColor(hex) {
+        colors = (colors === hex) ? "" : (hex || "")
+        saveToConfig()
+        search(currentQuery, 1)
     }
 
     function reset() {

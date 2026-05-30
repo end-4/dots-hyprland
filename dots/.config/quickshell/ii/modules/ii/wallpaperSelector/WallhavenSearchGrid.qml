@@ -22,8 +22,25 @@ Item {
     property bool loading: WallhavenSearch.fetching
     property bool downloading: false
     property string downloadingId: ""
+    property bool showColors: false // color palette strip toggle
 
     signal wallpaperApplied()
+
+    // Auto-browse on open so the grid is never empty (relevance needs a query, so
+    // fall back to toplist). Lets users land on curated results without typing.
+    onVisibleChanged: {
+        if (visible && !WallhavenSearch.fetching && WallhavenSearch.currentResults.length === 0) {
+            WallhavenSearch.browse(WallhavenSearch.sorting === "relevance" ? "toplist" : WallhavenSearch.sorting)
+        }
+    }
+
+    // Quick predefined browse modes (all return results without a query)
+    readonly property var browseModes: [
+        { label: Translation.tr("Top"), sort: "toplist" },
+        { label: Translation.tr("Latest"), sort: "date_added" },
+        { label: Translation.tr("Random"), sort: "random" },
+        { label: Translation.tr("Views"), sort: "views" }
+    ]
 
     // Public API for parent key forwarding
     function moveGridSelection(delta) { wallhavenGrid.moveSelection(delta) }
@@ -215,6 +232,16 @@ Item {
 
                 IconToolbarButton {
                     implicitWidth: height
+                    text: "palette"
+                    toggled: root.showColors || WallhavenSearch.colors.length > 0
+                    onClicked: root.showColors = !root.showColors
+                    StyledToolTip {
+                        text: Translation.tr("Filter by color")
+                    }
+                }
+
+                IconToolbarButton {
+                    implicitWidth: height
                     text: "tune"
                     onClicked: root.showSettings = true
                     StyledToolTip {
@@ -228,6 +255,59 @@ Item {
                     onClicked: root.useDarkMode = !root.useDarkMode
                     StyledToolTip {
                         text: Translation.tr("Toggle light/dark mode for applied wallpaper")
+                    }
+                }
+            }
+        }
+
+        // Color palette filter strip (toggled by the palette button)
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.topMargin: root.showColors ? 4 : 0
+            Layout.preferredHeight: root.showColors ? (swatchFlow.implicitHeight + 16) : 0
+            visible: root.showColors
+            color: Appearance.colors.colLayer1
+            radius: Appearance.rounding.normal
+            clip: true
+
+            Flow {
+                id: swatchFlow
+                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 8 }
+                spacing: 6
+
+                // Clear / none
+                Rectangle {
+                    width: 26; height: 26; radius: height / 2
+                    color: "transparent"
+                    border.width: 2
+                    border.color: WallhavenSearch.colors.length === 0 ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
+                    MaterialSymbol {
+                        anchors.centerIn: parent
+                        text: "format_color_reset"
+                        iconSize: 16
+                        color: Appearance.colors.colOnLayer1
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: WallhavenSearch.setColor("")
+                    }
+                    StyledToolTip { text: Translation.tr("Any color") }
+                }
+
+                Repeater {
+                    model: WallhavenSearch.paletteColors
+                    delegate: Rectangle {
+                        required property string modelData
+                        width: 26; height: 26; radius: height / 2
+                        color: "#" + modelData
+                        border.width: WallhavenSearch.colors === modelData ? 3 : 1
+                        border.color: WallhavenSearch.colors === modelData ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: WallhavenSearch.setColor(parent.modelData)
+                        }
                     }
                 }
             }
@@ -312,10 +392,33 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                 }
                 StyledText {
-                    text: Translation.tr("Search for wallpapers on Wallhaven")
+                    text: Translation.tr("Search, or just browse:")
                     color: Appearance.colors.colOnLayer0
                     font.pixelSize: Appearance.font.pixelSize.small
                     Layout.alignment: Qt.AlignHCenter
+                }
+                // Quick predefined browse — no typing required
+                Row {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 8
+                    Repeater {
+                        model: root.browseModes
+                        delegate: RippleButton {
+                            required property var modelData
+                            implicitHeight: 34
+                            leftPadding: 16
+                            rightPadding: 16
+                            buttonRadius: height / 2
+                            colBackground: Appearance.colors.colLayer1
+                            onClicked: WallhavenSearch.browse(modelData.sort)
+                            contentItem: StyledText {
+                                text: modelData.label
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer1
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
                 }
             }
 
