@@ -45,11 +45,6 @@ ApplicationWindow {
             component: "modules/settings/BackgroundConfig.qml"
         },
         {
-            name: Translation.tr("Color"),
-            icon: "palette",
-            component: "modules/settings/ColorConfig.qml"
-        },
-        {
             name: Translation.tr("Interface"),
             icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"
