@@ -33,6 +33,15 @@ Item {
         }
     }
 
+    // Black/white that reads on a given hex (relative luminance)
+    function contrastColor(hex) {
+        if (!hex || hex.length < 6) return Appearance.colors.colOnLayer1
+        const r = parseInt(hex.substr(0, 2), 16)
+        const g = parseInt(hex.substr(2, 2), 16)
+        const b = parseInt(hex.substr(4, 2), 16)
+        return (0.299 * r + 0.587 * g + 0.114 * b) > 140 ? "#000000" : "#ffffff"
+    }
+
     // Quick predefined browse modes (all return results without a query)
     readonly property var browseModes: [
         { label: Translation.tr("Top"), sort: "toplist" },
@@ -234,6 +243,12 @@ Item {
                     implicitWidth: height
                     text: "palette"
                     toggled: colorMenu.visible || WallhavenSearch.colors.length > 0
+                    // Reflect the active color on the button itself
+                    colBackgroundToggled: WallhavenSearch.colors.length > 0 ? ("#" + WallhavenSearch.colors) : Appearance.colors.colSecondaryContainer
+                    colBackgroundToggledHover: WallhavenSearch.colors.length > 0 ? ("#" + WallhavenSearch.colors) : Appearance.colors.colSecondaryContainerHover
+                    colText: WallhavenSearch.colors.length > 0
+                        ? root.contrastColor(WallhavenSearch.colors)
+                        : (toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnSurfaceVariant)
                     onClicked: colorMenu.visible ? colorMenu.close() : colorMenu.open()
                     StyledToolTip {
                         text: Translation.tr("Filter by color")
@@ -253,7 +268,8 @@ Item {
                         exit: Transition { NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 100 } }
 
                         background: Rectangle {
-                            color: Appearance.colors.colLayer1
+                            // m3 token is opaque (colLayer1 is alpha-blended → looked see-through)
+                            color: Appearance.m3colors.m3surfaceContainerHigh
                             radius: Appearance.rounding.normal
                             border.width: 1
                             border.color: Appearance.colors.colLayer0Border
