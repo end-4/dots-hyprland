@@ -34,8 +34,9 @@ Singleton {
     property string apiKey: ""
     property string colors: "" // wallhaven palette filter — comma-separated hex list (no '#')
 
-    // Download directory
-    readonly property string downloadDirectory: `${FileUtils.trimFileProtocol(Directories.pictures)}/Wallpapers`
+    // Download directory — keep wallhaven grabs in their own subfolder so they don't
+    // clutter the top-level Wallpapers folder (shows up as a tidy folder in the local browser).
+    readonly property string downloadDirectory: `${FileUtils.trimFileProtocol(Directories.pictures)}/Wallpapers/wallhaven`
 
     // Signals
     signal searchCompleted(var results, var meta)
