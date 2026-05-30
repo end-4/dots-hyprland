@@ -46,15 +46,27 @@ Item {
 
     property bool showSettings: false
 
+    onShowSettingsChanged: {
+        if (showSettings) {
+            settingsPopupLoader.active = true
+        } else {
+            if (settingsPopupLoader.item) {
+                settingsPopupLoader.item.show = false
+            }
+            WallhavenSearch.saveToConfig()
+            WallhavenSearch.search(searchField.text, 1)
+        }
+    }
+
     // Settings popup overlay
     Loader {
         id: settingsPopupLoader
         anchors.fill: parent
         z: 100
-        active: root.showSettings
+        active: false
 
         onActiveChanged: {
-            if (active) {
+            if (active && item) {
                 item.show = true
                 item.forceActiveFocus()
             }
@@ -62,6 +74,7 @@ Item {
 
         Connections {
             target: settingsPopupLoader.item
+            ignoreUnknownSignals: true
             function onDismiss() {
                 if (settingsPopupLoader.item) {
                     settingsPopupLoader.item.show = false
