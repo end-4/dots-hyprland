@@ -50,6 +50,28 @@ Item {
         { label: Translation.tr("Views"), sort: "views" }
     ]
 
+    // Broad color families. Each ORs several wallhaven palette colors (the API
+    // accepts a comma-separated list) so one swatch = a wide range of wallpapers.
+    // `hex` is the display swatch; `q` is the comma-joined wallhaven colors value.
+    readonly property var colorGroups: [
+        { hex: "cc0000", q: "660000,990000,cc0000,cc3333" },        // Red
+        { hex: "ff6600", q: "ffcc33,ff9900,ff6600" },               // Orange
+        { hex: "cccc33", q: "666600,999900,cccc33,ffff00" },        // Yellow
+        { hex: "669900", q: "77cc33,669900,336600" },               // Green
+        { hex: "66cccc", q: "66cccc,0099cc" },                      // Teal
+        { hex: "0066cc", q: "0066cc,0099cc,333399" },               // Blue
+        { hex: "663399", q: "ea4c88,993399,663399,333399" },        // Purple / pink
+        { hex: "996633", q: "cc6633,996633,663300" },               // Brown
+        { hex: "999999", q: "000000,999999,cccccc,ffffff,424153" }  // Neutral
+    ]
+
+    // Display hex of the currently-active family ("" if none) — drives the button color
+    readonly property string activeHex: {
+        for (let i = 0; i < colorGroups.length; i++)
+            if (colorGroups[i].q === WallhavenSearch.colors) return colorGroups[i].hex
+        return ""
+    }
+
     // Public API for parent key forwarding
     function moveGridSelection(delta) { wallhavenGrid.moveSelection(delta) }
     function activateGridCurrent() { wallhavenGrid.activateCurrent() }
@@ -243,11 +265,11 @@ Item {
                     implicitWidth: height
                     text: "palette"
                     toggled: colorMenu.visible || WallhavenSearch.colors.length > 0
-                    // Reflect the active color on the button itself
-                    colBackgroundToggled: WallhavenSearch.colors.length > 0 ? ("#" + WallhavenSearch.colors) : Appearance.colors.colSecondaryContainer
-                    colBackgroundToggledHover: WallhavenSearch.colors.length > 0 ? ("#" + WallhavenSearch.colors) : Appearance.colors.colSecondaryContainerHover
-                    colText: WallhavenSearch.colors.length > 0
-                        ? root.contrastColor(WallhavenSearch.colors)
+                    // Reflect the active color family on the button itself
+                    colBackgroundToggled: root.activeHex.length > 0 ? ("#" + root.activeHex) : Appearance.colors.colSecondaryContainer
+                    colBackgroundToggledHover: root.activeHex.length > 0 ? ("#" + root.activeHex) : Appearance.colors.colSecondaryContainerHover
+                    colText: root.activeHex.length > 0
+                        ? root.contrastColor(root.activeHex)
                         : (toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnSurfaceVariant)
                     onClicked: colorMenu.visible ? colorMenu.close() : colorMenu.open()
                     StyledToolTip {
@@ -303,20 +325,20 @@ Item {
                             }
 
                             Grid {
-                                columns: 6
-                                spacing: 6
+                                columns: 3
+                                spacing: 8
                                 Repeater {
-                                    model: WallhavenSearch.paletteColors
+                                    model: root.colorGroups
                                     delegate: Rectangle {
-                                        required property string modelData
-                                        width: 30; height: 30; radius: Appearance.rounding.small
-                                        color: "#" + modelData
-                                        border.width: WallhavenSearch.colors === modelData ? 3 : 1
-                                        border.color: WallhavenSearch.colors === modelData ? Appearance.colors.colPrimary : Appearance.colors.colLayer0Border
+                                        required property var modelData
+                                        width: 44; height: 44; radius: Appearance.rounding.small
+                                        color: "#" + modelData.hex
+                                        border.width: WallhavenSearch.colors === modelData.q ? 3 : 1
+                                        border.color: WallhavenSearch.colors === modelData.q ? Appearance.colors.colPrimary : Appearance.colors.colLayer0Border
                                         MouseArea {
                                             anchors.fill: parent
                                             cursorShape: Qt.PointingHandCursor
-                                            onClicked: { WallhavenSearch.setColor(parent.modelData); colorMenu.close() }
+                                            onClicked: { WallhavenSearch.setColor(parent.modelData.q); colorMenu.close() }
                                         }
                                     }
                                 }
