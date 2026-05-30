@@ -201,6 +201,18 @@ ContentPage {
                 }
             }
         }
+        ConfigSpinBox {
+            icon: "av_timer"
+            text: Translation.tr("Fade duration (ms)")
+            value: Config.options.appearance.openrgb.fadeDuration * 1000
+            from: 0
+            to: 10000
+            stepSize: 100
+            enabled: openRGB_toggle.checked
+            onValueChanged: {
+                Config.options.appearance.openrgb.fadeDuration = value / 1000;
+            }
+        }
 
         NoticeBox {
             Layout.fillWidth: true

@@ -90,10 +90,9 @@ if [ -f "$CONFIG_FILE" ]; then
         apply_term &
     fi
 
-    enable_openrgb=$(jq -r '.appearance.openRGB.enabled' "$CONFIG_FILE")
+    enable_openrgb=$(jq -r '.appearance.openrgb.enable' "$CONFIG_FILE")
     if [ "$enable_openrgb" = "true" ]; then
-        echo openrgb
-        openrgb_duration=$(jq -r '.appearance.openRGB.fadeDuration' "$CONFIG_FILE")
+        openrgb_duration=$(jq -r '.appearance.openrgb.fadeDuration' "$CONFIG_FILE")
         python "$CONFIG_DIR/scripts/colors/openRGB/apply_openrgb.py" -d $openrgb_duration
     fi
 else

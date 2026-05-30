@@ -6,6 +6,7 @@ from time import sleep
 import argparse
 from subprocess import Popen
 import psutil
+import json
 
 parser = argparse.ArgumentParser(description="Apply color on OpenRGB devices with a smooth transition")
 parser.add_argument(
@@ -60,16 +61,14 @@ MAX_SEVER_START_ATTEMPTS = 10
 SERVER_START_RETRY_DELAY = 0.5
 
 xdg_state_home = os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state"))
+xdg_config_home = os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.config"))
 state_dir = os.path.join(xdg_state_home, "quickshell")
 
+with open(xdg_config_home + "/illogical-impulse/config.json", "r") as f:
+    config = json.load(f)
+
 client = get_client()
-
-
-old_color = [
-    client.devices[0].leds[0].colors[0].red,
-    client.devices[0].leds[0].colors[0].green,
-    client.devices[0].leds[0].colors[0].blue,
-]  # A bit naive but should do the trick
+devices = config["appearance"]["openrgb"]["devices"]
 
 with open(state_dir + "/user/generated/color.txt", "r") as f:
     new_color = hexToRGB(f.read())
@@ -79,20 +78,27 @@ if args.color != None:
     new_color = hexToRGB(args.color)
 
 
-for dev in client.devices:
+for dev in devices:
+    if dev["enabled"]:
+        # is not per-led but as long as the device only had a single color
+        # the transistion should be smooth. Otherwise all LEDs would change to the color
+        # of the first one and then transition.
+        old_color = [
+            client.devices[dev["id"]].leds[0].colors[0].red,
+            client.devices[dev["id"]].leds[0].colors[0].green,
+            client.devices[dev["id"]].leds[0].colors[0].blue,
+        ]  
 
-    # set all device modes to 'Direct' (0)
-    if dev.active_mode != 0:
-        dev.set_mode(mode=0, save=True)
-
-
-y_known = [old_color, new_color]
-
-f = interp1d([0, 1], y_known, axis=0)
-
+        dev["interpolation"] = interp1d([0, 1], [old_color, new_color], axis=0)
 
 for i in range(INTERPOLATION_STEPS):
     t = i / (INTERPOLATION_STEPS - 1)
-    interp_color = [int(i) for i in f(t)]
-    client.set_color(RGBColor(*interp_color), True)
+
+    for dev in devices:
+        if dev["enabled"]:
+            interp_color = [int(i) for i in dev["interpolation"](t)]
+            if client.devices[dev["id"]].active_mode != 0:
+                client.devices[dev["id"]].set_mode(mode=0, save=True)
+            client.devices[dev["id"]].set_color(RGBColor(*interp_color), True)
+
     sleep(TRANSITION_DURATION/INTERPOLATION_STEPS)

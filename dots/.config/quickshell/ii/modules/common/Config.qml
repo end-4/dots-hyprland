@@ -135,6 +135,8 @@ Singleton {
                 }
                 property JsonObject openrgb: JsonObject {
                     property bool enable: false
+                    property real fadeDuration: 0.5
+                    property real interpolationSteps: 100
                     property list<var> devices: []
                 }
                 property JsonObject palette: JsonObject {
@@ -142,11 +144,6 @@ Singleton {
                     property string accentColor: ""
                 }
 
-                property JsonObject openRGB: JsonObject {
-                    property bool enabled: false
-                    property real fadeDuration: 0.5
-                    property real interpolationSteps: 100
-                }
             }
 
             property JsonObject audio: JsonObject {
