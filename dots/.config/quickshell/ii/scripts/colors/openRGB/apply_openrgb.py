@@ -4,6 +4,8 @@ from scipy.interpolate import interp1d
 import os
 from time import sleep
 import argparse
+from subprocess import Popen
+import psutil
 
 parser = argparse.ArgumentParser(description="Apply color on OpenRGB devices with a smooth transition")
 parser.add_argument(
@@ -36,14 +38,33 @@ def hexToRGB(hexColor) -> list[int]:
     return intColor
 
 
+def is_openrgb_running() -> bool:
+    return any(p.name() == "openrgb" for p in psutil.process_iter())
+
+
+def get_client(name: str = "quickshell") -> OpenRGBClient:
+    for attempt in range(MAX_SEVER_START_ATTEMPTS):
+        try:
+            return OpenRGBClient(name=name)
+        except ConnectionRefusedError:
+            if not is_openrgb_running():
+                Popen(["openrgb", "--server", "--startminimized"])
+            sleep(SERVER_START_RETRY_DELAY)
+    raise RuntimeError(f"Could not connect to OpenRGB after {MAX_SEVER_START_ATTEMPTS} attempts")
+
+
 TRANSITION_DURATION = args.duration
 INTERPOLATION_STEPS = args.interpolation_steps
+
+MAX_SEVER_START_ATTEMPTS = 10
+SERVER_START_RETRY_DELAY = 0.5
 
 xdg_state_home = os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state"))
 state_dir = os.path.join(xdg_state_home, "quickshell")
 
+client = get_client()
 
-client = OpenRGBClient(name="quickshell")
+
 old_color = [
     client.devices[0].leds[0].colors[0].red,
     client.devices[0].leds[0].colors[0].green,
