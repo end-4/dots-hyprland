@@ -14,11 +14,6 @@ WindowDialog {
     id: root
     backgroundWidth: 460
 
-    // Force hide on startup
-    Component.onCompleted: {
-        show = false
-    }
-
     function triggerSearch() {
         WallhavenSearch.saveToConfig()
         WallhavenSearch.search(WallhavenSearch.currentQuery, 1)

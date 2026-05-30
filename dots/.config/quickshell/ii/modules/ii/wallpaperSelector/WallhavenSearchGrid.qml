@@ -93,36 +93,22 @@ Item {
 
     property bool showSettings: false
 
-    // Settings popup overlay
+    // Settings dialog (filters + API key). Created on demand: WindowDialog collapses
+    // via onShowChanged, so a persistent instance would start open. Loader builds it
+    // fresh each time; onLoaded opens it. (The old reopen bug was WallhavenSettingsPopup's
+    // Component.onCompleted{show=false} racing this open — removed there.)
     Loader {
         id: settingsPopupLoader
         anchors.fill: parent
         z: 100
         active: root.showSettings
-
-        onActiveChanged: {
-            if (active) {
-                item.show = true
-                item.forceActiveFocus()
-            }
+        onLoaded: {
+            item.show = true
+            item.forceActiveFocus()
         }
-
-        Connections {
-            target: settingsPopupLoader.item
-            function onDismiss() {
-                if (settingsPopupLoader.item) {
-                    settingsPopupLoader.item.show = false
-                }
-                root.showSettings = false
-            }
-            function onVisibleChanged() {
-                if (settingsPopupLoader.item && !settingsPopupLoader.item.visible && !root.showSettings) {
-                    settingsPopupLoader.active = false
-                }
-            }
+        sourceComponent: WallhavenSettingsPopup {
+            onDismiss: root.showSettings = false
         }
-
-        sourceComponent: WallhavenSettingsPopup {}
     }
 
     ColumnLayout {
