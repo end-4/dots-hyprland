@@ -581,6 +581,15 @@ Singleton {
             
             property JsonObject wallpaperSelector: JsonObject {
                 property bool useSystemFileDialog: false
+                // Wallhaven online wallpaper browser. Declared here so the JsonAdapter
+                // actually persists them — assigning undeclared keys is silently dropped.
+                property string wallhavenApiKey: ""
+                property string wallhavenCategories: "111" // general,anime,people
+                property string wallhavenPurity: "100" // sfw
+                property string wallhavenSorting: "relevance"
+                property string wallhavenOrder: "desc"
+                property string wallhavenRatios: ""
+                property string wallhavenQuery: ""
             }
             
             property JsonObject windows: JsonObject {
