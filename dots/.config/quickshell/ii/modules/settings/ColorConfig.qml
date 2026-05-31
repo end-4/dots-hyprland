@@ -214,6 +214,7 @@ ContentPage {
         ConfigRow {
             uniform: false
             ConfigSwitch {
+                id: openrgbToggle
                 buttonIcon: "lightbulb"
                 text: Translation.tr("Enable OpenRGB theming")
                 checked: openRgbConfig.enable
@@ -253,7 +254,7 @@ ContentPage {
                 buttonIcon: "memory"
                 text: modelData.name && modelData.name.length > 0 ? modelData.name : Translation.tr("Device %1").arg(modelData.id)
                 checked: modelData.enabled === true
-                enabled: openRgbConfig.enable
+                enabled: openrgbToggle.checked
                 onCheckedChanged: {
                     root.updateDevice(modelData.id, {
                         enabled: checked,
