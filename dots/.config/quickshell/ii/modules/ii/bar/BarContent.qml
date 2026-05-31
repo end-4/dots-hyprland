@@ -183,6 +183,12 @@ Item { // Bar content region
                     visible: (root.useShortenedForm < 2 && Battery.available)
                     Layout.alignment: Qt.AlignVCenter
                 }
+
+                SystemUpdate {
+                    visible: (root.useShortenedForm < 2 && Config.options.systemControls.showUpdates)
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
             }
         }
     }
