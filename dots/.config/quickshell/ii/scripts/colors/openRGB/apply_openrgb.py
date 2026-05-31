@@ -80,14 +80,18 @@ if args.color != None:
 
 for dev in devices:
     if dev["enabled"]:
-        # is not per-led but as long as the device only had a single color
-        # the transistion should be smooth. Otherwise all LEDs would change to the color
-        # of the first one and then transition.
-        old_color = [
-            client.devices[dev["id"]].leds[0].colors[0].red,
-            client.devices[dev["id"]].leds[0].colors[0].green,
-            client.devices[dev["id"]].leds[0].colors[0].blue,
-        ]  
+        if client.devices[dev["id"]].active_mode == 1:  # 1 = Off
+            old_color = [0, 0, 0]
+
+        else:
+            # is not per-led but as long as the device only had a single color
+            # the transistion should be smooth. Otherwise all LEDs would change to the color
+            # of the first one and then transition.
+            old_color = [
+                client.devices[dev["id"]].leds[0].colors[0].red,
+                client.devices[dev["id"]].leds[0].colors[0].green,
+                client.devices[dev["id"]].leds[0].colors[0].blue,
+            ]  
 
         dev["interpolation"] = interp1d([0, 1], [old_color, new_color], axis=0)
 
@@ -97,8 +101,8 @@ for i in range(INTERPOLATION_STEPS):
     for dev in devices:
         if dev["enabled"]:
             interp_color = [int(i) for i in dev["interpolation"](t)]
-            if client.devices[dev["id"]].active_mode != 0:
-                client.devices[dev["id"]].set_mode(mode=0, save=True)
             client.devices[dev["id"]].set_color(RGBColor(*interp_color), True)
+            if client.devices[dev["id"]].active_mode != 0:
+                client.devices[dev["id"]].set_mode(mode=0)
 
     sleep(TRANSITION_DURATION/INTERPOLATION_STEPS)
