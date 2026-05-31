@@ -232,33 +232,6 @@ ContentPage {
                 }
             }
         }
-        ConfigSpinBox {
-            icon: "av_timer"
-            text: Translation.tr("Fade duration (ms)")
-            value: Config.options.appearance.openrgb.fadeDuration * 1000
-            from: 0
-            to: 10000
-            stepSize: 100
-            enabled: openRGB_toggle.checked
-            onValueChanged: {
-                Config.options.appearance.openrgb.fadeDuration = value / 1000;
-            }
-        }
-
-        ConfigSwitch {
-            buttonIcon: "power_settings_new"
-            text: Translation.tr("Apply on startup")
-            checked: openRgbConfig.applyOnStartup
-            enabled: openRgbConfig.enable
-            onCheckedChanged: {
-                openRgbConfig.applyOnStartup = checked;
-                Config.setNestedValue("appearance.openrgb.applyOnStartup", checked);
-            }
-            StyledToolTip {
-                text: Translation.tr("Runs the OpenRGB apply script after startup once config is loaded.")
-            }
-        }
-
         NoticeBox {
             Layout.fillWidth: true
             visible: openRgbError.length > 0
@@ -289,5 +262,39 @@ ContentPage {
                 }
             }
         }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 16
+        }
+
+        ConfigSpinBox {
+            icon: "av_timer"
+            text: Translation.tr("Fade duration (ms)")
+            value: Config.options.appearance.openrgb.fadeDuration * 1000
+            from: 0
+            to: 10000
+            stepSize: 100
+            enabled: openRGB_toggle.checked
+            onValueChanged: {
+                Config.options.appearance.openrgb.fadeDuration = value / 1000;
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "power_settings_new"
+            text: Translation.tr("Apply on startup")
+            checked: openRgbConfig.applyOnStartup
+            enabled: openRgbConfig.enable
+            onCheckedChanged: {
+                openRgbConfig.applyOnStartup = checked;
+                Config.setNestedValue("appearance.openrgb.applyOnStartup", checked);
+            }
+            StyledToolTip {
+                text: Translation.tr("Runs the OpenRGB apply script after startup once config is loaded.")
+            }
+        }
+
+        
     }
 }
