@@ -31,7 +31,7 @@ printf "\n"
 pause
 
 case $ask in
-  false) sleep 0 ;;
+  false) true ;;
   *) 
     printf "${STY_BLUE}"
     printf "${STY_BOLD}Do you want to confirm every time before a command executes?${STY_RST}\n"

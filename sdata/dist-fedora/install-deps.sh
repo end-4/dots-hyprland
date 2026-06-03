@@ -50,7 +50,7 @@ fi
 
 # Update System
 case $SKIP_SYSUPDATE in
-  true) sleep 0 ;;
+  true) true ;;
   *) v sudo dnf upgrade --refresh -y ;;
 esac
 
