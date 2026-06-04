@@ -402,6 +402,18 @@ MouseArea {
 
             IconToolbarButton {
                 implicitWidth: height
+                visible: root.wallpaperSource === "wallhaven"
+                onClicked: {
+                    WallhavenSearch.search(WallhavenSearch.currentQuery, 1)
+                }
+                text: "refresh"
+                StyledToolTip {
+                    text: Translation.tr("Refresh search results")
+                }
+            }
+
+            IconToolbarButton {
+                implicitWidth: height
                 onClicked: {
                     root.wallpaperSource = (root.wallpaperSource === "local") ? "wallhaven" : "local"
                 }
