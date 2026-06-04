@@ -10,7 +10,8 @@ MouseArea {
     id: root
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
-    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
+    property bool isVideo: /\.(mp4|webm|mkv|avi|mov)$/i.test(fileModelData.fileName)
+    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName) || isVideo
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -96,11 +97,29 @@ MouseArea {
 
                 Loader {
                     id: iconLoader
-                    active: !root.useThumbnail
+                    active: !root.useThumbnail && !root.isVideo
                     anchors.fill: parent
-                    sourceComponent: DirectoryIcon {
-                        fileModelData: root.fileModelData
+                    sourceComponent: MaterialSymbol {
+                        anchors.centerIn: parent
+                        iconSize: 64
+                        text: root.isDirectory ? "folder" : "description"
+                        fill: 1
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: Appearance.colors.colOnLayer0
+                        opacity: 0.5
                     }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    font.pixelSize: 28
+                    text: "▶"
+                    color: "#ffffff"
+                    style: Text.Raised
+                    styleColor: "#000000"
+                    opacity: 0.7
+                    visible: root.isVideo
                 }
             }
 
