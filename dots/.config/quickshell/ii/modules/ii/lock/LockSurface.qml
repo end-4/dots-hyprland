@@ -11,6 +11,7 @@ import qs.modules.common.panels.lock
 import qs.modules.ii.bar as Bar
 import Quickshell
 import Quickshell.Services.SystemTray
+import qs.modules.ii.mediaControls
 
 MouseArea {
     id: root
@@ -96,6 +97,25 @@ MouseArea {
     //     }
     // }
 
+    Loader {
+        id: lockscreenMediaController
+        active: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
+        visible: active
+        scale: root.toolbarScale
+        opacity: root.toolbarOpacity
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: mainIsland.top
+            bottomMargin: 15
+        }
+        sourceComponent: PlayerControl {
+            player: MprisController.activePlayer
+            implicitWidth: Appearance.sizes.mediaControlsWidth
+            implicitHeight: Appearance.sizes.mediaControlsHeight
+            radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+        }
+    }
+    
     // Main toolbar: password box
     Toolbar {
         id: mainIsland
