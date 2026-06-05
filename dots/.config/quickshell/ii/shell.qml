@@ -6,6 +6,8 @@
 // Remove two slashes below and adjust the value to change the UI scale
 ////@ pragma Env QT_SCALE_FACTOR=1
 
+import qs.modules.common
+import qs.modules.ii.lyricsSelector
 import "modules/common"
 import "services"
 import "panelFamilies"
@@ -32,6 +34,8 @@ ShellRoot {
         Updates.load()
     }
 
+    // Lyrics selector (always loaded)
+    LazyLoader { active: Config.ready; component: LyricsSelector {} }
 
     // Panel families
     property list<string> families: ["ii", "waffle"]
@@ -46,7 +50,7 @@ ShellRoot {
         property bool extraCondition: true
         active: Config.ready && Config.options.panelFamily === identifier && extraCondition
     }
-    
+
     PanelFamilyLoader {
         identifier: "ii"
         component: IllogicalImpulseFamily {}
@@ -74,4 +78,3 @@ ShellRoot {
         onPressed: root.cyclePanelFamily()
     }
 }
-
