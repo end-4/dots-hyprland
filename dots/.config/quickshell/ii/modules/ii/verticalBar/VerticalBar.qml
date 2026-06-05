@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -80,6 +81,70 @@ Scope {
                 }
                 Component.onDestruction: {
                     GlobalFocusGrab.removePersistent(barRoot);
+                }
+
+                ShaderEffectSource {
+                    id: barSource
+                    property real padding: 10 // extra space for shadow
+                    anchors {
+                        fill: hoverRegion
+                        margins: -padding
+                    }
+                    sourceItem: hoverRegion
+                    sourceRect: Qt.rect(
+                        -padding,
+                        -padding,
+                        hoverRegion.width + padding * 2,
+                        hoverRegion.height + padding * 2
+                    )
+                    samples: 4
+                    visible: false
+                }
+
+                ShaderEffectSource {
+                    id: barShadowMask
+                    sourceItem: barSource
+                    visible: false
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        blurEnabled: true
+                        blur: 0.05
+                        blurMax: 3
+                    }
+                }
+
+                MultiEffect {
+                    source: barSource
+                    anchors.fill: barSource
+                    shadowEnabled: targetShadowEnabled || shadowDisableTimer.running
+                    shadowColor: Appearance.colors.colShadow
+                    shadowBlur: targetShadowEnabled ? 0.6 : 0
+                    shadowOpacity: targetShadowEnabled ? 1 : 0
+                    autoPaddingEnabled: false
+
+                    maskEnabled: true
+                    maskSource: barShadowMask
+                    maskInverted: true
+                    maskThresholdMin: (1 - Appearance.backgroundTransparency) * 3/4
+                    maskSpreadAtMin: (1 - Appearance.backgroundTransparency) * 1/4
+                    maskThresholdMax: 1.0
+
+                    property bool targetShadowEnabled: Config.options.bar.shadow && (!Config?.options.bar.autoHide.enable || mustShow)
+                    Timer {
+                        id: shadowDisableTimer
+                        interval: Appearance.animation.elementMoveFast.duration
+                        repeat: false
+                    }
+                    onTargetShadowEnabledChanged: {
+                        if (!targetShadowEnabled) { shadowDisableTimer.start(); }
+                    }
+
+                    Behavior on shadowBlur {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                    Behavior on shadowOpacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
                 }
 
                 MouseArea  {
