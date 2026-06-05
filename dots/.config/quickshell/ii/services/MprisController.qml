@@ -107,7 +107,9 @@ Singleton {
 		required property MprisPlayer player
 
 		function _fetchArt() {
-			const url = worker.player?.trackArtUrl;
+			let url = worker.player?.trackArtUrl;
+			if (!url || url.length === 0)
+				url = StringUtils.getYoutubeArtUrl(worker.player?.metadata?.["xesam:url"] ?? "");
 			if (!url || url.length === 0) return;
 			artDownloader.trackKey = root._trackKeyOf(worker.player);
 			artDownloader.targetFile = url;
@@ -126,7 +128,15 @@ Singleton {
 					if (!isNaN(n)) artDownloader.sizeBytes = n;
 				}
 			}
-			command: ["bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'; stat -c %s '${artFilePath}' 2>/dev/null`]
+			command: ["bash", "-c", `
+				out=$1; url=$2
+				[ -f "$out" ] && { stat -c %s "$out" 2>/dev/null; exit 0; }
+				case "$url" in *"/oembed?"*)
+					url=$(curl -4 -fsSL "$url" | sed -n 's/.*"thumbnail_url":"\\([^"]*\\)".*/\\1/p') ;;
+				esac
+				[ -n "$url" ] && curl -4 -fsSL "$url" -o "$out"
+				stat -c %s "$out" 2>/dev/null
+			`, "qs-coverart", artFilePath, targetFile]
 			onExited: (exitCode, exitStatus) => {
 				if (exitCode !== 0 || sizeBytes <= 0 || artFilePath.length === 0) return;
 				root.rememberBestArt(worker.player, trackKey, artFilePath, sizeBytes);
