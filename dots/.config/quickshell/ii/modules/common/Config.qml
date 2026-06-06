@@ -493,6 +493,13 @@ Singleton {
                     property string imageSearchEngineBaseUrl: "https://lens.google.com/uploadbyurl?url="
                     property bool useCircleSelection: false
                 }
+                 property JsonObject fileSearch: JsonObject {
+                    property bool enable: false
+                    property list<string> paths: [Directories.home]
+                    property list<string> exclude: [".git", "node_modules", "target", "build"]
+                    property bool excludeHiddenDirs: true
+                    property int maxResults: 30
+                }
             }
 
             property JsonObject sidebar: JsonObject {
