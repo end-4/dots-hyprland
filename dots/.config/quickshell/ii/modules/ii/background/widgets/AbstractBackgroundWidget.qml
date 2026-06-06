@@ -46,7 +46,7 @@ AbstractWidget {
     property color colText: {
         const onNormalBackground = (GlobalStates.screenLocked && Config.options.lock.blur.enable)
         const adaptiveColor = ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
-        return onNormalBackground ? Appearance.colors.colOnLayer0 : adaptiveColor;
+        return onNormalBackground ? Appearance.colors.colPrimary : adaptiveColor;
     }
 
     property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
