@@ -27,14 +27,16 @@ Singleton {
     property string purity: "100" // sfw
     property string sorting: "relevance"
     property string order: "desc"
-    property string topRange: "1M"
+    property string topRange: "1y" // wider window so toplist (esp. with a color filter) isn't starved
     property string seed: ""
     property string minResolution: ""
     property string ratios: ""
     property string apiKey: ""
+    property string colors: "" // wallhaven palette filter — comma-separated hex list (no '#')
 
-    // Download directory
-    readonly property string downloadDirectory: `${FileUtils.trimFileProtocol(Directories.pictures)}/Wallpapers`
+    // Download directory — keep wallhaven grabs in their own subfolder so they don't
+    // clutter the top-level Wallpapers folder (shows up as a tidy folder in the local browser).
+    readonly property string downloadDirectory: `${FileUtils.trimFileProtocol(Directories.pictures)}/Wallpapers/wallhaven`
 
     // Signals
     signal searchCompleted(var results, var meta)
@@ -55,6 +57,7 @@ Singleton {
         sorting = cfg.wallhavenSorting || "relevance"
         order = cfg.wallhavenOrder || "desc"
         ratios = cfg.wallhavenRatios || ""
+        colors = cfg.wallhavenColors || ""
         currentQuery = cfg.wallhavenQuery || ""
     }
 
@@ -67,6 +70,7 @@ Singleton {
         cfg.wallhavenSorting = sorting
         cfg.wallhavenOrder = order
         cfg.wallhavenRatios = ratios
+        cfg.wallhavenColors = colors
         cfg.wallhavenQuery = currentQuery
     }
 
@@ -105,6 +109,10 @@ Singleton {
 
         if (ratios){
             params.push("ratios=" + ratios)
+        }
+
+        if (colors){
+            params.push("colors=" + colors)
         }
 
         if (apiKey){
@@ -230,6 +238,22 @@ Singleton {
             `mkdir -p '${downloadDirectory}' && curl -L -s -o '${localPath}' '${url}'`
         ]
         downloadProc.running = true
+    }
+
+    // Predefined browse without typing a query (e.g. toplist / latest / random).
+    function browse(sortMode) {
+        currentQuery = ""
+        sorting = sortMode || "toplist"
+        if (sortMode === "random") seed = ""
+        saveToConfig()
+        search("", 1)
+    }
+
+    // Toggle a palette-color filter (pass "" to clear) and re-search.
+    function setColor(hex) {
+        colors = (colors === hex) ? "" : (hex || "")
+        saveToConfig()
+        search(currentQuery, 1)
     }
 
     function reset() {

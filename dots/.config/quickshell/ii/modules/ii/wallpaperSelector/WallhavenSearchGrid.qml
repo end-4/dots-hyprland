@@ -25,6 +25,53 @@ Item {
 
     signal wallpaperApplied()
 
+    // Auto-browse on open so the grid is never empty (relevance needs a query, so
+    // fall back to toplist). Lets users land on curated results without typing.
+    onVisibleChanged: {
+        if (visible && !WallhavenSearch.fetching && WallhavenSearch.currentResults.length === 0) {
+            WallhavenSearch.browse(WallhavenSearch.sorting === "relevance" ? "toplist" : WallhavenSearch.sorting)
+        }
+    }
+
+    // Black/white that reads on a given hex (relative luminance)
+    function contrastColor(hex) {
+        if (!hex || hex.length < 6) return Appearance.colors.colOnLayer1
+        const r = parseInt(hex.substr(0, 2), 16)
+        const g = parseInt(hex.substr(2, 2), 16)
+        const b = parseInt(hex.substr(4, 2), 16)
+        return (0.299 * r + 0.587 * g + 0.114 * b) > 140 ? "#000000" : "#ffffff"
+    }
+
+    // Quick predefined browse modes (all return results without a query)
+    readonly property var browseModes: [
+        { label: Translation.tr("Top"), sort: "toplist" },
+        { label: Translation.tr("Latest"), sort: "date_added" },
+        { label: Translation.tr("Random"), sort: "random" },
+        { label: Translation.tr("Views"), sort: "views" }
+    ]
+
+    // Broad color families. Each ORs several wallhaven palette colors (the API
+    // accepts a comma-separated list) so one swatch = a wide range of wallpapers.
+    // `hex` is the display swatch; `q` is the comma-joined wallhaven colors value.
+    readonly property var colorGroups: [
+        { hex: "cc0000", q: "660000,990000,cc0000,cc3333" },        // Red
+        { hex: "ff6600", q: "ffcc33,ff9900,ff6600" },               // Orange
+        { hex: "cccc33", q: "666600,999900,cccc33,ffff00" },        // Yellow
+        { hex: "669900", q: "77cc33,669900,336600" },               // Green
+        { hex: "66cccc", q: "66cccc,0099cc" },                      // Teal
+        { hex: "0066cc", q: "0066cc,0099cc,333399" },               // Blue
+        { hex: "663399", q: "ea4c88,993399,663399,333399" },        // Purple / pink
+        { hex: "996633", q: "cc6633,996633,663300" },               // Brown
+        { hex: "999999", q: "000000,999999,cccccc,ffffff,424153" }  // Neutral
+    ]
+
+    // Display hex of the currently-active family ("" if none) — drives the button color
+    readonly property string activeHex: {
+        for (let i = 0; i < colorGroups.length; i++)
+            if (colorGroups[i].q === WallhavenSearch.colors) return colorGroups[i].hex
+        return ""
+    }
+
     // Public API for parent key forwarding
     function moveGridSelection(delta) { wallhavenGrid.moveSelection(delta) }
     function activateGridCurrent() { wallhavenGrid.activateCurrent() }
@@ -46,49 +93,22 @@ Item {
 
     property bool showSettings: false
 
-    onShowSettingsChanged: {
-        if (showSettings) {
-            settingsPopupLoader.active = true
-        } else {
-            if (settingsPopupLoader.item) {
-                settingsPopupLoader.item.show = false
-            }
-            WallhavenSearch.saveToConfig()
-            WallhavenSearch.search(searchField.text, 1)
-        }
-    }
-
-    // Settings popup overlay
+    // Settings dialog (filters + API key). Created on demand: WindowDialog collapses
+    // via onShowChanged, so a persistent instance would start open. Loader builds it
+    // fresh each time; onLoaded opens it. (The old reopen bug was WallhavenSettingsPopup's
+    // Component.onCompleted{show=false} racing this open — removed there.)
     Loader {
         id: settingsPopupLoader
         anchors.fill: parent
         z: 100
-        active: false
-
-        onActiveChanged: {
-            if (active && item) {
-                item.show = true
-                item.forceActiveFocus()
-            }
+        active: root.showSettings
+        onLoaded: {
+            item.show = true
+            item.forceActiveFocus()
         }
-
-        Connections {
-            target: settingsPopupLoader.item
-            ignoreUnknownSignals: true
-            function onDismiss() {
-                if (settingsPopupLoader.item) {
-                    settingsPopupLoader.item.show = false
-                }
-                root.showSettings = false
-            }
-            function onVisibleChanged() {
-                if (settingsPopupLoader.item && !settingsPopupLoader.item.visible && !root.showSettings) {
-                    settingsPopupLoader.active = false
-                }
-            }
+        sourceComponent: WallhavenSettingsPopup {
+            onDismiss: root.showSettings = false
         }
-
-        sourceComponent: WallhavenSettingsPopup {}
     }
 
     ColumnLayout {
@@ -227,6 +247,93 @@ Item {
                 }
 
                 IconToolbarButton {
+                    id: paletteButton
+                    implicitWidth: height
+                    text: "palette"
+                    toggled: colorMenu.visible || WallhavenSearch.colors.length > 0
+                    // Reflect the active color family on the button itself
+                    colBackgroundToggled: root.activeHex.length > 0 ? ("#" + root.activeHex) : Appearance.colors.colSecondaryContainer
+                    colBackgroundToggledHover: root.activeHex.length > 0 ? ("#" + root.activeHex) : Appearance.colors.colSecondaryContainerHover
+                    colText: root.activeHex.length > 0
+                        ? root.contrastColor(root.activeHex)
+                        : (toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnSurfaceVariant)
+                    onClicked: colorMenu.visible ? colorMenu.close() : colorMenu.open()
+                    StyledToolTip {
+                        text: Translation.tr("Filter by color")
+                    }
+
+                    // Drop-down color grid
+                    Popup {
+                        id: colorMenu
+                        y: paletteButton.height + 6
+                        x: paletteButton.width - width
+                        padding: 10
+                        modal: false
+                        focus: true
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                        enter: Transition { NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 } }
+                        exit: Transition { NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 100 } }
+
+                        background: Rectangle {
+                            // m3 token is opaque (colLayer1 is alpha-blended → looked see-through)
+                            color: Appearance.m3colors.m3surfaceContainerHigh
+                            radius: Appearance.rounding.normal
+                            border.width: 1
+                            border.color: Appearance.colors.colLayer0Border
+                        }
+
+                        contentItem: ColumnLayout {
+                            spacing: 8
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    text: Translation.tr("Filter by color")
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                }
+                                // Clear / any-color
+                                RippleButton {
+                                    visible: WallhavenSearch.colors.length > 0
+                                    implicitHeight: 24
+                                    leftPadding: 8
+                                    rightPadding: 8
+                                    buttonRadius: height / 2
+                                    onClicked: { WallhavenSearch.setColor(""); colorMenu.close() }
+                                    contentItem: StyledText {
+                                        text: Translation.tr("Clear")
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        color: Appearance.colors.colOnLayer1
+                                    }
+                                }
+                            }
+
+                            Grid {
+                                columns: 3
+                                spacing: 8
+                                Repeater {
+                                    model: root.colorGroups
+                                    delegate: Rectangle {
+                                        required property var modelData
+                                        width: 44; height: 44; radius: Appearance.rounding.small
+                                        color: "#" + modelData.hex
+                                        border.width: WallhavenSearch.colors === modelData.q ? 3 : 1
+                                        border.color: WallhavenSearch.colors === modelData.q ? Appearance.colors.colPrimary : Appearance.colors.colLayer0Border
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: { WallhavenSearch.setColor(parent.modelData.q); colorMenu.close() }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                IconToolbarButton {
                     implicitWidth: height
                     text: "tune"
                     onClicked: root.showSettings = true
@@ -325,10 +432,33 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                 }
                 StyledText {
-                    text: Translation.tr("Search for wallpapers on Wallhaven")
+                    text: Translation.tr("Search, or just browse:")
                     color: Appearance.colors.colOnLayer0
                     font.pixelSize: Appearance.font.pixelSize.small
                     Layout.alignment: Qt.AlignHCenter
+                }
+                // Quick predefined browse — no typing required
+                Row {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 8
+                    Repeater {
+                        model: root.browseModes
+                        delegate: RippleButton {
+                            required property var modelData
+                            implicitHeight: 34
+                            leftPadding: 16
+                            rightPadding: 16
+                            buttonRadius: height / 2
+                            colBackground: Appearance.colors.colLayer1
+                            onClicked: WallhavenSearch.browse(modelData.sort)
+                            contentItem: StyledText {
+                                text: modelData.label
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer1
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
                 }
             }
 
