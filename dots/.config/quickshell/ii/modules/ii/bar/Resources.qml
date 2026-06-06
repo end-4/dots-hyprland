@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
@@ -18,6 +19,90 @@ MouseArea {
         anchors.fill: parent
         anchors.leftMargin: 4
         anchors.rightMargin: 4
+
+        Item {
+            visible: NetworkTraffic.available
+            implicitWidth: speedMeasure.implicitWidth
+            implicitHeight: Appearance.sizes.barHeight
+            Layout.rightMargin: visible ? 16 : 0
+            clip: true
+
+            TextMetrics {
+                id: speedTextMetrics
+                text: "8888G/s"
+                font.pixelSize: Appearance.font.pixelSize.small
+                font.family: Appearance.font.family.main
+                font.variableAxes: Appearance.font.variableAxes.main
+            }
+
+            RowLayout {
+                id: speedMeasure
+                visible: false
+
+                MaterialSymbol {
+                    text: "south"
+                    iconSize: Appearance.font.pixelSize.normal
+                }
+
+                Item {
+                    implicitWidth: speedTextMetrics.width
+                    implicitHeight: 1
+                }
+
+                Item {
+                    implicitWidth: 2
+                    implicitHeight: 1
+                }
+
+                MaterialSymbol {
+                    text: "north"
+                    iconSize: Appearance.font.pixelSize.normal
+                }
+
+                Item {
+                    implicitWidth: speedTextMetrics.width
+                    implicitHeight: 1
+                }
+            }
+
+            RowLayout {
+                id: speedRow
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 2
+
+                MaterialSymbol {
+                    text: "south"
+                    iconSize: Appearance.font.pixelSize.normal
+                    color: Appearance.colors.colOnLayer1
+                }
+
+                StyledText {
+                    width: speedTextMetrics.width
+                    text: NetworkTraffic.downloadSpeedCompactText
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    color: Appearance.colors.colOnLayer1
+                    horizontalAlignment: Text.AlignRight
+                    elide: Text.ElideLeft
+                }
+
+                MaterialSymbol {
+                    text: "north"
+                    iconSize: Appearance.font.pixelSize.normal
+                    color: Appearance.colors.colOnLayer1
+                    Layout.leftMargin: 2
+                }
+
+                StyledText {
+                    width: speedTextMetrics.width
+                    text: NetworkTraffic.uploadSpeedCompactText
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    color: Appearance.colors.colOnLayer1
+                    horizontalAlignment: Text.AlignRight
+                    elide: Text.ElideLeft
+                }
+            }
+        }
 
         Resource {
             iconName: "memory"
