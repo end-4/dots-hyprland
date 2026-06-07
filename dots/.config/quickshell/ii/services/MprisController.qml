@@ -41,38 +41,137 @@ Singleton {
             !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
     }
 
-	// Original stuff from fox below
-	Instantiator {
-		model: Mpris.players;
+	// Last non-empty trackArtUrl seen per player (keyed by dbusName). Some
+	// MPRIS players (Firefox via firefox-mpris, Spotify) emit transient empty
+	// trackArtUrl between/during tracks. Consumers like PlayerControl that get
+	// recreated on panel open/close need a stable fallback so the cover
+	// doesn't vanish whenever they happen to mount during an empty window.
+	// dbusName is the right key here: MprisPlayer.uniqueId in Quickshell is a
+	// per-track identifier (it increments when the track changes), not a
+	// per-player one, so keying on it cross-contaminates between players that
+	// happen to share a uniqueId value.
+	property var stableArtUrlByPlayer: ({})
 
-		Connections {
-			required property MprisPlayer modelData;
-			target: modelData;
+	function _captureArtUrl(player) {
+		if (player?.trackArtUrl?.length > 0 && !!player?.dbusName) {
+			const map = Object.assign({}, root.stableArtUrlByPlayer);
+			map[player.dbusName] = player.trackArtUrl;
+			root.stableArtUrlByPlayer = map;
+		}
+	}
 
-			Component.onCompleted: {
-				if (root.trackedPlayer == null || modelData.isPlaying) {
-					root.trackedPlayer = modelData;
+	// Best (largest) downloaded cover file seen per player for the current
+	// track, keyed by dbusName. Persists across PlayerControl lifecycles so
+	// reopening the panel doesn't downgrade to a thumbnail when Firefox
+	// happens to be sitting on its low-res variant. Entry shape:
+	//   { trackKey: string, artFilePath: string, artBytes: number }
+	property var bestArtByPlayer: ({})
+
+	function rememberBestArt(player, trackKey, artFilePath, artBytes) {
+		const id = player?.dbusName;
+		if (!id || artBytes <= 0 || !artFilePath) return;
+		const existing = root.bestArtByPlayer[id];
+		// Same track and existing is already >= new size: nothing to do.
+		if (existing && existing.trackKey === trackKey && existing.artBytes >= artBytes) return;
+		const map = Object.assign({}, root.bestArtByPlayer);
+		map[id] = { trackKey: trackKey, artFilePath: artFilePath, artBytes: artBytes };
+		root.bestArtByPlayer = map;
+	}
+
+	function getBestArt(player, trackKey) {
+		const id = player?.dbusName;
+		if (!id) return null;
+		const entry = root.bestArtByPlayer[id];
+		if (!entry || entry.trackKey !== trackKey) return null;
+		return entry;
+	}
+
+	function _trackKeyOf(player) {
+		// title|artist (album omitted on purpose). Some players (Firefox via
+		// firefox-mpris) emit metadata progressively: first trackArtUrl +
+		// title + artist with album="", then a moment later update album.
+		// If album were part of the key, the high-res variant emitted with
+		// the partial metadata and the low-res variant emitted with the
+		// completed metadata would look like different tracks to the
+		// "never-downgrade" guard.
+		return `${player?.trackTitle ?? ""}|${player?.trackArtist ?? ""}`;
+	}
+
+	// Per-player worker. Holds a Process that downloads each new trackArtUrl
+	// the player emits, regardless of whether the media controls panel is
+	// open. This is what makes the cover stay sharp across panel
+	// close/reopen and across auto-advance while the panel is closed —
+	// PlayerControl is no longer the only thing watching for art emissions.
+	component PlayerWorker: QtObject {
+		id: worker
+		required property MprisPlayer player
+
+		function _fetchArt() {
+			const url = worker.player?.trackArtUrl;
+			if (!url || url.length === 0) return;
+			artDownloader.trackKey = root._trackKeyOf(worker.player);
+			artDownloader.targetFile = url;
+			artDownloader.artFilePath = `${Directories.coverArt}/${Qt.md5(url)}`;
+			artDownloader.running = true;
+		}
+
+		property Process artDownloader: Process {
+			property string trackKey
+			property string targetFile
+			property string artFilePath
+			property int sizeBytes: 0
+			stdout: SplitParser {
+				onRead: data => {
+					const n = parseInt(data.trim());
+					if (!isNaN(n)) artDownloader.sizeBytes = n;
 				}
 			}
-
-			Component.onDestruction: {
-				if (root.trackedPlayer == null || !root.trackedPlayer.isPlaying) {
-					for (const player of Mpris.players.values) {
-						if (player.playbackState.isPlaying) {
-							root.trackedPlayer = player;
-							break;
-						}
-					}
-
-					if (trackedPlayer == null && Mpris.players.values.length != 0) {
-						trackedPlayer = Mpris.players.values[0];
-					}
-				}
+			command: ["bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'; stat -c %s '${artFilePath}' 2>/dev/null`]
+			onExited: (exitCode, exitStatus) => {
+				if (exitCode !== 0 || sizeBytes <= 0 || artFilePath.length === 0) return;
+				root.rememberBestArt(worker.player, trackKey, artFilePath, sizeBytes);
 			}
+		}
 
+		property Connections _conn: Connections {
+			target: worker.player
 			function onPlaybackStateChanged() {
-				if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				if (root.trackedPlayer !== worker.player) root.trackedPlayer = worker.player;
 			}
+			function onTrackArtUrlChanged() {
+				root._captureArtUrl(worker.player);
+				worker._fetchArt();
+			}
+		}
+
+		Component.onCompleted: {
+			if (root.trackedPlayer == null || worker.player.isPlaying) {
+				root.trackedPlayer = worker.player;
+			}
+			root._captureArtUrl(worker.player);
+			worker._fetchArt();
+		}
+
+		Component.onDestruction: {
+			if (root.trackedPlayer == null || !root.trackedPlayer.isPlaying) {
+				for (const p of Mpris.players.values) {
+					if (p.playbackState.isPlaying) {
+						root.trackedPlayer = p;
+						break;
+					}
+				}
+				if (root.trackedPlayer == null && Mpris.players.values.length != 0) {
+					root.trackedPlayer = Mpris.players.values[0];
+				}
+			}
+		}
+	}
+
+	Instantiator {
+		model: Mpris.players
+		delegate: PlayerWorker {
+			required property MprisPlayer modelData
+			player: modelData
 		}
 	}
 
