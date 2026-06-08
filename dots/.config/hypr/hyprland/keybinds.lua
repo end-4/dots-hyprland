@@ -202,12 +202,12 @@ for i = 1, 10 do
     end, { description = "Window: Send to workspace " .. i })
 end
 --# We also use raw keycodes because some keyboard layouts register number keys as different chars. The codes can be verified with `wev`
-for i = 1, 10 do
-    local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
-    hl.bind("SUPER + ALT + code:" .. numberkey[i], function()
-        hl.dispatch(hl.dsp.window.move({ workspace = workspace_in_group(i), follow = false }))
-    end)
-end
+-- for i = 1, 10 do
+--     local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
+--     hl.bind("SUPER + ALT + code:" .. numberkey[i], function()
+--         hl.dispatch(hl.dsp.window.move({ workspace = workspace_in_group(i), follow = false }))
+--     end)
+-- end
 --# keypad numbers
 for i = 1, 10 do
     local numpadkey = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
