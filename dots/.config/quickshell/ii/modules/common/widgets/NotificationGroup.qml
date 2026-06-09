@@ -121,7 +121,7 @@ MouseArea { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: popup ? Appearance.colors.colBackgroundSurfaceContainer : Appearance.colors.colLayer2
+        color: popup ? Appearance.colors.colBackgroundSurfaceContainer : Appearance.colors.colLayer0
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 

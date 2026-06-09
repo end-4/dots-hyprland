@@ -14,9 +14,9 @@ GroupButton {
 
     buttonRadius: baseHeight / 2
     buttonRadiusPressed: Appearance.rounding.small
-    colBackground: Appearance.colors.colLayer2
-    colBackgroundHover: Appearance.colors.colLayer2Hover
-    colBackgroundActive: Appearance.colors.colLayer2Active
+    colBackground: Appearance.colors.colLayer0
+    colBackgroundHover: Appearance.colors.colLayer1Hover
+    colBackgroundActive: Appearance.colors.colLayer1Active
     property color colText: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
 
     contentItem: Item {
