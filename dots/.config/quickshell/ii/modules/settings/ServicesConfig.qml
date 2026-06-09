@@ -275,4 +275,58 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "image_search"
+        title: Translation.tr("Booru")
+
+        ContentSubsection {
+            title: Translation.tr("Zerochan")
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Username")
+                text: Config.options.sidebar.booru.zerochan.username === "[unset]"
+                    ? "" : Config.options.sidebar.booru.zerochan.username
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.zerochan.username =
+                        text.length > 0 ? text : "[unset]"
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Zerochan username. Required to avoid being banned from the API.\nSee: https://www.zerochan.net/api")
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Gelbooru")
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("User ID")
+                text: Config.options.sidebar.booru.gelbooru.userId
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.gelbooru.userId = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Gelbooru numeric user ID.\nFind it at: gelbooru.com → Account → My Account")
+                }
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("API Key")
+                text: Config.options.sidebar.booru.gelbooru.apiKey
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.gelbooru.apiKey = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Gelbooru API key.\nFind it at: gelbooru.com → Account → My Account → API Access Credentials")
+                }
+            }
+        }
+    }
 }
