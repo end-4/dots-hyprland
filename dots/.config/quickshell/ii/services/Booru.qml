@@ -355,13 +355,13 @@ Singleton {
         }
         else {
             if (currentProvider == "gelbooru") {
-                // Gelbooru pid is item-based offset, not page number.
-                // pid=0 → items 0..limit-1, pid=limit → items limit..2*limit-1, etc.
-                // Also inject sort:id:desc so results match the website's default order.
-                const gelbooruTagString = tagString + " sort:id:desc"
-                params.push("tags=" + encodeURIComponent(gelbooruTagString))
+                // Gelbooru DAPI pid is a 0-indexed page number (not item offset).
+                // pid=0 → page 1, pid=1 → page 2, etc. regardless of limit.
+                // sort:id:desc in the tag string gives newest-first, consistent with the website.
+                const gelbooruTags = tagString + " sort:id:desc"
+                params.push("tags=" + encodeURIComponent(gelbooruTags))
                 params.push("limit=" + limit)
-                params.push("pid=" + ((page - 1) * limit))
+                params.push("pid=" + (page - 1))
             } else {
                 params.push("tags=" + encodeURIComponent(tagString))
                 params.push("limit=" + limit)
