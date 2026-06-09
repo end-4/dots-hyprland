@@ -10,12 +10,21 @@ Singleton {
     id: root
 
     readonly property string shaderPath: Quickshell.shellPath("services/hyprlandAntiFlashbangShader/anti-flashbang.glsl")
-    property bool enabled: confOpt.value == shaderPath
+    readonly property string weakShaderPath: Quickshell.shellPath("services/hyprlandAntiFlashbangShader/anti-flashbang-weak.glsl")
+    property bool enabled: confOpt.value == shaderPath || weak
+    property bool weak: confOpt.value == weakShaderPath
 
     function enable() {
         HyprlandConfig.setMany({
             "decoration:screen_shader": root.shaderPath,
             "debug:damage_tracking": 1, // Turn off dmg tracking to prevent weird flashes. 1 = monitor only
+        });
+    }
+
+    function enableWeak() {
+        HyprlandConfig.setMany({
+            "decoration:screen_shader": root.weakShaderPath,
+            "debug:damage_tracking": 1,
         });
     }
 
@@ -29,6 +38,16 @@ Singleton {
     function toggle() {
         if (root.enabled) disable()
         else enable()
+    }
+
+    function cycle() {
+        if (!enabled) {
+            enableWeak();
+        } else if (weak) {
+            enable();
+        } else {
+            disable();
+        }
     }
     
     HyprlandConfigOption {
