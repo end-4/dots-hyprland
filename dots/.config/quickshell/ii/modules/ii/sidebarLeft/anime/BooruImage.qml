@@ -20,15 +20,20 @@ Button {
     property string previewDownloadPath
     property string downloadPath
     property string nsfwPath
+    property string refererUrl: ""
+    property string defaultUserAgent: Config.options?.networking?.userAgent
+        ?? "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     property string fileName: decodeURIComponent((imageData.file_url).substring((imageData.file_url).lastIndexOf('/') + 1))
     property string filePath: `${root.previewDownloadPath}/${root.fileName}`
     property int maxTagStringLineLength: 50
     property real imageRadius: Appearance.rounding.small
 
     property bool showActions: false
+
+    // Standard downloader — used for all providers WITHOUT hotlink protection
     ImageDownloaderProcess {
         id: imageDownloader
-        running: root.manualDownload
+        running: root.manualDownload && root.refererUrl === ""
         filePath: root.filePath
         sourceUrl: root.imageData.preview_url ?? root.imageData.sample_url
         onDone: (path, width, height) => {
@@ -38,6 +43,28 @@ Button {
                 modelData.width = width
                 modelData.height = height
                 modelData.aspect_ratio = width / height
+            }
+        }
+    }
+
+    // Referer-aware downloader via curl — used for providers with hotlink protection (e.g. Gelbooru)
+    Process {
+        id: refererDownloader
+        running: root.manualDownload && root.refererUrl !== ""
+        command: ["bash", "-c",
+            `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
+            `curl -s -L ` +
+            `-H 'Referer: ${root.refererUrl}' ` +
+            `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url ?? root.imageData.sample_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE`
+        ]
+        stdout: SplitParser {
+            onRead: (line) => {
+                if (line.trim() === "DONE") {
+                    imageObject.source = ""
+                    imageObject.source = root.filePath
+                }
             }
         }
     }
@@ -66,7 +93,7 @@ Button {
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
-            source: modelData.preview_url
+            source: root.refererUrl !== "" ? "" : (root.manualDownload ? "" : modelData.preview_url)
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -174,8 +201,9 @@ Button {
                                 const targetPath = root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath;
                                 const userAgent = Config.options?.networking?.userAgent ?? ""
                                 const userAgentHeader = userAgent ? ` -H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(userAgent)}'` : ""
+                                const refererHeader = root.refererUrl ? ` -H 'Referer: ${root.refererUrl}'` : ""
                                 Quickshell.execDetached(["bash", "-c", 
-                                    `mkdir -p '${targetPath}' && curl '${StringUtils.shellSingleQuoteEscape(root.imageData.file_url)}'${userAgentHeader} -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
+                                    `mkdir -p '${targetPath}' && curl '${StringUtils.shellSingleQuoteEscape(root.imageData.file_url)}'${userAgentHeader}${refererHeader} -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
                                 ])
                             }
                         }

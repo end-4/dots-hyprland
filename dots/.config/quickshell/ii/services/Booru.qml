@@ -287,9 +287,9 @@ Singleton {
             Persistent.states.booru.provider = provider
             var providerMessage = Translation.tr("Provider set to ") + providers[provider].name
             if (provider == "zerochan") {
-                providerMessage += Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!")
+                providerMessage += Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in Settings -> Services option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!")
             } else if (provider == "gelbooru") {
-                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.")
+                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.")
             }
             root.addSystemMessage(providerMessage)
         } else {
@@ -354,12 +354,17 @@ Singleton {
             params.push("quantity=" + limit)
         }
         else {
-            params.push("tags=" + encodeURIComponent(tagString))
-            params.push("limit=" + limit)
             if (currentProvider == "gelbooru") {
-                params.push("pid=" + page)
-            }
-            else {
+                // Gelbooru pid is item-based offset, not page number.
+                // pid=0 → items 0..limit-1, pid=limit → items limit..2*limit-1, etc.
+                // Also inject sort:id:desc so results match the website's default order.
+                const gelbooruTagString = tagString + " sort:id:desc"
+                params.push("tags=" + encodeURIComponent(gelbooruTagString))
+                params.push("limit=" + limit)
+                params.push("pid=" + ((page - 1) * limit))
+            } else {
+                params.push("tags=" + encodeURIComponent(tagString))
+                params.push("limit=" + limit)
                 params.push("page=" + page)
             }
         }
@@ -449,6 +454,15 @@ Singleton {
         }
         var url = provider.tagSearchTemplate.replace("{{query}}", encodeURIComponent(query))
 
+        // Inject Gelbooru API credentials into tag search URL
+        if (currentProvider === "gelbooru") {
+            var gelbooruApiKey = Config.options?.sidebar?.booru?.gelbooru?.apiKey || ""
+            var gelbooruUserId = Config.options?.sidebar?.booru?.gelbooru?.userId || ""
+            if (gelbooruApiKey && gelbooruUserId) {
+                url += "&api_key=" + gelbooruApiKey + "&user_id=" + gelbooruUserId
+            }
+        }
+
         var xhr = new XMLHttpRequest()
         currentTagRequest = xhr
         xhr.open("GET", url)
@@ -462,17 +476,17 @@ Singleton {
                     // console.log("[Booru] Mapped response: " + JSON.stringify(response))
                     root.tagSuggestion(query, response)
                 } catch (e) {
-                    console.log("[Booru] Failed to parse response: " + e)
+                    console.log("[Booru] Failed to parse tag response: " + e)
                 }
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {
-                console.log("[Booru] Request failed with status: " + xhr.status)
+                console.log("[Booru] Tag search failed with status: " + xhr.status)
             }
         }
 
         try {
-            // Required for danbooru and konachan
-            if (["danbooru", "konachan"].includes(currentProvider)) {
+            // Required for danbooru, konachan, and gelbooru
+            if (["danbooru", "konachan", "gelbooru"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()

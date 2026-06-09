@@ -230,7 +230,9 @@ Rectangle {
                         rowHeight: imageRow.rowHeight
                         imageRadius: imageRow.modelData.images.length == 1 ? 50 : Appearance.rounding.normal
                         // Download manually to reduce redundant requests or make sure downloading works
-                        manualDownload: ["danbooru", "waifu.im", "t.alcy.cc", "konachan"].includes(root.responseData.provider)
+                        manualDownload: ["danbooru", "waifu.im", "t.alcy.cc", "konachan", "gelbooru"].includes(root.responseData.provider)
+                        // Pass Referer header for providers with hotlink protection
+                        refererUrl: root.responseData.provider === "gelbooru" ? "https://gelbooru.com" : ""
                         previewDownloadPath: root.previewDownloadPath
                         downloadPath: root.downloadPath
                         nsfwPath: root.nsfwPath
