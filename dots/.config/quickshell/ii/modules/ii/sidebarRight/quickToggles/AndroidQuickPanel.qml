@@ -29,9 +29,20 @@ AbstractQuickPanel {
     readonly property real baseCellHeight: 56
 
     // Toggles
-    readonly property list<string> availableToggleTypes: ["network", "bluetooth", "idleInhibitor", "easyEffects", "nightLight", "darkMode", "cloudflareWarp", "gameMode", "screenSnip", "colorPicker", "onScreenKeyboard", "mic", "audio", "notifications", "powerProfile","musicRecognition", "antiFlashbang"]
+    readonly property list<string> availableToggleTypes: {
+       	const base = ["network", "bluetooth", "idleInhibitor", "easyEffects", "nightLight", "darkMode", "cloudflareWarp", "gameMode", "screenSnip", "colorPicker", "onScreenKeyboard", "mic", "audio", "notifications", "powerProfile","musicRecognition", "antiFlashbang"]
+		if (!Config.ready || !Config.options.sidebar.quickToggles.enableVpnToggles) return base
+		return base.concat(Vpn.connections.map(c => "vpn:" + c.name))
+	}
+
     readonly property int columns: Config.options.sidebar.quickToggles.android.columns
-    readonly property list<var> toggles: Config.ready ? Config.options.sidebar.quickToggles.android.toggles : []
+	readonly property list<var> toggles: {
+		if (!Config.ready) return []
+		const all = Config.options.sidebar.quickToggles.android.toggles
+		if (!Config.options.sidebar.quickToggles.enableVpnToggles)
+			return all.filter(t => !t?.type?.startsWith("vpn:"))
+		return all
+	}
     readonly property list<var> toggleRows: toggleRowsForList(toggles)
     readonly property list<var> unusedToggles: {
         const types = availableToggleTypes.filter(type => !toggles.some(toggle => (toggle && toggle.type === type)))
@@ -58,6 +69,21 @@ AbstractQuickPanel {
         }
         return rows;
     }
+
+	Connections {
+		target: Vpn
+		function onConnectionsChanged() {
+			if (!Config.ready) return
+			const vpnNames = Vpn.connections.map(c => c.name)
+			const toggleList = Config.options.sidebar.quickToggles.android.toggles
+			for (let i = toggleList.length - 1; i >= 0; i--) {
+				const t = toggleList[i]
+				if (t?.type?.startsWith("vpn:") && !vpnNames.includes(t.type.substring(4))) {
+					toggleList.splice(i, 1)
+				}
+			}
+		}
+	}
 
     Column {
         id: contentItem
