@@ -614,4 +614,144 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "equalizer"
+        title: Translation.tr("Widget: Audio Visualizer")
+
+        ConfigRow {
+            Layout.fillWidth: true
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.visualizer.enable
+                onCheckedChanged: { Config.options.background.widgets.visualizer.enable = checked; }
+            }
+            Item { Layout.fillWidth: true }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.visualizer.placementStrategy
+                onSelected: newValue => { Config.options.background.widgets.visualizer.placementStrategy = newValue; }
+                options: [
+                    { displayName: Translation.tr("Draggable"), icon: "drag_pan", value: "free" },
+                    { displayName: Translation.tr("Least busy"), icon: "category", value: "leastBusy" },
+                    { displayName: Translation.tr("Most busy"), icon: "shapes", value: "mostBusy" },
+                ]
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "vertical_distribute"
+                text: Translation.tr("Vertical")
+                checked: Config.options.background.widgets.visualizer.vertical
+                onCheckedChanged: { Config.options.background.widgets.visualizer.vertical = checked; }
+            }
+        }
+        ConfigSelectionArray {
+            currentValue: Config.options.background.widgets.visualizer.style
+            onSelected: newValue => { Config.options.background.widgets.visualizer.style = newValue; }
+            options: [
+                { displayName: Translation.tr("Bars"), icon: "bar_chart", value: "bars" },
+                { displayName: Translation.tr("Wave"), icon: "water", value: "wave" }
+            ]
+        }
+        ConfigSpinBox {
+            icon: "add_chart"
+            text: Translation.tr("Bars")
+            value: Config.options.background.widgets.visualizer.bars
+            from: 10; to: 100; stepSize: 1
+            onValueChanged: { Config.options.background.widgets.visualizer.bars = value; }
+        }
+    }
+
+    ContentSection {
+        icon: "query_stats"
+        title: Translation.tr("Widget: Stats (GitHub & Codeforces)")
+
+        ConfigRow {
+            Layout.fillWidth: true
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.stats.enable
+                onCheckedChanged: { Config.options.background.widgets.stats.enable = checked; }
+            }
+            Item { Layout.fillWidth: true }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.stats.placementStrategy
+                onSelected: newValue => { Config.options.background.widgets.stats.placementStrategy = newValue; }
+                options: [
+                    { displayName: Translation.tr("Draggable"), icon: "drag_pan", value: "free" },
+                    { displayName: Translation.tr("Least busy"), icon: "category", value: "leastBusy" },
+                    { displayName: Translation.tr("Most busy"), icon: "shapes", value: "mostBusy" },
+                ]
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "show_chart"
+                text: Translation.tr("Show Graphs")
+                checked: Config.options.background.widgets.stats.showGraphs
+                onCheckedChanged: { Config.options.background.widgets.stats.showGraphs = checked; }
+            }
+        }
+        ContentSubsection {
+            title: Translation.tr("Usernames")
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("GitHub Username")
+                text: Config.options.background.widgets.stats.githubUsername
+                wrapMode: TextEdit.Wrap
+                onTextChanged: { Config.options.background.widgets.stats.githubUsername = text; }
+            }
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Codeforces Username")
+                text: Config.options.background.widgets.stats.codeforcesUsername
+                wrapMode: TextEdit.Wrap
+                onTextChanged: { Config.options.background.widgets.stats.codeforcesUsername = text; }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "memory"
+        title: Translation.tr("Widget: System Resources")
+
+        ConfigRow {
+            Layout.fillWidth: true
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.systemResources.enable
+                onCheckedChanged: { Config.options.background.widgets.systemResources.enable = checked; }
+            }
+            Item { Layout.fillWidth: true }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.systemResources.placementStrategy
+                onSelected: newValue => { Config.options.background.widgets.systemResources.placementStrategy = newValue; }
+                options: [
+                    { displayName: Translation.tr("Draggable"), icon: "drag_pan", value: "free" },
+                    { displayName: Translation.tr("Least busy"), icon: "category", value: "leastBusy" },
+                    { displayName: Translation.tr("Most busy"), icon: "shapes", value: "mostBusy" },
+                ]
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "show_chart"
+                text: Translation.tr("Show Smooth Graphs")
+                checked: Config.options.background.widgets.systemResources.showGraphs
+                onCheckedChanged: { Config.options.background.widgets.systemResources.showGraphs = checked; }
+            }
+        }
+    }
 }
