@@ -17,6 +17,9 @@ import Quickshell.Hyprland
 import qs.modules.ii.background.widgets
 import qs.modules.ii.background.widgets.clock
 import qs.modules.ii.background.widgets.weather
+import qs.modules.ii.background.widgets.visualizer
+import qs.modules.ii.background.widgets.stats
+import qs.modules.ii.background.widgets.resources
 
 Variants {
     id: root
@@ -274,6 +277,31 @@ Variants {
                         scaledScreenHeight: bgRoot.screen.height
                         wallpaperScale: 1
                         wallpaperSafetyTriggered: bgRoot.wallpaperSafetyTriggered
+                    }
+                }
+
+                FadeLoader {
+                    shown: Config.options.background.widgets.visualizer.enable
+                    sourceComponent: VisualizerWidget {
+                        screenWidth: bgRoot.screen.width; screenHeight: bgRoot.screen.height
+                        scaledScreenWidth: bgRoot.screen.width; scaledScreenHeight: bgRoot.screen.height
+                        wallpaperScale: 1
+                    }
+                }
+                FadeLoader {
+                    shown: Config.options.background.widgets.stats.enable
+                    sourceComponent: StatsWidget {
+                        screenWidth: bgRoot.screen.width; screenHeight: bgRoot.screen.height
+                        scaledScreenWidth: bgRoot.screen.width; scaledScreenHeight: bgRoot.screen.height
+                        wallpaperScale: 1
+                    }
+                }
+                FadeLoader {
+                    shown: Config.options.background.widgets.systemResources.enable
+                    sourceComponent: SystemResourcesWidget {
+                        screenWidth: bgRoot.screen.width; screenHeight: bgRoot.screen.height
+                        scaledScreenWidth: bgRoot.screen.width; scaledScreenHeight: bgRoot.screen.height
+                        wallpaperScale: 1
                     }
                 }
             }
