@@ -209,6 +209,31 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject visualizer: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 500
+                        property real y: 500
+                        property int bars: 30
+                        property string style: "bars"
+                        property bool vertical: false
+                    }
+                    property JsonObject stats: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 150
+                        property real y: 300
+                        property string githubUsername: ""
+                        property string codeforcesUsername: ""
+                        property bool showGraphs: false
+                    }
+                    property JsonObject systemResources: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 150
+                        property real y: 600
+                        property bool showGraphs: false
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
