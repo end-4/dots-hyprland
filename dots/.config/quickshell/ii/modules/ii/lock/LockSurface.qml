@@ -10,6 +10,7 @@ import qs.modules.common.functions
 import qs.modules.common.panels.lock
 import qs.modules.ii.bar as Bar
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.SystemTray
 import qs.modules.ii.mediaControls
 
@@ -19,6 +20,24 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
+    property list<real> visualizerPoints: []
+
+    // Visualizer data for media controls
+    Process {
+        id: cavaProc
+        running: lockscreenMediaController.active
+        onRunningChanged: {
+            if (!cavaProc.running)
+                root.visualizerPoints = [];
+        }
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
+        stdout: SplitParser {
+            onRead: data => {
+                let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                root.visualizerPoints = points;
+            }
+        }
+    }
 
     // Force focus on entry
     function forceFieldFocus() {
@@ -110,6 +129,7 @@ MouseArea {
         }
         sourceComponent: PlayerControl {
             player: MprisController.activePlayer
+            visualizerPoints: root.visualizerPoints
             implicitWidth: Appearance.sizes.mediaControlsWidth
             implicitHeight: Appearance.sizes.mediaControlsHeight
             radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
