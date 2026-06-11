@@ -32,15 +32,38 @@ Item {
                 anchors.centerIn: parent
                 spacing: 0
 
-                StyledText {
+                Item {
                     Layout.alignment: Qt.AlignHCenter
-                    text: {
-                        let minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, '0');
-                        let seconds = Math.floor(TimerService.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
-                        return `${minutes}:${seconds}`;
+                    implicitWidth: timeText.implicitWidth
+                    implicitHeight: timeText.implicitHeight
+
+                    StyledText {
+                        id: timeText
+                        anchors.centerIn: parent
+                        text: {
+                            let minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, '0');
+                            let seconds = Math.floor(TimerService.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
+                            return `${minutes}:${seconds}`;
+                        }
+                        font.pixelSize: 40
+                        color: Appearance.m3colors.m3onSurface
                     }
-                    font.pixelSize: 40
-                    color: Appearance.m3colors.m3onSurface
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.MiddleButton
+                        onClicked: (mouse) => {
+                            if (mouse.button === Qt.MiddleButton) {
+                                if (mouse.modifiers & Qt.ShiftModifier) {
+                                    // Shift + middle click: decrement by 10 minutes
+                                    TimerService.adjustPomodoroTime(-600);
+                                } else {
+                                    // Middle click: increment by 10 minutes
+                                    TimerService.adjustPomodoroTime(600);
+                                }
+                            }
+                        }
+                    }
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
@@ -79,7 +102,7 @@ Item {
                 contentItem: StyledText {
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
-                    text: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
+                    text: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.pomodoroLapDuration) ? Translation.tr("Start") : Translation.tr("Resume")
                     color: TimerService.pomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
                 }
                 implicitHeight: 35
