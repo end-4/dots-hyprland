@@ -17,16 +17,19 @@ Item { // Player instance
     required property MprisPlayer player
     property var artUrl: player?.trackArtUrl
     property string artDownloadLocation: Directories.coverArt
-    property string artFileName: Qt.md5(artUrl)
+    property string artFileName: Qt.md5(artUrl ?? "")
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
-    property bool downloaded: false
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
 
-    property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+    // Stable snapshot: only updated after debounce + successful download.
+    // Prevents flicker when plasma-integration briefly clears artUrl mid-track.
+    property string displayedArtFilePath: ""
+    property string lastValidArtUrl: ""      // last non-empty artUrl we committed to
+    property string pendingArtUrl: ""        // artUrl being debounced/downloaded
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -59,27 +62,48 @@ Item { // Player instance
         }
     }
 
-    onArtFilePathChanged: {
-        if (root.artUrl.length == 0) {
-            root.artDominantColor = Appearance.m3colors.m3secondaryContainer
-            return;
-        }
+    // Debounce: wait for artUrl to settle before acting.
+    // Firefox/plasma-integration briefly clears artUrl during track changes,
+    // which would otherwise blank the thumbnail. We ignore transient empty
+    // values and only commit when a non-empty URL has been stable for ~150 ms.
+    onArtUrlChanged: {
+        artDebounce.restart()
+    }
 
-        // Binding does not work in Process
-        coverArtDownloader.targetFile = root.artUrl 
-        coverArtDownloader.artFilePath = root.artFilePath
-        // Download
-        root.downloaded = false
-        coverArtDownloader.running = true
+    Timer {
+        id: artDebounce
+        interval: 150
+        repeat: false
+        onTriggered: {
+            const url = root.artUrl
+
+            // Transient blank from plasma-integration — keep showing last art.
+            if (!url || url.length === 0)
+                return
+
+            // Same URL as what's already displayed — nothing to do.
+            if (url === root.lastValidArtUrl)
+                return
+
+            root.pendingArtUrl = url
+            coverArtDownloader.running = false   // abort any previous download
+            coverArtDownloader.targetFile = url
+            coverArtDownloader.artFilePath = root.artFilePath
+            coverArtDownloader.running = true
+        }
     }
 
     Process { // Cover art downloader
         id: coverArtDownloader
-        property string targetFile: root.artUrl
-        property string artFilePath: root.artFilePath
+        property string targetFile: ""
+        property string artFilePath: ""
         command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'` ]
         onExited: (exitCode, exitStatus) => {
-            root.downloaded = true
+            // Guard: discard result if the pending URL changed while we ran.
+            if (coverArtDownloader.targetFile !== root.pendingArtUrl)
+                return
+            root.lastValidArtUrl = root.pendingArtUrl
+            root.displayedArtFilePath = Qt.resolvedUrl(coverArtDownloader.artFilePath)
         }
     }
 
