@@ -149,19 +149,6 @@ Column {
         return dedirectioned;
     }
 
-    function bindSearchText(bind) {
-        const mods = root.modMaskToStringList(bind.modmask)
-            .map(mod => root.keySubstitutions[mod] || mod)
-            .join(" ");
-        return [
-            mods,
-            bind.key,
-            root.transformKey(bind.key),
-            bind.description,
-            root.transformDescription(bind, root.categoryName),
-        ].join(" ");
-    }
-
     Column {
         spacing: 4
         Repeater {
@@ -174,7 +161,11 @@ Column {
                     binds = HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isCategory(bind, root.categoryName) && !root.containsNonFirstRepetitive(bind));
                 }
                 if (root.searchQuery.trim().length === 0) return binds;
-                return binds.filter(bind => CheatsheetSearch.matchesQuery(root.bindSearchText(bind), root.searchQuery));
+                const category = root.isCategorized ? root.categoryName : "";
+                return binds.filter(bind => CheatsheetSearch.matchesQuery(
+                    CheatsheetSearch.keybindHaystack(bind, root.keySubstitutions, category),
+                    root.searchQuery,
+                ));
             }
             delegate: BindLine {
                 required property var modelData
