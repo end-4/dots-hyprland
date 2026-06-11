@@ -228,6 +228,9 @@ if [[ ! "$OS_GROUP_ID" == "fedora" ]]; then
   v install_google_sans_flex
 fi
 
+showfun install-flux-screensaver
+v install-flux-screensaver
+
 #####################################################################################
 
 v gen_firstrun

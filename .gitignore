@@ -1,5 +1,6 @@
 /diagnose.result
 /cache
+/tmp
 
 # Ignore Python cache files
 __pycache__/

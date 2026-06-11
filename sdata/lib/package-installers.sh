@@ -80,3 +80,37 @@ install-python-packages(){
   fi
   x deactivate
 }
+
+install-flux-screensaver(){
+  # Install Rust toolchain if missing
+  if ! command -v cargo &>/dev/null; then
+    log_info "Rust not found, installing via rustup..."
+    x bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y
+    . "$HOME/.cargo/env"
+  fi
+
+  # Clone flux repo to cache if not already there
+  if [ ! -d "$REPO_ROOT/cache/flux" ]; then
+    x git clone --depth 1 https://github.com/sandydoo/flux.git "$REPO_ROOT/cache/flux"
+  fi
+
+  # Apply our patch for config file support (safe to re-apply)
+  x cd "$REPO_ROOT/cache/flux"
+  git apply "$REPO_ROOT/sdata/screensaver/patches/flux-desktop-config.patch" 2>/dev/null || true
+  x cd "$REPO_ROOT"
+
+  # Build flux-desktop
+  x cd "$REPO_ROOT/cache/flux"
+  x cargo build --release -p flux-desktop
+  x cd "$REPO_ROOT"
+
+  # Strip and deploy binary
+  x mkdir -p "$XDG_BIN_HOME"
+  x cp "$REPO_ROOT/cache/flux/target/release/flux-desktop" "$XDG_BIN_HOME/flux-desktop"
+  x strip "$XDG_BIN_HOME/flux-desktop"
+  x chmod +x "$XDG_BIN_HOME/flux-desktop"
+
+  # Deploy wrapper script
+  x cp "$REPO_ROOT/sdata/screensaver/flux-screensaver.sh" "$XDG_BIN_HOME/flux-screensaver.sh"
+  x chmod +x "$XDG_BIN_HOME/flux-screensaver.sh"
+}

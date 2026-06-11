@@ -406,6 +406,22 @@ Singleton {
                 property bool materialShapeChars: true
             }
 
+            property JsonObject screensaver: JsonObject {
+                property bool enable: false
+                property int idleTimeout: 180
+                property int gridSpacing: 15
+                property real lineLength: 450
+                property real lineWidth: 9
+                property real viewScale: 1.6
+                property real viscosity: 5
+                property real velocityDissipation: 0
+                property int fluidSize: 128
+                property real fluidFrameRate: 60
+                property int diffusionIterations: 3
+                property int pressureIterations: 19
+                property real noiseMultiplier: 0.45
+            }
+
             property JsonObject media: JsonObject {
                 // Attempt to remove dupes (the aggregator playerctl one and browsers' native ones when there's plasma browser integration)
                 property bool filterDuplicatePlayers: true

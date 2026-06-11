@@ -234,3 +234,9 @@ Extra dependencies.
 ## illogical-impulse-microtex-git
 - [source](https://github.com/NanoMichael/MicroTeX)
 - This package will be installed as `/opt/MicroTeX`.
+
+# Build dependencies
+
+## rust / cargo
+- Installed automatically via rustup during the install process.
+- Used for building `flux-desktop` (screensaver).
