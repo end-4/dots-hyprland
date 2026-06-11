@@ -55,7 +55,7 @@ Scope {
 
     Process {
         id: cavaProc
-        running: mediaControlsLoader.active
+        running: mediaControlsLoader.active && GlobalStates.mediaControlsOpen
         onRunningChanged: {
             if (!cavaProc.running) {
                 root.visualizerPoints = [];
@@ -73,7 +73,7 @@ Scope {
 
     Loader {
         id: mediaControlsLoader
-        active: GlobalStates.mediaControlsOpen
+        active: GlobalStates.mediaControlsOpen || root.realPlayers.length > 0
         onActiveChanged: {
             if (!mediaControlsLoader.active && root.realPlayers.length === 0) {
                 GlobalStates.mediaControlsOpen = false;
@@ -82,7 +82,7 @@ Scope {
 
         sourceComponent: PanelWindow {
             id: panelWindow
-            visible: true
+            visible: GlobalStates.mediaControlsOpen
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
