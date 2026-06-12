@@ -169,4 +169,4 @@ hl.layer_rule({ match = { namespace = "quickshell:wTaskView" }, no_anim = true})
 hl.layer_rule({ match = { namespace = "gtk4-layer-shell" }, no_anim = true})
 
 -- Flux Screensaver
-hl.window_rule({match = {title = "^(Flux)$" }, animation = "popin 99%"})
+hl.window_rule({match = {title = "^(Flux)$" }, animation = "popin 99%", no_initial_focus = true, fullscreen = true})

@@ -23,7 +23,7 @@ if pgrep -x flux-desktop >/dev/null; then
   exit 0
 fi
 
-CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/ii/config.json"
+CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/illogical-impulse/config.json"
 IDLE_TIMEOUT=180
 
 if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
@@ -38,7 +38,10 @@ rm -f "$ACTIVEFILE"
 SLEEP_PID=""
 trap 'rm -f "$PIDFILE" "$ACTIVEFILE"; [ -n "$SLEEP_PID" ] && kill $SLEEP_PID 2>/dev/null; pkill flux-desktop 2>/dev/null; exit' TERM INT
 
-sleep "$IDLE_TIMEOUT" &
+REMAINING=$(( IDLE_TIMEOUT - 10 ))
+[ "$REMAINING" -lt 0 ] && REMAINING=0
+
+sleep "$REMAINING" &
 SLEEP_PID=$!
 wait $SLEEP_PID 2>/dev/null
 
