@@ -82,35 +82,46 @@ install-python-packages(){
 }
 
 install-flux-screensaver(){
-  # Install Rust toolchain if missing
-  if ! command -v cargo &>/dev/null; then
-    log_info "Rust not found, installing via rustup..."
-    x bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y
-    . "$HOME/.cargo/env"
+  local FLUX_REPO="Satoxyan/flux-comp"
+  local FLUX_BIN="$XDG_BIN_HOME/flux-desktop"
+  local FLUX_WRAPPER="$XDG_BIN_HOME/flux-screensaver.sh"
+  local TMP_DIR
+  TMP_DIR="$(mktemp -d)"
+
+  # Get latest release download URL
+  log_info "Fetching latest flux release from GitHub..."
+  local DOWNLOAD_URL
+  DOWNLOAD_URL="$(
+    curl -fsSL "https://api.github.com/repos/${FLUX_REPO}/releases/latest" \
+    | grep -o '"browser_download_url": *"[^"]*flux-linux\.tar\.gz"' \
+    | grep -o 'https://[^"]*'
+  )"
+
+  if [ -z "$DOWNLOAD_URL" ]; then
+    log_error "Could not find flux-linux.tar.gz in latest release of ${FLUX_REPO}"
+    rm -rf "$TMP_DIR"
+    return 1
   fi
 
-  # Clone flux repo to cache if not already there
-  if [ ! -d "$REPO_ROOT/cache/flux" ]; then
-    x git clone --depth 1 https://github.com/sandydoo/flux.git "$REPO_ROOT/cache/flux"
-  fi
+  # Download archive
+  log_info "Downloading $DOWNLOAD_URL ..."
+  x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_DIR/flux-linux.tar.gz"
 
-  # Apply our patch for config file support (safe to re-apply)
-  x cd "$REPO_ROOT/cache/flux"
-  git apply "$REPO_ROOT/sdata/screensaver/patches/flux-desktop-config.patch" 2>/dev/null || true
-  x cd "$REPO_ROOT"
+  # Extract
+  x tar -xzf "$TMP_DIR/flux-linux.tar.gz" -C "$TMP_DIR"
 
-  # Build flux-desktop
-  x cd "$REPO_ROOT/cache/flux"
-  x cargo build --release -p flux-desktop
-  x cd "$REPO_ROOT"
-
-  # Strip and deploy binary
+  # Deploy binary
   x mkdir -p "$XDG_BIN_HOME"
-  x cp "$REPO_ROOT/cache/flux/target/release/flux-desktop" "$XDG_BIN_HOME/flux-desktop"
-  x strip "$XDG_BIN_HOME/flux-desktop"
-  x chmod +x "$XDG_BIN_HOME/flux-desktop"
+  x cp "$TMP_DIR/flux-desktop" "$FLUX_BIN"
+  x strip "$FLUX_BIN"
+  x chmod +x "$FLUX_BIN"
 
   # Deploy wrapper script
-  x cp "$REPO_ROOT/sdata/screensaver/flux-screensaver.sh" "$XDG_BIN_HOME/flux-screensaver.sh"
-  x chmod +x "$XDG_BIN_HOME/flux-screensaver.sh"
+  x cp "$REPO_ROOT/sdata/screensaver/flux-screensaver.sh" "$FLUX_WRAPPER"
+  x chmod +x "$FLUX_WRAPPER"
+
+  # Cleanup
+  rm -rf "$TMP_DIR"
+
+  log_info "flux-desktop installed to $FLUX_BIN"
 }
