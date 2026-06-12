@@ -67,7 +67,7 @@ if [[ -f "${SUBCMD_DIR}/options.sh" ]];
 fi
 case ${SUBCMD_NAME} in
   install)
-    for function in ${print_os_group_id_functions[@]}; do
+    for function in "${print_os_group_id_functions[@]}"; do
       $function
     done
     pause
@@ -76,20 +76,20 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLGREETING}" != true ]]; then
-      source ${SUBCMD_DIR}/0.greeting.sh
+      source "${SUBCMD_DIR}/0.greeting.sh"
     fi
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-router.sh
+      source "${SUBCMD_DIR}/1.deps-router.sh"
     fi
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups.sh
+      source "${SUBCMD_DIR}/2.setups.sh"
     fi
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      source ${SUBCMD_DIR}/3.files.sh
+      source "${SUBCMD_DIR}/3.files.sh"
     fi
     ;;
   install-deps)
-    for function in ${print_os_group_id_functions[@]}; do
+    for function in "${print_os_group_id_functions[@]}"; do
       $function
     done
     pause
@@ -98,11 +98,11 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLDEPS}" != true ]]; then
-      source ${SUBCMD_DIR}/1.deps-router.sh
+      source "${SUBCMD_DIR}/1.deps-router.sh"
     fi
     ;;
   install-setups)
-    for function in ${print_os_group_id_functions[@]}; do
+    for function in "${print_os_group_id_functions[@]}"; do
       $function
     done
     pause
@@ -111,20 +111,20 @@ case ${SUBCMD_NAME} in
     # Set trap to cleanup when this subcommand exits
     trap sudo_stop_keepalive EXIT INT TERM
     if [[ "${SKIP_ALLSETUPS}" != true ]]; then
-      source ${SUBCMD_DIR}/2.setups.sh
+      source "${SUBCMD_DIR}/2.setups.sh"
     fi
     ;;
   install-files)
-    for function in ${print_os_group_id_functions[@]}; do
+    for function in "${print_os_group_id_functions[@]}"; do
       $function
     done
     pause
     if [[ "${SKIP_ALLFILES}" != true ]]; then
-      source ${SUBCMD_DIR}/3.files.sh
+      source "${SUBCMD_DIR}/3.files.sh"
     fi
     ;;
   *)
-    source ${SUBCMD_DIR}/0.run.sh
+    source "${SUBCMD_DIR}/0.run.sh"
     exit
     ;;
 esac
