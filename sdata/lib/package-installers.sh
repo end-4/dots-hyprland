@@ -116,10 +116,6 @@ install-flux-screensaver(){
   x strip "$FLUX_BIN"
   x chmod +x "$FLUX_BIN"
 
-  # Deploy wrapper script
-  x cp "$REPO_ROOT/sdata/screensaver/flux-screensaver.sh" "$FLUX_WRAPPER"
-  x chmod +x "$FLUX_WRAPPER"
-
   # Cleanup
   rm -rf "$TMP_DIR"
 
