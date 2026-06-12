@@ -4,18 +4,7 @@ PIDFILE="/tmp/flux-screensaver.pid"
 ACTIVEFILE="/tmp/flux-screensaver-active"
 
 if [ "$1" = "--resume" ]; then
-  if [ -f "$ACTIVEFILE" ]; then
-    AGE=$(($(date +%s) - $(stat -c %Y "$ACTIVEFILE" 2>/dev/null || echo 0)))
-    if [ "$AGE" -gt 2 ]; then
-      kill $(cat "$PIDFILE" 2>/dev/null) 2>/dev/null
-      rm -f "$PIDFILE" "$ACTIVEFILE"
-      pkill flux-desktop 2>/dev/null
-    fi
-  else
-    kill $(cat "$PIDFILE" 2>/dev/null) 2>/dev/null
-    rm -f "$PIDFILE" "$ACTIVEFILE"
-    pkill flux-desktop 2>/dev/null
-  fi
+  # Handled by the temporary watcher now.
   exit 0
 fi
 
@@ -32,23 +21,41 @@ if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
   IDLE_TIMEOUT=$(jq -r '.screensaver.idleTimeout // 180' "$CONFIG_FILE")
 fi
 
-echo $$ > "$PIDFILE"
-rm -f "$ACTIVEFILE"
-
-SLEEP_PID=""
-trap 'rm -f "$PIDFILE" "$ACTIVEFILE"; [ -n "$SLEEP_PID" ] && kill $SLEEP_PID 2>/dev/null; pkill flux-desktop 2>/dev/null; exit' TERM INT
-
 REMAINING=$(( IDLE_TIMEOUT - 10 ))
 [ "$REMAINING" -lt 0 ] && REMAINING=0
-
-sleep "$REMAINING" &
-SLEEP_PID=$!
-wait $SLEEP_PID 2>/dev/null
-
-touch "$ACTIVEFILE"
+sleep "$REMAINING"
 
 FLUX_SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/flux-screensaver"
 mkdir -p "$FLUX_SETTINGS_DIR"
 jq '.screensaver + {"seed": "1337"}' "$CONFIG_FILE" > "$FLUX_SETTINGS_DIR/settings.json" 2>/dev/null || true
 export FLUX_CONFIG="$FLUX_SETTINGS_DIR/settings.json"
-exec "${XDG_BIN_HOME:-$HOME/.local/bin}/flux-desktop"
+
+# Run flux-desktop in the background
+"${XDG_BIN_HOME:-$HOME/.local/bin}/flux-desktop" &
+FLUX_PID=$!
+
+# Wait for the window to map and trigger the inevitable fake activity
+sleep 3
+
+# Start a temporary hypridle to watch for REAL user activity
+WATCHER_CONF="/tmp/flux-watcher.conf"
+cat << EOF > "$WATCHER_CONF"
+general {
+    ignore_dbus_inhibit = true
+}
+listener {
+    timeout = 1
+    on-timeout = true
+    on-resume = pkill -P $$ flux-desktop 2>/dev/null || pkill flux-desktop 2>/dev/null
+}
+EOF
+
+hypridle -c "$WATCHER_CONF" &
+WATCHER_PID=$!
+
+# Cleanup trap
+trap 'kill $WATCHER_PID 2>/dev/null; kill $FLUX_PID 2>/dev/null; rm -f "$WATCHER_CONF"; exit' TERM INT
+
+wait $FLUX_PID
+kill $WATCHER_PID 2>/dev/null
+rm -f "$WATCHER_CONF"
