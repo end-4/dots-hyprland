@@ -30,10 +30,14 @@ MouseArea {
 
     onMediaPlayerAvailableChanged: {
         if (mediaPlayerAvailable) {
-            // Player appeared: activate loader (entry anim fires via onLoaded)
             mediaLoaderActive = true
+            if (lockscreenMediaController.item) {
+                mediaExitAnim.stop()
+                lockscreenMediaController.mediaScale   = 0.85
+                lockscreenMediaController.mediaOpacity = 0.0
+                entryAnim.restart()
+            }
         } else {
-            // Player disappeared: run exit anim, deactivate loader when done
             if (lockscreenMediaController.item) {
                 entryAnim.stop()
                 mediaExitAnim.restart()
@@ -100,6 +104,9 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
+        if (mediaPlayerAvailable) {
+            mediaLoaderActive = true;
+        }
     }
 
     // Key presses
@@ -211,11 +218,9 @@ MouseArea {
             }
         }
 
-        sourceComponent: PlayerControl {
+        sourceComponent: LockMediaWidget {
             player: MprisController.activePlayer
             visualizerPoints: root.visualizerPoints
-            implicitWidth: Appearance.sizes.mediaControlsWidth
-            implicitHeight: Appearance.sizes.mediaControlsHeight
             radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
         }
     }

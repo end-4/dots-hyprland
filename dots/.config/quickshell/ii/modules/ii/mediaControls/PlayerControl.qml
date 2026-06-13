@@ -24,6 +24,8 @@ Item { // Player instance
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
+    width: implicitWidth
+    height: implicitHeight
 
     // Stable snapshot: only updated after debounce + successful download.
     // Prevents flicker when plasma-integration briefly clears artUrl mid-track.
@@ -44,6 +46,7 @@ Item { // Player instance
             iconSize: Appearance.font.pixelSize.huge
             fill: 1
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             color: blendedColors.colOnSecondaryContainer
             text: iconName
 
@@ -320,6 +323,7 @@ Item { // Player instance
                             iconSize: Appearance.font.pixelSize.huge
                             fill: 1
                             horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                             color: root.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
                             text: root.player?.isPlaying ? "pause" : "play_arrow"
 
