@@ -85,7 +85,6 @@ ContentPage {
         }
 
         ConfigRow {
-            
             ContentSubsection {
                 title: Translation.tr("Corner style")
                 Layout.fillWidth: true
@@ -137,6 +136,16 @@ ContentPage {
                         }
                     ]
                 }
+            }
+        }
+
+        
+        ConfigSwitch {
+            buttonIcon: "ev_shadow"
+            text: Translation.tr("Bar Shadow")
+            checked: Config.options.bar.shadow
+            onCheckedChanged: {
+                Config.options.bar.shadow = checked;
             }
         }
     }
