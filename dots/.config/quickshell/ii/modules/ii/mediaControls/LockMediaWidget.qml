@@ -31,25 +31,147 @@ Item {
     // Sizes — must match what LockSurface passes in
     readonly property real fullWidth:    Appearance.sizes.mediaControlsWidth
     readonly property real fullHeight:   Appearance.sizes.mediaControlsHeight
-    readonly property real compactHeight: 70
+    readonly property real compactHeight: 80
     readonly property real compactWidth:  fullWidth * 0.8
 
-    implicitWidth:  compactMode ? compactWidth : fullWidth
-    implicitHeight: compactMode ? compactHeight : fullHeight
+    // committedCompact only flips AFTER the exit animation finishes (via ScriptAction)
+    // so the container size never changes while the outgoing element is still visible.
+    // Initialised to compactMode so the correct view renders on the very first frame.
+    property bool committedCompact: compactMode
+
+    // Skip transition animation on first load — just snap to the persisted state.
+    property bool initialised: false
+    Component.onCompleted: {
+        committedCompact = compactMode
+        if (compactMode) {
+            playerControl.animScale   = 1.0
+            playerControl.animOpacity = 0.0
+            compactView.animScale     = 1.0
+            compactView.animOpacity   = 1.0
+        }
+        initialised = true
+    }
+
+    implicitWidth:  committedCompact ? compactWidth : fullWidth
+    implicitHeight: committedCompact ? compactHeight : fullHeight
     width: implicitWidth
     height: implicitHeight
 
     Behavior on implicitWidth {
         NumberAnimation {
-            duration: Appearance.animation.elementMove.duration
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Easing.OutExpo
+        }
+    }
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: Appearance.animation.elementMoveFast.duration
             easing.type: Easing.OutExpo
         }
     }
 
-    Behavior on implicitHeight {
+    // ── Transition animations ────────────────────────────────────────────────
+    // full → compact: playerControl bounces out THEN size shrinks THEN compactView bounces in
+    // compact → full: compactView bounces out THEN size grows THEN playerControl bounces in
+
+    onCompactModeChanged: {
+        if (!initialised) return
+        if (compactMode) {
+            toFullInAnim.stop()
+            toCompactOutAnim.restart()
+        } else {
+            toCompactInAnim.stop()
+            toFullOutAnim.restart()
+        }
+    }
+
+    // full → compact step 1: playerControl exits, then commits size, then brings in compact
+    SequentialAnimation {
+        id: toCompactOutAnim
+        ParallelAnimation {
+            NumberAnimation {
+                target: playerControl; property: "animScale"
+                to: 0.85
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.InBack; easing.overshoot: 1.2
+            }
+            NumberAnimation {
+                target: playerControl; property: "animOpacity"
+                to: 0.0
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.InCubic
+            }
+        }
+        // Flip committed size AFTER exit — triggers Behavior on implicitWidth/Height
+        ScriptAction { script: root.committedCompact = true }
+        // Small pause for size Behavior to start before entrance begins
+        PauseAnimation { duration: 16 }
+        ScriptAction {
+            script: {
+                compactView.animScale   = 0.85
+                compactView.animOpacity = 0.0
+                toCompactInAnim.restart()
+            }
+        }
+    }
+
+    ParallelAnimation {
+        id: toCompactInAnim
         NumberAnimation {
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Easing.OutExpo
+            target: compactView; property: "animScale"
+            to: 1.0
+            duration: Appearance.animation.elementMove.duration * 1.1
+            easing.type: Easing.OutBack; easing.overshoot: 1.2
+        }
+        NumberAnimation {
+            target: compactView; property: "animOpacity"
+            to: 1.0
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    // compact → full step 1: compactView exits, then commits size, then brings in full
+    SequentialAnimation {
+        id: toFullOutAnim
+        ParallelAnimation {
+            NumberAnimation {
+                target: compactView; property: "animScale"
+                to: 0.85
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.InBack; easing.overshoot: 1.2
+            }
+            NumberAnimation {
+                target: compactView; property: "animOpacity"
+                to: 0.0
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.InCubic
+            }
+        }
+        ScriptAction { script: root.committedCompact = false }
+        PauseAnimation { duration: 16 }
+        ScriptAction {
+            script: {
+                playerControl.animScale   = 0.85
+                playerControl.animOpacity = 0.0
+                toFullInAnim.restart()
+            }
+        }
+    }
+
+    ParallelAnimation {
+        id: toFullInAnim
+        NumberAnimation {
+            target: playerControl; property: "animScale"
+            to: 1.0
+            duration: Appearance.animation.elementMove.duration * 1.1
+            easing.type: Easing.OutBack; easing.overshoot: 1.2
+        }
+        NumberAnimation {
+            target: playerControl; property: "animOpacity"
+            to: 1.0
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Easing.OutCubic
         }
     }
 
@@ -64,15 +186,12 @@ Item {
         implicitHeight: root.fullHeight
         radius: root.radius
 
-        opacity: compactMode ? 0 : 1
-        visible: opacity > 0
+        property real animScale:   1.0
+        property real animOpacity: 1.0
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.OutCubic
-            }
-        }
+        scale:   animScale
+        opacity: animOpacity
+        visible: animOpacity > 0
 
         // ── Hover overlay on cover art ────────────────────────────────────
         // Positioned over the art square inside PlayerControl.
@@ -150,15 +269,12 @@ Item {
         radius: root.compactHeight / 2
         color: playerControl.blendedColors?.colLayer0 ?? Appearance.colors.colLayer0
 
-        opacity: compactMode ? 1 : 0
-        visible: opacity > 0
+        property real animScale:   0.85
+        property real animOpacity: 0.0
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.OutCubic
-            }
-        }
+        scale:   animScale
+        opacity: animOpacity
+        visible: animOpacity > 0
 
         // Blurred art background (clipped to the pill shape)
         Item {
@@ -199,23 +315,24 @@ Item {
 
         // Main layout containing all visual controls
         RowLayout {
-            height: 56
             anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
+                fill: parent
+                // leftMargin matches pill radius so art thumbnail sits flush
+                // at the curved edge without being clipped
                 leftMargin: 10
                 rightMargin: 16
+                topMargin: 10
+                bottomMargin: 12
             }
-            spacing: 10
+            spacing: 12
 
             // Round cover art thumbnail — clicking expands back to full view
             Rectangle {
                 id: compactArt
-                Layout.preferredWidth: 56
-                Layout.preferredHeight: 56
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
                 Layout.alignment: Qt.AlignVCenter
-                radius: 28
+                radius: height / 2
                 color: ColorUtils.transparentize(
                     playerControl.blendedColors?.colLayer1 ?? Appearance.colors.colLayer1,
                     0.5
@@ -233,8 +350,8 @@ Item {
                             width: compactArt.width
                             height: compactArt.height
                             radius: compactArt.radius
+                        }
                     }
-                }
                 }
 
                 // Hover overlay on compact art — expand back
@@ -287,7 +404,7 @@ Item {
                 }
                 StyledText {
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.tiny
+                    font.pixelSize: Appearance.font.pixelSize.tiny * 0.85
                     color: playerControl.blendedColors?.colSubtext ?? Appearance.colors.colSubtext
                     elide: Text.ElideRight
                     text: root.player?.trackArtist ?? ""
@@ -295,7 +412,8 @@ Item {
                 }
                 StyledText {
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.tiny
+                    Layout.topMargin: 3
+                    font.pixelSize: Appearance.font.pixelSize.tiny * 0.85
                     color: playerControl.blendedColors?.colSubtext ?? Appearance.colors.colSubtext
                     text: `${StringUtils.friendlyTimeForSeconds(root.player?.position)} / ${StringUtils.friendlyTimeForSeconds(root.player?.length)}`
                 }
@@ -303,7 +421,6 @@ Item {
 
             // Playback controls
             RowLayout {
-                Layout.preferredHeight: 48
                 Layout.alignment: Qt.AlignVCenter
                 spacing: 4
 
@@ -311,11 +428,6 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     implicitWidth: 36
                     implicitHeight: 36
-                    padding: 0
-                    topPadding: 0
-                    bottomPadding: 0
-                    leftPadding: 0
-                    rightPadding: 0
                     buttonRadius: height / 2
                     colBackground: ColorUtils.transparentize(
                         playerControl.blendedColors?.colSecondaryContainer ?? Appearance.colors.colSecondaryContainer, 1)
@@ -336,11 +448,6 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     implicitWidth: 48
                     implicitHeight: 48
-                    padding: 0
-                    topPadding: 0
-                    bottomPadding: 0
-                    leftPadding: 0
-                    rightPadding: 0
                     buttonRadius: height / 2
                     colBackground: playerControl.blendedColors?.colSecondaryContainer ?? Appearance.colors.colSecondaryContainer
                     colBackgroundHover: playerControl.blendedColors?.colSecondaryContainerHover ?? Appearance.colors.colSecondaryContainerHover
@@ -363,11 +470,6 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     implicitWidth: 36
                     implicitHeight: 36
-                    padding: 0
-                    topPadding: 0
-                    bottomPadding: 0
-                    leftPadding: 0
-                    rightPadding: 0
                     buttonRadius: height / 2
                     colBackground: ColorUtils.transparentize(
                         playerControl.blendedColors?.colSecondaryContainer ?? Appearance.colors.colSecondaryContainer, 1)
