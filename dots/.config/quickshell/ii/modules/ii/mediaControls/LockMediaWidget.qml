@@ -31,7 +31,7 @@ Item {
     // Sizes — must match what LockSurface passes in
     readonly property real fullWidth:    Appearance.sizes.mediaControlsWidth
     readonly property real fullHeight:   Appearance.sizes.mediaControlsHeight
-    readonly property real compactHeight: 80
+    readonly property real compactHeight: 81
     readonly property real compactWidth:  fullWidth * 0.8
 
     // committedCompact only flips AFTER the exit animation finishes (via ScriptAction)
@@ -322,7 +322,7 @@ Item {
                 leftMargin: 10
                 rightMargin: 16
                 topMargin: 10
-                bottomMargin: 12
+                bottomMargin: 10
             }
             spacing: 12
 
@@ -404,7 +404,7 @@ Item {
                 }
                 StyledText {
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.tiny * 0.85
+                    font.pixelSize: Appearance.font.pixelSize.smaller
                     color: playerControl.blendedColors?.colSubtext ?? Appearance.colors.colSubtext
                     elide: Text.ElideRight
                     text: root.player?.trackArtist ?? ""
@@ -413,7 +413,7 @@ Item {
                 StyledText {
                     Layout.fillWidth: true
                     Layout.topMargin: 3
-                    font.pixelSize: Appearance.font.pixelSize.tiny * 0.85
+                    font.pixelSize: Appearance.font.pixelSize.smaller
                     color: playerControl.blendedColors?.colSubtext ?? Appearance.colors.colSubtext
                     text: `${StringUtils.friendlyTimeForSeconds(root.player?.position)} / ${StringUtils.friendlyTimeForSeconds(root.player?.length)}`
                 }
