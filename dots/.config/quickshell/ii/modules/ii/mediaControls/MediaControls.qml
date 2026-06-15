@@ -70,7 +70,7 @@ Scope {
 
     Loader {
         id: mediaControlsLoader
-        active: GlobalStates.mediaControlsOpen
+        active: GlobalStates.mediaControlsOpen || (item && item.isOpen)
         onActiveChanged: {
             if (!mediaControlsLoader.active && root.realPlayers.length === 0) {
                 GlobalStates.mediaControlsOpen = false;
@@ -80,6 +80,8 @@ Scope {
         sourceComponent: PanelWindow {
             id: panelWindow
             visible: true
+
+            property bool isOpen: GlobalStates.mediaControlsOpen
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
@@ -107,7 +109,6 @@ Scope {
 
             Component.onCompleted: {
                 GlobalFocusGrab.addDismissable(panelWindow);
-                introAnim.start();
             }
             Component.onDestruction: {
                 GlobalFocusGrab.removeDismissable(panelWindow);
@@ -119,24 +120,10 @@ Scope {
                 }
             }
 
-            ParallelAnimation {
-                id: introAnim
-                NumberAnimation {
-                    target: playerColumnLayout
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: 180
-                    easing.type: Easing.OutCubic
-                }
-                NumberAnimation {
-                    target: playerColumnLayout
-                    property: "scale"
-                    from: 0.93
-                    to: 1.0
-                    duration: 280
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+            Connections {
+                target: GlobalStates
+                function onMediaControlsOpenChanged() {
+                    panelWindow.isOpen = GlobalStates.mediaControlsOpen;
                 }
             }
 
@@ -145,6 +132,47 @@ Scope {
                 anchors.fill: parent
                 spacing: 8
                 transformOrigin: Item.Top
+                opacity: 0.0
+                scale: 0.93
+
+                states: [
+                    State {
+                        name: "visible"
+                        when: panelWindow.isOpen
+                        PropertyChanges { target: playerColumnLayout; opacity: 1.0; scale: 1.0 }
+                    },
+                    State {
+                        name: "hidden"
+                        when: !panelWindow.isOpen
+                        PropertyChanges { target: playerColumnLayout; opacity: 0.0; scale: 0.93 }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "hidden"; to: "visible"
+                        ParallelAnimation {
+                            NumberAnimation { target: playerColumnLayout; property: "opacity"; duration: 220; easing.type: Easing.OutCubic }
+                            NumberAnimation { target: playerColumnLayout; property: "scale"; duration: 280; easing.type: Easing.OutBack; easing.overshoot: 1.036 }
+                        }
+                    },
+                    Transition {
+                        from: "visible"; to: "hidden"
+                        SequentialAnimation {
+                            ParallelAnimation {
+                                NumberAnimation { target: playerColumnLayout; property: "opacity"; duration: 180; easing.type: Easing.OutCubic }
+                                NumberAnimation { target: playerColumnLayout; property: "scale"; duration: 200; easing.type: Easing.OutBack; easing.overshoot: 1.013 }
+                            }
+                            ScriptAction {
+                                script: {
+                                    if (!GlobalStates.mediaControlsOpen) {
+                                        mediaControlsLoader.active = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
 
                 Repeater {
                     model: ScriptModel {
@@ -242,17 +270,17 @@ Scope {
         target: "mediaControls"
 
         function toggle(): void {
-            mediaControlsLoader.active = !mediaControlsLoader.active;
-            if (mediaControlsLoader.active)
+            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
+            if (GlobalStates.mediaControlsOpen)
                 Notifications.timeoutAll();
         }
 
         function close(): void {
-            mediaControlsLoader.active = false;
+            GlobalStates.mediaControlsOpen = false;
         }
 
         function open(): void {
-            mediaControlsLoader.active = true;
+            GlobalStates.mediaControlsOpen = true;
             Notifications.timeoutAll();
         }
     }

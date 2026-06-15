@@ -33,9 +33,6 @@ Scope {
 
     function triggerOsd() {
         GlobalStates.osdVolumeOpen = true;
-        if (osdLoader.item) {
-            osdLoader.item.animateIn = true;
-        }
         osdTimeout.restart();
     }
 
@@ -45,12 +42,8 @@ Scope {
         repeat: false
         running: false
         onTriggered: {
-            if (osdLoader.item) {
-                osdLoader.item.animateIn = false; // triggers sleek exit transition before unmounting
-            } else {
-                GlobalStates.osdVolumeOpen = false;
-                root.protectionMessage = "";
-            }
+            GlobalStates.osdVolumeOpen = false;
+            root.protectionMessage = "";
         }
     }
 
@@ -73,6 +66,7 @@ Scope {
     }
 
     Connections {
+        // Listen to volume changes
         target: Audio.sink?.audio ?? null
         function onVolumeChanged() {
             if (!Audio.ready)
@@ -89,6 +83,7 @@ Scope {
     }
 
     Connections {
+        // Listen to protection triggers
         target: Audio
         function onSinkProtectionTriggered(reason) {
             root.protectionMessage = reason;
@@ -104,25 +99,6 @@ Scope {
         sourceComponent: PanelWindow {
             id: osdRoot
             color: "transparent"
-
-            // local state to orchestrate premium motion sequencing
-            property bool animateIn: false
-            Component.onCompleted: animateIn = true
-
-            onAnimateInChanged: {
-                if (!animateIn) {
-                    exitDelay.start();
-                }
-            }
-
-            Timer {
-                id: exitDelay
-                interval: 220
-                onTriggered: {
-                    GlobalStates.osdVolumeOpen = false;
-                    root.protectionMessage = "";
-                }
-            }
 
             Connections {
                 target: root
@@ -158,27 +134,15 @@ Scope {
 
                 Item {
                     id: osdValuesWrapper
+                    // Extra space for shadow
                     implicitHeight: contentColumnLayout.implicitHeight
                     implicitWidth: contentColumnLayout.implicitWidth
                     clip: true
 
-                    // fluid scale and slide mechanics that flip beautifully based on your bar position setup
-                    opacity: osdRoot.animateIn ? 1 : 0
-                    scale: osdRoot.animateIn ? 1 : 0.92
-                    transform: Translate {
-                        y: osdRoot.animateIn ? 0 : (Config.options.bar.bottom ? 20 : -20)
-                    }
-
-                    Behavior on opacity { NumberAnimation { duration: osdRoot.animateIn ? 200 : 140; easing.type: Easing.OutCubic } }
-                    Behavior on scale { NumberAnimation { duration: osdRoot.animateIn ? 340 : 180; easing.type: osdRoot.animateIn ? Easing.OutBack : Easing.OutCubic; easing.overshoot: 1.1 } }
-                    Behavior on transform { NumberAnimation { duration: osdRoot.animateIn ? 340 : 180; easing.type: osdRoot.animateIn ? Easing.OutBack : Easing.OutCubic; easing.overshoot: 1.1 } }
-
                     MouseArea {
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: {
-                            if (osdRoot.animateIn) osdRoot.animateIn = false;
-                        }
+                        onEntered: GlobalStates.osdVolumeOpen = false
                     }
 
                     Column {
@@ -201,7 +165,6 @@ Scope {
                             implicitHeight: protectionMessageBackground.implicitHeight
                             implicitWidth: protectionMessageBackground.implicitWidth
                             opacity: root.protectionMessage !== "" ? 1 : 0
-                            Behavior on opacity { NumberAnimation { duration: 200 } }
 
                             StyledRectangularShadow {
                                 target: protectionMessageBackground
@@ -248,26 +211,27 @@ Scope {
         }
 
         function hide() {
-            if (osdLoader.item) osdLoader.item.animateIn = false;
-            else GlobalStates.osdVolumeOpen = false;
+            GlobalStates.osdVolumeOpen = false;
         }
 
         function toggle() {
-            if (osdLoader.item) osdLoader.item.animateIn = !osdLoader.item.animateIn;
-            else root.triggerOsd();
+            GlobalStates.osdVolumeOpen = !GlobalStates.osdVolumeOpen;
         }
     }
     GlobalShortcut {
         name: "osdVolumeTrigger"
         description: "Triggers volume OSD on press"
-        onPressed: root.triggerOsd()
+
+        onPressed: {
+            root.triggerOsd();
+        }
     }
     GlobalShortcut {
         name: "osdVolumeHide"
         description: "Hides volume OSD on press"
+
         onPressed: {
-            if (osdLoader.item) osdLoader.item.animateIn = false;
-            else GlobalStates.osdVolumeOpen = false;
+            GlobalStates.osdVolumeOpen = false;
         }
     }
 }
