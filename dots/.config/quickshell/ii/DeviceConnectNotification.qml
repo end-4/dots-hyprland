@@ -16,9 +16,10 @@ Scope {
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
     
     // Dynamic properties passed via IPC
-    property string deviceType: "mouse" // "mouse", "pen_drive", "ssd", "hdd"
+    property string deviceType: "mouse" // "mouse", "pen_drive", "ssd", "hdd", "serial"
     property string deviceName: ""
     property string deviceSubtype: ""
+    property string devicePath: ""
 
     function triggerPopup() {
         root.active = true;
@@ -38,10 +39,11 @@ Scope {
     IpcHandler {
         target: "deviceConnectorService"
 
-        function showDeviceConnected(deviceType: string, deviceName: string, deviceSubtype: string): void {
+        function showDeviceConnected(deviceType: string, deviceName: string, deviceSubtype: string, devicePath: string): void {
             root.deviceType = deviceType;
             root.deviceName = deviceName;
             root.deviceSubtype = deviceSubtype;
+            root.devicePath = devicePath || "";
             root.triggerPopup();
         }
     }
@@ -111,6 +113,19 @@ Scope {
                 anchors {
                     centerIn: parent
                     verticalCenterOffset: contentWrapper.animOffset
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: {
+                        if (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") {
+                            if (root.devicePath) {
+                                Quickshell.execDetached(["bash", "-c", "exec $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh " + root.devicePath + " || exec $HOME/.config/hypr/custom/scripts/open_storage_device.sh " + root.devicePath]);
+                                root.active = false;
+                            }
+                        }
+                    }
                 }
 
                 RowLayout {
@@ -563,6 +578,110 @@ Scope {
                                         anchors.top: dongleBody.bottom
                                         anchors.topMargin: 10
                                         anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                            }
+
+                            // --- SERIAL DEVICE / MICROCONTROLLER GRAPHIC ---
+                            Item {
+                                anchors.fill: parent
+                                visible: root.deviceType === "serial"
+
+                                // PCB Board Base
+                                Rectangle {
+                                    id: pcbBase
+                                    width: 32
+                                    height: 48
+                                    radius: 4
+                                    color: "#1b2d24" // Dark forest green / PCB color
+                                    border.color: "#385e49" // Brighter green border
+                                    border.width: 1.5
+                                    anchors.centerIn: parent
+
+                                    // Left side pins (headers)
+                                    Column {
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        spacing: 3
+                                        Repeater {
+                                            model: 6
+                                            Rectangle {
+                                                width: 3
+                                                height: 3
+                                                color: "#D4AF37" // Metallic Gold
+                                                radius: 0.5
+                                            }
+                                        }
+                                    }
+
+                                    // Right side pins (headers)
+                                    Column {
+                                        anchors.right: parent.right
+                                        anchors.rightMargin: 2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        spacing: 3
+                                        Repeater {
+                                            model: 6
+                                            Rectangle {
+                                                width: 3
+                                                height: 3
+                                                color: "#D4AF37" // Metallic Gold
+                                                radius: 0.5
+                                            }
+                                        }
+                                    }
+
+                                    // Metal Shielding Module (ESP32 SoC)
+                                    Rectangle {
+                                        width: 18
+                                        height: 18
+                                        radius: 2
+                                        color: "#8E9297" // Silver/Grey
+                                        border.color: "#B1B5BC"
+                                        border.width: 1
+                                        anchors.centerIn: parent
+                                        anchors.verticalCenterOffset: -4
+
+                                        // Silicon Chip detail (black square on metal)
+                                        Rectangle {
+                                            width: 8
+                                            height: 8
+                                            color: "#1e1e1e"
+                                            radius: 1
+                                            anchors.centerIn: parent
+                                        }
+                                    }
+
+                                    // USB-C Connector Port at the bottom
+                                    Rectangle {
+                                        width: 10
+                                        height: 4
+                                        color: "#CCCCCC"
+                                        border.color: "#888888"
+                                        border.width: 1
+                                        radius: 1
+                                        anchors.bottom: parent.bottom
+                                        anchors.bottomMargin: -1.5
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+
+                                    // Status/Power LED
+                                    Rectangle {
+                                        width: 3
+                                        height: 3
+                                        radius: 1.5
+                                        color: "#00E5FF" // Neon cyan glowing LED
+                                        anchors.top: parent.top
+                                        anchors.topMargin: 4
+                                        anchors.horizontalCenter: parent.horizontalCenter
+
+                                        SequentialAnimation on opacity {
+                                            loops: Animation.Infinite
+                                            running: root.active
+                                            NumberAnimation { from: 1.0; to: 0.2; duration: 500; easing.type: Easing.InOutQuad }
+                                            NumberAnimation { from: 0.2; to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
+                                        }
                                     }
                                 }
                             }

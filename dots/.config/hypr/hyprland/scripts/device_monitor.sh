@@ -49,6 +49,7 @@ udevadm monitor --udev --property | while read -r line; do
         is_mouse=0
         is_storage=0
         is_gamepad=0
+        is_serial=0
         
         if [[ "$ACTION" == "add" ]]; then
             # 1. Check for Mouse connection
@@ -67,9 +68,14 @@ udevadm monitor --udev --property | while read -r line; do
             if [[ "$SUBSYSTEM" == "input" && "$ID_INPUT_JOYSTICK" == "1" ]]; then
                 is_gamepad=1
             fi
+
+            # 4. Check for USB-to-Serial / Microcontroller / ESP32
+            if [[ "$SUBSYSTEM" == "tty" && "$ID_BUS" == "usb" ]]; then
+                is_serial=1
+            fi
         fi
 
-        if [[ "$ACTION" == "add" && ("$SUBSYSTEM" == "block" || "$SUBSYSTEM" == "input" || "$SUBSYSTEM" == "usb") ]]; then
+        if [[ "$ACTION" == "add" && ("$SUBSYSTEM" == "block" || "$SUBSYSTEM" == "input" || "$SUBSYSTEM" == "usb" || "$SUBSYSTEM" == "tty") ]]; then
             echo "[$(date)] Event parsed: ACTION=$ACTION SUBSYSTEM=$SUBSYSTEM DEVTYPE=$DEVTYPE DEVNAME=$DEVNAME VENDOR=$ID_VENDOR MODEL=$ID_MODEL"
         fi
 
@@ -171,6 +177,51 @@ udevadm monitor --udev --property | while read -r line; do
             qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "$device_type" "$device_name" "$device_subtype" &
         fi
 
+        # Process Serial trigger
+        if [[ "$is_serial" -eq 1 ]]; then
+            # Resolve vendor and model name
+            vendor="${ID_USB_VENDOR:-${ID_VENDOR:-$ID_VENDOR_FROM_DATABASE}}"
+            model="${ID_USB_MODEL:-${ID_MODEL:-$ID_MODEL_FROM_DATABASE}}"
+            
+            vendor="${vendor//_/ }"
+            model="${model//_/ }"
+            
+            vendor=$(echo "$vendor" | xargs)
+            model=$(echo "$model" | xargs)
+            
+            if [[ -n "$vendor" && -n "$model" ]]; then
+                if [[ "${model,,}" == "${vendor,,}"* ]]; then
+                    device_name="$model"
+                else
+                    device_name="$vendor $model"
+                fi
+            elif [[ -n "$model" ]]; then
+                device_name="$model"
+            elif [[ -n "$vendor" ]]; then
+                device_name="$vendor"
+            else
+                device_name="COM Device"
+            fi
+
+            # Identify subtype (e.g. CP2102, CH340, ESP32, etc.)
+            device_subtype="USB Serial Port"
+            if [[ "${device_name,,}" =~ "esp" ]]; then
+                device_subtype="ESP32 Microcontroller"
+            elif [[ "${device_name,,}" =~ "arduino" ]]; then
+                device_subtype="Arduino Microcontroller"
+            elif [[ "${device_name,,}" =~ "cp210" ]]; then
+                device_subtype="CP210x USB-UART Bridge"
+            elif [[ "${device_name,,}" =~ "ch34" ]]; then
+                device_subtype="CH340 Serial Converter"
+            elif [[ -n "$DEVNAME" ]]; then
+                device_subtype="Serial Device (${DEVNAME##*/})"
+            fi
+
+            config_name="${qsConfig:-ii}"
+            echo "[$(date)] Triggering serial notification: type=serial, name=$device_name, subtype=$device_subtype, config=$config_name"
+            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "serial" "$device_name" "$device_subtype" &
+        fi
+
         # Process Storage trigger
         if [[ "$is_storage" -eq 1 ]]; then
             dev_base="${DEVNAME##*/}"
@@ -245,7 +296,7 @@ udevadm monitor --udev --property | while read -r line; do
             
             config_name="${qsConfig:-ii}"
             echo "[$(date)] Triggering storage notification: type=$device_type, name=$device_name, subtype=$device_subtype, config=$config_name"
-            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "$device_type" "$device_name" "$device_subtype" &
+            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "$device_type" "$device_name" "$device_subtype" "$DEVNAME" &
         fi
 
         # Reset variables for the next event
