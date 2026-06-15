@@ -162,6 +162,7 @@ Item {
                         color: "transparent"
                         echoMode: TextInput.Normal
                         cursorVisible: false
+                        cursorDelegate: Item {}
                         selectionColor: "transparent"
                         selectedTextColor: "transparent"
                         font.pixelSize: 16
