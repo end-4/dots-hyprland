@@ -117,7 +117,7 @@ Scope {
 
                 MouseArea {
                     anchors.fill: parent
-                    cursorShape: (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    cursorShape: ((root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") && root.devicePath !== "") ? Qt.PointingHandCursor : Qt.ArrowCursor
                     onClicked: {
                         if (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") {
                             if (root.devicePath) {
