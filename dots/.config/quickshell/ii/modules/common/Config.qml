@@ -497,6 +497,8 @@ Singleton {
 
             property JsonObject sidebar: JsonObject {
                 property bool keepRightSidebarLoaded: true
+                property int width: 460 // Collapsed sidebar width in px
+                property int widthExtended: 750 // Extended (Ctrl+O) sidebar width in px
                 property JsonObject translator: JsonObject {
                     property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
