@@ -184,7 +184,7 @@ hl.animation({
     leaf = "windowsOut",
     enabled = true,
     speed = 1,
-    bezier = "md3_decel",
+    bezier = "decel",
     style = "popin 60%"
 })
 hl.animation({
