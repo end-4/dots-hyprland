@@ -11,7 +11,7 @@ Loader {
     visible: active
 
     function abbreviateLayoutCode(fullCode) {
-    return fullCode.split(':').map(layout => {
+        return fullCode.split(':').map(layout => {
             const baseLayout = layout.split('-')[0];
             return baseLayout.slice(0, 4);
         }).join('\n');
@@ -28,7 +28,46 @@ Loader {
             text: abbreviateLayoutCode(HyprlandXkb.currentLayoutCode)
             font.pixelSize: text.includes("\n") ? Appearance.font.pixelSize.smallie : Appearance.font.pixelSize.small
             color: root.color
-            animateChange: true
+            animateChange: false
+            transformOrigin: Item.Center
+
+            transform: Translate {
+                id: textTranslate
+            }
+
+            onTextChanged: {
+                popAnim.restart();
+            }
+
+            ParallelAnimation {
+                id: popAnim
+                NumberAnimation {
+                    target: layoutCodeText
+                    property: "scale"
+                    from: 0.6
+                    to: 1.0
+                    duration: 250
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+                }
+                NumberAnimation {
+                    target: textTranslate
+                    property: "y"
+                    from: root.vertical ? 12 : -12
+                    to: 0
+                    duration: 250
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+                }
+                NumberAnimation {
+                    target: layoutCodeText
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 150
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
     }
 }

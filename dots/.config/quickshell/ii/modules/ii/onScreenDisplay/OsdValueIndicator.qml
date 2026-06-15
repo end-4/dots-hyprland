@@ -16,7 +16,7 @@ Item {
 
     property real valueIndicatorVerticalPadding: 9
     property real valueIndicatorLeftPadding: 10
-    property real valueIndicatorRightPadding: 20 // An icon is circle ish, a column isn't, hence the extra padding
+    property real valueIndicatorRightPadding: 20
 
     implicitWidth: Appearance.sizes.osdWidth + 2 * Appearance.sizes.elevationMargin
     implicitHeight: valueIndicator.implicitHeight + 2 * Appearance.sizes.elevationMargin
@@ -36,7 +36,7 @@ Item {
         implicitWidth: valueRow.implicitWidth
         implicitHeight: valueRow.implicitHeight
 
-        RowLayout { // Icon on the left, stuff on the right
+        RowLayout {
             id: valueRow
             Layout.margins: 10
             anchors.fill: parent
@@ -50,7 +50,7 @@ Item {
                 Layout.topMargin: valueIndicatorVerticalPadding
                 Layout.bottomMargin: valueIndicatorVerticalPadding
 
-                MaterialSymbol { // Icon
+                MaterialSymbol {
                     anchors {
                         centerIn: parent
                         alignWhenCentered: !root.rotateIcon
@@ -62,23 +62,23 @@ Item {
                     iconSize: 20 + 10 * (root.scaleIcon ? value : 1)
                     rotation: 180 * (root.rotateIcon ? value : 0)
 
+                    // snappy m3 spring curves for tactile feedback
                     Behavior on iconSize {
-                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                        NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.15 }
                     }
                     Behavior on rotation {
-                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                        NumberAnimation { duration: 380; easing.type: Easing.OutBack; easing.overshoot: 1.2 }
                     }
-                
                 }
             }
-            ColumnLayout { // Stuff
+            ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.rightMargin: valueIndicatorRightPadding
                 spacing: 5
 
-                RowLayout { // Name fill left, value on the right end
-                    Layout.leftMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
-                    Layout.rightMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
+                RowLayout {
+                    Layout.leftMargin: valueProgressBar.height / 2
+                    Layout.rightMargin: valueProgressBar.height / 2
 
                     StyledText {
                         color: Appearance.colors.colOnLayer0
@@ -94,7 +94,7 @@ Item {
                         text: Math.round(root.value * 100)
                     }
                 }
-                
+
                 StyledProgressBar {
                     id: valueProgressBar
                     Layout.fillWidth: true

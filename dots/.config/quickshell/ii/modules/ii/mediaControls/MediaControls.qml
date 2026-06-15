@@ -34,7 +34,6 @@ Scope {
             let p1 = players[i];
             let group = [i];
 
-            // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
                 if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
@@ -42,7 +41,6 @@ Scope {
                 }
             }
 
-            // Pick the one with non-empty trackArtUrl, or fallback to the first
             let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
             if (chosenIdx === undefined)
                 chosenIdx = group[0];
@@ -64,7 +62,6 @@ Scope {
         command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
         stdout: SplitParser {
             onRead: data => {
-                // Parse `;`-separated values into the visualizerPoints array
                 let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
                 root.visualizerPoints = points;
             }
@@ -110,6 +107,7 @@ Scope {
 
             Component.onCompleted: {
                 GlobalFocusGrab.addDismissable(panelWindow);
+                introAnim.start();
             }
             Component.onDestruction: {
                 GlobalFocusGrab.removeDismissable(panelWindow);
@@ -121,27 +119,75 @@ Scope {
                 }
             }
 
+            ParallelAnimation {
+                id: introAnim
+                NumberAnimation {
+                    target: playerColumnLayout
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 180
+                    easing.type: Easing.OutCubic
+                }
+                NumberAnimation {
+                    target: playerColumnLayout
+                    property: "scale"
+                    from: 0.93
+                    to: 1.0
+                    duration: 280
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+                }
+            }
+
             ColumnLayout {
                 id: playerColumnLayout
                 anchors.fill: parent
-                spacing: -Appearance.sizes.elevationMargin // Shadow overlap okay
+                spacing: 8
+                transformOrigin: Item.Top
 
                 Repeater {
                     model: ScriptModel {
                         values: root.meaningfulPlayers
                     }
                     delegate: PlayerControl {
+                        id: controlItem
                         required property MprisPlayer modelData
                         player: modelData
                         visualizerPoints: root.visualizerPoints
                         implicitWidth: root.widgetWidth
                         implicitHeight: root.widgetHeight
                         radius: root.popupRounding
+
+                        opacity: 0
+                        scale: 0.9
+
+                        Component.onCompleted: {
+                            delegateAnim.start();
+                        }
+
+                        ParallelAnimation {
+                            id: delegateAnim
+                            NumberAnimation {
+                                target: controlItem
+                                property: "opacity"
+                                to: 1
+                                duration: 200
+                                easing.type: Easing.OutCubic
+                            }
+                            NumberAnimation {
+                                target: controlItem
+                                property: "scale"
+                                to: 1
+                                duration: 250
+                                easing.type: Easing.BezierSpline
+                                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+                            }
+                        }
                     }
                 }
 
                 Item {
-                    // No player placeholder
                     Layout.alignment: {
                         if (panelWindow.anchors.left)
                             return Qt.AlignLeft;
@@ -164,22 +210,26 @@ Scope {
                         anchors.centerIn: parent
                         color: Appearance.colors.colLayer0
                         radius: root.popupRounding
-                        property real padding: 20
+                        property real padding: 24
                         implicitWidth: placeholderLayout.implicitWidth + padding * 2
                         implicitHeight: placeholderLayout.implicitHeight + padding * 2
 
                         ColumnLayout {
                             id: placeholderLayout
                             anchors.centerIn: parent
+                            spacing: 8
 
                             StyledText {
                                 text: Translation.tr("No active player")
                                 font.pixelSize: Appearance.font.pixelSize.large
+                                Layout.alignment: Qt.AlignHCenter
                             }
                             StyledText {
                                 color: Appearance.colors.colSubtext
                                 text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
                                 font.pixelSize: Appearance.font.pixelSize.small
+                                Layout.alignment: Qt.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter
                             }
                         }
                     }

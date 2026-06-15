@@ -1,3 +1,4 @@
+// added smoother transitions to the Slider layout changes and spring physics on toggle popups x
 import qs
 import qs.services
 import qs.modules.common
@@ -11,7 +12,6 @@ import Quickshell.Hyprland
 
 import qs.modules.ii.sidebarRight.quickToggles
 import qs.modules.ii.sidebarRight.quickToggles.classicStyle
-
 import qs.modules.ii.sidebarRight.bluetoothDevices
 import qs.modules.ii.sidebarRight.nightLight
 import qs.modules.ii.sidebarRight.volumeMixer
@@ -66,7 +66,6 @@ Item {
             SystemButtonRow {
                 Layout.fillHeight: false
                 Layout.fillWidth: true
-                // Layout.margins: 10
                 Layout.topMargin: 5
                 Layout.bottomMargin: 0
             }
@@ -74,7 +73,8 @@ Item {
             Loader {
                 id: slidersLoader
                 Layout.fillWidth: true
-                visible: active
+                visible: opacity > 0
+                opacity: active ? 1 : 0
                 active: {
                     const configQuickSliders = Config.options.sidebar.quickSliders
                     if (!configQuickSliders.enable) return false
@@ -82,6 +82,7 @@ Item {
                     return true;
                 }
                 sourceComponent: QuickSliders {}
+                Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
             }
 
             LoaderedQuickPanelImplementation {
@@ -113,16 +114,12 @@ Item {
 
     ToggleDialog {
         shownPropertyString: "showAudioOutputDialog"
-        dialog: VolumeDialog {
-            isSink: true
-        }
+        dialog: VolumeDialog { isSink: true }
     }
 
     ToggleDialog {
         shownPropertyString: "showAudioInputDialog"
-        dialog: VolumeDialog {
-            isSink: false
-        }
+        dialog: VolumeDialog { isSink: false }
     }
 
     ToggleDialog {
@@ -160,6 +157,13 @@ Item {
         readonly property bool shown: root[shownPropertyString]
         anchors.fill: parent
 
+        opacity: shown ? 1 : 0
+        scale: shown ? 1 : 0.97
+        visible: opacity > 0
+
+        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
+
         onShownChanged: if (shown) toggleDialogLoader.active = true;
         active: shown
         onActiveChanged: {
@@ -189,21 +193,11 @@ Item {
         active: Config.options.sidebar.quickToggles.style === styleName
         Connections {
             target: quickPanelImplLoader.item
-            function onOpenAudioOutputDialog() {
-                root.showAudioOutputDialog = true;
-            }
-            function onOpenAudioInputDialog() {
-                root.showAudioInputDialog = true;
-            }
-            function onOpenBluetoothDialog() {
-                root.showBluetoothDialog = true;
-            }
-            function onOpenNightLightDialog() {
-                root.showNightLightDialog = true;
-            }
-            function onOpenWifiDialog() {
-                root.showWifiDialog = true;
-            }
+            function onOpenAudioOutputDialog() { root.showAudioOutputDialog = true; }
+            function onOpenAudioInputDialog() { root.showAudioInputDialog = true; }
+            function onOpenBluetoothDialog() { root.showBluetoothDialog = true; }
+            function onOpenNightLightDialog() { root.showNightLightDialog = true; }
+            function onOpenWifiDialog() { root.showWifiDialog = true; }
         }
     }
 
@@ -221,7 +215,7 @@ Item {
             radius: height / 2
             implicitWidth: uptimeRow.implicitWidth + 24
             implicitHeight: uptimeRow.implicitHeight + 8
-            
+
             Row {
                 id: uptimeRow
                 anchors.centerIn: parent
@@ -271,9 +265,7 @@ Item {
                     Quickshell.execDetached(["hyprctl", "reload"])
                     Quickshell.reload(true);
                 }
-                StyledToolTip {
-                    text: Translation.tr("Reload Hyprland & Quickshell")
-                }
+                StyledToolTip { text: Translation.tr("Reload Hyprland & Quickshell") }
             }
             QuickToggleButton {
                 toggled: false
@@ -282,19 +274,13 @@ Item {
                     GlobalStates.sidebarRightOpen = false;
                     Quickshell.execDetached(["qs", "-p", root.settingsQmlPath]);
                 }
-                StyledToolTip {
-                    text: Translation.tr("Settings")
-                }
+                StyledToolTip { text: Translation.tr("Settings") }
             }
             QuickToggleButton {
                 toggled: false
                 buttonIcon: "power_settings_new"
-                onClicked: {
-                    GlobalStates.sessionOpen = true;
-                }
-                StyledToolTip {
-                    text: Translation.tr("Session")
-                }
+                onClicked: { GlobalStates.sessionOpen = true; }
+                StyledToolTip { text: Translation.tr("Session") }
             }
         }
     }

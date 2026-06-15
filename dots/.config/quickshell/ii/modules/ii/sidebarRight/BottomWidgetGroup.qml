@@ -40,32 +40,13 @@ Rectangle {
 
     Behavior on implicitHeight {
         NumberAnimation {
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            duration: 350
+            easing.type: Easing.OutBack
         }
     }
 
     function setCollapsed(state) {
         Persistent.states.sidebar.bottomGroup.collapsed = state;
-        if (collapsed) {
-            bottomWidgetGroupRow.opacity = 0;
-        } else {
-            collapsedBottomWidgetGroupRow.opacity = 0;
-        }
-        collapseCleanFadeTimer.start();
-    }
-
-    Timer {
-        id: collapseCleanFadeTimer
-        interval: Appearance.animation.elementMove.duration / 2
-        repeat: false
-        onTriggered: {
-            if (collapsed)
-                collapsedBottomWidgetGroupRow.opacity = 1;
-            else
-                bottomWidgetGroupRow.opacity = 1;
-        }
     }
 
     Keys.onPressed: event => {
@@ -79,29 +60,21 @@ Rectangle {
         }
     }
 
-    // The thing when collapsed
     RowLayout {
         id: collapsedBottomWidgetGroupRow
-        opacity: collapsed ? 1 : 0
+        opacity: root.collapsed ? 1 : 0
+        scale: root.collapsed ? 1 : 0.85
         visible: opacity > 0
-        Behavior on opacity {
-            NumberAnimation {
-                id: collapsedBottomWidgetGroupRowFade
-                duration: Appearance.animation.elementMove.duration / 2
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-        }
-
         spacing: 15
+
+        Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+        Behavior on scale { NumberAnimation { duration: 300; easing.type: Easing.OutBack } }
 
         CalendarHeaderButton {
             Layout.margins: 10
             Layout.rightMargin: 0
             forceCircle: true
-            downAction: () => {
-                root.setCollapsed(false);
-            }
+            downAction: () => root.setCollapsed(false)
             contentItem: MaterialSymbol {
                 text: "keyboard_arrow_up"
                 iconSize: Appearance.font.pixelSize.larger
@@ -114,40 +87,30 @@ Rectangle {
             property int remainingTasks: Todo.list.filter(task => !task.done).length
             Layout.margins: 10
             Layout.leftMargin: 0
-            // text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
             text: Translation.tr("%1   •   %2 tasks").arg(DateTime.collapsedCalendarFormat).arg(remainingTasks)
             font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
         }
     }
 
-    // The thing when expanded
     RowLayout {
         id: bottomWidgetGroupRow
-
-        opacity: collapsed ? 0 : 1
+        opacity: root.collapsed ? 0 : 1
+        scale: root.collapsed ? 0.85 : 1
         visible: opacity > 0
-        Behavior on opacity {
-            NumberAnimation {
-                id: bottomWidgetGroupRowFade
-                duration: Appearance.animation.elementMove.duration / 2
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-        }
-
         anchors.fill: parent
-        // implicitHeight: tabStack.implicitHeight
         spacing: 20
 
-        // Navigation rail
+        Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+        Behavior on scale { NumberAnimation { duration: 300; easing.type: Easing.OutBack } }
+
         Item {
             Layout.fillHeight: true
             Layout.fillWidth: false
             Layout.leftMargin: 10
             Layout.topMargin: 10
             implicitWidth: tabBar.implicitWidth
-            // Navigation rail buttons
+
             NavigationRailTabArray {
                 id: tabBar
                 anchors.verticalCenter: parent.verticalCenter
@@ -171,14 +134,12 @@ Rectangle {
                     }
                 }
             }
-            // Collapse button
+
             CalendarHeaderButton {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 forceCircle: true
-                downAction: () => {
-                    root.setCollapsed(true);
-                }
+                downAction: () => root.setCollapsed(true)
                 contentItem: MaterialSymbol {
                     text: "keyboard_arrow_down"
                     iconSize: Appearance.font.pixelSize.larger
@@ -188,28 +149,26 @@ Rectangle {
             }
         }
 
-        // Content area
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            // implicitHeight: tabStack.implicitHeight
 
             Loader {
                 id: tabStack
                 anchors.fill: parent
-                anchors.bottomMargin: -anchors.topMargin
+                transform: Translate { id: tabTranslate }
 
                 Component.onCompleted: {
+                    root.previousIndex = root.selectedTab;
                     tabStack.source = root.tabs[root.selectedTab].widget;
                 }
 
                 Connections {
                     target: root
                     function onSelectedTabChanged() {
-                        if (root.currentTab > root.previousIndex)
-                            tabSwitchBehavior.animation.down = true;
-                        else if (root.currentTab < root.previousIndex)
-                            tabSwitchBehavior.animation.down = false;
+                        if (root.previousIndex !== -1) {
+                            tabSwitchBehavior.animation.down = root.selectedTab > root.previousIndex;
+                        }
                         tabStack.source = root.tabs[root.selectedTab].widget;
                     }
                 }
@@ -233,41 +192,37 @@ Rectangle {
                 target: tabStack
                 properties: "opacity"
                 to: 0
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                duration: 150
+                easing.type: Easing.OutCubic
             }
             PropertyAnimation {
-                target: tabStack.anchors
-                properties: "topMargin"
-                to: 10 * (switchAnim.down ? -1 : 1)
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                target: tabTranslate
+                property: "y"
+                to: switchAnim.down ? -40 : 40
+                duration: 150
+                easing.type: Easing.OutCubic
             }
         }
         PropertyAction {
             target: tabStack
             property: "source"
             value: root.tabs[root.selectedTab].widget
-        } // The source change happens here
+        }
         ParallelAnimation {
             PropertyAnimation {
-                target: tabStack.anchors
-                properties: "topMargin"
-                from: 10 * -(switchAnim.down ? -1 : 1)
+                target: tabTranslate
+                property: "y"
+                from: switchAnim.down ? 40 : -40
                 to: 0
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                duration: 200
+                easing.type: Easing.OutCubic
             }
             PropertyAnimation {
                 target: tabStack
                 properties: "opacity"
                 to: 1
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                duration: 200
+                easing.type: Easing.OutCubic
             }
         }
         ScriptAction {

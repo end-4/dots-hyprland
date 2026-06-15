@@ -64,10 +64,11 @@ StyledFlickable {
                 property bool selected: index >= root.selectionStart && index < root.selectionEnd
 
                 color: ColorUtils.transparentize(root.selectionColor, selected ? 0 : 1)
-                
+
                 MaterialShape {
                     id: materialShape
                     anchors.centerIn: parent
+
                     property list<var> charShapes: [
                         MaterialShape.Shape.Clover4Leaf,
                         MaterialShape.Shape.Arrow,
@@ -77,7 +78,11 @@ StyledFlickable {
                         MaterialShape.Shape.ClamShell,
                         MaterialShape.Shape.Pentagon,
                     ]
-                    shape: charShapes[charItem.index % charShapes.length]
+
+                    // Evaluated once per instantiation to decouple from index patterns
+                    property int randomShapeIndex: Math.floor(Math.random() * charShapes.length)
+                    shape: charShapes[randomShapeIndex]
+
                     // Animate on appearance
                     color: charItem.selected ? root.selectedTextColor : root.color
                     implicitSize: 0

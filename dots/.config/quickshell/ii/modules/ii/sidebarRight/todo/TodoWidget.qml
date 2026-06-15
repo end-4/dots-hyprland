@@ -22,12 +22,10 @@ Item {
             }
             event.accepted = true;
         }
-        // Open add dialog on "N" (any modifiers)
         else if (event.key === Qt.Key_N) {
             root.showAddDialog = true
             event.accepted = true;
         }
-        // Close dialog on Esc if open
         else if (event.key === Qt.Key_Escape && root.showAddDialog) {
             root.showAddDialog = false
             event.accepted = true;
@@ -51,16 +49,14 @@ Item {
             }
         }
 
-        SwipeView {
+        Item {
             id: swipeView
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
             clip: true
-            currentIndex: tabBar.currentIndex
+            property int currentIndex: tabBar.currentIndex
 
-            // To Do tab
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
@@ -68,7 +64,18 @@ Item {
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return !item.done; })
+
+                width: parent.width
+                height: parent.height
+                x: (0 - swipeView.currentIndex) * (parent.width + 30)
+                opacity: swipeView.currentIndex === 0 ? 1 : 0
+                scale: swipeView.currentIndex === 0 ? 1 : 0.96
+
+                Behavior on x { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+                Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on scale { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
             }
+
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
@@ -76,12 +83,20 @@ Item {
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return item.done; })
-            }
 
+                width: parent.width
+                height: parent.height
+                x: (1 - swipeView.currentIndex) * (parent.width + 30)
+                opacity: swipeView.currentIndex === 1 ? 1 : 0
+                scale: swipeView.currentIndex === 1 ? 1 : 0.96
+
+                Behavior on x { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+                Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on scale { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+            }
         }
     }
 
-    // + FAB
     StyledRectangularShadow {
         target: fabButton
         radius: fabButton.buttonRadius
@@ -105,7 +120,7 @@ Item {
         visible: opacity > 0
         opacity: root.showAddDialog ? 1 : 0
         Behavior on opacity {
-            NumberAnimation { 
+            NumberAnimation {
                 duration: Appearance.animation.elementMoveFast.duration
                 easing.type: Appearance.animation.elementMoveFast.type
                 easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
@@ -119,7 +134,7 @@ Item {
             }
         }
 
-        Rectangle { // Scrim
+        Rectangle {
             anchors.fill: parent
             radius: Appearance.rounding.small
             color: Appearance.colors.colScrim
@@ -131,7 +146,7 @@ Item {
             }
         }
 
-        Rectangle { // The dialog
+        Rectangle {
             id: dialog
             anchors.left: parent.left
             anchors.right: parent.right
@@ -147,7 +162,7 @@ Item {
                     Todo.addTask(todoInput.text)
                     todoInput.text = ""
                     root.showAddDialog = false
-                    tabBar.setCurrentIndex(0) // Show unfinished tasks
+                    tabBar.setCurrentIndex(0)
                 }
             }
 

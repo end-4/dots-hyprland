@@ -20,52 +20,47 @@ ApplicationWindow {
     id: root
     property string firstRunFilePath: CF.FileUtils.trimFileProtocol(`${Directories.state}/user/first_run.txt`)
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
-    property real contentPadding: 8
+    property real contentPadding: 16
     property bool showNextTime: false
-    property var pages: [
+
+    property var sections: [
         {
-            name: Translation.tr("Quick"),
-            icon: "instant_mix",
-            component: "modules/settings/QuickConfig.qml"
+            title: Translation.tr("Core system"),
+            subpages: [
+                { name: Translation.tr("Quick settings"), icon: "instant_mix", component: "modules/settings/QuickConfig.qml" },
+                { name: Translation.tr("General configuration"), icon: "browse", component: "modules/settings/GeneralConfig.qml" },
+                { name: Translation.tr("Advanced settings"), icon: "construction", component: "modules/settings/AdvancedConfig.qml" }
+            ]
         },
         {
-            name: Translation.tr("General"),
-            icon: "browse",
-            component: "modules/settings/GeneralConfig.qml"
+            title: Translation.tr("Interface & style"),
+            subpages: [
+                { name: Translation.tr("Desktop bar"), icon: "toast", iconRotation: 180, component: "modules/settings/BarConfig.qml" },
+                { name: Translation.tr("Wallpapers"), icon: "texture", component: "modules/settings/BackgroundConfig.qml" },
+                { name: Translation.tr("Visual theme"), icon: "bottom_app_bar", component: "modules/settings/InterfaceConfig.qml" }
+            ]
         },
         {
-            name: Translation.tr("Bar"),
-            icon: "toast",
-            iconRotation: 180,
-            component: "modules/settings/BarConfig.qml"
-        },
-        {
-            name: Translation.tr("Background"),
-            icon: "texture",
-            component: "modules/settings/BackgroundConfig.qml"
-        },
-        {
-            name: Translation.tr("Interface"),
-            icon: "bottom_app_bar",
-            component: "modules/settings/InterfaceConfig.qml"
-        },
-        {
-            name: Translation.tr("Services"),
-            icon: "settings",
-            component: "modules/settings/ServicesConfig.qml"
-        },
-        {
-            name: Translation.tr("Advanced"),
-            icon: "construction",
-            component: "modules/settings/AdvancedConfig.qml"
-        },
-        {
-            name: Translation.tr("About"),
-            icon: "info",
-            component: "modules/settings/About.qml"
+            title: Translation.tr("System management"),
+            subpages: [
+                { name: Translation.tr("Background services"), icon: "settings", component: "modules/settings/ServicesConfig.qml" },
+                { name: Translation.tr("About shell"), icon: "info", component: "modules/settings/About.qml" }
+            ]
         }
     ]
-    property int currentPage: 0
+
+    property string currentComponent: "modules/settings/QuickConfig.qml"
+
+    property var flatPages: {
+        let arr = [];
+        for (let i = 0; i < sections.length; i++) {
+            for (let j = 0; j < sections[i].subpages.length; j++) {
+                arr.push(sections[i].subpages[j].component);
+            }
+        }
+        return arr;
+    }
+    property int flatIndex: flatPages.indexOf(currentComponent)
 
     visible: true
     onClosing: Qt.quit()
@@ -73,13 +68,13 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
+        Config.readWriteDelay = 0
     }
 
-    minimumWidth: 750
-    minimumHeight: 500
-    width: 1100
-    height: 750
+    minimumWidth: 850
+    minimumHeight: 600
+    width: 1150
+    height: 800
     color: Appearance.m3colors.m3background
 
     ColumnLayout {
@@ -87,99 +82,98 @@ ApplicationWindow {
             fill: parent
             margins: contentPadding
         }
+        spacing: 12
 
         Keys.onPressed: (event) => {
             if (event.modifiers === Qt.ControlModifier) {
-                if (event.key === Qt.Key_PageDown) {
-                    root.currentPage = Math.min(root.currentPage + 1, root.pages.length - 1)
-                    event.accepted = true;
-                } 
-                else if (event.key === Qt.Key_PageUp) {
-                    root.currentPage = Math.max(root.currentPage - 1, 0)
+                let len = root.flatPages.length;
+                if (event.key === Qt.Key_PageDown || event.key === Qt.Key_Tab) {
+                    root.currentComponent = root.flatPages[(root.flatIndex + 1) % len];
                     event.accepted = true;
                 }
-                else if (event.key === Qt.Key_Tab) {
-                    root.currentPage = (root.currentPage + 1) % root.pages.length;
-                    event.accepted = true;
-                }
-                else if (event.key === Qt.Key_Backtab) {
-                    root.currentPage = (root.currentPage - 1 + root.pages.length) % root.pages.length;
+                else if (event.key === Qt.Key_PageUp || event.key === Qt.Key_Backtab) {
+                    root.currentComponent = root.flatPages[(root.flatIndex - 1 + len) % len];
                     event.accepted = true;
                 }
             }
         }
 
-        Item { // Titlebar
+        Item {
             visible: Config.options?.windows.showTitlebar
             Layout.fillWidth: true
             Layout.fillHeight: false
-            implicitHeight: Math.max(titleText.implicitHeight, windowControlsRow.implicitHeight)
+            implicitHeight: 38
+
             StyledText {
                 id: titleText
                 anchors {
                     left: Config.options.windows.centerTitle ? undefined : parent.left
                     horizontalCenter: Config.options.windows.centerTitle ? parent.horizontalCenter : undefined
                     verticalCenter: parent.verticalCenter
-                    leftMargin: 12
                 }
                 color: Appearance.colors.colOnLayer0
                 text: Translation.tr("Settings")
                 font {
                     family: Appearance.font.family.title
-                    pixelSize: Appearance.font.pixelSize.title
-                    variableAxes: Appearance.font.variableAxes.title
+                    pixelSize: 13
+                    weight: Font.Bold
                 }
             }
-            RowLayout { // Window controls row
+            RowLayout {
                 id: windowControlsRow
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 RippleButton {
                     buttonRadius: Appearance.rounding.full
-                    implicitWidth: 35
-                    implicitHeight: 35
+                    implicitWidth: 28
+                    implicitHeight: 28
                     onClicked: root.close()
                     contentItem: MaterialSymbol {
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
                         text: "close"
-                        iconSize: 20
+                        iconSize: 16
                     }
                 }
             }
         }
 
-        RowLayout { // Window content with navigation rail and content pane
+        RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: contentPadding
+            spacing: 16
+
             Item {
                 id: navRailWrapper
                 Layout.fillHeight: true
-                Layout.margins: 5
-                implicitWidth: navRail.expanded ? 150 : fab.baseSize
+                implicitWidth: navRail.expanded ? 240 : 64
+
                 Behavior on implicitWidth {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                }
-                NavigationRail { // Window content with navigation rail and content pane
-                    id: navRail
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
+                    NumberAnimation {
+                        duration: 250
+                        easing.type: Easing.OutQuint
                     }
-                    spacing: 10
-                    expanded: root.width > 900
-                    
+                }
+
+                NavigationRail {
+                    id: navRail
+                    anchors.fill: parent
+                    spacing: 16
+                    expanded: root.width > 950
+
                     NavigationRailExpandButton {
                         focus: root.visible
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
                     }
 
                     FloatingActionButton {
                         id: fab
                         property bool justCopied: false
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
                         iconText: justCopied ? "check" : "edit"
-                        buttonText: justCopied ? Translation.tr("Path copied") : Translation.tr("Config file")
+                        buttonText: navRail.expanded ? (justCopied ? Translation.tr("Copied path") : Translation.tr("Source config")) : ""
                         expanded: navRail.expanded
                         downAction: () => {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
@@ -193,105 +187,252 @@ ApplicationWindow {
                         Timer {
                             id: revertTextTimer
                             interval: 1500
-                            onTriggered: {
-                                fab.justCopied = false;
-                            }
+                            onTriggered: { fab.justCopied = false; }
                         }
 
                         StyledToolTip {
-                            text: Translation.tr("Open the shell config file\nAlternatively right-click to copy path")
+                            text: Translation.tr("Open raw JSON config")
                         }
                     }
 
-                    NavigationRailTabArray {
-                        currentIndex: root.currentPage
-                        expanded: navRail.expanded
-                        Repeater {
-                            model: root.pages
-                            NavigationRailButton {
-                                required property var index
-                                required property var modelData
-                                toggled: root.currentPage === index
-                                onPressed: root.currentPage = index;
-                                expanded: navRail.expanded
-                                buttonIcon: modelData.icon
-                                buttonIconRotation: modelData.iconRotation || 0
-                                buttonText: modelData.name
-                                showToggledHighlight: false
+                    ScrollView {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+                        contentWidth: availableWidth
+                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+
+                        ColumnLayout {
+                            id: sidebarItemsContainer
+                            width: parent.width
+                            spacing: 20
+
+                            Repeater {
+                                model: root.sections
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 6
+
+                                    StyledText {
+                                        text: modelData.title.toUpperCase()
+                                        color: Appearance.colors.colOnLayer0
+                                        opacity: navRail.expanded ? 0.5 : 0.0
+                                        Layout.fillWidth: true
+                                        Layout.leftMargin: 14
+                                        Layout.bottomMargin: navRail.expanded ? 4 : 0
+                                        Layout.preferredHeight: navRail.expanded ? implicitHeight : 0
+
+                                        font {
+                                            pixelSize: 10
+                                            weight: Font.Black
+                                            letterSpacing: 1.2
+                                        }
+
+                                        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                                        Behavior on Layout.preferredHeight { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                                        Behavior on Layout.bottomMargin { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                                    }
+
+                                    Repeater {
+                                        model: modelData.subpages
+                                        Item {
+                                            id: sideBtn
+                                            required property var modelData
+                                            Layout.fillWidth: true
+                                            Layout.preferredHeight: 44
+
+                                            property bool isSelected: root.currentComponent === modelData.component
+
+                                            Rectangle {
+                                                id: buttonBg
+                                                anchors.left: parent.left
+                                                anchors.leftMargin: 10
+                                                width: navRail.expanded ? parent.width - 20 : 44
+                                                height: parent.height
+                                                radius: navRail.expanded ? 12 : 22
+                                                color: sideBtn.isSelected ? Appearance.m3colors.m3secondaryContainer : "transparent"
+
+                                                Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
+                                                Behavior on radius { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
+                                                Behavior on color { ColorAnimation { duration: 180 } }
+
+                                                transform: Scale {
+                                                    id: squishScale
+                                                    origin.x: buttonBg.width / 2
+                                                    origin.y: buttonBg.height / 2
+                                                    yScale: 1.0
+                                                    xScale: 1.0
+                                                }
+
+                                                Connections {
+                                                    target: sideBtn
+                                                    function onIsSelectedChanged() {
+                                                        if (sideBtn.isSelected) {
+                                                            selectAnim.restart();
+                                                        }
+                                                    }
+                                                }
+
+                                                SequentialAnimation {
+                                                    id: selectAnim
+                                                    ParallelAnimation {
+                                                        NumberAnimation { target: squishScale; property: "yScale"; to: 0.75; duration: 90; easing.type: Easing.OutQuad }
+                                                        NumberAnimation { target: squishScale; property: "xScale"; to: 1.08; duration: 90; easing.type: Easing.OutQuad }
+                                                    }
+                                                    ParallelAnimation {
+                                                        NumberAnimation { target: squishScale; property: "yScale"; to: 1.0; duration: 240; easing.type: Easing.OutBack }
+                                                        NumberAnimation { target: squishScale; property: "xScale"; to: 1.0; duration: 240; easing.type: Easing.OutBack }
+                                                    }
+                                                }
+
+                                                RippleButton {
+                                                    anchors.fill: parent
+                                                    buttonRadius: parent.radius
+                                                    onClicked: root.currentComponent = modelData.component
+
+                                                    RowLayout {
+                                                        anchors.fill: parent
+                                                        spacing: 0
+
+                                                        Item {
+                                                            Layout.preferredWidth: 44
+                                                            Layout.fillHeight: true
+
+                                                            MaterialSymbol {
+                                                                anchors.centerIn: parent
+                                                                text: modelData.icon
+                                                                iconSize: 22
+                                                                rotation: modelData.iconRotation || 0
+                                                                color: sideBtn.isSelected ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+                                                            }
+                                                        }
+
+                                                        Item {
+                                                            Layout.fillWidth: true
+                                                            Layout.fillHeight: true
+                                                            clip: true
+                                                            visible: navRail.expanded
+
+                                                            StyledText {
+                                                                text: modelData.name
+                                                                anchors.verticalCenter: parent.verticalCenter
+                                                                anchors.left: parent.left
+                                                                anchors.right: parent.right
+                                                                anchors.rightMargin: 16
+                                                                color: sideBtn.isSelected ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+                                                                font.weight: sideBtn.isSelected ? Font.Bold : Font.Normal
+                                                                font.pixelSize: 13
+                                                                wrapMode: Text.NoWrap
+                                                                elide: Text.ElideRight
+
+                                                                opacity: navRail.expanded ? 1.0 : 0.0
+                                                                Behavior on opacity { NumberAnimation { duration: 200 } }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
-
-                    Item {
-                        Layout.fillHeight: true
                     }
                 }
             }
-            Rectangle { // Content container
+
+            Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: Appearance.m3colors.m3surfaceContainerLow
-                radius: Appearance.rounding.windowRounding - root.contentPadding
+                color: Appearance.m3colors.m3surfaceContainer
+                radius: Appearance.rounding.windowRounding
 
-                Loader {
-                    id: pageLoader
+                Item {
+                    id: containerWrapper
                     anchors.fill: parent
-                    opacity: 1.0
+                    anchors.margins: 16
 
-                    active: Config.ready
-                    Component.onCompleted: {
-                        source = root.pages[0].component
-                    }
+                    Loader {
+                        id: pageLoader
+                        anchors.fill: parent
+                        opacity: 1.0
+                        scale: 1.0
+                        active: Config.ready
 
-                    Connections {
-                        target: root
-                        function onCurrentPageChanged() {
-                            switchAnim.complete();
-                            switchAnim.start();
+                        transform: Translate {
+                            id: loaderTranslate
+                            y: 0
                         }
-                    }
 
-                    SequentialAnimation {
-                        id: switchAnim
-
-                        NumberAnimation {
-                            target: pageLoader
-                            properties: "opacity"
-                            from: 1
-                            to: 0
-                            duration: 100
-                            easing.type: Appearance.animation.elementMoveExit.type
-                            easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
+                        Component.onCompleted: {
+                            source = root.currentComponent
                         }
-                        ParallelAnimation {
+
+                        Connections {
+                            target: root
+                            function onCurrentComponentChanged() {
+                                switchAnim.complete();
+                                switchAnim.start();
+                            }
+                        }
+
+                        SequentialAnimation {
+                            id: switchAnim
+
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    target: pageLoader
+                                    property: "opacity"
+                                    to: 0
+                                    duration: 100
+                                    easing.type: Easing.OutCubic
+                                }
+                                NumberAnimation {
+                                    target: pageLoader
+                                    property: "scale"
+                                    to: 0.96
+                                    duration: 100
+                                    easing.type: Easing.OutCubic
+                                }
+                                NumberAnimation {
+                                    target: loaderTranslate
+                                    property: "y"
+                                    to: 10
+                                    duration: 100
+                                    easing.type: Easing.OutCubic
+                                }
+                            }
+
                             PropertyAction {
                                 target: pageLoader
                                 property: "source"
-                                value: root.pages[root.currentPage].component
+                                value: root.currentComponent
                             }
-                            PropertyAction {
-                                target: pageLoader
-                                property: "anchors.topMargin"
-                                value: 20
-                            }
-                        }
-                        ParallelAnimation {
-                            NumberAnimation {
-                                target: pageLoader
-                                properties: "opacity"
-                                from: 0
-                                to: 1
-                                duration: 200
-                                easing.type: Appearance.animation.elementMoveEnter.type
-                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
-                            }
-                            NumberAnimation {
-                                target: pageLoader
-                                properties: "anchors.topMargin"
-                                to: 0
-                                duration: 200
-                                easing.type: Appearance.animation.elementMoveEnter.type
-                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
+
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    target: pageLoader
+                                    property: "opacity"
+                                    to: 1
+                                    duration: 300
+                                    easing.type: Easing.OutCubic
+                                }
+                                NumberAnimation {
+                                    target: pageLoader
+                                    property: "scale"
+                                    to: 1.0
+                                    duration: 300
+                                    easing.type: Easing.OutBack
+                                }
+                                NumberAnimation {
+                                    target: loaderTranslate
+                                    property: "y"
+                                    from: -10
+                                    to: 0
+                                    duration: 300
+                                    easing.type: Easing.OutCubic
+                                }
                             }
                         }
                     }
