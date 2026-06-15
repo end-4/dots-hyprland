@@ -70,7 +70,7 @@ Scope {
 
     Loader {
         id: mediaControlsLoader
-        active: GlobalStates.mediaControlsOpen || (item && item.isOpen)
+        active: GlobalStates.mediaControlsOpen
         onActiveChanged: {
             if (!mediaControlsLoader.active && root.realPlayers.length === 0) {
                 GlobalStates.mediaControlsOpen = false;
@@ -80,9 +80,6 @@ Scope {
         sourceComponent: PanelWindow {
             id: panelWindow
             visible: true
-
-            property bool isOpen: GlobalStates.mediaControlsOpen
-
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
             implicitWidth: root.widgetWidth
@@ -103,8 +100,96 @@ Scope {
                 right: Appearance.sizes.barHeight
             }
 
-            mask: Region {
-                item: playerColumnLayout
+            Item {
+                id: animatedContainer
+                anchors.fill: parent
+                opacity: 0
+                scale: 0.95
+
+                states: State {
+                    name: "visible"
+                    when: mediaControlsLoader.active
+                    PropertyChanges { target: animatedContainer; opacity: 1; scale: 1 }
+                }
+
+                transitions: Transition {
+                    from: ""; to: "visible"; reversible: true
+                    SequentialAnimation {
+                        ParallelAnimation {
+                            NumberAnimation { property: "opacity"; duration: 250; easing.type: Easing.OutCubic }
+                            NumberAnimation {
+                                property: "scale";
+                                duration: 230
+                                easing.type: Easing.OutBack
+                                easing.overshoot: 2.0
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: playerColumnLayout
+                    anchors.fill: parent
+                    spacing: -Appearance.sizes.elevationMargin
+
+                    Repeater {
+                        model: ScriptModel {
+                            values: root.meaningfulPlayers
+                        }
+                        delegate: PlayerControl {
+                            required property MprisPlayer modelData
+                            player: modelData
+                            visualizerPoints: root.visualizerPoints
+                            implicitWidth: root.widgetWidth
+                            implicitHeight: root.widgetHeight
+                            radius: root.popupRounding
+                        }
+                    }
+
+                    Item {
+                        Layout.alignment: {
+                            if (panelWindow.anchors.left)
+                                return Qt.AlignLeft;
+                            if (panelWindow.anchors.right)
+                                return Qt.AlignRight;
+                            return Qt.AlignHCenter;
+                        }
+                        Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
+                        Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
+                        visible: root.meaningfulPlayers.length === 0
+                        implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
+                        implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
+
+                        StyledRectangularShadow {
+                            target: placeholderBackground
+                        }
+
+                        Rectangle {
+                            id: placeholderBackground
+                            anchors.centerIn: parent
+                            color: Appearance.colors.colLayer0
+                            radius: root.popupRounding
+                            property real padding: 20
+                            implicitWidth: placeholderLayout.implicitWidth + padding * 2
+                            implicitHeight: placeholderLayout.implicitHeight + padding * 2
+
+                            ColumnLayout {
+                                id: placeholderLayout
+                                anchors.centerIn: parent
+
+                                StyledText {
+                                    text: Translation.tr("No active player")
+                                    font.pixelSize: Appearance.font.pixelSize.large
+                                }
+                                StyledText {
+                                    color: Appearance.colors.colSubtext
+                                    text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             Component.onCompleted: {
@@ -119,150 +204,6 @@ Scope {
                     GlobalStates.mediaControlsOpen = false;
                 }
             }
-
-            Connections {
-                target: GlobalStates
-                function onMediaControlsOpenChanged() {
-                    panelWindow.isOpen = GlobalStates.mediaControlsOpen;
-                }
-            }
-
-            ColumnLayout {
-                id: playerColumnLayout
-                anchors.fill: parent
-                spacing: 8
-                transformOrigin: Item.Top
-                opacity: 0.0
-                scale: 0.93
-
-                states: [
-                    State {
-                        name: "visible"
-                        when: panelWindow.isOpen
-                        PropertyChanges { target: playerColumnLayout; opacity: 1.0; scale: 1.0 }
-                    },
-                    State {
-                        name: "hidden"
-                        when: !panelWindow.isOpen
-                        PropertyChanges { target: playerColumnLayout; opacity: 0.0; scale: 0.93 }
-                    }
-                ]
-
-                transitions: [
-                    Transition {
-                        from: "hidden"; to: "visible"
-                        ParallelAnimation {
-                            NumberAnimation { target: playerColumnLayout; property: "opacity"; duration: 220; easing.type: Easing.OutCubic }
-                            NumberAnimation { target: playerColumnLayout; property: "scale"; duration: 280; easing.type: Easing.OutBack; easing.overshoot: 1.036 }
-                        }
-                    },
-                    Transition {
-                        from: "visible"; to: "hidden"
-                        SequentialAnimation {
-                            ParallelAnimation {
-                                NumberAnimation { target: playerColumnLayout; property: "opacity"; duration: 180; easing.type: Easing.OutCubic }
-                                NumberAnimation { target: playerColumnLayout; property: "scale"; duration: 200; easing.type: Easing.OutBack; easing.overshoot: 1.013 }
-                            }
-                            ScriptAction {
-                                script: {
-                                    if (!GlobalStates.mediaControlsOpen) {
-                                        mediaControlsLoader.active = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                ]
-
-                Repeater {
-                    model: ScriptModel {
-                        values: root.meaningfulPlayers
-                    }
-                    delegate: PlayerControl {
-                        id: controlItem
-                        required property MprisPlayer modelData
-                        player: modelData
-                        visualizerPoints: root.visualizerPoints
-                        implicitWidth: root.widgetWidth
-                        implicitHeight: root.widgetHeight
-                        radius: root.popupRounding
-
-                        opacity: 0
-                        scale: 0.9
-
-                        Component.onCompleted: {
-                            delegateAnim.start();
-                        }
-
-                        ParallelAnimation {
-                            id: delegateAnim
-                            NumberAnimation {
-                                target: controlItem
-                                property: "opacity"
-                                to: 1
-                                duration: 200
-                                easing.type: Easing.OutCubic
-                            }
-                            NumberAnimation {
-                                target: controlItem
-                                property: "scale"
-                                to: 1
-                                duration: 250
-                                easing.type: Easing.BezierSpline
-                                easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
-                            }
-                        }
-                    }
-                }
-
-                Item {
-                    Layout.alignment: {
-                        if (panelWindow.anchors.left)
-                            return Qt.AlignLeft;
-                        if (panelWindow.anchors.right)
-                            return Qt.AlignRight;
-                        return Qt.AlignHCenter;
-                    }
-                    Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
-                    Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
-                    visible: root.meaningfulPlayers.length === 0
-                    implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
-                    implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
-
-                    StyledRectangularShadow {
-                        target: placeholderBackground
-                    }
-
-                    Rectangle {
-                        id: placeholderBackground
-                        anchors.centerIn: parent
-                        color: Appearance.colors.colLayer0
-                        radius: root.popupRounding
-                        property real padding: 24
-                        implicitWidth: placeholderLayout.implicitWidth + padding * 2
-                        implicitHeight: placeholderLayout.implicitHeight + padding * 2
-
-                        ColumnLayout {
-                            id: placeholderLayout
-                            anchors.centerIn: parent
-                            spacing: 8
-
-                            StyledText {
-                                text: Translation.tr("No active player")
-                                font.pixelSize: Appearance.font.pixelSize.large
-                                Layout.alignment: Qt.AlignHCenter
-                            }
-                            StyledText {
-                                color: Appearance.colors.colSubtext
-                                text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                Layout.alignment: Qt.AlignHCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -270,17 +211,17 @@ Scope {
         target: "mediaControls"
 
         function toggle(): void {
-            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
-            if (GlobalStates.mediaControlsOpen)
+            mediaControlsLoader.active = !mediaControlsLoader.active;
+            if (mediaControlsLoader.active)
                 Notifications.timeoutAll();
         }
 
         function close(): void {
-            GlobalStates.mediaControlsOpen = false;
+            mediaControlsLoader.active = false;
         }
 
         function open(): void {
-            GlobalStates.mediaControlsOpen = true;
+            mediaControlsLoader.active = true;
             Notifications.timeoutAll();
         }
     }
