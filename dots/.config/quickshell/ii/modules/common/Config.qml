@@ -503,6 +503,10 @@ Singleton {
                 }
                 property JsonObject ai: JsonObject {
                     property bool textFadeIn: false
+                    // Chat message text size. Defaults to the theme value (live
+                    // binding, like cheatsheet.fontSize) so a theme change tracks
+                    // automatically instead of pinning a literal.
+                    property int fontSize: Appearance.font.pixelSize.small
                 }
                 property JsonObject booru: JsonObject {
                     property bool allowNsfw: false
