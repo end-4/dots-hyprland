@@ -123,7 +123,7 @@ udevadm monitor --udev --property | while read -r line; do
 
             config_name="${qsConfig:-ii}"
             echo "[$(date)] Triggering mouse notification: name=$device_name, subtype=$device_subtype, config=$config_name"
-            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "mouse" "$device_name" "$device_subtype" &
+            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "mouse" "$device_name" "$device_subtype" "" &
         fi
 
         # Process Gamepad trigger
@@ -174,7 +174,7 @@ udevadm monitor --udev --property | while read -r line; do
 
             config_name="${qsConfig:-ii}"
             echo "[$(date)] Triggering gamepad notification: type=$device_type, name=$device_name, subtype=$device_subtype, config=$config_name"
-            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "$device_type" "$device_name" "$device_subtype" &
+            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "$device_type" "$device_name" "$device_subtype" "" &
         fi
 
         # Process Serial trigger
@@ -219,7 +219,7 @@ udevadm monitor --udev --property | while read -r line; do
 
             config_name="${qsConfig:-ii}"
             echo "[$(date)] Triggering serial notification: type=serial, name=$device_name, subtype=$device_subtype, config=$config_name"
-            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "serial" "$device_name" "$device_subtype" &
+            qs -c "$config_name" ipc call deviceConnectorService showDeviceConnected "serial" "$device_name" "$device_subtype" "" &
         fi
 
         # Process Storage trigger
