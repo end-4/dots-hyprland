@@ -121,7 +121,7 @@ Scope {
                     onClicked: {
                         if (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") {
                             if (root.devicePath) {
-                                Quickshell.execDetached(["bash", "-c", "exec $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh " + root.devicePath + " || exec $HOME/.config/hypr/custom/scripts/open_storage_device.sh " + root.devicePath]);
+                                Quickshell.execDetached(["bash", "-c", "if [ -f $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh ]; then $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh " + root.devicePath + "; else $HOME/.config/hypr/custom/scripts/open_storage_device.sh " + root.devicePath + "; fi"]);
                                 root.active = false;
                             }
                         }
