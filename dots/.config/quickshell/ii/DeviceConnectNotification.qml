@@ -115,19 +115,6 @@ Scope {
                     verticalCenterOffset: contentWrapper.animOffset
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: ((root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") && root.devicePath !== "") ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    onClicked: {
-                        if (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") {
-                            if (root.devicePath) {
-                                Quickshell.execDetached(["bash", "-c", "if [ -f $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh ]; then $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh " + root.devicePath + "; else $HOME/.config/hypr/custom/scripts/open_storage_device.sh " + root.devicePath + "; fi"]);
-                                root.active = false;
-                            }
-                        }
-                    }
-                }
-
                 RowLayout {
                     anchors {
                         fill: parent
@@ -727,6 +714,20 @@ Scope {
                             color: Appearance.colors.colSubtext
                             Layout.fillWidth: true
                             elide: Text.ElideRight
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: ((root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") && root.devicePath !== "") ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: {
+                        Quickshell.execDetached(["bash", "-c", "echo 'QML click detected! type=" + root.deviceType + " path=" + root.devicePath + "' >> /tmp/qml_click.log"]);
+                        if (root.deviceType === "pen_drive" || root.deviceType === "ssd" || root.deviceType === "hdd") {
+                            if (root.devicePath) {
+                                Quickshell.execDetached(["bash", "-c", "if [ -f $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh ]; then $HOME/.config/hypr/hyprland/scripts/open_storage_device.sh " + root.devicePath + "; else $HOME/.config/hypr/custom/scripts/open_storage_device.sh " + root.devicePath + "; fi"]);
+                                root.active = false;
+                            }
                         }
                     }
                 }
