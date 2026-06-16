@@ -11,8 +11,42 @@ WindowDialog {
     id: root
     backgroundHeight: 600
 
-    WindowDialogTitle {
-        text: Translation.tr("Connect to Wi-Fi")
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.leftMargin: 4
+        Layout.rightMargin: 4
+
+        WindowDialogTitle {
+            Layout.fillWidth: true
+            text: Translation.tr("Connect to Wi-Fi")
+        }
+
+        MouseArea {
+            Layout.alignment: Qt.AlignVCenter
+            implicitWidth: 36
+            implicitHeight: 36
+            cursorShape: Network.wifiScanning ? Qt.ArrowCursor : Qt.PointingHandCursor
+
+            enabled: !Network.wifiScanning
+            opacity: Network.wifiScanning ? 0.4 : 1
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 150
+                }
+            }
+
+            onClicked: {
+                Network.rescanWifi()
+            }
+
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "restart_alt"
+                iconSize: 20
+                color: Appearance.colors.colOnLayer0
+            }
+        }
     }
     WindowDialogSeparator {
         visible: !Network.wifiScanning
