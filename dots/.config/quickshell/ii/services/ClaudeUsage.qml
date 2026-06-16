@@ -110,6 +110,7 @@ Singleton {
                 if (text.trim().length === 0) {
                     root.available = false;
                     root.lastError = "empty response";
+                    retryTimer.restart();
                     return;
                 }
                 try {
@@ -117,12 +118,14 @@ Singleton {
                     if (d.error) {
                         root.available = false;
                         root.lastError = String(d.error);
+                        retryTimer.restart();
                         return;
                     }
                     root.refine(d);
                 } catch (e) {
                     root.available = false;
                     root.lastError = e.message;
+                    retryTimer.restart();
                     console.error(`[ClaudeUsage] ${e.message}: ${text}`);
                 }
             }
@@ -135,5 +138,15 @@ Singleton {
         interval: root.fetchInterval
         triggeredOnStart: true
         onTriggered: root.getData()
+    }
+
+    // Quick retry while we don't have data yet (cold start / token mid-refresh /
+    // transient network), so a failed first fetch doesn't leave "Unavailable"
+    // showing until the next full interval.
+    Timer {
+        id: retryTimer
+        interval: 15000
+        repeat: false
+        onTriggered: if (root.enabled && !root.available) root.getData()
     }
 }
