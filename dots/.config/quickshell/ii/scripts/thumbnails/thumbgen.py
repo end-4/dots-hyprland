@@ -1,4 +1,4 @@
-#!/usr/bin/env -S /home/abddallah/.local/state/quickshell/.venv/bin/python3.12
+#!/usr/bin/env -S ~/.local/state/quickshell/.venv/bin/python3.12
 
 # From https://github.com/difference-engine/thumbnail-generator-ubuntu (MIT License)
 # Since the script is small and the maintainers seem inactive to accept my PR (#11) I decided to just copy it over.
