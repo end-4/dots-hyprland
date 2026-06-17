@@ -1,4 +1,4 @@
-#!/usr/bin/env -S ~/.local/state/quickshell/.venv/bin/python3.12
+#!/usr/bin/env python3
 
 # From https://github.com/difference-engine/thumbnail-generator-ubuntu (MIT License)
 # Since the script is small and the maintainers seem inactive to accept my PR (#11) I decided to just copy it over.
@@ -15,7 +15,7 @@ import gi
 from loguru import logger
 from tqdm import tqdm
 
-gi.require_version("GnomeDesktop", "3.0")
+gi.require_version("GnomeDesktop", "4.0")
 from gi.repository import Gio, GnomeDesktop  # isort:skip
 
 thumbnail_size_map = {
