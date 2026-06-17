@@ -74,11 +74,8 @@ apply_anyterm() {
 }
 
 apply_papirus_folders() {
-    # Extraer el color primario del scss generado
     PRIMARY=$(grep '^\$primary:' "$STATE_DIR/user/generated/material_colors.scss" | cut -d'#' -f2 | cut -d';' -f1 | tr '[:upper:]' '[:lower:]')
 
-    # Mapear el color hex al color más cercano de papirus-folders
-    # Por ahora usar violet que es cercano al morado actual
     HUE=$(python3 -c "
 import sys
 r,g,b = int('$PRIMARY'[0:2],16), int('$PRIMARY'[2:4],16), int('$PRIMARY'[4:6],16)
@@ -90,7 +87,6 @@ else: h=60*((r-g)/(mx-mn))+240
 print(int(h))
 " 2>/dev/null || echo "0")
 
-    # Mapear hue a color de papirus
     if [ "$HUE" -ge 330 ] || [ "$HUE" -lt 20 ]; then COLOR="red"
     elif [ "$HUE" -lt 40 ]; then COLOR="orange"
     elif [ "$HUE" -lt 65 ]; then COLOR="yellow"
@@ -103,9 +99,9 @@ print(int(h))
     else COLOR="blue"
     fi
 
-    papirus-folders -C "$COLOR" --theme Papirus-Dark
-    papirus-folders -C "$COLOR" --theme Papirus-Light
-    papirus-folders -C "$COLOR" --theme Papirus
+    sudo papirus-folders -C "$COLOR" --theme Papirus-Dark
+    sudo papirus-folders -C "$COLOR" --theme Papirus-Light
+    sudo papirus-folders -C "$COLOR" --theme Papirus
 }
 
 apply_term() {
