@@ -13,12 +13,15 @@ Options:
   -n, --dry-run      Show what would be done without making changes
   -v, --verbose      Enable verbose output
   -h, --help         Show this help message
-  -s, --skip-notice  Skip notice about script being untested
+  -s, --skip-notice  Skip notice about script being experimental
+  -e, --exclude      Exclude files from update (can be used multiple times)
       --non-interactive
                      Set default choice for file conflicts
                         replace: Replace local     keep: Keep local         old:  Backup as .old
                         new:     Save as .new      diff: Show diff          skip: Skip
                         ignore:  Add to ignore     backup: Backup and replace
+      --apply-to-all When used with --non-interactive, applies choice to all conflicts
+      --backup-dir   Custom backup directory (default: .update-backups/)
 
 This script updates your dotfiles by:
   1. Auto-detecting repository structure (dots/ prefix or direct)
@@ -33,12 +36,19 @@ Ignore file patterns support:
   - Wildcards (e.g., '*.log', 'path/*/file')
   - Root-relative patterns (e.g., '/.config')
   - Substring matching (prefix with '**', e.g., '**temp' matches any path containing 'temp')
-"
+
+Examples:
+  $0 exp-update                      # Run normally
+  $0 exp-update -f                   # Force check all files
+  $0 exp-update -e "*.log" -e "test" # Exclude log files and files with 'test'
+  $0 exp-update --non-interactive --default-choice skip
+                                    # Auto-skip all conflicts
+ "
 }
 # `man getopt` to see more
 para=$(getopt \
-  -o hfpnvs \
-  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive,default-choice: \
+  -o hfpnvse: \
+  -l help,force,packages,dry-run,verbose,skip-notice,non-interactive,default-choice:,exclude:,apply-to-all,backup-dir: \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -62,6 +72,9 @@ VERBOSE=false
 SKIP_NOTICE=false
 NON_INTERACTIVE=false
 DEFAULT_CHOICE=""
+APPLY_TO_ALL=false
+CUSTOM_BACKUP_DIR=""
+declare -a CLI_EXCLUDES=()
 
 eval set -- "$para"
 while true ; do
@@ -84,6 +97,19 @@ while true ; do
       ;;
     --non-interactive) NON_INTERACTIVE=true;shift
       log_info "Non-interactive mode enabled"
+      ;;
+    -e|--exclude)
+      CLI_EXCLUDES+=("$2")
+      log_info "Excluding pattern: $2"
+      shift 2
+      ;;
+    --apply-to-all) APPLY_TO_ALL=true;shift
+      log_info "Apply to all mode enabled - will apply choice to all conflicts"
+      ;;
+    --backup-dir)
+      CUSTOM_BACKUP_DIR="$2"
+      log_info "Custom backup directory set to: $CUSTOM_BACKUP_DIR"
+      shift 2
       ;;
     --default-choice)
       case "$2" in
