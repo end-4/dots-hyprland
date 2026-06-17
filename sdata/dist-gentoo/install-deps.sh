@@ -1,3 +1,4 @@
+source "$(dirname "$0")/functions.sh"
 printf "${STY_YELLOW}"
 printf "============WARNING/NOTE (1)============\n"
 printf "Ensure you have a global use flag for elogind or systemd in your make.conf for simplicity\n"
