@@ -30,7 +30,7 @@ PanelWindow {
     // Modes
     // TODO: Ask: sidebar AI
     enum SnipAction { Copy, Edit, Search, CharRecognition, Record, RecordWithSound } 
-    enum SelectionMode { RectCorners, Circle }
+    enum SelectionMode { RectCorners, Circle, Fullscreen }
     enum Phase { Select, Post }
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
@@ -120,9 +120,10 @@ PanelWindow {
 
     // Config
     property bool isCircleSelection: (root.selectionMode === RegionSelection.SelectionMode.Circle)
-    property bool enableWindowRegions: Config.options.regionSelector.targetRegions.windows && !isCircleSelection
-    property bool enableLayerRegions: Config.options.regionSelector.targetRegions.layers && !isCircleSelection
-    property bool enableContentRegions: Config.options.regionSelector.targetRegions.content
+    readonly property bool isFullscreenSelection: (root.selectionMode === RegionSelection.SelectionMode.Fullscreen)
+    property bool enableWindowRegions: Config.options.regionSelector.targetRegions.windows && !isCircleSelection && !isFullscreenSelection
+    property bool enableLayerRegions: Config.options.regionSelector.targetRegions.layers && !isCircleSelection && !isFullscreenSelection
+    property bool enableContentRegions: Config.options.regionSelector.targetRegions.content && !isFullscreenSelection
 
     // Target
     property real targetedRegionX: -1
@@ -290,6 +291,13 @@ PanelWindow {
 
     // Execution after selection
     function snip() {
+        if (root.isFullscreenSelection) {
+            root.regionX = 0;
+            root.regionY = 0;
+            root.regionWidth = root.screen.width;
+            root.regionHeight = root.screen.height;
+        }
+
         // Validity check
         if (root.regionWidth <= 0 || root.regionHeight <= 0) {
             console.warn("[Region Selector] Invalid region size, skipping snip.");
@@ -297,10 +305,12 @@ PanelWindow {
         }
 
         // Clamp region to screen bounds
-        root.regionX = Math.max(0, Math.min(root.regionX, root.screen.width - root.regionWidth));
-        root.regionY = Math.max(0, Math.min(root.regionY, root.screen.height - root.regionHeight));
-        root.regionWidth = Math.max(0, Math.min(root.regionWidth, root.screen.width - root.regionX));
-        root.regionHeight = Math.max(0, Math.min(root.regionHeight, root.screen.height - root.regionY));
+        if (!root.isFullscreenSelection) {
+            root.regionX = Math.max(0, Math.min(root.regionX, root.screen.width - root.regionWidth));
+            root.regionY = Math.max(0, Math.min(root.regionY, root.screen.height - root.regionHeight));
+            root.regionWidth = Math.max(0, Math.min(root.regionWidth, root.screen.width - root.regionX));
+            root.regionHeight = Math.max(0, Math.min(root.regionHeight, root.screen.height - root.regionY));
+        }
 
         // Adjust action
         if (root.action === RegionSelection.SnipAction.Copy || root.action === RegionSelection.SnipAction.Edit) {
@@ -370,8 +380,14 @@ PanelWindow {
             root.mouseButton = mouse.button;
         }
         onReleased: (mouse) => {
+            if (root.isFullscreenSelection) {
+                root.regionX = 0;
+                root.regionY = 0;
+                root.regionWidth = root.screen.width;
+                root.regionHeight = root.screen.height;
+            }
             // Detect if it was a click -> Try to select targeted region
-            if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
+            else if (root.draggingX === root.dragStartX && root.draggingY === root.dragStartY) {
                 if (root.targetedRegionValid()) {
                     root.setRegionToTargeted();
                 }

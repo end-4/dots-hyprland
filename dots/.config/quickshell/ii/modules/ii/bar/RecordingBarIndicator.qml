@@ -221,8 +221,4 @@ RippleButton {
             }
         }
     }
-
-    StyledToolTip {
-        text: Translation.tr("Recording")
-    }
 }
