@@ -12,9 +12,17 @@ MouseArea {
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
     implicitHeight: Appearance.sizes.barHeight
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
-    acceptedButtons: Qt.LeftButton
+    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
-    onPressed: ClaudeUsage.getData() // click to refresh now
+    // Which window the single gauge shows; toggled by clicking.
+    property bool showingWeekly: Config.options.bar.claudeUsage.defaultWeekly
+
+    onPressed: event => {
+        if (event.button === Qt.MiddleButton)
+            ClaudeUsage.getData(); // middle-click to refresh now
+        else
+            root.showingWeekly = !root.showingWeekly; // click to switch session <-> week
+    }
 
     // A single Claude-usage gauge: icon inside a ring + percentage number.
     component UsageGauge: Item {
@@ -72,16 +80,9 @@ MouseArea {
         anchors.leftMargin: 4
         anchors.rightMargin: 4
 
-        UsageGauge { // 5-hour session window
-            iconName: "auto_awesome"
-            percentage: ClaudeUsage.fiveHour / 100
-        }
-
-        UsageGauge { // 7-day window
-            iconName: "calendar_month"
-            percentage: ClaudeUsage.sevenDay / 100
-            visible: Config.options.bar.claudeUsage.showWeekly
-            Layout.leftMargin: visible ? 2 : 0
+        UsageGauge { // Click the module to switch between the two windows
+            iconName: root.showingWeekly ? "calendar_month" : "auto_awesome"
+            percentage: (root.showingWeekly ? ClaudeUsage.sevenDay : ClaudeUsage.fiveHour) / 100
         }
     }
 

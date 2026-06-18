@@ -275,9 +275,9 @@ Singleton {
                     property int fetchInterval: 10 // minutes
                 }
                 property JsonObject claudeUsage: JsonObject {
-                    property bool enable: false // Show Claude (Pro/Max) subscription usage gauges in the bar
-                    property bool showWeekly: true // Also show the 7-day window gauge next to the 5-hour one
-                    property int warningThreshold: 90 // Turn a gauge red at/above this utilization (%)
+                    property bool enable: false // Show a Claude (Pro/Max) subscription usage gauge in the bar
+                    property bool defaultWeekly: false // Start on the 7-day window; click the gauge to switch session <-> week
+                    property int warningThreshold: 90 // Turn the gauge red at/above this utilization (%)
                     property int fetchInterval: 5 // minutes
                 }
                 property JsonObject indicators: JsonObject {
