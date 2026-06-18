@@ -19,13 +19,9 @@ RippleButton {
     readonly property color stateColorActive: Appearance.colors.colErrorContainerActive
     readonly property color stateTextColor: Appearance.colors.colOnErrorContainer
 
-    // Property to determine when to fully show/hide in the layout (keeps space until zoom out finishes)
-    readonly property bool shouldReveal: root.recording || root.scale > 0.01
-
-    // Instant size change without sliding/shifting animation
-    implicitWidth: shouldReveal ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
-    implicitHeight: shouldReveal ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
-    visible: shouldReveal
+    // Size changes instantly when visible changes
+    implicitWidth: visible ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
+    implicitHeight: visible ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
 
     buttonRadius: Appearance.rounding.full
     toggled: root.recording
@@ -36,15 +32,58 @@ RippleButton {
     colBackgroundToggledHover: stateColorHover
     colRippleToggled: stateColorActive
 
-    // Bouncy Zoom In and Out animation for the entire indicator button
-    scale: root.recording ? 1.0 : 0.0
-    Behavior on scale {
-        NumberAnimation {
-            duration: 350
-            easing.type: root.recording ? Easing.OutBack : Easing.InBack
-            easing.overshoot: 1.5
+    // Robust State Machine for show/hide transitions
+    states: [
+        State {
+            name: "hidden"
+            when: !root.recording
+            PropertyChanges {
+                target: root
+                scale: 0.0
+                visible: false
+            }
+        },
+        State {
+            name: "shown"
+            when: root.recording
+            PropertyChanges {
+                target: root
+                scale: 1.0
+                visible: true
+            }
         }
-    }
+    ]
+
+    transitions: [
+        Transition {
+            from: "hidden"
+            to: "shown"
+            SequentialAnimation {
+                PropertyAction { target: root; property: "visible"; value: true }
+                NumberAnimation {
+                    target: root
+                    property: "scale"
+                    duration: 350
+                    easing.type: Easing.OutBack
+                    easing.overshoot: 1.5
+                }
+            }
+        },
+        Transition {
+            from: "shown"
+            to: "hidden"
+            SequentialAnimation {
+                NumberAnimation {
+                    target: root
+                    property: "scale"
+                    duration: 350
+                    easing.type: Easing.InBack
+                    easing.overshoot: 1.5
+                }
+                PropertyAction { target: root; property: "visible"; value: false }
+            }
+        }
+    ]
 
     // Poll wf-recorder process existence
     Timer {
@@ -181,5 +220,9 @@ RippleButton {
                 color: root.stateTextColor
             }
         }
+    }
+
+    StyledToolTip {
+        text: Translation.tr("Recording")
     }
 }

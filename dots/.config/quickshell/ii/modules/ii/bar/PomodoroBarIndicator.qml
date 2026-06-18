@@ -14,13 +14,9 @@ RippleButton {
     readonly property color stateColorActive: TimerService.pomodoroBreak ? Appearance.colors.colTertiaryContainerActive : Appearance.colors.colSecondaryContainerActive
     readonly property color stateTextColor: TimerService.pomodoroBreak ? Appearance.colors.colOnTertiaryContainer : Appearance.colors.colOnSecondaryContainer
 
-    // Property to determine when to fully show/hide in the layout (keeps space until zoom out finishes)
-    readonly property bool shouldReveal: TimerService.pomodoroRunning || root.scale > 0.01
-
-    // Instant size change without sliding/shifting animation
-    implicitWidth: shouldReveal ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
-    implicitHeight: shouldReveal ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
-    visible: shouldReveal
+    // Size changes instantly when visible changes
+    implicitWidth: visible ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
+    implicitHeight: visible ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
 
     buttonRadius: Appearance.rounding.full
     toggled: TimerService.pomodoroRunning
@@ -31,15 +27,58 @@ RippleButton {
     colBackgroundToggledHover: stateColorHover
     colRippleToggled: stateColorActive
 
-    // Bouncy Zoom In and Out animation for the entire indicator button
-    scale: TimerService.pomodoroRunning ? 1.0 : 0.0
-    Behavior on scale {
-        NumberAnimation {
-            duration: 350
-            easing.type: TimerService.pomodoroRunning ? Easing.OutBack : Easing.InBack
-            easing.overshoot: 1.5
+    // Robust State Machine for show/hide transitions
+    states: [
+        State {
+            name: "hidden"
+            when: !TimerService.pomodoroRunning
+            PropertyChanges {
+                target: root
+                scale: 0.0
+                visible: false
+            }
+        },
+        State {
+            name: "shown"
+            when: TimerService.pomodoroRunning
+            PropertyChanges {
+                target: root
+                scale: 1.0
+                visible: true
+            }
         }
-    }
+    ]
+
+    transitions: [
+        Transition {
+            from: "hidden"
+            to: "shown"
+            SequentialAnimation {
+                PropertyAction { target: root; property: "visible"; value: true }
+                NumberAnimation {
+                    target: root
+                    property: "scale"
+                    duration: 350
+                    easing.type: Easing.OutBack
+                    easing.overshoot: 1.5
+                }
+            }
+        },
+        Transition {
+            from: "shown"
+            to: "hidden"
+            SequentialAnimation {
+                NumberAnimation {
+                    target: root
+                    property: "scale"
+                    duration: 350
+                    easing.type: Easing.InBack
+                    easing.overshoot: 1.5
+                }
+                PropertyAction { target: root; property: "visible"; value: false }
+            }
+        }
+    ]
 
     function pomodoroTimeText() {
         const minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, "0");
