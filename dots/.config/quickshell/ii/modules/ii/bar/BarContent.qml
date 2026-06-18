@@ -317,13 +317,8 @@ Item { // Bar content region
                 }
             }
 
-            Revealer {
-                reveal: TimerService.pomodoroRunning
-                Layout.fillHeight: true
-
-                PomodoroBarIndicator {
-                    anchors.verticalCenter: parent.verticalCenter
-                }
+            PomodoroBarIndicator {
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             RecordingBarIndicator {

@@ -190,16 +190,9 @@ Item { // Bar content region
                 invertSide: Config?.options.bar.bottom
             }
 
-            Revealer {
+            Bar.PomodoroBarIndicator {
                 vertical: true
-                reveal: TimerService.pomodoroRunning
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
-
-                Bar.PomodoroBarIndicator {
-                    vertical: true
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Bar.RecordingBarIndicator {

@@ -14,8 +14,13 @@ RippleButton {
     readonly property color stateColorActive: TimerService.pomodoroBreak ? Appearance.colors.colTertiaryContainerActive : Appearance.colors.colSecondaryContainerActive
     readonly property color stateTextColor: TimerService.pomodoroBreak ? Appearance.colors.colOnTertiaryContainer : Appearance.colors.colOnSecondaryContainer
 
-    implicitWidth: vertical ? Appearance.sizes.verticalBarWidth - 10 : 104
-    implicitHeight: vertical ? 54 : Appearance.sizes.baseBarHeight - 8
+    // Property to determine when to fully show/hide in the layout (keeps space until zoom out finishes)
+    readonly property bool shouldReveal: TimerService.pomodoroRunning || root.scale > 0.01
+
+    // Instant size change without sliding/shifting animation
+    implicitWidth: shouldReveal ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
+    implicitHeight: shouldReveal ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
+    visible: shouldReveal
 
     buttonRadius: Appearance.rounding.full
     toggled: TimerService.pomodoroRunning
@@ -25,6 +30,16 @@ RippleButton {
     colBackgroundToggled: stateColor
     colBackgroundToggledHover: stateColorHover
     colRippleToggled: stateColorActive
+
+    // Bouncy Zoom In and Out animation for the entire indicator button
+    scale: TimerService.pomodoroRunning ? 1.0 : 0.0
+    Behavior on scale {
+        NumberAnimation {
+            duration: 350
+            easing.type: TimerService.pomodoroRunning ? Easing.OutBack : Easing.InBack
+            easing.overshoot: 1.5
+        }
+    }
 
     function pomodoroTimeText() {
         const minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, "0");
