@@ -47,7 +47,7 @@ Item {
                         let seconds = Math.floor(TimerService.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
                         return `${minutes}:${seconds}`;
                     }
-                    font.family: Appearance.font.family.monospace
+                    font.family: Appearance.font.family.main
                     font.pixelSize: 40
                     font.weight: Font.DemiBold
                     color: Appearance.m3colors.m3onSurface
@@ -83,7 +83,7 @@ Item {
 
                     StyledText {
                         id: cycleText
-                        font.family: Appearance.font.family.monospace
+                        font.family: Appearance.font.family.main
                         font.weight: Font.DemiBold
                         color: root.stateTextColor
                         text: `${root.cyclePosition}/${TimerService.cyclesBeforeLongBreak}`

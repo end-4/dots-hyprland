@@ -288,7 +288,7 @@ StyledFlickable {
             anchors.centerIn: parent
             text: preset.label
             horizontalAlignment: Text.AlignHCenter
-            font.family: Appearance.font.family.monospace
+            font.family: Appearance.font.family.main
             font.weight: Font.DemiBold
             color: Appearance.colors.colOnLayer2
         }
@@ -315,7 +315,7 @@ StyledFlickable {
 
             StyledText {
                 text: parent.parent.label
-                font.family: Appearance.font.family.monospace
+                font.family: Appearance.font.family.main
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 font.weight: Font.DemiBold
                 color: parent.parent.textColor

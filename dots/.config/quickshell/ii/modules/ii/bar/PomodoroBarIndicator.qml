@@ -62,8 +62,10 @@ RippleButton {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 48
                 horizontalAlignment: Text.AlignHCenter
+                topPadding: 2
+                bottomPadding: -2
                 text: root.pomodoroTimeText()
-                font.family: Appearance.font.family.monospace
+                font.family: Appearance.font.family.main
                 font.pixelSize: Appearance.font.pixelSize.normal
                 font.weight: Font.DemiBold
                 color: root.stateTextColor
@@ -91,7 +93,7 @@ RippleButton {
                     StyledText {
                         anchors.centerIn: parent
                         text: root.compactMinutesText()
-                        font.family: Appearance.font.family.monospace
+                        font.family: Appearance.font.family.main
                         font.pixelSize: 11
                         font.weight: Font.DemiBold
                     }
