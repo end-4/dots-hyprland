@@ -12,19 +12,52 @@ import Quickshell.Hyprland
 Scope {
     id: screenCorners
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-    property var actionForCorner: ({
-        [RoundCorner.CornerEnum.TopLeft]: () => GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen,
-        [RoundCorner.CornerEnum.BottomLeft]: () => GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen,
-        [RoundCorner.CornerEnum.TopRight]: () => GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen,
-        [RoundCorner.CornerEnum.BottomRight]: () => GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen
-    })
+
+    function isLeftCorner(corner) {
+        return corner === RoundCorner.CornerEnum.TopLeft || corner === RoundCorner.CornerEnum.BottomLeft;
+    }
+
+    function openSidebarForCorner(corner) {
+        if (isLeftCorner(corner))
+            GlobalStates.sidebarLeftOpen = true;
+        else
+            GlobalStates.sidebarRightOpen = true;
+    }
+
+    function toggleSidebarForCorner(corner) {
+        if (isLeftCorner(corner))
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        else
+            GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+    }
 
     component CornerPanelWindow: PanelWindow {
         id: cornerPanelWindow
         property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
         property bool fullscreen
+        property bool cornerTriggerActive: false
+        property bool registeredAsFocusGrabPersistent: false
         visible: (Config.options.appearance.fakeScreenRounding === 1 || (Config.options.appearance.fakeScreenRounding === 2 && !fullscreen))
         property var corner
+
+        function updateFocusGrabPersistence() {
+            const shouldRegister = visible && cornerTriggerActive;
+            if (registeredAsFocusGrabPersistent === shouldRegister)
+                return;
+
+            registeredAsFocusGrabPersistent = shouldRegister;
+            if (shouldRegister)
+                GlobalFocusGrab.addPersistent(cornerPanelWindow);
+            else
+                GlobalFocusGrab.removePersistent(cornerPanelWindow);
+        }
+
+        onVisibleChanged: updateFocusGrabPersistence()
+        Component.onCompleted: updateFocusGrabPersistence()
+        Component.onDestruction: {
+            if (registeredAsFocusGrabPersistent)
+                GlobalFocusGrab.removePersistent(cornerPanelWindow);
+        }
 
         exclusionMode: ExclusionMode.Ignore
         mask: Region {
@@ -66,6 +99,12 @@ Scope {
                     if (cornerPanelWindow.fullscreen) return false;
                     return (Config.options.sidebar.cornerOpen.bottom == cornerWidget.isBottom);
                 }
+                function syncFocusGrabPersistence() {
+                    cornerPanelWindow.cornerTriggerActive = active;
+                    cornerPanelWindow.updateFocusGrabPersistence();
+                }
+                Component.onCompleted: syncFocusGrabPersistence()
+                onActiveChanged: syncFocusGrabPersistence()
                 anchors {
                     top: (cornerWidget.isTopLeft || cornerWidget.isTopRight) ? parent.top : undefined
                     bottom: (cornerWidget.isBottomLeft || cornerWidget.isBottomRight) ? parent.bottom : undefined
@@ -84,14 +123,14 @@ Scope {
                         const correctX = (cornerWidget.isRight && mouseArea.mouseX >= mouseArea.width - 2) || (cornerWidget.isLeft && mouseArea.mouseX <= 2);
                         const correctY = (cornerWidget.isTop && mouseArea.mouseY > verticalOffset || cornerWidget.isBottom && mouseArea.mouseY < mouseArea.height - verticalOffset);
                         if (correctX && correctY)
-                            screenCorners.actionForCorner[cornerPanelWindow.corner]();
+                            screenCorners.openSidebarForCorner(cornerPanelWindow.corner);
                     }
                     onEntered: {
                         if (Config.options.sidebar.cornerOpen.clickless)
-                            screenCorners.actionForCorner[cornerPanelWindow.corner]();
+                            screenCorners.openSidebarForCorner(cornerPanelWindow.corner);
                     }
                     onPressed: {
-                        screenCorners.actionForCorner[cornerPanelWindow.corner]();
+                        screenCorners.toggleSidebarForCorner(cornerPanelWindow.corner);
                     }
                     onScrollDown: {
                         if (!Config.options.sidebar.cornerOpen.valueScroll)
