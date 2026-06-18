@@ -45,6 +45,7 @@ Item {
                     font.pixelSize: Appearance.font.pixelSize.larger
                     font.weight: Font.Medium
                     color: Appearance.colors.colOnLayer1
+                    topPadding: 12
                 }
 
                 StyledText {
