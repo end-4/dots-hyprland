@@ -202,6 +202,12 @@ Item { // Bar content region
                 }
             }
 
+            Bar.RecordingBarIndicator {
+                id: verticalRecordingBarIndicator
+                vertical: true
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
             RippleButton { // Right sidebar button
                 id: rightSidebarButton
 

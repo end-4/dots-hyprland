@@ -326,6 +326,11 @@ Item { // Bar content region
                 }
             }
 
+            RecordingBarIndicator {
+                id: recordingBarIndicator
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             SysTray {
                 visible: root.useShortenedForm === 0
                 Layout.fillWidth: false

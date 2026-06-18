@@ -211,6 +211,25 @@ PanelWindow {
             root.recordingShouldStop = (exitCode === 0);
         }
     }
+
+    Timer {
+        id: postRecordCheckTimer
+        interval: 1000
+        running: root.phase === RegionSelection.Phase.Post
+        repeat: true
+        onTriggered: checkPostRecordingProc.running = true
+    }
+
+    Process {
+        id: checkPostRecordingProc
+        command: ["pidof", "wf-recorder"]
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                root.dismiss();
+            }
+        }
+    }
+
     property bool preparationDone: false
     onPreparationDoneChanged: {
         if (!preparationDone) return;
