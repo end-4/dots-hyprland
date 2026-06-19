@@ -22,7 +22,7 @@ RippleButton {
 
     // Size changes instantly when visible changes
     implicitWidth: visible ? (vertical ? Appearance.sizes.verticalBarWidth - 10 : 104) : 0
-    implicitHeight: visible ? (vertical ? 54 : Appearance.sizes.baseBarHeight - 8) : 0
+    implicitHeight: visible ? (vertical ? 70 : Appearance.sizes.baseBarHeight - 8) : 0
 
     buttonRadius: Appearance.rounding.full
     toggled: root.recording
@@ -141,9 +141,14 @@ RippleButton {
         return `${minutes}:${seconds}`;
     }
 
-    function compactDisplayText() {
-        if (root.stopped) return "Stop";
-        return Math.ceil(root.elapsedSeconds / 60).toString().padStart(2, "0");
+    function verticalMinutes() {
+        if (root.stopped) return "St";
+        return Math.floor(root.elapsedSeconds / 60).toString().padStart(2, "0");
+    }
+
+    function verticalSeconds() {
+        if (root.stopped) return "op";
+        return Math.floor(root.elapsedSeconds % 60).toString().padStart(2, "0");
     }
 
     onClicked: {
@@ -234,7 +239,16 @@ RippleButton {
 
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
-                text: root.compactDisplayText()
+                text: root.verticalMinutes()
+                font.family: Appearance.font.family.main
+                font.pixelSize: 11
+                font.weight: Font.DemiBold
+                color: root.stateTextColor
+            }
+
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                text: root.verticalSeconds()
                 font.family: Appearance.font.family.main
                 font.pixelSize: 11
                 font.weight: Font.DemiBold

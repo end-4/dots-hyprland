@@ -192,13 +192,15 @@ Item { // Bar content region
 
             Bar.PomodoroBarIndicator {
                 vertical: true
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: rightSidebarButton.width
             }
 
             Bar.RecordingBarIndicator {
                 id: verticalRecordingBarIndicator
                 vertical: true
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: rightSidebarButton.width
             }
 
             RippleButton { // Right sidebar button
