@@ -12,6 +12,7 @@ RippleButton {
 
     property bool vertical: false
     property bool recording: false
+    property bool stopped: false
     property int elapsedSeconds: 0
 
     readonly property color stateColor: Appearance.colors.colErrorContainer
@@ -85,7 +86,16 @@ RippleButton {
         }
     ]
 
-    // Poll wf-recorder process existence
+    // Smooth local timer — ticks every second regardless of process latency
+    Timer {
+        id: elapsedTimer
+        interval: 1000
+        running: root.recording && !root.stopped
+        repeat: true
+        onTriggered: root.elapsedSeconds += 1
+    }
+
+    // Poll wf-recorder for start/stop detection
     Timer {
         id: pollTimer
         interval: 1000
@@ -97,37 +107,48 @@ RippleButton {
 
     Process {
         id: checkRecordingProc
-        command: ["pidof", "wf-recorder"]
-        onExited: (exitCode, exitStatus) => {
-            const wasRecording = root.recording;
-            root.recording = (exitCode === 0);
-            if (root.recording && !wasRecording) {
-                root.elapsedSeconds = 0;
+        command: ["bash", "-c", "pid=$(pidof wf-recorder 2>/dev/null); if [ -n \"$pid\" ]; then echo \"1 $(ps -o etimes= -p $pid 2>/dev/null | tr -d ' ')\"; else echo 0; fi"]
+        stdout: StdioCollector {
+            id: recordingOutput
+            onStreamFinished: {
+                // Ignore polls during user-initiated stop (prevents re-trigger)
+                if (root.stopped) return;
+
+                const parts = recordingOutput.text.trim().split(/\s+/);
+                const isRec = (parts[0] === "1");
+                const wasRecording = root.recording;
+                root.recording = isRec;
+                if (isRec && !wasRecording) {
+                    // Sync elapsed from OS only on recording start
+                    root.elapsedSeconds = parseInt(parts[1]) || 0;
+                }
             }
         }
     }
 
-    // Elapsed time counter
-    Timer {
-        id: elapsedTimer
-        interval: 1000
-        running: root.recording
-        repeat: true
-        onTriggered: root.elapsedSeconds += 1
+    // Reset after exit animation finishes
+    onVisibleChanged: {
+        if (!visible) {
+            elapsedSeconds = 0;
+            stopped = false;
+        }
     }
 
-    function recordingTimeText() {
+    function displayText() {
+        if (root.stopped) return "Stop";
         const minutes = Math.floor(root.elapsedSeconds / 60).toString().padStart(2, "0");
         const seconds = Math.floor(root.elapsedSeconds % 60).toString().padStart(2, "0");
         return `${minutes}:${seconds}`;
     }
 
-    function compactMinutesText() {
+    function compactDisplayText() {
+        if (root.stopped) return "Stop";
         return Math.ceil(root.elapsedSeconds / 60).toString().padStart(2, "0");
     }
 
     onClicked: {
-        // Stop recording
+        root.stopped = true;
+        root.recording = false;
         Quickshell.execDetached(["bash", "-c", "kill -INT $(pidof wf-recorder)"]);
     }
 
@@ -172,7 +193,7 @@ RippleButton {
                 horizontalAlignment: Text.AlignHCenter
                 topPadding: 2
                 bottomPadding: -2
-                text: root.recordingTimeText()
+                text: root.displayText()
                 font.family: Appearance.font.family.main
                 font.pixelSize: Appearance.font.pixelSize.normal
                 font.weight: Font.DemiBold
@@ -213,7 +234,7 @@ RippleButton {
 
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
-                text: root.compactMinutesText()
+                text: root.compactDisplayText()
                 font.family: Appearance.font.family.main
                 font.pixelSize: 11
                 font.weight: Font.DemiBold
