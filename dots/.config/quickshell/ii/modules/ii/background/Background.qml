@@ -208,10 +208,32 @@ Scope {
                 // Wallpaper
                 StyledImage {
                     id: wallpaper
-                    visible: opacity > 0 && !blurLoader.active
-                    opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
+                    visible: (opacity > 0 || transition.animating) && !blurLoader.active
+                    opacity: transition.animating ? 1 : ((status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0)
                     cache: false
                     smooth: false
+
+                    property string _trackedSource: ""
+
+                    Connections {
+                        target: bgRoot
+                        function onWallpaperPathChanged() {
+                            const newSrc = bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath;
+                            const oldSrc = wallpaper._trackedSource;
+                            wallpaper._trackedSource = newSrc;
+                            if (oldSrc && oldSrc !== newSrc && !bgRoot.wallpaperIsVideo && !bgRoot.wallpaperSafetyTriggered) {
+                                transition.play(oldSrc, newSrc);
+                            } else {
+                                wallpaper.source = newSrc;
+                            }
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        const initial = bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath;
+                        _trackedSource = initial;
+                        source = initial;
+                    }
 
                     property int workspaceIndex: (bgRoot.monitor.activeWorkspace?.id ?? 1) - 1
                     property real middleFraction: 0.5
@@ -258,7 +280,7 @@ Scope {
                         return - bgRoot.parallaxTotalPixelsY * usedFractionY;
                     }
 
-                    source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
+                    source: ""
                     fillMode: Image.PreserveAspectCrop
                     Behavior on x {
                         NumberAnimation {
@@ -274,6 +296,13 @@ Scope {
                     }
                     width: bgRoot.scaledWallpaperWidth
                     height: bgRoot.scaledWallpaperHeight
+                }
+
+                WallpaperTransition {
+                    id: transition
+                    wallpaper: wallpaper
+                    monitor: bgRoot.monitor
+                    anchors.fill: parent
                 }
 
                 Loader {

@@ -239,6 +239,10 @@ Singleton {
                     property bool enableSidebar: false
                     property real widgetsFactor: 1.2
                 }
+                property JsonObject transition: JsonObject {
+                    property bool enable: true
+                    property int duration: 600 // milliseconds
+                }
             }
 
             property JsonObject bar: JsonObject {

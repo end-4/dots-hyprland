@@ -53,6 +53,36 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "transform"
+        title: Translation.tr("Wallpaper Transition")
+
+        ConfigRow {
+            Layout.fillWidth: true
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.transition.enable
+                onCheckedChanged: {
+                    Config.options.background.transition.enable = checked;
+                }
+            }
+            ConfigSpinBox {
+                visible: Config.options.background.transition.enable
+                icon: "schedule"
+                text: Translation.tr("Duration (ms)")
+                value: Config.options.background.transition.duration
+                from: 50
+                to: 3000
+                stepSize: 50
+                onValueChanged: {
+                    Config.options.background.transition.duration = value;
+                }
+            }
+        }
+    }
+
+    ContentSection {
         id: settingsClock
         icon: "clock_loader_40"
         title: Translation.tr("Widget: Clock")
