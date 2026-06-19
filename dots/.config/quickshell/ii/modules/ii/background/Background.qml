@@ -281,6 +281,8 @@ Scope {
                     active: Config.options.lock.blur.enable && (GlobalStates.screenLocked || scaleAnim.running)
                     anchors.fill: wallpaper
                     scale: GlobalStates.screenLocked ? Config.options.lock.blur.extraZoom : 1
+                    layer.enabled: active
+                    layer.textureMirroring: ShaderEffect.NoMirroring
                     Behavior on scale {
                         NumberAnimation {
                             id: scaleAnim
@@ -293,6 +295,7 @@ Scope {
                         source: wallpaper
                         radius: GlobalStates.screenLocked ? Config.options.lock.blur.radius : 0
                         samples: radius * 2 + 1
+                        cached: true
 
                         Rectangle {
                             opacity: GlobalStates.screenLocked ? 1 : 0
