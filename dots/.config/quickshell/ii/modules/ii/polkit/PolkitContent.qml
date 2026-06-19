@@ -69,12 +69,29 @@ Item {
             text: PolkitService.cleanMessage
         }
 
+        WindowDialogParagraph {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            text: PolkitService.flow.supplementaryMessage
+            color: Appearance.colors.colTertiary
+            visible: PolkitService.fingerprintAvailable
+        }
+        
+        MaterialSymbol {
+            Layout.alignment: Qt.AlignHCenter
+            iconSize: 54
+            text: "fingerprint"
+            color: Appearance.colors.colSecondary
+            visible: PolkitService.isFingerprintCurrentlyOffered
+        }
+
         MaterialTextField {
             id: inputField
             Layout.fillWidth: true
             focus: true
             enabled: PolkitService.interactionAvailable
             placeholderText: PolkitService.cleanPrompt
+            visible: !PolkitService.isFingerprintCurrentlyOffered
             echoMode: root.usePasswordChars ? TextInput.Password : TextInput.Normal
             onAccepted: root.submit();
 
