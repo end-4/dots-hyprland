@@ -29,6 +29,7 @@ MouseArea {
         id: gauge
         required property string iconName
         required property real percentage // 0..1
+        property string label: "" // short window identifier, e.g. "5h" / "7d"
         property int warningThreshold: Config.options.bar.claudeUsage.warningThreshold
         property bool warning: percentage * 100 >= warningThreshold
 
@@ -70,6 +71,14 @@ MouseArea {
                 font.pixelSize: Appearance.font.pixelSize.small
                 text: ClaudeUsage.available ? `${Math.round(gauge.percentage * 100)}` : "–"
             }
+
+            StyledText { // which window is being shown
+                Layout.alignment: Qt.AlignVCenter
+                visible: gauge.label.length > 0
+                color: Appearance.colors.colSubtext
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                text: gauge.label
+            }
         }
     }
 
@@ -83,6 +92,7 @@ MouseArea {
         UsageGauge { // Click the module to switch between the two windows
             iconName: root.showingWeekly ? "calendar_month" : "auto_awesome"
             percentage: (root.showingWeekly ? ClaudeUsage.sevenDay : ClaudeUsage.fiveHour) / 100
+            label: root.showingWeekly ? "7d" : "5h"
         }
     }
 
