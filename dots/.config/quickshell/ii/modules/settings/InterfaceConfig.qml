@@ -247,6 +247,18 @@ ContentPage {
                     Config.options.lock.blur.extraZoom = value / 100;
                 }
             }
+
+            ConfigSpinBox {
+                icon: "blur_on"
+                text: Translation.tr("Blur strength (radius)")
+                value: Config.options.lock.blur.radius
+                from: 5
+                to: 200
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.lock.blur.radius = value;
+                }
+            }
         }
     }
 
