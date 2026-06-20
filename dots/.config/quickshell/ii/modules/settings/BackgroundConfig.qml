@@ -248,6 +248,19 @@ ContentPage {
                 }
             }
 
+            ConfigRow{
+                uniform: true
+                
+                ConfigSwitch {
+                    buttonIcon: "vertical_distribute"
+                    text: Translation.tr("Vertical (locked)")
+                    checked: Config.options.background.widgets.clock.digital.verticalLocked
+                    onCheckedChanged: {
+                        Config.options.background.widgets.clock.digital.verticalLocked = checked;
+                    }
+                }
+            }
+
             MaterialTextArea {
                 Layout.fillWidth: true
                 placeholderText: Translation.tr("Font family")
