@@ -57,6 +57,15 @@ ColumnLayout {
         text: DateTime.longDate
         color: clockColumn.colText
         horizontalAlignment: clockColumn.textHorizontalAlignment
+        font {
+            pixelSize: Config.options.background.widgets.clock.digital.font.size * 0.15
+            weight: Config.options.background.widgets.clock.digital.font.weight
+            family: Config.options.background.widgets.clock.digital.font.family
+            variableAxes: ({
+                    "wdth": Config.options.background.widgets.clock.digital.font.width,
+                    "ROND": Config.options.background.widgets.clock.digital.font.roundness
+                })
+        }
     }
 
     // Quote
