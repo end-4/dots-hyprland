@@ -401,6 +401,10 @@ Singleton {
                     property real radius: 100
                     property real extraZoom: 1.1
                 }
+                property JsonObject dim: JsonObject {
+                    property bool enable: false
+                    property real strength: 50
+                }
                 property bool centerClock: true
                 property bool showLockedText: true
                 property JsonObject security: JsonObject {
