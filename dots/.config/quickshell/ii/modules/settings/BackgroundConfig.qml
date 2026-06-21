@@ -205,6 +205,65 @@ ContentPage {
             tooltip: Translation.tr("Font width and roundness settings are only available for some fonts like Google Sans Flex")
 
             ConfigRow {
+                ContentSubsection {
+                    visible: !Config.options.background.widgets.clock.showOnlyWhenLocked
+                    title: Translation.tr("Clock color")
+                    Layout.fillWidth: true
+                    ConfigSelectionArray {
+                        currentValue: Config.options.background.widgets.clock.digital.colorMode
+                        onSelected: newValue => {
+                            Config.options.background.widgets.clock.digital.colorMode = newValue;
+                        }
+                        options: [
+                            {
+                                displayName: Translation.tr("Auto"),
+                                icon: "auto_fix_high",
+                                value: "auto"
+                            },
+                            {
+                                displayName: Translation.tr("Light"),
+                                icon: "light_mode",
+                                value: "light"
+                            },
+                            {
+                                displayName: Translation.tr("Dark"),
+                                icon: "dark_mode",
+                                value: "dark"
+                            }
+                        ]
+                    }
+                }
+
+                ContentSubsection {
+                    title: Translation.tr("Clock color (locked)")
+                    Layout.fillWidth: false
+                    ConfigSelectionArray {
+                        currentValue: Config.options.background.widgets.clock.digital.colorModeLocked
+                        onSelected: newValue => {
+                            Config.options.background.widgets.clock.digital.colorModeLocked = newValue;
+                        }
+                        options: [
+                            {
+                                displayName: Translation.tr("Auto"),
+                                icon: "auto_fix_high",
+                                value: "auto"
+                            },
+                            {
+                                displayName: Translation.tr("Light"),
+                                icon: "light_mode",
+                                value: "light"
+                            },
+                            {
+                                displayName: Translation.tr("Dark"),
+                                icon: "dark_mode",
+                                value: "dark"
+                            }
+                        ]
+                    }
+                }
+            }
+
+            ConfigRow {
                 uniform: true
                 ConfigSwitch {
                     buttonIcon: "vertical_distribute"
@@ -250,7 +309,7 @@ ContentPage {
 
             ConfigRow{
                 uniform: true
-                
+
                 ConfigSwitch {
                     buttonIcon: "vertical_distribute"
                     text: Translation.tr("Vertical (locked)")

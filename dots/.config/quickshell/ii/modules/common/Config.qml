@@ -191,6 +191,8 @@ Singleton {
                             property bool animateChange: true
                             property bool vertical: false
                             property bool verticalLocked: false
+                            property string colorMode: "auto"           // Options: "auto", "light", "dark"
+                            property string colorModeLocked: "auto"     // Options: "auto", "light", "dark"
                             property JsonObject font: JsonObject {
                                 property string family: "Google Sans Flex"
                                 property real weight: 350
