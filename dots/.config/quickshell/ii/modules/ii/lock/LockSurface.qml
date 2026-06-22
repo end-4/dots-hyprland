@@ -21,6 +21,9 @@ MouseArea {
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
 
+    property var pendingAction: null
+    property bool showConfirmDialog: false
+
     // Whether a player with a title is currently active
     readonly property bool mediaPlayerAvailable: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
 
@@ -464,7 +467,8 @@ MouseArea {
 
         onClicked: {
             if (!root.requirePasswordToPower) {
-                root.context.unlocked(guardedBtn.targetAction);
+                root.pendingAction = guardedBtn.targetAction;
+                root.showConfirmDialog = true;
                 return;
             }
             if (root.context.targetAction === guardedBtn.targetAction) {
@@ -500,6 +504,173 @@ MouseArea {
             anchors.verticalCenter: parent.verticalCenter
             text: pair.text
             color: pair.color
+        }
+    }
+
+    // Confirmation popup — close animation
+    property bool confirmExecuteOnClose: false
+
+    function closeConfirmPopup(execute) {
+        confirmPopup.confirmExecuteOnClose = execute;
+        closePopupAnim.restart();
+    }
+
+    SequentialAnimation {
+        id: closePopupAnim
+        ParallelAnimation {
+            NumberAnimation {
+                target: confirmPopup
+                property: "scale"
+                to: 0
+                duration: 250
+                easing.type: Easing.InBack
+                easing.overshoot: 1.4
+            }
+            NumberAnimation {
+                target: confirmPopup
+                property: "opacity"
+                to: 0
+                duration: 250
+                easing.type: Easing.InBack
+            }
+        }
+        ScriptAction {
+            script: {
+                if (confirmPopup.confirmExecuteOnClose) {
+                    root.context.unlocked(root.pendingAction);
+                }
+                root.showConfirmDialog = false;
+                root.pendingAction = null;
+            }
+        }
+    }
+
+    // Transparent scrim to catch outside clicks and dismiss the popup
+    MouseArea {
+        anchors.fill: parent
+        z: 998
+        visible: root.showConfirmDialog
+        enabled: root.showConfirmDialog
+        acceptedButtons: Qt.AllButtons
+        hoverEnabled: true
+        onClicked: root.closeConfirmPopup(false)
+    }
+
+    // Confirmation popup — inline, positioned above the right toolbar
+    Rectangle {
+        id: confirmPopup
+        z: 999
+        anchors {
+            bottom: rightIsland.top
+            bottomMargin: 8
+            right: rightIsland.right
+        }
+
+        visible: root.showConfirmDialog
+        width: Math.max(textColumn.implicitWidth, popupButtons.width) + 32
+        height: textColumn.implicitHeight + popupButtons.height + 40
+        radius: Appearance.rounding.large
+        color: Appearance.m3colors.m3surfaceContainerHigh
+
+        property bool confirmExecuteOnClose: root.confirmExecuteOnClose
+
+        transformOrigin: Item.BottomRight
+        scale: root.showConfirmDialog ? 1 : 0
+        opacity: root.showConfirmDialog ? 1 : 0
+
+        Behavior on scale {
+            NumberAnimation {
+                duration: 350
+                easing.type: Easing.OutBack
+                easing.overshoot: 1.8
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 180
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        StyledRectangularShadow {
+            target: confirmPopup
+        }
+
+        Column {
+            id: textColumn
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+                margins: 16
+            }
+            spacing: 6
+
+            StyledText {
+                width: parent.width
+                text: root.pendingAction === LockContext.ActionEnum.Poweroff
+                    ? Translation.tr("Shutdown now?")
+                    : Translation.tr("Restart now?")
+                color: Appearance.m3colors.m3onSurface
+                font.pixelSize: Appearance.font.pixelSize.small
+                wrapMode: Text.Wrap
+            }
+
+            StyledText {
+                width: parent.width
+                text: Translation.tr("You and any other people using this PC could lose unsaved work.")
+                color: Appearance.m3colors.m3onSurfaceVariant
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                wrapMode: Text.Wrap
+            }
+        }
+
+        Row {
+            id: popupButtons
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                margins: 12
+            }
+            spacing: 15
+
+            StyledText {
+                anchors.verticalCenter: parent.verticalCenter
+                text: Translation.tr("Cancel")
+                color: Appearance.colors.colOnSurface
+                font.pixelSize: Appearance.font.pixelSize.small
+
+                MouseArea {
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.closeConfirmPopup(false)
+                }
+            }
+
+            // Confirm button (filled primary)
+            Rectangle {
+                width: confirmText.implicitWidth + 20
+                height: 32
+                radius: Appearance.rounding.full
+                color: Appearance.colors.colPrimary
+
+                StyledText {
+                    id: confirmText
+                    anchors.centerIn: parent
+                    text: root.pendingAction === LockContext.ActionEnum.Poweroff
+                        ? Translation.tr("Shutdown")
+                        : Translation.tr("Restart")
+                    color: Appearance.colors.colOnPrimary
+                    font.pixelSize: Appearance.font.pixelSize.small
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.closeConfirmPopup(true)
+                }
+            }
         }
     }
 }
