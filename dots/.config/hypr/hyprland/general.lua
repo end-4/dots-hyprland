@@ -14,7 +14,7 @@ hl.gesture({
 hl.gesture({
     fingers = 3,
     direction = "pinch",
-    action = "fullscreen"
+    action = "float" -- to make the window floating instead of full screen
 })
 hl.gesture({
     fingers = 4,
