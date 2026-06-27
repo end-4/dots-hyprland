@@ -17,6 +17,10 @@ Rectangle {
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property int previousIndex: -1
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
+    readonly property int collapsedHeight: Math.max(
+        Appearance.font.pixelSize.larger + 24,
+        Appearance.font.pixelSize.large + 24
+    )
     property var tabs: [
         {
             "type": "calendar",

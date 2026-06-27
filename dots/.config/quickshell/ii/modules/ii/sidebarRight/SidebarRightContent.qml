@@ -96,17 +96,46 @@ Item {
                 }
             }
 
-            CenterWidgetGroup {
-                Layout.alignment: Qt.AlignHCenter
+            Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-            }
+                clip: true
 
-            BottomWidgetGroup {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillHeight: false
-                Layout.fillWidth: true
-                Layout.preferredHeight: implicitHeight
+                CenterWidgetGroup {
+                    id: centerGroup
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: bottomGroup.top
+                    anchors.bottomMargin: root.sidebarPadding
+
+                    opacity: bottomGroup.collapsed ? 1 : 0
+                    visible: opacity > 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMove.duration
+                            easing.type: Appearance.animation.elementMove.type
+                            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                        }
+                    }
+                }
+
+                BottomWidgetGroup {
+                    id: bottomGroup
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    height: bottomGroup.collapsed ? bottomGroup.collapsedHeight : parent.height
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMove.duration
+                            easing.type: Appearance.animation.elementMove.type
+                            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                        }
+                    }
+                }
             }
         }
     }

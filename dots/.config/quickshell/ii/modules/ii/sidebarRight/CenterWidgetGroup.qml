@@ -9,6 +9,7 @@ import QtQuick.Layouts
 
 Rectangle {
     id: root
+    clip: true
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
 
