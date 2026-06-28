@@ -68,12 +68,11 @@ Scope {
                 return;
             }
 
-            // Unlock the keyring if configured to do so
-            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring(); // Async
-
-            // Unlock the screen before exiting, or the compositor will display a
-            // fallback lock you can't interact with.
+            // Unlock the screen first — always
             GlobalStates.screenLocked = false;
+
+            // Then unlock the keyring (fire-and-forget, async)
+            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
 
             // Reset
             lockContext.reset();
