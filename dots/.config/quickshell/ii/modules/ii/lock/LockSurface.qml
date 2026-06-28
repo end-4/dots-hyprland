@@ -80,13 +80,26 @@ MouseArea {
             forceFieldFocus();
         }
     }
+
+    Connections {
+        target: root.context
+        function onUnlocked(action) {
+            fluidBg.running = false;
+        }
+    }
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
     onPressed: mouse => {
         forceFieldFocus();
+        idleHideTimer.restart();
+        toolbarOpacity = 1;
+        toolbarScale = 1;
     }
     onPositionChanged: mouse => {
         forceFieldFocus();
+        idleHideTimer.restart();
+        toolbarOpacity = 1;
+        toolbarScale = 1;
     }
 
     // ── Fluid simulation background ──
@@ -111,6 +124,18 @@ MouseArea {
         running: true
         repeat: true
         onTriggered: fluidBg.onFrameTick()
+    }
+
+    // Idle hide: 3s no input → toolbar fades out
+    Timer {
+        id: idleHideTimer
+        interval: 3000
+        running: true
+        repeat: false
+        onTriggered: {
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+        }
     }
 
     // Toolbar appearing animation
@@ -141,6 +166,9 @@ MouseArea {
     property bool ctrlHeld: false
     Keys.onPressed: event => {
         root.context.resetClearTimer();
+        idleHideTimer.restart();
+        toolbarOpacity = 1;
+        toolbarScale = 1;
         if (event.key === Qt.Key_Control) {
             root.ctrlHeld = true;
         }

@@ -228,6 +228,8 @@ if [[ ! "$OS_GROUP_ID" == "fedora" ]]; then
   v install_google_sans_flex
 fi
 
+showfun install-fluxengine-plugin
+v install-fluxengine-plugin
 
 #####################################################################################
 

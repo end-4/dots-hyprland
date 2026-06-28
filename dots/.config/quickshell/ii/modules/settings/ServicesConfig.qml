@@ -330,4 +330,116 @@ ContentPage {
         }
     }
 
+    ContentSection {
+        icon: "water"
+        title: "Fluid Simulation"
+
+        ContentSubsection {
+            title: "Display"
+
+            StyledComboBox {
+                buttonIcon: "palette"
+                textRole: "displayName"
+                model: [
+                    { displayName: "Original", value: 0 },
+                    { displayName: "Color Wheel", value: 1 },
+                    { displayName: "Image Texture", value: 2 }
+                ]
+                currentIndex: Config.options.fluid.colorMode
+                onCurrentIndexChanged: {
+                    Config.options.fluid.colorMode = currentIndex
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: "Physics"
+
+            ConfigSpinBox {
+                icon: "water_drop"
+                text: "Viscosity (×10)"
+                value: Config.options.fluid.viscosity * 10
+                from: 1; to: 200; stepSize: 5
+                onValueChanged: Config.options.fluid.viscosity = value / 10
+            }
+            ConfigSpinBox {
+                icon: "grain"
+                text: "Noise (×100)"
+                value: Config.options.fluid.noiseMultiplier * 100
+                from: 0; to: 200; stepSize: 5
+                onValueChanged: Config.options.fluid.noiseMultiplier = value / 100
+            }
+            ConfigSpinBox {
+                icon: "speed"
+                text: "Timestep (×1000)"
+                value: Config.options.fluid.timestep * 1000
+                from: 1; to: 100; stepSize: 1
+                onValueChanged: Config.options.fluid.timestep = value / 1000
+            }
+            ConfigSpinBox {
+                icon: "blur_on"
+                text: "Dissipation (×100)"
+                value: Config.options.fluid.dissipation * 100
+                from: 0; to: 100; stepSize: 5
+                onValueChanged: Config.options.fluid.dissipation = value / 100
+            }
+            ConfigSpinBox {
+                icon: "compress"
+                text: "Pressure Iterations"
+                value: Config.options.fluid.pressureIterations
+                from: 1; to: 50; stepSize: 1
+                onValueChanged: Config.options.fluid.pressureIterations = value
+            }
+        }
+
+        ContentSubsection {
+            title: "Lines"
+
+            ConfigSpinBox {
+                icon: "straighten"
+                text: "Variance (×100)"
+                value: Config.options.fluid.lineVariance * 100
+                from: 0; to: 200; stepSize: 5
+                onValueChanged: Config.options.fluid.lineVariance = value / 100
+            }
+            ConfigSpinBox {
+                icon: "line_weight"
+                text: "Width (×10)"
+                value: Config.options.fluid.lineWidthMultiplier * 10
+                from: 1; to: 50; stepSize: 1
+                onValueChanged: Config.options.fluid.lineWidthMultiplier = value / 10
+            }
+            ConfigSpinBox {
+                icon: "zoom_in"
+                text: "Zoom (×10)"
+                value: Config.options.fluid.zoom * 10
+                from: 5; to: 50; stepSize: 1
+                onValueChanged: Config.options.fluid.zoom = value / 10
+            }
+        }
+
+        ContentSubsection {
+            title: "Quality"
+
+            StyledComboBox {
+                buttonIcon: "grid_on"
+                textRole: "displayName"
+                model: [
+                    { displayName: "Off (1x)", value: 1 },
+                    { displayName: "2x", value: 2 },
+                    { displayName: "4x", value: 4 }
+                ]
+                currentIndex: {
+                    const vals = [1, 2, 4];
+                    const idx = vals.indexOf(Config.options.fluid.msaaSampleCount);
+                    return idx !== -1 ? idx : 2;
+                }
+                onCurrentIndexChanged: {
+                    const vals = [1, 2, 4];
+                    Config.options.fluid.msaaSampleCount = vals[currentIndex];
+                }
+            }
+        }
+    }
+
 }
