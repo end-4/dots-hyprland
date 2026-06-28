@@ -88,20 +88,21 @@ install-fluxengine-plugin(){
   TMP_FILE="$(mktemp)"
 
   log_info "Fetching latest FluxEngine release from GitHub..."
-  local DOWNLOAD_URL
-  DOWNLOAD_URL="$(
-    curl -fsSL "https://api.github.com/repos/${FLUX_REPO}/releases/latest" \
-    | grep -o '"browser_download_url": *"[^"]*FluxEngine-.*-linux-x86_64\.tar\.gz"' \
-    | grep -o 'https://[^"]*'
-  )"
+  local TAG
+  TAG="$(git ls-remote --tags --sort='-version:refname' \
+    "https://github.com/${FLUX_REPO}" \
+    | grep -o 'refs/tags/v[0-9.]*' \
+    | head -1 \
+    | sed 's|refs/tags/||')"
+  local DOWNLOAD_URL="https://github.com/${FLUX_REPO}/releases/download/${TAG}/FluxEngine-${TAG}-linux-x86_64.tar.gz"
 
-  if [ -z "$DOWNLOAD_URL" ]; then
-    log_error "Could not find FluxEngine release asset for ${FLUX_REPO}"
+  if [ -z "$TAG" ]; then
+    log_error "Could not find any tags for ${FLUX_REPO}"
     rm -f "$TMP_FILE"
     return 1
   fi
 
-  log_info "Downloading $DOWNLOAD_URL ..."
+  log_info "Downloading $TAG ..."
   x mkdir -p "$FLUX_IMPORT_DIR/FluxEngine"
   x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
   x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR/FluxEngine"
