@@ -82,6 +82,7 @@ MouseArea {
     }
 
 
+    cursorShape: root.toolbarOpacity > 0 ? Qt.ArrowCursor : Qt.BlankCursor
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
     onPressed: mouse => {
@@ -131,6 +132,7 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+
         }
     }
 
@@ -174,7 +176,7 @@ MouseArea {
         }
         if (event.key === Qt.Key_Escape) { // Esc to clear
             root.context.currentText = "";
-        } 
+        }
         forceFieldFocus();
     }
     Keys.onReleased: event => {
