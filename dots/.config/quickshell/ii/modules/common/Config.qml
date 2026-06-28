@@ -417,6 +417,19 @@ Singleton {
                 property bool materialShapeChars: true
             }
 
+            property JsonObject fluid: JsonObject {
+                property int colorMode: 0
+                property real viscosity: 5.0
+                property real noiseMultiplier: 0.45
+                property real timestep: 0.016667
+                property real dissipation: 0.0
+                property int pressureIterations: 19
+                property real lineVariance: 0.55
+                property real lineWidthMultiplier: 1.0
+                property real zoom: 1.6
+                property int msaaSampleCount: 4
+            }
+
             property JsonObject screensaver: JsonObject {
                 property bool enable: false
                 property int idleTimeout: 180

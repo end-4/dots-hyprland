@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import FluxEngine 1.0
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -86,6 +87,30 @@ MouseArea {
     }
     onPositionChanged: mouse => {
         forceFieldFocus();
+    }
+
+    // ── Fluid simulation background ──
+    FluxItem {
+        id: fluidBg
+        anchors.fill: parent
+        z: -1
+        running: true
+        viscosity: Config.options.fluid.viscosity
+        noiseMultiplier: Config.options.fluid.noiseMultiplier
+        timestep: Config.options.fluid.timestep
+        dissipation: Config.options.fluid.dissipation
+        pressureIterations: Config.options.fluid.pressureIterations
+        lineVariance: Config.options.fluid.lineVariance
+        lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+        zoom: Config.options.fluid.zoom
+        colorMode: Config.options.fluid.colorMode
+        msaaSampleCount: Config.options.fluid.msaaSampleCount
+    }
+    Timer {
+        interval: 16
+        running: true
+        repeat: true
+        onTriggered: fluidBg.onFrameTick()
     }
 
     // Toolbar appearing animation
