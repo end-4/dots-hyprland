@@ -349,18 +349,30 @@ ContentPage {
                 onCurrentIndexChanged: {
                     Config.options.fluid.colorMode = currentIndex
                 }
+                StyledToolTip {
+                    text: Translation.tr("Line coloring: Original (velocity-mapped purple/pink), Color Wheel (direction-based rainbow via 6-color palette), Image Texture (velocity-sampled rainbow gradient)")
+                }
             }
         }
 
         ContentSubsection {
             title: "Physics"
-
             ConfigSpinBox {
                 icon: "water_drop"
                 text: "Viscosity (×10)"
                 value: Config.options.fluid.viscosity * 10
                 from: 1; to: 200; stepSize: 5
                 onValueChanged: Config.options.fluid.viscosity = value / 10
+                MouseArea {
+                    id: viscHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: viscHover.containsMouse
+                    text: Translation.tr("Fluid viscosity. Higher values make the fluid thicker, slowing diffusion")
+                }
             }
             ConfigSpinBox {
                 icon: "grain"
@@ -368,6 +380,16 @@ ContentPage {
                 value: Config.options.fluid.noiseMultiplier * 100
                 from: 0; to: 200; stepSize: 5
                 onValueChanged: Config.options.fluid.noiseMultiplier = value / 100
+                MouseArea {
+                    id: noiseHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: noiseHover.containsMouse
+                    text: Translation.tr("Turbulence driving force. Higher = more turbulent, lower = calmer")
+                }
             }
             ConfigSpinBox {
                 icon: "speed"
@@ -375,6 +397,16 @@ ContentPage {
                 value: Config.options.fluid.timestep * 1000
                 from: 1; to: 100; stepSize: 1
                 onValueChanged: Config.options.fluid.timestep = value / 1000
+                MouseArea {
+                    id: timeHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: timeHover.containsMouse
+                    text: Translation.tr("Simulation speed per frame. Default 0.0167 (1/60s) — best left as-is")
+                }
             }
             ConfigSpinBox {
                 icon: "blur_on"
@@ -382,6 +414,16 @@ ContentPage {
                 value: Config.options.fluid.dissipation * 100
                 from: 0; to: 100; stepSize: 5
                 onValueChanged: Config.options.fluid.dissipation = value / 100
+                MouseArea {
+                    id: dissHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: dissHover.containsMouse
+                    text: Translation.tr("Energy loss per frame. 0 = no loss (conserves energy), higher = faster decay")
+                }
             }
             ConfigSpinBox {
                 icon: "compress"
@@ -389,6 +431,16 @@ ContentPage {
                 value: Config.options.fluid.pressureIterations
                 from: 1; to: 50; stepSize: 1
                 onValueChanged: Config.options.fluid.pressureIterations = value
+                MouseArea {
+                    id: pressHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: pressHover.containsMouse
+                    text: Translation.tr("Pressure solver accuracy. Higher = more physically accurate but more GPU intensive. Default 19")
+                }
             }
         }
 
@@ -401,6 +453,16 @@ ContentPage {
                 value: Config.options.fluid.lineVariance * 100
                 from: 0; to: 200; stepSize: 5
                 onValueChanged: Config.options.fluid.lineVariance = value / 100
+                MouseArea {
+                    id: varHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: varHover.containsMouse
+                    text: Translation.tr("How wiggly the flow lines are. Higher = more winding and chaotic")
+                }
             }
             ConfigSpinBox {
                 icon: "line_weight"
@@ -408,6 +470,16 @@ ContentPage {
                 value: Config.options.fluid.lineWidthMultiplier * 10
                 from: 1; to: 50; stepSize: 1
                 onValueChanged: Config.options.fluid.lineWidthMultiplier = value / 10
+                MouseArea {
+                    id: widthHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: widthHover.containsMouse
+                    text: Translation.tr("Line thickness multiplier. Higher = thicker lines")
+                }
             }
             ConfigSpinBox {
                 icon: "zoom_in"
@@ -415,6 +487,16 @@ ContentPage {
                 value: Config.options.fluid.zoom * 10
                 from: 5; to: 50; stepSize: 1
                 onValueChanged: Config.options.fluid.zoom = value / 10
+                MouseArea {
+                    id: zoomHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: zoomHover.containsMouse
+                    text: Translation.tr("Zoom level of the fluid display")
+                }
             }
         }
 
@@ -438,6 +520,9 @@ ContentPage {
                     const vals = [1, 2, 4];
                     Config.options.fluid.msaaSampleCount = vals[currentIndex];
                 }
+                StyledToolTip {
+                    text: Translation.tr("Multi-sample anti-aliasing for line edges. 4x gives the smoothest lines")
+                }
             }
             ConfigSpinBox {
                 icon: "speed"
@@ -445,6 +530,16 @@ ContentPage {
                 value: Config.options.fluid.fpsLimit
                 from: 0; to: 240; stepSize: 10
                 onValueChanged: Config.options.fluid.fpsLimit = value
+                MouseArea {
+                    id: fpsHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                }
+                StyledToolTip {
+                    extraVisibleCondition: fpsHover.containsMouse
+                    text: Translation.tr("Maximum frames per second. 0 = unlimited (runs as fast as your GPU can)")
+                }
             }
         }
     }
