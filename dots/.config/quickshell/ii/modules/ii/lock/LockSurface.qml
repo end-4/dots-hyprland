@@ -102,6 +102,24 @@ MouseArea {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    // Shake the whole toolbar row (left island + main island + right island) on wrong password.
+    // Soft & minimal: 3 alternating left-right-left nudges of 15px, settling back to 0, over 1s total.
+    property real rowShakeX: 0
+
+    SequentialAnimation {
+        id: wrongPasswordRowShakeAnim
+        NumberAnimation { target: root; property: "rowShakeX"; to: -15; duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: 15;  duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: -15; duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: 0;   duration: 120; easing.type: Easing.InOutSine }
+    }
+    Connections {
+        target: GlobalStates
+        function onScreenUnlockFailedChanged() {
+            if (GlobalStates.screenUnlockFailed) wrongPasswordRowShakeAnim.restart();
+        }
+    }
+
     // Init
     Component.onCompleted: {
         forceFieldFocus();
@@ -242,6 +260,7 @@ MouseArea {
 
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         // Fingerprint
         Loader {
@@ -298,18 +317,6 @@ MouseArea {
                     width: passwordBox.width - 8
                     height: passwordBox.height
                     radius: height / 2
-                }
-            }
-
-            // Shake when wrong password
-            ErrorShakeAnimation {
-                id: wrongPasswordShakeAnim
-                target: passwordBox
-            }
-            Connections {
-                target: GlobalStates
-                function onScreenUnlockFailedChanged() {
-                    if (GlobalStates.screenUnlockFailed) wrongPasswordShakeAnim.restart();
                 }
             }
 
@@ -371,6 +378,7 @@ MouseArea {
         }
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         // Username
         IconAndTextPair {
@@ -432,6 +440,7 @@ MouseArea {
 
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         IconAndTextPair {
             visible: Battery.available
