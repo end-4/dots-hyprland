@@ -148,6 +148,12 @@ MouseArea {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    function showToolbar() {
+        toolbarOpacity = 1;
+        toolbarScale = 1;
+        idleHideTimer.restart();
+    }
+
     // Init
     Component.onCompleted: {
         forceFieldFocus();
@@ -162,9 +168,7 @@ MouseArea {
     property bool ctrlHeld: false
     Keys.onPressed: event => {
         root.context.resetClearTimer();
-        idleHideTimer.restart();
-        toolbarOpacity = 1;
-        toolbarScale = 1;
+        showToolbar();
         if (event.key === Qt.Key_Control) {
             root.ctrlHeld = true;
         }
@@ -326,7 +330,10 @@ MouseArea {
             inputMethodHints: Qt.ImhSensitiveData
 
             // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
+            onTextChanged: {
+                root.context.currentText = this.text;
+                root.showToolbar();
+            }
             onAccepted: {
                 console.log("TIMING [lockSurface.onAccepted]", Date.now());
                 root.context.tryUnlock(ctrlHeld);
@@ -340,6 +347,7 @@ MouseArea {
 
             Keys.onPressed: event => {
                 root.context.resetClearTimer();
+                event.accepted = false;
             }
             
             layer.enabled: true
