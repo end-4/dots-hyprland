@@ -102,14 +102,23 @@ install-fluxengine-plugin(){
   fi
 
   log_info "Downloading $DOWNLOAD_URL ..."
-  x mkdir -p "$FLUX_IMPORT_DIR"
+  x mkdir -p "$FLUX_IMPORT_DIR/FluxEngine"
   x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
-  x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR"
+  x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR/FluxEngine"
   rm -f "$TMP_FILE"
 
   if [ ! -f "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so" ]; then
     log_error "FluxEngine plugin not found after extraction"
     return 1
+  fi
+
+  # Fix RPATH so plugin finds libfluxengine.so in same directory
+  if command -v patchelf &>/dev/null; then
+    patchelf --set-rpath '$ORIGIN' "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so"
+    log_info "RPATH fixed: libfluxengineplugin.so finds libfluxengine.so via \$ORIGIN"
+  else
+    log_warn "patchelf not found; libfluxengine.so might not load at runtime"
+    log_warn "Install patchelf or set LD_LIBRARY_PATH=$FLUX_IMPORT_DIR/FluxEngine"
   fi
 
   log_info "FluxEngine plugin installed to $FLUX_IMPORT_DIR/FluxEngine/"
