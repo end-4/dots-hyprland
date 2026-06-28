@@ -157,6 +157,7 @@ ContentPage {
                     }
                 }
             }
+        }
 
             ConfigRow {
                 uniform: true
@@ -185,7 +186,6 @@ ContentPage {
                     wrapMode: TextEdit.Wrap
                     onTextChanged: {
                         Config.options.search.prefix.webSearch = text;
-                    }
                 }
             }
         }
@@ -438,6 +438,13 @@ ContentPage {
                     const vals = [1, 2, 4];
                     Config.options.fluid.msaaSampleCount = vals[currentIndex];
                 }
+            }
+            ConfigSpinBox {
+                icon: "speed"
+                text: "FPS Limit"
+                value: Config.options.fluid.fpsLimit
+                from: 0; to: 240; stepSize: 10
+                onValueChanged: Config.options.fluid.fpsLimit = value
             }
         }
     }

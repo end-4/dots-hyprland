@@ -117,7 +117,9 @@ MouseArea {
         msaaSampleCount: Config.options.fluid.msaaSampleCount
     }
     Timer {
-        interval: 16
+        interval: Config.options.fluid.fpsLimit > 0
+            ? Math.max(4, 1000 / Config.options.fluid.fpsLimit)
+            : 4
         running: true
         repeat: true
         onTriggered: fluidBg.onFrameTick()

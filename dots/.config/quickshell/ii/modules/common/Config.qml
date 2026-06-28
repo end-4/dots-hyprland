@@ -428,6 +428,7 @@ Singleton {
                 property real lineWidthMultiplier: 1.0
                 property real zoom: 1.6
                 property int msaaSampleCount: 4
+                property int fpsLimit: 60
             }
 
             property JsonObject media: JsonObject {
