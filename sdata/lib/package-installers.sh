@@ -84,6 +84,8 @@ install-python-packages(){
 install-fluxengine-plugin(){
   local FLUX_REPO="dxnz-id/flux-quickshell"
   local FLUX_IMPORT_DIR="$HOME/.local/share/quickshell/imports"
+  local TMP_FILE
+  TMP_FILE="$(mktemp)"
 
   log_info "Fetching latest FluxEngine release from GitHub..."
   local DOWNLOAD_URL
@@ -95,12 +97,15 @@ install-fluxengine-plugin(){
 
   if [ -z "$DOWNLOAD_URL" ]; then
     log_error "Could not find FluxEngine release asset for ${FLUX_REPO}"
+    rm -f "$TMP_FILE"
     return 1
   fi
 
   log_info "Downloading $DOWNLOAD_URL ..."
   x mkdir -p "$FLUX_IMPORT_DIR"
-  x curl -fsSL "$DOWNLOAD_URL" | tar -xzf - -C "$FLUX_IMPORT_DIR"
+  x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
+  x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR"
+  rm -f "$TMP_FILE"
 
   if [ ! -f "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so" ]; then
     log_error "FluxEngine plugin not found after extraction"
