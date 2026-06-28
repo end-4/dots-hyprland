@@ -60,9 +60,11 @@ Scope {
     }
 
     function tryUnlock(alsoInhibitIdle = false) {
+        console.log("TIMING [tryUnlock]", Date.now());
         root.alsoInhibitIdle = alsoInhibitIdle;
         root.unlockInProgress = true;
         pam.start();
+        console.log("TIMING [pam.start.done]", Date.now());
     }
 
     function tryFingerUnlock() {
@@ -100,15 +102,19 @@ Scope {
 
         // pam_unix will ask for a response for the password prompt
         onPamMessage: {
+            console.log("TIMING [pam.onPamMessage]", Date.now());
             if (this.responseRequired) {
+                console.log("TIMING [pam.respond]", Date.now());
                 this.respond(root.currentText);
             }
         }
 
         // pam_unix won't send any important messages so all we need is the completion status.
         onCompleted: result => {
+            console.log("TIMING [pam.onCompleted]", Date.now(), "result:", result);
             if (result == PamResult.Success) {
                 root.unlocked(root.targetAction);
+                console.log("TIMING [after unlocked signal]", Date.now());
                 stopFingerPam();
             } else {
                 root.clearText();

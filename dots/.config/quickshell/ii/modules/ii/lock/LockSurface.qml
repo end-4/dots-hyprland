@@ -81,12 +81,7 @@ MouseArea {
         }
     }
 
-    Connections {
-        target: root.context
-        function onUnlocked(action) {
-            fluidBg.running = false;
-        }
-    }
+
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
     onPressed: mouse => {
@@ -103,6 +98,7 @@ MouseArea {
     }
 
     // ── Fluid simulation background ──
+    property alias fluidRunning: fluidBg.running
     FluxItem {
         id: fluidBg
         anchors.fill: parent
@@ -332,6 +328,7 @@ MouseArea {
             // Synchronizing (across monitors) and unlocking
             onTextChanged: root.context.currentText = this.text
             onAccepted: {
+                console.log("TIMING [lockSurface.onAccepted]", Date.now());
                 root.context.tryUnlock(ctrlHeld);
             }
             Connections {

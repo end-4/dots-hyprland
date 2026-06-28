@@ -315,7 +315,7 @@ Scope {
                     Behavior on scale {
                         NumberAnimation {
                             id: scaleAnim
-                            duration: 400
+                            duration: 200
                             easing.type: Easing.BezierSpline
                             easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
                         }

@@ -18,12 +18,9 @@ Scope {
         id: sessionLockSurface
         color: "transparent"
         Loader {
+            id: lockSurfaceLoader
             active: GlobalStates.screenLocked
             anchors.fill: parent
-            opacity: active ? 1 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
             sourceComponent: root.lockSurface
         }
     }
@@ -59,6 +56,7 @@ Scope {
         }
 
         onUnlocked: (targetAction) => {
+            console.log("TIMING [LockScreen.onUnlocked start]", Date.now());
             // Perform the target action if it's not just unlocking
             if (targetAction == LockContext.ActionEnum.Poweroff) {
                 Session.poweroff();
@@ -70,6 +68,7 @@ Scope {
 
             // Unlock the screen first — always
             GlobalStates.screenLocked = false;
+            console.log("TIMING [LockScreen.screenLocked=false]", Date.now());
 
             // Then unlock the keyring (fire-and-forget, async)
             if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
