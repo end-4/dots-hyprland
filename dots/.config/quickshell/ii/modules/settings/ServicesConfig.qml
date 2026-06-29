@@ -348,7 +348,14 @@ ContentPage {
             value: Config.options.fluid.idleTimeout
             from: 5; to: 300; stepSize: 5
             onValueChanged: Config.options.fluid.idleTimeout = value
+            MouseArea {
+                id: idleHover
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton
+            }
             StyledToolTip {
+                extraVisibleCondition: idleHover.containsMouse
                 text: Translation.tr("How long of inactivity before the fluid simulation starts showing")
             }
         }
@@ -358,7 +365,14 @@ ContentPage {
             value: Config.options.fluid.widgetAutoHideTimeout
             from: 3; to: 120; stepSize: 5
             onValueChanged: Config.options.fluid.widgetAutoHideTimeout = value
+            MouseArea {
+                id: autoHideHover
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton
+            }
             StyledToolTip {
+                extraVisibleCondition: autoHideHover.containsMouse
                 text: Translation.tr("How long after fluid appears before toolbar/clock fade out")
             }
         }
@@ -388,7 +402,14 @@ ContentPage {
             value: Config.options.fluid.fadeDuration
             from: 100; to: 3000; stepSize: 100
             onValueChanged: Config.options.fluid.fadeDuration = value
+            MouseArea {
+                id: fadeHover
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton
+            }
             StyledToolTip {
+                extraVisibleCondition: fadeHover.containsMouse
                 text: Translation.tr("Fade in/out duration for the fluid simulation background")
             }
         }
