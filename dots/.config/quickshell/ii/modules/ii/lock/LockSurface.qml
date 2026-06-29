@@ -89,34 +89,34 @@ MouseArea {
     onPressed: mouse => { forceFieldFocus(); showToolbar(); }
     onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
-    // ── Fluid simulation background ──
-    property alias fluidRunning: fluidBg.running
-    FluxItem {
-        id: fluidBg
-        anchors.fill: parent
-        z: -1
-        opacity: root.fluidOpacity
-        running: true
-        viscosity: Config.options.fluid.viscosity
-        noiseMultiplier: Config.options.fluid.noiseMultiplier
-        timestep: Config.options.fluid.timestep
-        dissipation: Config.options.fluid.dissipation
-        pressureIterations: Config.options.fluid.pressureIterations
-        lineVariance: Config.options.fluid.lineVariance
-        lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
-        zoom: Config.options.fluid.zoom
-        colorMode: Config.options.fluid.colorMode
-        msaaSampleCount: Config.options.fluid.msaaSampleCount
-    }
-    Timer {
-        id: fpsTimer
-        interval: Config.options.fluid.fpsLimit > 0
-            ? Math.max(4, 1000 / Config.options.fluid.fpsLimit)
-            : 4
-        running: true
-        repeat: true
-        onTriggered: fluidBg.onFrameTick()
-    }
+    // ── Fluid simulation background (DISABLED for diagnostics) ──
+    // property alias fluidRunning: fluidBg.running
+    // FluxItem {
+    //     id: fluidBg
+    //     anchors.fill: parent
+    //     z: -1
+    //     opacity: root.fluidOpacity
+    //     running: true
+    //     viscosity: Config.options.fluid.viscosity
+    //     noiseMultiplier: Config.options.fluid.noiseMultiplier
+    //     timestep: Config.options.fluid.timestep
+    //     dissipation: Config.options.fluid.dissipation
+    //     pressureIterations: Config.options.fluid.pressureIterations
+    //     lineVariance: Config.options.fluid.lineVariance
+    //     lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+    //     zoom: Config.options.fluid.zoom
+    //     colorMode: Config.options.fluid.colorMode
+    //     msaaSampleCount: Config.options.fluid.msaaSampleCount
+    // }
+    // Timer {
+    //     id: fpsTimer
+    //     interval: Config.options.fluid.fpsLimit > 0
+    //         ? Math.max(4, 1000 / Config.options.fluid.fpsLimit)
+    //         : 4
+    //     running: true
+    //     repeat: true
+    //     onTriggered: fluidBg.onFrameTick()
+    // }
 
     // Detect unlock signal from LockContext (same instance as LockScreen's)
     Connections {
@@ -126,13 +126,11 @@ MouseArea {
         }
     }
 
-    // Transition on unlock request: fade everything out
+    // Transition on unlock request: fade toolbar out
     onUnlockRequestedChanged: {
         if (unlockRequested) {
-            fpsTimer.running = false;
             toolbarOpacity = 0;
             toolbarScale = 0.85;
-            fluidOpacity = 0;
         }
     }
 
@@ -145,14 +143,12 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
-            fluidOpacity = 1;
         }
     }
 
     // Toolbar appearing animation
     property real toolbarScale: 0.9
     property real toolbarOpacity: 0
-    property real fluidOpacity: 0
     Behavior on toolbarScale {
         NumberAnimation {
             duration: Appearance.animation.elementMove.duration
@@ -162,9 +158,6 @@ MouseArea {
     }
     Behavior on toolbarOpacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-    Behavior on fluidOpacity {
-        NumberAnimation { duration: 600; easing.type: Easing.InOutCubic }
     }
 
     function showToolbar() {
