@@ -90,12 +90,30 @@ MouseArea {
     onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
     // ── Fluid simulation background ──
+    // diagStep: 1=noop, 2=+GLctx, 3=+QRhi, 4=+engine+display, 5=full sim
     FluxItem {
         id: fluidBg
         anchors.fill: parent
         z: -1
         opacity: 1
-        running: false
+        running: true
+        diagStep: 5
+        viscosity: Config.options.fluid.viscosity
+        noiseMultiplier: Config.options.fluid.noiseMultiplier
+        timestep: Config.options.fluid.timestep
+        dissipation: Config.options.fluid.dissipation
+        pressureIterations: Config.options.fluid.pressureIterations
+        lineVariance: Config.options.fluid.lineVariance
+        lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+        zoom: Config.options.fluid.zoom
+        msaaSampleCount: Config.options.fluid.msaaSampleCount
+
+        Timer {
+            interval: 16
+            running: parent.diagStep >= 5 && parent.running
+            repeat: true
+            onTriggered: parent.onFrameTick()
+        }
     }
 
     // Detect unlock signal from LockContext (same instance as LockScreen's)
