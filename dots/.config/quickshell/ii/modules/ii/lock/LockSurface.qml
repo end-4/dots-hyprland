@@ -136,6 +136,7 @@ MouseArea {
             toolbarOpacity = 0;
             toolbarScale = 0.85;
             fluidOpacity = 0;
+            GlobalStates.fluidOpaque = false;
         }
     }
 
@@ -150,6 +151,7 @@ MouseArea {
             fluidOpacity = 1;
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+            fluidCoverTimer.start();
         }
     }
 
@@ -162,6 +164,14 @@ MouseArea {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
         }
+    }
+
+    // Timer: after fluid fully fades in, hide blur/dim background behind it
+    Timer {
+        id: fluidCoverTimer
+        interval: Config.options.fluid.fadeDuration
+        repeat: false
+        onTriggered: GlobalStates.fluidOpaque = true
     }
 
     // Fluid animation visibility
@@ -221,6 +231,7 @@ MouseArea {
             fluidOpacity = 1;
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+            fluidCoverTimer.start();
         }
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
