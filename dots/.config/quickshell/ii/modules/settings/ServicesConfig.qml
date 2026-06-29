@@ -343,6 +343,26 @@ ContentPage {
             }
         }
 
+        ConfigSpinBox {
+            text: Translation.tr("Idle timeout before fluid (s)")
+            value: Config.options.fluid.idleTimeout
+            from: 5; to: 300; stepSize: 5
+            onValueChanged: Config.options.fluid.idleTimeout = value
+            StyledToolTip {
+                text: Translation.tr("How long of inactivity before the fluid simulation starts showing")
+            }
+        }
+
+        ConfigSpinBox {
+            text: Translation.tr("Widget auto-hide delay (s)")
+            value: Config.options.fluid.widgetAutoHideTimeout
+            from: 3; to: 120; stepSize: 5
+            onValueChanged: Config.options.fluid.widgetAutoHideTimeout = value
+            StyledToolTip {
+                text: Translation.tr("How long after fluid appears before toolbar/clock fade out")
+            }
+        }
+
         ContentSubsection {
             title: "Display"
 

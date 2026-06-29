@@ -139,17 +139,27 @@ MouseArea {
         }
     }
 
-    // Idle hide: 3s no input → toolbar fades out
+    // Timer before fluid appears (default 30s)
     Timer {
-        id: idleHideTimer
-        interval: 3000
-        running: true
+        id: fluidStartTimer
+        interval: Config.options.fluid.idleTimeout * 1000
+        running: Config.options.fluid.enabled && fluidLoader.active
+        repeat: false
+        onTriggered: {
+            if (fluidLoader.item) fluidLoader.item.running = true;
+            fluidOpacity = 1;
+            widgetHideTimer.start();
+        }
+    }
+
+    // Timer to auto-hide toolbar after fluid appears (default 10s)
+    Timer {
+        id: widgetHideTimer
+        interval: Config.options.fluid.widgetAutoHideTimeout * 1000
         repeat: false
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
-            if (fluidLoader.item) fluidLoader.item.running = true;
-            fluidOpacity = 1;
         }
     }
 
@@ -174,9 +184,10 @@ MouseArea {
     }
 
     function showToolbar() {
+        fluidStartTimer.restart();
+        widgetHideTimer.stop();
         toolbarOpacity = 1;
         toolbarScale = 1;
-        idleHideTimer.restart();
     }
 
     // Shake the whole toolbar row (left island + main island + right island) on wrong password.
@@ -202,9 +213,10 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
-        if (GlobalStates.lockFromIdle) {
+        if (GlobalStates.lockFromIdle && Config.options.fluid.enabled) {
             if (fluidLoader.item) fluidLoader.item.running = true;
             fluidOpacity = 1;
+            widgetHideTimer.start();
         }
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
