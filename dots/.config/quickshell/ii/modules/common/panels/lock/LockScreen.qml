@@ -66,17 +66,21 @@ Scope {
                 return;
             }
 
-            // Unlock the screen first — always
+            // Delay actual unlock to let animation complete (lock surface detects signal independently)
+            fadeUnlockTimer.start();
+        }
+    }
+
+    Timer {
+        id: fadeUnlockTimer
+        interval: 600
+        running: false
+        repeat: false
+        onTriggered: {
             GlobalStates.screenLocked = false;
             console.log("TIMING [LockScreen.screenLocked=false]", Date.now());
-
-            // Then unlock the keyring (fire-and-forget, async)
             if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
-
-            // Reset
             lockContext.reset();
-
-            // Post-unlock actions
             if (lockContext.alsoInhibitIdle) {
                 lockContext.alsoInhibitIdle = false;
                 Idle.toggleInhibit(true);

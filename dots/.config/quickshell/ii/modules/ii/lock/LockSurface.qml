@@ -24,6 +24,7 @@ MouseArea {
 
     property var pendingAction: null
     property bool showConfirmDialog: false
+    property bool unlockRequested: false
 
     // Whether a player with a title is currently active
     readonly property bool mediaPlayerAvailable: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
@@ -85,18 +86,8 @@ MouseArea {
     cursorShape: root.toolbarOpacity > 0 ? Qt.ArrowCursor : Qt.BlankCursor
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
-    onPressed: mouse => {
-        forceFieldFocus();
-        idleHideTimer.restart();
-        toolbarOpacity = 1;
-        toolbarScale = 1;
-    }
-    onPositionChanged: mouse => {
-        forceFieldFocus();
-        idleHideTimer.restart();
-        toolbarOpacity = 1;
-        toolbarScale = 1;
-    }
+    onPressed: mouse => { forceFieldFocus(); showToolbar(); }
+    onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
     // ── Fluid simulation background ──
     property alias fluidRunning: fluidBg.running
@@ -124,6 +115,23 @@ MouseArea {
         running: true
         repeat: true
         onTriggered: fluidBg.onFrameTick()
+    }
+
+    // Detect unlock signal from LockContext (same instance as LockScreen's)
+    Connections {
+        target: context
+        function onUnlocked() {
+            root.unlockRequested = true;
+        }
+    }
+
+    // Transition on unlock request: fade everything out
+    onUnlockRequestedChanged: {
+        if (unlockRequested) {
+            toolbarOpacity = 0;
+            toolbarScale = 0.85;
+            fluidOpacity = 0;
+        }
     }
 
     // Idle hide: 3s no input → toolbar fades out
@@ -203,6 +211,7 @@ MouseArea {
             root.context.currentText = "";
         }
         forceFieldFocus();
+        event.accepted = false; // propagate to passwordBox
     }
     Keys.onReleased: event => {
         if (event.key === Qt.Key_Control) {
