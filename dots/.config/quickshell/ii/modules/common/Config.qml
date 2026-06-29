@@ -422,7 +422,7 @@ Singleton {
                 property int idleTimeout: 30
                 property int widgetAutoHideTimeout: 10
                 property int fadeDuration: 600
-                property int colorMode: 0
+                property int colorPreset: 0
                 property real viscosity: 5.0
                 property real noiseMultiplier: 0.45
                 property real timestep: 0.016667

@@ -385,15 +385,18 @@ ContentPage {
                 textRole: "displayName"
                 model: [
                     { displayName: "Original", value: 0 },
-                    { displayName: "Color Wheel", value: 1 },
-                    { displayName: "Image Texture", value: 2 }
+                    { displayName: "Plasma", value: 1 },
+                    { displayName: "Poolside", value: 2 },
+                    { displayName: "Gumdrop", value: 3 },
+                    { displayName: "Silver", value: 4 },
+                    { displayName: "Freedom", value: 5 }
                 ]
-                currentIndex: Config.options.fluid.colorMode
+                currentIndex: Config.options.fluid.colorPreset
                 onCurrentIndexChanged: {
-                    Config.options.fluid.colorMode = currentIndex
+                    Config.options.fluid.colorPreset = currentIndex
                 }
             StyledToolTip {
-                text: Translation.tr("Line coloring: Original (velocity-mapped purple/pink), Color Wheel (direction-based rainbow via 6-color palette), Image Texture (velocity-sampled rainbow gradient)")
+                text: Translation.tr("Line coloring preset: Original (velocity-mapped), Plasma (warm color wheel), Poolside (cool blue wheel), Gumdrop (purple-pink gradient), Silver (grayscale noise), Freedom (blue-gold)")
             }
         }
 
