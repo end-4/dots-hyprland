@@ -96,7 +96,7 @@ MouseArea {
         anchors.fill: parent
         z: -1
         opacity: root.fluidOpacity
-        running: true
+        running: false
         diagStep: 5
         viscosity: Config.options.fluid.viscosity
         noiseMultiplier: Config.options.fluid.noiseMultiplier
@@ -142,6 +142,7 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+            fluidBg.running = true;
             fluidOpacity = 1;
         }
     }
@@ -195,8 +196,10 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
-        if (GlobalStates.lockFromIdle)
+        if (GlobalStates.lockFromIdle) {
+            fluidBg.running = true;
             fluidOpacity = 1;
+        }
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
         }
