@@ -112,6 +112,7 @@ MouseArea {
             lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
             zoom: Config.options.fluid.zoom
             msaaSampleCount: Config.options.fluid.msaaSampleCount
+            colorMode: Config.options.fluid.colorMode
 
             Timer {
                 interval: Config.options.fluid.fpsLimit > 0
