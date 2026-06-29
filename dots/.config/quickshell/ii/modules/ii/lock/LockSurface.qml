@@ -104,6 +104,7 @@ MouseArea {
         id: fluidBg
         anchors.fill: parent
         z: -1
+        opacity: root.fluidOpacity
         running: true
         viscosity: Config.options.fluid.viscosity
         noiseMultiplier: Config.options.fluid.noiseMultiplier
@@ -134,13 +135,14 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
-
+            fluidOpacity = 1;
         }
     }
 
     // Toolbar appearing animation
     property real toolbarScale: 0.9
     property real toolbarOpacity: 0
+    property real fluidOpacity: 0
     Behavior on toolbarScale {
         NumberAnimation {
             duration: Appearance.animation.elementMove.duration
@@ -150,6 +152,9 @@ MouseArea {
     }
     Behavior on toolbarOpacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+    Behavior on fluidOpacity {
+        NumberAnimation { duration: 600; easing.type: Easing.InOutCubic }
     }
 
     function showToolbar() {
