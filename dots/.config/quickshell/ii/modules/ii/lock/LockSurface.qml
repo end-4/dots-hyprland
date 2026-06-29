@@ -163,7 +163,6 @@ MouseArea {
     }
 
     function showToolbar() {
-        fluidOpacity = 0;
         toolbarOpacity = 1;
         toolbarScale = 1;
         idleHideTimer.restart();
