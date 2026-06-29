@@ -185,8 +185,10 @@ MouseArea {
     }
 
     function showToolbar() {
-        fluidStartTimer.restart();
-        widgetHideTimer.restart();
+        if (Config.options.fluid.enabled) {
+            fluidStartTimer.restart();
+            widgetHideTimer.restart();
+        }
         toolbarOpacity = 1;
         toolbarScale = 1;
     }
@@ -223,7 +225,8 @@ MouseArea {
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
         }
-        widgetHideTimer.start();
+        if (Config.options.fluid.enabled)
+            widgetHideTimer.start();
     }
 
     // Key presses
