@@ -94,11 +94,12 @@ Scope {
         surface: root.sessionLockSurface
     }
 
-    function lock() {
+    function lock(fromIdle = false) {
         if (Config.options.lock.useHyprlock) {
             Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
             return;
         }
+        GlobalStates.lockFromIdle = fromIdle;
         GlobalStates.screenLocked = true;
     }
 
@@ -106,10 +107,18 @@ Scope {
         target: "lock"
 
         function activate(): void {
-            root.lock();
+            root.lock(false);
         }
         function focus(): void {
             lockContext.shouldReFocus();
+        }
+    }
+
+    IpcHandler {
+        target: "lockIdle"
+
+        function activate(): void {
+            root.lock(true);
         }
     }
 
@@ -118,7 +127,7 @@ Scope {
         description: "Locks the screen"
 
         onPressed: {
-            root.lock()
+            root.lock(false)
         }
     }
 

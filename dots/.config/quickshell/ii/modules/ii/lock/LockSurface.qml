@@ -95,7 +95,7 @@ MouseArea {
         id: fluidBg
         anchors.fill: parent
         z: -1
-        opacity: 1
+        opacity: root.fluidOpacity
         running: true
         diagStep: 5
         viscosity: Config.options.fluid.viscosity
@@ -141,8 +141,12 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+            fluidOpacity = 1;
         }
     }
+
+    // Fluid animation visibility
+    property real fluidOpacity: 0
 
     // Toolbar appearing animation
     property real toolbarScale: 0.9
@@ -159,6 +163,7 @@ MouseArea {
     }
 
     function showToolbar() {
+        fluidOpacity = 0;
         toolbarOpacity = 1;
         toolbarScale = 1;
         idleHideTimer.restart();
@@ -187,6 +192,8 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
+        if (GlobalStates.lockFromIdle)
+            fluidOpacity = 1;
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
         }
