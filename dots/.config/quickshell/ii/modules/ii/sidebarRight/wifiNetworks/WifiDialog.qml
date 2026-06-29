@@ -21,11 +21,12 @@ WindowDialog {
             text: Translation.tr("Connect to Wi-Fi")
         }
 
-        MouseArea {
+        DialogButton {
+            id: rescanButton
             Layout.alignment: Qt.AlignVCenter
             implicitWidth: 36
             implicitHeight: 36
-            cursorShape: Network.wifiScanning ? Qt.ArrowCursor : Qt.PointingHandCursor
+            buttonText: ""
 
             enabled: !Network.wifiScanning
             opacity: Network.wifiScanning ? 0.4 : 1
@@ -36,15 +37,17 @@ WindowDialog {
                 }
             }
 
-            onClicked: {
-                Network.rescanWifi()
-            }
+            onClicked: Network.rescanWifi()
 
-            MaterialSymbol {
-                anchors.centerIn: parent
-                text: "restart_alt"
-                iconSize: 20
-                color: Appearance.colors.colOnLayer0
+            contentItem: Item {
+                anchors.fill: parent
+
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    text: "restart_alt"
+                    iconSize: 20
+                    color: rescanButton.enabled ? rescanButton.colEnabled : rescanButton.colDisabled
+                }
             }
         }
     }
