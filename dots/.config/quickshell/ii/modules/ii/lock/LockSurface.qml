@@ -89,34 +89,14 @@ MouseArea {
     onPressed: mouse => { forceFieldFocus(); showToolbar(); }
     onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
-    // ── Fluid simulation background (DISABLED for diagnostics) ──
-    // property alias fluidRunning: fluidBg.running
-    // FluxItem {
-    //     id: fluidBg
-    //     anchors.fill: parent
-    //     z: -1
-    //     opacity: root.fluidOpacity
-    //     running: true
-    //     viscosity: Config.options.fluid.viscosity
-    //     noiseMultiplier: Config.options.fluid.noiseMultiplier
-    //     timestep: Config.options.fluid.timestep
-    //     dissipation: Config.options.fluid.dissipation
-    //     pressureIterations: Config.options.fluid.pressureIterations
-    //     lineVariance: Config.options.fluid.lineVariance
-    //     lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
-    //     zoom: Config.options.fluid.zoom
-    //     colorMode: Config.options.fluid.colorMode
-    //     msaaSampleCount: Config.options.fluid.msaaSampleCount
-    // }
-    // Timer {
-    //     id: fpsTimer
-    //     interval: Config.options.fluid.fpsLimit > 0
-    //         ? Math.max(4, 1000 / Config.options.fluid.fpsLimit)
-    //         : 4
-    //     running: true
-    //     repeat: true
-    //     onTriggered: fluidBg.onFrameTick()
-    // }
+    // ── Fluid simulation background (STEP 1: constructor only) ──
+    FluxItem {
+        id: fluidBg
+        anchors.fill: parent
+        z: -1
+        opacity: 1
+        running: false
+    }
 
     // Detect unlock signal from LockContext (same instance as LockScreen's)
     Connections {
