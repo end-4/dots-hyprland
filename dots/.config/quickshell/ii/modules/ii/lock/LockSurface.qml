@@ -91,28 +91,34 @@ MouseArea {
 
     // ── Fluid simulation background ──
     // diagStep: 1=noop, 2=+GLctx, 3=+QRhi, 4=+engine+display, 5=full sim
-    FluxItem {
-        id: fluidBg
+    Loader {
+        id: fluidLoader
         anchors.fill: parent
         z: -1
-        opacity: root.fluidOpacity
-        running: false
-        diagStep: 5
-        viscosity: Config.options.fluid.viscosity
-        noiseMultiplier: Config.options.fluid.noiseMultiplier
-        timestep: Config.options.fluid.timestep
-        dissipation: Config.options.fluid.dissipation
-        pressureIterations: Config.options.fluid.pressureIterations
-        lineVariance: Config.options.fluid.lineVariance
-        lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
-        zoom: Config.options.fluid.zoom
-        msaaSampleCount: Config.options.fluid.msaaSampleCount
+        active: Config.options.fluid.enabled
 
-        Timer {
-            interval: 16
-            running: parent.diagStep >= 5 && parent.running
-            repeat: true
-            onTriggered: parent.onFrameTick()
+        sourceComponent: FluxItem {
+            id: fluidBg
+            anchors.fill: parent
+            opacity: root.fluidOpacity
+            running: false
+            diagStep: 5
+            viscosity: Config.options.fluid.viscosity
+            noiseMultiplier: Config.options.fluid.noiseMultiplier
+            timestep: Config.options.fluid.timestep
+            dissipation: Config.options.fluid.dissipation
+            pressureIterations: Config.options.fluid.pressureIterations
+            lineVariance: Config.options.fluid.lineVariance
+            lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+            zoom: Config.options.fluid.zoom
+            msaaSampleCount: Config.options.fluid.msaaSampleCount
+
+            Timer {
+                interval: 16
+                running: parent.diagStep >= 5 && parent.running
+                repeat: true
+                onTriggered: parent.onFrameTick()
+            }
         }
     }
 
@@ -142,7 +148,7 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
-            fluidBg.running = true;
+            if (fluidLoader.item) fluidLoader.item.running = true;
             fluidOpacity = 1;
         }
     }
@@ -197,7 +203,7 @@ MouseArea {
         toolbarScale = 1;
         toolbarOpacity = 1;
         if (GlobalStates.lockFromIdle) {
-            fluidBg.running = true;
+            if (fluidLoader.item) fluidLoader.item.running = true;
             fluidOpacity = 1;
         }
         if (mediaPlayerAvailable) {

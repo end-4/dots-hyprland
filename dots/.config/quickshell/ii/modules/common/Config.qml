@@ -418,6 +418,7 @@ Singleton {
             }
 
             property JsonObject fluid: JsonObject {
+                property bool enabled: true
                 property int colorMode: 0
                 property real viscosity: 5.0
                 property real noiseMultiplier: 0.45

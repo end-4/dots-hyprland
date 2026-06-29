@@ -334,6 +334,15 @@ ContentPage {
         icon: "water"
         title: "Fluid Simulation"
 
+        ConfigSwitch {
+            text: Translation.tr("Enable fluid simulation")
+            checked: Config.options.fluid.enabled
+            onCheckedChanged: Config.options.fluid.enabled = checked
+            StyledToolTip {
+                text: Translation.tr("Disable to use plain dark background instead of the fluid simulation")
+            }
+        }
+
         ContentSubsection {
             title: "Display"
 
