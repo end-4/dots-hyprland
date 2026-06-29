@@ -24,7 +24,6 @@ Singleton {
     property bool searchOpen: false
     property bool screenLocked: false
     property bool lockFromIdle: false
-    property bool fluidOpaque: false
     property bool screenLockContainsCharacters: false
     property bool screenUnlockFailed: false
     property bool screenTranslatorOpen: false

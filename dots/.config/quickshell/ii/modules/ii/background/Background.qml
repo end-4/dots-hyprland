@@ -307,7 +307,7 @@ Scope {
 
                 Loader {
                     id: blurLoader
-                    active: Config.options.lock.blur.enable && (GlobalStates.screenLocked || scaleAnim.running) && !GlobalStates.fluidOpaque
+                    active: Config.options.lock.blur.enable && (GlobalStates.screenLocked || scaleAnim.running)
                     anchors.fill: wallpaper
                     scale: GlobalStates.screenLocked ? Config.options.lock.blur.extraZoom : 1
                     layer.enabled: active
@@ -338,7 +338,7 @@ Scope {
                 Rectangle {
                     anchors.fill: parent
                     color: "black"
-                    opacity: (!GlobalStates.fluidOpaque && GlobalStates.screenLocked && Config.options.lock.dim.enable) ? (Config.options.lock.dim.strength / 100) : 0
+                    opacity: (GlobalStates.screenLocked && Config.options.lock.dim.enable) ? (Config.options.lock.dim.strength / 100) : 0
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 400
