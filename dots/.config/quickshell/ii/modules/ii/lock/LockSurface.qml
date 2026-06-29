@@ -129,6 +129,7 @@ MouseArea {
         if (unlockRequested) {
             toolbarOpacity = 0;
             toolbarScale = 0.85;
+            fluidOpacity = 0;
         }
     }
 
@@ -147,6 +148,9 @@ MouseArea {
 
     // Fluid animation visibility
     property real fluidOpacity: 0
+    Behavior on fluidOpacity {
+        NumberAnimation { duration: 600 }
+    }
 
     // Toolbar appearing animation
     property real toolbarScale: 0.9
