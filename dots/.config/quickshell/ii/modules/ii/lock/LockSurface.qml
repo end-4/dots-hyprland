@@ -114,7 +114,9 @@ MouseArea {
             msaaSampleCount: Config.options.fluid.msaaSampleCount
 
             Timer {
-                interval: 16
+                interval: Config.options.fluid.fpsLimit > 0
+                    ? Math.floor(1000 / Config.options.fluid.fpsLimit)
+                    : 1
                 running: parent.diagStep >= 5 && parent.running
                 repeat: true
                 onTriggered: parent.onFrameTick()
