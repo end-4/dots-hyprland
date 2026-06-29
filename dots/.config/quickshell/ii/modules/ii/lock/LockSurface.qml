@@ -167,7 +167,7 @@ MouseArea {
     // Fluid animation visibility
     property real fluidOpacity: 0
     Behavior on fluidOpacity {
-        NumberAnimation { duration: 600 }
+        NumberAnimation { duration: Config.options.fluid.fadeDuration }
     }
 
     // Toolbar appearing animation

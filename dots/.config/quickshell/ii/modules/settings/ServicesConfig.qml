@@ -378,11 +378,21 @@ ContentPage {
                 onCurrentIndexChanged: {
                     Config.options.fluid.colorMode = currentIndex
                 }
-                StyledToolTip {
-                    text: Translation.tr("Line coloring: Original (velocity-mapped purple/pink), Color Wheel (direction-based rainbow via 6-color palette), Image Texture (velocity-sampled rainbow gradient)")
-                }
+            StyledToolTip {
+                text: Translation.tr("Line coloring: Original (velocity-mapped purple/pink), Color Wheel (direction-based rainbow via 6-color palette), Image Texture (velocity-sampled rainbow gradient)")
             }
         }
+
+        ConfigSpinBox {
+            text: Translation.tr("Fade duration (ms)")
+            value: Config.options.fluid.fadeDuration
+            from: 100; to: 3000; stepSize: 100
+            onValueChanged: Config.options.fluid.fadeDuration = value
+            StyledToolTip {
+                text: Translation.tr("Fade in/out duration for the fluid simulation background")
+            }
+        }
+    }
 
         ContentSubsection {
             title: "Physics"
