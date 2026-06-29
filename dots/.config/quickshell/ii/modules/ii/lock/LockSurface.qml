@@ -148,11 +148,12 @@ MouseArea {
         onTriggered: {
             if (fluidLoader.item) fluidLoader.item.running = true;
             fluidOpacity = 1;
-            widgetHideTimer.start();
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
         }
     }
 
-    // Timer to auto-hide toolbar after fluid appears (default 10s)
+    // Timer to auto-hide toolbar after user stops interacting (default 10s)
     Timer {
         id: widgetHideTimer
         interval: Config.options.fluid.widgetAutoHideTimeout * 1000
@@ -185,7 +186,7 @@ MouseArea {
 
     function showToolbar() {
         fluidStartTimer.restart();
-        widgetHideTimer.stop();
+        widgetHideTimer.restart();
         toolbarOpacity = 1;
         toolbarScale = 1;
     }
@@ -216,11 +217,13 @@ MouseArea {
         if (GlobalStates.lockFromIdle && Config.options.fluid.enabled) {
             if (fluidLoader.item) fluidLoader.item.running = true;
             fluidOpacity = 1;
-            widgetHideTimer.start();
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
         }
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
         }
+        widgetHideTimer.start();
     }
 
     // Key presses
