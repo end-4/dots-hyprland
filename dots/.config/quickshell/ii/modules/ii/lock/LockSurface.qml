@@ -89,13 +89,22 @@ MouseArea {
     onPressed: mouse => { forceFieldFocus(); showToolbar(); }
     onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
-    // ── Fluid simulation background (STEP 1: constructor only) ──
+    // ── Fluid simulation background ──
+    // diagStep: 1=noop, 2=+GLctx, 3=+QRhi, 4=+engine+display, 5=full sim
     FluxItem {
         id: fluidBg
         anchors.fill: parent
         z: -1
         opacity: 1
         running: false
+        diagStep: 1
+
+        Timer {
+            interval: 16
+            running: parent.diagStep >= 5 && parent.running
+            repeat: true
+            onTriggered: parent.onFrameTick()
+        }
     }
 
     // Detect unlock signal from LockContext (same instance as LockScreen's)
