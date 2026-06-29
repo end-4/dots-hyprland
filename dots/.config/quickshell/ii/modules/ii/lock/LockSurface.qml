@@ -109,6 +109,7 @@ MouseArea {
         msaaSampleCount: Config.options.fluid.msaaSampleCount
     }
     Timer {
+        id: fpsTimer
         interval: Config.options.fluid.fpsLimit > 0
             ? Math.max(4, 1000 / Config.options.fluid.fpsLimit)
             : 4
@@ -128,6 +129,7 @@ MouseArea {
     // Transition on unlock request: fade everything out
     onUnlockRequestedChanged: {
         if (unlockRequested) {
+            fpsTimer.running = false;
             toolbarOpacity = 0;
             toolbarScale = 0.85;
             fluidOpacity = 0;
