@@ -200,16 +200,16 @@ MouseArea {
                 target: lockscreenMediaController
                 property: "mediaScale"
                 to: 1.0
-                duration: Appearance.animation.elementMove.duration * 1.2
+                duration: Appearance.animation.elementMove.duration
                 easing.type: Easing.OutBack
-                easing.overshoot: 1.2
+                easing.overshoot: 1.5
             }
             NumberAnimation {
                 target: lockscreenMediaController
                 property: "mediaOpacity"
                 to: 1.0
                 duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Easing.OutCubic
+                easing.type: Easing.InCubic
             }
         }
 
