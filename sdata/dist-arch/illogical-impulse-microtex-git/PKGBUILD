@@ -23,6 +23,8 @@ prepare() {
   cd $_pkgname
   sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
   sed -i 's/tinyxml2.so.10/tinyxml2.so.11/' CMakeLists.txt
+  # fontconfig >= 2.17 requiere incluir fcfreetype.h para FcFreeTypeQuery
+  sed -i 's|#include <fontconfig/fontconfig.h>|#include <fontconfig/fontconfig.h>\n#include <fontconfig/fcfreetype.h>|' src/platform/cairo/graphic_cairo.cpp
 }
 
 build() {

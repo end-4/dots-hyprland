@@ -5,6 +5,7 @@ import qs.modules.common.widgets
 
 Item {
     id: root
+    clip: true
 
     property bool shown: true
     property alias icon: shapeWidget.text
