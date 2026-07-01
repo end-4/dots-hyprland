@@ -14,6 +14,7 @@ ContentPage {
     // Persistencia: monitors.conf está en la lista de exclusiones del instalador,
     // así que las actualizaciones del dotfile no lo tocan
     readonly property string monitorsConf: FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.conf`)
+    readonly property string monitorsLua: FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.lua`)
 
     // Lista de monitores: [{name, description, resW, resH, rate, monScale, transform, posX, posY, enabled, modes}]
     // posX/posY en píxeles lógicos (como hyprctl). modes: [{w, h, rate}]
@@ -68,6 +69,7 @@ ContentPage {
                         if (d.focused) root.selectedIndex = i;
                     }
                     root.monitors = list;
+                    root.updateCommittedState();
                 } catch (e) {
                     console.log("[DisplaysConfig] parse error:", e);
                 }
@@ -78,6 +80,54 @@ ContentPage {
         id: repollTimer
         interval: 800
         onTriggered: displayPoller.running = true
+    }
+
+    // ── Preview countdown ───────────────────────────────────────────────────
+    property int previewCountdown: 0
+    property bool previewActive: false
+    property var previewSnapshot: []
+    // Estado "committed" = última vez que se aplicó/guardó/confirmó/polleó
+    property var committedState: []
+
+    function updateCommittedState() {
+        root.committedState = JSON.parse(JSON.stringify(root.monitors));
+    }
+
+    Timer {
+        id: previewCountdownTimer
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            root.previewCountdown -= 1;
+            if (root.previewCountdown <= 0) {
+                root.previewCountdown = 0;
+                root.revertPreview();
+            }
+        }
+    }
+
+    function startPreview() {
+        root.previewSnapshot = JSON.parse(JSON.stringify(root.committedState));
+        root.applyRuntime();
+        root.previewCountdown = 15;
+        root.previewActive = true;
+        previewCountdownTimer.restart();
+    }
+
+    function revertPreview() {
+        previewCountdownTimer.stop();
+        root.previewCountdown = 0;
+        root.previewActive = false;
+        root.monitors = JSON.parse(JSON.stringify(root.previewSnapshot));
+        root.updateCommittedState();
+        root.applyRuntime();
+    }
+
+    function confirmPreview() {
+        previewCountdownTimer.stop();
+        root.previewCountdown = 0;
+        root.previewActive = false;
+        root.applyAndSave();
     }
 
     // ── Aplicar y guardar ──────────────────────────────────────────────────
@@ -97,7 +147,29 @@ ContentPage {
                 continue;
             }
             let s = `${m.name}, ${m.resW}x${m.resH}@${m.rate.toFixed(2)}, ${Math.round(m.posX - minX)}x${Math.round(m.posY - minY)}, ${m.monScale}`;
-            if (m.transform !== 0) s += `, transform, ${m.transform}`;
+            s += `, transform, ${m.transform}`;
+            specs.push(s);
+        }
+        return specs;
+    }
+
+    function buildMonitorSpecsLua() {
+        let minX = Infinity, minY = Infinity;
+        for (const m of root.monitors) {
+            if (!m.enabled) continue;
+            minX = Math.min(minX, m.posX);
+            minY = Math.min(minY, m.posY);
+        }
+        if (minX === Infinity) { minX = 0; minY = 0; }
+        const specs = [];
+        for (const m of root.monitors) {
+            if (!m.enabled) {
+                specs.push(`hl.monitor({ output = '${m.name}', disabled = true })`);
+                continue;
+            }
+            let s = `hl.monitor({ output = '${m.name}', mode = '${m.resW}x${m.resH}@${m.rate.toFixed(2)}', position = '${Math.round(m.posX - minX)}x${Math.round(m.posY - minY)}', scale = ${m.monScale}`;
+            s += `, transform = ${m.transform}`;
+            s += " })";
             specs.push(s);
         }
         return specs;
@@ -105,28 +177,50 @@ ContentPage {
 
     // Solo en caliente: si algo sale mal, hyprctl reload restaura lo guardado
     function applyRuntime() {
-        const cmds = buildMonitorSpecs().map(s => "keyword monitor " + s.replace(/ /g, ""));
-        Quickshell.execDetached(["hyprctl", "--batch", cmds.join(" ; ")]);
+        const luaSpecs = buildMonitorSpecsLua().join("; ");
+        const confSpecs = buildMonitorSpecs().map(s => "keyword monitor " + s.replace(/ /g, ""));
+        const script = `
+            if hyprctl eval "true" >/dev/null 2>&1; then
+                hyprctl eval "${luaSpecs}"
+            else
+                hyprctl --batch "${confSpecs.join(" ; ")}"
+            fi
+        `;
+        Quickshell.execDetached(["bash", "-c", script]);
         repollTimer.restart();
     }
 
-    // Escribe monitors.conf; Hyprland lo recarga solo (y así también se aplica)
+    // Escribe monitors.conf y monitors.lua; Hyprland lo recarga solo (y así también se aplica)
     function applyAndSave() {
-        const lines = [
+        const linesConf = [
             "# Gestionado por la página Displays de la app de Ajustes (Super+I).",
             "# nwg-displays también puede sobrescribir este archivo si lo usas.",
             ...buildMonitorSpecs().map(s => "monitor = " + s),
             "monitor = , preferred, auto, 1  # Fallback para monitores no configurados"
         ];
-        const content = lines.join("\n") + "\n";
-        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsConf}' << 'HYPRMON_EOF'\n${content}HYPRMON_EOF`]);
-        Quickshell.execDetached(["notify-send", "Displays", Translation.tr("Layout applied and saved to monitors.conf")]);
-        repollTimer.restart();
+        const contentConf = linesConf.join("\n") + "\n";
+
+        const linesLua = [
+            "-- Managed by Displays page of Settings app (Super+I).",
+            ...buildMonitorSpecsLua(),
+            "hl.monitor({ output = '', mode = 'preferred', position = 'auto', scale = 1 }) -- Fallback for unconfigured monitors"
+        ];
+        const contentLua = linesLua.join("\n") + "\n";
+
+        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsConf}' << 'HYPRMON_EOF'\n${contentConf}HYPRMON_EOF`]);
+        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsLua}' << 'HYPRMON_EOF'\n${contentLua}HYPRMON_EOF`]);
+
+        applyRuntime();
+        root.updateCommittedState();
+
+        Quickshell.execDetached(["notify-send", "Displays", Translation.tr("Layout applied and saved")]);
     }
 
     function setMonProp(prop, value) {
         if (!root.selMon) return;
-        root.monitors[root.selectedIndex][prop] = value;
+        const mon = Object.assign({}, root.monitors[root.selectedIndex]);
+        mon[prop] = value;
+        root.monitors[root.selectedIndex] = mon;
         root.commit();
     }
 
@@ -252,8 +346,10 @@ ContentPage {
                             if (Math.abs(snapped.x - monRect.modelData.posX) < 2 //
                                 && Math.abs(snapped.y - monRect.modelData.posY) < 2)
                                 return;
-                            root.monitors[monRect.index].posX = snapped.x;
-                            root.monitors[monRect.index].posY = snapped.y;
+                            const mon = Object.assign({}, root.monitors[monRect.index]);
+                            mon.posX = snapped.x;
+                            mon.posY = snapped.y;
+                            root.monitors[monRect.index] = mon;
                             root.commit();
                         }
                     }
@@ -298,12 +394,13 @@ ContentPage {
                 onSelected: newValue => {
                     const parts = newValue.split("x");
                     const w = parseInt(parts[0]), h = parseInt(parts[1]);
-                    root.monitors[root.selectedIndex].resW = w;
-                    root.monitors[root.selectedIndex].resH = h;
-                    // Al cambiar de resolución, usa la mayor tasa disponible en ella
-                    const rates = root.selMon.modes.filter(m => m.w === w && m.h === h).map(m => m.rate);
+                    const mon = Object.assign({}, root.monitors[root.selectedIndex]);
+                    mon.resW = w;
+                    mon.resH = h;
+                    const rates = mon.modes.filter(m => m.w === w && m.h === h).map(m => m.rate);
                     if (rates.length > 0)
-                        root.monitors[root.selectedIndex].rate = Math.max(...rates);
+                        mon.rate = Math.max(...rates);
+                    root.monitors[root.selectedIndex] = mon;
                     root.commit();
                 }
                 options: {
@@ -384,15 +481,17 @@ ContentPage {
             RippleButtonWithIcon {
                 materialIcon: "play_arrow"
                 mainText: Translation.tr("Preview")
-                onClicked: root.applyRuntime()
+                onClicked: root.startPreview()
+                enabled: !root.previewActive
                 StyledToolTip {
-                    text: Translation.tr("Applies without saving.\nIf something looks wrong, run: hyprctl reload")
+                    text: Translation.tr("Preview the layout. Confirm or wait for auto-revert.")
                 }
             }
             RippleButtonWithIcon {
                 materialIcon: "save"
                 mainText: Translation.tr("Apply and save")
                 onClicked: root.applyAndSave()
+                enabled: !root.previewActive
                 StyledToolTip {
                     text: Translation.tr("Writes monitors.conf — survives reboots and dotfile updates")
                 }
@@ -401,6 +500,51 @@ ContentPage {
                 materialIcon: "refresh"
                 mainText: Translation.tr("Reload current state")
                 onClicked: displayPoller.running = true
+                enabled: !root.previewActive
+            }
+        }
+
+        // ── Preview confirmation overlay ────────────────────────────────────
+        Rectangle {
+            visible: root.previewActive
+            Layout.fillWidth: true
+            implicitHeight: 56
+            radius: Appearance.rounding.small
+            color: Appearance.colors.colSurfaceContainerHigh
+            border.width: 1
+            border.color: Appearance.colors.colOutlineVariant
+
+            RowLayout {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 12
+                anchors.rightMargin: 12
+                spacing: 8
+
+                StyledText {
+                    Layout.fillWidth: true
+                    text: Translation.tr("Preview active — revert in %1s").arg(root.previewCountdown)
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    color: Appearance.colors.colOnSurfaceVariant
+                    elide: Text.ElideRight
+                }
+
+                RippleButtonWithIcon {
+                    materialIcon: "save"
+                    mainText: Translation.tr("Apply")
+                    implicitHeight: 32
+                    horizontalPadding: 8
+                    onClicked: root.confirmPreview()
+                }
+
+                RippleButtonWithIcon {
+                    materialIcon: "undo"
+                    mainText: Translation.tr("Revert")
+                    implicitHeight: 32
+                    horizontalPadding: 8
+                    onClicked: root.revertPreview()
+                }
             }
         }
     }
