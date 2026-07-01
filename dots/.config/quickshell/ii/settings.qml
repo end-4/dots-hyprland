@@ -54,11 +54,11 @@ ApplicationWindow {
             icon: "monitor",
             component: "modules/settings/DisplaysConfig.qml"
         },
-        {
-            name: Translation.tr("Windows"),
-            icon: "select_window",
-            component: "modules/settings/WindowsConfig.qml"
-        },
+        // {
+        //     name: Translation.tr("Windows"),
+        //     icon: "select_window",
+        //     component: "modules/settings/WindowsConfig.qml"
+        // },
         {
             name: Translation.tr("Services"),
             icon: "settings",
