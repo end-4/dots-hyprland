@@ -22,6 +22,8 @@ ContentPage {
     property int selectedIndex: 0
     readonly property var selMon: (monitors.length > 0 && selectedIndex < monitors.length) ? monitors[selectedIndex] : null
 
+    readonly property bool hasChanges: JSON.stringify(root.monitors) !== JSON.stringify(root.committedState)
+
     function commit() {
         root.monitors = root.monitors.slice();
     }
@@ -482,7 +484,7 @@ ContentPage {
                 materialIcon: "play_arrow"
                 mainText: Translation.tr("Preview")
                 onClicked: root.startPreview()
-                enabled: !root.previewActive
+                enabled: root.hasChanges && !root.previewActive
                 StyledToolTip {
                     text: Translation.tr("Preview the layout. Confirm or wait for auto-revert.")
                 }
@@ -491,7 +493,7 @@ ContentPage {
                 materialIcon: "save"
                 mainText: Translation.tr("Apply and save")
                 onClicked: root.applyAndSave()
-                enabled: !root.previewActive
+                enabled: root.hasChanges && !root.previewActive
                 StyledToolTip {
                     text: Translation.tr("Writes monitors.conf — survives reboots and dotfile updates")
                 }
