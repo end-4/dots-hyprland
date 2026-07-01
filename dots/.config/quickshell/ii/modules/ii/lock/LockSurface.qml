@@ -112,7 +112,19 @@ MouseArea {
             lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
             zoom: Config.options.fluid.zoom
             msaaSampleCount: Config.options.fluid.msaaSampleCount
-            colorPreset: Config.options.fluid.colorPreset
+            Timer {
+                id: randomPresetTimer
+                interval: 5000
+                repeat: true
+                running: Config.options.fluid.colorPreset === 6
+                onTriggered: parent.colorPreset = Math.floor(Math.random() * 6)
+            }
+
+            Component.onCompleted: {
+                if (Config.options.fluid.colorPreset === 6) {
+                    parent.colorPreset = Math.floor(Math.random() * 6);
+                }
+            }
 
             Timer {
                 interval: Config.options.fluid.fpsLimit > 0
@@ -122,6 +134,14 @@ MouseArea {
                 repeat: true
                 onTriggered: parent.onFrameTick()
             }
+        }
+
+        Binding {
+            target: fluidBg
+            property: "colorPreset"
+            when: Config.options.fluid.colorPreset !== 6
+            value: Config.options.fluid.colorPreset
+            restoreMode: Binding.RestoreNone
         }
     }
 

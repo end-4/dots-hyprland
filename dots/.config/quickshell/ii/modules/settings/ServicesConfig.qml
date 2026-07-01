@@ -389,14 +389,15 @@ ContentPage {
                     { displayName: "Poolside", value: 2 },
                     { displayName: "Gumdrop", value: 3 },
                     { displayName: "Silver", value: 4 },
-                    { displayName: "Freedom", value: 5 }
+                    { displayName: "Freedom", value: 5 },
+                    { displayName: "Random", value: 6 }
                 ]
                 currentIndex: Config.options.fluid.colorPreset
                 onCurrentIndexChanged: {
                     Config.options.fluid.colorPreset = currentIndex
                 }
             StyledToolTip {
-                text: Translation.tr("Line coloring preset: Original (velocity-mapped), Plasma (warm color wheel), Poolside (cool blue wheel), Gumdrop (purple-pink gradient), Silver (grayscale noise), Freedom (blue-gold)")
+                    text: Translation.tr("Line coloring preset: Original (velocity-mapped), Plasma (warm color wheel), Poolside (cool blue wheel), Gumdrop (purple-pink gradient), Silver (grayscale noise), Freedom (blue-gold), Random (cycles every 5s)")
             }
         }
 
