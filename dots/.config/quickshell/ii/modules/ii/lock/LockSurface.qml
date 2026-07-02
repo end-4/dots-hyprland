@@ -153,6 +153,16 @@ MouseArea {
         }
     }
 
+    // Timer: setelah fluidOpacity selesai fade out, stop simulation
+    Timer {
+        id: fadeOutTimer
+        interval: Config.options.fluid.fadeDuration
+        repeat: false
+        onTriggered: {
+            if (fluidLoader.item) fluidLoader.item.running = false;
+        }
+    }
+
     // Timer to auto-hide toolbar after user stops interacting (default 10s)
     Timer {
         id: widgetHideTimer
@@ -161,8 +171,10 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
-            if (Config.options.fluid.dimOnInteraction)
+            if (Config.options.fluid.dimOnInteraction) {
+                if (fluidLoader.item) fluidLoader.item.running = true;
                 fluidOpacity = 1;
+            }
         }
     }
 
@@ -190,8 +202,10 @@ MouseArea {
         if (Config.options.fluid.enabled) {
             fluidStartTimer.restart();
             widgetHideTimer.restart();
-            if (Config.options.fluid.dimOnInteraction)
+            if (Config.options.fluid.dimOnInteraction) {
                 fluidOpacity = 0;
+                fadeOutTimer.restart();
+            }
         }
         toolbarOpacity = 1;
         toolbarScale = 1;
