@@ -90,7 +90,6 @@ MouseArea {
     onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
 
     // ── Fluid simulation background ──
-    // diagStep: 1=noop, 2=+GLctx, 3=+QRhi, 4=+engine+display, 5=full sim
     Loader {
         id: fluidLoader
         anchors.fill: parent
@@ -102,7 +101,6 @@ MouseArea {
             anchors.fill: parent
             opacity: root.fluidOpacity
             running: false
-            diagStep: 5
             viscosity: Config.options.fluid.viscosity
             noiseMultiplier: Config.options.fluid.noiseMultiplier
             timestep: Config.options.fluid.timestep
@@ -114,10 +112,10 @@ MouseArea {
             colorPreset: Config.options.fluid.colorPreset
 
             Timer {
-                interval: Config.options.fluid.fpsLimit > 0
+                interval: Math.max(16, Config.options.fluid.fpsLimit > 0
                     ? Math.floor(1000 / Config.options.fluid.fpsLimit)
-                    : 1
-                running: parent.diagStep >= 5 && parent.running
+                    : 16)
+                running: parent.running
                 repeat: true
                 onTriggered: parent.onFrameTick()
             }
@@ -408,7 +406,6 @@ MouseArea {
                 root.showToolbar();
             }
             onAccepted: {
-                console.log("TIMING [lockSurface.onAccepted]", Date.now());
                 root.context.tryUnlock(ctrlHeld);
             }
             Connections {
