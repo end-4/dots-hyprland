@@ -620,6 +620,15 @@ ContentPage {
                     text: Translation.tr("Fade in/out duration")
                 }
             }
+
+            ConfigSwitch {
+                text: Translation.tr("Dim fluid on interaction")
+                checked: Config.options.fluid.dimOnInteraction
+                onCheckedChanged: Config.options.fluid.dimOnInteraction = checked
+                StyledToolTip {
+                    text: Translation.tr("When interacting, fade fluid background out so widgets are more readable")
+                }
+            }
         }
 
         ContentSubsection {

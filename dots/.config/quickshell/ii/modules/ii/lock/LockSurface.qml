@@ -163,6 +163,8 @@ MouseArea {
         onTriggered: {
             toolbarOpacity = 0;
             toolbarScale = 0.9;
+            if (Config.options.fluid.dimOnInteraction)
+                fluidOpacity = 1;
         }
     }
 
@@ -190,6 +192,8 @@ MouseArea {
         if (Config.options.fluid.enabled) {
             fluidStartTimer.restart();
             widgetHideTimer.restart();
+            if (Config.options.fluid.dimOnInteraction)
+                fluidOpacity = 0;
         }
         toolbarOpacity = 1;
         toolbarScale = 1;
