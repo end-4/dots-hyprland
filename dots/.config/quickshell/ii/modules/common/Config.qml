@@ -418,7 +418,7 @@ Singleton {
             }
 
             property JsonObject fluid: JsonObject {
-                property bool enabled: true
+                property bool enabled: false
                 property int idleTimeout: 30
                 property int widgetAutoHideTimeout: 10
                 property int fadeDuration: 600
@@ -431,7 +431,6 @@ Singleton {
                 property real lineVariance: 0.55
                 property real lineWidthMultiplier: 1.0
                 property real zoom: 1.6
-                property int msaaSampleCount: 4
                 property int fpsLimit: 60
             }
 

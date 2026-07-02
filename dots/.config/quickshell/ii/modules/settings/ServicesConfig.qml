@@ -566,27 +566,6 @@ ContentPage {
         ContentSubsection {
             title: "Quality"
 
-            StyledComboBox {
-                buttonIcon: "grid_on"
-                textRole: "displayName"
-                model: [
-                    { displayName: "Off (1x)", value: 1 },
-                    { displayName: "2x", value: 2 },
-                    { displayName: "4x", value: 4 }
-                ]
-                currentIndex: {
-                    const vals = [1, 2, 4];
-                    const idx = vals.indexOf(Config.options.fluid.msaaSampleCount);
-                    return idx !== -1 ? idx : 2;
-                }
-                onCurrentIndexChanged: {
-                    const vals = [1, 2, 4];
-                    Config.options.fluid.msaaSampleCount = vals[currentIndex];
-                }
-                StyledToolTip {
-                    text: Translation.tr("Multi-sample anti-aliasing for line edges. 4x gives the smoothest lines")
-                }
-            }
             ConfigSpinBox {
                 icon: "speed"
                 text: "FPS Limit"
