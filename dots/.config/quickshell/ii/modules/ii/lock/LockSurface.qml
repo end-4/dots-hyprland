@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import FluxEngine 1.0
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -23,6 +24,7 @@ MouseArea {
 
     property var pendingAction: null
     property bool showConfirmDialog: false
+    property bool unlockRequested: false
 
     // Whether a player with a title is currently active
     readonly property bool mediaPlayerAvailable: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
@@ -79,13 +81,95 @@ MouseArea {
             forceFieldFocus();
         }
     }
+
+
+    cursorShape: root.toolbarOpacity > 0 ? Qt.ArrowCursor : Qt.BlankCursor
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
-    onPressed: mouse => {
-        forceFieldFocus();
+    onPressed: mouse => { forceFieldFocus(); showToolbar(); }
+    onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
+
+    // ── Fluid simulation background ──
+    Loader {
+        id: fluidLoader
+        anchors.fill: parent
+        z: -1
+        active: Config.options.fluid.enabled
+
+        sourceComponent: FluxItem {
+            id: fluidBg
+            anchors.fill: parent
+            opacity: root.fluidOpacity
+            running: false
+            viscosity: Config.options.fluid.viscosity
+            noiseMultiplier: Config.options.fluid.noiseMultiplier
+            timestep: Config.options.fluid.timestep
+            dissipation: Config.options.fluid.dissipation
+            pressureIterations: Config.options.fluid.pressureIterations
+            lineVariance: Config.options.fluid.lineVariance
+            lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+            zoom: Config.options.fluid.zoom
+            colorPreset: Config.options.fluid.colorPreset
+
+            Timer {
+                interval: Math.max(16, Config.options.fluid.fpsLimit > 0
+                    ? Math.floor(1000 / Config.options.fluid.fpsLimit)
+                    : 16)
+                running: parent.running
+                repeat: true
+                onTriggered: parent.onFrameTick()
+            }
+        }
     }
-    onPositionChanged: mouse => {
-        forceFieldFocus();
+
+    // Detect unlock signal from LockContext (same instance as LockScreen's)
+    Connections {
+        target: context
+        function onUnlocked() {
+            root.unlockRequested = true;
+        }
+    }
+
+    // Transition on unlock request: fade toolbar out
+    onUnlockRequestedChanged: {
+        if (unlockRequested) {
+            toolbarOpacity = 0;
+            toolbarScale = 0.85;
+            fluidOpacity = 0;
+        }
+    }
+
+    // Timer before fluid appears (default 30s)
+    Timer {
+        id: fluidStartTimer
+        interval: Config.options.fluid.idleTimeout * 1000
+        running: Config.options.fluid.enabled && fluidLoader.active
+        repeat: false
+        onTriggered: {
+            if (fluidLoader.item) fluidLoader.item.running = true;
+            fluidOpacity = 1;
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+        }
+    }
+
+    // Timer to auto-hide toolbar after user stops interacting (default 10s)
+    Timer {
+        id: widgetHideTimer
+        interval: Config.options.fluid.widgetAutoHideTimeout * 1000
+        repeat: false
+        onTriggered: {
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+            if (Config.options.fluid.dimOnInteraction)
+                fluidOpacity = 1;
+        }
+    }
+
+    // Fluid animation visibility
+    property real fluidOpacity: 0
+    Behavior on fluidOpacity {
+        NumberAnimation { duration: Config.options.fluid.fadeDuration }
     }
 
     // Toolbar appearing animation
@@ -100,6 +184,17 @@ MouseArea {
     }
     Behavior on toolbarOpacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
+    function showToolbar() {
+        if (Config.options.fluid.enabled) {
+            fluidStartTimer.restart();
+            widgetHideTimer.restart();
+            if (Config.options.fluid.dimOnInteraction)
+                fluidOpacity = 0;
+        }
+        toolbarOpacity = 1;
+        toolbarScale = 1;
     }
 
     // Shake the whole toolbar row (left island + main island + right island) on wrong password.
@@ -125,22 +220,32 @@ MouseArea {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
+        if (GlobalStates.lockFromIdle && Config.options.fluid.enabled) {
+            if (fluidLoader.item) fluidLoader.item.running = true;
+            fluidOpacity = 1;
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+        }
         if (mediaPlayerAvailable) {
             mediaLoaderActive = true;
         }
+        if (Config.options.fluid.enabled)
+            widgetHideTimer.start();
     }
 
     // Key presses
     property bool ctrlHeld: false
     Keys.onPressed: event => {
         root.context.resetClearTimer();
+        showToolbar();
         if (event.key === Qt.Key_Control) {
             root.ctrlHeld = true;
         }
         if (event.key === Qt.Key_Escape) { // Esc to clear
             root.context.currentText = "";
-        } 
+        }
         forceFieldFocus();
+        event.accepted = false; // propagate to passwordBox
     }
     Keys.onReleased: event => {
         if (event.key === Qt.Key_Control) {
@@ -296,7 +401,10 @@ MouseArea {
             inputMethodHints: Qt.ImhSensitiveData
 
             // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
+            onTextChanged: {
+                root.context.currentText = this.text;
+                root.showToolbar();
+            }
             onAccepted: {
                 root.context.tryUnlock(ctrlHeld);
             }
@@ -309,6 +417,7 @@ MouseArea {
 
             Keys.onPressed: event => {
                 root.context.resetClearTimer();
+                event.accepted = false;
             }
             
             layer.enabled: true

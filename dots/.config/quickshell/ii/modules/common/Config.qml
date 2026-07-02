@@ -417,20 +417,22 @@ Singleton {
                 property bool materialShapeChars: true
             }
 
-            property JsonObject screensaver: JsonObject {
-                property bool enable: false
-                property int idleTimeout: 180
-                property int gridSpacing: 15
-                property real lineLength: 450
-                property real lineWidth: 9
-                property real viewScale: 1.6
-                property real viscosity: 5
-                property real velocityDissipation: 0
-                property int fluidSize: 128
-                property real fluidFrameRate: 60
-                property int diffusionIterations: 3
-                property int pressureIterations: 19
+            property JsonObject fluid: JsonObject {
+                property bool enabled: false
+                property int idleTimeout: 30
+                property int widgetAutoHideTimeout: 10
+                property int fadeDuration: 600
+                property int colorPreset: 0
+                property real viscosity: 5.0
                 property real noiseMultiplier: 0.45
+                property real timestep: 0.016667
+                property real dissipation: 0.0
+                property int pressureIterations: 19
+                property real lineVariance: 0.55
+                property real lineWidthMultiplier: 1.0
+                property real zoom: 1.6
+                property int fpsLimit: 60
+                property bool dimOnInteraction: false
             }
 
             property JsonObject media: JsonObject {

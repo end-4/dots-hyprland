@@ -81,43 +81,46 @@ install-python-packages(){
   x deactivate
 }
 
-install-flux-screensaver(){
-  local FLUX_REPO="Satoxyan/flux-comp"
-  local FLUX_BIN="$XDG_BIN_HOME/flux-desktop"
-  local FLUX_WRAPPER="$XDG_BIN_HOME/flux-screensaver.sh"
-  local TMP_DIR
-  TMP_DIR="$(mktemp -d)"
+install-fluxengine-plugin(){
+  local FLUX_REPO="dxnz-id/flux-quickshell"
+  local FLUX_IMPORT_DIR="$HOME/.local/share/quickshell/imports"
+  local TMP_FILE
+  TMP_FILE="$(mktemp)"
 
-  # Get latest release download URL
-  log_info "Fetching latest flux release from GitHub..."
-  local DOWNLOAD_URL
-  DOWNLOAD_URL="$(
-    curl -fsSL "https://api.github.com/repos/${FLUX_REPO}/releases/latest" \
-    | grep -o '"browser_download_url": *"[^"]*flux-linux\.tar\.gz"' \
-    | grep -o 'https://[^"]*'
-  )"
+  log_info "Fetching latest FluxEngine release from GitHub..."
+  local TAG
+  TAG="$(git ls-remote --tags --sort='-version:refname' \
+    "https://github.com/${FLUX_REPO}" \
+    | grep -o 'refs/tags/v[0-9.]*' \
+    | head -1 \
+    | sed 's|refs/tags/||')"
+  local DOWNLOAD_URL="https://github.com/${FLUX_REPO}/releases/download/${TAG}/FluxEngine-${TAG}-linux-x86_64.tar.gz"
 
-  if [ -z "$DOWNLOAD_URL" ]; then
-    log_error "Could not find flux-linux.tar.gz in latest release of ${FLUX_REPO}"
-    rm -rf "$TMP_DIR"
+  if [ -z "$TAG" ]; then
+    log_error "Could not find any tags for ${FLUX_REPO}"
+    rm -f "$TMP_FILE"
     return 1
   fi
 
-  # Download archive
-  log_info "Downloading $DOWNLOAD_URL ..."
-  x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_DIR/flux-linux.tar.gz"
+  log_info "Downloading $TAG ..."
+  x mkdir -p "$FLUX_IMPORT_DIR/FluxEngine"
+  x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
+  x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR/FluxEngine"
+  rm -f "$TMP_FILE"
 
-  # Extract
-  x tar -xzf "$TMP_DIR/flux-linux.tar.gz" -C "$TMP_DIR"
+  if [ ! -f "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so" ]; then
+    log_error "FluxEngine plugin not found after extraction"
+    return 1
+  fi
 
-  # Deploy binary
-  x mkdir -p "$XDG_BIN_HOME"
-  x cp "$TMP_DIR/flux-desktop" "$FLUX_BIN"
-  x strip "$FLUX_BIN"
-  x chmod +x "$FLUX_BIN"
+  # Fix RPATH so plugin finds libfluxengine.so in same directory
+  if command -v patchelf &>/dev/null; then
+    patchelf --set-rpath '$ORIGIN' "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so"
+    log_info "RPATH fixed: libfluxengineplugin.so finds libfluxengine.so via \$ORIGIN"
+  else
+    log_warn "patchelf not found; libfluxengine.so might not load at runtime"
+    log_warn "Install patchelf or set LD_LIBRARY_PATH=$FLUX_IMPORT_DIR/FluxEngine"
+  fi
 
-  # Cleanup
-  rm -rf "$TMP_DIR"
-
-  log_info "flux-desktop installed to $FLUX_BIN"
+  log_info "FluxEngine plugin installed to $FLUX_IMPORT_DIR/FluxEngine/"
 }
