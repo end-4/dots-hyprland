@@ -332,19 +332,19 @@ ContentPage {
 
     ContentSection {
         icon: "water"
-        title: "Fluid Simulation"
+        title: "Screensaver"
 
         ConfigSwitch {
-            text: Translation.tr("Enable fluid simulation")
+            text: Translation.tr("Enable screensaver")
             checked: Config.options.fluid.enabled
             onCheckedChanged: Config.options.fluid.enabled = checked
             StyledToolTip {
-                text: Translation.tr("Disable to use plain dark background instead of the fluid simulation")
+                text: Translation.tr("Disable to use plain dark background instead of the screensaver")
             }
         }
 
         ConfigSpinBox {
-            text: Translation.tr("Idle timeout before fluid (s)")
+            text: Translation.tr("Idle timeout before screensaver (s)")
             value: Config.options.fluid.idleTimeout
             from: 5; to: 300; stepSize: 5
             onValueChanged: Config.options.fluid.idleTimeout = value
@@ -356,7 +356,7 @@ ContentPage {
             }
             StyledToolTip {
                 extraVisibleCondition: idleHover.containsMouse
-                text: Translation.tr("How long of inactivity before the fluid simulation starts showing")
+                text: Translation.tr("How long of inactivity before the screensaver starts showing")
             }
         }
 
@@ -373,7 +373,7 @@ ContentPage {
             }
             StyledToolTip {
                 extraVisibleCondition: autoHideHover.containsMouse
-                text: Translation.tr("How long after fluid appears before toolbar/clock fade out")
+                text: Translation.tr("How long after screensaver appears before toolbar/clock fade out")
             }
         }
 
@@ -413,7 +413,7 @@ ContentPage {
             }
             StyledToolTip {
                 extraVisibleCondition: fadeHover.containsMouse
-                text: Translation.tr("Fade in/out duration for the fluid simulation background")
+                text: Translation.tr("Fade in/out duration")
             }
         }
     }
@@ -558,7 +558,7 @@ ContentPage {
                 }
                 StyledToolTip {
                     extraVisibleCondition: zoomHover.containsMouse
-                    text: Translation.tr("Zoom level of the fluid display")
+                    text: Translation.tr("Zoom level")
                 }
             }
         }
