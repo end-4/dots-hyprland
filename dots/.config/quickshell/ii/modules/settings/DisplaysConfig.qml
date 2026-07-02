@@ -604,6 +604,26 @@ ContentPage {
             visible: Config.options.fluid.enabled
             title: "Display"
 
+            StyledComboBox {
+                buttonIcon: "palette"
+                textRole: "displayName"
+                model: [
+                    { displayName: "Original", value: 0 },
+                    { displayName: "Plasma", value: 1 },
+                    { displayName: "Poolside", value: 2 },
+                    { displayName: "Gumdrop", value: 3 },
+                    { displayName: "Silver", value: 4 },
+                    { displayName: "Freedom", value: 5 }
+                ]
+                currentIndex: Config.options.fluid.colorPreset
+                onCurrentIndexChanged: {
+                    Config.options.fluid.colorPreset = currentIndex
+                }
+                StyledToolTip {
+                    text: Translation.tr("Line coloring preset: Original (velocity-mapped), Plasma (warm color wheel), Poolside (cool blue wheel), Gumdrop (purple-pink gradient), Silver (grayscale noise), Freedom (blue-gold)")
+                }
+            }
+
             ConfigSpinBox {
                 text: Translation.tr("Fade duration (ms)")
                 value: Config.options.fluid.fadeDuration
@@ -622,7 +642,7 @@ ContentPage {
             }
 
             ConfigSwitch {
-                text: Translation.tr("Dim fluid on interaction")
+                text: Translation.tr("Hide fluid on interaction")
                 checked: Config.options.fluid.dimOnInteraction
                 onCheckedChanged: Config.options.fluid.dimOnInteraction = checked
                 StyledToolTip {
