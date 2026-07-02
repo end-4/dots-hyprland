@@ -73,7 +73,7 @@ Scope {
 
     Timer {
         id: fadeUnlockTimer
-        interval: 600
+        interval: Config.options.fluid.enabled && !Config.options.fluid.dimOnInteraction ? Config.options.fluid.fadeDuration : 200
         running: false
         repeat: false
         onTriggered: {
