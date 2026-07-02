@@ -11,9 +11,8 @@ ContentPage {
     id: root
     forceWidth: true
 
-    // Persistencia: monitors.conf está en la lista de exclusiones del instalador,
+    // Persistencia: monitors.lua está en la lista de exclusiones del instalador,
     // así que las actualizaciones del dotfile no lo tocan
-    readonly property string monitorsConf: FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.conf`)
     readonly property string monitorsLua: FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.lua`)
 
     // Lista de monitores: [{name, description, resW, resH, rate, monScale, transform, posX, posY, enabled, modes}]
@@ -133,28 +132,7 @@ ContentPage {
     }
 
     // ── Aplicar y guardar ──────────────────────────────────────────────────
-    // Normaliza el origen a (0,0) y devuelve las líneas "name, WxH@rate, XxY, scale[, transform, t]"
-    function buildMonitorSpecs() {
-        let minX = Infinity, minY = Infinity;
-        for (const m of root.monitors) {
-            if (!m.enabled) continue;
-            minX = Math.min(minX, m.posX);
-            minY = Math.min(minY, m.posY);
-        }
-        if (minX === Infinity) { minX = 0; minY = 0; }
-        const specs = [];
-        for (const m of root.monitors) {
-            if (!m.enabled) {
-                specs.push(`${m.name}, disable`);
-                continue;
-            }
-            let s = `${m.name}, ${m.resW}x${m.resH}@${m.rate.toFixed(2)}, ${Math.round(m.posX - minX)}x${Math.round(m.posY - minY)}, ${m.monScale}`;
-            s += `, transform, ${m.transform}`;
-            specs.push(s);
-        }
-        return specs;
-    }
-
+    // Normaliza el origen a (0,0) y devuelve llamadas hl.monitor({...})
     function buildMonitorSpecsLua() {
         let minX = Infinity, minY = Infinity;
         for (const m of root.monitors) {
@@ -180,28 +158,12 @@ ContentPage {
     // Solo en caliente: si algo sale mal, hyprctl reload restaura lo guardado
     function applyRuntime() {
         const luaSpecs = buildMonitorSpecsLua().join("; ");
-        const confSpecs = buildMonitorSpecs().map(s => "keyword monitor " + s.replace(/ /g, ""));
-        const script = `
-            if hyprctl eval "true" >/dev/null 2>&1; then
-                hyprctl eval "${luaSpecs}"
-            else
-                hyprctl --batch "${confSpecs.join(" ; ")}"
-            fi
-        `;
-        Quickshell.execDetached(["bash", "-c", script]);
+        Quickshell.execDetached(["bash", "-c", `hyprctl eval "${luaSpecs}"`]);
         repollTimer.restart();
     }
 
-    // Escribe monitors.conf y monitors.lua; Hyprland lo recarga solo (y así también se aplica)
+    // Escribe monitors.lua; Hyprland lo recarga solo (y así también se aplica)
     function applyAndSave() {
-        const linesConf = [
-            "# Gestionado por la página Displays de la app de Ajustes (Super+I).",
-            "# nwg-displays también puede sobrescribir este archivo si lo usas.",
-            ...buildMonitorSpecs().map(s => "monitor = " + s),
-            "monitor = , preferred, auto, 1  # Fallback para monitores no configurados"
-        ];
-        const contentConf = linesConf.join("\n") + "\n";
-
         const linesLua = [
             "-- Managed by Displays page of Settings app (Super+I).",
             ...buildMonitorSpecsLua(),
@@ -209,7 +171,6 @@ ContentPage {
         ];
         const contentLua = linesLua.join("\n") + "\n";
 
-        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsConf}' << 'HYPRMON_EOF'\n${contentConf}HYPRMON_EOF`]);
         Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsLua}' << 'HYPRMON_EOF'\n${contentLua}HYPRMON_EOF`]);
 
         applyRuntime();
@@ -495,7 +456,7 @@ ContentPage {
                 onClicked: root.applyAndSave()
                 enabled: root.hasChanges && !root.previewActive
                 StyledToolTip {
-                    text: Translation.tr("Writes monitors.conf — survives reboots and dotfile updates")
+                    text: Translation.tr("Writes monitors.lua — survives reboots and dotfile updates")
                 }
             }
             RippleButtonWithIcon {
