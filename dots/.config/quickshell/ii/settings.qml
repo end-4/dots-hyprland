@@ -85,11 +85,6 @@ ApplicationWindow {
                     component: "modules/settings/system/WifiConfig.qml"
                 },
                 {
-                    name: Translation.tr("Saved\nnetworks"),
-                    icon: "bookmark",
-                    component: "modules/settings/system/WifiKnownConfig.qml"
-                },
-                {
                     name: Translation.tr("Bluetooth"),
                     icon: "bluetooth",
                     component: "modules/settings/system/BluetoothConfig.qml"
@@ -98,11 +93,6 @@ ApplicationWindow {
                     name: Translation.tr("VPN"),
                     icon: "vpn_key",
                     component: "modules/settings/system/VpnConfig.qml"
-                },
-                {
-                    name: Translation.tr("Advanced"),
-                    icon: "tune",
-                    component: "modules/settings/system/WifiAdvancedConfig.qml"
                 }
             ]
         },
@@ -114,7 +104,7 @@ ApplicationWindow {
         {
             name: "KDE",
             icon: "palette",
-            component: "modules/settings/system/KdeConfig.qml"
+            command: "systemsettings"
         }
     ]
     property int currentCategory: 0
@@ -122,16 +112,32 @@ ApplicationWindow {
     readonly property bool categoryOpen: currentCategory >= 0
     readonly property var currentCategoryData: categoryOpen ? categories[currentCategory] : ({})
     readonly property bool currentCategoryHasPages: categoryOpen && currentCategoryData.pages !== undefined
+    readonly property var currentPageData: currentCategoryHasPages ? currentCategoryData.pages[currentPage] : ({})
     readonly property string currentComponent: !categoryOpen ? "modules/settings/SettingsHome.qml"
-        : currentCategoryHasPages ? currentCategoryData.pages[currentPage].component
+        : currentCategoryHasPages ? (currentPageData.component || currentCategoryData.pages[0].component)
         : currentCategoryData.component
 
     function openCategory(index) {
+        const category = categories[index];
+        if (category.command) {
+            Quickshell.execDetached(["bash", "-c", category.command]);
+            categoryRail.expanded = false;
+            return;
+        }
         animateInnerRail = false;
         currentCategory = index;
         currentPage = 0;
         categoryRail.expanded = false;
         enableInnerRailAnimationTimer.restart();
+    }
+
+    function openPage(index) {
+        const page = currentCategoryData.pages[index];
+        if (page.command) {
+            Quickshell.execDetached(["bash", "-c", page.command]);
+            return;
+        }
+        currentPage = index;
     }
 
     visible: true
@@ -170,22 +176,22 @@ ApplicationWindow {
             if (event.modifiers === Qt.ControlModifier) {
                 if (event.key === Qt.Key_PageDown) {
                     if (root.currentCategoryHasPages)
-                        root.currentPage = Math.min(root.currentPage + 1, root.categories[root.currentCategory].pages.length - 1)
+                        root.openPage(Math.min(root.currentPage + 1, root.categories[root.currentCategory].pages.length - 1))
                     event.accepted = true;
                 } 
                 else if (event.key === Qt.Key_PageUp) {
                     if (root.currentCategoryHasPages)
-                        root.currentPage = Math.max(root.currentPage - 1, 0)
+                        root.openPage(Math.max(root.currentPage - 1, 0))
                     event.accepted = true;
                 }
                 else if (event.key === Qt.Key_Tab) {
                     if (root.currentCategoryHasPages)
-                        root.currentPage = (root.currentPage + 1) % root.categories[root.currentCategory].pages.length;
+                        root.openPage((root.currentPage + 1) % root.categories[root.currentCategory].pages.length);
                     event.accepted = true;
                 }
                 else if (event.key === Qt.Key_Backtab) {
                     if (root.currentCategoryHasPages)
-                        root.currentPage = (root.currentPage - 1 + root.categories[root.currentCategory].pages.length) % root.categories[root.currentCategory].pages.length;
+                        root.openPage((root.currentPage - 1 + root.categories[root.currentCategory].pages.length) % root.categories[root.currentCategory].pages.length);
                     event.accepted = true;
                 }
             }
@@ -358,8 +364,8 @@ ApplicationWindow {
                             NavigationRailButton {
                                 required property var index
                                 required property var modelData
-                                toggled: root.currentPage === index
-                                onPressed: root.currentPage = index;
+                                toggled: root.currentPage === index && modelData.component !== undefined
+                                onPressed: root.openPage(index);
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
                                 buttonIconRotation: modelData.iconRotation || 0

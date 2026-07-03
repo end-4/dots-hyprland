@@ -131,9 +131,32 @@ ContentPage {
         }
     }
 
-    ContentSection {
-        icon: BluetoothStatus.connected ? "bluetooth_connected" : root.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
-        title: Translation.tr("Bluetooth")
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 6
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 6
+
+            OptionalMaterialSymbol {
+                icon: BluetoothStatus.connected ? "bluetooth_connected" : root.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                iconSize: Appearance.font.pixelSize.hugeass
+            }
+
+            StyledText {
+                Layout.fillWidth: true
+                text: Translation.tr("Bluetooth")
+                font.pixelSize: Appearance.font.pixelSize.larger
+                font.weight: Font.Medium
+                color: Appearance.colors.colOnSecondaryContainer
+            }
+
+            DialogButton {
+                buttonText: Translation.tr("Advanced settings")
+                onClicked: Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth])
+            }
+        }
 
         ConfigSwitch {
             visible: root.bluetoothAvailable
@@ -158,20 +181,8 @@ ContentPage {
                 onClicked: root.scanDevices()
             }
 
-            StyledText {
+            Item {
                 Layout.fillWidth: true
-                text: root.bluetoothScanning
-                    ? Translation.tr("Looking for nearby devices...")
-                    : root.savedDeviceCount === 1
-                        ? Translation.tr("1 saved Bluetooth device")
-                        : Translation.tr("%1 saved Bluetooth devices").arg(root.savedDeviceCount)
-                color: Appearance.colors.colSubtext
-                wrapMode: Text.Wrap
-            }
-
-            DialogButton {
-                buttonText: Translation.tr("Advanced settings")
-                onClicked: Quickshell.execDetached(["bash", "-c", Config.options.apps.bluetooth])
             }
         }
 
@@ -241,6 +252,16 @@ ContentPage {
         visible: root.bluetoothEnabled
         icon: "bookmark"
         title: Translation.tr("Saved devices")
+
+        StyledText {
+            Layout.fillWidth: true
+            Layout.leftMargin: 14
+            text: root.savedDeviceCount === 1
+                ? Translation.tr("1 saved Bluetooth device")
+                : Translation.tr("%1 saved Bluetooth devices").arg(root.savedDeviceCount)
+            color: Appearance.colors.colSubtext
+            wrapMode: Text.Wrap
+        }
 
         StyledText {
             Layout.fillWidth: true
