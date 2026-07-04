@@ -1006,7 +1006,7 @@ ContentPage {
                     buttonIcon: "power_settings_new"
                     text: Translation.tr("Enabled")
                     checked: itemRoot.monitorData.enabled
-                    enabled: itemRoot.monitorData.enabled || root.monitors.filter(m => m.enabled).length > 1
+                    enabled: root.monitors.filter(m => m.enabled && m.name !== itemRoot.monitorData.name).length > 0
                     onCheckedChanged: {
                         if (checked !== itemRoot.monitorData.enabled)
                             root.setMonitorProp(itemRoot.monitorIndex, "enabled", checked);
