@@ -494,69 +494,9 @@ ContentPage {
             Item {
                 Layout.fillWidth: true
             }
-
-            DialogButton {
-                buttonText: Translation.tr("Identify all")
-                enabled: root.monitors.length > 0
-                onClicked: root.identifyAllMonitors()
-            }
         }
 
-        // ── Secondary workspace ──
-        ContentSection {
-            icon: "workspaces"
-            title: Translation.tr("Secondary workspace")
-
-            ConfigRow {
-                StyledText {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: 14
-                    text: Translation.tr("Choose where the secondary monitor should land by default.")
-                    color: Appearance.colors.colSubtext
-                    wrapMode: Text.Wrap
-                }
-            }
-
-            ConfigRow {
-                StyledText {
-                    text: Translation.tr("Monitor")
-                    color: Appearance.colors.colOnSecondaryContainer
-                }
-
-                StyledComboBox {
-                    Layout.fillWidth: true
-                    model: root.monitors.map(m => m.name)
-                    currentIndex: Math.max(0, root.monitors.map(m => m.name).indexOf(root.selectedSecondaryMonitor))
-                    onActivated: index => root.selectedSecondaryMonitor = root.monitors[index]?.name ?? ""
-                }
-            }
-
-            ConfigRow {
-                StyledText {
-                    text: Translation.tr("Workspace")
-                    color: Appearance.colors.colOnSecondaryContainer
-                }
-
-                StyledSpinBox {
-                    from: 1
-                    to: 100
-                    value: root.secondaryWorkspace
-                    onValueChanged: root.secondaryWorkspace = value
-                }
-
-                DialogButton {
-                    buttonText: Translation.tr("Apply")
-                    onClicked: root.applySecondaryWorkspace()
-                }
-            }
-        }
-
-        // ── Apply section ──
-        ContentSection {
-            icon: "rocket_launch"
-            title: Translation.tr("Apply")
-
-            ConfigRow {
+        ConfigRow {
                 RippleButtonWithIcon {
                     materialIcon: "play_arrow"
                     mainText: Translation.tr("Preview")
@@ -623,6 +563,54 @@ ContentPage {
                         horizontalPadding: 8
                         onClicked: root.revertPreview()
                     }
+                }
+            }
+
+        // ── Secondary workspace ──
+        ContentSection {
+            icon: "workspaces"
+            title: Translation.tr("Secondary workspace")
+
+            ConfigRow {
+                StyledText {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 14
+                    text: Translation.tr("Choose where the secondary monitor should land by default.")
+                    color: Appearance.colors.colSubtext
+                    wrapMode: Text.Wrap
+                }
+            }
+
+            ConfigRow {
+                StyledText {
+                    text: Translation.tr("Monitor")
+                    color: Appearance.colors.colOnSecondaryContainer
+                }
+
+                StyledComboBox {
+                    Layout.fillWidth: true
+                    model: root.monitors.map(m => m.name)
+                    currentIndex: Math.max(0, root.monitors.map(m => m.name).indexOf(root.selectedSecondaryMonitor))
+                    onActivated: index => root.selectedSecondaryMonitor = root.monitors[index]?.name ?? ""
+                }
+            }
+
+            ConfigRow {
+                StyledText {
+                    text: Translation.tr("Workspace")
+                    color: Appearance.colors.colOnSecondaryContainer
+                }
+
+                StyledSpinBox {
+                    from: 1
+                    to: 100
+                    value: root.secondaryWorkspace
+                    onValueChanged: root.secondaryWorkspace = value
+                }
+
+                DialogButton {
+                    buttonText: Translation.tr("Apply")
+                    onClicked: root.applySecondaryWorkspace()
                 }
             }
         }
