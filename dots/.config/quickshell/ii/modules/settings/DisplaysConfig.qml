@@ -29,11 +29,9 @@ ContentPage {
     property var previewSnapshot: []
     property var committedState: []
 
-    readonly property bool hasChanges: JSON.stringify(root.monitors) !== JSON.stringify(root.committedState)
+    property var expandedStates: ({})
 
-    function commit() {
-        root.monitors = root.monitors.slice();
-    }
+    readonly property bool hasChanges: JSON.stringify(root.monitors) !== JSON.stringify(root.committedState)
 
     function logicalW(m) {
         const w = (m.transform % 2 === 1) ? m.resH : m.resW;
@@ -90,6 +88,7 @@ ContentPage {
                         if (d.focused) root.selectedIndex = i;
                     }
                     root.monitors = list;
+                    root.expandedStates = ({});
                     root.updateCommittedState();
                     if (!root.selectedSecondaryMonitor && root.secondaryMonitor())
                         root.selectedSecondaryMonitor = root.secondaryMonitor().name;
@@ -190,6 +189,10 @@ ContentPage {
         root.updateCommittedState();
 
         Quickshell.execDetached(["notify-send", "Displays", Translation.tr("Layout applied and saved")]);
+    }
+
+    function commit() {
+        root.monitors = root.monitors.slice();
     }
 
     function setMonitorProp(index, prop, value) {
@@ -302,11 +305,6 @@ ContentPage {
                 font.pixelSize: Appearance.font.pixelSize.larger
                 font.weight: Font.Medium
                 color: Appearance.colors.colOnSecondaryContainer
-            }
-
-            DialogButton {
-                buttonText: Translation.tr("KDE display settings")
-                onClicked: Quickshell.execDetached(["systemsettings", "display"])
             }
         }
 
@@ -493,6 +491,12 @@ ContentPage {
 
             Item {
                 Layout.fillWidth: true
+            }
+
+            DialogButton {
+                buttonText: Translation.tr("Identify all")
+                enabled: root.monitors.length > 0
+                onClicked: root.identifyAllMonitors()
             }
         }
 
@@ -896,8 +900,10 @@ ContentPage {
         id: itemRoot
         required property var monitorData
         required property int monitorIndex
-        property bool expanded: false
         readonly property bool active: monitorData.focused
+
+        property bool expanded: root.expandedStates[monitorIndex] ?? false
+        onExpandedChanged: root.expandedStates[monitorIndex] = itemRoot.expanded
 
         Layout.fillWidth: true
         implicitHeight: monitorItemContent.implicitHeight + 16
