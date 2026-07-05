@@ -87,11 +87,12 @@ Scope {
                 item: playerColumnLayout
             }
 
-            Component.onCompleted: {
-                GlobalFocusGrab.addDismissable(panelWindow);
-            }
-            Component.onDestruction: {
-                GlobalFocusGrab.removeDismissable(panelWindow);
+            onVisibleChanged: {
+                if (panelWindow.visible) {
+                    GlobalFocusGrab.addDismissable(panelWindow);
+                } else {
+                    GlobalFocusGrab.removeDismissable(panelWindow);
+                }
             }
             Connections {
                 target: GlobalFocusGrab
