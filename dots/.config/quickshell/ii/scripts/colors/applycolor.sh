@@ -16,16 +16,12 @@ if [ ! -d "$STATE_DIR"/user/generated ]; then
 fi
 cd "$CONFIG_DIR" || exit
 
-colornames=''
-colorstrings=''
 colorlist=()
 colorvalues=()
-
-colornames=$(cat $STATE_DIR/user/generated/material_colors.scss | cut -d: -f1)
-colorstrings=$(cat $STATE_DIR/user/generated/material_colors.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-IFS=$'\n'
-colorlist=($colornames)     # Array of color names
-colorvalues=($colorstrings) # Array of color values
+while IFS=': ' read -r name value; do
+  colorlist+=("$name")
+  colorvalues+=("${value%;}")
+done < "$STATE_DIR/user/generated/material_colors.scss"
 
 apply_kitty() {  
   # Check if terminal escape sequence template exists
@@ -42,9 +38,7 @@ apply_kitty() {
   done
 
   # Reload
-  if ! pgrep -f kitty >/dev/null; then
-    return
-  fi
+  pidof kitty || return
   kill -SIGUSR1 $(pidof kitty)
 }
 

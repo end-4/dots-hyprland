@@ -17,6 +17,9 @@ get_pictures_dir() {
     echo "$HOME/Pictures"
 }
 
+# Guard: if sourced, only define functions and return
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return
+
 QUICKSHELL_CONFIG_NAME="ii"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"

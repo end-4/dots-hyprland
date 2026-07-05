@@ -1,7 +1,8 @@
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_\"\$0\"\_\"\$@\""
 import argparse
 import math
 import json
+import importlib
 from PIL import Image
 from materialyoucolor.quantize import QuantizeCelebi
 from materialyoucolor.score.score import Score
@@ -30,8 +31,6 @@ args = parser.parse_args()
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}".format(rgba[0], rgba[1], rgba[2])
 argb_to_hex = lambda argb: "#{:02X}{:02X}{:02X}".format(*map(round, rgba_from_argb(argb)))
 hex_to_argb = lambda hex_code: argb_from_rgb(int(hex_code[1:3], 16), int(hex_code[3:5], 16), int(hex_code[5:], 16))
-display_color = lambda rgba : "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m")
-
 def calculate_optimal_size (width: int, height: int, bitmap_size: int) -> (int, int):
     image_area = width * height;
     bitmap_area = bitmap_size ** 2
@@ -87,26 +86,35 @@ elif args.color is not None:
     argb = hex_to_argb(args.color)
     hct = Hct.from_int(argb)
 
-if args.scheme == 'scheme-fruit-salad':
-    from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
-elif args.scheme == 'scheme-expressive':
-    from materialyoucolor.scheme.scheme_expressive import SchemeExpressive as Scheme
-elif args.scheme == 'scheme-monochrome':
-    from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
-elif args.scheme == 'scheme-rainbow':
-    from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
-elif args.scheme == 'scheme-tonal-spot':
-    from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
-elif args.scheme == 'scheme-neutral':
-    from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
-elif args.scheme == 'scheme-fidelity':
-    from materialyoucolor.scheme.scheme_fidelity import SchemeFidelity as Scheme
-elif args.scheme == 'scheme-content':
-    from materialyoucolor.scheme.scheme_content import SchemeContent as Scheme
-elif args.scheme == 'scheme-vibrant':
-    from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
-else:
-    from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
+# Map scheme names to module paths
+_scheme_module_map = {
+    'scheme-fruit-salad': 'materialyoucolor.scheme.scheme_fruit_salad',
+    'scheme-expressive': 'materialyoucolor.scheme.scheme_expressive',
+    'scheme-monochrome': 'materialyoucolor.scheme.scheme_monochrome',
+    'scheme-rainbow': 'materialyoucolor.scheme.scheme_rainbow',
+    'scheme-tonal-spot': 'materialyoucolor.scheme.scheme_tonal_spot',
+    'scheme-neutral': 'materialyoucolor.scheme.scheme_neutral',
+    'scheme-fidelity': 'materialyoucolor.scheme.scheme_fidelity',
+    'scheme-content': 'materialyoucolor.scheme.scheme_content',
+    'scheme-vibrant': 'materialyoucolor.scheme.scheme_vibrant',
+}
+_scheme_class_map = {
+    'scheme-fruit-salad': 'SchemeFruitSalad',
+    'scheme-expressive': 'SchemeExpressive',
+    'scheme-monochrome': 'SchemeMonochrome',
+    'scheme-rainbow': 'SchemeRainbow',
+    'scheme-tonal-spot': 'SchemeTonalSpot',
+    'scheme-neutral': 'SchemeNeutral',
+    'scheme-fidelity': 'SchemeFidelity',
+    'scheme-content': 'SchemeContent',
+    'scheme-vibrant': 'SchemeVibrant',
+}
+
+module_path = _scheme_module_map.get(args.scheme, _scheme_module_map['scheme-tonal-spot'])
+class_name = _scheme_class_map.get(args.scheme, _scheme_class_map['scheme-tonal-spot'])
+scheme_module = importlib.import_module(module_path)
+Scheme = getattr(scheme_module, class_name)
+
 # Generate
 scheme = Scheme(hct, darkmode, 0.0)
 
@@ -151,31 +159,9 @@ if args.termscheme is not None:
             harmonized = boost_chroma_tone(harmonized, 1, 1 + (args.term_fg_boost * (1 if darkmode else -1)))
         term_colors[color] = argb_to_hex(harmonized)
 
-if args.debug == False:
-    print(f"$darkmode: {darkmode};")
-    print(f"$transparent: {transparent};")
-    for color, code in material_colors.items():
-        print(f"${color}: {code};")
-    for color, code in term_colors.items():
-        print(f"${color}: {code};")
-else:
-    if args.path is not None:
-        print('\n--------------Image properties-----------------')
-        print(f"Image size: {wsize} x {hsize}")
-        print(f"Resized image: {wsize_new} x {hsize_new}")
-    print('\n---------------Selected color------------------')
-    print(f"Dark mode: {darkmode}")
-    print(f"Scheme: {args.scheme}")
-    print(f"Accent color: {display_color(rgba_from_argb(argb))} {argb_to_hex(argb)}")
-    print(f"HCT: {hct.hue:.2f}  {hct.chroma:.2f}  {hct.tone:.2f}")
-    print('\n---------------Material colors-----------------')
-    for color, code in material_colors.items():
-        rgba = rgba_from_argb(hex_to_argb(code))
-        print(f"{color.ljust(32)} : {display_color(rgba)}  {code}")
-    print('\n----------Harmonize terminal colors------------')
-    for color, code in term_colors.items():
-        rgba = rgba_from_argb(hex_to_argb(code))
-        code_source = term_source_colors[color]
-        rgba_source = rgba_from_argb(hex_to_argb(code_source))
-        print(f"{color.ljust(6)} : {display_color(rgba_source)} {code_source} --> {display_color(rgba)} {code}")
-    print('-----------------------------------------------')
+print(f"$darkmode: {darkmode};")
+print(f"$transparent: {transparent};")
+for color, code in material_colors.items():
+    print(f"${color}: {code};")
+for color, code in term_colors.items():
+    print(f"${color}: {code};")

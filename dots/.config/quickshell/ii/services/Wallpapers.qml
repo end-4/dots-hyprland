@@ -15,7 +15,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
 
-    property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/thumbgen-venv.sh`
+    property string thumbgenScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/run-in-venv.sh thumbnails/thumbgen.py`
     property string generateThumbnailsMagickScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
     property alias directory: folderModel.folder
     readonly property string effectiveDirectory: FileUtils.trimFileProtocol(folderModel.folder.toString())
