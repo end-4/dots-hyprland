@@ -337,26 +337,6 @@ ContentPage {
                 wrapMode: Text.WordWrap
             }
 
-            ConfigRow {
-                DialogButton {
-                    buttonText: Translation.tr("Apply layout")
-                    enabled: root.monitors.length > 0
-                    onClicked: { root.writeLuaFile(); root.applyRuntime(); }
-                }
-
-                DialogButton {
-                    buttonText: Translation.tr("Reset")
-                    onClicked: { displayPoller.running = true; }
-                }
-
-                StyledText {
-                    Layout.fillWidth: true
-                    text: Translation.tr("Drag monitors to change their position.")
-                    color: Appearance.colors.colSubtext
-                    wrapMode: Text.Wrap
-                }
-            }
-
             Rectangle {
                 id: canvas
                 Layout.fillWidth: true
@@ -538,7 +518,7 @@ ContentPage {
                 RippleButtonWithIcon {
                     materialIcon: "refresh"
                     mainText: Translation.tr("Reload current state")
-                    onClicked: displayPoller.running = true
+                    onClicked: { displayPoller.running = true; }
                     enabled: !root.previewActive
                 }
             }
