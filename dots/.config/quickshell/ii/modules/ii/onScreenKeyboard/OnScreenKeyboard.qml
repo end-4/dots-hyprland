@@ -12,9 +12,18 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property bool pinned: Config.options?.osk.pinnedOnStartup ?? false
+    // 0=floating (draggable, content width), 1=fullwidth (draggable, full width)
+    property int oskMode: Persistent.states.osk.mode
+    property real floatY: Persistent.states.osk.floatY
+    property real floatX: Persistent.states.osk.floatX
+    onOskModeChanged: {
+        if (root.oskMode === 1) {
+            root.floatX = 0
+            Persistent.states.osk.floatX = 0
+        }
+    }
 
-    component OskControlButton: GroupButton { // Pin button
+    component OskControlButton: GroupButton { // Control button
         baseWidth: 40
         baseHeight: 40
         clickedWidth: baseWidth
@@ -30,21 +39,25 @@ Scope { // Scope
                 Ydotool.releaseAllKeys();
             }
         }
-        
+
         sourceComponent: PanelWindow { // Window
             id: oskRoot
             visible: oskLoader.active && !GlobalStates.screenLocked
 
             anchors {
-                bottom: true
+                top: true
                 left: true
-                right: true
+                right: root.oskMode === 1  // fullwidth stretches, floating is content-sized
+            }
+            margins {
+                top: root.floatY
+                left: root.oskMode === 0 ? root.floatX : 0
             }
 
             function hide() {
                 GlobalStates.oskOpen = false
             }
-            exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.hyprlandGapsOut : 0
+            exclusiveZone: 0
             implicitWidth: oskBackground.width + Appearance.sizes.elevationMargin * 2
             implicitHeight: oskBackground.height + Appearance.sizes.elevationMargin * 2
             WlrLayershell.namespace: "quickshell:osk"
@@ -55,6 +68,17 @@ Scope { // Scope
 
             mask: Region {
                 item: oskBackground
+            }
+
+            // Center keyboard when entering floating mode
+            Connections {
+                target: root
+                function onOskModeChanged() {
+                    if (root.oskMode === 0 && oskRoot.screen) {
+                        root.floatX = Math.max(0, (oskRoot.screen.width - oskBackground.implicitWidth) / 2)
+                        Persistent.states.osk.floatX = root.floatX
+                    }
+                }
             }
 
             // Make it usable with other panels
@@ -71,12 +95,16 @@ Scope { // Scope
             }
             Rectangle {
                 id: oskBackground
-                anchors.centerIn: parent
+                // Always centered. Width switches between content-sized and parent-filling.
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: root.oskMode === 1 ? parent.width : implicitWidth
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.windowRounding
                 property real padding: 10
+                property real dragHandleHeight: 24
                 implicitWidth: oskRowLayout.implicitWidth + padding * 2
-                implicitHeight: oskRowLayout.implicitHeight + padding * 2
+                implicitHeight: oskRowLayout.implicitHeight + dragHandleHeight + padding * 2
 
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
@@ -84,19 +112,75 @@ Scope { // Scope
                     }
                 }
 
+                // handle
+                Item {
+                    id: dragHandle
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: oskBackground.dragHandleHeight
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.topMargin: 2
+                        radius: Appearance.rounding.verysmall
+                        color: Appearance.colors.colLayer1
+
+                        MaterialSymbol {
+                            anchors.centerIn: parent
+                            text: "drag_indicator"
+                            iconSize: Appearance.font.pixelSize.small
+                            color: Appearance.colors.colOnLayer2
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.OpenHandCursor
+                        property real lastX: 0
+                        property real lastY: 0
+
+                        onPressed: (mouse) => {
+                            lastX = mouse.x
+                            lastY = mouse.y
+                        }
+                        onPositionChanged: (mouse) => {
+                            if (pressed) {
+                                if (root.oskMode === 0) {
+                                    root.floatX = Math.max(0, root.floatX + mouse.x - lastX)
+                                }
+                                root.floatY = Math.max(0, root.floatY + mouse.y - lastY)
+                                lastX = mouse.x
+                                lastY = mouse.y
+                            }
+                        }
+                        onReleased: {
+                            Persistent.states.osk.floatX = root.floatX
+                            Persistent.states.osk.floatY = root.floatY
+                        }
+                    }
+                }
+
                 RowLayout {
                     id: oskRowLayout
-                    anchors.centerIn: parent
+                    // Always centered. Width switches between content-sized and parent-filling.
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: oskBackground.dragHandleHeight / 2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: root.oskMode === 1 ? parent.width - 2 * oskBackground.padding : implicitWidth
                     spacing: 5
                     VerticalButtonGroup {
-                        OskControlButton { // Pin button
-                            toggled: root.pinned
-                            downAction: () => root.pinned = !root.pinned
+                        OskControlButton { // Mode cycle button
+                            toggled: root.oskMode === 1
+                            downAction: () => {
+                                root.oskMode = (root.oskMode + 1) % 2
+                                Persistent.states.osk.mode = root.oskMode
+                            }
                             contentItem: MaterialSymbol {
-                                text: "keep"
+                                text: ["open_in_full", "width_full"][root.oskMode]
                                 horizontalAlignment: Text.AlignHCenter
                                 iconSize: Appearance.font.pixelSize.larger
-                                color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                color: root.oskMode === 0 ? Appearance.colors.colOnLayer0 : Appearance.m3colors.m3onPrimary
                             }
                         }
                         OskControlButton {

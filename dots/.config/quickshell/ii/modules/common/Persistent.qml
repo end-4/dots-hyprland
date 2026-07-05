@@ -145,6 +145,12 @@ Singleton {
                 }
             }
 
+            property JsonObject osk: JsonObject {
+                property int mode: 0  // 0=pinned, 1=floating, 2=fullwidth
+                property real floatX: 50
+                property real floatY: 100
+            }
+
             property JsonObject timer: JsonObject {
                 property JsonObject pomodoro: JsonObject {
                     property bool running: false
