@@ -5,6 +5,7 @@ import QtQuick.Layouts
 
 Item {
     id: root    
+    property bool stretchKeys: false
     property var layouts: Layouts.byName
     property var activeLayoutName: (layouts.hasOwnProperty(Config.options?.osk.layout)) 
         ? Config.options?.osk.layout 
@@ -33,6 +34,7 @@ Item {
                     delegate: OskKey { 
                         required property var modelData
                         keyData: modelData
+                        stretchAll: root.stretchKeys
                     }
                 }
             }

@@ -12,6 +12,7 @@ RippleButton {
     property string type: keyData.keytype
     property var keycode: keyData.keycode
     property string shape: keyData.shape
+    property bool stretchAll: false
     property bool isShift: Ydotool.shiftKeys.includes(keycode)
     property bool isBackspace: (key.toLowerCase() == "backspace")
     property bool isEnter: (key.toLowerCase() == "enter" || key.toLowerCase() == "return")
@@ -40,7 +41,7 @@ RippleButton {
     buttonRadius: Appearance.rounding.small
     implicitWidth: baseWidth * widthMultiplier[shape] || baseWidth
     implicitHeight: baseHeight * heightMultiplier[shape] || baseHeight
-    Layout.fillWidth: shape == "space" || shape == "expand"
+    Layout.fillWidth: stretchAll ? (shape != "empty") : (shape == "space" || shape == "expand")
 
     Connections {
         target: Ydotool

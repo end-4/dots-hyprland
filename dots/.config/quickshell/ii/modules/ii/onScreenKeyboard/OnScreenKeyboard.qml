@@ -112,7 +112,7 @@ Scope { // Scope
                     }
                 }
 
-                // handle
+                //  handle
                 Item {
                     id: dragHandle
                     anchors.top: parent.top
@@ -204,6 +204,7 @@ Scope { // Scope
                     OskContent {
                         id: oskContent
                         Layout.fillWidth: true
+                        stretchKeys: root.oskMode === 1
                     }
                 }
             }
