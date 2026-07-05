@@ -27,11 +27,16 @@ ContentPage {
     property int previewCountdown: 0
     property bool previewActive: false
     property var previewSnapshot: []
+    property string previewLuaContent: ""
     property var committedState: []
 
     property var expandedStates: ({})
+    property int _rev: 0
 
-    readonly property bool hasChanges: JSON.stringify(root.monitors) !== JSON.stringify(root.committedState)
+    readonly property bool hasChanges: {
+        root._rev;
+        return JSON.stringify(root.monitors) !== JSON.stringify(root.committedState);
+    }
 
     function logicalW(m) {
         const w = (m.transform % 2 === 1) ? m.resH : m.resW;
@@ -122,8 +127,19 @@ ContentPage {
         }
     }
 
+    function writeLuaFile() {
+        const linesLua = [
+            "-- Managed by Displays page of Settings app (Super+I).",
+            ...buildMonitorSpecsLua(),
+            "hl.monitor({ output = '', mode = 'preferred', position = 'auto', scale = 1 }) -- Fallback for unconfigured monitors"
+        ];
+        const contentLua = linesLua.join("\n") + "\n";
+        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsLua}' << 'HYPRMON_EOF'\n${contentLua}HYPRMON_EOF`]);
+    }
+
     function startPreview() {
         root.previewSnapshot = JSON.parse(JSON.stringify(root.committedState));
+        root.writeLuaFile();
         root.applyRuntime();
         root.previewCountdown = 15;
         root.previewActive = true;
@@ -136,6 +152,7 @@ ContentPage {
         root.previewActive = false;
         root.monitors = JSON.parse(JSON.stringify(root.previewSnapshot));
         root.updateCommittedState();
+        root.writeLuaFile();
         root.applyRuntime();
     }
 
@@ -176,23 +193,22 @@ ContentPage {
     }
 
     function applyAndSave() {
-        const linesLua = [
-            "-- Managed by Displays page of Settings app (Super+I).",
-            ...buildMonitorSpecsLua(),
-            "hl.monitor({ output = '', mode = 'preferred', position = 'auto', scale = 1 }) -- Fallback for unconfigured monitors"
-        ];
-        const contentLua = linesLua.join("\n") + "\n";
-
-        Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsLua}' << 'HYPRMON_EOF'\n${contentLua}HYPRMON_EOF`]);
-
-        applyRuntime();
+        root.writeLuaFile();
+        root.applyRuntime();
         root.updateCommittedState();
-
         Quickshell.execDetached(["notify-send", "Displays", Translation.tr("Layout applied and saved")]);
     }
 
+    property bool _pendingCommit: false
+
     function commit() {
-        root.monitors = root.monitors.slice();
+        if (root._pendingCommit) return;
+        root._pendingCommit = true;
+        root._rev++;
+        Qt.callLater(() => {
+            root.monitors = root.monitors.slice();
+            root._pendingCommit = false;
+        });
     }
 
     function setMonitorProp(index, prop, value) {
@@ -325,7 +341,7 @@ ContentPage {
                 DialogButton {
                     buttonText: Translation.tr("Apply layout")
                     enabled: root.monitors.length > 0
-                    onClicked: root.applyRuntime()
+                    onClicked: { root.writeLuaFile(); root.applyRuntime(); }
                 }
 
                 DialogButton {
