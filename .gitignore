@@ -15,3 +15,6 @@ __pycache__/
 
 # Emacs auto backup file
 *~
+
+dots/.config/quickshell/ii/.agents/
+knowledge.md

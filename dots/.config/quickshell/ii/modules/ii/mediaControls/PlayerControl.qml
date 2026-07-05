@@ -21,9 +21,6 @@ Item { // Player instance
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
-    property list<real> visualizerPoints: []
-    property real maxVisualizerValue: 1000 // Max value in the data points
-    property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
 
     property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
@@ -132,16 +129,6 @@ Item { // Player instance
                 color: ColorUtils.transparentize(blendedColors.colLayer0, 0.3)
                 radius: root.radius
             }
-        }
-
-        WaveVisualizer {
-            id: visualizerCanvas
-            anchors.fill: parent
-            live: root.player?.isPlaying
-            points: root.visualizerPoints
-            maxVisualizerValue: root.maxVisualizerValue
-            smoothing: root.visualizerSmoothing
-            color: blendedColors.colPrimary
         }
 
         RowLayout {
