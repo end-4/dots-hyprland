@@ -153,11 +153,35 @@ Singleton {
     }
 
     // Status update
+    // NOTE: debounced. nmcli monitor can emit several lines within the same
+    // second during wifi state changes (radio off/on, scan, associate, DHCP,
+    // connected). Previously each line called update() unconditionally,
+    // which could set running = true on a Process that was already running,
+    // racing its in-flight stdout callback teardown and crashing quickshell.
+    // Now a call that arrives while the previous batch is still in flight is
+    // deferred via pendingUpdate and re-run once every process has exited.
+    property bool pendingUpdate: false
+
     function update() {
+        if (updateConnectionType.running || wifiStatusProcess.running ||
+            updateNetworkName.running || updateNetworkStrength.running) {
+            pendingUpdate = true;
+            return;
+        }
         updateConnectionType.startCheck();
-        wifiStatusProcess.running = true
+        wifiStatusProcess.running = true;
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
+    }
+
+    function maybeRunPendingUpdate() {
+        if (!pendingUpdate)
+            return;
+        if (updateConnectionType.running || wifiStatusProcess.running ||
+            updateNetworkName.running || updateNetworkStrength.running)
+            return;
+        pendingUpdate = false;
+        update();
     }
 
     Process {
@@ -216,6 +240,7 @@ Singleton {
             root.wifiStatus = wifiStatus;
             root.ethernet = hasEthernet;
             root.wifi = hasWifi;
+            root.maybeRunPendingUpdate();
         }
     }
 
@@ -228,6 +253,9 @@ Singleton {
                 root.networkName = data;
             }
         }
+        onExited: (exitCode, exitStatus) => {
+            root.maybeRunPendingUpdate();
+        }
     }
 
     Process {
@@ -238,6 +266,9 @@ Singleton {
             onRead: data => {
                 root.networkStrength = parseInt(data);
             }
+        }
+        onExited: (exitCode, exitStatus) => {
+            root.maybeRunPendingUpdate();
         }
     }
 
@@ -252,6 +283,7 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 root.wifiEnabled = text.trim() === "enabled";
+                root.maybeRunPendingUpdate();
             }
         }
     }
