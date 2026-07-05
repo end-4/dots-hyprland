@@ -14,6 +14,7 @@ ContentPage {
     forceWidth: true
 
     readonly property string monitorsLua: FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.lua`)
+    readonly property string statePath: FileUtils.trimFileProtocol(`${Directories.config}/hypr/display_state.json`)
 
     property var monitors: []
     property int selectedIndex: 0
@@ -38,13 +39,18 @@ ContentPage {
         return JSON.stringify(root.monitors) !== JSON.stringify(root.committedState);
     }
 
+    function mirrorSource(m) {
+        return m.mirror ? root.monitors.find(o => o.name === m.mirror) : null;
+    }
     function logicalW(m) {
-        const w = (m.transform % 2 === 1) ? m.resH : m.resW;
-        return w / m.monScale;
+        const mon = root.mirrorSource(m) || m;
+        const w = (mon.transform % 2 === 1) ? mon.resH : mon.resW;
+        return w / mon.monScale;
     }
     function logicalH(m) {
-        const h = (m.transform % 2 === 1) ? m.resW : m.resH;
-        return h / m.monScale;
+        const mon = root.mirrorSource(m) || m;
+        const h = (mon.transform % 2 === 1) ? mon.resW : mon.resH;
+        return h / mon.monScale;
     }
 
     function primaryMonitor() {
@@ -67,9 +73,12 @@ ContentPage {
             onStreamFinished: {
                 try {
                     const data = JSON.parse(text.trim());
+                    const oldList = root.monitors.slice();
+                    const oldStates = root.expandedStates;
                     const list = [];
                     for (let i = 0; i < data.length; i++) {
                         const d = data[i];
+                        const old = oldList.find(m => m.name === d.name);
                         const modes = [];
                         for (const ms of (d.availableModes ?? [])) {
                             const match = ms.match(/(\d+)x(\d+)@([\d.]+)Hz/);
@@ -78,6 +87,7 @@ ContentPage {
                             if (!modes.some(o => o.w === mode.w && o.h === mode.h && Math.round(o.rate) === Math.round(mode.rate)))
                                 modes.push(mode);
                         }
+                        const saved = !old ? root.savedState.find(s => s.name === d.name) : null;
                         list.push({
                             name: d.name,
                             description: d.description ?? "",
@@ -85,15 +95,30 @@ ContentPage {
                             rate: d.refreshRate ?? 60,
                             monScale: d.scale ?? 1.0,
                             transform: d.transform ?? 0,
-                            posX: d.x, posY: d.y,
+                            posX: old ? old.posX : (saved ? saved.posX : d.x),
+                            posY: old ? old.posY : (saved ? saved.posY : d.y),
                             enabled: !d.disabled,
                             focused: !!d.focused,
-                            modes: modes
+                            modes: modes,
+                            mirror: old ? old.mirror : (saved ? saved.mirror : (d.mirror ?? ""))
                         });
                         if (d.focused) root.selectedIndex = i;
                     }
+                    // Auto-offset mirrored monitors to prevent canvas overlap
+                    for (let i = 0; i < list.length; i++) {
+                        const m = list[i];
+                        if (!m.mirror) continue;
+                        const src = list.find(o => o.name === m.mirror);
+                        if (!src) continue;
+                        const srcR = src.posX + root.logicalW(src);
+                        const srcB = src.posY + root.logicalH(src);
+                        if (m.posX >= src.posX && m.posX < srcR && m.posY >= src.posY && m.posY < srcB) {
+                            m.posX = srcR;
+                            m.posY = src.posY;
+                        }
+                    }
                     root.monitors = list;
-                    root.expandedStates = ({});
+                    root.expandedStates = oldStates;
                     root.updateCommittedState();
                     if (!root.selectedSecondaryMonitor && root.secondaryMonitor())
                         root.selectedSecondaryMonitor = root.secondaryMonitor().name;
@@ -135,6 +160,25 @@ ContentPage {
         ];
         const contentLua = linesLua.join("\n") + "\n";
         Quickshell.execDetached(["bash", "-c", `cat > '${root.monitorsLua}' << 'HYPRMON_EOF'\n${contentLua}HYPRMON_EOF`]);
+    }
+
+    function writeStateFile() {
+        const state = root.monitors.map(m => ({
+            name: m.name,
+            mirror: m.mirror,
+            posX: m.posX,
+            posY: m.posY
+        }));
+        root.savedState = state;
+        Quickshell.execDetached(["bash", "-c", `cat > '${root.statePath}' << 'HYPRSTATE_EOF'\n${JSON.stringify(state)}\nHYPRSTATE_EOF`]);
+    }
+
+    property var savedState: []
+    FileView {
+        id: stateFileView
+        path: Qt.resolvedUrl(root.statePath)
+        onLoaded: root.savedState = JSON.parse(stateFileView.text())
+        onLoadFailed: (err) => { if (err === FileViewError.FileNotFound) root.savedState = []; }
     }
 
     function startPreview() {
@@ -180,6 +224,7 @@ ContentPage {
             }
             let s = `hl.monitor({ output = '${m.name}', mode = '${m.resW}x${m.resH}@${m.rate.toFixed(2)}', position = '${Math.round(m.posX - minX)}x${Math.round(m.posY - minY)}', scale = ${m.monScale}`;
             s += `, transform = ${m.transform}`;
+            if (m.mirror) s += `, mirror = '${m.mirror}'`;
             s += " })";
             specs.push(s);
         }
@@ -194,6 +239,7 @@ ContentPage {
 
     function applyAndSave() {
         root.writeLuaFile();
+        root.writeStateFile();
         root.applyRuntime();
         root.updateCommittedState();
         Quickshell.execDetached(["notify-send", "Displays", Translation.tr("Layout applied and saved")]);
@@ -1109,6 +1155,26 @@ ContentPage {
                             {displayName: "180°", icon: "sync", value: 2},
                             {displayName: "270°", icon: "rotate_90_degrees_ccw", value: 3}
                         ]
+                    }
+                }
+
+                // Mirror mode (non-eDP only)
+                ContentSubsection {
+                    visible: !itemRoot.monitorData.name.toLowerCase().startsWith("edp")
+                    title: Translation.tr("Display mode")
+                    Layout.fillWidth: true
+
+                    ConfigSelectionArray {
+                        currentValue: itemRoot.monitorData.mirror
+                        onSelected: newValue => root.setMonitorProp(itemRoot.monitorIndex, "mirror", newValue)
+                        options: {
+                            const opts = [{displayName: Translation.tr("Extend"), value: ""}];
+                            for (const m of root.monitors) {
+                                if (m.name === itemRoot.monitorData.name) continue;
+                                opts.push({displayName: Translation.tr("Mirror: %1").arg(m.name), value: m.name});
+                            }
+                            return opts;
+                        }
                     }
                 }
 
