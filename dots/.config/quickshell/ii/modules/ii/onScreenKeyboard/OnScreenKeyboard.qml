@@ -95,120 +95,116 @@ Scope { // Scope
             }
             Rectangle {
                 id: oskBackground
-                // Always centered. Width switches between content-sized and parent-filling.
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: root.oskMode === 1 ? parent.width : implicitWidth
-                color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.windowRounding
-                property real padding: 10
-                property real dragHandleHeight: 24
-                implicitWidth: oskRowLayout.implicitWidth + padding * 2
-                implicitHeight: oskRowLayout.implicitHeight + dragHandleHeight + padding * 2
+                    width: root.oskMode === 1 ? parent.width : implicitWidth
+                    color: Appearance.colors.colLayer0
+                    radius: Appearance.rounding.windowRounding
+                    property real padding: 10
+                    property real dragHandleHeight: 24
+                    implicitWidth: oskRowLayout.implicitWidth + padding * 2
+                    implicitHeight: oskRowLayout.implicitHeight + dragHandleHeight + padding * 2
 
-                Keys.onPressed: (event) => { // Esc to close
-                    if (event.key === Qt.Key_Escape) {
-                        oskRoot.hide()
-                    }
-                }
-
-                //  handle
-                Item {
-                    id: dragHandle
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: oskBackground.dragHandleHeight
-
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.topMargin: 2
-                        radius: Appearance.rounding.verysmall
-                        color: Appearance.colors.colLayer1
-
-                        MaterialSymbol {
-                            anchors.centerIn: parent
-                            text: "drag_indicator"
-                            iconSize: Appearance.font.pixelSize.small
-                            color: Appearance.colors.colOnLayer2
+                    Keys.onPressed: (event) => { // Esc to close
+                        if (event.key === Qt.Key_Escape) {
+                            oskRoot.hide()
                         }
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.OpenHandCursor
-                        property real lastX: 0
-                        property real lastY: 0
+                    // handle
+                    Item {
+                        id: dragHandle
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: oskBackground.dragHandleHeight
 
-                        onPressed: (mouse) => {
-                            lastX = mouse.x
-                            lastY = mouse.y
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.topMargin: 2
+                            radius: Appearance.rounding.verysmall
+                            color: Appearance.colors.colLayer1
+
+                            MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: "drag_indicator"
+                                iconSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer2
+                            }
                         }
-                        onPositionChanged: (mouse) => {
-                            if (pressed) {
-                                if (root.oskMode === 0) {
-                                    root.floatX = Math.max(0, root.floatX + mouse.x - lastX)
-                                }
-                                root.floatY = Math.max(0, root.floatY + mouse.y - lastY)
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.OpenHandCursor
+                            property real lastY: 0
+                            property real lastX: 0
+
+                            onPressed: (mouse) => {
                                 lastX = mouse.x
                                 lastY = mouse.y
                             }
-                        }
-                        onReleased: {
-                            Persistent.states.osk.floatX = root.floatX
-                            Persistent.states.osk.floatY = root.floatY
+                            onPositionChanged: (mouse) => {
+                                if (pressed) {
+                                    if (root.oskMode === 0) {
+                                        root.floatX = Math.max(0, root.floatX + (mouse.x - lastX))
+                                        lastX = mouse.x
+                                    }
+                                    root.floatY = Math.max(0, root.floatY + (mouse.y - lastY))
+                                    lastY = mouse.y
+                                }
+                            }
+                            onReleased: {
+                                Persistent.states.osk.floatX = root.floatX
+                                Persistent.states.osk.floatY = root.floatY
+                            }
                         }
                     }
-                }
 
-                RowLayout {
-                    id: oskRowLayout
-                    // Always centered. Width switches between content-sized and parent-filling.
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: oskBackground.dragHandleHeight / 2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: root.oskMode === 1 ? parent.width - 2 * oskBackground.padding : implicitWidth
-                    spacing: 5
-                    VerticalButtonGroup {
-                        OskControlButton { // Mode cycle button
-                            toggled: root.oskMode === 1
-                            downAction: () => {
-                                root.oskMode = (root.oskMode + 1) % 2
-                                Persistent.states.osk.mode = root.oskMode
+                    RowLayout {
+                        id: oskRowLayout
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: oskBackground.dragHandleHeight / 2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: root.oskMode === 1 ? parent.width - 2 * oskBackground.padding : implicitWidth
+                        spacing: 5
+                        VerticalButtonGroup {
+                            OskControlButton { // Mode cycle button
+                                toggled: root.oskMode === 1
+                                downAction: () => {
+                                    root.oskMode = (root.oskMode + 1) % 2
+                                    Persistent.states.osk.mode = root.oskMode
+                                }
+                                contentItem: MaterialSymbol {
+                                    text: ["open_in_full", "width_full"][root.oskMode]
+                                    horizontalAlignment: Text.AlignHCenter
+                                    iconSize: Appearance.font.pixelSize.larger
+                                    color: root.oskMode === 0 ? Appearance.colors.colOnLayer0 : Appearance.m3colors.m3onPrimary
+                                }
                             }
-                            contentItem: MaterialSymbol {
-                                text: ["open_in_full", "width_full"][root.oskMode]
-                                horizontalAlignment: Text.AlignHCenter
-                                iconSize: Appearance.font.pixelSize.larger
-                                color: root.oskMode === 0 ? Appearance.colors.colOnLayer0 : Appearance.m3colors.m3onPrimary
+                            OskControlButton {
+                                onClicked: () => {
+                                    oskRoot.hide()
+                                }
+                                contentItem: MaterialSymbol {
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: "keyboard_hide"
+                                    iconSize: Appearance.font.pixelSize.larger
+                                }
                             }
                         }
-                        OskControlButton {
-                            onClicked: () => {
-                                oskRoot.hide()
-                            }
-                            contentItem: MaterialSymbol {
-                                horizontalAlignment: Text.AlignHCenter
-                                text: "keyboard_hide"
-                                iconSize: Appearance.font.pixelSize.larger
-                            }
+                        Rectangle {
+                            Layout.topMargin: 20
+                            Layout.bottomMargin: 20
+                            Layout.fillHeight: true
+                            implicitWidth: 1
+                            color: Appearance.colors.colOutlineVariant
                         }
-                    }
-                    Rectangle {
-                        Layout.topMargin: 20
-                        Layout.bottomMargin: 20
-                        Layout.fillHeight: true
-                        implicitWidth: 1
-                        color: Appearance.colors.colOutlineVariant
-                    }
-                    OskContent {
-                        id: oskContent
-                        Layout.fillWidth: true
-                        stretchKeys: root.oskMode === 1
-                    }
-                }
+                        OskContent {
+                            id: oskContent
+                            Layout.fillWidth: true
+                            stretchKeys: root.oskMode === 1
+                        }                }
             }
-
         }
     }
 
