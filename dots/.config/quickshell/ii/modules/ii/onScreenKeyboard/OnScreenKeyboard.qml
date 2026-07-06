@@ -81,12 +81,18 @@ Scope { // Scope
                 }
             }
 
-            // Make it usable with other panels
+            // Dismiss on click outside
             Component.onCompleted: {
-                GlobalFocusGrab.addPersistent(oskRoot);
+                GlobalFocusGrab.addDismissable(oskRoot);
             }
             Component.onDestruction: {
-                GlobalFocusGrab.removePersistent(oskRoot);
+                GlobalFocusGrab.removeDismissable(oskRoot);
+            }
+            Connections {
+                target: GlobalFocusGrab
+                function onDismissed() {
+                    oskRoot.hide();
+                }
             }
 
             // Background
