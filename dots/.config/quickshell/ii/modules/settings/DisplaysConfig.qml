@@ -616,6 +616,7 @@ ContentPage {
         ContentSection {
             icon: "workspaces"
             title: Translation.tr("Secondary workspace")
+            Layout.topMargin: 30
 
             ConfigRow {
                 StyledText {
@@ -665,6 +666,7 @@ ContentPage {
         ContentSection {
             icon: "auto_awesome"
             title: "Screensaver"
+            Layout.topMargin: 30
 
             ConfigSwitch {
                 text: Translation.tr("Enable screensaver")
