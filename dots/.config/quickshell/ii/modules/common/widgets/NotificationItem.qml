@@ -127,7 +127,7 @@ Item { // Notification item area
 
         color: (expanded && !onlyNotification) ? 
             (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                ColorUtils.mix(Appearance.colors.colSecondaryContainer, Appearance.colors.colLayer0, 0.35) :
+                ColorUtils.mix(Appearance.colors.colSecondaryContainer, Appearance.colors.colLayer2, 0.35) :
                 (Appearance.colors.colLayer3) :
             ColorUtils.transparentize(Appearance.colors.colLayer3)
 
