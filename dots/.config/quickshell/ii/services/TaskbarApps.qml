@@ -20,6 +20,21 @@ Singleton {
         }
     }
 
+    function pinnedAppIndex(appId) {
+        return Config.options.dock.pinnedApps.indexOf(appId);
+    }
+
+    function movePinnedApp(fromIndex, toIndex) {
+        const pinned = Config.options.dock.pinnedApps;
+        if (fromIndex < 0 || fromIndex >= pinned.length) return;
+        if (toIndex < 0 || toIndex >= pinned.length) return;
+        if (fromIndex === toIndex) return;
+        const apps = [...pinned];
+        const [item] = apps.splice(fromIndex, 1);
+        apps.splice(toIndex, 0, item);
+        Config.options.dock.pinnedApps = apps;
+    }
+
     property list<var> apps: {
         var map = new Map();
 
