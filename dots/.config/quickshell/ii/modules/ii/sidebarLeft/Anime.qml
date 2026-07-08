@@ -200,6 +200,18 @@ Item {
                     nsfwPath: root.nsfwPath
                 }
 
+                footer: Item {
+                    property bool isLoading: !root.pullLoading && Booru.runningRequests > 0 && root.responses.length > 0
+                    width: booruResponseListView.width
+                    implicitHeight: isLoading ? footerIndicator.implicitHeight + 20 : 0
+                    MaterialLoadingIndicator {
+                        id: footerIndicator
+                        anchors.centerIn: parent
+                        loading: parent.isLoading
+                        visible: parent.isLoading
+                    }
+                }
+
                 onDragEnded: { // Pull to load more
                     const gap = booruResponseListView.verticalOvershoot
                     if (gap > root.pullLoadingGap) {
@@ -212,11 +224,18 @@ Item {
             PagePlaceholder {
                 id: placeholderItem
                 z: 2
-                shown: root.responses.length === 0
+                shown: root.responses.length === 0 && Booru.runningRequests === 0
                 icon: "bookmark_heart"
                 title: Translation.tr("Anime boorus")
                 description: ""
                 shape: MaterialShape.Shape.Bun
+            }
+
+            MaterialLoadingIndicator {
+                z: 3
+                anchors.centerIn: parent
+                visible: root.responses.length === 0 && Booru.runningRequests > 0
+                loading: true
             }
 
             ScrollToBottomButton {
