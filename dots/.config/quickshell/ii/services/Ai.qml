@@ -11,9 +11,10 @@ import qs.services.ai
 
 /**
  * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
- * Supports Gemini and OpenAI models.
- * Limitations:
- * - For now functions only work with Gemini API format
+ * Supports Gemini and OpenAI models (incl. local Ollama / OpenRouter).
+ * Function calling works for both the Gemini format and the OpenAI format
+ * (streamed tool_calls are assembled in OpenAiApiStrategy), so local models
+ * can use tools too.
  */
 Singleton {
     id: root
