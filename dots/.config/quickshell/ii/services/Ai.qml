@@ -236,7 +236,7 @@ Singleton {
             "none": [],
         }
     }
-    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
+    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format] ?? {})
     property var toolDescriptions: {
         "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
         "search": Translation.tr("Gives the model search capabilities (immediately)"),
@@ -486,9 +486,15 @@ Singleton {
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
-        modelId = modelId.toLowerCase()
-        if (modelList.indexOf(modelId) !== -1) {
-            const model = models[modelId]
+        // Resolve the real key case-insensitively. Keys come from safeModelName(),
+        // which preserves case, so Ollama quant tags register as e.g.
+        // `qwen2.5_14b-instruct-q3_K_M` (uppercase K_M). A lowercased request
+        // (`...q3_k_m`) would miss and dump the whole model catalog as
+        // "Invalid model. Supported:". Match lowercase-vs-real, keep the real key.
+        const wantedId = modelId.toLowerCase()
+        const resolvedId = modelList.find(id => String(id).toLowerCase() === wantedId)
+        if (resolvedId !== undefined) {
+            const model = models[resolvedId]
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(
@@ -497,7 +503,7 @@ Singleton {
                 );
                 return;
             }
-            if (setPersistentState) Persistent.states.ai.model = modelId;
+            if (setPersistentState) Persistent.states.ai.model = resolvedId;
             if (feedback) root.addMessage(Translation.tr("Model set to %1").arg(model.name), root.interfaceRole);
             if (model.requires_key) {
                 // If key not there show advice

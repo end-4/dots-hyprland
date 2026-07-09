@@ -801,8 +801,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 ApiInputBoxIndicator {
                     // Model indicator
                     icon: "api"
-                    text: Ai.getModel().name
-                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
+                    // Optional-chain: local ollama models are added to Ai.models
+                    // asynchronously, so this binding evaluates against an
+                    // incomplete map on every reload (was a warn burst on each reload).
+                    text: Ai.getModel()?.name ?? "…"
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel()?.name ?? "…").arg(root.commandPrefix)
                 }
 
                 ApiInputBoxIndicator {
