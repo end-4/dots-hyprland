@@ -786,17 +786,57 @@ Singleton {
         property string shellCommand: ""
         property AiMessageData message
         property string baseMessageContent: ""
+        property bool sawStderr: false
+        property bool truncated: false
+        // Append captured output (stdout or stderr) to the function response so
+        // the model can see it. Without this, stderr was discarded and a failing
+        // command looked like empty output — the model would then blindly retry
+        // the same command. Surfacing stderr lets the model see "command not
+        // found" / errors and adapt instead.
+        function appendOutput(text) {
+            // Cap what the model has to read: 8k chars, then one explicit
+            // truncation marker so it knows the output continued (and doesn't
+            // overclaim from a partial view).
+            if (commandExecutionProc.message.functionResponse.length >= 8000) {
+                if (commandExecutionProc.truncated) return;
+                commandExecutionProc.truncated = true;
+                text = "[[ output truncated at 8000 chars — the command produced more; do not assume anything about the rest ]]";
+            }
+            commandExecutionProc.message.functionResponse += text + "\n\n";
+            const updatedContent = commandExecutionProc.baseMessageContent + `\n\n<think>\n<tt>${commandExecutionProc.message.functionResponse}</tt>\n</think>`;
+            commandExecutionProc.message.rawContent = updatedContent;
+            commandExecutionProc.message.content = updatedContent;
+        }
         command: ["bash", "-c", shellCommand]
         stdout: SplitParser {
+            onRead: (output) => commandExecutionProc.appendOutput(output)
+        }
+        stderr: SplitParser {
             onRead: (output) => {
-                commandExecutionProc.message.functionResponse += output + "\n\n";
-                const updatedContent = commandExecutionProc.baseMessageContent + `\n\n<think>\n<tt>${commandExecutionProc.message.functionResponse}</tt>\n</think>`;
-                commandExecutionProc.message.rawContent = updatedContent;
-                commandExecutionProc.message.content = updatedContent;
+                commandExecutionProc.sawStderr = true;
+                commandExecutionProc.appendOutput("[stderr] " + output);
+            }
+        }
+        onRunningChanged: {
+            if (running) {
+                sawStderr = false; // reset per execution
+                truncated = false;
             }
         }
         onExited: (exitCode, exitStatus) => {
-            commandExecutionProc.message.functionResponse += `[[ Command exited with code ${exitCode} (${exitStatus}) ]]\n`;
+            // Command output is data, not instructions: wrap it in an untrusted
+            // envelope before the model reads it, with inner closing tags
+            // defanged so output can't break out of the envelope.
+            commandExecutionProc.message.functionResponse =
+                "<untrusted_output>\n"
+                + commandExecutionProc.message.functionResponse.split("</untrusted_output>").join("</untrusted-output>")
+                + "\n</untrusted_output>\n";
+            // Make failure explicit and actionable so the model doesn't retry blindly.
+            if (exitCode !== 0) {
+                commandExecutionProc.message.functionResponse += `[[ Command FAILED with exit code ${exitCode} (${exitStatus})${exitCode === 127 ? " — command not found; check the name/PATH, do NOT re-run it unchanged" : ""}. Do not repeat this exact command; report the failure or try a different approach. ]]\n`;
+            } else {
+                commandExecutionProc.message.functionResponse += `[[ Command exited with code ${exitCode} (${exitStatus}) ]]\n`;
+            }
             requester.makeRequest(); // Continue
         }
     }
