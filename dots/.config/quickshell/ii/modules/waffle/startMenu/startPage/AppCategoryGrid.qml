@@ -279,7 +279,7 @@ Rectangle {
 
         onClicked: {
             GlobalStates.searchOpen = false;
-            desktopEntry.execute();
+            Quickshell.execDetached(["gtk-launch", desktopEntry.id]);
         }
 
         contentItem: Item {
