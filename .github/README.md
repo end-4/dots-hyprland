@@ -120,6 +120,7 @@ Widget system: Quickshell | Support: Yes
 ### illogical-impulse (AGS)
 
 Widget system: AGS | Support: No
+- [Repo's link](https://github.com/Satoxyan/HyprWNC)
 
 | AI | Common widgets |
 |:---|:---------------|
