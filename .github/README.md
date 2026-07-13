@@ -1,14 +1,13 @@
 <div align="center">
-    <h1>【 end_4's Hyprland dotfiles 】</h1>
+    <h1>【 My Personal Hyprland dotfiles (from end-4) 】</h1>
     <h3></h3>
 </div>
 
 <div align="center"> 
 
-![](https://img.shields.io/github/last-commit/end-4/dots-hyprland?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)
-![](https://img.shields.io/github/stars/end-4/dots-hyprland?style=for-the-badge&logo=andela&color=86dbd7&logoColor=D9E0EE&labelColor=1E202B)
-![](https://img.shields.io/github/repo-size/end-4/dots-hyprland?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B)
-<a href="https://discord.gg/GtdRBXgMwq"> <img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Finvites%2FGtdRBXgMwq%3Fwith_counts%3Dtrue&query=approximate_member_count&style=for-the-badge&logo=discord&logoColor=D9E0EE&label=discord&labelColor=%231E202B&color=86dbc0&link=https%3A%2F%2Fdiscord.gg%2FGtdRBXgMwq"> </a>
+![](https://img.shields.io/github/last-commit/Satoxyan/dots-hyprfork?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)
+![](https://img.shields.io/github/stars/Satoxyan/dots-hyprfork?style=for-the-badge&logo=andela&color=86dbd7&logoColor=D9E0EE&labelColor=1E202B)
+![](https://img.shields.io/github/repo-size/Satoxyan/dots-hyprfork?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B)
 
 </div>
 
@@ -97,21 +96,12 @@ Widget system: Quickshell | Support: Yes
 
  - [@clsty](https://github.com/clsty) for making the dotfiles accessible by taking care of the install script and many other things
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
- - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
+ - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey (end-4)
+ - [@dxnz-id](https://github.com/dxnz-id) for helping and supporting me with stuff
+ - PR and Idea: [@DevanshuDubey](https://github.com/DevanshuDubey), [@kxrur](https://github.com/kxrur), [@fb24m](https://github.com/fb24m), [@ReemX](https://github.com/ReemX), [@GazzD](https://github.com/GazzD), [@ParanoidExtreme](https://github.com/ParanoidExtreme), [@2cheikhhachem](https://github.com/cheikhhachem), [@CarlosBranty](https://github.com/CarlosBranty), [@reakjra](https://github.com/reakjra)
  - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan](https://github.com/fufexan/dotfiles)
-
-<div align="center">
-    <h2>• stonks •</h2>
-    <h3></h3>
-</div>
-
-- I promise not to attempt an +ULTRARICOSHOT irl... Coins can go here: https://github.com/sponsors/end-4
-- Tentacle cat hub twinkle internet points
-
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
-
 
 ---
 
@@ -133,46 +123,3 @@ Widget system: AGS | Support: No
 | ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
 | Window management | Weeb power |
 | ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
-
-#### m3ww
-
-Widget system: EWW | Support: No
-
-<a href="https://streamable.com/85ch8x">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-</a>
-
-#### NovelKnock
-
-Widget system: EWW | Support: No
-
-<a href="https://streamable.com/7vo61k">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-</a>
-
-#### Hybrid
-
-Widget system: EWW | Support: No
-
-<a href="https://streamable.com/4oogot">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-</a>
-
-#### Windoes
-
-Widget system: EWW | Support: No
-
-<a href="https://streamable.com/5qx614">
-<img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-</a>
-
-
-
-<div align="center">
-    <h2>• inspirations/copying •</h2>
-    <h3></h3>
-</div>
-
- - Inspiration: osu!lazer (Hybrid), Windows 11 (Windoes), AvdanOS (NovelKnock), Material Design 3 (m3ww & later)
- - Copying: Absolutely, feel free. Just follow the license and it's all good
- 
