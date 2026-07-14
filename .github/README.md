@@ -114,13 +114,12 @@ Widget system: Quickshell | Support: Yes
 </div>
 
 - **Unsupported!**
-- **Source**: illogical-impulse AGS in `ii-ags` branch, others in `archive` branch.
+- **Source**: illogical-impulse AGS in [here](https://github.com/Satoxyan/HyprWNC)
 - List is in reverse chronological order
 
 ### illogical-impulse (AGS)
 
 Widget system: AGS | Support: No
-- [Repo's link](https://github.com/Satoxyan/HyprWNC)
 
 | AI | Common widgets |
 |:---|:---------------|
