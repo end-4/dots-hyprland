@@ -285,6 +285,8 @@ Item {
                 delegate: ApiCommandButton {
                     id: tagButton
                     colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
+                    colBackgroundHover: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
+                    colBackgroundActive: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
                     bounce: false
                     contentItem: RowLayout {
                         anchors.centerIn: parent
