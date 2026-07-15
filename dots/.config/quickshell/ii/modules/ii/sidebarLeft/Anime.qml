@@ -284,7 +284,7 @@ Item {
                 }
                 delegate: ApiCommandButton {
                     id: tagButton
-                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer
+                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
                     bounce: false
                     contentItem: RowLayout {
                         anchors.centerIn: parent
@@ -292,7 +292,7 @@ Item {
                         StyledText {
                             Layout.fillWidth: false
                             font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.colors.colOnSecondaryContainer
+                            color: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainer : Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignRight
                             text: modelData.displayName ?? modelData.name
                         }
@@ -300,7 +300,7 @@ Item {
                             Layout.fillWidth: false
                             visible: modelData.count !== undefined
                             font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnSecondaryContainer
+                            color: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainer : Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignLeft
                             text: modelData.count ?? ""
                         }
@@ -328,6 +328,8 @@ Item {
                 tagInputField.text = updatedText;
                 tagInputField.cursorPosition = tagInputField.text.length;
                 tagInputField.forceActiveFocus();
+                tagInputField.searchTimer.stop();
+                root.suggestionList = [];
             }
 
             function acceptSelectedTag() {
@@ -446,7 +448,11 @@ Item {
                                 // Insert newline
                                 tagInputField.insert(tagInputField.cursorPosition, "\n")
                                 event.accepted = true
-                            } else { // Accept text
+                            } else if (tagSuggestions.visible && tagSuggestions.selectedIndex >= 0) {
+                                // Accept selected suggestion instead of submitting
+                                tagSuggestions.acceptSelectedTag();
+                                event.accepted = true
+                            } else { // Accept text (search)
                                 const inputText = tagInputField.text
                                 root.handleInput(inputText)
                                 tagInputField.clear()
