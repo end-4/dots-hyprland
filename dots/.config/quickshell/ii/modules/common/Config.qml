@@ -562,6 +562,10 @@ Singleton {
                         property string userId: ""
                         property string apiKey: ""
                     }
+                    property JsonObject rule34: JsonObject {
+                        property string userId: ""
+                        property string apiKey: ""
+                    }
                 }
                 property JsonObject cornerOpen: JsonObject {
                     property bool enable: true

@@ -328,8 +328,35 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Rule34")
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("User ID")
+                text: Config.options.sidebar.booru.rule34.userId
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.rule34.userId = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Rule34 numeric user ID.")
+                }
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("API Key")
+                text: Config.options.sidebar.booru.rule34.apiKey
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.rule34.apiKey = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Rule34 API key.")
+                }
+            }
+        }
     }
-
-
-
 }

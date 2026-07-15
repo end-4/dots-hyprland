@@ -192,6 +192,42 @@ Singleton {
                 })
             }
         },
+        "rule34": {
+            "name": "Rule34",
+            "url": "https://rule34.xxx",
+            "api": "https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1",
+            "defaultLimit": 43,
+            "description": Translation.tr("The original | All the NSFW you could ever want"),
+            "mapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
+                        "aspect_ratio": item.width / item.height,
+                        "tags": item.tags,
+                        "rating": item.rating.replace('general', 's').charAt(0),
+                        "is_nsfw": (item.rating != 's'),
+                        "md5": item.md5,
+                        "preview_url": item.preview_url,
+                        "sample_url": item.sample_url ?? item.file_url,
+                        "file_url": item.file_url,
+                        "file_ext": item.file_url.split('.').pop(),
+                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                    }
+                })
+            },
+            "tagSearchTemplate": "https://api.rule34.xxx/autocomplete.php?q={{query}}",
+            "tagMapFunc": (response) => {
+                return response.map(item => {
+                    var count = parseInt(item.label.match(/\((\d+)\)$/)?.[1]) || 0
+                    return {
+                        "name": item.value,
+                        "count": count
+                    }
+                })
+            }
+        },
         "waifu.im": {
             "name": "waifu.im",
             "url": "https://waifu.im",
@@ -296,7 +332,9 @@ Singleton {
             if (provider == "zerochan") {
                 providerMessage += Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in Settings -> Services option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!")
             } else if (provider == "gelbooru") {
-                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.")
+                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://gelbooru.com/index.php?page=account&s=options) on Gelbooru.")
+            } else if (provider == "rule34") {
+                providerMessage += Translation.tr(". Notes for Rule34:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://rule34.xxx/index.php?page=account&s=options) on Rule34.")
             }
             root.addSystemMessage(providerMessage)
         } else {
@@ -332,9 +370,11 @@ Singleton {
         var url = baseUrl
         var tagString = tags.join(" ")
         if (!nsfw && !(["zerochan", "waifu.im", "t.alcy.cc"].includes(currentProvider))) {
-            if (currentProvider == "gelbooru") 
+            if (currentProvider == "rule34")
+                tagString += " -ai -ai_generated -ai_assist -ai_art -ai-created";
+            else if (currentProvider == "gelbooru")
                 tagString += " rating:general";
-            else 
+            else
                 tagString += " rating:safe";
         }
         var params = []
@@ -345,6 +385,13 @@ Singleton {
         if (currentProvider === "gelbooru" && gelbooruApiKey && gelbooruUserId) {
             params.push("api_key=" + gelbooruApiKey);
             params.push("user_id=" + gelbooruUserId);
+        }
+        // Add Rule34 API credentials if needed
+        var rule34ApiKey = Config.options?.sidebar?.booru?.rule34?.apiKey || ""
+        var rule34UserId = Config.options?.sidebar?.booru?.rule34?.userId || ""
+        if (currentProvider === "rule34" && rule34ApiKey && rule34UserId) {
+            params.push("api_key=" + rule34ApiKey);
+            params.push("user_id=" + rule34UserId);
         }
 
         // Tags & limit
@@ -369,12 +416,12 @@ Singleton {
             params.push("quantity=" + effectiveLimit)
         }
         else {
-            if (currentProvider == "gelbooru") {
-                // Gelbooru DAPI pid is a 0-indexed page number (not item offset).
+            if (currentProvider == "gelbooru" || currentProvider == "rule34") {
+                // Gelbooru/Rule34 DAPI pid is a 0-indexed page number (not item offset).
                 // pid=0 → page 1, pid=1 → page 2, etc. regardless of limit.
                 // sort:id:desc in the tag string gives newest-first, consistent with the website.
-                const gelbooruTags = tagString + " sort:id:desc"
-                params.push("tags=" + encodeURIComponent(gelbooruTags))
+                const dapiTags = tagString + " sort:id:desc"
+                params.push("tags=" + encodeURIComponent(dapiTags))
                 params.push("limit=" + effectiveLimit)
                 params.push("pid=" + (page - 1))
             } else {
@@ -440,7 +487,7 @@ Singleton {
 
         try {
             // Required for danbooru and konachan
-            if (["danbooru", "konachan"].includes(currentProvider)) {
+            if (["danbooru", "konachan", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             else if (currentProvider == "zerochan") {
@@ -469,12 +516,18 @@ Singleton {
         }
         var url = provider.tagSearchTemplate.replace("{{query}}", encodeURIComponent(query))
 
-        // Inject Gelbooru API credentials into tag search URL
+        // Inject API credentials into tag search URL
         if (currentProvider === "gelbooru") {
             var gelbooruApiKey = Config.options?.sidebar?.booru?.gelbooru?.apiKey || ""
             var gelbooruUserId = Config.options?.sidebar?.booru?.gelbooru?.userId || ""
             if (gelbooruApiKey && gelbooruUserId) {
                 url += "&api_key=" + gelbooruApiKey + "&user_id=" + gelbooruUserId
+            }
+        } else if (currentProvider === "rule34") {
+            var rule34ApiKey = Config.options?.sidebar?.booru?.rule34?.apiKey || ""
+            var rule34UserId = Config.options?.sidebar?.booru?.rule34?.userId || ""
+            if (rule34ApiKey && rule34UserId) {
+                url += "&api_key=" + rule34ApiKey + "&user_id=" + rule34UserId
             }
         }
 
@@ -501,7 +554,7 @@ Singleton {
 
         try {
             // Required for danbooru, konachan, and gelbooru
-            if (["danbooru", "konachan", "gelbooru"].includes(currentProvider)) {
+            if (["danbooru", "konachan", "gelbooru", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()

@@ -551,14 +551,14 @@ Item {
                             Layout.alignment: Qt.AlignVCenter
                             font.pixelSize: Appearance.font.pixelSize.smaller
                             color: nsfwSwitch.enabled ? Appearance.colors.colOnLayer1 : Appearance.m3colors.m3outline
-                            text: Translation.tr("Allow NSFW")
+                            text: Booru.currentProvider === "rule34" ? Translation.tr("Allow AI") : Translation.tr("Allow NSFW")
                         }
                         StyledSwitch {
                             id: nsfwSwitch
                             enabled: Booru.currentProvider !== "zerochan"
                             scale: 0.6
                             Layout.alignment: Qt.AlignVCenter
-                            checked: (Persistent.states.booru.allowNsfw && Booru.currentProvider !== "zerochan")
+                            checked: Persistent.states.booru.allowNsfw
                             onCheckedChanged: {
                                 if (!nsfwSwitch.enabled) return;
                                 Persistent.states.booru.allowNsfw = checked;
