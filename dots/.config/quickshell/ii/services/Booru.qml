@@ -27,6 +27,7 @@ Singleton {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
+            "defaultLimit": 40,
             "description": Translation.tr("All-rounder | Good quality, decent quantity"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -61,6 +62,7 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.net",
             "api": "https://konachan.net/post.json",
+            "defaultLimit": 40,
             "description": Translation.tr("For desktop wallpapers | Good quality"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -95,6 +97,7 @@ Singleton {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
+            "defaultLimit": 20,
             "description": Translation.tr("Clean stuff | Excellent quality, no NSFW"),
             "mapFunc": (response) => {
                 response = response.items
@@ -122,6 +125,7 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
+            "defaultLimit": 20,
             "description": Translation.tr("The popular one | Best quantity, but quality can vary wildly"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -156,6 +160,7 @@ Singleton {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
+            "defaultLimit": 42,
             "description": Translation.tr("The hentai one | Great quantity, a lot of NSFW, quality varies wildly"),
             "mapFunc": (response) => {
                 response = response.post
@@ -191,6 +196,7 @@ Singleton {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/images",
+            "defaultLimit": 30,
             "description": Translation.tr("Waifus only | Excellent quality, limited quantity"),
             "mapFunc": (response) => {
                 response = response.items
@@ -221,6 +227,7 @@ Singleton {
             "name": "Alcy",
             "url": "https://t.alcy.cc",
             "api": "https://t.alcy.cc/",
+            "defaultLimit": 20,
             "description": Translation.tr("Large images | God tier quality, no NSFW."),
             "fixedTags": [
                 {
@@ -311,8 +318,16 @@ Singleton {
         })]
     }
 
-    function constructRequestUrl(tags, nsfw=true, limit=20, page=1) {
+    function constructRequestUrl(tags, nsfw=true, limit, page=1) {
         var provider = providers[currentProvider]
+        // User override: if limit is explicitly set and differs from default (20), use it globally
+        // Otherwise: use per-provider defaultLimit
+        var effectiveLimit;
+        if (limit !== undefined && limit !== 20) {
+            effectiveLimit = limit;
+        } else {
+            effectiveLimit = provider.defaultLimit ?? 20;
+        }
         var baseUrl = provider.api
         var url = baseUrl
         var tagString = tags.join(" ")
@@ -335,7 +350,7 @@ Singleton {
         // Tags & limit
         if (currentProvider === "zerochan") {
             params.push("c=" + tagString) // zerochan doesn't have search in api, so we use color
-            params.push("l=" + limit)
+            params.push("l=" + effectiveLimit)
             params.push("s=" + "fav")
             params.push("t=" + 1)
             params.push("p=" + page)
@@ -345,13 +360,13 @@ Singleton {
             tagsArray.forEach(tag => {
                 params.push("IncludedTags=" + encodeURIComponent(tag.toLowerCase()));
             });
-            params.push("PageSize=" + Math.min(limit, 30)) // Only admin can do > 30
+            params.push("PageSize=" + Math.min(effectiveLimit, 30)) // Only admin can do > 30
             params.push("IsNsfw=" + (nsfw ? "All" : "False")) // null is random
         }
         else if (currentProvider === "t.alcy.cc") {
             url += tagString
             params.push("json")
-            params.push("quantity=" + limit)
+            params.push("quantity=" + effectiveLimit)
         }
         else {
             if (currentProvider == "gelbooru") {
@@ -360,11 +375,11 @@ Singleton {
                 // sort:id:desc in the tag string gives newest-first, consistent with the website.
                 const gelbooruTags = tagString + " sort:id:desc"
                 params.push("tags=" + encodeURIComponent(gelbooruTags))
-                params.push("limit=" + limit)
+                params.push("limit=" + effectiveLimit)
                 params.push("pid=" + (page - 1))
             } else {
                 params.push("tags=" + encodeURIComponent(tagString))
-                params.push("limit=" + limit)
+                params.push("limit=" + effectiveLimit)
                 params.push("page=" + page)
             }
         }
@@ -376,7 +391,7 @@ Singleton {
         return url
     }
 
-    function makeRequest(tags, nsfw=false, limit=20, page=1) {
+    function makeRequest(tags, nsfw=false, limit, page=1) {
         var url = constructRequestUrl(tags, nsfw, limit, page)
         console.log("[Booru] Making request to " + url)
 
