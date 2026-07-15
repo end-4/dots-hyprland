@@ -33,11 +33,10 @@ Button {
     // Standard downloader — used for all providers WITHOUT hotlink protection
     ImageDownloaderProcess {
         id: imageDownloader
-        running: root.manualDownload && root.refererUrl === ""
+        running: root.refererUrl === ""
         filePath: root.filePath
         sourceUrl: root.imageData.preview_url ?? root.imageData.sample_url
         onDone: (path, width, height) => {
-            imageObject.source = ""
             imageObject.source = path
             if (!modelData.width || !modelData.height) {
                 modelData.width = width
@@ -50,9 +49,10 @@ Button {
     // Referer-aware downloader via curl — used for providers with hotlink protection (e.g. Gelbooru)
     Process {
         id: refererDownloader
-        running: root.manualDownload && root.refererUrl !== ""
+        running: root.refererUrl !== ""
         command: ["bash", "-c",
             `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] || ` +
             `curl -s -L ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
@@ -62,7 +62,6 @@ Button {
         stdout: SplitParser {
             onRead: (line) => {
                 if (line.trim() === "DONE") {
-                    imageObject.source = ""
                     imageObject.source = root.filePath
                 }
             }
@@ -93,7 +92,7 @@ Button {
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
-            source: root.refererUrl !== "" ? "" : (root.manualDownload ? "" : modelData.preview_url)
+            source: root.refererUrl !== "" ? "" : modelData.preview_url
 
             layer.enabled: true
             layer.effect: OpacityMask {
