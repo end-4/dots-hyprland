@@ -30,6 +30,14 @@ Button {
 
     property bool showActions: false
 
+    onClicked: {
+        var src = String(imageObject.source)
+        if (src.startsWith("/"))
+            src = "file://" + src
+        if (src.length > 0)
+            Qt.openUrlExternally(src)
+    }
+
     // Standard downloader — used for all providers WITHOUT hotlink protection
     ImageDownloaderProcess {
         id: imageDownloader
