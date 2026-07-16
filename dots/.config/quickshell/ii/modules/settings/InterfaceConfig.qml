@@ -223,6 +223,16 @@ ContentPage {
                     Config.options.lock.materialShapeChars = checked;
                 }
             }
+
+            //togle for the media on the lock screen
+            ConfigSwitch {
+                buttonIcon: "play_arrow"
+                text: Translation.tr('Allow media Player on lock screen')
+                checked: Config.options.lock.enableMedia
+                onCheckedChanged: {
+                    Config.options.lock.enableMedia = checked;
+                }
+            }
         }
         ContentSubsection {
             title: Translation.tr("Style: Blurred")
