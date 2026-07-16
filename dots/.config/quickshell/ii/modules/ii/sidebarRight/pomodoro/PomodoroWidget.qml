@@ -12,30 +12,29 @@ Item {
         {"name": Translation.tr("Stopwatch"), "icon": "timer"}
     ]
 
-    // These are keybinds for stopwatch and pomodoro
     Keys.onPressed: (event) => {
-        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) { // Switch tabs
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageDown) {
                 tabBar.incrementCurrentIndex();
             } else if (event.key === Qt.Key_PageUp) {
                 tabBar.decrementCurrentIndex();
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) { // Pause/resume with Space or S
+        } else if (event.key === Qt.Key_Space || event.key === Qt.Key_S) {
             if (tabBar.currentIndex === 0) {
                 TimerService.togglePomodoro()
             } else {
                 TimerService.toggleStopwatch()
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_R) { // Reset with R
+        } else if (event.key === Qt.Key_R) {
             if (tabBar.currentIndex === 0) {
                 TimerService.resetPomodoro()
             } else {
                 TimerService.stopwatchReset()
             }
             event.accepted = true
-        } else if (event.key === Qt.Key_L) { // Record lap with L
+        } else if (event.key === Qt.Key_L) {
             TimerService.stopwatchRecordLap()
             event.accepted = true
         }
@@ -58,18 +57,37 @@ Item {
             }
         }
 
-        SwipeView {
+        Item {
             id: swipeView
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
             clip: true
-            currentIndex: tabBar.currentIndex
+            property int currentIndex: tabBar.currentIndex
 
-            // Tabs
-            PomodoroTimer {}
-            Stopwatch {}
+            PomodoroTimer {
+                width: parent.width
+                height: parent.height
+                x: (0 - swipeView.currentIndex) * (parent.width + 30)
+                opacity: swipeView.currentIndex === 0 ? 1 : 0
+                scale: swipeView.currentIndex === 0 ? 1 : 0.96
+
+                Behavior on x { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+                Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on scale { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+            }
+
+            Stopwatch {
+                width: parent.width
+                height: parent.height
+                x: (1 - swipeView.currentIndex) * (parent.width + 30)
+                opacity: swipeView.currentIndex === 1 ? 1 : 0
+                scale: swipeView.currentIndex === 1 ? 1 : 0.96
+
+                Behavior on x { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+                Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on scale { NumberAnimation { duration: 350; easing.type: Easing.OutBack; easing.overshoot: 1.1 } }
+            }
         }
     }
 }

@@ -34,7 +34,6 @@ Scope {
             let p1 = players[i];
             let group = [i];
 
-            // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
                 if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
@@ -42,7 +41,6 @@ Scope {
                 }
             }
 
-            // Pick the one with non-empty trackArtUrl, or fallback to the first
             let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
             if (chosenIdx === undefined)
                 chosenIdx = group[0];
@@ -64,7 +62,6 @@ Scope {
         command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
         stdout: SplitParser {
             onRead: data => {
-                // Parse `;`-separated values into the visualizerPoints array
                 let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
                 root.visualizerPoints = points;
             }
@@ -83,7 +80,6 @@ Scope {
         sourceComponent: PanelWindow {
             id: panelWindow
             visible: true
-
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
             implicitWidth: root.widgetWidth
@@ -104,8 +100,96 @@ Scope {
                 right: Appearance.sizes.barHeight
             }
 
-            mask: Region {
-                item: playerColumnLayout
+            Item {
+                id: animatedContainer
+                anchors.fill: parent
+                opacity: 0
+                scale: 0.95
+
+                states: State {
+                    name: "visible"
+                    when: mediaControlsLoader.active
+                    PropertyChanges { target: animatedContainer; opacity: 1; scale: 1 }
+                }
+
+                transitions: Transition {
+                    from: ""; to: "visible"; reversible: true
+                    SequentialAnimation {
+                        ParallelAnimation {
+                            NumberAnimation { property: "opacity"; duration: 250; easing.type: Easing.OutCubic }
+                            NumberAnimation {
+                                property: "scale";
+                                duration: 230
+                                easing.type: Easing.OutBack
+                                easing.overshoot: 2.0
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: playerColumnLayout
+                    anchors.fill: parent
+                    spacing: -Appearance.sizes.elevationMargin
+
+                    Repeater {
+                        model: ScriptModel {
+                            values: root.meaningfulPlayers
+                        }
+                        delegate: PlayerControl {
+                            required property MprisPlayer modelData
+                            player: modelData
+                            visualizerPoints: root.visualizerPoints
+                            implicitWidth: root.widgetWidth
+                            implicitHeight: root.widgetHeight
+                            radius: root.popupRounding
+                        }
+                    }
+
+                    Item {
+                        Layout.alignment: {
+                            if (panelWindow.anchors.left)
+                                return Qt.AlignLeft;
+                            if (panelWindow.anchors.right)
+                                return Qt.AlignRight;
+                            return Qt.AlignHCenter;
+                        }
+                        Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
+                        Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
+                        visible: root.meaningfulPlayers.length === 0
+                        implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
+                        implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
+
+                        StyledRectangularShadow {
+                            target: placeholderBackground
+                        }
+
+                        Rectangle {
+                            id: placeholderBackground
+                            anchors.centerIn: parent
+                            color: Appearance.colors.colLayer0
+                            radius: root.popupRounding
+                            property real padding: 20
+                            implicitWidth: placeholderLayout.implicitWidth + padding * 2
+                            implicitHeight: placeholderLayout.implicitHeight + padding * 2
+
+                            ColumnLayout {
+                                id: placeholderLayout
+                                anchors.centerIn: parent
+
+                                StyledText {
+                                    text: Translation.tr("No active player")
+                                    font.pixelSize: Appearance.font.pixelSize.large
+                                }
+                                StyledText {
+                                    color: Appearance.colors.colSubtext
+                                    text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             Component.onCompleted: {
@@ -118,71 +202,6 @@ Scope {
                 target: GlobalFocusGrab
                 function onDismissed() {
                     GlobalStates.mediaControlsOpen = false;
-                }
-            }
-
-            ColumnLayout {
-                id: playerColumnLayout
-                anchors.fill: parent
-                spacing: -Appearance.sizes.elevationMargin // Shadow overlap okay
-
-                Repeater {
-                    model: ScriptModel {
-                        values: root.meaningfulPlayers
-                    }
-                    delegate: PlayerControl {
-                        required property MprisPlayer modelData
-                        player: modelData
-                        visualizerPoints: root.visualizerPoints
-                        implicitWidth: root.widgetWidth
-                        implicitHeight: root.widgetHeight
-                        radius: root.popupRounding
-                    }
-                }
-
-                Item {
-                    // No player placeholder
-                    Layout.alignment: {
-                        if (panelWindow.anchors.left)
-                            return Qt.AlignLeft;
-                        if (panelWindow.anchors.right)
-                            return Qt.AlignRight;
-                        return Qt.AlignHCenter;
-                    }
-                    Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
-                    Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
-                    visible: root.meaningfulPlayers.length === 0
-                    implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
-                    implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
-
-                    StyledRectangularShadow {
-                        target: placeholderBackground
-                    }
-
-                    Rectangle {
-                        id: placeholderBackground
-                        anchors.centerIn: parent
-                        color: Appearance.colors.colLayer0
-                        radius: root.popupRounding
-                        property real padding: 20
-                        implicitWidth: placeholderLayout.implicitWidth + padding * 2
-                        implicitHeight: placeholderLayout.implicitHeight + padding * 2
-
-                        ColumnLayout {
-                            id: placeholderLayout
-                            anchors.centerIn: parent
-
-                            StyledText {
-                                text: Translation.tr("No active player")
-                                font.pixelSize: Appearance.font.pixelSize.large
-                            }
-                            StyledText {
-                                color: Appearance.colors.colSubtext
-                                text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
-                                font.pixelSize: Appearance.font.pixelSize.small
-                            }
-                        }
-                    }
                 }
             }
         }

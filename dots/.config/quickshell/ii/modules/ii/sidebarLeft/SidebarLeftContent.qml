@@ -67,7 +67,7 @@ Item {
             radius: Appearance.rounding.normal
             color: Appearance.colors.colLayer1
 
-            SwipeView { // Content pages
+            SwipeView {
                 id: swipeView
                 anchors.fill: parent
                 spacing: 10
@@ -80,6 +80,34 @@ Item {
                         width: swipeView.width
                         height: swipeView.height
                         radius: Appearance.rounding.small
+                    }
+                }
+
+                contentItem: ListView {
+                    id: internalListView
+                    model: swipeView.contentModel
+                    interactive: swipeView.interactive
+                    orientation: swipeView.orientation
+                    spacing: swipeView.spacing
+                    snapMode: ListView.SnapOneItem
+                    boundsBehavior: Flickable.StopAtBounds
+                    currentIndex: swipeView.currentIndex
+                    highlightFollowsCurrentItem: false
+
+                    onCurrentIndexChanged: {
+                        if (!internalListView.moving && !internalListView.flicking) {
+                            pageSlideAnim.to = currentIndex * (internalListView.width + internalListView.spacing)
+                            pageSlideAnim.start()
+                        }
+                    }
+
+                    NumberAnimation {
+                        id: pageSlideAnim
+                        target: internalListView
+                        property: "contentX"
+                        duration: 400
+                        easing.type: Easing.OutBack
+                        easing.amplitude: 0.55
                     }
                 }
 
