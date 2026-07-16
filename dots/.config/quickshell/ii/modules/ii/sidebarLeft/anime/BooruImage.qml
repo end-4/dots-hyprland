@@ -31,6 +31,7 @@ Button {
     property bool showActions: false
     property bool sampleDownloaded: false
     readonly property var imageExtensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "svg", "avif"]
+    readonly property bool isAnimated: (root.imageData.tags || "").split(" ").includes("animated")
 
     onClicked: {
         if (root.sampleDownloaded) {
@@ -176,6 +177,26 @@ Button {
 
             onClicked: {
                 root.showActions = !root.showActions
+            }
+        }
+
+        Rectangle {
+            id: animatedPill
+            visible: root.isAnimated
+            anchors.top: parent.top
+            anchors.right: menuButton.left
+            anchors.margins: Math.max(root.imageRadius - menuButton.buttonSize / 2, 8)
+            implicitHeight: menuButton.buttonSize
+            implicitWidth: animatedText.implicitWidth + 10 * 2
+            radius: Appearance.rounding.full
+            color: ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
+
+            StyledText {
+                id: animatedText
+                anchors.centerIn: parent
+                font.pixelSize: Appearance.font.pixelSize.small
+                color: Appearance.m3colors.m3onSurface
+                text: "Animated"
             }
         }
 
