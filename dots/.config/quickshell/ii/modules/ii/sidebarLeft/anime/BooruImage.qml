@@ -35,7 +35,7 @@ Button {
         id: imageDownloader
         running: root.refererUrl === ""
         filePath: root.filePath
-        sourceUrl: root.imageData.preview_url ?? root.imageData.sample_url
+        sourceUrl: root.imageData.sample_url ?? root.imageData.preview_url ?? root.imageData.file_url
         onDone: (path, width, height) => {
             imageObject.source = path
             if (!modelData.width || !modelData.height) {
@@ -53,11 +53,16 @@ Button {
         command: ["bash", "-c",
             `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
             `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] || ` +
-            `curl -s -L ` +
+            `(curl -s -L ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
-            `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url ?? root.imageData.sample_url)}' ` +
-            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE`
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url ?? root.imageData.file_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ` +
+            `|| curl -s -L ` +
+            `-H 'Referer: ${root.refererUrl}' ` +
+            `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}') && echo DONE`
         ]
         stdout: SplitParser {
             onRead: (line) => {
@@ -92,7 +97,7 @@ Button {
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
-            source: root.refererUrl !== "" ? "" : modelData.preview_url
+            source: modelData.preview_url
 
             layer.enabled: true
             layer.effect: OpacityMask {
