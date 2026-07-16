@@ -139,8 +139,8 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_file_url,
-                        "sample_url": item.file_url ?? item.large_file_url,
-                        "file_url": item.large_file_url,
+                        "sample_url": item.large_file_url ?? item.file_url,
+                        "file_url": item.file_url,
                         "file_ext": item.file_ext,
                         "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
@@ -335,6 +335,8 @@ Singleton {
                 providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://gelbooru.com/index.php?page=account&s=options) on Gelbooru.")
             } else if (provider == "rule34") {
                 providerMessage += Translation.tr(". Notes for Rule34:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://rule34.xxx/index.php?page=account&s=options) on Rule34.")
+            } else if (provider == "danbooru") {
+                providerMessage += Translation.tr(". Notes for Danbooru:\n- You must enter API credentials in Settings -> Services options to bypass Cloudflare protection.")
             }
             root.addSystemMessage(providerMessage)
         } else {
@@ -392,6 +394,13 @@ Singleton {
         if (currentProvider === "rule34" && rule34ApiKey && rule34UserId) {
             params.push("api_key=" + rule34ApiKey);
             params.push("user_id=" + rule34UserId);
+        }
+        // Add Danbooru API credentials if needed
+        var danbooruLogin = Config.options?.sidebar?.booru?.danbooru?.login || ""
+        var danbooruApiKey = Config.options?.sidebar?.booru?.danbooru?.apiKey || ""
+        if (currentProvider === "danbooru" && danbooruLogin && danbooruApiKey) {
+            params.push("login=" + danbooruLogin);
+            params.push("api_key=" + danbooruApiKey);
         }
 
         // Tags & limit
@@ -487,7 +496,10 @@ Singleton {
 
         try {
             // Required for danbooru and konachan
-            if (["danbooru", "konachan", "rule34"].includes(currentProvider)) {
+            var danbooruUA = "Qt/6.0"
+            if (currentProvider === "danbooru") {
+                xhr.setRequestHeader("User-Agent", danbooruUA)
+            } else if (["konachan", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             else if (currentProvider == "zerochan") {
@@ -529,6 +541,12 @@ Singleton {
             if (rule34ApiKey && rule34UserId) {
                 url += "&api_key=" + rule34ApiKey + "&user_id=" + rule34UserId
             }
+        } else if (currentProvider === "danbooru") {
+            var danbooruLogin = Config.options?.sidebar?.booru?.danbooru?.login || ""
+            var danbooruApiKey = Config.options?.sidebar?.booru?.danbooru?.apiKey || ""
+            if (danbooruLogin && danbooruApiKey) {
+                url += "&login=" + danbooruLogin + "&api_key=" + danbooruApiKey
+            }
         }
 
         var xhr = new XMLHttpRequest()
@@ -553,8 +571,10 @@ Singleton {
         }
 
         try {
-            // Required for danbooru, konachan, and gelbooru
-            if (["danbooru", "konachan", "gelbooru", "rule34"].includes(currentProvider)) {
+            // Required for konachan, and gelbooru
+            if (currentProvider === "danbooru") {
+                xhr.setRequestHeader("User-Agent", "Qt/6.0")
+            } else if (["konachan", "gelbooru", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()

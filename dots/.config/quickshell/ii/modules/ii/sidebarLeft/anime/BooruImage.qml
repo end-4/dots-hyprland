@@ -97,7 +97,7 @@ Button {
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
-            source: modelData.preview_url
+            source: root.refererUrl !== "" ? "" : modelData.preview_url
 
             layer.enabled: true
             layer.effect: OpacityMask {

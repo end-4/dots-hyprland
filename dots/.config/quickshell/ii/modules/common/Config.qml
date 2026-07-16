@@ -566,6 +566,10 @@ Singleton {
                         property string userId: ""
                         property string apiKey: ""
                     }
+                    property JsonObject danbooru: JsonObject {
+                        property string login: ""
+                        property string apiKey: ""
+                    }
                 }
                 property JsonObject cornerOpen: JsonObject {
                     property bool enable: true

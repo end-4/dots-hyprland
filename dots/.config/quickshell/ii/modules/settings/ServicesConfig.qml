@@ -358,5 +358,35 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Danbooru")
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("Login")
+                text: Config.options.sidebar.booru.danbooru.login
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.danbooru.login = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Danbooru username.")
+                }
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                placeholderText: Translation.tr("API Key")
+                text: Config.options.sidebar.booru.danbooru.apiKey
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.sidebar.booru.danbooru.apiKey = text
+                }
+                StyledToolTip {
+                    text: Translation.tr("Your Danbooru API key.\nFind it at: danbooru.donmai.us → Account → API Key")
+                }
+            }
+        }
     }
 }
