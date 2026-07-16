@@ -9,6 +9,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Io
 
 Item {
     id: root
@@ -28,6 +29,26 @@ Item {
     property bool pullLoading: false
     property int pullLoadingGap: 80
     property real normalizedPullDistance: Math.max(0, (1 - Math.exp(-booruResponseListView.verticalOvershoot / 50)) * booruResponseListView.dragging)
+
+    property string cacheSize: ""
+
+    Process {
+        id: cacheSizeProcess
+        running: false
+        command: ["bash", "-c",
+            `du -sh '${Directories.booruPreviews}' 2>/dev/null | cut -f1 | sed 's/$/B/' || echo "0B"`
+        ]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.cacheSize = cacheSizeProcess.stdout.text.trim()
+            }
+        }
+    }
+
+    function refreshCacheSize() {
+        cacheSizeProcess.running = false
+        Qt.callLater(function() { cacheSizeProcess.running = true })
+    }
 
     Connections {
         target: Booru
@@ -506,24 +527,86 @@ Item {
 
                 property var commandsShown: [
                     {
-                        name: "mode",
-                        sendDirectly: false,
-                    },
-                    {
                         name: "clear",
                         sendDirectly: true,
                     }, 
                 ]
 
-                ApiInputBoxIndicator { // Tool indicator
-                    icon: "api"
-                    text: Booru.providers[Booru.currentProvider].name
-                    tooltipText: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
-                        .arg(Booru.providers[Booru.currentProvider].url)
-                        .arg(root.commandPrefix)
+                RippleButton {
+                    id: providerIndicator
+                    implicitWidth: rowLayout.implicitWidth + 4 * 2
+                    implicitHeight: rowLayout.implicitHeight + 4 * 2
+                    buttonRadius: Appearance.rounding.small
+
+                    RowLayout {
+                        id: rowLayout
+                        anchors.centerIn: parent
+
+                        MaterialSymbol {
+                            text: "api"
+                            iconSize: Appearance.font.pixelSize.normal
+                        }
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3onSurface
+                            elide: Text.ElideRight
+                            text: Booru.providers[Booru.currentProvider].name
+                            animateChange: true
+                        }
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Current API endpoint: %1\nClick to switch with %2mode PROVIDER")
+                            .arg(Booru.providers[Booru.currentProvider].url)
+                            .arg(root.commandPrefix)
+                    }
+
+                    onClicked: {
+                        tagInputField.text = root.commandPrefix + "mode "
+                        tagInputField.cursorPosition = tagInputField.text.length
+                        tagInputField.forceActiveFocus()
+                    }
                 }
 
                 StyledText {
+                    font.pixelSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnLayer1
+                    text: "•"
+                }
+
+                RippleButton {
+                    id: cacheSizeLabel
+                    visible: root.cacheSize.length > 0
+                    implicitWidth: cacheRow.implicitWidth + 4 * 2
+                    implicitHeight: cacheRow.implicitHeight + 4 * 2
+                    buttonRadius: Appearance.rounding.small
+
+                    RowLayout {
+                        id: cacheRow
+                        anchors.centerIn: parent
+
+                        MaterialSymbol {
+                            text: "cached"
+                            iconSize: Appearance.font.pixelSize.normal
+                        }
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3onSurface
+                            elide: Text.ElideRight
+                            text: root.cacheSize
+                            animateChange: true
+                        }
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Click to clear booru image cache")
+                    }
+
+                    onClicked: root.clearBooruCache()
+                }
+
+                StyledText {
+                    visible: root.cacheSize.length > 0
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: Appearance.colors.colOnLayer1
                     text: "•"
@@ -581,13 +664,7 @@ Item {
                             colBackground: Appearance.colors.colLayer2
 
                             downAction: () => {
-                                if (modelData.sendDirectly) {
-                                    root.handleInput(commandRepresentation)
-                                } else {
-                                    tagInputField.text = commandRepresentation + " "
-                                    tagInputField.cursorPosition = tagInputField.text.length
-                                    tagInputField.forceActiveFocus()
-                                }
+                                root.handleInput(commandRepresentation)
                                 if (modelData.name === "clear") {
                                     tagInputField.text = ""
                                 }
@@ -606,8 +683,11 @@ Item {
         function onSidebarLeftOpenChanged() {
             if (GlobalStates.sidebarLeftOpen) {
                 cacheCleanupTimer.stop()
+                cachePollTimer.start()
+                refreshCacheSize()
             } else {
                 cacheCleanupTimer.restart()
+                cachePollTimer.stop()
             }
         }
     }
@@ -619,9 +699,26 @@ Item {
         onTriggered: clearBooruCache()
     }
 
+    Timer {
+        id: cacheRefreshTimer
+        interval: 600
+        repeat: false
+        onTriggered: refreshCacheSize()
+    }
+
+    Timer {
+        id: cachePollTimer
+        interval: 10000
+        repeat: true
+        onTriggered: refreshCacheSize()
+    }
+
+    Component.onCompleted: refreshCacheSize()
+
     function clearBooruCache() {
         Quickshell.execDetached(["bash", "-c",
             `rm -rf '${Directories.booruPreviews}'; mkdir -p '${Directories.booruPreviews}'`
         ])
+        cacheRefreshTimer.restart()
     }
 }
