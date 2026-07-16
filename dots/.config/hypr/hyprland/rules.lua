@@ -157,6 +157,8 @@ hl.layer_rule({ match = { namespace = "quickshell:sidebarRight" }, animation = "
 hl.layer_rule({ match = { namespace = "quickshell:sidebarLeft" }, animation = "slide left"})
 hl.layer_rule({ match = { namespace = "quickshell:verticalBar" }, animation = "slide"})
 hl.layer_rule({ match = { namespace = "quickshell:osk" }, order = -1})
+hl.layer_rule({ match = { namespace = "quickshell:dock" }, order = -2})
+hl.layer_rule({ match = { namespace = "quickshell:session" }, order = -3})
 -- Quickshell: waffles
 hl.layer_rule({ match = { namespace = "quickshell:wallpaperSelector" }, animation = "slide top"})
 hl.layer_rule({ match = { namespace = "quickshell:wNotificationCenter" }, no_anim = true})
