@@ -599,4 +599,29 @@ Item {
 
         }
     }
+
+    // Cache lifecycle: auto-cleanup 1 hour after close, timer resets on reopen
+    Connections {
+        target: GlobalStates
+        function onSidebarLeftOpenChanged() {
+            if (GlobalStates.sidebarLeftOpen) {
+                cacheCleanupTimer.stop()
+            } else {
+                cacheCleanupTimer.restart()
+            }
+        }
+    }
+
+    Timer {
+        id: cacheCleanupTimer
+        interval: 3600000
+        repeat: false
+        onTriggered: clearBooruCache()
+    }
+
+    function clearBooruCache() {
+        Quickshell.execDetached(["bash", "-c",
+            `rm -rf '${Directories.booruPreviews}'; mkdir -p '${Directories.booruPreviews}'`
+        ])
+    }
 }
