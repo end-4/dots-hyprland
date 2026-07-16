@@ -100,7 +100,7 @@ Button {
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
             `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url)}' ` +
             `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' && ` +
-            `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' | grep -q '^image/' && ` +
+            `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' | grep -qE '^(image|video)/' && ` +
             `mv '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ` +
             `'${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE)`
         ]
