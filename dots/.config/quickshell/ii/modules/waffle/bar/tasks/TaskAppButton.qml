@@ -48,13 +48,13 @@ AppButton {
         } else if (root.appEntry.toplevels.length === 1) {
             root.appEntry.toplevels[0].activate()
         } else {
-            root.desktopEntry.execute()
+            Quickshell.execDetached(["gtk-launch", root.desktopEntry.id])
         }
     }
 
     middleClickAction: () => {
         if (root.desktopEntry) {
-            desktopEntry.execute()
+            Quickshell.execDetached(["gtk-launch", root.desktopEntry.id])
         }
     }
 
@@ -105,7 +105,7 @@ AppButton {
                 iconName: action.icon,
                 text: action.name,
                 action: () => {
-                    action.execute()
+                    Quickshell.execDetached(["gtk-launch", root.desktopEntry.id, action.id])
                 }
             })).concat({ type: "separator" }) : []),
             {
@@ -114,7 +114,7 @@ AppButton {
                 monochromeIcon: false,
                 action: () => {
                     if (root.desktopEntry) {
-                        root.desktopEntry.execute()
+                        Quickshell.execDetached(["gtk-launch", root.desktopEntry.id])
                     }
                 }
             },

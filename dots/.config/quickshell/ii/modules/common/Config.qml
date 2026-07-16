@@ -190,6 +190,9 @@ Singleton {
                             property bool showDate: true
                             property bool animateChange: true
                             property bool vertical: false
+                            property bool verticalLocked: false
+                            property string colorMode: "auto"           // Options: "auto", "light", "dark"
+                            property string colorModeLocked: "auto"     // Options: "auto", "light", "dark"
                             property JsonObject font: JsonObject {
                                 property string family: "Google Sans Flex"
                                 property real weight: 350
@@ -209,6 +212,24 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject visualizer: JsonObject {
+                        property bool enable: false
+                        property bool showWhenLocked: false
+                        property bool hideWhenCovered: true
+                        property bool hideWhenFullscreen: true
+                        property int height: 600 // in pixels
+                        property real barRounding: 0.5
+                        property real smoothing: 0.05
+                        property real opacity: 1
+                        property real barSpacing: 10 // in pixels
+                        property int targetBarWidth: 50 // in pixles, rough target
+                        property bool mono: true
+                        property string mode: "bars" // "bars" or "wave"
+                        property real waveFillOpacity: 0.5
+                        property real dataSmoothing: 0.5
+                        property int waveBorderWidth: 3    // 0 = no border
+                        property int renderEveryXFrames: -1  // -1 = auto (System), 1 = every frame, 2 = every other frame, etc. Only for "wave" mode
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
@@ -220,6 +241,10 @@ Singleton {
                     property real workspaceZoom: 1.07 // Relative to wallpaper size
                     property bool enableSidebar: false
                     property real widgetsFactor: 1.2
+                }
+                property JsonObject transition: JsonObject {
+                    property bool enable: true
+                    property int duration: 600 // milliseconds
                 }
             }
 
@@ -380,6 +405,10 @@ Singleton {
                     property real radius: 100
                     property real extraZoom: 1.1
                 }
+                property JsonObject dim: JsonObject {
+                    property bool enable: false
+                    property real strength: 50
+                }
                 property bool centerClock: true
                 property bool showLockedText: true
                 property JsonObject security: JsonObject {
@@ -387,6 +416,24 @@ Singleton {
                     property bool requirePasswordToPower: false
                 }
                 property bool materialShapeChars: true
+            }
+
+            property JsonObject fluid: JsonObject {
+                property bool enabled: false
+                property int idleTimeout: 30
+                property int widgetAutoHideTimeout: 10
+                property int fadeDuration: 600
+                property int colorPreset: 0
+                property real viscosity: 5.0
+                property real noiseMultiplier: 0.45
+                property real timestep: 0.016667
+                property real dissipation: 0.0
+                property int pressureIterations: 19
+                property real lineVariance: 0.55
+                property real lineWidthMultiplier: 1.0
+                property real zoom: 1.6
+                property int fpsLimit: 60
+                property bool dimOnInteraction: false
             }
 
             property JsonObject media: JsonObject {
@@ -512,6 +559,18 @@ Singleton {
                     property JsonObject zerochan: JsonObject {
                         property string username: "[unset]"
                     }
+                    property JsonObject gelbooru: JsonObject {
+                        property string userId: ""
+                        property string apiKey: ""
+                    }
+                    property JsonObject rule34: JsonObject {
+                        property string userId: ""
+                        property string apiKey: ""
+                    }
+                    property JsonObject danbooru: JsonObject {
+                        property string login: ""
+                        property string apiKey: ""
+                    }
                 }
                 property JsonObject cornerOpen: JsonObject {
                     property bool enable: true
@@ -573,6 +632,7 @@ Singleton {
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
                     property int longBreak: 900
+                    property bool notifications: true
                 }
                 property bool secondPrecision: false
             }
@@ -586,6 +646,16 @@ Singleton {
             
             property JsonObject wallpaperSelector: JsonObject {
                 property bool useSystemFileDialog: false
+                // Wallhaven online wallpaper browser. Declared here so the JsonAdapter
+                // actually persists them — assigning undeclared keys is silently dropped.
+                property string wallhavenApiKey: ""
+                property string wallhavenCategories: "111" // general,anime,people
+                property string wallhavenPurity: "100" // sfw
+                property string wallhavenSorting: "relevance"
+                property string wallhavenOrder: "desc"
+                property string wallhavenRatios: ""
+                property string wallhavenColors: "" // palette filter, single hex without '#'
+                property string wallhavenQuery: ""
             }
             
             property JsonObject windows: JsonObject {

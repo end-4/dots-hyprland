@@ -317,6 +317,15 @@ Item { // Bar content region
                 }
             }
 
+            PomodoroBarIndicator {
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            RecordingBarIndicator {
+                id: recordingBarIndicator
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             SysTray {
                 visible: root.useShortenedForm === 0
                 Layout.fillWidth: false

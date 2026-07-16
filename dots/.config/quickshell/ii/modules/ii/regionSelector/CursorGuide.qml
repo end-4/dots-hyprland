@@ -8,31 +8,42 @@ Item {
     property var action
     property var selectionMode
 
-    property string description: switch (root.action) {
-    case RegionSelection.SnipAction.Copy:
-    case RegionSelection.SnipAction.Edit:
-        return Translation.tr("Copy region (LMB) or annotate (RMB)");
-    case RegionSelection.SnipAction.Search:
-        return Translation.tr("Search with Google Lens");
-    case RegionSelection.SnipAction.CharRecognition:
-        return Translation.tr("Recognize text");
-    case RegionSelection.SnipAction.Record:
-    case RegionSelection.SnipAction.RecordWithSound:
-        return Translation.tr("Record region");
+    property string description: {
+        const isFullscreen = root.selectionMode === RegionSelection.SelectionMode.Fullscreen;
+        switch (root.action) {
+        case RegionSelection.SnipAction.Copy:
+        case RegionSelection.SnipAction.Edit:
+            return isFullscreen ? Translation.tr("Fullscreen capture") : Translation.tr("Copy region (LMB) or annotate (RMB)");
+        case RegionSelection.SnipAction.Search:
+            return isFullscreen ? Translation.tr("Search fullscreen with Lens") : Translation.tr("Search with Google Lens");
+        case RegionSelection.SnipAction.CharRecognition:
+            return isFullscreen ? Translation.tr("Recognize fullscreen text") : Translation.tr("Recognize text");
+        case RegionSelection.SnipAction.Record:
+        case RegionSelection.SnipAction.RecordWithSound:
+            return isFullscreen ? Translation.tr("Record fullscreen") : Translation.tr("Record region");
+        default:
+            return "";
+        }
     }
-    property string materialSymbol: switch (root.action) {
-    case RegionSelection.SnipAction.Copy:
-    case RegionSelection.SnipAction.Edit:
-        return "content_cut";
-    case RegionSelection.SnipAction.Search:
-        return "image_search";
-    case RegionSelection.SnipAction.CharRecognition:
-        return "document_scanner";
-    case RegionSelection.SnipAction.Record:
-    case RegionSelection.SnipAction.RecordWithSound:
-        return "videocam";
-    default:
-        return "";
+    property string materialSymbol: {
+        const isFullscreen = root.selectionMode === RegionSelection.SelectionMode.Fullscreen;
+        if (isFullscreen) {
+            return "fullscreen";
+        }
+        switch (root.action) {
+        case RegionSelection.SnipAction.Copy:
+        case RegionSelection.SnipAction.Edit:
+            return "content_cut";
+        case RegionSelection.SnipAction.Search:
+            return "image_search";
+        case RegionSelection.SnipAction.CharRecognition:
+            return "document_scanner";
+        case RegionSelection.SnipAction.Record:
+        case RegionSelection.SnipAction.RecordWithSound:
+            return "videocam";
+        default:
+            return "";
+        }
     }
 
     property bool showDescription: true

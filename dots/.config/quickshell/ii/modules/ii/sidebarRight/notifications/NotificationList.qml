@@ -32,6 +32,7 @@ Item {
 
     // Placeholder when list is empty
     PagePlaceholder {
+        anchors.fill: listview
         shown: Notifications.list.length === 0
         icon: "notifications_active"
         description: Translation.tr("Nothing")

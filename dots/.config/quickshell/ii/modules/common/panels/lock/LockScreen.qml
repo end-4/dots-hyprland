@@ -18,12 +18,9 @@ Scope {
         id: sessionLockSurface
         color: "transparent"
         Loader {
+            id: lockSurfaceLoader
             active: GlobalStates.screenLocked
             anchors.fill: parent
-            opacity: active ? 1 : 0
-            Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
             sourceComponent: root.lockSurface
         }
     }
@@ -68,6 +65,7 @@ Scope {
         }
 
         onUnlocked: (targetAction) => {
+            console.log("TIMING [LockScreen.onUnlocked start]", Date.now());
             // Perform the target action if it's not just unlocking
             if (targetAction == LockContext.ActionEnum.Poweroff) {
                 Session.poweroff();
@@ -77,17 +75,21 @@ Scope {
                 return;
             }
 
-            // Unlock the keyring if configured to do so
-            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring(); // Async
+            // Delay actual unlock to let animation complete (lock surface detects signal independently)
+            fadeUnlockTimer.start();
+        }
+    }
 
-            // Unlock the screen before exiting, or the compositor will display a
-            // fallback lock you can't interact with.
+    Timer {
+        id: fadeUnlockTimer
+        interval: Config.options.fluid.enabled && !Config.options.fluid.dimOnInteraction ? Config.options.fluid.fadeDuration : 200
+        running: false
+        repeat: false
+        onTriggered: {
             GlobalStates.screenLocked = false;
-
-            // Reset
+            console.log("TIMING [LockScreen.screenLocked=false]", Date.now());
+            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
             lockContext.reset();
-
-            // Post-unlock actions
             if (lockContext.alsoInhibitIdle) {
                 lockContext.alsoInhibitIdle = false;
                 Idle.toggleInhibit(true);
@@ -101,11 +103,12 @@ Scope {
         surface: root.sessionLockSurface
     }
 
-    function lock() {
+    function lock(fromIdle = false) {
         if (Config.options.lock.useHyprlock) {
             Quickshell.execDetached(["bash", "-c", "pidof hyprlock || hyprlock"]);
             return;
         }
+        GlobalStates.lockFromIdle = fromIdle;
         GlobalStates.screenLocked = true;
     }
 
@@ -113,10 +116,18 @@ Scope {
         target: "lock"
 
         function activate(): void {
-            root.lock();
+            root.lock(false);
         }
         function focus(): void {
             lockContext.shouldReFocus();
+        }
+    }
+
+    IpcHandler {
+        target: "lockIdle"
+
+        function activate(): void {
+            root.lock(true);
         }
     }
 
@@ -125,7 +136,7 @@ Scope {
         description: "Locks the screen"
 
         onPressed: {
-            root.lock()
+            root.lock(false)
         }
     }
 

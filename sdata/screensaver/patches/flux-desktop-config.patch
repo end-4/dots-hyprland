@@ -1,0 +1,40 @@
+diff --git a/flux-desktop/src/main.rs b/flux-desktop/src/main.rs
+index 81c409f..ef9c251 100644
+--- a/flux-desktop/src/main.rs
++++ b/flux-desktop/src/main.rs
+@@ -196,7 +196,8 @@ impl ApplicationHandler for FluxApp {
+         #[cfg(not(target_os = "macos"))]
+         let window_attributes = Window::default_attributes()
+             .with_title("Flux")
+-            .with_decorations(true)
++            .with_decorations(false)
++            .with_fullscreen(Some(winit::window::Fullscreen::Borderless(None)))
+             .with_resizable(true)
+             .with_inner_size(logical_size);
+ 
+@@ -261,10 +262,21 @@ impl ApplicationHandler for FluxApp {
+         macos::enable_edr(&window_surface);
+ 
+         let logical_size = physical_size.to_logical(window.scale_factor());
+-        let settings = Arc::new(Settings {
+-            seed: Some("1337".into()),
+-            ..Default::default()
+-        });
++
++        let config_path = std::env::var("FLUX_CONFIG")
++            .unwrap_or_else(|_| {
++                let home = std::env::var("HOME").unwrap_or_else(|_| "/tmp".into());
++                format!("{}/.config/flux-screensaver/settings.json", home)
++            });
++        let settings: Arc<Settings> = Arc::new(
++            std::fs::File::open(&config_path)
++                .ok()
++                .and_then(|f| serde_json::from_reader(f).ok())
++                .unwrap_or(Settings {
++                    seed: Some("1337".into()),
++                    ..Default::default()
++                })
++        );
+         let flux = Flux::new(
+             &device,
+             &command_queue,

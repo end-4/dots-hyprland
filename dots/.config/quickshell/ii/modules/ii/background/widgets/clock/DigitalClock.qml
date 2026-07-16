@@ -9,7 +9,8 @@ ColumnLayout {
     id: clockColumn
     spacing: 4
 
-    property bool isVertical: Config.options.background.widgets.clock.digital.vertical
+    property bool locked: false
+    property bool isVertical: locked ? Config.options.background.widgets.clock.digital.verticalLocked : Config.options.background.widgets.clock.digital.vertical
     property color colText: Appearance.colors.colOnSecondaryContainer
     property var textHorizontalAlignment: Text.AlignHCenter
 
@@ -57,6 +58,15 @@ ColumnLayout {
         text: DateTime.longDate
         color: clockColumn.colText
         horizontalAlignment: clockColumn.textHorizontalAlignment
+        font {
+            pixelSize: Config.options.background.widgets.clock.digital.font.size * 0.15
+            weight: Config.options.background.widgets.clock.digital.font.weight
+            family: Config.options.background.widgets.clock.digital.font.family
+            variableAxes: ({
+                    "wdth": Config.options.background.widgets.clock.digital.font.width,
+                    "ROND": Config.options.background.widgets.clock.digital.font.roundness
+                })
+        }
     }
 
     // Quote

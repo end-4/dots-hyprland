@@ -30,7 +30,7 @@ GridLayout {
             desktopEntry: modelData
             onClicked: {
                 GlobalStates.searchOpen = false;
-                desktopEntry.execute();
+                Quickshell.execDetached(["gtk-launch", desktopEntry.id]);
             }
         }
     }

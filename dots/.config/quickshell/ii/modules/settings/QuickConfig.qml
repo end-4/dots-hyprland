@@ -3,10 +3,12 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
+import QtMultimedia
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import Quickshell.Hyprland
 
 ContentPage {
     forceWidth: true
@@ -68,12 +70,88 @@ ContentPage {
                 implicitWidth: 340
                 implicitHeight: 200
                 
+                property bool isVideo: {
+                    const path = Config.options.background.wallpaperPath.toLowerCase();
+                    return path.endsWith('.mp4') || path.endsWith('.webm') || 
+                           path.endsWith('.mkv') || path.endsWith('.avi') || 
+                           path.endsWith('.mov') || path.endsWith('.m4v') ||
+                           path.endsWith('.ogv');
+                }
+                
                 StyledImage {
-                    id: wallpaperPreview
+                    id: wallpaperPreviewImage
+                    visible: !parent.isVideo
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectCrop
-                    source: Config.options.background.wallpaperPath
+                    source: parent.isVideo ? "" : Config.options.background.wallpaperPath
                     cache: false
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: 360
+                            height: 200
+                            radius: Appearance.rounding.normal
+                        }
+                    }
+                }
+                
+                Rectangle {
+                    id: videoContainer
+                    visible: parent.isVideo
+                    anchors.fill: parent
+                    color: "transparent"
+                    
+                    VideoOutput {
+                        id: videoOutput
+                        anchors.fill: parent
+                        fillMode: VideoOutput.PreserveAspectCrop
+                    }
+                    
+                    MediaPlayer {
+                        id: mediaPlayer
+                        source: videoContainer.visible ? Config.options.background.wallpaperPath : ""
+                        videoOutput: videoOutput
+                        audioOutput: AudioOutput {
+                            muted: true
+                        }
+                        loops: MediaPlayer.Infinite
+                        playbackRate: 1.0
+                        
+                        onPlaybackStateChanged: {
+                            if (playbackState === MediaPlayer.StoppedState && source !== "") {
+                                play();
+                            }
+                        }
+                        
+                        onSourceChanged: {
+                            if (source !== "" && videoContainer.visible) {
+                                // Small delay to ensure video output is ready
+                                playTimer.restart();
+                            }
+                        }
+                    }
+                    
+                    Timer {
+                        id: playTimer
+                        interval: 100
+                        repeat: false
+                        onTriggered: {
+                            if (mediaPlayer.source !== "" && videoContainer.visible) {
+                                mediaPlayer.play();
+                            }
+                        }
+                    }
+                    
+                    Timer {
+                        interval: 100
+                        running: videoContainer.visible
+                        onTriggered: {
+                            if (mediaPlayer.source !== "" && mediaPlayer.playbackState !== MediaPlayer.PlayingState) {
+                                mediaPlayer.play();
+                            }
+                        }
+                    }
+                    
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: Rectangle {
@@ -123,7 +201,7 @@ ContentPage {
                         text: Translation.tr("Pick wallpaper image on your system")
                     }
                     onClicked: {
-                        Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
+                        Hyprland.dispatch(`hl.dsp.global("quickshell:wallpaperSelectorToggle")`);
                     }
                     mainContentComponent: Component {
                         RowLayout {

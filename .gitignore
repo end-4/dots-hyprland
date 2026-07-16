@@ -1,5 +1,6 @@
 /diagnose.result
 /cache
+/.qoder
 
 # Ignore Python cache files
 __pycache__/

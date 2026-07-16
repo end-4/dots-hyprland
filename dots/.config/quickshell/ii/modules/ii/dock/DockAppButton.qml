@@ -16,6 +16,7 @@ DockButton {
     property real countDotWidth: 10
     property real countDotHeight: 4
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+    property bool dragActive: false
 
     readonly property bool isSeparator: appToplevel.appId === "SEPARATOR"
     property var desktopEntry: DesktopEntries.heuristicLookup(appToplevel.appId)
@@ -61,9 +62,15 @@ DockButton {
         }
     }
 
+    opacity: dragActive ? 0.35 : 1.0
+    Behavior on opacity { NumberAnimation { duration: 150 } }
+
+    scale: dragActive ? 0.85 : 1.0
+    Behavior on scale { NumberAnimation { duration: 150 } }
+
     onClicked: {
         if (appToplevel.toplevels.length === 0) {
-            root.desktopEntry?.execute();
+            if (root.desktopEntry) Quickshell.execDetached(["gtk-launch", root.desktopEntry.id]);
             return;
         }
         lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
@@ -71,7 +78,7 @@ DockButton {
     }
 
     middleClickAction: () => {
-        root.desktopEntry?.execute();
+        if (root.desktopEntry) Quickshell.execDetached(["gtk-launch", root.desktopEntry.id]);
     }
 
     altAction: () => {

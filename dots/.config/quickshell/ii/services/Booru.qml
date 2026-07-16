@@ -27,6 +27,7 @@ Singleton {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
+            "defaultLimit": 40,
             "description": Translation.tr("All-rounder | Good quality, decent quantity"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -40,10 +41,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -61,6 +62,7 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.net",
             "api": "https://konachan.net/post.json",
+            "defaultLimit": 40,
             "description": Translation.tr("For desktop wallpapers | Good quality"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -74,10 +76,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -95,6 +97,7 @@ Singleton {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
+            "defaultLimit": 20,
             "description": Translation.tr("Clean stuff | Excellent quality, no NSFW"),
             "mapFunc": (response) => {
                 response = response.items
@@ -122,6 +125,7 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
+            "defaultLimit": 20,
             "description": Translation.tr("The popular one | Best quantity, but quality can vary wildly"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -135,10 +139,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_file_url,
-                        "sample_url": item.file_url ?? item.large_file_url,
-                        "file_url": item.large_file_url,
+                        "sample_url": item.large_file_url || item.file_url,
+                        "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -156,6 +160,7 @@ Singleton {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
+            "defaultLimit": 42,
             "description": Translation.tr("The hentai one | Great quantity, a lot of NSFW, quality varies wildly"),
             "mapFunc": (response) => {
                 response = response.post
@@ -170,10 +175,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_url.split('.').pop(),
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -187,10 +192,47 @@ Singleton {
                 })
             }
         },
+        "rule34": {
+            "name": "Rule34",
+            "url": "https://rule34.xxx",
+            "api": "https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1",
+            "defaultLimit": 42,
+            "description": Translation.tr("The original | All the NSFW you could ever want"),
+            "mapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
+                        "aspect_ratio": item.width / item.height,
+                        "tags": item.tags,
+                        "rating": item.rating.replace('general', 's').charAt(0),
+                        "is_nsfw": (item.rating != 's'),
+                        "md5": item.md5,
+                        "preview_url": item.preview_url,
+                        "sample_url": item.sample_url || item.file_url,
+                        "file_url": item.file_url,
+                        "file_ext": item.file_url.split('.').pop(),
+                        "source": getWorkingImageSource(item.source) || item.file_url,
+                    }
+                })
+            },
+            "tagSearchTemplate": "https://api.rule34.xxx/autocomplete.php?q={{query}}",
+            "tagMapFunc": (response) => {
+                return response.map(item => {
+                    var count = parseInt(item.label.match(/\((\d+)\)$/)?.[1]) || 0
+                    return {
+                        "name": item.value,
+                        "count": count
+                    }
+                })
+            }
+        },
         "waifu.im": {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/images",
+            "defaultLimit": 30,
             "description": Translation.tr("Waifus only | Excellent quality, limited quantity"),
             "mapFunc": (response) => {
                 response = response.items
@@ -221,6 +263,7 @@ Singleton {
             "name": "Alcy",
             "url": "https://t.alcy.cc",
             "api": "https://t.alcy.cc/",
+            "defaultLimit": 20,
             "description": Translation.tr("Large images | God tier quality, no NSFW."),
             "fixedTags": [
                 {
@@ -285,8 +328,17 @@ Singleton {
         provider = provider.toLowerCase()
         if (providerList.indexOf(provider) !== -1) {
             Persistent.states.booru.provider = provider
-            root.addSystemMessage(Translation.tr("Provider set to ") + providers[provider].name
-                + (provider == "zerochan" ? Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
+            var providerMessage = Translation.tr("Provider set to ") + providers[provider].name
+            if (provider == "zerochan") {
+                providerMessage += Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in Settings -> Services option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!")
+            } else if (provider == "gelbooru") {
+                providerMessage += Translation.tr(". Notes for Gelbooru:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://gelbooru.com/index.php?page=account&s=options) on Gelbooru.")
+            } else if (provider == "rule34") {
+                providerMessage += Translation.tr(". Notes for Rule34:\n- You must enter API credentials in Settings -> Services options. You can get these from your [account settings](https://rule34.xxx/index.php?page=account&s=options) on Rule34.")
+            } else if (provider == "danbooru") {
+                providerMessage += Translation.tr(". Notes for Danbooru:\n- You must enter API credentials in Settings -> Services options to bypass Cloudflare protection.")
+            }
+            root.addSystemMessage(providerMessage)
         } else {
             root.addSystemMessage(Translation.tr("Invalid API provider. Supported: \n- ") + providerList.join("\n- "))
         }
@@ -306,22 +358,55 @@ Singleton {
         })]
     }
 
-    function constructRequestUrl(tags, nsfw=true, limit=20, page=1) {
+    function constructRequestUrl(tags, nsfw=true, limit, page=1) {
         var provider = providers[currentProvider]
+        // User override: if limit is explicitly set and differs from default (20), use it globally
+        // Otherwise: use per-provider defaultLimit
+        var effectiveLimit;
+        if (limit !== undefined && limit !== 20) {
+            effectiveLimit = limit;
+        } else {
+            effectiveLimit = provider.defaultLimit ?? 20;
+        }
         var baseUrl = provider.api
         var url = baseUrl
         var tagString = tags.join(" ")
         if (!nsfw && !(["zerochan", "waifu.im", "t.alcy.cc"].includes(currentProvider))) {
-            if (currentProvider == "gelbooru") 
+            if (currentProvider == "rule34")
+                tagString += " -ai -ai_generated -ai_assist -ai_art -ai-created";
+            else if (currentProvider == "gelbooru")
                 tagString += " rating:general";
-            else 
+            else
                 tagString += " rating:safe";
         }
         var params = []
+
+        // Add Gelbooru API credentials if needed
+        var gelbooruApiKey = Config.options?.sidebar?.booru?.gelbooru?.apiKey || ""
+        var gelbooruUserId = Config.options?.sidebar?.booru?.gelbooru?.userId || ""
+        if (currentProvider === "gelbooru" && gelbooruApiKey && gelbooruUserId) {
+            params.push("api_key=" + gelbooruApiKey);
+            params.push("user_id=" + gelbooruUserId);
+        }
+        // Add Rule34 API credentials if needed
+        var rule34ApiKey = Config.options?.sidebar?.booru?.rule34?.apiKey || ""
+        var rule34UserId = Config.options?.sidebar?.booru?.rule34?.userId || ""
+        if (currentProvider === "rule34" && rule34ApiKey && rule34UserId) {
+            params.push("api_key=" + rule34ApiKey);
+            params.push("user_id=" + rule34UserId);
+        }
+        // Add Danbooru API credentials if needed
+        var danbooruLogin = Config.options?.sidebar?.booru?.danbooru?.login || ""
+        var danbooruApiKey = Config.options?.sidebar?.booru?.danbooru?.apiKey || ""
+        if (currentProvider === "danbooru" && danbooruLogin && danbooruApiKey) {
+            params.push("login=" + danbooruLogin);
+            params.push("api_key=" + danbooruApiKey);
+        }
+
         // Tags & limit
         if (currentProvider === "zerochan") {
             params.push("c=" + tagString) // zerochan doesn't have search in api, so we use color
-            params.push("l=" + limit)
+            params.push("l=" + effectiveLimit)
             params.push("s=" + "fav")
             params.push("t=" + 1)
             params.push("p=" + page)
@@ -331,21 +416,26 @@ Singleton {
             tagsArray.forEach(tag => {
                 params.push("IncludedTags=" + encodeURIComponent(tag.toLowerCase()));
             });
-            params.push("PageSize=" + Math.min(limit, 30)) // Only admin can do > 30
+            params.push("PageSize=" + Math.min(effectiveLimit, 30)) // Only admin can do > 30
             params.push("IsNsfw=" + (nsfw ? "All" : "False")) // null is random
         }
         else if (currentProvider === "t.alcy.cc") {
             url += tagString
             params.push("json")
-            params.push("quantity=" + limit)
+            params.push("quantity=" + effectiveLimit)
         }
         else {
-            params.push("tags=" + encodeURIComponent(tagString))
-            params.push("limit=" + limit)
-            if (currentProvider == "gelbooru") {
-                params.push("pid=" + page)
-            }
-            else {
+            if (currentProvider == "gelbooru" || currentProvider == "rule34") {
+                // Gelbooru/Rule34 DAPI pid is a 0-indexed page number (not item offset).
+                // pid=0 → page 1, pid=1 → page 2, etc. regardless of limit.
+                // sort:id:desc in the tag string gives newest-first, consistent with the website.
+                const dapiTags = tagString + " sort:id:desc"
+                params.push("tags=" + encodeURIComponent(dapiTags))
+                params.push("limit=" + effectiveLimit)
+                params.push("pid=" + (page - 1))
+            } else {
+                params.push("tags=" + encodeURIComponent(tagString))
+                params.push("limit=" + effectiveLimit)
                 params.push("page=" + page)
             }
         }
@@ -357,7 +447,7 @@ Singleton {
         return url
     }
 
-    function makeRequest(tags, nsfw=false, limit=20, page=1) {
+    function makeRequest(tags, nsfw=false, limit, page=1) {
         var url = constructRequestUrl(tags, nsfw, limit, page)
         console.log("[Booru] Making request to " + url)
 
@@ -406,7 +496,10 @@ Singleton {
 
         try {
             // Required for danbooru and konachan
-            if (["danbooru", "konachan"].includes(currentProvider)) {
+            var danbooruUA = "Qt/6.0"
+            if (currentProvider === "danbooru") {
+                xhr.setRequestHeader("User-Agent", danbooruUA)
+            } else if (["konachan", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             else if (currentProvider == "zerochan") {
@@ -435,6 +528,27 @@ Singleton {
         }
         var url = provider.tagSearchTemplate.replace("{{query}}", encodeURIComponent(query))
 
+        // Inject API credentials into tag search URL
+        if (currentProvider === "gelbooru") {
+            var gelbooruApiKey = Config.options?.sidebar?.booru?.gelbooru?.apiKey || ""
+            var gelbooruUserId = Config.options?.sidebar?.booru?.gelbooru?.userId || ""
+            if (gelbooruApiKey && gelbooruUserId) {
+                url += "&api_key=" + gelbooruApiKey + "&user_id=" + gelbooruUserId
+            }
+        } else if (currentProvider === "rule34") {
+            var rule34ApiKey = Config.options?.sidebar?.booru?.rule34?.apiKey || ""
+            var rule34UserId = Config.options?.sidebar?.booru?.rule34?.userId || ""
+            if (rule34ApiKey && rule34UserId) {
+                url += "&api_key=" + rule34ApiKey + "&user_id=" + rule34UserId
+            }
+        } else if (currentProvider === "danbooru") {
+            var danbooruLogin = Config.options?.sidebar?.booru?.danbooru?.login || ""
+            var danbooruApiKey = Config.options?.sidebar?.booru?.danbooru?.apiKey || ""
+            if (danbooruLogin && danbooruApiKey) {
+                url += "&login=" + danbooruLogin + "&api_key=" + danbooruApiKey
+            }
+        }
+
         var xhr = new XMLHttpRequest()
         currentTagRequest = xhr
         xhr.open("GET", url)
@@ -448,17 +562,19 @@ Singleton {
                     // console.log("[Booru] Mapped response: " + JSON.stringify(response))
                     root.tagSuggestion(query, response)
                 } catch (e) {
-                    console.log("[Booru] Failed to parse response: " + e)
+                    console.log("[Booru] Failed to parse tag response: " + e)
                 }
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {
-                console.log("[Booru] Request failed with status: " + xhr.status)
+                console.log("[Booru] Tag search failed with status: " + xhr.status)
             }
         }
 
         try {
-            // Required for danbooru and konachan
-            if (["danbooru", "konachan"].includes(currentProvider)) {
+            // Required for konachan, and gelbooru
+            if (currentProvider === "danbooru") {
+                xhr.setRequestHeader("User-Agent", "Qt/6.0")
+            } else if (["konachan", "gelbooru", "rule34"].includes(currentProvider)) {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()
@@ -467,4 +583,3 @@ Singleton {
         } 
     }
 }
-

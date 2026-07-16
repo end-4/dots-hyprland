@@ -9,6 +9,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Io
 
 Item {
     id: root
@@ -28,6 +29,26 @@ Item {
     property bool pullLoading: false
     property int pullLoadingGap: 80
     property real normalizedPullDistance: Math.max(0, (1 - Math.exp(-booruResponseListView.verticalOvershoot / 50)) * booruResponseListView.dragging)
+
+    property string cacheSize: ""
+
+    Process {
+        id: cacheSizeProcess
+        running: false
+        command: ["bash", "-c",
+            `du -sh '${Directories.booruPreviews}' 2>/dev/null | cut -f1 | sed 's/$/B/' || echo "0B"`
+        ]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.cacheSize = cacheSizeProcess.stdout.text.trim()
+            }
+        }
+    }
+
+    function refreshCacheSize() {
+        cacheSizeProcess.running = false
+        Qt.callLater(function() { cacheSizeProcess.running = true })
+    }
 
     Connections {
         target: Booru
@@ -200,6 +221,18 @@ Item {
                     nsfwPath: root.nsfwPath
                 }
 
+                footer: Item {
+                    property bool isLoading: !root.pullLoading && Booru.runningRequests > 0 && root.responses.length > 0
+                    width: booruResponseListView.width
+                    implicitHeight: isLoading ? footerIndicator.implicitHeight + 20 : 0
+                    MaterialLoadingIndicator {
+                        id: footerIndicator
+                        anchors.centerIn: parent
+                        loading: parent.isLoading
+                        visible: parent.isLoading
+                    }
+                }
+
                 onDragEnded: { // Pull to load more
                     const gap = booruResponseListView.verticalOvershoot
                     if (gap > root.pullLoadingGap) {
@@ -212,11 +245,18 @@ Item {
             PagePlaceholder {
                 id: placeholderItem
                 z: 2
-                shown: root.responses.length === 0
+                shown: root.responses.length === 0 && Booru.runningRequests === 0
                 icon: "bookmark_heart"
                 title: Translation.tr("Anime boorus")
                 description: ""
                 shape: MaterialShape.Shape.Bun
+            }
+
+            MaterialLoadingIndicator {
+                z: 3
+                anchors.centerIn: parent
+                visible: root.responses.length === 0 && Booru.runningRequests > 0
+                loading: true
             }
 
             ScrollToBottomButton {
@@ -265,7 +305,9 @@ Item {
                 }
                 delegate: ApiCommandButton {
                     id: tagButton
-                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer
+                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
+                    colBackgroundHover: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
+                    colBackgroundActive: tagSuggestions.selectedIndex === index ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
                     bounce: false
                     contentItem: RowLayout {
                         anchors.centerIn: parent
@@ -273,7 +315,7 @@ Item {
                         StyledText {
                             Layout.fillWidth: false
                             font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.colors.colOnSecondaryContainer
+                            color: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainer : Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignRight
                             text: modelData.displayName ?? modelData.name
                         }
@@ -281,7 +323,7 @@ Item {
                             Layout.fillWidth: false
                             visible: modelData.count !== undefined
                             font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnSecondaryContainer
+                            color: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainer : Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignLeft
                             text: modelData.count ?? ""
                         }
@@ -309,6 +351,8 @@ Item {
                 tagInputField.text = updatedText;
                 tagInputField.cursorPosition = tagInputField.text.length;
                 tagInputField.forceActiveFocus();
+                tagInputField.searchTimer.stop();
+                root.suggestionList = [];
             }
 
             function acceptSelectedTag() {
@@ -427,7 +471,11 @@ Item {
                                 // Insert newline
                                 tagInputField.insert(tagInputField.cursorPosition, "\n")
                                 event.accepted = true
-                            } else { // Accept text
+                            } else if (tagSuggestions.visible && tagSuggestions.selectedIndex >= 0) {
+                                // Accept selected suggestion instead of submitting
+                                tagSuggestions.acceptSelectedTag();
+                                event.accepted = true
+                            } else { // Accept text (search)
                                 const inputText = tagInputField.text
                                 root.handleInput(inputText)
                                 tagInputField.clear()
@@ -479,24 +527,86 @@ Item {
 
                 property var commandsShown: [
                     {
-                        name: "mode",
-                        sendDirectly: false,
-                    },
-                    {
                         name: "clear",
                         sendDirectly: true,
                     }, 
                 ]
 
-                ApiInputBoxIndicator { // Tool indicator
-                    icon: "api"
-                    text: Booru.providers[Booru.currentProvider].name
-                    tooltipText: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
-                        .arg(Booru.providers[Booru.currentProvider].url)
-                        .arg(root.commandPrefix)
+                RippleButton {
+                    id: providerIndicator
+                    implicitWidth: rowLayout.implicitWidth + 4 * 2
+                    implicitHeight: rowLayout.implicitHeight + 4 * 2
+                    buttonRadius: Appearance.rounding.small
+
+                    RowLayout {
+                        id: rowLayout
+                        anchors.centerIn: parent
+
+                        MaterialSymbol {
+                            text: "api"
+                            iconSize: Appearance.font.pixelSize.normal
+                        }
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3onSurface
+                            elide: Text.ElideRight
+                            text: Booru.providers[Booru.currentProvider].name
+                            animateChange: true
+                        }
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Current API endpoint: %1\nClick to switch with %2mode PROVIDER")
+                            .arg(Booru.providers[Booru.currentProvider].url)
+                            .arg(root.commandPrefix)
+                    }
+
+                    onClicked: {
+                        tagInputField.text = root.commandPrefix + "mode "
+                        tagInputField.cursorPosition = tagInputField.text.length
+                        tagInputField.forceActiveFocus()
+                    }
                 }
 
                 StyledText {
+                    font.pixelSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnLayer1
+                    text: "•"
+                }
+
+                RippleButton {
+                    id: cacheSizeLabel
+                    visible: root.cacheSize.length > 0
+                    implicitWidth: cacheRow.implicitWidth + 4 * 2
+                    implicitHeight: cacheRow.implicitHeight + 4 * 2
+                    buttonRadius: Appearance.rounding.small
+
+                    RowLayout {
+                        id: cacheRow
+                        anchors.centerIn: parent
+
+                        MaterialSymbol {
+                            text: "cached"
+                            iconSize: Appearance.font.pixelSize.normal
+                        }
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3onSurface
+                            elide: Text.ElideRight
+                            text: root.cacheSize
+                            animateChange: true
+                        }
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Click to clear booru image cache")
+                    }
+
+                    onClicked: root.clearBooruCache()
+                }
+
+                StyledText {
+                    visible: root.cacheSize.length > 0
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: Appearance.colors.colOnLayer1
                     text: "•"
@@ -524,14 +634,14 @@ Item {
                             Layout.alignment: Qt.AlignVCenter
                             font.pixelSize: Appearance.font.pixelSize.smaller
                             color: nsfwSwitch.enabled ? Appearance.colors.colOnLayer1 : Appearance.m3colors.m3outline
-                            text: Translation.tr("Allow NSFW")
+                            text: Booru.currentProvider === "rule34" ? Translation.tr("Allow AI") : Translation.tr("Allow NSFW")
                         }
                         StyledSwitch {
                             id: nsfwSwitch
                             enabled: Booru.currentProvider !== "zerochan"
                             scale: 0.6
                             Layout.alignment: Qt.AlignVCenter
-                            checked: (Persistent.states.booru.allowNsfw && Booru.currentProvider !== "zerochan")
+                            checked: Persistent.states.booru.allowNsfw
                             onCheckedChanged: {
                                 if (!nsfwSwitch.enabled) return;
                                 Persistent.states.booru.allowNsfw = checked;
@@ -554,13 +664,7 @@ Item {
                             colBackground: Appearance.colors.colLayer2
 
                             downAction: () => {
-                                if (modelData.sendDirectly) {
-                                    root.handleInput(commandRepresentation)
-                                } else {
-                                    tagInputField.text = commandRepresentation + " "
-                                    tagInputField.cursorPosition = tagInputField.text.length
-                                    tagInputField.forceActiveFocus()
-                                }
+                                root.handleInput(commandRepresentation)
                                 if (modelData.name === "clear") {
                                     tagInputField.text = ""
                                 }
@@ -571,5 +675,50 @@ Item {
             }
 
         }
+    }
+
+    // Cache lifecycle: auto-cleanup 1 hour after close, timer resets on reopen
+    Connections {
+        target: GlobalStates
+        function onSidebarLeftOpenChanged() {
+            if (GlobalStates.sidebarLeftOpen) {
+                cacheCleanupTimer.stop()
+                cachePollTimer.start()
+                refreshCacheSize()
+            } else {
+                cacheCleanupTimer.restart()
+                cachePollTimer.stop()
+            }
+        }
+    }
+
+    Timer {
+        id: cacheCleanupTimer
+        interval: 3600000
+        repeat: false
+        onTriggered: clearBooruCache()
+    }
+
+    Timer {
+        id: cacheRefreshTimer
+        interval: 600
+        repeat: false
+        onTriggered: refreshCacheSize()
+    }
+
+    Timer {
+        id: cachePollTimer
+        interval: 10000
+        repeat: true
+        onTriggered: refreshCacheSize()
+    }
+
+    Component.onCompleted: refreshCacheSize()
+
+    function clearBooruCache() {
+        Quickshell.execDetached(["bash", "-c",
+            `rm -rf '${Directories.booruPreviews}'; mkdir -p '${Directories.booruPreviews}'`
+        ])
+        cacheRefreshTimer.restart()
     }
 }

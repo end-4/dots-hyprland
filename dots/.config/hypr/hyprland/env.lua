@@ -14,3 +14,6 @@ hl.env("XDG_MENU_PREFIX", "plasma-")
 
 -- Virtual environment
 hl.env("ILLOGICAL_IMPULSE_VIRTUAL_ENV", home_dir .. "/.local/state/quickshell/.venv")
+
+-- Fluid simulation plugin
+hl.env("QML2_IMPORT_PATH", home_dir .. "/.local/share/quickshell/imports")

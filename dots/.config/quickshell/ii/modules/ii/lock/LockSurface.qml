@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import FluxEngine 1.0
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -10,7 +11,9 @@ import qs.modules.common.functions
 import qs.modules.common.panels.lock
 import qs.modules.ii.bar as Bar
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.SystemTray
+import qs.modules.ii.mediaControls
 
 MouseArea {
     id: root
@@ -57,6 +60,55 @@ MouseArea {
         }
     }
 
+    property var pendingAction: null
+    property bool showConfirmDialog: false
+    property bool unlockRequested: false
+
+    // Whether a player with a title is currently active
+    readonly property bool mediaPlayerAvailable: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
+
+    // Gate that keeps the Loader alive during exit animation.
+    // Set to true when player appears, set to false only after exit anim finishes.
+    property bool mediaLoaderActive: false
+
+    onMediaPlayerAvailableChanged: {
+        if (mediaPlayerAvailable) {
+            mediaLoaderActive = true
+            if (lockscreenMediaController.item) {
+                mediaExitAnim.stop()
+                lockscreenMediaController.mediaScale   = 0.85
+                lockscreenMediaController.mediaOpacity = 0.0
+                entryAnim.restart()
+            }
+        } else {
+            if (lockscreenMediaController.item) {
+                entryAnim.stop()
+                mediaExitAnim.restart()
+            } else {
+                mediaLoaderActive = false
+            }
+        }
+    }
+
+    // Visualizer data for lockscreen media controls
+    property list<real> visualizerPoints: []
+
+    Process {
+        id: cavaProc
+        running: root.mediaLoaderActive && root.mediaPlayerAvailable
+        onRunningChanged: {
+            if (!cavaProc.running)
+                root.visualizerPoints = [];
+        }
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
+        stdout: SplitParser {
+            onRead: data => {
+                let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                root.visualizerPoints = points;
+            }
+        }
+    }
+
     // Force focus on entry
     function forceFieldFocus() {
         passwordBox.forceActiveFocus();
@@ -67,13 +119,107 @@ MouseArea {
             forceFieldFocus();
         }
     }
+
+
+    cursorShape: root.toolbarOpacity > 0 ? Qt.ArrowCursor : Qt.BlankCursor
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
-    onPressed: mouse => {
-        forceFieldFocus();
+    onPressed: mouse => { forceFieldFocus(); showToolbar(); }
+    onPositionChanged: mouse => { forceFieldFocus(); showToolbar(); }
+
+    // ── Fluid simulation background ──
+    Loader {
+        id: fluidLoader
+        anchors.fill: parent
+        z: -1
+        active: Config.options.fluid.enabled
+
+        sourceComponent: FluxItem {
+            id: fluidBg
+            anchors.fill: parent
+            opacity: root.fluidOpacity
+            running: false
+            viscosity: Config.options.fluid.viscosity
+            noiseMultiplier: Config.options.fluid.noiseMultiplier
+            timestep: Config.options.fluid.timestep
+            dissipation: Config.options.fluid.dissipation
+            pressureIterations: Config.options.fluid.pressureIterations
+            lineVariance: Config.options.fluid.lineVariance
+            lineWidthMultiplier: Config.options.fluid.lineWidthMultiplier
+            zoom: Config.options.fluid.zoom
+            colorPreset: Config.options.fluid.colorPreset
+
+            Timer {
+                interval: Math.max(16, Config.options.fluid.fpsLimit > 0
+                    ? Math.floor(1000 / Config.options.fluid.fpsLimit)
+                    : 16)
+                running: parent.running
+                repeat: true
+                onTriggered: parent.onFrameTick()
+            }
+        }
     }
-    onPositionChanged: mouse => {
-        forceFieldFocus();
+
+    // Detect unlock signal from LockContext (same instance as LockScreen's)
+    Connections {
+        target: context
+        function onUnlocked() {
+            root.unlockRequested = true;
+        }
+    }
+
+    // Transition on unlock request: fade toolbar out
+    onUnlockRequestedChanged: {
+        if (unlockRequested) {
+            toolbarOpacity = 0;
+            toolbarScale = 0.85;
+            fluidOpacity = 0;
+        }
+    }
+
+    // Timer before fluid appears (default 30s)
+    Timer {
+        id: fluidStartTimer
+        interval: Config.options.fluid.idleTimeout * 1000
+        running: Config.options.fluid.enabled && fluidLoader.active
+        repeat: false
+        onTriggered: {
+            if (fluidLoader.item) fluidLoader.item.running = true;
+            fluidOpacity = 1;
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+        }
+    }
+
+    // Timer: setelah fluidOpacity selesai fade out, stop simulation
+    Timer {
+        id: fadeOutTimer
+        interval: Config.options.fluid.fadeDuration
+        repeat: false
+        onTriggered: {
+            if (fluidLoader.item) fluidLoader.item.running = false;
+        }
+    }
+
+    // Timer to auto-hide toolbar after user stops interacting (default 10s)
+    Timer {
+        id: widgetHideTimer
+        interval: Config.options.fluid.widgetAutoHideTimeout * 1000
+        repeat: false
+        onTriggered: {
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+            if (Config.options.fluid.dimOnInteraction) {
+                if (fluidLoader.item) fluidLoader.item.running = true;
+                fluidOpacity = 1;
+            }
+        }
+    }
+
+    // Fluid animation visibility
+    property real fluidOpacity: 0
+    Behavior on fluidOpacity {
+        NumberAnimation { duration: Config.options.fluid.fadeDuration }
     }
 
     // Toolbar appearing animation
@@ -90,24 +236,68 @@ MouseArea {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
+    function showToolbar() {
+        if (Config.options.fluid.enabled) {
+            fluidStartTimer.restart();
+            widgetHideTimer.restart();
+            if (Config.options.fluid.dimOnInteraction) {
+                fluidOpacity = 0;
+                fadeOutTimer.restart();
+            }
+        }
+        toolbarOpacity = 1;
+        toolbarScale = 1;
+    }
+
+    // Shake the whole toolbar row (left island + main island + right island) on wrong password.
+    // Soft & minimal: 3 alternating left-right-left nudges of 15px, settling back to 0, over 1s total.
+    property real rowShakeX: 0
+
+    SequentialAnimation {
+        id: wrongPasswordRowShakeAnim
+        NumberAnimation { target: root; property: "rowShakeX"; to: -15; duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: 15;  duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: -15; duration: 120; easing.type: Easing.InOutSine }
+        NumberAnimation { target: root; property: "rowShakeX"; to: 0;   duration: 120; easing.type: Easing.InOutSine }
+    }
+    Connections {
+        target: GlobalStates
+        function onScreenUnlockFailedChanged() {
+            if (GlobalStates.screenUnlockFailed) wrongPasswordRowShakeAnim.restart();
+        }
+    }
+
     // Init
     Component.onCompleted: {
         forceFieldFocus();
         toolbarScale = 1;
         toolbarOpacity = 1;
+        if (GlobalStates.lockFromIdle && Config.options.fluid.enabled) {
+            if (fluidLoader.item) fluidLoader.item.running = true;
+            fluidOpacity = 1;
+            toolbarOpacity = 0;
+            toolbarScale = 0.9;
+        }
+        if (mediaPlayerAvailable) {
+            mediaLoaderActive = true;
+        }
+        if (Config.options.fluid.enabled)
+            widgetHideTimer.start();
     }
 
     // Key presses
     property bool ctrlHeld: false
     Keys.onPressed: event => {
         root.context.resetClearTimer();
+        showToolbar();
         if (event.key === Qt.Key_Control) {
             root.ctrlHeld = true;
         }
         if (event.key === Qt.Key_Escape) { // Esc to clear
             root.context.currentText = "";
-        } 
+        }
         forceFieldFocus();
+        event.accepted = false; // propagate to passwordBox
     }
     Keys.onReleased: event => {
         if (event.key === Qt.Key_Control) {
@@ -134,6 +324,85 @@ MouseArea {
     //     }
     // }
 
+    Loader {
+        id: lockscreenMediaController
+
+        // Controlled manually via mediaLoaderActive so exit anim can finish
+        // before the item is destroyed.
+        active: root.mediaLoaderActive
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: mainIsland.top
+            bottomMargin: 15
+        }
+
+        // Driven imperatively — no Behavior, so start values apply instantly.
+        property real mediaScale: 0.85
+        property real mediaOpacity: 0.0
+
+        scale: mediaScale * root.toolbarScale
+        opacity: mediaOpacity * root.toolbarOpacity
+
+        // Entry: fires after sourceComponent is fully instantiated.
+        onLoaded: {
+            mediaScale   = 0.85
+            mediaOpacity = 0.0
+            entryAnim.restart()
+        }
+
+        ParallelAnimation {
+            id: entryAnim
+            NumberAnimation {
+                target: lockscreenMediaController
+                property: "mediaScale"
+                to: 1.0
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Easing.OutBack
+                easing.overshoot: 1.5
+            }
+            NumberAnimation {
+                target: lockscreenMediaController
+                property: "mediaOpacity"
+                to: 1.0
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.InCubic
+            }
+        }
+
+        // Exit: deactivates loader when animation finishes.
+        SequentialAnimation {
+            id: mediaExitAnim
+            ParallelAnimation {
+                NumberAnimation {
+                    target: lockscreenMediaController
+                    property: "mediaScale"
+                    to: 0.85
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Easing.InBack
+                    easing.overshoot: 1.2
+                }
+                NumberAnimation {
+                    target: lockscreenMediaController
+                    property: "mediaOpacity"
+                    to: 0.0
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Easing.InCubic
+                }
+            }
+            // Only destroy the item after the animation has fully completed.
+            ScriptAction {
+                script: root.mediaLoaderActive = false
+            }
+        }
+
+        sourceComponent: LockMediaWidget {
+            player: MprisController.activePlayer
+            visualizerPoints: root.visualizerPoints
+            radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+        }
+    }
+    
     // Main toolbar: password box
     Toolbar {
         id: mainIsland
@@ -148,6 +417,7 @@ MouseArea {
 
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         // Fingerprint
         Loader {
@@ -183,7 +453,10 @@ MouseArea {
             inputMethodHints: Qt.ImhSensitiveData
 
             // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
+            onTextChanged: {
+                root.context.currentText = this.text;
+                root.showToolbar();
+            }
             onAccepted: {
                 root.context.tryUnlock(ctrlHeld);
             }
@@ -196,6 +469,7 @@ MouseArea {
 
             Keys.onPressed: event => {
                 root.context.resetClearTimer();
+                event.accepted = false;
             }
             
             layer.enabled: true
@@ -204,18 +478,6 @@ MouseArea {
                     width: passwordBox.width - 8
                     height: passwordBox.height
                     radius: height / 2
-                }
-            }
-
-            // Shake when wrong password
-            ErrorShakeAnimation {
-                id: wrongPasswordShakeAnim
-                target: passwordBox
-            }
-            Connections {
-                target: GlobalStates
-                function onScreenUnlockFailedChanged() {
-                    if (GlobalStates.screenUnlockFailed) wrongPasswordShakeAnim.restart();
                 }
             }
 
@@ -277,6 +539,7 @@ MouseArea {
         }
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         // Username
         IconAndTextPair {
@@ -338,6 +601,7 @@ MouseArea {
 
         scale: root.toolbarScale
         opacity: root.toolbarOpacity
+        transform: Translate { x: root.rowShakeX }
 
         IconAndTextPair {
             visible: Battery.available
@@ -373,7 +637,8 @@ MouseArea {
 
         onClicked: {
             if (!root.requirePasswordToPower) {
-                root.context.unlocked(guardedBtn.targetAction);
+                root.pendingAction = guardedBtn.targetAction;
+                root.showConfirmDialog = true;
                 return;
             }
             if (root.context.targetAction === guardedBtn.targetAction) {
@@ -409,6 +674,173 @@ MouseArea {
             anchors.verticalCenter: parent.verticalCenter
             text: pair.text
             color: pair.color
+        }
+    }
+
+    // Confirmation popup — close animation
+    property bool confirmExecuteOnClose: false
+
+    function closeConfirmPopup(execute) {
+        confirmPopup.confirmExecuteOnClose = execute;
+        closePopupAnim.restart();
+    }
+
+    SequentialAnimation {
+        id: closePopupAnim
+        ParallelAnimation {
+            NumberAnimation {
+                target: confirmPopup
+                property: "scale"
+                to: 0
+                duration: 250
+                easing.type: Easing.InBack
+                easing.overshoot: 1.4
+            }
+            NumberAnimation {
+                target: confirmPopup
+                property: "opacity"
+                to: 0
+                duration: 250
+                easing.type: Easing.InBack
+            }
+        }
+        ScriptAction {
+            script: {
+                if (confirmPopup.confirmExecuteOnClose) {
+                    root.context.unlocked(root.pendingAction);
+                }
+                root.showConfirmDialog = false;
+                root.pendingAction = null;
+            }
+        }
+    }
+
+    // Transparent scrim to catch outside clicks and dismiss the popup
+    MouseArea {
+        anchors.fill: parent
+        z: 998
+        visible: root.showConfirmDialog
+        enabled: root.showConfirmDialog
+        acceptedButtons: Qt.AllButtons
+        hoverEnabled: true
+        onClicked: root.closeConfirmPopup(false)
+    }
+
+    // Confirmation popup — inline, positioned above the right toolbar
+    Rectangle {
+        id: confirmPopup
+        z: 999
+        anchors {
+            bottom: rightIsland.top
+            bottomMargin: 8
+            right: rightIsland.right
+        }
+
+        visible: root.showConfirmDialog
+        width: Math.max(textColumn.implicitWidth, popupButtons.width) + 32
+        height: textColumn.implicitHeight + popupButtons.height + 40
+        radius: Appearance.rounding.large
+        color: Appearance.m3colors.m3surfaceContainerHigh
+
+        property bool confirmExecuteOnClose: root.confirmExecuteOnClose
+
+        transformOrigin: Item.BottomRight
+        scale: root.showConfirmDialog ? 1 : 0
+        opacity: root.showConfirmDialog ? 1 : 0
+
+        Behavior on scale {
+            NumberAnimation {
+                duration: 350
+                easing.type: Easing.OutBack
+                easing.overshoot: 1.8
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 180
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        StyledRectangularShadow {
+            target: confirmPopup
+        }
+
+        Column {
+            id: textColumn
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+                margins: 16
+            }
+            spacing: 6
+
+            StyledText {
+                width: parent.width
+                text: root.pendingAction === LockContext.ActionEnum.Poweroff
+                    ? Translation.tr("Shutdown now?")
+                    : Translation.tr("Restart now?")
+                color: Appearance.m3colors.m3onSurface
+                font.pixelSize: Appearance.font.pixelSize.small
+                wrapMode: Text.Wrap
+            }
+
+            StyledText {
+                width: parent.width
+                text: Translation.tr("You and any other people using this PC could lose unsaved work.")
+                color: Appearance.m3colors.m3onSurfaceVariant
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                wrapMode: Text.Wrap
+            }
+        }
+
+        Row {
+            id: popupButtons
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                margins: 12
+            }
+            spacing: 15
+
+            StyledText {
+                anchors.verticalCenter: parent.verticalCenter
+                text: Translation.tr("Cancel")
+                color: Appearance.colors.colOnSurface
+                font.pixelSize: Appearance.font.pixelSize.small
+
+                MouseArea {
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.closeConfirmPopup(false)
+                }
+            }
+
+            // Confirm button (filled primary)
+            Rectangle {
+                width: confirmText.implicitWidth + 20
+                height: 32
+                radius: Appearance.rounding.full
+                color: Appearance.colors.colPrimary
+
+                StyledText {
+                    id: confirmText
+                    anchors.centerIn: parent
+                    text: root.pendingAction === LockContext.ActionEnum.Poweroff
+                        ? Translation.tr("Shutdown")
+                        : Translation.tr("Restart")
+                    color: Appearance.colors.colOnPrimary
+                    font.pixelSize: Appearance.font.pixelSize.small
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.closeConfirmPopup(true)
+                }
+            }
         }
     }
 }

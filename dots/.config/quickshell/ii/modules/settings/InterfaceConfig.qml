@@ -231,6 +231,28 @@ ContentPage {
                 checked: Config.options.lock.enableMedia
                 onCheckedChanged: {
                     Config.options.lock.enableMedia = checked;
+            ConfigSwitch {
+                buttonIcon: "brightness_6"
+                text: Translation.tr('Dim lockscreen')
+                checked: Config.options.lock.dim.enable
+                onCheckedChanged: {
+                    Config.options.lock.dim.enable = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Darkens the lockscreen background for better visibility")
+                }
+            }
+
+            ConfigSlider {
+                text: Translation.tr("Dim strength")
+                usePercentTooltip: true
+                value: Config.options.lock.dim.strength
+                from: 0
+                to: 100
+                buttonIcon: "contrast"
+                stopIndicatorValues: [10]
+                onValueChanged: {
+                    Config.options.lock.dim.strength = value;
                 }
             }
         }
@@ -255,6 +277,18 @@ ContentPage {
                 stepSize: 2
                 onValueChanged: {
                     Config.options.lock.blur.extraZoom = value / 100;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "blur_on"
+                text: Translation.tr("Blur strength (radius)")
+                value: Config.options.lock.blur.radius
+                from: 5
+                to: 200
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.lock.blur.radius = value;
                 }
             }
         }

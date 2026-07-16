@@ -5,6 +5,7 @@ import qs.modules.common.widgets
 
 Item {
     id: root
+    clip: true
 
     property bool shown: true
     property alias icon: shapeWidget.text
@@ -56,6 +57,7 @@ Item {
             color: Appearance.m3colors.m3outline
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
+            textFormat: Text.RichText
         }
     }
 }

@@ -80,3 +80,47 @@ install-python-packages(){
   fi
   x deactivate
 }
+
+install-fluxengine-plugin(){
+  local FLUX_REPO="dxnz-id/flux-quickshell"
+  local FLUX_IMPORT_DIR="$HOME/.local/share/quickshell/imports"
+  local TMP_FILE
+  TMP_FILE="$(mktemp)"
+
+  log_info "Fetching latest FluxEngine release from GitHub..."
+  local TAG
+  TAG="$(git ls-remote --tags --sort='-version:refname' \
+    "https://github.com/${FLUX_REPO}" \
+    | grep -o 'refs/tags/v[0-9.]*' \
+    | head -1 \
+    | sed 's|refs/tags/||')"
+  local DOWNLOAD_URL="https://github.com/${FLUX_REPO}/releases/download/${TAG}/FluxEngine-${TAG}-linux-x86_64.tar.gz"
+
+  if [ -z "$TAG" ]; then
+    log_error "Could not find any tags for ${FLUX_REPO}"
+    rm -f "$TMP_FILE"
+    return 1
+  fi
+
+  log_info "Downloading $TAG ..."
+  x mkdir -p "$FLUX_IMPORT_DIR/FluxEngine"
+  x curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
+  x tar -xzf "$TMP_FILE" --strip-components=1 -C "$FLUX_IMPORT_DIR/FluxEngine"
+  rm -f "$TMP_FILE"
+
+  if [ ! -f "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so" ]; then
+    log_error "FluxEngine plugin not found after extraction"
+    return 1
+  fi
+
+  # Fix RPATH so plugin finds libfluxengine.so in same directory
+  if command -v patchelf &>/dev/null; then
+    patchelf --set-rpath '$ORIGIN' "$FLUX_IMPORT_DIR/FluxEngine/libfluxengineplugin.so"
+    log_info "RPATH fixed: libfluxengineplugin.so finds libfluxengine.so via \$ORIGIN"
+  else
+    log_warn "patchelf not found; libfluxengine.so might not load at runtime"
+    log_warn "Install patchelf or set LD_LIBRARY_PATH=$FLUX_IMPORT_DIR/FluxEngine"
+  fi
+
+  log_info "FluxEngine plugin installed to $FLUX_IMPORT_DIR/FluxEngine/"
+}
