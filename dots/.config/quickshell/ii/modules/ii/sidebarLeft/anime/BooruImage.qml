@@ -35,7 +35,7 @@ Button {
         id: imageDownloader
         running: root.refererUrl === ""
         filePath: root.filePath
-        sourceUrl: root.imageData.sample_url ?? root.imageData.preview_url ?? root.imageData.file_url
+        sourceUrl: root.imageData.sample_url || root.imageData.preview_url || root.imageData.file_url
         onDone: (path, width, height) => {
             imageObject.source = path
             if (!modelData.width || !modelData.height) {
@@ -47,22 +47,43 @@ Button {
     }
 
     // Referer-aware downloader via curl — used for providers with hotlink protection (e.g. Gelbooru)
+    // Stage 1: download preview_url fast for immediate display
     Process {
-        id: refererDownloader
+        id: refererPreviewDownloader
         running: root.refererUrl !== ""
         command: ["bash", "-c",
             `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
-            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] || ` +
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' ] && echo DONE || ` +
             `(curl -s -L ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
-            `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url ?? root.imageData.file_url)}' ` +
-            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ` +
-            `|| curl -s -L ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' && ` +
+            `[ -s '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' ] && echo DONE)`
+        ]
+        stdout: SplitParser {
+            onRead: (line) => {
+                if (line.trim() === "DONE") {
+                    imageObject.source = root.filePath + ".preview"
+                    refererSampleUpgrader.running = true
+                }
+            }
+        }
+    }
+    // Stage 2: upgrade to sample_url quality in background (only if different from file_url)
+    Process {
+        id: refererSampleUpgrader
+        running: false
+        command: ["bash", "-c",
+            `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo DONE || ` +
+            `(curl -s -L ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
-            `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url)}' ` +
-            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}') && echo DONE`
+            `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url)}' ` +
+            `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' && ` +
+            `[ -s '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ] && ` +
+            `mv '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ` +
+            `'${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE)`
         ]
         stdout: SplitParser {
             onRead: (line) => {
@@ -97,7 +118,7 @@ Button {
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
-            source: root.refererUrl !== "" ? "" : modelData.preview_url
+            source: modelData.preview_url || modelData.sample_url || modelData.file_url
 
             layer.enabled: true
             layer.effect: OpacityMask {

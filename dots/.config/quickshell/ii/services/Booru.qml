@@ -41,10 +41,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -76,10 +76,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -139,10 +139,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_file_url,
-                        "sample_url": item.large_file_url ?? item.file_url,
+                        "sample_url": item.large_file_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -175,10 +175,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_url.split('.').pop(),
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
@@ -196,7 +196,7 @@ Singleton {
             "name": "Rule34",
             "url": "https://rule34.xxx",
             "api": "https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1",
-            "defaultLimit": 43,
+            "defaultLimit": 42,
             "description": Translation.tr("The original | All the NSFW you could ever want"),
             "mapFunc": (response) => {
                 return response.map(item => {
@@ -210,10 +210,10 @@ Singleton {
                         "is_nsfw": (item.rating != 's'),
                         "md5": item.md5,
                         "preview_url": item.preview_url,
-                        "sample_url": item.sample_url ?? item.file_url,
+                        "sample_url": item.sample_url || item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_url.split('.').pop(),
-                        "source": getWorkingImageSource(item.source) ?? item.file_url,
+                        "source": getWorkingImageSource(item.source) || item.file_url,
                     }
                 })
             },
