@@ -29,13 +29,19 @@ Button {
     property real imageRadius: Appearance.rounding.small
 
     property bool showActions: false
+    property bool sampleDownloaded: false
+    readonly property var imageExtensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "svg", "avif"]
 
     onClicked: {
-        var src = String(imageObject.source)
-        if (src.startsWith("/"))
-            src = "file://" + src
-        if (src.length > 0)
-            Qt.openUrlExternally(src)
+        if (root.sampleDownloaded) {
+            Qt.openUrlExternally("file://" + root.filePath)
+        } else {
+            var src = String(imageObject.source)
+            if (src.startsWith("/"))
+                src = "file://" + src
+            if (src.length > 0)
+                Qt.openUrlExternally(src)
+        }
     }
 
     // Standard downloader — used for all providers WITHOUT hotlink protection
@@ -45,7 +51,11 @@ Button {
         filePath: root.filePath
         sourceUrl: root.imageData.sample_url || root.imageData.preview_url || root.imageData.file_url
         onDone: (path, width, height) => {
-            imageObject.source = path
+            if (root.imageExtensions.includes(root.imageData.file_ext)) {
+                imageObject.source = path
+            } else {
+                root.sampleDownloaded = true
+            }
             if (!modelData.width || !modelData.height) {
                 modelData.width = width
                 modelData.height = height
@@ -62,12 +72,13 @@ Button {
         command: ["bash", "-c",
             `mkdir -p '${StringUtils.shellSingleQuoteEscape(root.previewDownloadPath)}' && ` +
             `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' ] && echo DONE || ` +
-            `(curl -s -L ` +
+            `(curl -s -L --max-time 120 --retry 2 ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
             `'${StringUtils.shellSingleQuoteEscape(root.imageData.preview_url)}' ` +
             `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' && ` +
-            `[ -s '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' ] && echo DONE)`
+            `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.preview' | grep -q '^image/' && ` +
+            `echo DONE)`
         ]
         stdout: SplitParser {
             onRead: (line) => {
@@ -84,19 +95,23 @@ Button {
         running: false
         command: ["bash", "-c",
             `[ -f '${StringUtils.shellSingleQuoteEscape(root.filePath)}' ] && echo DONE || ` +
-            `(curl -s -L ` +
+            `(curl -s -L --max-time 120 --retry 2 ` +
             `-H 'Referer: ${root.refererUrl}' ` +
             `-H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(root.defaultUserAgent)}' ` +
             `'${StringUtils.shellSingleQuoteEscape(root.imageData.sample_url)}' ` +
             `-o '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' && ` +
-            `[ -s '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ] && ` +
+            `file -b --mime-type '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' | grep -q '^image/' && ` +
             `mv '${StringUtils.shellSingleQuoteEscape(root.filePath)}.tmp' ` +
             `'${StringUtils.shellSingleQuoteEscape(root.filePath)}' && echo DONE)`
         ]
         stdout: SplitParser {
             onRead: (line) => {
                 if (line.trim() === "DONE") {
-                    imageObject.source = root.filePath
+                    if (root.imageExtensions.includes(root.imageData.file_ext)) {
+                        imageObject.source = root.filePath
+                    } else {
+                        root.sampleDownloaded = true
+                    }
                 }
             }
         }
