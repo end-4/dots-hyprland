@@ -8,6 +8,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import Quickshell.Hyprland
 
 ContentPage {
     forceWidth: true
@@ -200,7 +201,7 @@ ContentPage {
                         text: Translation.tr("Pick wallpaper image on your system")
                     }
                     onClicked: {
-                        Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
+                        Hyprland.dispatch(`hl.dsp.global("quickshell:wallpaperSelectorToggle")`);
                     }
                     mainContentComponent: Component {
                         RowLayout {
