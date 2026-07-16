@@ -227,7 +227,7 @@ ContentPage {
             //togle for the media on the lock screen
             ConfigSwitch {
                 buttonIcon: "play_arrow"
-                text: Translation.tr('Allow media Player on lock screen')
+                text: Translation.tr('Allow media controls on lock screen')
                 checked: Config.options.lock.enableMedia
                 onCheckedChanged: {
                     Config.options.lock.enableMedia = checked;
