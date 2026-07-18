@@ -142,7 +142,7 @@ Item {
         }
 
         property bool shouldShow: {
-            if (root.dragging) return false;
+            if (root.dragging || contextMenu.isOpen) return false;
             const hoverConditions = (popupMouseArea.containsMouse || root.buttonHovered)
             return hoverConditions && allPreviewsReady;
         }
@@ -269,7 +269,15 @@ Item {
                                 }
                                 ScreencopyView {
                                     id: screencopyView
-                                    captureSource: previewPopup ? windowButton.modelData : null
+                                    // Gate capture on actual visibility: hover or popup-mouse, AND not in
+                                    // a state that's about to tear down the popup (context menu, drag).
+                                    // Hyprland 0.54.0 asserts in CScreenshareFrame::copyDmabuf if a frame
+                                    // is in flight when the popup is destroyed — that crashed the session
+                                    // on right-click before this gate.
+                                    captureSource: (root.buttonHovered || popupMouseArea.containsMouse)
+                                        && !contextMenu.isOpen
+                                        && !root.dragging
+                                        ? windowButton.modelData : null
                                     live: true
                                     paintCursor: true
                                     constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
