@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="mdi-gentoo"
+   viewBox="0 0 20 20"
+   version="1.1"
+   sodipodi:docname="Pictogrammers-Material-Gentoo.svg"
+   width="20"
+   height="20"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="20.875"
+     inkscape:cx="9.508982"
+     inkscape:cy="9.9640719"
+     inkscape:window-width="1327"
+     inkscape:window-height="1068"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="mdi-gentoo" />
+  <path
+     d="m 8.2792823,-5.5983568e-4 c -0.35,0 -0.71,0.0299999957 -1.05,0.0999999957 -3.62,0.66 -6.17,3.79000004 -6.38,5.86000004 -0.11,1.01 0.44,1.77 0.74,2.1 0.81,0.91 2.44,1.6 3.48,2.1699998 -1.51,1.27 -2.2,1.91 -2.88,2.63 -1.02,1.07 -1.74,2.24 -1.74,3.09 0,0.27 -0.05,1.14 0.31,1.82 0.13,0.26 0.51,1.12 1.65,1.76 0.73,0.41 1.76,0.56 2.78,0.42 3.14,-0.45 7.3499997,-3.12 10.3599997,-5.6 1.91,-1.58 3.31,-3.12 3.71,-3.85 0.33,-0.6299998 0.37,-1.7199998 0.18,-2.4099998 -0.54,-1.95 -4.91,-5.94 -8.48,-7.54000004 -0.82,-0.37 -1.7599997,-0.54999999568 -2.6799997,-0.54999999568 m 1.06,2.91000003568 c 0.25,0 0.47,0.03 0.66,0.09 1.1499997,0.3 3.0799997,1.68 2.9099997,2.94 -0.23,1.66 -1.68,2.33 -3.3499997,2.09 -0.98,-0.13 -2.93,-1.23 -2.78,-3.14 0.11,-1.49 1.52,-1.99 2.56,-1.98 m -0.02,1.74 c -0.27,0 -0.48,0.06 -0.58,0.22 -0.47,0.72 -0.24,1.22 0.18,1.55 0.15,-0.38 1.7899997,0.03 1.8299997,0.37 1.42,-1.07 -0.39,-2.13 -1.4299997,-2.14 z"
+     id="path1" />
+</svg>

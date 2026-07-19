@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Type = Package
+Target = qt6-base
+Target = qt6-wayland
+[Action]
+Description = Querying Quickshell compatibility after Qt6 update...
+When = PostTransaction
+Exec = /usr/bin/quickshell --private-check-compat

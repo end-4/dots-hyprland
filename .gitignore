@@ -1,10 +1,17 @@
-.config/ags/node_modules
-.config/ags/scss/_musicmaterial.scss
-.config/ags/scss/_musicwal.scss
-.config/ags/scss/_material.scss
 /diagnose.result
-/ii_ags.log
 /cache
+
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
+
+/dots/.config/quickshell/ii/.qmlls.ini
+
+# exp-update
+/.update-lock
+
+# custom os-release
+/os-release
+
+# Emacs auto backup file
+*~
