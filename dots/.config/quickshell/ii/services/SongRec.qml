@@ -17,8 +17,8 @@ Singleton {
     readonly property bool running: recognizeMusicProc.running
 
     function toggleRunning(running) {
-        if (recognizeMusicProc.running && !running === true) root.manuallyStopped = true;
-        if (running != undefined) {
+        if (recognizeMusicProc.running && !running) root.manuallyStopped = true;
+        if (running !== undefined) {
             recognizeMusicProc.running = running
         } else {
             recognizeMusicProc.running = !root.running
@@ -95,7 +95,7 @@ Singleton {
                 if (this.text == 0) {
                     Qt.openUrlExternally(root.recognizedTrack.url);
                 } else {
-                    Qt.openUrlExternally("https://www.youtube.com/results?search_query=" + root.recognizedTrack.title + " - " + root.recognizedTrack.subtitle);
+                    Qt.openUrlExternally("https://www.youtube.com/results?search_query=" + encodeURIComponent(root.recognizedTrack.title + " - " + root.recognizedTrack.subtitle));
                 }
             }
         }
