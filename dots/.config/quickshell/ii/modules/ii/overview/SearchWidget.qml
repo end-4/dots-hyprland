@@ -25,7 +25,11 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
     function focusFirstItem() {
-        appResults.currentIndex = 0;
+        let idx = 0;
+        const values = appResults.model?.values ?? [];
+        while (idx < values.length && values[idx]?.isSeparator)
+            idx++;
+        appResults.currentIndex = idx;
     }
 
     function focusSearchInput() {
@@ -118,111 +122,164 @@ Item { // Wrapper
             enabled: GlobalStates.overviewOpen && root.showResults
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
-
+        
         ColumnLayout {
-            id: columnLayout
-            anchors {
-                top: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            spacing: 0
-
-            // clip: true
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: searchWidgetContent.width
-                    height: searchWidgetContent.width
-                    radius: searchWidgetContent.radius
-                }
-            }
-
-            SearchBar {
-                id: searchBar
-                property real verticalPadding: 4
-                Layout.fillWidth: true
-                Layout.leftMargin: 10
-                Layout.rightMargin: 4
-                Layout.topMargin: verticalPadding
-                Layout.bottomMargin: verticalPadding
-                Synchronizer on searchingText {
-                    property alias source: root.searchingText
-                }
-            }
-
-            Rectangle {
-                // Separator
-                visible: root.showResults
-                Layout.fillWidth: true
-                height: 1
-                color: Appearance.colors.colOutlineVariant
-            }
-
-            ListView { // App results
-                id: appResults
-                visible: root.showResults
-                Layout.fillWidth: true
-                implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
-                clip: true
-                topMargin: 10
-                bottomMargin: 10
-                spacing: 2
-                KeyNavigation.up: searchBar
-                highlightMoveDuration: 100
-
-                onFocusChanged: {
-                    if (focus)
-                        appResults.currentIndex = 1;
-                }
-
-                Connections {
-                    target: root
-                    function onSearchingTextChanged() {
-                        if (appResults.count > 0)
-                            appResults.currentIndex = 0;
+                    id: columnLayout
+                    anchors {
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
                     }
-                }
+                    spacing: 0
 
-                Timer {
-                    id: debounceTimer
-                    interval: root.typingDebounceInterval
-                    onTriggered: {
-                        resultModel.values = LauncherSearch.results ?? [];
+                    // clip: true
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: searchWidgetContent.width
+                            height: searchWidgetContent.width
+                            radius: searchWidgetContent.radius
+                        }
                     }
-                }
 
-                Connections {
-                    target: LauncherSearch
-                    function onResultsChanged() {
-                        resultModel.values = LauncherSearch.results.slice(0, root.typingResultLimit);
-                        root.focusFirstItem();
-                        debounceTimer.restart();
+                    SearchBar {
+                        id: searchBar
+                        property real verticalPadding: 4
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        Layout.rightMargin: 4
+                        Layout.topMargin: verticalPadding
+                        Layout.bottomMargin: verticalPadding
+                        Synchronizer on searchingText {
+                            property alias source: root.searchingText
+                        }
                     }
-                }
 
-                model: ScriptModel {
-                    id: resultModel
-                    objectProp: "key"
-                }
+                    Rectangle {
+                        // Separator
+                        visible: root.showResults
+                        Layout.fillWidth: true
+                        height: 1
+                        color: Appearance.colors.colOutlineVariant
+                    }
 
-                delegate: SearchItem {
-                    id: searchItem
-                    // The selectable item for each search result
-                    required property var modelData
-                    anchors.left: parent?.left
-                    anchors.right: parent?.right
-                    entry: modelData
-                    query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+                    ListView { // App results
+                        id: appResults
+                        visible: root.showResults
+                        Layout.fillWidth: true
+                        implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
+                        clip: true
+                        topMargin: 10
+                        bottomMargin: 10
+                        spacing: 2
+                        KeyNavigation.up: searchBar
+                        highlightMoveDuration: 100
 
-                    Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Tab) {
-                            if (LauncherSearch.results.length === 0)
+                        onFocusChanged: {
+                            if (focus)
+                                appResults.currentIndex = 1;
+                        }
+
+                        // Skip over separator (letter header) rows when the current
+                        // index lands on one, in whichever direction we were moving.
+                        property int previousIndex: -1
+                        onCurrentIndexChanged: {
+                            const values = resultModel.values ?? [];
+                            if (currentIndex < 0 || currentIndex >= values.length) {
+                                previousIndex = currentIndex;
                                 return;
-                            const tabbedText = searchItem.modelData.name;
-                            LauncherSearch.query = tabbedText;
-                            searchBar.searchInput.text = tabbedText;
-                            event.accepted = true;
-                            root.focusSearchInput();
+                            }
+                            if (values[currentIndex]?.isSeparator) {
+                                const direction = currentIndex >= previousIndex ? 1 : -1;
+                                let next = currentIndex + direction;
+                                while (next >= 0 && next < values.length && values[next]?.isSeparator)
+                                    next += direction;
+                                if (next >= 0 && next < values.length) {
+                                    previousIndex = next;
+                                    currentIndex = next;
+                                    return;
+                                }
+                            }
+                            previousIndex = currentIndex;
+                        }
+
+                        Connections {
+                            target: root
+                            function onSearchingTextChanged() {
+                                if (appResults.count > 0)
+                                    appResults.currentIndex = 0;
+                            }
+                        }
+
+                        Timer {
+                            id: debounceTimer
+                            interval: root.typingDebounceInterval
+                            onTriggered: {
+                                resultModel.values = LauncherSearch.results ?? [];
+                            }
+                        }
+
+                        Connections {
+                            target: LauncherSearch
+                            function onResultsChanged() {
+                                // Don't cap results to typingResultLimit when browsing the
+                                // full alphabetical app list (the "@all" special query) -
+                                // the whole point there is to see everything, not just 15.
+                                const isAllAppsMode = root.searchingText === (Config.options.search.prefix.allApps + "all");
+                                resultModel.values = isAllAppsMode ? LauncherSearch.results : LauncherSearch.results.slice(0, root.typingResultLimit);
+                                root.focusFirstItem();
+                                debounceTimer.restart();
+                            }
+                        }
+
+                        model: ScriptModel {
+                            id: resultModel
+                            objectProp: "key"
+                        }
+
+                        delegate: Item {
+                            id: delegateItem
+                            required property var modelData
+                            width: appResults.width
+                            implicitHeight: contentLoader.item ? contentLoader.item.implicitHeight : 0
+                            height: implicitHeight
+
+                            Loader {
+                                id: contentLoader
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                sourceComponent: delegateItem.modelData.isSeparator ? separatorComponent : searchItemComponent
+                            }
+
+                            Component {
+                                id: separatorComponent
+                                SearchListSeparator {
+                                    anchors.left: parent?.left
+                                    anchors.right: parent?.right
+                                    letter: delegateItem.modelData.name
+                                }
+                            }
+
+                            Component {
+                                id: searchItemComponent
+                                SearchItem {
+                                    id: searchItem
+                            anchors.left: parent?.left
+                            anchors.right: parent?.right
+                            entry: delegateItem.modelData
+                            forcedSelected: delegateItem.ListView.isCurrentItem
+                            query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.allApps, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+
+                            Keys.onPressed: event => {
+                                if (event.key === Qt.Key_Tab) {
+                                    if (LauncherSearch.results.length === 0)
+                                        return;
+                                    const tabbedText = searchItem.entry.name;
+                                    LauncherSearch.query = tabbedText;
+                                    searchBar.searchInput.text = tabbedText;
+                                    event.accepted = true;
+                                    root.focusSearchInput();
+                                }
+                            }
                         }
                     }
                 }

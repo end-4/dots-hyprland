@@ -224,6 +224,41 @@ Singleton {
                     }
                 });
             }).filter(Boolean);
+        }else if (root.query === (Config.options.search.prefix.allApps + "all")) {
+            // Full alphabetical app list with letter separators, for the "@all" browse mode
+            const sortedApps = AppSearch.listAllSorted();
+            let lastLetter = "";
+            const output = [];
+            for (const entry of sortedApps) {
+                const firstLetter = (entry.name?.[0] ?? "").toUpperCase();
+                if (firstLetter !== lastLetter) {
+                    output.push(resultComp.createObject(null, {
+                        name: firstLetter,
+                        isSeparator: true
+                    }));
+                    lastLetter = firstLetter;
+                }
+                output.push(resultComp.createObject(null, {
+                    type: Translation.tr("App"),
+                    id: entry.id,
+                    name: entry.name,
+                    iconName: entry.icon,
+                    iconType: LauncherSearchResult.IconType.System,
+                    verb: Translation.tr("Open"),
+                    execute: () => {
+                        if (!entry.runInTerminal)
+                            entry.execute();
+                        else {
+                            Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                        }
+                    },
+                    comment: entry.comment,
+                    runInTerminal: entry.runInTerminal,
+                    genericName: entry.genericName,
+                    keywords: entry.keywords
+                }));
+            }
+            return output;
         }
 
         ////////////////// Init ///////////////////
@@ -288,7 +323,12 @@ Singleton {
                 if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
                     cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
                 }
-                Quickshell.execDetached(["bash", "-c", root.query.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
+                //if you fish
+                // const heldCommand = `${cleanedCommand}; exec fish`;
+                // Quickshell.execDetached(["fish", "-c", `${Config.options.apps.terminal} -e fish -c '${StringUtils.shellSingleQuoteEscape(heldCommand)}'`]);
+                //default bash
+                const heldCommand = `${cleanedCommand}; exec bash`;
+                Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} -e bash -c '${StringUtils.shellSingleQuoteEscape(heldCommand)}'`]);
             }
         });
         const webSearchResultObject = resultComp.createObject(null, {

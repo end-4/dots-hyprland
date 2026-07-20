@@ -81,12 +81,11 @@ RowLayout {
         onTextChanged: LauncherSearch.query = text
 
         onAccepted: {
-            if (appResults.count > 0) {
-                // Get the first visible delegate and trigger its click
-                let firstItem = appResults.itemAtIndex(0);
-                if (firstItem && firstItem.clicked) {
-                    firstItem.clicked();
-                }
+            const idx = appResults.currentIndex >= 0 ? appResults.currentIndex : 0;
+            const entry = resultModel.values?.[idx];
+            if (entry && !entry.isSeparator && entry.execute) {
+                GlobalStates.overviewOpen = false;
+                entry.execute();
             }
         }
 
@@ -96,6 +95,22 @@ RowLayout {
                 const tabbedText = LauncherSearch.results[0].name;
                 LauncherSearch.query = tabbedText;
                 searchInput.text = tabbedText;
+                event.accepted = true;
+            } else if (event.key === Qt.Key_Down) {
+                const values = resultModel.values ?? [];
+                let next = appResults.currentIndex + 1;
+                while (next < values.length && values[next]?.isSeparator)
+                    next++;
+                if (next < values.length)
+                    appResults.currentIndex = next;
+                event.accepted = true;
+            } else if (event.key === Qt.Key_Up) {
+                const values = resultModel.values ?? [];
+                let prev = appResults.currentIndex - 1;
+                while (prev >= 0 && values[prev]?.isSeparator)
+                    prev--;
+                if (prev >= 0)
+                    appResults.currentIndex = prev;
                 event.accepted = true;
             }
         }

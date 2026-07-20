@@ -76,6 +76,9 @@ Singleton {
             return r.obj.entry
         });
     }
+    function listAllSorted() {
+        return [...list].sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     function iconExists(iconName) {
         if (!iconName || iconName.length == 0) return false;

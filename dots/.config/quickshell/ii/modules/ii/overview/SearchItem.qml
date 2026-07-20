@@ -40,7 +40,10 @@ RippleButton {
     property int buttonHorizontalPadding: 10
     property int buttonVerticalPadding: 6
     property bool keyboardDown: false
-    readonly property bool selected: (root.hovered || root.focus)
+    // readonly property bool selected: (root.hovered || root.focus)
+    // readonly property bool selected: (root.hovered || root.focus || ListView.isCurrentItem)
+    property bool forcedSelected: false
+    readonly property bool selected: (root.hovered || root.focus || root.forcedSelected)
 
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
@@ -158,6 +161,7 @@ RippleButton {
                 source: Quickshell.iconPath(root.iconName, "image-missing")
                 width: 35
                 height: 35
+                Component.onCompleted: console.log("[icon debug]", root.itemName, "iconName:", root.iconName, "resolved:", source)
             }
         }
 
