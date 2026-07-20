@@ -255,7 +255,21 @@ Singleton {
                     comment: entry.comment,
                     runInTerminal: entry.runInTerminal,
                     genericName: entry.genericName,
-                    keywords: entry.keywords
+                    keywords: entry.keywords,
+                    actions: entry.actions.map(action => {
+                        return resultComp.createObject(null, {
+                            name: action.name,
+                            iconName: action.icon,
+                            iconType: LauncherSearchResult.IconType.System,
+                            execute: () => {
+                                if (!action.runInTerminal)
+                                    action.execute();
+                                else {
+                                    Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                                }
+                            }
+                        });
+                    })
                 }));
             }
             return output;
