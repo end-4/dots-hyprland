@@ -73,9 +73,41 @@ apply_anyterm() {
   done
 }
 
+apply_papirus_folders() {
+    PRIMARY=$(grep '^\$primary:' "$STATE_DIR/user/generated/material_colors.scss" | cut -d'#' -f2 | cut -d';' -f1 | tr '[:upper:]' '[:lower:]')
+
+    HUE=$(python3 -c "
+import sys
+r,g,b = int('$PRIMARY'[0:2],16), int('$PRIMARY'[2:4],16), int('$PRIMARY'[4:6],16)
+mx=max(r,g,b); mn=min(r,g,b)
+if mx==mn: h=0
+elif mx==r: h=(60*((g-b)/(mx-mn)))%360
+elif mx==g: h=60*((b-r)/(mx-mn))+120
+else: h=60*((r-g)/(mx-mn))+240
+print(int(h))
+" 2>/dev/null || echo "0")
+
+    if [ "$HUE" -ge 330 ] || [ "$HUE" -lt 20 ]; then COLOR="red"
+    elif [ "$HUE" -lt 40 ]; then COLOR="orange"
+    elif [ "$HUE" -lt 65 ]; then COLOR="yellow"
+    elif [ "$HUE" -lt 150 ]; then COLOR="green"
+    elif [ "$HUE" -lt 190 ]; then COLOR="teal"
+    elif [ "$HUE" -lt 220 ]; then COLOR="cyan"
+    elif [ "$HUE" -lt 255 ]; then COLOR="blue"
+    elif [ "$HUE" -lt 290 ]; then COLOR="violet"
+    elif [ "$HUE" -lt 330 ]; then COLOR="pink"
+    else COLOR="blue"
+    fi
+
+    sudo papirus-folders -C "$COLOR" --theme Papirus-Dark
+    sudo papirus-folders -C "$COLOR" --theme Papirus-Light
+    sudo papirus-folders -C "$COLOR" --theme Papirus
+}
+
 apply_term() {
   apply_anyterm &
   apply_kitty &
+  apply_papirus_folders &
 }
 
 # Check if terminal theming is enabled in config
