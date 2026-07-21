@@ -54,6 +54,15 @@ Scope {
                 if (GlobalStates.screenLocked) {
                     lockContext.reset();
                     lockContext.tryFingerUnlock();
+                    // If lockscreen media controls are disabled, pause whatever
+                    // is currently playing instead of leaving it running with
+                    // no controls visible.
+                    if (!Config.options.lock.enableMedia
+                            && MprisController.activePlayer
+                            && MprisController.activePlayer.isPlaying
+                            && MprisController.activePlayer.canPause) {
+                        MprisController.activePlayer.pause();
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell.Services.UPower
 import qs
+import Quickshell.Io
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -18,6 +19,44 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
+    // Whether a player with a title is currently active
+    //media player on lock-screen
+    readonly property bool mediaPlayerAvailable: Config.options.lock.enableMedia && MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
+    property bool mediaLoaderActive: false
+
+    onMediaPlayerAvailableChanged: {
+        if (mediaPlayerAvailable) {
+            // Player appeared: activate loader (entry anim fires via onLoaded)
+            mediaLoaderActive = true
+        } else {
+            // Player disappeared: run exit anim, deactivate loader when done
+            if (lockscreenMediaController.item) {
+                entryAnim.stop()
+                mediaExitAnim.restart()
+            } else {
+                mediaLoaderActive = false
+            }
+        }
+    }
+
+    // Visualizer data for lockscreen media controls
+    property list<real> visualizerPoints: []
+
+    Process {
+        id: cavaProc
+        running: root.mediaLoaderActive && root.mediaPlayerAvailable
+        onRunningChanged: {
+            if (!cavaProc.running)
+                root.visualizerPoints = [];
+        }
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
+        stdout: SplitParser {
+            onRead: data => {
+                let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                root.visualizerPoints = points;
+            }
+        }
+    }
 
     // Force focus on entry
     function forceFieldFocus() {
