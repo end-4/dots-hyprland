@@ -224,8 +224,7 @@ Singleton {
                     }
                 });
             }).filter(Boolean);
-        }else if (root.query === (Config.options.search.prefix.allApps + "all")) {
-            // Full alphabetical app list with letter separators, for the "@all" browse mode
+        }else if (root.query === Config.options.search.prefix.app) {
             const sortedApps = AppSearch.listAllSorted();
             let lastLetter = "";
             const output = [];

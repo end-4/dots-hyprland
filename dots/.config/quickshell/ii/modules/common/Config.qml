@@ -481,7 +481,6 @@ Singleton {
                 property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
-                    property string allApps: "@"// all applications
                     property string action: "/"
                     property string app: ">"
                     property string clipboard: ";"

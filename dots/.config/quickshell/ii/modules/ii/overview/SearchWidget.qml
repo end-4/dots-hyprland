@@ -221,10 +221,7 @@ Item { // Wrapper
                         Connections {
                             target: LauncherSearch
                             function onResultsChanged() {
-                                // Don't cap results to typingResultLimit when browsing the
-                                // full alphabetical app list (the "@all" special query) -
-                                // the whole point there is to see everything, not just 15.
-                                const isAllAppsMode = root.searchingText === (Config.options.search.prefix.allApps + "all");
+                                const isAllAppsMode = root.searchingText === Config.options.search.prefix.app;
                                 resultModel.values = isAllAppsMode ? LauncherSearch.results : LauncherSearch.results.slice(0, root.typingResultLimit);
                                 root.focusFirstItem();
                                 debounceTimer.restart();
@@ -267,7 +264,8 @@ Item { // Wrapper
                             anchors.right: parent?.right
                             entry: delegateItem.modelData
                             forcedSelected: delegateItem.ListView.isCurrentItem
-                            query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.allApps, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+                            query: StringUtils.cleanOnePrefix(root.searchingText, [Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch])
+
 
                             Keys.onPressed: event => {
                                 if (event.key === Qt.Key_Tab) {
