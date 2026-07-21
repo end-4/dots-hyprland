@@ -40,8 +40,6 @@ RippleButton {
     property int buttonHorizontalPadding: 10
     property int buttonVerticalPadding: 6
     property bool keyboardDown: false
-    // readonly property bool selected: (root.hovered || root.focus)
-    // readonly property bool selected: (root.hovered || root.focus || ListView.isCurrentItem)
     property bool forcedSelected: false
     readonly property bool selected: (root.hovered || root.focus || root.forcedSelected)
 
