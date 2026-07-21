@@ -227,7 +227,7 @@ Singleton {
         }else if (root.query === Config.options.search.prefix.app) {
             const output = [];
 
-            // Recent apps
+            // Recent apps, shown above the alphabetical list
             const recentApps = RecentApps.topEntries(5);
             if (recentApps.length > 0) {
                 output.push(resultComp.createObject(null, {
@@ -275,7 +275,6 @@ Singleton {
             // Alphabetical list with letter separators
             const sortedApps = AppSearch.listAllSorted();
             let lastLetter = "";
-            
             for (const entry of sortedApps) {
                 const firstLetter = (entry.name?.[0] ?? "").toUpperCase();
                 if (firstLetter !== lastLetter) {
