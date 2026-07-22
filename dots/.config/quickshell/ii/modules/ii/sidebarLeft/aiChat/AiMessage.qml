@@ -20,7 +20,33 @@ Rectangle {
     property bool renderMarkdown: true
     property bool editing: false
 
-    property list<var> messageBlocks: StringUtils.splitMarkdownBlocks(root.messageData?.content)
+    // Streaming re-split happens on EVERY token; feeding those fresh objects
+    // straight into ScriptModel destroyed and recreated every segment delegate
+    // per token — heights collapsed to 0 and re-expanded, which is what shook
+    // the list and yanked it toward the top. Split: a stable SKELETON
+    // (type/lang/idx, object identity preserved while structure is unchanged)
+    // drives the model, while the growing text flows to existing delegates
+    // through liveBlocks bindings.
+    property list<var> liveBlocks: StringUtils.splitMarkdownBlocks(root.messageData?.content)
+    readonly property var _blockSkeletonCache: ({ arr: [] })  // mutated, not reassigned — no binding dependency
+    property list<var> messageBlocks: {
+        const fresh = root.liveBlocks;
+        const cached = _blockSkeletonCache.arr;
+        let structureHeld = fresh.length >= cached.length;
+        if (structureHeld) {
+            for (let i = 0; i < cached.length; i++) {
+                if (cached[i].type !== fresh[i].type || cached[i].lang !== fresh[i].lang) {
+                    structureHeld = false;
+                    break;
+                }
+            }
+        }
+        if (!structureHeld) cached.length = 0;
+        for (let i = cached.length; i < fresh.length; i++) {
+            cached.push({ type: fresh[i].type, lang: fresh[i].lang, idx: i });
+        }
+        return cached.slice();
+    }
 
     anchors.left: parent?.left
     anchors.right: parent?.right
@@ -297,7 +323,7 @@ Rectangle {
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: modelData.content
+                        segmentContent: root.liveBlocks[modelData.idx]?.content ?? ""
                         segmentLang: modelData.lang
                         messageData: root.messageData
                     } }
@@ -305,16 +331,16 @@ Rectangle {
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: modelData.content
+                        segmentContent: root.liveBlocks[modelData.idx]?.content ?? ""
                         messageData: root.messageData
                         done: root.messageData?.done ?? false
-                        completed: modelData.completed ?? false
+                        completed: root.liveBlocks[modelData.idx]?.completed ?? false
                     } }
                     DelegateChoice { roleValue: "text"; MessageTextBlock {
                         editing: root.editing
                         renderMarkdown: root.renderMarkdown
                         enableMouseSelection: root.enableMouseSelection
-                        segmentContent: modelData.content
+                        segmentContent: root.liveBlocks[modelData.idx]?.content ?? ""
                         messageData: root.messageData
                         done: root.messageData?.done ?? false
                         forceDisableChunkSplitting: root.messageData?.content.includes("```") ?? true
