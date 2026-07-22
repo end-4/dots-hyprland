@@ -64,11 +64,8 @@ MouseArea { // Notification group area
             easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
         }
         onFinished: () => {
-            root.notifications.forEach((notif) => {
-                Qt.callLater(() => {
-                    Notifications.discardNotification(notif.notificationId);
-                });
-            });
+            // one batched removal instead of N full reactive-graph recomputes
+            Notifications.discardByAppName(root.notifications[0]?.appName);
         }
     }
 
@@ -228,7 +225,13 @@ MouseArea { // Notification group area
 
                 StyledListView { // Notification body (expanded)
                     id: notificationsColumn
+                    // Do not bind implicitHeight to contentHeight while nested in a ColumnLayout: it
+                    // forms a Layout<->contentHeight polish() feedback loop that pegs a CPU core on
+                    // Qt 6.11 (same class as upstream #3388). Drive the Layout height off contentHeight
+                    // and recycle delegates.
+                    Layout.preferredHeight: contentHeight
                     implicitHeight: contentHeight
+                    reuseItems: true
                     Layout.fillWidth: true
                     spacing: expanded ? 5 : 3
                     // clip: true
