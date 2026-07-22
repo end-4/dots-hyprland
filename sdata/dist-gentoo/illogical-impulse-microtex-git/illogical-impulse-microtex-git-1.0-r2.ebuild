@@ -5,8 +5,8 @@ EAPI=8
 MICROTEX_VER="0e3707f"
 
 DESCRIPTION="MicroTeX for illogical-impulse dotfiles"
-HOMEPAGE="https://github.com/NanoMichael/MicroTeX"
-SRC_URI="https://github.com/NanoMichael/MicroTeX/archive/${MICROTEX_VER}.tar.gz -> MicroTeX-${MICROTEX_VER}.tar.gz"
+#HOMEPAGE="https://github.com/end-4/MicroTeX"
+SRC_URI="https://github.com/end-4/MicroTeX/archive/${MICROTEX_VER}.tar.gz -> MicroTeX-${MICROTEX_VER}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
