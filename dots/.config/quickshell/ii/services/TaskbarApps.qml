@@ -12,6 +12,13 @@ Singleton {
         return Config.options.dock.pinnedApps.indexOf(appId) !== -1;
     }
 
+    function reorderPinned(from, to) {
+        var arr = Config.options.dock.pinnedApps.slice();
+        var item = arr.splice(from, 1)[0];
+        arr.splice(to, 0, item);
+        Config.options.dock.pinnedApps = arr;
+    }
+
     function togglePin(appId) {
         if (root.isPinned(appId)) {
             Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.filter(id => id !== appId)
@@ -19,6 +26,13 @@ Singleton {
             Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.concat([appId])
         }
     }
+
+    // Keyed by appId so unchanged apps keep the same TaskbarAppEntry identity
+    // across recomputation. Recreating every entry from scratch on each
+    // rebuild (e.g. on every window open/close) made ScriptModel see the
+    // whole dock list as removed+re-added, since it can only diff QObject
+    // values by pointer identity, not by their objectProp.
+    property var _entryCache: new Map()
 
     property list<var> apps: {
         var map = new Map();
@@ -50,10 +64,28 @@ Singleton {
             map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
         }
 
+        // Mutate the cache object in place (never reassign root._entryCache)
+        // so this binding doesn't depend on its own writes and loop.
+        var cache = root._entryCache;
         var values = [];
 
         for (const [key, value] of map) {
-            values.push(appEntryComp.createObject(null, { appId: key, toplevels: value.toplevels, pinned: value.pinned }));
+            var entry = cache.get(key);
+            if (entry) {
+                entry.toplevels = value.toplevels;
+                entry.pinned = value.pinned;
+            } else {
+                entry = appEntryComp.createObject(null, { appId: key, toplevels: value.toplevels, pinned: value.pinned });
+                cache.set(key, entry);
+            }
+            values.push(entry);
+        }
+
+        for (const oldKey of cache.keys()) {
+            if (!map.has(oldKey)) {
+                cache.get(oldKey).destroy();
+                cache.delete(oldKey);
+            }
         }
 
         return values;

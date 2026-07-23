@@ -15,7 +15,7 @@ url='https://git.outfoxxed.me/quickshell/quickshell'
 options=(!strip)
 license=('LGPL-3.0-only')
 depends=(
-  'cpptrace'
+  # 'cpptrace'  # not in repos; source doesn't actually use it (grep'd; ldd empty on prior build)
   'jemalloc'
   'mesa'
   'qt6-declarative'
@@ -69,7 +69,8 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DDISTRIBUTOR="AUR (package: quickshell-git)" \
     -DDISTRIBUTOR_DEBUGINFO_AVAILABLE=NO \
-    -DINSTALL_QML_PREFIX=lib/qt6/qml
+    -DINSTALL_QML_PREFIX=lib/qt6/qml \
+    -DVENDOR_CPPTRACE=TRUE
 
   cmake --build build
 }
@@ -79,4 +80,24 @@ package() {
   cd "$_pkgname"
   DESTDIR="$pkgdir" cmake --install build
   install -Dm644 "LICENSE" -t "$pkgdir/usr/share/licenses/$_pkgname"
+
+  # cpptrace's FetchContent transitively installs libdwarf + zstd artifacts
+  # that conflict with the system packages. cpptrace itself is statically
+  # linked into the quickshell binary, so we only need the binary — strip
+  # everything libdwarf/zstd brought in, plus cpptrace dev files we don't need.
+  rm -f  "$pkgdir/usr/include/dwarf.h" \
+         "$pkgdir/usr/include/libdwarf.h" \
+         "$pkgdir/usr/include/zdict.h" \
+         "$pkgdir/usr/include/zstd.h" \
+         "$pkgdir/usr/include/zstd_errors.h"
+  rm -rf "$pkgdir/usr/include/cpptrace" \
+         "$pkgdir/usr/lib/cmake/cpptrace" \
+         "$pkgdir/usr/lib/cmake/libdwarf" \
+         "$pkgdir/usr/lib/cmake/zstd" \
+         "$pkgdir/usr/share/cpptrace"
+  rm -f  "$pkgdir/usr/lib/libcpptrace.a" \
+         "$pkgdir/usr/lib/libdwarf.a" \
+         "$pkgdir/usr/lib/libzstd.a" \
+         "$pkgdir/usr/lib/pkgconfig/libdwarf.pc" \
+         "$pkgdir/usr/lib/pkgconfig/libzstd.pc"
 }
