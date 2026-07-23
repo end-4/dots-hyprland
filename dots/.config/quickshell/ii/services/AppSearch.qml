@@ -40,13 +40,29 @@ Singleton {
         }
     ]
 
-    // Deduped list to fix double icons
-    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
-        .filter((app, index, self) => 
-            index === self.findIndex((t) => (
-                t.id === app.id
-            ))
-    )
+	// Cached deduplicated list to avoid rebuilding on every access
+	property list<DesktopEntry> list: []
+	Connections {
+	    target: DesktopEntries
+
+		function onApplicationsChanged() {
+		    rebuild();
+		}
+	}
+
+	// Deduplicate entries by id to prevent duplicate icons
+	function rebuild() {
+	    const apps = Array.from(DesktopEntries.applications.values);
+	    const seen = new Set();
+
+	    list = apps.filter(app => {
+	        if (seen.has(app.id))
+	            return false;
+
+	        seen.add(app.id);
+	        return true;
+	    });
+	}
     
     readonly property var preppedNames: list.map(a => ({
         name: Fuzzy.prepare(`${a.name} `),
