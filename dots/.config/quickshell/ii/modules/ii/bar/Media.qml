@@ -30,14 +30,27 @@ Item {
         anchors.fill: parent
         acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
         onPressed: (event) => {
-            if (event.button === Qt.MiddleButton) {
-                activePlayer.togglePlaying();
-            } else if (event.button === Qt.BackButton) {
+            if (event.button === Qt.MiddleButton || event.button === Qt.BackButton) {
                 activePlayer.previous();
             } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
                 activePlayer.next();
             } else if (event.button === Qt.LeftButton) {
                 GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
+            }
+        }
+    }
+
+    WheelHandler {
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onWheel: (event) => {
+            if (!activePlayer || !activePlayer.canSeek) return;
+            let step = 5; // 5 seconds
+            if (event.angleDelta.y > 0) {
+                // Scroll up -> forward 5 seconds
+                activePlayer.position = Math.min(activePlayer.length, activePlayer.position + step);
+            } else if (event.angleDelta.y < 0) {
+                // Scroll down -> backward 5 seconds
+                activePlayer.position = Math.max(0, activePlayer.position - step);
             }
         }
     }
@@ -74,12 +87,10 @@ Item {
 
         StyledText {
             visible: Config.options.bar.verbose
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true // Ensures the text takes up available space
+            Layout.fillWidth: true
             Layout.rightMargin: rowLayout.spacing
             horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight // Truncates the text on the right
             color: Appearance.colors.colOnLayer1
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
         }
