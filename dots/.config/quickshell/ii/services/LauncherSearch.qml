@@ -21,6 +21,9 @@ Singleton {
             root.query = prefix + root.query;
         }
     }
+    onQueryChanged: {
+        FileSearch.search(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app));
+    }
 
     // https://specifications.freedesktop.org/menu/latest/category-registry.html
     property list<string> mainRegisteredCategories: ["AudioVideo", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"]
@@ -163,6 +166,38 @@ Singleton {
             }
         }
     }
+       property list<var> fileResults: {
+        if (!Config.options.search.fileSearch.enable) return [];
+        if (!FileSearch.results || FileSearch.results.length === 0) return [];
+
+        return FileSearch.results.map(path => {
+            const trimmed = FileUtils.trimFileProtocol(path.path);
+            const isDir = path.isDir;
+            const displayName = isDir ? FileUtils.folderNameForPath(trimmed) : FileUtils.fileNameForPath(trimmed);
+            const parentDir = FileUtils.parentDirectory(trimmed);
+            return resultComp.createObject(null, {
+                rawValue: trimmed,
+                name: displayName || trimmed,
+                verb: Translation.tr("Open"),
+                type: isDir ? Translation.tr("Folder") : Translation.tr("File"),
+                iconName: isDir ? "folder" : "description",
+                iconType: LauncherSearchResult.IconType.Material,
+                execute: () => {
+                    Qt.openUrlExternally(`file://${trimmed}`);
+                },
+                actions: [resultComp.createObject(null, {
+                        name: Translation.tr("Open Parent folder"),
+                        iconName: "folder_open",
+                        iconType: LauncherSearchResult.IconType.Material,
+                        execute: () => {
+                            if (parentDir) {
+                                Qt.openUrlExternally(`file://${parentDir}`);
+                            }
+                        }
+                    })]
+            });
+        });
+    }
 
     property list<var> results: {
         // Search results are handled here
@@ -275,6 +310,7 @@ Singleton {
                 })
             });
         });
+
         const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
             verb: Translation.tr("Run"),
@@ -339,6 +375,8 @@ Singleton {
 
         //////////////// Apps //////////////////
         result = result.concat(appResultObjects);
+        result = result.concat(fileResults);
+
 
         ////////// Launcher actions ////////////
         result = result.concat(launcherActionObjects);

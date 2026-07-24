@@ -12,6 +12,7 @@ depends=(
   cmake
   curl
   wget
+  plocate
   ripgrep
   jq
   xdg-user-dirs
