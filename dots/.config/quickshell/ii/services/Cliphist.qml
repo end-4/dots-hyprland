@@ -104,8 +104,8 @@ Singleton {
             const escaped = entries.map(e => StringUtils.shellSingleQuoteEscape(e)).join("\\n");
             Quickshell.execDetached(["bash", "-c", `printf '${escaped}' | ${root.cliphistBinary} delete`]);
         } else {
-            entries.forEach(e => deleteEntry(e));
-            return;
+            const escaped = entries.map(e => StringUtils.shellSingleQuoteEscape(e)).join("'\\n'");
+            Quickshell.execDetached(["bash", "-c", `printf '%b' '${escaped}' | while IFS= read -r entry; do [ -n "$entry" ] && echo "$entry" | ${root.cliphistBinary} delete; done`]);
         }
         delayedUpdateTimer.restart();
     }

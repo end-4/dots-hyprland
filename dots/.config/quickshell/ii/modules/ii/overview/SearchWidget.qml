@@ -222,18 +222,6 @@ Item { // Wrapper
                     }
                     KeyNavigation.right: clearClipboardBtn
                     KeyNavigation.down: appResults
-                    Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            clearResultsBtn.down = true;
-                            clearResultsBtn.clicked();
-                            event.accepted = true;
-                        }
-                    }
-                    Keys.onReleased: event => {
-                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            clearResultsBtn.down = false;
-                        }
-                    }
                 }
                 Button {
                     id: clearClipboardBtn
@@ -259,20 +247,8 @@ Item { // Wrapper
                         Cliphist.wipe();
                         root.focusSearchInput();
                     }
-                    KeyNavigation.left: root.clipboardSearching ? clearResultsBtn : undefined
+                    KeyNavigation.left: root.clipboardSearching ? clearResultsBtn : searchBar
                     KeyNavigation.down: appResults
-                    Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            clearClipboardBtn.down = true;
-                            clearClipboardBtn.clicked();
-                            event.accepted = true;
-                        }
-                    }
-                    Keys.onReleased: event => {
-                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            clearClipboardBtn.down = false;
-                        }
-                    }
                 }
             }
 
@@ -326,7 +302,7 @@ Item { // Wrapper
 
                 onFocusChanged: {
                     if (focus)
-                        appResults.currentIndex = 1;
+                        appResults.currentIndex = 0;
                 }
 
                 Connections {
