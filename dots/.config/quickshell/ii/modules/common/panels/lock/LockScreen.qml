@@ -57,7 +57,7 @@ Scope {
 
                     // Отключаем экран по таймауту, если параметр больше нуля
                     if (Config.options.lock.dpmsTimeout > 0) {
-                        Quickshell.execDetached(["bash", "-c", `sleep ${Config.options.lock.dpmsTimeout} && hyprctl dispatch dpms off`]);
+                        Quickshell.execDetached(["bash", "-c", `sleep ${Config.options.lock.dpmsTimeout} && hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'`]);
                     }
                 }
             }
