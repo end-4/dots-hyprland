@@ -80,6 +80,7 @@ Singleton {
 
             property string panelFamily: "ii" // "ii", "waffle"
 
+
             property JsonObject policies: JsonObject {
                 property int ai: 1 // 0: No | 1: Yes | 2: Local
                 property int weeb: 1 // 0: No | 1: Open | 2: Closet
@@ -247,6 +248,10 @@ Singleton {
                     property int memoryWarningThreshold: 95
                     property int swapWarningThreshold: 85
                     property int cpuWarningThreshold: 90
+                }
+                property JsonObject media: JsonObject {
+                    property bool showLyrics: false
+                    property JsonObject lyricsSelection: JsonObject {}
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
                 property JsonObject utilButtons: JsonObject {
