@@ -40,6 +40,7 @@ RippleButton {
     property int buttonHorizontalPadding: 10
     property int buttonVerticalPadding: 6
     property bool keyboardDown: false
+    property bool clearBtnHasFocus: false
     readonly property bool selected: (root.hovered || root.focus)
 
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
