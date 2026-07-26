@@ -15,6 +15,7 @@ import Quickshell.Hyprland
 Scope { // Scope
     id: root
     property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
+    property bool hasDockApps: TaskbarApps.apps.length > 0
 
     Variants {
         // For each monitor
@@ -123,9 +124,12 @@ Scope { // Scope
                             DockSeparator {}
                             DockApps {
                                 id: dockApps
+                                visible: root.hasDockApps
                                 buttonPadding: dockRow.padding
                             }
-                            DockSeparator {}
+                            DockSeparator {
+                                visible: root.hasDockApps
+                            }
                             DockButton {
                                 Layout.fillHeight: true
                                 onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
