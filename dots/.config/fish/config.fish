@@ -25,7 +25,7 @@ if status is-interactive
     alias pamcan pacman
     alias q 'qs -c ii'
     if test "$TERM" != "linux"
-        alias ls 'eza --icons'
+        alias ls 'eza --icons=auto'
     end
     if test "$TERM" = "xterm-kitty"
         alias ssh 'kitten ssh'
