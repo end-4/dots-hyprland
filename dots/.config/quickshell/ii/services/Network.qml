@@ -14,6 +14,8 @@ import qs.services.network
 Singleton {
     id: root
 
+    signal monitorChanged()
+
     property bool wifi: true
     property bool ethernet: false
 
@@ -165,7 +167,10 @@ Singleton {
         running: true
         command: ["nmcli", "monitor"]
         stdout: SplitParser {
-            onRead: root.update()
+            onRead: {
+                root.update()
+                root.monitorChanged()
+            }
         }
     }
 
