@@ -14,6 +14,8 @@ Singleton {
     property bool sidebarLeftOpen: false
     property bool sidebarRightOpen: false
     property bool mediaControlsOpen: false
+    property bool lyricsSelectorOpen: false
+    property var lyricsSelectorScreen: null // Screen whose bar opened the selector
     property bool osdBrightnessOpen: false
     property bool osdVolumeOpen: false
     property bool oskOpen: false
