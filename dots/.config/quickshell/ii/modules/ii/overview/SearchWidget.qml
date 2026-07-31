@@ -302,7 +302,7 @@ Item { // Wrapper
 
                 onFocusChanged: {
                     if (focus)
-                        appResults.currentIndex = 0;
+                        appResults.currentIndex = 1;
                 }
 
                 Connections {
