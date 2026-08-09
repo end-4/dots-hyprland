@@ -56,6 +56,8 @@ case $1 in
     shift;;
   # Correct subcommand but not using ./sdata/subcmd-$1
   install-deps|install-setups|install-files)
+    sudo_init_keepalive
+    trap sudo_stop_keepalive EXIT INT TERM
     SUBCMD_NAME=$1
     SUBCMD_DIR=./sdata/subcmd-install
     shift;;
@@ -116,6 +118,8 @@ case ${SUBCMD_NAME} in
     fi
     ;;
   install-files)
+    sudo_init_keepalive
+    trap sudo_stop_keepalive EXIT INT TERM
     for function in ${print_os_group_id_functions[@]}; do
       $function
     done

@@ -35,6 +35,11 @@
 #
 
 set -euo pipefail
+source "$(dirname "$(realpath "$0")")/../lib/common.sh"
+
+
+
+
 
 # =============================================================================
 # Configuration
@@ -107,17 +112,6 @@ PROTECTED_PATTERNS=(
 # =============================================================================
 # Colors and logging
 # =============================================================================
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-
-log_info()  { echo -e "${BLUE}[INFO]${NC} $*"; }
-log_ok()    { echo -e "${GREEN}[OK]${NC}   $*"; }
-log_warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 log_action() { echo -e "${CYAN}[ACT]${NC}   $*"; }
 
 # =============================================================================
@@ -207,7 +201,7 @@ main() {
         exit 1
     fi
     if ! flock -n 200; then
-        log_warn "Another instance is already running. Exiting."
+        log_warning "Another instance is already running. Exiting."
         exit 0
     fi
 
@@ -345,7 +339,7 @@ main() {
 
     if [[ "$ONCE_MODE" == true ]]; then
         echo ""
-        log_ok "Smart Organizer completed (once)."
+        log_success "Smart Organizer completed (once)."
         log_info "Log saved to: ${LOG_FILE}"
         print_report
         echo ""
@@ -365,7 +359,7 @@ main() {
     fi
 
     echo ""
-    log_ok "Smart Organizer completed."
+    log_success "Smart Organizer completed."
     log_info "Log saved to: ${LOG_FILE}"
     print_report
     echo ""

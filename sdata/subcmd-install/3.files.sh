@@ -12,7 +12,7 @@ function warning_overwrite(){
 function auto_backup_configs(){
   local backup=false
   case $ask in
-    false) if [[ ! -d "$BACKUP_DIR" ]]; then local backup=true;fi;;
+    false) if [[ ! -d "$BACKUP_DIR" ]]; then backup=true;fi;;
     *)
       printf "${STY_RED}"
       printf "Would you like to backup clashing dirs/files to \"$BACKUP_DIR\"?\n"
@@ -23,7 +23,7 @@ function auto_backup_configs(){
         local p; read -p "====> " p
         case $p in
           [yY]) echo -e "${STY_BLUE}OK, doing backup...${STY_RST}"
-            local backup=true;break ;;
+            backup=true;break ;;
           [nNsS]) echo -e "${STY_BLUE}Alright, skipping...${STY_RST}"
             local backup=false;break ;;
           *) echo -e "${STY_RED}Please enter [y/n/s].${STY_RST}";;
@@ -97,7 +97,7 @@ function install_file(){
   if [ -f $t ];then
     warning_overwrite
   fi
-  v cp_file $s $t
+  v cp_file "$s" "$t"
 }
 function install_file__auto_backup(){
   # NOTE: Do not add prefix `v` or `x` when using this function
@@ -107,15 +107,15 @@ function install_file__auto_backup(){
     echo -e "${STY_YELLOW}[$0]: \"$t\" already exists.${STY_RST}"
     if ${INSTALL_FIRSTRUN};then
       echo -e "${STY_BLUE}[$0]: It seems to be the firstrun.${STY_RST}"
-      v mv $t $t.old
-      v cp_file $s $t
+      v mv "$t" "${t}.old"
+      v cp_file "$s" "$t"
     else
       echo -e "${STY_BLUE}[$0]: It seems not a firstrun.${STY_RST}"
-      v cp_file $s $t.new
+      v cp_file "$s" "$t".new
     fi
   else
     echo -e "${STY_GREEN}[$0]: \"$t\" does not exist yet.${STY_RST}"
-    v cp_file $s $t
+    v cp_file "$s" "$t"
   fi
 }
 function install_dir(){

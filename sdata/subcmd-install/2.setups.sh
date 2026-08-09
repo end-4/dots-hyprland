@@ -1,14 +1,7 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-die() {
-  printf "${STY_RED}FATAL: %s${STY_RST}\n" "$*"
-  exit 1
-}
 
-command_exists() {
-  command -v "$1" >/dev/null 2>&1
-}
 
 require_cmd() {
   local c
@@ -53,6 +46,12 @@ function prepare_systemd_user_service(){
   fi
 }
 
+
+#####################################################################################
+# These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
+showfun install-python-packages
+v install-python-packages
+
 function setup_user_group(){
   if [[ -z $(getent group i2c) ]] && [[ "${OS_GROUP_ID:-unknown}" != "fedora" ]]; then
     # On Fedora this is not needed. Tested with desktop computer with NVIDIA video card.
@@ -65,10 +64,6 @@ function setup_user_group(){
     x sudo usermod -aG video,i2c,input "$(whoami)"
   fi
 }
-#####################################################################################
-# These python packages are installed using uv into the venv (virtual environment). Once the folder of the venv gets deleted, they are all gone cleanly. So it's considered as setups, not dependencies.
-showfun install-python-packages
-v install-python-packages
 
 showfun setup_user_group
 v setup_user_group
@@ -115,8 +110,12 @@ fi
 
 #####################################################################################
 # MSI MUX Switcher
-showfun setup_mux_switcher
-v setup_mux_switcher
+
+function setup_cachyos_tune() {
+  if [[ "${OS_GROUP_ID:-unknown}" == "cachyos" ]]; then
+    v bash "${REPO_ROOT}/tools/cachyos-tune/cachyos-tune.sh"
+  fi
+}
 
 function setup_mux_switcher(){
   local mux_dir="${REPO_ROOT}/tools/mux-switcher"
@@ -128,8 +127,8 @@ function setup_mux_switcher(){
     return 0
   fi
 
-  if [[ -f /sys/class/dmi/id/product_name ]] && \
-     grep -qi "MSI" /sys/class/dmi/id/sys_vendor 2>/dev/null; then
+  if grep -qi "MSI" /sys/class/dmi/id/sys_vendor 2>/dev/null || \
+     grep -qi "MSI" /sys/class/dmi/id/product_name 2>/dev/null; then
     printf "${STY_CYAN}[$0]: MSI laptop detected, setting up MUX switcher${STY_RST}\n"
     v mkdir -p "${BIN_DIR}"
     v ln -sf "${py_script}" "$mux_bin"
@@ -144,14 +143,15 @@ function setup_mux_switcher(){
   fi
 }
 
+showfun setup_mux_switcher
+v setup_mux_switcher
+
+
+
 #####################################################################################
 # Smart Organizer
 if [[ ! "${SKIP_SMART_ORGANIZER:-}" == true ]]; then
-  showfun setup_smart_organizer
-  v setup_smart_organizer
-fi
-
-function setup_smart_organizer(){
+  function setup_smart_organizer(){
   local organizer_dir="${REPO_ROOT}/tools/smart-organizer"
   local organizer_bin="${BIN_DIR}/smart-organizer"
 
@@ -185,20 +185,8 @@ function setup_smart_organizer(){
 
   # Install systemd user service for watch mode
   v mkdir -p "${CONFIG_DIR}/systemd/user"
-  v bash -c "cat > '${CONFIG_DIR}/systemd/user/smart-organizer.service' << EOFSERVICE
-[Unit]
-Description=Smart Organizer Watch Service
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=${BIN_DIR}/smart-organizer --watch
-Restart=on-failure
-RestartSec=10
-
-[Install]
-WantedBy=default.target
-EOFSERVICE"
+  v install -Dm644 "${organizer_dir}/units/smart-organizer.service" "${CONFIG_DIR}/systemd/user/smart-organizer.service"
+  v install -Dm644 "${organizer_dir}/units/smart-organizer.timer" "${CONFIG_DIR}/systemd/user/smart-organizer.timer"
 
   # Install systemd user timer for periodic runs
   v bash -c "cat > '${CONFIG_DIR}/systemd/user/smart-organizer-timer.service' << EOFSERVICE
@@ -239,7 +227,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=${BIN_DIR}/backup.sh --dry-run
+ExecStart=${BIN_DIR}/backup.sh
 EOFSERVICE"
 
     v bash -c "cat > '${CONFIG_DIR}/systemd/user/backup.timer' << EOFSERVICE
@@ -299,11 +287,14 @@ EOFSERVICE"
   printf "  Maintenance timer: systemctl --user list-timers | grep maintenance\n"
 }
 
+showfun setup_smart_organizer
+  v setup_smart_organizer
+fi
+
+
+
 #####################################################################################
 # NVIDIA + MUX Setup for CachyOS
-showfun setup_nvidia_mux
-v setup_nvidia_mux
-
 function setup_nvidia_mux(){
   if [[ "${OS_GROUP_ID:-unknown}" != "arch" ]] && [[ "${OS_GROUP_ID:-unknown}" != "cachyos" ]]; then
     printf "${STY_YELLOW}[$0]: Not Arch/CachyOS, skipping NVIDIA setup${STY_RST}\n"
@@ -332,10 +323,25 @@ function setup_nvidia_mux(){
   printf "  Configuring mkinitcpio for Intel + NVIDIA hybrid...\n"
   NEEDS_INITRAMFS_REBUILD=0
   if [[ -f /etc/mkinitcpio.conf ]]; then
-    if ! grep -q "^MODULES=(i915 nvidia" /etc/mkinitcpio.conf; then
-      v sudo sed -i 's/^MODULES=(/MODULES=(i915 nvidia nvidia_modeset nvidia_uvm nvidia_drm /' /etc/mkinitcpio.conf
-      NEEDS_INITRAMFS_REBUILD=1
-    fi
+    local current
+    current=$(awk -F'[()]' '/^MODULES=/{print $2}' /etc/mkinitcpio.conf)
+    local required=("i915" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm")
+    local new_list=("${required[@]}")
+    for mod in $current; do
+      local found=false
+      for req in "${required[@]}"; do
+        if [[ "$mod" == "$req" ]]; then
+          found=true
+          break
+        fi
+      done
+      if [[ "$found" == false && -n "$mod" ]]; then
+        new_list+=("$mod")
+      fi
+    done
+    local new_modules="${new_list[*]}"
+    v sudo sed -i "s/^MODULES=(.*/MODULES=(${new_modules})/" /etc/mkinitcpio.conf
+    NEEDS_INITRAMFS_REBUILD=1
   fi
 
   # Configure bootloader kernel parameters (detect bootloader first)
@@ -464,11 +470,17 @@ EOFSCRIPT
   printf "  Run: sudo msi-gpu-switcher status\n"
 }
 
+if [[ "${OS_GROUP_ID:-unknown}" == "arch" || "${OS_GROUP_ID:-unknown}" == "cachyos" ]]; then
+  if [[ "${SKIP_NVIDIA:-false}" != "true" ]]; then
+    showfun setup_nvidia_mux
+    v setup_nvidia_mux
+  fi
+fi
+
+
+
 #####################################################################################
 # AI/ML Stack Setup
-showfun setup_ai_stack
-v setup_ai_stack
-
 function setup_ai_stack(){
   if [[ "${OS_GROUP_ID:-unknown}" != "arch" ]] && [[ "${OS_GROUP_ID:-unknown}" != "cachyos" ]]; then
     printf "${STY_YELLOW}[$0]: Not Arch/CachyOS, skipping AI stack setup${STY_RST}\n"
@@ -492,19 +504,29 @@ function setup_ai_stack(){
 
   # Install Python packages
   printf "  Installing Python AI packages...\n"
-  v pip install --user torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 || true
-  v pip install --user transformers datasets accelerate huggingface-hub chromadb langchain || true
+  local venv_dir="${XDG_STATE_HOME:-$HOME/.local/state}/quickshell/.venv"
+  if [[ ! -d "$venv_dir" ]]; then
+    v uv venv "$venv_dir"
+  fi
+  v uv pip install --python "$venv_dir/bin/python" torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+  v uv pip install --python "$venv_dir/bin/python" transformers datasets accelerate huggingface-hub chromadb langchain
 
   printf "${STY_GREEN}[$0]: AI/ML stack installed${STY_RST}\n"
   printf "  Run: ollama pull qwen2.5:7b\n"
   printf "  Run: python -c \"import torch; print(torch.cuda.is_available())\"\n"
 }
 
+if [[ "${OS_GROUP_ID:-unknown}" == "arch" || "${OS_GROUP_ID:-unknown}" == "cachyos" ]]; then
+  if [[ "${SKIP_AI:-false}" != "true" ]]; then
+    showfun setup_ai_stack
+    v setup_ai_stack
+  fi
+fi
+
+
+
 #####################################################################################
 # Power Management Setup
-showfun setup_power_management
-v setup_power_management
-
 function setup_power_management(){
   printf "${STY_CYAN}[$0]: Setting up power management${STY_RST}\n"
 
@@ -517,11 +539,34 @@ function setup_power_management(){
   # Set balanced profile by default
   v powerprofilesctl set balanced || true
 
-  # ZRAM configuration for 16GB RAM
-  printf "  Configuring ZRAM for 16GB RAM...\n"
-  if [[ -f /etc/systemd/system/systemd-zram-setup@.service ]]; then
+  # ZRAM configuration dynamically based on RAM
+  if [[ "${SKIP_ZRAM:-false}" != "true" ]]; then
+    local total_ram_kb
+    total_ram_kb=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+    local total_ram_gb=$(( total_ram_kb / 1024 / 1024 ))
+    local zram_size_gb=$(( total_ram_gb / 2 ))
+    (( zram_size_gb > 16 )) && zram_size_gb=16
+    printf "  Configuring ZRAM at %sGB (for %sGB RAM)...
+" "$zram_size_gb" "$total_ram_gb"
+    printf "[zram0]
+zram-size = %s GiB
+compression-algorithm = zstd
+" "$zram_size_gb" | v sudo tee /etc/systemd/zram-generator.conf >/dev/null
+    v sudo systemctl daemon-reload
     v sudo systemctl enable --now systemd-zram-setup@zram0.service || true
   fi
 
   printf "${STY_GREEN}[$0]: Power management configured${STY_RST}\n"
 }
+
+if [[ "${OS_GROUP_ID:-unknown}" == "arch" || "${OS_GROUP_ID:-unknown}" == "cachyos" ]]; then
+  showfun setup_power_management
+  v setup_power_management
+fi
+
+
+
+if [[ "${OS_GROUP_ID:-unknown}" == "cachyos" ]]; then
+  showfun setup_cachyos_tune
+  v setup_cachyos_tune
+fi

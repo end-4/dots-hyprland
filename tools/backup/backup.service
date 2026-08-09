@@ -4,4 +4,4 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/backup.sh --dry-run
+ExecStart=%h/.local/bin/backup.sh

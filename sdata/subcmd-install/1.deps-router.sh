@@ -4,7 +4,7 @@ printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RST}"
 
 function outdate_detect(){
   # Shallow clone prevent latest_commit_timestamp() from working.
-  x git_auto_unshallow 2>&1>/dev/null
+  x git_auto_unshallow >/dev/null 2>&1
 
   local source_path="$1"
   local target_path="$2"

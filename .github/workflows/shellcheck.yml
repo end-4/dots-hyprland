@@ -29,7 +29,7 @@ jobs:
           shellcheck --version
 
           echo "Finding shell scripts..."
-          scripts=$(find tools sdata/subcmd-smart-organizer -type f \( -name '*.sh' -o -name 'bootstrap.sh' \) 2>/dev/null | sort)
+          scripts=$(find . -not -path "./.git/*" -not -path "./dots/*" -type f \( -name "*.sh" -o -name "setup" -o -name "diagnose" -o -name "uninstall" \) )
           echo "Found scripts: $scripts"
 
           if [[ -z "$scripts" ]]; then

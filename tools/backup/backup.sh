@@ -26,20 +26,15 @@
 #
 
 set -euo pipefail
+source "$(dirname "$(realpath "$0")")/../../tools/lib/common.sh"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+
+
+
 
 DRY_RUN=false
 ENCRYPT=false
 
-log_info()  { echo -e "${BLUE}[BACKUP]${NC} $*"; }
-log_ok()    { echo -e "${GREEN}[OK]${NC}   $*"; }
-log_warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
 usage() {
     cat << 'EOF'
@@ -95,7 +90,7 @@ backup_item() {
     local label="${3:-$src}"
 
     if [[ ! -e "$src" ]]; then
-        log_warn "$label not found: $src"
+        log_warning "$label not found: $src"
         return 0
     fi
 
@@ -114,7 +109,7 @@ backup_item() {
         cp -p "$src" "$dest"
     fi
 
-    log_ok "$label backed up"
+    log_success "$label backed up"
 }
 
 # 1. SSH keys (critical)
@@ -148,7 +143,7 @@ if ! $DRY_RUN; then
         pacman -Qqe > "$DEST/package-lists/pacman.txt" 2>/dev/null || true
         pacman -Qqm > "$DEST/package-lists/aur.txt" 2>/dev/null || true
     fi
-    log_ok "Package lists backed up"
+    log_success "Package lists backed up"
 fi
 
 # 8. Create backup manifest
@@ -160,7 +155,7 @@ User: $(whoami)
 OS: $(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d '"' || echo "Unknown")
 Backup size: $(du -sh "$DEST" | cut -f1)
 EOF
-    log_ok "Backup manifest created"
+    log_success "Backup manifest created"
 fi
 
 # 9. Encryption (optional)
@@ -168,10 +163,10 @@ if $ENCRYPT && ! $DRY_RUN; then
     log_info "Encrypting backup with GPG..."
     tar -czf - -C "$(dirname "$DEST")" "$(basename "$DEST")" | \
         gpg --symmetric --cipher-algo AES256 -o "${DEST}.tar.gz.gpg"
-    log_ok "Backup encrypted: ${DEST}.tar.gz.gpg"
+    log_success "Backup encrypted: ${DEST}.tar.gz.gpg"
 fi
 
 echo ""
-log_ok "Backup completed: $DEST"
+log_success "Backup completed: $DEST"
 log_info "Backup size: $(du -sh "$DEST" 2>/dev/null | cut -f1 || echo 'unknown')"
 echo ""

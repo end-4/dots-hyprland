@@ -1,0 +1,12 @@
+[Unit]
+Description=Smart Organizer Watch Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/smart-organizer --watch
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

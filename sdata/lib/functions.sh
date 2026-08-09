@@ -69,9 +69,6 @@ function pause(){
   fi
 }
 function remove_bashcomments_emptylines(){
-  echo "pwd=$(pwd)"
-  echo "input=$1"
-  echo "output=$2"
   mkdir -p "$(dirname "$2")"
   cat "$1" | sed -e 's/#.*//' -e '/^[[:space:]]*$/d' > "$2"
 }
@@ -355,8 +352,10 @@ function backup_clashing_targets(){
 
   # Find clash dirs/files, save as clash_list
   local clash_list=()
-  local source_list=($(ls -A "$source_dir"))
-  local target_list=($(ls -A "$target_dir"))
+  local source_list=()
+  mapfile -t source_list < <(ls -A "$source_dir")
+  local target_list=()
+  mapfile -t target_list < <(ls -A "$target_dir")
   local -A target_map
   for i in "${target_list[@]}"; do
     target_map["$i"]=1
@@ -390,61 +389,34 @@ function backup_clashing_targets(){
 }
 
 function install_cmds(){
-  case $OS_GROUP_ID in
-    "arch")
-      local pkgs=()
-      for cmd in "$@";do
-        # For package name which is not cmd name, use "case" syntax to replace
-        case $cmd in
-          ip) pkgs+=(iproute2);;
-          *) pkgs+=($cmd) ;;
+  local pkgs=()
+  for cmd in "$@"; do
+    case $cmd in
+      ip)
+        case "${OS_GROUP_ID:-unknown}" in
+          arch) pkgs+=("iproute2");;
+          fedora|gentoo|nix) pkgs+=("iproute");;
         esac
-      done
-      v sudo pacman -Syu
+        ;;
+      pip)
+        case "${OS_GROUP_ID:-unknown}" in
+          arch) pkgs+=("python-pip");;
+          fedora|gentoo|nix) pkgs+=("pip");;
+        esac
+        ;;
+      *) pkgs+=("$cmd");;
+    esac
+  done
+
+  if [[ ${#pkgs[@]} -gt 0 ]]; then
+    if [[ "${OS_GROUP_ID:-unknown}" == "arch" ]]; then
       v sudo pacman -S --noconfirm --needed "${pkgs[@]}"
-      ;;
-    "debian")
-      local pkgs=()
-      for cmd in "$@";do
-        # For package name which is not cmd name, use "case" syntax to replace
-        case $cmd in
-          ip) pkgs+=(iproute2);;
-          *) pkgs+=($cmd) ;;
-        esac
-      done
-      v sudo apt update -y
-      v sudo apt install -y "${pkgs[@]}"
-      ;;
-    "fedora")
-      local pkgs=()
-      for cmd in "$@";do
-        # For package name which is not cmd name, use "case" syntax to replace
-        case $cmd in
-          ip) pkgs+=(iproute);;
-          *) pkgs+=($cmd) ;;
-        esac
-      done
+    elif [[ "${OS_GROUP_ID:-unknown}" == "fedora" ]]; then
       v sudo dnf install -y "${pkgs[@]}"
-      ;;
-    "suse")
-      local pkgs=()
-      for cmd in "$@";do
-        # For package name which is not cmd name, use "case" syntax to replace
-        case $cmd in
-          ip) pkgs+=(iproute2);;
-          *) pkgs+=($cmd) ;;
-        esac
-      done
-      v sudo zypper refresh
-      v sudo zypper -n install "${pkgs[@]}"
-      ;;
-    *)
-      printf "WARNING\n"
-      printf "No method found to install package providing the commands:\n"
-      printf "  $@\n"
-      printf "Please install by yourself.\n"
-      ;;
-  esac
+    elif [[ "${OS_GROUP_ID:-unknown}" == "gentoo" ]]; then
+      v sudo emerge -n "${pkgs[@]}"
+    fi
+  fi
 }
 
 function ensure_cmds(){
@@ -468,4 +440,8 @@ function dedup_and_sort_listfile(){
     sort -u -- "$1" > "$temp"
     mv -f -- "$temp" "$2"
   fi
+}
+
+function die() {
+  log_die "$@"
 }

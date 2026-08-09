@@ -20,12 +20,11 @@
 #
 
 set -euo pipefail
+source "$(dirname "$(realpath "$0")")/../../tools/lib/common.sh"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+
+
+
 
 SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id_ed25519"
@@ -33,10 +32,6 @@ SSH_CONFIG="$SSH_DIR/config"
 EMAIL="${1:-$USER@$(hostname)}"
 USE_AGENT=true
 
-log_info()  { echo -e "${BLUE}[SSH]${NC} $*"; }
-log_ok()    { echo -e "${GREEN}[OK]${NC}   $*"; }
-log_warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
 # Parse args
 shift_used=false
@@ -68,13 +63,13 @@ echo ""
 log_info "Setting up ~/.ssh directory..."
 mkdir -p "$SSH_DIR"
 chmod 700 "$SSH_DIR"
-log_ok ".ssh directory ready"
+log_success ".ssh directory ready"
 
 # Generate SSH key if it doesn't exist
 if [[ ! -f "$SSH_KEY" ]]; then
     log_info "Generating new SSH key..."
     ssh-keygen -t ed25519 -C "$EMAIL" -f "$SSH_KEY" -N ""
-    log_ok "SSH key generated"
+    log_success "SSH key generated"
 else
     log_info "SSH key already exists: $SSH_KEY"
 fi
@@ -87,8 +82,8 @@ if $USE_AGENT; then
     fi
 
     log_info "Adding SSH key to agent..."
-    ssh-add "$SSH_KEY" 2>/dev/null || log_warn "Could not add key to agent"
-    log_ok "SSH key added to agent"
+    ssh-add "$SSH_KEY" 2>/dev/null || log_warning "Could not add key to agent"
+    log_success "SSH key added to agent"
 fi
 
 # Configure SSH config
@@ -125,11 +120,11 @@ Host gitea
 EOF
 
 chmod 600 "$SSH_CONFIG"
-log_ok "SSH config updated"
+log_success "SSH config updated"
 
 # Display public key
 echo ""
-log_ok "Your SSH public key:"
+log_success "Your SSH public key:"
 echo "=========================================="
 cat "${SSH_KEY}.pub"
 echo "=========================================="
@@ -142,13 +137,13 @@ echo ""
 # Test connection
 log_info "Testing SSH connection to GitHub..."
 if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
-    log_ok "GitHub SSH connection successful!"
+    log_success "GitHub SSH connection successful!"
 else
-    log_warn "GitHub SSH connection failed. Add your key first."
+    log_warning "GitHub SSH connection failed. Add your key first."
 fi
 
 echo ""
-log_ok "SSH setup completed"
+log_success "SSH setup completed"
 log_info "Next steps:"
 echo "  1. Add the public key to your Git provider"
 echo "  2. Test: ssh -T git@github.com"

@@ -1,0 +1,11 @@
+[Unit]
+Description=Smart Organizer Timer
+Requires=smart-organizer.service
+
+[Timer]
+OnCalendar=*:0/15
+AccuracySec=1m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

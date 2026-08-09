@@ -10,18 +10,27 @@
 #   curl -s https://raw.githubusercontent.com/gaganjainse/Auto-desktopenv/main/tools/bootstrap.sh | bash
 #
 set -euo pipefail
+source "$(dirname "$(realpath "$0")")/lib/common.sh"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m'
+SKIP_AI=false
+SKIP_NVIDIA=false
+SKIP_ZRAM=false
 
-log_info()  { echo -e "${BLUE}[BOOT]${NC} $*"; }
-log_ok()    { echo -e "${GREEN}[OK]${NC}   $*"; }
-log_warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --skip-ai) SKIP_AI=true; shift;;
+    --skip-nvidia) SKIP_NVIDIA=true; shift;;
+    --skip-zram) SKIP_ZRAM=true; shift;;
+    *) shift;;
+  esac
+done
+
+export SKIP_AI SKIP_NVIDIA SKIP_ZRAM
+
+
+
+
+
 
 preflight() {
     echo ""
@@ -45,13 +54,13 @@ preflight() {
         log_error "No network connectivity. Check WiFi/Ethernet."
         exit 1
     fi
-    log_ok "Network reachable"
+    log_success "Network reachable"
 
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
         log_info "OS: ${NAME:-Unknown} ${VERSION:-}"
         if [[ "${ID:-}" != "cachyos" && "${ID:-}" != "arch" ]]; then
-            log_warn "This script is designed for CachyOS/Arch. You are on ${ID}."
+            log_warning "This script is designed for CachyOS/Arch. You are on ${ID}."
             read -p "Continue anyway? [y/N] " -n 1 -r
             echo
             [[ ! $REPLY =~ ^[Yy]$ ]] && exit 0
@@ -77,7 +86,7 @@ install_prerequisites() {
         git curl wget base-devel yay \
         inotify-tools python python-pip go rustup
 
-    log_ok "Prerequisites installed"
+    log_success "Prerequisites installed"
 }
 
 clone_repo() {
@@ -97,7 +106,7 @@ clone_repo() {
         git clone "${repo_url}" "${install_dir}"
     fi
 
-    log_ok "Repository ready at ${install_dir}"
+    log_success "Repository ready at ${install_dir}"
 }
 
 run_installer() {
@@ -135,9 +144,9 @@ main() {
     run_installer
 
     echo ""
-    log_ok "========================================"
-    log_ok " Bootstrap Complete"
-    log_ok "========================================"
+    log_success "========================================"
+    log_success " Bootstrap Complete"
+    log_success "========================================"
     log_info "Reboot and select Hyprland at login."
     log_info "After reboot:"
     log_info "  - Test MUX: sudo msi-mux-switcher status"

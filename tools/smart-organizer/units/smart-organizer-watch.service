@@ -1,0 +1,19 @@
+[Unit]
+Description=Smart Organizer — Real-time file watcher
+Documentation=https://github.com/gaganjainse/Auto-desktopenv
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/smart-organizer --watch --real-time
+Restart=on-failure
+RestartSec=10s
+Environment=PYTHONUNBUFFERED=1
+
+CPUQuota=5%
+MemoryMax=256M
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,13 +1,6 @@
 # This script is meant to be sourced.
 # It's not for directly running.
 
-# shellcheck shell=bash
-
-#####################################################################################
-# Notes by @clsty:
-#
-# I'm not the one who developed this script (see issue#2284 which discussed about the history).
-# However it contains many unnecessary logics. This is typically what AI will do.
 # I don't really care if it's AI-generated or not, it's just an extra option in addition to ./setup install, so as long as the users say it works, it should be fine.
 # However, it's not easy to maintain something like this.
 # The redundant logic should be cleaned up someday.

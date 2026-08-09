@@ -22,20 +22,15 @@
 #
 
 set -euo pipefail
+source "$(dirname "$(realpath "$0")")/../../tools/lib/common.sh"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+
+
+
 
 DRY_RUN=false
 AUTO_MODE=false
 
-log_info()  { echo -e "${BLUE}[MAINT]${NC} $*"; }
-log_ok()    { echo -e "${GREEN}[OK]${NC}   $*"; }
-log_warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
 usage() {
     cat << 'EOF'
@@ -84,9 +79,9 @@ if command -v pacman >/dev/null 2>&1; then
     else
         sudo pacman -Syu --noconfirm
     fi
-    log_ok "System updated"
+    log_success "System updated"
 else
-    log_warn "Not an Arch-based system, skipping system update"
+    log_warning "Not an Arch-based system, skipping system update"
 fi
 
 # 2. Clean package cache
@@ -97,7 +92,7 @@ if command -v pacman >/dev/null 2>&1; then
     else
         sudo pacman -Sc --noconfirm || true
     fi
-    log_ok "Package cache cleaned"
+    log_success "Package cache cleaned"
 fi
 
 if command -v yay >/dev/null 2>&1; then
@@ -106,7 +101,7 @@ if command -v yay >/dev/null 2>&1; then
     else
         yay -Sc --noconfirm || true
     fi
-    log_ok "AUR cache cleaned"
+    log_success "AUR cache cleaned"
 fi
 
 # 3. Remove orphans
@@ -119,7 +114,7 @@ if command -v pacman >/dev/null 2>&1; then
         else
             echo "$orphans" | sudo pacman -Rns --noconfirm - || true
         fi
-        log_ok "Orphans removed"
+        log_success "Orphans removed"
     else
         log_info "No orphans found"
     fi
@@ -133,7 +128,7 @@ if command -v journalctl >/dev/null 2>&1; then
     else
         sudo journalctl --vacuum-time=7d || true
     fi
-    log_ok "Journal cleaned"
+    log_success "Journal cleaned"
 fi
 
 # 5. Disk space report
@@ -145,10 +140,10 @@ log_info "6. Checking disk health..."
 if command -v smartctl >/dev/null 2>&1; then
     disk=$(df /home | awk 'NR==2 {print $1}' | sed 's/[0-9]//g')
     if [[ -n "$disk" ]]; then
-        sudo smartctl -H "$disk" 2>/dev/null | grep -E "PASSED|FAILED|SMART" || log_warn "SMART check not available"
+        sudo smartctl -H "$disk" 2>/dev/null | grep -E "PASSED|FAILED|SMART" || log_warning "SMART check not available"
     fi
 else
-    log_warn "smartctl not installed, skipping disk health check"
+    log_warning "smartctl not installed, skipping disk health check"
 fi
 
 # 7. Service health check
@@ -156,9 +151,9 @@ log_info "7. Checking critical services..."
 services=(bluetooth NetworkManager systemd-timesyncd)
 for svc in "${services[@]}"; do
     if systemctl is-active --quiet "$svc" 2>/dev/null; then
-        log_ok "$svc is running"
+        log_success "$svc is running"
     else
-        log_warn "$svc is not running"
+        log_warning "$svc is not running"
     fi
 done
 
@@ -169,12 +164,12 @@ free -h | awk 'NR==1 {print} NR==2 {print "  RAM: "$3" / "$2" used"}'
 # 9. Temperature (if available)
 log_info "9. Temperature:"
 if command -v sensors >/dev/null 2>&1; then
-    sensors 2>/dev/null | grep -E "Core|Package|temp1" | head -5 || log_warn "Temperature sensors not available"
+    sensors 2>/dev/null | grep -E "Core|Package|temp1" | head -5 || log_warning "Temperature sensors not available"
 else
-    log_warn "lm_sensors not installed"
+    log_warning "lm_sensors not installed"
 fi
 
 echo ""
-log_ok "Maintenance completed"
+log_success "Maintenance completed"
 log_info "Run with --auto for non-interactive mode"
 echo ""

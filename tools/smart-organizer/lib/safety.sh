@@ -40,7 +40,7 @@ PROTECTED_FILE_PATTERNS=(
     "*.pem"
     "*.secret"
     "*.password"
-    "*credentials*"
+
     "*id_rsa*"
     "*id_ed25519*"
     "*.p12"
@@ -48,6 +48,7 @@ PROTECTED_FILE_PATTERNS=(
     "*backup*"
     "*password*"
     "*credentials*"
+
 )
 
 # Exempt paths (user-specified paths to skip during organization)

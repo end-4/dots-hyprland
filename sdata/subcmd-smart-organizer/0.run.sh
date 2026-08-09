@@ -7,14 +7,7 @@ source ./sdata/lib/functions.sh
 prevent_sudo_or_root
 set -e
 
-die() {
-  printf "${STY_RED}FATAL: %s${STY_RST}\n" "$*"
-  exit 1
-}
 
-command_exists() {
-  command -v "$1" >/dev/null 2>&1
-}
 
 BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -106,7 +99,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=${BIN_DIR}/backup.sh --dry-run
+ExecStart=${BIN_DIR}/backup.sh
 EOFSERVICE
 
   cat > "${CONFIG_DIR}/systemd/user/backup.timer" << EOFSERVICE

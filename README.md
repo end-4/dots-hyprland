@@ -69,7 +69,7 @@ systemctl --user enable --now smart-organizer
 ### MUX Switcher
 ```bash
 # Check status
-sudo mux-switcher status
+sudo msi-mux-switcher status
 
 # Switch to hybrid
 sudo mux-switcher hybrid
@@ -85,7 +85,7 @@ sudo mux-switcher dgpu
 - NVIDIA RTX 4050 Laptop (6GB)
 - Hardware MUX switch
 
-Other MSI laptops with MUX switch should work. Check `sudo mux-switcher status`.
+Other MSI laptops with MUX switch should work. Check `sudo msi-mux-switcher status`.
 
 ## Directory Structure
 
@@ -114,14 +114,14 @@ Auto-desktopenv/
 
 ## Documentation
 
-- [Setup Guide](docs/SETUP.md)
+- [Setup Guide](INSTALLATION_GUIDE.md)
 - [Smart Organizer](tools/smart-organizer/README.md)
 - [MUX Switcher](tools/mux-switcher/README.md)
-- [Directory Organization](docs/DIRECTORY-ORGANIZATION.md)
+- [Directory Organization](tools/smart-organizer/README.md)
 
 ## License
 
-MIT - Same as upstream end-4/dots-hyprland
+GPL-3.0 - Same as upstream end-4/dots-hyprland
 
 ## Acknowledgments
 

@@ -8,7 +8,7 @@ Idempotent installation for dotfiles.
 Options for install:
   -h, --help                Print this help message and exit
   -f, --force               (Dangerous) Force mode without any confirm
-  -F, --fisrtrun            Act like it is the first run
+  -F, --firstrun            Act like it is the first run
   -c, --clean               Clean the build cache first
       --skip-allgreeting    Skip the whole process greeting
       --skip-alldeps        Skip the whole process installing dependency
