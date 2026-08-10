@@ -283,6 +283,14 @@ ContentPage {
                     Config.options.sounds.pomodoro = checked;
                 }
             }
+            ConfigSwitch {
+                buttonIcon: "notifications"
+                text: Translation.tr("Notifications")
+                checked: Config.options.sounds.notifications
+                onCheckedChanged: {
+                    Config.options.sounds.notifications = checked;
+                }
+            }
         }
     }
 
