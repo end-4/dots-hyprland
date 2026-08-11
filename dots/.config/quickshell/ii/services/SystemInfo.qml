@@ -60,6 +60,7 @@ Singleton {
             switch (distroId) {
                 case "artix":
                 case "arch": distroIcon = "arch-symbolic"; break;
+                case "manjaro": distroIcon = "manjaro-symbolic"; break;
                 case "endeavouros": distroIcon = "endeavouros-symbolic"; break;
                 case "cachyos": distroIcon = "cachyos-symbolic"; break;
                 case "nixos": distroIcon = "nixos-symbolic"; break;
