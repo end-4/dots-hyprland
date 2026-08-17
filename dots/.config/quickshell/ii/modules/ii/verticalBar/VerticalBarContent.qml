@@ -92,6 +92,12 @@ Item { // Bar content region
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }
+
+            Bar.AiQuotaBar {
+                vertical: true
+                visible: Config.options.bar.aiQuota.enable
+                Layout.alignment: Qt.AlignHCenter
+            }
             
             HorizontalBarSeparator {}
 
