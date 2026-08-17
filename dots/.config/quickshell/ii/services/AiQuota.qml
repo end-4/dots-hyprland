@@ -10,7 +10,8 @@ import qs.modules.common
 Singleton {
     id: root
     // Polling interval, derived from Config defaults (minutes -> ms).
-    readonly property int fetchInterval: Config.options.bar.aiQuota.intervalMinutes * 60 * 1000
+    // Falls back to 5 minutes so a missing/partial config entry cannot yield an invalid interval.
+    readonly property int fetchInterval: Math.max(1, Config.options?.bar?.aiQuota?.intervalMinutes ?? 5) * 60 * 1000
 
     // Ordered list of provider ids we want to render, in display order.
     // Only providers actually present in the codexbar JSON are exposed.
@@ -51,7 +52,9 @@ Singleton {
         root.fetchInFlight = true
         // Resolve the CLI through the user's login shell so PATH overrides and
         // ~/.local/bin survive session restarts; force non-interactive, machine output.
-        fetcher.command[2] = 'codexbar --format json --json-only 2>/dev/null || true'
+        // The timeout bounds slow provider probes (Claude's CLI probe takes ~20s) so a
+        // hung fetch can never hold the in-flight guard and freeze later polls.
+        fetcher.command[2] = 'timeout 90 codexbar --format json --json-only 2>/dev/null || true'
         fetcher.running = true
     }
 
@@ -91,10 +94,6 @@ Singleton {
         }
     }
 
-    Component.onCompleted: {
-        root.getData()
-    }
-
     Process {
         id: fetcher
         command: ["bash", "-lc", ""]
@@ -122,6 +121,7 @@ Singleton {
     }
 
     Timer {
+        running: true
         repeat: true
         interval: root.fetchInterval
         triggeredOnStart: true

@@ -119,7 +119,7 @@ Item { // Bar content region
             }
 
             AiQuotaBar {
-                visible: Config.options.bar.aiQuota.enable && root.useShortenedForm < 2
+                visible: (Config.options.bar.aiQuota?.enable ?? true) && root.useShortenedForm < 2
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: 6
             }

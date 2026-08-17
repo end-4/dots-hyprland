@@ -95,7 +95,7 @@ Item { // Bar content region
 
             Bar.AiQuotaBar {
                 vertical: true
-                visible: Config.options.bar.aiQuota.enable
+                visible: Config.options.bar.aiQuota?.enable ?? true
                 Layout.alignment: Qt.AlignHCenter
             }
             
