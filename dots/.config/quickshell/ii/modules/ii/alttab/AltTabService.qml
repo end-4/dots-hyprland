@@ -2,7 +2,6 @@ import qs
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.services
-import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -15,8 +14,6 @@ Scope {
 
     property bool alttabOpen: false
     property int currentIndex: 0
-    property var sourceWindowState: null
-    property var sourceAddress: null
     property var currentToplevel: null
     readonly property var allToplevels: ToplevelManager.toplevels.values
     readonly property var focusedMonitor: Hyprland.focusedMonitor
@@ -33,62 +30,6 @@ Scope {
     function workspaceIdForToplevel(toplevel) {
         return HyprlandData.clientForToplevel(toplevel)?.workspace?.id ?? -1
     }
-
-    function windowStateForToplevel(toplevel) {
-        const client = HyprlandData.clientForToplevel(toplevel)
-        return {
-            internalFs: Number(client?.fullscreen ?? 0),
-            clientFs: Number(client?.fullscreenClient ?? 0),
-            floating: client?.floating === true,
-            pinned: client?.pinned === true,
-            pinFullscreened: client?.pinFullscreened === true
-        }
-    }
-
-    function beginCycle() {
-        const active = ToplevelManager.activeToplevel
-        root.sourceAddress = active?.HyprlandToplevel?.address ? `0x${active.HyprlandToplevel.address}` : null
-        root.sourceWindowState = active ? root.windowStateForToplevel(active) : null
-    }
-
-    function resetCycleState() {
-        root.alttabOpen = false
-        root.currentToplevel = null
-        root.currentIndex = 0
-        root.sourceWindowState = null
-        root.sourceAddress = null
-    }
-
-    function focusWithSourceState(toplevel) {
-        if (!toplevel) return
-        const targetAddr = `0x${toplevel.HyprlandToplevel?.address ?? ""}`
-        if (!targetAddr || targetAddr === "0x") return
-
-        const source = root.sourceWindowState
-        const targetState = root.windowStateForToplevel(toplevel)
-
-        // 1. Focus target window
-        Hyprland.dispatch(`hl.dsp.focus({ window = "address:${targetAddr}" })`)
-
-        if (!source) return
-
-        // 2. Restore source fullscreen/maximized state onto target
-        if (source.internalFs !== targetState.internalFs || source.clientFs !== targetState.clientFs) {
-            Hyprland.dispatch(`hl.dsp.window.fullscreen_state({ internal = ${source.internalFs}, client = ${source.clientFs}, action = "set", window = "address:${targetAddr}" })`)
-        }
-
-        // 3. Restore source floating state onto target
-        if (source.floating !== targetState.floating) {
-            const action = source.floating ? "enable" : "disable"
-            Hyprland.dispatch(`hl.dsp.window.float({ action = "${action}", window = "address:${targetAddr}" })`)
-        }
-
-        // 4. Restore source pinned state onto target
-        if (source.pinned !== targetState.pinned) {
-            const action = source.pinned ? "enable" : "disable"
-            Hyprland.dispatch(`hl.dsp.window.pin({ action = "${action}", window = "address:${targetAddr}" })`)
-        }
-    }
     readonly property var filteredToplevels: {
         const workspaceId = root.currentWorkspaceId
         if (workspaceId === -1) return []
@@ -101,7 +42,6 @@ Scope {
         root.currentIndex = 0
         GlobalStates.alttabReleaseMightTrigger = true
     }
-    // This avoids allocating previews for off-screen windows.
     readonly property var visibleToplevels: {
         const arr = root.filteredToplevels
         const count = Math.min(4, arr.length)
@@ -123,7 +63,6 @@ Scope {
                 return
             }
             if (!root.alttabOpen) {
-                root.beginCycle()
                 if (!windowLoader.active) windowLoader.active = true
                 const activeIndex = toplevels.indexOf(ToplevelManager.activeToplevel)
                 root.currentIndex = activeIndex >= 0 ? (activeIndex + 1) % toplevels.length : 0
@@ -162,9 +101,12 @@ Scope {
                 return
             }
             if (root.currentToplevel !== null && root.currentToplevel !== undefined) {
-                root.focusWithSourceState(root.currentToplevel)
+                const addr = `0x${root.currentToplevel.HyprlandToplevel?.address}`
+                Hyprland.dispatch(`hl.dsp.focus({ window = "address:${addr}" })`)
             }
-            root.resetCycleState()
+            root.alttabOpen = false
+            root.currentToplevel = null
+            root.currentIndex = 0
             GlobalStates.alttabReleaseMightTrigger = true
         }
     }
@@ -212,12 +154,10 @@ Scope {
                 return
             }
             if (!root.alttabOpen) {
-                root.beginCycle()
                 if (!windowLoader.active) windowLoader.active = true
                 root.alttabOpen = true
-                const activeIndex = toplevels.indexOf(ToplevelManager.activeToplevel)
-                root.currentIndex = activeIndex >= 0 ? (activeIndex + 1) % toplevels.length : 0
-                root.currentToplevel = toplevels[root.currentIndex]
+                root.currentIndex = 0
+                root.currentToplevel = toplevels[0]
             } else {
                 root.currentIndex = (root.currentIndex + 1) % toplevels.length
                 root.currentToplevel = toplevels[root.currentIndex]
@@ -231,12 +171,10 @@ Scope {
                 return
             }
             if (!root.alttabOpen) {
-                root.beginCycle()
                 if (!windowLoader.active) windowLoader.active = true
                 root.alttabOpen = true
-                const activeIndex = toplevels.indexOf(ToplevelManager.activeToplevel)
-                root.currentIndex = activeIndex >= 0 ? (activeIndex - 1 + toplevels.length) % toplevels.length : 0
-                root.currentToplevel = toplevels[root.currentIndex]
+                root.currentIndex = 0
+                root.currentToplevel = toplevels[0]
             } else {
                 root.currentIndex = (root.currentIndex - 1 + toplevels.length) % toplevels.length
                 root.currentToplevel = toplevels[root.currentIndex]
@@ -244,16 +182,21 @@ Scope {
         }
 
         function cancel(): void {
-            root.resetCycleState()
+            root.alttabOpen = false
+            root.currentToplevel = null
+            root.currentIndex = 0
             GlobalStates.alttabReleaseMightTrigger = false
         }
 
         function release(): void {
             if (!root.alttabOpen) return
             if (root.currentToplevel !== null && root.currentToplevel !== undefined) {
-                root.focusWithSourceState(root.currentToplevel)
+                const addr = `0x${root.currentToplevel.HyprlandToplevel?.address}`
+                Hyprland.dispatch(`hl.dsp.focus({ window = "address:${addr}" })`)
             }
-            root.resetCycleState()
+            root.alttabOpen = false
+            root.currentToplevel = null
+            root.currentIndex = 0
         }
 
     IpcHandler {

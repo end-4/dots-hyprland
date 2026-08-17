@@ -2,7 +2,6 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -13,23 +12,8 @@ PanelWindow {
     id: root
     required property var service
 
-    property var viewport: null
     readonly property var windowByAddress: HyprlandData.windowByAddress
     readonly property var monitors: HyprlandData.monitors
-    readonly property int cardCount: root.service.filteredToplevels.length
-    property int frameWidth: cardCount >= 4
-        ? 1000
-        : Math.max(300, cardCount * root.cardWidth
-            + Math.max(0, cardCount - 1) * root.cardSpacing
-            + root.framePadding * 4)
-    property int frameHeight: 240
-
-    function isPreviewVisible(toplevel) {
-        return root.service.visibleToplevels.indexOf(toplevel) >= 0
-    }
-    function ensureSelectedCardVisible() {
-        if (root.viewport) root.viewport.ensureSelectedVisible()
-    }
 
     WlrLayershell.namespace: "quickshell:alttab"
     WlrLayershell.layer: WlrLayer.Overlay
@@ -54,8 +38,12 @@ PanelWindow {
 
     property int cardWidth: 220
     property int cardHeight: 124
-    property int cardSpacing: 45
+    property int cardSpacing: 12
     property int framePadding: 16
+    property int frameWidth: root.service.filteredToplevels.length >= 4
+        ? 1000
+        : Math.max(300, cardRow.implicitWidth + root.framePadding * 2 + 52)
+    property int frameHeight: 240
 
     Component.onCompleted: GlobalFocusGrab.addDismissable(root)
     Component.onDestruction: GlobalFocusGrab.removeDismissable(root)
@@ -97,8 +85,8 @@ PanelWindow {
             anchors.margins: root.framePadding
             color: Appearance.colors.colLayer1Base
             radius: Appearance.rounding.small
-            border.width: 0
-            border.color: "transparent"
+            border.width: 1
+            border.color: Appearance.m3colors.m3outline
             clip: true
 
             StyledText {
@@ -109,16 +97,15 @@ PanelWindow {
                 font.pixelSize: Appearance.font.pixelSize.large
                 font.weight: Font.Bold
             }
+
             Flickable {
                 id: cardViewport
                 anchors.fill: parent
                 anchors.margins: root.framePadding
-                Component.onCompleted: root.viewport = cardViewport
-                Component.onDestruction: {
-                    if (root.viewport === cardViewport) root.viewport = null
-                }
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
                 property int cardCount: root.service.filteredToplevels.length
-                contentWidth: cardRow.implicitWidth
+                contentWidth: cardCount <= 4 ? width : cardRow.implicitWidth
                 contentHeight: cardRow.implicitHeight
 
                 function ensureSelectedVisible() {
@@ -145,28 +132,28 @@ PanelWindow {
                 Connections {
                     target: root.service
                     function onCurrentIndexChanged() {
-                        root.ensureSelectedCardVisible()
+                        cardViewport.ensureSelectedVisible()
+                    }
+                    function onFilteredToplevelsChanged() {
+                        cardViewport.ensureSelectedVisible()
                     }
                 }
+
                 Row {
                     id: cardRow
-                    x: root.cardCount <= 4
-                        ? Math.max(0, (root.frameWidth - root.framePadding * 4 - implicitWidth) / 2)
-                        : 0
-                    y: Math.max(0, (root.frameHeight - root.framePadding * 4 - implicitHeight) / 2)
-                    width: implicitWidth
-                    spacing: root.cardSpacing
+                    width: cardViewport.cardCount <= 4 ? cardViewport.width : implicitWidth
+                    spacing: cardViewport.cardCount > 1 && cardViewport.cardCount <= 4
+                        ? (cardViewport.width - cardViewport.cardCount * root.cardWidth) / (cardViewport.cardCount - 1)
+                        : root.cardSpacing
 
                     Repeater {
                         model: root.service.filteredToplevels
                         delegate: AltTabCard {
                             required property var modelData
-                            required property int index
                             toplevel: modelData
                             windowData: root.windowDataForToplevel(modelData)
                             monitorData: root.monitorDataForToplevel(modelData)
-                            isSelected: modelData === root.service.currentToplevel || index === root.service.currentIndex
-                            captureEnabled: root.service.alttabOpen && root.isPreviewVisible(modelData)
+                            isSelected: modelData === root.service.currentToplevel
                             cardWidth: root.cardWidth
                             cardHeight: root.cardHeight
                         }
@@ -175,4 +162,4 @@ PanelWindow {
             }
         }
     }
-    }
+}

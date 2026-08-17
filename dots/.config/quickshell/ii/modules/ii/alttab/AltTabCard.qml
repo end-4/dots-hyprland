@@ -3,7 +3,6 @@ import qs.services
 import Quickshell
 import Quickshell.Wayland
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 
 Item {
@@ -13,7 +12,7 @@ Item {
     property var windowData
     property var monitorData
     property bool isSelected: false
-    property bool captureEnabled: false
+    property bool captureEnabled: true
     property real cardWidth: 220
     property real cardHeight: 124
     property int labelHeight: 36
@@ -79,21 +78,11 @@ Item {
             anchors.fill: parent
             color: "transparent"
             radius: Appearance.rounding.small
-            border.width: root.borderWidth
-            border.color: Appearance.m3colors.m3outline
+            border.width: root.isSelected ? 3 : root.borderWidth
+            border.color: root.isSelected ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
         }
-
-        }
-    Rectangle {
-        id: cardInnerBorder
-        anchors.fill: parent
-        anchors.margins: -16
-        color: "transparent"
-        radius: Appearance.rounding.small
-        border.width: root.isSelected ? 3 : 1
-        border.color: root.isSelected ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
-        z: 1
     }
+
     Column {
         anchors {
             top: imageFrame.bottom
