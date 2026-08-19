@@ -15,6 +15,7 @@ Scope {
     property bool alttabOpen: false
     property int currentIndex: 0
     property var currentToplevel: null
+    property var cycleToplevels: []
     readonly property var allToplevels: ToplevelManager.toplevels.values
     readonly property var focusedMonitor: Hyprland.focusedMonitor
     readonly property var activeWorkspace: HyprlandData.activeWorkspace ?? focusedMonitor?.activeWorkspace ?? null
@@ -35,15 +36,23 @@ Scope {
         if (workspaceId === -1) return []
         return root.allToplevels.filter(toplevel => root.workspaceIdForToplevel(toplevel) === workspaceId)
     }
+    readonly property var displayToplevels:
+        root.alttabOpen && root.cycleToplevels.length > 0
+            ? root.cycleToplevels
+            : root.filteredToplevels
+    function clearCycle(): void {
+        root.cycleToplevels = []
+    }
     function showEmpty(): void {
         if (!windowLoader.active) windowLoader.active = true
+        root.cycleToplevels = []
         root.alttabOpen = true
         root.currentToplevel = null
         root.currentIndex = 0
         GlobalStates.alttabReleaseMightTrigger = true
     }
     readonly property var visibleToplevels: {
-        const arr = root.filteredToplevels
+        const arr = root.displayToplevels
         const count = Math.min(4, arr.length)
         const result = []
         for (let i = 0; i < count; i++)
@@ -57,25 +66,26 @@ Scope {
 
         onPressed: {
             if (!Config.options.alttab.enable) return
-            const toplevels = root.filteredToplevels
-            if (toplevels.length === 0) {
+            const available = root.filteredToplevels
+            if (available.length === 0) {
                 root.showEmpty()
                 return
             }
             if (!root.alttabOpen) {
+                root.cycleToplevels = available.slice()
                 if (!windowLoader.active) windowLoader.active = true
-                const activeIndex = toplevels.indexOf(ToplevelManager.activeToplevel)
-                root.currentIndex = activeIndex >= 0 ? (activeIndex + 1) % toplevels.length : 0
-                root.currentToplevel = toplevels[root.currentIndex]
+                const activeIndex = available.indexOf(ToplevelManager.activeToplevel)
+                root.currentIndex = activeIndex >= 0 ? (activeIndex + 1) % available.length : 0
+                root.currentToplevel = root.cycleToplevels[root.currentIndex]
                 root.alttabOpen = true
                 GlobalStates.alttabReleaseMightTrigger = true
                 return
             }
+            const toplevels = root.displayToplevels
             root.currentIndex = (root.currentIndex + 1) % toplevels.length
             root.currentToplevel = toplevels[root.currentIndex]
         }
     }
-
 
     GlobalShortcut {
         name: "alttabCyclePrev"
@@ -83,7 +93,7 @@ Scope {
 
         onPressed: {
             if (!root.alttabOpen) return
-            const toplevels = root.filteredToplevels
+            const toplevels = root.displayToplevels
             if (toplevels.length === 0) return
             root.currentIndex = (root.currentIndex - 1 + toplevels.length) % toplevels.length
             root.currentToplevel = toplevels[root.currentIndex]
@@ -105,23 +115,25 @@ Scope {
                 Hyprland.dispatch(`hl.dsp.focus({ window = "address:${addr}" })`)
             }
             root.alttabOpen = false
+            root.clearCycle()
             root.currentToplevel = null
             root.currentIndex = 0
             GlobalStates.alttabReleaseMightTrigger = true
         }
     }
+
     GlobalShortcut {
         name: "alttabCancel"
         description: "Cancels Alt-Tab without changing focus"
 
         onPressed: {
             root.alttabOpen = false
+            root.clearCycle()
             root.currentToplevel = null
             root.currentIndex = 0
             GlobalStates.alttabReleaseMightTrigger = false
         }
     }
-
 
     LazyLoader {
         id: windowLoader
@@ -130,74 +142,85 @@ Scope {
 
     IpcHandler {
         target: "alttab"
+
         function open(): void {
             if (!Config.options.alttab.enable) return
+            const available = root.filteredToplevels
+            root.cycleToplevels = available.slice()
             if (!windowLoader.active) windowLoader.active = true
             root.alttabOpen = true
             GlobalStates.alttabReleaseMightTrigger = true
             if (root.currentToplevel === null || root.currentToplevel === undefined) {
                 root.currentIndex = 0
-                root.currentToplevel = root.filteredToplevels[0] ?? null
+                root.currentToplevel = root.displayToplevels[0] ?? null
             }
         }
 
         function close(): void {
             root.alttabOpen = false
+            root.clearCycle()
             root.currentToplevel = null
             root.currentIndex = 0
         }
     }
-        function cycle(): void {
-            const toplevels = root.filteredToplevels
-            if (toplevels.length === 0) {
-                root.showEmpty()
-                return
-            }
-            if (!root.alttabOpen) {
-                if (!windowLoader.active) windowLoader.active = true
-                root.alttabOpen = true
-                root.currentIndex = 0
-                root.currentToplevel = toplevels[0]
-            } else {
-                root.currentIndex = (root.currentIndex + 1) % toplevels.length
-                root.currentToplevel = toplevels[root.currentIndex]
-            }
-        }
 
-        function cyclePrev(): void {
-            const toplevels = root.filteredToplevels
-            if (toplevels.length === 0) {
-                root.showEmpty()
-                return
-            }
-            if (!root.alttabOpen) {
-                if (!windowLoader.active) windowLoader.active = true
-                root.alttabOpen = true
-                root.currentIndex = 0
-                root.currentToplevel = toplevels[0]
-            } else {
-                root.currentIndex = (root.currentIndex - 1 + toplevels.length) % toplevels.length
-                root.currentToplevel = toplevels[root.currentIndex]
-            }
+    function cycle(): void {
+        const available = root.filteredToplevels
+        if (available.length === 0) {
+            root.showEmpty()
+            return
         }
-
-        function cancel(): void {
-            root.alttabOpen = false
-            root.currentToplevel = null
+        if (!root.alttabOpen) {
+            root.cycleToplevels = available.slice()
+            if (!windowLoader.active) windowLoader.active = true
+            root.alttabOpen = true
             root.currentIndex = 0
-            GlobalStates.alttabReleaseMightTrigger = false
+            root.currentToplevel = root.cycleToplevels[0]
+            return
         }
+        const toplevels = root.displayToplevels
+        root.currentIndex = (root.currentIndex + 1) % toplevels.length
+        root.currentToplevel = toplevels[root.currentIndex]
+    }
 
-        function release(): void {
-            if (!root.alttabOpen) return
-            if (root.currentToplevel !== null && root.currentToplevel !== undefined) {
-                const addr = `0x${root.currentToplevel.HyprlandToplevel?.address}`
-                Hyprland.dispatch(`hl.dsp.focus({ window = "address:${addr}" })`)
-            }
-            root.alttabOpen = false
-            root.currentToplevel = null
-            root.currentIndex = 0
+    function cyclePrev(): void {
+        const available = root.filteredToplevels
+        if (available.length === 0) {
+            root.showEmpty()
+            return
         }
+        if (!root.alttabOpen) {
+            root.cycleToplevels = available.slice()
+            if (!windowLoader.active) windowLoader.active = true
+            root.alttabOpen = true
+            root.currentIndex = 0
+            root.currentToplevel = root.cycleToplevels[0]
+            return
+        }
+        const toplevels = root.displayToplevels
+        root.currentIndex = (root.currentIndex - 1 + toplevels.length) % toplevels.length
+        root.currentToplevel = toplevels[root.currentIndex]
+    }
+
+    function cancel(): void {
+        root.alttabOpen = false
+        root.clearCycle()
+        root.currentToplevel = null
+        root.currentIndex = 0
+        GlobalStates.alttabReleaseMightTrigger = false
+    }
+
+    function release(): void {
+        if (!root.alttabOpen) return
+        if (root.currentToplevel !== null && root.currentToplevel !== undefined) {
+            const addr = `0x${root.currentToplevel.HyprlandToplevel?.address}`
+            Hyprland.dispatch(`hl.dsp.focus({ window = "address:${addr}" })`)
+        }
+        root.alttabOpen = false
+        root.clearCycle()
+        root.currentToplevel = null
+        root.currentIndex = 0
+    }
 
     IpcHandler {
         target: "alttabKeys"
