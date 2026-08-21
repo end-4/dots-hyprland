@@ -46,7 +46,7 @@ ButtonMouseArea {
     }
 
     // Interactions
-    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.BackButton
     hoverEnabled: true
     property int hoverIndex: {
         const position = root.vertical ? mouseY : mouseX;
@@ -56,11 +56,18 @@ ButtonMouseArea {
     function switchWorkspaceToHovered() {
         Hyprland.dispatch(`hl.dsp.focus({workspace = ${wsModel.getWorkspaceIdAt(hoverIndex)}})`);
     }
+
+    function toggleSpecial() {
+        Hyprland.dispatch(`hl.dsp.workspace.toggle_special("special")`);
+    }
+
     onPressed: mouse => {
         if (mouse.button == Qt.LeftButton)
             switchWorkspaceToHovered();
         else if (mouse.button == Qt.RightButton)
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+        else if (mouse.button == Qt.BackButton) 
+            toggleSpecial()
     }
     onWheel: event => {
         if (event.angleDelta.y < 0)

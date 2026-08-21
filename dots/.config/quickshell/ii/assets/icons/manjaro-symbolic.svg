@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="200"
+   height="200"
+   viewBox="0 0 200 200">
+  <g transform="translate(222.41168,-236.90015)">
+    <rect width="58.534939" height="200" x="-80.946617" y="236.90016" />
+    <rect width="58.534939" height="129.26881" x="-151.68127" y="307.63138" />
+    <path transform="translate(-222.41168,236.90015)"
+          d="M 0 0 L 0 200 L 58.535156 200 L 58.535156 58.535156 L 129.26562 58.535156 L 129.26562 0 L 58.535156 0 L 20.765625 0 L 0 0 z " />
+  </g>
+</svg>
