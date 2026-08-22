@@ -332,6 +332,12 @@ Singleton {
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty",]
                 property list<string> ignoredAppRegexes: []
+                property JsonObject appFinder: JsonObject {
+                    property int columns: 5
+                    property int iconSize: 40
+                    property int maxRows: 5
+                    property bool replaceOverviewButton: false
+                }
             }
 
             property JsonObject interactions: JsonObject {
