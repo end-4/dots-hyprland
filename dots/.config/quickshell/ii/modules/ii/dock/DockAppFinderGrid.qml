@@ -8,6 +8,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import Quickshell.Widgets
 
 Item {
@@ -397,7 +398,11 @@ Item {
                         }
                     }
 
-                    Item { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Appearance.colors.colLayer0Border }
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 1
+                        color: Appearance.colors.colLayer0Border
+                    }
 
                     // Description
                     StyledText {
