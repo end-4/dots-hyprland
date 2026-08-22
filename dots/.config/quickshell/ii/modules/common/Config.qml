@@ -209,6 +209,26 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject visualizer: JsonObject {
+                        property bool enable: false
+                        property int numBars: 128
+                        property real sensitivity: 1.0
+                        property int smoothing: 2
+                        property string colorMode: "auto" // "auto", "primary", "accent", "custom"
+                        property string customColor: "#888888"
+                        property bool showOnlyWhenPlaying: true
+                    }
+                    property JsonObject mprisWidget: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 200
+                        property real y: 100
+                        property int width: 350
+                        property int height: 140
+                        property int rounding: 2 // 0:unsharpen 1:verysmall 2:small 3:normal 4:large 5:verylarge 6:full
+                        property bool showAlbumArt: true
+                        property bool showControls: true
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""

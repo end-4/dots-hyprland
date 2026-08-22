@@ -16,6 +16,7 @@ import Quickshell.Hyprland
 
 import qs.modules.ii.background.widgets
 import qs.modules.ii.background.widgets.clock
+import qs.modules.ii.background.widgets.mprisWidget
 import qs.modules.ii.background.widgets.weather
 
 Variants {
@@ -95,6 +96,44 @@ Variants {
         onWallpaperPathChanged: {
             bgRoot.updateZoomScale();
             // Clock position gets updated after zoom scale is updated
+        }
+
+        // Cava process for full-screen visualizer
+        property list<real> visualizerPoints: []
+        property bool visualizerHasAudio: false
+        Process {
+            id: cavaProc
+            running: Config.options.background.widgets.visualizer.enable
+            onRunningChanged: {
+                if (!cavaProc.running) {
+                    bgRoot.visualizerPoints = [];
+                }
+            }
+            command: ["cava", "-p", `${CF.FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/background_viz_config.txt`]
+            stdout: SplitParser {
+                onRead: data => {
+                    let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                    bgRoot.visualizerPoints = points;
+                }
+            }
+        }
+        Timer {
+            id: visualizerActivityTimer
+            interval: 500
+            repeat: true
+            running: cavaProc.running
+            onTriggered: {
+                let hasActivity = false;
+                const points = bgRoot.visualizerPoints;
+                const threshold = 10 / Config.options.background.widgets.visualizer.sensitivity;
+                for (let i = 0; i < points.length; ++i) {
+                    if (points[i] > threshold) {
+                        hasActivity = true;
+                        break;
+                    }
+                }
+                bgRoot.visualizerHasAudio = hasActivity;
+            }
         }
 
         // Wallpaper zoom scale
@@ -224,6 +263,84 @@ Variants {
                 }
             }
 
+            // Full-screen audio visualizer
+            Loader {
+                id: visualizerLoader
+                anchors.fill: parent
+                active: Config.options.background.widgets.visualizer.enable && !GlobalStates.screenLocked
+
+                opacity: Config.options.background.widgets.visualizer.showOnlyWhenPlaying && !bgRoot.visualizerHasAudio ? 0 : 1
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+
+                property color vizColor: {
+                    switch (Config.options.background.widgets.visualizer.colorMode) {
+                        case "primary":
+                            return Appearance.m3colors.m3primary;
+                        case "accent":
+                            return Appearance.m3colors.m3secondary;
+                        case "custom":
+                            return Config.options.background.widgets.visualizer.customColor;
+                        case "auto":
+                        default:
+                            return bgRoot.colText;
+                    }
+                }
+
+                sourceComponent: Canvas {
+                    id: fullscreenViz
+                    anchors.fill: parent
+
+                    onPaint: {
+                        var ctx = getContext("2d");
+                        ctx.clearRect(0, 0, width, height);
+
+                        var points = bgRoot.visualizerPoints;
+                        var n = points.length;
+                        if (n < 2) return;
+
+                        var h = height;
+                        var w = width;
+                        var maxVal = 1000;
+                        var color = visualizerLoader.vizColor;
+
+                        // Smoothing
+                        var smoothWindow = Config.options.background.widgets.visualizer.smoothing;
+                        var smoothed = [];
+                        for (var i = 0; i < n; ++i) {
+                            var sum = 0, count = 0;
+                            for (var j = -smoothWindow; j <= smoothWindow; ++j) {
+                                var idx = Math.max(0, Math.min(n - 1, i + j));
+                                sum += points[idx];
+                                count++;
+                            }
+                            smoothed.push(sum / count);
+                        }
+
+                        // Draw bottom-to-top filled waveform
+                        ctx.beginPath();
+                        ctx.moveTo(0, h);
+                        for (var i = 0; i < n; ++i) {
+                            var x = (i / (n - 1)) * w;
+                            var amp = Math.min(1, smoothed[i] / maxVal) * h * 0.95;
+                            ctx.lineTo(x, h - amp);
+                        }
+                        ctx.lineTo(w, h);
+                        ctx.closePath();
+                        ctx.fillStyle = Qt.rgba(color.r, color.g, color.b, 0.15);
+                        ctx.fill();
+                    }
+
+                    Connections {
+                        target: bgRoot
+                        function onVisualizerPointsChanged() {
+                            fullscreenViz.requestPaint();
+                        }
+                    }
+                }
+            }
+
             WidgetCanvas {
                 id: widgetCanvas
                 width: parent.width
@@ -274,6 +391,17 @@ Variants {
                         scaledScreenHeight: bgRoot.screen.height
                         wallpaperScale: 1
                         wallpaperSafetyTriggered: bgRoot.wallpaperSafetyTriggered
+                    }
+                }
+
+                FadeLoader {
+                    shown: Config.options.background.widgets.mprisWidget.enable
+                    sourceComponent: MprisWidget {
+                        screenWidth: bgRoot.screen.width
+                        screenHeight: bgRoot.screen.height
+                        scaledScreenWidth: bgRoot.screen.width
+                        scaledScreenHeight: bgRoot.screen.height
+                        wallpaperScale: 1
                     }
                 }
             }

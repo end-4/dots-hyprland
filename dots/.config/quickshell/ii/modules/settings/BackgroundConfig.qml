@@ -614,4 +614,249 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "graphic_eq"
+        title: Translation.tr("Widget: Visualizer")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable full-screen visualizer")
+            checked: Config.options.background.widgets.visualizer.enable
+            onCheckedChanged: {
+                Config.options.background.widgets.visualizer.enable = checked;
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Appearance")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.background.widgets.visualizer.colorMode
+                onSelected: newValue => {
+                    Config.options.background.widgets.visualizer.colorMode = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Auto"),
+                        icon: "auto_awesome",
+                        value: "auto"
+                    },
+                    {
+                        displayName: Translation.tr("Primary"),
+                        icon: "palette",
+                        value: "primary"
+                    },
+                    {
+                        displayName: Translation.tr("Accent"),
+                        icon: "colorize",
+                        value: "accent"
+                    },
+                    {
+                        displayName: Translation.tr("Custom"),
+                        icon: "format_color_fill",
+                        value: "custom"
+                    }
+                ]
+            }
+
+            MaterialTextArea {
+                Layout.fillWidth: true
+                visible: Config.options.background.widgets.visualizer.colorMode === "custom"
+                placeholderText: Translation.tr("Custom color (hex, e.g. #FF6B6B)")
+                text: Config.options.background.widgets.visualizer.customColor
+                wrapMode: TextEdit.NoWrap
+                onTextChanged: {
+                    Config.options.background.widgets.visualizer.customColor = text;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Behavior")
+
+            ConfigSlider {
+                buttonIcon: "tune"
+                text: Translation.tr("Sensitivity")
+                value: Config.options.background.widgets.visualizer.sensitivity
+                from: 0.1
+                to: 5.0
+                onValueChanged: {
+                    Config.options.background.widgets.visualizer.sensitivity = value;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "waves"
+                text: Translation.tr("Smoothing")
+                value: Config.options.background.widgets.visualizer.smoothing
+                from: 0
+                to: 10
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.background.widgets.visualizer.smoothing = value;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "equalizer"
+                text: Translation.tr("Bars")
+                value: Config.options.background.widgets.visualizer.numBars
+                from: 16
+                to: 512
+                stepSize: 16
+                onValueChanged: {
+                    Config.options.background.widgets.visualizer.numBars = value;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "music_note"
+                text: Translation.tr("Show only when playing")
+                checked: Config.options.background.widgets.visualizer.showOnlyWhenPlaying
+                onCheckedChanged: {
+                    Config.options.background.widgets.visualizer.showOnlyWhenPlaying = checked;
+                }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "album"
+        title: Translation.tr("Widget: Now Playing")
+
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.mprisWidget.enable
+                onCheckedChanged: {
+                    Config.options.background.widgets.mprisWidget.enable = checked;
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.mprisWidget.placementStrategy
+                onSelected: newValue => {
+                    Config.options.background.widgets.mprisWidget.placementStrategy = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Draggable"),
+                        icon: "drag_pan",
+                        value: "free"
+                    },
+                    {
+                        displayName: Translation.tr("Least busy"),
+                        icon: "category",
+                        value: "leastBusy"
+                    },
+                    {
+                        displayName: Translation.tr("Most busy"),
+                        icon: "shapes",
+                        value: "mostBusy"
+                    }
+                ]
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Appearance")
+
+            ConfigSpinBox {
+                icon: "width"
+                text: Translation.tr("Width")
+                value: Config.options.background.widgets.mprisWidget.width
+                from: 200
+                to: 800
+                stepSize: 10
+                onValueChanged: {
+                    Config.options.background.widgets.mprisWidget.width = value;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "height"
+                text: Translation.tr("Height")
+                value: Config.options.background.widgets.mprisWidget.height
+                from: 80
+                to: 400
+                stepSize: 10
+                onValueChanged: {
+                    Config.options.background.widgets.mprisWidget.height = value;
+                }
+            }
+
+            ContentSubsection {
+                title: Translation.tr("Corner rounding")
+                ConfigSelectionArray {
+                    currentValue: Config.options.background.widgets.mprisWidget.rounding
+                    onSelected: newValue => {
+                        Config.options.background.widgets.mprisWidget.rounding = newValue;
+                    }
+                    options: [
+                        {
+                            displayName: Translation.tr("Unsharpen"),
+                            icon: "rectangle",
+                            value: 0
+                        },
+                        {
+                            displayName: Translation.tr("Very small"),
+                            icon: "rounded_corner",
+                            value: 1
+                        },
+                        {
+                            displayName: Translation.tr("Small"),
+                            icon: "rounded_corner",
+                            value: 2
+                        },
+                        {
+                            displayName: Translation.tr("Normal"),
+                            icon: "rounded_corner",
+                            value: 3
+                        },
+                        {
+                            displayName: Translation.tr("Large"),
+                            icon: "rounded_corner",
+                            value: 4
+                        },
+                        {
+                            displayName: Translation.tr("Very large"),
+                            icon: "rounded_corner",
+                            value: 5
+                        },
+                        {
+                            displayName: Translation.tr("Full"),
+                            icon: "circle",
+                            value: 6
+                        }
+                    ]
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "image"
+                text: Translation.tr("Show album art")
+                checked: Config.options.background.widgets.mprisWidget.showAlbumArt
+                onCheckedChanged: {
+                    Config.options.background.widgets.mprisWidget.showAlbumArt = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "play_circle"
+                text: Translation.tr("Show playback controls")
+                checked: Config.options.background.widgets.mprisWidget.showControls
+                onCheckedChanged: {
+                    Config.options.background.widgets.mprisWidget.showControls = checked;
+                }
+            }
+        }
+    }
 }
