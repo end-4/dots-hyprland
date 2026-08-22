@@ -105,9 +105,11 @@ PanelWindow {
         readonly property real pad: 12
         readonly property real gap: 8
         readonly property real sbHeight: 48
+        readonly property int panelWidth: Config.options?.dock.appFinder.width ?? 640
+        readonly property int panelHeight: Config.options?.dock.appFinder.height ?? 560
 
-        implicitWidth: Math.max(400, (appGridLoader.item?.implicitWidth ?? 0)) + pad * 2
-        implicitHeight: sbHeight + (appGridLoader.item?.maxPanelHeight ?? 0) + pad * 2 + gap
+        implicitWidth: panelWidth
+        implicitHeight: sbHeight + panelHeight + pad * 2 + gap
 
         StyledRectangularShadow { target: bg }
 
@@ -197,24 +199,22 @@ PanelWindow {
                     }
                 }
 
-                // Wrapper to center the grid — uses Loader so AppSearch/DesktopEntries
-                // bindings inside DockAppFinderGrid only evaluate when visible
+                // Grid area with fixed configured height; scrolls internally
                 Item {
                     Layout.fillWidth: true
-                    implicitHeight: appGridLoader.item?.implicitHeight ?? 0
+                    Layout.preferredHeight: contentWrapper.panelHeight
 
                     Loader {
                         id: appGridLoader
                         active: root.showing
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.fill: parent
                         sourceComponent: appGridComponent
                     }
 
                     Component {
                         id: appGridComponent
                         DockAppFinderGrid {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            width: implicitWidth
+                            anchors.fill: parent
                             searchText: root.searchText
                         }
                     }

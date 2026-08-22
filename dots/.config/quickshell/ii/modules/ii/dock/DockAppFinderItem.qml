@@ -12,12 +12,8 @@ RippleButton {
     id: root
     required property var entry // DesktopEntry
     property real iconSize: Config.options?.dock.appFinder.iconSize ?? 40
-    property real cellWidth: 90
-    property real cellHeight: 90
     property color colText: Appearance.m3colors.m3onSurface
 
-    implicitWidth: cellWidth
-    implicitHeight: cellHeight
     buttonRadius: Appearance.rounding.normal
 
     colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
@@ -28,11 +24,6 @@ RippleButton {
 
     onClicked: {
         root.entry?.execute();
-    }
-
-    altAction: () => {
-        if (root.entry?.id)
-            TaskbarApps.togglePin(root.entry.id);
     }
 
     contentItem: ColumnLayout {
@@ -47,7 +38,7 @@ RippleButton {
 
         StyledText {
             Layout.alignment: Qt.AlignHCenter
-            Layout.maximumWidth: root.cellWidth - 8
+            Layout.maximumWidth: root.width - 8
             text: root.entry?.name ?? ""
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: root.colText

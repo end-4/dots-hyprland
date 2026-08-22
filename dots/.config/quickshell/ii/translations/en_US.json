@@ -624,5 +624,12 @@
   "Office": "Office",
   "Science": "Science",
   "Utilities": "Utilities",
-  "Other": "Other"
+  "Other": "Other",
+  "Pin to dock": "Pin to dock",
+  "Properties": "Properties",
+  "Exec: %1": "Exec: %1",
+  "Categories: %1": "Categories: %1",
+  "Panel width": "Panel width",
+  "Panel height": "Panel height",
+  "Unknown executable": "Unknown executable"
 }

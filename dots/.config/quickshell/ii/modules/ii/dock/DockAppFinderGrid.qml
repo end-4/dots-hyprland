@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import qs.services
 import qs.modules.common
+import qs.modules.common.models
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
@@ -12,11 +13,18 @@ import Quickshell.Widgets
 Item {
     id: root
     property string searchText: ""
-    property real cellWidth: 90
-    property real cellHeight: 90
     property int columns: Config.options?.dock.appFinder.columns ?? 5
-    property int maxRows: Config.options?.dock.appFinder.maxRows ?? 5
-    property real spacing: 6
+    property real spacing: 10
+    // Cell width adapts to panel width so columns always fit evenly
+    readonly property real cellWidth: Math.max(72, (root.width - (root.columns - 1) * root.spacing - 16) / root.columns)
+    readonly property real cellHeight: Math.max(88, root.cellWidth * 1.2)
+
+    // Context menu state (managed by DockAppFinder)
+    property var contextMenuApp: null
+    property point contextMenuPosition: Qt.point(0, 0)
+    property bool contextMenuVisible: false
+    property var propertiesDialogApp: null
+    property bool propertiesDialogVisible: false
 
     readonly property var catNames: ({
         "AudioVideo":  Translation.tr("Multimedia"),
@@ -92,10 +100,7 @@ Item {
         return result.filter(g => g.apps.length > 0);
     }
 
-    // Size: width uses max columns; height capped to maxRows
     implicitWidth: root.columns * (root.cellWidth + root.spacing) - root.spacing
-    readonly property real maxPanelHeight: root.maxRows * (root.cellHeight + root.spacing) + 40 // 40px for headers
-    implicitHeight: Math.min(columnLayout.implicitHeight, maxPanelHeight)
 
     Flickable {
         id: flick
@@ -114,14 +119,14 @@ Item {
         ColumnLayout {
             id: columnLayout
             width: flick.width
-            spacing: 2
+            spacing: 12
 
             Repeater {
                 model: root.groups
 
                 ColumnLayout {
                     required property var modelData
-                    spacing: 2
+                    spacing: 6
                     Layout.fillWidth: true
 
                     // ── Category header ──
@@ -133,41 +138,333 @@ Item {
                         color: Appearance.colors.colPrimary
                     }
 
-                    // ── Chunked rows, each centered ──
-                    Repeater {
-                        model: {
-                            const apps = modelData.apps;
-                            const rows = [];
-                            for (let i = 0; i < apps.length; i += root.columns)
-                                rows.push(apps.slice(i, i + root.columns));
-                            return rows;
+                    // ── GridView per category (grid-style, like ApplicationDrawer) ──
+                    GridView {
+                        id: catGrid
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: {
+                            // Height = number of rows * (cellHeight + spacing)
+                            const rows = Math.ceil(modelData.apps.length / root.columns);
+                            return Math.max(1, rows) * (root.cellHeight + root.spacing) - root.spacing;
                         }
+                        cellWidth: root.cellWidth
+                        cellHeight: root.cellHeight
+                        interactive: false // Outer Flickable handles scrolling
+                        boundsBehavior: Flickable.StopAtBounds
+                        clip: false
 
-                        Item {
+                        model: modelData.apps
+
+                        delegate: DockAppFinderItem {
+                            id: itemDelegate
                             required property var modelData
-                            Layout.fillWidth: true
-                            implicitWidth: row.implicitWidth
-                            implicitHeight: row.implicitHeight
+                            width: catGrid.cellWidth
+                            height: catGrid.cellHeight
 
-                            Row {
-                                id: row
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                spacing: root.spacing
+                            entry: modelData
+                            iconSize: Config.options?.dock.appFinder.iconSize ?? 40
 
-                                Repeater {
-                                    model: modelData
-                                    DockAppFinderItem {
-                                        required property var modelData
-                                        entry: modelData
-                                        cellWidth: root.cellWidth
-                                        cellHeight: root.cellHeight
-                                    }
-                                }
+                            // ── Right-click context menu ──
+                            altAction: (event) => {
+                                const globalPos = itemDelegate.mapToItem(root, event.x, event.y);
+                                root.contextMenuPosition = globalPos;
+                                root.contextMenuApp = modelData;
+                                root.contextMenuVisible = true;
+                                event.accepted = true;
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    // ── Context menu ──
+    Loader {
+        id: contextMenuLoader
+        active: root.contextMenuVisible
+        anchors.fill: parent
+
+        sourceComponent: Item {
+            anchors.fill: parent
+
+            MouseArea {
+                anchors.fill: parent
+                onPressed: root.contextMenuVisible = false
+            }
+
+            StyledRectangularShadow {
+                target: contextMenuRect
+            }
+
+            Rectangle {
+                id: contextMenuRect
+                x: Math.min(root.contextMenuPosition.x, parent.width - width - 10)
+                y: Math.min(root.contextMenuPosition.y, parent.height - height - 10)
+                width: 200
+                height: contextMenuColumn.implicitHeight + 16
+                radius: Appearance.rounding.normal
+                color: Appearance.colors.colLayer1
+                border.width: 1
+                border.color: Appearance.colors.colLayer0Border
+
+                ColumnLayout {
+                    id: contextMenuColumn
+                    anchors.fill: parent
+                    anchors.margins: 8
+                    spacing: 4
+
+                    // Copy path
+                    RippleButton {
+                        Layout.fillWidth: true
+                        implicitHeight: 36
+                        buttonRadius: Appearance.rounding.small
+                        colBackground: ColorUtils.transparentize(Appearance.colors.colLayer0)
+                        colBackgroundHover: Appearance.colors.colLayer2
+                        colRipple: Appearance.colors.colLayer2Active
+
+                        onClicked: {
+                            copyAppPath(root.contextMenuApp);
+                            root.contextMenuVisible = false;
+                        }
+
+                        contentItem: RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 12
+
+                            MaterialSymbol {
+                                text: "content_copy"
+                                iconSize: Appearance.font.pixelSize.normal
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: Translation.tr("Copy path")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
+                    }
+
+                    // Pin / Unpin
+                    RippleButton {
+                        Layout.fillWidth: true
+                        implicitHeight: 36
+                        buttonRadius: Appearance.rounding.small
+                        colBackground: ColorUtils.transparentize(Appearance.colors.colLayer0)
+                        colBackgroundHover: Appearance.colors.colLayer2
+                        colRipple: Appearance.colors.colLayer2Active
+
+                        onClicked: {
+                            TaskbarApps.togglePin(root.contextMenuApp.id);
+                            root.contextMenuVisible = false;
+                        }
+
+                        contentItem: RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 12
+
+                            MaterialSymbol {
+                                text: "push_pin"
+                                iconSize: Appearance.font.pixelSize.normal
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: TaskbarApps.isPinned(root.contextMenuApp.id)
+                                    ? Translation.tr("Unpin")
+                                    : Translation.tr("Pin to dock")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
+                    }
+
+                    // Properties
+                    RippleButton {
+                        Layout.fillWidth: true
+                        implicitHeight: 36
+                        buttonRadius: Appearance.rounding.small
+                        colBackground: ColorUtils.transparentize(Appearance.colors.colLayer0)
+                        colBackgroundHover: Appearance.colors.colLayer2
+                        colRipple: Appearance.colors.colLayer2Active
+
+                        onClicked: {
+                            root.propertiesDialogApp = root.contextMenuApp;
+                            root.propertiesDialogVisible = true;
+                            root.contextMenuVisible = false;
+                        }
+
+                        contentItem: RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 12
+
+                            MaterialSymbol {
+                                text: "info"
+                                iconSize: Appearance.font.pixelSize.normal
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: Translation.tr("Properties")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Properties dialog ──
+    Loader {
+        id: propertiesDialogLoader
+        active: root.propertiesDialogVisible
+        anchors.fill: parent
+
+        sourceComponent: Item {
+            anchors.fill: parent
+
+            MouseArea {
+                anchors.fill: parent
+                onPressed: root.propertiesDialogVisible = false
+            }
+
+            StyledRectangularShadow {
+                target: propertiesRect
+            }
+
+            Rectangle {
+                id: propertiesRect
+                anchors.centerIn: parent
+                width: 320
+                height: Math.min(400, parent.height - 40)
+                radius: Appearance.rounding.normal
+                color: Appearance.colors.colLayer1
+                border.width: 1
+                border.color: Appearance.colors.colLayer0Border
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 16
+                    spacing: 10
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 12
+
+                        IconImage {
+                            source: Quickshell.iconPath(root.propertiesDialogApp?.icon ?? "", "image-missing")
+                            implicitSize: 40
+                        }
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 2
+                            StyledText {
+                                text: root.propertiesDialogApp?.name ?? ""
+                                font.pixelSize: Appearance.font.pixelSize.normal
+                                font.bold: true
+                                color: Appearance.colors.colOnLayer0
+                                elide: Text.ElideRight
+                            }
+                            StyledText {
+                                text: root.propertiesDialogApp?.id ?? ""
+                                font.pixelSize: Appearance.font.pixelSize.smaller
+                                color: Appearance.colors.colSubtext
+                                elide: Text.ElideRight
+                            }
+                        }
+                        RippleButton {
+                            implicitWidth: 28; implicitHeight: 28
+                            buttonRadius: Appearance.rounding.full
+                            colBackground: "transparent"
+                            colBackgroundHover: Appearance.colors.colLayer2
+                            colRipple: Appearance.colors.colLayer2Active
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: "close"
+                                iconSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            onClicked: root.propertiesDialogVisible = false
+                        }
+                    }
+
+                    Item { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Appearance.colors.colLayer0Border }
+
+                    // Description
+                    StyledText {
+                        Layout.fillWidth: true
+                        visible: root.propertiesDialogApp?.description
+                        text: root.propertiesDialogApp?.description ?? ""
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        color: Appearance.colors.colOnLayer0
+                        wrapMode: Text.WordWrap
+                    }
+
+                    // Exec
+                    StyledText {
+                        Layout.fillWidth: true
+                        visible: root.propertiesDialogApp?.exec
+                        text: Translation.tr("Exec: %1").arg(root.propertiesDialogApp?.exec ?? "")
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        font.family: Appearance.font.family.monospace
+                        color: Appearance.colors.colSubtext
+                        wrapMode: Text.WrapAnywhere
+                    }
+
+                    // Categories
+                    StyledText {
+                        Layout.fillWidth: true
+                        visible: root.propertiesDialogApp?.categories
+                        text: Translation.tr("Categories: %1").arg((root.propertiesDialogApp?.categories ?? []).join(", "))
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.colors.colSubtext
+                        wrapMode: Text.WordWrap
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Helper: copy executable path via `which` ──
+    function getExecutablePath(app) {
+        if (!app) return "";
+        const exec = app.exec || "";
+        const parts = exec.split(" ");
+        return parts[0] || "";
+    }
+
+    Process {
+        id: pathFinderProcess
+        property var app: null
+        property string execName: ""
+        command: ["which", execName]
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 0 && stdout.length > 0) {
+                Quickshell.clipboardText = stdout.trim();
+            } else {
+                Quickshell.clipboardText = execName;
+            }
+        }
+    }
+
+    function copyAppPath(app) {
+        if (!app) return;
+        const execName = getExecutablePath(app);
+        if (!execName) {
+            Quickshell.clipboardText = Translation.tr("Unknown executable");
+            return;
+        }
+        pathFinderProcess.app = app;
+        pathFinderProcess.execName = execName;
+        pathFinderProcess.running = true;
     }
 }

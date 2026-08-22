@@ -336,6 +336,8 @@ Singleton {
                     property int columns: 5
                     property int iconSize: 40
                     property int maxRows: 5
+                    property int width: 640 // Panel width in px
+                    property int height: 560 // Panel height in px
                     property bool replaceOverviewButton: false
                 }
             }

@@ -157,7 +157,7 @@ ContentPage {
                 visible: Config.options.dock.appFinder.replaceOverviewButton
                 value: Config.options.dock.appFinder.columns
                 from: 3
-                to: 8
+                to: 12
                 stepSize: 1
                 onValueChanged: {
                     Config.options.dock.appFinder.columns = value;
@@ -172,6 +172,28 @@ ContentPage {
                 stepSize: 4
                 onValueChanged: {
                     Config.options.dock.appFinder.iconSize = value;
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Panel width")
+                visible: Config.options.dock.appFinder.replaceOverviewButton
+                value: Config.options.dock.appFinder.width
+                from: 400
+                to: 1200
+                stepSize: 20
+                onValueChanged: {
+                    Config.options.dock.appFinder.width = value;
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Panel height")
+                visible: Config.options.dock.appFinder.replaceOverviewButton
+                value: Config.options.dock.appFinder.height
+                from: 300
+                to: 900
+                stepSize: 20
+                onValueChanged: {
+                    Config.options.dock.appFinder.height = value;
                 }
             }
         }

@@ -732,5 +732,12 @@
   "Graphics": "图形",
   "Office": "办公",
   "Science": "科学",
-  "Utilities": "实用工具"
+  "Utilities": "实用工具",
+  "Pin to dock": "固定到 Dock",
+  "Properties": "属性",
+  "Exec: %1": "可执行文件：%1",
+  "Categories: %1": "分类：%1",
+  "Panel width": "面板宽度",
+  "Panel height": "面板高度",
+  "Unknown executable": "未知的可执行文件"
 }
