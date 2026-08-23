@@ -51,8 +51,32 @@ Scope {
                     }
                 }
                 property bool superShow: false
-                property bool mustShow: hoverRegion.containsMouse || superShow
-                exclusionMode: ExclusionMode.Ignore
+		readonly property var currentMonitor: HyprlandData.monitors.find(m => m.name === barRoot.screen.name)
+		readonly property int currentWorkspaceId: currentMonitor?.activeWorkspace?.id ?? -1
+		readonly property bool workspaceEmpty: 
+		    currentWorkspaceId >= 0
+		    && !HyprlandData.windowList.some(
+			win => win.workspace?.id === currentWorkspaceId
+		    )
+		readonly property bool forceVisibleOnEmptyWorkspace:
+		    Config.options.bar.autoHide.enable
+		    && Config.options.bar.autoHide.showOnEmptyWorkspace
+		    && workspaceEmpty
+                property bool mustShow: hoverRegion.containsMouse || superShow || forceVisibleOnEmptyWorkspace
+                readonly property real forcedVisibleOffset:
+		    forceVisibleOnEmptyWorkspace
+		    ? Appearance.sizes.baseBarHeight
+			+ (Config.options.bar.cornerStyle === 1
+			    ? Appearance.sizes.hyprlandGapsOut
+			    : 0)
+		    : 0
+		onForcedVisibleOffsetChanged: {
+		    BarState.setOffset(
+			barRoot.screen.name,
+			forcedVisibleOffset
+		    )
+		}
+		exclusionMode: ExclusionMode.Ignore
                 exclusiveZone: (Config?.options.bar.autoHide.enable && (!mustShow || !Config?.options.bar.autoHide.pushWindows)) ? 0 :
                     Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
                 WlrLayershell.namespace: "quickshell:bar"
@@ -78,9 +102,20 @@ Scope {
                 // Include in focus grab
                 Component.onCompleted: {
                     GlobalFocusGrab.addPersistent(barRoot);
+
+		    BarState.setOffset(
+			barRoot.screen.name,
+			forcedVisibleOffset
+		    );
                 }
+
                 Component.onDestruction: {
                     GlobalFocusGrab.removePersistent(barRoot);
+
+		    BarState.setOffset(
+			barRoot.screen.name,
+			0
+		    );
                 }
 
                 MouseArea  {
