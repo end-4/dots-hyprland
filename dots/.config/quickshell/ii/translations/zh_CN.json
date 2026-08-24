@@ -722,7 +722,6 @@
   "Pin": "固定",
   "Unpin": "取消固定",
   "App finder": "应用查找器",
-  "Icon size": "图标大小",
   "Search apps...": "搜索应用...",
   "Use app finder (Experimental)": "使用应用查找器(实验性)",
   "Multimedia": "多媒体",
@@ -734,10 +733,7 @@
   "Science": "科学",
   "Utilities": "实用工具",
   "Pin to dock": "固定到 Dock",
-  "Properties": "属性",
-  "Exec: %1": "可执行文件：%1",
-  "Categories: %1": "分类：%1",
   "Panel width": "面板宽度",
   "Panel height": "面板高度",
-  "Unknown executable": "未知的可执行文件"
+  "Recent files": "最近文件"
 }

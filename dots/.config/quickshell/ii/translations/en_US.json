@@ -613,7 +613,6 @@
   "Pin": "Pin",
   "Unpin": "Unpin",
   "App finder": "App finder",
-  "Icon size": "Icon size",
   "Search apps...": "Search apps...",
   "Use app finder (Experimental)": "Use app finder (Experimental)",
   "Multimedia": "Multimedia",
@@ -626,10 +625,7 @@
   "Utilities": "Utilities",
   "Other": "Other",
   "Pin to dock": "Pin to dock",
-  "Properties": "Properties",
-  "Exec: %1": "Exec: %1",
-  "Categories: %1": "Categories: %1",
   "Panel width": "Panel width",
   "Panel height": "Panel height",
-  "Unknown executable": "Unknown executable"
+  "Recent files": "Recent files"
 }

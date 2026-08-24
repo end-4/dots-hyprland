@@ -11,14 +11,23 @@ import Quickshell.Widgets
 RippleButton {
     id: root
     required property var entry // DesktopEntry
-    property real iconSize: Config.options?.dock.appFinder.iconSize ?? 40
+    // Icon size adapts to the cell size so it scales with panel width/columns
+    property real iconSize: Math.min(root.width * 0.45, root.height * 0.4)
     property color colText: Appearance.m3colors.m3onSurface
+    property bool selected: false // Keyboard navigation highlight
 
     buttonRadius: Appearance.rounding.normal
 
-    colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-    colBackgroundHover: Appearance.colors.colLayer1Hover
-    colRipple: Appearance.colors.colLayer1Active
+    // M3 theme colors — hover is clearly visible in both dark and light mode;
+    // pressing deepens the background (Button.down is a built-in read-only prop)
+    readonly property color baseHover: Appearance.m3colors.m3secondaryContainer
+    readonly property color pressedColor: ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.m3colors.m3onSecondaryContainer, 0.25)
+    colBackground: "transparent"
+    colBackgroundHover: root.down ? root.pressedColor : root.baseHover
+    colRipple: root.baseHover
+    toggled: root.selected
+    colBackgroundToggled: root.down ? root.pressedColor : root.baseHover
+    colBackgroundToggledHover: root.pressedColor
 
     PointingHandInteraction {}
 

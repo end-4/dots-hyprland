@@ -164,17 +164,6 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: Translation.tr("Icon size")
-                visible: Config.options.dock.appFinder.replaceOverviewButton
-                value: Config.options.dock.appFinder.iconSize
-                from: 24
-                to: 64
-                stepSize: 4
-                onValueChanged: {
-                    Config.options.dock.appFinder.iconSize = value;
-                }
-            }
-            ConfigSpinBox {
                 text: Translation.tr("Panel width")
                 visible: Config.options.dock.appFinder.replaceOverviewButton
                 value: Config.options.dock.appFinder.width
