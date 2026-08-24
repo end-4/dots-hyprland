@@ -115,8 +115,10 @@ PanelWindow {
         }
     }
 
-    // ── Animation: slide up from below ──
-    property real animSlide: showing ? 0 : contentWrapper.implicitHeight
+    // ── Animation: short slide + fade (panel is almost fully visible right
+    // away; only a slight upward shift, avoiding the long "crawl from below"
+    // feel that looked laggy).
+    property real animSlide: showing ? 0 : 24
     property real animOpacity: showing ? 1.0 : 0.0
 
     Behavior on animSlide {
@@ -256,7 +258,9 @@ PanelWindow {
 
                     Loader {
                         id: appGridLoader
-                        active: root.showing
+                        // Keep loaded permanently so opening the drawer is
+                        // instant — the app list is built once, not on every open.
+                        active: true
                         anchors.fill: parent
                         sourceComponent: appGridComponent
                     }
