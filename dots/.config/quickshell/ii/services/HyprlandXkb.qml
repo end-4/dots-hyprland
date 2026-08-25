@@ -81,10 +81,24 @@ Singleton {
         stdout: StdioCollector {
             id: devicesCollector
             onStreamFinished: {
-                const parsedOutput = JSON.parse(devicesCollector.text);
-                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
-                root.layoutCodes = hyprlandKeyboard["layout"].split(",");
-                root.currentLayoutName = hyprlandKeyboard["active_keymap"];
+                let parsedOutput;
+                try {
+                    parsedOutput = JSON.parse(devicesCollector.text);
+                } catch (e) {
+                    console.error("[HyprlandXkb] Could not parse `hyprctl -j devices`:", e);
+                    return;
+                }
+                const keyboards = parsedOutput?.keyboards ?? [];
+                if (keyboards.length === 0) {
+                    console.error("[HyprlandXkb] Hyprland reported no keyboards");
+                    return;
+                }
+                // Hyprland does not always flag a device as main (nested sessions,
+                // or a race while devices are still being enumerated), so fall back
+                // to the first keyboard instead of dereferencing undefined.
+                const hyprlandKeyboard = keyboards.find(kb => kb.main === true) ?? keyboards[0];
+                root.layoutCodes = (hyprlandKeyboard["layout"] ?? "").split(",");
+                root.currentLayoutName = hyprlandKeyboard["active_keymap"] ?? "";
                 // console.log("[HyprlandXkb] Fetched | Layouts (multiple: " + (root.layoutCodes.length > 1) + "): "
                 //     + root.layoutCodes.join(", ") + " | Active: " + root.currentLayoutName);
             }
