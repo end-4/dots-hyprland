@@ -6,6 +6,7 @@ QtObject {
     id: root
 
     property var offsetByScreen: ({})
+    property var bottomOffsetByScreen: ({})
 
     function setOffset(screenName, offset) {
         const copy = Object.assign({}, offsetByScreen)
@@ -15,5 +16,15 @@ QtObject {
 
     function offset(screenName) {
         return offsetByScreen[screenName] ?? 0
+    }
+
+    function setBottomOffset(screenName, offset) {
+        const copy = Object.assign({}, bottomOffsetByScreen)
+        copy[screenName] = offset
+        bottomOffsetByScreen = copy
+    }
+
+    function bottomOffset(screenName) {
+        return bottomOffsetByScreen[screenName] ?? 0
     }
 }
