@@ -66,6 +66,13 @@ apply_anyterm() {
 
   for file in /dev/pts/*; do
     if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
+      # Only write to a pty that some process is actually using as its
+      # controlling terminal. Other things keep a pty open without being a
+      # terminal at all, and the raw OSC sequences land there as a desktop
+      # notification full of colour codes instead of recolouring anything.
+      if ! ps -t "${file#/dev/}" -o pid= >/dev/null 2>&1; then
+        continue
+      fi
       {
       cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
       } & disown || true
