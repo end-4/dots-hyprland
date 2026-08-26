@@ -76,6 +76,10 @@ apply_anyterm() {
 apply_term() {
   apply_anyterm &
   apply_kitty &
+  # Both are backgrounded, and apply_term is backgrounded by its caller,
+  # so without this the function returns before apply_kitty has
+  # substituted the colours into kitty-theme.conf.
+  wait
 }
 
 # Check if terminal theming is enabled in config
@@ -91,3 +95,7 @@ else
 fi
 
 # apply_qt & # Qt theming is already handled by kde-material-colors
+
+# apply_term above is backgrounded, so the script would otherwise exit while
+# it is still running and take the theme generation down with it.
+wait
