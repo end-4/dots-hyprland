@@ -22,9 +22,26 @@ Singleton {
     // backlight need it: brightnessctl picks one on its own, and on hybrid
     // graphics laptops that is often a second, non-functional device, so the
     // panel never changes and the reported level is whatever that device says.
+    // Only affects the brightnessctl path; DDC monitors go through ddcutil.
     readonly property string brightnessctlDeviceName: Config.options.brightness?.device ?? ""
-    readonly property list<string> brightnessctlDeviceArgs: root.brightnessctlDeviceName.length > 0 ? ["-d", root.brightnessctlDeviceName] : []
-    readonly property string brightnessctlDevice: root.brightnessctlDeviceName.length > 0 ? `-d ${root.brightnessctlDeviceName}` : ""
+
+    // A function, not a bound property: a property would still hold the old
+    // device when the change handler below runs, and the re-read would go to
+    // the device that was just switched away from.
+    function brightnessctlDeviceArgs(): list<string> {
+        if (root.brightnessctlDeviceName.length === 0)
+            return [];
+        return ["-d", root.brightnessctlDeviceName];
+    }
+
+    // Re-read levels: the new device is at its own brightness, and without
+    // this the slider keeps showing the old device's value until the next
+    // change, which then jumps.
+    onBrightnessctlDeviceNameChanged: Qt.callLater(() => root.initializeMonitor(0))
+
+    // Backlight devices offered in settings. LEDs are listed by brightnessctl
+    // too but are not backlights, so they are filtered out.
+    property list<string> availableDevices: []
 
     property var ddcMonitors: []
     readonly property list<BrightnessMonitor> monitors: Quickshell.screens.map(screen => monitorComp.createObject(root, {
@@ -99,6 +116,18 @@ Singleton {
         id: setProc
     }
 
+    Process {
+        id: deviceListProc
+
+        running: true
+        command: ["brightnessctl", "--list", "--machine-readable"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.availableDevices = text.trim().split("\n").map(line => line.split(",")).filter(fields => fields[1] === "backlight").map(fields => fields[0]);
+            }
+        }
+    }
+
     component BrightnessMonitor: QtObject {
         id: monitor
 
@@ -135,7 +164,7 @@ Singleton {
             const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             isDdc = !!match;
             busNum = match?.busNum ?? "";
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl ${root.brightnessctlDevice} g) $(brightnessctl ${root.brightnessctlDevice} m)"`];
+            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", 'echo "a b c $(brightnessctl "$@" g) $(brightnessctl "$@" m)"', "sh", ...root.brightnessctlDeviceArgs()];
             initProc.running = true;
         }
 
@@ -171,7 +200,7 @@ Singleton {
                 const valuePercentNumber = Math.floor(brightnessValue * 100);
                 let valuePercent = `${valuePercentNumber}%`;
                 if (valuePercentNumber == 0) valuePercent = "1"; // Prevent fully black
-                setProc.exec(["brightnessctl", "--class", "backlight", ...root.brightnessctlDeviceArgs, "s", valuePercent, "--quiet"])
+                setProc.exec(["brightnessctl", "--class", "backlight", ...root.brightnessctlDeviceArgs(), "s", valuePercent, "--quiet"])
             }
         }
 

@@ -298,7 +298,9 @@ Singleton {
                 // that expose more than one backlight: hybrid-graphics laptops
                 // often register a second, non-functional one and brightnessctl
                 // may pick that, so the panel never changes.
-                // `brightnessctl -l` lists them.
+                // `brightnessctl -l` lists them, and Settings > Services >
+                // Brightness offers the backlight ones.
+                // Monitors driven over DDC are unaffected.
                 property string device: ""
             }
 

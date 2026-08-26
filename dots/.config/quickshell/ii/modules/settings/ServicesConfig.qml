@@ -25,6 +25,35 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "brightness_medium"
+        title: Translation.tr("Brightness")
+
+        ContentSubsection {
+            title: Translation.tr("Device")
+            tooltip: Translation.tr("Which backlight to drive.\nAutomatic lets brightnessctl choose, which is usually right.\nLaptops with hybrid graphics can expose a second, non-functional backlight: if the brightness keys do nothing, pick the panel explicitly.\nMonitors controlled over DDC are unaffected.")
+
+            ConfigSelectionArray {
+                currentValue: Config.options.brightness.device
+                onSelected: newValue => {
+                    Config.options.brightness.device = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Automatic"),
+                        icon: "auto_mode",
+                        value: ""
+                    },
+                    ...Brightness.availableDevices.map(device => ({
+                                displayName: device,
+                                icon: "light_mode",
+                                value: device
+                            }))
+                ]
+            }
+        }
+    }
+
+    ContentSection {
         icon: "music_cast"
         title: Translation.tr("Music Recognition")
 
