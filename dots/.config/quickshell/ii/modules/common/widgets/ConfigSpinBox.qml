@@ -11,6 +11,9 @@ RowLayout {
     property alias stepSize: spinBoxWidget.stepSize
     property alias from: spinBoxWidget.from
     property alias to: spinBoxWidget.to
+    // Emitted only when the user changes the value, unlike valueChanged
+    // which also fires when a binding updates it.
+    signal valueModified()
     spacing: 10
     Layout.leftMargin: 8
     Layout.rightMargin: 8
@@ -33,6 +36,9 @@ RowLayout {
     StyledSpinBox {
         id: spinBoxWidget
         Layout.fillWidth: false
-        value: root.value
+        // No `value: root.value` here: root.value is an alias for this very
+        // property, so binding it to itself freezes whatever it was first
+        // assigned and later updates are dropped.
+        onValueModified: root.valueModified()
     }
 }

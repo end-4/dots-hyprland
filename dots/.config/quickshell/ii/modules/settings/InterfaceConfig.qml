@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.models.hyprland
 
 ContentPage {
     forceWidth: true
@@ -99,6 +100,54 @@ ContentPage {
             }
         }
     }
+    ContentSection {
+        icon: "select_window"
+        title: Translation.tr("Windows")
+
+        HyprlandConfigOption {
+            id: borderSizeOption
+            key: "general:border_size"
+        }
+
+        ConfigSpinBox {
+            id: borderSizeSpinBox
+            icon: "border_outer"
+            text: Translation.tr("Active border thickness")
+            from: 0
+            to: 10
+            stepSize: 1
+
+            // The value is assigned rather than bound: SpinBox clamps against
+            // from/to while it is being built, which drops a declarative
+            // binding before the first hyprctl read comes back.
+            //
+            // synced guards the other direction. SpinBox emits valueModified
+            // during construction as well as on real input, so without it the
+            // panel writes its own placeholder value back to Hyprland the
+            // moment the tab is opened.
+            property bool synced: false
+
+            Connections {
+                target: borderSizeOption
+                function onValueChanged() {
+                    if (borderSizeOption.value === undefined) return;
+                    borderSizeSpinBox.value = borderSizeOption.value;
+                    borderSizeSpinBox.synced = true;
+                }
+            }
+
+            onValueModified: {
+                if (!borderSizeSpinBox.synced) return;
+                if (value === borderSizeOption.value) return;
+                borderSizeOption.setValue(value);
+            }
+
+            StyledToolTip {
+                text: Translation.tr("How thick the border around the focused window is. 0 hides it.")
+            }
+        }
+    }
+
     ContentSection {
         icon: "call_to_action"
         title: Translation.tr("Dock")
