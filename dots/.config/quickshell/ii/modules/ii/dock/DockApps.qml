@@ -204,8 +204,9 @@ Item {
                                     ScreencopyView {
                                         id: screencopyView
                                         anchors.centerIn: parent
-                                        captureSource: windowButton.modelData
-                                        live: true
+                                        captureSource: Config.options.overview.hideWindowPreviews
+                                            ? null : windowButton.modelData
+                                        live: !Config.options.overview.hideWindowPreviews
                                         paintCursor: true
                                         constraintSize: Qt.size(root.maxWindowPreviewWidth, root.maxWindowPreviewHeight)
                                         layer.enabled: true

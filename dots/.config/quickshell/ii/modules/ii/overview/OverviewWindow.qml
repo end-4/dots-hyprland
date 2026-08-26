@@ -93,8 +93,9 @@ Item { // Window
     ScreencopyView {
         id: windowPreview
         anchors.fill: parent
-        captureSource: GlobalStates.overviewOpen ? root.toplevel : null
-        live: true
+        captureSource: (GlobalStates.overviewOpen && !Config.options.overview.hideWindowPreviews)
+            ? root.toplevel : null
+        live: !Config.options.overview.hideWindowPreviews
 
         // Color overlay for interactions
         Rectangle {

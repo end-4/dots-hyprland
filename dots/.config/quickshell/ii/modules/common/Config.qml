@@ -432,6 +432,10 @@ Singleton {
                 property bool orderRightLeft: false
                 property bool orderBottomUp: false
                 property bool centerIcons: true
+                // Show only the app icon instead of a live capture of each
+                // window, so the overview does not reveal other workspaces
+                // while screen sharing.
+                property bool hideWindowPreviews: false
             }
 
             property JsonObject regionSelector: JsonObject {
