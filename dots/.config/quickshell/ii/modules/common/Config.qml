@@ -292,6 +292,16 @@ Singleton {
                 property int suspend: 3
             }
 
+            property JsonObject brightness: JsonObject {
+                // brightnessctl device to drive, e.g. "intel_backlight".
+                // Empty lets brightnessctl choose. Worth setting on machines
+                // that expose more than one backlight: hybrid-graphics laptops
+                // often register a second, non-functional one and brightnessctl
+                // may pick that, so the panel never changes.
+                // `brightnessctl -l` lists them.
+                property string device: ""
+            }
+
             property JsonObject calendar: JsonObject {
                 property string locale: "en-GB"
             }

@@ -18,6 +18,14 @@ Singleton {
     id: root
     signal brightnessChanged()
 
+    // Optional brightnessctl device. Machines that expose more than one
+    // backlight need it: brightnessctl picks one on its own, and on hybrid
+    // graphics laptops that is often a second, non-functional device, so the
+    // panel never changes and the reported level is whatever that device says.
+    readonly property string brightnessctlDeviceName: Config.options.brightness?.device ?? ""
+    readonly property list<string> brightnessctlDeviceArgs: root.brightnessctlDeviceName.length > 0 ? ["-d", root.brightnessctlDeviceName] : []
+    readonly property string brightnessctlDevice: root.brightnessctlDeviceName.length > 0 ? `-d ${root.brightnessctlDeviceName}` : ""
+
     property var ddcMonitors: []
     readonly property list<BrightnessMonitor> monitors: Quickshell.screens.map(screen => monitorComp.createObject(root, {
         screen
@@ -127,7 +135,7 @@ Singleton {
             const match = root.ddcMonitors.find(m => m.name === screen.name && !root.monitors.slice(0, root.monitors.indexOf(this)).some(mon => mon.busNum === m.busNum));
             isDdc = !!match;
             busNum = match?.busNum ?? "";
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl ${root.brightnessctlDevice} g) $(brightnessctl ${root.brightnessctlDevice} m)"`];
             initProc.running = true;
         }
 
@@ -163,7 +171,7 @@ Singleton {
                 const valuePercentNumber = Math.floor(brightnessValue * 100);
                 let valuePercent = `${valuePercentNumber}%`;
                 if (valuePercentNumber == 0) valuePercent = "1"; // Prevent fully black
-                setProc.exec(["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"])
+                setProc.exec(["brightnessctl", "--class", "backlight", ...root.brightnessctlDeviceArgs, "s", valuePercent, "--quiet"])
             }
         }
 
