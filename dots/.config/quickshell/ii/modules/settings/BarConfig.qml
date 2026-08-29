@@ -235,6 +235,14 @@ ContentPage {
                     Config.options.bar.utilButtons.showScreenRecord = checked;
                 }
             }
+            ConfigSwitch {
+                buttonIcon: "vpn_lock"
+                text: Translation.tr("Tailscale exit node")
+                checked: Config.options.bar.utilButtons.showTailscale
+                onCheckedChanged: {
+                    Config.options.bar.utilButtons.showTailscale = checked;
+                }
+            }
         }
     }
 

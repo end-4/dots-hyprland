@@ -257,6 +257,7 @@ Singleton {
                     property bool showDarkModeToggle: true
                     property bool showPerformanceProfileToggle: false
                     property bool showScreenRecord: false
+                    property bool showTailscale: false
                 }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: true
