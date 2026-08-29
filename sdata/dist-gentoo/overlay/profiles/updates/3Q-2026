@@ -1,0 +1,11 @@
+move app-misc/illogical-impulse-audio media-sound/illogical-impulse-audio
+move app-misc/illogical-impulse-bibata-modern-classic-bin x11-themes/illogical-impulse-bibata-modern-classic-bin
+move app-misc/illogical-impulse-fonts-themes x11-themes/illogical-impulse-fonts-themes
+move app-misc/illogical-impulse-hyprland gui-wm/illogical-impulse-hyprland
+move app-misc/illogical-impulse-kde kde-misc/illogical-impulse-kde
+move app-misc/illogical-impulse-microtex-git app-text/illogical-impulse-microtex-git
+move app-misc/illogical-impulse-portal sys-apps/illogical-impulse-portal
+move app-misc/illogical-impulse-quickshell-git gui-apps/illogical-impulse-quickshell-git
+move app-misc/illogical-impulse-screencapture gui-apps/illogical-impulse-screencapture
+move app-misc/illogical-impulse-widgets gui-apps/illogical-impulse-widgets
+move x11-themes/darkly kde-misc/darkly
