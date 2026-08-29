@@ -611,5 +611,7 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Type or click here to search…": "Type or click here to search…",
+  "No matching keybinds": "No matching keybinds"
 }

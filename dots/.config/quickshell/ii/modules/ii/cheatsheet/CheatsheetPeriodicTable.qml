@@ -3,6 +3,7 @@ import QtQuick
 
 Item {
     id: root
+    property string searchQuery: ""
     readonly property var elements: PTable.elements
     readonly property var series: PTable.series
     property real spacing: 6
@@ -27,6 +28,7 @@ Item {
                     delegate: ElementTile {
                         required property var modelData
                         element: modelData
+                        searchQuery: root.searchQuery
                     }
 
                 }
@@ -52,6 +54,7 @@ Item {
                     delegate: ElementTile {
                         required property var modelData
                         element: modelData
+                        searchQuery: root.searchQuery
                     }
 
                 }
