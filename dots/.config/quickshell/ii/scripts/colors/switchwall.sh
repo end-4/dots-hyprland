@@ -305,8 +305,18 @@ switch() {
 
     matugen "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
-    python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
-        > "$STATE_DIR"/user/generated/material_colors.scss
+    # Generate into a temp file first: redirecting straight into material_colors.scss
+    # truncates it to 0 bytes *before* python runs, so any failure leaves an empty file
+    # and applycolor.sh then writes theme files full of unsubstituted placeholders.
+    if python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
+        > "$STATE_DIR"/user/generated/material_colors.scss.tmp \
+        && [ -s "$STATE_DIR"/user/generated/material_colors.scss.tmp ]; then
+        mv "$STATE_DIR"/user/generated/material_colors.scss.tmp \
+           "$STATE_DIR"/user/generated/material_colors.scss
+    else
+        rm -f "$STATE_DIR"/user/generated/material_colors.scss.tmp
+        echo "switchwall: generate_colors_material.py produced no output; keeping previous colors" >&2
+    fi
     deactivate
     "$SCRIPT_DIR"/applycolor.sh
 
