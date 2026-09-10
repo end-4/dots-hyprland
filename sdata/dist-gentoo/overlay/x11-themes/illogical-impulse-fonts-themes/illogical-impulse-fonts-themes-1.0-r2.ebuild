@@ -15,7 +15,7 @@ RDEPEND="
 	x11-themes/adw-gtk3
 	kde-plasma/breeze
 	kde-plasma/breeze-plus
-	x11-themes/darkly
+	kde-misc/darkly
 	sys-apps/eza
 	app-shells/fish
 	media-libs/fontconfig
@@ -29,10 +29,3 @@ RDEPEND="
 	media-fonts/rubik-vf
 	media-fonts/twemoji
 "
-##### CUSTOM EBUILDS
-# x11-themes/adw-gtk3
-# x11-themes/darkly
-# media-fonts/space-grotesk
-# media-fonts/material-symbols-variable
-# media-fonts/readex-pro
-# media-fonts/rubik-vf

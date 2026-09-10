@@ -23,5 +23,3 @@ RDEPEND="
 	gui-apps/wlogout
 	sci-libs/libqalculate
 "
-##### CUSTOM EBUILDS
-# app-misc/songrec

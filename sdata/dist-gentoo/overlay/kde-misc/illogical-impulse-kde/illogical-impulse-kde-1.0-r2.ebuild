@@ -20,4 +20,5 @@ RDEPEND="
 	kde-plasma/polkit-kde-agent
 	kde-apps/dolphin
 	kde-plasma/systemsettings
+	kde-plasma/plasma-integration
 "
