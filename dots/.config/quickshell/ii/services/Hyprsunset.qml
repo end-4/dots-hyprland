@@ -69,6 +69,7 @@ Singleton {
 
     property int _lastTemp: -1
     property int _lastGamma: -1
+    property bool _outputPending: false
 
     onClockMinuteChanged: recompute()
     onStartModeChanged: recompute()
@@ -181,11 +182,15 @@ Singleton {
     }
 
     function pushOutput() {
+        root._outputPending = true;
+        root.ensureHyprsunset();
+    }
+
+    function applyOutput() {
         const level = root.appliedLevel;
         const active = level > 0.001;
         const temp = Math.round(root.defaultColorTemperature + (root.colorTemperature - root.defaultColorTemperature) * level);
         root.temperatureActive = active;
-        root.startHyprsunset();
         if (temp !== root._lastTemp) {
             root._lastTemp = temp;
             Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${temp}`]);
@@ -196,12 +201,13 @@ Singleton {
         }
     }
 
-    function startHyprsunset() {
-        Quickshell.execDetached(["bash", "-c", `pidof hyprsunset || hyprsunset`]);
+    // A PID alone is not a usable daemon: after a crash it can outlive its control
+    // socket. Probe the actual hyprctl endpoint, then only replace a broken daemon.
+    function ensureHyprsunset() {
+        if (!ensureProc.running) ensureProc.running = true;
     }
 
     function load() {
-        root.startHyprsunset();
         root.appliedLevel = 0;
         root._lastTemp = -1;
         root._lastGamma = -1;
@@ -221,8 +227,28 @@ Singleton {
     function setGamma(gamma) {
         root.gamma = Math.max(root.gammaLowerLimit, Math.min(100, gamma));
         root.gammaChangeAttempt();
-        root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset gamma ${root.gamma}`]);
+        root._outputPending = true;
+        root.ensureHyprsunset();
+    }
+
+    Process {
+        id: ensureProc
+        command: ["bash", "-c", `
+            if hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+            pkill -x hyprsunset 2>/dev/null || true
+            rm -f -- "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock"
+            hyprsunset >/dev/null 2>&1 &
+            for _ in $(seq 1 20); do
+                if hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+                sleep 0.05
+            done
+            exit 1
+        `]
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0 || !root._outputPending) return;
+            root._outputPending = false;
+            root.applyOutput();
+        }
     }
 
     function fetchState() { fetchProc.running = true; }
