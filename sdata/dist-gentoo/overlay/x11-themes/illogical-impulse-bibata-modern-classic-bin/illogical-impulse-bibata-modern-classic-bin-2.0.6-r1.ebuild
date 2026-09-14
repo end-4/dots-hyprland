@@ -4,18 +4,13 @@
 EAPI=8
 
 DESCRIPTION="Material Based Cursor Theme, installed for illogical-impulse dotfiles"
-HOMEPAGE=""
-SRC_URI="https://github.com/ful1e5/Bibata_Cursor/releases/download/v${PV}/Bibata-Modern-Classic.tar.xz -> bibata-modern-classic.tar.xz"
+HOMEPAGE="https://github.com/ful1e5/Bibata_Cursor"
+SRC_URI="https://github.com/ful1e5/Bibata_Cursor/releases/download/v${PV}/Bibata-Modern-Classic.tar.xz -> ${P}.tar.xz"
+S="${WORKDIR}/Bibata-Modern-Classic"
 
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
-
-DEPEND=""
-RDEPEND=""
-
-S="${WORKDIR}/Bibata-Modern-Classic"
 
 src_install() {
 	insinto /usr/share/icons

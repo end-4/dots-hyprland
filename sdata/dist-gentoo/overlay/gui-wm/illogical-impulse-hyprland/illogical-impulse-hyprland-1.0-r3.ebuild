@@ -4,14 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse Hyprland related packages"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
-RESTRICT="strip"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	gui-apps/hyprsunset
 	>=gui-wm/hyprland-0.53.3:=

@@ -4,14 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse KDE Dependencies"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
 
-DEPEND=""
 RDEPEND="
 	kde-plasma/bluedevil
 	gnome-base/gnome-keyring

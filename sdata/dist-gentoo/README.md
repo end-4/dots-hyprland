@@ -8,47 +8,64 @@ Note:
 - See also [Install scripts | illogical-impulse](https://ii.clsty.link/en/dev/inst-script/)
 
 ## Contributors
+
 - Author: [jwihardi](https://github.com/jwihardi)
 
-## install-deps.sh
-1. Enables localrepo and guru overlays if not already enabled.
-2. Copies _keywords_ to _keywords-user_ and appends the correct unmask keywords for the user's architecture (adm64, arm64, and x86 are supported).
-3. _keywords-user_ and _useflags_ are copies over into the proper portage directories. Quickshell also uses a live ebuild.
-4. Syncs, updates, and depcleans @world.
-5. Copies over the custom live ebuilds (hyprgraphics, hyprland-qt-support, hyprland-qtutils, hyprlang, hyprwayland-scanner) into localrepo and digests them.
-6. Loops through all illogical-impulse ebuilds to digest and emerge them.
+This directory contains the Gentoo dependency definitions used by the main
+illogical-impulse installer. It mirrors the package groups maintained in
+[`sdata/dist-arch`](../dist-arch/) with Gentoo metapackages and a local Portage
+overlay.
 
-## Recommended use flags (useflags)
-- **The recommended useflags are not required, this is a more out of the box experience with these**
-- Pipewire is used, alsa and pulseaudio are disabled (enabling them won't hurt).
-- Init system is not assumed or considered so disabling systemd should be done in make.conf, same with session managers (elogind is recommended).
+The complete package set is currently intended for **amd64**. Some individual
+ebuilds also carry arm64 or x86 keywords, but not every illogical-impulse
+metapackage supports those architectures yet.
 
-## Making the dot-files work
-- elogind is expected to be installed and run as a service on OpenRC to set `XDG_RUNTIME_DIR`
-  - NOT recommended: seatd will require more manual setup
-- pipewire, pipewire-pulse, and wireplumber must be started after a dbus-session is created and before Hyprland is launched.
+## How installation works
 
-If you want to start after logging into tty1 you can do something like this.
-```fish
-if status --is-interactive; and [ (tty) = "/dev/tty1" ]
-    # Start DBus session if not running
-    if not set -q DBUS_SESSION_BUS_ADDRESS
-        dbus-launch --sh-syntax | sed 's/^/set -gx /; s/=/ /' | source
-    end
+The dependency installer:
 
-    # Start PipeWire if not running
-    pgrep -x pipewire >/dev/null; or pipewire &
-    pgrep -x pipewire-pulse >/dev/null; or pipewire-pulse &
-    pgrep -x wireplumber >/dev/null; or wireplumber &
+1. Installs `eselect-repository`, `rsync`, and `smart-live-rebuild`.
+2. Enables the GURU and hyproverlay repositories when necessary.
+3. Copies [`overlay/`](overlay/) to `/var/db/repos/ii-dots` and installs its
+   repository configuration.
+4. Generates `/etc/portage/package.accept_keywords/illogical-impulse` for the
+   current architecture from [`keywords`](keywords).
+5. Installs [`useflags`](useflags) and [`additional-useflags`](additional-useflags)
+   as `/etc/portage/package.use/illogical-impulse`.
+6. Syncs configured repositories, updates `@world`, and rebuilds
+   installed live packages.
+7. Emerges every metapackage listed in [`metapkgs.sh`](metapkgs.sh).
 
-    # Launch Hyprland with DBus session
-    exec Hyprland
-end
-```
+Note: The installer also ensures Python 3.12 is installed.
 
-## Known Issues
-- If Hyprland is just blank, rebuild Quickshell (`emerge -q gui-apps/quickshell`)
-- `Hyprland: error while loading shared libraries: libhyprgraphics.so.0: cannot open shared object file: No such file or directory`
-  - The Hyprland live ebuild sometimes has linkage issues, deleting _Hyprland_ and _hyprland_ from `/usr/bin/` and then re-emerging usually fixes this.
-- When emerging Hyprland if you get an issue relating to `undefined reference to ``Hyprutils::Math::Vector2D::˜Vector2D()`` `
-  - Clear the cache folder (`rm -fr /var/tmp/portage/gui-wm/hyprland*`) then try again
+The `ii-dots` repository has `auto-sync = no`. A normal `emerge --sync` does
+not update it; rerun the illogical-impulse installer to copy the current
+overlay into Portage.
+
+## Repository contents
+
+| Path | Purpose |
+| --- | --- |
+| [`overlay/`](overlay/) | Local ebuild repository containing the II metapackages and packages not provided in the required form elsewhere. |
+| [`ii-dots.conf`](ii-dots.conf) | Portage repository configuration installed under `/etc/portage/repos.conf`. |
+| [`keywords`](keywords) | Packages that must accept testing or unkeyworded ebuilds. The installer appends the current testing keyword. |
+| [`useflags`](useflags) | Direct feature requirements for the II package set. |
+| [`additional-useflags`](additional-useflags) | Transitive feature requirements appended to the same Portage package.use file. |
+| [`metapkgs.sh`](metapkgs.sh) | Package groups installed and removed by the dependency scripts. |
+
+MicroTeX and Material Symbols use live ebuilds. Quickshell keeps the `-git`
+package name for compatibility but is pinned to a tested upstream commit.
+Versioned theme and font ebuilds may also use pinned commits as their source.
+
+## System requirements
+
+Choose either `elogind` or `systemd` globally so all installed packages use
+the same session manager. On OpenRC, `elogind` is recommended and
+must be running so the user session receives `XDG_RUNTIME_DIR`.
+
+## Uninstalling
+
+The uninstall path removes the II metapackages, local overlay, repository
+configuration, keyword file, and USE file. It does not automatically remove
+dependencies that have become unused; review `emerge --depclean --pretend`
+before deciding whether to depclean them.

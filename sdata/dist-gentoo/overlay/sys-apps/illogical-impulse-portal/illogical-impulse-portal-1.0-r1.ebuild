@@ -4,14 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse XDG Desktop Portals"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	sys-apps/xdg-desktop-portal
 	kde-plasma/xdg-desktop-portal-kde

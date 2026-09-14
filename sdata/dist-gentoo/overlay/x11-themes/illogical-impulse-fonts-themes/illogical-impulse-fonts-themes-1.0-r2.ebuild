@@ -4,13 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse Fonts and Theming Dependencies"
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	x11-themes/adw-gtk3
 	kde-plasma/breeze
@@ -23,7 +22,7 @@ RDEPEND="
 	x11-misc/matugen
 	media-fonts/space-grotesk
 	app-shells/starship
-	media-fonts/jetbrains-mono
+	media-fonts/nerdfonts[jetbrainsmono]
 	media-fonts/material-symbols-variable
 	media-fonts/readex-pro
 	media-fonts/rubik-vf

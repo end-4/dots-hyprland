@@ -5,15 +5,16 @@ EAPI=8
 
 inherit font
 
+COMMIT="1a5aaa4c15edb043c37113a8cddf020235917050"
+
 DESCRIPTION="Illogical Impulse Fonts and Theming Dependencies"
-HOMEPAGE=""
-SRC_URI="https://github.com/ThomasJockin/readexpro/archive/refs/heads/master.tar.gz -> ${P}-readexpro.tar.gz"
-LICENSE="GPL-2"
+HOMEPAGE="https://github.com/ThomasJockin/readexpro"
+SRC_URI="https://github.com/ThomasJockin/readexpro/archive/${COMMIT}.tar.gz -> ${P}-readexpro.tar.gz"
+S="${WORKDIR}/readexpro-${COMMIT}"
+
+LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
-
-S="${WORKDIR}/readexpro-master"
 
 src_install() {
 	insinto /usr/share/fonts/ttf-readex-pro

@@ -5,7 +5,7 @@ x11-themes/illogical-impulse-bibata-modern-classic-bin
 x11-themes/illogical-impulse-fonts-themes
 gui-wm/illogical-impulse-hyprland
 kde-misc/illogical-impulse-kde
-app-text/illogical-impulse-microtex-git
+app-text/illogical-impulse-microtex-git **
 sys-apps/illogical-impulse-portal
 app-misc/illogical-impulse-python
 gui-apps/illogical-impulse-quickshell-git
@@ -30,19 +30,17 @@ gui-apps/fuzzel
 gui-apps/wlogout
 dev-cpp/sdbus-c++
 dev-libs/hyprland-protocols
+dev-libs/wayland
+dev-libs/wayland-protocols
 gui-libs/hyprutils
 gui-libs/hyprwire
 dev-util/hyprwayland-scanner
-gui-libs/hyprland-qt-support
+dev-util/wayland-scanner
 gui-libs/hyprland-guiutils
 gui-libs/hyprtoolkit
 gui-wm/hyprland
 dev-libs/hyprgraphics
 gui-libs/aquamarine
-x11-libs/libxkbcommon
-dev-util/breakpad
-dev-libs/linux-syscall-support
-dev-embedded/libdisasm
 kde-plasma/breeze-plus
 kde-misc/darkly
 x11-themes/adw-gtk3
@@ -51,6 +49,7 @@ media-fonts/material-symbols-variable **
 media-fonts/readex-pro
 media-fonts/rubik-vf
 media-sound/songrec
+media-fonts/nerdfonts
 dev-cpp/glaze
 dev-cpp/cpptrace
 dev-libs/libdwarf

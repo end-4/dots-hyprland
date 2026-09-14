@@ -3,17 +3,18 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake toolchain-funcs
+
+COMMIT="7511545ee20664e3b8b8d3322c0ffe7567c56f7a"
 
 DESCRIPTION="Toolkit for building desktop widgets using QtQuick"
 HOMEPAGE="https://quickshell.org/"
+SRC_URI="https://github.com/quickshell-mirror/quickshell/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/quickshell-${COMMIT}"
 
-EGIT_REPO_URI="https://github.com/quickshell-mirror/quickshell.git"
-EGIT_COMMIT="7511545ee20664e3b8b8d3322c0ffe7567c56f7a"
-
-KEYWORDS="~amd64 ~arm64 ~x86"
 LICENSE="LGPL-3"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 
 # Upstream recommends leaving all build options enabled by default
 IUSE="
@@ -34,7 +35,7 @@ REQUIRED_USE="
 	i3? ( X )
 "
 
-II_RDEPEND="
+II_DEPEND="
 	dev-qt/qt5compat:6=
 	kde-frameworks/kimageformats:6=[avif]
 	dev-qt/qtimageformats:6=
@@ -53,10 +54,6 @@ II_RDEPEND="
 	kde-frameworks/kirigami:6=
 	kde-apps/kdialog
 	kde-frameworks/syntax-highlighting:6=
-"
-RDEPEND="
-	${II_RDEPEND}
-
 	dev-qt/qtbase:6=[dbus,vulkan,X?]
 	dev-qt/qtdeclarative:6=
 	x11-libs/libdrm
@@ -71,19 +68,21 @@ RDEPEND="
 	)
 	bluetooth? ( net-wireless/bluez )
 	networkmanager? ( net-misc/networkmanager )
+	crash-handler? ( dev-cpp/cpptrace[unwind] )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${II_DEPEND}
+	dev-cpp/cli11
+	screencopy? ( dev-util/vulkan-headers )
+"
+RDEPEND="${II_DEPEND}"
 BDEPEND="
 	virtual/pkgconfig
-	dev-cpp/cli11
 	dev-util/spirv-tools
 	dev-qt/qtshadertools:6
-	screencopy? ( dev-util/vulkan-headers )
 	wayland? (
 		dev-util/wayland-scanner
 		dev-libs/wayland-protocols
 	)
-	crash-handler? ( dev-cpp/cpptrace[unwind] )
 "
 
 DOCS=( README.md changelog/ )
@@ -103,6 +102,7 @@ src_configure() {
 	local _i3=$(usex i3)
 
 	local mycmakeargs=(
+		-DGIT_REVISION="${COMMIT}"
 		-DDISTRIBUTOR="Gentoo Illogical-Impulses"
 		-DINSTALL_QML_PREFIX="$(get_libdir)/qt6/qml"
 		-DCRASH_HANDLER=$(usex crash-handler)
@@ -134,7 +134,6 @@ src_configure() {
 		-DSERVICE_NOTIFICATIONS=$(usex notifications)
 		-DBLUETOOTH=$(usex bluetooth)
 		-DNETWORK=$(usex networkmanager)
-
 	)
 	cmake_src_configure
 }

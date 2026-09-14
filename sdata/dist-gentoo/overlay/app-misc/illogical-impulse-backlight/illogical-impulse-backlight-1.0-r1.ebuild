@@ -4,14 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse Backlight Dependencies"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
-RESTRICT="strip"
+KEYWORDS="~amd64 ~arm64"
 
-DEPEND=""
 RDEPEND="
 	app-misc/geoclue
 	app-misc/brightnessctl

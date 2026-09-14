@@ -4,13 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse Screenshot and Recording Dependencies"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	gui-apps/hyprshot
 	gui-apps/slurp

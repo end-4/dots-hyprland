@@ -4,13 +4,12 @@
 EAPI=8
 
 DESCRIPTION="Illogical Impulse Toolkit Dependencies"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	sys-power/upower
 	gui-apps/wtype

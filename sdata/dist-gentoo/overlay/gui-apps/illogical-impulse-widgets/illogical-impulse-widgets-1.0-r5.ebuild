@@ -3,14 +3,13 @@
 
 EAPI=8
 
-DESCRIPTION="Illogicall Impulse Widget Dependencies"
-HOMEPAGE=""
+DESCRIPTION="Illogical Impulse Widget Dependencies"
+HOMEPAGE="https://github.com/end-4/dots-hyprland"
 
 LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="~amd64"
 
-DEPEND=""
 RDEPEND="
 	gui-apps/fuzzel
 	dev-libs/glib
