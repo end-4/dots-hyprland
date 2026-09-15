@@ -140,9 +140,13 @@ Singleton {
         const endAuto = root.endMode === "auto" && sun && !sun.polar;
         const frm = startAuto ? sun.sunsetMin : (root.fromHour * 60 + root.fromMinute);
         const to = endAuto ? sun.sunriseMin : (root.toHour * 60 + root.toMinute);
+        // Circadian asymmetry: the evening edge fades in gently (soft, long) so we
+        // don't slam melatonin; the morning edge clears sharply — waking wants blue
+        // back promptly, and a long soft fade toward a late (winter) sunrise would
+        // only drag the warm tint deep into the morning. So soften start, not end.
         const softFade = Math.round(root.transitionMinutes * root.softFactor);
         const transIn = startAuto ? softFade : root.transitionMinutes;
-        const transOut = endAuto ? softFade : root.transitionMinutes;
+        const transOut = root.transitionMinutes;
         const t = clockHour * 60 + clockMinute;
 
         if (sun && sun.polar === "day") root.autoLevel = 0;
@@ -234,12 +238,20 @@ Singleton {
     Process {
         id: ensureProc
         command: ["bash", "-c", `
-            if hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
-            pkill -x hyprsunset 2>/dev/null || true
+            # timeout wraps every probe: a deadlocked daemon can still hold a
+            # connectable socket, so a bare hyprctl would block on recv forever.
+            if timeout 2 hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+            # A daemon we've decided is dead gets SIGKILL, not SIGTERM: the failure
+            # mode here is a deadlock (hyprsunset blocks in futex_wait while keeping
+            # its PID and an orphaned listen socket), and a wedged process ignores
+            # SIGTERM. Force-kill, then wait for it to actually go before relaunching
+            # so the fresh instance doesn't race a not-yet-reaped socket.
+            pkill -KILL -x hyprsunset 2>/dev/null || true
+            for _ in $(seq 1 40); do pgrep -x hyprsunset >/dev/null || break; sleep 0.05; done
             rm -f -- "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock"
             hyprsunset >/dev/null 2>&1 &
             for _ in $(seq 1 20); do
-                if hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+                if timeout 2 hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
                 sleep 0.05
             done
             exit 1
@@ -261,7 +273,7 @@ Singleton {
             onStreamFinished: {
                 const output = stateCollector.text.trim();
                 if (output.length == 0 || output.startsWith("Couldn't")) root.temperatureActive = false;
-                else root.temperatureActive = (output != root.defaultColorTemperature);
+                else root.temperatureActive = (Number(output) < root.defaultColorTemperature);
             }
         }
     }
