@@ -4,6 +4,7 @@ import qs.services
 import qs.modules.common
 import Quickshell
 import Quickshell.Services.UPower
+import Quickshell.Services.Mpris
 import QtQuick
 import Quickshell.Io
 
@@ -80,6 +81,9 @@ Singleton {
 
     onIsSuspendingAndNotChargingChanged: {
         if (root.available && isSuspendingAndNotCharging) {
+            for (const player of Mpris.players.values) {
+                if (player.canPause) player.pause();
+            }
             Quickshell.execDetached(["bash", "-c", `systemctl suspend || loginctl suspend`]);
         }
     }
