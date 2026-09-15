@@ -60,13 +60,7 @@ Singleton {
 
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
         if (root.sloppySearch) {
-            const results = list.map(obj => ({
-                entry: obj,
-                score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
-            })).filter(item => item.score > root.scoreThreshold)
-                .sort((a, b) => b.score - a.score)
-            return results
-                .map(item => item.entry)
+            return root.levenshteinQuery(search);
         }
 
         return Fuzzy.go(search, preppedNames, {
@@ -75,6 +69,11 @@ Singleton {
         }).map(r => {
             return r.obj.entry
         });
+    }
+
+    function levenshteinQuery(search: string): var {
+        const prepared = BitwiseFuzzy.prepare(search);
+        return BitwiseFuzzy.search(prepared, list, { key: "name", threshold: root.scoreThreshold });
     }
 
     function iconExists(iconName) {
