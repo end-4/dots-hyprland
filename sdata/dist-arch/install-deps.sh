@@ -81,11 +81,14 @@ install-local-pkgbuild() {
   x yay -S --sudoloop $installflags --asdeps "${depends[@]}"
   # man makepkg:
   # -A, --ignorearch: Ignore a missing or incomplete arch field in the build script.
+  # -C, --cleanbuild: Remove the $srcdir before building the package.
   # -s, --syncdeps: Install missing dependencies using pacman. When build-time or run-time dependencies are not found, pacman will try to resolve them.
   # -f, --force: build a package even if it already exists in the PKGDEST
   # -i, --install: Install or upgrade the package after a successful build using pacman(8).
+  # -C is needed so that source-compiled packages (e.g. quickshell) don't reuse
+  # stale CMake caches from a previous Qt6 version after a system update.
   # In https://github.com/end-4/dots-hyprland/issues/823#issuecomment-3394774645 it's suggested to use `sudo pacman -U --noconfirm *.pkg.tar.zst` instead of `makepkg -i`, however it's possible that multiple *.pkg.tar.zst exist, which makes this command not reliable.
-  x makepkg -Afsi --noconfirm
+  x makepkg -ACfsi --noconfirm
   x popd
 }
 

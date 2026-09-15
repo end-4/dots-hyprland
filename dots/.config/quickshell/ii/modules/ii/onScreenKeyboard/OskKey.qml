@@ -52,6 +52,22 @@ RippleButton {
         }
     }
 
+    // Visual feedback for physical keyboard presses
+    Connections {
+        target: PhysicalKeyboard
+        enabled: root.enabled && root.keycode !== undefined
+        function onKeyPressed(keycode) {
+            if (keycode === root.keycode) {
+                root.startRipple(root.width / 2, root.height / 2);
+            }
+        }
+        function onKeyReleased(keycode) {
+            if (keycode === root.keycode) {
+                root.fadeRipple();
+            }
+        }
+    }
+
     Timer {
         id: capsLockTimer
         property bool hasStarted: false
