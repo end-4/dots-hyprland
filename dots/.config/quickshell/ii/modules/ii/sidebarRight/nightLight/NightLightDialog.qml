@@ -52,7 +52,7 @@ WindowDialog {
             text: Translation.tr("Automatic")
             checked: Config.options.light.night.automatic
             onCheckedChanged: Config.options.light.night.automatic = checked
-            StyledToolTip { text: Translation.tr("Run on a schedule. Each edge is a fixed time, or <b>Auto</b> — sunset for start, sunrise for end (from your location, offline).") }
+            StyledToolTip { text: Translation.tr("Follow a schedule. Auto uses sunset and sunrise.") }
         }
 
         // Start edge — one editable time, or Auto (sunset)
