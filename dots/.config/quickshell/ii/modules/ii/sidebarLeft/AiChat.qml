@@ -30,6 +30,7 @@ Item {
         messageInputField.forceActiveFocus();
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
+                messageListView.autoFollow = false; // reading intent beats streaming pin
                 messageListView.contentY = Math.max(0, messageListView.contentY - messageListView.height / 2);
                 event.accepted = true;
             } else if (event.key === Qt.Key_PageDown) {
@@ -363,16 +364,51 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
+                // Keep the streaming text comfortably above the very bottom edge
+                // ("preheat" the generation zone) instead of jammed against input.
+                bottomMargin: 12
+
                 property int lastResponseLength: 0
-                // onContentHeightChanged: {
-                //     if (atYEnd)
-                //         Qt.callLater(positionViewAtEnd);
-                // }
-                // onCountChanged: {
-                //     // Auto-scroll when new messages are added
-                //     if (atYEnd)
-                //         Qt.callLater(positionViewAtEnd);
-                // }
+
+                // --- Streaming auto-follow (smooth) ---
+                // Pin to the bottom INSTANTLY (no scroll easing) as the response
+                // grows, but only while the user is already at the bottom. If they
+                // scroll up, follow disengages; when they return to the bottom (or
+                // hit the scroll-to-bottom button) it re-engages. Instant pinning
+                // avoids the jank of animating every token-driven height change.
+                property bool autoFollow: true
+                property bool pinning: false
+                property bool pinQueued: false
+                // Hysteresis band (px from the true bottom). Asymmetric on purpose:
+                //  - RE-ENGAGE only when the user lands (near) exactly at the bottom,
+                //    so scrolling up to read never gets magnetically yanked back down.
+                //  - the wide old 40px band was the "magnetism": any downward scroll
+                //    passing within 40px snapped follow back on mid-gesture.
+                readonly property real followReengagePx: 6
+                function pinBottom() {
+                    pinQueued = false;
+                    if (!autoFollow) return;               // user scrolled away since queued
+                    const maxY = Math.max(0, contentHeight - height);
+                    if (contentY >= maxY - 1) return;      // already at end → no redundant pin (kills shake)
+                    pinning = true;
+                    animateContentY = false;               // instant, bypass scroll easing
+                    contentY = maxY;
+                    animateContentY = true;
+                    pinning = false;
+                }
+                // User grabbing/flicking the list disengages follow immediately.
+                onDraggingChanged: if (dragging) autoFollow = false
+                onContentHeightChanged: {
+                    // Coalesce the burst of height changes streaming produces into
+                    // one pin per event loop, instead of one per token.
+                    if (autoFollow && !pinQueued) { pinQueued = true; Qt.callLater(pinBottom); }
+                }
+                onContentYChanged: {
+                    if (pinning) return;                   // ignore our own pin
+                    const maxY = Math.max(0, contentHeight - height);
+                    if (contentY < maxY - followReengagePx) autoFollow = false;   // moved up → let go
+                    else if (contentY >= maxY - 1) autoFollow = true;             // landed at bottom → follow
+                }
 
                 add: null // Prevent function calls from being janky
 
@@ -390,6 +426,22 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         Ai.messageByID[modelData];
                     }
                     messageInputField: root.inputField
+                }
+            }
+
+            MouseArea {
+                // Wheel-intent watcher. Position-based disengage (onContentYChanged)
+                // loses the race while streaming: at gesture start contentY is still
+                // inside the bottom band, so a queued pin yanks the view back down.
+                // Catch the INTENT instead: any upward wheel kills autoFollow before
+                // the pin can fire. Event is not accepted → scrolling itself still
+                // goes through the normal path (custom fast-scroll or Flickable).
+                z: 1
+                anchors.fill: messageListView
+                acceptedButtons: Qt.NoButton
+                onWheel: function(wheelEvent) {
+                    if (wheelEvent.angleDelta.y > 0) messageListView.autoFollow = false;
+                    wheelEvent.accepted = false;
                 }
             }
 
@@ -749,8 +801,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 ApiInputBoxIndicator {
                     // Model indicator
                     icon: "api"
-                    text: Ai.getModel().name
-                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
+                    // Optional-chain: local ollama models are added to Ai.models
+                    // asynchronously, so this binding evaluates against an
+                    // incomplete map on every reload (was a warn burst on each reload).
+                    text: Ai.getModel()?.name ?? "…"
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel()?.name ?? "…").arg(root.commandPrefix)
                 }
 
                 ApiInputBoxIndicator {

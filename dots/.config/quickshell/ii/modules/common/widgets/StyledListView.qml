@@ -15,6 +15,10 @@ ListView {
     property bool popin: true
     property bool animateAppearance: true
     property bool animateMovement: false
+    // When false, contentY changes apply instantly (no scroll easing). Used for
+    // streaming auto-follow: animating every token-driven height change fights
+    // itself and looks janky, whereas instant pinning is smooth.
+    property bool animateContentY: true
     // Accumulated scroll destination so wheel deltas stack while animating
     property real scrollTargetY: 0
 
@@ -52,6 +56,7 @@ ListView {
     }
 
     Behavior on contentY {
+        enabled: root.animateContentY
         NumberAnimation {
             id: scrollAnim
             alwaysRunToEnd: true
