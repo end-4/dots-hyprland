@@ -26,6 +26,11 @@ Singleton {
     property int pomodoroSecondsLeft: pomodoroLapDuration // Reasonable init value, to be changed
     property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
+    // When the configured duration changes while the timer is paused, show the new value immediately
+    onPomodoroLapDurationChanged: {
+        if (!pomodoroRunning) pomodoroSecondsLeft = pomodoroLapDuration;
+    }
+
     property bool stopwatchRunning: Persistent.states.timer.stopwatch.running
     property int stopwatchTime: 0
     property int stopwatchStart: Persistent.states.timer.stopwatch.start
@@ -49,11 +54,26 @@ Singleton {
     function refreshPomodoro() {
         // Work <-> break ?
         if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
-            // Reset counts
-            Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
+            const wasBreak = pomodoroBreak;
+            Persistent.states.timer.pomodoro.isBreak = !wasBreak;
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
 
-            // Send notification
+            // Skip zero-duration break phases: go straight to the next focus session
+            if (!wasBreak) {
+                const enteringLongBreak = (pomodoroCycle + 1 == cyclesBeforeLongBreak);
+                const newBreakDuration = enteringLongBreak ? longBreakTime : breakTime;
+                if (newBreakDuration === 0) {
+                    Persistent.states.timer.pomodoro.isBreak = false;
+                    Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
+                    Quickshell.execDetached(["notify-send", "Pomodoro",
+                        Translation.tr(`🔴 Focus: %1 minutes`).arg(Math.floor(focusTime / 60)), "-a", "Shell"]);
+                    playPomodoroAlarm();
+                    pomodoroSecondsLeft = pomodoroLapDuration;
+                    return;
+                }
+            }
+
+            // Send notification for the new phase
             let notificationMessage;
             if (Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak)) {
                 notificationMessage = Translation.tr(`🌿 Long break: %1 minutes`).arg(Math.floor(longBreakTime / 60));
@@ -64,16 +84,16 @@ Singleton {
             }
 
             Quickshell.execDetached(["notify-send", "Pomodoro", notificationMessage, "-a", "Shell"]);
-            if (Config.options.sounds.pomodoro) {
-                Audio.playSystemSound("alarm-clock-elapsed")
-            }
+            playPomodoroAlarm();
 
             if (!pomodoroBreak) {
                 Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
             }
         }
 
-        pomodoroSecondsLeft = pomodoroLapDuration - (getCurrentTimeInSeconds() - Persistent.states.timer.pomodoro.start);
+        pomodoroSecondsLeft = pomodoroLapDuration > 0
+            ? pomodoroLapDuration - (getCurrentTimeInSeconds() - Persistent.states.timer.pomodoro.start)
+            : 0;
     }
 
     Timer {
@@ -82,6 +102,38 @@ Singleton {
         running: root.pomodoroRunning
         repeat: true
         onTriggered: refreshPomodoro()
+    }
+
+    function playPomodoroAlarm() {
+        if (!Config.options.sounds.pomodoro) return;
+        const vol = String(Config.options.time.pomodoro.alarmVolume);
+        const base = `/usr/share/sounds/${Audio.audioTheme}/stereo/alarm-clock-elapsed`;
+        Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", "-volume", vol, base + ".oga"]);
+        Quickshell.execDetached(["ffplay", "-nodisp", "-autoexit", "-volume", vol, base + ".ogg"]);
+    }
+
+    function skipPomodoro() {
+        const wasBreak = pomodoroBreak;
+        Persistent.states.timer.pomodoro.isBreak = !wasBreak;
+        Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
+
+        // Skip zero-duration break phases (mirrors refreshPomodoro logic)
+        if (!wasBreak) {
+            const enteringLongBreak = (pomodoroCycle + 1 == cyclesBeforeLongBreak);
+            const newBreakDuration = enteringLongBreak ? longBreakTime : breakTime;
+            if (newBreakDuration === 0) {
+                Persistent.states.timer.pomodoro.isBreak = false;
+                Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
+                pomodoroSecondsLeft = pomodoroLapDuration;
+                return;
+            }
+        }
+
+        if (wasBreak) {
+            Persistent.states.timer.pomodoro.cycle = (Persistent.states.timer.pomodoro.cycle + 1) % root.cyclesBeforeLongBreak;
+        }
+
+        pomodoroSecondsLeft = pomodoroLapDuration;
     }
 
     function togglePomodoro() {

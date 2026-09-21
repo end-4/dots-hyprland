@@ -7,6 +7,7 @@ import QtQuick.Layouts
 
 Item {
     id: root
+    property alias timerEditMode: pomodoroTimerWidget.editMode
     property var tabButtonList: [
         {"name": Translation.tr("Pomodoro"), "icon": "search_activity"},
         {"name": Translation.tr("Stopwatch"), "icon": "timer"}
@@ -68,7 +69,7 @@ Item {
             currentIndex: tabBar.currentIndex
 
             // Tabs
-            PomodoroTimer {}
+            PomodoroTimer { id: pomodoroTimerWidget }
             Stopwatch {}
         }
     }
