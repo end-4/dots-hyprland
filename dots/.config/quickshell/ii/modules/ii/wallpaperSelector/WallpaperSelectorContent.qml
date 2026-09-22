@@ -61,9 +61,27 @@ MouseArea {
         if (event.key === Qt.Key_Escape) {
             GlobalStates.wallpaperSelectorOpen = false;
             event.accepted = true;
+        } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_W) {
+            // Switch between local and Wallhaven. Ctrl+W rather than a bare "w": plain keys
+            // are forwarded into the search field in both modes, so a letter can't be a verb.
+            root.wallpaperSource = (root.wallpaperSource === "local") ? "wallhaven" : "local";
+            event.accepted = true;
         } else if (root.wallpaperSource === "wallhaven") {
+            if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_C) {
+                wallhavenSearchGrid.toggleColorPicker()
+                event.accepted = true
+            } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_B) {
+                wallhavenSearchGrid.toggleBrowseMenu()
+                event.accepted = true
+            } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_S) {
+                wallhavenSearchGrid.toggleSettings()
+                event.accepted = true
+            } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_T) {
+                wallhavenSearchGrid.useDarkMode = !wallhavenSearchGrid.useDarkMode
+                event.accepted = true
+            }
             // Forward navigation keys to the Wallhaven grid
-            if (event.key === Qt.Key_Left) {
+            else if (event.key === Qt.Key_Left) {
                 wallhavenSearchGrid.moveGridSelection(-1)
                 event.accepted = true
             } else if (event.key === Qt.Key_Right) {
@@ -77,6 +95,16 @@ MouseArea {
                 event.accepted = true
             } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                 wallhavenSearchGrid.activateGridCurrent()
+                event.accepted = true
+            } else if (event.key === Qt.Key_Slash) {
+                wallhavenSearchGrid.focusSearch()
+                event.accepted = true
+            } else if (event.key === Qt.Key_Backspace) {
+                wallhavenSearchGrid.backspaceSearch()
+                event.accepted = true
+            } else if (event.text.length > 0 && !(event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))) {
+                // Same as local mode: typing anywhere goes to the search field
+                wallhavenSearchGrid.appendToSearch(event.text)
                 event.accepted = true
             }
         } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) { // Intercept Ctrl+V to handle "paste to go to" in pickers

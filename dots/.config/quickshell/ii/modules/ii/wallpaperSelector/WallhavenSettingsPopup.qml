@@ -19,6 +19,16 @@ WindowDialog {
         WallhavenSearch.search(WallhavenSearch.currentQuery, 1)
     }
 
+    // The dialog holds focus while open, so Ctrl+S has to close it from here — the
+    // selector's handler never sees the key. Escape is repeated because declaring
+    // Keys.onPressed here overrides WindowDialog's own handler.
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Escape || ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_S)) {
+            root.dismiss()
+            event.accepted = true
+        }
+    }
+
     WindowDialogTitle {
         text: Translation.tr("Wallhaven Settings")
     }

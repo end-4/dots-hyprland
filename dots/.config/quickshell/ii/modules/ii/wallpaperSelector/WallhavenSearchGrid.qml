@@ -75,7 +75,22 @@ Item {
     // Public API for parent key forwarding
     function moveGridSelection(delta) { wallhavenGrid.moveSelection(delta) }
     function activateGridCurrent() { wallhavenGrid.activateCurrent() }
+    function focusSearch() {
+        searchField.forceActiveFocus()
+        searchField.cursorPosition = searchField.text.length
+    }
+    function appendToSearch(text) {
+        searchField.text += text
+        focusSearch()
+    }
+    function backspaceSearch() {
+        if (searchField.text.length > 0)
+            searchField.text = searchField.text.slice(0, -1)
+        focusSearch()
+    }
+    function toggleColorPicker() { colorMenu.visible ? colorMenu.close() : colorMenu.open() }
     function toggleBrowseMenu() { browseMenu.visible ? browseMenu.close() : browseMenu.open() }
+    function toggleSettings() { root.showSettings = !root.showSettings }
 
     // Run one of the predefined browse modes. Once the user has typed, searchField.text is
     // no longer bound to WallhavenSearch.currentQuery, so clear it by hand — and stop the
@@ -181,7 +196,7 @@ Item {
                     id: searchField
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    placeholderText: Translation.tr("Search Wallhaven...")
+                    placeholderText: searchField.activeFocus ? Translation.tr("Search Wallhaven...") : Translation.tr("Hit \"/\" to search Wallhaven")
                     placeholderTextColor: Appearance.colors.colSubtext
                     color: Appearance.colors.colOnLayer1
                     font {
@@ -318,7 +333,17 @@ Item {
                         }
 
                         contentItem: ColumnLayout {
+                            focus: true
                             spacing: 8
+
+                            // The popup takes focus, so the toggle shortcut has to be
+                            // answered here too or Ctrl+B could only ever open it.
+                            Keys.onPressed: event => {
+                                if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_B) {
+                                    browseMenu.close()
+                                    event.accepted = true
+                                }
+                            }
 
                             StyledText {
                                 Layout.fillWidth: true
@@ -376,7 +401,17 @@ Item {
                         }
 
                         contentItem: ColumnLayout {
+                            focus: true
                             spacing: 8
+
+                            // Same reason as the browse popup: it holds focus while open,
+                            // so Ctrl+C has to close it from in here.
+                            Keys.onPressed: event => {
+                                if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_C) {
+                                    colorMenu.close()
+                                    event.accepted = true
+                                }
+                            }
 
                             RowLayout {
                                 Layout.fillWidth: true
