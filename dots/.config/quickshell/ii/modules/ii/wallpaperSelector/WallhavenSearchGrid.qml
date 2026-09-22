@@ -75,6 +75,16 @@ Item {
     // Public API for parent key forwarding
     function moveGridSelection(delta) { wallhavenGrid.moveSelection(delta) }
     function activateGridCurrent() { wallhavenGrid.activateCurrent() }
+    function toggleBrowseMenu() { browseMenu.visible ? browseMenu.close() : browseMenu.open() }
+
+    // Run one of the predefined browse modes. Once the user has typed, searchField.text is
+    // no longer bound to WallhavenSearch.currentQuery, so clear it by hand — and stop the
+    // pending debounce, or the debounced search fires next and overwrites the browse.
+    function browseMode(sort) {
+        searchField.text = ""
+        searchDebounce.stop()
+        WallhavenSearch.browse(sort)
+    }
 
     // Download and apply a wallhaven wallpaper
     function downloadAndApply(wallpaper) {
@@ -92,6 +102,37 @@ Item {
     }
 
     property bool showSettings: false
+
+    // One browse chip. Shared by the toolbar dropdown and the initial empty state so the
+    // two can't drift — and so the modes stay reachable once results fill the grid, which
+    // is exactly what the empty-state-only version got wrong.
+    Component {
+        id: browseChipComponent
+        RippleButton {
+            id: chip
+            required property var modelData
+            implicitHeight: 34
+            leftPadding: 16
+            rightPadding: 16
+            buttonRadius: height / 2
+            // A browse mode is active only while no query is in play
+            toggled: WallhavenSearch.currentQuery.length === 0 && WallhavenSearch.sorting === chip.modelData.sort
+            colBackground: Appearance.colors.colLayer1
+            colBackgroundToggled: Appearance.colors.colSecondaryContainer
+            colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+            colRippleToggled: Appearance.colors.colSecondaryContainerActive
+            onClicked: {
+                root.browseMode(chip.modelData.sort)
+                browseMenu.close()
+            }
+            contentItem: StyledText {
+                text: chip.modelData.label
+                font.pixelSize: Appearance.font.pixelSize.small
+                color: chip.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+    }
 
     // Settings dialog (filters + API key). Created on demand: WindowDialog collapses
     // via onShowChanged, so a persistent instance would start open. Loader builds it
@@ -243,6 +284,57 @@ Item {
                         text: "navigate_next"
                         enabled: !root.loading && WallhavenSearch.currentPage < WallhavenSearch.lastPage
                         onClicked: WallhavenSearch.nextPage()
+                    }
+                }
+
+                IconToolbarButton {
+                    id: browseButton
+                    implicitWidth: height
+                    text: "explore"
+                    // Lit while a browse listing is on screen (browse clears the query)
+                    toggled: browseMenu.visible || (WallhavenSearch.currentQuery.length === 0 && WallhavenSearch.currentResults.length > 0)
+                    onClicked: root.toggleBrowseMenu()
+                    StyledToolTip {
+                        text: Translation.tr("Browse without searching")
+                    }
+
+                    Popup {
+                        id: browseMenu
+                        y: browseButton.height + 6
+                        x: browseButton.width - width
+                        padding: 10
+                        modal: false
+                        focus: true
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                        enter: Transition { NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 } }
+                        exit: Transition { NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 100 } }
+
+                        background: Rectangle {
+                            color: Appearance.m3colors.m3surfaceContainerHigh
+                            radius: Appearance.rounding.normal
+                            border.width: 1
+                            border.color: Appearance.colors.colLayer0Border
+                        }
+
+                        contentItem: ColumnLayout {
+                            spacing: 8
+
+                            StyledText {
+                                Layout.fillWidth: true
+                                text: Translation.tr("Browse")
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: Appearance.colors.colSubtext
+                            }
+
+                            Row {
+                                spacing: 8
+                                Repeater {
+                                    model: root.browseModes
+                                    delegate: browseChipComponent
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -443,21 +535,7 @@ Item {
                     spacing: 8
                     Repeater {
                         model: root.browseModes
-                        delegate: RippleButton {
-                            required property var modelData
-                            implicitHeight: 34
-                            leftPadding: 16
-                            rightPadding: 16
-                            buttonRadius: height / 2
-                            colBackground: Appearance.colors.colLayer1
-                            onClicked: WallhavenSearch.browse(modelData.sort)
-                            contentItem: StyledText {
-                                text: modelData.label
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                color: Appearance.colors.colOnLayer1
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-                        }
+                        delegate: browseChipComponent
                     }
                 }
             }
