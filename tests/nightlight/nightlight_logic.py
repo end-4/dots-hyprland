@@ -11,19 +11,29 @@ import math
 import datetime
 
 # ---- constants (mirror Hyprsunset.qml) ----
-DEFAULT_TEMP = 6000        # day-neutral / "off"
+NEUTRAL_TEMP = 6600        # glide endpoint: hyprsunset's Kelvin nearest identity
+IDENTITY = "identity"      # level 0 output: no CTM tint at all (6000K still tints, #3328)
 GLIDE_FACTOR = 0.28        # exponential ease per 60ms tick
 GLIDE_SNAP = 0.004         # |target-applied| below this snaps and stops
 GAMMA_LOWER = 25
 
 
+ACTIVE_EPS = 0.001
+
+
 def temp_for_level(level, peak):
-    """appliedLevel -> absolute colour temperature (K). level 0 = neutral, 1 = peak warmth."""
-    return round(DEFAULT_TEMP + (peak - DEFAULT_TEMP) * level)
+    """appliedLevel -> hyprsunset output. level 0 = IDENTITY (off), else Kelvin lerp
+    from NEUTRAL_TEMP (level->0) to peak warmth (level 1)."""
+    if level <= ACTIVE_EPS:
+        return IDENTITY
+    return round(NEUTRAL_TEMP + (peak - NEUTRAL_TEMP) * level)
 
 
-def gamma_for_level(level, night_gamma):
-    return round(100 + (max(GAMMA_LOWER, night_gamma) - 100) * level)
+def gamma_for_level(level, user_gamma, night_gamma, dim_on):
+    """Output gamma = the user's gamma times the dim factor — dim composes, it never
+    replaces the user's value (else the Gamma slider dies while Dim is on)."""
+    dim = 1 + (max(GAMMA_LOWER, night_gamma) / 100 - 1) * level if dim_on else 1
+    return max(GAMMA_LOWER, round(user_gamma * dim))
 
 
 def _in_between(t, frm, to):

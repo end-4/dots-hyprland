@@ -34,13 +34,26 @@ def check(name, cond, detail=""):
 def test_temperature_mapping():
     print("temperature mapping")
     peak = 4729
-    check("level 0 is day-neutral 6000", L.temp_for_level(0, peak) == 6000)
+    check("level 0 is identity (off), not a Kelvin value", L.temp_for_level(0, peak) == L.IDENTITY)
     check("level 1 is the peak warmth", L.temp_for_level(1, peak) == peak)
-    check("level 0.6 matches lerp (5237 for peak 4729)", L.temp_for_level(0.6, peak) == 5237,
+    check("level 0.6 matches lerp (5477 for peak 4729)", L.temp_for_level(0.6, peak) == 5477,
           f"got {L.temp_for_level(0.6, peak)}")
-    seq = [L.temp_for_level(x / 10, peak) for x in range(0, 11)]
+    near0 = L.temp_for_level(0.002, peak)
+    check("just above 0 sits at neutral (hand-off to identity is seamless)", abs(near0 - 6600) <= 5, str(near0))
+    seq = [L.temp_for_level(x / 10, peak) for x in range(1, 11)]
     check("warmer as level rises = temperature strictly decreases",
           all(b < a for a, b in zip(seq, seq[1:])), str(seq))
+
+
+# ---------------- gamma composition ----------------
+def test_gamma_composes_with_dim():
+    print("gamma: user value x dim factor (dim never kills the Gamma slider)")
+    check("dim off = user gamma passes through", L.gamma_for_level(1, 70, 50, False) == 70)
+    check("dim on, day (level 0) = user gamma", L.gamma_for_level(0, 70, 50, True) == 70)
+    check("dim on, full night = user x night (100 x 50%)", L.gamma_for_level(1, 100, 50, True) == 50)
+    at_night = [L.gamma_for_level(1, g, 80, True) for g in (100, 90, 70)]
+    check("lowering user gamma still lowers output while dimmed", at_night[0] > at_night[1] > at_night[2], str(at_night))
+    check("never below the floor", L.gamma_for_level(1, 25, 25, True) == L.GAMMA_LOWER)
 
 
 # ---------------- twilight ramp shape ----------------
@@ -163,7 +176,7 @@ def test_solar_polar():
 
 
 ALL = [
-    test_temperature_mapping, test_ramp_shape, test_soft_auto_edge, test_midnight_wrap,
+    test_temperature_mapping, test_gamma_composes_with_dim, test_ramp_shape, test_soft_auto_edge, test_midnight_wrap,
     test_glide_converges, test_glide_no_overshoot, test_glide_bounded_step, test_glide_downward,
     test_effective_level, test_solar_correct, test_solar_seasonality, test_solar_polar,
 ]
@@ -177,8 +190,11 @@ def main():
             L.GLIDE_FACTOR = 1.0   # instant snap — must break the smoothness tests
             print("MUTATION: GLIDE_FACTOR = 1.0 (instant) — expect glide-smoothness reds\n")
         elif which == "neutral":
-            L.DEFAULT_TEMP = 4000  # wrong neutral — must break temperature + solar-independent maps
-            print("MUTATION: DEFAULT_TEMP = 4000 — expect temperature-mapping reds\n")
+            L.NEUTRAL_TEMP = 4000  # wrong neutral — must break temperature mapping
+            print("MUTATION: NEUTRAL_TEMP = 4000 — expect temperature-mapping reds\n")
+        elif which == "gamma":
+            L.gamma_for_level = lambda lv, ug, ng, on: round(100 + (max(L.GAMMA_LOWER, ng) - 100) * lv) if on else ug
+            print("MUTATION: dim overwrites user gamma (the old bug) — expect gamma reds\n")
         elif which == "solar":
             _orig = L.sun_times
             L.sun_times = lambda *a, **k: (6 * 60, 18 * 60)  # ignore date/location

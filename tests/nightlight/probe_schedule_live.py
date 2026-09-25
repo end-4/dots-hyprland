@@ -7,7 +7,7 @@ manual from/to window around 'now' to exercise deep-night (level 1) and mid-fade
 import json, os, subprocess, time, glob, datetime
 
 CFG = os.path.expanduser("~/.config/illogical-impulse/config.json")
-DEFAULT_TEMP = 6000
+DEFAULT_TEMP = 6600  # glide neutral; level 0 itself is hyprsunset identity
 ENV = dict(os.environ, HYPRLAND_INSTANCE_SIGNATURE=os.path.basename(
     sorted(glob.glob("/run/user/%d/hypr/*" % os.getuid()))[0]))
 
@@ -33,6 +33,12 @@ def sample(n=9, dt=0.2):
 def lerp(level, peak): return round(DEFAULT_TEMP + (peak - DEFAULT_TEMP) * level)
 
 fails = []
+def is_identity():
+    out = subprocess.run(["hyprctl", "hyprsunset", "identity", "get"],
+                         capture_output=True, text=True, env=ENV).stdout.strip()
+    return out == "true"
+
+
 def check(name, cond, detail=""):
     print(f"  [{'PASS' if cond else 'FAIL'}] {name}" + (f"  — {detail}" if detail and not cond else ""))
     if not cond: fails.append(name)
@@ -47,7 +53,7 @@ def main():
         time.sleep(1.2)
         base = temp()
         print(f"baseline (auto, daytime): {base}K")
-        check("daytime auto = neutral 6000", base == 6000, f"got {base}")
+        check("daytime auto = identity (no tint)", is_identity(), f"temp {base}")
 
         # deep night: window opened 45 min ago (past the 30-min fade -> level 1)
         f45 = (now - datetime.timedelta(minutes=45)).strftime("%H:%M")
@@ -61,13 +67,13 @@ def main():
         set_night(**{"from": f15})
         s = sample(); exp = lerp(0.5, peak); print(f"mid-fade [{f15}] target~{exp}K: {s}")
         check("mid-fade sits near half strength", abs(s[-1] - exp) <= 120, f"{s[-1]} vs {exp}")
-        lo, hi = sorted((6000, lerp(1, peak)))  # peak may be warmer (<6000) or cooler (>6000) than neutral
+        lo, hi = sorted((DEFAULT_TEMP, lerp(1, peak)))  # peak may be warmer or cooler than neutral
         check("mid-fade is strictly between neutral and peak", lo < s[-1] < hi, f"{s[-1]} not in ({lo},{hi})")
     finally:
         set_night(startMode=orig.get("startMode", "auto"), endMode=orig.get("endMode", "auto"),
                   **{"from": orig.get("from", "19:00"), "to": orig.get("to", "06:30")})
         time.sleep(1.0)
-        print(f"restored -> auto; temp now {temp()}K")
+        print(f"restored -> auto; temp now {temp()}K identity={is_identity()}")
     if fails:
         print(f"\nRESULT: {len(fails)} FAILED -> {fails}"); raise SystemExit(1)
     print("\nRESULT: all green (live schedule)")

@@ -36,6 +36,7 @@ Singleton {
     property bool automatic: Config.options?.light?.night?.automatic && (Config?.ready ?? true)
     property int colorTemperature: Config.options?.light?.night?.colorTemperature ?? 5000 // the one "Warmth"
     property int defaultColorTemperature: 6000
+    readonly property int neutralColorTemperature: 6600 // hyprsunset's Kelvin nearest to identity
 
     property real bias: Config.options?.light?.night?.bias ?? 0 // -1..+1, held
     property bool automaticGamma: Config.options?.light?.night?.automaticGamma ?? false
@@ -190,18 +191,24 @@ Singleton {
         root.ensureHyprsunset();
     }
 
+    // Level 0 is "off": hyprsunset identity, not a temperature — no Kelvin value is
+    // truly neutral (6000K still tints warm, #3328). Above 0 the glide lerps from
+    // neutralColorTemperature, the Kelvin closest to identity, so the hand-off is seamless.
+    // Gamma is composed, never overwritten: the user's gamma times the dim factor.
     function applyOutput() {
         const level = root.appliedLevel;
         const active = level > 0.001;
-        const temp = Math.round(root.defaultColorTemperature + (root.colorTemperature - root.defaultColorTemperature) * level);
+        const temp = active ? Math.round(root.neutralColorTemperature + (root.colorTemperature - root.neutralColorTemperature) * level) : 0;
         root.temperatureActive = active;
         if (temp !== root._lastTemp) {
             root._lastTemp = temp;
-            Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${temp}`]);
+            Quickshell.execDetached(["hyprctl", "hyprsunset", ...(active ? ["temperature", `${temp}`] : ["identity"])]);
         }
-        if (root.automaticGamma) {
-            const g = Math.round(100 + (Math.max(root.gammaLowerLimit, root.nightGamma) - 100) * level);
-            if (g !== root._lastGamma) { root._lastGamma = g; root.setGamma(g); }
+        const dim = root.automaticGamma ? 1 + (Math.max(root.gammaLowerLimit, root.nightGamma) / 100 - 1) * level : 1;
+        const g = Math.max(root.gammaLowerLimit, Math.round(root.gamma * dim));
+        if (g !== root._lastGamma) {
+            root._lastGamma = g;
+            Quickshell.execDetached(["hyprctl", "hyprsunset", "gamma", `${g}`]);
         }
     }
 
@@ -220,7 +227,9 @@ Singleton {
 
     // Bar quick-toggle / "boost now": park the bias at an extreme (held; centre = auto).
     function toggleTemperature(active = undefined) {
-        const on = root.targetLevel > 0.5;
+        // Invert what the user can currently see, not the destination of a glide.
+        // targetLevel may already have moved while appliedLevel is still fading.
+        const on = root.temperatureActive;
         const want = active !== undefined ? active : !on;
         Config.options.light.night.bias = want ? 1 : -1;
     }
@@ -267,12 +276,13 @@ Singleton {
     Process {
         id: fetchProc
         running: true
-        command: ["bash", "-c", "hyprctl hyprsunset temperature"]
+        // identity keeps the last Kelvin value around, so it must be checked first.
+        command: ["bash", "-c", "[ \"$(hyprctl hyprsunset identity get)\" = true ] && echo identity || hyprctl hyprsunset temperature"]
         stdout: StdioCollector {
             id: stateCollector
             onStreamFinished: {
                 const output = stateCollector.text.trim();
-                if (output.length == 0 || output.startsWith("Couldn't")) root.temperatureActive = false;
+                if (output.length == 0 || output === "identity" || output.startsWith("Couldn't")) root.temperatureActive = false;
                 else root.temperatureActive = (Number(output) < root.defaultColorTemperature);
             }
         }
@@ -289,8 +299,7 @@ Singleton {
         function onLongitudeChanged() { root.recompute(); }
         function onAutomaticGammaChanged() {
             root._lastGamma = -1;
-            if (!Config.options.light.night.automaticGamma) root.setGamma(100);
-            else root.pushOutput();
+            root.pushOutput();
         }
     }
 }

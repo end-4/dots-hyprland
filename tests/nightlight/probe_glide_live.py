@@ -5,7 +5,7 @@ value the way the slider does, then samples the REAL `hyprctl hyprsunset
 temperature` over time and asserts the deployed service actually:
   * eases (several distinct intermediate values, no instant snap),
   * lands on the lerp target for that level, within tolerance,
-  * returns to neutral (6000) at bias 0.
+  * returns to hyprsunset identity (no tint at all) at bias 0.
 
 It writes only config.light.night.bias and restores it to 0 at the end.
 Exit non-zero on any failed assertion.
@@ -17,7 +17,7 @@ import time
 import glob
 
 CFG = os.path.expanduser("~/.config/illogical-impulse/config.json")
-DEFAULT_TEMP = 6000
+DEFAULT_TEMP = 6600  # glide neutral; level 0 itself is hyprsunset identity
 TOL_K = 60          # endpoint tolerance (glide snap + rounding)
 MIN_INTERMEDIATE = 3  # distinct values strictly between start and settle => it eased
 
@@ -72,6 +72,12 @@ def lerp_target(level, pk):
 fails = []
 
 
+def is_identity():
+    out = subprocess.run(["hyprctl", "hyprsunset", "identity", "get"],
+                         capture_output=True, text=True, env=ENV).stdout.strip()
+    return out == "true"
+
+
 def check(name, cond, detail=""):
     print(f"  [{'PASS' if cond else 'FAIL'}] {name}" + (f"  — {detail}" if (detail and not cond) else ""))
     if not cond:
@@ -104,10 +110,12 @@ def main():
     pk = peak()
     set_bias(0.0); time.sleep(1.2)
     base = temp()
-    print(f"baseline temp at bias 0: {base}K (expect 6000 by day)\n")
+    print(f"baseline temp at bias 0: {base}K, identity={is_identity()} (expect identity by day)\n")
     for b in [0.6, 1.0, 0.3, 0.0]:
         run_case(b, pk)
         print()
+    time.sleep(0.5)
+    check("bias 0 by day ends in identity, not a Kelvin tint", is_identity())
     set_bias(0.0)
     print("restored bias -> 0 (pure auto)")
     if fails:

@@ -157,11 +157,12 @@ WindowDialog {
             anchors { left: parent.left; right: parent.right; leftMargin: 4; rightMargin: 4 }
             visible: Config.options.light.night.automaticGamma
             text: Translation.tr("Dim amount")
-            from: Hyprsunset.gammaLowerLimit
-            to: 100
-            value: Config.options.light.night.nightGamma
-            onMoved: Config.options.light.night.nightGamma = value
-            tooltipContent: `${Math.round(value)}%`
+            // Shown as how much to dim (right = darker); stored as the night gamma %.
+            from: 0
+            to: 100 - Hyprsunset.gammaLowerLimit
+            value: 100 - Config.options.light.night.nightGamma
+            onMoved: Config.options.light.night.nightGamma = Math.round(100 - value)
+            tooltipContent: `-${Math.round(value)}%`
         }
     }
 
