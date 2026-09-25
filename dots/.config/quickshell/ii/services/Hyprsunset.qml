@@ -46,7 +46,6 @@ Singleton {
     property real longitude: Config.options?.light?.night?.longitude ?? 0
 
     property int gamma: 100
-    property bool dimPreview: false // Dim amount slider held: show full-night dim now
     property real autoLevel: 0
     property real targetLevel: 0
     property real appliedLevel: 0
@@ -78,7 +77,6 @@ Singleton {
     onEndModeChanged: recompute()
     onAutomaticChanged: updateTarget()
     onBiasChanged: updateTarget()
-    onDimPreviewChanged: pushOutput()
 
     function minutesSince(t, start) { let d = t - start; if (d < 0) d += 1440; return d; }
     function minutesUntil(t, end)   { let d = end - t; if (d < 0) d += 1440; return d; }
@@ -206,8 +204,8 @@ Singleton {
             root._lastTemp = temp;
             Quickshell.execDetached(["hyprctl", "hyprsunset", ...(active ? ["temperature", `${temp}`] : ["identity"])]);
         }
-        const dimLevel = root.dimPreview ? 1 : level;
-        const dim = root.automaticGamma ? 1 + (Math.max(root.gammaLowerLimit, root.nightGamma) / 100 - 1) * dimLevel : 1;
+        // Dim screen is a steady dim while on, independent of the night level.
+        const dim = root.automaticGamma ? Math.max(root.gammaLowerLimit, root.nightGamma) / 100 : 1;
         const g = Math.max(root.gammaLowerLimit, Math.round(root.gamma * dim));
         if (g !== root._lastGamma) {
             root._lastGamma = g;

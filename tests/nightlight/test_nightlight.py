@@ -49,7 +49,7 @@ def test_temperature_mapping():
 def test_gamma_composes_with_dim():
     print("gamma: user value x dim factor (dim never kills the Gamma slider)")
     check("dim off = user gamma passes through", L.gamma_for_level(1, 70, 50, False) == 70)
-    check("dim on, day (level 0) = user gamma", L.gamma_for_level(0, 70, 50, True) == 70)
+    check("dim on holds by day too (level 0): 100 x 50%", L.gamma_for_level(0, 100, 50, True) == 50)
     check("dim on, full night = user x night (100 x 50%)", L.gamma_for_level(1, 100, 50, True) == 50)
     at_night = [L.gamma_for_level(1, g, 80, True) for g in (100, 90, 70)]
     check("lowering user gamma still lowers output while dimmed", at_night[0] > at_night[1] > at_night[2], str(at_night))
@@ -194,7 +194,7 @@ def main():
             print("MUTATION: NEUTRAL_TEMP = 4000 — expect temperature-mapping reds\n")
         elif which == "gamma":
             L.gamma_for_level = lambda lv, ug, ng, on: round(100 + (max(L.GAMMA_LOWER, ng) - 100) * lv) if on else ug
-            print("MUTATION: dim overwrites user gamma (the old bug) — expect gamma reds\n")
+            print("MUTATION: dim overwrites user gamma, scaled by night level (the old bugs) — expect gamma reds\n")
         elif which == "solar":
             _orig = L.sun_times
             L.sun_times = lambda *a, **k: (6 * 60, 18 * 60)  # ignore date/location

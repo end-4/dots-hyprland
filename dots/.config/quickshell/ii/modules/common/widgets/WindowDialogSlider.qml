@@ -16,7 +16,6 @@ Column {
     property alias value: sliderWidget.value
     property alias tooltipContent: sliderWidget.tooltipContent
     property alias stopIndicatorValues: sliderWidget.stopIndicatorValues
-    readonly property alias pressed: sliderWidget.pressed
 
     signal moved()
     

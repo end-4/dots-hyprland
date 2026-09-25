@@ -31,8 +31,10 @@ def temp_for_level(level, peak):
 
 def gamma_for_level(level, user_gamma, night_gamma, dim_on):
     """Output gamma = the user's gamma times the dim factor — dim composes, it never
-    replaces the user's value (else the Gamma slider dies while Dim is on)."""
-    dim = 1 + (max(GAMMA_LOWER, night_gamma) / 100 - 1) * level if dim_on else 1
+    replaces the user's value (else the Gamma slider dies while Dim is on).
+    Dim is steady while on: `level` is deliberately unused (a night-scaled dim
+    looked dead by day)."""
+    dim = max(GAMMA_LOWER, night_gamma) / 100 if dim_on else 1
     return max(GAMMA_LOWER, round(user_gamma * dim))
 
 
