@@ -163,6 +163,8 @@ WindowDialog {
             value: 100 - Config.options.light.night.nightGamma
             onMoved: Config.options.light.night.nightGamma = Math.round(100 - value)
             tooltipContent: `-${Math.round(value)}%`
+            // By day the night level is ~0, so the dim would be invisible; preview it while held.
+            onPressedChanged: Hyprsunset.dimPreview = pressed
         }
     }
 
