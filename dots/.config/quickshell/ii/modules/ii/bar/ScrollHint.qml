@@ -1,6 +1,7 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
+import Quickshell
 
 Revealer { // Scroll hint
     id: root
@@ -32,6 +33,9 @@ Revealer { // Scroll hint
         PopupToolTip {
             extraVisibleCondition: (tooltipText.length > 0 && mouseArea.showHintTimedOut)
             text: tooltipText
+            anchorEdges: Config.options.bar.bottom ? Edges.Top : Edges.Bottom
+            anchorGravity: anchorEdges
+            verticalMargin: 8
         }
 
         Column {
