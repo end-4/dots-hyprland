@@ -17,10 +17,14 @@ Item {
     id: root
 
     Component.onCompleted: {
-        if (Bluetooth.defaultAdapter.enabled) Bluetooth.defaultAdapter.discovering = true;
+        if (Bluetooth.defaultAdapter?.enabled) {
+            Bluetooth.defaultAdapter.discovering = true;
+        }
+        BluetoothStatus.scheduleUpdate(true);
     }
     Component.onDestruction: {
-        Bluetooth.defaultAdapter.discovering = false;
+        if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.discovering = false;
+        BluetoothStatus.expandedAddress = "";
     }
 
     WPanelPageColumn {
@@ -84,9 +88,7 @@ Item {
                     clip: true
                     spacing: 4
 
-                    model: ScriptModel {
-                        values: BluetoothStatus.friendlyDeviceList
-                    }
+                    model: BluetoothStatus.friendlyDeviceList
                     delegate: BluetoothDeviceItem {
                         required property BluetoothDevice modelData
                         device: modelData
@@ -117,7 +119,7 @@ Item {
                 enabled: !Bluetooth.defaultAdapter?.discovering && Bluetooth.defaultAdapter?.enabled
 
                 onClicked: {
-                    Bluetooth.defaultAdapter.discovering = true;
+                    if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.discovering = true;
                 }
 
                 contentItem: FluentIcon {

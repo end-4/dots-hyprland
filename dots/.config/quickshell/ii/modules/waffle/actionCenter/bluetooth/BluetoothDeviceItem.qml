@@ -14,6 +14,8 @@ import qs.modules.waffle.actionCenter
 ExpandableChoiceButton {
     id: root
     required property BluetoothDevice device
+    expanded: BluetoothStatus.expandedAddress !== "" && BluetoothStatus.expandedAddress === (root.device?.address ?? "")
+    onClicked: BluetoothStatus.expandedAddress = expanded ? "" : (root.device?.address ?? "")
 
     contentItem: RowLayout {
         id: contentItem

@@ -43,9 +43,7 @@ WindowDialog {
         spacing: 0
         animateAppearance: false
 
-        model: ScriptModel {
-            values: BluetoothStatus.friendlyDeviceList
-        }
+        model: BluetoothStatus.friendlyDeviceList
         delegate: BluetoothDeviceItem {
             required property BluetoothDevice modelData
             device: modelData
