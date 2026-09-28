@@ -49,7 +49,11 @@ if [[ ! -z $(systemctl --version) ]]; then
   fi
   v sudo systemctl enable bluetooth --now
 elif [[ ! -z $(openrc --version) ]]; then
-  v bash -c "echo 'modules=i2c-dev' | sudo tee -a /etc/conf.d/modules"
+  v sudo mkdir -p /etc/modules-load.d
+  v bash -c "printf '%s\n' i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
+  if [[ -f /etc/conf.d/modules ]]; then
+    v sudo sed -i '/^modules=i2c-dev$/d' /etc/conf.d/modules
+  fi
   v sudo rc-update add modules boot
   v sudo rc-update add ydotool default
   v sudo rc-update add bluetooth default
