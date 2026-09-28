@@ -19,6 +19,7 @@ Item {
     StyledListView {
         id: listView
         anchors.fill: parent
+        bottomMargin: root.listBottomPadding
         spacing: root.todoListItemSpacing
         animateAppearance: false
         model: ScriptModel {
