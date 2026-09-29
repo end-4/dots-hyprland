@@ -364,15 +364,24 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
                 property int lastResponseLength: 0
-                // onContentHeightChanged: {
-                //     if (atYEnd)
-                //         Qt.callLater(positionViewAtEnd);
-                // }
-                // onCountChanged: {
-                //     // Auto-scroll when new messages are added
-                //     if (atYEnd)
-                //         Qt.callLater(positionViewAtEnd);
-                // }
+
+                // Stick-to-bottom while streaming (like a claude-code style terminal)
+                property bool followBottom: true
+                // While following, use a short scroll animation to dampen erratic height changes
+                scrollDuration: followBottom ? 70 : Appearance.animation.scroll.duration
+
+                onContentHeightChanged: { // text grew during streaming
+                    if (followBottom)
+                        Qt.callLater(positionViewAtEnd);
+                }
+                onCountChanged: { // a new message was added
+                    if (followBottom)
+                        Qt.callLater(positionViewAtEnd);
+                }
+                // Decouple when a user gesture begins (flick/drag/wheel set moving).
+                onMovingChanged: if (moving) followBottom = false
+                // When the gesture ends, re-attach only if they came to rest at the bottom.
+                onMovementEnded: followBottom = atYEnd
 
                 add: null // Prevent function calls from being janky
 
