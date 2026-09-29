@@ -124,6 +124,17 @@ ContentPage {
                 text: Translation.tr("Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)")
             }
         }
+         ConfigSwitch {
+            text: Translation.tr("Enable file search")
+            checked: Config.options.search.fileSearch.enable
+            onCheckedChanged: {
+                Config.options.search.fileSearch.enable = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Enabling this will allow searching for files and folders on your system")
+            }
+
+        }
 
         ContentSubsection {
             title: Translation.tr("Prefixes")

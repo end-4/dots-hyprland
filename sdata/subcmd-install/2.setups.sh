@@ -28,6 +28,10 @@ showfun setup_user_group
 v setup_user_group
 
 if [[ ! -z $(systemctl --version) ]]; then
+# For Arch Linux, plocate-updatedb.timer can be enabled to keep the plocate database up-to-date.
+if [[ "$OS_GROUP_ID" == "arch" ]] && command -v plocate >/dev/null 2>&1; then
+  v sudo systemctl enable plocate-updatedb.timer --now
+fi
   # For Fedora, uinput is required for the virtual keyboard to function, and udev rules enable input group users to utilize it.
   if [[ "$OS_GROUP_ID" == "fedora" ]]; then
     v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
