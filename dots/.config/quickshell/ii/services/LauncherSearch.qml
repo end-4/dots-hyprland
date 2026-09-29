@@ -251,8 +251,7 @@ Singleton {
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
-                        // Probably needs more proper escaping, but this will do for now
-                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                        Quickshell.execDetached([...Config.options.apps.terminal.trim().split(/\s+/), "-e", ...entry.command]);
                     }
                 },
                 comment: entry.comment,
@@ -268,7 +267,7 @@ Singleton {
                             if (!action.runInTerminal)
                                 action.execute();
                             else {
-                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                                Quickshell.execDetached([...Config.options.apps.terminal.trim().split(/\s+/), "-e", ...action.command]);
                             }
                         }
                     });
