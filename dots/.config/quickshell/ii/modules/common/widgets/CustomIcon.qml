@@ -13,15 +13,21 @@ Item {
     width: 30
     height: 30
     
+    readonly property string bundledPath: iconFolder + "/" + root.source
+
+    Image {
+        id: bundledProbe
+        visible: false
+        source: root.source.length > 0 ? root.bundledPath : ""
+    }
+
     IconImage {
         id: iconImage
         anchors.fill: parent
         source: {
-            const fullPathWhenSourceIsIconName = iconFolder + "/" + root.source;
-            if (iconFolder && fullPathWhenSourceIsIconName) {
-                return fullPathWhenSourceIsIconName
-            }
-            return root.source
+            if (root.source.length === 0) return ""
+            if (bundledProbe.status === Image.Ready) return root.bundledPath
+            return Quickshell.iconPath(root.source)
         }
         implicitSize: root.height
     }
