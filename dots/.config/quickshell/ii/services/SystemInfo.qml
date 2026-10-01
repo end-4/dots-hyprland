@@ -34,26 +34,26 @@ Singleton {
             const textOsRelease = fileOsRelease.text()
 
             // Extract the friendly name (PRETTY_NAME field, fallback to NAME)
-            const prettyNameMatch = textOsRelease.match(/^PRETTY_NAME="(.+?)"/m)
-            const nameMatch = textOsRelease.match(/^NAME="(.+?)"/m)
+            const prettyNameMatch = textOsRelease.match(/^PRETTY_NAME=['"](.+?)['"]/m)
+            const nameMatch = textOsRelease.match(/^NAME=['"](.+?)['"]/m)
             distroName = prettyNameMatch ? prettyNameMatch[1] : (nameMatch ? nameMatch[1].replace(/Linux/i, "").trim() : "Unknown")
 
             // Extract the ID
-            const idMatch = textOsRelease.match(/^ID="?(.+?)"?$/m)
+            const idMatch = textOsRelease.match(/^ID=['"]?(.+?)['"]?$/m)
             distroId = idMatch ? idMatch[1] : "unknown"
 
             // Extract additional URLs and logo
-            const homeUrlMatch = textOsRelease.match(/^HOME_URL="(.+?)"/m)
+            const homeUrlMatch = textOsRelease.match(/^HOME_URL=['"](.+?)['"]/m)
             homeUrl = homeUrlMatch ? homeUrlMatch[1] : ""
-            const documentationUrlMatch = textOsRelease.match(/^DOCUMENTATION_URL="(.+?)"/m)
+            const documentationUrlMatch = textOsRelease.match(/^DOCUMENTATION_URL=['"](.+?)['"]/m)
             documentationUrl = documentationUrlMatch ? documentationUrlMatch[1] : ""
-            const supportUrlMatch = textOsRelease.match(/^SUPPORT_URL="(.+?)"/m)
+            const supportUrlMatch = textOsRelease.match(/^SUPPORT_URL=['"](.+?)['"]/m)
             supportUrl = supportUrlMatch ? supportUrlMatch[1] : ""
-            const bugReportUrlMatch = textOsRelease.match(/^BUG_REPORT_URL="(.+?)"/m)
+            const bugReportUrlMatch = textOsRelease.match(/^BUG_REPORT_URL=['"](.+?)['"]/m)
             bugReportUrl = bugReportUrlMatch ? bugReportUrlMatch[1] : ""
-            const privacyPolicyUrlMatch = textOsRelease.match(/^PRIVACY_POLICY_URL="(.+?)"/m)
+            const privacyPolicyUrlMatch = textOsRelease.match(/^PRIVACY_POLICY_URL=['"](.+?)['"]/m)
             privacyPolicyUrl = privacyPolicyUrlMatch ? privacyPolicyUrlMatch[1] : ""
-            const logoFieldMatch = textOsRelease.match(/^LOGO="?(.+?)"?$/m)
+            const logoFieldMatch = textOsRelease.match(/^LOGO=['"]?(.+?)['"]?$/m)
             logo = logoFieldMatch ? logoFieldMatch[1] : ""
 
             // Update the distroIcon property based on distroId
