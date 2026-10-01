@@ -25,10 +25,10 @@ gui-apps/wf-recorder pipewire
 
 dev-qt/qt5compat icu qml
 dev-qt/qtbase X cups dbus gui icu libproxy opengl vulkan wayland
-dev-qt/qtdeclarative network opengl ssl svg vulkan
-dev-qt/qtmultimedia dbus ffmpeg opengl pipewire qml wayland
+dev-qt/qtdeclarative network opengl ssl svg vulkan wayland
+dev-qt/qtmultimedia dbus ffmpeg opengl pipewire qml vulkan wayland
 dev-qt/qtpositioning geoclue qml
-dev-qt/qttools qdbus
+dev-qt/qttools qdbus opengl vulkan
 
 gui-apps/fuzzel png svg
 media-gfx/imagemagick xml
