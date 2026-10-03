@@ -84,6 +84,18 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "desktop_windows"
+            text: Translation.tr("Keep visible on empty workspace")
+
+            enabled: Config.options.bar.autoHide.enable
+            checked: Config.options.bar.autoHide.showOnEmptyWorkspace
+
+            onCheckedChanged: {
+                Config.options.bar.autoHide.showOnEmptyWorkspace = checked;
+            }
+        }
+
         ConfigRow {
             
             ContentSubsection {

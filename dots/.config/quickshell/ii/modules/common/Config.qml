@@ -228,6 +228,7 @@ Singleton {
                     property bool enable: false
                     property int hoverRegionWidth: 2
                     property bool pushWindows: false
+                    property bool showOnEmptyWorkspace: false
                     property JsonObject showWhenPressingSuper: JsonObject {
                         property bool enable: true
                         property int delay: 140
