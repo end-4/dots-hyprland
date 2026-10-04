@@ -614,4 +614,48 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "checklist"
+        title: Translation.tr("Widget: Todo & Calendar")
+
+        ConfigRow {
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.todo?.enable ?? false
+                onCheckedChanged: {
+                    Config.options.background.widgets.todo.enable = checked;
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.todo?.placementStrategy ?? "free"
+                onSelected: newValue => {
+                    Config.options.background.widgets.todo.placementStrategy = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Draggable"),
+                        icon: "drag_pan",
+                        value: "free"
+                    },
+                    {
+                        displayName: Translation.tr("Least busy"),
+                        icon: "category",
+                        value: "leastBusy"
+                    },
+                    {
+                        displayName: Translation.tr("Most busy"),
+                        icon: "shapes",
+                        value: "mostBusy"
+                    },
+                ]
+            }
+        }
+    }
 }
