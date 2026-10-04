@@ -209,6 +209,13 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject music: JsonObject {
+                        property bool enable: false
+                        property bool hideWhenIdle: true
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 100
+                        property real y: 400
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
