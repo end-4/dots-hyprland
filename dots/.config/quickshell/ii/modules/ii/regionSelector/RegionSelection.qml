@@ -51,7 +51,6 @@ PanelWindow {
     property color imageFillColor: ColorUtils.transparentize(imageBorderColor, 0.85)
     property color onBorderColor: "#ff000000"
     property real targetRegionOpacity: Config.options.regionSelector.targetRegions.opacity
-    property bool contentRegionOpacity: Config.options.regionSelector.targetRegions.contentRegionOpacity
 
     // Vars for indicators
     readonly property var windows: [...HyprlandData.windowList].sort((a, b) => {
@@ -61,6 +60,11 @@ PanelWindow {
     })
     readonly property var layers: HyprlandData.layers
     readonly property real falsePositivePreventionRatio: 0.5
+
+    function showWindowTitle(region) {
+        if (!Config.options.regionSelector.targetRegions.showTitle) return region.class;
+        return region.title ? `${region.class} — ${region.title}` : region.class;
+    }
 
     // Screen & interaction vars
     readonly property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(screen)
@@ -223,15 +227,24 @@ PanelWindow {
         command: ["bash", "-c", `${Directories.scriptPath}/images/find-regions-venv.sh ` 
             + `--hyprctl ` 
             + `--image '${StringUtils.shellSingleQuoteEscape(root.screenshotPath)}' ` 
-            + `--max-width ${Math.round(root.screen.width * root.falsePositivePreventionRatio)} ` 
-            + `--max-height ${Math.round(root.screen.height * root.falsePositivePreventionRatio)} `]
+            + `--max-width ${Math.round(root.screen.width * root.falsePositivePreventionRatio * root.monitorScale)} ` 
+            + `--max-height ${Math.round(root.screen.height * root.falsePositivePreventionRatio * root.monitorScale)} `]
         stdout: StdioCollector {
             id: imageDimensionCollector
             onStreamFinished: {
-                imageRegions = RegionFunctions.filterImageRegions(
-                    JSON.parse(imageDimensionCollector.text),
-                    root.windowRegions
-                );
+                const raw = JSON.parse(imageDimensionCollector.text);
+                // find_regions.py reports native pixels, the QML scene works in logical ones.
+                // Guard against an unresolved monitor, and keep integer bounds: windowRegions come
+                // from Hyprland in whole pixels, and the selection compares against them directly.
+                const scale = root.monitorScale > 0 ? root.monitorScale : 1;
+                const scaled = raw.map(r => {
+                    const x = Math.round(r.at[0] / scale);
+                    const y = Math.round(r.at[1] / scale);
+                    const right = Math.round((r.at[0] + r.size[0]) / scale);
+                    const bottom = Math.round((r.at[1] + r.size[1]) / scale);
+                    return { at: [x, y], size: [right - x, bottom - y] };
+                });
+                imageRegions = RegionFunctions.filterImageRegions(scaled, root.windowRegions);
             }
         }
     }
@@ -427,10 +440,10 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0] //
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.targetRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.targetRegionOpacity
                 borderColor: root.windowBorderColor
                 fillColor: targeted ? root.windowFillColor : "transparent"
-                text: `${modelData.class}`
+                text: root.showWindowTitle(modelData)
                 radius: Appearance.rounding.windowRounding
             }
         }
@@ -456,7 +469,7 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0]
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.targetRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.targetRegionOpacity
                 borderColor: root.windowBorderColor
                 fillColor: targeted ? root.windowFillColor : "transparent"
                 text: `${modelData.namespace}`
@@ -485,7 +498,7 @@ PanelWindow {
                     && root.targetedRegionWidth === modelData.size[0]
                     && root.targetedRegionHeight === modelData.size[1])
 
-                opacity: root.draggedAway ? 0 : root.contentRegionOpacity
+                regionAlpha: root.draggedAway ? 0 : root.targetRegionOpacity
                 borderColor: root.imageBorderColor
                 fillColor: targeted ? root.imageFillColor : "transparent"
                 text: Translation.tr("Content region")

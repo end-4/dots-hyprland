@@ -439,9 +439,13 @@ Singleton {
                     property bool windows: true
                     property bool layers: false
                     property bool content: true
-                    property bool showLabel: false
+                    property bool showLabel: true
+                    property bool showIcon: true
+                    property bool showTitle: true
+                    property bool showCoordinates: false
+                    // Scales fill and border of every hinted region. The slider never reaches 0,
+                    // so a region always stays visible enough to be selected.
                     property real opacity: 0.3
-                    property real contentRegionOpacity: 0.8
                     property int selectionPadding: 5
                 }
                 property JsonObject rect: JsonObject {
