@@ -1,5 +1,4 @@
 import qs.modules.common
-import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
@@ -17,27 +16,44 @@ DialogListItem {
     component ActionButton: DialogButton {
         colBackground: Appearance.colors.colPrimary
         colBackgroundHover: Appearance.colors.colPrimaryHover
-        colRipple: Appearance.colors.colPrimaryActive
+        colRipple: Appearance.colors.colPrimaryHover
         colText: Appearance.colors.colOnPrimary
     }
+
+
+    buttonRadius: 20
+
+    colBackground: expanded ? Appearance.colors.colPrimaryContainer : "transparent"
+    colBackgroundHover: expanded ? Appearance.colors.colPrimaryContainer : Appearance.colors.colLayer3Hover
 
     contentItem: ColumnLayout {
         anchors {
             fill: parent
             topMargin: root.verticalPadding
-            leftMargin: root.horizontalPadding
-            rightMargin: root.horizontalPadding
+            leftMargin: 12
+            rightMargin: 12
         }
         spacing: 0
 
         RowLayout {
-            // Name
-            spacing: 10
+            spacing: 16
 
-            MaterialSymbol {
-                iconSize: Appearance.font.pixelSize.larger
-                text: Icons.getBluetoothDeviceMaterialSymbol(root.device?.icon || "")
-                color: Appearance.colors.colOnSurfaceVariant
+            Rectangle {
+                width: 28
+                height: 28
+                radius: 14
+                color: root.device?.icon.includes('input') ? Appearance.colors.colPrimary 
+                : root.device?.icon.includes('audio') ? Appearance.colors.colTertiary
+                : Appearance.colors.colSecondary
+
+                MaterialSymbol {
+                    anchors.centerIn: parent
+                    iconSize: Appearance.font.pixelSize.larger
+                    text: Icons.getBluetoothDeviceMaterialSymbol(root.device?.icon || "")
+                    color: root.device?.icon.includes('input') ? Appearance.colors.colOnPrimary 
+                    : root.device?.icon.includes('audio') ? Appearance.colors.colOnTertiary
+                    : Appearance.colors.colOnSecondary
+                }
             }
 
             ColumnLayout {
@@ -45,8 +61,9 @@ DialogListItem {
                 Layout.fillWidth: true
                 StyledText {
                     Layout.fillWidth: true
-                    color: Appearance.colors.colOnSurfaceVariant
+                    color: Appearance.colors.colOnSurface
                     elide: Text.ElideRight
+                    font.pixelSize: Appearance.font.pixelSize.smaller
                     text: root.device?.name || Translation.tr("Unknown device")
                     textFormat: Text.PlainText
                 }
@@ -54,7 +71,7 @@ DialogListItem {
                     visible: (root.device?.connected || root.device?.paired) ?? false
                     Layout.fillWidth: true
                     font.pixelSize: Appearance.font.pixelSize.smaller
-                    color: Appearance.colors.colSubtext
+                    color: Appearance.colors.colOnSurface
                     elide: Text.ElideRight
                     text: {
                         if (!root.device?.paired) return "";
@@ -83,13 +100,9 @@ DialogListItem {
             Item {
                 Layout.fillWidth: true
             }
+
             ActionButton {
                 readonly property bool p: root.device?.paired ?? false
-                colBackground: p ? Appearance.colors.colError : ColorUtils.transparentize(Appearance.colors.colLayer3, 1)
-                colBackgroundHover: p ? Appearance.colors.colErrorHover : ColorUtils.transparentize(Appearance.colors.colLayer3, 1)
-                colRipple: p ? Appearance.colors.colErrorActive : Appearance.colors.colLayer3Hover
-                colText: p ? Appearance.colors.colOnError : Appearance.colors.colPrimary
-
                 buttonText: p ? Translation.tr("Forget") : Translation.tr("Always connect")
                 onClicked: {
                     if (root.device?.paired) {
