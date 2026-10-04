@@ -15,18 +15,49 @@ import Quickshell.Services.Mpris
 Item { // Player instance
     id: root
     required property MprisPlayer player
-    property var artUrl: player?.trackArtUrl
-    property string artDownloadLocation: Directories.coverArt
-    property string artFileName: Qt.md5(artUrl)
-    property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
-    property bool downloaded: false
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
     property real radius
 
-    property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+    // Cover art is downloaded centrally by MprisController (per-player Process
+    // that runs regardless of panel state), and tracked there as the
+    // highest-quality variant seen for each (player, track) pair. We just
+    // read that cache. This survives both:
+    //   - panel close/reopen (we weren't here to receive emissions; the
+    //     central downloader was)
+    //   - players that emit multiple sizes per track (Firefox: 544x544 then
+    //     60x60 thumbnail; Chromium: several near-identical tmp files) —
+    //     bestArtByPlayer keeps the largest.
+    // Cache the last non-empty trackTitle/trackArtist. Some players
+    // (pear-desktop / youtube-music) clear metadata briefly during a track
+    // change before emitting the new track's values; binding the UI
+    // directly to player.trackTitle would make the title flash to
+    // "Untitled" mid-skip and would also invalidate the trackKey, dropping
+    // the cover image.
+    property string _stableTitle: ""
+    property string _stableArtist: ""
+    Connections {
+        target: root.player
+        function onTrackTitleChanged() {
+            if (root.player?.trackTitle) root._stableTitle = root.player.trackTitle;
+        }
+        function onTrackArtistChanged() {
+            if (root.player?.trackArtist) root._stableArtist = root.player.trackArtist;
+        }
+    }
+    Component.onCompleted: {
+        if (root.player?.trackTitle) _stableTitle = root.player.trackTitle;
+        if (root.player?.trackArtist) _stableArtist = root.player.trackArtist;
+    }
+
+    // title|artist only; see MprisController._trackKeyOf for why album is omitted.
+    readonly property string _trackKey: `${_stableTitle}|${_stableArtist}`
+    readonly property string displayedArtFilePath: {
+        const entry = MprisController.getBestArt(player, _trackKey);
+        return entry ? Qt.resolvedUrl(entry.artFilePath) : "";
+    }
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -56,30 +87,6 @@ Item { // Player instance
         repeat: true
         onTriggered: {
             root.player.positionChanged()
-        }
-    }
-
-    onArtFilePathChanged: {
-        if (root.artUrl.length == 0) {
-            root.artDominantColor = Appearance.m3colors.m3secondaryContainer
-            return;
-        }
-
-        // Binding does not work in Process
-        coverArtDownloader.targetFile = root.artUrl 
-        coverArtDownloader.artFilePath = root.artFilePath
-        // Download
-        root.downloaded = false
-        coverArtDownloader.running = true
-    }
-
-    Process { // Cover art downloader
-        id: coverArtDownloader
-        property string targetFile: root.artUrl
-        property string artFilePath: root.artFilePath
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -4 -sSL '${targetFile}' -o '${artFilePath}'` ]
-        onExited: (exitCode, exitStatus) => {
-            root.downloaded = true
         }
     }
 
@@ -190,7 +197,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.large
                     color: blendedColors.colOnLayer0
                     elide: Text.ElideRight
-                    text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
+                    text: StringUtils.cleanMusicTitle(root._stableTitle) || "Untitled"
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
@@ -201,7 +208,7 @@ Item { // Player instance
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: blendedColors.colSubtext
                     elide: Text.ElideRight
-                    text: root.player?.trackArtist
+                    text: root._stableArtist
                     animateChange: true
                     animationDistanceX: 6
                     animationDistanceY: 0
