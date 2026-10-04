@@ -133,10 +133,18 @@ Singleton {
                         property bool forceDarkMode: false
                     }
                 }
+                property JsonObject openrgb: JsonObject {
+                    property bool enable: false
+                    property bool applyOnStartup: true
+                    property real fadeDuration: 0.5
+                    property real interpolationSteps: 100
+                    property list<var> devices: []
+                }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                     property string accentColor: ""
                 }
+
             }
 
             property JsonObject audio: JsonObject {
