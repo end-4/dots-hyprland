@@ -179,7 +179,7 @@ Scope {
         }
 
         onReleased: {
-            if (!GlobalStates.superReleaseMightTrigger) {
+            if (GlobalStates.shouldSuppressSuperReleaseSearch() || !GlobalStates.superReleaseMightTrigger) {
                 GlobalStates.superReleaseMightTrigger = true;
                 return;
             }
