@@ -240,16 +240,74 @@ Item { // Bar content region
                     }
                     Revealer {
                         vertical: true
-                        reveal: Audio.source?.audio?.muted ?? false
+                        reveal: (Audio.source?.audio?.muted ?? false) || Privacy.micIndicatorVisible
                         Layout.fillWidth: true
                         Layout.bottomMargin: reveal ? indicatorsColumnLayout.realSpacing : 0
-                        Behavior on Layout.topMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
                         MaterialSymbol {
-                            text: "mic_off"
+                            text: Audio.source?.audio?.muted ? "mic_off" : "mic"
                             iconSize: Appearance.font.pixelSize.larger
                             color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.micIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
+                        }
+                    }
+                    Revealer {
+                        vertical: true
+                        reveal: Privacy.cameraIndicatorVisible
+                        Layout.fillWidth: true
+                        Layout.bottomMargin: reveal ? indicatorsColumnLayout.realSpacing : 0
+                        MaterialSymbol {
+                            text: "videocam"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.cameraIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
+                        }
+                    }
+                    Revealer {
+                        vertical: true
+                        reveal: Privacy.screenCaptureIndicatorVisible
+                        Layout.fillWidth: true
+                        Layout.bottomMargin: reveal ? indicatorsColumnLayout.realSpacing : 0
+                        MaterialSymbol {
+                            text: "screen_share"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.screenCaptureIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
                         }
                     }
                     Bar.HyprlandXkbIndicator {

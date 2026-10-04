@@ -35,15 +35,26 @@ Scope {
 
         NotificationListView {
             id: listview
+            // Приватность всегда первая в этом углу, уведомления идут стопкой под ней: идущая
+            // запись с микрофона важнее прочитанного уведомления, и наоборот перекрывать их нельзя.
+            // Ноль, пока стопка приватности пуста: уведомления тогда остаются ровно там, где
+            // стояли до неё. Появился попап - сдвинулись на его высоту плюс зазор.
+            property real stackOffset: GlobalStates.privacyPopupHeight > 0
+                ? GlobalStates.privacyPopupHeight + 8
+                : 0
             anchors {
                 top: parent.top
                 bottom: parent.bottom
                 right: parent.right
                 rightMargin: 4
-                topMargin: 4
+                topMargin: 4 + stackOffset
             }
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
+
+            Behavior on stackOffset {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
         }
     }
 }

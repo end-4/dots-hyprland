@@ -272,16 +272,81 @@ Item { // Bar content region
                         }
                     }
                     Revealer {
-                        reveal: Audio.source?.audio?.muted ?? false
+                        reveal: (Audio.source?.audio?.muted ?? false) || Privacy.micIndicatorVisible
                         Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         Behavior on Layout.rightMargin {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
                         MaterialSymbol {
-                            text: "mic_off"
+                            text: Audio.source?.audio?.muted ? "mic_off" : "mic"
                             iconSize: Appearance.font.pixelSize.larger
                             color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.micIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
+                        }
+                    }
+                    Revealer {
+                        reveal: Privacy.cameraIndicatorVisible
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        MaterialSymbol {
+                            text: "videocam"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.cameraIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
+                        }
+                    }
+                    Revealer {
+                        reveal: Privacy.screenCaptureIndicatorVisible
+                        Layout.fillHeight: true
+                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                        Behavior on Layout.rightMargin {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        MaterialSymbol {
+                            text: "screen_share"
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+
+                            Rectangle {
+                                visible: Privacy.screenCaptureIndicatorVisible
+                                anchors {
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                }
+                                radius: Appearance.rounding.full
+                                color: Appearance.colors.colError
+                                z: 1
+                                implicitWidth: 8
+                                implicitHeight: 8
+                            }
                         }
                     }
                     HyprlandXkbIndicator {
