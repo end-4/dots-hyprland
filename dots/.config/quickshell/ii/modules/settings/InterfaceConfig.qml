@@ -139,6 +139,53 @@ ContentPage {
                 Config.options.dock.monochromeIcons = checked;
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("App finder")
+
+            ConfigSwitch {
+                buttonIcon: "apps"
+                text: Translation.tr("Use app finder (Experimental)")
+                checked: Config.options.dock.appFinder.replaceOverviewButton
+                onCheckedChanged: {
+                    Config.options.dock.appFinder.replaceOverviewButton = checked;
+                }
+            }
+
+            ConfigSpinBox {
+                text: Translation.tr("Columns")
+                visible: Config.options.dock.appFinder.replaceOverviewButton
+                value: Config.options.dock.appFinder.columns
+                from: 3
+                to: 12
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.dock.appFinder.columns = value;
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Panel width")
+                visible: Config.options.dock.appFinder.replaceOverviewButton
+                value: Config.options.dock.appFinder.width
+                from: 400
+                to: 1200
+                stepSize: 20
+                onValueChanged: {
+                    Config.options.dock.appFinder.width = value;
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Panel height")
+                visible: Config.options.dock.appFinder.replaceOverviewButton
+                value: Config.options.dock.appFinder.height
+                from: 300
+                to: 900
+                stepSize: 20
+                onValueChanged: {
+                    Config.options.dock.appFinder.height = value;
+                }
+            }
+        }
     }
 
     ContentSection {

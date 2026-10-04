@@ -720,5 +720,20 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "App finder": "应用查找器",
+  "Search apps...": "搜索应用...",
+  "Use app finder (Experimental)": "使用应用查找器(实验性)",
+  "Multimedia": "多媒体",
+  "Development": "开发",
+  "Education": "教育",
+  "Games": "游戏",
+  "Graphics": "图形",
+  "Office": "办公",
+  "Science": "科学",
+  "Utilities": "实用工具",
+  "Pin to dock": "固定到 Dock",
+  "Panel width": "面板宽度",
+  "Panel height": "面板高度",
+  "Recent files": "最近文件"
 }
