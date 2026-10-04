@@ -19,6 +19,7 @@ QtObject {
     property string functionName
     property var functionCall
     property string functionResponse
+    property string thoughtSignature: ""
     property bool functionPending: false
     property bool visibleToUser: true
 }
