@@ -6,6 +6,8 @@ hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 -- Applications
 local xdg_data_dirs_old = os.getenv("XDG_DATA_DIRS") or ""
 hl.env("XDG_DATA_DIRS", home_dir .. "/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:" .. xdg_data_dirs_old)
+local path_old = os.getenv("PATH") or ""
+hl.env("PATH", home_dir .. "/.local/bin:" .. path_old)
 
 -- Themes
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")

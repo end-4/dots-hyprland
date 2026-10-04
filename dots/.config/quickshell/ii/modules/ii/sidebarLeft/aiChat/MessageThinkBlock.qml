@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
@@ -94,55 +93,24 @@ Item {
                     text: root.completed ? Translation.tr("Thought") : (Translation.tr("Thinking") + ".".repeat(Math.random() * 4))
                 }
                 Item { Layout.fillWidth: true }
-                RippleButton { // Expand button
+                ExpandButton {
                     id: expandButton
                     visible: root.completed
-                    implicitWidth: 22
-                    implicitHeight: 22
-                    colBackground: headerMouseArea.containsMouse ? Appearance.colors.colLayer2Hover
-                        : ColorUtils.transparentize(Appearance.colors.colLayer2, 1)
-                    colBackgroundHover: Appearance.colors.colLayer2Hover
-                    colRipple: Appearance.colors.colLayer2Active
-
-                    onClicked: { root.collapsed = !root.collapsed }
-                    
-                    contentItem: MaterialSymbol {
-                        anchors.centerIn: parent
-                        text: "keyboard_arrow_down"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        iconSize: Appearance.font.pixelSize.normal
-                        color: Appearance.colors.colOnLayer2
-                        rotation: root.collapsed ? 0 : 180
-                        Behavior on rotation {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementMoveFast.duration
-                                easing.type: Appearance.animation.elementMoveFast.type
-                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                            }
-                        }
-                    }
-
+                    expanded: !root.collapsed
+                    headerHovered: headerMouseArea.containsMouse
+                    onClicked: root.collapsed = !root.collapsed
                 }
-                
+
             }
 
         }
 
-        Item {
+        CollapsibleContent {
             id: content
-            Layout.fillWidth: true
-            implicitHeight: collapsed ? 0 : contentBackground.implicitHeight + thinkBlockComponentSpacing
-            clip: true
-
-            Behavior on implicitHeight {
-                enabled: root.completed ?? false
-                NumberAnimation {
-                    duration: collapseAnimation.duration
-                    easing.type: collapseAnimation.type
-                    easing.bezierCurve: collapseAnimation.bezierCurve
-                }
-            }
+            collapsed: root.collapsed
+            contentHeight: contentBackground.implicitHeight + root.thinkBlockComponentSpacing
+            animation: root.collapseAnimation
+            animated: root.completed ?? false
 
             Rectangle {
                 id: contentBackground
