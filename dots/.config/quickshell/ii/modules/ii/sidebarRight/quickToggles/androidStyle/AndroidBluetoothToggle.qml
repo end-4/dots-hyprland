@@ -11,4 +11,11 @@ AndroidQuickToggleButton {
     id: root
     
     toggleModel: BluetoothToggle {}
+
+    mainAction: () => {
+        Quickshell.execDetached([
+            "bash", "-lc",
+            "rfkill list bluetooth | grep -q 'Soft blocked: yes' && rfkill unblock bluetooth || rfkill block bluetooth"
+        ])
+    }
 }
