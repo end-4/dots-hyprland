@@ -140,10 +140,13 @@ Item { // Bar content region
                     // Right-click to toggle overview
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton
+                    propagateComposedEvents: true
 
                     onPressed: event => {
                         if (event.button === Qt.RightButton) {
                             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+                        } else {
+                            event.accepted = false;
                         }
                     }
                 }
@@ -182,6 +185,72 @@ Item { // Bar content region
                 BatteryIndicator {
                     visible: (root.useShortenedForm < 2 && Battery.available)
                     Layout.alignment: Qt.AlignVCenter
+                }
+
+                Revealer {
+                    reveal: BluetoothStatus.connectedDevices.some(d => d.batteryAvailable)
+                    Layout.alignment: Qt.AlignVCenter
+
+                    MouseArea {
+                        id: btBatteryHover
+                        width: btBattery.width
+                        height: btBattery.height
+                        hoverEnabled: true
+                        onPressed: mouse => mouse.accepted = true
+
+                        ClippedProgressBar {
+                            id: btBattery
+                            readonly property var btDevices: BluetoothStatus.connectedDevices.filter(d => d.batteryAvailable)
+                            value: btDevices.length > 0 ? btDevices[0].battery : 0
+                            highlightColor: Appearance.colors.colOnSecondaryContainer
+                            valueBarWidth: 40
+                            textMask: Item {
+                                width: 40
+                                height: 18
+                                RowLayout {
+                                    anchors.centerIn: parent
+                                    spacing: 0
+                                    MaterialSymbol {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        fill: 1
+                                        text: "bluetooth"
+                                        iconSize: 13
+                                    }
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        font.pixelSize: 13
+                                        font.weight: Font.DemiBold
+                                        text: btBattery.btDevices.length > 1
+                                            ? "+" + btBattery.btDevices.length
+                                            : Math.round((btBattery.btDevices[0]?.battery ?? 0) * 100)
+                                    }
+                                }
+                            }
+                        }
+
+                        StyledPopup {
+                            hoverTarget: btBatteryHover
+
+                            ColumnLayout {
+                                anchors.centerIn: parent
+                                spacing: 4
+
+                                StyledPopupHeaderRow {
+                                    icon: "bluetooth"
+                                    label: "Bluetooth"
+                                }
+                                Repeater {
+                                    model: BluetoothStatus.connectedDevices.filter(d => d.batteryAvailable)
+                                    StyledPopupValueRow {
+                                        required property var modelData
+                                        icon: "battery_android_full"
+                                        label: modelData.name + ":"
+                                        value: Math.round(modelData.battery * 100) + "%"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
