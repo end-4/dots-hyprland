@@ -251,8 +251,8 @@ Singleton {
                     if (!entry.runInTerminal)
                         entry.execute();
                     else {
-                        // Probably needs more proper escaping, but this will do for now
-                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                        // Fixed: Escape each argument individually and pass as separate tokens to -e
+                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e ${entry.command.map(arg => "'" + StringUtils.shellSingleQuoteEscape(arg) + "'").join(' ')}`]);
                     }
                 },
                 comment: entry.comment,
@@ -268,7 +268,7 @@ Singleton {
                             if (!action.runInTerminal)
                                 action.execute();
                             else {
-                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e ${action.command.map(arg => "'" + StringUtils.shellSingleQuoteEscape(arg) + "'").join(' ')}`]);
                             }
                         }
                     });
