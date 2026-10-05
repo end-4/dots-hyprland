@@ -83,7 +83,7 @@ Item {
 
     // ================= 2D Canvas Geometry & Dragging State =================
     property real canvasWidth: 800
-    property real canvasHeight: 340
+    property real canvasHeight: 440
     property string activeDraggingDisplay: ""
     property real dragStartX: 0
     property real dragStartY: 0
@@ -250,7 +250,7 @@ Item {
             StyledRectangle {
                 id: canvasArea
                 Layout.fillWidth: true
-                implicitHeight: 340
+                implicitHeight: 440
                 radius: Appearance.rounding.normal
                 color: Appearance.m3colors.m3surfaceContainerLow
                 clip: true
@@ -419,8 +419,8 @@ Item {
 
                         x: currentOriginX + currentVirtX * currentScale
                         y: currentOriginY + currentVirtY * currentScale
-                        width: Math.max(logW * currentScale, 90)
-                        height: Math.max(logH * currentScale, 60)
+                        width: Math.max(logW * currentScale, 110)
+                        height: Math.max(logH * currentScale, 72)
                         z: isDragging ? 30 : (isSelected ? 10 : 1)
                         scale: isDragging ? 1.04 : 1.0
 
