@@ -29,6 +29,7 @@ Singleton {
 
     // ================= Screen Identification =================
     property bool identifyVisible: false
+    property bool identifyAnimActive: false
 
     readonly property string monitorsConfigPath: CF.FileUtils.trimFileProtocol(`${Directories.config}/hypr/monitors.lua`)
 
@@ -74,19 +75,32 @@ Singleton {
         interval: 3500
         repeat: false
         onTriggered: {
+            root.identifyAnimActive = false;
+            identifyCloseTimer.restart();
+        }
+    }
+
+    // Timer allowing exit animation to complete before removing overlay window
+    Timer {
+        id: identifyCloseTimer
+        interval: 280
+        repeat: false
+        onTriggered: {
             root.identifyVisible = false;
         }
     }
 
+    function dismissIdentify() {
+        identifyTimer.stop();
+        root.identifyAnimActive = false;
+        identifyCloseTimer.restart();
+    }
+
     function identifyDisplays() {
+        identifyCloseTimer.stop();
         root.identifyVisible = true;
+        root.identifyAnimActive = true;
         identifyTimer.restart();
-        for (let i = 0; i < root.pendingDisplays.length; i++) {
-            let d = root.pendingDisplays[i];
-            let desc = d.model ? `${d.model} - ` : "";
-            let msg = `[Display ${i + 1}] ${d.name}: ${desc}${d.width}x${d.height} @ ${Math.round(d.refreshRate)}Hz`;
-            Quickshell.execDetached(["hyprctl", "notify", "1", "3500", "0", msg]);
-        }
     }
 
     // Refresh displays from hyprctl

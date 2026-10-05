@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions as CF
@@ -1385,6 +1386,232 @@ Item {
                                 font.bold: true
                                 font.pixelSize: Appearance.font.pixelSize.small
                                 color: Appearance.m3colors.m3onPrimary
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ================= Multi-Monitor Screen Identification Overlay =================
+    Scope {
+        Variants {
+            model: Quickshell.screens
+            delegate: PanelWindow {
+                id: identifyOverlay
+                required property var modelData
+                screen: modelData
+                visible: DisplayService.identifyVisible
+
+                readonly property int dispNumber: {
+                    for (let i = 0; i < DisplayService.pendingDisplays.length; i++) {
+                        if (DisplayService.pendingDisplays[i].name === modelData.name) {
+                            return i + 1;
+                        }
+                    }
+                    return 1;
+                }
+                readonly property var dispInfo: {
+                    for (let i = 0; i < DisplayService.pendingDisplays.length; i++) {
+                        if (DisplayService.pendingDisplays[i].name === modelData.name) {
+                            return DisplayService.pendingDisplays[i];
+                        }
+                    }
+                    return null;
+                }
+
+                color: "transparent"
+                WlrLayershell.namespace: "quickshell:displayIdentify"
+                WlrLayershell.layer: WlrLayer.Overlay
+                exclusionMode: ExclusionMode.Ignore
+                anchors {
+                    left: true
+                    right: true
+                    top: true
+                    bottom: true
+                }
+
+                mask: Region {
+                    item: cardContainer
+                }
+
+                Item {
+                    id: overlayWrapper
+                    anchors.fill: parent
+                    opacity: DisplayService.identifyAnimActive ? 1.0 : 0.0
+                    scale: DisplayService.identifyAnimActive ? 1.0 : 0.88
+                    Behavior on opacity {
+                        NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                    }
+                    Behavior on scale {
+                        NumberAnimation { duration: 250; easing.type: Easing.OutBack }
+                    }
+
+                    StyledRectangle {
+                        id: cardContainer
+                        anchors.centerIn: parent
+                        implicitWidth: Math.max(380, mainCardLayout.implicitWidth + 48)
+                        implicitHeight: mainCardLayout.implicitHeight + 40
+                        radius: Appearance.rounding.large
+                        color: Appearance.m3colors.m3surface
+                        border.width: 2
+                        border.color: Appearance.m3colors.m3primary
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: DisplayService.dismissIdentify()
+                        }
+
+                        ColumnLayout {
+                            id: mainCardLayout
+                            anchors.centerIn: parent
+                            spacing: 14
+
+                            // Top badge & connector
+                            RowLayout {
+                                Layout.alignment: Qt.AlignHCenter
+                                spacing: 16
+
+                                // Big Display Number Pill/Circle
+                                StyledRectangle {
+                                    width: 72
+                                    height: 72
+                                    radius: 36
+                                    color: Appearance.m3colors.m3primary
+
+                                    StyledText {
+                                        anchors.centerIn: parent
+                                        text: String(identifyOverlay.dispNumber)
+                                        font.pixelSize: 42
+                                        font.bold: true
+                                        color: Appearance.m3colors.m3onPrimary
+                                    }
+                                }
+
+                                ColumnLayout {
+                                    spacing: 2
+                                    Layout.alignment: Qt.AlignVCenter
+
+                                    StyledText {
+                                        text: identifyOverlay.dispInfo ? identifyOverlay.dispInfo.name : identifyOverlay.modelData.name
+                                        font.pixelSize: 24
+                                        font.bold: true
+                                        color: Appearance.m3colors.m3onSurface
+                                    }
+
+                                    StyledText {
+                                        text: {
+                                            if (identifyOverlay.dispInfo && identifyOverlay.dispInfo.model) {
+                                                return identifyOverlay.dispInfo.model;
+                                            }
+                                            return identifyOverlay.modelData.model || Translation.tr("Physical Display");
+                                        }
+                                        font.pixelSize: Appearance.font.pixelSize.normal
+                                        color: Appearance.m3colors.m3onSurfaceVariant
+                                    }
+                                }
+                            }
+
+                            // Spec Chips (Resolution, Refresh Rate, Scale, Coordinates)
+                            RowLayout {
+                                Layout.alignment: Qt.AlignHCenter
+                                spacing: 8
+
+                                // Resolution & Rate
+                                StyledRectangle {
+                                    radius: Appearance.rounding.small
+                                    color: Appearance.m3colors.m3surfaceContainerHigh
+                                    border.width: 1
+                                    border.color: Appearance.m3colors.m3outlineVariant
+                                    implicitWidth: resLayout.implicitWidth + 16
+                                    implicitHeight: 32
+
+                                    RowLayout {
+                                        id: resLayout
+                                        anchors.centerIn: parent
+                                        spacing: 6
+                                        MaterialSymbol {
+                                            text: "aspect_ratio"
+                                            iconSize: 16
+                                            color: Appearance.m3colors.m3primary
+                                        }
+                                        StyledText {
+                                            text: {
+                                                if (identifyOverlay.dispInfo) {
+                                                    return `${identifyOverlay.dispInfo.width}×${identifyOverlay.dispInfo.height} @ ${Math.round(identifyOverlay.dispInfo.refreshRate)}Hz`;
+                                                }
+                                                return `${identifyOverlay.modelData.width}×${identifyOverlay.modelData.height}`;
+                                            }
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.bold: true
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                    }
+                                }
+
+                                // Scale Chip
+                                StyledRectangle {
+                                    radius: Appearance.rounding.small
+                                    color: Appearance.m3colors.m3surfaceContainerHigh
+                                    border.width: 1
+                                    border.color: Appearance.m3colors.m3outlineVariant
+                                    implicitWidth: scaleLayout.implicitWidth + 16
+                                    implicitHeight: 32
+
+                                    RowLayout {
+                                        id: scaleLayout
+                                        anchors.centerIn: parent
+                                        spacing: 6
+                                        MaterialSymbol {
+                                            text: "density_medium"
+                                            iconSize: 16
+                                            color: Appearance.m3colors.m3secondary
+                                        }
+                                        StyledText {
+                                            text: `${Math.round((identifyOverlay.dispInfo?.scale || 1.0) * 100)}%`
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.bold: true
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                    }
+                                }
+
+                                // Position Chip
+                                StyledRectangle {
+                                    radius: Appearance.rounding.small
+                                    color: Appearance.m3colors.m3surfaceContainerHigh
+                                    border.width: 1
+                                    border.color: Appearance.m3colors.m3outlineVariant
+                                    implicitWidth: posLayout.implicitWidth + 16
+                                    implicitHeight: 32
+
+                                    RowLayout {
+                                        id: posLayout
+                                        anchors.centerIn: parent
+                                        spacing: 6
+                                        MaterialSymbol {
+                                            text: "pin_drop"
+                                            iconSize: 16
+                                            color: Appearance.m3colors.m3tertiary
+                                        }
+                                        StyledText {
+                                            text: identifyOverlay.dispInfo ? `(${identifyOverlay.dispInfo.x}, ${identifyOverlay.dispInfo.y})` : "(0, 0)"
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.bold: true
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Dismiss hint
+                            StyledText {
+                                Layout.alignment: Qt.AlignHCenter
+                                text: Translation.tr("Click to dismiss")
+                                font.pixelSize: Appearance.font.pixelSize.smaller
+                                color: Appearance.m3colors.m3outline
                             }
                         }
                     }
