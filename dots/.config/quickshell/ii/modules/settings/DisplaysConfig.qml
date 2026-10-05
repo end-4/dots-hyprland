@@ -84,7 +84,7 @@ Item {
 
     // ================= 2D Canvas Geometry & Dragging State =================
     property real canvasWidth: 800
-    property real canvasHeight: 440
+    property real canvasHeight: 380
     property string activeDraggingDisplay: ""
     property real dragStartX: 0
     property real dragStartY: 0
@@ -136,19 +136,20 @@ Item {
         return { minX: minX, maxX: maxX, minY: minY, maxY: maxY, width: w, height: h };
     }
 
-    readonly property real canvasMargin: 30
+    readonly property real canvasMargin: 24
+    readonly property real canvasTopToolbarHeight: 52
     readonly property real availCanvasWidth: Math.max(canvasWidth - canvasMargin * 2, 200)
-    readonly property real availCanvasHeight: Math.max(canvasHeight - canvasMargin * 2, 150)
+    readonly property real availCanvasHeight: Math.max(canvasHeight - canvasTopToolbarHeight - canvasMargin * 2, 140)
     readonly property real scaleFactor: {
-        let paddingW = boundingBox.width + 400;
-        let paddingH = boundingBox.height + 400;
+        let paddingW = boundingBox.width + 320;
+        let paddingH = boundingBox.height + 320;
         let sx = availCanvasWidth / paddingW;
         let sy = availCanvasHeight / paddingH;
         return Math.min(sx, sy);
     }
 
     readonly property real originX: (canvasWidth - boundingBox.width * scaleFactor) / 2 - boundingBox.minX * scaleFactor
-    readonly property real originY: (canvasHeight - boundingBox.height * scaleFactor) / 2 - boundingBox.minY * scaleFactor
+    readonly property real originY: canvasTopToolbarHeight + (canvasHeight - canvasTopToolbarHeight - boundingBox.height * scaleFactor) / 2 - boundingBox.minY * scaleFactor
 
     // ================= Main Content Page =================
     ContentPage {
@@ -251,7 +252,7 @@ Item {
             StyledRectangle {
                 id: canvasArea
                 Layout.fillWidth: true
-                implicitHeight: 440
+                implicitHeight: 380
                 radius: Appearance.rounding.normal
                 color: Appearance.m3colors.m3surfaceContainerLow
                 clip: true
@@ -420,8 +421,8 @@ Item {
 
                         x: currentOriginX + currentVirtX * currentScale
                         y: currentOriginY + currentVirtY * currentScale
-                        width: Math.max(logW * currentScale, 110)
-                        height: Math.max(logH * currentScale, 72)
+                        width: Math.max(logW * currentScale, 115)
+                        height: Math.max(logH * currentScale, 76)
                         z: isDragging ? 30 : (isSelected ? 10 : 1)
                         scale: isDragging ? 1.04 : 1.0
 
@@ -431,7 +432,7 @@ Item {
 
                         StyledRectangle {
                             anchors.fill: parent
-                            radius: Appearance.rounding.small
+                            radius: Appearance.rounding.small + 2
                             color: monitorItem.isDisabled ? Appearance.m3colors.m3surfaceVariant : (monitorItem.isSelected ? Appearance.m3colors.m3surfaceContainerHighest : Appearance.m3colors.m3surfaceContainer)
                             border.width: monitorItem.isSelected || monitorItem.isDragging ? 2 : 1
                             border.color: monitorItem.isSelected || monitorItem.isDragging ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outlineVariant
@@ -439,18 +440,47 @@ Item {
 
                             ColumnLayout {
                                 anchors.fill: parent
-                                anchors.margins: 6
-                                spacing: 2
+                                anchors.margins: 8
+                                spacing: 4
 
+                                // Top row: connector name + focused star
                                 RowLayout {
                                     Layout.fillWidth: true
                                     spacing: 4
 
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: monitorItem.modelData.name
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        font.bold: true
+                                        elide: Text.ElideRight
+                                        color: monitorItem.isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurface
+                                    }
+
+                                    MaterialSymbol {
+                                        visible: monitorItem.modelData.focused
+                                        text: "star"
+                                        iconSize: 14
+                                        color: Appearance.m3colors.m3primary
+                                    }
+                                }
+
+                                // Center: Circular monitor index badge + model name
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignCenter
+                                    spacing: 3
+
                                     StyledRectangle {
-                                        width: 20
-                                        height: 20
-                                        radius: 10
+                                        Layout.alignment: Qt.AlignCenter
+                                        width: 24
+                                        height: 24
+                                        radius: 12
                                         color: monitorItem.isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3surfaceContainerHigh
+                                        border.width: 1
+                                        border.color: monitorItem.isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outlineVariant
+
                                         StyledText {
                                             anchors.centerIn: parent
                                             text: String(monitorItem.index + 1)
@@ -462,45 +492,30 @@ Item {
 
                                     StyledText {
                                         Layout.fillWidth: true
-                                        text: monitorItem.modelData.name
-                                        font.pixelSize: Appearance.font.pixelSize.small
-                                        font.bold: monitorItem.isSelected
+                                        Layout.alignment: Qt.AlignCenter
+                                        horizontalAlignment: Text.AlignHCenter
+                                        text: monitorItem.modelData.model || monitorItem.modelData.description || monitorItem.modelData.name
+                                        font.pixelSize: 9
+                                        color: Appearance.m3colors.m3onSurfaceVariant
                                         elide: Text.ElideRight
-                                        color: monitorItem.isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurface
-                                    }
-
-                                    MaterialSymbol {
-                                        visible: monitorItem.modelData.focused
-                                        text: "star"
-                                        iconSize: 14
-                                        color: Appearance.m3colors.m3primary
-                                        StyledToolTip { text: Translation.tr("Primary focused display") }
                                     }
                                 }
 
-                                Item { Layout.fillHeight: true }
+                                // Bottom: Resolution & Refresh Rate pill
+                                StyledRectangle {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    radius: Appearance.rounding.full
+                                    color: monitorItem.isSelected ? Appearance.m3colors.m3surfaceContainerHigh : Appearance.m3colors.m3surfaceContainerHighest
+                                    implicitHeight: 18
+                                    implicitWidth: resChipText.implicitWidth + 12
 
-                                StyledText {
-                                    Layout.fillWidth: true
-                                    text: monitorItem.modelData.model || monitorItem.modelData.description || monitorItem.modelData.name
-                                    font.pixelSize: 10
-                                    color: Appearance.m3colors.m3onSurfaceVariant
-                                    elide: Text.ElideRight
-                                }
-
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 2
                                     StyledText {
-                                        text: `${Math.round(monitorItem.modelData.width)}×${Math.round(monitorItem.modelData.height)}`
-                                        font.pixelSize: 10
+                                        id: resChipText
+                                        anchors.centerIn: parent
+                                        text: `${Math.round(monitorItem.modelData.width)}×${Math.round(monitorItem.modelData.height)} • ${Math.round(monitorItem.modelData.refreshRate)}Hz`
+                                        font.pixelSize: 9
                                         font.bold: true
                                         color: Appearance.m3colors.m3onSurface
-                                    }
-                                    StyledText {
-                                        text: `@ ${Math.round(monitorItem.modelData.refreshRate)}Hz`
-                                        font.pixelSize: 10
-                                        color: Appearance.m3colors.m3onSurfaceVariant
                                     }
                                 }
                             }
@@ -657,20 +672,30 @@ Item {
             StyledRectangle {
                 Layout.fillWidth: true
                 implicitHeight: 48
-                radius: Appearance.rounding.small
+                radius: Appearance.rounding.normal
                 color: Appearance.m3colors.m3surfaceContainerLow
+                border.width: 1
+                border.color: Appearance.m3colors.m3outlineVariant
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
+                    anchors.leftMargin: 14
+                    anchors.rightMargin: 14
+                    spacing: 10
 
-                    StyledText {
-                        text: Translation.tr("Selected Display:")
-                        font.bold: true
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.m3colors.m3onSurfaceVariant
+                    RowLayout {
+                        spacing: 6
+                        MaterialSymbol {
+                            text: "devices"
+                            iconSize: 18
+                            color: Appearance.m3colors.m3primary
+                        }
+                        StyledText {
+                            text: Translation.tr("Selected Display:")
+                            font.bold: true
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: Appearance.m3colors.m3onSurface
+                        }
                     }
 
                     Repeater {
@@ -682,9 +707,9 @@ Item {
                             required property int index
 
                             readonly property bool isSelected: DisplayService.selectedDisplayName === modelData.name
-                            implicitWidth: chipRow.implicitWidth + 24
+                            implicitWidth: chipRow.implicitWidth + 20
                             implicitHeight: 32
-                            padding: 10
+                            padding: 8
                             buttonRadius: Appearance.rounding.full
                             colBackground: isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3surfaceContainerHigh
                             onClicked: DisplayService.selectedDisplayName = modelData.name
@@ -709,10 +734,11 @@ Item {
                                 }
 
                                 StyledText {
-                                    text: `${modelData.name} ${modelData.model ? `(${modelData.model})` : ""}`
+                                    text: `${modelData.name}${modelData.model ? ` • ${modelData.model}` : ""}`
                                     font.pixelSize: Appearance.font.pixelSize.small
                                     font.bold: isSelected
                                     color: isSelected ? Appearance.m3colors.m3onPrimary : Appearance.m3colors.m3onSurface
+                                    elide: Text.ElideRight
                                 }
 
                                 StyledText {
@@ -752,17 +778,18 @@ Item {
                 }
             }
 
-            // ---------------- Bento Grid (4 Cards) ----------------
+            // ---------------- Bento Grid (Balanced 2x2 Grid) ----------------
             GridLayout {
                 Layout.fillWidth: true
                 columns: 2
                 columnSpacing: 14
                 rowSpacing: 14
 
-                // CARD 1: Hardware Specifications
+                // CARD 1: Display Identity & Physical Specs
                 StyledRectangle {
                     Layout.fillWidth: true
-                    implicitHeight: card1Layout.implicitHeight + 28
+                    Layout.fillHeight: true
+                    implicitHeight: card1Layout.implicitHeight + 32
                     radius: Appearance.rounding.normal
                     color: Appearance.m3colors.m3surfaceContainer
                     border.width: 1
@@ -771,89 +798,119 @@ Item {
                     ColumnLayout {
                         id: card1Layout
                         anchors.fill: parent
-                        anchors.margins: 14
-                        spacing: 10
+                        anchors.margins: 16
+                        spacing: 12
 
+                        // Card Header
                         RowLayout {
                             spacing: 8
-                            MaterialSymbol { text: "info"; iconSize: 20; color: Appearance.m3colors.m3primary }
+                            MaterialSymbol { text: "desktop_windows"; iconSize: 20; color: Appearance.m3colors.m3primary }
                             StyledText {
-                                text: Translation.tr("Hardware Specifications")
+                                text: Translation.tr("Display Identity")
                                 font.bold: true
                                 font.pixelSize: Appearance.font.pixelSize.normal + 1
                                 color: Appearance.m3colors.m3onSurface
+                            }
+                            Item { Layout.fillWidth: true }
+                            StyledRectangle {
+                                radius: Appearance.rounding.full
+                                color: Appearance.m3colors.m3primaryContainer
+                                implicitWidth: portBadgeText.implicitWidth + 16
+                                implicitHeight: 24
+                                StyledText {
+                                    id: portBadgeText
+                                    anchors.centerIn: parent
+                                    text: (root.disp && root.disp.name) ? root.disp.name : ""
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    font.bold: true
+                                    color: Appearance.m3colors.m3onPrimaryContainer
+                                }
+                            }
+                        }
+
+                        // Display Title & Make
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 2
+
+                            StyledText {
+                                text: ((root.disp && root.disp.make) ? root.disp.make + " " : "") + ((root.disp && root.disp.model) ? root.disp.model : ((root.disp && root.disp.description) ? root.disp.description : Translation.tr("Generic Monitor")))
+                                font.bold: true
+                                font.pixelSize: Appearance.font.pixelSize.normal
+                                color: Appearance.m3colors.m3onSurface
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
+                            StyledText {
+                                text: root.diagonalInches > 0 ? `${root.diagonalInches.toFixed(1)}" Diagonal • ${root.aspectRatioStr}` : Translation.tr("Connected Display")
+                                font.pixelSize: Appearance.font.pixelSize.smaller
+                                color: Appearance.m3colors.m3onSurfaceVariant
                             }
                         }
 
                         Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.m3colors.m3outlineVariant }
 
+                        // 2x2 Clean Spec Grid
                         GridLayout {
                             Layout.fillWidth: true
                             columns: 2
-                            rowSpacing: 6
-                            columnSpacing: 12
+                            rowSpacing: 8
+                            columnSpacing: 14
 
-                            StyledText { text: Translation.tr("Make & Model:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: ((root.disp && root.disp.make) ? root.disp.make + " " : "") + ((root.disp && root.disp.model) ? root.disp.model : ((root.disp && root.disp.description) ? root.disp.description : Translation.tr("Generic Monitor"))); font.bold: true; font.pixelSize: Appearance.font.pixelSize.small; elide: Text.ElideRight }
-
-                            StyledText { text: Translation.tr("Output Port:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: (root.disp && root.disp.name) ? root.disp.name : ""; font.bold: true; font.pixelSize: Appearance.font.pixelSize.small }
-
-                            StyledText { text: Translation.tr("Physical Size:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText {
-                                text: root.diagonalInches > 0 ? `${Math.round(root.disp.physicalWidth)} × ${Math.round(root.disp.physicalHeight)} mm (~${root.diagonalInches.toFixed(1)}")` : Translation.tr("Unknown")
-                                font.pixelSize: Appearance.font.pixelSize.small
+                            ColumnLayout {
+                                spacing: 2
+                                StyledText { text: Translation.tr("Physical Dimensions"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.smaller }
+                                StyledText {
+                                    text: (root.disp && root.disp.physicalWidth > 0) ? `${Math.round(root.disp.physicalWidth)} × ${Math.round(root.disp.physicalHeight)} mm` : Translation.tr("Built-in Panel")
+                                    font.bold: true
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.m3colors.m3onSurface
+                                }
                             }
 
-                            StyledText { text: Translation.tr("Pixel Density:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: root.ppi > 0 ? `${root.ppi.toFixed(1)} PPI` : Translation.tr("Standard"); font.pixelSize: Appearance.font.pixelSize.small }
-
-                            StyledText { text: Translation.tr("Aspect Ratio:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: root.aspectRatioStr; font.pixelSize: Appearance.font.pixelSize.small }
-
-                            StyledText { text: Translation.tr("Pixel Format:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: (root.disp && root.disp.currentFormat) ? root.disp.currentFormat : "XRGB8888"; font.pixelSize: Appearance.font.pixelSize.small }
-
-                            StyledText { text: Translation.tr("Serial Number:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: (root.disp && root.disp.serial) ? root.disp.serial : Translation.tr("Not specified"); font.pixelSize: Appearance.font.pixelSize.small }
-
-                            StyledText { text: Translation.tr("Display Controller:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText {
-                                text: {
-                                    if (root.disp && DisplayService.gpuInfo.connectors && DisplayService.gpuInfo.connectors[root.disp.name]) {
-                                        let c = DisplayService.gpuInfo.connectors[root.disp.name];
-                                        return `${c.gpuName} (${c.card} / ${c.driver})`;
-                                    }
-                                    return DisplayService.gpuInfo.primaryRenderer || Translation.tr("KMS Display Controller");
+                            ColumnLayout {
+                                spacing: 2
+                                StyledText { text: Translation.tr("Pixel Density"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.smaller }
+                                StyledText {
+                                    text: root.ppi > 0 ? `${root.ppi.toFixed(1)} PPI` : Translation.tr("Standard DPI")
+                                    font.bold: true
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.m3colors.m3onSurface
                                 }
-                                font.bold: true
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
                             }
 
-                            StyledText { text: Translation.tr("3D Acceleration:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText {
-                                text: {
-                                    if (DisplayService.gpuInfo.hasDgpu && DisplayService.gpuInfo.dgpu) {
-                                        let prefix = DisplayService.gpuInfo.offloadPrefix ? DisplayService.gpuInfo.offloadPrefix.trim() : "PRIME";
-                                        return `${DisplayService.gpuInfo.dgpu.name} (${prefix} Offload)`;
-                                    }
-                                    return Translation.tr("Unified Hardware Acceleration");
+                            ColumnLayout {
+                                spacing: 2
+                                StyledText { text: Translation.tr("Pixel Format"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.smaller }
+                                StyledText {
+                                    text: (root.disp && root.disp.currentFormat) ? root.disp.currentFormat : "XRGB8888"
+                                    font.bold: true
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.m3colors.m3onSurface
                                 }
-                                font.bold: true
-                                font.pixelSize: Appearance.font.pixelSize.small
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
+                            }
+
+                            ColumnLayout {
+                                spacing: 2
+                                StyledText { text: Translation.tr("Serial Number"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.smaller }
+                                StyledText {
+                                    text: (root.disp && root.disp.serial) ? root.disp.serial : Translation.tr("Internal / Auto")
+                                    font.bold: true
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.m3colors.m3onSurface
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
+                                }
                             }
                         }
                     }
                 }
 
-                // CARD 2: Graphics & GPU Architecture
+                // CARD 2: Graphics Engine & GPU Telemetry
                 StyledRectangle {
                     Layout.fillWidth: true
-                    implicitHeight: gpuCardLayout.implicitHeight + 28
+                    Layout.fillHeight: true
+                    implicitHeight: gpuCardLayout.implicitHeight + 32
                     radius: Appearance.rounding.normal
                     color: Appearance.m3colors.m3surfaceContainer
                     border.width: 1
@@ -862,7 +919,7 @@ Item {
                     ColumnLayout {
                         id: gpuCardLayout
                         anchors.fill: parent
-                        anchors.margins: 14
+                        anchors.margins: 16
                         spacing: 12
 
                         // Card Header
@@ -870,7 +927,7 @@ Item {
                             spacing: 8
                             MaterialSymbol { text: "developer_board"; iconSize: 20; color: Appearance.m3colors.m3primary }
                             StyledText {
-                                text: Translation.tr("Graphics & GPU Architecture")
+                                text: Translation.tr("Graphics & GPU Telemetry")
                                 font.bold: true
                                 font.pixelSize: Appearance.font.pixelSize.normal + 1
                                 color: Appearance.m3colors.m3onSurface
@@ -879,7 +936,7 @@ Item {
                             StyledRectangle {
                                 radius: Appearance.rounding.full
                                 color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3primaryContainer : Appearance.m3colors.m3secondaryContainer
-                                implicitWidth: hybridTagRow.implicitWidth + 16
+                                implicitWidth: hybridTagRow.implicitWidth + 14
                                 implicitHeight: 24
                                 RowLayout {
                                     id: hybridTagRow
@@ -887,11 +944,11 @@ Item {
                                     spacing: 4
                                     MaterialSymbol {
                                         text: DisplayService.gpuInfo.isHybrid ? "sync_alt" : "verified"
-                                        iconSize: 14
+                                        iconSize: 13
                                         color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
                                     }
                                     StyledText {
-                                        text: DisplayService.gpuInfo.isHybrid ? Translation.tr("PRIME Hybrid Active") : Translation.tr("Unified Graphics")
+                                        text: DisplayService.gpuInfo.isHybrid ? Translation.tr("PRIME Hybrid") : Translation.tr("Unified KMS")
                                         font.pixelSize: Appearance.font.pixelSize.smaller
                                         font.bold: true
                                         color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
@@ -900,15 +957,15 @@ Item {
                             }
                         }
 
-                        // Sub-cards for iGPU and dGPU (or unified GPU)
+                        // Compact sub-row for iGPU and dGPU
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: 12
+                            spacing: 10
 
-                            // 1. Primary Display Controller Box
+                            // 1. Primary Display Controller
                             StyledRectangle {
                                 Layout.fillWidth: true
-                                implicitHeight: igpuBoxCol.implicitHeight + 20
+                                implicitHeight: igpuBoxCol.implicitHeight + 16
                                 radius: Appearance.rounding.small
                                 color: Appearance.m3colors.m3surfaceContainerHigh
                                 border.width: 1
@@ -917,67 +974,42 @@ Item {
                                 ColumnLayout {
                                     id: igpuBoxCol
                                     anchors.fill: parent
-                                    anchors.margins: 10
-                                    spacing: 6
+                                    anchors.margins: 8
+                                    spacing: 4
 
                                     RowLayout {
-                                        spacing: 6
-                                        MaterialSymbol { text: "desktop_windows"; iconSize: 18; color: Appearance.m3colors.m3primary }
+                                        spacing: 4
+                                        MaterialSymbol { text: "desktop_windows"; iconSize: 15; color: Appearance.m3colors.m3primary }
                                         StyledText {
-                                            text: (DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].name : (DisplayService.gpuInfo.primaryRenderer || Translation.tr("Primary Graphics"))
+                                            text: Translation.tr("Display Master (KMS)")
                                             font.bold: true
-                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3onSurface
-                                            elide: Text.ElideRight
-                                            Layout.fillWidth: true
-                                        }
-                                        StyledRectangle {
-                                            radius: Appearance.rounding.full
-                                            color: Appearance.m3colors.m3surfaceVariant
-                                            implicitWidth: igpuBadgeText.implicitWidth + 10
-                                            implicitHeight: 18
-                                            StyledText {
-                                                id: igpuBadgeText
-                                                anchors.centerIn: parent
-                                                text: DisplayService.gpuInfo.isHybrid ? Translation.tr("Display Master") : Translation.tr("Unified KMS")
-                                                font.pixelSize: 10
-                                                font.bold: true
-                                                color: Appearance.m3colors.m3onSurfaceVariant
-                                            }
                                         }
                                     }
-
                                     StyledText {
-                                        text: DisplayService.gpuInfo.isHybrid ?
-                                            Translation.tr("Controls scanout for connected displays (%1). Low-power desktop compositing.").arg(Object.keys(DisplayService.gpuInfo.connectors || {}).join(", ")) :
-                                            Translation.tr("High-efficiency GPU architecture directly powering all connected monitors and desktop composition.")
-                                        wrapMode: Text.Wrap
+                                        text: (DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].name : (DisplayService.gpuInfo.primaryRenderer || Translation.tr("Intel Graphics"))
+                                        font.bold: true
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        color: Appearance.m3colors.m3primary
+                                        elide: Text.ElideRight
                                         Layout.fillWidth: true
-                                        font.pixelSize: Appearance.font.pixelSize.smaller
-                                        color: Appearance.m3colors.m3onSurfaceVariant
                                     }
-
-                                    RowLayout {
-                                        spacing: 12
-                                        StyledText {
-                                            text: `Driver: ${(DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].driver : "KMS"}`
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3outline
-                                        }
-                                        StyledText {
-                                            text: `PCI: ${(DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].pci : "0000:00:02.0"}`
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3outline
-                                        }
+                                    StyledText {
+                                        text: `Driver: ${(DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].driver : "i915"} • Active Scanout`
+                                        font.pixelSize: 10
+                                        color: Appearance.m3colors.m3outline
+                                        elide: Text.ElideRight
+                                        Layout.fillWidth: true
                                     }
                                 }
                             }
 
-                            // 2. Secondary / Dedicated dGPU Box (Visible if dGPU present)
+                            // 2. Dedicated 3D Accelerator
                             StyledRectangle {
                                 visible: DisplayService.gpuInfo.hasDgpu
                                 Layout.fillWidth: true
-                                implicitHeight: dgpuBoxCol.implicitHeight + 20
+                                implicitHeight: dgpuBoxCol.implicitHeight + 16
                                 radius: Appearance.rounding.small
                                 color: Appearance.m3colors.m3surfaceContainerHigh
                                 border.width: 1
@@ -986,159 +1018,109 @@ Item {
                                 ColumnLayout {
                                     id: dgpuBoxCol
                                     anchors.fill: parent
-                                    anchors.margins: 10
-                                    spacing: 6
+                                    anchors.margins: 8
+                                    spacing: 4
 
                                     RowLayout {
-                                        spacing: 6
-                                        MaterialSymbol { text: "rocket_launch"; iconSize: 18; color: Appearance.m3colors.m3secondary }
+                                        spacing: 4
+                                        MaterialSymbol { text: "rocket_launch"; iconSize: 15; color: Appearance.m3colors.m3secondary }
                                         StyledText {
-                                            text: DisplayService.gpuInfo.dgpu ? DisplayService.gpuInfo.dgpu.name : Translation.tr("Dedicated GPU")
+                                            text: Translation.tr("3D Acceleration (Offload)")
                                             font.bold: true
-                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3onSurface
-                                            elide: Text.ElideRight
-                                            Layout.fillWidth: true
-                                        }
-                                        StyledRectangle {
-                                            radius: Appearance.rounding.full
-                                            color: Appearance.m3colors.m3secondaryContainer
-                                            implicitWidth: dgpuBadgeText.implicitWidth + 10
-                                            implicitHeight: 18
-                                            StyledText {
-                                                id: dgpuBadgeText
-                                                anchors.centerIn: parent
-                                                text: Translation.tr("3D Offload")
-                                                font.pixelSize: 10
-                                                font.bold: true
-                                                color: Appearance.m3colors.m3onSecondaryContainer
-                                            }
                                         }
                                     }
-
+                                    StyledText {
+                                        text: DisplayService.gpuInfo.dgpu ? DisplayService.gpuInfo.dgpu.name : Translation.tr("Dedicated GPU")
+                                        font.bold: true
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        color: Appearance.m3colors.m3secondary
+                                        elide: Text.ElideRight
+                                        Layout.fillWidth: true
+                                    }
                                     StyledText {
                                         text: {
                                             if (!DisplayService.gpuInfo.dgpu) return "";
-                                            let vram = (DisplayService.gpuInfo.dgpu.vramUsed && DisplayService.gpuInfo.dgpu.vramTotal) ?
-                                                `${DisplayService.gpuInfo.dgpu.vramUsed} / ${DisplayService.gpuInfo.dgpu.vramTotal}` : Translation.tr("Dedicated VRAM");
-                                            let util = DisplayService.gpuInfo.dgpu.utilization ? ` (${DisplayService.gpuInfo.dgpu.utilization} util)` : "";
-                                            return Translation.tr("Dedicated accelerator for 3D gaming, CAD, and AI. VRAM: %1%2").arg(vram).arg(util);
+                                            let parts = [];
+                                            if (DisplayService.gpuInfo.dgpu.vramUsed && DisplayService.gpuInfo.dgpu.vramTotal) {
+                                                parts.push(`VRAM: ${DisplayService.gpuInfo.dgpu.vramUsed} / ${DisplayService.gpuInfo.dgpu.vramTotal}`);
+                                            }
+                                            if (DisplayService.gpuInfo.dgpu.temp) parts.push(DisplayService.gpuInfo.dgpu.temp);
+                                            if (DisplayService.gpuInfo.dgpu.power) parts.push(DisplayService.gpuInfo.dgpu.power);
+                                            return parts.length > 0 ? parts.join(" • ") : "Ready for Offload";
                                         }
-                                        wrapMode: Text.Wrap
+                                        font.pixelSize: 10
+                                        color: Appearance.m3colors.m3outline
+                                        elide: Text.ElideRight
                                         Layout.fillWidth: true
-                                        font.pixelSize: Appearance.font.pixelSize.smaller
-                                        color: Appearance.m3colors.m3onSurfaceVariant
-                                    }
-
-                                    RowLayout {
-                                        spacing: 12
-                                        StyledText {
-                                            visible: !!DisplayService.gpuInfo.dgpu?.temp
-                                            text: `Temp: ${DisplayService.gpuInfo.dgpu?.temp || ""}`
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3outline
-                                        }
-                                        StyledText {
-                                            visible: !!DisplayService.gpuInfo.dgpu?.power
-                                            text: `Power: ${DisplayService.gpuInfo.dgpu?.power || ""}`
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3outline
-                                        }
-                                        StyledText {
-                                            text: `Driver: ${DisplayService.gpuInfo.dgpu?.driverVersion || DisplayService.gpuInfo.dgpu?.driver || "active"}`
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3outline
-                                        }
                                     }
                                 }
                             }
                         }
 
-                        // Explanatory Banner: Multi-GPU Offloading vs Unified
+                        // Sleek single-line 3D Offload Runner
                         StyledRectangle {
+                            visible: DisplayService.gpuInfo.isHybrid
                             Layout.fillWidth: true
-                            implicitHeight: bannerCol.implicitHeight + 16
+                            implicitHeight: 34
                             radius: Appearance.rounding.small
                             color: Appearance.m3colors.m3surfaceVariant
                             border.width: 1
                             border.color: Appearance.m3colors.m3outlineVariant
 
-                            ColumnLayout {
-                                id: bannerCol
+                            RowLayout {
                                 anchors.fill: parent
-                                anchors.margins: 10
-                                spacing: 6
+                                anchors.leftMargin: 10
+                                anchors.rightMargin: 6
+                                spacing: 8
 
-                                RowLayout {
-                                    spacing: 6
-                                    MaterialSymbol { text: "info"; iconSize: 16; color: Appearance.m3colors.m3primary }
-                                    StyledText {
-                                        text: DisplayService.gpuInfo.isHybrid ?
-                                            Translation.tr("Multi-GPU Architecture & Dynamic Application Offloading") :
-                                            Translation.tr("Direct Kernel Mode Setting (KMS) & Display Hotplug")
-                                        font.bold: true
-                                        font.pixelSize: Appearance.font.pixelSize.small
-                                        color: Appearance.m3colors.m3onSurface
-                                    }
-                                }
-
+                                MaterialSymbol { text: "terminal"; iconSize: 15; color: Appearance.m3colors.m3primary }
                                 StyledText {
-                                    Layout.fillWidth: true
-                                    text: DisplayService.gpuInfo.isHybrid ?
-                                        Translation.tr("Motherboard video ports are physically wired to the primary display controller. To run any 3D game, emulator, or heavy rendering app on the dedicated GPU with full acceleration, launch it with:") :
-                                        Translation.tr("All connected monitors run directly on hardware scanout with full Wayland hardware acceleration. Simply connect any HDMI, DisplayPort, or USB-C monitor and arrange it dynamically above.")
+                                    text: Translation.tr("Run 3D App:")
                                     font.pixelSize: Appearance.font.pixelSize.smaller
-                                    wrapMode: Text.Wrap
                                     color: Appearance.m3colors.m3onSurfaceVariant
                                 }
 
-                                RowLayout {
-                                    visible: DisplayService.gpuInfo.isHybrid
-                                    spacing: 8
-                                    StyledRectangle {
-                                        radius: 6
-                                        color: Appearance.m3colors.m3surfaceContainerHighest
-                                        implicitWidth: codeText.implicitWidth + 16
-                                        implicitHeight: 26
-                                        StyledText {
-                                            id: codeText
-                                            anchors.centerIn: parent
-                                            text: DisplayService.gpuInfo.offloadCommand || "prime-run <command>"
-                                            font.bold: true
-                                            font.family: "monospace"
-                                            font.pixelSize: Appearance.font.pixelSize.smaller
-                                            color: Appearance.m3colors.m3primary
-                                        }
-                                    }
-
-                                    RippleButton {
-                                        implicitWidth: copyRow.implicitWidth + 14
-                                        implicitHeight: 26
-                                        buttonRadius: Appearance.rounding.full
-                                        colBackground: Appearance.m3colors.m3secondaryContainer
-                                        onClicked: {
-                                            Quickshell.clipboardText = DisplayService.gpuInfo.offloadPrefix || "prime-run ";
-                                        }
-                                        RowLayout {
-                                            id: copyRow
-                                            anchors.centerIn: parent
-                                            spacing: 4
-                                            MaterialSymbol { text: "content_copy"; iconSize: 14; color: Appearance.m3colors.m3onSecondaryContainer }
-                                            StyledText {
-                                                text: Translation.tr("Copy Prefix")
-                                                font.pixelSize: Appearance.font.pixelSize.smaller
-                                                color: Appearance.m3colors.m3onSecondaryContainer
-                                            }
-                                        }
-                                        StyledToolTip { text: Translation.tr("Copy command prefix to clipboard") }
-                                    }
-
+                                StyledRectangle {
+                                    radius: 4
+                                    color: Appearance.m3colors.m3surfaceContainerHighest
+                                    implicitWidth: codeText.implicitWidth + 12
+                                    implicitHeight: 22
                                     StyledText {
-                                        Layout.fillWidth: true
-                                        text: Translation.tr("e.g. %1blender, %1steam").arg(DisplayService.gpuInfo.offloadPrefix || "prime-run ")
-                                        font.pixelSize: Appearance.font.pixelSize.smaller
-                                        color: Appearance.m3colors.m3outline
+                                        id: codeText
+                                        anchors.centerIn: parent
+                                        text: DisplayService.gpuInfo.offloadCommand || "prime-run <command>"
+                                        font.bold: true
+                                        font.family: "monospace"
+                                        font.pixelSize: 11
+                                        color: Appearance.m3colors.m3primary
                                     }
+                                }
+
+                                Item { Layout.fillWidth: true }
+
+                                RippleButton {
+                                    implicitWidth: copyRow.implicitWidth + 14
+                                    implicitHeight: 24
+                                    buttonRadius: Appearance.rounding.full
+                                    colBackground: Appearance.m3colors.m3secondaryContainer
+                                    onClicked: {
+                                        Quickshell.clipboardText = DisplayService.gpuInfo.offloadPrefix || "prime-run ";
+                                    }
+                                    RowLayout {
+                                        id: copyRow
+                                        anchors.centerIn: parent
+                                        spacing: 4
+                                        MaterialSymbol { text: "content_copy"; iconSize: 12; color: Appearance.m3colors.m3onSecondaryContainer }
+                                        StyledText {
+                                            text: Translation.tr("Copy")
+                                            font.pixelSize: 10
+                                            font.bold: true
+                                            color: Appearance.m3colors.m3onSecondaryContainer
+                                        }
+                                    }
+                                    StyledToolTip { text: Translation.tr("Copy prefix to clipboard") }
                                 }
                             }
                         }
@@ -1148,17 +1130,18 @@ Item {
                 // CARD 3: Resolution & Refresh Rate
                 StyledRectangle {
                     Layout.fillWidth: true
-                    implicitHeight: card2Layout.implicitHeight + 28
+                    Layout.fillHeight: true
+                    implicitHeight: card3Layout.implicitHeight + 32
                     radius: Appearance.rounding.normal
                     color: Appearance.m3colors.m3surfaceContainer
                     border.width: 1
                     border.color: Appearance.m3colors.m3outlineVariant
 
                     ColumnLayout {
-                        id: card2Layout
+                        id: card3Layout
                         anchors.fill: parent
-                        anchors.margins: 14
-                        spacing: 10
+                        anchors.margins: 16
+                        spacing: 12
 
                         RowLayout {
                             spacing: 8
@@ -1236,26 +1219,27 @@ Item {
                     }
                 }
 
-                // CARD 3: Scaling & Orientation
+                // CARD 4: Scale & Spatial Layout
                 StyledRectangle {
                     Layout.fillWidth: true
-                    implicitHeight: card3Layout.implicitHeight + 28
+                    Layout.fillHeight: true
+                    implicitHeight: card4Layout.implicitHeight + 32
                     radius: Appearance.rounding.normal
                     color: Appearance.m3colors.m3surfaceContainer
                     border.width: 1
                     border.color: Appearance.m3colors.m3outlineVariant
 
                     ColumnLayout {
-                        id: card3Layout
+                        id: card4Layout
                         anchors.fill: parent
-                        anchors.margins: 14
-                        spacing: 10
+                        anchors.margins: 16
+                        spacing: 12
 
                         RowLayout {
                             spacing: 8
                             MaterialSymbol { text: "aspect_ratio"; iconSize: 20; color: Appearance.m3colors.m3primary }
                             StyledText {
-                                text: Translation.tr("Scaling & Orientation")
+                                text: Translation.tr("Scale & Spatial Layout")
                                 font.bold: true
                                 font.pixelSize: Appearance.font.pixelSize.normal + 1
                                 color: Appearance.m3colors.m3onSurface
@@ -1264,6 +1248,7 @@ Item {
 
                         Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.m3colors.m3outlineVariant }
 
+                        // Interface Scale Row
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 4
@@ -1308,119 +1293,35 @@ Item {
                             }
                         }
 
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 4
-
-                            StyledText { text: Translation.tr("Orientation / Rotation"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
-
-                            StyledComboBox {
-                                Layout.fillWidth: true
-                                model: [
-                                    Translation.tr("Standard Landscape (0°)"),
-                                    Translation.tr("Portrait Left (90°)"),
-                                    Translation.tr("Inverted Landscape (180°)"),
-                                    Translation.tr("Portrait Right (270°)")
-                                ]
-                                currentIndex: root.disp ? Math.min(root.disp.transform, 3) : 0
-                                onActivated: (index) => {
-                                    DisplayService.updateDisplayProp(root.disp.name, "transform", index);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // CARD 4: Position Coordinates & Advanced Sync
-                StyledRectangle {
-                    Layout.fillWidth: true
-                    implicitHeight: card4Layout.implicitHeight + 28
-                    radius: Appearance.rounding.normal
-                    color: Appearance.m3colors.m3surfaceContainer
-                    border.width: 1
-                    border.color: Appearance.m3colors.m3outlineVariant
-
-                    ColumnLayout {
-                        id: card4Layout
-                        anchors.fill: parent
-                        anchors.margins: 14
-                        spacing: 10
-
-                        RowLayout {
-                            spacing: 8
-                            MaterialSymbol { text: "tune"; iconSize: 20; color: Appearance.m3colors.m3primary }
-                            StyledText {
-                                text: Translation.tr("Position & Advanced Sync")
-                                font.bold: true
-                                font.pixelSize: Appearance.font.pixelSize.normal + 1
-                                color: Appearance.m3colors.m3onSurface
-                            }
-                        }
-
-                        Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.m3colors.m3outlineVariant }
-
+                        // Orientation & Mirroring in 2 columns
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 12
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 2
-                                StyledText { text: Translation.tr("Position X (px)"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
-                                StyledSpinBox {
-                                    Layout.fillWidth: true
-                                    from: 0
-                                    to: 15000
-                                    stepSize: 50
-                                    value: root.disp ? Math.round(root.disp.x) : 0
-                                    onValueModified: {
-                                        DisplayService.setPosition(root.disp.name, value, root.disp.y);
-                                    }
-                                }
-                            }
+                                spacing: 4
 
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 2
-                                StyledText { text: Translation.tr("Position Y (px)"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
-                                StyledSpinBox {
-                                    Layout.fillWidth: true
-                                    from: 0
-                                    to: 15000
-                                    stepSize: 50
-                                    value: root.disp ? Math.round(root.disp.y) : 0
-                                    onValueModified: {
-                                        DisplayService.setPosition(root.disp.name, root.disp.x, value);
-                                    }
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 12
-
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 2
-                                StyledText { text: Translation.tr("VRR / Adaptive Sync"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
+                                StyledText { text: Translation.tr("Orientation"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
                                 StyledComboBox {
                                     Layout.fillWidth: true
                                     model: [
-                                        Translation.tr("Off"),
-                                        Translation.tr("On (Always)"),
-                                        Translation.tr("Fullscreen Only")
+                                        Translation.tr("Landscape (0°)"),
+                                        Translation.tr("Portrait Left (90°)"),
+                                        Translation.tr("Inverted (180°)"),
+                                        Translation.tr("Portrait Right (270°)")
                                     ]
-                                    currentIndex: root.disp ? root.disp.vrr : 0
+                                    currentIndex: root.disp ? Math.min(root.disp.transform, 3) : 0
                                     onActivated: (index) => {
-                                        DisplayService.updateDisplayProp(root.disp.name, "vrr", index);
+                                        DisplayService.updateDisplayProp(root.disp.name, "transform", index);
                                     }
                                 }
                             }
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 2
+                                spacing: 4
+
                                 StyledText { text: Translation.tr("Mirror Display"); font.pixelSize: Appearance.font.pixelSize.small; color: Appearance.m3colors.m3onSurfaceVariant }
                                 StyledComboBox {
                                     Layout.fillWidth: true
@@ -1453,6 +1354,56 @@ Item {
                                 }
                             }
                         }
+
+                        // Coordinates & VRR in 3 columns
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 10
+
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+                                StyledText { text: Translation.tr("Offset X"); font.pixelSize: Appearance.font.pixelSize.smaller; color: Appearance.m3colors.m3onSurfaceVariant }
+                                StyledSpinBox {
+                                    Layout.fillWidth: true
+                                    from: 0
+                                    to: 15000
+                                    stepSize: 50
+                                    value: root.disp ? Math.round(root.disp.x) : 0
+                                    onValueModified: DisplayService.setPosition(root.disp.name, value, root.disp.y)
+                                }
+                            }
+
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+                                StyledText { text: Translation.tr("Offset Y"); font.pixelSize: Appearance.font.pixelSize.smaller; color: Appearance.m3colors.m3onSurfaceVariant }
+                                StyledSpinBox {
+                                    Layout.fillWidth: true
+                                    from: 0
+                                    to: 15000
+                                    stepSize: 50
+                                    value: root.disp ? Math.round(root.disp.y) : 0
+                                    onValueModified: DisplayService.setPosition(root.disp.name, root.disp.x, value)
+                                }
+                            }
+
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+                                StyledText { text: Translation.tr("Adaptive Sync"); font.pixelSize: Appearance.font.pixelSize.smaller; color: Appearance.m3colors.m3onSurfaceVariant }
+                                StyledComboBox {
+                                    Layout.fillWidth: true
+                                    model: [
+                                        Translation.tr("Off"),
+                                        Translation.tr("Always"),
+                                        Translation.tr("Fullscreen")
+                                    ]
+                                    currentIndex: root.disp ? root.disp.vrr : 0
+                                    onActivated: (index) => DisplayService.updateDisplayProp(root.disp.name, "vrr", index)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1460,7 +1411,7 @@ Item {
             // ---------------- Action Bar ----------------
             StyledRectangle {
                 Layout.fillWidth: true
-                implicitHeight: 64
+                implicitHeight: 56
                 radius: Appearance.rounding.normal
                 color: Appearance.m3colors.m3surfaceContainerLow
                 border.width: 1
@@ -1474,8 +1425,8 @@ Item {
 
                     RippleButton {
                         implicitWidth: resetRow.implicitWidth + 24
-                        implicitHeight: 40
-                        padding: 14
+                        implicitHeight: 36
+                        padding: 12
                         buttonRadius: Appearance.rounding.full
                         colBackground: Appearance.m3colors.m3surfaceContainerHigh
                         onClicked: DisplayService.resetDefaults()
@@ -1499,8 +1450,8 @@ Item {
                     RippleButton {
                         visible: DisplayService.dirty
                         implicitWidth: discardRow.implicitWidth + 24
-                        implicitHeight: 40
-                        padding: 14
+                        implicitHeight: 36
+                        padding: 12
                         buttonRadius: Appearance.rounding.full
                         colBackground: Appearance.m3colors.m3surfaceContainerHighest
                         onClicked: DisplayService.revert()
@@ -1519,9 +1470,9 @@ Item {
                     }
 
                     RippleButton {
-                        implicitWidth: applyRow.implicitWidth + 28
-                        implicitHeight: 40
-                        padding: 16
+                        implicitWidth: applyRow.implicitWidth + 24
+                        implicitHeight: 36
+                        padding: 12
                         buttonRadius: Appearance.rounding.full
                         colBackground: DisplayService.dirty ? Appearance.m3colors.m3primary : Appearance.m3colors.m3surfaceContainerHigh
                         enabled: DisplayService.dirty
@@ -1548,9 +1499,9 @@ Item {
                     }
 
                     RippleButton {
-                        implicitWidth: saveRow.implicitWidth + 28
-                        implicitHeight: 40
-                        padding: 16
+                        implicitWidth: saveRow.implicitWidth + 24
+                        implicitHeight: 36
+                        padding: 12
                         buttonRadius: Appearance.rounding.full
                         colBackground: root.showSavedFeedback ? Appearance.m3colors.m3primaryContainer : Appearance.m3colors.m3secondaryContainer
                         onClicked: {
