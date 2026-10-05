@@ -81,7 +81,20 @@ Item {
     readonly property string currentResStr: disp ? `${disp.width}x${disp.height}` : "1920x1080"
     readonly property var currentRates: parsedModes.rateMap[currentResStr] || [60.0]
 
-    // ================= 2D Canvas Geometry & Snapping State =================
+    // ================= 2D Canvas Geometry & Dragging State =================
+    property real canvasWidth: 800
+    property real canvasHeight: 340
+    property string activeDraggingDisplay: ""
+    property real dragStartX: 0
+    property real dragStartY: 0
+    property real dragItemStartX: 0
+    property real dragItemStartY: 0
+    property real frozenOriginX: 0
+    property real frozenOriginY: 0
+    property real frozenScaleFactor: 1.0
+    property real activeDisplayVirtX: 0
+    property real activeDisplayVirtY: 0
+
     property real snapGuideX: -1
     property real snapGuideY: -1
     property bool showSnapGuideX: false
@@ -115,8 +128,8 @@ Item {
     }
 
     readonly property real canvasMargin: 30
-    readonly property real availCanvasWidth: Math.max(canvasArea.width - canvasMargin * 2, 200)
-    readonly property real availCanvasHeight: Math.max(canvasArea.height - canvasMargin * 2, 150)
+    readonly property real availCanvasWidth: Math.max(canvasWidth - canvasMargin * 2, 200)
+    readonly property real availCanvasHeight: Math.max(canvasHeight - canvasMargin * 2, 150)
     readonly property real scaleFactor: {
         let paddingW = boundingBox.width + 400;
         let paddingH = boundingBox.height + 400;
@@ -125,8 +138,8 @@ Item {
         return Math.min(sx, sy);
     }
 
-    readonly property real originX: (canvasArea.width - boundingBox.width * scaleFactor) / 2 - boundingBox.minX * scaleFactor
-    readonly property real originY: (canvasArea.height - boundingBox.height * scaleFactor) / 2 - boundingBox.minY * scaleFactor
+    readonly property real originX: (canvasWidth - boundingBox.width * scaleFactor) / 2 - boundingBox.minX * scaleFactor
+    readonly property real originY: (canvasHeight - boundingBox.height * scaleFactor) / 2 - boundingBox.minY * scaleFactor
 
     // ================= Main Content Page =================
     ContentPage {
@@ -233,6 +246,17 @@ Item {
                 radius: Appearance.rounding.normal
                 color: Appearance.m3colors.m3surfaceContainerLow
                 clip: true
+
+                onWidthChanged: {
+                    if (width > 0) root.canvasWidth = width;
+                }
+                onHeightChanged: {
+                    if (height > 0) root.canvasHeight = height;
+                }
+                Component.onCompleted: {
+                    if (width > 0) root.canvasWidth = width;
+                    if (height > 0) root.canvasHeight = height;
+                }
 
                 // Subtle Canvas Grid Pattern
                 Canvas {
@@ -346,10 +370,10 @@ Item {
                     visible: root.showSnapGuideX
                     x: root.snapGuideX
                     y: 0
-                    width: 1.5
+                    width: 2
                     height: parent.height
                     color: Appearance.m3colors.m3primary
-                    z: 8
+                    z: 99
                 }
 
                 Rectangle {
@@ -357,9 +381,9 @@ Item {
                     x: 0
                     y: root.snapGuideY
                     width: parent.width
-                    height: 1.5
+                    height: 2
                     color: Appearance.m3colors.m3primary
-                    z: 8
+                    z: 99
                 }
 
                 // Draggable Monitor Cards
@@ -372,147 +396,37 @@ Item {
                         required property int index
 
                         readonly property bool isSelected: DisplayService.selectedDisplayName === modelData.name
+                        readonly property bool isDragging: root.activeDraggingDisplay === modelData.name
                         readonly property bool isDisabled: modelData.disabled
                         readonly property real effW: (modelData.transform === 1 || modelData.transform === 3) ? modelData.height : modelData.width
                         readonly property real effH: (modelData.transform === 1 || modelData.transform === 3) ? modelData.width : modelData.height
                         readonly property real logW: effW / (modelData.scale || 1.0)
                         readonly property real logH: effH / (modelData.scale || 1.0)
 
-                        x: root.originX + modelData.x * root.scaleFactor
-                        y: root.originY + modelData.y * root.scaleFactor
-                        width: Math.max(logW * root.scaleFactor, 90)
-                        height: Math.max(logH * root.scaleFactor, 60)
-                        z: isSelected ? 5 : (dragArea.drag.active ? 6 : 1)
+                        readonly property real currentVirtX: isDragging ? root.activeDisplayVirtX : modelData.x
+                        readonly property real currentVirtY: isDragging ? root.activeDisplayVirtY : modelData.y
+                        readonly property real currentScale: root.activeDraggingDisplay !== "" ? root.frozenScaleFactor : root.scaleFactor
+                        readonly property real currentOriginX: root.activeDraggingDisplay !== "" ? root.frozenOriginX : root.originX
+                        readonly property real currentOriginY: root.activeDraggingDisplay !== "" ? root.frozenOriginY : root.originY
+
+                        x: currentOriginX + currentVirtX * currentScale
+                        y: currentOriginY + currentVirtY * currentScale
+                        width: Math.max(logW * currentScale, 90)
+                        height: Math.max(logH * currentScale, 60)
+                        z: isDragging ? 30 : (isSelected ? 10 : 1)
+                        scale: isDragging ? 1.04 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 100 }
+                        }
 
                         StyledRectangle {
                             anchors.fill: parent
                             radius: Appearance.rounding.small
-                            color: isDisabled ? Appearance.m3colors.m3surfaceVariant : (isSelected ? Appearance.m3colors.m3surfaceContainerHighest : Appearance.m3colors.m3surfaceContainer)
-                            border.width: isSelected ? 2 : 1
-                            border.color: isSelected ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outlineVariant
-                            opacity: isDisabled ? 0.45 : 1.0
-
-                            MouseArea {
-                                id: dragArea
-                                anchors.fill: parent
-                                drag.target: parent
-                                drag.axis: Drag.XAndYAxis
-                                cursorShape: drag.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
-
-                                property real startDragX: 0
-                                property real startDragY: 0
-
-                                onPressed: {
-                                    DisplayService.selectedDisplayName = monitorItem.modelData.name;
-                                    startDragX = monitorItem.x;
-                                    startDragY = monitorItem.y;
-                                }
-
-                                onPositionChanged: (mouse) => {
-                                    if (!drag.active) return;
-
-                                    let targetVirtX = (monitorItem.x - root.originX) / root.scaleFactor;
-                                    let targetVirtY = (monitorItem.y - root.originY) / root.scaleFactor;
-
-                                    let snapThresholdVirt = 45;
-                                    let snappedX = targetVirtX;
-                                    let snappedY = targetVirtY;
-                                    let snapGuideXCanvas = -1;
-                                    let snapGuideYCanvas = -1;
-
-                                    let others = DisplayService.pendingDisplays.filter(d => d.name !== monitorItem.modelData.name && !d.disabled);
-                                    for (let i = 0; i < others.length; i++) {
-                                        let o = others[i];
-                                        let oEffW = (o.transform === 1 || o.transform === 3) ? o.height : o.width;
-                                        let oEffH = (o.transform === 1 || o.transform === 3) ? o.width : o.height;
-                                        let oLogW = oEffW / (o.scale || 1.0);
-                                        let oLogH = oEffH / (o.scale || 1.0);
-
-                                        // Left to Right
-                                        if (Math.abs(targetVirtX - (o.x + oLogW)) < snapThresholdVirt) {
-                                            snappedX = o.x + oLogW;
-                                            snapGuideXCanvas = root.originX + snappedX * root.scaleFactor;
-                                        }
-                                        // Right to Left
-                                        else if (Math.abs((targetVirtX + monitorItem.logW) - o.x) < snapThresholdVirt) {
-                                            snappedX = o.x - monitorItem.logW;
-                                            snapGuideXCanvas = root.originX + o.x * root.scaleFactor;
-                                        }
-                                        // Left to Left
-                                        else if (Math.abs(targetVirtX - o.x) < snapThresholdVirt) {
-                                            snappedX = o.x;
-                                            snapGuideXCanvas = root.originX + o.x * root.scaleFactor;
-                                        }
-                                        // Right to Right
-                                        else if (Math.abs((targetVirtX + monitorItem.logW) - (o.x + oLogW)) < snapThresholdVirt) {
-                                            snappedX = o.x + oLogW - monitorItem.logW;
-                                            snapGuideXCanvas = root.originX + (o.x + oLogW) * root.scaleFactor;
-                                        }
-
-                                        // Top to Bottom
-                                        if (Math.abs(targetVirtY - (o.y + oLogH)) < snapThresholdVirt) {
-                                            snappedY = o.y + oLogH;
-                                            snapGuideYCanvas = root.originY + snappedY * root.scaleFactor;
-                                        }
-                                        // Bottom to Top
-                                        else if (Math.abs((targetVirtY + monitorItem.logH) - o.y) < snapThresholdVirt) {
-                                            snappedY = o.y - monitorItem.logH;
-                                            snapGuideYCanvas = root.originY + o.y * root.scaleFactor;
-                                        }
-                                        // Top to Top
-                                        else if (Math.abs(targetVirtY - o.y) < snapThresholdVirt) {
-                                            snappedY = o.y;
-                                            snapGuideYCanvas = root.originY + o.y * root.scaleFactor;
-                                        }
-                                        // Bottom to Bottom
-                                        else if (Math.abs((targetVirtY + monitorItem.logH) - (o.y + oLogH)) < snapThresholdVirt) {
-                                            snappedY = o.y + oLogH - monitorItem.logH;
-                                            snapGuideYCanvas = root.originY + (o.y + oLogH) * root.scaleFactor;
-                                        }
-                                        // Center align
-                                        else if (Math.abs((targetVirtY + monitorItem.logH / 2) - (o.y + oLogH / 2)) < snapThresholdVirt) {
-                                            snappedY = o.y + (oLogH - monitorItem.logH) / 2;
-                                            snapGuideYCanvas = root.originY + (o.y + oLogH / 2) * root.scaleFactor;
-                                        }
-                                    }
-
-                                    if (snapGuideXCanvas >= 0) {
-                                        root.snapGuideX = snapGuideXCanvas;
-                                        root.showSnapGuideX = true;
-                                    } else {
-                                        root.showSnapGuideX = false;
-                                    }
-
-                                    if (snapGuideYCanvas >= 0) {
-                                        root.snapGuideY = snapGuideYCanvas;
-                                        root.showSnapGuideY = true;
-                                    } else {
-                                        root.showSnapGuideY = false;
-                                    }
-
-                                    DisplayService.setPosition(monitorItem.modelData.name, snappedX, snappedY);
-                                }
-
-                                onReleased: {
-                                    root.showSnapGuideX = false;
-                                    root.showSnapGuideY = false;
-
-                                    let list = DisplayService.pendingDisplays;
-                                    if (list.length > 0) {
-                                        let minX = list[0].x;
-                                        let minY = list[0].y;
-                                        for (let i = 1; i < list.length; i++) {
-                                            if (list[i].x < minX) minX = list[i].x;
-                                            if (list[i].y < minY) minY = list[i].y;
-                                        }
-                                        if (minX !== 0 || minY !== 0) {
-                                            for (let i = 0; i < list.length; i++) {
-                                                DisplayService.setPosition(list[i].name, list[i].x - minX, list[i].y - minY);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            color: monitorItem.isDisabled ? Appearance.m3colors.m3surfaceVariant : (monitorItem.isSelected ? Appearance.m3colors.m3surfaceContainerHighest : Appearance.m3colors.m3surfaceContainer)
+                            border.width: monitorItem.isSelected || monitorItem.isDragging ? 2 : 1
+                            border.color: monitorItem.isSelected || monitorItem.isDragging ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outlineVariant
+                            opacity: monitorItem.isDisabled ? 0.45 : 1.0
 
                             ColumnLayout {
                                 anchors.fill: parent
@@ -580,6 +494,150 @@ Item {
                                         color: Appearance.m3colors.m3onSurfaceVariant
                                     }
                                 }
+                            }
+                        }
+
+                        // Drag & Selection Mouse Area covering the entire card on top of everything
+                        MouseArea {
+                            id: dragArea
+                            anchors.fill: parent
+                            z: 50
+                            preventStealing: true
+                            cursorShape: (root.activeDraggingDisplay === monitorItem.modelData.name) ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+
+                            onPressed: (mouse) => {
+                                DisplayService.selectedDisplayName = monitorItem.modelData.name;
+                                root.frozenOriginX = root.originX;
+                                root.frozenOriginY = root.originY;
+                                root.frozenScaleFactor = root.scaleFactor;
+                                root.activeDraggingDisplay = monitorItem.modelData.name;
+                                root.activeDisplayVirtX = monitorItem.modelData.x;
+                                root.activeDisplayVirtY = monitorItem.modelData.y;
+
+                                let pt = mapToItem(monitorItem.parent, mouse.x, mouse.y);
+                                root.dragStartX = pt.x;
+                                root.dragStartY = pt.y;
+                                root.dragItemStartX = monitorItem.modelData.x;
+                                root.dragItemStartY = monitorItem.modelData.y;
+                            }
+
+                            onPositionChanged: (mouse) => {
+                                if (root.activeDraggingDisplay !== monitorItem.modelData.name) return;
+
+                                let pt = mapToItem(monitorItem.parent, mouse.x, mouse.y);
+                                let pixelDx = pt.x - root.dragStartX;
+                                let pixelDy = pt.y - root.dragStartY;
+
+                                let virtDx = pixelDx / root.frozenScaleFactor;
+                                let virtDy = pixelDy / root.frozenScaleFactor;
+
+                                let targetVirtX = Math.round(root.dragItemStartX + virtDx);
+                                let targetVirtY = Math.round(root.dragItemStartY + virtDy);
+
+                                let snapThresholdVirt = 45 / root.frozenScaleFactor;
+                                let snappedX = targetVirtX;
+                                let snappedY = targetVirtY;
+                                let snapGuideXCanvas = -1;
+                                let snapGuideYCanvas = -1;
+
+                                let myEffW = (monitorItem.modelData.transform === 1 || monitorItem.modelData.transform === 3) ? monitorItem.modelData.height : monitorItem.modelData.width;
+                                let myEffH = (monitorItem.modelData.transform === 1 || monitorItem.modelData.transform === 3) ? monitorItem.modelData.width : monitorItem.modelData.height;
+                                let myLogW = myEffW / (monitorItem.modelData.scale || 1.0);
+                                let myLogH = myEffH / (monitorItem.modelData.scale || 1.0);
+
+                                let others = DisplayService.pendingDisplays.filter(d => d.name !== monitorItem.modelData.name && !d.disabled);
+                                for (let i = 0; i < others.length; i++) {
+                                    let o = others[i];
+                                    let oEffW = (o.transform === 1 || o.transform === 3) ? o.height : o.width;
+                                    let oEffH = (o.transform === 1 || o.transform === 3) ? o.width : o.height;
+                                    let oLogW = oEffW / (o.scale || 1.0);
+                                    let oLogH = oEffH / (o.scale || 1.0);
+
+                                    // X snapping
+                                    if (Math.abs(targetVirtX - (o.x + oLogW)) < snapThresholdVirt) {
+                                        snappedX = o.x + oLogW;
+                                        snapGuideXCanvas = root.frozenOriginX + snappedX * root.frozenScaleFactor;
+                                    } else if (Math.abs((targetVirtX + myLogW) - o.x) < snapThresholdVirt) {
+                                        snappedX = o.x - myLogW;
+                                        snapGuideXCanvas = root.frozenOriginX + o.x * root.frozenScaleFactor;
+                                    } else if (Math.abs(targetVirtX - o.x) < snapThresholdVirt) {
+                                        snappedX = o.x;
+                                        snapGuideXCanvas = root.frozenOriginX + o.x * root.frozenScaleFactor;
+                                    } else if (Math.abs((targetVirtX + myLogW) - (o.x + oLogW)) < snapThresholdVirt) {
+                                        snappedX = o.x + oLogW - myLogW;
+                                        snapGuideXCanvas = root.frozenOriginX + (o.x + oLogW) * root.frozenScaleFactor;
+                                    }
+
+                                    // Y snapping
+                                    if (Math.abs(targetVirtY - (o.y + oLogH)) < snapThresholdVirt) {
+                                        snappedY = o.y + oLogH;
+                                        snapGuideYCanvas = root.frozenOriginY + snappedY * root.frozenScaleFactor;
+                                    } else if (Math.abs((targetVirtY + myLogH) - o.y) < snapThresholdVirt) {
+                                        snappedY = o.y - myLogH;
+                                        snapGuideYCanvas = root.frozenOriginY + o.y * root.frozenScaleFactor;
+                                    } else if (Math.abs(targetVirtY - o.y) < snapThresholdVirt) {
+                                        snappedY = o.y;
+                                        snapGuideYCanvas = root.frozenOriginY + o.y * root.frozenScaleFactor;
+                                    } else if (Math.abs((targetVirtY + myLogH) - (o.y + oLogH)) < snapThresholdVirt) {
+                                        snappedY = o.y + oLogH - myLogH;
+                                        snapGuideYCanvas = root.frozenOriginY + (o.y + oLogH) * root.frozenScaleFactor;
+                                    } else if (Math.abs((targetVirtY + myLogH / 2) - (o.y + oLogH / 2)) < snapThresholdVirt) {
+                                        snappedY = o.y + (oLogH - myLogH) / 2;
+                                        snapGuideYCanvas = root.frozenOriginY + (o.y + oLogH / 2) * root.frozenScaleFactor;
+                                    }
+                                }
+
+                                if (snapGuideXCanvas >= 0) {
+                                    root.snapGuideX = snapGuideXCanvas;
+                                    root.showSnapGuideX = true;
+                                } else {
+                                    root.showSnapGuideX = false;
+                                }
+
+                                if (snapGuideYCanvas >= 0) {
+                                    root.snapGuideY = snapGuideYCanvas;
+                                    root.showSnapGuideY = true;
+                                } else {
+                                    root.showSnapGuideY = false;
+                                }
+
+                                root.activeDisplayVirtX = snappedX;
+                                root.activeDisplayVirtY = snappedY;
+                            }
+
+                            onReleased: {
+                                root.showSnapGuideX = false;
+                                root.showSnapGuideY = false;
+
+                                if (root.activeDraggingDisplay === monitorItem.modelData.name) {
+                                    let finalX = root.activeDisplayVirtX;
+                                    let finalY = root.activeDisplayVirtY;
+                                    DisplayService.setPosition(monitorItem.modelData.name, finalX, finalY);
+
+                                    // Normalize positions so minX and minY are 0
+                                    let list = DisplayService.pendingDisplays;
+                                    if (list.length > 0) {
+                                        let minX = list[0].x;
+                                        let minY = list[0].y;
+                                        for (let i = 1; i < list.length; i++) {
+                                            if (list[i].x < minX) minX = list[i].x;
+                                            if (list[i].y < minY) minY = list[i].y;
+                                        }
+                                        if (minX !== 0 || minY !== 0) {
+                                            for (let i = 0; i < list.length; i++) {
+                                                DisplayService.setPosition(list[i].name, list[i].x - minX, list[i].y - minY);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                root.activeDraggingDisplay = "";
+                            }
+
+                            onCanceled: {
+                                root.showSnapGuideX = false;
+                                root.showSnapGuideY = false;
+                                root.activeDraggingDisplay = "";
                             }
                         }
                     }
