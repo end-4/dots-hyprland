@@ -6,157 +6,142 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Widgets
 import Quickshell.Hyprland
+import Quickshell.Services.Notifications
 import Quickshell.Services.Notifications
 
 Scope {
     id: root
-    property bool shown: false
-    property string appName: ""
-    property string appIconName: ""
-    property string message: ""
 
-    // application.name and media.name identify the app; node.name often doesn't (every Electron
-    // app is "electron") and node.description is a device or codec string. A generic "an app" beats
-    // a name that tells the reader nothing.
-    function displayName(node) {
-        return node?.properties?.["application.name"] ?? node?.properties?.["media.name"] ?? "";
+    property var cards: []
+
+    function symbolFor(kind) {
+        switch (kind) {
+            case "mic": return "mic";
+            case "camera": return "videocam";
+            case "screen": return "screen_share";
+        }
+        return "shield";
     }
 
     function messageFor(kind) {
         switch (kind) {
-            case "mic": return Translation.tr("started to capture microphone");
-            case "camera": return Translation.tr("started to use the camera");
-            case "screen": return Translation.tr("started to share your screen");
+            case "mic": return Translation.tr("Captures audio from the microphone");
+            case "camera": return Translation.tr("Captures video from the camera");
+            case "screen": return Translation.tr("Captures picture of the screen");
         }
         return "";
     }
 
-    function show(node, kind) {
-        if (!node)
-            return;
+    readonly property string unknownApp: Translation.tr("Unknown application")
 
-        root.appName = root.displayName(node);
-        // Only a real icon name goes to NotificationAppIcon: it resolves the path itself, and
-        // guessIcon() can return a name that does not exist, which would leave a broken image.
-        let icon = AppSearch.guessIcon(node.properties["application.icon-name"] ?? "");
-        if (!AppSearch.iconExists(icon))
-            icon = AppSearch.guessIcon(node.properties["node.name"] ?? "");
-        root.appIconName = AppSearch.iconExists(icon) ? icon : "";
-
-        root.message = root.messageFor(kind);
-        root.shownKind = kind;
-        root.shown = true;
-        hideTimer.restart();
-    }
-
-    // Read the raw state, not Privacy.micIndicatorVisible and friends: those are bindings *on*
-    // Privacy.micActive, and a change handler runs before its dependents are re-evaluated, so during
-    // the capture-started signal they still hold the previous value - the popup would read the
-    // indicator as off and hide itself exactly when it should appear.
     function enabled(kind) {
         if (kind === "mic") return Config.options.bar.indicators.mic.showIndicator;
         if (kind === "camera") return Config.options.bar.indicators.camera.showIndicator;
         return Config.options.bar.indicators.screen.showIndicator;
     }
 
-    // Whichever capture is currently on, preferring the most privacy-relevant one. Used for the
-    // "setting was flipped while a capture was running" case, in both directions.
-    function activeKind() {
-        if (Privacy.micActive && root.enabled("mic")) return "mic";
-        if (Privacy.cameraActive && root.enabled("camera")) return "camera";
-        if (Privacy.screenCaptureActive && root.enabled("screen")) return "screen";
-        return null;
+    function iconNameFor(node) {
+        if (!node)
+            return "";
+        let icon = AppSearch.guessIcon(node.properties["application.icon-name"] ?? "");
+        if (!AppSearch.iconExists(icon))
+            icon = AppSearch.guessIcon(node.properties["node.name"] ?? "");
+        return AppSearch.iconExists(icon) ? icon : "";
     }
 
-    function activeNode(kind) {
-        if (kind === "mic") return Privacy.micActiveNodes[0];
-        if (kind === "camera") return Privacy.cameraCaptureNodes[0];
-        return Privacy.screenCaptureNodes[0];
+    function displayName(node, app) {
+        if (!node)
+            return app ?? "";
+        return node.properties?.["application.name"] ?? node.properties?.["media.name"] ?? "";
     }
 
-    function showFor(node, kind) {
-        if (!node || !root.enabled(kind))
+    function put(kind, app, icon) {
+        if (!root.enabled(kind))
             return;
-        root.show(node, kind);
+        const previous = root.cards.find(card => card.kind === kind);
+        const next = root.cards.filter(card => card.kind !== kind);
+        next.push({
+            kind,
+            app: app || previous?.app || "",
+            icon: icon || previous?.icon || ""
+        });
+        root.cards = next;
     }
 
-    function sync() {
-        const kind = root.activeKind();
-        if (kind === null) {
-            hideTimer.stop();
-            root.shown = false;
-            root.shownKind = "";
-            return;
-        }
-        // Only ever raise (or re-label) it here. A setting flip re-evaluates this, and hiding on that
-        // path would let an unrelated re-evaluation kill a notification that is still true - the
-        // capture ending is what hides it, via the timer.
-        if (!root.shown || root.shownKind !== kind)
-            root.show(root.activeNode(kind), kind);
+    function drop(kind) {
+        const next = root.cards.filter(card => card.kind !== kind);
+        if (next.length !== root.cards.length)
+            root.cards = next;
     }
 
-    property string shownKind: ""
-
-    Timer {
-        id: hideTimer
-        interval: Config.options.notifications.timeout
-        repeat: false
-        onTriggered: root.shown = false
+    function dropDisabled() {
+        root.cards = root.cards.filter(card => root.enabled(card.kind));
     }
 
     Connections {
         target: Privacy
         function onMicCaptureStarted(node) {
-            root.showFor(node, "mic");
+            root.put("mic", root.displayName(node, ""), root.iconNameFor(node));
         }
-        function onCameraCaptureStarted(node) {
-            root.showFor(node, "camera");
+        function onCameraCaptureStarted(node, app) {
+            root.put("camera", root.displayName(node, app), root.iconNameFor(node));
         }
         function onScreenCaptureStarted(node) {
-            root.showFor(node, "screen");
+            root.put("screen", root.displayName(node, ""), root.iconNameFor(node));
+        }
+        function onScreenCaptureNodesChanged() {
+            const card = root.cards.find(c => c.kind === "screen");
+            if (!card || card.app !== "")
+                return;
+            const node = Privacy.screenCaptureNodes[0];
+            if (node)
+                root.put("screen", root.displayName(node, ""), root.iconNameFor(node));
+        }
+        function onCameraCaptureNodesChanged() {
+            const card = root.cards.find(c => c.kind === "camera");
+            if (!card || card.app !== "")
+                return;
+            const node = Privacy.cameraCaptureNodes[0];
+            if (node)
+                root.put("camera", root.displayName(node, card.app), root.iconNameFor(node));
         }
     }
 
     Connections {
         target: Config.options.bar.indicators.mic
         function onShowIndicatorChanged() {
-            root.sync();
+            root.dropDisabled();
         }
     }
 
     Connections {
         target: Config.options.bar.indicators.camera
         function onShowIndicatorChanged() {
-            root.sync();
+            root.dropDisabled();
         }
     }
 
     Connections {
         target: Config.options.bar.indicators.screen
         function onShowIndicatorChanged() {
-            root.sync();
+            root.dropDisabled();
         }
     }
 
     PanelWindow {
         id: popupRoot
-        visible: root.shown
+        visible: root.cards.length > 0
 
-        // Тот же монитор, что и у попапов уведомлений, включая принудительный из настроек:
-        // попап приватности обязан быть там же, где уведомления, иначе он просто не виден.
         screen: Quickshell.screens.find(s => Config.options.notifications.forceMonitor.enable
             ? s.name === Config.options.notifications.forceMonitor.name
             : s.name === Hyprland.focusedMonitor?.name) ?? null
 
         WlrLayershell.namespace: "quickshell:privacyCapturePopup"
         WlrLayershell.layer: WlrLayer.Overlay
-        // Без exclusionMode окно ведёт себя как окно уведомлений: по умолчанию Auto, и
-        // композитор сам отодвигает его от панели - сверху и справа. С Ignore окно уезжало под
-        // панель, и приходилось угадывать сдвиг вручную.
         exclusiveZone: 0
 
-        // Окно во всю высоту, прижато к правому верхнему углу - как окно уведомлений.
         anchors {
             top: true
             right: true
@@ -164,78 +149,123 @@ Scope {
         }
 
         color: "transparent"
-        // Только ширина, как у окна уведомлений: с высотой окно перестаёт растягиваться по краям.
         implicitWidth: Appearance.sizes.notificationPopupWidth
 
-        // Пока попапа нет, эта высота нулевая, и уведомления остаются ровно на своём месте.
-        readonly property real publishedHeight: root.shown ? card.height : 0
+        readonly property real publishedHeight: root.cards.length > 0 ? stack.height : 0
         onPublishedHeightChanged: GlobalStates.privacyPopupHeight = popupRoot.publishedHeight
         Component.onDestruction: GlobalStates.privacyPopupHeight = 0
 
         mask: Region {
-            item: card
+            item: stack
         }
 
-        StyledRectangularShadow {
-            target: card
-        }
-
-        Rectangle { // Card, same metrics as a notification card
-            id: card
+        Column {
+            id: stack
             anchors {
                 top: parent.top
                 right: parent.right
-                // Ровно как у списка уведомлений, без ручных поправок на положение панели.
-                topMargin: 4
                 rightMargin: 4
+                topMargin: 4
             }
-            property real padding: 10
-            color: Appearance.colors.colBackgroundSurfaceContainer
-            radius: Appearance.rounding.normal
-            clip: true
-            // Ширина ровно как у карточки уведомления: иначе рядом с ней стопка выглядит
-            // разнокалиберной.
-            implicitWidth: popupRoot.width - Appearance.sizes.elevationMargin * 2
-            implicitHeight: row.implicitHeight + padding * 2
+            spacing: 8
 
-            RowLayout {
-                id: row
-                // Прижат к краям на ширину карточки, как в NotificationGroup: центрирование
-                // сдвигало бы текст относительно уведомлений ступенькой вбок.
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                    margins: card.padding
-                }
-                spacing: 10
+            Repeater {
+                id: repeater
+                model: root.cards
 
-                NotificationAppIcon {
-                    Layout.alignment: Qt.AlignTop
-                    Layout.fillWidth: false
-                    appIcon: root.appIconName
-                    summary: root.appName
-                    urgency: NotificationUrgency.Critical
-                }
+                delegate: Item {
+                    id: delegate
+                    required property var modelData
+                    required property int index
 
-                ColumnLayout {
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    spacing: 0
+                    readonly property string kind: modelData.kind
+                    readonly property string app: modelData.app
+                    readonly property string icon: modelData.icon
 
-                    StyledText {
-                        Layout.fillWidth: true
-                        elide: Text.ElideRight
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.colors.colOnLayer2
-                        text: root.appName !== "" ? root.appName : Translation.tr("An app")
+                    implicitWidth: card.implicitWidth
+                    implicitHeight: card.implicitHeight
+
+                    property bool hovered: false
+
+                    Timer {
+                        id: cardTimer
+                        interval: Config.options.notifications.timeout
+                        repeat: false
+                        running: !delegate.hovered
+                        onTriggered: root.drop(delegate.kind)
                     }
-                    StyledText {
-                        Layout.fillWidth: true
-                        elide: Text.ElideRight
-                        font.pixelSize: Appearance.font.pixelSize.small
-                        color: Appearance.colors.colSubtext
-                        text: root.message
+
+                    MouseArea {
+                        anchors.fill: card
+                        hoverEnabled: true
+                        acceptedButtons: Qt.LeftButton
+                        onContainsMouseChanged: delegate.hovered = containsMouse
+                        onClicked: root.drop(delegate.kind)
+                    }
+
+                    StyledRectangularShadow {
+                        target: card
+                    }
+
+                    Rectangle {
+                        id: card
+                        property real padding: 10
+                        color: Appearance.colors.colBackgroundSurfaceContainer
+                        radius: Appearance.rounding.normal
+                        clip: true
+                        implicitWidth: popupRoot.width - Appearance.sizes.elevationMargin * 2
+                        implicitHeight: row.implicitHeight + padding * 2
+
+                        RowLayout {
+                            id: row
+                            anchors {
+                                top: parent.top
+                                left: parent.left
+                                right: parent.right
+                                bottom: parent.bottom
+                                margins: card.padding
+                            }
+                            spacing: 10
+
+                            NotificationAppIcon {
+                                Layout.alignment: Qt.AlignTop
+                                Layout.fillWidth: false
+                                summary: ""
+                                urgency: NotificationUrgency.Critical
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 0
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+
+                                    IconImage {
+                                        visible: delegate.icon !== ""
+                                        Layout.preferredWidth: 18
+                                        Layout.preferredHeight: 18
+                                        Layout.alignment: Qt.AlignVCenter
+                                        asynchronous: true
+                                        source: Quickshell.iconPath(delegate.icon, "image-missing")
+                                    }
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        color: Appearance.colors.colOnLayer2
+                                        text: delegate.app !== "" ? delegate.app : root.unknownApp
+                                    }
+                                }
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                    text: root.messageFor(delegate.kind)
+                                }
+                            }
+                        }
                     }
                 }
             }

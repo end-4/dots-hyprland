@@ -50,6 +50,17 @@ ContentPage {
                 }
             }
         }
+
+        ConfigRow {
+            ConfigSwitch {
+                buttonIcon: "visibility"
+                text: Translation.tr("Also detect apps that open the camera directly")
+                checked: Config.options.bar.indicators.camera.watchDevices
+                onCheckedChanged: {
+                    Config.options.bar.indicators.camera.watchDevices = checked;
+                }
+            }
+        }
     }
 
     ContentSection {

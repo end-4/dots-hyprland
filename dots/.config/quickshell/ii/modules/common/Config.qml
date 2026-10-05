@@ -283,6 +283,7 @@ Singleton {
                     }
                     property JsonObject camera: JsonObject {
                         property bool showIndicator: false
+                        property bool watchDevices: false
                     }
                     property JsonObject screen: JsonObject {
                         property bool showIndicator: false

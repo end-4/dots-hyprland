@@ -756,5 +756,10 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Captures audio from the microphone": "Получает звук с микрофона",
+  "Captures video from the camera": "Получает изображение с камеры",
+  "Captures picture of the screen": "Получает изображение с экрана",
+  "Unknown application": "Неизвестное приложение",
+  "Also detect apps that open the camera directly": "Также детектить приложения, которые открывают камеру напрямую"
 }

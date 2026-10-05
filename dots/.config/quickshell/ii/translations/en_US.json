@@ -614,10 +614,11 @@
   "Unpin": "Unpin",
   "Privacy": "Privacy",
   "Show a notification and an icon in the bar when an app starts using:": "Show a notification and an icon in the bar when an app starts using:",
-  "An app": "An app",
-  "started to capture microphone": "started to capture microphone",
-  "started to use the camera": "started to use the camera",
-  "started to share your screen": "started to share your screen",
   "Camera": "Camera",
-  "Screen recording": "Screen recording"
+  "Screen recording": "Screen recording",
+  "Captures audio from the microphone": "Captures audio from the microphone",
+  "Captures video from the camera": "Captures video from the camera",
+  "Captures picture of the screen": "Captures picture of the screen",
+  "Unknown application": "Unknown application",
+  "Also detect apps that open the camera directly": "Also detect apps that open the camera directly"
 }

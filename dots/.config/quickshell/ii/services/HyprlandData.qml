@@ -22,6 +22,28 @@ Singleton {
     property var monitors: []
     property var layers: ({})
 
+    property bool screencastActive: false
+    property string screencastSource: ""
+
+    Timer {
+        id: screencastDebounce
+        interval: 500
+        repeat: false
+        onTriggered: {
+            root.screencastActive = false;
+            root.screencastSource = "";
+        }
+    }
+
+    function onScreencast(data) {
+        const [state, , source] = String(data).split(",");
+        if (state !== "1")
+            return;
+        root.screencastSource = source ?? "";
+        root.screencastActive = true;
+        screencastDebounce.restart();
+    }
+
     // Convenient stuff
 
     function toplevelsForWorkspace(workspace) {
@@ -88,7 +110,11 @@ Singleton {
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
-            if (["openlayer", "closelayer", "screencast"].includes(event.name)) return;
+            if (event.name === "screencast" || event.name === "screencastv2") {
+                root.onScreencast(event.data);
+                return;
+            }
+            if (["openlayer", "closelayer"].includes(event.name)) return;
             updateAll()
         }
     }

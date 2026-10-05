@@ -31,9 +31,6 @@ Singleton {
     property bool wallpaperSelectorOpen: false
     property bool workspaceShowNumbers: false
 
-    // Height the privacy capture popup currently occupies, published by PrivacyCapturePopup.qml (0
-    // when it is hidden). The notification popups share that corner and stack below it, so a
-    // mic/camera/screen notification is never covered and never covers a tray notification.
     property real privacyPopupHeight: 0
 
     onSidebarRightOpenChanged: {

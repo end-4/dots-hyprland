@@ -26,6 +26,11 @@ getactivemonitor() {
 mkdir -p "$RECORDING_DIR"
 cd "$RECORDING_DIR" || exit
 
+notify_shell() {
+    command -v qs >/dev/null 2>&1 || return 0
+    qs -p "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" ipc call privacy "$1" >/dev/null 2>&1
+}
+
 # parse --region <value> without modifying $@ so other flags like --fullscreen still work
 ARGS=("$@")
 MANUAL_REGION=""
@@ -49,9 +54,13 @@ done
 if pgrep wf-recorder > /dev/null; then
     notify-send "Recording Stopped" "Stopped" -a 'Recorder' &
     pkill wf-recorder &
+    notify_shell screenRecordStopped
 else
     if [[ $FULLSCREEN_FLAG -eq 1 ]]; then
         notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        notify_shell screenRecordStarted
+        trap 'notify_shell screenRecordStopped' EXIT
+        trap 'notify_shell screenRecordStopped' INT TERM
         if [[ $SOUND_FLAG -eq 1 ]]; then
             wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --audio="$(getaudiooutput)"
         else
@@ -69,6 +78,9 @@ else
         fi
 
         notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        notify_shell screenRecordStarted
+        trap 'notify_shell screenRecordStopped' EXIT
+        trap 'notify_shell screenRecordStopped' INT TERM
         if [[ $SOUND_FLAG -eq 1 ]]; then
             wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" --audio="$(getaudiooutput)"
         else
