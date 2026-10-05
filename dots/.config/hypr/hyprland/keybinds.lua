@@ -91,15 +91,21 @@ hl.bind("SUPER + ALT + R", hl.dsp.exec_cmd(qsIsAlive .. " || " .. qsScripts .. "
 hl.bind("CTRL + ALT + R", hl.dsp.exec_cmd(qsScripts .. "/videos/record.sh --fullscreen"), { locked = true })
 hl.bind("SUPER + SHIFT + ALT + R", hl.dsp.exec_cmd(qsScripts .. "/videos/record.sh --fullscreen --sound"),
     { locked = true, description = "Utilities: Record screen (with sound)" })
---# Fullscreen screenshot
-local grimhyprctl = "grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\""
-hl.bind("Print", hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"),
-    { locked = true, description = "Utilities: Screenshot >> clipboard" })
-hl.bind("CTRL + Print", hl.dsp.exec_cmd(
-    "mkdir -p $(xdg-user-dir PICTURES)/Screenshots && " ..
-    grimhyprctl .. " $(xdg-user-dir PICTURES)/Screenshots/Screenshot_\"$(date '+%Y-%m-%d_%H.%M.%S')\".png"
-), { locked = true, non_consuming = true, description = "Utilities: Screenshot >> clipboard & file" })
-hl.bind("CTRL + Print", hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"), { locked = true, non_consuming = true })
+--# Screenshot & Screen Snip
+hl.bind("Print", hl.dsp.global("quickshell:regionScreenshot"), { description = "Utilities: Screen snip" })
+hl.bind("Print",
+    hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || hyprshot --freeze --clipboard-only --mode region --silent"))
+
+--# Fullscreen & Window screenshot
+local screenshotFullscreen = "f=\"$(xdg-user-dir PICTURES)/Screenshots/Screenshot_$(date '+%Y-%m-%d_%H.%M.%S').png\" && mkdir -p \"$(dirname \"$f\")\" && grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\" \"$f\" && wl-copy --type image/png < \"$f\" && notify-send 'Screenshot Saved' \"Saved to $(basename \"$f\") & copied to clipboard\" -i \"$f\" -a Hyprshot"
+local screenshotClipboard = "grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\" - | wl-copy --type image/png && notify-send 'Screenshot Copied' 'Active screen copied to clipboard' -a Hyprshot"
+
+hl.bind("CTRL + Print", hl.dsp.exec_cmd(screenshotFullscreen),
+    { locked = true, description = "Utilities: Fullscreen screenshot >> clipboard & file" })
+hl.bind("SUPER + Print", hl.dsp.exec_cmd(screenshotClipboard),
+    { locked = true, description = "Utilities: Fullscreen screenshot >> clipboard" })
+hl.bind("ALT + Print", hl.dsp.exec_cmd("hyprshot -m window --clipboard-only"),
+    { locked = true, description = "Utilities: Window screenshot >> clipboard" })
 --# AI
 hl.bind("SUPER + SHIFT + ALT + mouse:273", hl.dsp.exec_cmd(hyprScripts .. "/ai/primary-buffer-query.sh"),
     { description = "Utilities: Generate AI summary for selected text" })
