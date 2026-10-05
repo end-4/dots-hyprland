@@ -818,10 +818,34 @@ Item {
                             StyledText { text: (root.disp && root.disp.serial) ? root.disp.serial : Translation.tr("Not specified"); font.pixelSize: Appearance.font.pixelSize.small }
 
                             StyledText { text: Translation.tr("Display Controller:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: "Intel® Iris® Xe Graphics (KMS Scanout / i915)"; font.bold: true; font.pixelSize: Appearance.font.pixelSize.small }
+                            StyledText {
+                                text: {
+                                    if (root.disp && DisplayService.gpuInfo.connectors && DisplayService.gpuInfo.connectors[root.disp.name]) {
+                                        let c = DisplayService.gpuInfo.connectors[root.disp.name];
+                                        return `${c.gpuName} (${c.card} / ${c.driver})`;
+                                    }
+                                    return DisplayService.gpuInfo.primaryRenderer || Translation.tr("KMS Display Controller");
+                                }
+                                font.bold: true
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
 
                             StyledText { text: Translation.tr("3D Acceleration:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
-                            StyledText { text: "NVIDIA® GeForce® MX570 A (PRIME 3D Offload)"; font.bold: true; font.pixelSize: Appearance.font.pixelSize.small }
+                            StyledText {
+                                text: {
+                                    if (DisplayService.gpuInfo.hasDgpu && DisplayService.gpuInfo.dgpu) {
+                                        let prefix = DisplayService.gpuInfo.offloadPrefix ? DisplayService.gpuInfo.offloadPrefix.trim() : "PRIME";
+                                        return `${DisplayService.gpuInfo.dgpu.name} (${prefix} Offload)`;
+                                    }
+                                    return Translation.tr("Unified Hardware Acceleration");
+                                }
+                                font.bold: true
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
                         }
                     }
                 }
@@ -854,30 +878,34 @@ Item {
                             Item { Layout.fillWidth: true }
                             StyledRectangle {
                                 radius: Appearance.rounding.full
-                                color: Appearance.m3colors.m3primaryContainer
+                                color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3primaryContainer : Appearance.m3colors.m3secondaryContainer
                                 implicitWidth: hybridTagRow.implicitWidth + 16
                                 implicitHeight: 24
                                 RowLayout {
                                     id: hybridTagRow
                                     anchors.centerIn: parent
                                     spacing: 4
-                                    MaterialSymbol { text: "sync_alt"; iconSize: 14; color: Appearance.m3colors.m3onPrimaryContainer }
+                                    MaterialSymbol {
+                                        text: DisplayService.gpuInfo.isHybrid ? "sync_alt" : "verified"
+                                        iconSize: 14
+                                        color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
+                                    }
                                     StyledText {
-                                        text: Translation.tr("PRIME Hybrid Active")
+                                        text: DisplayService.gpuInfo.isHybrid ? Translation.tr("PRIME Hybrid Active") : Translation.tr("Unified Graphics")
                                         font.pixelSize: Appearance.font.pixelSize.smaller
                                         font.bold: true
-                                        color: Appearance.m3colors.m3onPrimaryContainer
+                                        color: DisplayService.gpuInfo.isHybrid ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
                                     }
                                 }
                             }
                         }
 
-                        // Sub-cards for iGPU and dGPU
+                        // Sub-cards for iGPU and dGPU (or unified GPU)
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 12
 
-                            // 1. Intel iGPU Box
+                            // 1. Primary Display Controller Box
                             StyledRectangle {
                                 Layout.fillWidth: true
                                 implicitHeight: igpuBoxCol.implicitHeight + 20
@@ -896,12 +924,13 @@ Item {
                                         spacing: 6
                                         MaterialSymbol { text: "desktop_windows"; iconSize: 18; color: Appearance.m3colors.m3primary }
                                         StyledText {
-                                            text: DisplayService.gpuInfo.igpu.name
+                                            text: (DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].name : (DisplayService.gpuInfo.primaryRenderer || Translation.tr("Primary Graphics"))
                                             font.bold: true
                                             font.pixelSize: Appearance.font.pixelSize.small
                                             color: Appearance.m3colors.m3onSurface
+                                            elide: Text.ElideRight
+                                            Layout.fillWidth: true
                                         }
-                                        Item { Layout.fillWidth: true }
                                         StyledRectangle {
                                             radius: Appearance.rounding.full
                                             color: Appearance.m3colors.m3surfaceVariant
@@ -910,7 +939,7 @@ Item {
                                             StyledText {
                                                 id: igpuBadgeText
                                                 anchors.centerIn: parent
-                                                text: Translation.tr("Display Master")
+                                                text: DisplayService.gpuInfo.isHybrid ? Translation.tr("Display Master") : Translation.tr("Unified KMS")
                                                 font.pixelSize: 10
                                                 font.bold: true
                                                 color: Appearance.m3colors.m3onSurfaceVariant
@@ -919,7 +948,9 @@ Item {
                                     }
 
                                     StyledText {
-                                        text: Translation.tr("Drives scanout for both eDP-1 and HDMI-A-1. Low-power, ultra-smooth desktop compositing.")
+                                        text: DisplayService.gpuInfo.isHybrid ?
+                                            Translation.tr("Controls scanout for connected displays (%1). Low-power desktop compositing.").arg(Object.keys(DisplayService.gpuInfo.connectors || {}).join(", ")) :
+                                            Translation.tr("High-efficiency GPU architecture directly powering all connected monitors and desktop composition.")
                                         wrapMode: Text.Wrap
                                         Layout.fillWidth: true
                                         font.pixelSize: Appearance.font.pixelSize.smaller
@@ -929,12 +960,12 @@ Item {
                                     RowLayout {
                                         spacing: 12
                                         StyledText {
-                                            text: `Driver: ${DisplayService.gpuInfo.igpu.driver}`
+                                            text: `Driver: ${(DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].driver : "KMS"}`
                                             font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3outline
                                         }
                                         StyledText {
-                                            text: `PCI: ${DisplayService.gpuInfo.igpu.pci}`
+                                            text: `PCI: ${(DisplayService.gpuInfo.gpus && DisplayService.gpuInfo.gpus[0]) ? DisplayService.gpuInfo.gpus[0].pci : "0000:00:02.0"}`
                                             font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3outline
                                         }
@@ -942,8 +973,9 @@ Item {
                                 }
                             }
 
-                            // 2. NVIDIA dGPU Box
+                            // 2. Secondary / Dedicated dGPU Box (Visible if dGPU present)
                             StyledRectangle {
+                                visible: DisplayService.gpuInfo.hasDgpu
                                 Layout.fillWidth: true
                                 implicitHeight: dgpuBoxCol.implicitHeight + 20
                                 radius: Appearance.rounding.small
@@ -961,12 +993,13 @@ Item {
                                         spacing: 6
                                         MaterialSymbol { text: "rocket_launch"; iconSize: 18; color: Appearance.m3colors.m3secondary }
                                         StyledText {
-                                            text: DisplayService.gpuInfo.dgpu.name
+                                            text: DisplayService.gpuInfo.dgpu ? DisplayService.gpuInfo.dgpu.name : Translation.tr("Dedicated GPU")
                                             font.bold: true
                                             font.pixelSize: Appearance.font.pixelSize.small
                                             color: Appearance.m3colors.m3onSurface
+                                            elide: Text.ElideRight
+                                            Layout.fillWidth: true
                                         }
-                                        Item { Layout.fillWidth: true }
                                         StyledRectangle {
                                             radius: Appearance.rounding.full
                                             color: Appearance.m3colors.m3secondaryContainer
@@ -984,7 +1017,13 @@ Item {
                                     }
 
                                     StyledText {
-                                        text: Translation.tr("Dedicated accelerator for 3D games, CAD, and AI. VRAM: %1 / %2 (%3 util)").arg(DisplayService.gpuInfo.dgpu.vramUsed).arg(DisplayService.gpuInfo.dgpu.vramTotal).arg(DisplayService.gpuInfo.dgpu.utilization)
+                                        text: {
+                                            if (!DisplayService.gpuInfo.dgpu) return "";
+                                            let vram = (DisplayService.gpuInfo.dgpu.vramUsed && DisplayService.gpuInfo.dgpu.vramTotal) ?
+                                                `${DisplayService.gpuInfo.dgpu.vramUsed} / ${DisplayService.gpuInfo.dgpu.vramTotal}` : Translation.tr("Dedicated VRAM");
+                                            let util = DisplayService.gpuInfo.dgpu.utilization ? ` (${DisplayService.gpuInfo.dgpu.utilization} util)` : "";
+                                            return Translation.tr("Dedicated accelerator for 3D gaming, CAD, and AI. VRAM: %1%2").arg(vram).arg(util);
+                                        }
                                         wrapMode: Text.Wrap
                                         Layout.fillWidth: true
                                         font.pixelSize: Appearance.font.pixelSize.smaller
@@ -994,17 +1033,19 @@ Item {
                                     RowLayout {
                                         spacing: 12
                                         StyledText {
-                                            text: `Temp: ${DisplayService.gpuInfo.dgpu.temp}`
+                                            visible: !!DisplayService.gpuInfo.dgpu?.temp
+                                            text: `Temp: ${DisplayService.gpuInfo.dgpu?.temp || ""}`
                                             font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3outline
                                         }
                                         StyledText {
-                                            text: `Power: ${DisplayService.gpuInfo.dgpu.power}`
+                                            visible: !!DisplayService.gpuInfo.dgpu?.power
+                                            text: `Power: ${DisplayService.gpuInfo.dgpu?.power || ""}`
                                             font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3outline
                                         }
                                         StyledText {
-                                            text: `Driver: ${DisplayService.gpuInfo.dgpu.driverVersion}`
+                                            text: `Driver: ${DisplayService.gpuInfo.dgpu?.driverVersion || DisplayService.gpuInfo.dgpu?.driver || "active"}`
                                             font.pixelSize: Appearance.font.pixelSize.smaller
                                             color: Appearance.m3colors.m3outline
                                         }
@@ -1013,7 +1054,7 @@ Item {
                             }
                         }
 
-                        // Explanatory Banner: Why displays are on Intel & How to switch apps to NVIDIA
+                        // Explanatory Banner: Multi-GPU Offloading vs Unified
                         StyledRectangle {
                             Layout.fillWidth: true
                             implicitHeight: bannerCol.implicitHeight + 16
@@ -1032,7 +1073,9 @@ Item {
                                     spacing: 6
                                     MaterialSymbol { text: "info"; iconSize: 16; color: Appearance.m3colors.m3primary }
                                     StyledText {
-                                        text: Translation.tr("Why are both monitors driven by Intel & how to run apps on NVIDIA?")
+                                        text: DisplayService.gpuInfo.isHybrid ?
+                                            Translation.tr("Multi-GPU Architecture & Dynamic Application Offloading") :
+                                            Translation.tr("Direct Kernel Mode Setting (KMS) & Display Hotplug")
                                         font.bold: true
                                         font.pixelSize: Appearance.font.pixelSize.small
                                         color: Appearance.m3colors.m3onSurface
@@ -1041,13 +1084,16 @@ Item {
 
                                 StyledText {
                                     Layout.fillWidth: true
-                                    text: Translation.tr("On this laptop, motherboard video ports (internal panel & HDMI) are wired directly to the Intel CPU display controller (KMS device). The NVIDIA GPU is a dedicated 3D accelerator without direct display pins. To run any game, 3D viewport, or heavy app on the NVIDIA GPU, run it with prime-run:")
+                                    text: DisplayService.gpuInfo.isHybrid ?
+                                        Translation.tr("Motherboard video ports are physically wired to the primary display controller. To run any 3D game, emulator, or heavy rendering app on the dedicated GPU with full acceleration, launch it with:") :
+                                        Translation.tr("All connected monitors run directly on hardware scanout with full Wayland hardware acceleration. Simply connect any HDMI, DisplayPort, or USB-C monitor and arrange it dynamically above.")
                                     font.pixelSize: Appearance.font.pixelSize.smaller
                                     wrapMode: Text.Wrap
                                     color: Appearance.m3colors.m3onSurfaceVariant
                                 }
 
                                 RowLayout {
+                                    visible: DisplayService.gpuInfo.isHybrid
                                     spacing: 8
                                     StyledRectangle {
                                         radius: 6
@@ -1057,7 +1103,7 @@ Item {
                                         StyledText {
                                             id: codeText
                                             anchors.centerIn: parent
-                                            text: "prime-run <command>"
+                                            text: DisplayService.gpuInfo.offloadCommand || "prime-run <command>"
                                             font.bold: true
                                             font.family: "monospace"
                                             font.pixelSize: Appearance.font.pixelSize.smaller
@@ -1071,7 +1117,7 @@ Item {
                                         buttonRadius: Appearance.rounding.full
                                         colBackground: Appearance.m3colors.m3secondaryContainer
                                         onClicked: {
-                                            Quickshell.clipboardText = "prime-run ";
+                                            Quickshell.clipboardText = DisplayService.gpuInfo.offloadPrefix || "prime-run ";
                                         }
                                         RowLayout {
                                             id: copyRow
@@ -1084,12 +1130,12 @@ Item {
                                                 color: Appearance.m3colors.m3onSecondaryContainer
                                             }
                                         }
-                                        StyledToolTip { text: Translation.tr("Copy 'prime-run ' to clipboard") }
+                                        StyledToolTip { text: Translation.tr("Copy command prefix to clipboard") }
                                     }
 
                                     StyledText {
                                         Layout.fillWidth: true
-                                        text: Translation.tr("e.g. prime-run blender, prime-run steam")
+                                        text: Translation.tr("e.g. %1blender, %1steam").arg(DisplayService.gpuInfo.offloadPrefix || "prime-run ")
                                         font.pixelSize: Appearance.font.pixelSize.smaller
                                         color: Appearance.m3colors.m3outline
                                     }

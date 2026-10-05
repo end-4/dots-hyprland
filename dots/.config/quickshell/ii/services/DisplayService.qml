@@ -103,68 +103,42 @@ Singleton {
         identifyTimer.restart();
     }
 
-    // ================= GPU & Graphics Telemetry =================
+    // ================= Dynamic GPU & Graphics Telemetry =================
     property var gpuInfo: ({
-        igpu: {
-            name: "Intel® Iris® Xe Graphics (ADL GT2)",
-            driver: "i915 (Mesa)",
-            type: "Integrated (CPU)",
-            pci: "0000:00:02.0",
-            role: "KMS Display Controller (Scanout Master)",
-            ports: "eDP-1, HDMI-A-1, DP-1, DP-2"
-        },
-        dgpu: {
-            name: "NVIDIA® GeForce® MX570 A",
-            driver: "nvidia",
-            driverVersion: "615.71.09",
-            type: "Discrete (Render Offload)",
-            vramTotal: "2048 MB",
-            vramUsed: "14 MB",
-            vramFree: "1776 MB",
-            temp: "70°C",
-            power: "11W",
-            utilization: "8%",
-            pci: "0000:01:00.0",
-            role: "PRIME Render Offload (Compute & 3D)"
-        },
-        displayScanout: "Intel® Iris® Xe Graphics (card1)",
-        primeAvailable: true
+        primaryRenderer: "",
+        gpus: [],
+        connectors: {},
+        hasDgpu: false,
+        dgpu: null,
+        isHybrid: false,
+        offloadCommand: "",
+        offloadPrefix: ""
     })
 
+    readonly property string gpuDetectScriptPath: CF.FileUtils.trimFileProtocol(`${Directories.config}/quickshell/ii/scripts/hyprland/gpu_detect.py`)
+
     Process {
-        id: nvidiaStatsProc
-        command: ["nvidia-smi", "--query-gpu=name,driver_version,memory.total,memory.used,memory.free,temperature.gpu,utilization.gpu,power.draw", "--format=csv,noheader,nounits"]
+        id: gpuDetectProc
+        command: [root.gpuDetectScriptPath]
         stdout: StdioCollector {
-            id: nvidiaStatsCollector
+            id: gpuDetectCollector
             onStreamFinished: {
                 try {
-                    let line = nvidiaStatsCollector.text.trim();
-                    if (!line) return;
-                    let parts = line.split(",").map(p => p.trim());
-                    if (parts.length >= 8) {
-                        let newInfo = Object.assign({}, root.gpuInfo);
-                        newInfo.dgpu = Object.assign({}, root.gpuInfo.dgpu, {
-                            name: parts[0],
-                            driverVersion: parts[1],
-                            vramTotal: `${parts[2]} MB`,
-                            vramUsed: `${parts[3]} MB`,
-                            vramFree: `${parts[4]} MB`,
-                            temp: `${parts[5]}°C`,
-                            utilization: `${parts[6]}%`,
-                            power: `${Math.round(parseFloat(parts[7]))}W`
-                        });
-                        root.gpuInfo = newInfo;
+                    let text = gpuDetectCollector.text.trim();
+                    if (text.length > 0) {
+                        let raw = JSON.parse(text);
+                        root.gpuInfo = raw;
                     }
                 } catch (e) {
-                    console.warn("[DisplayService] Failed to parse nvidia-smi stats:", e);
+                    console.warn("[DisplayService] Failed to parse gpu_detect output:", e);
                 }
             }
         }
     }
 
     function refreshGpuStats() {
-        if (!nvidiaStatsProc.running) {
-            nvidiaStatsProc.running = true;
+        if (!gpuDetectProc.running) {
+            gpuDetectProc.running = true;
         }
     }
 
