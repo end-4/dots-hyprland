@@ -816,11 +816,290 @@ Item {
 
                             StyledText { text: Translation.tr("Serial Number:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
                             StyledText { text: (root.disp && root.disp.serial) ? root.disp.serial : Translation.tr("Not specified"); font.pixelSize: Appearance.font.pixelSize.small }
+
+                            StyledText { text: Translation.tr("Display Controller:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
+                            StyledText { text: "Intel® Iris® Xe Graphics (KMS Scanout / i915)"; font.bold: true; font.pixelSize: Appearance.font.pixelSize.small }
+
+                            StyledText { text: Translation.tr("3D Acceleration:"); color: Appearance.m3colors.m3onSurfaceVariant; font.pixelSize: Appearance.font.pixelSize.small }
+                            StyledText { text: "NVIDIA® GeForce® MX570 A (PRIME 3D Offload)"; font.bold: true; font.pixelSize: Appearance.font.pixelSize.small }
                         }
                     }
                 }
 
-                // CARD 2: Resolution & Refresh Rate
+                // CARD 2: Graphics & GPU Architecture
+                StyledRectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: gpuCardLayout.implicitHeight + 28
+                    radius: Appearance.rounding.normal
+                    color: Appearance.m3colors.m3surfaceContainer
+                    border.width: 1
+                    border.color: Appearance.m3colors.m3outlineVariant
+
+                    ColumnLayout {
+                        id: gpuCardLayout
+                        anchors.fill: parent
+                        anchors.margins: 14
+                        spacing: 12
+
+                        // Card Header
+                        RowLayout {
+                            spacing: 8
+                            MaterialSymbol { text: "developer_board"; iconSize: 20; color: Appearance.m3colors.m3primary }
+                            StyledText {
+                                text: Translation.tr("Graphics & GPU Architecture")
+                                font.bold: true
+                                font.pixelSize: Appearance.font.pixelSize.normal + 1
+                                color: Appearance.m3colors.m3onSurface
+                            }
+                            Item { Layout.fillWidth: true }
+                            StyledRectangle {
+                                radius: Appearance.rounding.full
+                                color: Appearance.m3colors.m3primaryContainer
+                                implicitWidth: hybridTagRow.implicitWidth + 16
+                                implicitHeight: 24
+                                RowLayout {
+                                    id: hybridTagRow
+                                    anchors.centerIn: parent
+                                    spacing: 4
+                                    MaterialSymbol { text: "sync_alt"; iconSize: 14; color: Appearance.m3colors.m3onPrimaryContainer }
+                                    StyledText {
+                                        text: Translation.tr("PRIME Hybrid Active")
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        font.bold: true
+                                        color: Appearance.m3colors.m3onPrimaryContainer
+                                    }
+                                }
+                            }
+                        }
+
+                        // Sub-cards for iGPU and dGPU
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+
+                            // 1. Intel iGPU Box
+                            StyledRectangle {
+                                Layout.fillWidth: true
+                                implicitHeight: igpuBoxCol.implicitHeight + 20
+                                radius: Appearance.rounding.small
+                                color: Appearance.m3colors.m3surfaceContainerHigh
+                                border.width: 1
+                                border.color: Appearance.m3colors.m3outlineVariant
+
+                                ColumnLayout {
+                                    id: igpuBoxCol
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    spacing: 6
+
+                                    RowLayout {
+                                        spacing: 6
+                                        MaterialSymbol { text: "desktop_windows"; iconSize: 18; color: Appearance.m3colors.m3primary }
+                                        StyledText {
+                                            text: DisplayService.gpuInfo.igpu.name
+                                            font.bold: true
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                        Item { Layout.fillWidth: true }
+                                        StyledRectangle {
+                                            radius: Appearance.rounding.full
+                                            color: Appearance.m3colors.m3surfaceVariant
+                                            implicitWidth: igpuBadgeText.implicitWidth + 10
+                                            implicitHeight: 18
+                                            StyledText {
+                                                id: igpuBadgeText
+                                                anchors.centerIn: parent
+                                                text: Translation.tr("Display Master")
+                                                font.pixelSize: 10
+                                                font.bold: true
+                                                color: Appearance.m3colors.m3onSurfaceVariant
+                                            }
+                                        }
+                                    }
+
+                                    StyledText {
+                                        text: Translation.tr("Drives scanout for both eDP-1 and HDMI-A-1. Low-power, ultra-smooth desktop compositing.")
+                                        wrapMode: Text.Wrap
+                                        Layout.fillWidth: true
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        color: Appearance.m3colors.m3onSurfaceVariant
+                                    }
+
+                                    RowLayout {
+                                        spacing: 12
+                                        StyledText {
+                                            text: `Driver: ${DisplayService.gpuInfo.igpu.driver}`
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3outline
+                                        }
+                                        StyledText {
+                                            text: `PCI: ${DisplayService.gpuInfo.igpu.pci}`
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3outline
+                                        }
+                                    }
+                                }
+                            }
+
+                            // 2. NVIDIA dGPU Box
+                            StyledRectangle {
+                                Layout.fillWidth: true
+                                implicitHeight: dgpuBoxCol.implicitHeight + 20
+                                radius: Appearance.rounding.small
+                                color: Appearance.m3colors.m3surfaceContainerHigh
+                                border.width: 1
+                                border.color: Appearance.m3colors.m3outlineVariant
+
+                                ColumnLayout {
+                                    id: dgpuBoxCol
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    spacing: 6
+
+                                    RowLayout {
+                                        spacing: 6
+                                        MaterialSymbol { text: "rocket_launch"; iconSize: 18; color: Appearance.m3colors.m3secondary }
+                                        StyledText {
+                                            text: DisplayService.gpuInfo.dgpu.name
+                                            font.bold: true
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                        Item { Layout.fillWidth: true }
+                                        StyledRectangle {
+                                            radius: Appearance.rounding.full
+                                            color: Appearance.m3colors.m3secondaryContainer
+                                            implicitWidth: dgpuBadgeText.implicitWidth + 10
+                                            implicitHeight: 18
+                                            StyledText {
+                                                id: dgpuBadgeText
+                                                anchors.centerIn: parent
+                                                text: Translation.tr("3D Offload")
+                                                font.pixelSize: 10
+                                                font.bold: true
+                                                color: Appearance.m3colors.m3onSecondaryContainer
+                                            }
+                                        }
+                                    }
+
+                                    StyledText {
+                                        text: Translation.tr("Dedicated accelerator for 3D games, CAD, and AI. VRAM: %1 / %2 (%3 util)").arg(DisplayService.gpuInfo.dgpu.vramUsed).arg(DisplayService.gpuInfo.dgpu.vramTotal).arg(DisplayService.gpuInfo.dgpu.utilization)
+                                        wrapMode: Text.Wrap
+                                        Layout.fillWidth: true
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        color: Appearance.m3colors.m3onSurfaceVariant
+                                    }
+
+                                    RowLayout {
+                                        spacing: 12
+                                        StyledText {
+                                            text: `Temp: ${DisplayService.gpuInfo.dgpu.temp}`
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3outline
+                                        }
+                                        StyledText {
+                                            text: `Power: ${DisplayService.gpuInfo.dgpu.power}`
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3outline
+                                        }
+                                        StyledText {
+                                            text: `Driver: ${DisplayService.gpuInfo.dgpu.driverVersion}`
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3outline
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Explanatory Banner: Why displays are on Intel & How to switch apps to NVIDIA
+                        StyledRectangle {
+                            Layout.fillWidth: true
+                            implicitHeight: bannerCol.implicitHeight + 16
+                            radius: Appearance.rounding.small
+                            color: Appearance.m3colors.m3surfaceVariant
+                            border.width: 1
+                            border.color: Appearance.m3colors.m3outlineVariant
+
+                            ColumnLayout {
+                                id: bannerCol
+                                anchors.fill: parent
+                                anchors.margins: 10
+                                spacing: 6
+
+                                RowLayout {
+                                    spacing: 6
+                                    MaterialSymbol { text: "info"; iconSize: 16; color: Appearance.m3colors.m3primary }
+                                    StyledText {
+                                        text: Translation.tr("Why are both monitors driven by Intel & how to run apps on NVIDIA?")
+                                        font.bold: true
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        color: Appearance.m3colors.m3onSurface
+                                    }
+                                }
+
+                                StyledText {
+                                    Layout.fillWidth: true
+                                    text: Translation.tr("On this laptop, motherboard video ports (internal panel & HDMI) are wired directly to the Intel CPU display controller (KMS device). The NVIDIA GPU is a dedicated 3D accelerator without direct display pins. To run any game, 3D viewport, or heavy app on the NVIDIA GPU, run it with prime-run:")
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    wrapMode: Text.Wrap
+                                    color: Appearance.m3colors.m3onSurfaceVariant
+                                }
+
+                                RowLayout {
+                                    spacing: 8
+                                    StyledRectangle {
+                                        radius: 6
+                                        color: Appearance.m3colors.m3surfaceContainerHighest
+                                        implicitWidth: codeText.implicitWidth + 16
+                                        implicitHeight: 26
+                                        StyledText {
+                                            id: codeText
+                                            anchors.centerIn: parent
+                                            text: "prime-run <command>"
+                                            font.bold: true
+                                            font.family: "monospace"
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            color: Appearance.m3colors.m3primary
+                                        }
+                                    }
+
+                                    RippleButton {
+                                        implicitWidth: copyRow.implicitWidth + 14
+                                        implicitHeight: 26
+                                        buttonRadius: Appearance.rounding.full
+                                        colBackground: Appearance.m3colors.m3secondaryContainer
+                                        onClicked: {
+                                            Quickshell.clipboardText = "prime-run ";
+                                        }
+                                        RowLayout {
+                                            id: copyRow
+                                            anchors.centerIn: parent
+                                            spacing: 4
+                                            MaterialSymbol { text: "content_copy"; iconSize: 14; color: Appearance.m3colors.m3onSecondaryContainer }
+                                            StyledText {
+                                                text: Translation.tr("Copy Prefix")
+                                                font.pixelSize: Appearance.font.pixelSize.smaller
+                                                color: Appearance.m3colors.m3onSecondaryContainer
+                                            }
+                                        }
+                                        StyledToolTip { text: Translation.tr("Copy 'prime-run ' to clipboard") }
+                                    }
+
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: Translation.tr("e.g. prime-run blender, prime-run steam")
+                                        font.pixelSize: Appearance.font.pixelSize.smaller
+                                        color: Appearance.m3colors.m3outline
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // CARD 3: Resolution & Refresh Rate
                 StyledRectangle {
                     Layout.fillWidth: true
                     implicitHeight: card2Layout.implicitHeight + 28
