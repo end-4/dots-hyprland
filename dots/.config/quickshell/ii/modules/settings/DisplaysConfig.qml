@@ -100,6 +100,14 @@ Item {
     property bool showSnapGuideX: false
     property bool showSnapGuideY: false
 
+    property bool showSavedFeedback: false
+
+    Timer {
+        id: savedFeedbackTimer
+        interval: 2500
+        onTriggered: root.showSavedFeedback = false
+    }
+
     readonly property var boundingBox: {
         let list = DisplayService.pendingDisplays.filter(d => !d.disabled);
         if (list.length === 0) return { minX: 0, maxX: 1920, minY: 0, maxY: 1080, width: 1920, height: 1080 };
@@ -1218,26 +1226,30 @@ Item {
                         implicitHeight: 40
                         padding: 16
                         buttonRadius: Appearance.rounding.full
-                        colBackground: Appearance.m3colors.m3secondaryContainer
-                        onClicked: DisplayService.confirmChanges()
+                        colBackground: root.showSavedFeedback ? Appearance.m3colors.m3primaryContainer : Appearance.m3colors.m3secondaryContainer
+                        onClicked: {
+                            DisplayService.confirmChanges();
+                            root.showSavedFeedback = true;
+                            savedFeedbackTimer.restart();
+                        }
 
                         RowLayout {
                             id: saveRow
                             anchors.centerIn: parent
                             spacing: 6
                             MaterialSymbol {
-                                text: "save"
+                                text: root.showSavedFeedback ? "check_circle" : "save"
                                 iconSize: 18
-                                color: Appearance.m3colors.m3onSecondaryContainer
+                                color: root.showSavedFeedback ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
                             }
                             StyledText {
-                                text: Translation.tr("Save as Default")
+                                text: root.showSavedFeedback ? Translation.tr("Saved as Default!") : Translation.tr("Save as Default")
                                 font.bold: true
                                 font.pixelSize: Appearance.font.pixelSize.small
-                                color: Appearance.m3colors.m3onSecondaryContainer
+                                color: root.showSavedFeedback ? Appearance.m3colors.m3onPrimaryContainer : Appearance.m3colors.m3onSecondaryContainer
                             }
                         }
-                        StyledToolTip { text: Translation.tr("Save current monitor setup permanently to ~/.config/hypr/monitors.lua") }
+                        StyledToolTip { text: Translation.tr("Apply and save current monitor setup permanently to ~/.config/hypr/monitors.lua") }
                     }
                 }
             }
