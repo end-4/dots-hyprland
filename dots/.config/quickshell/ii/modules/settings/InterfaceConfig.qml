@@ -406,14 +406,13 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: Translation.tr("Target region transparency")
-            tooltip: Translation.tr("Sets how transparent the hinted regions are. Labels and icons stay readable at any value.")
+            title: Translation.tr("Target region opacity")
+            tooltip: Translation.tr("Sets how visible the hinted regions are. Labels and icons stay readable at any value.")
 
             ConfigRow {
                 ConfigSlider {
                     buttonIcon: "select_window"
-                    text: Translation.tr("Region opacity")
-                    textWidth: 200
+                    textWidth: 0
                     from: 0.1
                     to: 1
                     value: Config.options.regionSelector.targetRegions.opacity

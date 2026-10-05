@@ -757,12 +757,11 @@
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
   "Unpin": "Откреп",
-  "Target region transparency": "Прозрачность областей",
-  "Region opacity": "Прозрачность области",
+  "Target region opacity": "Непрозрачность областей",
   "Target region labels": "Подписи областей",
   "Show label": "Показывать подпись",
   "Show app icon": "Показывать иконку приложения",
   "Show window title": "Показывать заголовок окна",
   "Show region size and position": "Показывать размер и положение области",
-  "Sets how transparent the hinted regions are. Labels and icons stay readable at any value.": "Задаёт прозрачность подсвеченных областей. Подписи и иконки остаются читаемыми при любом значении."
+  "Sets how visible the hinted regions are. Labels and icons stay readable at any value.": "Задаёт, насколько заметны подсвеченные области. Подписи и иконки остаются читаемыми при любом значении."
 }

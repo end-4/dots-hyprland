@@ -17,11 +17,13 @@ Rectangle {
     property bool showTitle: Config.options.regionSelector.targetRegions.showTitle
     property bool showCoordinates: Config.options.regionSelector.targetRegions.showCoordinates
     property bool targeted: false
-    // Scales the fill and border only, so labels and icons stay readable at any transparency
     property real regionAlpha: 0.3
+    readonly property real labelAlpha: 0.7 + 0.3 * regionAlpha
     property color borderColor: "#ddffffff"
     property color fillColor: "transparent"
     property string text: ""
+    property string title: ""
+    readonly property string labelText: (showTitle && title) ? `${text} — ${title}` : text
     property real textPadding: 10
     z: 2
     color: Qt.rgba(fillColor.r, fillColor.g, fillColor.b, fillColor.a * regionAlpha)
@@ -33,8 +35,8 @@ Rectangle {
         animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
     }
 
-    visible: regionAlpha > 0
-    Behavior on regionAlpha {
+    visible: opacity > 0
+    Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
     x: clientDimensions.at[0]
@@ -42,9 +44,6 @@ Rectangle {
     width: clientDimensions.size[0]
     height: clientDimensions.size[1]
 
-    // True when this region maps to a window whose icon file is actually on disk. guessIcon()
-    // returns the name straight out of the desktop entry without checking it, so an app can
-    // point at an icon that was deleted or moved and still produce a broken image.
     function hasWindowIcon() {
         const cls = clientDimensions.class;
         if (!cls) return false;
@@ -65,9 +64,9 @@ Rectangle {
             property real verticalPadding: 5
             property real horizontalPadding: 10
             radius: 10
-            color: Qt.rgba(root.colBackground.r, root.colBackground.g, root.colBackground.b, root.colBackground.a * root.regionAlpha)
+            color: Qt.rgba(root.colBackground.r, root.colBackground.g, root.colBackground.b, root.colBackground.a * root.labelAlpha)
             border.width: 1
-            border.color: Qt.rgba(Appearance.m3colors.m3outlineVariant.r, Appearance.m3colors.m3outlineVariant.g, Appearance.m3colors.m3outlineVariant.b, Appearance.m3colors.m3outlineVariant.a * root.regionAlpha)
+            border.color: Qt.rgba(Appearance.m3colors.m3outlineVariant.r, Appearance.m3colors.m3outlineVariant.g, Appearance.m3colors.m3outlineVariant.b, Appearance.m3colors.m3outlineVariant.a * root.labelAlpha)
             implicitWidth: regionInfo.implicitWidth + horizontalPadding * 2
             implicitHeight: regionInfo.implicitHeight + verticalPadding * 2
 
@@ -83,7 +82,7 @@ Rectangle {
                 id: genericIconComponent
                 MaterialSymbol {
                     iconSize: Appearance.font.pixelSize.larger
-                    text: root.clientDimensions.namespace ? "layers" : "image"
+                    text: root.clientDimensions.namespace ? "layers" : root.clientDimensions.class !== undefined ? "select_window" : "image"
                     color: root.colForeground
                 }
             }
@@ -101,15 +100,12 @@ Rectangle {
                         id: regionIconLoader
                         active: root.showIcon
                         visible: active
-                        // Content regions carry no window class, and a class can point at an icon
-                        // file that is not on disk. iconPath cannot tell us that, so fall back to
-                        // a material glyph instead of rendering a broken image.
                         sourceComponent: root.hasWindowIcon() ? windowIconComponent : genericIconComponent
                     }
 
                     StyledText {
                         id: regionText
-                        text: root.text
+                        text: root.labelText
                         color: root.colForeground
                     }
                 }

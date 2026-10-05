@@ -612,12 +612,11 @@
   "Battery full": "Battery full",
   "Pin": "Pin",
   "Unpin": "Unpin",
-  "Target region transparency": "Target region transparency",
-  "Region opacity": "Region opacity",
+  "Target region opacity": "Target region opacity",
   "Target region labels": "Target region labels",
   "Show label": "Show label",
   "Show app icon": "Show app icon",
   "Show window title": "Show window title",
   "Show region size and position": "Show region size and position",
-  "Sets how transparent the hinted regions are. Labels and icons stay readable at any value.": "Sets how transparent the hinted regions are. Labels and icons stay readable at any value."
+  "Sets how visible the hinted regions are. Labels and icons stay readable at any value.": "Sets how visible the hinted regions are. Labels and icons stay readable at any value."
 }

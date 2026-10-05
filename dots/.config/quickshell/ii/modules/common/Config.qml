@@ -443,8 +443,6 @@ Singleton {
                     property bool showIcon: true
                     property bool showTitle: true
                     property bool showCoordinates: false
-                    // Scales fill and border of every hinted region. The slider never reaches 0,
-                    // so a region always stays visible enough to be selected.
                     property real opacity: 0.3
                     property int selectionPadding: 5
                 }
