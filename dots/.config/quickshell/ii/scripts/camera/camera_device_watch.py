@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import ctypes
+import ctypes.util
 import glob
 import os
 import select
@@ -9,35 +10,50 @@ import sys
 import time
 
 PR_SET_PDEATHSIG = 1
+IN_NONBLOCK = 0o4000
 IN_ATTRIB = 0x00000004
 IN_CLOSE_WRITE = 0x00000008
+IN_CLOSE_NOWRITE = 0x00000010
 IN_OPEN = 0x00000020
 IN_CREATE = 0x00000100
 IN_DELETE = 0x00000200
-WATCH_MASK = IN_OPEN | IN_CLOSE_WRITE | IN_ATTRIB
-DEBOUNCE_MS = 400
+IN_IGNORED = 0x00008000
+WATCH_MASK = IN_OPEN | IN_CLOSE_WRITE | IN_CLOSE_NOWRITE | IN_ATTRIB
+DEBOUNCE_S = 0.4
 VERIFY_S = 3.0
 
 MEDIA_STACK = ("pipewire", "pulseaudio", "wireplumber")
 
-libc = ctypes.CDLL("libc.so.6", use_errno=True)
+libc = ctypes.CDLL(ctypes.util.find_library("c") or "libc.so.6", use_errno=True)
 libc.prctl(PR_SET_PDEATHSIG, signal.SIGTERM)
 if os.getppid() == 1:
     sys.exit(0)
 
-fd = libc.inotify_init1(0o4000)
+fd = libc.inotify_init1(IN_NONBLOCK)
 if fd < 0:
     raise OSError(ctypes.get_errno(), "inotify_init1 failed")
 
+dev_wd = libc.inotify_add_watch(fd, b"/dev", IN_CREATE | IN_DELETE)
+if dev_wd < 0:
+    raise OSError(ctypes.get_errno(), "inotify_add_watch /dev failed")
+
 devices = {}
-libc.inotify_add_watch(fd, b"/dev", IN_CREATE | IN_DELETE)
+
 
 def watch_all() -> None:
+    watched = set(devices.values())
     for path in sorted(glob.glob("/dev/video*")):
-        if path not in [d for d in devices.values()]:
-            wd = libc.inotify_add_watch(fd, path.encode(), WATCH_MASK)
-            if wd >= 0:
-                devices[wd] = path
+        if path in watched:
+            continue
+        wd = libc.inotify_add_watch(fd, path.encode(), WATCH_MASK)
+        if wd >= 0:
+            devices[wd] = path
+
+
+def forget(path: str) -> None:
+    for wd in [wd for wd, watched in devices.items() if watched == path]:
+        del devices[wd]
+
 
 def users() -> dict:
     out = {}
@@ -47,7 +63,7 @@ def users() -> dict:
         try:
             with open(f"/proc/{pid}/comm") as f:
                 comm = f.read().strip()
-            if comm in MEDIA_STACK:
+            if comm.startswith(MEDIA_STACK):
                 continue
             for entry in glob.glob(f"/proc/{pid}/fd/*"):
                 target = os.readlink(entry)
@@ -57,6 +73,7 @@ def users() -> dict:
         except OSError:
             continue
     return out
+
 
 def still_held(known: dict) -> dict:
     alive = {}
@@ -70,6 +87,7 @@ def still_held(known: dict) -> dict:
             continue
     return alive
 
+
 def report(current: dict, previous: dict) -> None:
     for device, (name, _pid) in sorted(current.items()):
         if previous.get(device, ("",))[0] != name:
@@ -77,9 +95,29 @@ def report(current: dict, previous: dict) -> None:
     for device in sorted(set(previous) - set(current)):
         print(f"RELEASE {device}", flush=True)
 
+
+def read_events() -> None:
+    try:
+        data = os.read(fd, 8192)
+    except BlockingIOError:
+        return
+    off = 0
+    while off < len(data):
+        wd, mask, _cookie, length = struct.unpack_from("iIII", data, off)
+        off += 16 + length
+        name = data[off - length:off].split(b"\0")[0].decode(errors="replace")
+        if mask & IN_IGNORED:
+            devices.pop(wd, None)
+        elif wd == dev_wd and name.startswith("video"):
+            if mask & IN_DELETE:
+                forget(f"/dev/{name}")
+            watch_all()
+
+
 watch_all()
 previous = users()
 report(previous, {})
+print("READY", flush=True)
 
 poll = select.poll()
 poll.register(fd, select.POLLIN)
@@ -88,26 +126,23 @@ pending = False
 next_verify = last_scan + VERIFY_S
 
 while True:
-    timeout = -1
+    deadlines = []
     if pending:
-        timeout = max(0.0, last_scan + DEBOUNCE_MS / 1000 - time.monotonic())
+        deadlines.append(last_scan + DEBOUNCE_S)
     if previous:
-        timeout = max(0.0, min([t for t in (timeout, next_verify - time.monotonic()) if t >= 0], default=0.0))
-    for _ in poll.poll(timeout):
-        data = os.read(fd, 8192)
-        off = 0
-        while off < len(data):
-            _wd, _mask, _cookie, length = struct.unpack_from("iIII", data, off)
-            off += 16 + length
-            name = data[off - length:off].split(b"\0")[0].decode(errors="replace")
-            if name.startswith("video"):
-                watch_all()
+        deadlines.append(next_verify)
+    timeout_ms = -1
+    if deadlines:
+        timeout_ms = max(0, int((min(deadlines) - time.monotonic()) * 1000) + 1)
+
+    if poll.poll(timeout_ms):
+        read_events()
         pending = True
 
     now = time.monotonic()
-    if pending and (now - last_scan) * 1000 >= DEBOUNCE_MS:
+    if pending and now - last_scan >= DEBOUNCE_S:
         last_scan = now
-        next_verify = last_scan + VERIFY_S
+        next_verify = now + VERIFY_S
         pending = False
         current = users()
         report(current, previous)
@@ -116,9 +151,8 @@ while True:
 
     if previous and now >= next_verify:
         last_scan = now
-        next_verify = last_scan + VERIFY_S
-        current = still_held(previous)
-        if current != previous:
+        next_verify = now + VERIFY_S
+        if still_held(previous) != previous:
             current = users()
             report(current, previous)
             previous = current

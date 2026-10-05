@@ -43,7 +43,7 @@ ContentPage {
             }
             ConfigSwitch {
                 buttonIcon: "screen_share"
-                text: Translation.tr("Screen recording")
+                text: Translation.tr("Screen capture")
                 checked: Config.options.bar.indicators.screen.showIndicator
                 onCheckedChanged: {
                     Config.options.bar.indicators.screen.showIndicator = checked;

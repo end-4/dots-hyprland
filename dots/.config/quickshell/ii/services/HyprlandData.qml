@@ -22,27 +22,7 @@ Singleton {
     property var monitors: []
     property var layers: ({})
 
-    property bool screencastActive: false
-    property string screencastSource: ""
-
-    Timer {
-        id: screencastDebounce
-        interval: 500
-        repeat: false
-        onTriggered: {
-            root.screencastActive = false;
-            root.screencastSource = "";
-        }
-    }
-
-    function onScreencast(data) {
-        const [state, , source] = String(data).split(",");
-        if (state !== "1")
-            return;
-        root.screencastSource = source ?? "";
-        root.screencastActive = true;
-        screencastDebounce.restart();
-    }
+    signal screencast(bool active, string owner)
 
     // Convenient stuff
 
@@ -110,8 +90,11 @@ Singleton {
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
-            if (event.name === "screencast" || event.name === "screencastv2") {
-                root.onScreencast(event.data);
+            if (event.name === "screencast") return;
+            if (event.name === "screencastv2") {
+                const data = String(event.data);
+                const ownerEnd = data.indexOf(",", 2);
+                root.screencast(data[0] === "1", ownerEnd < 0 ? data.slice(2) : data.slice(2, ownerEnd));
                 return;
             }
             if (["openlayer", "closelayer"].includes(event.name)) return;

@@ -271,83 +271,26 @@ Item { // Bar content region
                             color: rightSidebarButton.colText
                         }
                     }
-                    Revealer {
+                    PrivacyIndicator {
                         reveal: (Audio.source?.audio?.muted ?? false) || Privacy.micIndicatorVisible
-                        Layout.fillHeight: true
-                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                        Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        MaterialSymbol {
-                            text: Audio.source?.audio?.muted ? "mic_off" : "mic"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-
-                            Rectangle {
-                                visible: Privacy.micIndicatorVisible
-                                anchors {
-                                    right: parent.right
-                                    bottom: parent.bottom
-                                }
-                                radius: Appearance.rounding.full
-                                color: Appearance.colors.colError
-                                z: 1
-                                implicitWidth: 8
-                                implicitHeight: 8
-                            }
-                        }
+                        icon: Audio.source?.audio?.muted ? "mic_off" : "mic"
+                        showDot: Privacy.micIndicatorVisible
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
                     }
-                    Revealer {
+                    PrivacyIndicator {
                         reveal: Privacy.cameraIndicatorVisible
-                        Layout.fillHeight: true
-                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                        Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        MaterialSymbol {
-                            text: "videocam"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-
-                            Rectangle {
-                                visible: Privacy.cameraIndicatorVisible
-                                anchors {
-                                    right: parent.right
-                                    bottom: parent.bottom
-                                }
-                                radius: Appearance.rounding.full
-                                color: Appearance.colors.colError
-                                z: 1
-                                implicitWidth: 8
-                                implicitHeight: 8
-                            }
-                        }
+                        icon: "videocam"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
                     }
-                    Revealer {
+                    PrivacyIndicator {
                         reveal: Privacy.screenCaptureIndicatorVisible
-                        Layout.fillHeight: true
-                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                        Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        MaterialSymbol {
-                            text: "screen_share"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-
-                            Rectangle {
-                                visible: Privacy.screenCaptureIndicatorVisible
-                                anchors {
-                                    right: parent.right
-                                    bottom: parent.bottom
-                                }
-                                radius: Appearance.rounding.full
-                                color: Appearance.colors.colError
-                                z: 1
-                                implicitWidth: 8
-                                implicitHeight: 8
-                            }
-                        }
+                        icon: "screen_share"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
                     }
                     HyprlandXkbIndicator {
                         Layout.alignment: Qt.AlignVCenter

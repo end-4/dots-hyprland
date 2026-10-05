@@ -9,7 +9,6 @@ import Quickshell.Wayland
 import Quickshell.Widgets
 import Quickshell.Hyprland
 import Quickshell.Services.Notifications
-import Quickshell.Services.Notifications
 
 Scope {
     id: root
@@ -171,7 +170,9 @@ Scope {
 
             Repeater {
                 id: repeater
-                model: root.cards
+                model: ScriptModel {
+                    values: root.cards
+                }
 
                 delegate: Item {
                     id: delegate
