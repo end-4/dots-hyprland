@@ -127,13 +127,23 @@ def detect():
             ).strip()
             parts = [p.strip() for p in smi.split(',')]
             if len(parts) >= 7:
-                data['dgpu']['name'] = parts[0]
-                data['dgpu']['driverVersion'] = parts[1]
-                data['dgpu']['vramTotal'] = f'{parts[2]} MB'
-                data['dgpu']['vramUsed'] = f'{parts[3]} MB'
-                data['dgpu']['temp'] = f'{parts[4]}°C'
-                data['dgpu']['power'] = f'{round(float(parts[5]))}W'
-                data['dgpu']['utilization'] = f'{parts[6]}%'
+                if parts[0] and parts[0] != 'N/A':
+                    data['dgpu']['name'] = parts[0]
+                if parts[1] and parts[1] != 'N/A':
+                    data['dgpu']['driverVersion'] = parts[1]
+                if parts[2] and parts[2] != 'N/A':
+                    data['dgpu']['vramTotal'] = f'{parts[2]} MB' if 'MB' not in parts[2] else parts[2]
+                if parts[3] and parts[3] != 'N/A':
+                    data['dgpu']['vramUsed'] = f'{parts[3]} MB' if 'MB' not in parts[3] else parts[3]
+                if parts[4] and parts[4] != 'N/A':
+                    data['dgpu']['temp'] = f'{parts[4]}°C' if '°' not in parts[4] else parts[4]
+                if parts[5] and parts[5] != 'N/A':
+                    try:
+                        data['dgpu']['power'] = f'{round(float(parts[5]))}W'
+                    except Exception:
+                        data['dgpu']['power'] = f'{parts[5]}W' if 'W' not in parts[5] else parts[5]
+                if parts[6] and parts[6] != 'N/A':
+                    data['dgpu']['utilization'] = f'{parts[6]}%' if '%' not in parts[6] else parts[6]
         except Exception:
             pass
 

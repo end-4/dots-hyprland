@@ -1846,7 +1846,7 @@ Item {
                                             color: Appearance.m3colors.m3secondary
                                         }
                                         StyledText {
-                                            text: `${Math.round((identifyOverlay.dispInfo?.scale || 1.0) * 100)}%`
+                                            text: `${Math.round(((identifyOverlay.dispInfo && identifyOverlay.dispInfo.scale) ? identifyOverlay.dispInfo.scale : 1.0) * 100)}%`
                                             font.pixelSize: Appearance.font.pixelSize.small
                                             font.bold: true
                                             color: Appearance.m3colors.m3onSurface

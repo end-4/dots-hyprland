@@ -159,7 +159,10 @@ Singleton {
             onStreamFinished: {
                 root.loading = false;
                 try {
-                    let raw = JSON.parse(monitorsCollector.text);
+                    let text = monitorsCollector.text ? monitorsCollector.text.trim() : "";
+                    if (!text) return;
+                    let raw = JSON.parse(text);
+                    if (!Array.isArray(raw)) return;
                     root.displays = raw;
 
                     // Initialize pendingDisplays if empty or when requested
@@ -314,8 +317,11 @@ Singleton {
         let commands = [];
         for (let i = 0; i < displayList.length; i++) {
             let d = displayList[i];
-            let posStr = `"${Math.round(d.x)}x${Math.round(d.y)}"`;
-            let modeStr = d.disabled ? "\"disable\"" : `"${d.mode}"`;
+            let posX = Math.round(d.x || 0);
+            let posY = Math.round(d.y || 0);
+            let posStr = `"${posX}x${posY}"`;
+            let modeVal = (d.mode && d.mode.length > 0) ? d.mode : "preferred";
+            let modeStr = d.disabled ? "\"disable\"" : `"${modeVal}"`;
             let scaleVal = d.scale || 1.0;
             let transformVal = d.transform || 0;
             let vrrVal = d.vrr || 0;
@@ -389,8 +395,11 @@ Singleton {
 
         for (let i = 0; i < root.pendingDisplays.length; i++) {
             let d = root.pendingDisplays[i];
-            let posStr = `"${Math.round(d.x)}x${Math.round(d.y)}"`;
-            let modeStr = d.disabled ? "\"disable\"" : `"${d.mode}"`;
+            let posX = Math.round(d.x || 0);
+            let posY = Math.round(d.y || 0);
+            let posStr = `"${posX}x${posY}"`;
+            let modeVal = (d.mode && d.mode.length > 0) ? d.mode : "preferred";
+            let modeStr = d.disabled ? "\"disable\"" : `"${modeVal}"`;
             let scaleVal = d.scale || 1.0;
             let transformVal = d.transform || 0;
             let vrrVal = d.vrr || 0;
@@ -412,7 +421,7 @@ Singleton {
         // Write to ~/.config/hypr/monitors.lua
         Quickshell.execDetached([
             "bash", "-c",
-            `mkdir -p "$(dirname "${root.monitorsConfigPath}")" && cat << 'EOF' > "${root.monitorsConfigPath}"\n${fullScript}\nEOF`
+            `mkdir -p "$(dirname "${root.monitorsConfigPath}")" && cat << '__MONITORS_EOF__' > "${root.monitorsConfigPath}"\n${fullScript}\n__MONITORS_EOF__`
         ]);
     }
 
@@ -441,7 +450,7 @@ Singleton {
         target: Hyprland
 
         function onRawEvent(event) {
-            if (["monitoradded", "monitorremoved", "monitorlayout"].includes(event.name)) {
+            if (event && ["monitoradded", "monitorremoved", "monitorlayout"].includes(event.name)) {
                 root.refresh();
             }
         }
