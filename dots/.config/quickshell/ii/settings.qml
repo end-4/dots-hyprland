@@ -14,6 +14,7 @@ import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import qs.modules.common.functions as CF
 
 ApplicationWindow {
@@ -22,7 +23,9 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 8
     property bool showNextTime: false
-    property var pages: [
+    property bool settingsReady: false
+    property bool animateInnerRail: false
+    property var iiPages: [
         {
             name: Translation.tr("Quick"),
             icon: "instant_mix",
@@ -65,7 +68,77 @@ ApplicationWindow {
             component: "modules/settings/About.qml"
         }
     ]
+    property var categories: [
+        {
+            name: "illogical-impulse",
+            icon: "settings",
+            customIcon: "illogical-impulse-symbolic.svg",
+            pages: iiPages
+        },
+        {
+            name: "Connectivity",
+            icon: "settings_input_antenna",
+            pages: [
+                {
+                    name: Translation.tr("Wi-Fi"),
+                    icon: "wifi",
+                    component: "modules/settings/system/WifiConfig.qml"
+                },
+                {
+                    name: Translation.tr("Bluetooth"),
+                    icon: "bluetooth",
+                    component: "modules/settings/system/BluetoothConfig.qml"
+                },
+                {
+                    name: Translation.tr("VPN"),
+                    icon: "vpn_key",
+                    component: "modules/settings/system/VpnConfig.qml"
+                }
+            ]
+        },
+        {
+            name: "Monitor",
+            icon: "monitor",
+            component: "modules/settings/system/MonitorConfig.qml"
+        },
+        {
+            name: "KDE",
+            icon: "palette",
+            command: "systemsettings"
+        }
+    ]
+    property int currentCategory: 0
     property int currentPage: 0
+    readonly property bool categoryOpen: currentCategory >= 0
+    readonly property var currentCategoryData: categoryOpen ? categories[currentCategory] : ({})
+    readonly property bool currentCategoryHasPages: categoryOpen && currentCategoryData.pages !== undefined
+    readonly property var currentPageData: currentCategoryHasPages ? currentCategoryData.pages[currentPage] : ({})
+    readonly property string currentComponent: !categoryOpen ? "modules/settings/SettingsHome.qml"
+        : currentCategoryHasPages ? (currentPageData.component || currentCategoryData.pages[0].component)
+        : currentCategoryData.component
+
+    function openCategory(index) {
+        const category = categories[index];
+        if (category.command) {
+            Quickshell.execDetached(["bash", "-c", category.command]);
+            categoryRail.expanded = false;
+            return;
+        }
+        animateInnerRail = false;
+        currentCategory = index;
+        currentPage = 0;
+        categoryRail.expanded = false;
+        enableInnerRailAnimationTimer.restart();
+    }
+
+    function openPage(index) {
+        const page = currentCategoryData.pages[index];
+        if (page.command) {
+            Quickshell.execDetached(["bash", "-c", page.command]);
+            return;
+        }
+        currentPage = index;
+    }
 
     visible: true
     onClosing: Qt.quit()
@@ -74,6 +147,17 @@ ApplicationWindow {
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
+        settingsReady = true
+        enableInnerRailAnimationTimer.restart();
+    }
+
+    Timer {
+        id: enableInnerRailAnimationTimer
+        interval: 50
+        repeat: false
+        onTriggered: {
+            root.animateInnerRail = true;
+        }
     }
 
     minimumWidth: 750
@@ -91,19 +175,23 @@ ApplicationWindow {
         Keys.onPressed: (event) => {
             if (event.modifiers === Qt.ControlModifier) {
                 if (event.key === Qt.Key_PageDown) {
-                    root.currentPage = Math.min(root.currentPage + 1, root.pages.length - 1)
+                    if (root.currentCategoryHasPages)
+                        root.openPage(Math.min(root.currentPage + 1, root.categories[root.currentCategory].pages.length - 1))
                     event.accepted = true;
                 } 
                 else if (event.key === Qt.Key_PageUp) {
-                    root.currentPage = Math.max(root.currentPage - 1, 0)
+                    if (root.currentCategoryHasPages)
+                        root.openPage(Math.max(root.currentPage - 1, 0))
                     event.accepted = true;
                 }
                 else if (event.key === Qt.Key_Tab) {
-                    root.currentPage = (root.currentPage + 1) % root.pages.length;
+                    if (root.currentCategoryHasPages)
+                        root.openPage((root.currentPage + 1) % root.categories[root.currentCategory].pages.length);
                     event.accepted = true;
                 }
                 else if (event.key === Qt.Key_Backtab) {
-                    root.currentPage = (root.currentPage - 1 + root.pages.length) % root.pages.length;
+                    if (root.currentCategoryHasPages)
+                        root.openPage((root.currentPage - 1 + root.categories[root.currentCategory].pages.length) % root.categories[root.currentCategory].pages.length);
                     event.accepted = true;
                 }
             }
@@ -152,24 +240,88 @@ ApplicationWindow {
         RowLayout { // Window content with navigation rail and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: contentPadding
+            spacing: 0
             Item {
-                id: navRailWrapper
+                id: categoryRailWrapper
                 Layout.fillHeight: true
-                Layout.margins: 5
-                implicitWidth: navRail.expanded ? 150 : fab.baseSize
+                Layout.leftMargin: 5
+                Layout.rightMargin: contentPadding
+                Layout.topMargin: 5
+                Layout.bottomMargin: 5
+                implicitWidth: categoryRail.expanded ? 184 : 56
                 Behavior on implicitWidth {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-                NavigationRail { // Window content with navigation rail and content pane
-                    id: navRail
+                NavigationRail {
+                    id: categoryRail
                     anchors {
                         left: parent.left
                         top: parent.top
                         bottom: parent.bottom
                     }
                     spacing: 10
-                    expanded: root.width > 900
+                    expanded: false
+
+                    NavigationRailExpandButton {
+                        focus: root.visible
+                    }
+
+                    NavigationRailTabArray {
+                        currentIndex: root.currentCategory
+                        expanded: categoryRail.expanded
+                        Layout.topMargin: 25
+                        Repeater {
+                            model: root.categories
+                            NavigationRailButton {
+                                required property var index
+                                required property var modelData
+                                toggled: root.currentCategory === index
+                                onPressed: root.openCategory(index)
+                                expanded: categoryRail.expanded
+                                buttonIcon: modelData.icon
+                                customIconSource: modelData.customIcon || ""
+                                buttonText: modelData.name
+                                showCollapsedText: false
+                                showToggledHighlight: false
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
+                }
+            }
+
+            Item {
+                id: navRailWrapper
+                readonly property int leftPadding: 8
+                readonly property int rightPadding: 8
+                visible: root.currentCategoryHasPages
+                Layout.fillHeight: true
+                implicitWidth: visible ? ((navRail.expanded ? 150 : fab.baseSize) + leftPadding + rightPadding) : 0
+                Behavior on implicitWidth {
+                    enabled: root.settingsReady && root.animateInnerRail
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: ColorUtils.mix(Appearance.m3colors.m3surfaceContainerLow, Appearance.m3colors.m3background, 0.55)
+                    topLeftRadius: Appearance.rounding.large
+                    bottomLeftRadius: Appearance.rounding.large
+                }
+
+                NavigationRail { // Window content with navigation rail and content pane
+                    id: navRail
+                    anchors {
+                        left: parent.left
+                        leftMargin: navRailWrapper.leftPadding
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+                    spacing: 10
+                    expanded: true
                     
                     NavigationRailExpandButton {
                         focus: root.visible
@@ -177,6 +329,7 @@ ApplicationWindow {
 
                     FloatingActionButton {
                         id: fab
+                        visible: root.currentCategory === 0
                         property bool justCopied: false
                         iconText: justCopied ? "check" : "edit"
                         buttonText: justCopied ? Translation.tr("Path copied") : Translation.tr("Config file")
@@ -207,16 +360,18 @@ ApplicationWindow {
                         currentIndex: root.currentPage
                         expanded: navRail.expanded
                         Repeater {
-                            model: root.pages
+                            model: root.currentCategoryHasPages ? root.categories[root.currentCategory].pages : []
                             NavigationRailButton {
                                 required property var index
                                 required property var modelData
-                                toggled: root.currentPage === index
-                                onPressed: root.currentPage = index;
+                                toggled: root.currentPage === index && modelData.component !== undefined
+                                onPressed: root.openPage(index);
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
                                 buttonIconRotation: modelData.iconRotation || 0
                                 buttonText: modelData.name
+                                animateLayout: root.settingsReady && root.animateInnerRail
+                                showCollapsedText: false
                                 showToggledHighlight: false
                             }
                         }
@@ -231,7 +386,11 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: Appearance.m3colors.m3surfaceContainerLow
-                radius: Appearance.rounding.windowRounding - root.contentPadding
+                radius: 0
+                topLeftRadius: root.currentCategoryHasPages ? 0 : Appearance.rounding.windowRounding - root.contentPadding
+                bottomLeftRadius: root.currentCategoryHasPages ? 0 : Appearance.rounding.windowRounding - root.contentPadding
+                topRightRadius: Appearance.rounding.windowRounding - root.contentPadding
+                bottomRightRadius: Appearance.rounding.windowRounding - root.contentPadding
 
                 Loader {
                     id: pageLoader
@@ -240,12 +399,12 @@ ApplicationWindow {
 
                     active: Config.ready
                     Component.onCompleted: {
-                        source = root.pages[0].component
+                        source = root.currentComponent
                     }
 
                     Connections {
                         target: root
-                        function onCurrentPageChanged() {
+                        function onCurrentComponentChanged() {
                             switchAnim.complete();
                             switchAnim.start();
                         }
@@ -267,7 +426,7 @@ ApplicationWindow {
                             PropertyAction {
                                 target: pageLoader
                                 property: "source"
-                                value: root.pages[root.currentPage].component
+                                value: root.currentComponent
                             }
                             PropertyAction {
                                 target: pageLoader
