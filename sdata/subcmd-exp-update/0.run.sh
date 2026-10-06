@@ -303,7 +303,7 @@ show_diff() {
   echo "----------------------------------------"
 
   if command -v diff &>/dev/null; then
-    diff -u "$file1" "$file2" || true
+    diff --color=always -u "$file1" "$file2" || true
   else
     echo "diff command not available"
   fi
