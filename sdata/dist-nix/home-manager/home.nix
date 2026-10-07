@@ -8,7 +8,7 @@ quickshell, home_attrs, ... }:
   targets.genericLinux.enable = true;
   #nixGL.packages = nixgl.packages;
   #nixGL.defaultWrapper = "mesa";
-
+  fonts.fontDir.enable = true;
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
