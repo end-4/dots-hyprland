@@ -92,6 +92,37 @@ def glide_series(start, target, factor=None, snap=None, max_ticks=1000):
     return out
 
 
+# ---- seed from the daemon, NaN guards, redundant-send skip (mirror Hyprsunset.qml) ----
+def seed_level(identity, temp, gamma, peak):
+    """Hyprsunset._seed: appliedLevel derived from the daemon's ACTUAL state at load.
+    Returns None when the daemon's answer is unusable (falls back to start-from-zero)."""
+    if not (math.isfinite(temp) and math.isfinite(gamma)):
+        return None
+    span = peak - NEUTRAL_TEMP
+    if identity or span == 0:
+        return 0.0
+    return max(0.0, min(1.0, (temp - NEUTRAL_TEMP) / span))
+
+
+def target_level(base, bias):
+    """Hyprsunset.recompute target: clamp(base + bias), NaN -> 0 (Math.max/min pass NaN through)."""
+    raw = base + bias
+    return max(0.0, min(1.0, raw)) if math.isfinite(raw) else 0.0
+
+
+def glide_done(target, applied):
+    """True when the glide must stop. NaN is never < GLIDE_SNAP, so it needs its own branch
+    or the 60 ms timer spins forever."""
+    d = target - applied
+    return (not math.isfinite(d)) or abs(d) < GLIDE_SNAP
+
+
+def should_send(out, last):
+    """Hyprsunset.pushOutput: probe the daemon only when (temp, gamma) differ from what it already has.
+    last = (-1, -1) after load/settings change forces a pass."""
+    return out != last
+
+
 # ---- SunCalc (MIT, V. Agafonkin), ported to match Hyprsunset.qml.sunTimes ----
 def sun_times(date, lat, lng, tz):
     """date: aware datetime in tz. Returns (sunrise_min, sunset_min) local minutes-of-day,

@@ -145,6 +145,41 @@ def test_effective_level():
     check("automatic off = bias is the whole signal", L.effective_level(0.7, 0.4, False) == 0.4)
 
 
+# ---------------- seed from the daemon / NaN guards / redundant sends ----------------
+NAN = float("nan")
+
+
+def test_seed_from_daemon():
+    print("load seeds appliedLevel from the daemon's real state")
+    peak = 4600
+    check("identity -> level 0 (stored 6000K is NOT an active tint)", L.seed_level(True, 6000, 100, peak) == 0.0)
+    check("temp at neutral -> 0", L.seed_level(False, L.NEUTRAL_TEMP, 100, peak) == 0.0)
+    check("temp at peak -> 1", L.seed_level(False, peak, 100, peak) == 1.0)
+    mid = L.seed_level(False, (L.NEUTRAL_TEMP + peak) / 2, 100, peak)
+    check("midway temp -> 0.5", abs(mid - 0.5) < 1e-9, mid)
+    check("beyond peak clamps to 1", L.seed_level(False, 3000, 100, peak) == 1.0)
+    check("peak == neutral (span 0) -> 0, no division by zero", L.seed_level(False, 5000, 100, L.NEUTRAL_TEMP) == 0.0)
+    check("unusable daemon answer -> None (start from zero)", L.seed_level(False, NAN, 100, peak) is None
+          and L.seed_level(False, 5000, NAN, peak) is None)
+
+
+def test_nan_guards():
+    print("NaN never becomes the target and never spins the glide")
+    check("finite target unchanged", L.target_level(0.5, 0.2) == 0.7 and L.target_level(0.9, 0.5) == 1.0)
+    check("NaN bias -> 0, not NaN", L.target_level(0.5, NAN) == 0.0)
+    check("NaN base -> 0", L.target_level(NAN, 0.2) == 0.0)
+    check("glide stops on NaN difference", L.glide_done(NAN, 0.3) and L.glide_done(0.3, NAN))
+    check("glide keeps going on a real gap", not L.glide_done(0.9, 0.1))
+
+
+def test_redundant_send_skip():
+    print("the daemon is probed only when the output changed")
+    check("same (temp, gamma) -> no send", not L.should_send((4600, 100), (4600, 100)))
+    check("temp changed -> send", L.should_send((4500, 100), (4600, 100)))
+    check("gamma changed -> send", L.should_send((4600, 90), (4600, 100)))
+    check("reset to -1 (load / settings change) forces a send", L.should_send((4600, 100), (-1, -1)))
+
+
 # ---------------- solar schedule ----------------
 def test_solar_correct():
     print("solar times — Kyiv 2026-09-14")
@@ -178,7 +213,8 @@ def test_solar_polar():
 ALL = [
     test_temperature_mapping, test_gamma_composes_with_dim, test_ramp_shape, test_soft_auto_edge, test_midnight_wrap,
     test_glide_converges, test_glide_no_overshoot, test_glide_bounded_step, test_glide_downward,
-    test_effective_level, test_solar_correct, test_solar_seasonality, test_solar_polar,
+    test_effective_level, test_seed_from_daemon, test_nan_guards, test_redundant_send_skip,
+    test_solar_correct, test_solar_seasonality, test_solar_polar,
 ]
 
 
@@ -195,6 +231,16 @@ def main():
         elif which == "gamma":
             L.gamma_for_level = lambda lv, ug, ng, on: round(100 + (max(L.GAMMA_LOWER, ng) - 100) * lv) if on else ug
             print("MUTATION: dim overwrites user gamma, scaled by night level (the old bugs) — expect gamma reds\n")
+        elif which == "seed":
+            L.seed_level = lambda identity, temp, gamma, peak: (L.NEUTRAL_TEMP - temp) / (L.NEUTRAL_TEMP - peak)
+            print("MUTATION: seed ignores identity and clamping - expect seed reds\n")
+        elif which == "nan":
+            L.target_level = lambda base, bias: max(0.0, min(1.0, base + bias))
+            L.glide_done = lambda target, applied: abs(target - applied) < L.GLIDE_SNAP
+            print("MUTATION: no isFinite guards - expect NaN reds\n")
+        elif which == "send":
+            L.should_send = lambda out, last: True
+            print("MUTATION: always send - expect redundant-send reds\n")
         elif which == "solar":
             _orig = L.sun_times
             L.sun_times = lambda *a, **k: (6 * 60, 18 * 60)  # ignore date/location
