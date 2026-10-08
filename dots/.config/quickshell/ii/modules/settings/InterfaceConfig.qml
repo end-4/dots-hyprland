@@ -404,6 +404,78 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Target region opacity")
+            tooltip: Translation.tr("Sets how visible the hinted regions are. Labels and icons stay readable at any value.")
+
+            ConfigRow {
+                ConfigSlider {
+                    buttonIcon: "select_window"
+                    textWidth: 0
+                    from: 0.1
+                    to: 1
+                    value: Config.options.regionSelector.targetRegions.opacity
+                    onValueChanged: {
+                        Config.options.regionSelector.targetRegions.opacity = value;
+                    }
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Target region labels")
+
+            ConfigRow {
+                ConfigSwitch {
+                    buttonIcon: "label"
+                    text: Translation.tr("Show label")
+                    checked: Config.options.regionSelector.targetRegions.showLabel
+                    onCheckedChanged: {
+                        Config.options.regionSelector.targetRegions.showLabel = checked;
+                    }
+                }
+            }
+
+            ConfigRow {
+                enabled: Config.options.regionSelector.targetRegions.showLabel
+
+                ConfigSwitch {
+                    buttonIcon: "insert_photo"
+                    text: Translation.tr("Show app icon")
+                    checked: Config.options.regionSelector.targetRegions.showIcon
+                    onCheckedChanged: {
+                        Config.options.regionSelector.targetRegions.showIcon = checked;
+                    }
+                }
+            }
+
+            ConfigRow {
+                enabled: Config.options.regionSelector.targetRegions.showLabel
+
+                ConfigSwitch {
+                    buttonIcon: "title"
+                    text: Translation.tr("Show window title")
+                    checked: Config.options.regionSelector.targetRegions.showTitle
+                    onCheckedChanged: {
+                        Config.options.regionSelector.targetRegions.showTitle = checked;
+                    }
+                }
+            }
+
+            ConfigRow {
+                enabled: Config.options.regionSelector.targetRegions.showLabel
+
+                ConfigSwitch {
+                    buttonIcon: "pin"
+                    text: Translation.tr("Show region size and position")
+                    checked: Config.options.regionSelector.targetRegions.showCoordinates
+                    onCheckedChanged: {
+                        Config.options.regionSelector.targetRegions.showCoordinates = checked;
+                    }
+                }
+            }
+        }
         
         ContentSubsection {
             title: Translation.tr("Google Lens")
