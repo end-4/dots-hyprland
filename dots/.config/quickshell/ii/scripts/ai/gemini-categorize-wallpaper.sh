@@ -8,7 +8,7 @@ fi
 
 # Variables
 SOURCE_IMG_PATH="$1"
-MODEL="${2:-${GEMINI_WALLPAPER_MODEL:-gemini-2.5-flash}}" # We use the flash variant so it's fast
+MODEL="${2:-${GEMINI_WALLPAPER_MODEL:-gemini-flash-latest}}" # We use the flash variant so it's fast
 WALLPAPER_NAME="$(basename "$SOURCE_IMG_PATH")"
 PROMPT="${3:-${GEMINI_WALLPAPER_PROMPT:-Categorize the wallpaper. Its file name is $WALLPAPER_NAME}}"
 RESIZED_IMG_PATH="/tmp/quickshell/ai/wallpaper.jpg"
@@ -43,7 +43,7 @@ payload='{
         ]
     }],
     "generationConfig": {
-        "responseMimeType": "text/x.enum",
+        "responseMimeType": "application/json",
         "responseSchema": {
             "type": "string",
             "enum": [ "abstract", "anime", "city", "minimalist", "landscape", "plants", "person", "space" ]
@@ -62,4 +62,4 @@ response=$(curl "https://generativelanguage.googleapis.com/v1beta/models/${MODEL
 # echo "$response" | jq
 
 # Write the result
-echo "$response" | jq -r '.candidates[0].content.parts[0].text'
+echo "$response" | jq -r '.candidates[0].content.parts[0].text | fromjson? // .'
