@@ -18,172 +18,58 @@ Item {
     Layout.fillWidth: true
     clip: true
 
-    property var pendingPositions: ({})
+    readonly property real paddingSize: 16
+    readonly property real epsilon: 0.01
 
-    readonly property bool hasPendingChanges:
-        Object.keys(pendingPositions).length > 0
+    // Espaçamento somente visual entre os monitores.
+    // Não altera as coordenadas nem a área de arraste.
+    readonly property real monitorGap: 4
 
-    readonly property real paddingSize: 20
-
-    // Keep the preview geometry stable while dragging.
     property bool dragging: false
     property real frozenScale: 1
-    property real frozenOffsetX: 0
-    property real frozenOffsetY: 0
     property real frozenMinX: 0
     property real frozenMinY: 0
+    property real frozenOffsetX: 0
+    property real frozenOffsetY: 0
 
-    function monitorX(monitor) {
-        const position = pendingPositions[monitor.name];
-        return position ? position.x : monitor.x;
+    function clamp(value, low, high) {
+        return Math.max(low, Math.min(high, value));
     }
 
-    function monitorY(monitor) {
-        const position = pendingPositions[monitor.name];
-        return position ? position.y : monitor.y;
+    function logicalWidth(m) {
+        const rotated = Number(m.transform || 0) % 2 !== 0;
+
+        return (rotated ? Number(m.height) : Number(m.width))
+            / Math.max(0.01, Number(m.scale) || 1);
     }
 
-    function logicalWidth(monitor) {
-        const rotated = monitor.transform % 2 !== 0;
+    function logicalHeight(m) {
+        const rotated = Number(m.transform || 0) % 2 !== 0;
 
-        return (rotated ? monitor.height : monitor.width)
-            / monitor.scale;
+        return (rotated ? Number(m.width) : Number(m.height))
+            / Math.max(0.01, Number(m.scale) || 1);
     }
 
-    function logicalHeight(monitor) {
-        const rotated = monitor.transform % 2 !== 0;
-
-        return (rotated ? monitor.width : monitor.height)
-            / monitor.scale;
-    }
-
-    function moveMonitor(name, x, y) {
-        const positions = Object.assign({}, pendingPositions);
-
-        positions[name] = {
-            x: Math.round(x),
-            y: Math.round(y)
-        };
-
-        pendingPositions = positions;
-        layoutChanged(positions);
-    }
-
-    function resetLayout() {
-        pendingPositions = {};
-        layoutChanged(pendingPositions);
-    }
-
-    function rectanglesOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
-        return ax < bx + bw
-            && ax + aw > bx
-            && ay < by + bh
-            && ay + ah > by;
-    }
-
-    // Find the nearest non-overlapping position touching another monitor.
-    function snapMonitor(name, x, y) {
-        const moving = monitors.find(m => m.name === name);
-
-        if (!moving)
-            return;
-
-        const w = logicalWidth(moving);
-        const h = logicalHeight(moving);
-
-        const others = monitors.filter(m => m.name !== name);
-
-        if (others.length === 0) {
-            moveMonitor(name, x, y);
-            return;
-        }
-
-        let bestX = x;
-        let bestY = y;
-        let bestDistance = Infinity;
-
-        for (const other of others) {
-            const ox = monitorX(other);
-            const oy = monitorY(other);
-            const ow = logicalWidth(other);
-            const oh = logicalHeight(other);
-
-            const candidates = [
-                {
-                    x: ox + ow,
-                    y: Math.max(oy - h + 1, Math.min(y, oy + oh - 1))
-                },
-                {
-                    x: ox - w,
-                    y: Math.max(oy - h + 1, Math.min(y, oy + oh - 1))
-                },
-                {
-                    x: Math.max(ox - w + 1, Math.min(x, ox + ow - 1)),
-                    y: oy + oh
-                },
-                {
-                    x: Math.max(ox - w + 1, Math.min(x, ox + ow - 1)),
-                    y: oy - h
-                }
-            ];
-
-            for (const candidate of candidates) {
-                const overlapsAny = others.some(m =>
-                    rectanglesOverlap(
-                        candidate.x,
-                        candidate.y,
-                        w,
-                        h,
-                        monitorX(m),
-                        monitorY(m),
-                        logicalWidth(m),
-                        logicalHeight(m)
-                    )
-                );
-
-                if (overlapsAny)
-                    continue;
-
-                const distance = Math.hypot(
-                    candidate.x - x,
-                    candidate.y - y
-                );
-
-                if (distance < bestDistance) {
-                    bestDistance = distance;
-                    bestX = candidate.x;
-                    bestY = candidate.y;
-                }
-            }
-        }
-
-        if (bestDistance !== Infinity)
-            moveMonitor(name, bestX, bestY);
-    }
-
-    readonly property real minX: monitors.length > 0
-        ? Math.min(...monitors.map(m => monitorX(m)))
+    readonly property real minX: monitors.length
+        ? Math.min(...monitors.map(m => Number(m.x) || 0))
         : 0
 
-    readonly property real minY: monitors.length > 0
-        ? Math.min(...monitors.map(m => monitorY(m)))
+    readonly property real minY: monitors.length
+        ? Math.min(...monitors.map(m => Number(m.y) || 0))
         : 0
 
-    readonly property real maxX: monitors.length > 0
-        ? Math.max(...monitors.map(
-            m => monitorX(m) + logicalWidth(m)))
+    readonly property real maxX: monitors.length
+        ? Math.max(...monitors.map(m =>
+            (Number(m.x) || 0) + logicalWidth(m)))
         : 1
 
-    readonly property real maxY: monitors.length > 0
-        ? Math.max(...monitors.map(
-            m => monitorY(m) + logicalHeight(m)))
+    readonly property real maxY: monitors.length
+        ? Math.max(...monitors.map(m =>
+            (Number(m.y) || 0) + logicalHeight(m)))
         : 1
 
-    readonly property real layoutWidth:
-        Math.max(1, maxX - minX)
-
-    readonly property real layoutHeight:
-        Math.max(1, maxY - minY)
+    readonly property real layoutWidth: Math.max(1, maxX - minX)
+    readonly property real layoutHeight: Math.max(1, maxY - minY)
 
     readonly property real availableWidth:
         Math.max(1, width - paddingSize * 2)
@@ -196,20 +82,14 @@ Item {
         availableHeight / layoutHeight
     )
 
-    readonly property real offsetX:
-        (width - layoutWidth * previewScale) / 2
+    readonly property real offsetX: paddingSize
+        + (availableWidth - layoutWidth * previewScale) / 2
 
-    readonly property real offsetY:
-        (height - layoutHeight * previewScale) / 2
+    readonly property real offsetY: paddingSize
+        + (availableHeight - layoutHeight * previewScale) / 2
 
     readonly property real effectiveScale:
         dragging ? frozenScale : previewScale
-
-    readonly property real effectiveOffsetX:
-        dragging ? frozenOffsetX : offsetX
-
-    readonly property real effectiveOffsetY:
-        dragging ? frozenOffsetY : offsetY
 
     readonly property real effectiveMinX:
         dragging ? frozenMinX : minX
@@ -217,38 +97,152 @@ Item {
     readonly property real effectiveMinY:
         dragging ? frozenMinY : minY
 
-    function clamp(value, minimum, maximum) {
-        return Math.max(minimum, Math.min(value, maximum));
+    readonly property real effectiveOffsetX:
+        dragging ? frozenOffsetX : offsetX
+
+    readonly property real effectiveOffsetY:
+        dragging ? frozenOffsetY : offsetY
+
+    function previewX(x) {
+        return effectiveOffsetX
+            + (x - effectiveMinX) * effectiveScale;
     }
 
-    // Keep the entire rectangle inside the preview area.
-    function clampPreviewX(x, monitorWidth) {
-        return clamp(
-            x,
-            paddingSize,
-            Math.max(paddingSize, width - paddingSize - monitorWidth)
-        );
-    }
-
-    function clampPreviewY(y, monitorHeight) {
-        return clamp(
-            y,
-            paddingSize,
-            Math.max(paddingSize, height - paddingSize - monitorHeight)
-        );
+    function previewY(y) {
+        return effectiveOffsetY
+            + (y - effectiveMinY) * effectiveScale;
     }
 
     function beginDrag() {
         frozenScale = previewScale;
-        frozenOffsetX = offsetX;
-        frozenOffsetY = offsetY;
         frozenMinX = minX;
         frozenMinY = minY;
+        frozenOffsetX = offsetX;
+        frozenOffsetY = offsetY;
         dragging = true;
     }
 
-    function endDrag() {
-        dragging = false;
+    function overlaps(ax, ay, aw, ah, bx, by, bw, bh) {
+        return ax < bx + bw - epsilon
+            && ax + aw > bx + epsilon
+            && ay < by + bh - epsilon
+            && ay + ah > by + epsilon;
+    }
+
+    function validPosition(name, x, y) {
+        const moving = monitors.find(m => m.name === name);
+
+        if (!moving)
+            return false;
+
+        const w = logicalWidth(moving);
+        const h = logicalHeight(moving);
+
+        return !monitors.some(other =>
+            other.name !== name && overlaps(
+                x, y, w, h,
+                Number(other.x) || 0,
+                Number(other.y) || 0,
+                logicalWidth(other),
+                logicalHeight(other)
+            )
+        );
+    }
+
+    function snapMonitor(name, requestedX, requestedY) {
+        const moving = monitors.find(m => m.name === name);
+
+        if (!moving)
+            return;
+
+        const others = monitors.filter(m => m.name !== name);
+
+        if (!others.length) {
+            layoutChanged({
+                [name]: {
+                    x: Math.round(requestedX),
+                    y: Math.round(requestedY)
+                }
+            });
+            return;
+        }
+
+        const w = logicalWidth(moving);
+        const h = logicalHeight(moving);
+
+        let best = null;
+        let bestDistance = Infinity;
+
+        for (const other of others) {
+            const ox = Number(other.x) || 0;
+            const oy = Number(other.y) || 0;
+            const ow = logicalWidth(other);
+            const oh = logicalHeight(other);
+
+            const candidates = [
+                {
+                    x: Math.ceil(ox + ow),
+                    y: Math.round(clamp(
+                        requestedY,
+                        oy - h + 1,
+                        oy + oh - 1
+                    ))
+                },
+                {
+                    x: Math.floor(ox - w),
+                    y: Math.round(clamp(
+                        requestedY,
+                        oy - h + 1,
+                        oy + oh - 1
+                    ))
+                },
+                {
+                    x: Math.round(clamp(
+                        requestedX,
+                        ox - w + 1,
+                        ox + ow - 1
+                    )),
+                    y: Math.ceil(oy + oh)
+                },
+                {
+                    x: Math.round(clamp(
+                        requestedX,
+                        ox - w + 1,
+                        ox + ow - 1
+                    )),
+                    y: Math.floor(oy - h)
+                }
+            ];
+
+            for (const candidate of candidates) {
+                if (!validPosition(
+                    name,
+                    candidate.x,
+                    candidate.y
+                )) {
+                    continue;
+                }
+
+                const distance = Math.hypot(
+                    candidate.x - requestedX,
+                    candidate.y - requestedY
+                );
+
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    best = candidate;
+                }
+            }
+        }
+
+        if (best) {
+            layoutChanged({
+                [name]: {
+                    x: best.x,
+                    y: best.y
+                }
+            });
+        }
     }
 
     Rectangle {
@@ -260,8 +254,10 @@ Item {
     Repeater {
         model: root.monitors
 
-        delegate: Rectangle {
-            id: monitorRect
+        // A área externa mantém o tamanho lógico completo.
+        // O retângulo interno recebe apenas a margem visual.
+        delegate: Item {
+            id: monitorItem
 
             required property var modelData
             required property int index
@@ -269,21 +265,19 @@ Item {
             readonly property bool selected:
                 modelData.name === root.selectedMonitorName
 
-            readonly property real baseX:
-                root.effectiveOffsetX
-                + (root.monitorX(modelData) - root.effectiveMinX)
-                * root.effectiveScale
+            property real visualDX: 0
+            property real visualDY: 0
+            property real dragStartX: 0
+            property real dragStartY: 0
+            property real dragScale: 1
+            property real requestedDX: 0
+            property real requestedDY: 0
 
-            readonly property real baseY:
-                root.effectiveOffsetY
-                + (root.monitorY(modelData) - root.effectiveMinY)
-                * root.effectiveScale
+            x: root.previewX(Number(modelData.x) || 0)
+                + visualDX
 
-            property real dragX: 0
-            property real dragY: 0
-
-            x: baseX + dragX
-            y: baseY + dragY
+            y: root.previewY(Number(modelData.y) || 0)
+                + visualDY
 
             width: Math.max(
                 1,
@@ -297,104 +291,126 @@ Item {
 
             z: dragHandler.active ? 10 : selected ? 2 : 1
 
-            radius: Appearance.rounding.normal
+            Rectangle {
+                id: monitorVisual
 
-            color: selected
-                ? Appearance.m3colors.m3primaryContainer
-                : Appearance.m3colors.m3surfaceContainerHigh
+                anchors.fill: parent
+                anchors.margins: root.monitorGap / 2
 
-            border.width: selected ? 3 : 1
+                radius: Appearance.rounding.normal
 
-            border.color: selected
-                ? Appearance.m3colors.m3primary
-                : Appearance.m3colors.m3outlineVariant
+                color: monitorItem.selected
+                    ? Appearance.m3colors.m3primaryContainer
+                    : Appearance.m3colors.m3surfaceContainerHigh
 
-            Behavior on color {
-                ColorAnimation {
-                    duration: 160
+                border.width: monitorItem.selected ? 3 : 1
+
+                border.color: monitorItem.selected
+                    ? Appearance.m3colors.m3primary
+                    : Appearance.m3colors.m3outlineVariant
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 160
+                    }
+                }
+
+                Column {
+                    anchors.centerIn: parent
+                    width: Math.max(0, parent.width - 12)
+                    spacing: 4
+
+                    StyledText {
+                        anchors.horizontalCenter:
+                            parent.horizontalCenter
+
+                        text: String(monitorItem.index + 1)
+                        font.pixelSize: 28
+                        font.weight: Font.Bold
+
+                        color: monitorItem.selected
+                            ? Appearance.m3colors.m3onPrimaryContainer
+                            : Appearance.m3colors.m3onSurface
+                    }
+
+                    StyledText {
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                        text: monitorItem.modelData.name
+
+                        color: monitorItem.selected
+                            ? Appearance.m3colors.m3onPrimaryContainer
+                            : Appearance.m3colors.m3onSurface
+                    }
                 }
             }
 
-            Column {
-                anchors.centerIn: parent
-                width: Math.max(0, parent.width - 12)
-                spacing: 4
-
-                StyledText {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: String(monitorRect.index + 1)
-                    font.pixelSize: 28
-                    font.weight: Font.Bold
-
-                    color: monitorRect.selected
-                        ? Appearance.m3colors.m3onPrimaryContainer
-                        : Appearance.m3colors.m3onSurface
-                }
-
-                StyledText {
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                    elide: Text.ElideRight
-                    text: monitorRect.modelData.name
-
-                    color: monitorRect.selected
-                        ? Appearance.m3colors.m3onPrimaryContainer
-                        : Appearance.m3colors.m3onSurface
-                }
-            }
-
+            // Clique seleciona sem movimentar.
             TapHandler {
+                acceptedButtons: Qt.LeftButton
+
                 onTapped: {
-                    root.monitorSelected(monitorRect.modelData.name);
+                    root.monitorSelected(
+                        monitorItem.modelData.name
+                    );
                 }
             }
 
+            // Arraste preservado da versão funcional.
             DragHandler {
                 id: dragHandler
 
                 target: null
                 acceptedButtons: Qt.LeftButton
-
-                property real startScale: 1
-                property real initialMonitorX: 0
-                property real initialMonitorY: 0
+                dragThreshold: 2
 
                 onActiveChanged: {
                     if (active) {
-                        root.monitorSelected(monitorRect.modelData.name);
-
                         root.beginDrag();
 
-                        startScale = root.frozenScale;
+                        root.monitorSelected(
+                            monitorItem.modelData.name
+                        );
 
-                        initialMonitorX =
-                            root.monitorX(monitorRect.modelData);
+                        monitorItem.dragStartX =
+                            Number(monitorItem.modelData.x) || 0;
 
-                        initialMonitorY =
-                            root.monitorY(monitorRect.modelData);
+                        monitorItem.dragStartY =
+                            Number(monitorItem.modelData.y) || 0;
+
+                        monitorItem.dragScale = root.frozenScale;
+
+                        monitorItem.visualDX = 0;
+                        monitorItem.visualDY = 0;
+                        monitorItem.requestedDX = 0;
+                        monitorItem.requestedDY = 0;
                     } else {
-                        if (root.dragging) {
-                            if (Math.abs(monitorRect.dragX) > 0.5
-                                || Math.abs(monitorRect.dragY) > 0.5) {
+                        if (!root.dragging)
+                            return;
 
-                                const newX = initialMonitorX
-                                    + monitorRect.dragX / startScale;
+                        const name = monitorItem.modelData.name;
 
-                                const newY = initialMonitorY
-                                    + monitorRect.dragY / startScale;
+                        const requestedX =
+                            monitorItem.dragStartX
+                            + monitorItem.requestedDX
+                            / monitorItem.dragScale;
 
-                                root.snapMonitor(
-                                    monitorRect.modelData.name,
-                                    newX,
-                                    newY
-                                );
-                            }
+                        const requestedY =
+                            monitorItem.dragStartY
+                            + monitorItem.requestedDY
+                            / monitorItem.dragScale;
 
-                            monitorRect.dragX = 0;
-                            monitorRect.dragY = 0;
+                        monitorItem.visualDX = 0;
+                        monitorItem.visualDY = 0;
 
-                            root.endDrag();
-                        }
+                        root.dragging = false;
+
+                        root.snapMonitor(
+                            name,
+                            requestedX,
+                            requestedY
+                        );
                     }
                 }
 
@@ -402,29 +418,46 @@ Item {
                     if (!active)
                         return;
 
-                    // Proposed position in preview pixels.
-                    const proposedX =
-                        monitorRect.baseX + translation.x;
+                    monitorItem.requestedDX = translation.x;
+                    monitorItem.requestedDY = translation.y;
 
-                    const proposedY =
-                        monitorRect.baseY + translation.y;
+                    const baseX = root.frozenOffsetX
+                        + (monitorItem.dragStartX
+                        - root.frozenMinX)
+                        * monitorItem.dragScale;
 
-                    // Stop at the preview boundaries.
-                    const boundedX = root.clampPreviewX(
-                        proposedX,
-                        monitorRect.width
+                    const baseY = root.frozenOffsetY
+                        + (monitorItem.dragStartY
+                        - root.frozenMinY)
+                        * monitorItem.dragScale;
+
+                    const minDX = root.paddingSize - baseX;
+
+                    const maxDX =
+                        root.width
+                        - root.paddingSize
+                        - monitorItem.width
+                        - baseX;
+
+                    const minDY = root.paddingSize - baseY;
+
+                    const maxDY =
+                        root.height
+                        - root.paddingSize
+                        - monitorItem.height
+                        - baseY;
+
+                    monitorItem.visualDX = root.clamp(
+                        translation.x,
+                        Math.min(minDX, maxDX),
+                        Math.max(minDX, maxDX)
                     );
 
-                    const boundedY = root.clampPreviewY(
-                        proposedY,
-                        monitorRect.height
+                    monitorItem.visualDY = root.clamp(
+                        translation.y,
+                        Math.min(minDY, maxDY),
+                        Math.max(minDY, maxDY)
                     );
-
-                    monitorRect.dragX =
-                        boundedX - monitorRect.baseX;
-
-                    monitorRect.dragY =
-                        boundedY - monitorRect.baseY;
                 }
             }
         }
