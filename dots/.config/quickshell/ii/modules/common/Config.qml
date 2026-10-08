@@ -474,6 +474,8 @@ Singleton {
                 property int interval: 4
             }
 
+            property bool autoIdleInhibit: false
+
             property JsonObject search: JsonObject {
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
