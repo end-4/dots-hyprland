@@ -161,7 +161,9 @@ Singleton {
 
     function updateTarget() {
         const base = root.automatic ? root.autoLevel : 0;
-        root.targetLevel = Math.max(0, Math.min(1, base + root.bias));
+        const raw = base + root.bias;
+        // NaN from a bad bias/autoLevel (broken config, coordinates) must not become the target: Math.max/min pass NaN through
+        root.targetLevel = isFinite(raw) ? Math.max(0, Math.min(1, raw)) : 0;
         root.startGlide();
     }
 
@@ -172,23 +174,44 @@ Singleton {
         repeat: true
         onTriggered: {
             const d = root.targetLevel - root.appliedLevel;
-            if (Math.abs(d) < 0.004) { root.appliedLevel = root.targetLevel; glideTimer.stop(); }
+            // NaN is never below the threshold: without isFinite the 60 ms timer would spin forever and pushOutput would send a "new" output every tick
+            if (!isFinite(d) || Math.abs(d) < 0.004) { root.appliedLevel = isFinite(root.targetLevel) ? root.targetLevel : 0; glideTimer.stop(); }
             else root.appliedLevel += d * 0.28;
             root.pushOutput();
         }
     }
     function startGlide() {
-        if (Math.abs(root.targetLevel - root.appliedLevel) < 0.004) {
-            root.appliedLevel = root.targetLevel;
+        if (!isFinite(root.targetLevel - root.appliedLevel) || Math.abs(root.targetLevel - root.appliedLevel) < 0.004) {
+            root.appliedLevel = isFinite(root.targetLevel) ? root.targetLevel : 0;
             root.pushOutput();
             return;
         }
         if (!glideTimer.running) glideTimer.start();
     }
 
+    // Only probe the daemon (bash + timeout + hyprctl) when there is something new to send:
+    // the per-minute recompute used to do it even when the output was unchanged.
+    // Resetting _last* to -1 still forces a pass (load, settings change).
     function pushOutput() {
+        if (!root._seeded) return;   // daemon state not read yet (see load)
+        const o = root._computeOutput();
+        if (o.temp === root._lastTemp && o.gamma === root._lastGamma) {
+            root.temperatureActive = o.active;
+            return;
+        }
         root._outputPending = true;
         root.ensureHyprsunset();
+    }
+
+    function _computeOutput() {
+        const level = root.appliedLevel;
+        const active = level > 0.001;
+        const t0 = active ? Math.round(root.neutralColorTemperature + (root.colorTemperature - root.neutralColorTemperature) * level) : 0;
+        const temp = isFinite(t0) ? t0 : 0;
+        const dim = root.automaticGamma ? Math.max(root.gammaLowerLimit, root.nightGamma) / 100 : 1;
+        const g0 = Math.max(root.gammaLowerLimit, Math.round(root.gamma * dim));
+        const gamma = isFinite(g0) ? g0 : 100;   // NaN !== NaN would make every pass look like a new output and call ensureHyprsunset
+        return { active: active && isFinite(t0), temp, gamma };
     }
 
     // Level 0 is "off": hyprsunset identity, not a temperature — no Kelvin value is
@@ -196,17 +219,16 @@ Singleton {
     // neutralColorTemperature, the Kelvin closest to identity, so the hand-off is seamless.
     // Gamma is composed, never overwritten: the user's gamma times the dim factor.
     function applyOutput() {
-        const level = root.appliedLevel;
-        const active = level > 0.001;
-        const temp = active ? Math.round(root.neutralColorTemperature + (root.colorTemperature - root.neutralColorTemperature) * level) : 0;
+        const o = root._computeOutput();
+        const active = o.active;
+        const temp = o.temp;
         root.temperatureActive = active;
         if (temp !== root._lastTemp) {
             root._lastTemp = temp;
             Quickshell.execDetached(["hyprctl", "hyprsunset", ...(active ? ["temperature", `${temp}`] : ["identity"])]);
         }
         // Dim screen is a steady dim while on, independent of the night level.
-        const dim = root.automaticGamma ? Math.max(root.gammaLowerLimit, root.nightGamma) / 100 : 1;
-        const g = Math.max(root.gammaLowerLimit, Math.round(root.gamma * dim));
+        const g = o.gamma;
         if (g !== root._lastGamma) {
             root._lastGamma = g;
             Quickshell.execDetached(["hyprctl", "hyprsunset", "gamma", `${g}`]);
@@ -219,11 +241,52 @@ Singleton {
         if (!ensureProc.running) ensureProc.running = true;
     }
 
+    // Loading the shell must not reset the daemon. load() used to zero appliedLevel and _last*, so every shell
+    // restart sent identity + gamma and then glided the night temperature back in: the screen flashed neutral.
+    // Now we start from the daemon's ACTUAL state: read identity/temperature/gamma and derive appliedLevel from them.
+    // _last* then match the daemon, nothing redundant is sent, and a differing target is approached smoothly from
+    // the real point. A silent daemon falls back to the old start-from-zero path.
+    // Nothing is sent before that read (_seeded): config-load signals (onColorTemperatureChanged etc.) otherwise
+    // called pushOutput with appliedLevel = 0 and sent identity - measured as an identity flash right after a restart.
+    property bool _seeded: false
     function load() {
+        root._seeded = false;
+        seedProc.running = true;
+    }
+    function _seededDone() {
+        root._seeded = true;
+        if (root._outputPending) {   // a settings change arrived before the seed: force a send from the real state now
+            root._lastTemp = -1;
+            root._lastGamma = -1;
+        }
+    }
+    function _loadFromZero() {
         root.appliedLevel = 0;
         root._lastTemp = -1;
         root._lastGamma = -1;
+        root._seededDone();
         root.recompute();
+    }
+    function _seed(text) {
+        const l = text.trim().split("\n");
+        const temp = Number(l[1]), gamma = Number(l[2]);
+        if (l.length < 3 || l[0] === "" || !Number.isFinite(temp) || !Number.isFinite(gamma)) { root._loadFromZero(); return; }
+        const identity = l[0] === "true";
+        const span = root.colorTemperature - root.neutralColorTemperature;
+        root.appliedLevel = (identity || span === 0) ? 0 : Math.max(0, Math.min(1, (temp - root.neutralColorTemperature) / span));
+        root._lastTemp = identity ? 0 : temp;   // same convention as applyOutput: "off" = 0
+        root._lastGamma = gamma;
+        root.temperatureActive = !identity;
+        root._seededDone();
+        root.recompute();
+    }
+    Process {
+        id: seedProc
+        command: ["bash", "-c", "timeout 2 hyprctl hyprsunset identity get; timeout 2 hyprctl hyprsunset temperature; timeout 2 hyprctl hyprsunset gamma"]
+        stdout: StdioCollector {
+            id: seedCollector
+            onStreamFinished: root._seed(seedCollector.text)
+        }
     }
 
     // Bar quick-toggle / "boost now": park the bias at an extreme (held; centre = auto).
@@ -267,7 +330,7 @@ Singleton {
             exit 1
         `]
         onExited: (exitCode, exitStatus) => {
-            if (exitCode !== 0 || !root._outputPending) return;
+            if (exitCode !== 0 || !root._outputPending || !root._seeded) return;   // before the seed applyOutput would send identity from appliedLevel = 0
             root._outputPending = false;
             root.applyOutput();
         }
@@ -276,7 +339,6 @@ Singleton {
     function fetchState() { fetchProc.running = true; }
     Process {
         id: fetchProc
-        running: true
         // identity keeps the last Kelvin value around, so it must be checked first.
         command: ["bash", "-c", "[ \"$(hyprctl hyprsunset identity get)\" = true ] && echo identity || hyprctl hyprsunset temperature"]
         stdout: StdioCollector {
