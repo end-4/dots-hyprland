@@ -34,6 +34,11 @@ ApplicationWindow {
             component: "modules/settings/GeneralConfig.qml"
         },
         {
+            name: Translation.tr("Displays"),
+            icon: "desktop_windows",
+            component: "modules/settings/DisplaysConfig.qml"
+        },
+        {
             name: Translation.tr("Bar"),
             icon: "toast",
             iconRotation: 180,
@@ -69,7 +74,7 @@ ApplicationWindow {
 
     visible: true
     onClosing: Qt.quit()
-    title: "illogical-impulse Settings"
+    title: "Vesta Settings"
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
