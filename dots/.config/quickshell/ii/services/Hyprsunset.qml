@@ -7,25 +7,58 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 /**
- * Simple hyprsunset service with automatic mode.
- * In theory we don't need this because hyprsunset has a config file, but it somehow doesn't work.
- * It should also be possible to control it via hyprctl, but it doesn't work consistently either so we're just killing and launching.
+ * hyprsunset service — one automatic day/night cycle with a relative override.
+ *
+ * Schedule has a START and an END edge; EACH edge is independently either a fixed
+ * clock time or "auto" (sunset / sunrise, computed offline from latitude/longitude,
+ * so it tracks the season and works anywhere). start=auto -> sunset, end=auto ->
+ * sunrise ("until morning"). Auto edges use a softer, longer twilight fade.
+ *
+ *   autoLevel 0..1  the schedule's recommendation (twilight-eased).
+ *   bias -1..+1     a held relative nudge on top; this is the live "dim/boost now".
+ *   target = clamp((automatic ? autoLevel : 0) + bias, 0, 1)
+ *
+ * appliedLevel glides smoothly toward target, so nothing snaps. State lives in
+ * config.json and survives a reboot.
  */
 Singleton {
     id: root
     signal gammaChangeAttempt()
 
     readonly property real gammaLowerLimit: 25
+    readonly property real softFactor: 1.75 // auto edges fade this much longer than a fixed time
 
-    property string from: Config.options?.light?.night?.from ?? "19:00" 
+    property string startMode: Config.options?.light?.night?.startMode ?? "time" // "time" | "auto"(sunset)
+    property string endMode: Config.options?.light?.night?.endMode ?? "time"     // "time" | "auto"(sunrise)
+    property string from: Config.options?.light?.night?.from ?? "19:00"
     property string to: Config.options?.light?.night?.to ?? "06:30"
+
     property bool automatic: Config.options?.light?.night?.automatic && (Config?.ready ?? true)
-    property int colorTemperature: Config.options?.light?.night?.colorTemperature ?? 5000
+    property int colorTemperature: Config.options?.light?.night?.colorTemperature ?? 5000 // the one "Warmth"
     property int defaultColorTemperature: 6000
+    readonly property int neutralColorTemperature: 6600 // hyprsunset's Kelvin nearest to identity
+
+    property real bias: Config.options?.light?.night?.bias ?? 0 // -1..+1, held
+    property bool automaticGamma: Config.options?.light?.night?.automaticGamma ?? false
+    property int nightGamma: Config.options?.light?.night?.nightGamma ?? 85
+    property int transitionMinutes: Config.options?.light?.night?.transitionMinutes ?? 30
+    property real latitude: Config.options?.light?.night?.latitude ?? 0
+    property real longitude: Config.options?.light?.night?.longitude ?? 0
+
     property int gamma: 100
-    property bool shouldBeOn
-    property bool firstEvaluation: true
+    property real autoLevel: 0
+    property real targetLevel: 0
+    property real appliedLevel: 0
     property bool temperatureActive: false
+
+    property int sunsetMin: -1
+    property int sunriseMin: -1
+    property string sunsetStr: ""
+    property string sunriseStr: ""
+    property int sunsetHour: sunsetMin >= 0 ? Math.floor(sunsetMin / 60) : 19
+    property int sunsetMinute: sunsetMin >= 0 ? sunsetMin % 60 : 0
+    property int sunriseHour: sunriseMin >= 0 ? Math.floor(sunriseMin / 60) : 6
+    property int sunriseMinute: sunriseMin >= 0 ? sunriseMin % 60 : 30
 
     property int fromHour: Number(from.split(":")[0])
     property int fromMinute: Number(from.split(":")[1])
@@ -35,138 +68,301 @@ Singleton {
     property int clockHour: DateTime.clock.hours
     property int clockMinute: DateTime.clock.minutes
 
-    property var manualActive
-    property int manualActiveHour
-    property int manualActiveMinute
+    property int _lastTemp: -1
+    property int _lastGamma: -1
+    property bool _outputPending: false
 
-    onClockMinuteChanged: reEvaluate()
-    onAutomaticChanged: {
-        root.manualActive = undefined;
-        root.firstEvaluation = true;
-        reEvaluate();
+    onClockMinuteChanged: recompute()
+    onStartModeChanged: recompute()
+    onEndModeChanged: recompute()
+    onAutomaticChanged: updateTarget()
+    onBiasChanged: updateTarget()
+
+    function minutesSince(t, start) { let d = t - start; if (d < 0) d += 1440; return d; }
+    function minutesUntil(t, end)   { let d = end - t; if (d < 0) d += 1440; return d; }
+    function pad2(n) { return (n < 10 ? "0" : "") + n; }
+    function inBetween(t, frm, to) {
+        if (frm < to) return (t >= frm && t <= to);
+        return (t >= frm || t <= to);
     }
 
-    function inBetween(t, from, to) {
-        if (from < to) {
-            return (t >= from && t <= to);
+    // ---- Solar math (SunCalc, MIT — Vladimir Agafonkin). Offline, no network. ----
+    function sunTimes(date, lat, lng) {
+        const rad = Math.PI / 180, dayMs = 86400000, J1970 = 2440588, J2000 = 2451545, J0 = 0.0009;
+        const toJulian = d => d.valueOf() / dayMs - 0.5 + J1970;
+        const fromJulian = j => new Date((j + 0.5 - J1970) * dayMs);
+        const toDays = d => toJulian(d) - J2000;
+        const lw = rad * -lng, phi = rad * lat;
+        const d = toDays(date);
+        const n = Math.round(d - J0 - lw / (2 * Math.PI));
+        const ds = J0 + lw / (2 * Math.PI) + n;
+        const M = rad * (357.5291 + 0.98560028 * ds);
+        const C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
+        const L = M + C + rad * 102.9372 + Math.PI;
+        const dec = Math.asin(Math.sin(L) * Math.sin(rad * 23.4397));
+        const Jnoon = J2000 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
+        const h0 = rad * -0.833;
+        const cosW = (Math.sin(h0) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec));
+        if (cosW > 1) return { polar: "day" };
+        if (cosW < -1) return { polar: "night" };
+        const w0 = Math.acos(cosW);
+        const a = J0 + (w0 + lw) / (2 * Math.PI) + n;
+        const Jset = J2000 + a + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
+        const Jrise = Jnoon - (Jset - Jnoon);
+        const rise = fromJulian(Jrise), set = fromJulian(Jset);
+        return {
+            sunriseMin: rise.getHours() * 60 + rise.getMinutes(),
+            sunsetMin: set.getHours() * 60 + set.getMinutes(),
+        };
+    }
+
+    function computeLevel(t, frm, to, transIn, transOut) {
+        if (!inBetween(t, frm, to)) return 0;
+        const rampIn = transIn <= 0 ? 1 : Math.min(1, minutesSince(t, frm) / transIn);
+        const rampOut = transOut <= 0 ? 1 : Math.min(1, minutesUntil(t, to) / transOut);
+        return Math.max(0, Math.min(rampIn, rampOut));
+    }
+
+    function recompute() {
+        const hasCoords = (root.latitude !== 0 || root.longitude !== 0);
+        const wantSun = (root.startMode === "auto" || root.endMode === "auto") && hasCoords;
+        const sun = wantSun ? root.sunTimes(new Date(), root.latitude, root.longitude) : null;
+
+        if (sun && !sun.polar) {
+            root.sunsetMin = sun.sunsetMin;
+            root.sunriseMin = sun.sunriseMin;
+            root.sunsetStr = pad2(Math.floor(sun.sunsetMin / 60)) + ":" + pad2(sun.sunsetMin % 60);
+            root.sunriseStr = pad2(Math.floor(sun.sunriseMin / 60)) + ":" + pad2(sun.sunriseMin % 60);
         } else {
-            // Wrapped around midnight
-            return (t >= from || t <= to);
+            root.sunsetMin = -1; root.sunriseMin = -1; root.sunsetStr = ""; root.sunriseStr = "";
         }
-    }
 
-    function reEvaluate() {
+        const startAuto = root.startMode === "auto" && sun && !sun.polar;
+        const endAuto = root.endMode === "auto" && sun && !sun.polar;
+        const frm = startAuto ? sun.sunsetMin : (root.fromHour * 60 + root.fromMinute);
+        const to = endAuto ? sun.sunriseMin : (root.toHour * 60 + root.toMinute);
+        // Circadian asymmetry: the evening edge fades in gently (soft, long) so we
+        // don't slam melatonin; the morning edge clears sharply — waking wants blue
+        // back promptly, and a long soft fade toward a late (winter) sunrise would
+        // only drag the warm tint deep into the morning. So soften start, not end.
+        const softFade = Math.round(root.transitionMinutes * root.softFactor);
+        const transIn = startAuto ? softFade : root.transitionMinutes;
+        const transOut = root.transitionMinutes;
         const t = clockHour * 60 + clockMinute;
-        const from = fromHour * 60 + fromMinute;
-        const to = toHour * 60 + toMinute;
-        const manualActive = manualActiveHour * 60 + manualActiveMinute;
 
-        if (root.manualActive !== undefined && (inBetween(from, manualActive, t) || inBetween(to, manualActive, t))) {
-            root.manualActive = undefined;
-        }
-        root.shouldBeOn = inBetween(t, from, to);
-        if (firstEvaluation) {
-            firstEvaluation = false;
-            root.ensureState();
-        }
+        if (sun && sun.polar === "day") root.autoLevel = 0;
+        else if (sun && sun.polar === "night") root.autoLevel = 1;
+        else root.autoLevel = computeLevel(t, frm, to, transIn, transOut);
+
+        root.updateTarget();
     }
 
-    onShouldBeOnChanged: ensureState()
-    function ensureState() {
-        // console.log("[Hyprsunset] Ensuring state:", root.shouldBeOn, "Automatic mode:", root.automatic);
-        if (!root.automatic || root.manualActive !== undefined)
-            return;
-        if (root.shouldBeOn) {
-            root.enableTemperature();
-        } else {
-            root.disableTemperature();
-        }
+    onAutoLevelChanged: updateTarget()
+
+    function updateTarget() {
+        const base = root.automatic ? root.autoLevel : 0;
+        const raw = base + root.bias;
+        // NaN from a bad bias/autoLevel (broken config, coordinates) must not become the target: Math.max/min pass NaN through
+        root.targetLevel = isFinite(raw) ? Math.max(0, Math.min(1, raw)) : 0;
+        root.startGlide();
     }
 
-    function startHyprsunset() {
-        Quickshell.execDetached(["bash", "-c", `pidof hyprsunset || hyprsunset`]);
-    }
-
-    function load() {
-        root.startHyprsunset();
-        root.ensureState();
-    }
-
+    // ---- Smooth glide ----
     Timer {
-        id: updateHyprsunset
-        interval: 100
-        repeat: false
+        id: glideTimer
+        interval: 60
+        repeat: true
         onTriggered: {
-            root.ensureState();
-            root.setGamma(root.gamma);
+            const d = root.targetLevel - root.appliedLevel;
+            // NaN is never below the threshold: without isFinite the 60 ms timer would spin forever and pushOutput would send a "new" output every tick
+            if (!isFinite(d) || Math.abs(d) < 0.004) { root.appliedLevel = isFinite(root.targetLevel) ? root.targetLevel : 0; glideTimer.stop(); }
+            else root.appliedLevel += d * 0.28;
+            root.pushOutput();
+        }
+    }
+    function startGlide() {
+        if (!isFinite(root.targetLevel - root.appliedLevel) || Math.abs(root.targetLevel - root.appliedLevel) < 0.004) {
+            root.appliedLevel = isFinite(root.targetLevel) ? root.targetLevel : 0;
+            root.pushOutput();
+            return;
+        }
+        if (!glideTimer.running) glideTimer.start();
+    }
+
+    // Only probe the daemon (bash + timeout + hyprctl) when there is something new to send:
+    // the per-minute recompute used to do it even when the output was unchanged.
+    // Resetting _last* to -1 still forces a pass (load, settings change).
+    function pushOutput() {
+        if (!root._seeded) return;   // daemon state not read yet (see load)
+        const o = root._computeOutput();
+        if (o.temp === root._lastTemp && o.gamma === root._lastGamma) {
+            root.temperatureActive = o.active;
+            return;
+        }
+        root._outputPending = true;
+        root.ensureHyprsunset();
+    }
+
+    function _computeOutput() {
+        const level = root.appliedLevel;
+        const active = level > 0.001;
+        const t0 = active ? Math.round(root.neutralColorTemperature + (root.colorTemperature - root.neutralColorTemperature) * level) : 0;
+        const temp = isFinite(t0) ? t0 : 0;
+        const dim = root.automaticGamma ? Math.max(root.gammaLowerLimit, root.nightGamma) / 100 : 1;
+        const g0 = Math.max(root.gammaLowerLimit, Math.round(root.gamma * dim));
+        const gamma = isFinite(g0) ? g0 : 100;   // NaN !== NaN would make every pass look like a new output and call ensureHyprsunset
+        return { active: active && isFinite(t0), temp, gamma };
+    }
+
+    // Level 0 is "off": hyprsunset identity, not a temperature — no Kelvin value is
+    // truly neutral (6000K still tints warm, #3328). Above 0 the glide lerps from
+    // neutralColorTemperature, the Kelvin closest to identity, so the hand-off is seamless.
+    // Gamma is composed, never overwritten: the user's gamma times the dim factor.
+    function applyOutput() {
+        const o = root._computeOutput();
+        const active = o.active;
+        const temp = o.temp;
+        root.temperatureActive = active;
+        if (temp !== root._lastTemp) {
+            root._lastTemp = temp;
+            Quickshell.execDetached(["hyprctl", "hyprsunset", ...(active ? ["temperature", `${temp}`] : ["identity"])]);
+        }
+        // Dim screen is a steady dim while on, independent of the night level.
+        const g = o.gamma;
+        if (g !== root._lastGamma) {
+            root._lastGamma = g;
+            Quickshell.execDetached(["hyprctl", "hyprsunset", "gamma", `${g}`]);
         }
     }
 
-    function enableTemperature() {
-        root.temperatureActive = true;
-
-        // console.log("[Hyprsunset] Enabling");
-        root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.colorTemperature}`]);
+    // A PID alone is not a usable daemon: after a crash it can outlive its control
+    // socket. Probe the actual hyprctl endpoint, then only replace a broken daemon.
+    function ensureHyprsunset() {
+        if (!ensureProc.running) ensureProc.running = true;
     }
 
-    function disableTemperature() {
-        root.temperatureActive = false;
-        // console.log("[Hyprsunset] Disabling");
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset temperature ${root.defaultColorTemperature}`]);
+    // Loading the shell must not reset the daemon. load() used to zero appliedLevel and _last*, so every shell
+    // restart sent identity + gamma and then glided the night temperature back in: the screen flashed neutral.
+    // Now we start from the daemon's ACTUAL state: read identity/temperature/gamma and derive appliedLevel from them.
+    // _last* then match the daemon, nothing redundant is sent, and a differing target is approached smoothly from
+    // the real point. A silent daemon falls back to the old start-from-zero path.
+    // Nothing is sent before that read (_seeded): config-load signals (onColorTemperatureChanged etc.) otherwise
+    // called pushOutput with appliedLevel = 0 and sent identity - measured as an identity flash right after a restart.
+    property bool _seeded: false
+    function load() {
+        root._seeded = false;
+        seedProc.running = true;
+    }
+    function _seededDone() {
+        root._seeded = true;
+        if (root._outputPending) {   // a settings change arrived before the seed: force a send from the real state now
+            root._lastTemp = -1;
+            root._lastGamma = -1;
+        }
+    }
+    function _loadFromZero() {
+        root.appliedLevel = 0;
+        root._lastTemp = -1;
+        root._lastGamma = -1;
+        root._seededDone();
+        root.recompute();
+    }
+    function _seed(text) {
+        const l = text.trim().split("\n");
+        const temp = Number(l[1]), gamma = Number(l[2]);
+        if (l.length < 3 || l[0] === "" || !Number.isFinite(temp) || !Number.isFinite(gamma)) { root._loadFromZero(); return; }
+        const identity = l[0] === "true";
+        const span = root.colorTemperature - root.neutralColorTemperature;
+        root.appliedLevel = (identity || span === 0) ? 0 : Math.max(0, Math.min(1, (temp - root.neutralColorTemperature) / span));
+        root._lastTemp = identity ? 0 : temp;   // same convention as applyOutput: "off" = 0
+        root._lastGamma = gamma;
+        root.temperatureActive = !identity;
+        root._seededDone();
+        root.recompute();
+    }
+    Process {
+        id: seedProc
+        command: ["bash", "-c", "timeout 2 hyprctl hyprsunset identity get; timeout 2 hyprctl hyprsunset temperature; timeout 2 hyprctl hyprsunset gamma"]
+        stdout: StdioCollector {
+            id: seedCollector
+            onStreamFinished: root._seed(seedCollector.text)
+        }
+    }
+
+    // Bar quick-toggle / "boost now": park the bias at an extreme (held; centre = auto).
+    function toggleTemperature(active = undefined) {
+        // Invert what the user can currently see, not the destination of a glide.
+        // targetLevel may already have moved while appliedLevel is still fading.
+        const on = root.temperatureActive;
+        const want = active !== undefined ? active : !on;
+        Config.options.light.night.bias = want ? 1 : -1;
+    }
+    function setBias(b) {
+        Config.options.light.night.bias = Math.max(-1, Math.min(1, b));
     }
 
     function setGamma(gamma) {
         root.gamma = Math.max(root.gammaLowerLimit, Math.min(100, gamma));
-
         root.gammaChangeAttempt();
-
-        root.startHyprsunset();
-        Quickshell.execDetached(["bash", "-c", `hyprctl hyprsunset gamma ${root.gamma}`]);
-    }
-
-    function fetchState() {
-        fetchProc.running = true;
+        root._outputPending = true;
+        root.ensureHyprsunset();
     }
 
     Process {
+        id: ensureProc
+        command: ["bash", "-c", `
+            # timeout wraps every probe: a deadlocked daemon can still hold a
+            # connectable socket, so a bare hyprctl would block on recv forever.
+            if timeout 2 hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+            # A daemon we've decided is dead gets SIGKILL, not SIGTERM: the failure
+            # mode here is a deadlock (hyprsunset blocks in futex_wait while keeping
+            # its PID and an orphaned listen socket), and a wedged process ignores
+            # SIGTERM. Force-kill, then wait for it to actually go before relaunching
+            # so the fresh instance doesn't race a not-yet-reaped socket.
+            pkill -KILL -x hyprsunset 2>/dev/null || true
+            for _ in $(seq 1 40); do pgrep -x hyprsunset >/dev/null || break; sleep 0.05; done
+            rm -f -- "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock"
+            hyprsunset >/dev/null 2>&1 &
+            for _ in $(seq 1 20); do
+                if timeout 2 hyprctl hyprsunset temperature >/dev/null 2>&1; then exit 0; fi
+                sleep 0.05
+            done
+            exit 1
+        `]
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0 || !root._outputPending || !root._seeded) return;   // before the seed applyOutput would send identity from appliedLevel = 0
+            root._outputPending = false;
+            root.applyOutput();
+        }
+    }
+
+    function fetchState() { fetchProc.running = true; }
+    Process {
         id: fetchProc
-        running: true
-        command: ["bash", "-c", "hyprctl hyprsunset temperature"]
+        // identity keeps the last Kelvin value around, so it must be checked first.
+        command: ["bash", "-c", "[ \"$(hyprctl hyprsunset identity get)\" = true ] && echo identity || hyprctl hyprsunset temperature"]
         stdout: StdioCollector {
             id: stateCollector
             onStreamFinished: {
                 const output = stateCollector.text.trim();
-                if (output.length == 0 || output.startsWith("Couldn't"))
-                    root.temperatureActive = false;
-                else
-                    root.temperatureActive = (output != root.defaultColorTemperature); // 6000 is the default when off
-                // console.log("[Hyprsunset] Fetched state:", output, "->", root.temperatureActive);
+                if (output.length == 0 || output === "identity" || output.startsWith("Couldn't")) root.temperatureActive = false;
+                else root.temperatureActive = (Number(output) < root.defaultColorTemperature);
             }
         }
     }
 
-    function toggleTemperature(active = undefined) {
-        if (root.manualActive === undefined) {
-            root.manualActive = root.temperatureActive;
-            root.manualActiveHour = root.clockHour;
-            root.manualActiveMinute = root.clockMinute;
-        }
-
-        root.manualActive = active !== undefined ? active : !root.manualActive;
-        if (root.manualActive) {
-            root.enableTemperature();
-        } else {
-            root.disableTemperature();
-        }
-    }
-
-    // Change temp
     Connections {
         target: Config.options.light.night
-        function onColorTemperatureChanged() {
-            if (!root.temperatureActive) return;
-            Quickshell.execDetached(["hyprctl", "hyprsunset", "temperature", `${Config.options.light.night.colorTemperature}`]);
+        function onColorTemperatureChanged() { root._lastTemp = -1; root.pushOutput(); }
+        function onNightGammaChanged() { root._lastGamma = -1; root.pushOutput(); }
+        function onTransitionMinutesChanged() { root.recompute(); }
+        function onFromChanged() { root.recompute(); }
+        function onToChanged() { root.recompute(); }
+        function onLatitudeChanged() { root.recompute(); }
+        function onLongitudeChanged() { root.recompute(); }
+        function onAutomaticGammaChanged() {
+            root._lastGamma = -1;
+            root.pushOutput();
         }
     }
 }
