@@ -238,19 +238,29 @@ Item { // Bar content region
                             color: rightSidebarButton.colText
                         }
                     }
-                    Revealer {
+                    Bar.PrivacyIndicator {
                         vertical: true
-                        reveal: Audio.source?.audio?.muted ?? false
-                        Layout.fillWidth: true
-                        Layout.bottomMargin: reveal ? indicatorsColumnLayout.realSpacing : 0
-                        Behavior on Layout.topMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        MaterialSymbol {
-                            text: "mic_off"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-                        }
+                        reveal: (Audio.source?.audio?.muted ?? false) || Privacy.micIndicatorVisible
+                        icon: Audio.source?.audio?.muted ? "mic_off" : "mic"
+                        showDot: Privacy.micIndicatorVisible
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsColumnLayout.realSpacing
+                    }
+                    Bar.PrivacyIndicator {
+                        vertical: true
+                        reveal: Privacy.cameraIndicatorVisible
+                        icon: "videocam"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsColumnLayout.realSpacing
+                    }
+                    Bar.PrivacyIndicator {
+                        vertical: true
+                        reveal: Privacy.screenCaptureIndicatorVisible
+                        icon: "screen_share"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsColumnLayout.realSpacing
                     }
                     Bar.HyprlandXkbIndicator {
                         vertical: true

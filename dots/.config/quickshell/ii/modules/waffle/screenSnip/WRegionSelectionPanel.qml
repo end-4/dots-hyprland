@@ -121,6 +121,7 @@ PanelWindow {
         anchors.fill: parent
         live: false
         captureSource: root.screen
+        Component.onCompleted: Privacy.holdShellCapture(1000)
 
         focus: root.visible
         Keys.onPressed: event => { // Esc to close
@@ -338,6 +339,7 @@ PanelWindow {
         WToolbarIconButton {
             icon.name: "eyedropper"
             onClicked: {
+                Privacy.holdShellCapture(2000);
                 Quickshell.execDetached(["bash", "-c", "sleep 0.2; hyprpicker -a"]);
                 root.closed();
             }

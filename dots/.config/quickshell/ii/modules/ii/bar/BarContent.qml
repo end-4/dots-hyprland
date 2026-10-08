@@ -271,18 +271,26 @@ Item { // Bar content region
                             color: rightSidebarButton.colText
                         }
                     }
-                    Revealer {
-                        reveal: Audio.source?.audio?.muted ?? false
-                        Layout.fillHeight: true
-                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                        Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                        }
-                        MaterialSymbol {
-                            text: "mic_off"
-                            iconSize: Appearance.font.pixelSize.larger
-                            color: rightSidebarButton.colText
-                        }
+                    PrivacyIndicator {
+                        reveal: (Audio.source?.audio?.muted ?? false) || Privacy.micIndicatorVisible
+                        icon: Audio.source?.audio?.muted ? "mic_off" : "mic"
+                        showDot: Privacy.micIndicatorVisible
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
+                    }
+                    PrivacyIndicator {
+                        reveal: Privacy.cameraIndicatorVisible
+                        icon: "videocam"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
+                    }
+                    PrivacyIndicator {
+                        reveal: Privacy.screenCaptureIndicatorVisible
+                        icon: "screen_share"
+                        showDot: true
+                        iconColor: rightSidebarButton.colText
+                        layoutSpacing: indicatorsRowLayout.realSpacing
                     }
                     HyprlandXkbIndicator {
                         Layout.alignment: Qt.AlignVCenter

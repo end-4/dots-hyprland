@@ -23,8 +23,22 @@ getactivemonitor() {
     hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name'
 }
 
+SHELL_CONFIG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
 mkdir -p "$RECORDING_DIR"
 cd "$RECORDING_DIR" || exit
+
+notify_shell() {
+    command -v qs >/dev/null 2>&1 || return 0
+    qs -p "$SHELL_CONFIG_DIR" ipc call privacy "$1" >/dev/null 2>&1
+}
+
+track_recording() {
+    notify_shell screenRecordStarted
+    trap 'notify_shell screenRecordStopped' EXIT
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
+}
 
 # parse --region <value> without modifying $@ so other flags like --fullscreen still work
 ARGS=("$@")
@@ -49,9 +63,11 @@ done
 if pgrep wf-recorder > /dev/null; then
     notify-send "Recording Stopped" "Stopped" -a 'Recorder' &
     pkill wf-recorder &
+    notify_shell screenRecordStopped
 else
     if [[ $FULLSCREEN_FLAG -eq 1 ]]; then
         notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        track_recording
         if [[ $SOUND_FLAG -eq 1 ]]; then
             wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --audio="$(getaudiooutput)"
         else
@@ -69,6 +85,7 @@ else
         fi
 
         notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        track_recording
         if [[ $SOUND_FLAG -eq 1 ]]; then
             wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" --audio="$(getaudiooutput)"
         else

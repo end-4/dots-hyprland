@@ -21,6 +21,7 @@ QuickToggleModel {
         interval: 300
         repeat: false
         onTriggered: {
+            Privacy.holdShellCapture(1500);
             Quickshell.execDetached(["hyprpicker", "-a"]);
         }
     }
