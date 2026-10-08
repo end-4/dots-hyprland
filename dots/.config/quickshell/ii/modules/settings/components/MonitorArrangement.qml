@@ -1,7 +1,6 @@
 
 import QtQuick
 import QtQuick.Layouts
-
 import qs.modules.common
 import qs.modules.common.widgets
 
@@ -252,18 +251,21 @@ Item {
     }
 
     Repeater {
-        model: root.monitors
+        model: root.monitors.length
 
         // A área externa mantém o tamanho lógico completo.
         // O retângulo interno recebe apenas a margem visual.
         delegate: Item {
             id: monitorItem
 
-            required property var modelData
             required property int index
 
+            readonly property var monitorData:
+                root.monitors[index] ?? null
+
             readonly property bool selected:
-                modelData.name === root.selectedMonitorName
+                monitorData !== null
+                && monitorData.name === root.selectedMonitorName
 
             property real visualDX: 0
             property real visualDY: 0
@@ -273,20 +275,22 @@ Item {
             property real requestedDX: 0
             property real requestedDY: 0
 
-            x: root.previewX(Number(modelData.x) || 0)
+            x: root.previewX(Number(monitorData.x) || 0)
                 + visualDX
 
-            y: root.previewY(Number(modelData.y) || 0)
+            y: root.previewY(Number(monitorData.y) || 0)
                 + visualDY
 
             width: Math.max(
                 1,
-                root.logicalWidth(modelData) * root.effectiveScale
+                root.logicalWidth(monitorData)
+                    * root.effectiveScale
             )
 
             height: Math.max(
                 1,
-                root.logicalHeight(modelData) * root.effectiveScale
+                root.logicalHeight(monitorData)
+                    * root.effectiveScale
             )
 
             z: dragHandler.active ? 10 : selected ? 2 : 1
@@ -317,6 +321,7 @@ Item {
 
                 Column {
                     anchors.centerIn: parent
+
                     width: Math.max(0, parent.width - 12)
                     spacing: 4
 
@@ -325,7 +330,12 @@ Item {
                             parent.horizontalCenter
 
                         text: String(monitorItem.index + 1)
-                        font.pixelSize: 28
+
+                        font.pixelSize:
+                            monitorVisual.width < 165
+                            || monitorVisual.height < 115
+                                ? 22 : 28
+
                         font.weight: Font.Bold
 
                         color: monitorItem.selected
@@ -335,13 +345,112 @@ Item {
 
                     StyledText {
                         width: parent.width
-                        horizontalAlignment: Text.AlignHCenter
+
+                        horizontalAlignment:
+                            Text.AlignHCenter
+
                         elide: Text.ElideRight
-                        text: monitorItem.modelData.name
+
+                        text: monitorItem.monitorData
+                            ? monitorItem.monitorData.name
+                            : ""
 
                         color: monitorItem.selected
                             ? Appearance.m3colors.m3onPrimaryContainer
                             : Appearance.m3colors.m3onSurface
+                    }
+
+                    Column {
+                        width: parent.width
+                        spacing: 1
+
+                        visible:
+                            monitorItem.monitorData !== null
+                            && monitorVisual.width >= 100
+                            && monitorVisual.height >= 80
+
+                        readonly property color detailColor:
+                            monitorItem.selected
+                                ? Appearance.m3colors.m3onPrimaryContainer
+                                : Appearance.m3colors.m3onSurface
+
+                        // Modelo do monitor:
+                        // fonte ligeiramente maior e peso médio.
+                        StyledText {
+                            width: parent.width
+
+                            horizontalAlignment:
+                                Text.AlignHCenter
+
+                            elide: Text.ElideRight
+
+                            font.pixelSize: 11
+                            font.weight: Font.Medium
+
+                            color: parent.detailColor
+
+                            text: monitorItem.monitorData
+                                ? (
+                                    String(
+                                        monitorItem.monitorData.make ?? ""
+                                    )
+                                    + " "
+                                    + String(
+                                        monitorItem.monitorData.model ?? ""
+                                    )
+                                ).trim()
+                                : ""
+                        }
+
+                        // Resolução e frequência:
+                        // 11 px para facilitar a leitura.
+                        StyledText {
+                            width: parent.width
+
+                            horizontalAlignment:
+                                Text.AlignHCenter
+
+                            elide: Text.ElideRight
+
+                            font.pixelSize: 11
+                            font.weight: Font.Medium
+
+                            color: parent.detailColor
+
+                            text: monitorItem.monitorData
+                                ? (
+                                    monitorItem.monitorData.width
+                                    + " × "
+                                    + monitorItem.monitorData.height
+                                    + " @ "
+                                    + Number(
+                                        monitorItem.monitorData.refreshRate
+                                    ).toFixed(2)
+                                    + " Hz"
+                                )
+                                : ""
+                        }
+
+                        // Escala:
+                        // mantém tamanho discreto, mas mais nítido.
+                        StyledText {
+                            width: parent.width
+
+                            horizontalAlignment:
+                                Text.AlignHCenter
+
+                            font.pixelSize: 10
+                            font.weight: Font.Medium
+
+                            color: parent.detailColor
+
+                            text: monitorItem.monitorData
+                                ? "Scale: "
+                                    + Number(
+                                        monitorItem.monitorData.scale
+                                    ).toFixed(2)
+                                : ""
+                        }
                     }
                 }
             }
@@ -351,8 +460,11 @@ Item {
                 acceptedButtons: Qt.LeftButton
 
                 onTapped: {
+                    if (!monitorItem.monitorData)
+                        return;
+
                     root.monitorSelected(
-                        monitorItem.modelData.name
+                        monitorItem.monitorData.name
                     );
                 }
             }
@@ -370,26 +482,27 @@ Item {
                         root.beginDrag();
 
                         root.monitorSelected(
-                            monitorItem.modelData.name
+                            monitorItem.monitorData.name
                         );
 
                         monitorItem.dragStartX =
-                            Number(monitorItem.modelData.x) || 0;
+                            Number(monitorItem.monitorData.x) || 0;
 
                         monitorItem.dragStartY =
-                            Number(monitorItem.modelData.y) || 0;
+                            Number(monitorItem.monitorData.y) || 0;
 
                         monitorItem.dragScale = root.frozenScale;
 
                         monitorItem.visualDX = 0;
                         monitorItem.visualDY = 0;
+
                         monitorItem.requestedDX = 0;
                         monitorItem.requestedDY = 0;
                     } else {
                         if (!root.dragging)
                             return;
 
-                        const name = monitorItem.modelData.name;
+                        const name = monitorItem.monitorData.name;
 
                         const requestedX =
                             monitorItem.dragStartX
@@ -421,17 +534,22 @@ Item {
                     monitorItem.requestedDX = translation.x;
                     monitorItem.requestedDY = translation.y;
 
-                    const baseX = root.frozenOffsetX
-                        + (monitorItem.dragStartX
-                        - root.frozenMinX)
-                        * monitorItem.dragScale;
+                    const baseX =
+                        root.frozenOffsetX
+                        + (
+                            monitorItem.dragStartX
+                            - root.frozenMinX
+                        ) * monitorItem.dragScale;
 
-                    const baseY = root.frozenOffsetY
-                        + (monitorItem.dragStartY
-                        - root.frozenMinY)
-                        * monitorItem.dragScale;
+                    const baseY =
+                        root.frozenOffsetY
+                        + (
+                            monitorItem.dragStartY
+                            - root.frozenMinY
+                        ) * monitorItem.dragScale;
 
-                    const minDX = root.paddingSize - baseX;
+                    const minDX =
+                        root.paddingSize - baseX;
 
                     const maxDX =
                         root.width
@@ -439,7 +557,8 @@ Item {
                         - monitorItem.width
                         - baseX;
 
-                    const minDY = root.paddingSize - baseY;
+                    const minDY =
+                        root.paddingSize - baseY;
 
                     const maxDY =
                         root.height
@@ -465,7 +584,9 @@ Item {
 
     StyledText {
         anchors.centerIn: parent
+
         visible: root.monitors.length === 0
+
         text: "No connected displays"
         color: Appearance.m3colors.m3outline
     }
