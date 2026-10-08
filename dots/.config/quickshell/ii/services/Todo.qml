@@ -33,15 +33,69 @@ Singleton {
         save();
     }
 
-    function addTask(desc, date) {
+    function addTask(desc, date, priority) {
         const item = {
             "content": desc,
             "done": false,
             "date": date || root.getTodayDateString(),
             "completedDate": null,
+            "priority": (priority !== undefined && priority !== null) ? Number(priority) : 0,
             "subtasks": []
         };
         addItem(item);
+    }
+
+    function setPriority(index, priority) {
+        if (index >= 0 && index < list.length) {
+            list[index].priority = (priority !== undefined && priority !== null) ? Number(priority) : 0;
+            save();
+        }
+    }
+
+    function cyclePriority(index) {
+        if (index >= 0 && index < list.length) {
+            const current = list[index].priority || 0;
+            // Cycle: 0 (Normal) -> 1 (High) -> 2 (Medium) -> 3 (Low) -> 0
+            const next = current === 0 ? 1 : (current === 1 ? 2 : (current === 2 ? 3 : 0));
+            list[index].priority = next;
+            save();
+        }
+    }
+
+    function moveItem(fromIndex, toIndex) {
+        if (fromIndex >= 0 && fromIndex < list.length && toIndex >= 0 && toIndex < list.length && fromIndex !== toIndex) {
+            const item = list.splice(fromIndex, 1)[0];
+            list.splice(toIndex, 0, item);
+            save();
+        }
+    }
+
+    function moveItemRelative(fromOriginalIndex, targetOriginalIndex, placeAfter) {
+        if (fromOriginalIndex < 0 || fromOriginalIndex >= list.length) return;
+        if (targetOriginalIndex < 0 || targetOriginalIndex >= list.length) return;
+        if (fromOriginalIndex === targetOriginalIndex) return;
+
+        const item = list.splice(fromOriginalIndex, 1)[0];
+        let newTargetIndex = targetOriginalIndex;
+        if (fromOriginalIndex < targetOriginalIndex) {
+            newTargetIndex--;
+        }
+        if (placeAfter) {
+            newTargetIndex++;
+        }
+        newTargetIndex = Math.max(0, Math.min(list.length, newTargetIndex));
+        list.splice(newTargetIndex, 0, item);
+        save();
+    }
+
+    function sortByPriority() {
+        list.sort((a, b) => {
+            if (a.done !== b.done) return a.done ? 1 : -1;
+            const pA = (a.priority && a.priority > 0) ? a.priority : 999;
+            const pB = (b.priority && b.priority > 0) ? b.priority : 999;
+            return pA - pB;
+        });
+        save();
     }
 
     function markDone(index, completionDate) {
