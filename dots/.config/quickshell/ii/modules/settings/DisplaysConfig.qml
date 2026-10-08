@@ -369,6 +369,13 @@ ContentPage {
     Component.onCompleted: ensureSelection()
     onMonitorsChanged: ensureSelection()
 
+    // Identificação física das telas.
+    // Não modifica configurações do Hyprland.
+    DisplaysComponents.MonitorIdentifier {
+        id: monitorIdentifier
+        monitors: root.monitors
+    }
+
     ContentSection {
         icon: "desktop_windows"
         title: Translation.tr("Displays")
@@ -388,6 +395,29 @@ ContentPage {
 
                 onLayoutChanged: positions => {
                     root.updatePositions(positions);
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Identify displays")
+
+            ConfigSelectionArray {
+                currentValue: ""
+
+                options: [
+                    {
+                        displayName: Translation.tr(
+                            "Identify monitors"
+                        ),
+                        icon: "monitor",
+                        value: "identify"
+                    }
+                ]
+
+                onSelected: newValue => {
+                    if (newValue === "identify")
+                        monitorIdentifier.identify();
                 }
             }
         }
