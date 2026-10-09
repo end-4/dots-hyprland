@@ -9,10 +9,9 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property string scriptPath:
-        Quickshell.shellPath(
-            "scripts/displays/display_transaction.py"
-        )
+    readonly property string scriptPath: Quickshell.shellPath(
+        "scripts/displays/display_persistent.py"
+    )
 
     property bool busy: false
     property bool confirming: false
@@ -25,9 +24,11 @@ Singleton {
     signal confirmed()
     signal reverted()
     signal failed(string message)
+    signal positionsApplied()
+    signal positionsFailed(string message)
 
     function execute(action, argument) {
-        if (root.busy)
+        if (root.busy || (root.confirming && action === "positions"))
             return false;
 
         root.busy = true;
@@ -35,29 +36,41 @@ Singleton {
         root.operation = action;
 
         const args = ["python3", root.scriptPath, action];
+
         if (argument !== undefined)
             args.push(JSON.stringify(argument));
 
         worker.command = args;
         worker.running = true;
+
         return true;
     }
 
     function apply(monitors) {
         if (root.confirming || root.busy)
             return false;
+
         return execute("apply", monitors);
+    }
+
+    function applyPositions(positions) {
+        if (root.confirming || root.busy)
+            return false;
+
+        return execute("positions", positions);
     }
 
     function keep() {
         if (!root.confirming)
             return false;
+
         return execute("confirm");
     }
 
     function rollback() {
         if (root.busy)
             return false;
+
         return execute("revert");
     }
 
@@ -84,32 +97,44 @@ Singleton {
         if (exitCode !== 0 || !data || data.ok !== true) {
             root.lastError = data?.error
                 ?? "Display operation failed";
-            root.failed(root.lastError);
 
-            // Reconcile with the independent watchdog.
-            if (action !== "status")
-                recoveryTimer.restart();
+            if (action === "positions") {
+                root.positionsFailed(root.lastError);
+            } else {
+                root.failed(root.lastError);
+
+                if (action !== "status")
+                    recoveryTimer.restart();
+            }
+
             return;
         }
 
-        if (action === "apply") {
+        if (action === "positions") {
+            root.positionsApplied();
+
+        } else if (action === "apply") {
             root.deadline = Number(data.deadline);
             root.confirming = true;
             root.updateCountdown();
             countdown.start();
             root.applied();
+
         } else if (action === "confirm") {
             root.confirming = false;
             root.secondsRemaining = 0;
             countdown.stop();
             root.confirmed();
+
         } else if (action === "revert") {
             root.confirming = false;
             root.secondsRemaining = 0;
             countdown.stop();
             root.reverted();
+
         } else if (action === "status") {
             root.confirming = Boolean(data.active);
+
             if (root.confirming) {
                 root.deadline = Number(data.deadline);
                 root.updateCountdown();
@@ -118,6 +143,7 @@ Singleton {
                 const wasConfirming = countdown.running;
                 countdown.stop();
                 root.secondsRemaining = 0;
+
                 if (wasConfirming)
                     root.reverted();
             }
@@ -147,11 +173,7 @@ Singleton {
                     || String(error);
             }
 
-            root.finish(
-                root.operation,
-                data,
-                exitCode
-            );
+            root.finish(root.operation, data, exitCode);
         }
     }
 
@@ -159,6 +181,7 @@ Singleton {
         id: countdown
         interval: 200
         repeat: true
+
         onTriggered: root.updateCountdown()
     }
 
@@ -166,6 +189,7 @@ Singleton {
         id: recoveryTimer
         interval: 500
         repeat: false
+
         onTriggered: {
             if (!root.busy)
                 root.checkStatus();
