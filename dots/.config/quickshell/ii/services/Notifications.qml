@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import qs.modules.common
+import qs.services
 import qs
 import QtQuick
 import Quickshell
@@ -79,6 +80,8 @@ Singleton {
     property list<Notif> list: []
     property var popupList: list.filter((notif) => notif.popup);
     property bool popupInhibited: (GlobalStates?.sidebarRightOpen ?? false) || silent
+    property int notificationSoundMinInterval: 500 // ms; avoids machine-gunning sounds on notification bursts
+    property double _lastNotificationSoundTime: 0
     property var latestTimeForApp: ({})
     Component {
         id: notifComponent
@@ -91,6 +94,14 @@ Singleton {
 
     function stringifyList(list) {
         return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
+    }
+
+    function soundNameForUrgency(urgency) {
+        switch (urgency) {
+            case NotificationUrgency.Critical: return "dialog-warning";
+            case NotificationUrgency.Low: return "message";
+            default: return "message-new-instant";
+        }
     }
     
     onListChanged: {
@@ -178,6 +189,15 @@ Singleton {
                     });
                 }
                 root.unread++;
+            }
+
+            // Sound
+            if (Config.options.sounds.notifications && !root.silent && !newNotifObject.isTransient) {
+                const now = Date.now();
+                if (now - root._lastNotificationSoundTime > root.notificationSoundMinInterval) {
+                    root._lastNotificationSoundTime = now;
+                    Audio.playSystemSound(root.soundNameForUrgency(notification.urgency));
+                }
             }
             root.notify(newNotifObject);
             // console.log(notifToString(newNotifObject));
