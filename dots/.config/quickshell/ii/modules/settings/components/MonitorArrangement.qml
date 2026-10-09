@@ -9,7 +9,6 @@ Item {
 
     property var monitors: []
     property string selectedMonitorName: ""
-
     signal monitorSelected(string name)
     signal layoutChanged(var positions)
 
@@ -19,12 +18,12 @@ Item {
 
     readonly property real paddingSize: 16
     readonly property real epsilon: 0.01
-
-    // Espaçamento somente visual entre os monitores.
-    // Não altera as coordenadas nem a área de arraste.
     readonly property real monitorGap: 4
+    readonly property real alignmentTolerance: 16
 
     property bool dragging: false
+    property var dragGuide: null
+
     property real frozenScale: 1
     property real frozenMinX: 0
     property real frozenMinY: 0
@@ -37,14 +36,12 @@ Item {
 
     function logicalWidth(m) {
         const rotated = Number(m.transform || 0) % 2 !== 0;
-
         return (rotated ? Number(m.height) : Number(m.width))
             / Math.max(0.01, Number(m.scale) || 1);
     }
 
     function logicalHeight(m) {
         const rotated = Number(m.transform || 0) % 2 !== 0;
-
         return (rotated ? Number(m.width) : Number(m.height))
             / Math.max(0.01, Number(m.scale) || 1);
     }
@@ -118,6 +115,7 @@ Item {
         frozenMinY = minY;
         frozenOffsetX = offsetX;
         frozenOffsetY = offsetY;
+        dragGuide = null;
         dragging = true;
     }
 
@@ -148,22 +146,72 @@ Item {
         );
     }
 
-    function snapMonitor(name, requestedX, requestedY) {
+    // Normaliza todas as posições sem alterar a disposição relativa.
+    function emitNormalizedLayout(name, x, y) {
+        const positions = {};
+
+        for (const monitor of monitors) {
+            positions[monitor.name] = {
+                x: monitor.name === name
+                    ? Math.round(x)
+                    : Math.round(Number(monitor.x) || 0),
+                y: monitor.name === name
+                    ? Math.round(y)
+                    : Math.round(Number(monitor.y) || 0)
+            };
+        }
+
+        const names = Object.keys(positions);
+
+        if (!names.length)
+            return;
+
+        const minX = Math.min(
+            ...names.map(key => positions[key].x)
+        );
+        const minY = Math.min(
+            ...names.map(key => positions[key].y)
+        );
+
+        for (const key of names) {
+            positions[key].x -= minX;
+            positions[key].y -= minY;
+        }
+
+        layoutChanged(positions);
+    }
+
+    function alignNear(value, candidates) {
+        let closest = value;
+        let distance = alignmentTolerance;
+
+        for (const candidate of candidates) {
+            const delta = Math.abs(value - candidate);
+
+            if (delta <= distance) {
+                closest = candidate;
+                distance = delta;
+            }
+        }
+
+        return closest;
+    }
+
+    function findSnap(name, requestedX, requestedY) {
         const moving = monitors.find(m => m.name === name);
 
         if (!moving)
-            return;
+            return null;
 
         const others = monitors.filter(m => m.name !== name);
 
         if (!others.length) {
-            layoutChanged({
-                [name]: {
-                    x: Math.round(requestedX),
-                    y: Math.round(requestedY)
-                }
-            });
-            return;
+            return {
+                x: Math.round(requestedX),
+                y: Math.round(requestedY),
+                alignedX: false,
+                alignedY: false
+            };
         }
 
         const w = logicalWidth(moving);
@@ -213,6 +261,58 @@ Item {
                 }
             ];
 
+            // Encaixe lateral: alinha bordas e centros verticais.
+            for (const candidate of candidates.slice(0, 2)) {
+                const originalY = candidate.y;
+
+                candidate.y = Math.round(alignNear(
+                    candidate.y,
+                    [
+                        oy,
+                        oy + oh - h,
+                        oy + (oh - h) / 2
+                    ]
+                ));
+
+                candidate.alignedY =
+                    Math.abs(candidate.y - originalY) > 0.01
+                    || [
+                        oy,
+                        oy + oh - h,
+                        oy + (oh - h) / 2
+                    ].some(value =>
+                        Math.abs(candidate.y - value) <= 0.5
+                    );
+
+                candidate.alignedX = false;
+            }
+
+            // Encaixe vertical: alinha bordas e centros horizontais.
+            for (const candidate of candidates.slice(2)) {
+                const originalX = candidate.x;
+
+                candidate.x = Math.round(alignNear(
+                    candidate.x,
+                    [
+                        ox,
+                        ox + ow - w,
+                        ox + (ow - w) / 2
+                    ]
+                ));
+
+                candidate.alignedX =
+                    Math.abs(candidate.x - originalX) > 0.01
+                    || [
+                        ox,
+                        ox + ow - w,
+                        ox + (ow - w) / 2
+                    ].some(value =>
+                        Math.abs(candidate.x - value) <= 0.5
+                    );
+
+                candidate.alignedY = false;
+            }
+
             for (const candidate of candidates) {
                 if (!validPosition(
                     name,
@@ -234,27 +334,129 @@ Item {
             }
         }
 
-        if (best) {
-            layoutChanged({
-                [name]: {
-                    x: best.x,
-                    y: best.y
-                }
-            });
-        }
+        return best;
     }
 
+    function snapMonitor(name, requestedX, requestedY) {
+        const best = findSnap(name, requestedX, requestedY);
+
+        if (best)
+            emitNormalizedLayout(name, best.x, best.y);
+    }
+
+    // Fundo: deve permanecer atrás dos monitores e das guias.
     Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.large
         color: Appearance.m3colors.m3surfaceContainerLow
+        z: -1
+    }
+
+    // Guia vertical.
+    Rectangle {
+        visible: root.dragging
+            && root.dragGuide !== null
+            && root.dragGuide.alignedX
+
+        x: root.dragGuide
+            ? root.previewX(root.dragGuide.x)
+            : 0
+
+        y: root.dragGuide
+            ? root.previewY(root.dragGuide.y)
+            : 0
+
+        width: 2
+
+        height: root.dragGuide
+            ? root.dragGuide.height * root.effectiveScale
+            : 0
+
+        radius: 1
+        color: Appearance.m3colors.m3primary
+        opacity: 0.9
+        z: 100
+    }
+
+    // Guia horizontal.
+    Rectangle {
+        visible: root.dragging
+            && root.dragGuide !== null
+            && root.dragGuide.alignedY
+
+        x: root.dragGuide
+            ? root.previewX(root.dragGuide.x)
+            : 0
+
+        y: root.dragGuide
+            ? root.previewY(root.dragGuide.y)
+            : 0
+
+        width: root.dragGuide
+            ? root.dragGuide.width * root.effectiveScale
+            : 0
+
+        height: 2
+        radius: 1
+        color: Appearance.m3colors.m3primary
+        opacity: 0.9
+        z: 100
+    }
+
+    // Contorno da posição prevista de encaixe.
+    Rectangle {
+        visible: root.dragging && root.dragGuide !== null
+
+        x: root.dragGuide
+            ? root.previewX(root.dragGuide.x)
+            : 0
+
+        y: root.dragGuide
+            ? root.previewY(root.dragGuide.y)
+            : 0
+
+        width: root.dragGuide
+            ? root.dragGuide.width * root.effectiveScale
+            : 0
+
+        height: root.dragGuide
+            ? root.dragGuide.height * root.effectiveScale
+            : 0
+
+        radius: Appearance.rounding.normal
+        color: "transparent"
+        border.width: 3
+        border.color: Appearance.m3colors.m3primary
+        opacity: 0.95
+        z: 99
+    }
+
+    // Marcador central da posição prevista.
+    Rectangle {
+        visible: root.dragging && root.dragGuide !== null
+
+        x: root.dragGuide
+            ? root.previewX(
+                root.dragGuide.x + root.dragGuide.width / 2
+            ) - 4
+            : 0
+
+        y: root.dragGuide
+            ? root.previewY(
+                root.dragGuide.y + root.dragGuide.height / 2
+            ) - 4
+            : 0
+
+        width: 8
+        height: 8
+        radius: 4
+        color: Appearance.m3colors.m3primary
+        z: 101
     }
 
     Repeater {
         model: root.monitors.length
 
-        // A área externa mantém o tamanho lógico completo.
-        // O retângulo interno recebe apenas a margem visual.
         delegate: Item {
             id: monitorItem
 
@@ -300,7 +502,6 @@ Item {
 
                 anchors.fill: parent
                 anchors.margins: root.monitorGap / 2
-
                 radius: Appearance.rounding.normal
 
                 color: monitorItem.selected
@@ -321,7 +522,6 @@ Item {
 
                 Column {
                     anchors.centerIn: parent
-
                     width: Math.max(0, parent.width - 12)
                     spacing: 4
 
@@ -345,10 +545,7 @@ Item {
 
                     StyledText {
                         width: parent.width
-
-                        horizontalAlignment:
-                            Text.AlignHCenter
-
+                        horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
 
                         text: monitorItem.monitorData
@@ -374,19 +571,12 @@ Item {
                                 ? Appearance.m3colors.m3onPrimaryContainer
                                 : Appearance.m3colors.m3onSurface
 
-                        // Modelo do monitor:
-                        // fonte ligeiramente maior e peso médio.
                         StyledText {
                             width: parent.width
-
-                            horizontalAlignment:
-                                Text.AlignHCenter
-
+                            horizontalAlignment: Text.AlignHCenter
                             elide: Text.ElideRight
-
                             font.pixelSize: 11
                             font.weight: Font.Medium
-
                             color: parent.detailColor
 
                             text: monitorItem.monitorData
@@ -402,19 +592,12 @@ Item {
                                 : ""
                         }
 
-                        // Resolução e frequência:
-                        // 11 px para facilitar a leitura.
                         StyledText {
                             width: parent.width
-
-                            horizontalAlignment:
-                                Text.AlignHCenter
-
+                            horizontalAlignment: Text.AlignHCenter
                             elide: Text.ElideRight
-
                             font.pixelSize: 11
                             font.weight: Font.Medium
-
                             color: parent.detailColor
 
                             text: monitorItem.monitorData
@@ -431,21 +614,15 @@ Item {
                                 : ""
                         }
 
-                        // Escala:
-                        // mantém tamanho discreto, mas mais nítido.
                         StyledText {
                             width: parent.width
-
-                            horizontalAlignment:
-                                Text.AlignHCenter
-
+                            horizontalAlignment: Text.AlignHCenter
                             font.pixelSize: 10
                             font.weight: Font.Medium
-
                             color: parent.detailColor
 
                             text: monitorItem.monitorData
-                                ? "Scale: "
+                                ? "Escala: "
                                     + Number(
                                         monitorItem.monitorData.scale
                                     ).toFixed(2)
@@ -455,7 +632,7 @@ Item {
                 }
             }
 
-            // Clique seleciona sem movimentar.
+            // Seleção por clique.
             TapHandler {
                 acceptedButtons: Qt.LeftButton
 
@@ -469,10 +646,9 @@ Item {
                 }
             }
 
-            // Arraste preservado da versão funcional.
+            // Arraste dos monitores.
             DragHandler {
                 id: dragHandler
-
                 target: null
                 acceptedButtons: Qt.LeftButton
                 dragThreshold: 2
@@ -492,10 +668,8 @@ Item {
                             Number(monitorItem.monitorData.y) || 0;
 
                         monitorItem.dragScale = root.frozenScale;
-
                         monitorItem.visualDX = 0;
                         monitorItem.visualDY = 0;
-
                         monitorItem.requestedDX = 0;
                         monitorItem.requestedDY = 0;
                     } else {
@@ -506,18 +680,18 @@ Item {
 
                         const requestedX =
                             monitorItem.dragStartX
-                            + monitorItem.requestedDX
+                            + monitorItem.visualDX
                             / monitorItem.dragScale;
 
                         const requestedY =
                             monitorItem.dragStartY
-                            + monitorItem.requestedDY
+                            + monitorItem.visualDY
                             / monitorItem.dragScale;
 
                         monitorItem.visualDX = 0;
                         monitorItem.visualDY = 0;
-
                         root.dragging = false;
+                        root.dragGuide = null;
 
                         root.snapMonitor(
                             name,
@@ -577,6 +751,33 @@ Item {
                         Math.min(minDY, maxDY),
                         Math.max(minDY, maxDY)
                     );
+
+                    const candidate = root.findSnap(
+                        monitorItem.monitorData.name,
+                        monitorItem.dragStartX
+                            + monitorItem.visualDX
+                            / monitorItem.dragScale,
+                        monitorItem.dragStartY
+                            + monitorItem.visualDY
+                            / monitorItem.dragScale
+                    );
+
+                    if (candidate) {
+                        root.dragGuide = {
+                            x: candidate.x,
+                            y: candidate.y,
+                            width: root.logicalWidth(
+                                monitorItem.monitorData
+                            ),
+                            height: root.logicalHeight(
+                                monitorItem.monitorData
+                            ),
+                            alignedX: candidate.alignedX || false,
+                            alignedY: candidate.alignedY || false
+                        };
+                    } else {
+                        root.dragGuide = null;
+                    }
                 }
             }
         }
@@ -584,10 +785,8 @@ Item {
 
     StyledText {
         anchors.centerIn: parent
-
         visible: root.monitors.length === 0
-
-        text: "No connected displays"
+        text: "Nenhum monitor conectado"
         color: Appearance.m3colors.m3outline
     }
 }
