@@ -25,7 +25,7 @@ metapackage supports those architectures yet.
 The dependency installer:
 
 1. Installs `eselect-repository`, `rsync`, and `smart-live-rebuild`.
-2. Enables the GURU and hyproverlay repositories when necessary.
+2. Enables the GURU repository when necessary.
 3. Copies [`overlay/`](overlay/) to `/var/db/repos/ii-dots` and installs its
    repository configuration.
 4. Generates `/etc/portage/package.accept_keywords/illogical-impulse` for the
