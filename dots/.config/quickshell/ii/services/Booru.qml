@@ -17,6 +17,8 @@ Singleton {
     signal responseFinished()
 
     property string failMessage: Translation.tr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
+    property string httpFailMessage: Translation.tr("The request failed (HTTP %1).\nTips:\n- Try another provider with `/mode`\n- Some providers reject anonymous requests")
+    property string parseFailMessage: Translation.tr("Couldn't understand the response from the provider")
     property var responses: []
     property int runningRequests: 0
     property var defaultUserAgent: Config.options?.networking?.userAgent || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
@@ -389,7 +391,7 @@ Singleton {
                     
                 } catch (e) {
                     console.log("[Booru] Failed to parse response: " + e)
-                    newResponse.message = root.failMessage
+                    newResponse.message = root.parseFailMessage
                 } finally {
                     root.runningRequests--;
                     root.responses = [...root.responses, newResponse]
@@ -397,7 +399,7 @@ Singleton {
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {
                 console.log("[Booru] Request failed with status: " + xhr.status)
-                newResponse.message = root.failMessage
+                newResponse.message = root.httpFailMessage.arg(xhr.status)
                 root.runningRequests--;
                 root.responses = [...root.responses, newResponse]
             }
