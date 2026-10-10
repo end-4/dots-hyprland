@@ -14,7 +14,13 @@ import Quickshell.Hyprland
 ButtonMouseArea {
     id: root
 
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
+    readonly property HyprlandMonitor monitor: {
+        // monitorFor() creates no property dependency, so without touching the monitor
+        // list this binding would keep a stale/null value when evaluated before
+        // Hyprland announces the monitor (e.g. right after login or resume).
+        Hyprland.monitors.values;
+        return Hyprland.monitorFor(root.QsWindow.window?.screen);
+    }
     WorkspaceModel {
         id: wsModel
         monitor: root.monitor
