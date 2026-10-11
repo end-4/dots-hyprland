@@ -48,7 +48,13 @@ _check_distro_id() {
   fi
 }
 _check_distro() {
-  lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
+   if command -v lsb_release >/dev/null 2>&1; then
+    lsb_release -a
+  elif [[ -r /etc/os-release ]]; then
+    cat /etc/os-release
+  elif [[ -r /etc/lsb-release ]]; then
+    cat /etc/lsb-release
+  fi
 }
 _check_venv() {
   source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
@@ -70,8 +76,7 @@ x git submodule status --recursive
 
 e "Checking distro"
 x _check_distro_id
-x cat os-release
-#x _check_distro 
+x _check_distro 
 
 e "Checking variables"
 x declare -p XDG_CACHE_HOME # ~/.cache
