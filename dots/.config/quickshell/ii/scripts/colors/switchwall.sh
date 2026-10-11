@@ -34,6 +34,49 @@ handle_kde_material_you_colors() {
     "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
 }
 
+update_gtk_settings_file() {
+    local mode="$1"
+    local prefer_dark="0"
+    
+    if [[ "$mode" == "dark" ]]; then
+        prefer_dark="1"
+    elif [[ "$mode" == "light" ]]; then
+        prefer_dark="0"
+    else
+        return 
+    fi
+    
+    for gtk_version in "gtk-3.0" "gtk-4.0"; do
+        local settings_dir="$HOME/.config/$gtk_version"
+        local settings_file="$settings_dir/settings.ini"
+        
+        if [ ! -d "$settings_dir" ]; then
+            mkdir -p "$settings_dir"
+        fi
+        
+        # Create file with [Settings] section if it doesn't exist
+        if [ ! -f "$settings_file" ]; then
+            echo -e "[Settings]\ngtk-application-prefer-dark-theme=$prefer_dark" > "$settings_file"
+        else
+            # Check if the property exists
+            if grep -q "^gtk-application-prefer-dark-theme=" "$settings_file"; then
+                sed -i "s/^gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=$prefer_dark/" "$settings_file"
+            else
+                # Check if [Settings] section exists
+                if grep -q "^\[Settings\]" "$settings_file"; then
+                    sed -i "/^\[Settings\]/a gtk-application-prefer-dark-theme=$prefer_dark" "$settings_file"
+                else
+                    echo -e "[Settings]\ngtk-application-prefer-dark-theme=$prefer_dark\n$(cat "$settings_file")" > "$settings_file"
+                fi
+            fi
+        fi
+    done
+}
+
+restart_xdg_portal_gtk() {
+    systemctl --user restart xdg-desktop-portal-gtk.service 2>/dev/null || true
+}
+
 pre_process() {
     local mode_flag="$1"
     # Set GNOME color-scheme if mode_flag is dark or light
@@ -44,6 +87,9 @@ pre_process() {
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
         gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
     fi
+    
+    # Update GTK settings files for dark theme preference
+    update_gtk_settings_file "$mode_flag"
 
     if [ ! -d "$CACHE_DIR"/user/generated ]; then
         mkdir -p "$CACHE_DIR"/user/generated
@@ -314,6 +360,9 @@ switch() {
     max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
     max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
     post_process "$max_width_desired" "$max_height_desired" "$imgpath"
+    
+    # Restart xdg-desktop-portal-gtk service to apply GTK settings changes
+    restart_xdg_portal_gtk
 }
 
 main() {
