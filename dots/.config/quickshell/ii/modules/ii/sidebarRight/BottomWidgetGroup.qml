@@ -13,7 +13,14 @@ Rectangle {
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
     clip: true
-    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : 350
+    // Track whether the pomodoro timer's inline editor is open so we can grow to fit it
+    property bool pomodoroTimerEditMode: {
+        if (selectedTab !== 2) return false;
+        if (tabStack.status !== Loader.Ready || !tabStack.item) return false;
+        return tabStack.item.timerEditMode ?? false;
+    }
+
+    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : (pomodoroTimerEditMode ? 530 : 350)
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property int previousIndex: -1
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
