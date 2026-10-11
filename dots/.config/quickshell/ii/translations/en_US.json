@@ -611,5 +611,14 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Privacy": "Privacy",
+  "Show a notification and an icon in the bar when an app starts using:": "Show a notification and an icon in the bar when an app starts using:",
+  "Camera": "Camera",
+  "Screen capture": "Screen capture",
+  "Captures audio from the microphone": "Captures audio from the microphone",
+  "Captures video from the camera": "Captures video from the camera",
+  "Captures picture of the screen": "Captures picture of the screen",
+  "Unknown application": "Unknown application",
+  "Also detect apps that open the camera directly": "Also detect apps that open the camera directly"
 }

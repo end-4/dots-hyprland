@@ -8,6 +8,62 @@ ContentPage {
     forceWidth: true
 
     ContentSection {
+        icon: "shield"
+        title: Translation.tr("Privacy")
+
+        RowLayout {
+            Layout.fillWidth: true
+            StyledText {
+                Layout.leftMargin: 10
+                Layout.rightMargin: 10
+                Layout.fillWidth: true
+                color: Appearance.colors.colSubtext
+                font.pixelSize: Appearance.font.pixelSize.smallie
+                wrapMode: Text.WordWrap
+                text: Translation.tr("Show a notification and an icon in the bar when an app starts using:")
+            }
+        }
+
+        ConfigRow {
+            ConfigSwitch {
+                buttonIcon: "mic"
+                text: Translation.tr("Microphone")
+                checked: Config.options.bar.indicators.mic.showIndicator
+                onCheckedChanged: {
+                    Config.options.bar.indicators.mic.showIndicator = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "videocam"
+                text: Translation.tr("Camera")
+                checked: Config.options.bar.indicators.camera.showIndicator
+                onCheckedChanged: {
+                    Config.options.bar.indicators.camera.showIndicator = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "screen_share"
+                text: Translation.tr("Screen capture")
+                checked: Config.options.bar.indicators.screen.showIndicator
+                onCheckedChanged: {
+                    Config.options.bar.indicators.screen.showIndicator = checked;
+                }
+            }
+        }
+
+        ConfigRow {
+            ConfigSwitch {
+                buttonIcon: "visibility"
+                text: Translation.tr("Also detect apps that open the camera directly")
+                checked: Config.options.bar.indicators.camera.watchDevices
+                onCheckedChanged: {
+                    Config.options.bar.indicators.camera.watchDevices = checked;
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "notifications"
         title: Translation.tr("Notifications")
         ConfigSwitch {

@@ -1,4 +1,5 @@
 import qs
+import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
@@ -36,19 +37,40 @@ Item {
             }
         }
 
-        Loader {
-            active: Config.options.bar.utilButtons.showScreenRecord
-            visible: Config.options.bar.utilButtons.showScreenRecord
-            sourceComponent: CircleUtilButton {
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: Quickshell.execDetached([Directories.recordScriptPath])
-                MaterialSymbol {
-                    horizontalAlignment: Qt.AlignHCenter
-                    fill: 1
-                    text: "videocam"
-                    iconSize: Appearance.font.pixelSize.large
-                    color: Appearance.colors.colOnLayer2
+        Item {
+            id: screenRecordContainer
+            Layout.alignment: Qt.AlignVCenter
+            visible: screenRecordLoader.active
+            implicitWidth: screenRecordLoader.implicitWidth
+            implicitHeight: screenRecordLoader.implicitHeight
+
+            Loader {
+                id: screenRecordLoader
+                active: Config.options.bar.utilButtons.showScreenRecord
+                visible: Config.options.bar.utilButtons.showScreenRecord
+                sourceComponent: CircleUtilButton {
+                    onClicked: Quickshell.execDetached([Directories.recordScriptPath])
+                    MaterialSymbol {
+                        horizontalAlignment: Qt.AlignHCenter
+                        fill: 1
+                        text: "videocam"
+                        iconSize: Appearance.font.pixelSize.large
+                        color: Appearance.colors.colOnLayer2
+                    }
                 }
+            }
+
+            Rectangle {
+                id: recordBadge
+                readonly property var iconItem: screenRecordLoader.item?.content ?? null
+                visible: screenRecordLoader.active && Privacy.scriptScreenRecording && iconItem !== null
+                x: iconItem ? iconItem.x + iconItem.width / 2 + iconItem.contentWidth / 2 - width : 0
+                y: iconItem ? iconItem.y + iconItem.height / 2 + iconItem.contentHeight / 2 - height : 0
+                radius: Appearance.rounding.full
+                color: Appearance.colors.colError
+                z: 1
+                implicitWidth: 8
+                implicitHeight: 8
             }
         }
 
@@ -57,7 +79,10 @@ Item {
             visible: Config.options.bar.utilButtons.showColorPicker
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Quickshell.execDetached(["hyprpicker", "-a"])
+                onClicked: {
+                    Privacy.holdShellCapture(1500);
+                    Quickshell.execDetached(["hyprpicker", "-a"]);
+                }
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 1
@@ -84,19 +109,40 @@ Item {
             }
         }
 
-        Loader {
-            active: Config.options.bar.utilButtons.showMicToggle
-            visible: Config.options.bar.utilButtons.showMicToggle
-            sourceComponent: CircleUtilButton {
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
-                MaterialSymbol {
-                    horizontalAlignment: Qt.AlignHCenter
-                    fill: 0
-                    text: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
-                    iconSize: Appearance.font.pixelSize.large
-                    color: Appearance.colors.colOnLayer2
+        Item {
+            id: micContainer
+            Layout.alignment: Qt.AlignVCenter
+            visible: micLoader.active
+            implicitWidth: micLoader.implicitWidth
+            implicitHeight: micLoader.implicitHeight
+
+            Loader {
+                id: micLoader
+                active: Config.options.bar.utilButtons.showMicToggle
+                visible: Config.options.bar.utilButtons.showMicToggle
+                sourceComponent: CircleUtilButton {
+                    onClicked: Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
+                    MaterialSymbol {
+                        horizontalAlignment: Qt.AlignHCenter
+                        fill: 0
+                        text: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
+                        iconSize: Appearance.font.pixelSize.large
+                        color: Appearance.colors.colOnLayer2
+                    }
                 }
+            }
+
+            Rectangle {
+                id: micBadge
+                readonly property var iconItem: micLoader.item?.content ?? null
+                visible: micLoader.active && Privacy.micIndicatorVisible && iconItem !== null
+                x: iconItem ? iconItem.x + iconItem.width / 2 + iconItem.contentWidth / 2 - width : 0
+                y: iconItem ? iconItem.y + iconItem.height / 2 + iconItem.contentHeight / 2 - height : 0
+                radius: Appearance.rounding.full
+                color: Appearance.colors.colError
+                z: 1
+                implicitWidth: 8
+                implicitHeight: 8
             }
         }
 

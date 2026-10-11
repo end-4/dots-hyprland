@@ -756,5 +756,14 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Privacy": "Приватность",
+  "Show a notification and an icon in the bar when an app starts using:": "Показывать уведомление и значок в панели, когда приложение начинает использовать:",
+  "Camera": "Камера",
+  "Screen capture": "Захват экрана",
+  "Captures audio from the microphone": "Получает звук с микрофона",
+  "Captures video from the camera": "Получает изображение с камеры",
+  "Captures picture of the screen": "Получает изображение с экрана",
+  "Unknown application": "Неизвестное приложение",
+  "Also detect apps that open the camera directly": "Также отслеживать приложения, открывающие камеру напрямую"
 }

@@ -230,6 +230,8 @@ Singleton {
                     + ` && grim -o '${StringUtils.shellSingleQuoteEscape(screenScope.screenName)}' -`
                     + ` | magick png:- -colorspace Gray -format "%[fx:mean*100]" info:`
                 ]
+                onStarted: Privacy.beginShellCapture()
+                onExited: Privacy.endShellCapture()
                 stdout: StdioCollector {
                     id: lightnessCollector
                     onStreamFinished: {

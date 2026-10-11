@@ -40,6 +40,7 @@ StyledOverlayWidget {
                     name: "Screenshot"
                     onClicked: {
                         GlobalStates.overlayOpen = false;
+                        Privacy.holdShellCapture(1500);
                         Quickshell.execDetached(["bash", "-c", "grim - | wl-copy"]);
                     }
                 }
