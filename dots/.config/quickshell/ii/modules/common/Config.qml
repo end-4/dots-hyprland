@@ -362,9 +362,17 @@ Singleton {
             property JsonObject light: JsonObject {
                 property JsonObject night: JsonObject {
                     property bool automatic: true
-                    property string from: "19:00" // Format: "HH:mm", 24-hour time
-                    property string to: "06:30"   // Format: "HH:mm", 24-hour time
-                    property int colorTemperature: 5000
+                    property string startMode: "time" // start edge: "time" (from) or "auto" (sunset)
+                    property string endMode: "time"   // end edge:   "time" (to)   or "auto" (sunrise)
+                    property string from: "19:00" // "HH:mm", used when startMode == "time"
+                    property string to: "06:30"   // "HH:mm", used when endMode == "time"
+                    property int colorTemperature: 5000 // night warmth (K)
+                    property real bias: 0               // -1..+1 relative override on top of the auto curve
+                    property bool automaticGamma: false // also dim the screen (gamma) on schedule
+                    property int nightGamma: 85          // gamma % target when scheduled dimming is on
+                    property int transitionMinutes: 30   // base twilight fade; auto edges fade softer/longer
+                    property real latitude: 0            // for auto edges (seeded from timezone)
+                    property real longitude: 0
                 }
                 property JsonObject antiFlashbang: JsonObject {
                     property bool enable: false
