@@ -153,11 +153,35 @@ Singleton {
     }
 
     // Status update
+    // NOTE: debounced. nmcli monitor can emit several lines within the same
+    // second during wifi state changes (radio off/on, scan, associate, DHCP,
+    // connected). Previously each line called update() unconditionally,
+    // which could set running = true on a Process that was already running,
+    // racing its in-flight stdout callback teardown and crashing quickshell.
+    // Now a call that arrives while the previous batch is still in flight is
+    // deferred via pendingUpdate and re-run once every process has exited.
+    property bool pendingUpdate: false
+
     function update() {
+        if (updateConnectionType.running || wifiStatusProcess.running ||
+            updateNetworkName.running || updateNetworkStrength.running) {
+            pendingUpdate = true;
+            return;
+        }
         updateConnectionType.startCheck();
-        wifiStatusProcess.running = true
+        wifiStatusProcess.running = true;
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
+    }
+
+    function maybeRunPendingUpdate() {
+        if (!pendingUpdate)
+            return;
+        if (updateConnectionType.running || wifiStatusProcess.running ||
+            updateNetworkName.running || updateNetworkStrength.running)
+            return;
+        pendingUpdate = false;
+        update();
     }
 
     Process {
@@ -217,6 +241,11 @@ Singleton {
             root.ethernet = hasEthernet;
             root.wifi = hasWifi;
         }
+        // onExited never fires if nmcli fails to *launch* (e.g. missing binary/PATH
+        // issue) - Quickshell's Process only emits runningChanged in that case.
+        // running is the one signal guaranteed to fire either way, so use it to
+        // release the pendingUpdate guard instead of relying on onExited alone.
+        onRunningChanged: if (!running) root.maybeRunPendingUpdate()
     }
 
     Process {
@@ -228,6 +257,7 @@ Singleton {
                 root.networkName = data;
             }
         }
+        onRunningChanged: if (!running) root.maybeRunPendingUpdate()
     }
 
     Process {
@@ -239,6 +269,7 @@ Singleton {
                 root.networkStrength = parseInt(data);
             }
         }
+        onRunningChanged: if (!running) root.maybeRunPendingUpdate()
     }
 
     Process {
@@ -254,6 +285,7 @@ Singleton {
                 root.wifiEnabled = text.trim() === "enabled";
             }
         }
+        onRunningChanged: if (!running) root.maybeRunPendingUpdate()
     }
 
     Process {
