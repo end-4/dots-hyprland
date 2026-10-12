@@ -15,7 +15,7 @@ TRANSLATIONS_TARGET_DIR="${SHELL_CONFIG_DIR}/translations"
 SOURCE_LOCALE="en_US"
 NOTIFICATION_APP_NAME="Shell"
 TARGET_LOCALE="$1"
-MODEL="${2:-${GEMINI_MODEL:-gemini-2.5-flash}}"
+MODEL="${2:-${GEMINI_MODEL:-gemini-flash-latest}}"
 
 # Update the source keys for translation
 "${TRANSLATIONS_DIR}/tools/manage-translations.sh" update -l "$SOURCE_LOCALE" --yes
