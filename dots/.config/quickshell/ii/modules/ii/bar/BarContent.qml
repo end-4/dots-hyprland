@@ -131,7 +131,7 @@ Item { // Bar content region
         BarGroup {
             id: middleCenterGroup
             anchors.verticalCenter: parent.verticalCenter
-            padding: workspacesWidget.widgetPadding
+            padding: workspacesWidget.widgetPadding ?? 4
 
             Workspaces {
                 id: workspacesWidget
