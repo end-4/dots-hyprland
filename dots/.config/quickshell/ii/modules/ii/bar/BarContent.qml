@@ -118,6 +118,12 @@ Item { // Bar content region
                 Layout.fillWidth: root.useShortenedForm === 2
             }
 
+            AiQuotaBar {
+                visible: (Config.options.bar.aiQuota?.enable ?? true) && root.useShortenedForm < 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 6
+            }
+
             Media {
                 visible: root.useShortenedForm < 2
                 Layout.fillWidth: true
