@@ -10,7 +10,9 @@ import qs.modules.common.functions
 import qs.modules.common.panels.lock
 import qs.modules.ii.bar as Bar
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.SystemTray
+import qs.modules.ii.mediaControls
 
 MouseArea {
     id: root
@@ -18,6 +20,47 @@ MouseArea {
     property bool active: false
     property bool showInputField: active || context.currentText.length > 0
     readonly property bool requirePasswordToPower: Config.options.lock.security.requirePasswordToPower
+
+    // Whether a player with a title is currently active
+    readonly property bool mediaPlayerAvailable: MprisController.activePlayer !== null && MprisController.activePlayer.trackTitle
+
+    // Gate that keeps the Loader alive during exit animation.
+    // Set to true when player appears, set to false only after exit anim finishes.
+    property bool mediaLoaderActive: false
+
+    onMediaPlayerAvailableChanged: {
+        if (mediaPlayerAvailable) {
+            // Player appeared: activate loader (entry anim fires via onLoaded)
+            mediaLoaderActive = true
+        } else {
+            // Player disappeared: run exit anim, deactivate loader when done
+            if (lockscreenMediaController.item) {
+                entryAnim.stop()
+                mediaExitAnim.restart()
+            } else {
+                mediaLoaderActive = false
+            }
+        }
+    }
+
+    // Visualizer data for lockscreen media controls
+    property list<real> visualizerPoints: []
+
+    Process {
+        id: cavaProc
+        running: root.mediaLoaderActive && root.mediaPlayerAvailable
+        onRunningChanged: {
+            if (!cavaProc.running)
+                root.visualizerPoints = [];
+        }
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
+        stdout: SplitParser {
+            onRead: data => {
+                let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                root.visualizerPoints = points;
+            }
+        }
+    }
 
     // Force focus on entry
     function forceFieldFocus() {
@@ -96,6 +139,87 @@ MouseArea {
     //     }
     // }
 
+    Loader {
+        id: lockscreenMediaController
+
+        // Controlled manually via mediaLoaderActive so exit anim can finish
+        // before the item is destroyed.
+        active: root.mediaLoaderActive
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: mainIsland.top
+            bottomMargin: 15
+        }
+
+        // Driven imperatively — no Behavior, so start values apply instantly.
+        property real mediaScale: 0.85
+        property real mediaOpacity: 0.0
+
+        scale: mediaScale * root.toolbarScale
+        opacity: mediaOpacity * root.toolbarOpacity
+
+        // Entry: fires after sourceComponent is fully instantiated.
+        onLoaded: {
+            mediaScale   = 0.85
+            mediaOpacity = 0.0
+            entryAnim.restart()
+        }
+
+        ParallelAnimation {
+            id: entryAnim
+            NumberAnimation {
+                target: lockscreenMediaController
+                property: "mediaScale"
+                to: 1.0
+                duration: Appearance.animation.elementMove.duration * 1.2
+                easing.type: Easing.OutBack
+                easing.overshoot: 1.2
+            }
+            NumberAnimation {
+                target: lockscreenMediaController
+                property: "mediaOpacity"
+                to: 1.0
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        // Exit: deactivates loader when animation finishes.
+        SequentialAnimation {
+            id: mediaExitAnim
+            ParallelAnimation {
+                NumberAnimation {
+                    target: lockscreenMediaController
+                    property: "mediaScale"
+                    to: 0.85
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Easing.InBack
+                    easing.overshoot: 1.2
+                }
+                NumberAnimation {
+                    target: lockscreenMediaController
+                    property: "mediaOpacity"
+                    to: 0.0
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Easing.InCubic
+                }
+            }
+            // Only destroy the item after the animation has fully completed.
+            ScriptAction {
+                script: root.mediaLoaderActive = false
+            }
+        }
+
+        sourceComponent: PlayerControl {
+            player: MprisController.activePlayer
+            visualizerPoints: root.visualizerPoints
+            implicitWidth: Appearance.sizes.mediaControlsWidth
+            implicitHeight: Appearance.sizes.mediaControlsHeight
+            radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+        }
+    }
+    
     // Main toolbar: password box
     Toolbar {
         id: mainIsland
