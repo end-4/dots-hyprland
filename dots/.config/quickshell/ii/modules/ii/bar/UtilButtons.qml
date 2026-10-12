@@ -123,6 +123,14 @@ Item {
         }
 
         Loader {
+            active: Config.options.bar.utilButtons.showTailscale
+            visible: Config.options.bar.utilButtons.showTailscale
+            sourceComponent: TailscaleButton {
+                Layout.alignment: Qt.AlignVCenter
+            }
+        }
+
+        Loader {
             active: Config.options.bar.utilButtons.showPerformanceProfileToggle
             visible: Config.options.bar.utilButtons.showPerformanceProfileToggle
             sourceComponent: CircleUtilButton {
