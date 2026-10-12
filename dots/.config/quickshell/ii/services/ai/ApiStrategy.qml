@@ -1,6 +1,8 @@
 import QtQuick
 
 QtObject {
+    // CLI strategies run a local process fed over stdin (buildStdinPayload etc.) instead of curl
+    property bool isCli: false
     function buildEndpoint(model: AiModel): string { throw new Error("Not implemented") }
     function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>, filePath: string) { throw new Error("Not implemented") }
     function buildAuthorizationHeader(apiKeyEnvVarName: string): string { throw new Error("Not implemented") }

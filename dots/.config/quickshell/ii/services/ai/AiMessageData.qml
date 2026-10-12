@@ -16,9 +16,12 @@ QtObject {
     property var annotations: []
     property var annotationSources: []
     property list<string> searchQueries: []
+    property string cliSessionId
     property string functionName
     property var functionCall
     property string functionResponse
     property bool functionPending: false
+    // Ordinal (among the message's ```command fences) of the one awaiting approval
+    property int pendingCommandIndex: -1
     property bool visibleToUser: true
 }

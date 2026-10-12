@@ -4,6 +4,7 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Qt.labs.synchronizer
 
@@ -72,6 +73,10 @@ Item {
                 anchors.fill: parent
                 spacing: 10
                 currentIndex: tabBar.currentIndex
+
+                // A horizontal drag inside a text field is a selection, not a tab
+                // switch; the field would otherwise lose the mouse grab to this view
+                interactive: !(Window.activeFocusItem instanceof TextInput)
 
                 clip: true
                 layer.enabled: true
