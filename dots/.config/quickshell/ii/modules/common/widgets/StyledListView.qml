@@ -15,6 +15,10 @@ ListView {
     property bool popin: true
     property bool animateAppearance: true
     property bool animateMovement: false
+    // Set false to snap contentY instantly instead of animating (e.g. for auto-follow)
+    property bool smoothScroll: true
+    // Duration of the contentY scroll animation; keep short for auto-follow
+    property int scrollDuration: Appearance.animation.scroll.duration
     // Accumulated scroll destination so wheel deltas stack while animating
     property real scrollTargetY: 0
 
@@ -52,10 +56,11 @@ ListView {
     }
 
     Behavior on contentY {
+        enabled: root.smoothScroll
         NumberAnimation {
             id: scrollAnim
             alwaysRunToEnd: true
-            duration: Appearance.animation.scroll.duration
+            duration: root.scrollDuration
             easing.type: Appearance.animation.scroll.type
             easing.bezierCurve: Appearance.animation.scroll.bezierCurve
         }

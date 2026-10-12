@@ -14,8 +14,15 @@ RippleButton {
         bottomMargin: 10
     }
 
-    opacity: !target.atYEnd ? 1 : 0
-    scale: !target.atYEnd ? 1 : 0.7
+    // Show only when the user scrolled away, not during auto-follow; key off followBottom
+    // (not raw distance, which the 70ms follow lags) and require a meaningful gap
+    property real showThreshold: Math.max(200, target.height * 0.3)
+    readonly property real distanceFromBottom: target.contentHeight - target.height - target.contentY
+    readonly property bool following: target.followBottom === true
+    readonly property bool shouldShow: !following && distanceFromBottom > showThreshold
+
+    opacity: shouldShow ? 1 : 0
+    scale: shouldShow ? 1 : 0.7
     visible: opacity > 0
     Behavior on opacity {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -34,6 +41,7 @@ RippleButton {
 
     downAction: () => {
         target.positionViewAtEnd()
+        if (target.followBottom !== undefined) target.followBottom = true // re-engage auto-follow
     }
 
     contentItem: Row {
