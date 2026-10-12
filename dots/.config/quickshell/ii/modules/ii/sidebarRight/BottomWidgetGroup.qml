@@ -13,7 +13,7 @@ Rectangle {
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
     clip: true
-    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : 350
+    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : 430
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property int previousIndex: -1
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
@@ -31,10 +31,16 @@ Rectangle {
             "widget": "todo/TodoWidget.qml"
         },
         {
-            "type": "timer",
-            "name": Translation.tr("Timer"),
-            "icon": "schedule",
+            "type": "pomodoro",
+            "name": Translation.tr("Pomodoro"),
+            "icon": "search_activity",
             "widget": "pomodoro/PomodoroWidget.qml"
+        },
+        {
+            "type": "stopwatch",
+            "name": Translation.tr("Stopwatch"),
+            "icon": "timer",
+            "widget": "pomodoro/StopwatchWidget.qml"
         },
     ]
 
@@ -54,6 +60,14 @@ Rectangle {
             collapsedBottomWidgetGroupRow.opacity = 0;
         }
         collapseCleanFadeTimer.start();
+    }
+
+    Connections {
+        target: Persistent.states.sidebar.bottomGroup
+
+        function onTabChanged() {
+            root.selectedTab = Persistent.states.sidebar.bottomGroup.tab;
+        }
     }
 
     Timer {

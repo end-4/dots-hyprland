@@ -572,6 +572,7 @@ Singleton {
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
                     property int longBreak: 900
+                    property bool notifications: true
                 }
                 property bool secondPrecision: false
             }
