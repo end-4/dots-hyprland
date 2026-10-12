@@ -252,6 +252,19 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "lyrics"
+        title: Translation.tr("Lyrics")
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Show synced lyrics in the media widget")
+            checked: Config.options.bar.media.showLyrics
+            onCheckedChanged: {
+                Config.options.bar.media.showLyrics = checked;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "workspaces"
         title: Translation.tr("Workspaces")
 
