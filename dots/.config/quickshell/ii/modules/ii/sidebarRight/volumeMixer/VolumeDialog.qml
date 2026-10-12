@@ -15,12 +15,8 @@ WindowDialog {
 
     WindowDialogTitle {
         text: root.isSink ? Translation.tr("Audio output") : Translation.tr("Audio input")
-    }
-
-    WindowDialogSeparator {
-        Layout.topMargin: -22
-        Layout.leftMargin: 0
-        Layout.rightMargin: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.bottomMargin: 12
     }
 
     VolumeDialogContent {
@@ -28,6 +24,8 @@ WindowDialog {
     }
 
     WindowDialogButtonRow {
+        Layout.margins: 4
+        
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
@@ -43,6 +41,9 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Done")
             onClicked: root.dismiss()
+            colBackground: Appearance.colors.colPrimary
+            colText: Appearance.colors.colOnPrimary
+            colBackgroundHover: Appearance.colors.colPrimaryHover
         }
     }
 }
