@@ -52,7 +52,7 @@ const byName = {
                 { keytype: "normal", label: "0", labelShift: ")", shape: "normal", keycode: 11 },
                 { keytype: "normal", label: "-", labelShift: "_", shape: "normal", keycode: 12 },
                 { keytype: "normal", label: "=", labelShift: "+", shape: "normal", keycode: 13 },
-                { keytype: "normal", label: "Backspace", shape: "expand", keycode: 14 }
+                { keytype: "normal", label: "Backspace", shape: "backspace", keycode: 14 }
             ],
             [
                 { keytype: "normal", label: "Tab", shape: "tab", keycode: 15 },
@@ -68,7 +68,7 @@ const byName = {
                 { keytype: "normal", label: "p", labelShift: "P", shape: "normal", keycode: 25 },
                 { keytype: "normal", label: "[", labelShift: "{", shape: "normal", keycode: 26 },
                 { keytype: "normal", label: "]", labelShift: "}", shape: "normal", keycode: 27 },
-                { keytype: "normal", label: "\\", labelShift: "|", shape: "expand", keycode: 43 }
+                { keytype: "normal", label: "\\", labelShift: "|", shape: "backslash", keycode: 43 }
             ],
             [
                 //{ keytype: "normal", label: "Caps", shape: "caps", keycode: 58 }, // not needed as double-pressing shift does that
@@ -85,7 +85,7 @@ const byName = {
                 { keytype: "normal", label: "l", labelShift: "L", shape: "normal", keycode: 38 },
                 { keytype: "normal", label: ";", labelShift: ":", shape: "normal", keycode: 39 },
                 { keytype: "normal", label: "'", labelShift: '"', shape: "normal", keycode: 40 },
-                { keytype: "normal", label: "Enter", shape: "expand", keycode: 28 }
+                { keytype: "normal", label: "Enter", shape: "enter", keycode: 28 }
             ],
             [
                 { keytype: "modkey", label: "Shift", labelShift: "Shift", labelCaps: "Caps", shape: "shift", keycode: 42 },
@@ -99,7 +99,7 @@ const byName = {
                 { keytype: "normal", label: ",", labelShift: "<", shape: "normal", keycode: 51 },
                 { keytype: "normal", label: ".", labelShift: ">", shape: "normal", keycode: 52 },
                 { keytype: "normal", label: "/", labelShift: "?", shape: "normal", keycode: 53 },
-                { keytype: "modkey", label: "Shift", labelShift: "Shift", labelCaps: "Caps", shape: "expand", keycode: 54 } // optional
+                { keytype: "modkey", label: "Shift", labelShift: "Shift", labelCaps: "Caps", shape: "shift", keycode: 54 } // optional
             ],
             [
                 { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 29 },
@@ -149,7 +149,7 @@ const byName = {
                 { keytype: "normal", label: "0", labelShift: "=", labelAlt: "}", shape: "normal", keycode: 11 },
                 { keytype: "normal", label: "ß", labelShift: "?", labelAlt: "\\", shape: "normal", keycode: 12 },
                 { keytype: "normal", label: "´", labelShift: "`", labelAlt: "¸", shape: "normal", keycode: 13 },
-                { keytype: "normal", label: "⟵", shape: "expand", keycode: 14 }
+                { keytype: "normal", label: "⟵", shape: "backspace", keycode: 14 }
             ],
             [
                 { keytype: "normal", label: "Tab ⇆", shape: "tab", keycode: 15 },
@@ -165,7 +165,7 @@ const byName = {
                 { keytype: "normal", label: "p", labelShift: "P", labelAlt: "þ", shape: "normal", keycode: 25 },
                 { keytype: "normal", label: "ü", labelShift: "Ü", labelAlt: "¨", shape: "normal", keycode: 26 },
                 { keytype: "normal", label: "+", labelShift: "*", labelAlt: "~", shape: "normal", keycode: 27 },
-                { keytype: "normal", label: "↵", shape: "expand", keycode: 28 }
+                { keytype: "normal", label: "↵", shape: "enter", keycode: 28 }
             ],
             [
                 //{ keytype: "normal", label: "Umschalt ⇩", shape: "caps", keycode: 58 },
@@ -184,7 +184,7 @@ const byName = {
                 { keytype: "normal", label: "ä", labelShift: 'Ä', labelAlt: "^", shape: "normal", keycode: 40 },
                 { keytype: "normal", label: "#", labelShift: '\'', labelAlt: "’", shape: "normal", keycode: 43 },
                 { keytype: "spacer", label: "", shape: "empty" },
-                //{ keytype: "normal", label: "↵", shape: "expand", keycode: 28 }
+                //{ keytype: "normal", label: "↵", shape: "enter", keycode: 28 }
             ],
             [
                 { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "shift", keycode: 42 },
@@ -199,7 +199,7 @@ const byName = {
                 { keytype: "normal", label: ",", labelShift: ";", labelAlt: "·", shape: "normal", keycode: 51 },
                 { keytype: "normal", label: ".", labelShift: ":", labelAlt: "…", shape: "normal", keycode: 52 },
                 { keytype: "normal", label: "-", labelShift: "_", labelAlt: "–", shape: "normal", keycode: 53 },
-                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "expand", keycode: 54 }, // optional
+                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "shift", keycode: 54 }, // optional
             ],
             [
                 { keytype: "modkey", label: "Strg", shape: "control", keycode: 29 },
@@ -251,7 +251,7 @@ const byName = {
                 { keytype: "normal", label: "0", labelShift: ")", shape: "normal", keycode: 11 },
                 { keytype: "normal", label: "-", labelShift: "_", shape: "normal", keycode: 12 },
                 { keytype: "normal", label: "=", labelShift: "+", shape: "normal", keycode: 13 },
-                { keytype: "normal", label: "Backspace", shape: "expand", keycode: 14 }
+                { keytype: "normal", label: "Backspace", shape: "backspace", keycode: 14 }
             ],
             [
                 { keytype: "normal", label: "Tab", shape: "tab", keycode: 15 },
@@ -267,7 +267,7 @@ const byName = {
                 { keytype: "normal", label: "з", labelShift: "З", shape: "normal", keycode: 25 },
                 { keytype: "normal", label: "х", labelShift: "Х", shape: "normal", keycode: 26 },
                 { keytype: "normal", label: "ъ", labelShift: "Ъ", shape: "normal", keycode: 27 },
-                { keytype: "normal", label: "\\", labelShift: "/", shape: "expand", keycode: 43 }
+                { keytype: "normal", label: "\\", labelShift: "/", shape: "backslash", keycode: 43 }
             ],
             [
                 { keytype: "spacer", label: "", shape: "empty" },
@@ -283,7 +283,7 @@ const byName = {
                 { keytype: "normal", label: "д", labelShift: "Д", shape: "normal", keycode: 38 },
                 { keytype: "normal", label: "ж", labelShift: "Ж", shape: "normal", keycode: 39 },
                 { keytype: "normal", label: "э", labelShift: "Э", shape: "normal", keycode: 40 },
-                { keytype: "normal", label: "Enter", shape: "expand", keycode: 28 }
+                { keytype: "normal", label: "Enter", shape: "enter", keycode: 28 }
             ],
             [
                 { keytype: "modkey", label: "Shift", shape: "shift", keycode: 42 },
@@ -297,7 +297,7 @@ const byName = {
                 { keytype: "normal", label: "б", labelShift: "Б", shape: "normal", keycode: 51 },
                 { keytype: "normal", label: "ю", labelShift: "Ю", shape: "normal", keycode: 52 },
                 { keytype: "normal", label: ".", labelShift: ",", shape: "normal", keycode: 53 },
-                { keytype: "modkey", label: "Shift", shape: "expand", keycode: 54 }
+                { keytype: "modkey", label: "Shift", shape: "shift", keycode: 54 }
             ],
             [
                 { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 29 },

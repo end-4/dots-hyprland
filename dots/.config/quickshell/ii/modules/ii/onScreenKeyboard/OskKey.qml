@@ -22,8 +22,17 @@ RippleButton {
         "fn": 1,
         "tab": 1.6,
         "caps": 1.9,
-        "shift": 2.5,
-        "control": 1.3
+        "shift": 2.3,
+        "control": 1.3,
+        "space": 11,
+        "enter": 2,
+        "backspace": 2,
+        "backslash": 1.6,
+    })
+    property var widthAddition: ({
+        "shift": 5,
+        "enter": 5,
+        "backspace": 5,
     })
     property var heightMultiplier: ({
         "normal": 1,
@@ -38,9 +47,10 @@ RippleButton {
     enabled: shape != "empty"
     colBackground: shape == "empty" ? ColorUtils.transparentize(Appearance.colors.colLayer1) : Appearance.colors.colLayer1
     buttonRadius: Appearance.rounding.small
-    implicitWidth: baseWidth * widthMultiplier[shape] || baseWidth
-    implicitHeight: baseHeight * heightMultiplier[shape] || baseHeight
-    Layout.fillWidth: shape == "space" || shape == "expand"
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.preferredWidth: baseWidth * (widthMultiplier[shape] ?? 1) + (widthAddition[shape] ?? 0)
+    Layout.preferredHeight: baseHeight * (heightMultiplier[shape] ?? 1)
 
     Connections {
         target: Ydotool
@@ -104,13 +114,31 @@ RippleButton {
 
     }
 
+    function calculateFontSize() {
+        if (isBackspace || isEnter) {
+            return Appearance.font.pixelSizeIncreasingList.find(
+                size => root.height * 0.425 < size
+            ) ?? Appearance.font.pixelSizeIncreasingList[Appearance.font.pixelSizeIncreasingList.length - 1];
+        } else if (root.shape == "fn") {
+            return Appearance.font.pixelSizeIncreasingList.find(
+                size => root.height * 0.4 < size
+            ) ?? Appearance.font.pixelSizeIncreasingList[Appearance.font.pixelSizeIncreasingList.length - 1];
+        } else {
+            return Appearance.font.pixelSizeIncreasingList.find(
+                size => root.height * 0.35 < size
+            ) ?? Appearance.font.pixelSizeIncreasingList[Appearance.font.pixelSizeIncreasingList.length - 1];
+        }
+    }
+
+    onHeightChanged: {
+        keyText.font.pixelSize = calculateFontSize();
+    }
+
     contentItem: StyledText {
         id: keyText
         anchors.fill: parent
         font.family: (isBackspace || isEnter) ? Appearance.font.family.iconMaterial : Appearance.font.family.main
-        font.pixelSize: root.shape == "fn" ? Appearance.font.pixelSize.small : 
-            (isBackspace || isEnter) ? Appearance.font.pixelSize.huge :
-            Appearance.font.pixelSize.large
+        font.pixelSize: calculateFontSize()
         horizontalAlignment: Text.AlignHCenter
         color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
         text: root.isBackspace ? "backspace" : root.isEnter ? "subdirectory_arrow_left" :
