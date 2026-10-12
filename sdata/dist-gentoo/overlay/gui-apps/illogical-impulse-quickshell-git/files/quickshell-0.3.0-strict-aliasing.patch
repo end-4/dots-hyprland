@@ -1,0 +1,18 @@
+Fixes strict-aliasing error when building with LTO
+From: https://github.com/noctalia-dev/noctalia-qs/commit/46e60df2d6ebb4d52d5bde8a63a9a6255e556097
+
+--- a/src/core/model.hpp
++++ b/src/core/model.hpp
+@@ -170,7 +170,11 @@
+ 	}
+ 
+ 	[[nodiscard]] QList<QObject*> values() override {
+-		return *reinterpret_cast<QList<QObject*>*>(&this->mValuesList);
++		QList<QObject*> result;
++		result.reserve(this->mValuesList.size());
++		for (auto* item: this->mValuesList)
++			result.append(reinterpret_cast<QObject*>(item));
++		return result;
+ 	}
+ 
+ private:

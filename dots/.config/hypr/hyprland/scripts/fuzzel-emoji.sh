@@ -1886,3 +1886,68 @@ AH↗️HA↘️HA↗️HA↘️ pekora arrows hahaha rabbit
 𝕏  twitter x logo
 👉👈 etou ughhhhhhh shy
 👉👌 put it in imagination perv
+🫨 shaking face tremble shake shocked
+🩷 pink heart love
+🩵 light blue heart love cyan
+🩶 grey heart gray love
+🫷 leftwards pushing hand stop halt left
+🫸 rightwards pushing hand stop halt right
+🫎 moose animal antlers
+🫏 donkey animal mule ass
+🪽 wing bird feather fly
+🐦‍⬛ black bird crow raven rook
+🪿 goose bird honk
+🪼 jellyfish sea ocean sting
+🪻 hyacinth flower spring
+🫚 ginger root spice food
+🫛 pea pod peas vegetable food
+🪭 folding hand fan fan cool
+🪮 hair pick afro comb
+🪇 maracas instrument music shake
+🪈 flute instrument music
+🪯 khanda sikh religion symbol
+🛜 wireless wifi wi-fi internet network
+🙂‍↔️ head shaking horizontally no shake
+🙂‍↕️ head shaking vertically yes nod
+🚶‍➡️ person walking facing right walk
+🚶‍♀️‍➡️ woman walking facing right walk
+🚶‍♂️‍➡️ man walking facing right walk
+🧎‍➡️ person kneeling facing right kneel
+🧎‍♀️‍➡️ woman kneeling facing right kneel
+🧎‍♂️‍➡️ man kneeling facing right kneel
+🧑‍🦯‍➡️ person with white cane facing right accessibility blind
+👨‍🦯‍➡️ man with white cane facing right accessibility blind
+👩‍🦯‍➡️ woman with white cane facing right accessibility blind
+🧑‍🦼‍➡️ person in motorized wheelchair facing right accessibility
+👨‍🦼‍➡️ man in motorized wheelchair facing right accessibility
+👩‍🦼‍➡️ woman in motorized wheelchair facing right accessibility
+🧑‍🦽‍➡️ person in manual wheelchair facing right accessibility
+👨‍🦽‍➡️ man in manual wheelchair facing right accessibility
+👩‍🦽‍➡️ woman in manual wheelchair facing right accessibility
+🏃‍➡️ person running facing right run
+🏃‍♀️‍➡️ woman running facing right run
+🏃‍♂️‍➡️ man running facing right run
+🧑‍🧑‍🧒 family adult adult child parents
+🧑‍🧑‍🧒‍🧒 family adult adult child child parents
+🧑‍🧒 family adult child parent
+🧑‍🧒‍🧒 family adult child child parent
+🐦‍🔥 phoenix fire bird rebirth
+🍋‍🟩 lime fruit citrus green
+🍄‍🟫 brown mushroom fungi
+⛓️‍💥 broken chain snap shatter
+🫩 face with bags under eyes tired sleepy exhausted
+🫆 fingerprint id biometric
+🪾 leafless tree barren dead winter
+🫜 root vegetable food turnip radish
+🪉 harp instrument music
+🪏 shovel dig tool
+🫟 splatter splash stain mess
+🇨🇶 flag sark
+🫪 distorted face anxiety shocked panic
+🫯 fight cloud comic brawl dust
+🫈 hairy creature sasquatch bigfoot
+🧑‍🩰 ballet dancer dance ballerina
+🫍 orca killer whale
+🛘 landslide rockfall disaster
+🪊 trombone instrument music
+🪎 treasure chest gold loot pirate

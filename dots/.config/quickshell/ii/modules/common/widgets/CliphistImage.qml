@@ -88,8 +88,6 @@ Rectangle {
 
         width: root.imageWidth * root.scale
         height: root.imageHeight * root.scale
-        sourceSize.width: width
-        sourceSize.height: height
     }
 
     Loader {

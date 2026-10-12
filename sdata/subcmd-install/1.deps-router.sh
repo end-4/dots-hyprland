@@ -96,7 +96,7 @@ elif [[ "$OS_GROUP_ID" =~ ^(arch|gentoo|fedora)$ ]]; then
           printf "${STY_RED}Still proceed?${STY_RST}\n"
           read -p "[y/N]: " p
           case "$p" in
-            [yY])sleep 0;;
+            [yY])true;;
             *)echo "Aborting...";exit 1;;
           esac
         fi

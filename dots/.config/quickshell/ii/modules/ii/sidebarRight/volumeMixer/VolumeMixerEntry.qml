@@ -36,12 +36,10 @@ Item {
                 text: root.node?.audio.muted ? Translation.tr("Click to unmute") : Translation.tr("Click to mute")
             }
 
-            Image {
+            StyledImage {
                 id: iconImg
                 anchors.fill: parent
                 visible: false
-                sourceSize.width: parent.size
-                sourceSize.height: parent.size
                 source: {
                     let icon;
                     icon = AppSearch.guessIcon(root.node?.properties["application.icon-name"] ?? "");

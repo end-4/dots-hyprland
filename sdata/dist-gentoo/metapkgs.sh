@@ -1,0 +1,16 @@
+metapkgs=(
+    media-sound/illogical-impulse-audio
+    app-misc/illogical-impulse-backlight
+    app-misc/illogical-impulse-basic
+    x11-themes/illogical-impulse-bibata-modern-classic-bin
+    x11-themes/illogical-impulse-fonts-themes
+    gui-wm/illogical-impulse-hyprland
+    kde-misc/illogical-impulse-kde
+    app-text/illogical-impulse-microtex-git
+    sys-apps/illogical-impulse-portal
+    app-misc/illogical-impulse-python
+    gui-apps/illogical-impulse-quickshell-git
+    gui-apps/illogical-impulse-screencapture
+    app-misc/illogical-impulse-toolkit
+    gui-apps/illogical-impulse-widgets
+)

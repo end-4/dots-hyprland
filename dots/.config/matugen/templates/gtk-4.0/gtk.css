@@ -173,54 +173,68 @@ splitbutton menubutton {
   border-radius: 999px;
 }
 
-#NautilusPathBar #NautilusPathButton * {
-  color: @accent_color;
-  font-weight: 400;
+#NautilusPathBar #NautilusPathButton *,
+.nautilus-pathbar .nautilus-path-button * {
+    color: @sidebar_row_active_fg_color;
+    font-weight: 400;
 }
 
-#NautilusPathBar #NautilusPathButton {
-  background: @accent_active_color;
-  border-radius: 4px;
-  margin: 0;
-  margin-right: 2px;
+#NautilusPathBar #NautilusPathButton,
+.nautilus-pathbar .nautilus-path-button {
+    background: @accent_active_color;
+    border-radius: 4px;
+    margin: 0;
+    margin-right: 2px;
 }
 
-#NautilusPathBar {
-  background: transparent;
+#NautilusPathBar #NautilusPathButton:hover,
+.nautilus-pathbar .nautilus-path-button:hover {
+    background: @accent_vibrant_hover_color;
 }
 
-#NautilusPathBar box box:first-child #NautilusPathButton {
-  border-radius: 24px 4px 4px 24px;
+#NautilusPathBar #NautilusPathButton:active,
+.nautilus-pathbar .nautilus-path-button:active {
+    background: @accent_vibrant_active_color;
 }
 
-#NautilusPathBar box box:last-child #NautilusPathButton {
-  border-radius: 4px 24px 24px 4px;
+#NautilusPathButton,
+.nautilus-pathbar {
+    background: transparent;
 }
 
-#NautilusPathBar #NautilusPathButton.current-dir.current-dir {
-  border-radius: 999px;
+#NautilusPathBar box box:first-child #NautilusPathButton,
+.nautilus-pathbar box box:first-child .nautilus-path-button {
+    border-radius: 24px 4px 4px 24px;
 }
 
-#NautilusPathBar #NautilusPathButton * {
-  color: @sidebar_row_active_fg_color;
+#NautilusPathBar box box:last-child #NautilusPathButton,
+.nautilus-pathbar box box:last-child .nautilus-path-button {
+    border-radius: 4px 24px 24px 4px;
 }
 
-#NautilusPathBar .dim-label {
-  font-size: 0;
+#NautilusPathBar #NautilusPathButton.current-dir.current-dir,
+.nautilus-pathbar .nautilus-path-button.current-dir.current-dir {
+    border-radius: 999px;
 }
 
-#NautilusPathBar button .dim-label {
-  font-size: 14px;
-  opacity: 100%;
+#NautilusPathBar .dim-label,
+.nautilus-pathbar .dim-label {
+    font-size: 0;
 }
 
-#NautilusPathBar button {
-  border-radius: 8px;
+#NautilusPathBar button .dim-label,
+.nautilus-pathbar button .dim-label {
+    font-size: 14px;
+    opacity: 100%;
 }
 
-
-#NautilusPathBar button:checked {
-  background: @accent_vibrant_hover_color;
+#NautilusPathBar button,
+.nautilus-pathbar button {
+    border-radius: 8px;
+}
+#NautilusPathBar button:checked,
+.nautilus-pathbar button:checked {
+    background: @accent_vibrant_hover_color;
 }
 
 headerbar button {

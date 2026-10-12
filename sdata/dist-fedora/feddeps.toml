@@ -84,6 +84,7 @@ packages = [
 packages = [
   "hyprland",
   "hyprland-guiutils",
+  "hyprland-qt-support",
   "hyprsunset",
   "wl-clipboard"
 ]
@@ -133,7 +134,6 @@ packages = [
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
 
-# Quickshell-git
 [groups.quickshell]
 packages = [
   "qt6-qtdeclarative",
@@ -160,6 +160,12 @@ packages = [
   "qt6-qtvirtualkeyboard",
   "kdialog",
   "kf6-syntax-highlighting"
+]
+
+[groups.illogical-impulse]
+packages = [
+    "quickshell-git",
+    "matugen"
 ]
 
 # Screencapture
@@ -205,4 +211,3 @@ packages = [
   "unzip"
 ]
 install_opts = ["--setopt=install_weak_deps=False"]
-

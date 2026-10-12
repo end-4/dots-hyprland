@@ -67,8 +67,6 @@ Button {
             height: root.rowHeight
             fillMode: Image.PreserveAspectFit
             source: modelData.preview_url
-            sourceSize.width: root.rowHeight * modelData.aspect_ratio
-            sourceSize.height: root.rowHeight
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -149,9 +147,9 @@ Button {
                             buttonText: Translation.tr("Open file link")
                             onClicked: {
                                 root.showActions = false
-                                Hyprland.dispatch("keyword cursor:no_warps true")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = true}})")
                                 Qt.openUrlExternally(root.imageData.file_url)
-                                Hyprland.dispatch("keyword cursor:no_warps false")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = false}})")
                             }
                         }
                         MenuButton {
@@ -162,9 +160,9 @@ Button {
                             enabled: root.imageData.source && root.imageData.source.length > 0
                             onClicked: {
                                 root.showActions = false
-                                Hyprland.dispatch("keyword cursor:no_warps true")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = true}})")
                                 Qt.openUrlExternally(root.imageData.source)
-                                Hyprland.dispatch("keyword cursor:no_warps false")
+                                Hyprland.dispatch("hl.config({cursor = {no_warps = false}})")
                             }
                         }
                         MenuButton {
@@ -174,8 +172,10 @@ Button {
                             onClicked: {
                                 root.showActions = false;
                                 const targetPath = root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath;
+                                const userAgent = Config.options?.networking?.userAgent ?? ""
+                                const userAgentHeader = userAgent ? ` -H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(userAgent)}'` : ""
                                 Quickshell.execDetached(["bash", "-c", 
-                                    `mkdir -p '${targetPath}' && curl '${root.imageData.file_url}' -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
+                                    `mkdir -p '${targetPath}' && curl '${StringUtils.shellSingleQuoteEscape(root.imageData.file_url)}'${userAgentHeader} -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
                                 ])
                             }
                         }

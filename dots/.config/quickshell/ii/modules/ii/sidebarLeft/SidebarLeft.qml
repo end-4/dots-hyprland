@@ -34,7 +34,7 @@ Scope { // Scope
             running = true;
         }
         function doIt2(output) {
-            command = ["bash", "-c", "hyprctl dispatch movecursor 9999 9999"];
+            command = ["bash", "-c", "hyprctl dispatch 'hl.dsp.cursor.move({x=9999,y=9999})'"];
             hook = () => {
                 doIt3();
             }
@@ -42,7 +42,7 @@ Scope { // Scope
         }
         function doIt3(output) {
             root.pin = !root.pin;
-            command = ["bash", "-c", `sleep 0.01; hyprctl dispatch movecursor ${cursorX} ${cursorY}`];
+            command = ["bash", "-c", `sleep 0.01; hyprctl dispatch 'hl.dsp.cursor.move({x=${cursorX},y=${cursorY}})'`];
             hook = null
             running = true;
         }

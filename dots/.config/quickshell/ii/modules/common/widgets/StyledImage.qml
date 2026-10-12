@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -21,5 +22,10 @@ Image {
             source = fallbacks[currentFallbackIndex];
             currentFallbackIndex += 1;
         }
+    }
+
+    sourceSize: {
+        const dpr = (QsWindow.window as QsWindow)?.devicePixelRatio ?? 1;
+        return Qt.size(width * dpr, height * dpr);
     }
 }

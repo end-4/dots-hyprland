@@ -1,0 +1,92 @@
+<?xml version='1.0'?>
+<!DOCTYPE gui SYSTEM 'kpartgui.dtd'>
+<gui name="session" version="36">
+ <MenuBar>
+  <Menu name="file">
+   <Action group="session-operations" name="file_save_as"/>
+   <Action group="session-operations" name="file-autosave"/>
+   <Action group="session-operations" name="stop-autosave"/>
+   <Separator group="session-operations"/>
+   <Action group="session-operations" name="file_print"/>
+   <Separator group="session-operations"/>
+   <Action group="session-operations" name="open-browser"/>
+   <Action group="session-tab-operations" name="close-session"/>
+  </Menu>
+  <Menu name="edit">
+   <Action group="session-edit-operations" name="edit_copy"/>
+   <Action group="session-edit-operations" name="edit_paste"/>
+   <Separator group="session-edit-operations"/>
+   <Action group="session-edit-operations" name="select-all"/>
+   <Action group="session-edit-operations" name="select-mode"/>
+   <Separator group="session-edit-operations"/>
+   <Action group="session-edit-operations" name="copy-input-to"/>
+   <Action group="session-edit-operations" name="send-signal"/>
+   <Action group="session-edit-operations" name="rename-session"/>
+   <Action group="session-edit-operations" name="zmodem-upload"/>
+   <Separator group="session-edit-operations"/>
+   <Action group="session-edit-operations" name="edit_find"/>
+   <Action group="session-edit-operations" name="edit_find_next"/>
+   <Action group="session-edit-operations" name="edit_find_prev"/>
+  </Menu>
+  <Menu name="view">
+   <Action group="session-view-operations" name="monitor-once"/>
+   <Action group="session-view-operations" name="monitor-prompt"/>
+   <Action group="session-view-operations" name="monitor-silence"/>
+   <Action group="session-view-operations" name="monitor-activity"/>
+   <Action group="session-view-operations" name="monitor-process-finish"/>
+   <Separator group="session-view-operations"/>
+   <Action group="session-view-operations" name="view-readonly"/>
+   <Action group="session-view-operations" name="allow-mouse-tracking"/>
+   <Separator group="session-view-operations"/>
+   <Action group="session-view-operations" name="enlarge-font"/>
+   <Action group="session-view-operations" name="reset-font-size"/>
+   <Action group="session-view-operations" name="shrink-font"/>
+   <Action group="session-view-operations" name="set-encoding"/>
+   <Separator group="session-view-operations"/>
+   <Action group="session-view-operations" name="clear-history"/>
+   <Action group="session-view-operations" name="clear-history-and-reset"/>
+  </Menu>
+  <Menu name="settings">
+   <Action group="session-settings" name="edit-current-profile"/>
+   <Action group="session-settings" name="switch-profile"/>
+  </Menu>
+ </MenuBar>
+ <Menu name="session-popup-menu">
+  <Action name="edit_copy_contextmenu"/>
+  <Action name="edit_copy_contextmenu_in"/>
+  <Action name="edit_copy_contextmenu_out"/>
+  <Action name="edit_copy_contextmenu_in_out"/>
+  <Action name="edit_paste"/>
+  <Action name="web-search"/>
+  <Action name="open-browser"/>
+  <Separator/>
+  <Menu name="view-split">
+   <text>Split View</text>
+   <Action name="split-view-left-right"/>
+   <Action name="split-view-top-bottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="set-encoding"/>
+  <Action name="clear-history"/>
+  <Action name="adjust-history"/>
+  <Separator/>
+  <Action name="view-readonly"/>
+  <Action name="allow-mouse-tracking"/>
+  <Separator/>
+  <Action name="switch-profile"/>
+  <Action name="edit-current-profile"/>
+ </Menu>
+ <ToolBar name="sessionToolbar">
+  <text>Session Toolbar</text>
+  <index>1</index>
+  <Spacer/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_find"/>
+  <Action name="hamburger_menu"/>
+ </ToolBar>
+ <ActionProperties scheme="Default">
+  <Action name="edit_copy" shortcut="Ctrl+C; Ctrl+Ins"/>
+  <Action name="edit_paste" shortcut="Ctrl+V; Shift+Ins"/>
+ </ActionProperties>
+</gui>

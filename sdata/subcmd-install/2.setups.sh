@@ -27,35 +27,70 @@ v install-python-packages
 showfun setup_user_group
 v setup_user_group
 
-if [[ ! -z $(systemctl --version) ]]; then
-  # For Fedora, uinput is required for the virtual keyboard to function, and udev rules enable input group users to utilize it.
-  if [[ "$OS_GROUP_ID" == "fedora" ]]; then
-    v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
-    v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
-  else
-    v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
-  fi
-  # TODO: find a proper way for enable Nix installed ydotool. When running `systemctl --user enable ydotool, it errors "Failed to enable unit: Unit ydotool.service does not exist".
-  if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
+if [[ -d /run/systemd/system ]]; then
+  if systemctl --version >/dev/null 2>&1; then
+    # For Fedora, uinput is required for the virtual keyboard to function, and udev rules enable input group users to utilize it.
     if [[ "$OS_GROUP_ID" == "fedora" ]]; then
-      v prepare_systemd_user_service
-    fi
-    # When $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR are empty, it commonly means that the current user has been logged in with `su - user` or `ssh user@hostname`. In such case `systemctl --user enable <service>` is not usable. It should be `sudo systemctl --machine=$(whoami)@.host --user enable <service>` instead.
-    if [[ ! -z "${DBUS_SESSION_BUS_ADDRESS}" ]]; then
-      v systemctl --user enable ydotool --now
+      v bash -c "echo uinput | sudo tee /etc/modules-load.d/uinput.conf"
+      v bash -c 'echo SUBSYSTEM==\"misc\", KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"input\" | sudo tee /etc/udev/rules.d/99-uinput.rules'
     else
-      v sudo systemctl --machine=$(whoami)@.host --user enable ydotool --now
+      v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
     fi
+    # TODO: find a proper way for enable Nix installed ydotool. When running `systemctl --user enable ydotool, it errors "Failed to enable unit: Unit ydotool.service does not exist".
+    if [[ ! "${INSTALL_VIA_NIX}" == true ]]; then
+      if [[ "$OS_GROUP_ID" == "fedora" ]]; then
+        v prepare_systemd_user_service
+      fi
+      # When $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR are empty, it commonly means that the current user has been logged in with `su - user` or `ssh user@hostname`. In such case `systemctl --user enable <service>` is not usable. It should be `sudo systemctl --machine=$(whoami)@.host --user enable <service>` instead.
+      if [[ ! -z "${DBUS_SESSION_BUS_ADDRESS}" ]]; then
+        v systemctl --user enable ydotool --now
+      else
+        v sudo systemctl --machine=$(whoami)@.host --user enable ydotool --now
+      fi
+    fi
+    v sudo systemctl enable bluetooth --now
+  else
+    echo -e "${STY_RED}Systemd detected, but the systemctl command is unavailable.${STY_RST}"
+    pause
   fi
-  v sudo systemctl enable bluetooth --now
-elif [[ ! -z $(openrc --version) ]]; then
-  v bash -c "echo 'modules=i2c-dev' | sudo tee -a /etc/conf.d/modules"
-  v sudo rc-update add modules boot
-  v sudo rc-update add ydotool default
-  v sudo rc-update add bluetooth default
+elif [[ -f /run/openrc/softlevel ]]; then
+  if openrc --version >/dev/null 2>&1; then
+    v sudo mkdir -p /etc/modules-load.d
+    v bash -c "printf '%s\n' i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
+    if [[ -f /etc/conf.d/modules ]]; then
+      v sudo sed -i '/^modules=i2c-dev$/d' /etc/conf.d/modules
+    fi
+    v sudo rc-update add modules boot
+    v sudo rc-update add ydotool default
+    v sudo rc-update add bluetooth default
 
-  x sudo rc-service ydotool start
-  x sudo rc-service bluetooth start
+    x sudo rc-service ydotool start
+    x sudo rc-service bluetooth start
+  else
+    echo -e "${STY_RED}OpenRC detected, but the openrc command is unavailable.${STY_RST}"
+    pause
+  fi
+elif [[ ! -z $(dinitctl --version 2>/dev/null) ]]; then
+  # Modules loading
+  v bash -c "echo i2c-dev | sudo tee -a /etc/modules"
+  v bash -c "echo -e '-- Fix user Ydotool not working\nhl.env(\"YDOTOOL_SOCKET\", \"/tmp/.ydotool_socket\")' | tee -a \$HOME/.config/hypr/custom/env.lua"
+  v bash -c "echo -e 'type = process\ncommand = /usr/bin/ydotoold\nlogfile = /var/log/dinit/ydotool.log\ndepends-on = dbus\nsmooth-recovery = true' | sudo tee /etc/dinit.d/ydotool"
+  
+  # Quick check for services to avoid "service already enabled" error"
+  # System services
+  for srv in userspawn bluetoothd ydotool; do
+    if [ ! -e "/etc/dinit.d/boot.d/$srv" ]; then
+      v sudo dinitctl enable "$srv"
+    fi
+  done
+
+  # User services
+  for usrv in pipewire wireplumber pipewire-pulse; do
+    if [ ! -e "$HOME/.config/dinit.d/boot.d/$usrv" ]; then
+      v dinitctl --user enable "$usrv"
+    fi
+  done
+  
 else
   printf "${STY_RED}"
   printf "====================INIT SYSTEM NOT FOUND====================\n"

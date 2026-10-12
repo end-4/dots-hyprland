@@ -54,7 +54,7 @@ v remove_deprecated_dependencies
 
 # Issue #363
 case $SKIP_SYSUPDATE in
-  true) sleep 0;;
+  true) true;;
   *) v sudo pacman -Syu;;
 esac
 
@@ -102,10 +102,32 @@ for i in "${metapkgs[@]}"; do
   v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
+install-dinit-service-packages(){
+  local -a pkgs=()
+  local pkg
+
+  if ! command -v dinitctl >/dev/null 2>&1; then
+    return 0
+  fi
+
+  for pkg in userspawn-dinit bluez-dinit networkmanager-dinit pipewire-dinit pipewire-pulse-dinit wireplumber-dinit power-profiles-daemon-dinit; do
+    if pacman -Si "$pkg" >/dev/null 2>&1; then
+      pkgs+=("$pkg")
+    fi
+  done
+
+  if (( ${#pkgs[@]} > 0 )); then
+    printf "${STY_YELLOW}[$0]: Detected dinit init system, installing service packages: ${pkgs[*]}${STY_RST}\n"
+    x sudo pacman -S --needed --noconfirm "${pkgs[@]}"
+  fi
+}
+showfun install-dinit-service-packages
+v install-dinit-service-packages
+
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
 case $SKIP_PLASMAINTG in
-  true) sleep 0;;
+  true) true;;
   *)
     if $ask;then
       echo -e "${STY_YELLOW}[$0]: NOTE: The size of \"plasma-browser-integration\" is ~600 KiB, but if you don't yet have KDE on your system it'll pull an extra ~600MiB of packages.${STY_RST}"
