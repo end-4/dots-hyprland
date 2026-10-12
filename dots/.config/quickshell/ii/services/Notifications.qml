@@ -174,7 +174,7 @@ Singleton {
                 if (notification.expireTimeout != 0) {
                     newNotifObject.timer = notifTimerComponent.createObject(root, {
                         "notificationId": newNotifObject.notificationId,
-                        "interval": notification.expireTimeout < 0 ? (Config?.options.notifications.timeout ?? 7000) : notification.expireTimeout,
+                        "interval": Config?.options.notifications.timeout ?? 7000,
                     });
                 }
                 root.unread++;
