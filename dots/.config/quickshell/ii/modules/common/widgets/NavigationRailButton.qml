@@ -10,10 +10,14 @@ TabButton {
 
     property bool toggled: TabBar.tabBar.currentIndex === TabBar.index
     property string buttonIcon
+    property string customIconSource: ""
     property real buttonIconRotation: 0
     property string buttonText
     property bool expanded: false
+    property bool showCollapsedText: true
+    property bool animateLayout: true
     property bool showToggledHighlight: true
+    readonly property bool showText: root.expanded || root.showCollapsedText
     readonly property real visualWidth: root.expanded ? root.baseSize + 20 + itemText.implicitWidth : root.baseSize
 
     property real baseSize: 56
@@ -71,6 +75,7 @@ TabButton {
                 }
             }
             transitions: Transition {
+                enabled: root.animateLayout
                 AnchorAnimation {
                     duration: Appearance.animation.elementMoveFast.duration
                     easing.type: Appearance.animation.elementMoveFast.type
@@ -100,6 +105,7 @@ TabButton {
             }
             MaterialSymbol {
                 id: navRailButtonIcon
+                visible: root.customIconSource === ""
                 rotation: root.buttonIconRotation
                 anchors.centerIn: parent
                 iconSize: 24
@@ -112,10 +118,24 @@ TabButton {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
+            Loader {
+                active: root.customIconSource !== ""
+                anchors.centerIn: parent
+                width: 24
+                height: 24
+                sourceComponent: CustomIcon {
+                    width: 24
+                    height: 24
+                    source: root.customIconSource
+                    colorize: true
+                    color: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
+                }
+            }
         }
 
         StyledText {
             id: itemText
+            visible: root.showText
             anchors {
                 top: itemIconBackground.bottom
                 topMargin: 2
@@ -135,6 +155,7 @@ TabButton {
                 }
             }
             transitions: Transition {
+                enabled: root.animateLayout
                 AnchorAnimation {
                     duration: Appearance.animation.elementMoveFast.duration
                     easing.type: Appearance.animation.elementMoveFast.type
@@ -144,6 +165,10 @@ TabButton {
             text: buttonText
             font.pixelSize: 14
             color: Appearance.colors.colOnLayer1
+            opacity: root.showText ? 1 : 0
+            Behavior on opacity {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
         }
     }
 

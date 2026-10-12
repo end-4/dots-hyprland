@@ -14,7 +14,6 @@ WindowDialog {
     WindowDialogTitle {
         text: Translation.tr("Connect to Wi-Fi")
     }
-    WindowDialogSeparator {
         visible: !Network.wifiScanning
     }
     StyledIndeterminateProgressBar {
