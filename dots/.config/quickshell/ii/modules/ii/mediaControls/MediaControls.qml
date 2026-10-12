@@ -17,7 +17,45 @@ Scope {
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property var realPlayers: MprisController.players
-    readonly property var meaningfulPlayers: filterDuplicatePlayers(realPlayers)
+    // Hide ghost players: Stopped AND no title. Chromium (and others) leave
+    // an MPRIS registration on D-Bus after a tab closes — still owns the
+    // bus name, playbackState=Stopped, no title/artist, sometimes a stale
+    // mpris:artUrl. Filtering on Stopped alone is too aggressive: real
+    // players (e.g. pear-desktop / youtube-music) transition through
+    // Stopped during track changes while keeping the previous trackTitle
+    // set, and filtering them produces a brief "No active player"
+    // placeholder flash mid-skip.
+    readonly property var _rawMeaningfulPlayers: filterDuplicatePlayers(
+        realPlayers.filter(p => !(p?.playbackState === MprisPlaybackState.Stopped && !p?.trackTitle))
+    )
+
+    // Stabilized view: holds the previous non-empty list for a brief grace
+    // window when the raw list goes empty, so we don't destroy/recreate
+    // PlayerControl delegates (and shrink/grow the panel) during normal
+    // track changes. Real "all players gone" states get through after the
+    // timer fires.
+    property var meaningfulPlayers: _rawMeaningfulPlayers
+    property bool noActivePlayers: false
+    on_RawMeaningfulPlayersChanged: {
+        if (_rawMeaningfulPlayers.length > 0) {
+            meaningfulPlayers = _rawMeaningfulPlayers;
+            noActivePlayers = false;
+            noActivePlayerDelay.stop();
+        } else {
+            noActivePlayerDelay.restart();
+        }
+    }
+    Timer {
+        id: noActivePlayerDelay
+        interval: 800
+        repeat: false
+        onTriggered: {
+            if (root._rawMeaningfulPlayers.length === 0) {
+                root.meaningfulPlayers = [];
+                root.noActivePlayers = true;
+            }
+        }
+    }
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
@@ -28,24 +66,46 @@ Scope {
         let filtered = [];
         let used = new Set();
 
+        // Higher rank wins when picking the canonical player from a duplicate
+        // group. A stale Stopped player with a non-empty artUrl should never
+        // mask a live Playing one (Chromium leaves behind such ghosts).
+        const playRank = p => (p?.playbackState === MprisPlaybackState.Playing) ? 2
+                            : (p?.playbackState === MprisPlaybackState.Paused)  ? 1 : 0;
+        const hasArt = p => !!(p?.trackArtUrl && p.trackArtUrl.length > 0);
+
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i))
                 continue;
             let p1 = players[i];
             let group = [i];
 
-            // Find duplicates by trackTitle prefix
+            // Find duplicates: matching titles, OR same playback state plus
+            // near-identical position/length (plasma-browser-integration vs
+            // the native browser bus). Use absolute differences — the
+            // original `<= 2` on raw subtraction is true for any negative
+            // diff, so a Stopped player at position=0/length=0 incorrectly
+            // matches every Playing player.
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+                const titleMatch = p1.trackTitle && p2.trackTitle &&
+                    (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle));
+                const motionMatch = p1.playbackState === p2.playbackState &&
+                    Math.abs(p1.position - p2.position) <= 2 &&
+                    Math.abs(p1.length - p2.length) <= 2;
+                if (titleMatch || motionMatch) {
                     group.push(j);
                 }
             }
 
-            // Pick the one with non-empty trackArtUrl, or fallback to the first
-            let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
-            if (chosenIdx === undefined)
-                chosenIdx = group[0];
+            // Tiebreaker: highest play-state rank, then non-empty trackArtUrl,
+            // then first encountered.
+            let chosenIdx = group[0];
+            for (let k = 1; k < group.length; ++k) {
+                const cand = players[group[k]];
+                const best = players[chosenIdx];
+                if (playRank(cand) > playRank(best)) chosenIdx = group[k];
+                else if (playRank(cand) === playRank(best) && hasArt(cand) && !hasArt(best)) chosenIdx = group[k];
+            }
 
             filtered.push(players[chosenIdx]);
             group.forEach(idx => used.add(idx));
@@ -151,7 +211,7 @@ Scope {
                     }
                     Layout.leftMargin: Appearance.sizes.hyprlandGapsOut
                     Layout.rightMargin: Appearance.sizes.hyprlandGapsOut
-                    visible: root.meaningfulPlayers.length === 0
+                    visible: root.noActivePlayers
                     implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
                     implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
 
