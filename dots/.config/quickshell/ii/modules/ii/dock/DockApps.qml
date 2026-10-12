@@ -23,7 +23,6 @@ Item {
     property bool requestDockShow: previewPopup.show
 
     Layout.fillHeight: true
-    Layout.topMargin: Appearance.sizes.hyprlandGapsOut
     implicitWidth: listView.implicitWidth
 
     function popupCenterXForButton(button) {
@@ -55,8 +54,8 @@ Item {
             appToplevel: modelData
             appListRoot: root
 
-            topInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
-            bottomInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
+            topInset: root.buttonPadding
+            bottomInset: root.buttonPadding
         }
     }
 
