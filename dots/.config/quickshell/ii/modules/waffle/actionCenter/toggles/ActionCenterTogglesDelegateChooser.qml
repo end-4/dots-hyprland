@@ -30,6 +30,13 @@ DelegateChooser {
         }
     }
     DelegateChoice {
+        roleValue: "autoRotate"
+        ActionCenterToggleButton {
+            toggleModel: AutoRotateToggle {}
+            icon: "repeat"
+        }
+    }
+    DelegateChoice {
         roleValue: "bluetooth"
         ActionCenterToggleButton {
             toggleModel: BluetoothToggle {}
