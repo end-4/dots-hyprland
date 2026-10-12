@@ -54,6 +54,11 @@ Scope {
                 if (GlobalStates.screenLocked) {
                     lockContext.reset();
                     lockContext.tryFingerUnlock();
+
+                    // Отключаем экран по таймауту, если параметр больше нуля
+                    if (Config.options.lock.dpmsTimeout > 0) {
+                        Quickshell.execDetached(["bash", "-c", `sleep ${Config.options.lock.dpmsTimeout} && hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'`]);
+                    }
                 }
             }
         }
@@ -70,6 +75,11 @@ Scope {
 
             // Unlock the keyring if configured to do so
             if (Config.options.lock.security.unlockKeyring) root.unlockKeyring(); // Async
+
+            // Выполняем пользовательский хук разблокировки, если он задан
+            if (Config.options.lock.unlockHook && Config.options.lock.unlockHook !== "") {
+                Quickshell.execDetached(["bash", "-c", Config.options.lock.unlockHook]);
+            }
 
             // Unlock the screen before exiting, or the compositor will display a
             // fallback lock you can't interact with.
