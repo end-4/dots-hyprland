@@ -26,6 +26,7 @@ Scope { // Scope
         id: oskLoader
         active: GlobalStates.oskOpen
         onActiveChanged: {
+            PhysicalKeyboard.active = oskLoader.active;
             if (!oskLoader.active) {
                 Ydotool.releaseAllKeys();
             }
