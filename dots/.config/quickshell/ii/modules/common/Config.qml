@@ -209,6 +209,16 @@ Singleton {
                         property real x: 400
                         property real y: 100
                     }
+                    property JsonObject bluetooth: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 650
+                        property real y: 100
+                        property real opacity: 0.92
+                        property string listOrientation: "horizontal" // "horizontal", "vertical"
+                        property int refreshIntervalMinutes: 1
+                        property int maxVisibleDevices: 8
+                    }
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
