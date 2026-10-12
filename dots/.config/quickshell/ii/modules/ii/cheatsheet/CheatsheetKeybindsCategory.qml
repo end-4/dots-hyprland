@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import "cheatsheet_search.js" as CheatsheetSearch
 import qs.services
 import qs.modules.common
 import qs.modules.common.functions
@@ -13,6 +14,7 @@ import Quickshell
 Column {
     id: root
     required property string categoryName
+    property string searchQuery: ""
     readonly property bool isCategorized: categoryName?.length > 0
     property int maxBindWidth: 0
     property real columnSpacing: 40
@@ -152,10 +154,18 @@ Column {
         Repeater {
             id: repeater
             model: {
+                let binds;
                 if (!root.isCategorized) {
-                    return HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isUncategorized(bind) && !root.containsNonFirstRepetitive(bind));
+                    binds = HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isUncategorized(bind) && !root.containsNonFirstRepetitive(bind));
+                } else {
+                    binds = HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isCategory(bind, root.categoryName) && !root.containsNonFirstRepetitive(bind));
                 }
-                return HyprlandKeybinds.keybinds.filter(bind => root.hasDescription(bind) && root.isCategory(bind, root.categoryName) && !root.containsNonFirstRepetitive(bind));
+                if (root.searchQuery.trim().length === 0) return binds;
+                const category = root.isCategorized ? root.categoryName : "";
+                return binds.filter(bind => CheatsheetSearch.matchesQuery(
+                    CheatsheetSearch.keybindHaystack(bind, root.keySubstitutions, category),
+                    root.searchQuery,
+                ));
             }
             delegate: BindLine {
                 required property var modelData

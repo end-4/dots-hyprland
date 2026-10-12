@@ -1,3 +1,4 @@
+import "cheatsheet_search.js" as CheatsheetSearch
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
@@ -6,7 +7,14 @@ import QtQuick
 RippleButton {
     id: root
     required property var element
-    opacity: element.type != "empty" ? 1 : 0
+    property string searchQuery: ""
+
+    readonly property bool dimmed: searchQuery.trim().length > 0
+        && element.type !== "empty"
+        && !CheatsheetSearch.matchesElement(element, searchQuery)
+
+    opacity: element.type != "empty" ? (dimmed ? 0.28 : 1) : 0
+    enabled: element.type === "empty" || !dimmed
     implicitHeight: 70
     implicitWidth: 70
     colBackground: Appearance.colors.colLayer2
