@@ -216,6 +216,40 @@ ContentPage {
             ]
         }
 
+        // Custom color palette (#1586): the engine already exists in switchwall.sh —
+        // `--color` picks a color with hyprpicker and generates the whole theme from
+        // it (persisted as appearance.palette.accentColor, survives light/dark
+        // toggles); `--color clear` returns to wallpaper-derived colors. This row
+        // only exposes it.
+        ConfigRow {
+            uniform: true
+            RippleButtonWithIcon {
+                Layout.fillWidth: true
+                materialIcon: "colorize"
+                mainText: (Config.options.appearance.palette.accentColor ?? "") !== ""
+                    ? Translation.tr("Custom color: %1").arg(Config.options.appearance.palette.accentColor)
+                    : Translation.tr("Custom color")
+                onClicked: {
+                    Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --color --noswitch`]);
+                }
+                StyledToolTip {
+                    text: Translation.tr("Pick a color on screen — the whole theme is generated from it instead of the wallpaper")
+                }
+            }
+            RippleButtonWithIcon {
+                Layout.fillWidth: true
+                enabled: (Config.options.appearance.palette.accentColor ?? "") !== ""
+                materialIcon: "format_color_reset"
+                mainText: Translation.tr("Back to wallpaper colors")
+                onClicked: {
+                    Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --color clear --noswitch`]);
+                }
+                StyledToolTip {
+                    text: Translation.tr("Clear the custom color and derive colors from the wallpaper again")
+                }
+            }
+        }
+
         ConfigSwitch {
             buttonIcon: "ev_shadow"
             text: Translation.tr("Transparency")
