@@ -29,8 +29,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 mkdir -p "$PICTURES_DIR/Wallpapers"
 
-response=$(curl "https://osu.ppy.sh/api/v2/seasonal-backgrounds")
-images=$(echo "$response" | jq '.backgrounds | length' -r);
+# The endpoint sits behind Cloudflare, which sometimes answers with an HTML
+# challenge page instead of JSON (see #3590). Without these guards the script
+# cascaded: jq parse error, division by zero, curl with an empty URL, then
+# matugen/switchwall choking on a nonexistent image file. A failure should be
+# ONE clear notification, not a broken wallpaper state.
+response=$(curl -sf -A "Mozilla/5.0 (X11; Linux x86_64)" -H "Accept: application/json"     "https://osu.ppy.sh/api/v2/seasonal-backgrounds") || response=""
+images=$(echo "$response" | jq '.backgrounds | length' -r 2>/dev/null) || images=0
+if [ -z "$images" ] || [ "$images" -eq 0 ] 2>/dev/null; then
+    notify-send -t 8000 -a "Wallpaper switcher" "osu! seasonal backgrounds unreachable"         "The API refused the request (Cloudflare challenge). Try again later." 2>/dev/null || true
+    exit 1
+fi
 randomIndex=$((RANDOM % images));
 link=$(echo "$response" | jq ".backgrounds[$randomIndex].url" -r)
 ext=$(echo "$link" | awk -F. '{print $NF}')
@@ -40,5 +49,8 @@ currentWallpaperPath=$(jq -r '.background.wallpaperPath' $illogicalImpulseConfig
 if [ "$downloadPath" == "$currentWallpaperPath" ]; then
     downloadPath="$PICTURES_DIR/Wallpapers/random_wallpaper-1.$ext"
 fi
-curl "$link" -o "$downloadPath"
+if ! curl -sf "$link" -o "$downloadPath"; then
+    notify-send -t 8000 -a "Wallpaper switcher" "osu! background download failed" "$link" 2>/dev/null || true
+    exit 1
+fi
 "$SCRIPT_DIR/../switchwall.sh" --image "$downloadPath"
