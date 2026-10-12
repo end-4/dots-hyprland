@@ -1,5 +1,6 @@
 pragma Singleton
 import Quickshell
+import Quickshell.Services.Mpris
 import qs.services
 import qs.modules.common
 
@@ -21,6 +22,7 @@ Singleton {
     }
 
     function suspend() {
+        pauseAllPlayers();
         Quickshell.execDetached(["bash", "-c", "systemctl suspend || loginctl suspend"]);
     }
 
@@ -34,7 +36,14 @@ Singleton {
     }
 
     function hibernate() {
+        pauseAllPlayers();
         Quickshell.execDetached(["bash", "-c", `systemctl hibernate || loginctl hibernate`]);
+    }
+
+    function pauseAllPlayers() {
+        for (const player of Mpris.players.values) {
+            if (player.canPause) player.pause();
+        }
     }
 
     function poweroff() {
