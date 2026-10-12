@@ -11,16 +11,17 @@ Singleton {
     id: root
 
     property alias inhibit: idleInhibitor.enabled
-    inhibit: false
+    property bool autoIdleInhibit: Config.options.autoIdleInhibit
+    inhibit: autoIdleInhibit
+
 
     Connections {
         target: Persistent
         function onReadyChanged() {
-            if (!Persistent.isNewHyprlandInstance) {
-                root.inhibit = Persistent.states.idle.inhibit;
-            } else {
-                Persistent.states.idle.inhibit = root.inhibit;
+            if (Persistent.isNewHyprlandInstance) {
+                Persistent.states.idle.inhibit = Config.options.autoIdleInhibit;
             }
+            root.inhibit = Persistent.states.idle.inhibit;
         }
     }
 
@@ -31,6 +32,10 @@ Singleton {
             root.inhibit = !root.inhibit;
         }
         Persistent.states.idle.inhibit = root.inhibit;
+    }
+
+    function toggleAutoInhibit(active = null) {
+        Config.options.autoIdleInhibit = !Config.options.autoIdleInhibit
     }
 
     IdleInhibitor {
