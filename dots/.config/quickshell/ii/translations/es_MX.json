@@ -585,7 +585,7 @@
   "Cancel wallpaper selection": "Cancelar selección de fondo de pantalla",
   "See fewer": "Ver menos",
   "Click to toggle light/dark mode\n(applied when wallpaper is chosen)": "Clic para alternar modo claro/oscuro\n(se aplica al elegir el fondo de pantalla)",
-  "LMB to enable/disable\nRMB to toggle size\nScroll to swap position": "Clic izq. para activar/desactivar\nClic der. para alternar tamaño\nDesplazar para cambiar posición",
+  "\nLMB to enable/disable\nRMB to toggle size\nScroll to swap position": "\nClic izq. para activar/desactivar\nClic der. para alternar tamaño\nDesplazar para cambiar posición",
   "Window": "Ventana",
   "Cancel": "Cancelar",
   "Unknown Artist": "Artista desconocido",
