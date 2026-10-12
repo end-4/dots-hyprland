@@ -231,7 +231,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: 25
                     height: 25
-                    source: SystemInfo.distroIcon
+                    source: Config.options.sidebar.topIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.sidebar.topIcon}-symbolic`
                     colorize: true
                     color: Appearance.colors.colOnLayer0
                 }
