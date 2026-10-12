@@ -155,7 +155,7 @@ ColumnLayout {
             renderType: Text.NativeRendering
             font.family: Appearance.font.family.reading
             font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
-            font.pixelSize: Appearance.font.pixelSize.small
+            font.pixelSize: Appearance.font.pixelSize.larger
             selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
             selectionColor: Appearance.colors.colSecondaryContainer
             wrapMode: TextEdit.Wrap
