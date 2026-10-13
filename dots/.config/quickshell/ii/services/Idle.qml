@@ -19,6 +19,7 @@ Singleton {
             if (!Persistent.isNewHyprlandInstance) {
                 root.inhibit = Persistent.states.idle.inhibit;
             } else {
+                root.inhibit = Config.options?.idle?.inhibitOnStartup ?? false;
                 Persistent.states.idle.inhibit = root.inhibit;
             }
         }

@@ -334,6 +334,10 @@ Singleton {
                 property list<string> ignoredAppRegexes: []
             }
 
+            property JsonObject idle: JsonObject {
+                property bool inhibitOnStartup: false
+            }
+
             property JsonObject interactions: JsonObject {
                 property JsonObject scrolling: JsonObject {
                     property bool fasterTouchpadScroll: false // Enable faster scrolling with touchpad
