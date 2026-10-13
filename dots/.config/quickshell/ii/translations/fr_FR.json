@@ -611,5 +611,9 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "Notification history": "Historique des notifications",
+  "No notification history yet": "Aucune notification dans l’historique pour le moment",
+  "Clear history": "Effacer l’historique",
+  "History: %1": "Historique : %1"
 }

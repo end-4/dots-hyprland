@@ -756,5 +756,9 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Notification history": "История уведомлений",
+  "No notification history yet": "История уведомлений пуста",
+  "Clear history": "Очистить историю",
+  "History: %1": "История: %1"
 }
