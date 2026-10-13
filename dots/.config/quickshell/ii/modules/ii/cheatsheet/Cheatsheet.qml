@@ -19,6 +19,10 @@ Scope { // Scope
             "name": Translation.tr("Keybinds")
         },
         {
+            "icon": "apps",
+            "name": Translation.tr("Apps")
+        },
+        {
             "icon": "experiment",
             "name": Translation.tr("Elements")
         },
@@ -171,6 +175,9 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
+                        CheatsheetApps {
+                            onAppLaunched: cheatsheetRoot.hide()
+                        }
                         CheatsheetPeriodicTable {}
                     }
                 }
