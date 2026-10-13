@@ -33,6 +33,11 @@ Item {
     // Placeholder when list is empty
     PagePlaceholder {
         shown: Notifications.list.length === 0
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: statusRow.top
+        anchors.bottomMargin: 5
         icon: "notifications_active"
         description: Translation.tr("Nothing")
         shape: MaterialShape.Shape.Ghostish
