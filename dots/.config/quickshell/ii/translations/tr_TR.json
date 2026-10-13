@@ -604,5 +604,9 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Notification history": "Bildirim geçmişi",
+  "No notification history yet": "Henüz bildirim geçmişi yok",
+  "Clear history": "Geçmişi temizle",
+  "History: %1": "Geçmiş: %1"
 }
