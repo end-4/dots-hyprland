@@ -8,7 +8,7 @@ net-misc/wget ssl
 x11-terms/kitty wayland
 media-fonts/nerdfonts jetbrainsmono
 
-gui-wm/hyprland::hyproverlay X guiutils
+gui-wm/hyprland X guiutils
 
 gnome-base/gnome-keyring pam ssh-agent
 net-misc/networkmanager concheck tools wifi
