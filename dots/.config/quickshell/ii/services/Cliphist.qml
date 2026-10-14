@@ -16,6 +16,12 @@ Singleton {
     property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property list<string> entries: []
+    // Current clipboard content according to cliphist (first list entry, id prefix stripped).
+    // Use this instead of Quickshell.clipboardText in bindings: reading clipboardText on
+    // Wayland does a synchronous pipe read on the main thread (QWaylandDataOffer, ~1s
+    // timeout per mime type when the clipboard owner is unresponsive) and re-evaluates
+    // on every clipboard change.
+    readonly property string currentEntryText: entries.length > 0 ? StringUtils.cleanCliphistEntry(entries[0]) : ""
     readonly property var preparedEntries: entries.map(a => ({
         name: Fuzzy.prepare(`${a.replace(/^\s*\S+\s+/, "")}`),
         entry: a
