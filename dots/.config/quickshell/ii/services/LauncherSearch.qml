@@ -24,24 +24,47 @@ Singleton {
 
     // https://specifications.freedesktop.org/menu/latest/category-registry.html
     property list<string> mainRegisteredCategories: ["AudioVideo", "Development", "Education", "Game", "Graphics", "Network", "Office", "Science", "Settings", "System", "Utility"]
-    property list<string> appCategories: DesktopEntries.applications.values.reduce((acc, entry) => {
-        for (const category of entry.categories) {
-            if (!acc.includes(category) && mainRegisteredCategories.includes(category)) {
-                acc.push(category);
+    property list<string> appCategories: []
+
+    function updateAppCategories() {
+        const registered = mainRegisteredCategories;
+        const catSet = new Set();
+        const apps = DesktopEntries.applications.values || [];
+        for (let i = 0; i < apps.length; i++) {
+            const entry = apps[i];
+            if (!entry || !entry.categories) continue;
+            for (let j = 0; j < entry.categories.length; j++) {
+                const cat = entry.categories[j];
+                if (registered.includes(cat)) {
+                    catSet.add(cat);
+                }
             }
         }
-        return acc;
-    }, []).sort()
+        root.appCategories = Array.from(catSet).sort();
+    }
+
+    Connections {
+        target: DesktopEntries.applications
+        function onValuesChanged() {
+            Qt.callLater(root.updateAppCategories);
+        }
+    }
+
+    Component.onCompleted: {
+        updateAppCategories();
+    }
 
     // Load user action scripts from ~/.config/illogical-impulse/actions/
     // Uses FolderListModel to auto-reload when scripts are added/removed
-    property var userActionScripts: {
+    property var userActionScripts: []
+
+    function updateUserActionScripts() {
         const actions = [];
         for (let i = 0; i < userActionsFolder.count; i++) {
             const fileName = userActionsFolder.get(i, "fileName");
             const filePath = userActionsFolder.get(i, "filePath");
             if (fileName && filePath) {
-                const actionName = fileName.replace(/\.[^/.]+$/, ""); // strip extension
+                const actionName = fileName.replace(/\.[^/.]+$/, "");
                 actions.push({
                     action: actionName,
                     execute: ((path) => (args) => {
@@ -50,7 +73,7 @@ Singleton {
                 });
             }
         }
-        return actions;
+        root.userActionScripts = actions;
     }
 
     FolderListModel {
@@ -164,24 +187,59 @@ Singleton {
         }
     }
 
-    property list<var> results: {
-        // Search results are handled here
-        ////////////////// Skip? //////////////////
-        if (root.query == "")
-            return [];
+    property list<var> results: []
+    property var _activeObjects: []
+
+    onQueryChanged: {
+        nonAppResultsTimer.restart();
+        rebuildResultsTimer.restart();
+    }
+
+    Timer {
+        id: rebuildResultsTimer
+        interval: 10
+        repeat: false
+        onTriggered: root.rebuildResults()
+    }
+
+    function clearOldObjects() {
+        for (let i = 0; i < root._activeObjects.length; i++) {
+            if (root._activeObjects[i]) {
+                root._activeObjects[i].destroy();
+            }
+        }
+        root._activeObjects = [];
+    }
+
+    function rebuildResults() {
+        clearOldObjects();
 
         ///////////// Special cases ///////////////
+        if (root.query === "") {
+            root.results = [];
+            return;
+        }
+
+        const createdObjects = [];
+        function createResultObj(properties) {
+            const obj = resultComp.createObject(null, properties);
+            if (obj) createdObjects.push(obj);
+            return obj;
+        }
+
         if (root.query.startsWith(Config.options.search.prefix.clipboard)) {
             // Clipboard
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.clipboard);
-            return Cliphist.fuzzyQuery(searchString).map((entry, index, array) => {
+            const rawClipResults = Cliphist.fuzzyQuery(searchString);
+            
+            const clipObjects = rawClipResults.map((entry, index, array) => {
                 const mightBlurImage = Cliphist.entryIsImage(entry) && root.clipboardWorkSafetyActive;
                 let shouldBlurImage = mightBlurImage;
                 if (mightBlurImage) {
                     shouldBlurImage = shouldBlurImage && (root.containsUnsafeLink(array[index - 1]) || root.containsUnsafeLink(array[index + 1]));
                 }
                 const type = `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`;
-                return resultComp.createObject(null, {
+                return createResultObj({
                     rawValue: entry,
                     name: StringUtils.cleanCliphistEntry(entry),
                     verb: "",
@@ -189,14 +247,14 @@ Singleton {
                     execute: () => {
                         Cliphist.copy(entry);
                     },
-                    actions: [resultComp.createObject(null, {
+                    actions: [createResultObj({
                             name: Translation.tr("Copy"),
                             iconName: "content_copy",
                             iconType: LauncherSearchResult.IconType.Material,
                             execute: () => {
                                 Cliphist.copy(entry);
                             }
-                        }), resultComp.createObject(null, {
+                        }), createResultObj({
                             name: Translation.tr("Delete"),
                             iconName: "delete",
                             iconType: LauncherSearchResult.IconType.Material,
@@ -207,12 +265,17 @@ Singleton {
                     blurImage: shouldBlurImage
                 });
             }).filter(Boolean);
-        } else if (root.query.startsWith(Config.options.search.prefix.emojis)) {
-            // Clipboard
+
+            root._activeObjects = createdObjects;
+            root.results = clipObjects;
+            return;
+        }else if (root.query.startsWith(Config.options.search.prefix.emojis)) {
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.emojis);
-            return Emojis.fuzzyQuery(searchString).map(entry => {
+            const rawEmojiResults = Emojis.fuzzyQuery(searchString);
+            
+            const emojiObjects = rawEmojiResults.map(entry => {
                 const emoji = entry.match(/^\s*(\S+)/)?.[1] || "";
-                return resultComp.createObject(null, {
+                return createResultObj({
                     rawValue: entry,
                     name: entry.replace(/^\s*\S+\s+/, ""),
                     iconName: emoji,
@@ -224,11 +287,14 @@ Singleton {
                     }
                 });
             }).filter(Boolean);
+
+            root._activeObjects = createdObjects;
+            root.results = emojiObjects;
+            return;
         }
 
         ////////////////// Init ///////////////////
-        nonAppResultsTimer.restart();
-        const mathResultObject = resultComp.createObject(null, {
+        const mathResultObject = createResultObj({
             name: root.mathResult,
             verb: Translation.tr("Copy"),
             type: Translation.tr("Math result"),
@@ -239,8 +305,11 @@ Singleton {
                 Quickshell.clipboardText = root.mathResult;
             }
         });
-        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
-            return resultComp.createObject(null, {
+
+        const rawAppEntries = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app));
+        
+        const appResultObjects = rawAppEntries.map(entry => {
+            return createResultObj({
                 type: Translation.tr("App"),
                 id: entry.id,
                 name: entry.name,
@@ -260,7 +329,7 @@ Singleton {
                 genericName: entry.genericName,
                 keywords: entry.keywords,
                 actions: entry.actions.map(action => {
-                    return resultComp.createObject(null, {
+                    return createResultObj({
                         name: action.name,
                         iconName: action.icon,
                         iconType: LauncherSearchResult.IconType.System,
@@ -275,7 +344,8 @@ Singleton {
                 })
             });
         });
-        const commandResultObject = resultComp.createObject(null, {
+
+        const commandResultObject = createResultObj({
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
             verb: Translation.tr("Run"),
             type: Translation.tr("Command"),
@@ -291,7 +361,8 @@ Singleton {
                 Quickshell.execDetached(["bash", "-c", root.query.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
             }
         });
-        const webSearchResultObject = resultComp.createObject(null, {
+
+        const webSearchResultObject = createResultObj({
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch),
             verb: Translation.tr("Search"),
             type: Translation.tr("Web search"),
@@ -306,10 +377,11 @@ Singleton {
                 Qt.openUrlExternally(url);
             }
         });
+
         const launcherActionObjects = root.allActions.map(action => {
             const actionString = `${Config.options.search.prefix.action}${action.action}`;
             if (actionString.startsWith(root.query) || root.query.startsWith(actionString)) {
-                return resultComp.createObject(null, {
+                return createResultObj({
                     name: root.query.startsWith(actionString) ? root.query : actionString,
                     verb: Translation.tr("Run"),
                     type: Translation.tr("Action"),
@@ -324,36 +396,38 @@ Singleton {
         }).filter(Boolean);
 
         //////// Prioritized by prefix /////////
-        let result = [];
+        let finalResults = [];
         const startsWithNumber = /^\d/.test(root.query);
         const startsWithMathPrefix = root.query.startsWith(Config.options.search.prefix.math);
         const startsWithShellCommandPrefix = root.query.startsWith(Config.options.search.prefix.shellCommand);
         const startsWithWebSearchPrefix = root.query.startsWith(Config.options.search.prefix.webSearch);
+
         if (startsWithNumber || startsWithMathPrefix) {
-            result.push(mathResultObject);
+            finalResults.push(mathResultObject);
         } else if (startsWithShellCommandPrefix) {
-            result.push(commandResultObject);
+            finalResults.push(commandResultObject);
         } else if (startsWithWebSearchPrefix) {
-            result.push(webSearchResultObject);
+            finalResults.push(webSearchResultObject);
         }
 
         //////////////// Apps //////////////////
-        result = result.concat(appResultObjects);
+        finalResults = finalResults.concat(appResultObjects);
 
         ////////// Launcher actions ////////////
-        result = result.concat(launcherActionObjects);
+        finalResults = finalResults.concat(launcherActionObjects);
 
         /// Math result, command, web search ///
         if (Config.options.search.prefix.showDefaultActionsWithoutPrefix) {
             if (!startsWithShellCommandPrefix)
-                result.push(commandResultObject);
+                finalResults.push(commandResultObject);
             if (!startsWithNumber && !startsWithMathPrefix)
-                result.push(mathResultObject);
+                finalResults.push(mathResultObject);
             if (!startsWithWebSearchPrefix)
-                result.push(webSearchResultObject);
+                finalResults.push(webSearchResultObject);
         }
 
-        return result;
+        root._activeObjects = createdObjects;
+        root.results = finalResults;
     }
 
     Component {
