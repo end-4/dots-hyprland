@@ -611,5 +611,21 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "App finder": "App finder",
+  "Search apps...": "Search apps...",
+  "Use app finder (Experimental)": "Use app finder (Experimental)",
+  "Multimedia": "Multimedia",
+  "Development": "Development",
+  "Education": "Education",
+  "Games": "Games",
+  "Graphics": "Graphics",
+  "Office": "Office",
+  "Science": "Science",
+  "Utilities": "Utilities",
+  "Other": "Other",
+  "Pin to dock": "Pin to dock",
+  "Panel width": "Panel width",
+  "Panel height": "Panel height",
+  "Recent files": "Recent files"
 }
