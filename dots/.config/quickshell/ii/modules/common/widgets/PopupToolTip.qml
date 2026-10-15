@@ -20,7 +20,7 @@ Item {
         tooltipLoader.item?.anchor.updateAnchor();
     }
 
-    readonly property bool internalVisibleCondition: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition
+    readonly property bool internalVisibleCondition: (extraVisibleCondition && (parent?.hovered ?? false)) || alternativeVisibleCondition
     property var anchorEdges: Edges.Top
     property var anchorGravity: anchorEdges
 
