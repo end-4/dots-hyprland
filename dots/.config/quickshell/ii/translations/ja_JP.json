@@ -158,8 +158,8 @@
   "No": "いいえ",
   "AI": "AI",
   "Local only": "ローカルのみ",
-  "Policies": "ポリシー",
-  "Weeb": "アニメファン向け",
+  "Policies": "機能の利用設定",
+  "Weeb": "アニメ関連機能",
   "Closet": "隠し",
   "Show next time": "次回も表示する",
   "Usage": "使用状況",
@@ -713,5 +713,11 @@
   "e.g. 󱊫 for F1, 󱊶  for F12": "例：F1は󱊫、F12は󱊶",
   "with vertical offset": "縦方向のずれ",
   "Health:": "健全性：",
-  "Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar": "オンラインモデルの設定：/key を入力\nCtrl+O：サイドバーを広げる\nCtrl+P：サイドバーを固定\nCtrl+D：別ウィンドウで開く"
+  "Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar": "オンラインモデルの設定：/key を入力\nCtrl+O：サイドバーを広げる\nCtrl+P：サイドバーを固定\nCtrl+D：別ウィンドウで開く",
+  "Disable AI": "使わない",
+  "Allow online AI": "オンラインも使う",
+  "Local AI only": "このPC内のみ",
+  "Disable anime features": "使わない",
+  "Show anime features": "表示する",
+  "Hide anime tab": "タブを隠す"
 }
