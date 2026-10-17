@@ -715,7 +715,7 @@
   "Health:": "健全性：",
   "Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar": "オンラインモデルの設定：/key を入力\nCtrl+O：サイドバーを広げる\nCtrl+P：サイドバーを固定\nCtrl+D：別ウィンドウで開く",
   "Disable AI": "使わない",
-  "Allow online AI": "オンラインも使う",
+  "Allow online AI": "オンラインAIを許可",
   "Local AI only": "このPC内のみ",
   "Disable anime features": "使わない",
   "Show anime features": "表示する",
