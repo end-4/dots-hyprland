@@ -711,5 +711,6 @@
   "at": "残量",
   "e.g. 󰘴  for Ctrl, 󰘵  for Alt, 󰘶  for Shift, etc": "例：Ctrlは󰘴、Altは󰘵、Shiftは󰘶など",
   "e.g. 󱊫 for F1, 󱊶  for F12": "例：F1は󱊫、F12は󱊶",
-  "with vertical offset": "縦方向のずれ"
+  "with vertical offset": "縦方向のずれ",
+  "Health:": "健全性："
 }
