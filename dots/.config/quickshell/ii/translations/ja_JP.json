@@ -712,5 +712,6 @@
   "e.g. 󰘴  for Ctrl, 󰘵  for Alt, 󰘶  for Shift, etc": "例：Ctrlは󰘴、Altは󰘵、Shiftは󰘶など",
   "e.g. 󱊫 for F1, 󱊶  for F12": "例：F1は󱊫、F12は󱊶",
   "with vertical offset": "縦方向のずれ",
-  "Health:": "健全性："
+  "Health:": "健全性：",
+  "Type /key to get started with online models\nCtrl+O to expand sidebar\nCtrl+P to pin sidebar\nCtrl+D to detach sidebar": "オンラインモデルの設定：/key を入力\nCtrl+O：サイドバーを広げる\nCtrl+P：サイドバーを固定\nCtrl+D：別ウィンドウで開く"
 }
