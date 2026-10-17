@@ -11,14 +11,17 @@ Item {
     required property string name
     property bool rotateIcon: false
     property bool scaleIcon: false
+    property string valueText: `${Math.round(root.value * 100)}`
+    property bool showProgressBar: true
     property alias from: valueProgressBar.from
     property alias to: valueProgressBar.to
+    property bool stackNameValue: false
 
     property real valueIndicatorVerticalPadding: 9
     property real valueIndicatorLeftPadding: 10
     property real valueIndicatorRightPadding: 20 // An icon is circle ish, a column isn't, hence the extra padding
 
-    implicitWidth: Appearance.sizes.osdWidth + 2 * Appearance.sizes.elevationMargin
+    implicitWidth: Math.max(Appearance.sizes.osdWidth, valueRow.implicitWidth) + 2 * Appearance.sizes.elevationMargin
     implicitHeight: valueIndicator.implicitHeight + 2 * Appearance.sizes.elevationMargin
 
     StyledRectangularShadow {
@@ -77,6 +80,7 @@ Item {
                 spacing: 5
 
                 RowLayout { // Name fill left, value on the right end
+                    visible: !root.stackNameValue
                     Layout.leftMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
                     Layout.rightMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
 
@@ -91,12 +95,25 @@ Item {
                         color: Appearance.colors.colOnLayer0
                         font.pixelSize: Appearance.font.pixelSize.small
                         Layout.fillWidth: false
-                        text: Math.round(root.value * 100)
+                        text: root.valueText
                     }
                 }
-                
+
+                StyledText {
+                    visible: root.stackNameValue
+                    Layout.leftMargin: valueProgressBar.height / 2
+                    Layout.rightMargin: valueProgressBar.height / 2
+                    color: Appearance.colors.colOnLayer0
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    horizontalAlignment: Text.AlignHCenter
+                    lineHeight: Appearance.font.pixelSize.small * 1.1
+                    lineHeightMode: Text.FixedHeight
+                    text: `${root.name}\n${root.valueText}`
+                }
+
                 StyledProgressBar {
                     id: valueProgressBar
+                    visible: root.showProgressBar
                     Layout.fillWidth: true
                     value: root.value
                 }

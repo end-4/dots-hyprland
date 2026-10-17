@@ -29,6 +29,10 @@ Scope {
             id: "gamma",
             sourceUrl: "indicators/GammaIndicator.qml"
         },
+        {
+            id: "layout",
+            sourceUrl: "indicators/LayoutIndicator.qml"
+        },
     ]
 
     function triggerOsd() {
@@ -61,6 +65,20 @@ Scope {
         function onGammaChangeAttempt() {
             root.protectionMessage = "";
             root.currentIndicator = "gamma";
+            root.triggerOsd();
+        }
+    }
+
+    Connections {
+        target: HyprlandXkb
+        property bool seenInitialLayout: false
+        function onCurrentLayoutNameChanged() {
+            if (!seenInitialLayout) {
+                seenInitialLayout = true;
+                return;
+            }
+            root.protectionMessage = "";
+            root.currentIndicator = "layout";
             root.triggerOsd();
         }
     }
@@ -138,6 +156,18 @@ Scope {
                     implicitHeight: contentColumnLayout.implicitHeight
                     implicitWidth: contentColumnLayout.implicitWidth
                     clip: true
+
+                    property bool animateResize: false
+                    onImplicitWidthChanged: if (implicitWidth > 0) animateResize = true
+
+                    Behavior on implicitWidth {
+                        enabled: osdValuesWrapper.animateResize
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                    }
+                    Behavior on implicitHeight {
+                        enabled: osdValuesWrapper.animateResize
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                    }
 
                     MouseArea {
                         anchors.fill: parent
