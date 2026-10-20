@@ -4,49 +4,50 @@ import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
+import Quickshell.Widgets
 import Quickshell.Hyprland
 
 Item {
     id: root
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
-    readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
+    readonly property var minimized: HyprlandData.windowList
+        .filter(w => w.workspace?.name === "special:minimized")
 
-    property string activeWindowAddress: `0x${activeWindow?.HyprlandToplevel?.address}`
-    property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
-    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
+    implicitWidth: row.implicitWidth
 
-    implicitWidth: colLayout.implicitWidth
-
-    ColumnLayout {
-        id: colLayout
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: -4
-
-        StyledText {
-            Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.smaller
-            color: Appearance.colors.colSubtext
-            elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
-                root.activeWindow?.appId :
-                (root.biggestWindow?.class) ?? Translation.tr("Desktop")
-
-        }
-
-        StyledText {
-            Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnLayer0
-            elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
-                root.activeWindow?.title :
-                (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
-        }
-
+    // Absorbe el click izquierdo en toda el área: evita que llegue al
+    // MouseArea de BarContent que abre el sidebar izquierdo.
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
     }
 
+    RowLayout {
+        id: row
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        spacing: 6
+
+        Repeater {
+            model: root.minimized
+            delegate: MouseArea {
+                required property var modelData
+                implicitWidth: 24
+                implicitHeight: 24
+                cursorShape: Qt.PointingHandCursor
+
+                onClicked: {
+                    const ws = HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id
+                    if (ws === undefined) return
+                    Quickshell.execDetached(["hyprctl", "dispatch",
+                        `hl.dsp.window.move({ workspace = ${ws}, follow = true, window = "address:${modelData.address}" })`])
+                }
+
+                IconImage {
+                    anchors.fill: parent
+                    source: Quickshell.iconPath(AppSearch.guessIcon(modelData.class), "image-missing")
+                }
+            }
+        }
+    }
 }
