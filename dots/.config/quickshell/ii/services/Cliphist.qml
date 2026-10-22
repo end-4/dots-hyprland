@@ -11,18 +11,19 @@ Singleton {
     id: root
     // property string cliphistBinary: FileUtils.trimFileProtocol(`${Directories.home}/.cargo/bin/stash`)
     property string cliphistBinary: "cliphist"
-    property string cliphistFavDbArg: `-db-path ${Directories.favoriteClipboardPath}`
+    property string cliphistFavDbArg: `-db-path '${StringUtils.shellSingleQuoteEscape(Directories.favoriteClipboardPath)}'`
     property real pasteDelay: 0.05
     property string pressPasteCommand: "ydotool key -d 1 29:1 47:1 47:0 29:0"
     property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
+    readonly property bool favSupported: cliphistBinary.includes("cliphist")
     property list<string> entries: []
     property list<string> favEntries: []
     readonly property var joinedEntries: {
         const favKeys = new Set(favEntries.map(e => StringUtils.cleanCliphistEntry(e)));
         const normal = entries
-        .filter(e => !favKeys.has(StringUtils.cleanCliphistEntry(e)))
-        .map(entry => ({ entry, isFav: false }));
+            .filter(e => !favKeys.has(StringUtils.cleanCliphistEntry(e)))
+            .map(entry => ({ entry, isFav: false }));
         const favs = favEntries.map(entry => ({ entry, isFav: true }));
         return [...normal, ...favs];
     }
@@ -31,40 +32,34 @@ Singleton {
         entry: item.entry,
         isFav: item.isFav
     }))
-    function joinEntries(): var {
-        const pendingCleaned = favEntries.map(e => StringUtils.cleanCliphistEntry(e));
-        const filteredEntries = entries
-        .filter(entry => !pendingCleaned.includes(StringUtils.cleanCliphistEntry(entry)))
-        .map(entry => ({ entry, isFav: false }));
 
-        const favs = favEntries.map(entry => ({ entry, isFav: true }));
-
-        return [...filteredEntries, ...favs];
-    }
     function fuzzyQuery(search: string): var {
-        const allEntries = joinEntries();
-        if (search.trim() === "") {
-            return allEntries;
+        const query = search.trim();
+        if (query === "") {
+            return joinedEntries;
         }
-        if (search.trim() === "#fav")
-            return favEntries.map(entry => ({ entry, isFav: true }));
+        if (query === "#fav") {
+            return joinedEntries.filter(item => item.isFav);
+        }
         if (root.sloppySearch) {
-            const results = allEntries.slice(0, 100).map(({ entry: str, isFav }) => ({
-                entry: str,
-                score: Levendist.computeTextMatchScore(str.toLowerCase(), search.toLowerCase()),
-                isFav
+            // limit only the normal entries so favorites are always searchable
+            const candidates = [
+                ...joinedEntries.filter(item => !item.isFav).slice(0, 100),
+                ...joinedEntries.filter(item => item.isFav)
+            ];
+            return candidates.map(({ entry, isFav }) => ({
+                entry,
+                isFav,
+                score: Levendist.computeTextMatchScore(entry.toLowerCase(), query.toLowerCase())
             })).filter(item => item.score > root.scoreThreshold)
                 .sort((a, b) => b.score - a.score)
-            return results
-                .map(({ entry, isFav }) => ({ entry, isFav }))
+                .map(({ entry, isFav }) => ({ entry, isFav }));
         }
 
         return Fuzzy.go(search, preparedEntries, {
             all: true,
             key: "name"
-        }).map(r => {
-            return { entry: r.obj.entry, isFav: r.obj.isFav }
-        });
+        }).map(r => ({ entry: r.obj.entry, isFav: r.obj.isFav }));
     }
 
     function entryIsImage(entry) {
@@ -94,31 +89,19 @@ Singleton {
         }
     }
 
-    function copyFav(entry, fromDefault = false) {
-        if (fromDefault) {
-            const printfEntry = `printf '${StringUtils.shellSingleQuoteEscape(StringUtils.cleanCliphistEntry(entry))}'`
-            Quickshell.execDetached(["bash", "-c", `${printfEntry} | ${root.cliphistBinary} ${root.cliphistFavDbArg} store && ${printfEntry} | wl-copy`]);
-        }
-        else if (root.cliphistBinary.includes("cliphist")) // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} decode | wl-copy`]);
-        else { // Stash
-            const entryNumber = entry.split("\t")[0];
-            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} ${root.cliphistFavDbArg} decode ${entryNumber} | wl-copy`]);
-        }
+    function copyFav(entry) {
+        if (!root.favSupported) return;
+        Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} decode | wl-copy`]);
     }
 
-    function pasteFav(entry) {
-        if (root.cliphistBinary.includes("cliphist")) // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} decode | wl-copy && wl-paste`]);
-        else { // Stash
-            const entryNumber = entry.split("\t")[0];
-            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} ${root.cliphistFavDbArg} decode ${entryNumber} | wl-copy; ${root.pressPasteCommand}`]);
-        }
+    function defaultToFav(entry) {
+        const e = StringUtils.shellSingleQuoteEscape(entry);
+        runFavScript(`printf '${e}' | ${root.cliphistBinary} decode | ${root.cliphistBinary} ${root.cliphistFavDbArg} store`);
     }
 
     function favToDefault(entry) {
-        root.deleteFavEntry(entry);
-        Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(StringUtils.cleanCliphistEntry(entry))}' | ${root.cliphistBinary} store`]);
+        const e = StringUtils.shellSingleQuoteEscape(entry);
+        runFavScript(`printf '${e}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} decode | ${root.cliphistBinary} store && printf '${e}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} delete`);
     }
 
     function superpaste(count, isImage = false) {
@@ -156,6 +139,7 @@ Singleton {
         property string entry: ""
         command: ["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(deleteFavProc.entry)}' | ${root.cliphistBinary} ${root.cliphistFavDbArg} delete`]
         function deleteEntry(entry) {
+            if (!root.favSupported) return;
             deleteFavProc.entry = entry;
             deleteFavProc.running = true;
             deleteFavProc.entry = "";
@@ -198,6 +182,21 @@ Singleton {
     }
 
     Process {
+        id: favActionProc
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0)
+                console.error("[Cliphist] Favorite action failed with code", exitCode, "and status", exitStatus);
+            root.refresh();
+        }
+    }
+
+    function runFavScript(script: string) {
+        if (!root.favSupported) return;
+        favActionProc.command = ["bash", "-c", script];
+        favActionProc.running = true;
+    }
+
+    Process {
         id: readProc
         property list<string> buffer: []
 
@@ -212,6 +211,7 @@ Singleton {
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {
                 root.entries = readProc.buffer;
+                if (!root.favSupported) return;
                 readFavProc.buffer = [];
                 readFavProc.running = true;
             } else {
