@@ -125,6 +125,7 @@ Singleton {
         // Find entries
         const targetEntries = entries.filter(entry => {
             if (!isImage) return true;
+            if (favEntries.some(fEntry => StringUtils.cleanCliphistEntry(fEntry) === StringUtils.cleanCliphistEntry(entry))) return false;
             return entryIsImage(entry);
         }).slice(0, count)
         const pasteCommands = [...targetEntries].reverse().map(entry => `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`)
