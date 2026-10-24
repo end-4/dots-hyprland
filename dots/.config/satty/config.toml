@@ -1,0 +1,11 @@
+# Opened by the quickshell region selector (F4, or right-click a selection on Super+Shift+S)
+[general]
+floating-hack = true
+resize = { mode = "smart" }
+initial-tool = "arrow"
+copy-command = "wl-copy"
+output-filename = "~/Pictures/Screenshots/satty-%Y-%m-%d_%H-%M-%S.png"
+# Enter: copy and close. Ctrl+C copies, Ctrl+S saves to output-filename; both close satty.
+actions-on-enter = ["save-to-clipboard", "exit"]
+actions-on-escape = ["exit"]
+early-exit = ["copy", "save"]

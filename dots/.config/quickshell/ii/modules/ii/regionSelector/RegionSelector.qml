@@ -38,6 +38,12 @@ Scope {
         GlobalStates.regionSelectorOpen = true
     }
 
+    function screenshotEdit() {
+        root.action = RegionSelection.SnipAction.Edit
+        root.selectionMode = RegionSelection.SelectionMode.RectCorners
+        GlobalStates.regionSelectorOpen = true
+    }
+
     function search() {
         root.action = RegionSelection.SnipAction.Search
         if (Config.options.search.imageSearch.useCircleSelection) {
@@ -76,6 +82,9 @@ Scope {
         function screenshot() {
             root.screenshot()
         }
+        function edit() {
+            root.screenshotEdit()
+        }
         function search() {
             root.search()
         }
@@ -94,6 +103,11 @@ Scope {
         name: "regionScreenshot"
         description: "Takes a screenshot of the selected region"
         onPressed: root.screenshot()
+    }
+    GlobalShortcut {
+        name: "regionEdit"
+        description: "Takes a screenshot of the selected region and opens it in the annotator"
+        onPressed: root.screenshotEdit()
     }
     GlobalShortcut {
         name: "regionSearch"

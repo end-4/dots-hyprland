@@ -68,6 +68,9 @@ hl.bind("SUPER + Period", hl.dsp.exec_cmd(
 hl.bind("SUPER + SHIFT + S", hl.dsp.global("quickshell:regionScreenshot"), { description = "Utilities: Screen snip" })
 hl.bind("SUPER + SHIFT + S",
     hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || hyprshot --freeze --clipboard-only --mode region --silent"))
+hl.bind("F4", hl.dsp.global("quickshell:regionEdit"), { description = "Utilities: Screen snip >> annotate" })
+hl.bind("F4",
+    hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || grim -g \"$(slurp)\" - | satty -f -"))
 hl.bind("SUPER + SHIFT + A", hl.dsp.global("quickshell:regionSearch"), { description = "Utilities: Google Lens" })
 hl.bind("SUPER + SHIFT + A", hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || " .. hyprScripts .. "/snip_to_search.sh"))
 --# OCR

@@ -1,13 +1,14 @@
 groups=(illogical-impulse)
 pkgname=illogical-impulse-screencapture
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Illogical Impulse Screenshot and Recording Dependencies'
 arch=(any)
 license=(None)
 depends=(
   hyprshot
   slurp
+  satty
   swappy
   tesseract
   tesseract-data-eng

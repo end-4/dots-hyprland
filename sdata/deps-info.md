@@ -152,6 +152,8 @@ Tips:
   - Used in Hyprland `keybinds.conf` as fallback.
 - `slurp`
   - Used in Hyprland and Quickshell config.
+- `satty`
+  - Used in Quickshell config (default screenshot annotator).
 - `swappy`
   - Used in Quickshell config.
 - `tesseract`
