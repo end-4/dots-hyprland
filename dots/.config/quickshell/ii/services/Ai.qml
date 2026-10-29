@@ -485,8 +485,11 @@ Singleton {
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
-        modelId = modelId.toLowerCase()
-        if (modelList.indexOf(modelId) !== -1) {
+        modelId = modelId.trim()
+        const cleanId = root.safeModelName(modelId).toLowerCase()
+        const matchedKey = modelList.find(m => m.toLowerCase() === modelId.toLowerCase() || root.safeModelName(m).toLowerCase() === cleanId)
+        if (matchedKey !== undefined) {
+            modelId = matchedKey
             const model = models[modelId]
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
@@ -505,7 +508,7 @@ Singleton {
                 }
             }
         } else {
-            if (feedback) root.addMessage(Translation.tr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n"), Ai.interfaceRole) + "\n```"
+            if (feedback) root.addMessage(Translation.tr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n") + "\n```", Ai.interfaceRole)
         }
     }
 
