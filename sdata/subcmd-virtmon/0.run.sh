@@ -59,7 +59,7 @@ echo "Creating tester monitor..."
 x hyprctl output create headless ${vmon_tester}
 
 echo "Setting properties of tester monitor..."
-x hyprctl keyword monitor ${vmon_tester},${VMON_RESOLUTION}@${VMON_FPS},${VMON_POSITION},${VMON_SCALE}${VMON_EXTRA}
+x hyprctl eval "hl.monitor({ output = \"${vmon_tester}\", mode = \"${VMON_RESOLUTION}@${VMON_FPS}\", position = \"${VMON_POSITION}\", scale = ${VMON_SCALE}${VMON_EXTRA} })"
 
 e="%s${STY_RST}\n"
 printf "${STY_YELLOW}=========================================$e"

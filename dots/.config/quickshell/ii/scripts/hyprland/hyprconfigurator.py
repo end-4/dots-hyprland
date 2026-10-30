@@ -47,7 +47,7 @@ def edit_hyprland_config(file_path, set_args, reset_args):
         if len(key_parts) > 1:
             # Build pattern to match nested structure
             pattern_parts = [rf'\s*{re.escape(part)}\s*=' for part in key_parts]
-            nested_pattern = '\{'.join(pattern_parts)
+            nested_pattern = r'\{'.join(pattern_parts)
             patterns[k] = re.compile(rf'^\s*hl\.config\(\{{\s*{nested_pattern}')
         else:
             patterns[k] = re.compile(rf'^\s*hl\.config\(\{{\s*{re.escape(main_key)}\s*=')
