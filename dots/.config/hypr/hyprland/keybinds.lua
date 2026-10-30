@@ -14,6 +14,22 @@ hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
 hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
 
+-- Don't toggle search on Super release if anything else was pressed while holding it
+local superKeycodes = { [133] = true, [134] = true } -- Super_L, Super_R
+local superHeld = 0
+hl.on("input.keyboard.key", function(keycode, _, pressed)
+    if superKeycodes[keycode] then
+        superHeld = math.max(0, superHeld + (pressed and 1 or -1))
+        return
+    end
+    if not pressed or superHeld == 0 then return end
+    hl.dispatch(hl.dsp.global("quickshell:searchToggleReleaseInterrupt"))
+end)
+for _, button in ipairs({ ":272", ":273", ":274", ":275", ":276", ":277", "_up", "_down" }) do
+    hl.bind("SUPER + mouse" .. button, hl.dsp.global("quickshell:searchToggleReleaseInterrupt"),
+        { non_consuming = true })
+end
+
 hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
 hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
 hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"),
