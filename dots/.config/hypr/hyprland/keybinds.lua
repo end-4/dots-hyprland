@@ -8,6 +8,28 @@ local qsScripts = "$HOME/.config/quickshell/$qsConfig/scripts"
 local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
+local bind = hl.bind
+local interruptedSuperBinds = {}
+
+hl.bind = function(keys, dispatcher, options)
+    if type(keys) == "string" and keys ~= "SUPER + SUPER_L" and keys ~= "SUPER + SUPER_R" then
+        local hasSuper = false
+        for key in keys:gmatch("[^+]+") do
+            if key:match("^%s*(.-)%s*$") == "SUPER" then
+                hasSuper = true
+                break
+            end
+        end
+
+        if hasSuper and not interruptedSuperBinds[keys] then
+            interruptedSuperBinds[keys] = true
+            bind(keys, hl.dsp.global("quickshell:searchToggleReleaseInterrupt"),
+                { transparent = true, non_consuming = true })
+        end
+    end
+
+    return bind(keys, dispatcher, options)
+end
 
 hl.bind("SUPER + SUPER_L", hl.dsp.global("quickshell:searchToggleRelease"), { description = "Shell: Toggle search" })
 hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
