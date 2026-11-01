@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import qs
 import qs.modules.common
 import qs.modules.common.functions
 import QtQuick
@@ -252,11 +253,32 @@ Singleton {
     }
 
     function setSession(meta) {
+        const prevStatus = root.sessions[meta.key]?.status;
         const s = Object.assign({}, root.sessions);
         s[meta.key] = meta;
         root.sessions = s;
         if (meta.key === root.defaultKey && meta.sessionId && meta.sessionId !== root.state.sessionId)
             root.state.sessionId = meta.sessionId;
+        if (prevStatus === "busy" && meta.status === "idle")
+            root.notifyReply(meta);
+    }
+
+    // A reply finished while the sidebar was closed
+    function notifyReply(meta) {
+        if (GlobalStates.sidebarLeftOpen || meta.key === "fixture")
+            return;
+        const title = root.labels[meta.key] ?? (meta.name || (meta.cwd ?? "").split("/").pop() || "Claude Code");
+        let body = "";
+        if (meta.key === root.activeKey) {
+            for (let i = root.itemIds.length - 1; i >= 0 && !body; i--) {
+                const it = root.itemObjects[root.itemIds[i]]?.d;
+                if (it?.kind === "text")
+                    body = it.text.trim();
+            }
+        }
+        if (body.length > 200)
+            body = body.slice(0, 200) + "…";
+        Quickshell.execDetached(["notify-send", "-a", "Claude Code", title, body || Translation.tr("Reply ready")]);
     }
 
     function handleEvent(line) {
