@@ -208,6 +208,7 @@ class Session {
         this.cur = null; // streaming message state
         this.record = null;
         this.stderr = "";
+        this.echoes = 0; // messages shown on send whose replayed copy hasn't arrived yet
     }
 
     // ----- items -----
@@ -266,6 +267,7 @@ class Session {
         }
         this.proc = proc;
         this.stderr = "";
+        this.echoes = 0;
         this.setMeta({ alive: true, status: "starting" });
         readline.createInterface({ input: proc.stdout }).on("line", line => {
             if (this.record) fs.appendFileSync(this.record, line + "\n");
@@ -330,6 +332,10 @@ class Session {
         }
         content.push({ type: "text", text });
         this.write({ type: "user", message: { role: "user", content }, parent_tool_use_id: null, session_id: this.meta.sessionId });
+        // Show it right away; Claude replays it only once the turn starts
+        this.add({ kind: "user", text, images: images.length });
+        this.echoes++;
+        this.cur = null;
         this.setMeta({ status: "busy", statusText: "" });
     }
     answerPermission(requestId, decision) {
@@ -555,6 +561,11 @@ class Session {
             return;
         }
         if (e.isMeta || e.isCompactSummary) return;
+        if (e.isReplay && this.echoes > 0) {
+            this.echoes--;
+            this.cur = null;
+            return;
+        }
         const text = typeof content === "string" ? content : resultText(content);
         if (!text.trim()) return;
         const peer = text.match(PEER_RE);
