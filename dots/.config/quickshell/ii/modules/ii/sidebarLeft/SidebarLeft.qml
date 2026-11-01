@@ -102,7 +102,7 @@ Scope { // Scope
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
             // Newer Hyprland: with follow_mouse, OnDemand loses the keyboard to the window under the pointer,
-            // so keep it while open. This gives up click-outside-to-close; Esc or the keybind closes it.
+            // so keep it while open.
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
@@ -116,13 +116,34 @@ Scope { // Scope
                 item: sidebarLeftBackground
             }
 
-            // Not added to GlobalFocusGrab: with exclusive focus it can't close on outside clicks anyway,
-            // and an active Hyprland focus grab keeps input methods (fcitx etc.) from composing here.
+            // Not added to GlobalFocusGrab: an active Hyprland focus grab keeps input methods (fcitx etc.)
+            // from composing here. Clicks outside are caught by the layer below instead.
             onVisibleChanged: {
                 if (!visible)
                     return;
                 // Type right away: give the current tab's input the focus
                 Qt.callLater(() => root.sidebarContent?.focusActiveItem());
+            }
+            LazyLoader { // Click outside to close
+                active: panelWindow.visible && !root.pin
+                component: PanelWindow {
+                    WlrLayershell.namespace: "quickshell:sidebarLeftOutside"
+                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+                    exclusionMode: ExclusionMode.Normal // Leaves the bar and other reserved areas clickable
+                    color: "transparent"
+                    anchors {
+                        top: true
+                        bottom: true
+                        left: true
+                        right: true
+                    }
+                    margins.left: panelWindow.sidebarWidth
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.AllButtons
+                        onPressed: panelWindow.hide()
+                    }
+                }
             }
             Connections {
                 target: GlobalFocusGrab
