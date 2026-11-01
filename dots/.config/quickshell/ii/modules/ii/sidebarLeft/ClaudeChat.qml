@@ -131,12 +131,19 @@ Item {
         root.jumpPending = false;
         messageListView.forceLayout();
         messageListView.positionViewAtEnd();
+        settleTimer.tries = 0;
         settleTimer.restart();
     }
-    Timer { // Item heights are estimates until scrolled into view: land once more after the scroll animation
+    Timer { // Heights of items not yet in view are estimates: land again until really at the end
         id: settleTimer
+        property int tries: 0
         interval: Appearance.animation.scroll.duration + 100
-        onTriggered: messageListView.positionViewAtEnd()
+        onTriggered: {
+            if (messageListView.atYEnd || ++tries > 5)
+                return;
+            messageListView.positionViewAtEnd();
+            restart();
+        }
     }
     Connections {
         target: ClaudeCode
@@ -288,6 +295,7 @@ Item {
 
             StyledListView {
                 id: messageListView
+                cacheBuffer: 2000 // fewer estimated heights near the view
                 anchors.fill: parent
                 spacing: 8
                 popin: false
@@ -322,9 +330,30 @@ Item {
                 shape: MaterialShape.Shape.PixelCircle
             }
 
+            MouseArea { // Vertical wheel for the whole list, above code blocks that would swallow it, animated like StyledListView
+                z: 1
+                anchors.fill: messageListView
+                acceptedButtons: Qt.NoButton
+                onWheel: wheel => {
+                    if (Math.abs(wheel.angleDelta.x) > Math.abs(wheel.angleDelta.y)) {
+                        wheel.accepted = false; // horizontal: let code blocks scroll
+                        return;
+                    }
+                    const lv = messageListView;
+                    const delta = wheel.angleDelta.y / lv.mouseScrollDeltaThreshold;
+                    const factor = Math.abs(wheel.angleDelta.y) >= lv.mouseScrollDeltaThreshold ? lv.mouseScrollFactor : lv.touchpadScrollFactor;
+                    const maxY = lv.originY + Math.max(0, lv.contentHeight - lv.height);
+                    const target = Math.max(lv.originY, Math.min(lv.scrollTargetY - delta * factor, maxY));
+                    root.pinIndex = -1; // the user took over scrolling
+                    lv.scrollTargetY = target;
+                    lv.contentY = target;
+                }
+            }
+
             ScrollToBottomButton {
                 z: 3
                 target: messageListView
+                downAction: () => root.jumpToEnd()
             }
 
             MouseArea { // Click outside the menu closes it
@@ -556,6 +585,8 @@ Item {
                 spacing: 4
 
                 BackendSwitch {
+                    iconSource: "claude-symbolic"
+                    iconColor: "#D97757"
                     symbol: "terminal"
                     label: "Claude Code"
                     tooltipText: Translation.tr("Local Claude Code\nClick to switch to API models")

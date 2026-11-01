@@ -39,7 +39,7 @@ Item {
             Layout.leftMargin: 7
             Layout.rightMargin: 7
             Layout.topMargin: 7
-            icon: "neurology"
+            iconSource: "claude-symbolic"
             label: ClaudeCode.activeMeta?.model ? `Claude · ${ClaudeCode.activeMeta.model}` : "Claude"
         }
 
@@ -75,6 +75,7 @@ Item {
     component Header: Rectangle {
         id: header
         property string icon
+        property string iconSource // an icon file in assets/icons, shown in Claude's orange
         property string label
         Layout.fillWidth: true
         implicitHeight: Math.max(headerRow.implicitHeight + 5 * 2, 30) + 4 * 2
@@ -91,9 +92,18 @@ Item {
             }
             spacing: 12
             MaterialSymbol {
+                visible: !header.iconSource
                 text: header.icon
                 iconSize: Appearance.font.pixelSize.larger
                 color: Appearance.m3colors.m3onSecondaryContainer
+            }
+            CustomIcon {
+                visible: !!header.iconSource
+                width: Appearance.font.pixelSize.larger
+                height: Appearance.font.pixelSize.larger
+                source: header.iconSource
+                colorize: true
+                color: "#D97757"
             }
             StyledText {
                 Layout.fillWidth: true

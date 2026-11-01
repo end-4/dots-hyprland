@@ -11,6 +11,8 @@ import QtQuick.Layouts
 RippleButton {
     id: root
     property string symbol: "api"
+    property string iconSource // an icon file in assets/icons instead of the symbol
+    property color iconColor: Appearance.m3colors.m3onSurface
     property string label: ""
     property string tooltipText: ""
 
@@ -32,8 +34,17 @@ RippleButton {
         id: rowLayout
 
         MaterialSymbol {
+            visible: !root.iconSource
             text: root.symbol
             iconSize: Appearance.font.pixelSize.normal
+        }
+        CustomIcon {
+            visible: !!root.iconSource
+            width: Appearance.font.pixelSize.normal
+            height: Appearance.font.pixelSize.normal
+            source: root.iconSource
+            colorize: true
+            color: root.iconColor
         }
         StyledText {
             font.pixelSize: Appearance.font.pixelSize.smaller

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000">
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(0 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(30 12 12)"/>
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(60 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(90 12 12)"/>
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(120 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(150 12 12)"/>
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(180 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(210 12 12)"/>
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(240 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(270 12 12)"/>
+  <rect x="11.1" y="1.4" width="1.8" height="9.0" rx="0.9" transform="rotate(300 12 12)"/>
+  <rect x="11.1" y="3.4" width="1.8" height="7.0" rx="0.9" transform="rotate(330 12 12)"/>
+  <circle cx="12" cy="12" r="2.2"/>
+</svg>
