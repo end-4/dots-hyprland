@@ -35,7 +35,8 @@ Singleton {
     property var labels: ({}) // key -> display name
     property string activeKey: ""
     readonly property var activeMeta: sessions[activeKey] ?? null
-    readonly property string activeLabel: labels[activeKey] ?? activeMeta?.name ?? ""
+    // Labels live in memory; after a reload fall back to the session's folder name
+    readonly property string activeLabel: labels[activeKey] ?? (activeMeta?.name || (activeMeta?.cwd ?? "").split("/").pop())
     readonly property bool busy: ["busy", "waiting"].includes(activeMeta?.status ?? "")
 
     // Items of the session on screen
@@ -54,6 +55,8 @@ Singleton {
     property bool sessionMenuOpen: false
     property string menuNotice: ""
     property string pendingShow: ""
+
+    signal messageSent
 
     function setActive(value) {
         root.state.active = value;
@@ -207,6 +210,7 @@ Singleton {
         if (!root.activeKey)
             return;
         root.send({ op: "send", key: root.activeKey, text: text, images: images });
+        root.messageSent();
     }
     function interrupt() {
         root.send({ op: "interrupt", key: root.activeKey });

@@ -8,6 +8,7 @@ import QtQuick
 import QtQuick.Controls
 import qs.modules.ii.sidebarLeft.claudeCode
 import QtQuick.Layouts
+import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 
@@ -21,7 +22,12 @@ Item {
     property alias inputItem: messageInputField
     property var pendingImages: []
 
-    Component.onCompleted: ClaudeCode.ensureStarted()
+    Component.onCompleted: {
+        ClaudeCode.ensureStarted();
+        // The page can be created after the session's items are already there
+        if (ClaudeCode.itemIds.length > 0)
+            Qt.callLater(root.jumpToEnd);
+    }
 
     readonly property var localCommands: [
         {
@@ -77,6 +83,72 @@ Item {
         }
     }
 
+    // After sending, the message is pinned to the top of the view with room below for the reply.
+    // Nothing else scrolls by itself, as in the API chat.
+    property bool pinNext: false
+    property Item pinnedItem: null
+    property bool jumpOnLoad: true
+
+    function pinLastUserItem() {
+        const ids = ClaudeCode.itemIds;
+        let idx = ids.length - 1;
+        while (idx >= 0 && ClaudeCode.itemObjects[ids[idx]]?.d?.kind !== "user")
+            idx--;
+        if (idx < 0)
+            return;
+        root.pinNext = false;
+        // Lay out now so the new message has a delegate, then again once the room below it is added
+        messageListView.forceLayout();
+        messageListView.positionViewAtEnd();
+        root.pinnedItem = messageListView.itemAtIndex(idx);
+        messageListView.forceLayout();
+        messageListView.positionViewAtIndex(idx, ListView.Beginning);
+    }
+
+    // A hidden sidebar doesn't lay out its list, so a jump waits until it is shown
+    property bool jumpPending: false
+    readonly property bool windowShown: root.Window.window?.visible ?? false
+    onWindowShownChanged: if (windowShown && jumpPending)
+        Qt.callLater(root.jumpToEnd)
+
+    function jumpToEnd() {
+        if (!root.windowShown) {
+            root.jumpPending = true;
+            return;
+        }
+        root.jumpPending = false;
+        messageListView.forceLayout();
+        messageListView.positionViewAtEnd();
+        settleTimer.restart();
+    }
+    Timer { // Item heights are estimates until scrolled into view: land once more after the scroll animation
+        id: settleTimer
+        interval: Appearance.animation.scroll.duration + 100
+        onTriggered: messageListView.positionViewAtEnd()
+    }
+    Connections {
+        target: ClaudeCode
+        function onMessageSent() {
+            root.pinNext = true;
+        }
+        function onActiveKeyChanged() {
+            root.pinNext = false;
+            root.pinnedItem = null;
+            root.jumpOnLoad = true;
+        }
+        function onItemIdsChanged() {
+            if (ClaudeCode.itemIds.length === 0)
+                return;
+            if (root.pinNext) {
+                Qt.callLater(root.pinLastUserItem);
+            } else if (root.jumpOnLoad) {
+                // A session's history just arrived: start at its latest messages
+                root.jumpOnLoad = false;
+                Qt.callLater(root.jumpToEnd);
+            }
+        }
+    }
+
     function handleInput(text) {
         text = text.trim();
         if (text.length === 0 && root.pendingImages.length === 0)
@@ -94,8 +166,6 @@ Item {
             ClaudeCode.sendMessage(text, root.pendingImages);
             root.pendingImages = [];
         }
-        messageListView.stick = true;
-        messageListView.positionViewAtEnd();
     }
 
     Process { // Clipboard image -> file, then attach (same approach as the API chat)
@@ -202,7 +272,6 @@ Item {
 
             StyledListView {
                 id: messageListView
-                property bool stick: true
                 anchors.fill: parent
                 spacing: 8
                 popin: false
@@ -211,11 +280,11 @@ Item {
                 touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
-                onMovementEnded: stick = atYEnd
-                onAtYEndChanged: if (atYEnd)
-                    stick = true
-                onContentHeightChanged: if (stick)
-                    Qt.callLater(positionViewAtEnd)
+                // Room under the pinned message so it can sit at the top while the reply is short
+                footer: Item {
+                    width: ListView.view?.width ?? 0
+                    height: root.pinnedItem ? Math.max(0, messageListView.height - (y - root.pinnedItem.y)) : 0
+                }
 
                 model: ScriptModel {
                     values: ClaudeCode.itemIds
