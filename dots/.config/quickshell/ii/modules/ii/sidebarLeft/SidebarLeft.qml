@@ -101,7 +101,9 @@ Scope { // Scope
             implicitWidth: Appearance.sizes.sidebarWidthExtended + Appearance.sizes.elevationMargin
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+            // Newer Hyprland: with follow_mouse, OnDemand loses the keyboard to the window under the pointer,
+            // so keep it while open. This gives up click-outside-to-close; Esc or the keybind closes it.
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
             anchors {
@@ -114,12 +116,13 @@ Scope { // Scope
                 item: sidebarLeftBackground
             }
 
+            // Not added to GlobalFocusGrab: with exclusive focus it can't close on outside clicks anyway,
+            // and an active Hyprland focus grab keeps input methods (fcitx etc.) from composing here.
             onVisibleChanged: {
-                if (visible) {
-                    GlobalFocusGrab.addDismissable(panelWindow);
-                } else {
-                    GlobalFocusGrab.removeDismissable(panelWindow);
-                }
+                if (!visible)
+                    return;
+                // Type right away: give the current tab's input the focus
+                Qt.callLater(() => root.sidebarContent?.focusActiveItem());
             }
             Connections {
                 target: GlobalFocusGrab
