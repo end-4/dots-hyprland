@@ -57,6 +57,7 @@ Singleton {
     property string pendingShow: ""
 
     signal messageSent
+    signal itemsUpdated
 
     function setActive(value) {
         root.state.active = value;
@@ -247,6 +248,7 @@ Singleton {
         }
         if (added.length > 0)
             root.itemIds = root.itemIds.concat(added);
+        root.itemsUpdated();
     }
 
     function setSession(meta) {

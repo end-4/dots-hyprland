@@ -83,10 +83,10 @@ Item {
         }
     }
 
-    // After sending, the message is pinned to the top of the view with room below for the reply.
-    // Nothing else scrolls by itself, as in the API chat.
+    // After sending, the message scrolls up towards the top, following the reply until it gets
+    // there. Nothing else scrolls by itself, as in the API chat.
     property bool pinNext: false
-    property Item pinnedItem: null
+    property int pinIndex: -1
     property bool jumpOnLoad: true
 
     function pinLastUserItem() {
@@ -97,12 +97,24 @@ Item {
         if (idx < 0)
             return;
         root.pinNext = false;
-        // Lay out now so the new message has a delegate, then again once the room below it is added
-        messageListView.forceLayout();
-        messageListView.positionViewAtEnd();
-        root.pinnedItem = messageListView.itemAtIndex(idx);
+        root.pinIndex = idx;
         messageListView.forceLayout();
         messageListView.positionViewAtIndex(idx, ListView.Beginning);
+    }
+
+    // While the pinned message isn't at the top yet, new output moves it further up
+    function pursuePin() {
+        const item = messageListView.itemAtIndex(root.pinIndex);
+        if (!item || item.y <= messageListView.contentY + 1) {
+            root.pinIndex = -1;
+            return;
+        }
+        messageListView.positionViewAtIndex(root.pinIndex, ListView.Beginning);
+    }
+    Timer {
+        id: pursueTimer
+        interval: 80
+        onTriggered: root.pursuePin()
     }
 
     // A hidden sidebar doesn't lay out its list, so a jump waits until it is shown
@@ -131,9 +143,13 @@ Item {
         function onMessageSent() {
             root.pinNext = true;
         }
+        function onItemsUpdated() {
+            if (root.pinIndex >= 0)
+                pursueTimer.restart();
+        }
         function onActiveKeyChanged() {
             root.pinNext = false;
-            root.pinnedItem = null;
+            root.pinIndex = -1;
             root.jumpOnLoad = true;
         }
         function onItemIdsChanged() {
@@ -280,11 +296,7 @@ Item {
                 touchpadScrollFactor: Config.options.interactions.scrolling.touchpadScrollFactor * 1.4
                 mouseScrollFactor: Config.options.interactions.scrolling.mouseScrollFactor * 1.4
 
-                // Room under the pinned message so it can sit at the top while the reply is short
-                footer: Item {
-                    width: ListView.view?.width ?? 0
-                    height: root.pinnedItem ? Math.max(0, messageListView.height - (y - root.pinnedItem.y)) : 0
-                }
+                onMovementStarted: root.pinIndex = -1 // the user took over scrolling
 
                 model: ScriptModel {
                     values: ClaudeCode.itemIds
