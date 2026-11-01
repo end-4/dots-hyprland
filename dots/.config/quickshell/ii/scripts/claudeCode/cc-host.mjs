@@ -226,16 +226,19 @@ class Session {
     }
     flush() {
         this.timer = null;
-        if (this.dirty.size === 0) return;
+        if (this.dirty.size === 0 || this.gone) return;
         const items = [...this.dirty].map(id => this.byId.get(id)).filter(Boolean);
         this.dirty.clear();
         broadcast({ ev: "items", key: this.key, items });
     }
     setMeta(patch) {
         Object.assign(this.meta, patch);
+        // A closed or replaced session's process still exits afterwards: keep it quiet
+        if (this.gone) return;
         broadcast({ ev: "meta", key: this.key, meta: this.meta });
     }
     emitTasks() {
+        if (this.gone) return;
         broadcast({ ev: "tasks", key: this.key, tasks: [...this.tasks.values()] });
     }
     snapshot() {
@@ -358,6 +361,7 @@ class Session {
         this.touch(it);
     }
     kill() {
+        this.gone = true;
         if (this.proc) {
             this.meta.status = "closing";
             this.proc.kill("SIGTERM");
