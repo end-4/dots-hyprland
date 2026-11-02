@@ -21,13 +21,13 @@ ApiStrategy {
             const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
             const usingSearch = tools[0]?.google_search !== undefined
             if (!usingSearch && message.functionCall != undefined && message.functionName.length > 0) {
+                const part = { functionCall: message.functionCall };
+                if (message.thoughtSignature && message.thoughtSignature.length > 0) {
+                    part.thoughtSignature = message.thoughtSignature;
+                }
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{
-                        functionCall: {
-                            "name": message.functionName,
-                        }
-                    }]
+                    "parts": [part]
                 }
             }
             if (!usingSearch && message.functionResponse != undefined && message.functionName.length > 0) {
@@ -129,13 +129,17 @@ ApiStrategy {
             
             // Function call handling
             if (dataJson.candidates[0]?.content?.parts[0]?.functionCall) {
-                const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
+                const part = dataJson.candidates[0].content.parts[0];
+                const functionCall = part.functionCall;
                 message.functionName = functionCall.name;
-                message.functionCall = functionCall.name;
+                message.functionCall = functionCall;
+                if (part.thoughtSignature) {
+                    message.thoughtSignature = part.thoughtSignature;
+                }
                 const newContent = `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`
                 message.rawContent += newContent;
                 message.content += newContent;
-                return { functionCall: { name: functionCall.name, args: functionCall.args }, finished: finished };
+                return { functionCall: functionCall, finished: finished };
             }
 
             // Normal text response

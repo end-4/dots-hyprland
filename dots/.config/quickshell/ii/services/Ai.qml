@@ -848,6 +848,7 @@ Singleton {
                 "annotationSources": message.annotationSources,
                 "functionName": message.functionName,
                 "functionCall": message.functionCall,
+                "thoughtSignature": message.thoughtSignature,
                 "functionResponse": message.functionResponse,
                 "visibleToUser": message.visibleToUser,
             })
@@ -904,6 +905,7 @@ Singleton {
                     "annotationSources": message.annotationSources,
                     "functionName": message.functionName,
                     "functionCall": message.functionCall,
+                    "thoughtSignature": message.thoughtSignature,
                     "functionResponse": message.functionResponse,
                     "visibleToUser": message.visibleToUser,
                 });
