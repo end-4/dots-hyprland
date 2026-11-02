@@ -197,6 +197,33 @@ Singleton {
     }
 
     Process {
+        id: dedupProc
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode === 0) {
+                root.refresh();
+            } else {
+                console.error("[Cliphist] Failed to remove duplicates with code", exitCode, "and status", exitStatus);
+            }
+        }
+    }
+
+    function removeDuplicatesFromDefault() {
+        if (!root.favSupported || dedupProc.running || favEntries.length === 0) return;
+
+        const favKeys = new Set(favEntries.map(e => StringUtils.cleanCliphistEntry(e)));
+        // TODO: also dedupe images. They're skipped for now because the cliphist
+        // label only has type/size/resolution (e.g. "[[ binary data 10 KiB png 800x600 ]]"),
+        // so different images can look identical. Needs a content comparison
+        // (e.g. hash the decoded data) instead of comparing labels.
+        const dups = entries.filter(e => !entryIsImage(e) && favKeys.has(StringUtils.cleanCliphistEntry(e)));
+        if (dups.length === 0) return;
+
+        const args = dups.map(e => `'${StringUtils.shellSingleQuoteEscape(e)}'`).join(" ");
+        dedupProc.command = ["bash", "-c", `printf '%s\\n' ${args} | ${root.cliphistBinary} delete`];
+        dedupProc.running = true;
+    }
+
+    Process {
         id: readProc
         property list<string> buffer: []
 
@@ -235,6 +262,7 @@ Singleton {
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {
                 root.favEntries = readFavProc.buffer;
+                root.removeDuplicatesFromDefault();
             } else {
                 console.error("[Cliphist] Failed to refresh favorite with code", exitCode, "and status", exitStatus);
             }
