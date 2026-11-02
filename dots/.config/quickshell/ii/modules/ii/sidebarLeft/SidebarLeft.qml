@@ -92,6 +92,17 @@ Scope { // Scope
             property real sidebarWidth: panelWindow.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
             property var contentParent: sidebarLeftBackground
 
+            // Mientras una accion del dashboard espera autenticacion (el dialogo de polkit toma el foco),
+            // no cerrar el sidebar al perder el foco.
+            readonly property bool authPending: Object.keys(PortsServices.pending).length > 0
+                || Object.keys(Vms.pending).length > 0
+            onAuthPendingChanged: {
+                if (!authPending && visible) { // volver a armar el cierre al hacer clic fuera
+                    GlobalFocusGrab.removeDismissable(panelWindow);
+                    GlobalFocusGrab.addDismissable(panelWindow);
+                }
+            }
+
             function hide() {
                 GlobalStates.sidebarLeftOpen = false
             }
@@ -124,6 +135,7 @@ Scope { // Scope
             Connections {
                 target: GlobalFocusGrab
                 function onDismissed() {
+                    if (panelWindow.authPending) return;
                     panelWindow.hide();
                 }
             }
