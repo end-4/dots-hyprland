@@ -31,7 +31,8 @@ BarButton {
                 id: internetHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon: "wifi-1"
+                    // Dimmed full-strength arcs behind the signal strength icons only
+                    icon: /^wifi-[1-4]$/.test(WIcons.internetIcon) ? "wifi-1" : ""
                     color: Looks.colors.inactiveIcon
 
                     FluentIcon {
@@ -90,7 +91,8 @@ BarButton {
 
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && internetHoverArea.containsMouse
-        text: Translation.tr("%1\nInternet access").arg(Network.ethernet ? Translation.tr("Network") : Network.networkName)
+        text: ((Network.ethernet ? Network.ethernetLimited : Network.wifiStatus === "limited") ? Translation.tr("%1\nNo internet access") : Translation.tr("%1\nInternet access"))
+            .arg(Network.ethernet ? Translation.tr("Network") : Network.networkName)
     }
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && volumeHoverArea.containsMouse

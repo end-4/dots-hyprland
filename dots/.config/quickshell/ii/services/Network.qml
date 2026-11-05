@@ -16,6 +16,8 @@ Singleton {
 
     property bool wifi: true
     property bool ethernet: false
+    // Connected through ethernet, but it doesn't reach the internet
+    property bool ethernetLimited: false
 
     property bool wifiEnabled: false
     property bool wifiScanning: false
@@ -32,10 +34,18 @@ Singleton {
     })
     property string wifiStatus: "disconnected"
 
-    property string networkName: ""
-    property int networkStrength
+    property list<var> activeConnections: []
+    // Name of the connection the icon stands for. Loopback and bridges (docker, libvirt...) can be listed first
+    readonly property string networkName: {
+        const preferredType = root.ethernet ? "802-3-ethernet" : "802-11-wireless";
+        const ignoredTypes = ["loopback", "bridge", "tun", "dummy"];
+        const connection = activeConnections.find(c => c.type === preferredType)
+            ?? activeConnections.find(c => !ignoredTypes.includes(c.type));
+        return connection?.name ?? "";
+    }
+    readonly property int networkStrength: active?.strength ?? 0
     property string materialSymbol: root.ethernet
-        ? "lan"
+        ? (root.ethernetLimited ? "public_off" : "lan")
         : (root.wifiEnabled && root.wifiStatus === "connected")
             ? (
                 (root.active?.strength ?? 0) > 83 ? "signal_wifi_4_bar" :
@@ -153,11 +163,34 @@ Singleton {
     }
 
     // Status update
+    // `nmcli monitor` prints several lines per state change, so they're coalesced into one refresh
     function update() {
-        updateConnectionType.startCheck();
-        wifiStatusProcess.running = true
-        updateNetworkName.running = true;
-        updateNetworkStrength.running = true;
+        updateDebounce.restart();
+    }
+
+    Timer {
+        id: updateDebounce
+        interval: 300
+        onTriggered: {
+            updateConnectionType.running = true;
+            wifiStatusProcess.running = true;
+            updateNetworkName.running = true;
+            getNetworks.running = true;
+        }
+    }
+
+    // `nmcli monitor` reports neither signal changes nor the connectivity of each device. Reading them is cheap
+    // and doesn't touch the radio, as NM keeps the strength of the current access point up to date by itself
+    Timer {
+        readonly property bool wifiAssociated: root.wifiStatus === "connected" || root.wifiStatus === "limited"
+        interval: 10000
+        repeat: true
+        running: root.ethernet || wifiAssociated
+        onTriggered: {
+            updateConnectionType.running = true;
+            if (wifiAssociated)
+                getNetworks.running = true;
+        }
     }
 
     Process {
@@ -169,74 +202,85 @@ Singleton {
         }
     }
 
+    // Whether a device reaches the internet, from NetworkManager's per-device connectivity check.
+    // The device's connectivity is the best of IPv4 and IPv6 (one is often "limited" or "none" for lack of IPv6).
+    // "unknown" means the check is disabled or hasn't finished, so it's not reported as a problem
+    function hasInternet(ip4Connectivity: string, ip6Connectivity: string): bool {
+        const rank = ["unknown", "none", "portal", "limited", "full"];
+        const best = Math.max(rank.indexOf(ip4Connectivity), rank.indexOf(ip6Connectivity));
+        return best <= 0 || best === rank.length - 1;
+    }
+
     Process {
         id: updateConnectionType
-        property string buffer
-        command: ["sh", "-c", "nmcli -t -f TYPE,STATE d status && nmcli -t -f CONNECTIVITY g"]
+        command: ["nmcli", "-t", "-f", "TYPE,STATE,IP4-CONNECTIVITY,IP6-CONNECTIVITY", "d", "status"]
         running: true
-        function startCheck() {
-            buffer = "";
-            updateConnectionType.running = true;
-        }
-        stdout: SplitParser {
-            onRead: data => {
-                updateConnectionType.buffer += data + "\n";
-            }
-        }
-        onExited: (exitCode, exitStatus) => {
-            const lines = updateConnectionType.buffer.trim().split('\n');
-            const connectivity = lines.pop() // none, limited, full
-            let hasEthernet = false;
-            let hasWifi = false;
-            let wifiStatus = "disconnected";
-            lines.forEach(line => {
-                if (line.includes("ethernet") && line.includes("connected"))
-                    hasEthernet = true;
-                else if (line.includes("wifi:")) {
-                    if (line.includes("disconnected")) {
-                        wifiStatus = "disconnected"
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                let hasEthernet = false;
+                let ethernetOnline = false;
+                let hasWifi = false;
+                let wifiStatus = "disconnected";
+                text.trim().split("\n").forEach(line => {
+                    const [type, state = "", ip4Connectivity = "", ip6Connectivity = ""] = line.split(":");
+                    // "disconnected" also contains "connected"
+                    if (type === "ethernet" && state.startsWith("connected")) {
+                        hasEthernet = true;
+                        if (root.hasInternet(ip4Connectivity, ip6Connectivity))
+                            ethernetOnline = true;
                     }
-                    else if (line.includes("connected")) {
-                        hasWifi = true;
-                        wifiStatus = "connected"
+                    else if (type === "wifi") {
+                        if (state.startsWith("disconnected")) {
+                            wifiStatus = "disconnected"
+                        }
+                        else if (state.startsWith("connected")) {
+                            hasWifi = true;
+                            wifiStatus = "connected"
 
-                        if (connectivity === "limited") {
-                            hasWifi = false;
-                            wifiStatus = "limited"
+                            if (!root.hasInternet(ip4Connectivity, ip6Connectivity)) {
+                                hasWifi = false;
+                                wifiStatus = "limited"
+                            }
+                        }
+                        else if (state.startsWith("connecting")) {
+                            wifiStatus = "connecting"
+                        }
+                        else if (state.startsWith("unavailable")) {
+                            wifiStatus = "disabled"
                         }
                     }
-                    else if (line.includes("connecting")) {
-                        wifiStatus = "connecting"
-                    }
-                    else if (line.includes("unavailable")) {
-                        wifiStatus = "disabled"
-                    }
-                }
-            });
-            root.wifiStatus = wifiStatus;
-            root.ethernet = hasEthernet;
-            root.wifi = hasWifi;
+                });
+                root.wifiStatus = wifiStatus;
+                // An ethernet link without internet (e.g. straight to another computer) is only shown when wifi
+                // doesn't have internet either: NetworkManager then routes the traffic through wifi
+                root.ethernet = hasEthernet && (ethernetOnline || !hasWifi);
+                root.ethernetLimited = root.ethernet && !ethernetOnline;
+                root.wifi = hasWifi;
+            }
         }
     }
 
     Process {
         id: updateNetworkName
-        command: ["sh", "-c", "nmcli -t -f NAME c show --active | head -1"]
+        command: ["nmcli", "-t", "--escape", "no", "-f", "TYPE,NAME", "c", "show", "--active"]
         running: true
-        stdout: SplitParser {
-            onRead: data => {
-                root.networkName = data;
-            }
-        }
-    }
-
-    Process {
-        id: updateNetworkStrength
-        running: true
-        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\\*/{if (NR!=1) {print $2}}'"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.networkStrength = parseInt(data);
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.activeConnections = text.trim().split("\n").map(line => {
+                    const separator = line.indexOf(":");
+                    return {
+                        type: line.slice(0, separator),
+                        name: line.slice(separator + 1)
+                    };
+                }).filter(c => c.name.length > 0);
             }
         }
     }
@@ -259,7 +303,8 @@ Singleton {
     Process {
         id: getNetworks
         running: true
-        command: ["nmcli", "-g", "ACTIVE,SIGNAL,FREQ,SSID,BSSID,SECURITY", "d", "w"]
+        // `--rescan no`: by default nmcli scans when the list is older than 30s, which stalls the connection for a few seconds
+        command: ["nmcli", "-g", "ACTIVE,SIGNAL,FREQ,SSID,BSSID,SECURITY", "d", "w", "list", "--rescan", "no"]
         environment: ({
             LANG: "C",
             LC_ALL: "C"

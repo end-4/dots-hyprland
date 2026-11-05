@@ -34,7 +34,7 @@ Singleton {
     }
 
     function getNetworkMaterialSymbol() {
-        if (Network.ethernet) return "lan";
+        if (Network.ethernet) return Network.ethernetLimited ? "public_off" : "lan";
         if (Network.wifiEnabled && Network.wifiStatus === "connected") {
             const strength = Network.active?.strength ?? 0
             if (strength > 83) return "signal_wifi_4_bar";
