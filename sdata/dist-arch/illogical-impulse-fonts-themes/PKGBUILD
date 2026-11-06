@@ -3,13 +3,12 @@ pkgname=illogical-impulse-fonts-themes
 pkgver=1.0
 pkgrel=6
 pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
-arch=(any)
+arch=(x86_64 aarch64)
 license=(None)
 depends=(
   adw-gtk-theme-git
   breeze
   breeze-plus
-  darkly-bin
   eza
   fish
   fontconfig
@@ -23,3 +22,6 @@ depends=(
   ttf-rubik-vf
   ttf-twemoji
 )
+# darkly-bin is only built for x86_64 on the AUR; aarch64 builds darkly from source.
+depends_x86_64=(darkly-bin)
+depends_aarch64=(darkly)
