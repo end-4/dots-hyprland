@@ -1,0 +1,3 @@
+module qs.services
+singleton Translation 1.0 Translation.qml
+singleton HyprlandConfig 1.0 HyprlandConfig.qml
