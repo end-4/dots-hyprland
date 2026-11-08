@@ -108,9 +108,9 @@ Widget system: Quickshell | Support: Yes
 </div>
 
 - I promise not to attempt an +ULTRARICOSHOT irl... Coins can go here: https://github.com/sponsors/end-4
-- Tentacle cat hub twinkle internet points
+- Tentacle cat hub twinkle internet points (without the sketchy style because i dont like that one)
 
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
+[![Star history](https://repostars.dev/api/og?repos=end-4%2Fdots-hyprland&theme=dark)](https://repostars.dev/?repos=end-4%2Fdots-hyprland&theme=sakura)
 
 
 ---
