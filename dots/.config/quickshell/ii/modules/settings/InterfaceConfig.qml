@@ -131,12 +131,23 @@ ContentPage {
                 }
             }
         }
-        ConfigSwitch {
-            buttonIcon: "colors"
-            text: Translation.tr("Tint app icons")
-            checked: Config.options.dock.monochromeIcons
-            onCheckedChanged: {
-                Config.options.dock.monochromeIcons = checked;
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "colors"
+                text: Translation.tr("Tint app icons")
+                checked: Config.options.dock.monochromeIcons
+                onCheckedChanged: {
+                    Config.options.dock.monochromeIcons = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "grid_view"
+                text: Translation.tr("Show apps button")
+                checked: Config.options.dock.showAppsButton
+                onCheckedChanged: {
+                    Config.options.dock.showAppsButton = checked;
+                }
             }
         }
     }
