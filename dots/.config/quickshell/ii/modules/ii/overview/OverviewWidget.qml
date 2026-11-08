@@ -229,14 +229,17 @@ Item {
                     bottomLeftRadius: Math.max((workspaceAtBottomLeft ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromBottomLeftCorner, minRadius)
                     bottomRightRadius: Math.max((workspaceAtBottomRight ? root.largeWorkspaceRadius : root.smallWorkspaceRadius) - distanceFromBottomRightCorner, minRadius)
 
+                    // After a drop on another workspace, the x/y bindings (initX/initY) move the tile as soon as Hyprland reports the new
+                    // position. Don't write the old position back in the meantime: if hyprctl is slower than a fixed delay the tile
+                    // would fly back to where it came from first. Only if nothing arrives (the move failed), put it back where it really is.
                     Timer {
-                        id: updateWindowPosition
-                        interval: Config.options.hacks.arbitraryRaceConditionDelay
+                        id: settleTimer
+                        interval: 500
                         repeat: false
                         running: false
                         onTriggered: {
-                            window.x = Math.round(xWithinWorkspaceWidget + xOffset)
-                            window.y = Math.round(yWithinWorkspaceWidget + yOffset)
+                            window.x = window.initX
+                            window.y = window.initY
                         }
                     }
 
@@ -267,11 +270,13 @@ Item {
                             root.draggingFromWorkspace = -1
                             if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
                                 Hyprland.dispatch(`hl.dsp.window.move({ workspace = ${targetWorkspace}, follow = false, window = "address:${window.windowData?.address}" })`)
-                                updateWindowPosition.restart()
+                                settleTimer.restart()
                             }
                             else {
                                 if (!window.windowData.floating) {
-                                    updateWindowPosition.restart()
+                                    // Nothing moved, slide the tile back to its slot
+                                    window.x = window.initX
+                                    window.y = window.initY
                                     return
                                 }
                                 const percentageX = (window.x - xOffset) / root.workspaceImplicitWidth
