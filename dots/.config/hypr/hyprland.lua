@@ -36,7 +36,31 @@ end
 if is_file_exists(HOME .. "/.config/hypr/workspaces.lua") then
     require("workspaces")
 end
-if is_file_exists(HOME .. "/.config/hypr/monitors.lua") then
+
+-- monitors.lua is loaded only while the Quickshell Displays feature is on.
+-- Turning the feature off keeps the file and skips it here.
+local function displays_feature_enabled()
+    local config_home = os.getenv("XDG_CONFIG_HOME")
+    if config_home == nil or config_home == "" then
+        config_home = HOME .. "/.config"
+    end
+    local f = io.open(config_home .. "/illogical-impulse/config.json", "r")
+    if f == nil then
+        return false
+    end
+    local text = f:read("*a")
+    f:close()
+    if text == nil then
+        return false
+    end
+    local body = text:match('"displays"%s*:%s*(%b{})')
+    if body == nil then
+        return false
+    end
+    return body:match('"enable"%s*:%s*true') ~= nil
+end
+
+if displays_feature_enabled() and is_file_exists(HOME .. "/.config/hypr/monitors.lua") then
     require("monitors")
 end
 

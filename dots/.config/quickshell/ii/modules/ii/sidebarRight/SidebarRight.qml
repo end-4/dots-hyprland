@@ -1,6 +1,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.ii.sidebarRight.displays
 import QtQuick
 import Quickshell.Io
 import Quickshell
@@ -106,5 +107,15 @@ Scope {
         onPressed: {
             GlobalStates.sidebarRightOpen = false;
         }
+    }
+
+    Loader {
+        active: Config.ready && Config.options.sidebar.displays.enable && Displays.arrangeOpen
+        sourceComponent: DisplaysArrange {}
+    }
+
+    Loader {
+        active: Config.ready && Config.options.sidebar.displays.enable
+        sourceComponent: DisplaysConfirm {}
     }
 }

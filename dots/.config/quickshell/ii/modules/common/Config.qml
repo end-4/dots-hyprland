@@ -524,6 +524,10 @@ Singleton {
                     property int clicklessCornerVerticalOffset: 1
                 }
 
+                property JsonObject displays: JsonObject {
+                    property bool enable: false
+                }
+
                 property JsonObject quickToggles: JsonObject {
                     property string style: "android" // Options: classic, android
                     property JsonObject android: JsonObject {

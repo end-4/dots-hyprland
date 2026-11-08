@@ -13,6 +13,7 @@ import qs.modules.ii.sidebarRight.quickToggles
 import qs.modules.ii.sidebarRight.quickToggles.classicStyle
 
 import qs.modules.ii.sidebarRight.bluetoothDevices
+import qs.modules.ii.sidebarRight.displays
 import qs.modules.ii.sidebarRight.nightLight
 import qs.modules.ii.sidebarRight.volumeMixer
 import qs.modules.ii.sidebarRight.wifiNetworks
@@ -27,7 +28,14 @@ Item {
     property bool showBluetoothDialog: false
     property bool showNightLightDialog: false
     property bool showWifiDialog: false
+    property bool showDisplaysDialog: false
     property bool editMode: false
+    readonly property bool displaysEnabled: Config.options.sidebar.displays.enable
+
+    onDisplaysEnabledChanged: {
+        if (root.displaysEnabled) return;
+        root.showDisplaysDialog = false;
+    }
 
     Connections {
         target: GlobalStates
@@ -37,6 +45,7 @@ Item {
                 root.showBluetoothDialog = false;
                 root.showAudioOutputDialog = false;
                 root.showAudioInputDialog = false;
+                root.showDisplaysDialog = false;
             }
         }
     }
@@ -150,6 +159,24 @@ Item {
             if (!shown) return;
             Network.enableWifi();
             Network.rescanWifi();
+        }
+    }
+
+    Loader {
+        active: root.displaysEnabled
+        sourceComponent: Connections {
+            target: Displays
+            function onDialogRequested() {
+                root.showDisplaysDialog = true;
+            }
+        }
+    }
+
+    ToggleDialog {
+        shownPropertyString: "showDisplaysDialog"
+        dialog: DisplaysDialog {}
+        onShownChanged: {
+            if (shown) Displays.refresh();
         }
     }
 

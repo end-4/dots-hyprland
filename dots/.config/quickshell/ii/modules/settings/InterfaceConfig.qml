@@ -522,6 +522,16 @@ ContentPage {
                     Config.options.sidebar.quickToggles.android.columns = value;
                 }
             }
+
+            ConfigSwitch {
+                buttonIcon: "monitor"
+                text: Translation.tr("Show the Displays toggle in the quick panel")
+                checked: Config.options.sidebar.displays.enable
+                onCheckedChanged: {
+                    if (checked === Config.options.sidebar.displays.enable) return;
+                    Displays.setFeatureEnabled(checked);
+                }
+            }
         }
 
         ContentSubsection {
