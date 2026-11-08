@@ -184,27 +184,27 @@ Singleton {
                 return resultComp.createObject(null, {
                     rawValue: entry,
                     name: StringUtils.cleanCliphistEntry(entry),
-                    verb: "",
-                    type: type,
-                    execute: () => {
-                        Cliphist.copy(entry);
-                    },
-                    actions: [resultComp.createObject(null, {
-                            name: Translation.tr("Copy"),
-                            iconName: "content_copy",
-                            iconType: LauncherSearchResult.IconType.Material,
-                            execute: () => {
-                                Cliphist.copy(entry);
-                            }
-                        }), resultComp.createObject(null, {
-                            name: Translation.tr("Delete"),
-                            iconName: "delete",
-                            iconType: LauncherSearchResult.IconType.Material,
-                            execute: () => {
-                                Cliphist.deleteEntry(entry);
-                            }
-                        })],
-                    blurImage: shouldBlurImage
+                                               verb: "",
+                                               type: type,
+                                               execute: () => {
+                                                   Cliphist.copy(entry);
+                                               },
+                                               actions: [resultComp.createObject(null, {
+                                                   name: Translation.tr("Copy"),
+                                                                                 iconName: "content_copy",
+                                                                                 iconType: LauncherSearchResult.IconType.Material,
+                                                                                 execute: () => {
+                                                                                     Cliphist.copy(entry);
+                                                                                 }
+                                               }), resultComp.createObject(null, {
+                                                   name: Translation.tr("Delete"),
+                                                                           iconName: "delete",
+                                                                           iconType: LauncherSearchResult.IconType.Material,
+                                                                           execute: () => {
+                                                                               Cliphist.deleteEntry(entry);
+                                                                           }
+                                               })],
+                                               blurImage: shouldBlurImage
                 });
             }).filter(Boolean);
         } else if (root.query.startsWith(Config.options.search.prefix.emojis)) {
@@ -215,13 +215,13 @@ Singleton {
                 return resultComp.createObject(null, {
                     rawValue: entry,
                     name: entry.replace(/^\s*\S+\s+/, ""),
-                    iconName: emoji,
-                    iconType: LauncherSearchResult.IconType.Text,
-                    verb: Translation.tr("Copy"),
-                    type: Translation.tr("Emoji"),
-                    execute: () => {
-                        Quickshell.clipboardText = entry.match(/^\s*(\S+)/)?.[1];
-                    }
+                                               iconName: emoji,
+                                               iconType: LauncherSearchResult.IconType.Text,
+                                               verb: Translation.tr("Copy"),
+                                               type: Translation.tr("Emoji"),
+                                               execute: () => {
+                                                   Quickshell.clipboardText = entry.match(/^\s*(\S+)/)?.[1];
+                                               }
                 });
             }).filter(Boolean);
         }
@@ -231,93 +231,93 @@ Singleton {
         const mathResultObject = resultComp.createObject(null, {
             name: root.mathResult,
             verb: Translation.tr("Copy"),
-            type: Translation.tr("Math result"),
-            fontType: LauncherSearchResult.FontType.Monospace,
-            iconName: 'calculate',
-            iconType: LauncherSearchResult.IconType.Material,
-            execute: () => {
-                Quickshell.clipboardText = root.mathResult;
-            }
+                                                         type: Translation.tr("Math result"),
+                                                         fontType: LauncherSearchResult.FontType.Monospace,
+                                                         iconName: 'calculate',
+                                                         iconType: LauncherSearchResult.IconType.Material,
+                                                         execute: () => {
+                                                             Quickshell.clipboardText = root.mathResult;
+                                                         }
         });
         const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
             return resultComp.createObject(null, {
                 type: Translation.tr("App"),
-                id: entry.id,
-                name: entry.name,
-                iconName: entry.icon,
-                iconType: LauncherSearchResult.IconType.System,
-                verb: Translation.tr("Open"),
-                execute: () => {
-                    if (!entry.runInTerminal)
-                        entry.execute();
-                    else {
-                        // Probably needs more proper escaping, but this will do for now
-                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
-                    }
-                },
-                comment: entry.comment,
-                runInTerminal: entry.runInTerminal,
-                genericName: entry.genericName,
-                keywords: entry.keywords,
-                actions: entry.actions.map(action => {
-                    return resultComp.createObject(null, {
-                        name: action.name,
-                        iconName: action.icon,
-                        iconType: LauncherSearchResult.IconType.System,
-                        execute: () => {
-                            if (!action.runInTerminal)
-                                action.execute();
-                            else {
-                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
-                            }
-                        }
-                    });
-                })
+                                           id: entry.id,
+                                           name: entry.name,
+                                           iconName: entry.icon,
+                                           iconType: LauncherSearchResult.IconType.System,
+                                           verb: Translation.tr("Open"),
+                                           execute: () => {
+                                               if (!entry.runInTerminal)
+                                                   entry.execute();
+                                               else {
+                                                   // Fixed: Escape each argument individually and pass as separate tokens to -e
+                                                   Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e ${entry.command.map(arg => "'" + StringUtils.shellSingleQuoteEscape(arg) + "'").join(' ')}`]);
+                                               }
+                                           },
+                                           comment: entry.comment,
+                                           runInTerminal: entry.runInTerminal,
+                                           genericName: entry.genericName,
+                                           keywords: entry.keywords,
+                                           actions: entry.actions.map(action => {
+                                               return resultComp.createObject(null, {
+                                                   name: action.name,
+                                                   iconName: action.icon,
+                                                   iconType: LauncherSearchResult.IconType.System,
+                                                   execute: () => {
+                                                       if (!action.runInTerminal)
+                                                           action.execute();
+                                                       else {
+                                                           Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e ${action.command.map(arg => "'" + StringUtils.shellSingleQuoteEscape(arg) + "'").join(' ')}`]);
+                                                       }
+                                                   }
+                                               });
+                                           })
             });
         });
         const commandResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.shellCommand).replace("file://", ""),
-            verb: Translation.tr("Run"),
-            type: Translation.tr("Command"),
-            fontType: LauncherSearchResult.FontType.Monospace,
-            iconName: 'terminal',
-            iconType: LauncherSearchResult.IconType.Material,
-            execute: () => {
-                let cleanedCommand = root.query.replace("file://", "");
-                cleanedCommand = StringUtils.cleanPrefix(cleanedCommand, Config.options.search.prefix.shellCommand);
-                if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
-                    cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
-                }
-                Quickshell.execDetached(["bash", "-c", root.query.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
-            }
+                                                            verb: Translation.tr("Run"),
+                                                            type: Translation.tr("Command"),
+                                                            fontType: LauncherSearchResult.FontType.Monospace,
+                                                            iconName: 'terminal',
+                                                            iconType: LauncherSearchResult.IconType.Material,
+                                                            execute: () => {
+                                                                let cleanedCommand = root.query.replace("file://", "");
+                                                                cleanedCommand = StringUtils.cleanPrefix(cleanedCommand, Config.options.search.prefix.shellCommand);
+                                                                if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
+                                                                    cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
+                                                                }
+                                                                Quickshell.execDetached(["bash", "-c", root.query.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
+                                                            }
         });
         const webSearchResultObject = resultComp.createObject(null, {
             name: StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch),
-            verb: Translation.tr("Search"),
-            type: Translation.tr("Web search"),
-            iconName: 'travel_explore',
-            iconType: LauncherSearchResult.IconType.Material,
-            execute: () => {
-                let query = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch);
-                let url = Config.options.search.engineBaseUrl + query;
-                for (let site of Config.options.search.excludedSites) {
-                    url += ` -site:${site}`;
-                }
-                Qt.openUrlExternally(url);
-            }
+                                                              verb: Translation.tr("Search"),
+                                                              type: Translation.tr("Web search"),
+                                                              iconName: 'travel_explore',
+                                                              iconType: LauncherSearchResult.IconType.Material,
+                                                              execute: () => {
+                                                                  let query = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.webSearch);
+                                                                  let url = Config.options.search.engineBaseUrl + query;
+                                                                  for (let site of Config.options.search.excludedSites) {
+                                                                      url += ` -site:${site}`;
+                                                                  }
+                                                                  Qt.openUrlExternally(url);
+                                                              }
         });
         const launcherActionObjects = root.allActions.map(action => {
             const actionString = `${Config.options.search.prefix.action}${action.action}`;
             if (actionString.startsWith(root.query) || root.query.startsWith(actionString)) {
                 return resultComp.createObject(null, {
                     name: root.query.startsWith(actionString) ? root.query : actionString,
-                    verb: Translation.tr("Run"),
-                    type: Translation.tr("Action"),
-                    iconName: 'settings_suggest',
-                    iconType: LauncherSearchResult.IconType.Material,
-                    execute: () => {
-                        action.execute(root.query.split(" ").slice(1).join(" "));
-                    }
+                                               verb: Translation.tr("Run"),
+                                               type: Translation.tr("Action"),
+                                               iconName: 'settings_suggest',
+                                               iconType: LauncherSearchResult.IconType.Material,
+                                               execute: () => {
+                                                   action.execute(root.query.split(" ").slice(1).join(" "));
+                                               }
                 });
             }
             return null;
