@@ -45,7 +45,8 @@ Singleton {
             case ScreenshotAction.Action.Copy:
                 if (saveDir === "") {
                     // not saving the screenshot, just copy to clipboard
-                    return ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                    // open in annotation tool (satty/swappy); it copies to clipboard on Enter
+                    return ["bash", "-c", `${cropToStdout} | ${annotationCommand} ; ${cleanup}`]
                     break;
                 }
                 return [
