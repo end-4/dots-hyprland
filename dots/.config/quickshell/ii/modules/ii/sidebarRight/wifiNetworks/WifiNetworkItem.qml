@@ -55,6 +55,28 @@ DialogListItem {
             Layout.topMargin: 8
             visible: root.wifiNetwork?.askingPassword ?? false
 
+            function submit() {
+                Network.changePassword(root.wifiNetwork, passwordField.text, usernameField.text, domainField.text.trim());
+            }
+
+            Connections {
+                target: root.wifiNetwork
+                function onAskingPasswordChanged() {
+                    // Typing breaks the binding, so restore it to show the saved domain on each prompt
+                    if (root.wifiNetwork.askingPassword) domainField.text = Qt.binding(() => root.wifiNetwork?.savedDomain ?? "");
+                }
+            }
+
+            MaterialTextField {
+                id: usernameField
+                Layout.fillWidth: true
+                visible: root.wifiNetwork?.isEnterprise ?? false
+                placeholderText: Translation.tr("Username")
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+
+                onAccepted: passwordField.forceActiveFocus()
+            }
+
             MaterialTextField {
                 id: passwordField
                 Layout.fillWidth: true
@@ -64,9 +86,18 @@ DialogListItem {
                 echoMode: TextInput.Password
                 inputMethodHints: Qt.ImhSensitiveData
 
-                onAccepted: {
-                    Network.changePassword(root.wifiNetwork, passwordField.text);
-                }
+                onAccepted: passwordPrompt.submit()
+            }
+
+            MaterialTextField {
+                id: domainField
+                Layout.fillWidth: true
+                visible: root.wifiNetwork?.isEnterprise ?? false
+                text: root.wifiNetwork?.savedDomain ?? ""
+                placeholderText: Translation.tr("Server domain (optional)")
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhUrlCharactersOnly
+
+                onAccepted: passwordPrompt.submit()
             }
 
             RowLayout {
@@ -85,9 +116,7 @@ DialogListItem {
 
                 DialogButton {
                     buttonText: Translation.tr("Connect")
-                    onClicked: {
-                        Network.changePassword(root.wifiNetwork, passwordField.text);
-                    }
+                    onClicked: passwordPrompt.submit()
                 }
             }
         }
