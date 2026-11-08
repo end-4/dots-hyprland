@@ -61,6 +61,12 @@ Singleton {
             property JsonObject ai: JsonObject {
                 property string model: "gemini-2.5-flash"
                 property real temperature: 0.5
+                property JsonObject claudeCode: JsonObject {
+                    property bool active: false
+                    property string sessionId: "" // The default session's conversation
+                    property string lastKey: ""
+                    property string permissionMode: "default"
+                }
             }
 
             property JsonObject cheatsheet: JsonObject {
