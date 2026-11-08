@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.UPower
+import "../common/functions/BatterySavingsPresets.js" as SavingsPresets
 import QtQuick.Layouts
 import qs.services
 import qs.modules.common
@@ -8,6 +10,22 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
+    id: root
+    function useSavingsPreset(preset) {
+        const values = SavingsPresets.options(preset.options);
+        Object.keys(values).forEach(key => Config.options.battery.savings[key] = values[key]);
+        presetName.text = preset.name;
+    }
+    readonly property var energyHistory: energyHistoryLoader.item
+    Loader {
+        id: energyHistoryLoader
+        active: root.visible && Config.ready && Config.options.battery.monitorConsumption
+            && Battery.available && UPower.onBattery
+        sourceComponent: BatteryPowerHistory {
+            active: true
+            powerWatts: Battery.energyRate
+        }
+    }
     forceWidth: true
 
     Process {
@@ -53,6 +71,173 @@ ContentPage {
                 stepSize: 2
                 onValueChanged: {
                     Config.options.audio.protection.maxAllowed = value;
+                }
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "monitoring"
+        title: Translation.tr("Battery consumption")
+        ConfigSwitch {
+            buttonIcon: "monitoring"
+            text: Translation.tr("Monitor battery consumption")
+            checked: Config.options.battery.monitorConsumption
+            onCheckedChanged: Config.options.battery.monitorConsumption = checked
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: Translation.tr("Measures total battery drain while this page is open. No settings are changed automatically.")
+        }
+        ColumnLayout {
+            Layout.fillWidth: true
+            visible: Config.options.battery.monitorConsumption
+            StyledText {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: !Battery.available ? Translation.tr("No laptop battery detected")
+                    : !UPower.onBattery ? Translation.tr("Unplug the charger to measure battery drain")
+                    : !energyHistory?.validReading ? Translation.tr("Battery power reading unavailable")
+                    : Translation.tr("Current consumption: %1 W").arg(Battery.energyRate.toFixed(2))
+            }
+            StyledText {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                visible: energyHistoryLoader.active && (energyHistory?.sampleCount ?? 0) > 0
+                text: (energyHistory?.sampleCount ?? 0) < 3 ? Translation.tr("Collecting samples for a recent average...")
+                    : Translation.tr("Recent average: %1 W (%2 samples)").arg(energyHistory.averageWatts.toFixed(2)).arg((energyHistory?.sampleCount ?? 0))
+            }
+            RippleButtonWithIcon {
+                materialIcon: "restart_alt"
+                mainText: Translation.tr("Start a new comparison")
+                enabled: energyHistoryLoader.active
+                onClicked: { energyHistory?.reset(); energyHistory?.sample(); }
+            }
+            StyledText {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: Translation.tr("Change one option at a time, start a new comparison, and keep the same workload for several minutes. Total watts do not identify consumption by app or component.")
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "energy_savings_leaf"
+        title: Translation.tr("Battery savings")
+        ConfigSwitch {
+            buttonIcon: "battery_android_bolt"
+            text: Translation.tr("Apply selected options on battery power")
+            checked: Config.options.battery.savings.enable
+            onCheckedChanged: Config.options.battery.savings.enable = checked
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: Translation.tr("Options are restored when disabled or plugged in. Later manual changes are preserved. Enable one option at a time to compare consumption.")
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: !Config.options.battery.savings.enable ? Translation.tr("Battery savings disabled")
+                : !Battery.available ? Translation.tr("No laptop battery detected")
+                : !UPower.onBattery ? Translation.tr("Waiting for battery power")
+                : Translation.tr("Battery savings enabled")
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            visible: BatterySavings.processError.length > 0 || (BatterySavings.state.errors || []).length > 0
+            text: Translation.tr("Some options could not be applied or restored:") + "\n"
+                + ((BatterySavings.state.errors || []).join("\n") || BatterySavings.processError)
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            visible: (BatterySavings.state.warnings || []).length > 0
+            text: Translation.tr("Another application is holding a power profile. The profile option will wait.")
+        }
+        ConfigSwitch {
+            buttonIcon: "brightness_6"
+            text: Translation.tr("Limit internal screen brightness")
+            checked: Config.options.battery.savings.limitBrightness
+            onCheckedChanged: Config.options.battery.savings.limitBrightness = checked
+        }
+        ConfigSpinBox {
+            enabled: Config.options.battery.savings.limitBrightness
+            text: Translation.tr("Maximum brightness (%)")
+            from: 10
+            to: 100
+            stepSize: 5
+            value: Config.options.battery.savings.brightnessPercent
+            onValueChanged: Config.options.battery.savings.brightnessPercent = value
+        }
+        ConfigSwitch {
+            buttonIcon: "speed"
+            text: Translation.tr("Use a power profile on battery")
+            checked: Config.options.battery.savings.setProfile
+            onCheckedChanged: Config.options.battery.savings.setProfile = checked
+        }
+        ConfigSelectionArray {
+            enabled: Config.options.battery.savings.setProfile
+            currentValue: Config.options.battery.savings.profile
+            onSelected: value => Config.options.battery.savings.profile = value
+            options: [
+                { displayName: Translation.tr("Power Saver"), icon: "energy_savings_leaf", value: "power-saver" },
+                { displayName: Translation.tr("Balanced"), icon: "airwave", value: "balanced" }
+            ].concat(PowerProfiles.hasPerformanceProfile ? [
+                { displayName: Translation.tr("Performance"), icon: "local_fire_department", value: "performance" }
+            ] : [])
+        }
+        ConfigSwitch {
+            buttonIcon: "blur_off"
+            text: Translation.tr("Disable blur on battery")
+            checked: Config.options.battery.savings.disableBlur
+            onCheckedChanged: Config.options.battery.savings.disableBlur = checked
+        }
+        ConfigSwitch {
+            buttonIcon: "animation"
+            text: Translation.tr("Disable animations on battery")
+            checked: Config.options.battery.savings.disableAnimations
+            onCheckedChanged: Config.options.battery.savings.disableAnimations = checked
+        }
+        ContentSubsectionLabel { text: Translation.tr("My battery presets") }
+        MaterialTextField {
+            id: presetName
+            Layout.fillWidth: true
+            maximumLength: 64
+            placeholderText: Translation.tr("Preset name")
+        }
+        RippleButtonWithIcon {
+            materialIcon: "save"
+            mainText: Translation.tr("Save current options")
+            enabled: presetName.text.trim().length > 0 && (
+                SavingsPresets.list(Config.options.battery.savings.presets).length < 16
+                || SavingsPresets.list(Config.options.battery.savings.presets).some(preset => preset.name === presetName.text.trim()))
+            onClicked: Config.options.battery.savings.presets = SavingsPresets.save(
+                Config.options.battery.savings.presets, presetName.text, Config.options.battery.savings)
+        }
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: Translation.tr("Save up to 16 presets. Choosing one loads its options without enabling battery savings.")
+        }
+        Repeater {
+            model: SavingsPresets.list(Config.options.battery.savings.presets)
+            delegate: RowLayout {
+                required property var modelData
+                Layout.fillWidth: true
+                RippleButtonWithIcon {
+                    Layout.fillWidth: true
+                    materialIcon: "tune"
+                    mainText: modelData.name
+                    onClicked: root.useSavingsPreset(modelData)
+                }
+                RippleButtonWithIcon {
+                    materialIcon: "delete"
+                    mainText: Translation.tr("Delete")
+                    onClicked: Config.options.battery.savings.presets = SavingsPresets.list(
+                        Config.options.battery.savings.presets).filter(preset => preset.name !== modelData.name)
                 }
             }
         }
