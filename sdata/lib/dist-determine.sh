@@ -124,5 +124,6 @@ fi
 export MACHINE_ARCH=$(uname -m)
 case "${MACHINE_ARCH}" in
   "x86_64") true;;
+  "aarch64") true;;
   *) print_os_group_id_functions+=(print_os_group_id_architecture);;
 esac
