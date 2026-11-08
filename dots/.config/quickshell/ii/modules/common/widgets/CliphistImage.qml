@@ -14,9 +14,10 @@ Rectangle {
     property real maxHeight
     property bool blur: false
     property string blurText: "Image hidden"
+    property bool isFav: false
 
     property string imageDecodePath: Directories.cliphistDecode
-    property string imageDecodeFileName: `${entryNumber}`
+    property string imageDecodeFileName: `${isFav ? "fav-" : ""}${entryNumber}`
     property string imageDecodeFilePath: `${imageDecodePath}/${imageDecodeFileName}`
     property string source
 
@@ -53,7 +54,7 @@ Rectangle {
 
     Process {
         id: decodeImageProcess
-        command: ["bash", "-c", `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`]
+        command: ["bash", "-c", `[ -f '${imageDecodeFilePath}' ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | ${Cliphist.cliphistBinary} ${root.isFav ? Cliphist.cliphistFavDbArg : ""} decode > '${imageDecodeFilePath}'`]
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {
                 root.source = imageDecodeFilePath;
