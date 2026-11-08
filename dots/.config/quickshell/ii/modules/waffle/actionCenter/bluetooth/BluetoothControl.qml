@@ -17,10 +17,12 @@ Item {
     id: root
 
     Component.onCompleted: {
-        if (Bluetooth.defaultAdapter.enabled) Bluetooth.defaultAdapter.discovering = true;
+        const adapter = Bluetooth.defaultAdapter;
+        if (adapter?.enabled) adapter.discovering = true;
     }
     Component.onDestruction: {
-        Bluetooth.defaultAdapter.discovering = false;
+        const adapter = Bluetooth.defaultAdapter;
+        if (adapter) adapter.discovering = false;
     }
 
     WPanelPageColumn {
@@ -51,7 +53,8 @@ Item {
                             id: toggleSwitch
                             Layout.rightMargin: 12
                             checked: Bluetooth.defaultAdapter?.enabled ?? false
-                            onCheckedChanged: {
+                            // React only to user input, never to initial/property synchronization.
+                            onToggled: {
                                 if (Bluetooth.defaultAdapter) {
                                     Bluetooth.defaultAdapter.enabled = checked;
                                     if (checked) {
