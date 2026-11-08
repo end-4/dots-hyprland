@@ -196,6 +196,10 @@ Variants {
                 }
                 width: bgRoot.scaledWallpaperWidth
                 height: bgRoot.scaledWallpaperHeight
+                // With PreserveAspectCrop the image is decoded at the size that covers sourceSize, which ends up
+                // the same as width/height here. Not binding to those avoids re-decoding the wallpaper several times
+                // on startup while the wallpaper size and zoom scale settle.
+                sourceSize: Qt.size(bgRoot.screen.width * bgRoot.parallaxRation * bgRoot.devicePixelRatio, bgRoot.screen.height * bgRoot.parallaxRation * bgRoot.devicePixelRatio)
             }
 
             Loader {
