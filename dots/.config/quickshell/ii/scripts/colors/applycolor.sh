@@ -27,25 +27,40 @@ IFS=$'\n'
 colorlist=($colornames)     # Array of color names
 colorvalues=($colorstrings) # Array of color values
 
+# Without colors every sed substitution below is a no-op and the templates get
+# copied verbatim, leaving literal "$term0 #" placeholders in the generated theme
+# files (kitty then errors out with "Invalid color name"). Bail out instead.
+if [ ${#colorlist[@]} -eq 0 ]; then
+  echo "applycolor: no colors in $STATE_DIR/user/generated/material_colors.scss; keeping existing themes" >&2
+  exit 1
+fi
+
 apply_kitty() {  
   # Check if terminal escape sequence template exists
   if [ ! -f "$SCRIPT_DIR/terminal/kitty-theme.conf" ]; then
     echo "Template file not found for Kitty theme. Skipping that."
     return
   fi
-  # Copy template
+  # Build in a temp file, then move into place. Substituting in-place on the live
+  # file leaves it full of unusable "$term0 #" placeholders for the duration of the
+  # loop -- and permanently if the script is interrupted -- which is what kitty
+  # reports as "Invalid color name".
   mkdir -p "$STATE_DIR"/user/generated/terminal
-  cp "$SCRIPT_DIR/terminal/kitty-theme.conf" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
+  local target="$STATE_DIR/user/generated/terminal/kitty-theme.conf"
+  local tmp="$target.tmp.$$"
+  cp "$SCRIPT_DIR/terminal/kitty-theme.conf" "$tmp"
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
+    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$tmp"
   done
+  mv "$tmp" "$target"
 
-  # Reload
-  if ! pgrep -f kitty >/dev/null; then
-    return
-  fi
-  kill -SIGUSR1 $(pidof kitty)
+  # Reload. Match on the process name only: 'pgrep -f kitty' also matches any
+  # command line that merely mentions kitty, and then 'pidof' comes back empty
+  # and kill runs with no arguments.
+  local pids
+  pids=$(pgrep -x kitty) || return
+  [ -n "$pids" ] && kill -SIGUSR1 $pids
 }
 
 apply_anyterm() {
