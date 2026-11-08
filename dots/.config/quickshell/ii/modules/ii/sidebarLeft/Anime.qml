@@ -83,6 +83,28 @@ Item {
                 Persistent.states.booru.allowNsfw = true;
             }
         },
+        {
+            name: "gelbooru_key",
+            description: Translation.tr("Set Gelbooru API key"),
+            execute: (args) => {
+                if (args.length > 0) {
+                    Booru.setApiKey("gelbooru", args[0]);
+                } else {
+                    Booru.addSystemMessage(Translation.tr("Usage: /gelbooru_key <key>"));
+                }
+            }
+        },
+        {
+            name: "gelbooru_id",
+            description: Translation.tr("Set Gelbooru User ID"),
+            execute: (args) => {
+                if (args.length > 0) {
+                    Booru.setUserId("gelbooru", args[0]);
+                } else {
+                    Booru.addSystemMessage(Translation.tr("Usage: /gelbooru_id <id>"));
+                }
+            }
+        },
     ]
 
     function handleInput(inputText) {
