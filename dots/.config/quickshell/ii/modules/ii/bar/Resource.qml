@@ -10,15 +10,15 @@ Item {
     property int warningThreshold: 100
     property bool shown: true
     clip: true
-    visible: width > 0 && height > 0
-    implicitWidth: resourceRowLayout.x < 0 ? 0 : resourceRowLayout.implicitWidth
+    visible: opacity > 0 // Not width: the layout can leave a collapsed item's width stuck above 0
+    implicitWidth: shown ? resourceRowLayout.implicitWidth : 0
+    opacity: shown ? 1 : 0
     implicitHeight: Appearance.sizes.barHeight
     property bool warning: percentage * 100 >= warningThreshold
 
     RowLayout {
         id: resourceRowLayout
         spacing: 2
-        x: shown ? 0 : -resourceRowLayout.width
         anchors {
             verticalCenter: parent.verticalCenter
         }
@@ -68,10 +68,6 @@ Item {
                 text: `${Math.round(percentage * 100).toString()}`
             }
         }
-
-        Behavior on x {
-            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-        }
     }
 
     MouseArea {
@@ -79,9 +75,12 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.NoButton
-        enabled: resourceRowLayout.x >= 0 && root.width > 0 && root.visible
+        enabled: root.shown && root.visible
     }
 
+    Behavior on opacity {
+        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+    }
     Behavior on implicitWidth {
         NumberAnimation {
             duration: Appearance.animation.elementMove.duration

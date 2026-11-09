@@ -242,6 +242,10 @@ Singleton {
                 property bool verbose: true
                 property bool vertical: false
                 property JsonObject resources: JsonObject {
+                    property bool showMemory: true
+                    property bool showSwap: true
+                    property bool showCpu: true
+                    property bool showGpu: true // Only shown if a supported GPU (AMD/NVIDIA) is found
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true
                     property int memoryWarningThreshold: 95

@@ -239,6 +239,50 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "monitoring"
+        title: Translation.tr("Resources")
+
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "memory"
+                text: Translation.tr("Memory")
+                checked: Config.options.bar.resources.showMemory
+                onCheckedChanged: {
+                    Config.options.bar.resources.showMemory = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "swap_horiz"
+                text: Translation.tr("Swap")
+                checked: Config.options.bar.resources.showSwap
+                onCheckedChanged: {
+                    Config.options.bar.resources.showSwap = checked;
+                }
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                buttonIcon: "planner_review"
+                text: Translation.tr("CPU")
+                checked: Config.options.bar.resources.showCpu
+                onCheckedChanged: {
+                    Config.options.bar.resources.showCpu = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "empty_dashboard"
+                text: Translation.tr("GPU")
+                checked: Config.options.bar.resources.showGpu
+                onCheckedChanged: {
+                    Config.options.bar.resources.showGpu = checked;
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "cloud"
         title: Translation.tr("Weather")
         ConfigSwitch {
