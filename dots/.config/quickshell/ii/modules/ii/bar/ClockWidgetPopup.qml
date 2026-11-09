@@ -17,7 +17,7 @@ StyledPopup {
     property bool calendarOpen: false
 
     // Click to show calendar. Content is only reset on open, so closing doesn't flash the info view
-    active: hoverTarget && (hoverTarget.containsMouse || calendarOpen)
+    keepOpen: calendarOpen
     onActiveChanged: if (active) showCalendar = calendarOpen
 
     property Connections clickHandler: Connections {
@@ -65,8 +65,10 @@ StyledPopup {
             label: root.formattedDate
         }
 
-        CalendarWidget {
-            visible: root.showCalendar
+        Loader { // Only built when shown
+            active: root.showCalendar
+            visible: active
+            sourceComponent: CalendarWidget {}
         }
 
         StyledPopupValueRow {
