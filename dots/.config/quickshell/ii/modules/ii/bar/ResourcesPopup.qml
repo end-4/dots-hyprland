@@ -24,7 +24,7 @@ StyledPopup {
                 icon: "memory"
                 label: "RAM"
             }
-            Column {
+            ColumnLayout { // Stretches rows to equal width, so values line up on the right
                 spacing: 4
                 StyledPopupValueRow {
                     icon: "clock_loader_60"
@@ -53,7 +53,7 @@ StyledPopup {
                 icon: "swap_horiz"
                 label: "Swap"
             }
-            Column {
+            ColumnLayout { // Stretches rows to equal width, so values line up on the right
                 spacing: 4
                 StyledPopupValueRow {
                     icon: "clock_loader_60"
@@ -81,12 +81,48 @@ StyledPopup {
                 icon: "planner_review"
                 label: "CPU"
             }
-            Column {
+            ColumnLayout { // Stretches rows to equal width, so values line up on the right
                 spacing: 4
                 StyledPopupValueRow {
                     icon: "bolt"
                     label: Translation.tr("Load:")
                     value: `${Math.round(ResourceUsage.cpuUsage * 100)}%`
+                }
+                StyledPopupValueRow {
+                    visible: ResourceUsage.cpuTempPath !== ""
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value: `${Math.round(ResourceUsage.cpuTemperature)} °C`
+                }
+            }
+        }
+
+        Column {
+            visible: ResourceUsage.gpuAvailable
+            anchors.top: parent.top
+            spacing: 8
+
+            StyledPopupHeaderRow {
+                icon: "empty_dashboard"
+                label: "GPU"
+            }
+            ColumnLayout {
+                spacing: 4
+                StyledPopupValueRow {
+                    icon: "bolt"
+                    label: Translation.tr("Load:")
+                    value: `${Math.round(ResourceUsage.gpuUsage * 100)}%`
+                }
+                StyledPopupValueRow {
+                    icon: "clock_loader_60"
+                    label: Translation.tr("VRAM Used:")
+                    value: `${Math.round(ResourceUsage.gpuVramUsage * 100)}%`
+                }
+                StyledPopupValueRow {
+                    visible: ResourceUsage.gpuType !== "amd" || ResourceUsage.amdGpuTempPath !== ""
+                    icon: "thermometer"
+                    label: Translation.tr("Temp:")
+                    value: `${Math.round(ResourceUsage.gpuTemperature)} °C`
                 }
             }
         }

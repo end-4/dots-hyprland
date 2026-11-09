@@ -7,7 +7,9 @@ import Quickshell
 import Quickshell.Io
 
 /**
- * Simple polled resource usage service with RAM, Swap, and CPU usage.
+ * Simple polled resource usage service with RAM, Swap, CPU and GPU usage, and CPU/GPU temperature.
+ * Sensors are detected once at startup: CPU temp via hwmon (AMD k10temp/zenpower, Intel coretemp),
+ * GPU via amdgpu sysfs or nvidia-smi.
  */
 Singleton {
     id: root
@@ -21,6 +23,15 @@ Singleton {
     property real swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property real cpuUsage: 0
     property var previousCpuStats
+    property real cpuTemperature: 0 // °C
+    property real gpuUsage: 0
+    property real gpuVramUsage: 0
+    property real gpuTemperature: 0 // °C
+    property string gpuType: "" // "amd", "nvidia", or "" when no supported GPU
+    readonly property bool gpuAvailable: gpuType !== ""
+    property string cpuTempPath: ""
+    property string amdGpuPath: "" // e.g. /sys/class/drm/card1/device
+    property string amdGpuTempPath: ""
 
     property string maxAvailableMemoryString: kbToGbString(ResourceUsage.memoryTotal)
     property string maxAvailableSwapString: kbToGbString(ResourceUsage.swapTotal)
@@ -92,6 +103,23 @@ Singleton {
                 previousCpuStats = { total, idle }
             }
 
+            // Temperatures and GPU
+            if (cpuTempPath) {
+                fileCpuTemp.reload()
+                cpuTemperature = Number(fileCpuTemp.text()) / 1000
+            }
+            if (gpuType === "amd") {
+                fileGpuBusy.reload()
+                fileVramUsed.reload()
+                fileVramTotal.reload()
+                gpuUsage = Number(fileGpuBusy.text()) / 100
+                gpuVramUsage = Number(fileVramUsed.text()) / Number(fileVramTotal.text())
+                if (amdGpuTempPath) {
+                    fileGpuTemp.reload()
+                    gpuTemperature = Number(fileGpuTemp.text()) / 1000
+                }
+            }
+
             root.updateHistories()
             interval = Config.options?.resources?.updateInterval ?? 3000
         }
@@ -99,6 +127,53 @@ Singleton {
 
 	FileView { id: fileMeminfo; path: "/proc/meminfo" }
     FileView { id: fileStat; path: "/proc/stat" }
+    FileView { id: fileCpuTemp; path: root.cpuTempPath }
+    FileView { id: fileGpuBusy; path: root.amdGpuPath ? `${root.amdGpuPath}/gpu_busy_percent` : "" }
+    FileView { id: fileVramUsed; path: root.amdGpuPath ? `${root.amdGpuPath}/mem_info_vram_used` : "" }
+    FileView { id: fileVramTotal; path: root.amdGpuPath ? `${root.amdGpuPath}/mem_info_vram_total` : "" }
+    FileView { id: fileGpuTemp; path: root.amdGpuTempPath }
+
+    Process { // Find sensors. Prints "cpuTemp <path>", "amd <device path>", "amdTemp <path>" or "nvidia"
+        running: true
+        command: ["bash", "-c", `
+            for d in /sys/class/hwmon/hwmon*; do
+                case "$(cat $d/name)" in k10temp|zenpower|coretemp|cpu_thermal) echo "cpuTemp $d/temp1_input"; break;; esac
+            done
+            # AMD: the card with the most VRAM, so a dGPU wins over an iGPU
+            gpu=$(for c in /sys/class/drm/card*/device; do [ -f $c/gpu_busy_percent ] && echo "$(cat $c/mem_info_vram_total 2>/dev/null || echo 0) $c"; done | sort -n | tail -1 | cut -d' ' -f2)
+            if [ -n "$gpu" ]; then
+                echo "amd $gpu"
+                for t in $gpu/hwmon/hwmon*/temp1_input; do [ -f $t ] && echo "amdTemp $t"; done # edge
+                for t in $gpu/hwmon/hwmon*/temp*_label; do [ "$(cat $t 2>/dev/null)" = junction ] && echo "amdTemp \${t%_label}_input"; done
+            elif nvidia-smi -L > /dev/null 2>&1; then
+                echo "nvidia"
+            fi
+        `]
+        stdout: SplitParser {
+            onRead: line => {
+                const [key, path] = line.split(" ")
+                if (key === "cpuTemp") root.cpuTempPath = path
+                else if (key === "amd") { root.amdGpuPath = path; root.gpuType = "amd" }
+                else if (key === "amdTemp") root.amdGpuTempPath = path // Junction (hotspot) overrides edge
+                else if (key === "nvidia") root.gpuType = "nvidia"
+            }
+        }
+    }
+
+    Process { // NVIDIA: one long-running nvidia-smi printing "usage, vramUsed, vramTotal, temp" each interval
+        // ponytail: keeps a hybrid laptop's NVIDIA dGPU awake. Only used when there's no AMD GPU; check runtime PM if that matters
+        running: root.gpuType === "nvidia"
+        command: ["nvidia-smi", "-i", "0", "--query-gpu=utilization.gpu,memory.used,memory.total,temperature.gpu",
+            "--format=csv,noheader,nounits", "-lms", `${Config.options?.resources?.updateInterval ?? 3000}`]
+        stdout: SplitParser {
+            onRead: line => {
+                const [usage, vramUsed, vramTotal, temp] = line.split(",").map(Number)
+                root.gpuUsage = usage / 100
+                root.gpuVramUsage = vramUsed / vramTotal
+                root.gpuTemperature = temp
+            }
+        }
+    }
 
     Process {
         id: findCpuMaxFreqProc
