@@ -12,6 +12,7 @@ Item {
     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
     property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
     width: calendarColumn.width
+    implicitWidth: calendarColumn.width
     implicitHeight: calendarColumn.height + 10 * 2
 
     Keys.onPressed: (event) => {
