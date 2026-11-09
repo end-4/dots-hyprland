@@ -114,12 +114,13 @@ StyledPopup {
                     value: `${Math.round(ResourceUsage.gpuUsage * 100)}%`
                 }
                 StyledPopupValueRow {
+                    visible: ResourceUsage.gpuVramAvailable
                     icon: "clock_loader_60"
                     label: Translation.tr("VRAM Used:")
                     value: `${Math.round(ResourceUsage.gpuVramUsage * 100)}%`
                 }
                 StyledPopupValueRow {
-                    visible: ResourceUsage.gpuType !== "amd" || ResourceUsage.amdGpuTempPath !== ""
+                    visible: ResourceUsage.gpuTempAvailable
                     icon: "thermometer"
                     label: Translation.tr("Temp:")
                     value: `${Math.round(ResourceUsage.gpuTemperature)} °C`
