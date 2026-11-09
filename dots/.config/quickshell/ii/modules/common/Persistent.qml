@@ -147,6 +147,8 @@ Singleton {
 
             property JsonObject timer: JsonObject {
                 property JsonObject pomodoro: JsonObject {
+                    property bool enabled: true // Off = plain countdown of timerDuration
+                    property int timerDuration: 300
                     property bool running: false
                     property int start: 0
                     property bool isBreak: false
