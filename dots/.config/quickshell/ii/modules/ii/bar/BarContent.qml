@@ -15,7 +15,18 @@ Item { // Bar content region
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
-    readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+    readonly property int centerSideModuleMaxWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+
+    // Priority display: when space runs out, hide weather first, then resources, media and finally the clock
+    readonly property real rightSideWidth: rightSidebarButton.implicitWidth + rightSidebarButton.Layout.rightMargin + (sysTray.visible ? sysTray.implicitWidth + rightSectionRowLayout.spacing : 0) + rightSectionRowLayout.spacing
+    readonly property real weatherWidth: weatherLoader.implicitWidth + weatherLoader.Layout.leftMargin + rightSectionRowLayout.spacing
+    readonly property real centerSideAvailableWidth: (width - middleCenterGroup.width) / 2 - middleSection.spacing * 2 - rightSideWidth
+    readonly property bool showWeather: Config.options.bar.weather.enable && centerSideAvailableWidth - weatherWidth >= centerSideModuleMaxWidth
+    readonly property int centerSideModuleWidth: Math.min(centerSideModuleMaxWidth, centerSideAvailableWidth - (showWeather ? weatherWidth : 0))
+    readonly property real mediaMinWidth: Math.min(mediaWidget.implicitWidth, Appearance.sizes.barMediaMinWidth) + leftCenterGroup.padding * 2
+    readonly property bool showClock: centerSideModuleWidth >= rightCenterGroupContent.implicitWidth
+    readonly property bool showMedia: showClock && centerSideModuleWidth >= mediaMinWidth
+    readonly property bool showResources: showMedia && centerSideModuleWidth >= mediaMinWidth + resourcesWidget.implicitWidth
 
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
@@ -110,15 +121,19 @@ Item { // Bar content region
 
         BarGroup {
             id: leftCenterGroup
+            visible: root.showMedia
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
 
             Resources {
+                id: resourcesWidget
+                visible: root.showResources
                 alwaysShowAllResources: root.useShortenedForm === 2
                 Layout.fillWidth: root.useShortenedForm === 2
             }
 
             Media {
+                id: mediaWidget
                 visible: root.useShortenedForm < 2
                 Layout.fillWidth: true
             }
@@ -156,6 +171,7 @@ Item { // Bar content region
 
         MouseArea {
             id: rightCenterGroup
+            visible: root.showClock
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
             implicitHeight: rightCenterGroupContent.implicitHeight
@@ -318,6 +334,7 @@ Item { // Bar content region
             }
 
             SysTray {
+                id: sysTray
                 visible: root.useShortenedForm === 0
                 Layout.fillWidth: false
                 Layout.fillHeight: true
@@ -331,8 +348,10 @@ Item { // Bar content region
 
             // Weather
             Loader {
+                id: weatherLoader
                 Layout.leftMargin: 4
                 active: Config.options.bar.weather.enable
+                visible: root.showWeather
 
                 sourceComponent: BarGroup {
                     WeatherBar {}
