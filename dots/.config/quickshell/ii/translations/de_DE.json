@@ -604,5 +604,9 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Notification history": "Benachrichtigungsverlauf",
+  "No notification history yet": "Noch kein Benachrichtigungsverlauf",
+  "Clear history": "Verlauf löschen",
+  "History: %1": "Verlauf: %1"
 }

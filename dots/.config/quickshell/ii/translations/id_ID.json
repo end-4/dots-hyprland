@@ -488,5 +488,10 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Notification history": "Riwayat notifikasi",
+  "No notification history yet": "Belum ada riwayat notifikasi",
+  "Clear history": "Hapus riwayat",
+  "History: %1": "Riwayat: %1",
+  "Nothing": "Tidak ada"
 }

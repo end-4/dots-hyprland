@@ -745,5 +745,9 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Notification history": "Historial de notificaciones",
+  "No notification history yet": "Aún no hay notificaciones en el historial",
+  "Clear history": "Borrar historial",
+  "History: %1": "Historial: %1"
 }

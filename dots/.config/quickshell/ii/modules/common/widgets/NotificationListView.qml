@@ -8,6 +8,8 @@ import Quickshell
 StyledListView { // Scrollable window
     id: root
     property bool popup: false
+    property bool horizontalSwipeActive: false
+    interactive: !horizontalSwipeActive
 
     spacing: 3
 
@@ -18,6 +20,7 @@ StyledListView { // Scrollable window
         required property int index
         required property var modelData
         popup: root.popup
+        notificationListView: root
         width: ListView.view.width // https://doc.qt.io/qt-6/qml-qtquick-listview.html
         notificationGroup: popup ? 
             Notifications.popupGroupsByAppName[modelData] :

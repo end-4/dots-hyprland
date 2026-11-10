@@ -501,5 +501,10 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "Notification history": "היסטוריית התראות",
+  "No notification history yet": "אין עדיין התראות בהיסטוריה",
+  "Clear history": "ניקוי ההיסטוריה",
+  "History: %1": "היסטוריה: %1",
+  "Nothing": "אין כלום"
 }
