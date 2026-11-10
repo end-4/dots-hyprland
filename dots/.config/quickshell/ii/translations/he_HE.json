@@ -230,6 +230,7 @@
   "Config file": "קובץ הגדרות",
   "☕ Break: %1 minutes": "☕ הפסקה: %1 דקות",
   ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!": ". הערות ל-Zerochan:\n- חובה להזין צבע\n- הגדר את שם המשתמש שלך ב-zerochan באופציית הקונפיג `sidebar.booru.zerochan.username`. ייתכן שתחסם אם לא תעשה זאת!",
+  ". Notes for Gelbooru:\n- You must enter API credentials in `sidebar.booru.gelbooru.userId` and `sidebar.booru.gelbooru.apiKey` config options. You can get these from your [account settings](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) on Gelbooru.": ". הערות ל-Gelbooru:\n- עליך להזין פרטי API בהגדרות `sidebar.booru.gelbooru.userId` ו-`sidebar.booru.gelbooru.apiKey`. ניתן לקבל אותם מ[הגדרות החשבון](https://gelbooru.com/index.php?page=wiki&s=view&id=18780) ב-Gelbooru.",
   "Used:": "בשימוש:",
   "Hi there! First things first...": "שלום! קודם כל...",
   "Registration failed. Please inspect manually with the <tt>warp-cli</tt> command": "ההרשמה נכשלה. נא לבדוק ידנית עם הפקודה <tt>warp-cli</tt>",
