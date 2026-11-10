@@ -1,0 +1,260 @@
+#!/usr/bin/env python3
+"""
+Tests that BITE the night-light cycle logic. Each asserts one specific claim and
+goes red when exactly that claim breaks. Run:  python3 test_nightlight.py
+A `--mutate <name>` mode intentionally breaks one constant to PROVE the relevant
+tests fail (the reversal-check: a test that can't fail is poison, not a test).
+
+Covers: temperature mapping, twilight ramp shape, midnight wrap, glide
+convergence / no-overshoot / bounded-step (== "how smoothly it moves"), and the
+solar schedule (correctness + seasonality + polar), which is what makes it work
+"for everyone" across the year.
+"""
+import sys
+import math
+import datetime
+from zoneinfo import ZoneInfo
+
+import nightlight_logic as L
+
+KYIV = ZoneInfo("Europe/Kiev")
+KYIV_LAT, KYIV_LON = 50.4501, 30.5234
+
+_fails = []
+
+
+def check(name, cond, detail=""):
+    status = "PASS" if cond else "FAIL"
+    if not cond:
+        _fails.append(name)
+    print(f"  [{status}] {name}" + (f"  — {detail}" if detail and not cond else ""))
+
+
+# ---------------- temperature mapping ----------------
+def test_temperature_mapping():
+    print("temperature mapping")
+    peak = 4729
+    check("level 0 is identity (off), not a Kelvin value", L.temp_for_level(0, peak) == L.IDENTITY)
+    check("level 1 is the peak warmth", L.temp_for_level(1, peak) == peak)
+    check("level 0.6 matches lerp (5477 for peak 4729)", L.temp_for_level(0.6, peak) == 5477,
+          f"got {L.temp_for_level(0.6, peak)}")
+    near0 = L.temp_for_level(0.002, peak)
+    check("just above 0 sits at neutral (hand-off to identity is seamless)", abs(near0 - 6600) <= 5, str(near0))
+    seq = [L.temp_for_level(x / 10, peak) for x in range(1, 11)]
+    check("warmer as level rises = temperature strictly decreases",
+          all(b < a for a, b in zip(seq, seq[1:])), str(seq))
+
+
+# ---------------- gamma composition ----------------
+def test_gamma_composes_with_dim():
+    print("gamma: user value x dim factor (dim never kills the Gamma slider)")
+    check("dim off = user gamma passes through", L.gamma_for_level(1, 70, 50, False) == 70)
+    check("dim on holds by day too (level 0): 100 x 50%", L.gamma_for_level(0, 100, 50, True) == 50)
+    check("dim on, full night = user x night (100 x 50%)", L.gamma_for_level(1, 100, 50, True) == 50)
+    at_night = [L.gamma_for_level(1, g, 80, True) for g in (100, 90, 70)]
+    check("lowering user gamma still lowers output while dimmed", at_night[0] > at_night[1] > at_night[2], str(at_night))
+    check("never below the floor", L.gamma_for_level(1, 25, 25, True) == L.GAMMA_LOWER)
+
+
+# ---------------- twilight ramp shape ----------------
+def test_ramp_shape():
+    print("twilight ramp (compute_level)")
+    frm, to, tr = 19 * 60 + 17, 6 * 60 + 32, 30  # 19:17 -> 06:32, 30-min fade both edges
+    check("outside the window = 0 (noon)", L.compute_level(12 * 60, frm, to, tr, tr) == 0)
+    check("exactly at the start edge = 0", L.compute_level(frm, frm, to, tr, tr) == 0)
+    check("exactly at the end edge = 0", L.compute_level(to, frm, to, tr, tr) == 0)
+    check("deep in the window = full 1 (midnight)", L.compute_level(0, frm, to, tr, tr) == 1.0)
+    mid_ramp = L.compute_level(frm + 15, frm, to, tr, tr)  # 15 min into a 30-min fade
+    check("15 min into a 30-min fade = ~0.5", abs(mid_ramp - 0.5) < 1e-9, f"got {mid_ramp}")
+    check("ramp is partial, not binary, inside the fade", 0 < mid_ramp < 1)
+
+
+def test_soft_auto_edge():
+    print("auto edges fade softer (longer) than a fixed time")
+    frm, to = 19 * 60, 6 * 60
+    hard = 30
+    soft = round(hard * L.SOFT_FACTOR)  # 53
+    # 30 min into the window: a hard edge is already full; a soft edge is still ramping.
+    hard_lvl = L.compute_level(frm + 30, frm, to, hard, hard)
+    soft_lvl = L.compute_level(frm + 30, frm, to, soft, soft)
+    check("hard edge is full 30 min in", abs(hard_lvl - 1.0) < 1e-9, f"{hard_lvl}")
+    check("soft edge is still below full 30 min in", soft_lvl < 1.0, f"{soft_lvl}")
+    check("soft edge is gentler (lower level at the same offset)", soft_lvl < hard_lvl)
+
+
+def test_midnight_wrap():
+    print("midnight wrap")
+    frm, to = 19 * 60 + 17, 6 * 60 + 32
+    check("00:00 counts as night", L.compute_level(0, frm, to, 30, 30) == 1.0)
+    check("12:00 counts as day", L.compute_level(12 * 60, frm, to, 30, 30) == 0.0)
+    check("05:00 (pre-sunrise) still night-ish", L.compute_level(5 * 60, frm, to, 30, 30) > 0)
+
+
+# ---------------- glide == smoothness ----------------
+def test_glide_converges():
+    print("glide converges")
+    s = L.glide_series(0.0, 1.0)
+    check("reaches the target", abs(s[-1] - 1.0) < 1e-9)
+    check("converges in a sane number of ticks (<40)", len(s) < 40, f"{len(s)} ticks")
+
+
+def test_glide_no_overshoot():
+    print("glide is smooth — monotonic, no overshoot")
+    s = L.glide_series(0.0, 1.0)
+    check("never overshoots past target", all(x <= 1.0 + 1e-12 for x in s))
+    diffs = [b - a for a, b in zip(s, s[1:])]
+    check("moves in one direction only (no oscillation)", all(d >= -1e-12 for d in diffs))
+    # The eased steps (all but the terminal snap) must shrink every tick — the
+    # signature of exponential approach. The final tick is a snap-to-target whose
+    # size is bounded separately (below), so it is excluded here.
+    eased = diffs[:-1]
+    check("eased steps shrink every tick (exponential, not linear/jerky)",
+          all(b <= a + 1e-12 for a, b in zip(eased, eased[1:])))
+    check("terminal snap is imperceptible (<= GLIDE_SNAP level, ~5K)", diffs[-1] <= L.GLIDE_SNAP + 1e-12,
+          f"snap {diffs[-1]:.4f}")
+
+
+SMOOTH_MAX_STEP = 0.35  # absolute: one 60ms tick must not cover >35% of the range, or it reads as a snap
+
+def test_glide_bounded_step():
+    print("glide step is bounded — no visible snap")
+    s = L.glide_series(0.0, 1.0)
+    biggest = max(b - a for a, b in zip(s, s[1:]))
+    # ABSOLUTE bar, independent of GLIDE_FACTOR — otherwise the test is tautological
+    # (a jerky factor would just drag the bar with it). An instant/large factor fails here.
+    check(f"no single tick covers more than {int(SMOOTH_MAX_STEP*100)}% of the range",
+          biggest <= SMOOTH_MAX_STEP + 1e-9, f"biggest step {biggest:.3f}")
+    check("the eased approach takes several ticks (not 1-2)", len(s) >= 8, f"{len(s)} ticks")
+
+
+def test_glide_downward():
+    print("glide works downward too (sunrise / turning off)")
+    s = L.glide_series(1.0, 0.0)
+    check("reaches 0", abs(s[-1]) < 1e-9)
+    check("never undershoots below 0", all(x >= -1e-12 for x in s))
+
+
+# ---------------- effective level (auto + bias) ----------------
+def test_effective_level():
+    print("effective level = clamp(auto + bias)")
+    check("bias 0 follows auto", L.effective_level(0.7, 0.0, True) == 0.7)
+    check("bias +0.3 rides above auto", abs(L.effective_level(0.5, 0.3, True) - 0.8) < 1e-9)
+    check("bias -0.3 rides below auto", abs(L.effective_level(0.5, -0.3, True) - 0.2) < 1e-9)
+    check("clamps at 1", L.effective_level(0.9, 0.5, True) == 1.0)
+    check("clamps at 0", L.effective_level(0.1, -0.5, True) == 0.0)
+    check("automatic off = bias is the whole signal", L.effective_level(0.7, 0.4, False) == 0.4)
+
+
+# ---------------- seed from the daemon / NaN guards / redundant sends ----------------
+NAN = float("nan")
+
+
+def test_seed_from_daemon():
+    print("load seeds appliedLevel from the daemon's real state")
+    peak = 4600
+    check("identity -> level 0 (stored 6000K is NOT an active tint)", L.seed_level(True, 6000, 100, peak) == 0.0)
+    check("temp at neutral -> 0", L.seed_level(False, L.NEUTRAL_TEMP, 100, peak) == 0.0)
+    check("temp at peak -> 1", L.seed_level(False, peak, 100, peak) == 1.0)
+    mid = L.seed_level(False, (L.NEUTRAL_TEMP + peak) / 2, 100, peak)
+    check("midway temp -> 0.5", abs(mid - 0.5) < 1e-9, mid)
+    check("beyond peak clamps to 1", L.seed_level(False, 3000, 100, peak) == 1.0)
+    check("peak == neutral (span 0) -> 0, no division by zero", L.seed_level(False, 5000, 100, L.NEUTRAL_TEMP) == 0.0)
+    check("unusable daemon answer -> None (start from zero)", L.seed_level(False, NAN, 100, peak) is None
+          and L.seed_level(False, 5000, NAN, peak) is None)
+
+
+def test_nan_guards():
+    print("NaN never becomes the target and never spins the glide")
+    check("finite target unchanged", L.target_level(0.5, 0.2) == 0.7 and L.target_level(0.9, 0.5) == 1.0)
+    check("NaN bias -> 0, not NaN", L.target_level(0.5, NAN) == 0.0)
+    check("NaN base -> 0", L.target_level(NAN, 0.2) == 0.0)
+    check("glide stops on NaN difference", L.glide_done(NAN, 0.3) and L.glide_done(0.3, NAN))
+    check("glide keeps going on a real gap", not L.glide_done(0.9, 0.1))
+
+
+def test_redundant_send_skip():
+    print("the daemon is probed only when the output changed")
+    check("same (temp, gamma) -> no send", not L.should_send((4600, 100), (4600, 100)))
+    check("temp changed -> send", L.should_send((4500, 100), (4600, 100)))
+    check("gamma changed -> send", L.should_send((4600, 90), (4600, 100)))
+    check("reset to -1 (load / settings change) forces a send", L.should_send((4600, 100), (-1, -1)))
+
+
+# ---------------- solar schedule ----------------
+def test_solar_correct():
+    print("solar times — Kyiv 2026-09-14")
+    date = datetime.datetime(2026, 9, 14, 12, 0, tzinfo=KYIV)
+    rise, sset = L.sun_times(date, KYIV_LAT, KYIV_LON, KYIV)
+    check("sunrise within 2 min of 06:32", abs(rise - (6 * 60 + 32)) <= 2, f"{rise//60:02d}:{rise%60:02d}")
+    check("sunset within 2 min of 19:17", abs(sset - (19 * 60 + 17)) <= 2, f"{sset//60:02d}:{sset%60:02d}")
+
+
+def test_solar_seasonality():
+    print("solar adapts across seasons (this is the 'works for the whole year' claim)")
+    def day_len(month):
+        d = datetime.datetime(2026, month, 21, 12, 0, tzinfo=KYIV)
+        rise, sset = L.sun_times(d, KYIV_LAT, KYIV_LON, KYIV)
+        return (sset - rise) % 1440
+    june, dec = day_len(6), day_len(12)
+    check("June day is longer than December day", june > dec, f"jun {june}m vs dec {dec}m")
+    check("the swing is large (>4h), i.e. genuinely seasonal", (june - dec) > 240,
+          f"delta {june - dec}m")
+
+
+def test_solar_polar():
+    print("solar polar edge cases (Svalbard 78N)")
+    svb = ZoneInfo("Arctic/Longyearbyen")
+    jun = L.sun_times(datetime.datetime(2026, 6, 21, 12, tzinfo=svb), 78.22, 15.63, svb)
+    dec = L.sun_times(datetime.datetime(2026, 12, 21, 12, tzinfo=svb), 78.22, 15.63, svb)
+    check("midnight sun in June = polar 'night' sentinel (never engage)", jun == ('polar', 'night'), str(jun))
+    check("polar night in December = polar 'day' sentinel (always engage)", dec == ('polar', 'day'), str(dec))
+
+
+ALL = [
+    test_temperature_mapping, test_gamma_composes_with_dim, test_ramp_shape, test_soft_auto_edge, test_midnight_wrap,
+    test_glide_converges, test_glide_no_overshoot, test_glide_bounded_step, test_glide_downward,
+    test_effective_level, test_seed_from_daemon, test_nan_guards, test_redundant_send_skip,
+    test_solar_correct, test_solar_seasonality, test_solar_polar,
+]
+
+
+def main():
+    # --mutate proves the tests bite: break one constant, expect reds.
+    if len(sys.argv) > 1 and sys.argv[1] == "--mutate":
+        which = sys.argv[2] if len(sys.argv) > 2 else "glide"
+        if which == "glide":
+            L.GLIDE_FACTOR = 1.0   # instant snap — must break the smoothness tests
+            print("MUTATION: GLIDE_FACTOR = 1.0 (instant) — expect glide-smoothness reds\n")
+        elif which == "neutral":
+            L.NEUTRAL_TEMP = 4000  # wrong neutral — must break temperature mapping
+            print("MUTATION: NEUTRAL_TEMP = 4000 — expect temperature-mapping reds\n")
+        elif which == "gamma":
+            L.gamma_for_level = lambda lv, ug, ng, on: round(100 + (max(L.GAMMA_LOWER, ng) - 100) * lv) if on else ug
+            print("MUTATION: dim overwrites user gamma, scaled by night level (the old bugs) — expect gamma reds\n")
+        elif which == "seed":
+            L.seed_level = lambda identity, temp, gamma, peak: (L.NEUTRAL_TEMP - temp) / (L.NEUTRAL_TEMP - peak)
+            print("MUTATION: seed ignores identity and clamping - expect seed reds\n")
+        elif which == "nan":
+            L.target_level = lambda base, bias: max(0.0, min(1.0, base + bias))
+            L.glide_done = lambda target, applied: abs(target - applied) < L.GLIDE_SNAP
+            print("MUTATION: no isFinite guards - expect NaN reds\n")
+        elif which == "send":
+            L.should_send = lambda out, last: True
+            print("MUTATION: always send - expect redundant-send reds\n")
+        elif which == "solar":
+            _orig = L.sun_times
+            L.sun_times = lambda *a, **k: (6 * 60, 18 * 60)  # ignore date/location
+            print("MUTATION: sun_times ignores date/location — expect solar reds\n")
+
+    print("=== night-light cycle: tests that bite ===\n")
+    for t in ALL:
+        t()
+        print()
+    if _fails:
+        print(f"RESULT: {len(_fails)} FAILED -> {_fails}")
+        sys.exit(1)
+    print("RESULT: all green")
+
+
+if __name__ == "__main__":
+    main()
