@@ -48,6 +48,8 @@ hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO
 
 hl.bind("CTRL + SUPER + T", hl.dsp.global("quickshell:wallpaperSelectorToggle"),
     { description = "Shell: Change wallpaper" })
+hl.bind("CTRL + SUPER + W", hl.dsp.global("quickshell:dualWallpaperSelectorToggle"),
+    { description = "Shell: Dual wallpaper selector (Dark/Light)" })
 hl.bind("CTRL + SUPER + ALT + T", hl.dsp.global("quickshell:wallpaperSelectorRandom"),
     { description = "Shell: Random wallpaper" })
 hl.bind("CTRL + SUPER + SHIFT + D", hl.dsp.global("quickshell:toggleLightDark"),

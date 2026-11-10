@@ -41,7 +41,20 @@ MouseArea {
     }
 
     function selectWallpaperPath(filePath) {
-        if (filePath && filePath.length > 0) {
+        if (!filePath || filePath.length === 0) return;
+        if (GlobalStates.dualWallpaperSelectorMode) {
+            if (GlobalStates.dualWallpaperActiveTarget === "dark") {
+                Wallpapers.setDarkWallpaper(filePath);
+                if (!Config.options.background.lightWallpaperPath) {
+                    GlobalStates.dualWallpaperActiveTarget = "light";
+                }
+            } else {
+                Wallpapers.setLightWallpaper(filePath);
+                if (!Config.options.background.darkWallpaperPath) {
+                    GlobalStates.dualWallpaperActiveTarget = "dark";
+                }
+            }
+        } else {
             Wallpapers.select(filePath, root.useDarkMode);
             filterField.text = "";
         }
@@ -258,6 +271,226 @@ MouseArea {
                     radius: wallpaperGridBackground.radius - Layout.margins
                 }
 
+                Rectangle {
+                    id: dualWallpaperHeader
+                    visible: GlobalStates.dualWallpaperSelectorMode
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 4
+                    Layout.rightMargin: 4
+                    Layout.bottomMargin: 2
+                    implicitHeight: 82
+                    radius: Appearance.rounding.small
+                    color: Appearance.colors.colLayer1
+                    border.width: 1
+                    border.color: Appearance.colors.colOutlineVariant
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 6
+                        spacing: 8
+
+                        // Dark Wallpaper Card
+                        Rectangle {
+                            id: darkSlotCard
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            radius: Appearance.rounding.small
+                            color: GlobalStates.dualWallpaperActiveTarget === "dark" ? Appearance.colors.colSecondaryContainer : Appearance.colors.colLayer2
+                            border.width: GlobalStates.dualWallpaperActiveTarget === "dark" ? 2 : 1
+                            border.color: GlobalStates.dualWallpaperActiveTarget === "dark" ? Appearance.colors.colSecondary : Appearance.colors.colOutlineVariant
+
+                            Behavior on color {
+                                ColorAnimation { duration: 150 }
+                            }
+                            Behavior on border.color {
+                                ColorAnimation { duration: 150 }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    GlobalStates.dualWallpaperActiveTarget = "dark";
+                                }
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 6
+                                    spacing: 8
+
+                                    Rectangle {
+                                        Layout.preferredWidth: 64
+                                        Layout.fillHeight: true
+                                        radius: Appearance.rounding.small
+                                        color: Appearance.colors.colLayer0
+                                        clip: true
+
+                                        Image {
+                                            anchors.fill: parent
+                                            fillMode: Image.PreserveAspectCrop
+                                            source: Config.options.background.darkWallpaperPath ? Qt.resolvedUrl(Config.options.background.darkWallpaperPath) : ""
+                                            visible: status === Image.Ready
+                                        }
+
+                                        MaterialSymbol {
+                                            anchors.centerIn: parent
+                                            visible: !Config.options.background.darkWallpaperPath || parent.children[0].status !== Image.Ready
+                                            text: "dark_mode"
+                                            iconSize: 22
+                                            color: Appearance.colors.colOnSecondaryContainer
+                                        }
+                                    }
+
+                                    ColumnLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 2
+
+                                        RowLayout {
+                                            spacing: 4
+                                            MaterialSymbol {
+                                                text: "dark_mode"
+                                                iconSize: 15
+                                                color: GlobalStates.dualWallpaperActiveTarget === "dark" ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                                            }
+                                            StyledText {
+                                                text: Translation.tr("Dark Mode Wallpaper")
+                                                font.weight: Font.Bold
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                                color: GlobalStates.dualWallpaperActiveTarget === "dark" ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                                            }
+                                            Item { Layout.fillWidth: true }
+                                            Rectangle {
+                                                visible: GlobalStates.dualWallpaperActiveTarget === "dark"
+                                                radius: 6
+                                                color: Appearance.colors.colPrimary
+                                                implicitWidth: darkActiveText.implicitWidth + 8
+                                                implicitHeight: 16
+                                                StyledText {
+                                                    id: darkActiveText
+                                                    anchors.centerIn: parent
+                                                    text: Translation.tr("SELECTING")
+                                                    font.pixelSize: Appearance.font.pixelSize.smallest
+                                                    font.weight: Font.Bold
+                                                    color: Appearance.colors.colOnPrimary
+                                                }
+                                            }
+                                        }
+
+                                        StyledText {
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideMiddle
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            opacity: 0.85
+                                            color: GlobalStates.dualWallpaperActiveTarget === "dark" ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                                            text: Config.options.background.darkWallpaperPath ? FileUtils.fileNameForPath(Config.options.background.darkWallpaperPath) : Translation.tr("Click below to select")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Light Wallpaper Card
+                        Rectangle {
+                            id: lightSlotCard
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            radius: Appearance.rounding.small
+                            color: GlobalStates.dualWallpaperActiveTarget === "light" ? Appearance.colors.colTertiaryContainer : Appearance.colors.colLayer2
+                            border.width: GlobalStates.dualWallpaperActiveTarget === "light" ? 2 : 1
+                            border.color: GlobalStates.dualWallpaperActiveTarget === "light" ? Appearance.colors.colTertiary : Appearance.colors.colOutlineVariant
+
+                            Behavior on color {
+                                ColorAnimation { duration: 150 }
+                            }
+                            Behavior on border.color {
+                                ColorAnimation { duration: 150 }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    GlobalStates.dualWallpaperActiveTarget = "light";
+                                }
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 6
+                                    spacing: 8
+
+                                    Rectangle {
+                                        Layout.preferredWidth: 64
+                                        Layout.fillHeight: true
+                                        radius: Appearance.rounding.small
+                                        color: Appearance.colors.colLayer0
+                                        clip: true
+
+                                        Image {
+                                            anchors.fill: parent
+                                            fillMode: Image.PreserveAspectCrop
+                                            source: Config.options.background.lightWallpaperPath ? Qt.resolvedUrl(Config.options.background.lightWallpaperPath) : ""
+                                            visible: status === Image.Ready
+                                        }
+
+                                        MaterialSymbol {
+                                            anchors.centerIn: parent
+                                            visible: !Config.options.background.lightWallpaperPath || parent.children[0].status !== Image.Ready
+                                            text: "light_mode"
+                                            iconSize: 22
+                                            color: Appearance.colors.colOnTertiaryContainer
+                                        }
+                                    }
+
+                                    ColumnLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 2
+
+                                        RowLayout {
+                                            spacing: 4
+                                            MaterialSymbol {
+                                                text: "light_mode"
+                                                iconSize: 15
+                                                color: GlobalStates.dualWallpaperActiveTarget === "light" ? Appearance.colors.colOnTertiaryContainer : Appearance.colors.colOnLayer2
+                                            }
+                                            StyledText {
+                                                text: Translation.tr("Light Mode Wallpaper")
+                                                font.weight: Font.Bold
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                                color: GlobalStates.dualWallpaperActiveTarget === "light" ? Appearance.colors.colOnTertiaryContainer : Appearance.colors.colOnLayer2
+                                            }
+                                            Item { Layout.fillWidth: true }
+                                            Rectangle {
+                                                visible: GlobalStates.dualWallpaperActiveTarget === "light"
+                                                radius: 6
+                                                color: Appearance.colors.colTertiary
+                                                implicitWidth: lightActiveText.implicitWidth + 8
+                                                implicitHeight: 16
+                                                StyledText {
+                                                    id: lightActiveText
+                                                    anchors.centerIn: parent
+                                                    text: Translation.tr("SELECTING")
+                                                    font.pixelSize: Appearance.font.pixelSize.smallest
+                                                    font.weight: Font.Bold
+                                                    color: Appearance.colors.colOnTertiary
+                                                }
+                                            }
+                                        }
+
+                                        StyledText {
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideMiddle
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            opacity: 0.85
+                                            color: GlobalStates.dualWallpaperActiveTarget === "light" ? Appearance.colors.colOnTertiaryContainer : Appearance.colors.colOnLayer2
+                                            text: Config.options.background.lightWallpaperPath ? FileUtils.fileNameForPath(Config.options.background.lightWallpaperPath) : Translation.tr("Click below to select")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Item {
                     id: gridDisplayRegion
                     Layout.fillWidth: true
@@ -309,8 +542,13 @@ MouseArea {
                         }
 
                         function activateCurrent() {
+                            const isDir = grid.model.get(currentIndex, "fileIsDir");
                             const filePath = grid.model.get(currentIndex, "filePath");
-                            root.selectWallpaperPath(filePath);
+                            if (isDir) {
+                                Wallpapers.setDirectory(filePath);
+                            } else {
+                                root.selectWallpaperPath(filePath);
+                            }
                         }
 
                         model: Wallpapers.folderModel
@@ -321,15 +559,35 @@ MouseArea {
                             fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            colBackground: (index === grid?.currentIndex || containsMouse) ? Appearance.colors.colPrimary : (fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colSecondaryContainer : ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
-                            colText: (index === grid.currentIndex || containsMouse) ? Appearance.colors.colOnPrimary : (fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer0
+                            colBackground: (index === grid?.currentIndex || containsMouse) ? Appearance.colors.colPrimary :
+                                (!fileModelData.fileIsDir && GlobalStates.dualWallpaperSelectorMode && fileModelData.filePath === Config.options.background.darkWallpaperPath) ? Appearance.colors.colSecondaryContainer :
+                                (!fileModelData.fileIsDir && GlobalStates.dualWallpaperSelectorMode && fileModelData.filePath === Config.options.background.lightWallpaperPath) ? Appearance.colors.colTertiaryContainer :
+                                (!fileModelData.fileIsDir && fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colSecondaryContainer :
+                                ColorUtils.transparentize(Appearance.colors.colPrimaryContainer)
+                            colText: (index === grid.currentIndex || containsMouse) ? Appearance.colors.colOnPrimary :
+                                (!fileModelData.fileIsDir && GlobalStates.dualWallpaperSelectorMode && fileModelData.filePath === Config.options.background.darkWallpaperPath) ? Appearance.colors.colOnSecondaryContainer :
+                                (!fileModelData.fileIsDir && GlobalStates.dualWallpaperSelectorMode && fileModelData.filePath === Config.options.background.lightWallpaperPath) ? Appearance.colors.colOnTertiaryContainer :
+                                (!fileModelData.fileIsDir && fileModelData.filePath === Config.options.background.wallpaperPath) ? Appearance.colors.colOnSecondaryContainer :
+                                Appearance.colors.colOnLayer0
 
                             onEntered: {
                                 grid.currentIndex = index;
                             }
 
                             onActivated: {
-                                root.selectWallpaperPath(fileModelData.filePath);
+                                if (fileModelData.fileIsDir) {
+                                    Wallpapers.setDirectory(fileModelData.filePath);
+                                } else {
+                                    root.selectWallpaperPath(fileModelData.filePath);
+                                }
+                            }
+
+                            onRightClicked: {
+                                if (!fileModelData.fileIsDir) {
+                                    contextMenu.targetPath = fileModelData.filePath;
+                                    contextMenu.targetName = fileModelData.fileName;
+                                    contextMenu.openAtItem(this);
+                                }
                             }
                         }
 
@@ -390,6 +648,24 @@ MouseArea {
                                 }
                             }
 
+                            IconToolbarButton {
+                                implicitWidth: height
+                                onClicked: {
+                                    GlobalStates.dualWallpaperSelectorMode = !GlobalStates.dualWallpaperSelectorMode;
+                                    if (GlobalStates.dualWallpaperSelectorMode && !GlobalStates.dualWallpaperActiveTarget) {
+                                        GlobalStates.dualWallpaperActiveTarget = Appearance.m3colors.darkmode ? "dark" : "light";
+                                    }
+                                }
+                                text: GlobalStates.dualWallpaperSelectorMode ? "view_agenda" : "split_scene"
+                                toggled: GlobalStates.dualWallpaperSelectorMode
+                                colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                                StyledToolTip {
+                                    text: GlobalStates.dualWallpaperSelectorMode ?
+                                        Translation.tr("Dual Wallpaper Mode: Active\n(Click to switch to single wallpaper mode)") :
+                                        Translation.tr("Switch to Dual Wallpaper Mode\n(Choose both Dark & Light wallpapers)")
+                                }
+                            }
+
                             ToolbarTextField {
                                 id: filterField
                                 placeholderText: focus ? Translation.tr("Search wallpapers") : Translation.tr("Hit \"/\" to search")
@@ -426,6 +702,15 @@ MouseArea {
                         }
 
                         ToolbarPairedFab {
+                            visible: GlobalStates.dualWallpaperSelectorMode
+                            iconText: "check"
+                            onClicked: GlobalStates.wallpaperSelectorOpen = false;
+                            StyledToolTip {
+                                text: Translation.tr("Done / Apply dual wallpaper selection")
+                            }
+                        }
+
+                        ToolbarPairedFab {
                             iconText: "close"
                             onClicked: GlobalStates.wallpaperSelectorOpen = false;
                             StyledToolTip {
@@ -450,7 +735,117 @@ MouseArea {
     Connections {
         target: Wallpapers
         function onChanged() {
-            GlobalStates.wallpaperSelectorOpen = false;
+            if (!GlobalStates.dualWallpaperSelectorMode) {
+                GlobalStates.wallpaperSelectorOpen = false;
+            }
+        }
+    }
+
+    Popup {
+        id: contextMenu
+        property string targetPath: ""
+        property string targetName: ""
+
+        function openAtItem(item) {
+            const mapped = item.mapToItem(wallpaperGridBackground, 0, 0);
+            x = Math.max(10, Math.min(mapped.x + 20, wallpaperGridBackground.width - width - 20));
+            y = Math.max(10, Math.min(mapped.y + 40, wallpaperGridBackground.height - height - 20));
+            open();
+        }
+
+        padding: 6
+        background: Rectangle {
+            color: Appearance.colors.colLayer1
+            radius: Appearance.rounding.small
+            border.width: 1
+            border.color: Appearance.colors.colOutlineVariant
+            StyledRectangularShadow { target: parent }
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 3
+
+            StyledText {
+                Layout.margins: 6
+                Layout.maximumWidth: 220
+                text: contextMenu.targetName
+                elide: Text.ElideMiddle
+                font.weight: Font.Bold
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colOnLayer1
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: Appearance.colors.colOutlineVariant
+            }
+
+            RippleButton {
+                Layout.fillWidth: true
+                implicitHeight: 34
+                buttonRadius: Appearance.rounding.small
+                onClicked: {
+                    Wallpapers.setDarkWallpaper(contextMenu.targetPath);
+                    contextMenu.close();
+                }
+                contentItem: RowLayout {
+                    spacing: 8
+                    MaterialSymbol {
+                        text: "dark_mode"
+                        iconSize: 16
+                        color: Appearance.colors.colSecondary
+                    }
+                    StyledText {
+                        text: Translation.tr("Set as Dark Wallpaper")
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                    }
+                }
+            }
+
+            RippleButton {
+                Layout.fillWidth: true
+                implicitHeight: 34
+                buttonRadius: Appearance.rounding.small
+                onClicked: {
+                    Wallpapers.setLightWallpaper(contextMenu.targetPath);
+                    contextMenu.close();
+                }
+                contentItem: RowLayout {
+                    spacing: 8
+                    MaterialSymbol {
+                        text: "light_mode"
+                        iconSize: 16
+                        color: Appearance.colors.colTertiary
+                    }
+                    StyledText {
+                        text: Translation.tr("Set as Light Wallpaper")
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                    }
+                }
+            }
+
+            RippleButton {
+                Layout.fillWidth: true
+                implicitHeight: 34
+                buttonRadius: Appearance.rounding.small
+                onClicked: {
+                    Wallpapers.setBothWallpapers(contextMenu.targetPath);
+                    contextMenu.close();
+                }
+                contentItem: RowLayout {
+                    spacing: 8
+                    MaterialSymbol {
+                        text: "style"
+                        iconSize: 16
+                        color: Appearance.colors.colPrimary
+                    }
+                    StyledText {
+                        text: Translation.tr("Set as Both (Dark & Light)")
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                    }
+                }
+            }
         }
     }
 }

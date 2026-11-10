@@ -22,8 +22,9 @@ Singleton {
     property url defaultFolder: Qt.resolvedUrl(`${Directories.pictures}/Wallpapers`)
     property alias folderModel: folderModel // Expose for direct binding when needed
     property string searchQuery: ""
-    readonly property list<string> extensions: [ // TODO: add videos
-        "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg"
+    readonly property list<string> extensions: [
+        "jpg", "jpeg", "png", "webp", "avif", "bmp", "svg",
+        "mp4", "webm", "mkv", "avi", "mov"
     ]
     property list<string> wallpapers: [] // List of absolute file paths (without file://)
     readonly property bool thumbnailGenerationRunning: thumbgenProc.running
@@ -43,6 +44,64 @@ Singleton {
         if (!path || path.length === 0) return;
         Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", darkMode ? "dark" : "light", "--image", path]);
         root.changed()
+    }
+
+    Process {
+        id: setDarkProc
+        property string filePath: ""
+        property bool applyNow: false
+        function setDark(path, applyNow) {
+            setDarkProc.filePath = path;
+            setDarkProc.applyNow = applyNow;
+            setDarkProc.exec(["test", "-f", FileUtils.trimFileProtocol(path)]);
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) return;
+            Config.options.background.darkWallpaperPath = setDarkProc.filePath;
+            if (setDarkProc.applyNow) {
+                root.apply(setDarkProc.filePath, true);
+            } else {
+                Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--dark-image", setDarkProc.filePath]);
+            }
+            root.changed();
+        }
+    }
+
+    Process {
+        id: setLightProc
+        property string filePath: ""
+        property bool applyNow: false
+        function setLight(path, applyNow) {
+            setLightProc.filePath = path;
+            setLightProc.applyNow = applyNow;
+            setLightProc.exec(["test", "-f", FileUtils.trimFileProtocol(path)]);
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) return;
+            Config.options.background.lightWallpaperPath = setLightProc.filePath;
+            if (setLightProc.applyNow) {
+                root.apply(setLightProc.filePath, false);
+            } else {
+                Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--light-image", setLightProc.filePath]);
+            }
+            root.changed();
+        }
+    }
+
+    function setDarkWallpaper(path, applyNow = Appearance.m3colors.darkmode) {
+        if (!path || path.length === 0) return;
+        setDarkProc.setDark(path, applyNow);
+    }
+
+    function setLightWallpaper(path, applyNow = !Appearance.m3colors.darkmode) {
+        if (!path || path.length === 0) return;
+        setLightProc.setLight(path, applyNow);
+    }
+
+    function setBothWallpapers(path) {
+        if (!path || path.length === 0) return;
+        setDarkWallpaper(path, Appearance.m3colors.darkmode);
+        setLightWallpaper(path, !Appearance.m3colors.darkmode);
     }
 
     Process {
@@ -175,6 +234,18 @@ Singleton {
 
         function apply(path: string): void {
             root.apply(path);
+        }
+
+        function setDark(path: string): void {
+            root.setDarkWallpaper(path);
+        }
+
+        function setLight(path: string): void {
+            root.setLightWallpaper(path);
+        }
+
+        function setBoth(path: string): void {
+            root.setBothWallpapers(path);
         }
     }
 }

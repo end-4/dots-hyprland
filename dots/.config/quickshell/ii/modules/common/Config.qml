@@ -117,7 +117,7 @@ Singleton {
                     property string expressive: "Space Grotesk"
                 }
                 property JsonObject transparency: JsonObject {
-                    property bool enable: false
+                    property bool enable: true
                     property bool automatic: true
                     property real backgroundTransparency: 0.11
                     property real contentTransparency: 0.57
@@ -211,6 +211,8 @@ Singleton {
                     }
                 }
                 property string wallpaperPath: ""
+                property string darkWallpaperPath: ""
+                property string lightWallpaperPath: ""
                 property string thumbnailPath: ""
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
@@ -241,6 +243,9 @@ Singleton {
                 property bool showBackground: true
                 property bool verbose: true
                 property bool vertical: false
+                property JsonObject clipboard: JsonObject {
+                    property bool enable: true
+                }
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true

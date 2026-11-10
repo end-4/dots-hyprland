@@ -12,6 +12,14 @@ SHELL_CONFIG_FILE="$XDG_CONFIG_HOME/illogical-impulse/config.json"
 MATUGEN_DIR="$XDG_CONFIG_HOME/matugen"
 terminalscheme="$SCRIPT_DIR/terminal/scheme-base.json"
 
+# Prevent concurrent execution collisions
+LOCKFILE="${XDG_RUNTIME_DIR:-/tmp}/switchwall.lock"
+exec 200>"$LOCKFILE"
+if ! flock -n 200; then
+    echo "[switchwall.sh] Another instance is already running. Exiting." >&2
+    exit 0
+fi
+
 handle_kde_material_you_colors() {
     # Check if Qt app theming is enabled in config
     if [ -f "$SHELL_CONFIG_FILE" ]; then
@@ -34,15 +42,79 @@ handle_kde_material_you_colors() {
     "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
 }
 
+sync_ini_setting() {
+    local file="$1"
+    local section="$2"
+    local key="$3"
+    local value="$4"
+
+    mkdir -p "$(dirname "$file")"
+    if [ ! -f "$file" ]; then
+        printf "[%s]\n%s=%s\n" "$section" "$key" "$value" > "$file"
+        return
+    fi
+
+    if grep -q -E "^${key}=" "$file"; then
+        sed -i -E "s/^(${key}=).*/\1${value}/" "$file"
+    elif grep -q -E "^\[${section}\]" "$file"; then
+        sed -i -E "/^\[${section}\]/a ${key}=${value}" "$file"
+    else
+        printf "\n[%s]\n%s=%s\n" "$section" "$key" "$value" >> "$file"
+    fi
+}
+
 pre_process() {
     local mode_flag="$1"
-    # Set GNOME color-scheme if mode_flag is dark or light
+    local gtk_theme=""
+    local color_scheme=""
+    local prefer_dark="0"
+    local colorfgbg=""
+    local glamour_style=""
+
     if [[ "$mode_flag" == "dark" ]]; then
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-        gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
-    elif [[ "$mode_flag" == "light" ]]; then
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-        gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
+        color_scheme='prefer-dark'
+        gtk_theme='adw-gtk3-dark'
+        prefer_dark="1"
+        colorfgbg="15;0"
+        glamour_style="dark"
+    else
+        color_scheme='prefer-light'
+        gtk_theme='adw-gtk3'
+        prefer_dark="0"
+        colorfgbg="0;15"
+        glamour_style="light"
+    fi
+
+    # 1. Set GNOME / GTK desktop interface in gsettings and dconf
+    gsettings set org.gnome.desktop.interface color-scheme "$color_scheme" 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme" 2>/dev/null || true
+    dconf write /org/gnome/desktop/interface/color-scheme "'$color_scheme'" 2>/dev/null || true
+    dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk_theme'" 2>/dev/null || true
+
+    # Export terminal environment variables for Wayland/Hyprland session
+    hyprctl setenv COLORFGBG "$colorfgbg" 2>/dev/null || true
+    hyprctl setenv GLAMOUR_STYLE "$glamour_style" 2>/dev/null || true
+
+    # Save to generated terminal env files for shells (fish, bash, etc.)
+    mkdir -p "$STATE_DIR/user/generated/terminal"
+    echo "set -gx COLORFGBG \"$colorfgbg\"" > "$STATE_DIR/user/generated/terminal/colorfgbg.fish"
+    echo "set -gx GLAMOUR_STYLE \"$glamour_style\"" >> "$STATE_DIR/user/generated/terminal/colorfgbg.fish"
+    echo "export COLORFGBG=\"$colorfgbg\"" > "$STATE_DIR/user/generated/terminal/colorfgbg.sh"
+    echo "export GLAMOUR_STYLE=\"$glamour_style\"" >> "$STATE_DIR/user/generated/terminal/colorfgbg.sh"
+
+    # 2. Update GTK-3.0 settings.ini
+    sync_ini_setting "$XDG_CONFIG_HOME/gtk-3.0/settings.ini" "Settings" "gtk-theme-name" "$gtk_theme"
+    sync_ini_setting "$XDG_CONFIG_HOME/gtk-3.0/settings.ini" "Settings" "gtk-application-prefer-dark-theme" "$prefer_dark"
+
+    # 3. Update GTK-4.0 settings.ini
+    sync_ini_setting "$XDG_CONFIG_HOME/gtk-4.0/settings.ini" "Settings" "gtk-theme-name" "$gtk_theme"
+    sync_ini_setting "$XDG_CONFIG_HOME/gtk-4.0/settings.ini" "Settings" "gtk-application-prefer-dark-theme" "$prefer_dark"
+
+    # 4. Update xsettingsd configuration
+    mkdir -p "$XDG_CONFIG_HOME/xsettingsd"
+    if [ -f "$XDG_CONFIG_HOME/xsettingsd/xsettingsd.conf" ]; then
+        sed -i -E "s/^(Net\/ThemeName\s+).*/\1\"$gtk_theme\"/" "$XDG_CONFIG_HOME/xsettingsd/xsettingsd.conf"
+        killall -HUP xsettingsd 2>/dev/null || true
     fi
 
     if [ ! -d "$CACHE_DIR"/user/generated ]; then
@@ -143,8 +215,31 @@ EOF
 
 set_wallpaper_path() {
     local path="$1"
+    if [[ -z "$path" || -d "$path" || ! -f "$path" ]]; then
+        return 1
+    fi
     if [ -f "$SHELL_CONFIG_FILE" ]; then
         jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+    fi
+}
+
+set_dark_wallpaper_path() {
+    local path="$1"
+    if [[ -z "$path" || -d "$path" || ! -f "$path" ]]; then
+        return 1
+    fi
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        jq --arg path "$path" '.background.darkWallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+    fi
+}
+
+set_light_wallpaper_path() {
+    local path="$1"
+    if [[ -z "$path" || -d "$path" || ! -f "$path" ]]; then
+        return 1
+    fi
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        jq --arg path "$path" '.background.lightWallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
     fi
 }
 
@@ -167,19 +262,15 @@ switch() {
     type_flag="$3"
     color_flag="$4"
     color="$5"
+    noswitch_flag="$6"
 
-    # Start Gemini auto-categorization if enabled
-    aiStylingEnabled=$(jq -r '.background.widgets.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
-    if [[ "$aiStylingEnabled" == "true" ]]; then
-        categorize_wallpaper "$imgpath" &
+    # Start Gemini auto-categorization if enabled (only on wallpaper change)
+    if [[ "$noswitch_flag" != "1" ]]; then
+        aiStylingEnabled=$(jq -r '.background.widgets.clock.cookie.aiStyling' "$SHELL_CONFIG_FILE")
+        if [[ "$aiStylingEnabled" == "true" ]]; then
+            categorize_wallpaper "$imgpath" &
+        fi
     fi
-
-    read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
-    cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
-    cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
-    cursorposy=$(hyprctl cursorpos -j | jq '.y' 2>/dev/null) || cursorposy=540
-    cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
-    cursorposy_inverted=$((screensizey - cursorposy))
 
     matugen_args=(--source-color-index 0)
 
@@ -187,13 +278,15 @@ switch() {
         matugen_args+=(color hex "$color")
         generate_colors_material_args=(--color "$color")
     else
-        if [[ -z "$imgpath" ]]; then
-            echo 'Aborted'
-            exit 0
+        if [[ -z "$imgpath" || -d "$imgpath" || ! -f "$imgpath" ]]; then
+            echo "[switchwall.sh] Aborted: '$imgpath' is not a valid image file" >&2
+            exit 1
         fi
 
-        check_and_prompt_upscale "$imgpath" &
-        kill_existing_mpvpaper
+        if [[ "$noswitch_flag" != "1" ]]; then
+            check_and_prompt_upscale "$imgpath" &
+            kill_existing_mpvpaper
+        fi
 
         if is_video "$imgpath"; then
             mkdir -p "$THUMBNAIL_DIR"
@@ -207,7 +300,7 @@ switch() {
             fi
             if [ ${#missing_deps[@]} -gt 0 ]; then
                 echo "Missing deps: ${missing_deps[*]}"
-                echo "Arch: sudo pacman -S ${missing_deps[*]}"
+                echo "Arch: yay -S ${missing_deps[*]}"
                 action=$(notify-send \
                     -a "Wallpaper switcher" \
                     -c "im.error" \
@@ -215,7 +308,11 @@ switch() {
                     "Can't switch to video wallpaper" \
                     "Missing dependencies: ${missing_deps[*]}")
                 if [[ "$action" == "install_arch" ]]; then
-                    kitty -1 sudo pacman -S "${missing_deps[*]}"
+                    if command -v yay &>/dev/null; then
+                        kitty -1 yay -S "${missing_deps[*]}"
+                    else
+                        kitty -1 sudo pacman -S "${missing_deps[*]}"
+                    fi
                     if command -v mpvpaper &>/dev/null && command -v ffmpeg &>/dev/null; then
                         notify-send 'Wallpaper switcher' 'Alright, try again!' -a "Wallpaper switcher"
                     fi
@@ -254,8 +351,11 @@ switch() {
             matugen_args+=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
-            set_wallpaper_path "$imgpath"
-            remove_restore
+            local cur_saved_path="$(jq -r '.background.wallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null)"
+            if [[ "$noswitch_flag" != "1" || "$imgpath" != "$cur_saved_path" ]]; then
+                set_wallpaper_path "$imgpath"
+                remove_restore
+            fi
         fi
     fi
 
@@ -311,9 +411,7 @@ switch() {
     "$SCRIPT_DIR"/applycolor.sh
 
     # Pass screen width, height, and wallpaper path to post_process
-    max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
-    max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
-    post_process "$max_width_desired" "$max_height_desired" "$imgpath"
+    post_process "" "" "$imgpath"
 }
 
 main() {
@@ -364,13 +462,57 @@ main() {
                     shift
                 fi
                 ;;
+            --dark-image)
+                local dark_arg="$2"
+                set_dark_wallpaper_path "$dark_arg"
+                if [[ "$mode_flag" == "dark" ]] || { [[ -z "$mode_flag" ]] && gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | grep -q "prefer-dark"; }; then
+                    imgpath="$dark_arg"
+                fi
+                shift 2
+                ;;
+            --light-image)
+                local light_arg="$2"
+                set_light_wallpaper_path "$light_arg"
+                if [[ "$mode_flag" == "light" ]] || { [[ -z "$mode_flag" ]] && ! gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | grep -q "prefer-dark"; }; then
+                    imgpath="$light_arg"
+                fi
+                shift 2
+                ;;
             --image)
                 imgpath="$2"
+                if [[ "$mode_flag" == "dark" ]]; then
+                    set_dark_wallpaper_path "$imgpath"
+                elif [[ "$mode_flag" == "light" ]]; then
+                    set_light_wallpaper_path "$imgpath"
+                fi
                 shift 2
                 ;;
             --noswitch)
                 noswitch_flag="1"
-                imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                local cfg_dark="$(jq -r '.background.darkWallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null)"
+                local cfg_light="$(jq -r '.background.lightWallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null)"
+                local eff_mode="$mode_flag"
+                if [[ -z "$eff_mode" ]]; then
+                    if gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | grep -q "prefer-dark"; then
+                        eff_mode="dark"
+                    else
+                        eff_mode="light"
+                    fi
+                fi
+                if [[ "$eff_mode" == "dark" && -n "$cfg_dark" && -f "$cfg_dark" && ! -d "$cfg_dark" ]]; then
+                    imgpath="$cfg_dark"
+                elif [[ "$eff_mode" == "light" && -n "$cfg_light" && -f "$cfg_light" && ! -d "$cfg_light" ]]; then
+                    imgpath="$cfg_light"
+                else
+                    imgpath=$(jq -r '.background.wallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+                    if [[ -z "$imgpath" || -d "$imgpath" || ! -f "$imgpath" ]]; then
+                        if [[ -n "$cfg_dark" && -f "$cfg_dark" && ! -d "$cfg_dark" ]]; then
+                            imgpath="$cfg_dark"
+                        elif [[ -n "$cfg_light" && -f "$cfg_light" && ! -d "$cfg_light" ]]; then
+                            imgpath="$cfg_light"
+                        fi
+                    fi
+                fi
                 shift
                 ;;
             *)
@@ -444,31 +586,42 @@ main() {
         fi
     fi
 
-    # If mode_flag is dark or light, try to find a variant with that mode suffix
+    # If mode_flag is dark or light, select configured wallpaper or suffix variant
     if [[ "$mode_flag" == "dark" || "$mode_flag" == "light" ]]; then
-        # Get directory, filename without extension, and extension
-        local imgdir="$(dirname "$imgpath")"
-        local imgbase="$(basename "$imgpath")"
-        local imgname="${imgbase%.*}"
-        local imgext="${imgbase##*.}"
+        local configured_target=""
+        if [[ "$mode_flag" == "dark" ]]; then
+            configured_target="$(jq -r '.background.darkWallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null)"
+        else
+            configured_target="$(jq -r '.background.lightWallpaperPath // empty' "$SHELL_CONFIG_FILE" 2>/dev/null)"
+        fi
 
-        # Strip existing -dark or -light suffix
-        local stripped_name="${imgname%-dark}"
-        stripped_name="${stripped_name%-light}"
+        if [[ "$noswitch_flag" == "1" && -n "$configured_target" && -f "$configured_target" ]]; then
+            imgpath="$configured_target"
+        elif [[ "$noswitch_flag" == "1" ]]; then
+            # Get directory, filename without extension, and extension
+            local imgdir="$(dirname "$imgpath")"
+            local imgbase="$(basename "$imgpath")"
+            local imgname="${imgbase%.*}"
+            local imgext="${imgbase##*.}"
 
-        # Construct the new path with the requested mode suffix
-        local new_imgpath="${imgdir}/${stripped_name}-${mode_flag}.${imgext}"
-        local new_stripped_imgpath="${imgdir}/${stripped_name}.${imgext}"
+            # Strip existing -dark or -light suffix
+            local stripped_name="${imgname%-dark}"
+            stripped_name="${stripped_name%-light}"
 
-        # If the variant exists, use it
-        if [[ -f "$new_imgpath" ]]; then
-            imgpath="$new_imgpath"
-        elif [[ -f "$new_stripped_imgpath" ]]; then
-            imgpath="$new_stripped_imgpath"
+            # Construct the new path with the requested mode suffix
+            local new_imgpath="${imgdir}/${stripped_name}-${mode_flag}.${imgext}"
+            local new_stripped_imgpath="${imgdir}/${stripped_name}.${imgext}"
+
+            # If the variant exists, use it
+            if [[ -f "$new_imgpath" ]]; then
+                imgpath="$new_imgpath"
+            elif [[ -f "$new_stripped_imgpath" ]]; then
+                imgpath="$new_stripped_imgpath"
+            fi
         fi
     fi
 
-    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
+    switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color" "$noswitch_flag"
 }
 
 main "$@"
