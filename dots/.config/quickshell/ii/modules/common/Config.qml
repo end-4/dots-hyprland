@@ -278,6 +278,16 @@ Singleton {
                     property JsonObject notifications: JsonObject {
                         property bool showUnreadCount: false
                     }
+                    property JsonObject mic: JsonObject {
+                        property bool showIndicator: false
+                    }
+                    property JsonObject camera: JsonObject {
+                        property bool showIndicator: false
+                        property bool watchDevices: false
+                    }
+                    property JsonObject screen: JsonObject {
+                        property bool showIndicator: false
+                    }
                 }
                 property JsonObject tooltips: JsonObject {
                     property bool clickToShow: false

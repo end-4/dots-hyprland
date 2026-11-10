@@ -22,6 +22,8 @@ Singleton {
     property var monitors: []
     property var layers: ({})
 
+    signal screencast(bool active, string owner)
+
     // Convenient stuff
 
     function toplevelsForWorkspace(workspace) {
@@ -88,7 +90,14 @@ Singleton {
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
-            if (["openlayer", "closelayer", "screencast"].includes(event.name)) return;
+            if (event.name === "screencast") return;
+            if (event.name === "screencastv2") {
+                const data = String(event.data);
+                const ownerEnd = data.indexOf(",", 2);
+                root.screencast(data[0] === "1", ownerEnd < 0 ? data.slice(2) : data.slice(2, ownerEnd));
+                return;
+            }
+            if (["openlayer", "closelayer"].includes(event.name)) return;
             updateAll()
         }
     }
