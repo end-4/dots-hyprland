@@ -32,6 +32,14 @@ hl.bind("SUPER + Slash", hl.dsp.global("quickshell:cheatsheetToggle"), { descrip
 hl.bind("SUPER + K", hl.dsp.global("quickshell:oskToggle"), { description = "Shell: Toggle on-screen keyboard" })
 hl.bind("SUPER + M", hl.dsp.global("quickshell:mediaControlsToggle"), { description = "Shell: Toggle media controls" })
 hl.bind("SUPER + G", hl.dsp.global("quickshell:overlayToggle"), { description = "Shell: Toggle widget overlay" })
+hl.bind("ALT + code:23", hl.dsp.exec_cmd(qsIpcCall .. " alttabKeys cycle"),
+    { transparent = true, repeating = true, description = "Shell: Cycle windows" })
+hl.bind("ALT + SHIFT + code:23", hl.dsp.exec_cmd(qsIpcCall .. " alttabKeys cyclePrev"),
+    { transparent = true, repeating = true, description = "Shell: Cycle windows backwards" })
+hl.bind("ALT + Escape", hl.dsp.exec_cmd(qsIpcCall .. " alttabKeys cancel"),
+    { transparent = true, description = "Shell: Cancel Alt-Tab" })
+hl.bind("ALT_L", hl.dsp.exec_cmd(qsIpcCall .. " alttabKeys release"),
+    { ignore_mods = true, transparent = true, release = true, description = "Shell: Commit Alt-Tab" })
 hl.bind("CTRL + ALT + Delete", hl.dsp.global("quickshell:sessionToggle"), { description = "Shell: Toggle session menu" })
 hl.bind("SUPER + J", hl.dsp.global("quickshell:barToggle"), { description = "Shell: Toggle bar" })
 hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd(qsIsAlive .. " || pkill wlogout || wlogout -p layer-shell"))

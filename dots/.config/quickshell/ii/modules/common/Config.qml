@@ -333,6 +333,9 @@ Singleton {
                     "org.kde.dolphin", "kitty",]
                 property list<string> ignoredAppRegexes: []
             }
+            property JsonObject alttab: JsonObject {
+                property bool enable: true
+            }
 
             property JsonObject interactions: JsonObject {
                 property JsonObject scrolling: JsonObject {
