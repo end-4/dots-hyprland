@@ -83,13 +83,24 @@ Singleton {
         updateAll();
     }
 
+    Timer {
+        id: windowTitleUpdateDebounce
+        interval: 250
+        repeat: false
+        onTriggered: root.updateWindowList()
+    }
+
     Connections {
         target: Hyprland
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
+            if (["windowtitle", "windowtitlev2"].includes(event.name)) {
+                windowTitleUpdateDebounce.restart();
+                return;
+            }
             if (["openlayer", "closelayer", "screencast"].includes(event.name)) return;
-            updateAll()
+            updateAll();
         }
     }
 
