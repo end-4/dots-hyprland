@@ -142,6 +142,131 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "smart_button"
+        title: Translation.tr("Dynamic Island")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: Translation.tr("Enable")
+            checked: Config.options.bar.island.enable
+            onCheckedChanged: {
+                Config.options.bar.island.enable = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("A pill next to the workspaces that shows notifications, music and ongoing activity, and drops down to tell you something. Replaces the notification popups")
+            }
+        }
+
+        ColumnLayout {
+            visible: Config.options.bar.island.enable
+            Layout.fillWidth: true
+            spacing: 4
+
+            NoticeBox {
+                visible: Config.options.bar.vertical || Config.options.bar.bottom
+                Layout.fillWidth: true
+                materialIcon: "info"
+                text: Translation.tr("The island is only shown when the bar is at the top")
+            }
+
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "music_note"
+                    text: Translation.tr("Music island")
+                    checked: Config.options.bar.island.music
+                    onCheckedChanged: {
+                        Config.options.bar.island.music = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("A second pill for music that splits off while something plays and opens a player for every source. Replaces the resources and media widgets")
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "equalizer"
+                    text: Translation.tr("Equalizer")
+                    enabled: Config.options.bar.island.music
+                    checked: Config.options.bar.island.equalizer
+                    onCheckedChanged: {
+                        Config.options.bar.island.equalizer = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Bars that follow the music (needs cava)")
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "lyrics"
+                    text: Translation.tr("Lyrics")
+                    enabled: Config.options.bar.island.music
+                    checked: Config.options.bar.island.lyrics
+                    onCheckedChanged: {
+                        Config.options.bar.island.lyrics = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Synced lyrics in the music pill, fetched from lrclib.net")
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "content_paste"
+                    text: Translation.tr("Clipboard")
+                    checked: Config.options.bar.island.clipboard
+                    onCheckedChanged: {
+                        Config.options.bar.island.clipboard = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Confirms copies without showing the text, and shows copied images")
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "smart_toy"
+                    text: Translation.tr("Coding agents")
+                    checked: Config.options.bar.island.codingAgents
+                    onCheckedChanged: {
+                        Config.options.bar.island.codingAgents = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Shows Claude Code and OpenCode working or waiting for you (needs their hooks)")
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "monitoring"
+                    text: Translation.tr("System monitor")
+                    checked: Config.options.bar.island.systemMonitor
+                    onCheckedChanged: {
+                        Config.options.bar.island.systemMonitor = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("A bar button that opens a panel with CPU, GPU and memory usage")
+                    }
+                }
+            }
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "system_update_alt"
+                    text: Translation.tr("Package updates")
+                    checked: Config.options.bar.island.packageUpdates
+                    onCheckedChanged: {
+                        Config.options.bar.island.packageUpdates = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Shows pending pacman and AUR updates when idle (checks a copy of the package database hourly)")
+                    }
+                }
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "shelf_auto_hide"
         title: Translation.tr("Tray")
 

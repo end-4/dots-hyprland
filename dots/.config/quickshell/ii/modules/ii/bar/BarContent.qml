@@ -5,6 +5,8 @@ import Quickshell
 import Quickshell.Services.UPower
 import qs
 import qs.services
+import qs.modules.ii.island
+import qs.modules.ii.island.monitor
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
@@ -89,6 +91,14 @@ Item { // Bar content region
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             }
 
+            Loader { // System monitor panel button (island option)
+                active: IslandConfig.systemMonitor
+                visible: active
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 4
+                sourceComponent: MonitorButton {}
+            }
+
             ActiveWindow {
                 Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
                 Layout.rightMargin: Appearance.rounding.screenRounding
@@ -105,12 +115,15 @@ Item { // Bar content region
             top: parent.top
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
+            // With the island, keep the workspaces exactly centred; the islands grow to the left.
+            horizontalCenterOffset: IslandConfig.enabled ? middleSection.width / 2 - (middleCenterGroup.x + middleCenterGroup.width / 2) : 0
         }
         spacing: 4
 
         BarGroup {
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
+            visible: !IslandConfig.music // the music island replaces resources + media
             implicitWidth: root.centerSideModuleWidth
 
             Resources {
@@ -121,6 +134,25 @@ Item { // Bar content region
             Media {
                 visible: root.useShortenedForm < 2
                 Layout.fillWidth: true
+            }
+        }
+
+        Loader { // Music island: splits off the main island while music plays
+            anchors.verticalCenter: parent.verticalCenter
+            active: IslandConfig.music
+            visible: active
+            sourceComponent: IslandBarSlot {
+                screenName: root.screen?.name ?? ""
+                role: "dj"
+            }
+        }
+
+        Loader { // Main island, drawn by the island overlay over this spacer
+            anchors.verticalCenter: parent.verticalCenter
+            active: IslandConfig.enabled
+            visible: active
+            sourceComponent: IslandBarSlot {
+                screenName: root.screen?.name ?? ""
             }
         }
 

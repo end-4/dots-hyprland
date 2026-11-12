@@ -22,6 +22,8 @@ import qs.modules.ii.sidebarRight
 import qs.modules.ii.overlay
 import qs.modules.ii.verticalBar
 import qs.modules.ii.wallpaperSelector
+import qs.modules.ii.island
+import qs.modules.ii.island.monitor
 
 Scope {
     PanelLoader { extraCondition: !Config.options.bar.vertical; component: Bar {} }
@@ -30,7 +32,7 @@ Scope {
     PanelLoader { extraCondition: Config.options.dock.enable; component: Dock {} }
     PanelLoader { component: Lock {} }
     PanelLoader { component: MediaControls {} }
-    PanelLoader { component: NotificationPopup {} }
+    PanelLoader { extraCondition: !IslandConfig.enabled; component: NotificationPopup {} } // the island shows notifications
     PanelLoader { component: OnScreenDisplay {} }
     PanelLoader { component: OnScreenKeyboard {} }
     PanelLoader { component: Overlay {} }
@@ -44,4 +46,6 @@ Scope {
     PanelLoader { component: SidebarRight {} }
     PanelLoader { extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
     PanelLoader { component: WallpaperSelector {} }
+    PanelLoader { extraCondition: IslandConfig.enabled; component: Island {} }
+    PanelLoader { extraCondition: IslandConfig.systemMonitor; component: SystemMonitor {} }
 }
