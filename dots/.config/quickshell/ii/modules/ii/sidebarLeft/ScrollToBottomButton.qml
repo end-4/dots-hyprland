@@ -33,6 +33,10 @@ RippleButton {
     buttonRadius: Appearance.rounding.verysmall
 
     downAction: () => {
+        // Re-engage streaming auto-follow (if the target supports it), then scroll
+        // to the end — so subsequent generated text keeps pinning to the bottom
+        // instead of the view "pulling up" away from it.
+        if (target.autoFollow !== undefined) target.autoFollow = true
         target.positionViewAtEnd()
     }
 
