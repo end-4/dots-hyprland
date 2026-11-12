@@ -292,6 +292,11 @@ Singleton {
                 property int suspend: 3
             }
 
+            property JsonObject systemControls: JsonObject {
+                property bool showUpdates: false
+                property int fetchInterval: 30
+            }
+
             property JsonObject calendar: JsonObject {
                 property string locale: "en-GB"
             }
