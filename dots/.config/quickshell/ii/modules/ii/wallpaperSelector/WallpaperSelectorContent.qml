@@ -18,7 +18,8 @@ MouseArea {
 
     function updateThumbnails() {
         const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2;
-        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions(grid.cellWidth - totalImageMargin, grid.cellHeight - totalImageMargin);
+        const dpr = (QsWindow.window as QsWindow)?.devicePixelRatio ?? 1;
+        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions((grid.cellWidth - totalImageMargin) * dpr, (grid.cellHeight - totalImageMargin) * dpr);
         Wallpapers.generateThumbnail(thumbnailSizeName);
     }
 
