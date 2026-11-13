@@ -19,6 +19,9 @@ Singleton {
 
     property bool loaded: false
     property var keyringData: ({})
+    // Writes that arrived before the initial fetch finished. Replayed by
+    // flushPendingWrites() once the real contents are in memory.
+    property var pendingWrites: []
     
     property var properties: {
         "application": "illogical-impulse",
@@ -32,6 +35,22 @@ Singleton {
     property string keyringLabel: Translation.tr("%1 Safe Storage").arg("illogical-impulse")
 
     function setNestedField(path, value) {
+        // saveKeyringData() serialises the entire keyring blob, and
+        // `secret-tool store` replaces the stored value outright - there is no
+        // merge on the storage side. Until the initial fetch completes,
+        // keyringData is still the empty default, so saving now would persist a
+        // blob containing only this one field and destroy every other secret
+        // already stored. Queue the write and replay it once loaded instead.
+        if (!root.loaded) {
+            root.pendingWrites.push({ path: path, value: value });
+            root.fetchKeyringData();
+            return;
+        }
+        root.applyNestedField(path, value);
+        root.saveKeyringData();
+    }
+
+    function applyNestedField(path, value) {
         if (!root.keyringData) root.keyringData = {};
         let keys = path;
         let obj = root.keyringData;
@@ -59,11 +78,20 @@ Singleton {
 
         // Finally, reassign root.keyringData to trigger top-level change
         root.keyringData = Object.assign({}, root.keyringData);
+    }
 
-        saveKeyringData();
+    function flushPendingWrites() {
+        if (root.pendingWrites.length === 0) return;
+        const writes = root.pendingWrites;
+        root.pendingWrites = [];
+        for (let i = 0; i < writes.length; ++i) {
+            root.applyNestedField(writes[i].path, writes[i].value);
+        }
+        root.saveKeyringData();
     }
 
     function fetchKeyringData() {
+        if (getData.running) return;
         // console.log("[KeyringStorage] Fetching keyring data...");
         // console.log("[KeyringStorage] getData command:'" + getData.command.join("' '") + "'");
         getData.running = true;
@@ -102,6 +130,7 @@ Singleton {
                 if (data.length === 0 || !data.startsWith("{")) return;
                 try {
                     root.keyringData = JSON.parse(data);
+                    root.dataChanged();
                     // console.log("[KeyringStorage] Keyring data fetched:", JSON.stringify(root.keyringData));
                 } catch (e) {
                     console.error("[KeyringStorage] Failed to get keyring data, reinitializing.");
@@ -115,10 +144,11 @@ Singleton {
             if (exitCode === 1) {
                 console.error("[KeyringStorage] Entry not found, initializing.");
                 root.keyringData = {};
-                saveKeyringData()
+                if (root.pendingWrites.length === 0) saveKeyringData()
             }
             if (exitCode !== 2) {
                 root.loaded = true;
+                root.flushPendingWrites();
             }
         }
     }
