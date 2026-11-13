@@ -332,6 +332,7 @@ Singleton {
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty",]
                 property list<string> ignoredAppRegexes: []
+                property bool hideSpecialWorkspaceApps: false // Hide windows that live on a special workspace (scratchpad)
             }
 
             property JsonObject interactions: JsonObject {

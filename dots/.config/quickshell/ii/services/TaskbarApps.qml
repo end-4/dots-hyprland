@@ -4,6 +4,7 @@ import qs.modules.common
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -40,9 +41,15 @@ Singleton {
         // Ignored apps
         const ignoredRegexStrings = Config.options?.dock.ignoredAppRegexes ?? [];
         const ignoredRegexes = ignoredRegexStrings.map(pattern => new RegExp(pattern, "i"));
+        // Special workspaces (scratchpads)
+        const hideSpecial = Config.options?.dock.hideSpecialWorkspaceApps ?? false;
+        const windowByAddress = hideSpecial ? HyprlandData.windowByAddress : {};
+        // Hyprland >= 0.57 marks them with type "special" and no id; older versions use negative ids
+        const onSpecialWorkspace = ws => ws?.type === "special" || (ws?.name ?? "").startsWith("special:") || (ws?.id ?? 0) < 0;
         // Open windows
         for (const toplevel of ToplevelManager.toplevels.values) {
             if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;
+            if (hideSpecial && onSpecialWorkspace(windowByAddress[`0x${toplevel.HyprlandToplevel?.address}`]?.workspace)) continue;
             if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
                 pinned: false,
                 toplevels: []
