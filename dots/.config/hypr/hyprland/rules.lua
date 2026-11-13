@@ -6,6 +6,9 @@ hl.window_rule({match = {class = "^()$", title = "^()$" },                   no_
 -- Disable blur for every window
 hl.window_rule({match = {class = ".*" }, no_blur = true })
 
+-- Hide the Xwayland container used by xembedsniproxy for legacy tray icons.
+hl.window_rule({match = {class = "^xembedsniproxy$" }, float = true, opacity = 0.0, no_blur = true })
+
 -- Floating
 hl.window_rule({match = {title = "^(Open File)(.*)$" },                      center = true})
 hl.window_rule({match = {title = "^(Open File)(.*)$" },                      float = true})
