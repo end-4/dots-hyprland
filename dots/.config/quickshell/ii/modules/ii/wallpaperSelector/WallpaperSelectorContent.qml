@@ -16,16 +16,42 @@ MouseArea {
     property real previewCellAspectRatio: 4 / 3
     property bool useDarkMode: Appearance.m3colors.darkmode
 
+    readonly property var qsWindow: QsWindow.window
+    readonly property real devicePixelRatio: root.qsWindow ? root.qsWindow.devicePixelRatio : 1
+    readonly property real totalImageMargin: (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2
+    // ThumbnailImage sizes itself from sourceSize, which is the item size
+    // multiplied by the window's devicePixelRatio. Use the same formula here,
+    // and hand the result down to the delegates, so the bucket we generate is
+    // always the one they look up.
+    readonly property string thumbnailSizeName: Images.thumbnailSizeNameForDimensions(
+        (grid.cellWidth - root.totalImageMargin) * root.devicePixelRatio,
+        (grid.cellHeight - root.totalImageMargin) * root.devicePixelRatio
+    )
+
     function updateThumbnails() {
-        const totalImageMargin = (Appearance.sizes.wallpaperSelectorItemMargins + Appearance.sizes.wallpaperSelectorItemPadding) * 2;
-        const thumbnailSizeName = Images.thumbnailSizeNameForDimensions(grid.cellWidth - totalImageMargin, grid.cellHeight - totalImageMargin);
-        Wallpapers.generateThumbnail(thumbnailSizeName);
+        if (!root.qsWindow || grid.cellWidth <= 0) return;
+        Wallpapers.generateThumbnail(root.thumbnailSizeName);
+    }
+
+    // devicePixelRatio is not final while the window is being set up, and the
+    // grid is laid out asynchronously. Debounce so thumbnails are generated
+    // once the size name has stabilised.
+    function scheduleThumbnailUpdate() {
+        thumbnailUpdateTimer.restart();
+    }
+    onQsWindowChanged: root.scheduleThumbnailUpdate()
+    onThumbnailSizeNameChanged: root.scheduleThumbnailUpdate()
+
+    Timer {
+        id: thumbnailUpdateTimer
+        interval: 250
+        onTriggered: root.updateThumbnails()
     }
 
     Connections {
         target: Wallpapers
         function onDirectoryChanged() {
-            root.updateThumbnails();
+            root.scheduleThumbnailUpdate();
         }
     }
 
@@ -300,7 +326,7 @@ MouseArea {
                         ScrollBar.vertical: StyledScrollBar {}
 
                         Component.onCompleted: {
-                            root.updateThumbnails();
+                            root.scheduleThumbnailUpdate();
                         }
 
                         function moveSelection(delta) {
@@ -318,6 +344,7 @@ MouseArea {
                         delegate: WallpaperDirectoryItem {
                             required property var modelData
                             required property int index
+                            thumbnailSizeName: root.thumbnailSizeName
                             fileModelData: modelData
                             width: grid.cellWidth
                             height: grid.cellHeight
