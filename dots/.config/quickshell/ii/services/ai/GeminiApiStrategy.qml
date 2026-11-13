@@ -21,19 +21,26 @@ ApiStrategy {
             const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
             const usingSearch = tools[0]?.google_search !== undefined
             if (!usingSearch && message.functionCall != undefined && message.functionName.length > 0) {
+                const part = {
+                    functionCall: {
+                        "name": message.functionName,
+                        "args": message.functionCall.args
+                    }
+                };
+
+                if (message.thoughtSignature?.length > 0) {
+                    part.thoughtSignature = message.thoughtSignature;
+                }
+
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{
-                        functionCall: {
-                            "name": message.functionName,
-                        }
-                    }]
+                    "parts": [part]
                 }
             }
             if (!usingSearch && message.functionResponse != undefined && message.functionName.length > 0) {
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{ 
+                    "parts": [{
                         functionResponse: {
                             "name": message.functionName,
                             "response": { "content": message.functionResponse }
@@ -130,8 +137,10 @@ ApiStrategy {
             // Function call handling
             if (dataJson.candidates[0]?.content?.parts[0]?.functionCall) {
                 const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
+                const thoughtSignature = dataJson.candidates[0]?.content?.parts[0]?.thoughtSignature;
                 message.functionName = functionCall.name;
                 message.functionCall = functionCall.name;
+                message.thoughtSignature = thoughtSignature || "";
                 const newContent = `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`
                 message.rawContent += newContent;
                 message.content += newContent;

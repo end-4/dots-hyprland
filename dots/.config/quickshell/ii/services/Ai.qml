@@ -281,6 +281,19 @@ Singleton {
             "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
         }),
+        "gemini-3.6-flash": aiModelComponent.createObject(this, {
+            "name": "Gemini 3.6 Flash",
+            "icon": "google-gemini-symbolic",
+            "description": Translation.tr("Online | Google's Gemini 3.6 Flash"),
+            "homepage": "https://aistudio.google.com",
+            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:streamGenerateContent",
+            "model": "gemini-3.6-flash",
+            "requires_key": true,
+            "key_id": "gemini",
+            "key_get_link": "https://aistudio.google.com/app/apikey",
+            "key_get_description": Translation.tr("Requires a Gemini API key"),
+            "api_format": "gemini",
+        }),
         "mistral-medium-3": aiModelComponent.createObject(this, {
             "name": "Mistral Medium 3",
             "icon": "mistral-symbolic",
@@ -848,6 +861,7 @@ Singleton {
                 "annotationSources": message.annotationSources,
                 "functionName": message.functionName,
                 "functionCall": message.functionCall,
+                "thoughtSignature": message.thoughtSignature,
                 "functionResponse": message.functionResponse,
                 "visibleToUser": message.visibleToUser,
             })
@@ -904,6 +918,7 @@ Singleton {
                     "annotationSources": message.annotationSources,
                     "functionName": message.functionName,
                     "functionCall": message.functionCall,
+                    "thoughtSignature": message.thoughtSignature,
                     "functionResponse": message.functionResponse,
                     "visibleToUser": message.visibleToUser,
                 });
