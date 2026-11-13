@@ -8,11 +8,11 @@ import QtQuick.Layouts
 DialogListItem {
     id: root
     required property var device
-    property bool expanded: false
+    property bool expanded: BluetoothStatus.expandedAddress !== "" && BluetoothStatus.expandedAddress === (root.device?.address ?? "")
     pointingHandCursor: !expanded
 
-    onClicked: expanded = !expanded
-    altAction: () => expanded = !expanded
+    onClicked: BluetoothStatus.expandedAddress = expanded ? "" : (root.device?.address ?? "")
+    altAction: () => BluetoothStatus.expandedAddress = expanded ? "" : (root.device?.address ?? "")
     
     component ActionButton: DialogButton {
         colBackground: Appearance.colors.colPrimary
