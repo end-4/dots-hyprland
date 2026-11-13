@@ -33,7 +33,7 @@ AbstractBackgroundWidget {
                 weight: Font.Medium
             }
             color: Appearance.colors.colPrimary
-            text: Weather.data?.temp.substring(0,Weather.data?.temp.length - 1) ?? "--°"
+            text: (typeof Weather.data?.temp === "string") ? Weather.data.temp.slice(0, -1) : "--°"
             anchors {
                 right: parent.right
                 top: parent.top
