@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake toolchain-funcs
 
-COMMIT="4f508be500dea6e5732cc3d50382a0048b17e7b1"
+COMMIT="9b0f339b19057f4731bf3b48293307d7ef241671"
 
 DESCRIPTION="Toolkit for building desktop widgets using QtQuick"
 HOMEPAGE="https://quickshell.org/"
