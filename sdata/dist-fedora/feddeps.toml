@@ -2,11 +2,11 @@
 # "solopasha/hyprland" is not up to date to the current Hyprland version, replaced with the fork "sdegler/hyprland"
 [copr]
 repos = [
-  "ririko66z/dots-hyprland",
   "sdegler/hyprland",
   "deltacopy/darkly",
   "alternateved/eza",
-  "atim/starship"
+  "atim/starship",
+  "ririko66z/dots-hyprland"
 ]
 
 # Fedora dependencies list

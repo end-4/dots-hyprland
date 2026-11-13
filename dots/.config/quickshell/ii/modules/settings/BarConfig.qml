@@ -139,6 +139,15 @@ ContentPage {
                 }
             }
         }
+
+        ConfigSwitch {
+            buttonIcon: "media_output"
+            text: Translation.tr("Auto-dismiss popups on hide")
+            checked: Config.options.bar.autoHide.dismissPopups
+            onCheckedChanged: {
+                Config.options.bar.autoHide.dismissPopups = checked;
+            }
+        }
     }
 
     ContentSection {
