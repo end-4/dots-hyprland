@@ -54,7 +54,14 @@ Scope {
                     }
                 }
                 property bool superShow: false
-                property bool mustShow: hoverRegion.containsMouse || superShow
+                readonly property var currentMonitor: HyprlandData.monitors.find(monitor => monitor.name === barRoot.screen.name)
+                readonly property int currentWorkspaceId: currentMonitor?.activeWorkspace?.id ?? -1
+                readonly property bool workspaceEmpty: currentWorkspaceId >= 0
+                    && !HyprlandData.windowList.some(window => window.workspace?.id === currentWorkspaceId)
+                readonly property bool forceVisibleOnEmptyWorkspace: Config.options.bar.autoHide.enable
+                    && Config.options.bar.autoHide.showOnEmptyWorkspace
+                    && workspaceEmpty
+                property bool mustShow: hoverRegion.containsMouse || superShow || forceVisibleOnEmptyWorkspace
                 exclusionMode: ExclusionMode.Ignore
                 exclusiveZone: (Config?.options.bar.autoHide.enable && (!mustShow || !Config?.options.bar.autoHide.pushWindows)) ? 0 :
                     Appearance.sizes.baseVerticalBarWidth + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
@@ -130,7 +137,7 @@ Scope {
                             PropertyChanges {
                                 target: barContent
                                 anchors.topMargin: 0
-                                anchors.rightMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.barHeight : 0
+                                anchors.rightMargin: (Config?.options.bar.autoHide.enable && !mustShow) ? -Appearance.sizes.verticalBarWidth : 0
                             }
                         }
                     }

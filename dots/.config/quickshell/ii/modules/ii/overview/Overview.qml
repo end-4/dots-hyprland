@@ -74,6 +74,7 @@ Scope {
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.top
+                topMargin: BarState.offset(panelWindow.screen.name)
             }
             spacing: -8
 
