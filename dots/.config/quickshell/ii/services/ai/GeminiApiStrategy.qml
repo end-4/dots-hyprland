@@ -21,13 +21,22 @@ ApiStrategy {
             const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
             const usingSearch = tools[0]?.google_search !== undefined
             if (!usingSearch && message.functionCall != undefined && message.functionName.length > 0) {
+                // Gemini 3 rejects the request unless the thought signature is returned on the
+                // very same part it came back on. See https://ai.google.dev/gemini-api/docs/thought-signatures
+                let functionCallPart = {
+                    functionCall: {
+                        "name": message.functionName,
+                    }
+                };
+                if (message.functionCall?.args) {
+                    functionCallPart.functionCall.args = message.functionCall.args;
+                }
+                if (message.thoughtSignature?.length > 0) {
+                    functionCallPart.thoughtSignature = message.thoughtSignature;
+                }
                 return {
                     "role": geminiApiRoleName,
-                    "parts": [{
-                        functionCall: {
-                            "name": message.functionName,
-                        }
-                    }]
+                    "parts": [functionCallPart]
                 }
             }
             if (!usingSearch && message.functionResponse != undefined && message.functionName.length > 0) {
@@ -128,8 +137,13 @@ ApiStrategy {
             }
             
             // Function call handling
-            if (dataJson.candidates[0]?.content?.parts[0]?.functionCall) {
-                const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
+            const parts = dataJson.candidates[0]?.content?.parts ?? [];
+            const functionCallPart = parts.find(part => part.functionCall);
+            if (functionCallPart) {
+                const functionCall = functionCallPart.functionCall;
+                if (functionCallPart.thoughtSignature) {
+                    message.thoughtSignature = functionCallPart.thoughtSignature;
+                }
                 message.functionName = functionCall.name;
                 message.functionCall = functionCall.name;
                 const newContent = `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`
