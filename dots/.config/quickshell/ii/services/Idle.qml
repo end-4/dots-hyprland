@@ -10,17 +10,26 @@ import Quickshell.Wayland
 Singleton {
     id: root
 
-    property alias inhibit: idleInhibitor.enabled
-    inhibit: false
+    property bool inhibit: false
+
+    property bool inhibitorStartupDelayElapsed: false
+
+    function restoreState() {
+        if (!Persistent.ready)
+            return;
+        if (!Persistent.isNewHyprlandInstance) {
+            root.inhibit = Persistent.states.idle.inhibit;
+        } else {
+            Persistent.states.idle.inhibit = root.inhibit;
+        }
+    }
+
+    Component.onCompleted: root.restoreState()
 
     Connections {
         target: Persistent
         function onReadyChanged() {
-            if (!Persistent.isNewHyprlandInstance) {
-                root.inhibit = Persistent.states.idle.inhibit;
-            } else {
-                Persistent.states.idle.inhibit = root.inhibit;
-            }
+            root.restoreState();
         }
     }
 
@@ -33,13 +42,19 @@ Singleton {
         Persistent.states.idle.inhibit = root.inhibit;
     }
 
+    Timer {
+        id: inhibitorStartupTimer
+        interval: 1000 // Give the helper surface time to map before enabling idle inhibition.
+        repeat: false
+        onTriggered: root.inhibitorStartupDelayElapsed = true
+    }
+
     IdleInhibitor {
         id: idleInhibitor
+        enabled: root.inhibit && root.inhibitorStartupDelayElapsed
         window: PanelWindow {
-            // Inhibitor requires a "visible" surface
-            // Actually not lol
-            implicitWidth: 0
-            implicitHeight: 0
+            implicitWidth: 1
+            implicitHeight: 1
             color: "transparent"
             // Just in case...
             anchors {
@@ -50,6 +65,7 @@ Singleton {
             mask: Region {
                 item: null
             }
+            Component.onCompleted: inhibitorStartupTimer.restart()
         }
     }
 }
