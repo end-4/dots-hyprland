@@ -115,19 +115,25 @@ Column {
         return bind.description.indexOf(":") === -1;
     }
 
+    function isFunctionKey(key) {
+	// F1 - F12 function keys
+        return /^F\d+$/i.test(key);
+    }
+
     function containsNonFirstRepetitive(bind) {
         const key = bind.key;
         if (key.includes("mouse") || key.includes("page")) return false;
         // Contains non-1 number
-        if (/\d/.test(key) && !key.includes("1")) return true;
+        if (!isFunctionKey(key) && /\d/.test(key) && !key.includes("1")) return true;
         // Contains non-left direction
         if (/^(right|up|down)\b/i.test(key)) return true;
         return false;
     }
 
     function containsFirstRepetitive(bind) {
-        const key = bind.key;
-        return key.includes("1") || /left/i.test(key);
+	const key = bind.key;
+	// Function keys contain F1, F10, F11, F12
+        return (!isFunctionKey(key) && key.includes("1") || /left/i.test(key));
     }
 
     function transformKey(key) {
