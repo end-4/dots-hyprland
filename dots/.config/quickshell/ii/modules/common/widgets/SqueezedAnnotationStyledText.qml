@@ -17,6 +17,10 @@ Item {
 
     Component.onCompleted: updateText()
     onTextChanged: updateText()
+    // The box is sized by its parent, so a resize after creation must re-fit;
+    // otherwise the font stays fitted to the old dimensions.
+    onWidthChanged: updateText()
+    onHeightChanged: updateText()
 
     property bool searching: false
     property real searchPixelSize: Appearance.font.pixelSize.small
@@ -24,6 +28,10 @@ Item {
     font.pixelSize: searching ? searchPixelSize : (renderPixelSize * scaleFactor)
 
     function updateText() {
+        // Nothing to fit into yet. Happens before the first layout pass, and
+        // the divisions below would otherwise produce NaN/Infinity targets.
+        if (root.width <= 0 || root.height <= 0 || root.text.length === 0) return;
+
         // Do we rotate?
 
         root.rotate90 = false;
@@ -43,7 +51,9 @@ Item {
             var mid = (lower + upper) / 2;
             // print("bin searching", mid, "target", targetWidth, targetHeight, "actual", textWidget.contentWidth, textWidget.contentHeight);
             root.searchPixelSize = mid
-            if (textWidget.contentHeight > targetHeight) {
+            // Width matters too: wrapMode cannot break a single word that is
+            // wider than the box, so a height-only test lets it overflow.
+            if (textWidget.contentHeight > targetHeight || textWidget.contentWidth > targetWidth) {
                 upper = mid
             } else {
                 lower = mid
