@@ -13,6 +13,42 @@ Item {
     implicitHeight: contentColumn.implicitHeight
     implicitWidth: contentColumn.implicitWidth
 
+    // Minutes or seconds of the timer, editable for the plain timer
+    component TimeField: StyledTextInput {
+        id: field
+        property int value
+        property int step // Seconds per scroll step
+        readOnly: TimerService.pomodoroEnabled || TimerService.pomodoroRunning
+        validator: RegularExpressionValidator { regularExpression: /[0-9]{0,3}/ }
+        text: value.toString().padStart(2, '0')
+        font.pixelSize: 40
+        color: Appearance.m3colors.m3onSurface
+
+        onActiveFocusChanged: if (activeFocus) selectAll()
+        onEditingFinished: {
+            const seconds = Number(minutesField.text) * 60 + Number(secondsField.text);
+            if (seconds > 0) TimerService.setTimerDuration(seconds);
+            text = Qt.binding(() => value.toString().padStart(2, '0'));
+            focus = false;
+        }
+
+        MouseArea { // Click always selects the whole field
+            anchors.fill: parent
+            enabled: !field.readOnly
+            cursorShape: Qt.IBeamCursor
+            onPressed: {
+                field.forceActiveFocus();
+                field.selectAll();
+            }
+            onWheel: event => TimerService.setTimerDuration(TimerService.timerDuration + (event.angleDelta.y > 0 ? field.step : -field.step))
+        }
+    }
+
+    MouseArea { // Clicking outside the time fields finishes editing
+        anchors.fill: parent
+        onPressed: root.forceActiveFocus()
+    }
+
     ColumnLayout {
         id: contentColumn
         anchors.fill: parent
@@ -32,25 +68,38 @@ Item {
                 anchors.centerIn: parent
                 spacing: 0
 
-                StyledText {
+                RowLayout {
                     Layout.alignment: Qt.AlignHCenter
-                    text: {
-                        let minutes = Math.floor(TimerService.pomodoroSecondsLeft / 60).toString().padStart(2, '0');
-                        let seconds = Math.floor(TimerService.pomodoroSecondsLeft % 60).toString().padStart(2, '0');
-                        return `${minutes}:${seconds}`;
+                    spacing: 0
+
+                    TimeField {
+                        id: minutesField
+                        value: Math.floor(TimerService.pomodoroSecondsLeft / 60)
+                        step: 60
+                        KeyNavigation.tab: secondsField
                     }
-                    font.pixelSize: 40
-                    color: Appearance.m3colors.m3onSurface
+                    StyledText {
+                        text: ":"
+                        font.pixelSize: 40
+                        color: Appearance.m3colors.m3onSurface
+                    }
+                    TimeField {
+                        id: secondsField
+                        value: Math.floor(TimerService.pomodoroSecondsLeft % 60)
+                        step: 1
+                    }
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
-                    text: TimerService.pomodoroLongBreak ? Translation.tr("Long break") : TimerService.pomodoroBreak ? Translation.tr("Break") : Translation.tr("Focus")
+                    horizontalAlignment: Text.AlignHCenter
+                    text: !TimerService.pomodoroEnabled ? (TimerService.pomodoroRunning ? Translation.tr("Timer") : Translation.tr("Scroll to edit")) : TimerService.pomodoroLongBreak ? Translation.tr("Long break") : TimerService.pomodoroBreak ? Translation.tr("Break") : Translation.tr("Focus")
                     font.pixelSize: Appearance.font.pixelSize.normal
                     color: Appearance.colors.colSubtext
                 }
             }
 
             Rectangle {
+                visible: TimerService.pomodoroEnabled
                 radius: Appearance.rounding.full
                 color: Appearance.colors.colLayer2
                 
@@ -79,7 +128,7 @@ Item {
                 contentItem: StyledText {
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
-                    text: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
+                    text: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.pomodoroLapDuration) ? Translation.tr("Start") : Translation.tr("Resume")
                     color: TimerService.pomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
                 }
                 implicitHeight: 35
@@ -107,6 +156,26 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     text: Translation.tr("Reset")
                     color: Appearance.colors.colOnErrorContainer
+                }
+            }
+
+            RippleButton {
+                implicitHeight: 35
+                implicitWidth: 35
+                buttonRadius: Appearance.rounding.full
+                toggled: TimerService.pomodoroEnabled
+                onClicked: TimerService.setPomodoroEnabled(!TimerService.pomodoroEnabled)
+
+                contentItem: MaterialSymbol {
+                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "search_activity"
+                    iconSize: Appearance.font.pixelSize.larger
+                    color: TimerService.pomodoroEnabled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer1
+                }
+
+                StyledToolTip {
+                    text: Translation.tr("Pomodoro")
                 }
             }
         }

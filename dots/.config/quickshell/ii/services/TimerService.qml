@@ -18,11 +18,13 @@ Singleton {
     property int breakTime: Config.options.time.pomodoro.breakTime
     property int longBreakTime: Config.options.time.pomodoro.longBreak
     property int cyclesBeforeLongBreak: Config.options.time.pomodoro.cyclesBeforeLongBreak
+    property bool pomodoroEnabled: Persistent.states.timer.pomodoro.enabled
+    property int timerDuration: Persistent.states.timer.pomodoro.timerDuration
 
     property bool pomodoroRunning: Persistent.states.timer.pomodoro.running
     property bool pomodoroBreak: Persistent.states.timer.pomodoro.isBreak
     property bool pomodoroLongBreak: Persistent.states.timer.pomodoro.isBreak && (pomodoroCycle + 1 == cyclesBeforeLongBreak);
-    property int pomodoroLapDuration: pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime // This is a binding that's to be kept
+    property int pomodoroLapDuration: !pomodoroEnabled ? timerDuration : pomodoroLongBreak ? longBreakTime : pomodoroBreak ? breakTime : focusTime // This is a binding that's to be kept
     property int pomodoroSecondsLeft: pomodoroLapDuration // Reasonable init value, to be changed
     property int pomodoroCycle: Persistent.states.timer.pomodoro.cycle
 
@@ -47,8 +49,16 @@ Singleton {
 
     // Pomodoro
     function refreshPomodoro() {
-        // Work <-> break ?
-        if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
+        if (!pomodoroEnabled && getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
+            // Plain timer: stop when done
+            Persistent.states.timer.pomodoro.running = false;
+            Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
+            Quickshell.execDetached(["notify-send", Translation.tr("Timer"), Translation.tr("⏰ Time's up"), "-a", "Shell"]);
+            if (Config.options.sounds.pomodoro) {
+                Audio.playSystemSound("alarm-clock-elapsed")
+            }
+        } else if (getCurrentTimeInSeconds() >= Persistent.states.timer.pomodoro.start + pomodoroLapDuration) {
+            // Work <-> break
             // Reset counts
             Persistent.states.timer.pomodoro.isBreak = !Persistent.states.timer.pomodoro.isBreak;
             Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
@@ -98,6 +108,16 @@ Singleton {
         Persistent.states.timer.pomodoro.start = getCurrentTimeInSeconds();
         Persistent.states.timer.pomodoro.cycle = 0;
         refreshPomodoro();
+    }
+
+    function setPomodoroEnabled(enabled) {
+        Persistent.states.timer.pomodoro.enabled = enabled;
+        resetPomodoro();
+    }
+
+    function setTimerDuration(seconds) {
+        Persistent.states.timer.pomodoro.timerDuration = Math.max(1, seconds);
+        resetPomodoro();
     }
 
     // Stopwatch
