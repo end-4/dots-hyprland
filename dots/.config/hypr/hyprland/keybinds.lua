@@ -342,7 +342,11 @@ hl.bind("CTRL + SHIFT + ALT + SUPER + Delete", hl.dsp.exec_cmd("systemctl powero
 
 
 --##! Apps
-hl.bind("SUPER + Return", hl.dsp.exec_cmd(terminal), { description = "App: Terminal" })
+hl.bind("SUPER + Return", function()
+    hl.exec_cmd(terminal)
+    -- Quickshell checks the optional setting; terminal startup never waits for theming.
+    hl.exec_cmd("qs -c $qsConfig ipc call wallpapers terminalOpened")
+end, { description = "App: Terminal" })
 hl.bind("SUPER + T", hl.dsp.exec_cmd(terminal))
 hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })

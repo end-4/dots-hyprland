@@ -733,5 +733,17 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Choose wallpaper folder": "Escolher pasta de wallpapers",
+  "Wallpaper rotation": "Rotação de wallpaper",
+  "Automatically change wallpaper": "Trocar wallpaper automaticamente",
+  "Wallpaper folder": "Pasta de wallpapers",
+  "Choose folder": "Escolher pasta",
+  "Change every (minutes)": "Trocar a cada (minutos)",
+  "Pick a random wallpaper on startup": "Sortear um wallpaper ao iniciar",
+  "Pause automatic rotation on battery power": "Pausar rotação automática ao usar a bateria",
+  "Change wallpaper randomly now": "Trocar wallpaper agora aleatoriamente",
+  "Choose wallpaper to apply": "Escolher wallpaper para trocar",
+  "No supported images found in this folder. Choose a folder containing wallpapers.": "Nenhuma imagem compatível nesta pasta. Escolha uma pasta com wallpapers.",
+  "Random wallpaper when opening a terminal with Super+Enter": "Sortear wallpaper ao abrir um terminal com Super+Enter"
 }

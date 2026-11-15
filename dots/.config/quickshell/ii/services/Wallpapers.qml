@@ -1,3 +1,4 @@
+import qs
 import qs.modules.common
 import qs.modules.common.models
 import qs.modules.common.functions
@@ -5,6 +6,7 @@ import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.UPower
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -33,7 +35,58 @@ Singleton {
     signal thumbnailGenerated(directory: string)
     signal thumbnailGeneratedFile(filePath: string)
 
-    function load () {} // For forcing initialization
+    // Only shell.qml calls load(); settings.qml also imports this singleton.
+    property bool rotationSessionEnabled: false
+    function load() { root.rotationSessionEnabled = true; }
+
+    readonly property url rotationDirectory: Qt.resolvedUrl(Config.options.background.rotation.directory || root.defaultFolder)
+
+    // Open the existing shell picker in the configured folder, including from settings.qml.
+    function openRotationPicker() {
+        if (root.rotationSessionEnabled) root.directory = root.rotationDirectory;
+        Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("shell.qml"), "ipc", "call", root.rotationSessionEnabled ? "wallpaperSelector" : "wallpapers", root.rotationSessionEnabled ? "toggle" : "pick"]);
+    }
+
+    // Settings runs in a separate process; only the main shell owns the scheduler.
+    function rotateWallpaper() {
+        if (root.rotationSessionEnabled) {
+            rotationLoader.item?.rotate();
+            return;
+        }
+        Quickshell.execDetached(["qs", "-p", Quickshell.shellPath("shell.qml"), "ipc", "call", "wallpapers", "rotate"]);
+    }
+
+    // Terminal launches are explicit requests, independent of automatic scheduling pauses.
+    function terminalOpened() {
+        if (!Config.ready || !root.rotationSessionEnabled || !Config.options.background.rotation.onTerminalLaunch) return;
+        rotationLoader.item?.requestRotation();
+    }
+
+    Loader {
+        id: rotationLoader
+        active: root.rotationSessionEnabled && Config.ready && (Config.options.background.rotation.enable || Config.options.background.rotation.onTerminalLaunch)
+        sourceComponent: WallpaperRotation {
+            folder: root.rotationDirectory
+            currentWallpaper: Qt.resolvedUrl(Config.options.background.wallpaperPath)
+            automaticEnabled: Config.options.background.rotation.enable
+            intervalMinutes: Config.options.background.rotation.interval
+            randomOnStartup: Config.options.background.rotation.randomOnStartup
+            busy: rotationProc.running
+            paused: GlobalStates.screenLocked || (Config.options.background.rotation.pauseOnBattery && UPower.onBattery)
+            extensions: root.extensions
+            onWallpaperSelected: path => {
+                rotationProc.exec([Directories.wallpaperSwitchScriptPath, "--mode", Appearance.m3colors.darkmode ? "dark" : "light", "--image", path]);
+                root.changed();
+            }
+        }
+    }
+
+    Process {
+        id: rotationProc
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) console.warn("[Wallpapers] Wallpaper rotation failed:", exitCode);
+        }
+    }
     
     function openFallbackPicker(darkMode = Appearance.m3colors.darkmode) {
         Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--mode", darkMode ? "dark" : "light"]);
@@ -172,6 +225,18 @@ Singleton {
 
     IpcHandler {
         target: "wallpapers"
+
+        function terminalOpened(): void {
+            root.terminalOpened();
+        }
+
+        function pick(): void {
+            root.openRotationPicker();
+        }
+
+        function rotate(): void {
+            root.rotateWallpaper();
+        }
 
         function apply(path: string): void {
             root.apply(path);
