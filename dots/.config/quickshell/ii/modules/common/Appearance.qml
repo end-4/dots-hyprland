@@ -391,6 +391,7 @@ Singleton {
         property real barCenterSideModuleWidth: Config.options?.bar.verbose ? 360 : 140
         property real barCenterSideModuleWidthShortened: 280
         property real barCenterSideModuleWidthHellaShortened: 190
+        property real barMediaMinWidth: 100 // Below this, media is hidden from the bar instead of squished
         property real barShortenScreenWidthThreshold: 1200 // Shorten if screen width is at most this value
         property real barHellaShortenScreenWidthThreshold: 1000 // Shorten even more...
         property real elevationMargin: 10
