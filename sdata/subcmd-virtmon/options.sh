@@ -27,7 +27,7 @@ For the syntax of following options, see also Hyprland Wiki:
       --pos <pos>  Position, by default ${STY_UNDERLINE}$VMON_POSITION${STY_RST}
                    Examples: ${STY_UNDERLINE}auto-left${STY_RST}, ${STY_UNDERLINE}0x-1080${STY_RST}
       --sca <sca>  Scale, by default ${STY_UNDERLINE}$VMON_SCALE${STY_RST}
-      --ext <ext>  Extra properties, e.g. ${STY_UNDERLINE}transform, 1${STY_RST}
+      --ext <ext>  Extra properties, e.g. ${STY_UNDERLINE}transform = 1${STY_RST}
 
 Note 1:
   The virtual monitor will be served via wayvnc.
