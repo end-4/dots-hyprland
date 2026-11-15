@@ -614,4 +614,59 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        icon: "music_note"
+        title: Translation.tr("Widget: Music")
+
+        ConfigRow {
+            Layout.fillWidth: true
+
+            ConfigSwitch {
+                Layout.fillWidth: false
+                buttonIcon: "check"
+                text: Translation.tr("Enable")
+                checked: Config.options.background.widgets.music.enable
+                onCheckedChanged: {
+                    Config.options.background.widgets.music.enable = checked;
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            ConfigSelectionArray {
+                Layout.fillWidth: false
+                currentValue: Config.options.background.widgets.music.placementStrategy
+                onSelected: newValue => {
+                    Config.options.background.widgets.music.placementStrategy = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Draggable"),
+                        icon: "drag_pan",
+                        value: "free"
+                    },
+                    {
+                        displayName: Translation.tr("Least busy"),
+                        icon: "category",
+                        value: "leastBusy"
+                    },
+                    {
+                        displayName: Translation.tr("Most busy"),
+                        icon: "shapes",
+                        value: "mostBusy"
+                    },
+                ]
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "visibility_off"
+            text: Translation.tr("Hide when inactive")
+            checked: Config.options.background.widgets.music.hideWhenIdle
+            onCheckedChanged: {
+                Config.options.background.widgets.music.hideWhenIdle = checked;
+            }
+        }
+    }
 }
