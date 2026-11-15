@@ -12,6 +12,7 @@ import Quickshell.Services.Notifications
 Item { // Notification item area
     id: root
     property var notificationObject
+    property var notificationListView: null
     property bool expanded: false
     property bool onlyNotification: false
     property real fontSize: Appearance.font.pixelSize.small
@@ -66,7 +67,8 @@ Item { // Notification item area
         id: dragManager
         anchors.fill: root
         anchors.leftMargin: root.expanded ? -notificationIcon.implicitWidth : 0
-        interactive: expanded
+        interactive: expanded && !root.onlyNotification
+        axisLockEnabled: true
         automaticallyReset: false
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
@@ -76,18 +78,22 @@ Item { // Notification item area
             }
         }
 
-        onDraggingChanged: () => {
-            if (dragging) {
+        onGestureAxisChanged: {
+            if (gestureAxis === "horizontal") {
+                root.notificationListView.horizontalSwipeActive = true;
                 root.qmlParent.dragIndex = root.index ?? root.parent.children.indexOf(root);
+                root.qmlParent.dragDistance = dragDiffX;
             }
         }
 
         onDragDiffXChanged: () => {
-            root.qmlParent.dragDistance = dragDiffX;
+            if (gestureAxis === "horizontal")
+                root.qmlParent.dragDistance = dragDiffX;
         }
 
         onDragReleased: (diffX, diffY) => {
-            if (Math.abs(diffX) > root.dragConfirmThreshold)
+            root.notificationListView.horizontalSwipeActive = false;
+            if (gestureAxis === "horizontal" && Math.abs(diffX) > root.dragConfirmThreshold)
                 root.destroyWithAnimation(diffX < 0);
             else 
                 dragManager.resetDrag();

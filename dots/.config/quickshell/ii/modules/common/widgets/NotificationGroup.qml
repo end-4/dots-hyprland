@@ -18,6 +18,7 @@ MouseArea { // Notification group area
     property bool multipleNotifications: notificationCount > 1
     property bool expanded: false
     property bool popup: false
+    property var notificationListView: null
     property real padding: 10
     implicitHeight: background.implicitHeight
 
@@ -81,7 +82,8 @@ MouseArea { // Notification group area
     DragManager { // Drag manager
         id: dragManager
         anchors.fill: parent
-        interactive: !expanded
+        interactive: !expanded || !root.multipleNotifications
+        axisLockEnabled: true
         automaticallyReset: false
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
@@ -95,18 +97,22 @@ MouseArea { // Notification group area
                 root.destroyWithAnimation();
         }
 
-        onDraggingChanged: () => {
-            if (dragging) {
+        onGestureAxisChanged: {
+            if (gestureAxis === "horizontal") {
+                root.notificationListView.horizontalSwipeActive = true;
                 root.qmlParent.dragIndex = root.index ?? root.parent.children.indexOf(root);
+                root.qmlParent.dragDistance = dragDiffX;
             }
         }
 
         onDragDiffXChanged: () => {
-            root.qmlParent.dragDistance = dragDiffX;
+            if (gestureAxis === "horizontal")
+                root.qmlParent.dragDistance = dragDiffX;
         }
 
         onDragReleased: (diffX, diffY) => {
-            if (Math.abs(diffX) > root.dragConfirmThreshold)
+            root.notificationListView.horizontalSwipeActive = false;
+            if (gestureAxis === "horizontal" && Math.abs(diffX) > root.dragConfirmThreshold)
                 root.destroyWithAnimation(diffX < 0);
             else 
                 dragManager.resetDrag();
@@ -244,6 +250,7 @@ MouseArea { // Notification group area
                         required property int index
                         required property var modelData
                         notificationObject: modelData
+                        notificationListView: root.notificationListView
                         expanded: root.expanded
                         onlyNotification: (root.notificationCount === 1)
                         opacity: (!root.expanded && index == 1 && root.notificationCount > 2) ? 0.5 : 1

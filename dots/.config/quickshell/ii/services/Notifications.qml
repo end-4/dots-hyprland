@@ -66,6 +66,7 @@ Singleton {
         onTriggered: () => {
             const index = root.list.findIndex((notif) => notif.notificationId === notificationId);
             const notifObject = root.list[index];
+            if (!notifObject) { destroy(); return; }
             print("[Notifications] Notification timer triggered for ID: " + notificationId + ", transient: " + notifObject?.isTransient);
             if (notifObject.isTransient) root.discardNotification(notificationId);
             else root.timeoutNotification(notificationId);
@@ -76,6 +77,12 @@ Singleton {
     property bool silent: false
     property int unread: 0
     property var filePath: Directories.notificationsPath
+    property string historyFilePath: Directories.notificationHistoryPath
+    property var history: []
+    property var pendingHistory: []
+    property bool historyLoaded: false
+    property bool historyClearRequested: false
+    readonly property int historyLimit: 200
     property list<Notif> list: []
     property var popupList: list.filter((notif) => notif.popup);
     property bool popupInhibited: (GlobalStates?.sidebarRightOpen ?? false) || silent
@@ -91,6 +98,44 @@ Singleton {
 
     function stringifyList(list) {
         return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
+    }
+
+    function saveHistory() {
+        if (root.historyLoaded)
+            historyFileView.setText(JSON.stringify(root.history, null, 2));
+    }
+
+    function recordHistory(notif) {
+        const entry = notifToJSON(notif);
+        if (!root.historyLoaded) {
+            root.pendingHistory = [...root.pendingHistory, entry];
+            return;
+        }
+        root.history = [entry, ...root.history].slice(0, root.historyLimit);
+        saveHistory();
+    }
+
+    function clearHistory() {
+        root.history = [];
+        root.pendingHistory = [];
+        if (!root.historyLoaded)
+            root.historyClearRequested = true;
+        saveHistory();
+    }
+
+    function loadHistory(entries) {
+        const hasPending = root.pendingHistory.length > 0;
+        const shouldClear = root.historyClearRequested;
+        const validEntries = shouldClear ? [] : entries.filter((entry) =>
+            entry && typeof entry === "object" && Number.isFinite(entry.time));
+        root.history = [...root.pendingHistory.slice().reverse(), ...validEntries]
+            .sort((a, b) => b.time - a.time)
+            .slice(0, root.historyLimit);
+        root.pendingHistory = [];
+        root.historyClearRequested = false;
+        root.historyLoaded = true;
+        if (hasPending || shouldClear)
+            saveHistory();
     }
     
     onListChanged: {
@@ -167,6 +212,7 @@ Singleton {
                 "time": Date.now(),
             });
 			root.list = [...root.list, newNotifObject];
+            root.recordHistory(newNotifObject);
 
             // Popup
             if (!root.popupInhibited) {
@@ -216,7 +262,7 @@ Singleton {
 
     function cancelTimeout(id) {
         const index = root.list.findIndex((notif) => notif.notificationId === id);
-        if (root.list[index] != null)
+        if (root.list[index]?.timer)
             root.list[index].timer.stop();
     }
 
@@ -299,6 +345,30 @@ Singleton {
                 notifFileView.setText(stringifyList(root.list));
             } else {
                 console.log("[Notifications] Error loading file: " + error)
+            }
+        }
+    }
+
+    FileView {
+        id: historyFileView
+        path: Qt.resolvedUrl(root.historyFilePath)
+        Component.onCompleted: reload()
+        onLoaded: {
+            try {
+                const entries = JSON.parse(historyFileView.text());
+                root.loadHistory(Array.isArray(entries) ? entries : []);
+            } catch (error) {
+                console.log("[Notifications] Error parsing history: " + error);
+                root.loadHistory([]);
+            }
+        }
+        onLoadFailed: (error) => {
+            if (error === FileViewError.FileNotFound) {
+                root.loadHistory([]);
+                root.saveHistory();
+            } else {
+                console.log("[Notifications] Error loading history: " + error);
+                root.loadHistory([]);
             }
         }
     }

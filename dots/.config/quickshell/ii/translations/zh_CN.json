@@ -720,5 +720,9 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Notification history": "通知历史",
+  "No notification history yet": "暂无通知历史",
+  "Clear history": "清空历史",
+  "History: %1": "历史：%1"
 }

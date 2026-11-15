@@ -733,5 +733,9 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Notification history": "Histórico de notificações",
+  "No notification history yet": "Ainda não há notificações no histórico",
+  "Clear history": "Limpar histórico",
+  "History: %1": "Histórico: %1"
 }

@@ -428,5 +428,10 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "Notification history": "通知履歴",
+  "No notification history yet": "通知履歴はまだありません",
+  "Clear history": "履歴を消去",
+  "History: %1": "履歴: %1",
+  "Nothing": "何もありません"
 }
