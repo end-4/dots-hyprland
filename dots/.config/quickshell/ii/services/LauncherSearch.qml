@@ -174,34 +174,48 @@ Singleton {
         if (root.query.startsWith(Config.options.search.prefix.clipboard)) {
             // Clipboard
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.clipboard);
-            return Cliphist.fuzzyQuery(searchString).map((entry, index, array) => {
+            return Cliphist.fuzzyQuery(searchString).map(({ entry, isFav }, index, array) => {
                 const mightBlurImage = Cliphist.entryIsImage(entry) && root.clipboardWorkSafetyActive;
                 let shouldBlurImage = mightBlurImage;
                 if (mightBlurImage) {
-                    shouldBlurImage = shouldBlurImage && (root.containsUnsafeLink(array[index - 1]) || root.containsUnsafeLink(array[index + 1]));
+                    shouldBlurImage = shouldBlurImage && (root.containsUnsafeLink(array[index - 1]?.entry) || root.containsUnsafeLink(array[index + 1]?.entry));
                 }
-                const type = `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`;
+                const type = `#${isFav ? "fav-" : ""}${entry.match(/^\s*(\S+)/)?.[1] || ""}`;
+
+                const pinAction = Cliphist.favSupported && resultComp.createObject(null, {
+                            name: isFav ? Translation.tr("Remove from favorite") : Translation.tr("Set as favorite"),
+                            iconName: isFav ? "keep_off" : "keep",
+                            iconType: LauncherSearchResult.IconType.Material,
+                            execute: () => {
+                                if (isFav) Cliphist.favToDefault(entry);
+                                else Cliphist.defaultToFav(entry);
+                            }
+                        })
                 return resultComp.createObject(null, {
                     rawValue: entry,
                     name: StringUtils.cleanCliphistEntry(entry),
                     verb: "",
                     type: type,
                     execute: () => {
-                        Cliphist.copy(entry);
+                        if (isFav) Cliphist.copyFav(entry);
+                        else Cliphist.copy(entry);
                     },
-                    actions: [resultComp.createObject(null, {
+                    actions: [...(Cliphist.favSupported ? [pinAction] : []),
+                        resultComp.createObject(null, {
                             name: Translation.tr("Copy"),
                             iconName: "content_copy",
                             iconType: LauncherSearchResult.IconType.Material,
                             execute: () => {
-                                Cliphist.copy(entry);
+                                if (isFav) Cliphist.copyFav(entry);
+                                else Cliphist.copy(entry);
                             }
                         }), resultComp.createObject(null, {
                             name: Translation.tr("Delete"),
                             iconName: "delete",
                             iconType: LauncherSearchResult.IconType.Material,
                             execute: () => {
-                                Cliphist.deleteEntry(entry);
+                                if (isFav) Cliphist.deleteFavEntry(entry);
+                                else Cliphist.deleteEntry(entry);
                             }
                         })],
                     blurImage: shouldBlurImage

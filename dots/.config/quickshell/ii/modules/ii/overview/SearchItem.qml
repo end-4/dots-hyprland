@@ -237,6 +237,7 @@ RippleButton {
                     maxWidth: contentColumn.width
                     maxHeight: 140
                     blur: root.blurImage
+                    isFav: root.entry?.type?.startsWith("#fav-")
                 }
             }
         }
