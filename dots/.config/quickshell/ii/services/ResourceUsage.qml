@@ -77,11 +77,13 @@ Singleton {
 
             // Parse CPU usage
             const textStat = fileStat.text()
-            const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/)
-            if (cpuLine) {
-                const stats = cpuLine.slice(1).map(Number)
-                const total = stats.reduce((a, b) => a + b, 0)
-                const idle = stats[3]
+            const cpuFields = textStat.match(/^cpu\s+(.*)$/m)?.[1]?.trim().split(/\s+/).map(Number)
+            if (cpuFields && cpuFields.length >= 4) {
+                // 0=user, 1=nice, 2=system, 3=idle, 4=iowait, 5=irq, 6=softirq, 7=steal
+                // Same as btop: idle = idle + iowait (iowait is waiting, not work), and
+                // guest/guest_nice are excluded from the total (already counted in user/nice)
+                const total = cpuFields.slice(0, 8).reduce((a, b) => a + b, 0)
+                const idle = cpuFields[3] + (cpuFields[4] ?? 0)
 
                 if (previousCpuStats) {
                     const totalDiff = total - previousCpuStats.total
