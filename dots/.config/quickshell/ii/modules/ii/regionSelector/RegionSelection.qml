@@ -34,6 +34,10 @@ PanelWindow {
     enum Phase { Select, Post }
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
+    property var lockController: null
+    readonly property bool lockedOut: lockController !== null
+        && lockController.lockedScreenName !== ""
+        && lockController.lockedScreenName !== root.screen.name
     property var phase: RegionSelection.Phase.Select
     signal dismiss()
 
@@ -215,7 +219,15 @@ PanelWindow {
             root.dismiss();
             return;
         }
-        root.visible = true;
+        root.visible = !root.lockedOut;
+    }
+
+    onLockedOutChanged: {
+        if (root.lockedOut) {
+            root.visible = false;
+        } else if (root.preparationDone) {
+            root.visible = true;
+        }
     }
 
     Process {
@@ -300,7 +312,7 @@ PanelWindow {
     // Only clickable in Selection phase
     mask: Region {
         item: switch(root.phase) {
-            case RegionSelection.Phase.Select: return mouseArea;
+            case RegionSelection.Phase.Select: return root.lockedOut ? null : mouseArea;
             case RegionSelection.Phase.Post: return null;
         }
     }
@@ -328,6 +340,9 @@ PanelWindow {
 
         // Controls
         onPressed: (mouse) => {
+            if (root.lockController !== null && root.lockController.lockedScreenName === "") {
+                root.lockController.lockedScreenName = root.screen.name;
+            }
             root.dragStartX = mouse.x;
             root.dragStartY = mouse.y;
             root.draggingX = mouse.x;

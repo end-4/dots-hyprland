@@ -10,9 +10,11 @@ Scope {
     id: root
 
     function dismiss() {
+        root.lockedScreenName = "";
         GlobalStates.regionSelectorOpen = false
     }
 
+    property string lockedScreenName: ""
     property var action: RegionSelection.SnipAction.Copy
     property var selectionMode: RegionSelection.SelectionMode.RectCorners
     
@@ -28,17 +30,20 @@ Scope {
                 onDismiss: root.dismiss()
                 action: root.action
                 selectionMode: root.selectionMode
+                lockController: root
             }
         }
     }
 
     function screenshot() {
+        root.lockedScreenName = "";
         root.action = RegionSelection.SnipAction.Copy
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
         GlobalStates.regionSelectorOpen = true
     }
 
     function search() {
+        root.lockedScreenName = "";
         root.action = RegionSelection.SnipAction.Search
         if (Config.options.search.imageSearch.useCircleSelection) {
             root.selectionMode = RegionSelection.SelectionMode.Circle
@@ -49,12 +54,14 @@ Scope {
     }
 
     function ocr() {
+        root.lockedScreenName = "";
         root.action = RegionSelection.SnipAction.CharRecognition
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
         GlobalStates.regionSelectorOpen = true
     }
 
     function record() {
+        root.lockedScreenName = "";
         root.action = RegionSelection.SnipAction.Record
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
         // If already open then re-trigger to stop recording
@@ -63,6 +70,7 @@ Scope {
     }
 
     function recordWithSound() {
+        root.lockedScreenName = "";
         root.action = RegionSelection.SnipAction.RecordWithSound
         root.selectionMode = RegionSelection.SelectionMode.RectCorners
         // If already open then re-trigger to stop recording
