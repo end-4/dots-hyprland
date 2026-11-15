@@ -285,6 +285,17 @@ Singleton {
             }
 
             property JsonObject battery: JsonObject {
+                property bool monitorConsumption: false
+                property JsonObject savings: JsonObject {
+                    property bool enable: false
+                    property bool limitBrightness: false
+                    property int brightnessPercent: 80
+                    property bool setProfile: false
+                    property string profile: "power-saver"
+                    property bool disableBlur: false
+                    property bool disableAnimations: false
+                    property list<var> presets: []
+                }
                 property int low: 20
                 property int critical: 5
                 property int full: 101
