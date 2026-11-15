@@ -23,6 +23,7 @@ Singleton {
     property Component geminiApiStrategy: GeminiApiStrategy {}
     property Component openaiApiStrategy: OpenAiApiStrategy {}
     property Component mistralApiStrategy: MistralApiStrategy {}
+    property Component claudeCliStrategy: ClaudeCliStrategy {}
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
 
@@ -48,6 +49,17 @@ Singleton {
         if (!apiKeysLoaded) return false;
         const key = apiKeys[model.key_id];
         return (key?.length > 0);
+    }
+    readonly property bool busy: requester.running
+    // Pending CLI tool-permission request awaiting user approval: {requestId, input}
+    property var pendingCliPermission: null
+    // Questions of a pending AskUserQuestion call. Selections hold each question's
+    // picked labels (or free text); the set submits as one permission response when
+    // the user hits Submit, and questions left unselected are skipped.
+    readonly property var pendingQuestions: pendingCliPermission?.input?.questions ?? null
+    property var questionSelections: ({})
+    onPendingCliPermissionChanged: {
+        questionSelections = ({});
     }
     property var postResponseHook
     property real temperature: Persistent.states?.ai?.temperature ?? 0.5
@@ -233,9 +245,12 @@ Singleton {
             ],
             "search": [],
             "none": [],
+        },
+        "claude-cli": {
+            "none": []
         }
     }
-    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
+    property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format] ?? {})
     property var toolDescriptions: {
         "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
         "search": Translation.tr("Gives the model search capabilities (immediately)"),
@@ -302,6 +317,7 @@ Singleton {
         "openai": openaiApiStrategy.createObject(this),
         "gemini": geminiApiStrategy.createObject(this),
         "mistral": mistralApiStrategy.createObject(this),
+        "claude-cli": claudeCliStrategy.createObject(this),
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
@@ -364,7 +380,6 @@ Singleton {
                 try {
                     if (data.length === 0) return;
                     const dataJson = JSON.parse(data);
-                    root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
                         const safeModelName = root.safeModelName(model);
                         root.addModel(safeModelName, {
@@ -378,12 +393,51 @@ Singleton {
                         })
                     });
 
-                    root.modelList = Object.keys(root.models);
-
                 } catch (e) {
                     console.log("Could not fetch Ollama models:", e);
                 }
             }
+        }
+    }
+
+    // Tracked separately so a refresh only ever removes models it added itself, and not
+    // user-configured claude-cli entries from extraModels
+    property var claudeDiscoveredIds: []
+
+    // ClaudeCli.aliases is authoritative whenever it changes, so an alias that is gone (a stale
+    // cache entry, an alias Anthropic retired, the CLI uninstalled) takes its model with it
+    function syncClaudeModels() {
+        const aliases = ClaudeCli.aliases;
+        const ids = aliases.map(alias => "claude-" + root.safeModelName(alias));
+        const stale = root.claudeDiscoveredIds.filter(id => !ids.includes(id));
+        if (stale.length > 0) {
+            const keptModels = {};
+            Object.keys(root.models).forEach(id => {
+                if (!stale.includes(id)) keptModels[id] = root.models[id];
+            });
+            root.models = keptModels;
+        }
+        root.claudeDiscoveredIds = ids;
+        aliases.forEach((alias, i) => {
+            root.addModel(ids[i], {
+                "name": "Claude " + CF.StringUtils.toTitleCase(alias),
+                "icon": "spark-symbolic",
+                "description": Translation.tr("Online | Claude Code CLI\nAnthropic's %1 model").arg(alias),
+                "homepage": "https://claude.com/claude-code",
+                // Never requested (finalizeScriptContent discards the curl line); it marks the
+                // model as online so the local-only policy in setModel() rejects it
+                "endpoint": "https://api.anthropic.com",
+                "model": alias,
+                "requires_key": false,
+                "api_format": "claude-cli",
+            });
+        });
+    }
+
+    Connections {
+        target: ClaudeCli
+        function onAliasesChanged() {
+            root.syncClaudeModels();
         }
     }
 
@@ -466,9 +520,14 @@ Singleton {
     function removeMessage(index) {
         if (index < 0 || index >= messageIDs.length) return;
         const id = root.messageIDs[index];
+        const removedRole = root.messageByID[id].role;
         root.messageIDs.splice(index, 1);
         root.messageIDs = [...root.messageIDs];
         delete root.messageByID[id];
+        // CLI sessions are append-only; drop the ids so an edited chat starts fresh
+        if (removedRole !== root.interfaceRole) {
+            root.messageIDs.forEach(mid => { root.messageByID[mid].cliSessionId = "" });
+        }
     }
 
     function addApiKeyAdvice(model) {
@@ -481,6 +540,16 @@ Singleton {
 
     function getModel() {
         return models[currentModelId];
+    }
+
+    // No model is a reachable state: discovery can remove the selected one, and the local-only
+    // policy with no local models leaves the list empty
+    function requireModel() {
+        const model = models[currentModelId];
+        if (!model) {
+            root.addMessage(Translation.tr("No model selected. Pick one with `%1`").arg("/model"), root.interfaceRole);
+        }
+        return model ?? null;
     }
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
@@ -533,13 +602,13 @@ Singleton {
     }
 
     function setApiKey(key) {
-        const model = models[currentModelId];
+        const model = root.requireModel();
+        if (!model) return;
         if (!model.requires_key) {
             root.addMessage(Translation.tr("%1 does not require an API key").arg(model.name), Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
-            const model = models[currentModelId];
             root.addApiKeyAdvice(model)
             return;
         }
@@ -548,7 +617,8 @@ Singleton {
     }
 
     function printApiKey() {
-        const model = models[currentModelId];
+        const model = root.requireModel();
+        if (!model) return;
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
@@ -566,6 +636,9 @@ Singleton {
     }
 
     function clearMessages() {
+        if (requester.running) root.interrupt();
+        requester.restartOnExit = false;
+        root.pendingCliPermission = null;
         root.messageIDs = [];
         root.messageByID = ({});
         root.tokenCount.input = -1;
@@ -579,12 +652,20 @@ Singleton {
 
     Process {
         id: requester
+        // Launch claude cli in ~/.config/illogical-impulse
+        workingDirectory: Directories.shellConfig
         property list<string> baseCommand: ["bash"]
         property AiMessageData message
         property ApiStrategy currentStrategy
+        // Used when interrupting previous messages to wait 
+        // until process exits before starting new request
+        property bool restartOnExit: false
 
         function markDone() {
             requester.message.done = true;
+            root.pendingCliPermission = null;
+            requester.message.functionPending = false;
+            requester.stdinEnabled = false;
             if (root.postResponseHook) {
                 root.postResponseHook();
                 root.postResponseHook = null; // Reset hook after use
@@ -594,10 +675,18 @@ Singleton {
         }
 
         function makeRequest() {
-            const model = models[currentModelId];
+            // Kill previous request before making new one
+            if (requester.running) {
+                requester.restartOnExit = true;
+                root.interrupt();
+                return;
+            }
+            requester.restartOnExit = false;
+            const model = root.requireModel();
+            if (!model) return;
 
             // Fetch API keys if needed
-            if (model?.requires_key && !KeyringStorage.loaded) KeyringStorage.fetchKeyringData();
+            if (model.requires_key && !KeyringStorage.loaded) KeyringStorage.fetchKeyringData();
             
             requester.currentStrategy = root.currentApiStrategy;
             requester.currentStrategy.reset(); // Reset strategy state
@@ -654,7 +743,7 @@ Singleton {
 
             /* Create command string */
             let scriptRequestContent = ""
-            scriptRequestContent += `curl --no-buffer "${endpoint}"`
+            scriptRequestContent += `curl --no-buffer -sS "${endpoint}"`
                 + ` ${headerString}`
                 + (authHeader ? ` ${authHeader}` : "")
                 + ` --data '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
@@ -666,7 +755,15 @@ Singleton {
             requesterScriptFile.path = Qt.resolvedUrl(shellScriptPath)
             requesterScriptFile.setText(scriptContent)
             requester.command = baseCommand.concat([shellScriptPath]);
+            requester.stdinEnabled = true;
             requester.running = true
+        }
+
+        // Claude CLI takes input over stdin
+        onStarted: {
+            if (requester.currentStrategy.isCli) {
+                requester.write(requester.currentStrategy.buildStdinPayload() + "\n");
+            }
         }
 
         stdout: SplitParser {
@@ -683,6 +780,9 @@ Singleton {
                     if (result.functionCall) {
                         requester.message.functionCall = result.functionCall;
                         root.handleFunctionCall(result.functionCall.name, result.functionCall.args, requester.message);
+                    }
+                    if (result.permissionRequest) {
+                        root.pendingCliPermission = result.permissionRequest;
                     }
                     if (result.tokenUsage) {
                         root.tokenCount.input = result.tokenUsage.input;
@@ -701,7 +801,22 @@ Singleton {
             }
         }
 
+        stderr: SplitParser {
+            onRead: data => {
+                if (data.length === 0) return;
+                // Show errors to user (useful for CLI)
+                if (requester.currentStrategy.isCli) {
+                    requester.message.thinking = false;
+                    requester.message.content += data + "\n";
+                    requester.message.rawContent += data + "\n";
+                } else {
+                    console.log("[Ai] Request stderr: ", data);
+                }
+            }
+        }
+
         onExited: (exitCode, exitStatus) => {
+            interruptKillTimer.stop();
             const result = requester.currentStrategy.onRequestFinished(requester.message);
             
             if (result.finished) {
@@ -714,6 +829,32 @@ Singleton {
             if (requester.message.content.includes("API key not valid")) {
                 root.addApiKeyAdvice(models[requester.message.model]);
             }
+
+            if (requester.restartOnExit) {
+                requester.restartOnExit = false;
+                requester.makeRequest();
+            }
+        }
+    }
+
+    Timer {
+        id: interruptKillTimer
+        interval: 3000
+        onTriggered: requester.running = false
+    }
+
+    function interrupt() {
+        // A pending permission blocks the turn, so decline it first; otherwise the tool
+        // call is left unanswered in claude's session and the fence renders half-asked
+        if (root.pendingCliPermission) root.rejectCommand(requester.message);
+        // CLI strategies get a graceful stop first, so claude records the partial turn
+        // in its session; the timer (or a second press) hard-kills if it doesn't wind down
+        if (requester.running && !interruptKillTimer.running
+                && requester.currentStrategy.isCli) {
+            requester.write(requester.currentStrategy.buildInterruptRequest() + "\n");
+            interruptKillTimer.start();
+        } else {
+            requester.running = false;
         }
     }
 
@@ -759,15 +900,84 @@ Singleton {
         root.messageByID[id] = aiMessage;
     }
 
+    // CLI permission requests are answered over the running process's stdin
+    function answerCliPermission(allow, updatedInput): bool {
+        if (!root.pendingCliPermission) return false;
+        requester.write(requester.currentStrategy.buildPermissionResponse(root.pendingCliPermission, allow, updatedInput) + "\n");
+        root.pendingCliPermission = null;
+        return true;
+    }
+
+    // multiSelect chip toggle: adds/removes one label in the question's pick list
+    function toggleQuestionOption(question: string, label: string) {
+        const list = (root.questionSelections[question] ?? []).slice();
+        const i = list.indexOf(label);
+        if (i >= 0) list.splice(i, 1); else list.push(label);
+        setQuestionSelection(question, list);
+    }
+
+    function setQuestionSelection(question: string, labels: list<string>) {
+        const selections = Object.assign({}, root.questionSelections);
+        selections[question] = labels;
+        root.questionSelections = selections;
+    }
+
+    // Sends the one permission response for the whole question set; the strategy
+    // encodes the answers, omitting (skipping) questions with no selection
+    function submitQuestions(message: AiMessageData) {
+        if (!message.functionPending || !root.pendingQuestions) return;
+        const questions = root.pendingQuestions;
+        const updatedInput = requester.currentStrategy.buildQuestionAnswers(
+            questions, root.questionSelections);
+        message.functionPending = false;
+        markQuestionAnswered(message, questions, root.questionSelections);
+        answerCliPermission(true, updatedInput);
+    }
+
+    // Rewrites the pending command fence (by pendingCommandIndex ordinal) in both
+    // content and rawContent
+    function editPendingCommandFence(message: AiMessageData, transform) {
+        const index = message.pendingCommandIndex ?? -1;
+        message.content = CF.StringUtils.editCommandFence(message.content, index, transform);
+        message.rawContent = CF.StringUtils.editCommandFence(message.rawContent, index, transform);
+    }
+
+    // Rewrites the fence body to {questions, selections} and flags it :answered, so the
+    // transcript renders the chosen answers instead of a stale interactive card
+    function markQuestionAnswered(message: AiMessageData, questions, selections) {
+        editPendingCommandFence(message, () => "```command:AskUserQuestion:answered\n"
+            + JSON.stringify({ questions: questions, selections: selections }) + "\n```");
+    }
+
+    // Replaces the fence's state token, so the decision persists in the transcript
+    // and the block title renders it
+    function markCommandDenied(message: AiMessageData) {
+        editPendingCommandFence(message, m => CF.StringUtils.withCommandFenceState(m, "denied"));
+    }
+
+    // Approval is the only thing standing between "pending" and the tool actually
+    // running; the result event takes it from there
+    function markCommandRunning(message: AiMessageData) {
+        editPendingCommandFence(message, m => CF.StringUtils.withCommandFenceState(m, "running"));
+    }
+
     function rejectCommand(message: AiMessageData) {
         if (!message.functionPending) return;
         message.functionPending = false; // User decided, no more "thinking"
+        if (answerCliPermission(false)) {
+            markCommandDenied(message);
+            return;
+        }
         addFunctionOutputMessage(message.functionName, Translation.tr("Command rejected by user"))
     }
 
     function approveCommand(message: AiMessageData) {
         if (!message.functionPending) return;
         message.functionPending = false; // User decided, no more "thinking"
+        if (answerCliPermission(true)) {
+            markCommandRunning(message);
+            return;
+        }
 
         const responseMessage = createFunctionOutputMessage(message.functionName, "", false);
         const id = idForMessage(responseMessage);
@@ -824,7 +1034,8 @@ Singleton {
                 addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `command`."));
                 return;
             }
-            const contentToAppend = `\n\n**Command execution request**\n\n\`\`\`command\n${args.command}\n\`\`\``;
+            message.pendingCommandIndex = CF.StringUtils.commandFences(message.content).length;
+            const contentToAppend = `\n\n**${Translation.tr("Command execution request")}**\n\n\`\`\`command\n${args.command}\n\`\`\``;
             message.rawContent += contentToAppend;
             message.content += contentToAppend;
             message.functionPending = true; // Use thinking to indicate the command is waiting for approval
@@ -842,6 +1053,7 @@ Singleton {
                 "fileUri": message.fileUri,
                 "localFilePath": message.localFilePath,
                 "model": message.model,
+                "cliSessionId": message.cliSessionId,
                 "thinking": false,
                 "done": true,
                 "annotations": message.annotations,
@@ -898,6 +1110,7 @@ Singleton {
                     "fileUri": message.fileUri,
                     "localFilePath": message.localFilePath,
                     "model": message.model,
+                    "cliSessionId": message.cliSessionId ?? "",
                     "thinking": message.thinking,
                     "done": message.done,
                     "annotations": message.annotations,

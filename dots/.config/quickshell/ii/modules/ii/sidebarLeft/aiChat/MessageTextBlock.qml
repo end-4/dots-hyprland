@@ -150,6 +150,8 @@ ColumnLayout {
             }
 
             Layout.fillWidth: true
+            topPadding: 0
+            bottomPadding: 0
             readOnly: !editing
             selectByMouse: enableMouseSelection || editing
             renderType: Text.NativeRendering
