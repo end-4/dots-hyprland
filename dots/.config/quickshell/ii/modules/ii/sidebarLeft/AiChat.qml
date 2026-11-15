@@ -14,7 +14,8 @@ import Quickshell.Io
 Item {
     id: root
     property real padding: 4
-    property var inputField: messageInputField
+    readonly property bool claudeMode: ClaudeCode.active
+    property var inputField: claudeMode && claudeLoader.item ? claudeLoader.item.inputItem : messageInputField
     property string commandPrefix: "/"
 
     property var suggestionQuery: ""
@@ -27,6 +28,10 @@ Item {
     }
 
     Keys.onPressed: event => {
+        if (root.claudeMode) {
+            root.inputField.forceActiveFocus();
+            return;
+        }
         messageInputField.forceActiveFocus();
         if (event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageUp) {
@@ -273,8 +278,21 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         color: Appearance.colors.colOutlineVariant
     }
 
+    Loader { // Local Claude Code, replaces the API chat when selected
+        id: claudeLoader
+        anchors.fill: parent
+        active: root.claudeMode
+        sourceComponent: ClaudeChat {
+            padding: root.padding
+        }
+        onLoaded: item.inputItem.forceActiveFocus()
+        onActiveChanged: if (!active)
+            messageInputField.forceActiveFocus()
+    }
+
     ColumnLayout {
         id: columnLayout
+        visible: !root.claudeMode
         anchors {
             fill: parent
             margins: root.padding
@@ -748,9 +766,17 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                 ApiInputBoxIndicator {
                     // Model indicator
+                    visible: !ClaudeCode.enabled
                     icon: "api"
                     text: Ai.getModel().name
                     tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL").arg(Ai.getModel().name).arg(root.commandPrefix)
+                }
+                BackendSwitch {
+                    // Model indicator, click to switch to local Claude Code
+                    visible: ClaudeCode.enabled
+                    symbol: "api"
+                    label: Ai.getModel().name
+                    tooltipText: Translation.tr("Current model: %1\nSet it with %2model MODEL\nClick to switch to local Claude Code").arg(Ai.getModel().name).arg(root.commandPrefix)
                 }
 
                 ApiInputBoxIndicator {

@@ -102,6 +102,12 @@ Singleton {
                         "requires_key": true
                     }
                 ]
+                property JsonObject claudeCode: JsonObject {
+                    property bool enable: true // Switch between API models and local Claude Code (needs `claude` and `node`)
+                    property string defaultSessionName: "Assistant"
+                    property string defaultSessionDir: "" // Empty: home folder
+                    property string newSessionDir: "" // Empty: home folder
+                }
             }
 
             property JsonObject appearance: JsonObject {
