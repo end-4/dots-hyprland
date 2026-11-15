@@ -83,6 +83,10 @@ Singleton {
                 property bool inhibit: false
             }
 
+            property JsonObject bluetooth: JsonObject {
+                property bool enabled: true
+            }
+
             property JsonObject overlay: JsonObject {
                 property list<string> open: ["crosshair", "recorder", "volumeMixer", "resources"]
                 property JsonObject crosshair: JsonObject {
