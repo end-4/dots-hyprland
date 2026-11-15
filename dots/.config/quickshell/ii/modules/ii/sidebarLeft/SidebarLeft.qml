@@ -58,11 +58,15 @@ Scope { // Scope
         else root.pin = !root.pin;
     }
 
-    Component.onCompleted: {
-        root.sidebarContent = contentComponent.createObject(null, {
-            "scopeRoot": root,
-        });
-        sidebarLoader.item.contentParent.children = [root.sidebarContent];
+    // Content is created once the first window loads and is moved between windows on detach.
+    // No QObject parent so it survives the window being unloaded.
+    function attachContent(contentParent) {
+        if (!root.sidebarContent) {
+            root.sidebarContent = contentComponent.createObject(null, {
+                "scopeRoot": root,
+            });
+        }
+        contentParent.children = [root.sidebarContent];
     }
 
     onDetachChanged: {
@@ -83,7 +87,10 @@ Scope { // Scope
     Loader {
         id: sidebarLoader
         active: true
-        
+        // Deferred so the content isn't created inside the panel's async incubation. Otherwise its tab bar
+        // buttons get incubated late and out of order, which shifts the selected tab.
+        onLoaded: Qt.callLater(root.attachContent, item.contentParent)
+
         sourceComponent: PanelWindow { // Window
             id: panelWindow
             visible: GlobalStates.sidebarLeftOpen

@@ -41,20 +41,26 @@ ShellRoot {
         Config.options.panelFamily = families[nextIndex]
     }
 
+    // Families are loaded by path instead of inline components so that only the
+    // active one gets compiled. An inline component makes the engine compile the
+    // whole family (and everything it imports) at startup even if it's never used.
     component PanelFamilyLoader: LazyLoader {
         required property string identifier
+        required property string familySource
         property bool extraCondition: true
-        active: Config.ready && Config.options.panelFamily === identifier && extraCondition
+        readonly property bool shouldLoad: Config.ready && Config.options.panelFamily === identifier && extraCondition
+        source: shouldLoad ? familySource : ""
+        active: source.length > 0 // Depends on source so it only activates once the component exists
     }
-    
+
     PanelFamilyLoader {
         identifier: "ii"
-        component: IllogicalImpulseFamily {}
+        familySource: "panelFamilies/IllogicalImpulseFamily.qml"
     }
 
     PanelFamilyLoader {
         identifier: "waffle"
-        component: WaffleFamily {}
+        familySource: "panelFamilies/WaffleFamily.qml"
     }
 
 
