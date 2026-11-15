@@ -25,7 +25,20 @@ Scope {
             screen: modelData
             // The island belongs to the bar: a fullscreen window covers the bar (Top layer),
             // so hide the island too instead of floating over the fullscreen app (Overlay layer).
-            readonly property bool fullscreenOnScreen: Hyprland.monitorFor(modelData)?.activeWorkspace?.toplevels.values.some(t => t.wayland?.fullscreen) ?? false
+            // The shown special workspace counts too (e.g. Telegram's fullscreen media viewer in a scratchpad).
+            readonly property var hyprMonitor: Hyprland.monitorFor(modelData)
+            readonly property string shownSpecial: hyprMonitor?.lastIpcObject?.specialWorkspace?.name ?? ""
+            readonly property bool fullscreenOnScreen: Hyprland.workspaces.values.some(ws =>
+                (ws === hyprMonitor?.activeWorkspace || (shownSpecial !== "" && ws.name === shownSpecial))
+                && ws.toplevels.values.some(t => t.wayland?.fullscreen))
+            // lastIpcObject only updates on a monitor refresh, so refresh when a special workspace is toggled.
+            Connections {
+                target: Hyprland
+                function onRawEvent(event) {
+                    if (event.name === "activespecial")
+                        Hyprland.refreshMonitors();
+                }
+            }
             visible: IslandConfig.enabled && !GlobalStates.screenLocked && !fullscreenOnScreen && !(Config.options?.bar.vertical ?? false)
             color: "transparent"
 
