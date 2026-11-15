@@ -139,6 +139,14 @@ ContentPage {
                 Config.options.dock.monochromeIcons = checked;
             }
         }
+        ConfigSwitch {
+            buttonIcon: "visibility_off"
+            text: Translation.tr("Hide windows on special workspaces")
+            checked: Config.options.dock.hideSpecialWorkspaceApps
+            onCheckedChanged: {
+                Config.options.dock.hideSpecialWorkspaceApps = checked;
+            }
+        }
     }
 
     ContentSection {
