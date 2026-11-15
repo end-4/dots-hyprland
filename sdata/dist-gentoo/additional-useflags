@@ -19,6 +19,7 @@ sys-apps/dbus X
 sys-libs/zlib minizip
 dev-qt/qtquick3d opengl vulkan
 media-video/ffmpeg X bzip2 dav1d drm fontconfig gnutls gpl libass opencl opengl openh264 opus postproc svg truetype vaapi vpx vulkan x264 x265 xml zlib
+media-video/ffmpeg-compat x264
 media-libs/leptonica jpeg png zlib tiff webp
 media-libs/libva X wayland
 app-text/xmlto text
