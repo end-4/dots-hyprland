@@ -23,8 +23,10 @@ Singleton {
 
     property string internetIcon: {
         if (Network.ethernet)
-            return "ethernet";
-        if (Network.wifiEnabled) {
+            return Network.ethernetLimited ? "globe-prohibited" : "ethernet";
+        if (Network.wifiStatus === "limited")
+            return "wifi-warning";
+        if (Network.wifiEnabled && Network.wifiStatus === "connected") {
             const strength = Network.networkStrength;
             return wifiIconForStrength(strength);
         }
