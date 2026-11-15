@@ -113,6 +113,7 @@ PanelWindow {
 
             live: false
             captureSource: root.screen
+            Component.onCompleted: Privacy.holdShellCapture(1000)
         }
 
         Loader {

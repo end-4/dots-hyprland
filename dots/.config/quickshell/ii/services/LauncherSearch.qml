@@ -65,6 +65,7 @@ Singleton {
         {
             action: "accentcolor",
             execute: args => {
+                if (args == '') Privacy.holdShellCapture(2000);
                 Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, "--noswitch", "--color", ...(args != '' ? [`${args}`] : [])]);
             }
         },

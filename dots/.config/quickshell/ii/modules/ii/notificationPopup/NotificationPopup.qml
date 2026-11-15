@@ -35,15 +35,22 @@ Scope {
 
         NotificationListView {
             id: listview
+            property real stackOffset: GlobalStates.privacyPopupHeight > 0
+                ? GlobalStates.privacyPopupHeight + 8
+                : 0
             anchors {
                 top: parent.top
                 bottom: parent.bottom
                 right: parent.right
                 rightMargin: 4
-                topMargin: 4
+                topMargin: 4 + stackOffset
             }
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
+
+            Behavior on stackOffset {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
         }
     }
 }

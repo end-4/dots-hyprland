@@ -309,6 +309,7 @@ PanelWindow {
         anchors.fill: parent
         live: false
         captureSource: root.screen
+        Component.onCompleted: Privacy.holdShellCapture(1000)
         visible: root.phase === RegionSelection.Phase.Select
 
         focus: root.visible
