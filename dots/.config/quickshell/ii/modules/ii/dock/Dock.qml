@@ -101,22 +101,45 @@ Scope { // Scope
                             spacing: 3
                             property real padding: 5
 
-                            VerticalButtonGroup {
-                                Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
-                                GroupButton {
-                                    // Pin button
-                                    baseWidth: 35
-                                    baseHeight: 35
-                                    clickedWidth: baseWidth
-                                    clickedHeight: baseHeight + 20
-                                    buttonRadius: Appearance.rounding.normal
-                                    toggled: root.pinned
-                                    onClicked: root.pinned = !root.pinned
-                                    contentItem: MaterialSymbol {
-                                        text: "keep"
-                                        horizontalAlignment: Text.AlignHCenter
-                                        iconSize: Appearance.font.pixelSize.larger
-                                        color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                            DockButton {
+                                id: pinButton
+                                Layout.fillHeight: true
+                                downAction: () => {
+                                    root.pinned = !root.pinned;
+                                }
+                                topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                contentItem: Item {
+                                    anchors.centerIn: parent
+
+                                    Item {
+                                        id: pinIconContainer
+                                        anchors {
+                                            left: parent.left
+                                            right: parent.right
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        implicitHeight: 35
+
+                                        MaterialSymbol {
+                                            anchors.centerIn: parent
+                                            font.pixelSize: parent.width / 2
+                                            text: "keep"
+                                            color: Appearance.colors.colOnLayer0
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        visible: root.pinned
+                                        anchors {
+                                            top: pinIconContainer.bottom
+                                            topMargin: 2
+                                            horizontalCenter: parent.horizontalCenter
+                                        }
+                                        radius: Appearance.rounding.full
+                                        implicitWidth: 10
+                                        implicitHeight: 4
+                                        color: Appearance.colors.colPrimary
                                     }
                                 }
                             }
@@ -127,8 +150,63 @@ Scope { // Scope
                             }
                             DockSeparator {}
                             DockButton {
+                                id: appsButton
+                                visible: Config.options?.dock?.showAppsButton ?? true
+                                readonly property bool isAppsActive: GlobalStates.cheatsheetOpen && Persistent.states.cheatsheet.tabIndex === 1
                                 Layout.fillHeight: true
-                                onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
+                                downAction: () => {
+                                    GlobalStates.overviewOpen = false;
+                                    if (GlobalStates.cheatsheetOpen && Persistent.states.cheatsheet.tabIndex === 1) {
+                                        GlobalStates.cheatsheetOpen = false;
+                                        GlobalStates.cheatsheetScreen = null;
+                                    } else {
+                                        GlobalStates.cheatsheetScreen = dockRoot.screen;
+                                        Persistent.states.cheatsheet.tabIndex = 1;
+                                        GlobalStates.cheatsheetOpen = true;
+                                    }
+                                }
+                                topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
+                                contentItem: Item {
+                                    anchors.centerIn: parent
+
+                                    Item {
+                                        id: iconContainer
+                                        anchors {
+                                            left: parent.left
+                                            right: parent.right
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        implicitHeight: 35
+
+                                        MaterialSymbol {
+                                            anchors.centerIn: parent
+                                            font.pixelSize: parent.width / 2
+                                            text: "grid_view"
+                                            color: Appearance.colors.colOnLayer0
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        visible: appsButton.isAppsActive
+                                        anchors {
+                                            top: iconContainer.bottom
+                                            topMargin: 2
+                                            horizontalCenter: parent.horizontalCenter
+                                        }
+                                        radius: Appearance.rounding.full
+                                        implicitWidth: 10
+                                        implicitHeight: 4
+                                        color: Appearance.colors.colPrimary
+                                    }
+                                }
+                            }
+                            DockButton {
+                                Layout.fillHeight: true
+                                onClicked: {
+                                    GlobalStates.cheatsheetOpen = false;
+                                    GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+                                }
                                 topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
                                 bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
                                 contentItem: MaterialSymbol {
