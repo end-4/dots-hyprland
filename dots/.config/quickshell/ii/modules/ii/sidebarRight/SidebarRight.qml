@@ -15,6 +15,21 @@ Scope {
         id: panelWindow
         visible: GlobalStates.sidebarRightOpen
 
+        readonly property bool posRight: (!Config.options.bar.vertical || Config.options.bar.bottom)
+
+        Component.onCompleted: {
+            updateLayerRule();
+        }
+
+        onPosRightChanged: {
+            updateLayerRule();
+        }
+
+        function updateLayerRule() {
+            console.log("Updating layer rule for right sidebar to", `animation slide ${posRight ? "right" : "left"}, quickshell:sidebarRight`);
+            Quickshell.execDetached(["hyprctl", "keyword", "layerrule", `animation slide ${posRight ? "right" : "left"}, quickshell:sidebarRight`]);
+        }
+
         function hide() {
             GlobalStates.sidebarRightOpen = false;
         }
@@ -27,7 +42,8 @@ Scope {
 
         anchors {
             top: true
-            right: true
+            left: !posRight ? true : null
+            right: posRight ? true : null
             bottom: true
         }
 
@@ -51,7 +67,8 @@ Scope {
             anchors {
                 fill: parent
                 margins: Appearance.sizes.hyprlandGapsOut
-                leftMargin: Appearance.sizes.elevationMargin
+                leftMargin: posRight ? Appearance.sizes.elevationMargin: null
+                rightMargin: posRight ? Appearance.sizes.hyprlandGapsOut: null
             }
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
