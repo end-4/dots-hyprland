@@ -242,7 +242,7 @@ ContentPage {
                         Config.options.bar.island.systemMonitor = checked;
                     }
                     StyledToolTip {
-                        text: Translation.tr("A bar button that opens a panel with CPU, GPU and memory usage")
+                        text: Translation.tr("Replaces the left sidebar button with a panel showing CPU, GPU and memory usage")
                     }
                 }
             }

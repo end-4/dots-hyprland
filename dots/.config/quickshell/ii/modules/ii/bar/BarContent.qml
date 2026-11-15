@@ -65,7 +65,7 @@ Item { // Bar content region
         onScrollUp: Brightness.increaseBrightness()
         onMovedAway: GlobalStates.osdBrightnessOpen = false
         onPressed: event => {
-            if (event.button === Qt.LeftButton)
+            if (event.button === Qt.LeftButton && !IslandConfig.systemMonitor)
                 GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
         }
 
@@ -86,21 +86,23 @@ Item { // Bar content region
 
             LeftSidebarButton { // Left sidebar button
                 id: leftSidebarButton
+                visible: !IslandConfig.systemMonitor // the system monitor button takes its place
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             }
 
-            Loader { // System monitor panel button (island option)
+            Loader { // System monitor panel button (island option), replaces the left sidebar button
+                id: monitorButtonLoader
                 active: IslandConfig.systemMonitor
                 visible: active
                 Layout.alignment: Qt.AlignVCenter
-                Layout.leftMargin: 4
+                Layout.leftMargin: Appearance.rounding.screenRounding
                 sourceComponent: MonitorButton {}
             }
 
             ActiveWindow {
-                Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
+                Layout.leftMargin: 10 + ((leftSidebarButton.visible || monitorButtonLoader.visible) ? 0 : Appearance.rounding.screenRounding)
                 Layout.rightMargin: Appearance.rounding.screenRounding
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -364,7 +366,7 @@ Item { // Bar content region
             // Weather
             Loader {
                 Layout.leftMargin: 4
-                active: Config.options.bar.weather.enable
+                active: Config.options.bar.weather.enable && !IslandConfig.enabled // the island's idle glance shows weather
 
                 sourceComponent: BarGroup {
                     WeatherBar {}
