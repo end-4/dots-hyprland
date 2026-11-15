@@ -12,8 +12,9 @@ LazyLoader {
     property Item hoverTarget
     default property Item contentItem
     property real popupBackgroundMargin: 0
+    property bool keepOpen: false // Stay open without hover, e.g. while something in the popup is in use
 
-    active: hoverTarget && hoverTarget.containsMouse
+    active: hoverTarget && (hoverTarget.containsMouse || keepOpen)
 
     component: PanelWindow {
         id: popupWindow
@@ -34,19 +35,20 @@ LazyLoader {
         exclusionMode: ExclusionMode.Ignore
         exclusiveZone: 0
         margins {
+            // Centered on the target, but kept within the screen
             left: {
-                if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
+                if (!Config.options.bar.vertical) return Math.max(0, Math.min(root.QsWindow?.window.width - popupWindow.implicitWidth, root.QsWindow?.mapFromItem(
                     root.hoverTarget, 
                     (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
-                ).x;
+                ).x));
                 return Appearance.sizes.verticalBarWidth
             }
             top: {
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
-                return root.QsWindow?.mapFromItem(
+                return Math.max(0, Math.min(root.QsWindow?.window.height - popupWindow.implicitHeight, root.QsWindow?.mapFromItem(
                     root.hoverTarget, 
                     (root.hoverTarget.height - popupBackground.implicitHeight) / 2, 0
-                ).y;
+                ).y));
             }
             right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
