@@ -102,7 +102,7 @@ copy_and_commit_user_config() {
     return
   fi
 
-  # chekc for rebase in progress
+  # check for rebase in progress
   if git status | grep -q "rebase in progress"; then
     log_error "Rebase already in progress, resolve it first"
     return 1
