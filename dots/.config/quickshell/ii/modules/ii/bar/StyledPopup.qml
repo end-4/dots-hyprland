@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.services
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
@@ -13,7 +14,12 @@ LazyLoader {
     default property Item contentItem
     property real popupBackgroundMargin: 0
 
-    active: hoverTarget && hoverTarget.containsMouse
+    readonly property bool hovered: hoverTarget?.containsMouse ?? false
+    // Closing waits a moment, so a brief hover loss (like when the popup window appears) doesn't make it flicker
+    property Timer closeDelay: Timer { interval: 100 }
+    onHoveredChanged: if (!hovered) closeDelay.restart()
+
+    active: hoverTarget && (hovered || closeDelay.running)
 
     component: PanelWindow {
         id: popupWindow
@@ -52,6 +58,9 @@ LazyLoader {
             bottom: Appearance.sizes.barHeight
         }
         WlrLayershell.namespace: "quickshell:popup"
+        // Part of the focus grab while shown, so an open sidebar's grab doesn't take the pointer away and make it flicker
+        Component.onCompleted: GlobalFocusGrab.addPersistent(popupWindow)
+        Component.onDestruction: GlobalFocusGrab.removePersistent(popupWindow)
         WlrLayershell.layer: WlrLayer.Overlay
 
         StyledRectangularShadow {
