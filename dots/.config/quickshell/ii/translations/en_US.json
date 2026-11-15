@@ -611,5 +611,16 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Choose wallpaper folder": "Choose wallpaper folder",
+  "Wallpaper rotation": "Wallpaper rotation",
+  "Automatically change wallpaper": "Automatically change wallpaper",
+  "Wallpaper folder": "Wallpaper folder",
+  "Choose folder": "Choose folder",
+  "Change every (minutes)": "Change every (minutes)",
+  "Pick a random wallpaper on startup": "Pick a random wallpaper on startup",
+  "Pause automatic rotation on battery power": "Pause automatic rotation on battery power",
+  "Change wallpaper randomly now": "Change wallpaper randomly now",
+  "Choose wallpaper to apply": "Choose wallpaper to apply",
+  "No supported images found in this folder. Choose a folder containing wallpapers.": "No supported images found in this folder. Choose a folder containing wallpapers."
 }

@@ -1,11 +1,102 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
+import Qt.labs.folderlistmodel
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
+
+    FolderListModel {
+        id: rotationFolderModel
+        folder: Wallpapers.rotationDirectory
+        nameFilters: Wallpapers.extensions.map(extension => `*.${extension}`)
+        caseSensitive: false
+        showDirs: false
+        showOnlyReadable: true
+    }
+
+    FolderDialog {
+        id: rotationFolderDialog
+        title: Translation.tr("Choose wallpaper folder")
+        currentFolder: Wallpapers.rotationDirectory
+        onAccepted: Config.options.background.rotation.directory = selectedFolder.toString()
+    }
+
+    ContentSection {
+        icon: "wallpaper_slideshow"
+        title: Translation.tr("Wallpaper rotation")
+
+        ConfigSwitch {
+            buttonIcon: "autorenew"
+            text: Translation.tr("Automatically change wallpaper")
+            checked: Config.options.background.rotation.enable
+            onCheckedChanged: Config.options.background.rotation.enable = checked
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Wallpaper folder")
+            MaterialTextField {
+                Layout.fillWidth: true
+                readOnly: true
+                text: decodeURIComponent(Wallpapers.rotationDirectory.toString().replace(/^file:\/\//, ""))
+            }
+            RippleButtonWithIcon {
+                materialIcon: "folder_open"
+                mainText: Translation.tr("Choose folder")
+                onClicked: rotationFolderDialog.open()
+            }
+        }
+
+        ConfigSpinBox {
+            enabled: Config.options.background.rotation.enable
+            icon: "timer"
+            text: Translation.tr("Change every (minutes)")
+            from: 1
+            to: 1440
+            stepSize: 1
+            value: Config.options.background.rotation.interval
+            onValueChanged: Config.options.background.rotation.interval = value
+        }
+
+        ConfigSwitch {
+            enabled: Config.options.background.rotation.enable
+            buttonIcon: "restart_alt"
+            text: Translation.tr("Pick a random wallpaper on startup")
+            checked: Config.options.background.rotation.randomOnStartup
+            onCheckedChanged: Config.options.background.rotation.randomOnStartup = checked
+        }
+
+        ConfigSwitch {
+            enabled: Config.options.background.rotation.enable
+            buttonIcon: "battery_saver"
+            text: Translation.tr("Pause automatic rotation on battery power")
+            checked: Config.options.background.rotation.pauseOnBattery
+            onCheckedChanged: Config.options.background.rotation.pauseOnBattery = checked
+        }
+
+        RippleButtonWithIcon {
+            enabled: Config.options.background.rotation.enable && rotationFolderModel.count > 0
+            materialIcon: "shuffle"
+            mainText: Translation.tr("Change wallpaper randomly now")
+            onClicked: Wallpapers.rotateWallpaper()
+        }
+
+        RippleButtonWithIcon {
+            materialIcon: "image_search"
+            mainText: Translation.tr("Choose wallpaper to apply")
+            onClicked: Wallpapers.openRotationPicker()
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            visible: Config.options.background.rotation.enable && rotationFolderModel.status === FolderListModel.Ready && rotationFolderModel.count === 0
+            text: Translation.tr("No supported images found in this folder. Choose a folder containing wallpapers.")
+        }
+    }
 
     ContentSection {
         icon: "sync_alt"

@@ -162,6 +162,13 @@ Singleton {
             }
 
             property JsonObject background: JsonObject {
+                property JsonObject rotation: JsonObject {
+                    property bool enable: false
+                    property string directory: "" // Empty uses the Pictures/Wallpapers folder
+                    property int interval: 15 // minutes
+                    property bool randomOnStartup: true
+                    property bool pauseOnBattery: true
+                }
                 property JsonObject widgets: JsonObject {
                     property JsonObject clock: JsonObject {
                         property bool enable: true
