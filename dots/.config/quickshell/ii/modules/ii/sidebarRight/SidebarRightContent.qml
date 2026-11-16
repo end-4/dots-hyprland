@@ -28,6 +28,12 @@ Item {
     property bool showNightLightDialog: false
     property bool showWifiDialog: false
     property bool editMode: false
+    
+    // Hide the center widget on short screens when the bottom widget is expanded.
+    property int compactLayoutHeight: 800
+    property bool compactLayout:
+        !Persistent.states.sidebar.bottomGroup.collapsed &&
+        sidebarRightBackground.height < compactLayoutHeight
 
     Connections {
         target: GlobalStates
@@ -100,6 +106,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                visible: !root.compactLayout
             }
 
             BottomWidgetGroup {
