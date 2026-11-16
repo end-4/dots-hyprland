@@ -295,4 +295,27 @@ Singleton {
             }
         );
     }
+
+    /**
+     * Returns a URL the cover-art downloader can fetch as artwork for a
+     * YouTube link, or "" if the URL is not from YouTube. Used as a fallback
+     * when the player exposes no mpris:artUrl (Firefox MPRIS bridge,
+     * plasma-browser-integration on YouTube Music).
+     *
+     * - Watch URL (?v=, youtu.be/, /embed/, /shorts/) → deterministic
+     *   i.ytimg.com/vi/<id>/hqdefault.jpg.
+     * - Playlist / channel / other YouTube URL → public oEmbed endpoint;
+     *   the downloader resolves its `thumbnail_url` field at fetch time.
+     *
+     * @param { string } url
+     * @returns { string }
+     */
+    function getYoutubeArtUrl(url) {
+        if (!url || !/(?:^|\/\/|\.)(?:youtube\.com|youtu\.be)/.test(url))
+            return "";
+        const m = url.match(/(?:[?&]v=|youtu\.be\/|\/(?:embed|shorts)\/)([A-Za-z0-9_-]{11})/);
+        if (m)
+            return `https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg`;
+        return `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+    }
 }
