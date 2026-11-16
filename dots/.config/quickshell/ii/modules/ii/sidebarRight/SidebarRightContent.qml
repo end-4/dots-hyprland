@@ -71,42 +71,60 @@ Item {
                 Layout.bottomMargin: 0
             }
 
-            Loader {
-                id: slidersLoader
+            StyledFlickable {
+                id: flickable
                 Layout.fillWidth: true
-                visible: active
-                active: {
-                    const configQuickSliders = Config.options.sidebar.quickSliders
-                    if (!configQuickSliders.enable) return false
-                    if (!configQuickSliders.showMic && !configQuickSliders.showVolume && !configQuickSliders.showBrightness) return false;
-                    return true;
-                }
-                sourceComponent: QuickSliders {}
-            }
-
-            LoaderedQuickPanelImplementation {
-                styleName: "classic"
-                sourceComponent: ClassicQuickPanel {}
-            }
-
-            LoaderedQuickPanelImplementation {
-                styleName: "android"
-                sourceComponent: AndroidQuickPanel {
-                    editMode: root.editMode
-                }
-            }
-
-            CenterWidgetGroup {
-                Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
+                clip: true
+                flickableDirection: Flickable.VerticalFlick
+                contentWidth: width
+                contentHeight: contentColumn.height
 
-            BottomWidgetGroup {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillHeight: false
-                Layout.fillWidth: true
-                Layout.preferredHeight: implicitHeight
+                ColumnLayout {
+                    id: contentColumn
+                    width: flickable.width
+                    height: Math.max(flickable.height, implicitHeight)
+                    spacing: sidebarPadding
+
+                    Loader {
+                        id: slidersLoader
+                        Layout.fillWidth: true
+                        visible: active
+                        active: {
+                            const configQuickSliders = Config.options.sidebar.quickSliders
+                            if (!configQuickSliders.enable) return false
+                            if (!configQuickSliders.showMic && !configQuickSliders.showVolume && !configQuickSliders.showBrightness) return false;
+                            return true;
+                        }
+                        sourceComponent: QuickSliders {}
+                    }
+
+                    LoaderedQuickPanelImplementation {
+                        styleName: "classic"
+                        sourceComponent: ClassicQuickPanel {}
+                    }
+
+                    LoaderedQuickPanelImplementation {
+                        styleName: "android"
+                        sourceComponent: AndroidQuickPanel {
+                            editMode: root.editMode
+                        }
+                    }
+
+                    CenterWidgetGroup {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.minimumHeight: 140
+                    }
+
+                    BottomWidgetGroup {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillHeight: false
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: implicitHeight
+                    }
+                }
             }
         }
     }

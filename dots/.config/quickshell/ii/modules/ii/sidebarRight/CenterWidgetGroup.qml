@@ -9,6 +9,9 @@ import QtQuick.Layouts
 
 Rectangle {
     id: root
+    clip: true
+    implicitHeight: 140
+    Layout.minimumHeight: 120
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
 
