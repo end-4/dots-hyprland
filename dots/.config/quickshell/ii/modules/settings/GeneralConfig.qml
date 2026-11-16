@@ -196,9 +196,13 @@ ContentPage {
         title: Translation.tr("Policies")
 
         ConfigRow {
+            uniform: true
 
             // AI policy
             ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
                 ContentSubsectionLabel {
                     text: Translation.tr("AI")
                 }
@@ -210,17 +214,17 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: Translation.tr("No"),
+                            displayName: Translation.tr("Disable AI"),
                             icon: "close",
                             value: 0
                         },
                         {
-                            displayName: Translation.tr("Yes"),
+                            displayName: Translation.tr("Allow online AI"),
                             icon: "check",
                             value: 1
                         },
                         {
-                            displayName: Translation.tr("Local only"),
+                            displayName: Translation.tr("Local AI only"),
                             icon: "sync_saved_locally",
                             value: 2
                         }
@@ -230,6 +234,9 @@ ContentPage {
 
             // Weeb policy
             ColumnLayout {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                Layout.alignment: Qt.AlignTop
 
                 ContentSubsectionLabel {
                     text: Translation.tr("Weeb")
@@ -242,17 +249,17 @@ ContentPage {
                     }
                     options: [
                         {
-                            displayName: Translation.tr("No"),
+                            displayName: Translation.tr("Disable anime features"),
                             icon: "close",
                             value: 0
                         },
                         {
-                            displayName: Translation.tr("Yes"),
+                            displayName: Translation.tr("Show anime features"),
                             icon: "check",
                             value: 1
                         },
                         {
-                            displayName: Translation.tr("Closet"),
+                            displayName: Translation.tr("Hide anime tab"),
                             icon: "ev_shadow",
                             value: 2
                         }
