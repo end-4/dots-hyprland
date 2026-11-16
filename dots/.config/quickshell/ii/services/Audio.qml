@@ -18,6 +18,7 @@ Singleton {
     readonly property real hardMaxValue: 2.00 // People keep joking about setting volume to 5172% so...
     property string audioTheme: Config.options.sounds.theme
     property real value: sink?.audio.volume ?? 0
+    property bool autoMuted: false
     
     function friendlyDeviceName(node) {
         return (node.nickname || node.description || Translation.tr("Unknown"));
@@ -50,6 +51,7 @@ Singleton {
 
     // Controls
     function toggleMute() {
+        root.autoMuted = false
         Audio.sink.audio.muted = !Audio.sink.audio.muted
     }
 
@@ -111,6 +113,14 @@ Singleton {
                 sink.audio.volume = Math.min(lastVolume, maxAllowed);
             }
             lastVolume = sink.audio.volume;
+
+            if (lastVolume === 0 && !sink.audio.muted) {
+                sink.audio.muted = true;
+                root.autoMuted = true;
+            } else if (lastVolume > 0 && root.autoMuted) {
+                sink.audio.muted = false;
+                root.autoMuted = false;
+            }
         }
     }
 
