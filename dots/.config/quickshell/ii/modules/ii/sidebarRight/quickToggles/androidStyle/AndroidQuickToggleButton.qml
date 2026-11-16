@@ -190,6 +190,11 @@ GroupButton {
             const index = root.buttonIndex;
             const toggleList = Config.options.sidebar.quickToggles.android.toggles;
             const buttonType = root.buttonData.type;
+            if (buttonType === "displays") {
+                const present = !!toggleList.find(toggle => toggle && toggle.type === "displays");
+                Displays.setFeatureEnabled(!present);
+                return;
+            }
             if (!toggleList.find(toggle => toggle.type === buttonType)) {
                 toggleList.push({ type: buttonType, size: 1 });
             } else {
