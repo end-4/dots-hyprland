@@ -23,6 +23,8 @@ Button {
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
 
+    property int mouseModifiers: 0
+
     property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
     property color colBackgroundToggled: Appearance?.colors.colPrimary ?? "#65558F"
@@ -60,8 +62,10 @@ Button {
     MouseArea {
         anchors.fill: parent
         cursorShape: root.pointingHandCursor ? Qt.PointingHandCursor : Qt.ArrowCursor
+        preventStealing: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         onPressed: (event) => { 
+            root.mouseModifiers = event.modifiers;
             if(event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction(event);
                 return;
@@ -77,6 +81,7 @@ Button {
             startRipple(x, y)
         }
         onReleased: (event) => {
+            root.mouseModifiers = event.modifiers;
             root.down = false
             if (event.button != Qt.LeftButton) return;
             if (root.releaseAction) root.releaseAction();

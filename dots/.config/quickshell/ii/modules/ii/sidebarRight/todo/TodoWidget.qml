@@ -38,17 +38,24 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        SecondaryTabBar {
-            id: tabBar
-            currentIndex: swipeView.currentIndex
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 6
 
-            Repeater {
-                model: root.tabButtonList
-                delegate: SecondaryTabButton {
-                    buttonText: modelData.name
-                    buttonIcon: modelData.icon
+            SecondaryTabBar {
+                id: tabBar
+                Layout.fillWidth: true
+                currentIndex: swipeView.currentIndex
+
+                Repeater {
+                    model: root.tabButtonList
+                    delegate: SecondaryTabButton {
+                        buttonText: modelData.name
+                        buttonIcon: modelData.icon
+                    }
                 }
             }
+
         }
 
         SwipeView {
@@ -114,8 +121,8 @@ Item {
 
         onVisibleChanged: {
             if (!visible) {
-                todoInput.text = ""
-                fabButton.focus = true
+                todoInput.text = "";
+                fabButton.focus = true;
             }
         }
 
