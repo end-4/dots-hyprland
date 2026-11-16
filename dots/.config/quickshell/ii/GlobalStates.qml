@@ -29,6 +29,8 @@ Singleton {
     property bool superDown: false
     property bool superReleaseMightTrigger: true
     property bool wallpaperSelectorOpen: false
+    property bool dualWallpaperSelectorMode: false
+    property string dualWallpaperActiveTarget: "dark"
     property bool workspaceShowNumbers: false
 
     onSidebarRightOpenChanged: {

@@ -37,7 +37,7 @@ Scope {
                 item: content
             }
 
-            implicitHeight: Appearance.sizes.wallpaperSelectorHeight
+            implicitHeight: Appearance.sizes.wallpaperSelectorHeight + (GlobalStates.dualWallpaperSelectorMode ? 90 : 0)
             implicitWidth: Appearance.sizes.wallpaperSelectorWidth
 
             Component.onCompleted: {
@@ -67,7 +67,22 @@ Scope {
             Wallpapers.openFallbackPicker(Appearance.m3colors.darkmode);
             return;
         }
-        GlobalStates.wallpaperSelectorOpen = !GlobalStates.wallpaperSelectorOpen
+        if (GlobalStates.wallpaperSelectorOpen && !GlobalStates.dualWallpaperSelectorMode) {
+            GlobalStates.wallpaperSelectorOpen = false;
+        } else {
+            GlobalStates.dualWallpaperSelectorMode = false;
+            GlobalStates.wallpaperSelectorOpen = true;
+        }
+    }
+
+    function toggleDualWallpaperSelector() {
+        if (GlobalStates.wallpaperSelectorOpen && GlobalStates.dualWallpaperSelectorMode) {
+            GlobalStates.wallpaperSelectorOpen = false;
+        } else {
+            GlobalStates.dualWallpaperSelectorMode = true;
+            GlobalStates.dualWallpaperActiveTarget = Appearance.m3colors.darkmode ? "dark" : "light";
+            GlobalStates.wallpaperSelectorOpen = true;
+        }
     }
 
     IpcHandler {
@@ -75,6 +90,10 @@ Scope {
 
         function toggle(): void {
             root.toggleWallpaperSelector();
+        }
+
+        function toggleDual(): void {
+            root.toggleDualWallpaperSelector();
         }
 
         function random(): void {
@@ -87,6 +106,14 @@ Scope {
         description: "Toggle wallpaper selector"
         onPressed: {
             root.toggleWallpaperSelector();
+        }
+    }
+
+    GlobalShortcut {
+        name: "dualWallpaperSelectorToggle"
+        description: "Toggle dual wallpaper selector (dark & light mode)"
+        onPressed: {
+            root.toggleDualWallpaperSelector();
         }
     }
 

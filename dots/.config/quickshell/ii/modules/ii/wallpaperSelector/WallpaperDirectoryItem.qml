@@ -10,7 +10,11 @@ MouseArea {
     id: root
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
-    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
+    property bool isVideo: Images.isValidVideoByName(fileModelData.fileName)
+    property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName) || isVideo
+
+    property bool isDarkWallpaper: !isDirectory && fileModelData.filePath === Config.options.background.darkWallpaperPath
+    property bool isLightWallpaper: !isDirectory && fileModelData.filePath === Config.options.background.lightWallpaperPath
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -21,9 +25,17 @@ MouseArea {
     padding: Appearance.sizes.wallpaperSelectorItemPadding
 
     signal activated()
+    signal rightClicked()
 
     hoverEnabled: true
-    onClicked: root.activated()
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    onClicked: mouse => {
+        if (mouse.button === Qt.RightButton) {
+            root.rightClicked();
+        } else {
+            root.activated();
+        }
+    }
 
     Rectangle {
         id: background
@@ -100,6 +112,74 @@ MouseArea {
                     anchors.fill: parent
                     sourceComponent: DirectoryIcon {
                         fileModelData: root.fileModelData
+                    }
+                }
+
+                Rectangle {
+                    visible: root.isVideo
+                    anchors {
+                        top: parent.top
+                        right: parent.right
+                        margins: 6
+                    }
+                    width: 22
+                    height: 22
+                    radius: Appearance.rounding.small
+                    color: ColorUtils.transparentize(Appearance.colors.colLayer0, 0.25)
+                    border.color: Appearance.colors.colOutlineVariant
+                    border.width: 1
+                    z: 10
+
+                    MaterialSymbol {
+                        anchors.centerIn: parent
+                        text: "movie"
+                        iconSize: 14
+                        color: Appearance.colors.colPrimary
+                    }
+                }
+
+                // Badges for Dual Wallpaper status
+                Row {
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        margins: 6
+                    }
+                    spacing: 4
+                    z: 10
+
+                    Rectangle {
+                        visible: root.isDarkWallpaper
+                        width: 22
+                        height: 22
+                        radius: Appearance.rounding.small
+                        color: ColorUtils.transparentize(Appearance.colors.colLayer0, 0.2)
+                        border.color: Appearance.colors.colSecondary
+                        border.width: 1.5
+
+                        MaterialSymbol {
+                            anchors.centerIn: parent
+                            text: "dark_mode"
+                            iconSize: 13
+                            color: Appearance.colors.colSecondary
+                        }
+                    }
+
+                    Rectangle {
+                        visible: root.isLightWallpaper
+                        width: 22
+                        height: 22
+                        radius: Appearance.rounding.small
+                        color: ColorUtils.transparentize(Appearance.colors.colLayer0, 0.2)
+                        border.color: Appearance.colors.colTertiary
+                        border.width: 1.5
+
+                        MaterialSymbol {
+                            anchors.centerIn: parent
+                            text: "light_mode"
+                            iconSize: 13
+                            color: Appearance.colors.colTertiary
+                        }
                     }
                 }
             }
