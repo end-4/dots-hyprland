@@ -18,9 +18,12 @@ ContentPage {
             spacing: 20
             Layout.topMargin: 10
             Layout.bottomMargin: 10
-            IconImage {
-                implicitSize: 80
-                source: Quickshell.iconPath(SystemInfo.logo)
+            CustomIcon {
+                width: 80
+                height: 80
+                colorize: true
+                color: Appearance.colors.colOnSurface
+                source: SystemInfo.logo ? SystemInfo.logo : SystemInfo.distroIcon
             }
             ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter
