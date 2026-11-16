@@ -42,6 +42,21 @@ BarButton {
             }
 
             IconHoverArea {
+                id: vpnHoverArea
+                visible: Network?.vpnEnabled ?? false
+                iconItem: FluentIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon: WIcons.vpnIcon
+                    color: Looks.colors.inactiveIcon
+
+                    FluentIcon {
+                        anchors.fill: parent
+                        icon: WIcons.vpnIcon
+                    }
+                }
+            }
+
+            IconHoverArea {
                 id: volumeHoverArea
                 iconItem: FluentIcon {
                     anchors.verticalCenter: parent.verticalCenter
@@ -91,6 +106,10 @@ BarButton {
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && internetHoverArea.containsMouse
         text: Translation.tr("%1\nInternet access").arg(Network.ethernet ? Translation.tr("Network") : Network.networkName)
+    }
+    BarToolTip {
+        extraVisibleCondition: root.shouldShowTooltip && vpnHoverArea.containsMouse
+        text: Translation.tr("%1 %2").arg(Translation.tr("VPN")).arg(Translation.tr("Active"))
     }
     BarToolTip {
         extraVisibleCondition: root.shouldShowTooltip && volumeHoverArea.containsMouse

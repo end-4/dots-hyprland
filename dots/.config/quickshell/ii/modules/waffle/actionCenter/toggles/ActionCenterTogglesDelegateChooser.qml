@@ -13,6 +13,7 @@ import qs.modules.waffle.actionCenter.bluetooth
 import qs.modules.waffle.actionCenter.nightLight
 import qs.modules.waffle.actionCenter.volumeControl
 import qs.modules.waffle.actionCenter.wifi
+import qs.modules.waffle.actionCenter.vpn
 
 DelegateChooser {
     id: root
@@ -37,6 +38,17 @@ DelegateChooser {
             icon: WIcons.bluetoothIcon
             menu: Component {
                 BluetoothControl {}
+            }
+        }
+    }
+    DelegateChoice {
+        roleValue: "vpns"
+        ActionCenterToggleButton {
+            toggleModel: VpnToggle {}
+            name: toggleModel.statusText
+            icon: WIcons.vpnIcon
+            menu: Component {
+                VpnControl {}
             }
         }
     }

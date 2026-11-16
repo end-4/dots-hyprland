@@ -16,6 +16,7 @@ import qs.modules.ii.sidebarRight.bluetoothDevices
 import qs.modules.ii.sidebarRight.nightLight
 import qs.modules.ii.sidebarRight.volumeMixer
 import qs.modules.ii.sidebarRight.wifiNetworks
+import qs.modules.ii.sidebarRight.vpns
 
 Item {
     id: root
@@ -27,6 +28,7 @@ Item {
     property bool showBluetoothDialog: false
     property bool showNightLightDialog: false
     property bool showWifiDialog: false
+    property bool showVpnDialog: false
     property bool editMode: false
 
     Connections {
@@ -37,6 +39,7 @@ Item {
                 root.showBluetoothDialog = false;
                 root.showAudioOutputDialog = false;
                 root.showAudioInputDialog = false;
+                root.showVpnDialog = false;
             }
         }
     }
@@ -153,6 +156,11 @@ Item {
         }
     }
 
+    ToggleDialog {
+        shownPropertyString: "showVpnDialog"
+        dialog: VpnDialog {}
+    }
+
     component ToggleDialog: Loader {
         id: toggleDialogLoader
         required property string shownPropertyString
@@ -203,6 +211,9 @@ Item {
             }
             function onOpenWifiDialog() {
                 root.showWifiDialog = true;
+            }
+            function onOpenVpnDialog() {
+                root.showVpnDialog = true;
             }
         }
     }

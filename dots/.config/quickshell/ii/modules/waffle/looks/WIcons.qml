@@ -37,6 +37,10 @@ Singleton {
         return "wifi-warning";
     }
 
+    property string vpnIcon: {
+        return "globe-shield";
+    }
+
     property string batteryIcon: {
         if (Battery.isCharging)
             return "battery-charge";
