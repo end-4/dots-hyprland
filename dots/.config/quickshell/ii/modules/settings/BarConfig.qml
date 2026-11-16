@@ -171,6 +171,26 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
+                buttonIcon: "instant_mix"
+                text: Translation.tr("App volume mixer")
+                checked: Config.options.bar.showAppVolumeMixer
+                onCheckedChanged: {
+                    Config.options.bar.showAppVolumeMixer = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "bedtime_off"
+                text: Translation.tr("Stay awake toggle")
+                checked: Config.options.bar.showSleepInhibitToggle
+                onCheckedChanged: {
+                    Config.options.bar.showSleepInhibitToggle = checked;
+                }
+            }
+        }
+
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
                 buttonIcon: "content_cut"
                 text: Translation.tr("Screen snip")
                 checked: Config.options.bar.utilButtons.showScreenSnip

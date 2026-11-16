@@ -241,6 +241,8 @@ Singleton {
                 property bool showBackground: true
                 property bool verbose: true
                 property bool vertical: false
+                property bool showAppVolumeMixer: true // Per-app volume mixer button
+                property bool showSleepInhibitToggle: false // Keep-awake (sleep inhibitor) toggle
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true
