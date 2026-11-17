@@ -27,7 +27,7 @@ Scope { // Scope
             screen: modelData
             visible: !GlobalStates.screenLocked
 
-            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
+            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated) || (Config.options?.dock.appFinder.replaceOverviewButton && appFinder.showing)
 
             anchors {
                 bottom: true
@@ -127,8 +127,14 @@ Scope { // Scope
                             }
                             DockSeparator {}
                             DockButton {
+                                id: appFinderButton
                                 Layout.fillHeight: true
-                                onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
+                                onClicked: {
+                                    if (Config.options?.dock.appFinder.replaceOverviewButton)
+                                        appFinder.showing = !appFinder.showing
+                                    else
+                                        GlobalStates.overviewOpen = !GlobalStates.overviewOpen
+                                }
                                 topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
                                 bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
                                 contentItem: MaterialSymbol {
@@ -136,12 +142,18 @@ Scope { // Scope
                                     horizontalAlignment: Text.AlignHCenter
                                     font.pixelSize: parent.width / 2
                                     text: "apps"
-                                    color: Appearance.colors.colOnLayer0
+                                    color: (Config.options?.dock.appFinder.replaceOverviewButton && appFinder.showing) ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer0
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            // ── App Finder popup ──
+            DockAppFinder {
+                id: appFinder
+                dockWindow: dockRoot
             }
         }
     }
