@@ -849,6 +849,7 @@ Singleton {
                 "functionName": message.functionName,
                 "functionCall": message.functionCall,
                 "functionResponse": message.functionResponse,
+                "thoughtSignature": message.thoughtSignature,
                 "visibleToUser": message.visibleToUser,
             })
         })
@@ -905,6 +906,7 @@ Singleton {
                     "functionName": message.functionName,
                     "functionCall": message.functionCall,
                     "functionResponse": message.functionResponse,
+                    "thoughtSignature": message.thoughtSignature ?? "",
                     "visibleToUser": message.visibleToUser,
                 });
             }
