@@ -34,6 +34,7 @@ Scope { // Scope
                 left: true
                 right: true
             }
+            margins.bottom: BarState.bottomOffset(dockRoot.screen.name)
 
             exclusiveZone: root.pinned ? implicitHeight - (Appearance.sizes.hyprlandGapsOut) - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
 

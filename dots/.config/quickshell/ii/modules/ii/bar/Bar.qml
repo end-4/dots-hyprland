@@ -51,7 +51,22 @@ Scope {
                     }
                 }
                 property bool superShow: false
-                property bool mustShow: hoverRegion.containsMouse || superShow
+                readonly property var currentMonitor: HyprlandData.monitors.find(monitor => monitor.name === barRoot.screen.name)
+                readonly property int currentWorkspaceId: currentMonitor?.activeWorkspace?.id ?? -1
+                readonly property bool workspaceEmpty: currentWorkspaceId >= 0
+                    && !HyprlandData.windowList.some(window => window.workspace?.id === currentWorkspaceId)
+                readonly property bool forceVisibleOnEmptyWorkspace: Config.options.bar.autoHide.enable
+                    && Config.options.bar.autoHide.showOnEmptyWorkspace
+                    && workspaceEmpty
+                property bool mustShow: hoverRegion.containsMouse || superShow || forceVisibleOnEmptyWorkspace
+                readonly property real forcedVisibleOffset: forceVisibleOnEmptyWorkspace && !Config.options.bar.bottom
+                    ? Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
+                    : 0
+                onForcedVisibleOffsetChanged: BarState.setOffset(barRoot.screen.name, forcedVisibleOffset)
+                readonly property real forcedVisibleBottomOffset: forceVisibleOnEmptyWorkspace && Config.options.bar.bottom
+                    ? Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
+                    : 0
+                onForcedVisibleBottomOffsetChanged: BarState.setBottomOffset(barRoot.screen.name, forcedVisibleBottomOffset)
                 exclusionMode: ExclusionMode.Ignore
                 exclusiveZone: (Config?.options.bar.autoHide.enable && (!mustShow || !Config?.options.bar.autoHide.pushWindows)) ? 0 :
                     Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
@@ -78,9 +93,14 @@ Scope {
                 // Include in focus grab
                 Component.onCompleted: {
                     GlobalFocusGrab.addPersistent(barRoot);
+                    BarState.setOffset(barRoot.screen.name, forcedVisibleOffset);
+                    BarState.setBottomOffset(barRoot.screen.name, forcedVisibleBottomOffset);
                 }
+
                 Component.onDestruction: {
                     GlobalFocusGrab.removePersistent(barRoot);
+                    BarState.setOffset(barRoot.screen.name, 0);
+                    BarState.setBottomOffset(barRoot.screen.name, 0);
                 }
 
                 MouseArea  {
