@@ -22,4 +22,8 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
+
+    -- Bridge legacy XEmbed tray icons (such as Wine/Proton) to the SNI tray.
+    -- plasma-workspace provides xembedsniproxy; skip it when unavailable.
+    hl.exec_cmd("command -v xembedsniproxy >/dev/null 2>&1 && xembedsniproxy")
 end)
