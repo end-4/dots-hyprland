@@ -1,0 +1,15 @@
+# Optional user service for the per-window keyboard layout tracker.
+# Installed by `./setup install --layout-tracker`.
+# Adapted from tak0-layout, the original project:
+# https://github.com/tak0dan/QoL-Script-For-Hyprland-By-Tak00/tree/main/layout-tracker
+[Unit]
+Description=Per-window keyboard layouts for Hyprland that learn your habits
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.config/hypr/hyprland/scripts/layout_tracker.py daemon
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

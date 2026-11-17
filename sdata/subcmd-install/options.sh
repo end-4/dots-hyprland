@@ -26,6 +26,9 @@ Options for install:
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
                             Quickshell, Fish and Hyprland
       --core                Alias of --skip-{plasmaintg,fish,miscconf,fontconfig}
+      --layout-tracker      Install and enable the optional user service that keeps a keyboard
+                            layout per window and learns the default for new windows.
+                            Without this flag it is only offered when asking interactively.
       --fontset <set>       Use a set of pre-defined font and config (currently only fontconfig).
                             Possible values of <set>: $(ls -A ${REPO_ROOT}/dots-extra/fontsets)
 ${STY_CYAN}
@@ -47,7 +50,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
   -o hfFk:cs \
-  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-hyprland-entry,skip-fontconfig,skip-miscconf,core,exp-files,via-nix \
+  -l help,force,firstrun,fontset:,clean,skip-allgreeting,skip-alldeps,skip-allsetups,skip-allfiles,ignore-outdate,skip-sysupdate,skip-plasmaintg,skip-backup,skip-quickshell,skip-fish,skip-hyprland,skip-hyprland-entry,skip-fontconfig,skip-miscconf,core,layout-tracker,exp-files,via-nix \
   -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -73,6 +76,7 @@ while true ; do
     ## Ones without parameter
     -f|--force) ask=false;shift;;
     -F|--firstrun) INSTALL_FIRSTRUN=true;shift;;
+    --layout-tracker) LAYOUT_TRACKER=true;shift;;
     --skip-allgreeting) SKIP_ALLGREETING=true;shift;;
     --skip-alldeps) SKIP_ALLDEPS=true;shift;;
     --skip-allsetups) SKIP_ALLSETUPS=true;shift;;
