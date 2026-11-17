@@ -126,14 +126,33 @@ Item {
     }
 
     ToggleDialog {
+        id: bluetoothToggleDialog
         shownPropertyString: "showBluetoothDialog"
         dialog: BluetoothDialog {}
         onShownChanged: {
             if (!shown) {
-                Bluetooth.defaultAdapter.discovering = false;
+                if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.discovering = false;
+                BluetoothStatus.expandedAddress = "";
             } else {
-                Bluetooth.defaultAdapter.enabled = true;
-                Bluetooth.defaultAdapter.discovering = true;
+                if (Bluetooth.defaultAdapter) {
+                    Bluetooth.defaultAdapter.enabled = true;
+                    Bluetooth.defaultAdapter.discovering = true;
+                }
+                BluetoothStatus.scheduleUpdate(true);
+            }
+        }
+        Component.onCompleted: {
+            if (!shown && Bluetooth.defaultAdapter) {
+                Bluetooth.defaultAdapter.discovering = false;
+            }
+        }
+
+        Connections {
+            target: Bluetooth
+            function onDefaultAdapterChanged() {
+                if (!bluetoothToggleDialog.shown && Bluetooth.defaultAdapter) {
+                    Bluetooth.defaultAdapter.discovering = false;
+                }
             }
         }
     }
