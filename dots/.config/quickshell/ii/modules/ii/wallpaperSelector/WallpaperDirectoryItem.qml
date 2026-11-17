@@ -11,6 +11,7 @@ MouseArea {
     required property var fileModelData
     property bool isDirectory: fileModelData.fileIsDir
     property bool useThumbnail: Images.isValidImageByName(fileModelData.fileName)
+    property string thumbnailSizeName: ""
 
     property alias colBackground: background.color
     property alias colText: wallpaperItemName.color
@@ -62,6 +63,7 @@ MouseArea {
                         id: thumbnailImage
                         generateThumbnail: false
                         sourcePath: fileModelData.filePath
+                        thumbnailSizeName: root.thumbnailSizeName !== "" ? root.thumbnailSizeName : undefined
 
                         cache: false
                         fillMode: Image.PreserveAspectCrop
