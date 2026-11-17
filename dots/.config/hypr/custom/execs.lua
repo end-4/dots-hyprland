@@ -1,1 +1,8 @@
-
+-- Optional: per-window keyboard layouts that learn from how you use them.
+-- Every window keeps its own layout, and a new window opens in the layout you use
+-- most in that app. Needs only python3. Uncomment to enable; run
+-- `python3 ~/.config/hypr/hyprland/scripts/layout_tracker.py stats` to see the numbers.
+-- Original project: https://github.com/tak0dan/QoL-Script-For-Hyprland-By-Tak00/tree/main/layout-tracker
+-- hl.on("hyprland.start", function()
+--     hl.exec_cmd("python3 $HOME/.config/hypr/hyprland/scripts/layout_tracker.py daemon")
+-- end)

@@ -7,6 +7,27 @@ function prepare_systemd_user_service(){
   fi
 }
 
+# Optional: per-window keyboard layouts that learn your habits.
+# Adapted from tak0-layout, the original project:
+# https://github.com/tak0dan/QoL-Script-For-Hyprland-By-Tak00/tree/main/layout-tracker
+function setup_layout_tracker(){
+  # The service runs hypr/hyprland/scripts/layout_tracker.py, copied in step 3,
+  # so it is enabled here and starts with the next login.
+  x mkdir -p "${XDG_CONFIG_HOME}/systemd/user"
+  x cp -f "${REPO_ROOT}/dots-extra/systemd/hypr-layout-tracker.service" "${XDG_CONFIG_HOME}/systemd/user/hypr-layout-tracker.service"
+  x systemctl --user daemon-reload
+  x systemctl --user enable hypr-layout-tracker.service
+}
+function ask_layout_tracker(){
+  # Not installed by default: it changes how layouts behave. Only offered when
+  # asking, and in force mode only with --layout-tracker.
+  [[ "${LAYOUT_TRACKER}" == true ]] && return 0
+  [[ "${ask}" == false ]] && return 1
+  printf "${STY_CYAN}Optional: keep a keyboard layout per window, and open new windows in the layout you use most in that app?${STY_RST}\n"
+  local p; read -p "Install the layout tracker service? [y/N] " p
+  [[ "$p" =~ ^[yY]$ ]]
+}
+
 function setup_user_group(){
   if [[ -z $(getent group i2c) ]] && [[ "$OS_GROUP_ID" != "fedora" ]]; then
     # On Fedora this is not needed. Tested with desktop computer with NVIDIA video card.
@@ -49,6 +70,13 @@ if [[ -d /run/systemd/system ]]; then
       fi
     fi
     v sudo systemctl enable bluetooth --now
+    # The layout tracker is a user service and needs the user session bus, like ydotool above.
+    if [[ -z "${DBUS_SESSION_BUS_ADDRESS}" ]]; then
+      echo -e "${STY_YELLOW}No user session bus here, skipping the optional layout tracker service.${STY_RST}"
+    elif ask_layout_tracker; then
+      showfun setup_layout_tracker
+      v setup_layout_tracker
+    fi
   else
     echo -e "${STY_RED}Systemd detected, but the systemctl command is unavailable.${STY_RST}"
     pause
