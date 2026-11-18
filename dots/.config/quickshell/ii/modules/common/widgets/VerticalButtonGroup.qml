@@ -14,13 +14,19 @@ Rectangle {
     property real padding: 0
     property int clickIndex: columnLayout.clickIndex
 
-    property real contentHeight: {
+    function calculateContentHeight() {
         let total = 0;
         for (let i = 0; i < columnLayout.children.length; ++i) {
             const child = columnLayout.children[i];
             total += child.baseHeight ?? child.implicitHeight ?? child.height;
         }
         return total + columnLayout.spacing * (columnLayout.children.length - 1);
+    }
+
+    property real contentHeight: calculateContentHeight()
+
+    onWidthChanged: {
+        contentHeight = calculateContentHeight();
     }
 
     topLeftRadius: columnLayout.children.length > 0 ? (columnLayout.children[0].radius + padding) : 
