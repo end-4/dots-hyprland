@@ -38,39 +38,77 @@ Singleton {
         wCode: 0,
         city: 0,
         wind: 0,
+        windUnit: "km/h",
+        windDirArrow: "↑",
         precip: 0,
+        precipUnit: "mm",
         visib: 0,
+        visibUnit: "km",
         press: 0,
+        pressUnit: "hPa",
         temp: 0,
         tempFeelsLike: 0,
         lastRefresh: 0,
     })
 
+    function windDirToArrow(dir) {
+        const map = {
+            "N": "↑", "NNE": "↗", "NE": "↗", "ENE": "→",
+            "E": "→", "ESE": "↘", "SE": "↘", "SSE": "↓",
+            "S": "↓", "SSW": "↙", "SW": "↙", "WSW": "←",
+            "W": "←", "WNW": "↖", "NW": "↖", "NNW": "↑"
+        };
+        return map[dir] ?? "→";
+    }
+
+    function formatAstroTime(timeStr) {
+        // API returns fixed 12h format like "04:50 AM" — convert to user's configured format
+        const parts = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!parts) return timeStr;
+        let hours = parseInt(parts[1]);
+        const minutes = parseInt(parts[2]);
+        const ampm = parts[3].toUpperCase();
+        if (ampm === "PM" && hours !== 12) hours += 12;
+        if (ampm === "AM" && hours === 12) hours = 0;
+        const d = new Date();
+        d.setHours(hours, minutes, 0, 0);
+        return Qt.locale().toString(d, Config.options?.time.format ?? "hh:mm");
+    }
+
     function refineData(data) {
         let temp = {};
         temp.uv = data?.current?.uvIndex || 0;
         temp.humidity = (data?.current?.humidity || 0) + "%";
-        temp.sunrise = data?.astronomy?.sunrise || "0.0";
-        temp.sunset = data?.astronomy?.sunset || "0.0";
+        temp.sunrise = formatAstroTime(data?.astronomy?.sunrise || "12:00 AM");
+        temp.sunset = formatAstroTime(data?.astronomy?.sunset || "12:00 AM");
         temp.windDir = data?.current?.winddir16Point || "N";
+        temp.windDirArrow = windDirToArrow(temp.windDir);
         temp.wCode = data?.current?.weatherCode || "113";
         temp.city = data?.location?.areaName[0]?.value || "City";
         temp.temp = "";
         temp.tempFeelsLike = "";
         if (root.useUSCS) {
-            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
-            temp.precip = (data?.current?.precipInches || 0) + " in";
-            temp.visib = (data?.current?.visibilityMiles || 0) + " m";
-            temp.press = (data?.current?.pressureInches || 0) + " psi";
+            temp.wind = data?.current?.windspeedMiles || 0;
+            temp.windUnit = "mph";
+            temp.precip = data?.current?.precipInches || 0;
+            temp.precipUnit = "in";
+            temp.visib = data?.current?.visibilityMiles || 0;
+            temp.visibUnit = "mi";
+            temp.press = data?.current?.pressureInches || 0;
+            temp.pressUnit = "psi";
             temp.temp += (data?.current?.temp_F || 0);
             temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
             temp.temp += "°F";
             temp.tempFeelsLike += "°F";
         } else {
-            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-            temp.precip = (data?.current?.precipMM || 0) + " mm";
-            temp.visib = (data?.current?.visibility || 0) + " km";
-            temp.press = (data?.current?.pressure || 0) + " hPa";
+            temp.wind = data?.current?.windspeedKmph || 0;
+            temp.windUnit = "km/h";
+            temp.precip = data?.current?.precipMM || 0;
+            temp.precipUnit = "mm";
+            temp.visib = data?.current?.visibility || 0;
+            temp.visibUnit = "km";
+            temp.press = data?.current?.pressure || 0;
+            temp.pressUnit = "hPa";
             temp.temp += (data?.current?.temp_C || 0);
             temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
             temp.temp += "°C";

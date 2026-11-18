@@ -6,39 +6,73 @@ import qs.modules.common.widgets
 
 Rectangle {
     id: root
+    
     radius: Appearance.rounding.small
     color: Appearance.colors.colSurfaceContainerHigh
-    implicitWidth: columnLayout.implicitWidth + 14 * 2
-    implicitHeight: columnLayout.implicitHeight + 14 * 2
-    Layout.fillWidth: parent
+    
+    Layout.fillWidth: true
+    implicitWidth: mainRow.implicitWidth + 32
+    implicitHeight: mainRow.implicitHeight + 12
 
     property alias title: title.text
     property alias value: value.text
     property alias symbol: symbol.text
 
-    ColumnLayout {
-        id: columnLayout
-        anchors.fill: parent
-        spacing: -10
-        RowLayout {
-            Layout.alignment: Qt.AlignHCenter
+    RowLayout {
+        id: mainRow
+        anchors {
+             left: parent.left
+             verticalCenter: parent.verticalCenter
+             leftMargin: 8
+             rightMargin: 16
+        }
+        spacing: 8
+
+        Rectangle {
+            id: iconContainer
+            width: Appearance.font.pixelSize.title * 2
+            height: Appearance.font.pixelSize.title * 2
+            radius: Appearance.rounding.small
+            color: Appearance.colors.colSurfaceContainerHighest ?? Appearance.colors.colSurfaceVariant
+            
+            Layout.alignment: Qt.AlignVCenter
+
             MaterialSymbol {
                 id: symbol
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1
                 fill: 0
-                iconSize: Appearance.font.pixelSize.normal
-                color: Appearance.colors.colOnSurfaceVariant
-            }
-            StyledText {
-                id: title
-                font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colOnSurfaceVariant
+                iconSize: Appearance.font.pixelSize.title
+                color: Appearance.colors.colOnSurface
             }
         }
-        StyledText {
-            id: value
-            Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnSurfaceVariant
+
+        ColumnLayout {
+            id: textColumn
+            Layout.alignment: Qt.AlignVCenter
+            spacing: 1 
+            
+
+            StyledText {
+                id: title
+                font {
+                    pixelSize: Appearance.font.pixelSize.smaller
+                    weight: Font.Normal
+                }
+                color: Appearance.colors.colOutline
+                elide: Text.ElideRight
+            }
+
+            StyledText {
+                id: value
+                font {
+                    pixelSize: Appearance.font.pixelSize.small
+                    weight: Font.Bold
+                }
+                color: Appearance.colors.colOnSurface 
+                elide: Text.ElideRight
+            }
         }
     }
 }
