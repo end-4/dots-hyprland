@@ -174,7 +174,16 @@ Singleton {
         if (root.query.startsWith(Config.options.search.prefix.clipboard)) {
             // Clipboard
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.clipboard);
-            return Cliphist.fuzzyQuery(searchString).map((entry, index, array) => {
+            const allClipStrings = [searchString, ...KeymapTranslation.translateAll(searchString)];
+            const seenClipEntries = new Set();
+            const clipEntries = allClipStrings.reduce((acc, q) => {
+                return acc.concat(Cliphist.fuzzyQuery(q).filter(e => {
+                    if (seenClipEntries.has(e)) return false;
+                    seenClipEntries.add(e);
+                    return true;
+                }));
+            }, []);
+            return clipEntries.map((entry, index, array) => {
                 const mightBlurImage = Cliphist.entryIsImage(entry) && root.clipboardWorkSafetyActive;
                 let shouldBlurImage = mightBlurImage;
                 if (mightBlurImage) {
@@ -208,9 +217,18 @@ Singleton {
                 });
             }).filter(Boolean);
         } else if (root.query.startsWith(Config.options.search.prefix.emojis)) {
-            // Clipboard
             const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.emojis);
-            return Emojis.fuzzyQuery(searchString).map(entry => {
+            const allEmojiStrings = [searchString, ...KeymapTranslation.translateAll(searchString)];
+            const seenEmojis = new Set();
+            const emojiEntries = allEmojiStrings.reduce((acc, q) => {
+                return acc.concat(Emojis.fuzzyQuery(q).filter(entry => {
+                    const key = entry.match(/^\s*(\S+)/)?.[1] || entry;
+                    if (seenEmojis.has(key)) return false;
+                    seenEmojis.add(key);
+                    return true;
+                }));
+            }, []);
+            return emojiEntries.map(entry => {
                 const emoji = entry.match(/^\s*(\S+)/)?.[1] || "";
                 return resultComp.createObject(null, {
                     rawValue: entry,
@@ -239,7 +257,33 @@ Singleton {
                 Quickshell.clipboardText = root.mathResult;
             }
         });
-        const appResultObjects = AppSearch.fuzzyQuery(StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app)).map(entry => {
+        
+        const _appQuery = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.app);
+        const _primaryEntries = AppSearch.fuzzyQuery(_appQuery);
+        const _seenIds = new Set(_primaryEntries.map(e => e.id));
+        const _layoutEntries = KeymapTranslation.translateAll(_appQuery).reduce((acc, tq) => {
+            return acc.concat(AppSearch.fuzzyQuery(tq).filter(e => {
+                if (_seenIds.has(e.id)) return false;
+                _seenIds.add(e.id);
+                return true;
+            }));
+        }, []);
+        const _translitQuery = KeymapTranslation.transliterate(_appQuery);
+        const _translitEntries = (_translitQuery && _translitQuery !== _appQuery)
+            ? AppSearch.levenshteinQuery(_translitQuery).filter(e => {
+                if (_seenIds.has(e.id)) return false;
+                _seenIds.add(e.id);
+                return true;
+            })
+            : [];
+        const _typoEntries = (_primaryEntries.length === 0 && _layoutEntries.length === 0 && _translitEntries.length === 0)
+            ? AppSearch.levenshteinQuery(_appQuery).filter(e => {
+                if (_seenIds.has(e.id)) return false;
+                _seenIds.add(e.id);
+                return true;
+            })
+            : [];
+        const appResultObjects = [..._primaryEntries, ..._layoutEntries, ..._translitEntries, ..._typoEntries].map(entry => {
             return resultComp.createObject(null, {
                 type: Translation.tr("App"),
                 id: entry.id,
