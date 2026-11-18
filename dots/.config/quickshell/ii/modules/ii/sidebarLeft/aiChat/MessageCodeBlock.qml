@@ -56,7 +56,15 @@ ColumnLayout {
                 font.pixelSize: Appearance.font.pixelSize.small
                 font.weight: Font.DemiBold
                 color: Appearance.colors.colOnLayer2
-                text: root.displayLang ? Repository.definitionForName(root.displayLang).name : "plain"
+                text: {
+                    // Label a tool command request as "Command"; otherwise show the
+                    // language definition name, guarding against a null definition
+                    // (an unknown lang tag made `.name` throw before this).
+                    if (root.isCommandRequest) return Translation.tr("Command");
+                    if (!root.displayLang) return "plain";
+                    const def = Repository.definitionForName(root.displayLang);
+                    return (def && def.name) ? def.name : root.displayLang;
+                }
             }
 
             Item { Layout.fillWidth: true }
