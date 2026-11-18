@@ -68,6 +68,56 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "timer"
+        title: Translation.tr("Pomodoro")
+
+        ConfigSpinBox {
+            icon: "avg_pace"
+            text: Translation.tr("Focus duration (min)")
+            value: Math.round(Config.options.time.pomodoro.focus / 60)
+            from: 1
+            to: 120
+            stepSize: 1
+            onValueChanged: {
+                Config.options.time.pomodoro.focus = value * 60;
+            }
+        }
+        ConfigSpinBox {
+            icon: "free_breakfast"
+            text: Translation.tr("Break duration (min)")
+            value: Math.round(Config.options.time.pomodoro.breakTime / 60)
+            from: 0
+            to: 60
+            stepSize: 1
+            onValueChanged: {
+                Config.options.time.pomodoro.breakTime = value * 60;
+            }
+        }
+        ConfigSpinBox {
+            icon: "nature"
+            text: Translation.tr("Long break duration (min)")
+            value: Math.round(Config.options.time.pomodoro.longBreak / 60)
+            from: 0
+            to: 60
+            stepSize: 1
+            onValueChanged: {
+                Config.options.time.pomodoro.longBreak = value * 60;
+            }
+        }
+        ConfigSpinBox {
+            icon: "repeat"
+            text: Translation.tr("Cycles before long break")
+            value: Config.options.time.pomodoro.cyclesBeforeLongBreak
+            from: 1
+            to: 10
+            stepSize: 1
+            onValueChanged: {
+                Config.options.time.pomodoro.cyclesBeforeLongBreak = value;
+            }
+        }
+    }
+
+    ContentSection {
         icon: "memory"
         title: Translation.tr("Resources")
 
