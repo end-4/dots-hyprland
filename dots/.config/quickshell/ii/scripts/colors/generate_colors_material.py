@@ -22,6 +22,7 @@ parser.add_argument('--termscheme', type=str, default=None, help='JSON file cont
 parser.add_argument('--harmony', type=float , default=0.8, help='(0-1) Color hue shift towards accent')
 parser.add_argument('--harmonize_threshold', type=float , default=100, help='(0-180) Max threshold angle to limit color hue shift')
 parser.add_argument('--term_fg_boost', type=float , default=0.35, help='Make terminal foreground more different from the background')
+parser.add_argument('--term_bg_tone', type=float , default=0.4, help='(0-1) Terminal background darkness/tone (lower = darker)')
 parser.add_argument('--blend_bg_fg', action='store_true', default=False, help='Shift terminal background or foreground towards accent')
 parser.add_argument('--cache', type=str, default=None, help='file path to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
@@ -143,7 +144,7 @@ if args.termscheme is not None:
             term_colors[color] = val
             continue
         if args.blend_bg_fg and color == "term0":
-            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainerLow']), 1.2, 0.95)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainerLow']), 1.2, args.term_bg_tone)
         elif args.blend_bg_fg and color == "term15":
             harmonized = boost_chroma_tone(hex_to_argb(material_colors['onSurface']), 3, 1)
         else:
