@@ -98,6 +98,18 @@ Singleton {
         deleteProc.deleteEntry(entry);
     }
 
+    function deleteEntries(entries) {
+        if (entries.length === 0) return;
+        if (root.cliphistBinary.includes("cliphist")) {
+            const escaped = entries.map(e => StringUtils.shellSingleQuoteEscape(e)).join("\\n");
+            Quickshell.execDetached(["bash", "-c", `printf '${escaped}' | ${root.cliphistBinary} delete`]);
+        } else {
+            const escaped = entries.map(e => StringUtils.shellSingleQuoteEscape(e)).join("'\\n'");
+            Quickshell.execDetached(["bash", "-c", `printf '%b' '${escaped}' | while IFS= read -r entry; do [ -n "$entry" ] && echo "$entry" | ${root.cliphistBinary} delete; done`]);
+        }
+        delayedUpdateTimer.restart();
+    }
+
     Process {
         id: wipeProc
         command: [root.cliphistBinary, "wipe"]
