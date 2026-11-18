@@ -230,6 +230,9 @@ Singleton {
             property var numbers: ({
                 "wght": 450,
             })
+            property var expressiveTitle: ({
+                "wght": 400
+            })
             property var title: ({ // Slightly bold weight for title
                 "wght": 550, // Weight (Lowered to compensate for increased grade)
             })
