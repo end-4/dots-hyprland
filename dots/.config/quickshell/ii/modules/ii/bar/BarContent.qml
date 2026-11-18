@@ -122,6 +122,12 @@ Item { // Bar content region
                 visible: root.useShortenedForm < 2
                 Layout.fillWidth: true
             }
+
+            Loader {
+                active: Config.options.bar.claudeUsage.enable
+                visible: root.useShortenedForm < 2 && active
+                sourceComponent: ClaudeUsageBar {}
+            }
         }
 
         VerticalBarSeparator {

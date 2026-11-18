@@ -274,6 +274,12 @@ Singleton {
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }
+                property JsonObject claudeUsage: JsonObject {
+                    property bool enable: false // Show a Claude (Pro/Max) subscription usage gauge in the bar
+                    property bool defaultWeekly: false // Start on the 7-day window; click the gauge to switch session <-> week
+                    property int warningThreshold: 90 // Turn the gauge red at/above this utilization (%)
+                    property int fetchInterval: 5 // minutes
+                }
                 property JsonObject indicators: JsonObject {
                     property JsonObject notifications: JsonObject {
                         property bool showUnreadCount: false
