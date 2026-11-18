@@ -12,6 +12,7 @@ DialogListItem {
     enabled: !(Network.wifiConnectTarget === root.wifiNetwork && !wifiNetwork?.active)
 
     active: (wifiNetwork?.askingPassword || wifiNetwork?.active) ?? false
+    buttonRadius: Appearance.rounding.normal
     onClicked: {
         Network.connectToWifiNetwork(wifiNetwork);
     }
