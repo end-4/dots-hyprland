@@ -90,22 +90,32 @@ Singleton {
     }
 
     function stringifyList(list) {
-        return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
+        // This cache is machine-read, so skip pretty-printing: indenting a large list wastes CPU
+        // and roughly doubles the bytes written on every save.
+        return JSON.stringify(list.map((notif) => notifToJSON(notif)));
     }
+
+    // Coalesce disk writes. Previously every list mutation synchronously re-serialised and rewrote
+    // the whole cache file (O(n) per change, O(n^2) for a bulk dismiss), which pegged a CPU core.
+    // queueSave() batches a burst of changes into one write; saveNow() flushes immediately.
+    Timer {
+        id: saveDebounce
+        interval: 500
+        repeat: false
+        onTriggered: notifFileView.setText(root.stringifyList(root.list))
+    }
+    function queueSave() { saveDebounce.restart(); }
+    function saveNow() { saveDebounce.stop(); notifFileView.setText(root.stringifyList(root.list)); }
     
     onListChanged: {
-        // Update latest time for each app
+        // Rebuild latestTimeForApp in a single O(n) pass (was O(n^2): a nested list.some() inside
+        // Object.keys().forEach()). Behaviour is identical.
+        const latest = {};
         root.list.forEach((notif) => {
-            if (!root.latestTimeForApp[notif.appName] || notif.time > root.latestTimeForApp[notif.appName]) {
-                root.latestTimeForApp[notif.appName] = Math.max(root.latestTimeForApp[notif.appName] || 0, notif.time);
-            }
+            const prev = latest[notif.appName] || 0;
+            if (notif.time > prev) latest[notif.appName] = notif.time;
         });
-        // Remove apps that no longer have notifications
-        Object.keys(root.latestTimeForApp).forEach((appName) => {
-            if (!root.list.some((notif) => notif.appName === appName)) {
-                delete root.latestTimeForApp[appName];
-            }
-        });
+        root.latestTimeForApp = latest;
     }
 
     function appNameListForGroups(groups) {
@@ -181,7 +191,7 @@ Singleton {
             }
             root.notify(newNotifObject);
             // console.log(notifToString(newNotifObject));
-            notifFileView.setText(stringifyList(root.list));
+            root.queueSave(); // debounced instead of a full synchronous file write per notification
         }
     }
 
@@ -195,7 +205,7 @@ Singleton {
         const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id + root.idOffset === id);
         if (index !== -1) {
             root.list.splice(index, 1);
-            notifFileView.setText(stringifyList(root.list));
+            root.queueSave(); // debounced: don't rewrite the whole cache on every single dismiss
             triggerListChange()
         }
         if (notifServerIndex !== -1) {
@@ -204,10 +214,27 @@ Singleton {
         root.discard(id); // Emit signal
     }
 
+    // Remove an entire app group in one list mutation, one recompute and one save, replacing the
+    // per-item forEach(callLater(discardNotification)) storm (O(n^2) lockup on a large group).
+    function discardByAppName(appName) {
+        if (!appName) return;
+        const removed = root.list.filter((notif) => notif.appName === appName);
+        if (removed.length === 0) return;
+        root.list = root.list.filter((notif) => notif.appName !== appName);
+        root.saveNow(); // group dismiss is a deliberate action: persist immediately
+        triggerListChange();
+        removed.forEach((notif) => {
+            const id = notif.notificationId;
+            const si = notifServer.trackedNotifications.values.findIndex((n) => n.id + root.idOffset === id);
+            if (si !== -1) notifServer.trackedNotifications.values[si].dismiss();
+            root.discard(id);
+        });
+    }
+
     function discardAllNotifications() {
         root.list = []
         triggerListChange()
-        notifFileView.setText(stringifyList(root.list));
+        root.saveNow(); // flush immediately so a clear-all persists even if qs exits right after
         notifServer.trackedNotifications.values.forEach((notif) => {
             notif.dismiss()
         })
