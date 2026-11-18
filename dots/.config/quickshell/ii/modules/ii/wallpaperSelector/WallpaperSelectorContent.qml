@@ -202,8 +202,8 @@ MouseArea {
                             ...(Config.options.policies.weeb === 1 ? [
                                     {
                                         icon: "favorite",
-                                        name: "Homework",
-                                        path: `${Directories.pictures}/homework`
+                                        name: "Wallpapers",
+                                        path: `${Directories.pictures}/Wallpapers`
                                     }
                                 ] : []),]
                         delegate: RippleButton {
