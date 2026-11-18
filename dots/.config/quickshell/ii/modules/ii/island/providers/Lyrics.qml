@@ -32,14 +32,45 @@ Item {
         return out;
     }
 
+    // Splits a line into word chunks of at most `max` chars, balanced so the last one isn't a lone word.
+    // A single word longer than `max` stays whole (the pill elides it).
+    function splitLine(text, max) {
+        if (text.length <= max)
+            return [text];
+        const target = Math.ceil(text.length / Math.ceil(text.length / max));
+        const out = [];
+        let cur = "";
+        for (const w of text.split(/\s+/)) {
+            if (cur && (cur.length + 1 + w.length > max || cur.length >= target)) {
+                out.push(cur);
+                cur = w;
+            } else {
+                cur = cur ? cur + " " + w : w;
+            }
+        }
+        if (cur)
+            out.push(cur);
+        return out;
+    }
+
     // Lines are in seconds (Quickshell MprisPlayer.position / length).
     function updateLine() {
         const pos = MprisController.activePlayer?.position ?? 0;
-        let cur = "";
         // Empty lines (instrumental breaks) keep the previous non-empty line.
-        for (const l of root.lines) {
-            if (l.t > pos) break;
-            if (l.text) cur = l.text;
+        let idx = -1;
+        for (let k = 0; k < root.lines.length; k++) {
+            if (root.lines[k].t > pos) break;
+            if (root.lines[k].text) idx = k;
+        }
+        let cur = "";
+        if (idx >= 0) {
+            // Too long for the pill: show its chunks in turn over the line's time.
+            const start = root.lines[idx].t;
+            const end = idx + 1 < root.lines.length ? root.lines[idx + 1].t : start + 5;
+            IslandState.lyricFull = root.lines[idx].text;
+            const parts = root.splitLine(root.lines[idx].text, IslandState.lyricChars);
+            const i = Math.floor((pos - start) / Math.max(0.5, end - start) * parts.length);
+            cur = parts[Math.max(0, Math.min(parts.length - 1, i))];
         }
         if (cur !== IslandState.lyricLine)
             IslandState.lyricLine = cur;
@@ -115,6 +146,14 @@ Item {
             IslandState.lyricLine = "";
         } else {
             root.refresh();
+        }
+    }
+
+    // Re-split right away when the measured capacity changes (new line, other script/font).
+    Connections {
+        target: IslandState
+        function onLyricCharsChanged() {
+            root.updateLine();
         }
     }
 

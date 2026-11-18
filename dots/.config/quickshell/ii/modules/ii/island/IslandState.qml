@@ -433,6 +433,9 @@ Singleton {
 
     // Current synced lyric line (set by the Lyrics provider), shown instead of the title.
     property string lyricLine: ""
+    // How many characters fit in the DJ pill's text (measured by RestingPill); Lyrics splits longer lines.
+    property int lyricChars: 18
+    property string lyricFull: ""   // the whole current line, for RestingPill's measurement
 
     // Claude extras: recent tools (hover feed) and number of live sessions.
     property var claudeFeed: []

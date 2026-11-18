@@ -252,7 +252,20 @@ Item {
             rotation: root.discAngle
         }
         StyledText {
+            id: rowText
             Layout.fillWidth: true
+            // Average character width of the current lyric line (Cyrillic etc. is wider than Latin)
+            // -> how many of its characters fit, with 10 % slack because word widths vary.
+            TextMetrics {
+                id: charMetrics
+                font: rowText.font
+                text: IslandState.lyricFull || "the quick brown fox jumps over the lazy dog"
+            }
+            readonly property int fitChars: Math.floor(0.9 * width / (charMetrics.advanceWidth / charMetrics.text.length))
+            onFitCharsChanged: {
+                if (root.mode === "music" && fitChars > 5)
+                    IslandState.lyricChars = fitChars;
+            }
             text: root.mode === "music"
                 ? (IslandState.lyricLine || (MprisController.activeTrack?.title ?? ""))
                 : (root.mode === "opencode" ? root.opencodeText()
