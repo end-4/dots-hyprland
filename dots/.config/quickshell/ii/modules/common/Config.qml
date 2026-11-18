@@ -332,6 +332,7 @@ Singleton {
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty",]
                 property list<string> ignoredAppRegexes: []
+                property int launchAnimation: DockLaunchAnims.AnimType.Bounce
             }
 
             property JsonObject interactions: JsonObject {
