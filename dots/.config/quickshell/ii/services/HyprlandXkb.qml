@@ -20,6 +20,16 @@ Singleton {
     property var baseLayoutFilePath: "/usr/share/X11/xkb/rules/base.lst"
     property bool needsLayoutRefresh: false
 
+    // Hyprland keeps xkb group state per input device and emits one
+    // activelayout event per device. Pin tracking to a single device so a
+    // spurious event from an unrelated device (e.g. a temporary virtual
+    // keyboard created by wtype) can't overwrite what this service reports.
+    // Set to a device name from `hyprctl devices -j` to override; leave
+    // empty to auto-resolve (Hyprland's main keyboard).
+    property string trackedKeyboardOverride: ""
+    property string trackedKeyboard: ""
+    property bool trackedKeyboardSeen: false
+
     // Update the layout code according to the layout name (Hyprland gives the name not the code)
     onCurrentLayoutNameChanged: root.updateLayoutCode()
     function updateLayoutCode() {
@@ -72,7 +82,7 @@ Singleton {
         }
     }
 
-    // Find out available layouts and current active layout. Should only be necessary on init
+    // Find out available layouts, the device to track, and current active layout. Should only be necessary on init
     Process {
         id: fetchLayoutsProc
         running: true
@@ -82,7 +92,21 @@ Singleton {
             id: devicesCollector
             onStreamFinished: {
                 const parsedOutput = JSON.parse(devicesCollector.text);
-                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
+                const keyboards = parsedOutput["keyboards"];
+                if (!keyboards || keyboards.length === 0) return;
+
+                // Pin to the override if it resolves, else Hyprland's main keyboard,
+                // else just the first one so we always end up with something valid.
+                var hyprlandKeyboard = null;
+                if (root.trackedKeyboardOverride.length > 0)
+                    hyprlandKeyboard = keyboards.find(kb => kb.name === root.trackedKeyboardOverride);
+                if (!hyprlandKeyboard)
+                    hyprlandKeyboard = keyboards.find(kb => kb.main === true);
+                if (!hyprlandKeyboard)
+                    hyprlandKeyboard = keyboards[0];
+
+                root.trackedKeyboard = hyprlandKeyboard["name"];
+                root.trackedKeyboardSeen = false;
                 root.layoutCodes = hyprlandKeyboard["layout"].split(",");
                 root.currentLayoutName = hyprlandKeyboard["active_keymap"];
                 // console.log("[HyprlandXkb] Fetched | Layouts (multiple: " + (root.layoutCodes.length > 1) + "): "
@@ -106,7 +130,29 @@ Singleton {
 
                 // Update when layout might have changed
                 const dataString = event.data;
-                root.currentLayoutName = dataString.substring(dataString.indexOf(",") + 1);
+
+                // A single physical keyboard can enumerate as several devices (extra
+                // HID interfaces for media keys, system keys, NKRO), and each emits
+                // its own activelayout event. Anything that briefly registers a new
+                // keyboard device (e.g. wtype) can also make Hyprland reset the
+                // layout on that device to index 0. Without filtering by device,
+                // whichever event arrives last wins, so this can end up reporting a
+                // layout that was never actually selected on the keyboard being
+                // typed on. Filter to one tracked device once it's been observed at
+                // least once; until then, stay permissive so a stale or misspelled
+                // override can never freeze this service.
+                const prefix = root.trackedKeyboard + ",";
+                const fromTracked = root.trackedKeyboard.length > 0 && dataString.startsWith(prefix);
+
+                if (fromTracked) {
+                    root.trackedKeyboardSeen = true;
+                } else if (root.trackedKeyboardSeen) {
+                    return;
+                }
+
+                root.currentLayoutName = fromTracked
+                    ? dataString.substring(prefix.length)
+                    : dataString.substring(dataString.indexOf(",") + 1);
 
                 // Update layout for on-screen keyboard (osk)
                 Config.options.osk.layout = root.currentLayoutName.split(" (")[0];
