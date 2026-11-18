@@ -150,6 +150,11 @@ Item { // Wrapper
                 }
             }
 
+            EverythingMenus {
+                visible: root.searchingText.startsWith(Config.options.search.prefix.files) && (FileSearch.sortMenuOpen || FileSearch.filterMenuOpen)
+                Layout.fillWidth: true
+            }
+
             Rectangle {
                 // Separator
                 visible: root.showResults

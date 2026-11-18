@@ -113,6 +113,16 @@ Scope {
         GlobalStates.overviewOpen = true;
     }
 
+    function toggleFiles() {
+        if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
+            GlobalStates.overviewOpen = false;
+            return;
+        }
+        overviewScope.dontAutoCancelSearch = true;
+        panelWindow.setSearchingText(Config.options.search.prefix.files);
+        GlobalStates.overviewOpen = true;
+    }
+
     function toggleEmojis() {
         if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
             GlobalStates.overviewOpen = false;
@@ -143,6 +153,9 @@ Scope {
         }
         function clipboardToggle() {
             overviewScope.toggleClipboard();
+        }
+        function filesToggle() {
+            overviewScope.toggleFiles();
         }
     }
 
@@ -200,6 +213,15 @@ Scope {
 
         onPressed: {
             overviewScope.toggleClipboard();
+        }
+    }
+
+    GlobalShortcut {
+        name: "overviewFilesToggle"
+        description: "Toggle file search (Everything) on overview widget"
+
+        onPressed: {
+            overviewScope.toggleFiles();
         }
     }
 
