@@ -18,7 +18,7 @@ PanelWindow {
     color: "transparent"
     WlrLayershell.namespace: "quickshell:regionSelector"
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     exclusionMode: ExclusionMode.Ignore
     anchors {
         left: true
@@ -26,6 +26,16 @@ PanelWindow {
         top: true
         bottom: true
     }
+
+    // Join the shared HyprlandFocusGrab while the selector is open. Otherwise, if
+    // another grabbing surface (e.g. the overview) is already open when the snip is
+    // triggered, that grab confines all compositor input to its own window: the
+    // selector renders on top (Overlay layer) but receives no clicks or keys and
+    // appears frozen until the other surface is dismissed. Adding the selector to
+    // the grab's window list routes input to it too, and Exclusive keyboard focus
+    // ensures Escape/keys reach the selector while it is up.
+    Component.onCompleted: GlobalFocusGrab.addDismissable(root)
+    Component.onDestruction: GlobalFocusGrab.removeDismissable(root)
 
     // Modes
     // TODO: Ask: sidebar AI
