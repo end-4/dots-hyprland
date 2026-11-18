@@ -24,7 +24,17 @@ Rectangle {
 
     anchors.left: parent?.left
     anchors.right: parent?.right
-    implicitHeight: columnLayout.implicitHeight + root.messagePadding * 2
+
+    // While streaming (!done), never let the bubble shrink: markdown reflow (esp. tables)
+    // transiently collapses height and jolts the auto-scroll. Floor it until done.
+    readonly property real naturalHeight: columnLayout.implicitHeight + root.messagePadding * 2
+    property real streamingHeightFloor: 0
+    implicitHeight: (messageData && !messageData.done) ? Math.max(naturalHeight, streamingHeightFloor) : naturalHeight
+    onNaturalHeightChanged: {
+        if (messageData && !messageData.done)
+            streamingHeightFloor = Math.max(streamingHeightFloor, naturalHeight);
+    }
+    onMessageDataChanged: streamingHeightFloor = 0 // reset if this delegate is reused for another message
 
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
