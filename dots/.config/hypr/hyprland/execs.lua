@@ -22,4 +22,7 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
+
+    -- Auto-Rotate
+    hl.exec_cmd("sleep 1 && iio-hyprland")
 end)
