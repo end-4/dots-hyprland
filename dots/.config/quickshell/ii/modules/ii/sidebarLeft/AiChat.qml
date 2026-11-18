@@ -417,6 +417,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             id: suggestions
             visible: root.suggestionList.length > 0 && messageInputField.text.length > 0
             property int selectedIndex: 0
+            // True once the user has picked a suggestion with Tab/arrows; Enter then
+            // runs the highlighted suggestion instead of submitting the typed text
+            property bool navigated: false
             Layout.fillWidth: true
             spacing: 5
 
@@ -424,6 +427,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 id: suggestionRepeater
                 model: {
                     suggestions.selectedIndex = 0;
+                    suggestions.navigated = false;
                     return root.suggestionList.slice(0, 10);
                 }
                 delegate: ApiCommandButton {
@@ -461,11 +465,34 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 messageInputField.forceActiveFocus();
             }
 
-            function acceptSelectedWord() {
-                if (suggestions.selectedIndex >= 0 && suggestions.selectedIndex < suggestionRepeater.count) {
-                    const word = root.suggestionList[suggestions.selectedIndex].name;
-                    suggestions.acceptSuggestion(word);
+            function cycle(step) {
+                if (suggestionRepeater.count === 0) return;
+                if (!suggestions.navigated) {
+                    suggestions.navigated = true;
+                    if (step > 0) return; // first Tab keeps the current highlight
                 }
+                const count = suggestionRepeater.count;
+                suggestions.selectedIndex = ((suggestions.selectedIndex + step) % count + count) % count;
+            }
+
+            function activateSelected() {
+                if (suggestions.selectedIndex < 0 || suggestions.selectedIndex >= suggestionRepeater.count) return;
+                const item = root.suggestionList[suggestions.selectedIndex];
+                if (item.fillOnly) {
+                    // Bare command name: complete it and keep typing (e.g. /model → its own suggestions)
+                    suggestions.acceptSuggestion(item.name);
+                    return;
+                }
+                // Complete the last word with the suggestion and run the command immediately
+                const words = messageInputField.text.trim().split(/\s+/);
+                if (words.length > 0) {
+                    words[words.length - 1] = item.name;
+                } else {
+                    words.push(item.name);
+                }
+                const completed = words.join(" ");
+                messageInputField.clear();
+                root.handleInput(completed);
             }
         }
 
@@ -625,7 +652,8 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(messageInputField.text.substring(1))).map(cmd => {
                                     return {
                                         name: `${root.commandPrefix}${cmd.name}`,
-                                        description: `${cmd.description}`
+                                        description: `${cmd.description}`,
+                                        fillOnly: true // complete the command, don't run it yet
                                     };
                                 });
                             }
@@ -638,18 +666,27 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
                         Keys.onPressed: event => {
                             if (event.key === Qt.Key_Tab) {
-                                suggestions.acceptSelectedWord();
+                                if (suggestions.visible) suggestions.cycle(1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Backtab) {
+                                if (suggestions.visible) suggestions.cycle(-1);
                                 event.accepted = true;
                             } else if (event.key === Qt.Key_Up && suggestions.visible) {
+                                suggestions.navigated = true;
                                 suggestions.selectedIndex = Math.max(0, suggestions.selectedIndex - 1);
                                 event.accepted = true;
                             } else if (event.key === Qt.Key_Down && suggestions.visible) {
-                                suggestions.selectedIndex = Math.min(root.suggestionList.length - 1, suggestions.selectedIndex + 1);
+                                suggestions.navigated = true;
+                                suggestions.selectedIndex = Math.min(suggestionRepeater.count - 1, suggestions.selectedIndex + 1);
                                 event.accepted = true;
                             } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
                                 if (event.modifiers & Qt.ShiftModifier) {
                                     // Insert newline
                                     messageInputField.insert(messageInputField.cursorPosition, "\n");
+                                    event.accepted = true;
+                                } else if (suggestions.visible && suggestions.navigated) {
+                                    // Run the suggestion highlighted via Tab/arrows
+                                    suggestions.activateSelected();
                                     event.accepted = true;
                                 } else {
                                     // Accept text
