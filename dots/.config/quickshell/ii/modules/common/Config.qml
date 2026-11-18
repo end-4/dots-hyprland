@@ -282,6 +282,16 @@ Singleton {
                 property JsonObject tooltips: JsonObject {
                     property bool clickToShow: false
                 }
+                property JsonObject island: JsonObject { // Dynamic Island next to the workspaces (horizontal bar only)
+                    property bool enable: false
+                    property bool music: true // Separate music island with player carousel
+                    property bool equalizer: true // Needs cava
+                    property bool lyrics: false // Fetches synced lyrics from lrclib.net
+                    property bool clipboard: false // "Copied" flash and image cards (copied text is never shown)
+                    property bool codingAgents: false // Claude Code / OpenCode status, needs the hooks in scripts/island
+                    property bool systemMonitor: false // System monitor panel + bar button
+                    property bool packageUpdates: false // Pending pacman/AUR updates in the idle glance (Arch only)
+                }
             }
 
             property JsonObject battery: JsonObject {

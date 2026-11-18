@@ -147,6 +147,8 @@ hl.layer_rule({ match = { namespace = "quickshell:notificationPopup" }, animatio
 hl.layer_rule({ match = { namespace = "quickshell:overlay" }, no_anim = true})
 hl.layer_rule({ match = { namespace = "quickshell:overlay" }, ignore_alpha = 1})
 hl.layer_rule({ match = { namespace = "quickshell:overview" }, no_anim = true})
+hl.layer_rule({ match = { namespace = "quickshell:island" }, blur = false}) -- Dynamic Island: resizes on every drop, draws its own blur
+hl.layer_rule({ match = { namespace = "quickshell:island" }, no_anim = true})
 hl.layer_rule({ match = { namespace = "quickshell:osk" }, animation = "slide bottom"})
 hl.layer_rule({ match = { namespace = "quickshell:polkit" }, no_anim = true})
 hl.layer_rule({ match = { namespace = "quickshell:popup" }, xray = false}) -- No weird color for bar tooltips (this in theory should suffice)
