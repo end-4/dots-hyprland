@@ -81,14 +81,31 @@ Singleton {
         stdout: StdioCollector {
             id: devicesCollector
             onStreamFinished: {
-                const parsedOutput = JSON.parse(devicesCollector.text);
-                const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
-                root.layoutCodes = hyprlandKeyboard["layout"].split(",");
-                root.currentLayoutName = hyprlandKeyboard["active_keymap"];
-                // console.log("[HyprlandXkb] Fetched | Layouts (multiple: " + (root.layoutCodes.length > 1) + "): "
-                //     + root.layoutCodes.join(", ") + " | Active: " + root.currentLayoutName);
+                try {
+                    const parsedOutput = JSON.parse(devicesCollector.text);
+                    const hyprlandKeyboard = parsedOutput["keyboards"].find(kb => kb.main === true);
+                    if (!hyprlandKeyboard || !hyprlandKeyboard["layout"]) {
+                        // Hyprland is not ready yet; retry
+                        fetchLayoutsRetryTimer.start();
+                        return;
+                    }
+                    root.layoutCodes = hyprlandKeyboard["layout"].split(",");
+                    root.currentLayoutName = hyprlandKeyboard["active_keymap"] || root.layoutCodes[0];
+                    fetchLayoutsRetryTimer.stop();
+                } catch (e) {
+                    // hyprctl failed (Quickshell started before Hyprland); retry until it answers
+                    fetchLayoutsRetryTimer.start();
+                }
             }
         }
+    }
+
+    // Retries the initial layout fetch when Quickshell starts before Hyprland is ready
+    Timer {
+        id: fetchLayoutsRetryTimer
+        interval: 1000
+        repeat: false
+        onTriggered: fetchLayoutsProc.running = true
     }
 
     // Update the layout name when it changes
@@ -99,6 +116,12 @@ Singleton {
                 if (root.needsLayoutRefresh) {
                     root.needsLayoutRefresh = false;
                     fetchLayoutsProc.running = true;
+                }
+
+                // If the initial fetch never succeeded, this event proves Hyprland is up now
+                if (root.layoutCodes.length === 0) {
+                    fetchLayoutsProc.running = true;
+                    return;
                 }
 
                 // If there's only one layout, the updated layout is always the same
