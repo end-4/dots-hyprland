@@ -90,6 +90,7 @@ Scope {
             implicitHeight: playerColumnLayout.implicitHeight
             color: "transparent"
             WlrLayershell.namespace: "quickshell:mediaControls"
+            WlrLayershell.layer: WlrLayer.Overlay
 
             anchors {
                 top: !Config.options.bar.bottom || Config.options.bar.vertical
