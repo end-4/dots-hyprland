@@ -745,5 +745,12 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Startup Apps": "Aplicaciones de inicio",
+  "Select installed app...": "Seleccionar app instalada...",
+  "App name": "Nombre de la app",
+  "Command or path": "Comando o ruta",
+  "No startup apps found": "No se encontraron aplicaciones de inicio",
+  "Date added": "Fecha de adición",
+  "Active status": "Estado activo"
 }

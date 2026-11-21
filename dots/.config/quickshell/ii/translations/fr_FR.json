@@ -611,5 +611,12 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "Startup Apps": "Applications au démarrage",
+  "Select installed app...": "Sélectionner une app installée...",
+  "App name": "Nom de l'application",
+  "Command or path": "Commande ou chemin",
+  "No startup apps found": "Aucune application au démarrage trouvée",
+  "Date added": "Date d'ajout",
+  "Active status": "Statut actif"
 }

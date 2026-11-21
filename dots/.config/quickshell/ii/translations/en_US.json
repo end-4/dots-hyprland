@@ -611,5 +611,12 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Startup Apps": "Startup Apps",
+  "Select installed app...": "Select installed app...",
+  "App name": "App name",
+  "Command or path": "Command or path",
+  "No startup apps found": "No startup apps found",
+  "Date added": "Date added",
+  "Active status": "Active status"
 }

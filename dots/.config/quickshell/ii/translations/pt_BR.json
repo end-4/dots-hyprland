@@ -733,5 +733,12 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Startup Apps": "Aplicativos de inicialização",
+  "Select installed app...": "Selecionar app instalado...",
+  "App name": "Nome do app",
+  "Command or path": "Comando ou caminho",
+  "No startup apps found": "Nenhum aplicativo de inicialização encontrado",
+  "Date added": "Data de adição",
+  "Active status": "Status ativo"
 }
