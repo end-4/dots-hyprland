@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Dialogs
 import Quickshell
 import Quickshell.Io
 import QtQuick.Layouts
@@ -11,7 +10,6 @@ import qs.modules.common.widgets
 ContentPage {
     id: generalPage
     forceWidth: true
-    property bool plymouthXanaInstalled: false
 
     Timer {
         id: generalIdleTimer
@@ -26,26 +24,6 @@ ContentPage {
     Process {
         id: generalIdleProc
         command: ["python3", Quickshell.shellPath("scripts/apply-screensaver-idle.py")]
-    }
-
-    Process {
-        id: plymouthCheckProc
-        running: true
-        command: ["bash", "-c", "[ -f /usr/share/plymouth/themes/xana/xana.plymouth ] && echo 1 || echo 0"]
-        stdout: StdioCollector {
-            onStreamFinished: generalPage.plymouthXanaInstalled = (text.trim() === "1")
-        }
-    }
-
-    FileDialog {
-        id: plymouthLogoPicker
-        title: Translation.tr("Select boot splash logo")
-        nameFilters: ["Images & Vector (*.png *.svg *.jpg *.jpeg *.webp *.pdf)", "All files (*)"]
-        onAccepted: {
-            const p = selectedFile.toString().replace(/^file:\/\//, "");
-            const script = Quickshell.shellPath("scripts/apply-plymouth-logo.sh");
-            Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} -e bash -c '"${0}" "${1}"; echo; read -p "Press Enter to close..."' "${script}" "${p}"`]);
-        }
     }
 
     Process {
@@ -479,38 +457,6 @@ ContentPage {
                 if (Config.options.lock.idle.suspendMinutes !== value) {
                     Config.options.lock.idle.suspendMinutes = value;
                     generalIdleTimer.restart();
-                }
-            }
-        }
-
-        RowLayout {
-            visible: generalPage.plymouthXanaInstalled
-            Layout.fillWidth: true
-            spacing: 8
-            MaterialSymbol {
-                text: "image"
-                iconSize: 20
-                color: Appearance.m3colors.m3onSurface
-            }
-            StyledText {
-                Layout.fillWidth: true
-                text: Translation.tr("Boot splash logo (Plymouth)")
-                color: Appearance.m3colors.m3onSurface
-                font.pixelSize: Appearance.font.pixelSize.small
-            }
-            RippleButton {
-                implicitWidth: plymouthBtnTxt.implicitWidth + 24
-                implicitHeight: 34
-                buttonRadius: Appearance.rounding.full
-                colBackground: Appearance.colors.colSecondaryContainer
-                onClicked: plymouthLogoPicker.open()
-                contentItem: StyledText {
-                    id: plymouthBtnTxt
-                    anchors.centerIn: parent
-                    text: Translation.tr("Choose File")
-                    color: Appearance.colors.colOnSecondaryContainer
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    font.weight: Font.Medium
                 }
             }
         }
