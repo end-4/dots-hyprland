@@ -57,6 +57,7 @@ Singleton {
             id: persistentStatesJsonAdapter
 
             property string hyprlandInstanceSignature: ""
+            property list<var> frequentApps: []
 
             property JsonObject ai: JsonObject {
                 property string model: "gemini-2.5-flash"

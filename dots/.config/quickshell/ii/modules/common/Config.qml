@@ -475,6 +475,8 @@ Singleton {
             }
 
             property JsonObject search: JsonObject {
+                property bool showFrequentApps: true
+                property int frequentAppsCount: 8
                 property int nonAppResultDelay: 30 // This prevents lagging when typing
                 property string engineBaseUrl: "https://www.google.com/search?q="
                 property list<string> excludedSites: ["quora.com", "facebook.com"]
