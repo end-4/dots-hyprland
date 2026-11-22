@@ -21,6 +21,10 @@ hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"),
 hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"),
     { ignore_mods = true, transparent = true, release = true })
 hl.bind("SUPER + Tab", hl.dsp.global("quickshell:overviewWorkspacesToggle"), { description = "Shell: Toggle overview" })
+hl.bind("ALT + Tab", hl.dsp.global("quickshell:altSwitcherNext"), { description = "Shell: Alt+Tab window switcher" })
+hl.bind("ALT + SHIFT + Tab", hl.dsp.global("quickshell:altSwitcherPrev"), { description = "Shell: Alt+Tab window switcher (back)" })
+hl.bind("ALT_L", hl.dsp.global("quickshell:altSwitcherAlt"), { ignore_mods = true, transparent = true })
+hl.bind("ALT_R", hl.dsp.global("quickshell:altSwitcherAlt"), { ignore_mods = true, transparent = true })
 hl.bind("SUPER + V", hl.dsp.global("quickshell:overviewClipboardToggle"))
 hl.bind("SUPER + Period", hl.dsp.global("quickshell:overviewEmojiToggle"))
 hl.bind("SUPER + A", hl.dsp.global("quickshell:sidebarLeftToggle"), { description = "Shell: Toggle left sidebar" })
