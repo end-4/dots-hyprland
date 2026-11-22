@@ -14,6 +14,15 @@ Singleton {
 
     property string query: ""
 
+    function launchApp(entry) {
+        if (!entry.runInTerminal)
+            entry.execute();
+        else {
+            // Probably needs more proper escaping, but this will do for now
+            Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+        }
+    }
+
     function ensurePrefix(prefix) {
         if ([Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
             root.query = prefix + root.query.slice(1);
@@ -247,14 +256,7 @@ Singleton {
                 iconName: entry.icon,
                 iconType: LauncherSearchResult.IconType.System,
                 verb: Translation.tr("Open"),
-                execute: () => {
-                    if (!entry.runInTerminal)
-                        entry.execute();
-                    else {
-                        // Probably needs more proper escaping, but this will do for now
-                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
-                    }
-                },
+                execute: () => root.launchApp(entry),
                 comment: entry.comment,
                 runInTerminal: entry.runInTerminal,
                 genericName: entry.genericName,

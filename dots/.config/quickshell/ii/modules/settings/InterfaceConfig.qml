@@ -112,6 +112,27 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "apps"
+            text: Translation.tr("Show frequently used apps in Search")
+            checked: Config.options.search.showFrequentApps
+            onCheckedChanged: {
+                Config.options.search.showFrequentApps = checked;
+            }
+        }
+        ConfigSpinBox {
+            enabled: Config.options.search.showFrequentApps
+            icon: "tag"
+            text: Translation.tr("Number of apps to show")
+            value: Config.options.search.frequentAppsCount
+            from: 1
+            to: 20
+            stepSize: 1
+            onValueChanged: {
+                Config.options.search.frequentAppsCount = value;
+            }
+        }
+
         ConfigRow {
             uniform: true
             ConfigSwitch {

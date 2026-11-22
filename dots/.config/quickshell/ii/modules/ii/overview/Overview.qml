@@ -75,7 +75,7 @@ Scope {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.top
             }
-            spacing: -8
+            spacing: overviewLoader.visible ? -8 : -2 * Appearance.sizes.elevationMargin
 
             Keys.onPressed: event => {
                 if (event.key === Qt.Key_Escape) {
@@ -95,10 +95,17 @@ Scope {
                 id: overviewLoader
                 anchors.horizontalCenter: parent.horizontalCenter
                 active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
-                visible: (panelWindow.searchingText == "")
+                visible: active && panelWindow.searchingText.length === 0
                 sourceComponent: OverviewWidget {
                     screen: panelWindow.screen
                 }
+            }
+
+            FrequentAppsStrip {
+                anchors.horizontalCenter: parent.horizontalCenter
+                availableWidth: panelWindow.width
+                visible: Config.options.search.showFrequentApps && panelWindow.searchingText.length === 0 && apps.length > 0
+                onAppOpened: GlobalStates.overviewOpen = false
             }
         }
     }
