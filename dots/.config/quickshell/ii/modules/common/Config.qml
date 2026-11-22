@@ -212,6 +212,19 @@ Singleton {
                 }
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
+                property bool perMonitor: false
+                property var monitors: ({})
+                property string selectedMonitor: ""
+                property list<string> monitorOrder: []
+                property JsonObject live: JsonObject {
+                    property real speed: 1.0
+                    property bool muted: true
+                    property real volume: 0.3
+                    property string fillMode: "crop"
+                    property int position: 50
+                    property bool pauseOnFullscreen: true
+                    property bool loop: true
+                }
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
@@ -259,6 +272,7 @@ Singleton {
                     property bool showScreenRecord: false
                 }
                 property JsonObject workspaces: JsonObject {
+                    property string defaultMonitor: ""
                     property bool monochromeIcons: true
                     property int shown: 10
                     property bool showAppIcons: true

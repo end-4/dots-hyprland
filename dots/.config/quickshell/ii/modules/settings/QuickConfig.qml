@@ -1,4 +1,5 @@
 import QtQuick
+import QtMultimedia
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
@@ -9,7 +10,19 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 
 ContentPage {
+    id: quickPage
     forceWidth: true
+
+    property string selectedWallpaperMonitor: Quickshell.screens.length > 0 ? Quickshell.screens[0].name : ""
+
+    readonly property string previewWallpaperPath: {
+        if (Config.options.background.perMonitor && quickPage.selectedWallpaperMonitor !== "") {
+            const entry = Config.options.background.monitors?.[quickPage.selectedWallpaperMonitor];
+            if (entry && entry.wallpaperPath && entry.wallpaperPath !== "")
+                return entry.wallpaperPath;
+        }
+        return Config.options.background.wallpaperPath;
+    }
 
     Process {
         id: randomWallProc
@@ -65,21 +78,130 @@ ContentPage {
             Layout.fillWidth: true
 
             Item {
+                id: previewFadeWrapper
                 implicitWidth: 340
                 implicitHeight: 200
-                
-                StyledImage {
-                    id: wallpaperPreview
+                readonly property bool previewIsVideo: /\.(mp4|webm|mkv|avi|mov)$/i.test(quickPage.previewWallpaperPath)
+                readonly property bool previewIsGif: /\.gif$/i.test(quickPage.previewWallpaperPath)
+                NumberAnimation on opacity {
+                    id: previewFadeAnim
+                    from: 0.25
+                    to: 1
+                    duration: 180
+                    easing.type: Easing.OutCubic
+                    running: false
+                }
+                Connections {
+                    target: quickPage
+                    function onPreviewWallpaperPathChanged() {
+                        previewFadeAnim.restart();
+                    }
+                }
+                Item {
                     anchors.fill: parent
-                    fillMode: Image.PreserveAspectCrop
-                    source: Config.options.background.wallpaperPath
-                    cache: false
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: Rectangle {
-                            width: 360
+                            width: 340
                             height: 200
                             radius: Appearance.rounding.normal
+                        }
+                    }
+                    StyledImage {
+                        id: wallpaperPreview
+                        anchors.fill: parent
+                        visible: !previewFadeWrapper.previewIsVideo && !previewFadeWrapper.previewIsGif
+                        fillMode: Image.PreserveAspectCrop
+                        source: visible ? quickPage.previewWallpaperPath : ""
+                        cache: true
+                    }
+                    AnimatedImage {
+                        anchors.fill: parent
+                        visible: previewFadeWrapper.previewIsGif
+                        source: visible ? ("file://" + quickPage.previewWallpaperPath.replace(/^file:\/\//, "")) : ""
+                        fillMode: Image.PreserveAspectCrop
+                        playing: visible && quickPage.visible
+                        asynchronous: true
+                    }
+                    Loader {
+                        id: livePreviewVideoLoader
+                        anchors.fill: parent
+                        // Two-phase teardown: stop + detach the player first, destroy the item
+                        // after a short delay so the render thread never samples a deleted video sink.
+                        readonly property bool wanted: previewFadeWrapper.previewIsVideo && quickPage.visible && quickPage.previewWallpaperPath !== ""
+                        property bool gate: false
+                        active: gate
+                        visible: active
+                        Component.onCompleted: gate = wanted
+                        onWantedChanged: {
+                            if (wanted) {
+                                quickPreviewGateTimer.stop();
+                                gate = true;
+                                if (item) item.resume();
+                            } else {
+                                if (item) item.shutdown();
+                                quickPreviewGateTimer.restart();
+                            }
+                        }
+                        Timer {
+                            id: quickPreviewGateTimer
+                            interval: 300
+                            onTriggered: livePreviewVideoLoader.gate = livePreviewVideoLoader.wanted
+                        }
+                        sourceComponent: Item {
+                            id: quickPreviewRoot
+                            anchors.fill: parent
+                            property bool shut: false
+                            function shutdown() { shut = true; previewVidPlayer.stop(); }
+                            function resume() { shut = false; previewVidPlayer.play(); }
+                            MediaPlayer {
+                                id: previewVidPlayer
+                                source: (quickPreviewRoot.shut || !previewFadeWrapper.previewIsVideo) ? "" : "file://" + quickPage.previewWallpaperPath.replace(/^file:\/\//, "")
+                                loops: MediaPlayer.Infinite
+                                audioOutput: AudioOutput { muted: true }
+                                videoOutput: quickPreviewRoot.shut ? null : previewVidOut
+                                Component.onCompleted: if (!quickPreviewRoot.shut && source.toString() !== "") play()
+                                onSourceChanged: {
+                                    stop();
+                                    if (!quickPreviewRoot.shut && source.toString() !== "") play();
+                                }
+                                onMediaStatusChanged: {
+                                    if (mediaStatus === MediaPlayer.LoadedMedia && !quickPreviewRoot.shut && playbackState !== MediaPlayer.PlayingState)
+                                        play();
+                                }
+                                onErrorOccurred: (error, errorString) => console.warn("[QuickConfig] preview MediaPlayer error:", error, errorString)
+                            }
+                            VideoOutput {
+                                id: previewVidOut
+                                anchors.fill: parent
+                                fillMode: VideoOutput.PreserveAspectCrop
+                            }
+                        }
+                    }
+                    Rectangle {
+                        visible: previewFadeWrapper.previewIsVideo || previewFadeWrapper.previewIsGif
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.margins: 8
+                        radius: Appearance.rounding.full
+                        color: Qt.rgba(0, 0, 0, 0.65)
+                        implicitWidth: liveBadgeRow.implicitWidth + 14
+                        implicitHeight: 24
+                        RowLayout {
+                            id: liveBadgeRow
+                            anchors.centerIn: parent
+                            spacing: 4
+                            MaterialSymbol {
+                                text: "play_circle"
+                                iconSize: 14
+                                color: "#ffffff"
+                            }
+                            StyledText {
+                                text: previewFadeWrapper.previewIsGif ? "GIF" : "LIVE"
+                                color: "#ffffff"
+                                font.pixelSize: 11
+                                font.weight: Font.Medium
+                            }
                         }
                     }
                 }
@@ -94,7 +216,8 @@ ContentPage {
                     materialIcon: "ifl"
                     mainText: randomWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                     onClicked: {
-                        randomWallProc.scriptPath = `${Directories.scriptPath}/colors/random/random_konachan_wall.sh`;
+                        const mon = (Config.options.background.perMonitor && quickPage.selectedWallpaperMonitor !== "") ? quickPage.selectedWallpaperMonitor : "";
+                        randomWallProc.command = ["bash", "-c", `II_TARGET_MONITOR="${mon}" "${FileUtils.trimFileProtocol(Directories.scriptPath)}/colors/random/random_konachan_wall.sh"`];
                         randomWallProc.running = true;
                     }
                     StyledToolTip {
@@ -109,7 +232,8 @@ ContentPage {
                     materialIcon: "ifl"
                     mainText: randomWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: osu! seasonal")
                     onClicked: {
-                        randomWallProc.scriptPath = `${Directories.scriptPath}/colors/random/random_osu_wall.sh`;
+                        const mon = (Config.options.background.perMonitor && quickPage.selectedWallpaperMonitor !== "") ? quickPage.selectedWallpaperMonitor : "";
+                        randomWallProc.command = ["bash", "-c", `II_TARGET_MONITOR="${mon}" "${FileUtils.trimFileProtocol(Directories.scriptPath)}/colors/random/random_osu_wall.sh"`];
                         randomWallProc.running = true;
                     }
                     StyledToolTip {
@@ -123,7 +247,11 @@ ContentPage {
                         text: Translation.tr("Pick wallpaper image on your system")
                     }
                     onClicked: {
-                        Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
+                        if (Config.options.background.perMonitor && quickPage.selectedWallpaperMonitor !== "") {
+                            Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --monitor "${quickPage.selectedWallpaperMonitor}"`]);
+                        } else {
+                            Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`);
+                        }
                     }
                     mainContentComponent: Component {
                         RowLayout {
@@ -168,6 +296,23 @@ ContentPage {
                     }
                 }
             }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "desktop_windows"
+            text: Translation.tr("Separate per monitor")
+            checked: Config.options.background.perMonitor
+            onCheckedChanged: {
+                if (Config.options.background.perMonitor !== checked) {
+                    Config.options.background.perMonitor = checked;
+                }
+            }
+        }
+
+        MonitorOrderPills {
+            visible: Config.options.background.perMonitor
+            selectedMonitor: quickPage.selectedWallpaperMonitor
+            onMonitorSelected: name => quickPage.selectedWallpaperMonitor = name
         }
 
         ConfigSelectionArray {

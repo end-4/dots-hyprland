@@ -61,8 +61,16 @@ post_process() {
 
 check_and_prompt_upscale() {
     local img="$1"
-    min_width_desired="$(hyprctl monitors -j | jq '([.[].width] | max)' | xargs)" # max monitor width
-    min_height_desired="$(hyprctl monitors -j | jq '([.[].height] | max)' | xargs)" # max monitor height
+    local pm sm
+    pm=$(jq -r '.background.perMonitor // false' "$SHELL_CONFIG_FILE" 2>/dev/null)
+    sm=$(get_target_monitor)
+    if [[ "$pm" == "true" && -n "$sm" ]]; then
+        min_width_desired="$(hyprctl monitors -j | jq -r --arg m "$sm" '(.[] | select(.name == $m) | .width) // ([.[].width] | max)' | xargs)"
+        min_height_desired="$(hyprctl monitors -j | jq -r --arg m "$sm" '(.[] | select(.name == $m) | .height) // ([.[].height] | max)' | xargs)"
+    else
+        min_width_desired="$(hyprctl monitors -j | jq '([.[].width] | max)' | xargs)" # max monitor width
+        min_height_desired="$(hyprctl monitors -j | jq '([.[].height] | max)' | xargs)" # max monitor height
+    fi
 
     if command -v identify &>/dev/null && [ -f "$img" ]; then
         local img_width img_height
@@ -112,7 +120,7 @@ is_video() {
 }
 
 kill_existing_mpvpaper() {
-    pkill -f -9 mpvpaper || true
+    pkill -x mpvpaper || true  # exact name: -f would also kill ffmpeg/editors whose argv merely mentions mpvpaper
 }
 
 create_restore_script() {
@@ -141,17 +149,65 @@ EOF
     mv "$RESTORE_SCRIPT.tmp" "$RESTORE_SCRIPT"
 }
 
+get_primary_monitor() {
+    local pref
+    pref=$(jq -r '.bar.workspaces.defaultMonitor // ""' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
+    if [[ -n "$pref" ]] && hyprctl monitors -j 2>/dev/null | jq -e --arg m "$pref" 'any(.[]; .name == $m)' >/dev/null 2>&1; then
+        echo "$pref"
+        return
+    fi
+    hyprctl monitors -j 2>/dev/null | jq -r 'max_by(.width * .height) | .name // ""' 2>/dev/null || echo ""
+}
+
+get_target_monitor() {
+    if [[ -n "${monitor_flag:-}" ]]; then
+        echo "$monitor_flag"
+    elif [[ -n "${II_TARGET_MONITOR:-}" ]]; then
+        echo "$II_TARGET_MONITOR"
+    else
+        hyprctl monitors -j 2>/dev/null | jq -r '(.[] | select(.focused) | .name) // ""' 2>/dev/null || echo ""
+    fi
+}
+
+write_config_preserve_inode() {
+    cat "$SHELL_CONFIG_FILE.tmp" > "$SHELL_CONFIG_FILE" && rm -f "$SHELL_CONFIG_FILE.tmp"
+}
+
 set_wallpaper_path() {
     local path="$1"
     if [ -f "$SHELL_CONFIG_FILE" ]; then
-        jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        local per_mon sel_mon primary_mon
+        per_mon=$(jq -r '.background.perMonitor // false' "$SHELL_CONFIG_FILE" 2>/dev/null)
+        sel_mon=$(get_target_monitor)
+        primary_mon=$(get_primary_monitor)
+        if [[ "$per_mon" == "true" && -n "$sel_mon" ]]; then
+            if [[ "$sel_mon" == "$primary_mon" || -z "$primary_mon" ]]; then
+                jq --arg mon "$sel_mon" --arg path "$path" '.background.monitors = (.background.monitors // {}) | .background.monitors[$mon] = ((.background.monitors[$mon] // {}) + {"wallpaperPath": $path}) | .background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+            else
+                jq --arg mon "$sel_mon" --arg path "$path" '.background.monitors = (.background.monitors // {}) | .background.monitors[$mon] = ((.background.monitors[$mon] // {}) + {"wallpaperPath": $path}) | if (.background.wallpaperPath // "") == "" then .background.wallpaperPath = $path else . end' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+            fi
+        else
+            jq --arg path "$path" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+        fi
     fi
 }
 
 set_thumbnail_path() {
     local path="$1"
     if [ -f "$SHELL_CONFIG_FILE" ]; then
-        jq --arg path "$path" '.background.thumbnailPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+        local per_mon sel_mon primary_mon
+        per_mon=$(jq -r '.background.perMonitor // false' "$SHELL_CONFIG_FILE" 2>/dev/null)
+        sel_mon=$(get_target_monitor)
+        primary_mon=$(get_primary_monitor)
+        if [[ "$per_mon" == "true" && -n "$sel_mon" ]]; then
+            if [[ "$sel_mon" == "$primary_mon" || -z "$primary_mon" ]]; then
+                jq --arg mon "$sel_mon" --arg path "$path" '.background.monitors = (.background.monitors // {}) | .background.monitors[$mon] = ((.background.monitors[$mon] // {}) + {"thumbnailPath": $path}) | .background.thumbnailPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+            else
+                jq --arg mon "$sel_mon" --arg path "$path" '.background.monitors = (.background.monitors // {}) | .background.monitors[$mon] = ((.background.monitors[$mon] // {}) + {"thumbnailPath": $path}) | if (.background.thumbnailPath // "") == "" then .background.thumbnailPath = $path else . end' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+            fi
+        else
+            jq --arg path "$path" '.background.thumbnailPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && write_config_preserve_inode
+        fi
     fi
 }
 
@@ -198,41 +254,14 @@ switch() {
         if is_video "$imgpath"; then
             mkdir -p "$THUMBNAIL_DIR"
 
-            missing_deps=()
-            if ! command -v mpvpaper &> /dev/null; then
-                missing_deps+=("mpvpaper")
-            fi
+            # native live video wallpaper (no mpvpaper)
             if ! command -v ffmpeg &> /dev/null; then
-                missing_deps+=("ffmpeg")
-            fi
-            if [ ${#missing_deps[@]} -gt 0 ]; then
-                echo "Missing deps: ${missing_deps[*]}"
-                echo "Arch: sudo pacman -S ${missing_deps[*]}"
-                action=$(notify-send \
-                    -a "Wallpaper switcher" \
-                    -c "im.error" \
-                    -A "install_arch=Install (Arch)" \
-                    "Can't switch to video wallpaper" \
-                    "Missing dependencies: ${missing_deps[*]}")
-                if [[ "$action" == "install_arch" ]]; then
-                    kitty -1 sudo pacman -S "${missing_deps[*]}"
-                    if command -v mpvpaper &>/dev/null && command -v ffmpeg &>/dev/null; then
-                        notify-send 'Wallpaper switcher' 'Alright, try again!' -a "Wallpaper switcher"
-                    fi
-                fi
+                notify-send -a "Wallpaper switcher" -c "im.error" "Can't switch to video wallpaper" "Missing dependency: ffmpeg"
                 exit 0
             fi
 
-            # Set wallpaper path
+            # Set wallpaper path (Quickshell Background.qml plays video natively via QtMultimedia)
             set_wallpaper_path "$imgpath"
-
-            # Set video wallpaper
-            local video_path="$imgpath"
-            monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
-            for monitor in $monitors; do
-                mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
-                sleep 0.1
-            done
 
             # Extract first frame for color generation
             thumbnail="$THUMBNAIL_DIR/$(basename "$imgpath").jpg"
@@ -244,7 +273,7 @@ switch() {
             if [ -f "$thumbnail" ]; then
                 matugen_args+=(image "$thumbnail")
                 generate_colors_material_args=(--path "$thumbnail")
-                create_restore_script "$video_path"
+                remove_restore  # native live wallpaper: no mpvpaper restore script (execs.lua would start a 2nd player)
             else
                 echo "Cannot create image to colorgen"
                 remove_restore
@@ -303,6 +332,17 @@ switch() {
         [[ "$term_fg_boost" != "null" && -n "$term_fg_boost" ]] && generate_colors_material_args+=(--term_fg_boost "$term_fg_boost")
     fi
 
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        local pm sm prim
+        pm=$(jq -r '.background.perMonitor // false' "$SHELL_CONFIG_FILE" 2>/dev/null)
+        sm=$(get_target_monitor)
+        prim=$(get_primary_monitor)
+        # skip secondary matugen so only primary monitor changes global theme
+        if [[ "$pm" == "true" && -n "$sm" && "$sm" != "$prim" && "$noswitch_flag" != "1" ]]; then
+            return 0
+        fi
+    fi
+
     matugen "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
@@ -323,6 +363,7 @@ main() {
     color_flag=""
     color=""
     noswitch_flag=""
+    monitor_flag=""
 
     get_type_from_config() {
         jq -r '.appearance.palette.type' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "auto"
@@ -366,6 +407,10 @@ main() {
                 ;;
             --image)
                 imgpath="$2"
+                shift 2
+                ;;
+            --monitor)
+                monitor_flag="$2"
                 shift 2
                 ;;
             --noswitch)

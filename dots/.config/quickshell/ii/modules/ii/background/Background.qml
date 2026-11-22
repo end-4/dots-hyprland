@@ -7,6 +7,7 @@ import qs.modules.common.widgets
 import qs.modules.common.widgets.widgetCanvas
 import qs.modules.common.functions as CF
 import QtQuick
+import QtMultimedia
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
@@ -40,8 +41,13 @@ Variants {
         property int workspaceChunkSize: Config?.options.bar.workspaces.shown ?? 10
         property int totalWorkspaces: Math.ceil(lastWorkspaceId / workspaceChunkSize) * workspaceChunkSize
         // Wallpaper
-        property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
-        property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
+        readonly property string monitorName: modelData?.name ?? ""
+        readonly property var monitorCfg: (Config.options.background.perMonitor && monitorName !== "") ? (Config.options.background.monitors?.[monitorName] ?? null) : null
+        readonly property string rawWallpaperPath: (monitorCfg?.wallpaperPath && monitorCfg.wallpaperPath !== "") ? monitorCfg.wallpaperPath : Config.options.background.wallpaperPath
+        readonly property string rawThumbnailPath: (monitorCfg?.thumbnailPath && monitorCfg.thumbnailPath !== "") ? monitorCfg.thumbnailPath : Config.options.background.thumbnailPath
+        readonly property bool wallpaperIsGif: rawWallpaperPath.toLowerCase().endsWith(".gif")
+        property bool wallpaperIsVideo: /\.(mp4|webm|mkv|avi|mov)$/i.test(rawWallpaperPath)
+        property string wallpaperPath: wallpaperIsVideo ? rawThumbnailPath : rawWallpaperPath
         property bool wallpaperSafetyTriggered: {
             const enabled = Config.options.workSafety.enable.wallpaper;
             const sensitiveWallpaper = (CF.StringUtils.stringListContainsSubstring(wallpaperPath.toLowerCase(), Config.options.workSafety.triggerCondition.fileKeywords));
@@ -99,6 +105,7 @@ Variants {
 
         // Wallpaper zoom scale
         function updateZoomScale() {
+            if (!bgRoot.wallpaperPath || bgRoot.wallpaperPath === "") return;
             getWallpaperSizeProc.path = bgRoot.wallpaperPath;
             getWallpaperSizeProc.running = true;
         }
@@ -127,11 +134,95 @@ Variants {
         Item {
             anchors.fill: parent
 
+            // Native Live Wallpaper (Video & GIF)
+            // Teardown is two-phase: the player is first stopped and detached from its
+            // VideoOutput, and only after a short delay (liveGateTimer) the Loader destroys
+            // it, so the render thread never samples a frame sink that is being deleted.
+            Loader {
+                id: liveVideoLoader
+                anchors.fill: parent
+                readonly property bool wanted: bgRoot.wallpaperIsVideo && !bgRoot.wallpaperSafetyTriggered && bgRoot.rawWallpaperPath !== ""
+                property bool gate: false
+                active: gate
+                visible: active && !blurLoader.active
+                Component.onCompleted: gate = wanted
+                onWantedChanged: {
+                    if (wanted) {
+                        liveGateTimer.stop();
+                        gate = true;
+                        if (item) item.resume();
+                    } else {
+                        if (item) item.shutdown();
+                        liveGateTimer.restart();
+                    }
+                }
+                Timer {
+                    id: liveGateTimer
+                    interval: 300
+                    onTriggered: liveVideoLoader.gate = liveVideoLoader.wanted
+                }
+                sourceComponent: Item {
+                    id: liveRoot
+                    anchors.fill: parent
+                    property bool shut: false
+                    function shutdown() { shut = true; bgVideoPlayer.stop(); }
+                    function resume() { shut = false; if (bgRoot.visible) bgVideoPlayer.play(); }
+                    MediaPlayer {
+                        id: bgVideoPlayer
+                        source: (liveRoot.shut || !bgRoot.wallpaperIsVideo) ? "" : "file://" + bgRoot.rawWallpaperPath.replace(/^file:\/\//, "")
+                        loops: Config.options.background.live.loop ? MediaPlayer.Infinite : 1
+                        playbackRate: Math.max(0.1, Config.options.background.live.speed)
+                        audioOutput: AudioOutput {
+                            muted: Config.options.background.live.muted
+                            volume: Config.options.background.live.volume
+                        }
+                        videoOutput: liveRoot.shut ? null : bgVideoOut
+                        Component.onCompleted: if (bgRoot.visible && !liveRoot.shut && source.toString() !== "") play()
+                        onSourceChanged: {
+                            stop();
+                            if (bgRoot.visible && !liveRoot.shut && source.toString() !== "") play();
+                        }
+                        onMediaStatusChanged: {
+                            if (mediaStatus === MediaPlayer.LoadedMedia && bgRoot.visible && !liveRoot.shut && playbackState !== MediaPlayer.PlayingState)
+                                play();
+                        }
+                        onErrorOccurred: (error, errorString) => console.warn("[Background] MediaPlayer error:", error, errorString)
+                    }
+                    Connections {
+                        target: bgRoot
+                        function onVisibleChanged() {
+                            if (liveRoot.shut) return;
+                            if (bgRoot.visible) bgVideoPlayer.play();
+                            else if (Config.options.background.live.pauseOnFullscreen) bgVideoPlayer.pause();
+                        }
+                    }
+                    VideoOutput {
+                        id: bgVideoOut
+                        width: parent.width
+                        height: parent.height
+                        x: (Config.options.background.live.position - 50) * -2
+                        fillMode: Config.options.background.live.fillMode === "fit" ? VideoOutput.PreserveAspectFit
+                                : Config.options.background.live.fillMode === "stretch" ? VideoOutput.Stretch
+                                : VideoOutput.PreserveAspectCrop
+                    }
+                }
+            }
+
+            AnimatedImage {
+                id: liveGifWallpaper
+                anchors.fill: parent
+                visible: bgRoot.wallpaperIsGif && !bgRoot.wallpaperSafetyTriggered && !blurLoader.active
+                source: visible ? ("file://" + bgRoot.rawWallpaperPath.replace(/^file:\/\//, "")) : ""
+                fillMode: Image.PreserveAspectCrop
+                playing: visible && bgRoot.visible
+                asynchronous: true
+            }
+
             // Wallpaper
             StyledImage {
                 id: wallpaper
                 visible: opacity > 0 && !blurLoader.active
-                opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
+                opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo && !bgRoot.wallpaperIsGif) ? 1 : 0
                 cache: false
                 smooth: false
 
