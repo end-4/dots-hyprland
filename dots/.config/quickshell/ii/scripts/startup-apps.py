@@ -248,6 +248,38 @@ def remove_app(item_id: str) -> int:
     return 1
 
 
+def run_autostart() -> int:
+    import shlex
+    import subprocess
+    seen_files: dict[str, dict] = {}
+    for base in (SYS_AUTOSTART, USER_AUTOSTART):
+        if not base.is_dir():
+            continue
+        for p in sorted(base.glob("*.desktop")):
+            seen_files[p.name] = parse_desktop(p)
+    for fname, d in seen_files.items():
+        if d.get("Hidden", "").lower() == "true":
+            continue
+        if d.get("X-GNOME-Autostart-enabled", "true").lower() == "false":
+            continue
+        raw_exec = d.get("Exec", "")
+        clean_exec = re.sub(r"\s+%[fFuUdDnNickvm]", "", raw_exec).strip()
+        if not clean_exec:
+            continue
+        try:
+            argv = shlex.split(clean_exec)
+            subprocess.Popen(
+                argv,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+        except Exception:
+            pass
+    return 0
+
+
 def main() -> int:
     if len(sys.argv) < 2 or sys.argv[1] == "list":
         print(json.dumps(list_apps(), ensure_ascii=False))
@@ -256,6 +288,8 @@ def main() -> int:
     if action == "apps":
         print(json.dumps(list_installed_apps(), ensure_ascii=False))
         return 0
+    if action == "run-autostart":
+        return run_autostart()
     if action == "toggle" and len(sys.argv) >= 4:
         return toggle_app(sys.argv[2], sys.argv[3] in ("1", "true", "True"))
     if action == "add" and len(sys.argv) >= 4:

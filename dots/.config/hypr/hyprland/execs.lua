@@ -22,4 +22,7 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
+
+    -- XDG autostart apps (managed via Settings -> General -> Startup Apps)
+    hl.exec_cmd("bash -c 'sleep 3 && python3 $HOME/.config/quickshell/ii/scripts/startup-apps.py run-autostart'")
 end)
