@@ -371,6 +371,19 @@ Singleton {
                 }
             }
 
+            property JsonObject screensaver: JsonObject {
+                property bool enable: false
+                property int timeoutMinutes: 3
+                property bool perMonitor: false
+                property var monitors: ({})
+                property string mode: "dvd"
+                property string color: "#000000"
+                property string customPath: ""
+                property var customItems: []
+                property string imageAnimation: "breathe"
+                property real speed: 1.0
+            }
+
             property JsonObject lock: JsonObject {
                 property bool useHyprlock: false
                 property bool launchOnStartup: false

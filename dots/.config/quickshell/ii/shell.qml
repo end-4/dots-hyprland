@@ -7,6 +7,7 @@
 ////@ pragma Env QT_SCALE_FACTOR=1
 
 import "modules/common"
+import "modules/ii/screensaver"
 import "services"
 import "panelFamilies"
 
@@ -21,6 +22,7 @@ ShellRoot {
 
     // Stuff for every panel family
     ReloadPopup {}
+    ScreensaverOverlay {}
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
