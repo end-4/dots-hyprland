@@ -40,13 +40,9 @@ Scope {
     }
 
     function build() {
-        // Special workspaces (negative ids) go last
-        const wsKey = id => id < 0 ? 100000 - id : id;
         const list = HyprlandData.windowList
             .filter(w => w.mapped && !w.hidden && w.workspace && w.workspace.id !== -1)
-            .sort((a, b) => wsKey(a.workspace.id) - wsKey(b.workspace.id) || a.at[0] - b.at[0] || a.at[1] - b.at[1]);
-        const current = list.findIndex(w => w.focusHistoryID === 0);
-        const previous = list.findIndex(w => w.focusHistoryID === 1); // the window used before the focused one
+            .sort((a, b) => a.focusHistoryID - b.focusHistoryID);
         const activeWs = HyprlandData.activeWorkspace?.id;
         root.cards = list.map(w => ({
             address: w.address,
@@ -57,12 +53,10 @@ Scope {
             toplevel: root.toplevelFor(w.address),
             icon: Quickshell.iconPath(AppSearch.guessIcon(w.class), "image-missing")
         }));
-        // Alt+Tab starts on the previously used window; Shift+Tab on the card before the focused one
+        // MRU order: Alt+Tab selects card 1 (previous window); Shift+Tab selects the last card
         const n = root.cards.length;
-        const from = current >= 0 ? current : 0;
         if (n <= 1) root.sel = 0;
-        else if (!root.reverseOpen && previous >= 0) root.sel = previous;
-        else root.sel = ((from + (root.reverseOpen ? -1 : 1)) % n + n) % n;
+        else root.sel = root.reverseOpen ? n - 1 : 1;
     }
 
     function openSwitcher(reverse) {
