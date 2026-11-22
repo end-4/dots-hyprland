@@ -22,6 +22,13 @@ DockButton {
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
+    function launchApp() {
+        if (desktopEntry) {
+            desktopEntry.execute();
+            appListRoot.appActivated();
+        }
+    }
+
     Connections {
         target: DesktopEntries
 
@@ -31,11 +38,12 @@ DockButton {
     }
 
     Loader {
+        id: separatorLoader
         active: isSeparator
         anchors {
             fill: parent
-            topMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
-            bottomMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
+            topMargin: Appearance.sizes.elevationMargin + appListRoot.buttonPadding + Appearance.rounding.normal
+            bottomMargin: separatorLoader.anchors.topMargin
         }
         sourceComponent: DockSeparator {}
     }
@@ -63,16 +71,15 @@ DockButton {
 
     onClicked: {
         if (appToplevel.toplevels.length === 0) {
-            root.desktopEntry?.execute();
+            root.launchApp();
             return;
         }
         lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
         appToplevel.toplevels[lastFocused].activate()
+        appListRoot.appActivated();
     }
 
-    middleClickAction: () => {
-        root.desktopEntry?.execute();
-    }
+    middleClickAction: () => root.launchApp()
 
     altAction: () => {
         TaskbarApps.togglePin(appToplevel.appId);
