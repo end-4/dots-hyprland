@@ -17,6 +17,9 @@ Item {
     property real maxWindowPreviewWidth: 300
     property real windowControlsHeight: 30
     property real buttonPadding: 5
+    property bool inOverview: false
+
+    signal appActivated()
 
     property Item lastHoveredButton: null
     property bool buttonHovered: false
@@ -36,6 +39,8 @@ Item {
         id: listView
         spacing: 2
         orientation: ListView.Horizontal
+        width: root.width
+        clip: root.inOverview
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -48,7 +53,9 @@ Item {
 
         model: ScriptModel {
             objectProp: "appId"
-            values: TaskbarApps.apps
+            values: root.inOverview
+                ? TaskbarApps.apps.filter((app, index, apps) => app.appId !== "SEPARATOR" || index < apps.length - 1)
+                : TaskbarApps.apps
         }
         delegate: DockAppButton {
             required property var modelData
@@ -96,12 +103,34 @@ Item {
 
         anchor {
             window: root.QsWindow.window
-            adjustment: PopupAdjustment.None
+            adjustment: root.inOverview ? PopupAdjustment.FlipY : PopupAdjustment.None
             gravity: Edges.Top | Edges.Right
             edges: Edges.Top | Edges.Left
+            onAnchoring: {
+                if (root.inOverview)
+                    previewPopup.anchor.rect.y = root.QsWindow.mapFromItem(root, 0, 0).y;
+            }
+        }
+
+        mask: root.inOverview ? previewRegion : null
+        Region {
+            id: previewRegion
+            item: popupMouseArea
         }
 
         visible: popupBackground.opacity > 0
+        onVisibleChanged: {
+            if (!root.inOverview)
+                return;
+            if (visible)
+                GlobalFocusGrab.addDismissable(previewPopup);
+            else
+                GlobalFocusGrab.removeDismissable(previewPopup);
+        }
+        Component.onDestruction: {
+            if (root.inOverview)
+                GlobalFocusGrab.removeDismissable(previewPopup);
+        }
         color: "transparent"
         implicitWidth: root.QsWindow.window?.width ?? 1
         implicitHeight: popupMouseArea.implicitHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
@@ -163,6 +192,7 @@ Item {
                             }
                             onClicked: {
                                 windowButton.modelData?.activate();
+                                root.appActivated();
                             }
                             contentItem: ColumnLayout {
                                 implicitWidth: screencopyView.implicitWidth

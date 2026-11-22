@@ -2,6 +2,7 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.ii.dock
 import Qt.labs.synchronizer
 import QtQuick
 import QtQuick.Controls
@@ -75,7 +76,7 @@ Scope {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.top
             }
-            spacing: -8
+            spacing: overviewLoader.visible ? -8 : -2 * Appearance.sizes.elevationMargin
 
             Keys.onPressed: event => {
                 if (event.key === Qt.Key_Escape) {
@@ -95,9 +96,46 @@ Scope {
                 id: overviewLoader
                 anchors.horizontalCenter: parent.horizontalCenter
                 active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
-                visible: (panelWindow.searchingText == "")
+                visible: active && panelWindow.searchingText.length === 0
                 sourceComponent: OverviewWidget {
                     screen: panelWindow.screen
+                }
+            }
+
+            Loader {
+                anchors.horizontalCenter: parent.horizontalCenter
+                active: GlobalStates.overviewOpen && Config.options.dock.showInOverview
+                    && panelWindow.searchingText.length === 0 && TaskbarApps.apps.length > 0
+                visible: active
+
+                sourceComponent: Item {
+                    implicitWidth: Math.min(panelWindow.width, overviewDockApps.implicitWidth + 2 * (Appearance.sizes.elevationMargin + overviewDockApps.buttonPadding))
+                    implicitHeight: Config.options.dock.height + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
+
+                    StyledRectangularShadow {
+                        target: dockBackground
+                    }
+
+                    Rectangle {
+                        id: dockBackground
+                        anchors.fill: parent
+                        anchors.margins: Appearance.sizes.elevationMargin
+                        anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
+                        color: Appearance.colors.colLayer0
+                        border.width: 1
+                        border.color: Appearance.colors.colLayer0Border
+                        radius: Appearance.rounding.large
+                    }
+
+                    DockApps {
+                        id: overviewDockApps
+                        anchors.fill: parent
+                        anchors.leftMargin: Appearance.sizes.elevationMargin + buttonPadding
+                        anchors.rightMargin: anchors.leftMargin
+                        anchors.topMargin: Appearance.sizes.hyprlandGapsOut
+                        inOverview: true
+                        onAppActivated: GlobalStates.overviewOpen = false
+                    }
                 }
             }
         }

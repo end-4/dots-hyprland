@@ -112,6 +112,15 @@ ContentPage {
             }
         }
 
+        ConfigSwitch {
+            buttonIcon: "grid_view"
+            text: Translation.tr("Show in Search")
+            checked: Config.options.dock.showInOverview
+            onCheckedChanged: {
+                Config.options.dock.showInOverview = checked;
+            }
+        }
+
         ConfigRow {
             uniform: true
             ConfigSwitch {

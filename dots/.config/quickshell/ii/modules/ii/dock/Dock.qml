@@ -83,7 +83,6 @@ Scope { // Scope
                         }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
-                            property real margin: Appearance.sizes.elevationMargin
                             anchors.fill: parent
                             anchors.topMargin: Appearance.sizes.elevationMargin
                             anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
@@ -120,12 +119,16 @@ Scope { // Scope
                                     }
                                 }
                             }
-                            DockSeparator {}
+                            DockSeparator {
+                                padding: dockRow.padding
+                            }
                             DockApps {
                                 id: dockApps
                                 buttonPadding: dockRow.padding
                             }
-                            DockSeparator {}
+                            DockSeparator {
+                                padding: dockRow.padding
+                            }
                             DockButton {
                                 Layout.fillHeight: true
                                 onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
