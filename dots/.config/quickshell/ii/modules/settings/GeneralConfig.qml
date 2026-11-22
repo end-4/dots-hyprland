@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Dialogs
 import Quickshell
 import Quickshell.Io
 import QtQuick.Layouts
@@ -8,7 +9,44 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
+    id: generalPage
     forceWidth: true
+    property bool plymouthXanaInstalled: false
+
+    Timer {
+        id: generalIdleTimer
+        interval: 200
+        repeat: false
+        onTriggered: {
+            generalIdleProc.running = false;
+            generalIdleProc.running = true;
+        }
+    }
+
+    Process {
+        id: generalIdleProc
+        command: ["python3", Quickshell.shellPath("scripts/apply-screensaver-idle.py")]
+    }
+
+    Process {
+        id: plymouthCheckProc
+        running: true
+        command: ["bash", "-c", "[ -f /usr/share/plymouth/themes/xana/xana.plymouth ] && echo 1 || echo 0"]
+        stdout: StdioCollector {
+            onStreamFinished: generalPage.plymouthXanaInstalled = (text.trim() === "1")
+        }
+    }
+
+    FileDialog {
+        id: plymouthLogoPicker
+        title: Translation.tr("Select boot splash logo")
+        nameFilters: ["Images & Vector (*.png *.svg *.jpg *.jpeg *.webp *.pdf)", "All files (*)"]
+        onAccepted: {
+            const p = selectedFile.toString().replace(/^file:\/\//, "");
+            const script = Quickshell.shellPath("scripts/apply-plymouth-logo.sh");
+            Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} -e bash -c '"${0}" "${1}"; echo; read -p "Press Enter to close..."' "${script}" "${p}"`]);
+        }
+    }
 
     Process {
         id: translationProc
@@ -353,6 +391,127 @@ ContentPage {
             checked: Config.options.workSafety.enable.wallpaper
             onCheckedChanged: {
                 Config.options.workSafety.enable.wallpaper = checked;
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "lock"
+        title: Translation.tr("Lock")
+
+        ConfigSwitch {
+            buttonIcon: "lock_clock"
+            text: Translation.tr("Lock screen on idle")
+            checked: Config.options.lock.idle.enableLock
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableLock !== checked) {
+                    Config.options.lock.idle.enableLock = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableLock
+            icon: "timer"
+            text: Translation.tr("Lock timeout (minutes)")
+            value: Config.options.lock.idle.lockMinutes
+            from: 1
+            to: 120
+            stepSize: 1
+            onValueChanged: {
+                if (Config.options.lock.idle.lockMinutes !== value) {
+                    Config.options.lock.idle.lockMinutes = value;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Turn off display (DPMS)")
+            checked: Config.options.lock.idle.enableDpms
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableDpms !== checked) {
+                    Config.options.lock.idle.enableDpms = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableDpms
+            icon: "timer"
+            text: Translation.tr("Display off timeout (minutes)")
+            value: Config.options.lock.idle.dpmsMinutes
+            from: 1
+            to: 180
+            stepSize: 1
+            onValueChanged: {
+                if (Config.options.lock.idle.dpmsMinutes !== value) {
+                    Config.options.lock.idle.dpmsMinutes = value;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "bedtime"
+            text: Translation.tr("Deep sleep (Suspend)")
+            checked: Config.options.lock.idle.enableSuspend
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableSuspend !== checked) {
+                    Config.options.lock.idle.enableSuspend = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableSuspend
+            icon: "timer"
+            text: Translation.tr("Suspend timeout (minutes)")
+            value: Config.options.lock.idle.suspendMinutes
+            from: 5
+            to: 360
+            stepSize: 5
+            onValueChanged: {
+                if (Config.options.lock.idle.suspendMinutes !== value) {
+                    Config.options.lock.idle.suspendMinutes = value;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        RowLayout {
+            visible: generalPage.plymouthXanaInstalled
+            Layout.fillWidth: true
+            spacing: 8
+            MaterialSymbol {
+                text: "image"
+                iconSize: 20
+                color: Appearance.m3colors.m3onSurface
+            }
+            StyledText {
+                Layout.fillWidth: true
+                text: Translation.tr("Boot splash logo (Plymouth)")
+                color: Appearance.m3colors.m3onSurface
+                font.pixelSize: Appearance.font.pixelSize.small
+            }
+            RippleButton {
+                implicitWidth: plymouthBtnTxt.implicitWidth + 24
+                implicitHeight: 34
+                buttonRadius: Appearance.rounding.full
+                colBackground: Appearance.colors.colSecondaryContainer
+                onClicked: plymouthLogoPicker.open()
+                contentItem: StyledText {
+                    id: plymouthBtnTxt
+                    anchors.centerIn: parent
+                    text: Translation.tr("Choose File")
+                    color: Appearance.colors.colOnSecondaryContainer
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    font.weight: Font.Medium
+                }
             }
         }
     }

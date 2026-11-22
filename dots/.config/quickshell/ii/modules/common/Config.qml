@@ -372,6 +372,14 @@ Singleton {
             }
 
             property JsonObject lock: JsonObject {
+                property JsonObject idle: JsonObject {
+                    property bool enableLock: true
+                    property int lockMinutes: 5
+                    property bool enableDpms: true
+                    property int dpmsMinutes: 10
+                    property bool enableSuspend: false
+                    property int suspendMinutes: 15
+                }
                 property bool useHyprlock: false
                 property bool launchOnStartup: false
                 property JsonObject blur: JsonObject {
