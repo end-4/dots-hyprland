@@ -611,5 +611,14 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "Antigravity Models": "Modèles Antigravity",
+  "Autonomous long-running goal mode": "Mode objectif autonome longue durée",
+  "Compact conversation context": "Compacter le contexte de conversation",
+  "Deep thinking & rigorous verification": "Réflexion approfondie et vérification rigoureuse",
+  "Interactive design interview": "Entretien de conception interactif",
+  "Local CLI | Antigravity agent (no API key needed)": "CLI locale | Agent Antigravity (aucune clé API requise)",
+  "Sign in / authenticate Antigravity CLI": "Se connecter à Antigravity CLI",
+  "Start a new conversation": "Démarrer une nouvelle conversation",
+  "Step-by-step planning mode": "Mode planification étape par étape"
 }

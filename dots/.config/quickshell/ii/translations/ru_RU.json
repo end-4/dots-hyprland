@@ -756,5 +756,14 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Antigravity Models": "Модели Antigravity",
+  "Autonomous long-running goal mode": "Автономный режим долгосрочной цели",
+  "Compact conversation context": "Сжать контекст диалога",
+  "Deep thinking & rigorous verification": "Глубокое обдумывание и строгая проверка",
+  "Interactive design interview": "Интерактивное интервью по дизайну",
+  "Local CLI | Antigravity agent (no API key needed)": "Локальная CLI | Агент Antigravity (API-ключ не нужен)",
+  "Sign in / authenticate Antigravity CLI": "Войти / авторизоваться в Antigravity CLI",
+  "Start a new conversation": "Начать новый диалог",
+  "Step-by-step planning mode": "Пошаговый режим планирования"
 }

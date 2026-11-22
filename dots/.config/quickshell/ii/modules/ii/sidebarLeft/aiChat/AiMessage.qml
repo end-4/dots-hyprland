@@ -19,6 +19,7 @@ Rectangle {
     property bool enableMouseSelection: false
     property bool renderMarkdown: true
     property bool editing: false
+    readonly property bool cliStyle: (Ai.models[root.messageData?.model]?.api_format === "agy") || (Ai.getModel()?.api_format === "agy")
 
     property list<var> messageBlocks: StringUtils.splitMarkdownBlocks(root.messageData?.content)
 
@@ -26,8 +27,8 @@ Rectangle {
     anchors.right: parent?.right
     implicitHeight: columnLayout.implicitHeight + root.messagePadding * 2
 
-    radius: Appearance.rounding.normal
-    color: Appearance.colors.colLayer1
+    radius: root.cliStyle ? Appearance.rounding.small : Appearance.rounding.normal
+    color: root.cliStyle ? (messageData?.role === "user" ? ColorUtils.transparentize(Appearance.colors.colLayer2, 0.45) : "transparent") : Appearance.colors.colLayer1
 
     function saveMessage() {
         if (!root.editing) return;
@@ -80,8 +81,8 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             implicitWidth: headerRowLayout.implicitWidth + 4 * 2
-            implicitHeight: headerRowLayout.implicitHeight + 4 * 2
-            color: Appearance.colors.colSecondaryContainer
+            implicitHeight: root.cliStyle ? (headerRowLayout.implicitHeight + 2) : (headerRowLayout.implicitHeight + 4 * 2)
+            color: root.cliStyle ? "transparent" : Appearance.colors.colSecondaryContainer
             radius: Appearance.rounding.small
         
             RowLayout { // Header
@@ -216,6 +217,7 @@ Rectangle {
                     }
                     AiMessageControlButton {
                         id: editButton
+                        visible: !root.cliStyle
                         activated: root.editing
                         enabled: root.messageData?.done ?? false
                         buttonIcon: "edit"
@@ -231,6 +233,7 @@ Rectangle {
                     }
                     AiMessageControlButton {
                         id: toggleMarkdownButton
+                        visible: !root.cliStyle
                         activated: !root.renderMarkdown
                         buttonIcon: "code"
                         onClicked: {

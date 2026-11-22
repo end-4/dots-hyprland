@@ -255,6 +255,16 @@ Singleton {
     // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
     // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
     property var models: Config.options.policies.ai === 2 ? {} : {
+        "antigravity": aiModelComponent.createObject(this, {
+            "name": "Antigravity (agy)",
+            "icon": "google-gemini-symbolic",
+            "description": Translation.tr("Local CLI | Antigravity agent (no API key needed)"),
+            "homepage": "https://antigravity.google",
+            "endpoint": "agy",
+            "model": "antigravity",
+            "requires_key": false,
+            "api_format": "agy",
+        }),
         "gemini-2.5-flash": aiModelComponent.createObject(this, {
             "name": "Gemini 2.5 Flash",
             "icon": "google-gemini-symbolic",
@@ -296,6 +306,70 @@ Singleton {
         }),
     }
     property var modelList: Object.keys(root.models)
+    property var agyFamilies: []
+    property var agyCommands: []
+    property string agyConversationId: ""
+
+    function refreshAgyModels() {
+        getAgyModelsProc.running = false;
+        getAgyModelsProc.running = true;
+    }
+
+    Process {
+        id: getAgyCommandsProc
+        command: ["python3", CF.FileUtils.trimFileProtocol(`${Directories.scriptPath}/ai/fetch-agy-commands.py`)]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const list = JSON.parse(text);
+                    if (Array.isArray(list) && list.length > 0)
+                        root.agyCommands = list;
+                } catch (e) {
+                    console.log("[AI] Could not fetch agy commands:", e);
+                }
+            }
+        }
+    }
+
+    Process {
+        id: getAgyModelsProc
+        command: ["python3", CF.FileUtils.trimFileProtocol(`${Directories.scriptPath}/ai/fetch-agy-models.py`)]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const payload = JSON.parse(text);
+                    const list = payload.models ?? [];
+                    const updated = {};
+                    for (let i = 0; i < list.length; i++) {
+                        const m = list[i];
+                        updated[m.id] = aiModelComponent.createObject(root, {
+                            "name": m.name,
+                            "icon": "google-gemini-symbolic",
+                            "description": Translation.tr("Local CLI | Antigravity agent (no API key needed)"),
+                            "homepage": "https://antigravity.google",
+                            "endpoint": "agy",
+                            "model": m.id,
+                            "requires_key": false,
+                            "api_format": "agy",
+                        });
+                    }
+                    if (list.length > 0) {
+                        root.models = updated;
+                        root.modelList = Object.keys(root.models);
+                        root.agyFamilies = payload.families ?? [];
+                        if (!root.currentModelId || !(root.currentModelId in root.models)) {
+                            const pref = updated["gemini-4-hydrogen-medium"] ? "gemini-4-hydrogen-medium" : list[0].id;
+                            root.setModel(pref, false);
+                        }
+                    }
+                } catch (e) {
+                    console.log("[AI] Could not fetch agy models:", e);
+                }
+            }
+        }
+    }
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
 
     property var apiStrategies: {
@@ -305,7 +379,8 @@ Singleton {
     }
     property ApiStrategy currentApiStrategy: apiStrategies[models[currentModelId]?.api_format || "openai"]
 
-    function addUserModels() {
+    function addUserModels() { return; }
+    function _unusedAddUserModels() {
         (Config?.options.ai?.extraModels ?? []).forEach(model => {
             const safeModelName = root.safeModelName(model["model"]);
             root.addModel(safeModelName, model)
@@ -480,7 +555,7 @@ Singleton {
     }
 
     function getModel() {
-        return models[currentModelId];
+        return models[currentModelId] ?? models["antigravity"] ?? models[modelList[0]];
     }
 
     function setModel(modelId, feedback = true, setPersistentState = true) {
@@ -565,7 +640,19 @@ Singleton {
         root.addMessage(Translation.tr("Temperature: %1").arg(root.temperature), Ai.interfaceRole);
     }
 
+    readonly property bool isGenerating: requester.running
+
+    function stopGeneration() {
+        if (!requester.running) return;
+        requester.running = false;
+        if (requester.message) {
+            requester.message.thinking = false;
+            requester.markDone();
+        }
+    }
+
     function clearMessages() {
+        root.agyConversationId = "";
         root.messageIDs = [];
         root.messageByID = ({});
         root.tokenCount.input = -1;
@@ -595,6 +682,41 @@ Singleton {
 
         function makeRequest() {
             const model = models[currentModelId];
+
+            if (model?.api_format === "agy") {
+                const messageArray = root.messageIDs.map(id => root.messageByID[id]);
+                const filtered = messageArray.filter(m => m.role !== Ai.interfaceRole);
+                const lastUser = filtered[filtered.length - 1];
+                let promptText = lastUser?.rawContent ?? lastUser?.content ?? "";
+                if (!root.agyConversationId && filtered.length > 1) {
+                    promptText = filtered.slice(-10).map(m => (m.role === "user" ? "User: " : "Assistant: ") + (m.rawContent || m.content)).join("\n\n");
+                }
+                if (root.pendingFilePath && root.pendingFilePath.length > 0) {
+                    promptText += "\n\n[Attached file: " + root.pendingFilePath + "]";
+                }
+                requester.message = root.aiMessageComponent.createObject(root, {
+                    "role": "assistant",
+                    "model": currentModelId,
+                    "content": "",
+                    "rawContent": "",
+                    "thinking": true,
+                    "done": false,
+                });
+                if (root.pendingFilePath && root.pendingFilePath.length > 0) {
+                    requester.message.localFilePath = root.pendingFilePath;
+                    root.pendingFilePath = "";
+                }
+                const id = idForMessage(requester.message);
+                root.messageIDs = [...root.messageIDs, id];
+                root.messageByID[id] = requester.message;
+                const agyBin = CF.FileUtils.trimFileProtocol(`${Directories.home}/.local/bin/agy`);
+                const modelArgs = (model.model && model.model !== "antigravity") ? ["--model", model.model] : [];
+                const convArgs = root.agyConversationId ? ["--conversation", root.agyConversationId] : [];
+                const slashArgs = promptText.trim().startsWith("/") ? [] : ["--disable-slash-commands"];
+                requester.command = [agyBin, "-p", promptText, ...modelArgs, ...convArgs, "--output-format", "stream-json", ...slashArgs];
+                requester.running = true;
+                return;
+            }
 
             // Fetch API keys if needed
             if (model?.requires_key && !KeyringStorage.loaded) KeyringStorage.fetchKeyringData();
@@ -675,6 +797,37 @@ Singleton {
                 if (requester.message.thinking) requester.message.thinking = false;
                 // console.log("[Ai] Raw response line: ", data);
 
+                if (models[requester.message.model]?.api_format === "agy") {
+                    try {
+                        const ev = JSON.parse(data);
+                        if (ev.conversation_id) root.agyConversationId = ev.conversation_id;
+                        if (ev.event === "step_update" && ev.step_update?.step_type === "agent_response") {
+                            if (ev.step_update.conversation_id) root.agyConversationId = ev.step_update.conversation_id;
+                            if (ev.step_update.text_delta) {
+                                requester.message.rawContent += ev.step_update.text_delta;
+                                requester.message.content += ev.step_update.text_delta;
+                            }
+                            if (ev.step_update.usage) {
+                                root.tokenCount.input = ev.step_update.usage.input_tokens ?? -1;
+                                root.tokenCount.output = ev.step_update.usage.output_tokens ?? -1;
+                                root.tokenCount.total = ev.step_update.usage.total_tokens ?? -1;
+                            }
+                        } else if (ev.event === "result" && ev.result) {
+                            if (ev.result.conversation_id) root.agyConversationId = ev.result.conversation_id;
+                            if (ev.result.response && requester.message.rawContent.length === 0) {
+                                requester.message.rawContent = ev.result.response;
+                                requester.message.content = ev.result.response;
+                            }
+                            if (ev.result.usage) {
+                                root.tokenCount.input = ev.result.usage.input_tokens ?? -1;
+                                root.tokenCount.output = ev.result.usage.output_tokens ?? -1;
+                                root.tokenCount.total = ev.result.usage.total_tokens ?? -1;
+                            }
+                        }
+                    } catch (e) {}
+                    return;
+                }
+
                 // Handle response line
                 try {
                     const result = requester.currentStrategy.parseResponseLine(data, requester.message);
@@ -702,6 +855,14 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
+            if (models[requester.message.model]?.api_format === "agy") {
+                if (requester.message.thinking) requester.message.thinking = false;
+                if (exitCode !== 0 && requester.message.content.trim().length === 0) {
+                    requester.message.content = "agy CLI error (exit " + exitCode + ")";
+                }
+                requester.markDone();
+                return;
+            }
             const result = requester.currentStrategy.onRequestFinished(requester.message);
             
             if (result.finished) {

@@ -745,5 +745,14 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Antigravity Models": "Modelos Antigravity",
+  "Autonomous long-running goal mode": "Modo de objetivo autónomo prolongado",
+  "Compact conversation context": "Compactar contexto de conversación",
+  "Deep thinking & rigorous verification": "Pensamiento profundo y verificación rigurosa",
+  "Interactive design interview": "Entrevista de diseño interactiva",
+  "Local CLI | Antigravity agent (no API key needed)": "CLI local | Agente Antigravity (no requiere clave API)",
+  "Sign in / authenticate Antigravity CLI": "Iniciar sesión en Antigravity CLI",
+  "Start a new conversation": "Iniciar una nueva conversación",
+  "Step-by-step planning mode": "Modo de planificación paso a paso"
 }

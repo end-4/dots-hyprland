@@ -720,5 +720,14 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Antigravity Models": "Antigravity 模型",
+  "Autonomous long-running goal mode": "长时自主目标模式",
+  "Compact conversation context": "压缩对话上下文",
+  "Deep thinking & rigorous verification": "深度思考与严格验证",
+  "Interactive design interview": "交互式设计访谈",
+  "Local CLI | Antigravity agent (no API key needed)": "本地 CLI | Antigravity 智能体（无需 API 密钥）",
+  "Sign in / authenticate Antigravity CLI": "登录 / 认证 Antigravity CLI",
+  "Start a new conversation": "开始新对话",
+  "Step-by-step planning mode": "分步规划模式"
 }

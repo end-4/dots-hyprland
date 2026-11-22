@@ -26,6 +26,7 @@ Button {
     property real imageRadius: Appearance.rounding.small
 
     property bool showActions: false
+    property bool viewerOpen: false
     ImageDownloaderProcess {
         id: imageDownloader
         running: root.manualDownload
@@ -44,6 +45,21 @@ Button {
 
     StyledToolTip {
         text: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}`
+    }
+
+    onClicked: root.viewerOpen = true
+
+    PointingHandInteraction {}
+
+    Loader {
+        active: root.viewerOpen
+        sourceComponent: AnimeImageViewer {
+            sourceUrl: root.imageData.file_url ?? root.imageData.sample_url ?? root.imageData.preview_url ?? ""
+            sampleUrl: root.imageData.sample_url ?? ""
+            previewUrl: root.imageData.preview_url ?? ""
+            tags: root.imageData.tags ?? ""
+            onCloseRequested: root.viewerOpen = false
+        }
     }
 
     padding: 0

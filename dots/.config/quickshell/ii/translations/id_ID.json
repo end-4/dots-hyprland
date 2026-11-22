@@ -488,5 +488,14 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Antigravity Models": "Model Antigravity",
+  "Autonomous long-running goal mode": "Mode tujuan otonom jangka panjang",
+  "Compact conversation context": "Padatkan konteks percakapan",
+  "Deep thinking & rigorous verification": "Berpikir mendalam & verifikasi ketat",
+  "Interactive design interview": "Wawancara desain interaktif",
+  "Local CLI | Antigravity agent (no API key needed)": "CLI Lokal | Agen Antigravity (tanpa kunci API)",
+  "Sign in / authenticate Antigravity CLI": "Masuk / autentikasi Antigravity CLI",
+  "Start a new conversation": "Mulai percakapan baru",
+  "Step-by-step planning mode": "Mode perencanaan langkah demi langkah"
 }

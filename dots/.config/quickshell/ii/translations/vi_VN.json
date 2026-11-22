@@ -369,5 +369,14 @@
   "illogical-impulse Settings": "Cài đặt illogical-impulse",
   "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Trực tuyến | Model của Google\nMới hơn nhưng chậm hơn so với phiên bản trước nhưng nên cung cấp câu trả lời chất lượng cao hơn",
   "Preferred wallpaper zoom (%)": "Tỷ lệ thu phóng hình nền (%)",
-  "Function Response": "Phản hồi function"
+  "Function Response": "Phản hồi function",
+  "Antigravity Models": "Mô hình Antigravity",
+  "Autonomous long-running goal mode": "Chế độ mục tiêu tự chủ dài hạn",
+  "Compact conversation context": "Nén ngữ cảnh cuộc trò chuyện",
+  "Deep thinking & rigorous verification": "Suy nghĩ sâu & kiểm chứng chặt chẽ",
+  "Interactive design interview": "Phỏng vấn thiết kế tương tác",
+  "Local CLI | Antigravity agent (no API key needed)": "CLI cục bộ | Tác nhân Antigravity (không cần khóa API)",
+  "Sign in / authenticate Antigravity CLI": "Đăng nhập / xác thực Antigravity CLI",
+  "Start a new conversation": "Bắt đầu cuộc trò chuyện mới",
+  "Step-by-step planning mode": "Chế độ lập kế hoạch từng bước"
 }

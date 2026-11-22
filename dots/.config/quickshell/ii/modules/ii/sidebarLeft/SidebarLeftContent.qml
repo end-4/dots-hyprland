@@ -17,7 +17,11 @@ Item {
     property bool animeEnabled: Config.options.policies.weeb !== 0
     property bool animeCloset: Config.options.policies.weeb === 2
     property var tabButtonList: [
-        ...(root.aiChatEnabled ? [{"icon": "neurology", "name": Translation.tr("Intelligence")}] : []),
+        ...(root.aiChatEnabled ? [
+            {"icon": "neurology", "name": "Claude"},
+            {"icon": "auto_awesome", "name": "Agy"},
+            {"icon": "terminal", "name": "Codex"}
+        ] : []),
         ...(root.translatorEnabled ? [{"icon": "translate", "name": Translation.tr("Translator")}] : []),
         ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
     ]
@@ -84,7 +88,7 @@ Item {
                 }
 
                 contentChildren: [
-                    ...(root.aiChatEnabled ? [aiChat.createObject()] : []),
+                    ...(root.aiChatEnabled ? [claudeChat.createObject(), aiChat.createObject(), codexChat.createObject()] : []),
                     ...(root.translatorEnabled ? [translator.createObject()] : []),
                     ...((root.tabButtonList.length === 0 || (!root.aiChatEnabled && !root.translatorEnabled && root.animeCloset)) ? [placeholder.createObject()] : []),
                     ...(root.animeEnabled ? [anime.createObject()] : []),
@@ -92,6 +96,14 @@ Item {
             }
         }
 
+        Component {
+            id: claudeChat
+            CliChatPanel { backend: "claude" }
+        }
+        Component {
+            id: codexChat
+            CliChatPanel { backend: "codex" }
+        }
         Component {
             id: aiChat
             AiChat {}

@@ -733,5 +733,14 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Antigravity Models": "Modelos Antigravity",
+  "Autonomous long-running goal mode": "Modo de meta autônoma prolongada",
+  "Compact conversation context": "Compactar contexto da conversa",
+  "Deep thinking & rigorous verification": "Pensamento profundo e verificação rigorosa",
+  "Interactive design interview": "Entrevista interativa de design",
+  "Local CLI | Antigravity agent (no API key needed)": "CLI local | Agente Antigravity (sem necessidade de chave API)",
+  "Sign in / authenticate Antigravity CLI": "Entrar no Antigravity CLI",
+  "Start a new conversation": "Iniciar uma nova conversa",
+  "Step-by-step planning mode": "Modo de planejamento passo a passo"
 }

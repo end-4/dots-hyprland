@@ -604,5 +604,14 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Antigravity Models": "Antigravity Modelleri",
+  "Autonomous long-running goal mode": "Uzun soluklu otonom hedef modu",
+  "Compact conversation context": "Sohbet bağlamını özetleyip sıkıştır",
+  "Deep thinking & rigorous verification": "Derin düşünme ve sıkı doğrulama modu",
+  "Interactive design interview": "Tasarım kararları için etkileşimli soru-cevap",
+  "Local CLI | Antigravity agent (no API key needed)": "Yerel CLI | Antigravity ajanı (API anahtarı gerekmez)",
+  "Sign in / authenticate Antigravity CLI": "Antigravity CLI giriş / oturum aç",
+  "Start a new conversation": "Yeni bir agy sohbeti başlat",
+  "Step-by-step planning mode": "Adım adım planlama modu"
 }

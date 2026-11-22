@@ -604,5 +604,14 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Antigravity Models": "Antigravity-Modelle",
+  "Autonomous long-running goal mode": "Autonomer Langzeit-Zielmodus",
+  "Compact conversation context": "Gesprächskontext komprimieren",
+  "Deep thinking & rigorous verification": "Tiefes Nachdenken & strenge Prüfung",
+  "Interactive design interview": "Interaktives Design-Interview",
+  "Local CLI | Antigravity agent (no API key needed)": "Lokale CLI | Antigravity-Agent (kein API-Schlüssel nötig)",
+  "Sign in / authenticate Antigravity CLI": "Bei Antigravity CLI anmelden",
+  "Start a new conversation": "Neues Gespräch starten",
+  "Step-by-step planning mode": "Schritt-für-Schritt-Planungsmodus"
 }
