@@ -604,5 +604,8 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Auto (Hyprland config)": "Auto (Hyprland-Konfiguration)",
+  "Keyboard Layout": "Tastaturlayout",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Wählen Sie das von Hyprland verwendete Tastaturlayout.\n„Auto“ behält das Layout aus Ihrer Hyprland-Konfiguration."
 }

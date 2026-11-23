@@ -611,5 +611,8 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Auto (Hyprland config)": "Auto (Hyprland config)",
+  "Keyboard Layout": "Keyboard Layout",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config."
 }

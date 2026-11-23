@@ -756,5 +756,8 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Auto (Hyprland config)": "Авто (конфигурация Hyprland)",
+  "Keyboard Layout": "Раскладка клавиатуры",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Выберите раскладку клавиатуры, используемую Hyprland.\n«Авто» сохраняет раскладку из вашей конфигурации Hyprland."
 }
