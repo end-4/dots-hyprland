@@ -756,5 +756,7 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "No apps are playing sound": "Нет приложений, воспроизводящих звук",
+  "No output device": "Нет устройства вывода"
 }

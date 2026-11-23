@@ -720,5 +720,7 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "No apps are playing sound": "没有正在播放声音的应用",
+  "No output device": "无输出设备"
 }

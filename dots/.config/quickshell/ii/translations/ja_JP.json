@@ -428,5 +428,7 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "No apps are playing sound": "音声を再生中のアプリはありません",
+  "No output device": "出力デバイスがありません"
 }

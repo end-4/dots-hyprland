@@ -488,5 +488,7 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "No apps are playing sound": "Tidak ada aplikasi yang memutar suara",
+  "No output device": "Tidak ada perangkat output"
 }

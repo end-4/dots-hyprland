@@ -611,5 +611,7 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "No apps are playing sound": "Aucune application ne joue de son",
+  "No output device": "Aucun périphérique de sortie"
 }

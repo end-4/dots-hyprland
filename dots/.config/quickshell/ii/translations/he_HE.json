@@ -501,5 +501,7 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "No apps are playing sound": "אין יישומים שמנגנים שמע",
+  "No output device": "אין התקן פלט"
 }
