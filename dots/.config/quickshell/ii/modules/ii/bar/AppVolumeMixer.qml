@@ -26,7 +26,7 @@ MouseArea {
 
     property bool popupOpen: false
     readonly property real wheelStep: 0.05
-    // stream node id -> its process and that process's ancestors (filled by ancestryProc)
+    // stream process id -> { pids: [...], hint: "..." } (filled by ancestryProc)
     property var ancestry: ({})
 
     // One entry per app: { key, name, icon, nodes: [PwNode] }; playback streams of the default output only
@@ -36,12 +36,17 @@ MouseArea {
         for (const node of Audio.outputAppNodes) {
             const p = node.properties ?? {};
             const win = root.windowFor(node);
-            const key = win ? `pid:${win.pid}` : (p["application.process.binary"] || p["application.name"] || node.name);
+            const entry = win ? null : root.desktopEntryForNode(node);
+            const key = win ? `pid:${win.pid}`
+                : entry ? `app:${entry.id}`
+                : (p["application.process.binary"] || p["application.name"] || node.name);
             if (!groups[key]) {
                 groups[key] = {
                     key: key,
-                    name: win ? root.appNameFor(win) : Audio.appNodeDisplayName(node),
-                    icon: win ? Quickshell.iconPath(AppSearch.guessIcon(win.class), "image-missing") : root.iconFor(node),
+                    name: win ? root.appNameFor(win) : (entry?.name || Audio.appNodeDisplayName(node)),
+                    icon: win ? Quickshell.iconPath(AppSearch.guessIcon(win.class), "image-missing")
+                        : entry ? Quickshell.iconPath(AppSearch.guessIcon(entry.icon || entry.id), "image-missing")
+                        : root.iconFor(node),
                     nodes: []
                 };
                 order.push(key);
@@ -53,12 +58,29 @@ MouseArea {
 
     // The Hyprland window owned by the stream's process or one of its ancestors (null if none)
     function windowFor(node) {
-        const chain = root.ancestry[node?.id] ?? [];
+        const pid = parseInt(node?.properties?.["application.process.id"] ?? "");
+        if (!pid) return null;
+        const info = root.ancestry[pid];
+        const chain = info?.pids ?? [pid];
         for (const id of chain) {
             const w = HyprlandData.windowList.find(w => w.pid === id);
             if (w) return w;
         }
         return null;
+    }
+
+    function desktopEntryForNode(node) {
+        const pid = parseInt(node?.properties?.["application.process.id"] ?? "");
+        const hint = (pid ? root.ancestry[pid]?.hint : "") ?? "";
+        if (!hint) return null;
+        const h = hint.toLowerCase();
+        return DesktopEntries.applications.values.find(a =>
+            (a.startupClass ?? "").toLowerCase() === h ||
+            (a.icon ?? "").toLowerCase() === h ||
+            (a.id ?? "").toLowerCase() === h ||
+            (a.execString ?? "").toLowerCase().includes(h) ||
+            (a.id ?? "").toLowerCase().includes(h)
+        ) ?? null;
     }
 
     function appNameFor(win) {
@@ -68,51 +90,42 @@ MouseArea {
         return e?.name || win.initialTitle || win.title || win.class;
     }
 
-    // Read every playback stream's process from PipeWire itself (Quickshell's PwNode.properties is empty until
-    // the node is bound) and walk each process up through its parents; the result maps node id -> pid chain
     function refreshAncestry() {
+        const pids = Audio.outputAppNodes.map(n => parseInt(n?.properties?.["application.process.id"] ?? "")).filter(p => p > 0);
+        if (pids.length === 0) return;
+        ancestryProc.command = [
+            "python3",
+            Quickshell.shellPath("scripts/pw-app-ancestry.py"),
+            ...pids.map(String)
+        ];
+        ancestryProc.running = false;
         ancestryProc.running = true;
+    }
+
+    Timer {
+        id: ancestryRetryTimer
+        interval: 80
+        repeat: false
+        onTriggered: root.refreshAncestry()
     }
 
     Process {
         id: ancestryProc
-        command: ["bash", "-c", `pw-dump 2>/dev/null | python3 -c '
-import json, sys
-def chain(pid):
-    out = [pid]
-    for _ in range(8):
-        try:
-            ppid = int(open(f"/proc/{out[-1]}/stat").read().rsplit(")", 1)[1].split()[1])
-        except Exception:
-            break
-        if ppid <= 1:
-            break
-        out.append(ppid)
-    return out
-for o in json.load(sys.stdin):
-    props = (o.get("info") or {}).get("props") or {}
-    pid = props.get("application.process.id")
-    if props.get("media.class") == "Stream/Output/Audio" and pid:
-        print(o["id"], *chain(int(pid)))
-'`]
         stdout: StdioCollector {
-            id: ancestryCollector
             onStreamFinished: {
-                const map = {};
-                for (const line of ancestryCollector.text.trim().split("\n")) {
-                    const ids = line.trim().split(/\s+/).map(Number).filter(n => n > 0);
-                    if (ids.length > 1) map[ids[0]] = ids.slice(1);
-                }
-                root.ancestry = map;
+                try {
+                    root.ancestry = JSON.parse(text.trim() || "{}");
+                } catch (e) {}
             }
         }
     }
     Connections {
         target: Audio
         function onOutputAppNodesChanged() {
-            if (root.popupOpen) root.refreshAncestry();
+            root.refreshAncestry();
         }
     }
+    Component.onCompleted: Qt.callLater(root.refreshAncestry)
 
     function iconFor(node) {
         const p = node?.properties ?? {};
@@ -153,12 +166,15 @@ for o in json.load(sys.stdin):
     onClicked: root.popupOpen = !root.popupOpen
     onPopupOpenChanged: {
         focusGrab.active = root.popupOpen;
-        if (root.popupOpen) root.refreshAncestry();
+        if (root.popupOpen) {
+            root.refreshAncestry();
+            ancestryRetryTimer.restart();
+        }
     }
 
-    // Bind the app streams so their properties (name, process id) and volume/mute are live; there are only a few
+    // Bind the nodes only while the popup is open, so their volume/mute properties are live
     PwObjectTracker {
-        objects: [Audio.sink, ...Audio.outputAppNodes]
+        objects: root.popupOpen ? [Audio.sink, ...Audio.outputAppNodes] : []
     }
 
     // Click anywhere outside the popup window closes it.
