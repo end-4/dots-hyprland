@@ -14,6 +14,10 @@ Scope {
     property bool lockPending: false
     property real armedAt: 0
 
+    // Lets the lock screen hide its UI (password box, buttons) while the screensaver is showing underneath
+    onActiveChanged: GlobalStates.screensaverActive = root.active
+    Component.onDestruction: GlobalStates.screensaverActive = false
+
     readonly property string mode: Config.options?.screensaver?.mode ?? "dvd"
     readonly property string customPath: Config.options?.screensaver?.customPath ?? ""
     readonly property string imageAnimation: Config.options?.screensaver?.imageAnimation ?? "breathe"
