@@ -435,5 +435,6 @@
   "Command or path": "コマンドまたはパス",
   "No startup apps found": "スタートアップアプリが見つかりません",
   "Date added": "追加日",
-  "Active status": "有効状態"
+  "Active status": "有効状態",
+  "Name": "名前"
 }

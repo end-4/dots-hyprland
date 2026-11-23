@@ -763,5 +763,6 @@
   "Command or path": "Команда или путь",
   "No startup apps found": "Приложения автозагрузки не найдены",
   "Date added": "Дата добавления",
-  "Active status": "Состояние"
+  "Active status": "Состояние",
+  "Name": "Имя"
 }

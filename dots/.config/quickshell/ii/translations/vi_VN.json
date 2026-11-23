@@ -376,5 +376,6 @@
   "Command or path": "Lệnh hoặc đường dẫn",
   "No startup apps found": "Không tìm thấy ứng dụng khởi động",
   "Date added": "Ngày thêm",
-  "Active status": "Trạng thái bật/tắt"
+  "Active status": "Trạng thái bật/tắt",
+  "Name": "Tên"
 }

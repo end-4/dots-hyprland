@@ -345,5 +345,6 @@
   "Command or path": "Команда або шлях",
   "No startup apps found": "Програм автозапуску не знайдено",
   "Date added": "Дата додавання",
-  "Active status": "Стан активності"
+  "Active status": "Стан активності",
+  "Name": "Ім'я"
 }

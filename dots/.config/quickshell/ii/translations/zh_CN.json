@@ -727,5 +727,6 @@
   "Command or path": "命令或路径",
   "No startup apps found": "未找到开机自启应用",
   "Date added": "添加日期",
-  "Active status": "启用状态"
+  "Active status": "启用状态",
+  "Name": "名称"
 }

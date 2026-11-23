@@ -618,5 +618,6 @@
   "Command or path": "Command or path",
   "No startup apps found": "No startup apps found",
   "Date added": "Date added",
-  "Active status": "Active status"
+  "Active status": "Active status",
+  "Name": "Name"
 }

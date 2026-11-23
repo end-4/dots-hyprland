@@ -611,5 +611,6 @@
   "Command or path": "Komut veya dosya yolu",
   "No startup apps found": "Başlangıç uygulaması bulunamadı",
   "Date added": "Eklenme tarihi",
-  "Active status": "Aktiflik durumu"
+  "Active status": "Aktiflik durumu",
+  "Name": "İsim"
 }

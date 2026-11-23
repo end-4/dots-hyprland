@@ -366,5 +366,7 @@
   "Command or path": "Comando o percorso",
   "No startup apps found": "Nessuna app all'avvio trovata",
   "Date added": "Data di aggiunta",
-  "Active status": "Stato attivo"
+  "Active status": "Stato attivo",
+  "Audio": "Audio",
+  "Name": "Nome"
 }

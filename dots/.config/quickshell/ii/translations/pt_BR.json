@@ -740,5 +740,6 @@
   "Command or path": "Comando ou caminho",
   "No startup apps found": "Nenhum aplicativo de inicialização encontrado",
   "Date added": "Data de adição",
-  "Active status": "Status ativo"
+  "Active status": "Status ativo",
+  "Name": "Nome"
 }

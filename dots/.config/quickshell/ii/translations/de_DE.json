@@ -611,5 +611,6 @@
   "Command or path": "Befehl oder Pfad",
   "No startup apps found": "Keine Autostart-Apps gefunden",
   "Date added": "Hinzugefügt am",
-  "Active status": "Aktivierungsstatus"
+  "Active status": "Aktivierungsstatus",
+  "Name": "Name"
 }
