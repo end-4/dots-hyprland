@@ -15,6 +15,7 @@ ButtonMouseArea {
     id: root
 
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
+    readonly property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
     WorkspaceModel {
         id: wsModel
         monitor: root.monitor
@@ -163,6 +164,7 @@ ButtonMouseArea {
             z: 2
 
             index: root.workspaceIndexInGroup
+            color: root.monitorIsFocused ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colSecondary, 0.55)
         }
 
         /////////////////// Hover ///////////////////
@@ -431,6 +433,7 @@ ButtonMouseArea {
             contentLayer: StyledRectangle.ContentLayer.Group
             radius: indicatorThickness / 2
             color: Appearance.colors.colPrimary
+            Behavior on color { ColorAnimation { duration: 150 } }
 
             x: root.vertical ? null : indicatorPosition
             y: root.vertical ? indicatorPosition : null

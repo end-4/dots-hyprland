@@ -630,5 +630,10 @@
   "Set as main monitor": "Ana monitör yap",
   "Speed": "Hız",
   "Stretch": "Uzat",
-  "Wallpaper": "Duvar Kağıdı"
+  "Wallpaper": "Duvar Kağıdı",
+  "Auto (Largest)": "Otomatik (En büyük)",
+  "Default monitor on startup": "Açılışta varsayılan monitör",
+  "Split workspaces by monitor": "Çalışma alanlarını monitöre göre böl",
+  "No 2nd monitor": "2. monitör yok",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

@@ -272,6 +272,9 @@ Singleton {
                     property bool showScreenRecord: false
                 }
                 property JsonObject workspaces: JsonObject {
+                    property bool splitByMonitor: true
+                    property int leftMonitorCount: 5
+                    property list<int> monitorSplits: [5]
                     property string defaultMonitor: ""
                     property bool monochromeIcons: true
                     property int shown: 10

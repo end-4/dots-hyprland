@@ -396,5 +396,10 @@
   "Set as main monitor": "Đặt làm màn hình chính",
   "Speed": "Tốc độ",
   "Stretch": "Kéo giãn",
-  "Copy path": "Sao chép đường dẫn"
+  "Copy path": "Sao chép đường dẫn",
+  "Auto (Largest)": "Tự động (Lớn nhất)",
+  "Default monitor on startup": "Màn hình mặc định khi khởi động",
+  "Split workspaces by monitor": "Chia không gian làm việc theo màn hình",
+  "No 2nd monitor": "Không có màn hình thứ 2",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

@@ -782,5 +782,10 @@
   "Set as main monitor": "Сделать основным",
   "Speed": "Скорость",
   "Stretch": "Растянуть",
-  "Wallpaper": "Обои"
+  "Wallpaper": "Обои",
+  "Auto (Largest)": "Авто (Наибольший)",
+  "Default monitor on startup": "Монитор по умолчанию при запуске",
+  "Split workspaces by monitor": "Разделять рабочие столы по мониторам",
+  "No 2nd monitor": "Нет второго монитора",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

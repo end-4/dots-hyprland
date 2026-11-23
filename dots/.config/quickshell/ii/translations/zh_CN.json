@@ -746,5 +746,10 @@
   "Set as main monitor": "设为主显示器",
   "Speed": "速度",
   "Stretch": "拉伸",
-  "Wallpaper": "壁纸"
+  "Wallpaper": "壁纸",
+  "Auto (Largest)": "自动（最大）",
+  "Default monitor on startup": "启动时默认显示器",
+  "Split workspaces by monitor": "按显示器拆分工作区",
+  "No 2nd monitor": "没有第二台显示器",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

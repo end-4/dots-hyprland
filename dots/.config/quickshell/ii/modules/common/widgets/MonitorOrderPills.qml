@@ -50,8 +50,22 @@ Flow {
         return screens;
     }
 
+    Timer {
+        id: wsOrderApplyTimer
+        interval: 150
+        repeat: false
+        onTriggered: {
+            if (!Config.options.bar.workspaces.splitByMonitor)
+                return;
+            const splits = Array.from(Config.options.bar.workspaces.monitorSplits ?? []);
+            const arg = splits.length > 0 ? splits.join(",") : String(Config.options.bar.workspaces.leftMonitorCount ?? 5);
+            Quickshell.execDetached(["python3", Quickshell.shellPath("scripts/apply-workspace-split.py"), arg]);
+        }
+    }
+
     function applyMonitorOrder(newOrder) {
         Config.options.background.monitorOrder = newOrder;
+        wsOrderApplyTimer.restart();
     }
 
     Repeater {

@@ -455,5 +455,10 @@
   "Set as main monitor": "メインモニターに設定",
   "Speed": "速度",
   "Stretch": "引き伸ばし",
-  "Copy path": "パスをコピー"
+  "Copy path": "パスをコピー",
+  "Auto (Largest)": "自動（最大）",
+  "Default monitor on startup": "起動時のデフォルトモニター",
+  "Split workspaces by monitor": "モニターごとにワークスペースを分割",
+  "No 2nd monitor": "2台目のモニターなし",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

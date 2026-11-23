@@ -528,5 +528,10 @@
   "Speed": "מהירות",
   "Stretch": "מתח",
   "Wallpaper": "טפט",
-  "Copy path": "העתק נתיב"
+  "Copy path": "העתק נתיב",
+  "Auto (Largest)": "אוטומטי (הגדול ביותר)",
+  "Default monitor on startup": "מסך ברירת מחדל בהפעלה",
+  "Split workspaces by monitor": "פצל סביבות עבודה לפי צג",
+  "No 2nd monitor": "אין צג שני",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

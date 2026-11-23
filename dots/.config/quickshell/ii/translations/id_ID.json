@@ -515,5 +515,10 @@
   "Speed": "Kecepatan",
   "Stretch": "Regangkan",
   "Wallpaper": "Wallpaper",
-  "Copy path": "Salin jalur"
+  "Copy path": "Salin jalur",
+  "Auto (Largest)": "Otomatis (Terbesar)",
+  "Default monitor on startup": "Monitor default saat mulai",
+  "Split workspaces by monitor": "Pisahkan ruang kerja per monitor",
+  "No 2nd monitor": "Tidak ada monitor ke-2",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

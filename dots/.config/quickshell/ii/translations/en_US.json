@@ -637,5 +637,10 @@
   "Set as main monitor": "Set as main monitor",
   "Speed": "Speed",
   "Stretch": "Stretch",
-  "Wallpaper": "Wallpaper"
+  "Wallpaper": "Wallpaper",
+  "Auto (Largest)": "Auto (Largest)",
+  "Default monitor on startup": "Default monitor on startup",
+  "Split workspaces by monitor": "Split workspaces by monitor",
+  "No 2nd monitor": "No 2nd monitor",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }

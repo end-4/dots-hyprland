@@ -637,5 +637,10 @@
   "Set as main monitor": "Définir comme écran principal",
   "Speed": "Vitesse",
   "Stretch": "Étirer",
-  "Wallpaper": "Fond d'écran"
+  "Wallpaper": "Fond d'écran",
+  "Auto (Largest)": "Auto (Plus grand)",
+  "Default monitor on startup": "Moniteur par défaut au démarrage",
+  "Split workspaces by monitor": "Répartir les espaces de travail par moniteur",
+  "No 2nd monitor": "Pas de deuxième moniteur",
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
 }
