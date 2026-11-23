@@ -604,5 +604,8 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Auto (Hyprland config)": "Otomatik (Hyprland yapılandırması)",
+  "Keyboard Layout": "Klavye Düzeni",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Hyprland'in kullandığı klavye düzenini seçin.\n\"Otomatik\", Hyprland yapılandırmanızdaki düzeni korur."
 }

@@ -165,6 +165,46 @@ ContentPage {
             }
         }
         ContentSubsection {
+            title: Translation.tr("Keyboard Layout")
+            tooltip: Translation.tr("Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.")
+
+            StyledComboBox {
+                id: keyboardSelector
+                buttonIcon: "keyboard"
+                textRole: "displayName"
+                property var layouts: []
+
+                model: [
+                    {
+                        displayName: Translation.tr("Auto (Hyprland config)"),
+                        value: ""
+                    },
+                    ...layouts
+                ]
+
+                currentIndex: {
+                    const index = model.findIndex(item => item.value === (Config.options.language.keyboard ?? ""));
+                    return index !== -1 ? index : 0;
+                }
+
+                onActivated: index => {
+                    Config.options.language.keyboard = model[index].value;
+                }
+
+                Process {
+                    running: true
+                    command: ["python3", Quickshell.shellPath("scripts/list-keyboard-layouts.py")]
+                    stdout: StdioCollector {
+                        onStreamFinished: {
+                            try {
+                                keyboardSelector.layouts = JSON.parse(text);
+                            } catch (e) {}
+                        }
+                    }
+                }
+            }
+        }
+        ContentSubsection {
             title: Translation.tr("Generate translation with Gemini")
             tooltip: Translation.tr("You'll need to enter your Gemini API key first.\nType /key on the sidebar for instructions.")
 

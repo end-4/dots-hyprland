@@ -733,5 +733,8 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Auto (Hyprland config)": "Auto (configuração do Hyprland)",
+  "Keyboard Layout": "Layout do teclado",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Selecione o layout de teclado usado pelo Hyprland.\n\"Auto\" mantém o layout da sua configuração do Hyprland."
 }

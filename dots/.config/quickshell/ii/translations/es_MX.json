@@ -745,5 +745,8 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Auto (Hyprland config)": "Auto (configuración de Hyprland)",
+  "Keyboard Layout": "Distribución del teclado",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Selecciona la distribución de teclado que usa Hyprland.\n«Auto» mantiene la distribución de tu configuración de Hyprland."
 }

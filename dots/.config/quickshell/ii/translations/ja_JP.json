@@ -428,5 +428,8 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "Auto (Hyprland config)": "自動 (Hyprland の設定)",
+  "Keyboard Layout": "キーボードレイアウト",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "Hyprland が使用するキーボードレイアウトを選択します。\n「自動」では Hyprland の設定のレイアウトを維持します。"
 }

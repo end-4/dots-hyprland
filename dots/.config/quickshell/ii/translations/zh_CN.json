@@ -720,5 +720,8 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Auto (Hyprland config)": "自动（Hyprland 配置）",
+  "Keyboard Layout": "键盘布局",
+  "Select the keyboard layout used by Hyprland.\n\"Auto\" keeps the layout from your Hyprland config.": "选择 Hyprland 使用的键盘布局。\n“自动”将保留你的 Hyprland 配置中的布局。"
 }
