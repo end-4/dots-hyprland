@@ -256,7 +256,7 @@ def run_autostart() -> int:
         if not base.is_dir():
             continue
         for p in sorted(base.glob("*.desktop")):
-            seen_files[p.name] = parse_desktop(p)
+            seen_files[p.name] = _parse_desktop(p)
     for fname, d in seen_files.items():
         if d.get("Hidden", "").lower() == "true":
             continue
