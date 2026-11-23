@@ -720,5 +720,11 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Deep sleep (Suspend)": "深度睡眠（挂起）",
+  "Display off timeout (minutes)": "关闭显示器超时（分钟）",
+  "Lock screen on idle": "空闲时锁定屏幕",
+  "Lock timeout (minutes)": "锁定超时（分钟）",
+  "Suspend timeout (minutes)": "挂起超时（分钟）",
+  "Turn off display (DPMS)": "关闭显示器 (DPMS)"
 }

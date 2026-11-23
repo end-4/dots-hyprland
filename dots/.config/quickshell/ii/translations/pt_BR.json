@@ -733,5 +733,11 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Deep sleep (Suspend)": "Sono profundo (Suspender)",
+  "Display off timeout (minutes)": "Tempo para desligar tela (minutos)",
+  "Lock screen on idle": "Bloquear tela ao ficar ocioso",
+  "Lock timeout (minutes)": "Tempo para bloquear (minutos)",
+  "Suspend timeout (minutes)": "Tempo para suspender (minutos)",
+  "Turn off display (DPMS)": "Desligar tela (DPMS)"
 }

@@ -604,5 +604,11 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Deep sleep (Suspend)": "Derin uyku (Askıya al)",
+  "Display off timeout (minutes)": "Ekran kapanma süresi (dakika)",
+  "Lock screen on idle": "Boştayken ekranı kilitle",
+  "Lock timeout (minutes)": "Kilitleme süresi (dakika)",
+  "Suspend timeout (minutes)": "Derin uyku süresi (dakika)",
+  "Turn off display (DPMS)": "Ekranı kapat (DPMS)"
 }

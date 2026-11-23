@@ -501,5 +501,11 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "Deep sleep (Suspend)": "שינה עמוקה (השעיה)",
+  "Display off timeout (minutes)": "זמן לכיבוי מסך (דקות)",
+  "Lock screen on idle": "נעל מסך בחוסר פעילות",
+  "Lock timeout (minutes)": "זמן לנעילה (דקות)",
+  "Suspend timeout (minutes)": "זמן להשעיה (דקות)",
+  "Turn off display (DPMS)": "כבה תצוגה (DPMS)"
 }

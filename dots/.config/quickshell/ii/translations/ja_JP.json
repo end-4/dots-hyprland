@@ -428,5 +428,11 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "Deep sleep (Suspend)": "ディープスリープ（サスペンド）",
+  "Display off timeout (minutes)": "画面オフまでの時間（分）",
+  "Lock screen on idle": "アイドル時に画面をロック",
+  "Lock timeout (minutes)": "ロックまでの時間（分）",
+  "Suspend timeout (minutes)": "サスペンドまでの時間（分）",
+  "Turn off display (DPMS)": "ディスプレイをオフにする (DPMS)"
 }

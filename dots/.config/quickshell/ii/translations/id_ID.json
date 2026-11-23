@@ -488,5 +488,11 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Deep sleep (Suspend)": "Tidur nyenyak (Tangguhkan)",
+  "Display off timeout (minutes)": "Batas waktu layar mati (menit)",
+  "Lock screen on idle": "Kunci layar saat menganggur",
+  "Lock timeout (minutes)": "Batas waktu kunci (menit)",
+  "Suspend timeout (minutes)": "Batas waktu tangguhkan (menit)",
+  "Turn off display (DPMS)": "Matikan layar (DPMS)"
 }
