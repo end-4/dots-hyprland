@@ -44,6 +44,20 @@ Singleton {
         return root.windowByAddress[address];
     }
 
+    /**
+     * Whether the workspace shown on the monitor has a fullscreen window.
+     * An open special workspace is drawn over the regular one, so its state takes precedence.
+     * Maximized windows don't count: a client's `fullscreen` is a bitmask where 1 = maximized, 2 = fullscreen.
+     */
+    function monitorShowsFullscreen(monitorName) {
+        const monitor = root.monitors.find(mon => mon.name === monitorName);
+        if (!monitor) return false;
+        const specialWorkspaceName = monitor.specialWorkspace?.name ?? "";
+        const shownWorkspaceName = specialWorkspaceName !== "" ? specialWorkspaceName : monitor.activeWorkspace?.name;
+        if (!shownWorkspaceName) return false;
+        return root.windowList.some(win => win.workspace?.name === shownWorkspaceName && (win.fullscreen & 2) !== 0);
+    }
+
     // Internals
 
     function updateWindowList() {

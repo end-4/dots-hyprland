@@ -139,6 +139,15 @@ ContentPage {
                 }
             }
         }
+
+        ConfigSwitch {
+            buttonIcon: "fullscreen"
+            text: Translation.tr("Hide when fullscreen")
+            checked: Config.options.bar.hideWhenFullscreen
+            onCheckedChanged: {
+                Config.options.bar.hideWhenFullscreen = checked;
+            }
+        }
     }
 
     ContentSection {

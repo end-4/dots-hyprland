@@ -234,6 +234,7 @@ Singleton {
                     }
                 }
                 property bool bottom: false // Instead of top
+                property bool hideWhenFullscreen: false // Hide while the monitor shows a fullscreen window (including on special workspaces)
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
                 property bool floatStyleShadow: true // Show shadow behind bar when cornerStyle == 1 (Float)
                 property bool borderless: false // true for no grouping of items
@@ -329,6 +330,7 @@ Singleton {
                 property real hoverRegionHeight: 2
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
+                property bool hideWhenFullscreen: false // Hide while the monitor shows a fullscreen window (including on special workspaces)
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty",]
                 property list<string> ignoredAppRegexes: []
