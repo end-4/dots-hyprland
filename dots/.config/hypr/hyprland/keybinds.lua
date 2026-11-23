@@ -225,6 +225,18 @@ for i = 1, 4 do
 end
 
 --#/# bind = SUPER+SHIFT, Page_↑/↓,, -- Send to workspace left/right
+-- With "Split workspaces by monitor" (Settings -> Bar) every monitor owns a range of workspace IDs
+-- (written to ~/.config/hypr/workspaces.lua). Ctrl+Super+Left/Right then steps through the IDs across
+-- monitors instead of staying on one monitor. Without a split the default behaviour is unchanged.
+local function workspaces_are_split()
+    local f = io.open(HOME .. "/.config/hypr/workspaces.lua", "r")
+    if not f then return false end
+    local content = f:read("*a")
+    f:close()
+    return content:find("workspace_rule", 1, true) ~= nil
+end
+local stepPrefix = workspaces_are_split() and { "-", "+" } or { "r-", "r+" }
+
 for i = 1, 2 do
     local keydirs = { "Up", "Down" }
     local prefix = { "r-", "r+" }
@@ -234,7 +246,7 @@ end
 for i = 1, 4 do
     local key = { "SUPER + ALT + Page_", "CTRL + SUPER + SHIFT + " }
     local keycombos = { key[1] .. "down", key[1] .. "up", key[2] .. "Right", key[2] .. "Left" }
-    local prefix = { "r+", "r-", "r+", "r-" }
+    local prefix = { "r+", "r-", stepPrefix[2], stepPrefix[1] }
     hl.bind(keycombos[i], hl.dsp.window.move({ workspace = prefix[i] .. "1" })) -- # [hidden]
 end
 
@@ -269,7 +281,7 @@ end
 --#/# bind = CTRL+SUPER+ALT, ←/→,, -- # [hidden] Focus busy left/right
 for i = 1, 2 do
     local keys = { "Left", "Right" }
-    local prefix = { "r-", "r+" }
+    local prefix = stepPrefix
     local descdir = { "left", "right" }
     hl.bind("CTRL + SUPER + " .. keys[i], hl.dsp.focus({ workspace = prefix[i] .. "1" }), {description = "Workspace: Focus " .. descdir[i]})
 end
