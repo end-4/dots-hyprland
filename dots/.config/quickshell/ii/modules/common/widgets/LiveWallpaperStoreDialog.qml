@@ -21,6 +21,29 @@ Popup {
     property string searchQuery: ""
     property bool historyMode: false
 
+    // Our own paging: sources are merged into one stream (allItems), shown 20 per page. More is fetched from the
+    // sites only when the user gets close to the end of what is loaded.
+    readonly property int pageSize: 20
+    property var allItems: []
+    property int sitePage: 0
+    property bool exhausted: false
+    property bool fetching: false
+    property int pendingPage: 0
+    readonly property int loadedPages: Math.max(1, Math.ceil(allItems.length / pageSize))
+    readonly property int knownPages: exhausted ? loadedPages : loadedPages + 1
+    readonly property var pageNumbers: {
+        const cur = currentPage, total = Math.max(1, knownPages);
+        let end = Math.min(total, Math.max(1, cur - 4) + 9);
+        let start = Math.max(1, end - 9);
+        const out = [];
+        if (start > 1) {
+            out.push(1);
+            if (start > 2) out.push(-1);
+        }
+        for (let i = start; i <= end; i++) out.push(i);
+        return out;
+    }
+
     modal: true
     focus: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -29,21 +52,77 @@ Popup {
     height: Math.min(680, (Overlay.overlay?.height ?? 740) - 40)
     padding: 0
 
+    // A new search / category: start over from the first page of every source
     function loadStore(page, query) {
         storePopup.historyMode = false;
         storePopup.previewingId = "";
-        storePopup.loading = true;
-        storePopup.currentPage = page;
         storePopup.searchQuery = query;
+        storePopup.allItems = [];
+        storePopup.items = [];
+        storePopup.sitePage = 0;
+        storePopup.exhausted = false;
+        storePopup.fetching = false;
+        storePopup.currentPage = 1;
+        storePopup.pendingPage = 1;
+        storePopup.loading = true;
+        fetchNext();
+    }
+
+    function fetchNext() {
+        if (storePopup.fetching || storePopup.exhausted) return;
+        storePopup.fetching = true;
+        storePopup.sitePage += 1;
         listProc.command = [
             "python3",
             Quickshell.shellPath("scripts/colors/live-wallpaper-store.py"),
             "list",
-            String(page),
-            query
+            String(storePopup.sitePage),
+            storePopup.searchQuery
         ];
         listProc.running = false;
         listProc.running = true;
+    }
+
+    function showPage(n) {
+        storePopup.previewingId = "";
+        storePopup.currentPage = n;
+        storePopup.items = storePopup.allItems.slice((n - 1) * storePopup.pageSize, n * storePopup.pageSize);
+        // Near the end of what is loaded: fetch the next chunk in the background
+        if (!storePopup.exhausted && !storePopup.fetching && n >= storePopup.loadedPages - 1)
+            fetchNext();
+    }
+
+    function goToPage(n) {
+        if (n < 1 || storePopup.loading) return;
+        if (n <= storePopup.loadedPages && (n * storePopup.pageSize <= storePopup.allItems.length || storePopup.exhausted)) {
+            showPage(n);
+        } else if (!storePopup.exhausted) {
+            storePopup.pendingPage = n;
+            storePopup.loading = true;
+            fetchNext();
+        }
+    }
+
+    function onChunk(parsed) {
+        const seen = {};
+        for (const it of storePopup.allItems) seen[it.id] = true;
+        const fresh = (parsed.items ?? []).filter(it => !seen[it.id]);
+        if (fresh.length > 0) storePopup.allItems = storePopup.allItems.concat(fresh);
+        storePopup.fetching = false;
+        if ((parsed.items ?? []).length === 0 || storePopup.sitePage >= (parsed.pages ?? 1))
+            storePopup.exhausted = true;
+        if (storePopup.pendingPage > 0) {
+            const want = storePopup.pendingPage;
+            if (storePopup.allItems.length >= want * storePopup.pageSize || storePopup.exhausted) {
+                storePopup.pendingPage = 0;
+                storePopup.loading = false;
+                showPage(Math.min(want, storePopup.loadedPages));
+            } else {
+                fetchNext();   // not enough yet (duplicates were dropped): keep loading
+            }
+        } else {
+            storePopup.loading = false;
+        }
     }
 
     function loadHistory() {
@@ -72,14 +151,28 @@ Popup {
         id: listProc
         stdout: StdioCollector {
             onStreamFinished: {
-                storePopup.loading = false;
+                let parsed = null;
                 try {
-                    const parsed = JSON.parse(text.trim() || "[]");
+                    parsed = JSON.parse(text.trim() || "[]");
+                } catch (e) {
+                    parsed = null;
+                }
+                if (storePopup.historyMode) {
+                    storePopup.loading = false;
                     storePopup.previewingId = "";
                     storePopup.items = Array.isArray(parsed) ? parsed : [];
-                } catch (e) {
-                    storePopup.items = [];
+                    return;
                 }
+                if (parsed === null || Array.isArray(parsed)) {
+                    // the request failed: stop here so the user sees "No wallpapers found" instead of a spinner
+                    storePopup.fetching = false;
+                    storePopup.exhausted = true;
+                    storePopup.pendingPage = 0;
+                    storePopup.loading = false;
+                    if (storePopup.allItems.length === 0) storePopup.items = [];
+                    return;
+                }
+                storePopup.onChunk(parsed);
             }
         }
     }
@@ -432,8 +525,29 @@ Popup {
                                     }
                                 }
 
+                                // Where the wallpaper comes from
+                                Rectangle {
+                                    visible: !!modelData.sourceName
+                                    anchors.bottom: parent.bottom
+                                    anchors.left: parent.left
+                                    anchors.margins: 6
+                                    radius: Appearance.rounding.full
+                                    color: Qt.rgba(0, 0, 0, 0.68)
+                                    implicitWidth: srcBadgeTxt.implicitWidth + 14
+                                    implicitHeight: 20
+                                    StyledText {
+                                        id: srcBadgeTxt
+                                        anchors.centerIn: parent
+                                        text: modelData.sourceName ?? ""
+                                        color: "#ffffff"
+                                        font.pixelSize: 10
+                                        font.weight: Font.Medium
+                                    }
+                                }
+
                                 // Top-right preview play/stop button
                                 Rectangle {
+                                    visible: (modelData.previewMp4 ?? "") !== ""
                                     anchors.top: parent.top
                                     anchors.right: parent.right
                                     anchors.margins: 6
@@ -479,13 +593,13 @@ Popup {
                                     Layout.preferredHeight: 28
                                     radius: 14
                                     color: storePopup.downloadingId === "" ? Appearance.colors.colPrimary : Appearance.colors.colLayer1
-                                    opacity: (storePopup.downloadingId === "" || applyBtn.isBusy) ? 1.0 : 0.55
+                                    opacity: (storePopup.downloadingId === "" || applyBtn.isBusy || modelData.browseOnly) ? 1.0 : 0.55
 
                                     StyledText {
                                         id: applyTxt
                                         z: 2
                                         anchors.centerIn: parent
-                                        text: applyBtn.isBusy ? Translation.tr("Downloading...") : Translation.tr("Apply")
+                                        text: modelData.browseOnly ? Translation.tr("Open page") : (applyBtn.isBusy ? Translation.tr("Downloading...") : Translation.tr("Apply"))
                                         color: Appearance.m3colors.m3onPrimary
                                         font.pixelSize: 12
                                         font.weight: Font.Medium
@@ -493,9 +607,14 @@ Popup {
 
                                     MouseArea {
                                         anchors.fill: parent
-                                        enabled: storePopup.downloadingId === ""
+                                        enabled: storePopup.downloadingId === "" || modelData.browseOnly
                                         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                                         onClicked: {
+                                            if (modelData.browseOnly) {
+                                                // These sites do not allow automated downloads: open the page and download there
+                                                Qt.openUrlExternally(modelData.pageUrl);
+                                                return;
+                                            }
                                             storePopup.downloadingId = modelData.id;
                                             const mon = storePopup.targetMonitor;
                                             if (modelData.localPath) {
@@ -528,56 +647,84 @@ Popup {
             }
         }
 
-        // Pagination
+        // Pagination: arrows and page numbers, e.g.  <  1 2 3 4 5 6 7 8 9 10  >  (shifts along as you go further)
         RowLayout {
-            visible: !storePopup.historyMode
+            visible: !storePopup.historyMode && (storePopup.items.length > 0 || storePopup.loading)
             Layout.fillWidth: true
+            spacing: 4
             Item { Layout.fillWidth: true }
+
             Rectangle {
                 readonly property bool canClick: storePopup.currentPage > 1 && !storePopup.loading
-                Layout.preferredWidth: prevTxt.implicitWidth + 24
-                Layout.preferredHeight: 30
-                radius: 15
-                color: Appearance.colors.colLayer2
-                opacity: canClick ? 1.0 : 0.45
-                StyledText {
-                    id: prevTxt
+                Layout.preferredWidth: 32
+                Layout.preferredHeight: 32
+                radius: 16
+                color: arrowLeftArea.containsMouse && canClick ? Appearance.colors.colLayer2 : "transparent"
+                opacity: canClick ? 1.0 : 0.4
+                MaterialSymbol {
                     anchors.centerIn: parent
-                    text: Translation.tr("Previous")
+                    text: "chevron_left"
+                    iconSize: 22
                     color: Appearance.m3colors.m3onSurface
-                    font.pixelSize: Appearance.font.pixelSize.smaller
                 }
                 MouseArea {
+                    id: arrowLeftArea
                     anchors.fill: parent
+                    hoverEnabled: true
                     enabled: parent.canClick
                     cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    onClicked: storePopup.loadStore(storePopup.currentPage - 1, storePopup.searchQuery)
+                    onClicked: storePopup.goToPage(storePopup.currentPage - 1)
                 }
             }
-            StyledText {
-                text: `${storePopup.currentPage}`
-                color: Appearance.colors.colSubtext
-                font.pixelSize: Appearance.font.pixelSize.small
+
+            Repeater {
+                model: storePopup.pageNumbers
+                delegate: Rectangle {
+                    required property int modelData
+                    readonly property bool isCurrent: modelData === storePopup.currentPage
+                    Layout.preferredWidth: Math.max(32, pageTxt.implicitWidth + 16)
+                    Layout.preferredHeight: 32
+                    radius: 16
+                    color: isCurrent ? Appearance.colors.colPrimary : (pageArea.containsMouse && modelData > 0 ? Appearance.colors.colLayer2 : "transparent")
+                    StyledText {
+                        id: pageTxt
+                        anchors.centerIn: parent
+                        text: modelData > 0 ? String(modelData) : "…"
+                        color: parent.isCurrent ? Appearance.m3colors.m3onPrimary : Appearance.m3colors.m3onSurface
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        font.weight: parent.isCurrent ? Font.DemiBold : Font.Normal
+                    }
+                    MouseArea {
+                        id: pageArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        enabled: modelData > 0 && !parent.isCurrent && !storePopup.loading
+                        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        onClicked: storePopup.goToPage(modelData)
+                    }
+                }
             }
+
             Rectangle {
-                readonly property bool canClick: !storePopup.loading && storePopup.items.length > 0
-                Layout.preferredWidth: nextTxt.implicitWidth + 24
-                Layout.preferredHeight: 30
-                radius: 15
-                color: Appearance.colors.colLayer2
-                opacity: canClick ? 1.0 : 0.45
-                StyledText {
-                    id: nextTxt
+                readonly property bool canClick: storePopup.currentPage < storePopup.knownPages && !storePopup.loading
+                Layout.preferredWidth: 32
+                Layout.preferredHeight: 32
+                radius: 16
+                color: arrowRightArea.containsMouse && canClick ? Appearance.colors.colLayer2 : "transparent"
+                opacity: canClick ? 1.0 : 0.4
+                MaterialSymbol {
                     anchors.centerIn: parent
-                    text: Translation.tr("Next")
+                    text: "chevron_right"
+                    iconSize: 22
                     color: Appearance.m3colors.m3onSurface
-                    font.pixelSize: Appearance.font.pixelSize.smaller
                 }
                 MouseArea {
+                    id: arrowRightArea
                     anchors.fill: parent
+                    hoverEnabled: true
                     enabled: parent.canClick
                     cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    onClicked: storePopup.loadStore(storePopup.currentPage + 1, storePopup.searchQuery)
+                    onClicked: storePopup.goToPage(storePopup.currentPage + 1)
                 }
             }
             Item { Layout.fillWidth: true }

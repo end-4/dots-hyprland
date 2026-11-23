@@ -635,5 +635,6 @@
   "Default monitor on startup": "Standardmonitor beim Start",
   "Split workspaces by monitor": "Arbeitsbereiche nach Monitor aufteilen",
   "No 2nd monitor": "Kein zweiter Monitor",
-  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6",
+  "Open page": "Seite öffnen"
 }

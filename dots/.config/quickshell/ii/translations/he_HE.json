@@ -533,5 +533,6 @@
   "Default monitor on startup": "מסך ברירת מחדל בהפעלה",
   "Split workspaces by monitor": "פצל סביבות עבודה לפי צג",
   "No 2nd monitor": "אין צג שני",
-  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6"
+  "M%1 %2–%3 | M%4 %5–%6": "M%1 %2–%3 | M%4 %5–%6",
+  "Open page": "פתח עמוד"
 }

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Fetch, search, and download live wallpapers from motionbgs.com and apply via switchwall.sh."""
+"""Browse live wallpapers from several sites in one list, download from MotionBGs and apply via switchwall.sh."""
 
+import concurrent.futures
+import html as _html
 import json
 import os
 import re
@@ -16,39 +18,134 @@ LIVE_DIR = Path.home() / "Pictures/Wallpapers/Live"
 SWITCHWALL = Path.home() / ".config/quickshell/ii/scripts/colors/switchwall.sh"
 
 
-def fetch_html(url: str) -> str:
+def fetch_html(url: str) -> tuple[str, str]:
+    """Returns (html, final_url); the final URL tells whether a redirect (e.g. search -> tag page) happened."""
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=12) as resp:
-        return resp.read().decode("utf-8", errors="ignore")
+        return resp.read().decode("utf-8", errors="ignore"), resp.geturl()
 
 
-def list_wallpapers(page: int = 1, query: str = "") -> list[dict]:
+# ----------------------------------------------------------------------------- sources
+# Every source returns (items, pages). Items share one shape so the store can show them in one grid:
+#   id, slug, res, title, thumb, previewMp4, source, sourceName, pageUrl, browseOnly
+# MotionBGs allows automated downloads (its robots.txt only blocks Yandex), so its items can be applied
+# directly. MoeWalls and WallpaperWaifu hide their downloads behind scripts (MoeWalls' robots.txt even
+# disallows /download*), so those items are browse-only: the store opens the wallpaper's page instead.
+
+PER_PAGE_MOTIONBGS = 36
+MOTIONBGS_THUMB = re.compile(r'/i/c/\d+x\d+/media/(\d+)/([a-z0-9-]+)\.(\d+x\d+)\.jpg')
+TITLE_COUNT = re.compile(r"<title>\s*([\d,.]+)\+?")
+
+
+def _motionbgs(page: int, query: str) -> tuple[list[dict], int]:
     q = query.strip()
-    if q:
-        url = f"https://motionbgs.com/search?q={urllib.parse.quote_plus(q)}&page={page}"
+    if not q:
+        url = "https://motionbgs.com/" if page <= 1 else f"https://motionbgs.com/{page}/"
+    elif page <= 1:
+        url = f"https://motionbgs.com/search?q={urllib.parse.quote_plus(q)}"
     else:
-        url = f"https://motionbgs.com/?page={page}"
-    html = fetch_html(url)
-
-    # Match thumbnail URLs: /i/c/<size>/media/<id>/<slug>.<res>.jpg
-    pattern = re.compile(r'/i/c/\d+x\d+/media/(\d+)/([a-z0-9-]+)\.(\d+x\d+)\.jpg')
+        slug = urllib.parse.quote(re.sub(r"\s+", "-", q.lower()))
+        url = f"https://motionbgs.com/tag:{slug}/{page}/"
+    html, _final = fetch_html(url)
     seen: set[str] = set()
     items: list[dict] = []
-    for m in pattern.finditer(html):
+    for m in MOTIONBGS_THUMB.finditer(html):
         wid, slug, res = m.group(1), m.group(2), m.group(3)
         if wid in seen:
             continue
         seen.add(wid)
-        title = slug.replace("-", " ").title()
         items.append({
             "id": wid,
             "slug": slug,
             "res": res,
-            "title": title,
+            "title": slug.replace("-", " ").title(),
             "thumb": f"https://motionbgs.com/i/c/546x308/media/{wid}/{slug}.{res}.jpg",
             "previewMp4": f"https://motionbgs.com/media/{wid}/{slug}.960x540.mp4",
+            "source": "motionbgs",
+            "sourceName": "MotionBGs",
+            "pageUrl": "",
+            "browseOnly": False,
         })
-    return items
+    items = items[:PER_PAGE_MOTIONBGS]  # page 1 also lists extra "popular" entries below the grid
+    pages = 1
+    tc = TITLE_COUNT.search(html)
+    if tc:
+        try:
+            pages = max(1, -(-int(re.sub(r"[,.]", "", tc.group(1))) // PER_PAGE_MOTIONBGS))
+        except ValueError:
+            pages = 1
+    return items, pages
+
+
+def _wordpress_grid(base: str, page: int, query: str, article_cls: str, source: str, name: str, img_attr: str) -> tuple[list[dict], int]:
+    q = query.strip()
+    if q:
+        url = f"{base}/{'page/%d/' % page if page > 1 else ''}?s={urllib.parse.quote_plus(q)}"
+    else:
+        url = f"{base}/" if page <= 1 else f"{base}/page/{page}/"
+    html, _final = fetch_html(url)
+    items: list[dict] = []
+    for art in re.findall(r"<article\b.*?</article>", html, re.S):
+        if article_cls not in art:
+            continue
+        link = re.search(r'<a[^>]+href="(https?://[^"]+)"[^>]*>', art)
+        title = re.search(r'title="([^"]+)"', art)
+        img = re.search(rf'{img_attr}="(https?://[^"]+\.(?:jpg|jpeg|png|webp)[^"]*)"', art)
+        if not (link and img):
+            continue
+        res = re.search(r"resolutions-(\d+x\d+)", art)
+        pid = re.search(r"post-(\d+)", art)
+        t = _html.unescape(title.group(1)) if title else link.group(1).rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+        t = re.sub(r"\s+Live Wallpaper$", "", t)
+        items.append({
+            "id": f"{source}:{pid.group(1) if pid else link.group(1)}",
+            "slug": link.group(1).rstrip("/").rsplit("/", 1)[-1],
+            "res": res.group(1) if res else "",
+            "title": t,
+            "thumb": img.group(1),
+            "previewMp4": "",
+            "source": source,
+            "sourceName": name,
+            "pageUrl": link.group(1),
+            "browseOnly": True,
+        })
+    pages = 1
+    nums = [int(x) for x in re.findall(r"/page/(\d+)/", html)]
+    if nums:
+        pages = max(nums)
+    return items, pages
+
+
+def _moewalls(page: int, query: str) -> tuple[list[dict], int]:
+    return _wordpress_grid("https://moewalls.com", page, query, "entry-tpl-grid", "moewalls", "MoeWalls", "src")
+
+
+def _wallpaperwaifu(page: int, query: str) -> tuple[list[dict], int]:
+    return _wordpress_grid("https://wallpaperwaifu.com", page, query, "wall-grid-item", "wallpaperwaifu", "WallpaperWaifu", "data-src")
+
+
+SOURCES = {"motionbgs": _motionbgs, "moewalls": _moewalls, "wallpaperwaifu": _wallpaperwaifu}
+
+
+def list_wallpapers(page: int = 1, query: str = "") -> dict:
+    """One page from every source, interleaved: {"items": [...], "pages": N}."""
+    results: dict[str, tuple[list[dict], int]] = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(SOURCES)) as pool:
+        futures = {pool.submit(fn, page, query): name for name, fn in SOURCES.items()}
+        for fut in concurrent.futures.as_completed(futures):
+            try:
+                results[futures[fut]] = fut.result()
+            except Exception as e:  # one source being down must not break the store
+                sys.stderr.write(f"WARN {futures[fut]}: {e}\n")
+    # A source only has so many pages: past its last page it must not repeat or invent results
+    lists = [results[n][0] if page <= results[n][1] else [] for n in SOURCES if n in results]
+    merged: list[dict] = []
+    for i in range(max((len(x) for x in lists), default=0)):
+        for lst in lists:
+            if i < len(lst):
+                merged.append(lst[i])
+    pages = max((r[1] for r in results.values()), default=1)
+    return {"items": merged, "pages": pages}
 
 
 def is_valid_video(path: Path) -> bool:
@@ -196,7 +293,7 @@ def main() -> int:
             return 0
         except Exception as e:
             sys.stderr.write(f"ERR: {e}\n")
-            print("[]")
+            print('{"items": [], "pages": 1}')
             return 1
     if sys.argv[1] == "history":
         print(json.dumps(list_history(), ensure_ascii=False))
