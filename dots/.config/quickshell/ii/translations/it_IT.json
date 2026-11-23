@@ -359,5 +359,21 @@
   "**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key": "**Istruzioni**: Accedi al tuo account Mistral, vai nella sezione \"Keys\" dal menu laterale, clicca \"Create new key\"",
   "Gives the model search capabilities (immediately)": "Abilita modalità ricerca del modello (immediatamente)",
   "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed": "Comanda, modifica la richiesta, cerca.\nRichiede un turno in più per attivare la modalità ricerca se richiesta",
-  "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls": "Online | Modello di %1 | Ritorna risposte veloci e formattate correttamente. Svantaggi: poca voglia di svolgere compiti; potrebbe fare chiamate di funzioni inesistenti"
+  "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls": "Online | Modello di %1 | Ritorna risposte veloci e formattate correttamente. Svantaggi: poca voglia di svolgere compiti; potrebbe fare chiamate di funzioni inesistenti",
+  "Automatic": "Automatica",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Scegli manualmente",
+  "Could not search cities. Check your internet connection.": "Impossibile cercare le città. Controlla la connessione a Internet.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Posizione",
+  "No matching city found": "Nessuna città corrispondente",
+  "No place selected yet": "Nessun luogo selezionato",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Scegli \"Automatica\" per rilevare la tua posizione, oppure scegli un luogo manualmente.",
+  "Refresh": "Aggiornamento",
+  "Search for a city": "Cerca una città",
+  "Search for a place": "Cerca un luogo",
+  "Searching...": "Ricerca in corso...",
+  "Selected: %1": "Selezionato: %1",
+  "Temperature unit": "Unità di temperatura",
+  "Polling interval (m)": "Intervallo di aggiornamento (m)"
 }

@@ -501,5 +501,21 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "Automatic": "אוטומטי",
+  "Celsius (°C)": "צלזיוס (°C)",
+  "Choose manually": "בחירה ידנית",
+  "Could not search cities. Check your internet connection.": "לא ניתן היה לחפש ערים. בדוק את חיבור האינטרנט.",
+  "Fahrenheit (°F)": "פרנהייט (°F)",
+  "Location": "מיקום",
+  "No matching city found": "לא נמצאה עיר תואמת",
+  "No place selected yet": "עדיין לא נבחר מקום",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "בחר \"אוטומטי\" כדי לזהות את המיקום שלך, או בחר מקום ידנית.",
+  "Refresh": "רענון",
+  "Search for a city": "חפש עיר",
+  "Search for a place": "חפש מקום",
+  "Searching...": "מחפש...",
+  "Selected: %1": "נבחר: %1",
+  "Temperature unit": "יחידת טמפרטורה",
+  "Polling interval (m)": "מרווח דגימה (דק')"
 }

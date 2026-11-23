@@ -611,5 +611,19 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Choose manually",
+  "Could not search cities. Check your internet connection.": "Could not search cities. Check your internet connection.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Location",
+  "No matching city found": "No matching city found",
+  "No place selected yet": "No place selected yet",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Pick \"Automatic\" to detect your location, or choose a place by hand.",
+  "Refresh": "Refresh",
+  "Search for a city": "Search for a city",
+  "Search for a place": "Search for a place",
+  "Searching...": "Searching...",
+  "Selected: %1": "Selected: %1",
+  "Temperature unit": "Temperature unit"
 }

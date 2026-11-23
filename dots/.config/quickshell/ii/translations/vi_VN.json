@@ -369,5 +369,21 @@
   "illogical-impulse Settings": "Cài đặt illogical-impulse",
   "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Trực tuyến | Model của Google\nMới hơn nhưng chậm hơn so với phiên bản trước nhưng nên cung cấp câu trả lời chất lượng cao hơn",
   "Preferred wallpaper zoom (%)": "Tỷ lệ thu phóng hình nền (%)",
-  "Function Response": "Phản hồi function"
+  "Function Response": "Phản hồi function",
+  "Automatic": "Tự động",
+  "Celsius (°C)": "Độ C (°C)",
+  "Choose manually": "Chọn thủ công",
+  "Could not search cities. Check your internet connection.": "Không thể tìm kiếm thành phố. Hãy kiểm tra kết nối internet.",
+  "Fahrenheit (°F)": "Độ F (°F)",
+  "Location": "Vị trí",
+  "No matching city found": "Không tìm thấy thành phố phù hợp",
+  "No place selected yet": "Chưa chọn địa điểm",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Chọn \"Tự động\" để phát hiện vị trí của bạn, hoặc chọn địa điểm thủ công.",
+  "Refresh": "Làm mới",
+  "Search for a city": "Tìm kiếm thành phố",
+  "Search for a place": "Tìm kiếm địa điểm",
+  "Searching...": "Đang tìm kiếm...",
+  "Selected: %1": "Đã chọn: %1",
+  "Temperature unit": "Đơn vị nhiệt độ",
+  "Polling interval (m)": "Khoảng thời gian thăm dò (phút)"
 }

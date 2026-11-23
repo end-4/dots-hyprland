@@ -733,5 +733,19 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Escolher manualmente",
+  "Could not search cities. Check your internet connection.": "Não foi possível pesquisar cidades. Verifique sua conexão com a internet.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Local",
+  "No matching city found": "Nenhuma cidade correspondente encontrada",
+  "No place selected yet": "Nenhum lugar selecionado ainda",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Escolha \"Automático\" para detectar sua localização ou escolha um lugar manualmente.",
+  "Refresh": "Atualização",
+  "Search for a city": "Pesquisar uma cidade",
+  "Search for a place": "Pesquisar um lugar",
+  "Searching...": "Pesquisando...",
+  "Selected: %1": "Selecionado: %1",
+  "Temperature unit": "Unidade de temperatura"
 }

@@ -249,6 +249,10 @@ ContentPage {
                 Config.options.bar.weather.enable = checked;
             }
         }
+
+        WeatherLocationSettings {
+            visible: Config.options.bar.weather.enable
+        }
     }
 
     ContentSection {

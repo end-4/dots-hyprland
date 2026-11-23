@@ -756,5 +756,19 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Celsius (°C)": "Цельсий (°C)",
+  "Choose manually": "Выбрать вручную",
+  "Could not search cities. Check your internet connection.": "Не удалось выполнить поиск городов. Проверьте подключение к интернету.",
+  "Fahrenheit (°F)": "Фаренгейт (°F)",
+  "Location": "Местоположение",
+  "No matching city found": "Подходящий город не найден",
+  "No place selected yet": "Место ещё не выбрано",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Выберите «Автоматически», чтобы определить местоположение, или выберите место вручную.",
+  "Refresh": "Обновление",
+  "Search for a city": "Поиск города",
+  "Search for a place": "Поиск места",
+  "Searching...": "Поиск...",
+  "Selected: %1": "Выбрано: %1",
+  "Temperature unit": "Единица температуры"
 }

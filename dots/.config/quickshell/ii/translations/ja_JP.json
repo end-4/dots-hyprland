@@ -428,5 +428,21 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "Automatic": "自動",
+  "Celsius (°C)": "摂氏 (°C)",
+  "Choose manually": "手動で選択",
+  "Could not search cities. Check your internet connection.": "都市を検索できませんでした。インターネット接続を確認してください。",
+  "Fahrenheit (°F)": "華氏 (°F)",
+  "Location": "場所",
+  "No matching city found": "一致する都市が見つかりません",
+  "No place selected yet": "まだ場所が選択されていません",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "現在地を自動検出するには「自動」を、手動で選ぶには「手動で選択」を選んでください。",
+  "Refresh": "更新",
+  "Search for a city": "都市を検索",
+  "Search for a place": "場所を検索",
+  "Searching...": "検索中...",
+  "Selected: %1": "選択中: %1",
+  "Temperature unit": "温度の単位",
+  "Polling interval (m)": "更新間隔（分）"
 }

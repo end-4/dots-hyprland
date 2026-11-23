@@ -270,7 +270,8 @@ Singleton {
                 property JsonObject weather: JsonObject {
                     property bool enable: false
                     property bool enableGPS: true // gps based location
-                    property string city: "" // When 'enableGPS' is false
+                    property string city: "" // When 'enableGPS' is false ('lat,lon' when picked from the search results)
+                    property string label: "" // Human readable name of the picked place
                     property bool useUSCS: false // Instead of metric (SI) units
                     property int fetchInterval: 10 // minutes
                 }

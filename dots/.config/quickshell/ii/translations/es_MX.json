@@ -745,5 +745,19 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Elegir manualmente",
+  "Could not search cities. Check your internet connection.": "No se pudo buscar ciudades. Revisa tu conexión a internet.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Ubicación",
+  "No matching city found": "No se encontró ninguna ciudad",
+  "No place selected yet": "Aún no se ha elegido un lugar",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Elige \"Automática\" para detectar tu ubicación, o elige un lugar manualmente.",
+  "Refresh": "Actualización",
+  "Search for a city": "Buscar una ciudad",
+  "Search for a place": "Buscar un lugar",
+  "Searching...": "Buscando...",
+  "Selected: %1": "Seleccionado: %1",
+  "Temperature unit": "Unidad de temperatura"
 }

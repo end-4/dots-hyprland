@@ -613,5 +613,9 @@ ContentPage {
                 ]
             }
         }
+
+        WeatherLocationSettings {
+            visible: Config.options.background.widgets.weather.enable
+        }
     }
 }
