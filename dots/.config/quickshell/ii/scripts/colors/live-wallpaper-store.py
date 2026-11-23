@@ -297,23 +297,33 @@ def import_to_live_dir(path: str) -> str:
 def list_history() -> list[dict]:
     dirs = [LIVE_DIR, Path.home() / "Pictures/Wallpapers"]
     seen: set[str] = set()
+    seen_files: set[tuple[str, int]] = set()
     files: list[Path] = []
+
+    def _add_if_new(p: Path) -> None:
+        try:
+            rp = str(p.resolve())
+            sig = (re.sub(r"[^A-Za-z0-9._ -]", "_", p.name), p.stat().st_size)
+        except OSError:
+            return
+        if rp in seen or sig in seen_files:
+            return
+        seen.add(rp)
+        seen_files.add(sig)
+        files.append(p)
+
     for d in dirs:
         if not d.is_dir():
             continue
         for ext in ("*.mp4", "*.webm", "*.mkv", "*.avi", "*.mov", "*.gif"):
             for p in d.glob(ext):
-                rp = str(p.resolve())
-                if rp not in seen:
-                    seen.add(rp)
-                    files.append(p)
+                _add_if_new(p)
     applied_at: dict[str, float] = {}
     for d in load_registry():
         p = Path(d["path"])
         applied_at[str(p)] = float(d.get("ts", 0))
-        if p.is_file() and str(p.resolve()) not in seen and p.suffix.lower() in (".mp4", ".webm", ".mkv", ".avi", ".mov", ".gif"):
-            seen.add(str(p.resolve()))
-            files.append(p)
+        if p.is_file() and p.suffix.lower() in (".mp4", ".webm", ".mkv", ".avi", ".mov", ".gif"):
+            _add_if_new(p)
     dl = downloads_dir()
     if dl is not None:
         cutoff = time.time() - DOWNLOAD_DAYS * 86400
@@ -324,10 +334,7 @@ def list_history() -> list[dict]:
                         continue
                 except OSError:
                     continue
-                rp = str(p.resolve())
-                if rp not in seen:
-                    seen.add(rp)
-                    files.append(p)
+                _add_if_new(p)
     files.sort(key=lambda p: max(p.stat().st_mtime, applied_at.get(str(p.resolve()), 0)), reverse=True)
     thumb_dir = Path.home() / ".config/hypr/custom/scripts/mpvpaper_thumbnails"
     thumb_dir.mkdir(parents=True, exist_ok=True)
