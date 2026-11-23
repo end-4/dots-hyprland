@@ -25,7 +25,9 @@ Scope { // Scope
             // Window
             required property var modelData
             screen: modelData
-            visible: !GlobalStates.screenLocked
+            // Unmapped over fullscreen windows so it leaves no input region or exclusive zone behind
+            property bool hiddenForFullscreen: (Config.options?.dock.hideWhenFullscreen ?? false) && HyprlandData.monitorShowsFullscreen(modelData.name)
+            visible: !GlobalStates.screenLocked && !hiddenForFullscreen
 
             property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
 
@@ -39,6 +41,7 @@ Scope { // Scope
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
+            WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
             implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut

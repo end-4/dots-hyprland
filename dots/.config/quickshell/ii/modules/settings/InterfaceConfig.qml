@@ -132,6 +132,14 @@ ContentPage {
             }
         }
         ConfigSwitch {
+            buttonIcon: "fullscreen"
+            text: Translation.tr("Hide when fullscreen")
+            checked: Config.options.dock.hideWhenFullscreen
+            onCheckedChanged: {
+                Config.options.dock.hideWhenFullscreen = checked;
+            }
+        }
+        ConfigSwitch {
             buttonIcon: "colors"
             text: Translation.tr("Tint app icons")
             checked: Config.options.dock.monochromeIcons
