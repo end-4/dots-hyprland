@@ -274,6 +274,7 @@ switch() {
                 matugen_args+=(image "$thumbnail")
                 generate_colors_material_args=(--path "$thumbnail")
                 remove_restore  # native live wallpaper: no mpvpaper restore script (execs.lua would start a 2nd player)
+                python3 "$SCRIPT_DIR/live-wallpaper-store.py" record "$imgpath" >/dev/null 2>&1 || true
             else
                 echo "Cannot create image to colorgen"
                 remove_restore
@@ -456,7 +457,7 @@ main() {
     # Only prompt for wallpaper if not using --color and not using --noswitch and no imgpath set
     if [[ -z "$imgpath" && -z "$color_flag" && -z "$noswitch_flag" ]]; then
         cd "$(xdg-user-dir PICTURES)/Wallpapers/showcase" 2>/dev/null || cd "$(xdg-user-dir PICTURES)/Wallpapers" 2>/dev/null || cd "$(xdg-user-dir PICTURES)" || return 1
-        imgpath="$(kdialog --getopenfilename . --title 'Choose wallpaper')"
+        imgpath="$(kdialog --getopenfilename . 'Images and videos (*.png *.jpg *.jpeg *.webp *.gif *.mp4 *.webm *.mkv *.avi *.mov)' --title 'Choose wallpaper')"
     fi
 
     if [[ -n "$imgpath" && -z "$noswitch_flag" ]]; then

@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -224,6 +225,75 @@ def download_and_apply(wid: str, slug: str, monitor: str = "") -> int:
     return 0
 
 
+HISTORY_MAX = 100
+
+
+def history_file() -> Path:
+    return Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "quickshell/user/live-wallpaper-history.json"
+
+
+def load_registry() -> list[dict]:
+    try:
+        data = json.loads(history_file().read_text(encoding="utf-8"))
+        return [d for d in data if isinstance(d, dict) and d.get("path")]
+    except (OSError, ValueError):
+        return []
+
+
+def record(path: str) -> int:
+    """Remember a wallpaper that was applied (from the store, the file picker or anywhere else)."""
+    p = Path(path).expanduser()
+    try:
+        p = p.resolve()
+    except OSError:
+        return 1
+    if not p.is_file():
+        return 1
+    entries = [d for d in load_registry() if d["path"] != str(p)]
+    entries.insert(0, {"path": str(p), "ts": time.time()})
+    hf = history_file()
+    hf.parent.mkdir(parents=True, exist_ok=True)
+    tmp = hf.with_suffix(".tmp")
+    tmp.write_text(json.dumps(entries[:HISTORY_MAX], ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, hf)
+    return 0
+
+
+DOWNLOAD_DAYS = 14  # recent videos in the downloads folder count as "downloaded from a browse-only site"
+
+
+def downloads_dir() -> Path | None:
+    try:
+        out = subprocess.check_output(["xdg-user-dir", "DOWNLOAD"], text=True, timeout=3).strip()
+        if out and Path(out).is_dir():
+            return Path(out)
+    except Exception:
+        pass
+    for name in ("Downloads", "İndirilenler"):
+        d = Path.home() / name
+        if d.is_dir():
+            return d
+    return None
+
+
+def import_to_live_dir(path: str) -> str:
+    """Wallpapers downloaded in a browser live in the downloads folder: copy them next to the others first,
+    so deleting the download later does not remove the wallpaper."""
+    src = Path(path)
+    try:
+        if LIVE_DIR in src.resolve().parents or not src.is_file():
+            return path
+        LIVE_DIR.mkdir(parents=True, exist_ok=True)
+        dest = LIVE_DIR / re.sub(r"[^A-Za-z0-9._ -]", "_", src.name)
+        if dest.exists() and dest.stat().st_size != src.stat().st_size:
+            dest = LIVE_DIR / f"{dest.stem}-{int(src.stat().st_mtime)}{dest.suffix}"
+        if not dest.exists():
+            shutil.copy2(src, dest)
+        return str(dest)
+    except OSError:
+        return path
+
+
 def list_history() -> list[dict]:
     dirs = [LIVE_DIR, Path.home() / "Pictures/Wallpapers"]
     seen: set[str] = set()
@@ -237,7 +307,28 @@ def list_history() -> list[dict]:
                 if rp not in seen:
                     seen.add(rp)
                     files.append(p)
-    files.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    applied_at: dict[str, float] = {}
+    for d in load_registry():
+        p = Path(d["path"])
+        applied_at[str(p)] = float(d.get("ts", 0))
+        if p.is_file() and str(p.resolve()) not in seen and p.suffix.lower() in (".mp4", ".webm", ".mkv", ".avi", ".mov", ".gif"):
+            seen.add(str(p.resolve()))
+            files.append(p)
+    dl = downloads_dir()
+    if dl is not None:
+        cutoff = time.time() - DOWNLOAD_DAYS * 86400
+        for ext in ("*.mp4", "*.webm", "*.mkv", "*.mov"):
+            for p in dl.glob(ext):
+                try:
+                    if p.stat().st_mtime < cutoff:
+                        continue
+                except OSError:
+                    continue
+                rp = str(p.resolve())
+                if rp not in seen:
+                    seen.add(rp)
+                    files.append(p)
+    files.sort(key=lambda p: max(p.stat().st_mtime, applied_at.get(str(p.resolve()), 0)), reverse=True)
     thumb_dir = Path.home() / ".config/hypr/custom/scripts/mpvpaper_thumbnails"
     thumb_dir.mkdir(parents=True, exist_ok=True)
     out: list[dict] = []
@@ -298,8 +389,10 @@ def main() -> int:
     if sys.argv[1] == "history":
         print(json.dumps(list_history(), ensure_ascii=False))
         return 0
+    if sys.argv[1] == "record" and len(sys.argv) >= 3:
+        return record(sys.argv[2])
     if sys.argv[1] == "apply-local" and len(sys.argv) >= 3:
-        path = sys.argv[2]
+        path = import_to_live_dir(sys.argv[2])
         mon = sys.argv[3] if len(sys.argv) >= 4 else ""
         cmd = ["bash", str(SWITCHWALL), "--image", path]
         if mon:

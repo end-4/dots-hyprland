@@ -20,6 +20,7 @@ Popup {
     property int currentPage: 1
     property string searchQuery: ""
     property bool historyMode: false
+    property string infoTip: ""
 
     // Our own paging: sources are merged into one stream (allItems), shown 20 per page. More is fetched from the
     // sites only when the user gets close to the end of what is loaded.
@@ -333,6 +334,7 @@ Popup {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
+                            storePopup.infoTip = "";
                             if (modelData === "__history__") {
                                 storePopup.loadHistory();
                             } else {
@@ -340,6 +342,48 @@ Popup {
                                 storePopup.loadStore(1, modelData);
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            visible: storePopup.infoTip !== ""
+            Layout.fillWidth: true
+            implicitHeight: tipRow.implicitHeight + 14
+            radius: Appearance.rounding.small
+            color: Appearance.colors.colLayer2
+            border.width: 1
+            border.color: Appearance.colors.colPrimary
+
+            RowLayout {
+                id: tipRow
+                anchors.fill: parent
+                anchors.leftMargin: 12
+                anchors.rightMargin: 10
+                spacing: 8
+
+                MaterialSymbol {
+                    text: "info"
+                    iconSize: 18
+                    color: Appearance.colors.colPrimary
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    text: storePopup.infoTip
+                    color: Appearance.m3colors.m3onSurface
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    wrapMode: Text.WordWrap
+                }
+                MaterialSymbol {
+                    text: "close"
+                    iconSize: 16
+                    color: Appearance.colors.colSubtext
+                    MouseArea {
+                        anchors.fill: parent
+                        anchors.margins: -4
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: storePopup.infoTip = ""
                     }
                 }
             }
@@ -613,6 +657,7 @@ Popup {
                                             if (modelData.browseOnly) {
                                                 // These sites do not allow automated downloads: open the page and download there
                                                 Qt.openUrlExternally(modelData.pageUrl);
+                                                storePopup.infoTip = Translation.tr("Opened in browser — after downloading, check the History tab.");
                                                 return;
                                             }
                                             storePopup.downloadingId = modelData.id;
