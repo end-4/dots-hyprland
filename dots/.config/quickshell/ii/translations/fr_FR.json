@@ -611,5 +611,19 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Choisir manuellement",
+  "Could not search cities. Check your internet connection.": "Impossible de rechercher des villes. Vérifiez votre connexion Internet.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Position",
+  "No matching city found": "Aucune ville correspondante",
+  "No place selected yet": "Aucun lieu sélectionné pour l'instant",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Choisissez « Automatique » pour détecter votre position, ou choisissez un lieu manuellement.",
+  "Refresh": "Actualisation",
+  "Search for a city": "Rechercher une ville",
+  "Search for a place": "Rechercher un lieu",
+  "Searching...": "Recherche...",
+  "Selected: %1": "Sélectionné : %1",
+  "Temperature unit": "Unité de température"
 }

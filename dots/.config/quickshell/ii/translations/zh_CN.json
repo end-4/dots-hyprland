@@ -720,5 +720,19 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Celsius (°C)": "摄氏度 (°C)",
+  "Choose manually": "手动选择",
+  "Could not search cities. Check your internet connection.": "无法搜索城市。请检查网络连接。",
+  "Fahrenheit (°F)": "华氏度 (°F)",
+  "Location": "位置",
+  "No matching city found": "未找到匹配的城市",
+  "No place selected yet": "尚未选择地点",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "选择“自动”以检测你的位置，或手动选择地点。",
+  "Refresh": "刷新",
+  "Search for a city": "搜索城市",
+  "Search for a place": "搜索地点",
+  "Searching...": "正在搜索...",
+  "Selected: %1": "已选择：%1",
+  "Temperature unit": "温度单位"
 }

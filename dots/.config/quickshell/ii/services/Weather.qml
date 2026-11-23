@@ -15,6 +15,7 @@ Singleton {
     readonly property string city: Config.options.bar.weather.city
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
     property bool gpsActive: Config.options.bar.weather.enableGPS
+    readonly property bool loading: fetcher.running
 
     onUseUSCSChanged: {
         root.getData();
@@ -54,7 +55,9 @@ Singleton {
         temp.sunset = data?.astronomy?.sunset || "0.0";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
-        temp.city = data?.location?.areaName[0]?.value || "City";
+        // A place picked in Settings is shown by its own name (the API may return an old or nearby area name)
+        const pickedName = (!root.gpsActive && Config.options.bar.weather.label) ? Config.options.bar.weather.label.split(",")[0].trim() : "";
+        temp.city = pickedName || data?.location?.areaName[0]?.value || "City";
         temp.temp = "";
         temp.tempFeelsLike = "";
         if (root.useUSCS) {

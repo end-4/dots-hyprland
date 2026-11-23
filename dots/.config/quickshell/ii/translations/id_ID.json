@@ -488,5 +488,21 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Automatic": "Otomatis",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Pilih manual",
+  "Could not search cities. Check your internet connection.": "Tidak dapat mencari kota. Periksa koneksi internet Anda.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Lokasi",
+  "No matching city found": "Kota tidak ditemukan",
+  "No place selected yet": "Belum ada tempat yang dipilih",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Pilih \"Otomatis\" untuk mendeteksi lokasi Anda, atau pilih tempat secara manual.",
+  "Refresh": "Penyegaran",
+  "Search for a city": "Cari kota",
+  "Search for a place": "Cari tempat",
+  "Searching...": "Mencari...",
+  "Selected: %1": "Dipilih: %1",
+  "Temperature unit": "Satuan suhu",
+  "Polling interval (m)": "Interval polling (m)"
 }

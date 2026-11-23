@@ -338,5 +338,21 @@
   "Tool set to: %1": "Інструмет вказано: %1",
   "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed": "Команди, редагування конфігурацій, пошук.\nВиконує додаткову дію для переходу в режим пошуку, якщо це потрібно",
   "To set an API key, pass it with the %4 command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3": "Щоб задати ключ API, передайте його командою %4\n\nЩоб переглянути ключ, передайте \"get\" командою<br/>\n\n### Для %1:\n\n**Лінк**: %2\n\n%3",
-  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді"
+  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді",
+  "Automatic": "Автоматично",
+  "Celsius (°C)": "Цельсій (°C)",
+  "Choose manually": "Вибрати вручну",
+  "Could not search cities. Check your internet connection.": "Не вдалося виконати пошук міст. Перевірте підключення до інтернету.",
+  "Fahrenheit (°F)": "Фаренгейт (°F)",
+  "Location": "Розташування",
+  "No matching city found": "Відповідне місто не знайдено",
+  "No place selected yet": "Місце ще не вибрано",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Виберіть «Автоматично», щоб визначити розташування, або виберіть місце вручну.",
+  "Refresh": "Оновлення",
+  "Search for a city": "Пошук міста",
+  "Search for a place": "Пошук місця",
+  "Searching...": "Пошук...",
+  "Selected: %1": "Вибрано: %1",
+  "Temperature unit": "Одиниця температури",
+  "Polling interval (m)": "Інтервал опитування (хв)"
 }

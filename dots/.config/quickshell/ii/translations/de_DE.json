@@ -604,5 +604,19 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Celsius (°C)": "Celsius (°C)",
+  "Choose manually": "Manuell wählen",
+  "Could not search cities. Check your internet connection.": "Städtesuche nicht möglich. Prüfen Sie Ihre Internetverbindung.",
+  "Fahrenheit (°F)": "Fahrenheit (°F)",
+  "Location": "Standort",
+  "No matching city found": "Keine passende Stadt gefunden",
+  "No place selected yet": "Noch kein Ort ausgewählt",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Wählen Sie \"Automatisch\", um Ihren Standort zu erkennen, oder wählen Sie einen Ort manuell.",
+  "Refresh": "Aktualisierung",
+  "Search for a city": "Nach einer Stadt suchen",
+  "Search for a place": "Nach einem Ort suchen",
+  "Searching...": "Suche läuft...",
+  "Selected: %1": "Ausgewählt: %1",
+  "Temperature unit": "Temperatureinheit"
 }

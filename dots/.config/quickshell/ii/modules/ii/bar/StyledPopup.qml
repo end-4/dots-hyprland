@@ -12,8 +12,26 @@ LazyLoader {
     property Item hoverTarget
     default property Item contentItem
     property real popupBackgroundMargin: 0
+    // When true the popup stays open while the mouse moves from the bar item onto the popup
+    property bool keepOpenOnHover: false
+    property bool popupHovered: false
+    readonly property bool targetHovered: !!hoverTarget && hoverTarget.containsMouse
 
-    active: hoverTarget && hoverTarget.containsMouse
+    onTargetHoveredChanged: {
+        if (!targetHovered)
+            closeDelay.restart();
+    }
+    onActiveChanged: {
+        if (!active)
+            popupHovered = false;
+    }
+
+    // Keeps the popup alive briefly after the pointer leaves the bar item so it can reach the popup
+    property Timer closeDelay: Timer {
+        interval: 250
+    }
+
+    active: targetHovered || (keepOpenOnHover && (popupHovered || closeDelay.running))
 
     component: PanelWindow {
         id: popupWindow
@@ -37,7 +55,7 @@ LazyLoader {
             left: {
                 if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
                     root.hoverTarget, 
-                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
+                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2 - Appearance.sizes.elevationMargin, 0
                 ).x;
                 return Appearance.sizes.verticalBarWidth
             }
@@ -76,6 +94,10 @@ LazyLoader {
 
             border.width: 1
             border.color: Appearance.colors.colLayer0Border
+
+            HoverHandler {
+                onHoveredChanged: root.popupHovered = hovered
+            }
         }
     }
 }

@@ -604,5 +604,19 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Celsius (°C)": "Santigrat (°C)",
+  "Choose manually": "Elle seç",
+  "Could not search cities. Check your internet connection.": "Şehirler aranamadı. İnternet bağlantınızı kontrol edin.",
+  "Fahrenheit (°F)": "Fahrenhayt (°F)",
+  "Location": "Konum",
+  "No matching city found": "Eşleşen şehir bulunamadı",
+  "No place selected yet": "Henüz bir yer seçilmedi",
+  "Pick \"Automatic\" to detect your location, or choose a place by hand.": "Konumunuzu otomatik bulmak için \"Otomatik\", elle seçmek için \"Elle seç\" seçeneğini kullanın.",
+  "Refresh": "Yenileme",
+  "Search for a city": "Şehir ara",
+  "Search for a place": "Bir yer ara",
+  "Searching...": "Aranıyor...",
+  "Selected: %1": "Seçili: %1",
+  "Temperature unit": "Sıcaklık birimi"
 }
