@@ -454,5 +454,6 @@
   "Separate per monitor": "モニターごとに個別設定",
   "Set as main monitor": "メインモニターに設定",
   "Speed": "速度",
-  "Stretch": "引き伸ばし"
+  "Stretch": "引き伸ばし",
+  "Copy path": "パスをコピー"
 }
