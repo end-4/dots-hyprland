@@ -16,6 +16,16 @@ EXEC_LUA_RE = re.compile(r'^(\s*)(--\s*\[disabled\]\s*)?hl\.exec_cmd\((["\'])(.+
 EXEC_CONF_RE = re.compile(r'^(\s*)(#\s*\[disabled\]\s*)?exec-once\s*=\s*(.+?)\s*$')
 
 
+def _applies_to_desktop(d: dict[str, str]) -> bool:
+    """XDG: OnlyShowIn / NotShowIn are matched against XDG_CURRENT_DESKTOP (e.g. KDE-only entries must not start on Hyprland)."""
+    current = {x for x in os.environ.get("XDG_CURRENT_DESKTOP", "Hyprland").split(":") if x} or {"Hyprland"}
+    only = {x for x in d.get("OnlyShowIn", "").split(";") if x}
+    if only and not (only & current):
+        return False
+    not_in = {x for x in d.get("NotShowIn", "").split(";") if x}
+    return not (not_in & current)
+
+
 def _parse_desktop(path: pathlib.Path) -> dict[str, str]:
     data: dict[str, str] = {}
     in_entry = False
@@ -99,6 +109,8 @@ def list_apps() -> list[dict]:
     for fname, (p, is_user) in sorted(seen_files.items()):
         d = _parse_desktop(p)
         if not d:
+            continue
+        if not is_user and not _applies_to_desktop(d):
             continue
         name = d.get("Name") or p.stem
         cmd = d.get("Exec") or ""
@@ -250,6 +262,7 @@ def remove_app(item_id: str) -> int:
 
 def run_autostart() -> int:
     import shlex
+    import shutil
     import subprocess
     seen_files: dict[str, dict] = {}
     for base in (SYS_AUTOSTART, USER_AUTOSTART):
@@ -261,6 +274,11 @@ def run_autostart() -> int:
         if d.get("Hidden", "").lower() == "true":
             continue
         if d.get("X-GNOME-Autostart-enabled", "true").lower() == "false":
+            continue
+        if not _applies_to_desktop(d):
+            continue
+        try_exec = d.get("TryExec", "").strip()
+        if try_exec and shutil.which(try_exec) is None:
             continue
         raw_exec = d.get("Exec", "")
         clean_exec = re.sub(r"\s+%[fFuUdDnNickvm]", "", raw_exec).strip()
