@@ -482,9 +482,11 @@ Singleton {
                 property JsonObject prefix: JsonObject {
                     property bool showDefaultActionsWithoutPrefix: true
                     property string action: "/"
+                    property string allApps: "!"
                     property string app: ">"
                     property string clipboard: ";"
                     property string emojis: ":"
+                    property string files: "#"
                     property string math: "="
                     property string shellCommand: "$"
                     property string webSearch: "?"

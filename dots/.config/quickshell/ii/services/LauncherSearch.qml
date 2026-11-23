@@ -14,8 +14,18 @@ Singleton {
 
     property string query: ""
 
+    onQueryChanged: {
+        if (root.query.startsWith(Config.options.search.prefix.files)) {
+            const q = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.files);
+            if (q.trim() === "")
+                FileSearch.ensureIndex();
+            else
+                FileSearch.updateQuery(q);
+        }
+    }
+
     function ensurePrefix(prefix) {
-        if ([Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.emojis, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
+        if ([Config.options.search.prefix.action, Config.options.search.prefix.app, Config.options.search.prefix.clipboard, Config.options.search.prefix.allApps, Config.options.search.prefix.emojis, Config.options.search.prefix.files, Config.options.search.prefix.math, Config.options.search.prefix.shellCommand, Config.options.search.prefix.webSearch,].some(i => root.query.startsWith(i))) {
             root.query = prefix + root.query.slice(1);
         } else {
             root.query = prefix + root.query;
@@ -224,6 +234,87 @@ Singleton {
                     }
                 });
             }).filter(Boolean);
+        } else if (root.query.startsWith(Config.options.search.prefix.files)) {
+            // Everything-style file search
+            const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.files);
+            if (searchString.trim() === "")
+                return [];
+            return FileSearch.results.map(item => {
+                const filePath = item.path ?? "";
+                const kindLabel = item.kind ? Translation.tr(item.kind) : "";
+                const meta = [item.dir, kindLabel, item.size, item.mtime].filter(Boolean).join("  •  ");
+                return resultComp.createObject(null, {
+                    rawValue: filePath,
+                    name: item.name ?? "",
+                    type: meta,
+                    verb: Translation.tr("Open"),
+                    iconName: item.icon ?? (item.isDir ? "folder" : "description"),
+                    iconType: LauncherSearchResult.IconType.Material,
+                    execute: () => {
+                        FileSearch.openFile(filePath);
+                    },
+                    actions: [
+                        resultComp.createObject(null, {
+                            name: Translation.tr("Open folder"),
+                            iconName: "folder_open",
+                            iconType: LauncherSearchResult.IconType.Material,
+                            execute: () => {
+                                FileSearch.openFolder(filePath);
+                            }
+                        }),
+                        resultComp.createObject(null, {
+                            name: Translation.tr("Copy path"),
+                            iconName: "content_copy",
+                            iconType: LauncherSearchResult.IconType.Material,
+                            execute: () => {
+                                FileSearch.copyPath(filePath);
+                            }
+                        })
+                    ]
+                });
+            }).filter(Boolean);
+        } else if (root.query.startsWith(Config.options.search.prefix.allApps)) {
+            // All installed applications sorted A-Z
+            const searchString = StringUtils.cleanPrefix(root.query, Config.options.search.prefix.allApps).trim().toLowerCase();
+            return AppSearch.list
+                .filter(entry => !searchString || (entry.name ?? "").toLowerCase().includes(searchString))
+                .slice()
+                .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                .map(entry => {
+                    return resultComp.createObject(null, {
+                        type: Translation.tr("App"),
+                        id: entry.id,
+                        name: entry.name,
+                        iconName: entry.icon,
+                        iconType: LauncherSearchResult.IconType.System,
+                        verb: Translation.tr("Open"),
+                        execute: () => {
+                            if (!entry.runInTerminal)
+                                entry.execute();
+                            else {
+                                Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(entry.command.join(' '))}'`]);
+                            }
+                        },
+                        comment: entry.comment,
+                        runInTerminal: entry.runInTerminal,
+                        genericName: entry.genericName,
+                        keywords: entry.keywords,
+                        actions: entry.actions.map(action => {
+                            return resultComp.createObject(null, {
+                                name: action.name,
+                                iconName: action.icon,
+                                iconType: LauncherSearchResult.IconType.System,
+                                execute: () => {
+                                    if (!action.runInTerminal)
+                                        action.execute();
+                                    else {
+                                        Quickshell.execDetached(["bash", '-c', `${Config.options.apps.terminal} -e '${StringUtils.shellSingleQuoteEscape(action.command.join(' '))}'`]);
+                                    }
+                                }
+                            });
+                        })
+                    });
+                });
         }
 
         ////////////////// Init ///////////////////

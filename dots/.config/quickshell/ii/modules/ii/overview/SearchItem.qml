@@ -188,6 +188,8 @@ RippleButton {
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 color: root.selected ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colSubtext
+                Layout.fillWidth: true
+                elide: Text.ElideMiddle
                 visible: root.itemType && root.itemType != Translation.tr("App")
                 text: root.itemType
             }

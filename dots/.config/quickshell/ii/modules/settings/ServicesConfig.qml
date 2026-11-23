@@ -188,6 +188,31 @@ ContentPage {
                     }
                 }
             }
+
+            ConfigRow {
+                uniform: true
+                MaterialTextArea {
+                    Layout.fillWidth: true
+                    placeholderText: Translation.tr("Files")
+                    text: Config.options.search.prefix.files
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.files = text;
+                    }
+                }
+                MaterialTextArea {
+                    Layout.fillWidth: true
+                    placeholderText: Translation.tr("All apps")
+                    text: Config.options.search.prefix.allApps
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.allApps = text;
+                    }
+                }
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
         }
         ContentSubsection {
             title: Translation.tr("Web search")
