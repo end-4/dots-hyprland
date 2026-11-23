@@ -4,6 +4,7 @@
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import urllib.parse
@@ -51,7 +52,11 @@ def list_wallpapers(page: int = 1, query: str = "") -> list[dict]:
 
 
 def is_valid_video(path: Path) -> bool:
-    """True when ffprobe can read a video stream from the file (rejects truncated/HTML downloads)."""
+    """True when ffprobe can read a video stream from the file (rejects truncated/HTML downloads).
+
+    Without ffprobe installed the check is skipped (download_file still verifies Content-Length)."""
+    if shutil.which("ffprobe") is None:
+        return True
     try:
         out = subprocess.check_output(
             ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_name", "-of", "csv=p=0", str(path)],
