@@ -611,5 +611,11 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Deep sleep (Suspend)": "Deep sleep (Suspend)",
+  "Display off timeout (minutes)": "Display off timeout (minutes)",
+  "Lock screen on idle": "Lock screen on idle",
+  "Lock timeout (minutes)": "Lock timeout (minutes)",
+  "Suspend timeout (minutes)": "Suspend timeout (minutes)",
+  "Turn off display (DPMS)": "Turn off display (DPMS)"
 }

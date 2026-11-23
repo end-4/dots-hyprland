@@ -604,5 +604,11 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Deep sleep (Suspend)": "Tiefschlaf (Bereitschaft)",
+  "Display off timeout (minutes)": "Bildschirm-Aus-Zeit (Minuten)",
+  "Lock screen on idle": "Bildschirm im Leerlauf sperren",
+  "Lock timeout (minutes)": "Sperrzeit (Minuten)",
+  "Suspend timeout (minutes)": "Bereitschaftszeit (Minuten)",
+  "Turn off display (DPMS)": "Bildschirm ausschalten (DPMS)"
 }

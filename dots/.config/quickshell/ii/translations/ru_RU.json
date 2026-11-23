@@ -756,5 +756,11 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Deep sleep (Suspend)": "Глубокий сон (Ждущий режим)",
+  "Display off timeout (minutes)": "Тайм-аут выключения экрана (минуты)",
+  "Lock screen on idle": "Блокировать экран при простое",
+  "Lock timeout (minutes)": "Тайм-аут блокировки (минуты)",
+  "Suspend timeout (minutes)": "Тайм-аут сна (минуты)",
+  "Turn off display (DPMS)": "Выключать дисплей (DPMS)"
 }

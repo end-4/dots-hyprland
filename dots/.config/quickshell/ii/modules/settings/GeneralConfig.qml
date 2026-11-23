@@ -8,7 +8,23 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 
 ContentPage {
+    id: generalPage
     forceWidth: true
+
+    Timer {
+        id: generalIdleTimer
+        interval: 200
+        repeat: false
+        onTriggered: {
+            generalIdleProc.running = false;
+            generalIdleProc.running = true;
+        }
+    }
+
+    Process {
+        id: generalIdleProc
+        command: ["python3", Quickshell.shellPath("scripts/apply-screensaver-idle.py")]
+    }
 
     Process {
         id: translationProc
@@ -353,6 +369,95 @@ ContentPage {
             checked: Config.options.workSafety.enable.wallpaper
             onCheckedChanged: {
                 Config.options.workSafety.enable.wallpaper = checked;
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "lock"
+        title: Translation.tr("Lock")
+
+        ConfigSwitch {
+            buttonIcon: "lock_clock"
+            text: Translation.tr("Lock screen on idle")
+            checked: Config.options.lock.idle.enableLock
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableLock !== checked) {
+                    Config.options.lock.idle.enableLock = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableLock
+            icon: "timer"
+            text: Translation.tr("Lock timeout (minutes)")
+            value: Config.options.lock.idle.lockMinutes
+            from: 1
+            to: 120
+            stepSize: 1
+            onValueChanged: {
+                if (Config.options.lock.idle.lockMinutes !== value) {
+                    Config.options.lock.idle.lockMinutes = value;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "monitor"
+            text: Translation.tr("Turn off display (DPMS)")
+            checked: Config.options.lock.idle.enableDpms
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableDpms !== checked) {
+                    Config.options.lock.idle.enableDpms = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableDpms
+            icon: "timer"
+            text: Translation.tr("Display off timeout (minutes)")
+            value: Config.options.lock.idle.dpmsMinutes
+            from: 1
+            to: 180
+            stepSize: 1
+            onValueChanged: {
+                if (Config.options.lock.idle.dpmsMinutes !== value) {
+                    Config.options.lock.idle.dpmsMinutes = value;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSwitch {
+            buttonIcon: "bedtime"
+            text: Translation.tr("Deep sleep (Suspend)")
+            checked: Config.options.lock.idle.enableSuspend
+            onCheckedChanged: {
+                if (Config.options.lock.idle.enableSuspend !== checked) {
+                    Config.options.lock.idle.enableSuspend = checked;
+                    generalIdleTimer.restart();
+                }
+            }
+        }
+
+        ConfigSpinBox {
+            visible: Config.options.lock.idle.enableSuspend
+            icon: "timer"
+            text: Translation.tr("Suspend timeout (minutes)")
+            value: Config.options.lock.idle.suspendMinutes
+            from: 5
+            to: 360
+            stepSize: 5
+            onValueChanged: {
+                if (Config.options.lock.idle.suspendMinutes !== value) {
+                    Config.options.lock.idle.suspendMinutes = value;
+                    generalIdleTimer.restart();
+                }
             }
         }
     }
