@@ -632,5 +632,8 @@
   "Sign in required to use %1": "%1 kullanmak için giriş gerekli",
   "Signing in to %1...": "%1 hesabına giriş yapılıyor...",
   "Waiting...": "Bekleniyor...",
-  "Would you like to install it now?": "Şimdi kurmak ister misiniz?"
+  "Would you like to install it now?": "Şimdi kurmak ister misiniz?",
+  "Providers": "Sağlayıcılar",
+  "Sign in required to use Agy": "Agy'yi kullanmak için giriş gerekli",
+  "Signing in to Agy...": "Agy hesabına giriş yapılıyor..."
 }

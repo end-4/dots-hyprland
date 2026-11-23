@@ -783,5 +783,8 @@
   "Sign in required to use %1": "Для использования %1 нужно войти",
   "Signing in to %1...": "Вход в %1...",
   "Waiting...": "Ожидание...",
-  "Would you like to install it now?": "Установить сейчас?"
+  "Would you like to install it now?": "Установить сейчас?",
+  "Providers": "Провайдеры",
+  "Sign in required to use Agy": "Для использования Agy требуется вход",
+  "Signing in to Agy...": "Вход в Agy..."
 }

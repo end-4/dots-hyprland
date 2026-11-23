@@ -456,5 +456,8 @@
   "Sign in required to use %1": "%1 を使うにはサインインが必要です",
   "Signing in to %1...": "%1 にサインイン中...",
   "Waiting...": "待機中...",
-  "Would you like to install it now?": "今すぐインストールしますか？"
+  "Would you like to install it now?": "今すぐインストールしますか？",
+  "Providers": "プロバイダー",
+  "Sign in required to use Agy": "Agy を使用するにはサインインが必要です",
+  "Signing in to Agy...": "Agy にサインインしています..."
 }

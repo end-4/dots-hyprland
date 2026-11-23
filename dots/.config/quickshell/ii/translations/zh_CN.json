@@ -748,5 +748,8 @@
   "Sign in required to use %1": "使用 %1 需要先登录",
   "Signing in to %1...": "正在登录 %1...",
   "Waiting...": "等待中...",
-  "Would you like to install it now?": "要现在安装吗？"
+  "Would you like to install it now?": "要现在安装吗？",
+  "Providers": "提供商",
+  "Sign in required to use Agy": "使用 Agy 需要登录",
+  "Signing in to Agy...": "正在登录 Agy..."
 }

@@ -529,5 +529,8 @@
   "Sign in required to use %1": "נדרשת התחברות כדי להשתמש ב-%1",
   "Signing in to %1...": "מתחבר ל-%1...",
   "Waiting...": "ממתין...",
-  "Would you like to install it now?": "להתקין עכשיו?"
+  "Would you like to install it now?": "להתקין עכשיו?",
+  "Providers": "ספקים",
+  "Sign in required to use Agy": "נדרשת התחברות כדי להשתמש ב-Agy",
+  "Signing in to Agy...": "מתחבר ל-Agy..."
 }

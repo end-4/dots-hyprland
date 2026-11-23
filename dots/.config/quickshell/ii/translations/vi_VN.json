@@ -398,5 +398,8 @@
   "Sign in required to use %1": "Cần đăng nhập để dùng %1",
   "Signing in to %1...": "Đang đăng nhập %1...",
   "Waiting...": "Đang chờ...",
-  "Would you like to install it now?": "Bạn có muốn cài đặt ngay không?"
+  "Would you like to install it now?": "Bạn có muốn cài đặt ngay không?",
+  "Providers": "Nhà cung cấp",
+  "Sign in required to use Agy": "Cần đăng nhập để sử dụng Agy",
+  "Signing in to Agy...": "Đang đăng nhập vào Agy..."
 }

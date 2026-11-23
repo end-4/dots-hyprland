@@ -387,5 +387,8 @@
   "Sign in required to use %1": "Accedi per usare %1",
   "Signing in to %1...": "Accesso a %1...",
   "Waiting...": "In attesa...",
-  "Would you like to install it now?": "Vuoi installarlo ora?"
+  "Would you like to install it now?": "Vuoi installarlo ora?",
+  "Providers": "Provider",
+  "Sign in required to use Agy": "Accesso richiesto per usare Agy",
+  "Signing in to Agy...": "Accesso ad Agy in corso..."
 }

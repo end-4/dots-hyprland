@@ -760,5 +760,8 @@
   "Sign in required to use %1": "É necessário entrar para usar o %1",
   "Signing in to %1...": "Entrando em %1...",
   "Waiting...": "Aguardando...",
-  "Would you like to install it now?": "Deseja instalar agora?"
+  "Would you like to install it now?": "Deseja instalar agora?",
+  "Providers": "Provedores",
+  "Sign in required to use Agy": "É necessário entrar para usar o Agy",
+  "Signing in to Agy...": "Entrando no Agy..."
 }

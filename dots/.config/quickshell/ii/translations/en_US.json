@@ -639,5 +639,8 @@
   "Sign in required to use %1": "Sign in required to use %1",
   "Signing in to %1...": "Signing in to %1...",
   "Waiting...": "Waiting...",
-  "Would you like to install it now?": "Would you like to install it now?"
+  "Would you like to install it now?": "Would you like to install it now?",
+  "Providers": "Providers",
+  "Sign in required to use Agy": "Sign in required to use Agy",
+  "Signing in to Agy...": "Signing in to Agy..."
 }
