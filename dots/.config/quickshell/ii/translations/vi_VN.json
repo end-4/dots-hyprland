@@ -371,5 +371,14 @@
   "Preferred wallpaper zoom (%)": "Tỷ lệ thu phóng hình nền (%)",
   "Function Response": "Phản hồi function",
   "No apps are playing sound": "Không có ứng dụng nào đang phát âm thanh",
-  "No output device": "Không có thiết bị đầu ra"
+  "No output device": "Không có thiết bị đầu ra",
+  "Audio output": "Đầu ra âm thanh",
+  "Audio output switcher": "Bộ chuyển đầu ra âm thanh",
+  "Audio output: Mono — click to switch to stereo": "Đầu ra âm thanh: Mono — nhấn để chuyển stereo",
+  "Audio output: Stereo — click to switch to mono": "Đầu ra âm thanh: Stereo — nhấn để chuyển mono",
+  "Mono audio toggle": "Nút chuyển âm thanh mono",
+  "Sleep allowed (click to stay awake)": "Cho phép ngủ (nhấp để giữ thức)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Đang giữ thức: màn hình không tắt, không ngủ (nhấp để cho phép ngủ)",
+  "App volume mixer": "Bộ trộn âm lượng theo ứng dụng",
+  "Stay awake toggle": "Nút giữ thức"
 }

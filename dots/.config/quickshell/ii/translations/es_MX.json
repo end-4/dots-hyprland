@@ -747,5 +747,13 @@
   "More Internet settings": "Más ajustes de Internet",
   "Utility buttons": "Botones de utilidad",
   "No apps are playing sound": "Ninguna aplicación está reproduciendo sonido",
-  "No output device": "Sin dispositivo de salida"
+  "No output device": "Sin dispositivo de salida",
+  "Audio output switcher": "Selector de salida de audio",
+  "Audio output: Mono — click to switch to stereo": "Salida de audio: Mono — clic para cambiar a estéreo",
+  "Audio output: Stereo — click to switch to mono": "Salida de audio: Estéreo — clic para cambiar a mono",
+  "Mono audio toggle": "Alternar audio mono",
+  "Sleep allowed (click to stay awake)": "Suspensión permitida (clic para mantener activo)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Manteniéndose activo: la pantalla no se apaga ni se suspende (clic para permitir la suspensión)",
+  "App volume mixer": "Mezclador de volumen por aplicación",
+  "Stay awake toggle": "Interruptor para mantener activo"
 }

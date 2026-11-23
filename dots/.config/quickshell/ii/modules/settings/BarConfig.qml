@@ -191,6 +191,26 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
+                buttonIcon: "headphones"
+                text: Translation.tr("Audio output switcher")
+                checked: Config.options.bar.showAudioOutputSwitcher
+                onCheckedChanged: {
+                    Config.options.bar.showAudioOutputSwitcher = checked;
+                }
+            }
+            ConfigSwitch {
+                buttonIcon: "speaker"
+                text: Translation.tr("Mono audio toggle")
+                checked: Config.options.bar.showAudioMonoToggle
+                onCheckedChanged: {
+                    Config.options.bar.showAudioMonoToggle = checked;
+                }
+            }
+        }
+
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
                 buttonIcon: "content_cut"
                 text: Translation.tr("Screen snip")
                 checked: Config.options.bar.utilButtons.showScreenSnip
