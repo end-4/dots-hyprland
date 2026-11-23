@@ -756,5 +756,15 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "No apps are playing sound": "Нет приложений, воспроизводящих звук",
+  "No output device": "Нет устройства вывода",
+  "Audio output switcher": "Переключатель аудиовыхода",
+  "Audio output: Mono — click to switch to stereo": "Вывод звука: Моно — нажмите для стерео",
+  "Audio output: Stereo — click to switch to mono": "Вывод звука: Стерео — нажмите для моно",
+  "Mono audio toggle": "Переключатель моно-звука",
+  "Sleep allowed (click to stay awake)": "Спящий режим разрешён (нажмите, чтобы не засыпать)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Не засыпает: экран не гаснет, спящего режима нет (нажмите, чтобы разрешить сон)",
+  "App volume mixer": "Микшер громкости приложений",
+  "Stay awake toggle": "Переключатель «не засыпать»"
 }

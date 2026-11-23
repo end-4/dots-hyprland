@@ -604,5 +604,15 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "No apps are playing sound": "Keine App gibt Ton wieder",
+  "No output device": "Kein Ausgabegerät",
+  "Audio output switcher": "Audioausgabe-Umschalter",
+  "Audio output: Mono — click to switch to stereo": "Audioausgang: Mono — klicken für Stereo",
+  "Audio output: Stereo — click to switch to mono": "Audioausgang: Stereo — klicken für Mono",
+  "Mono audio toggle": "Mono-Audio-Schalter",
+  "Sleep allowed (click to stay awake)": "Ruhezustand erlaubt (Klicken, um wach zu bleiben)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Bleibt wach: Bildschirm bleibt an, kein Ruhezustand (Klicken, um Ruhezustand zu erlauben)",
+  "App volume mixer": "App-Lautstärkemixer",
+  "Stay awake toggle": "Wachhalte-Schalter"
 }

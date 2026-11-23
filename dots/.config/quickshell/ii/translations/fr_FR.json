@@ -611,5 +611,15 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "No apps are playing sound": "Aucune application ne joue de son",
+  "No output device": "Aucun périphérique de sortie",
+  "Audio output switcher": "Sélecteur de sortie audio",
+  "Audio output: Mono — click to switch to stereo": "Sortie audio : Mono — cliquer pour passer en stéréo",
+  "Audio output: Stereo — click to switch to mono": "Sortie audio : Stéréo — cliquer pour passer en mono",
+  "Mono audio toggle": "Bascule audio mono",
+  "Sleep allowed (click to stay awake)": "Veille autorisée (cliquez pour rester éveillé)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Reste éveillé : l'écran ne s'éteint pas, pas de veille (cliquez pour autoriser la veille)",
+  "App volume mixer": "Mixeur de volume par application",
+  "Stay awake toggle": "Bouton rester éveillé"
 }

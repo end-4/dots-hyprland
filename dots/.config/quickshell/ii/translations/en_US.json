@@ -611,5 +611,15 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "No apps are playing sound": "No apps are playing sound",
+  "No output device": "No output device",
+  "Audio output switcher": "Audio output switcher",
+  "Audio output: Mono — click to switch to stereo": "Audio output: Mono — click to switch to stereo",
+  "Audio output: Stereo — click to switch to mono": "Audio output: Stereo — click to switch to mono",
+  "Mono audio toggle": "Mono audio toggle",
+  "Sleep allowed (click to stay awake)": "Sleep allowed (click to stay awake)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Staying awake: no screen off, no sleep (click to allow sleep)",
+  "App volume mixer": "App volume mixer",
+  "Stay awake toggle": "Stay awake toggle"
 }

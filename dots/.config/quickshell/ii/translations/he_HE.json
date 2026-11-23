@@ -501,5 +501,16 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "No apps are playing sound": "אין יישומים שמנגנים שמע",
+  "No output device": "אין התקן פלט",
+  "Audio output": "פלט שמע",
+  "Audio output switcher": "בורר פלט שמע",
+  "Audio output: Mono — click to switch to stereo": "פלט שמע: מונו — לחץ למעבר לסטריאו",
+  "Audio output: Stereo — click to switch to mono": "פלט שמע: סטריאו — לחץ למעבר למונו",
+  "Mono audio toggle": "מתג שמע מונו",
+  "Sleep allowed (click to stay awake)": "מצב שינה מותר (לחץ כדי להישאר ער)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "נשאר ער: המסך לא נכבה, אין שינה (לחץ כדי לאפשר שינה)",
+  "App volume mixer": "מיקסר עוצמת קול לפי אפליקציה",
+  "Stay awake toggle": "מתג הישארות ער"
 }

@@ -720,5 +720,15 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "No apps are playing sound": "没有正在播放声音的应用",
+  "No output device": "无输出设备",
+  "Audio output switcher": "音频输出切换",
+  "Audio output: Mono — click to switch to stereo": "音频输出：单声道 — 点击切换立体声",
+  "Audio output: Stereo — click to switch to mono": "音频输出：立体声 — 点击切换单声道",
+  "Mono audio toggle": "单声道音频切换",
+  "Sleep allowed (click to stay awake)": "允许睡眠（点击保持唤醒）",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "保持唤醒：屏幕不熄灭，不睡眠（点击允许睡眠）",
+  "App volume mixer": "应用音量混合器",
+  "Stay awake toggle": "保持唤醒开关"
 }

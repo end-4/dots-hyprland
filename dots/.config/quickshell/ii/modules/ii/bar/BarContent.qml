@@ -317,6 +317,34 @@ Item { // Bar content region
                 }
             }
 
+            SleepInhibitToggle {
+                visible: Config.options.bar.showSleepInhibitToggle && root.useShortenedForm < 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 4
+                Layout.rightMargin: 4
+            }
+
+            AudioMonoToggle {
+                visible: Config.options.bar.showAudioMonoToggle && root.useShortenedForm < 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 4
+                Layout.rightMargin: 4
+            }
+
+            AudioOutputSwitcher {
+                visible: Config.options.bar.showAudioOutputSwitcher && root.useShortenedForm < 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 4
+                Layout.rightMargin: 4
+            }
+
+            AppVolumeMixer {
+                visible: Config.options.bar.showAppVolumeMixer && root.useShortenedForm < 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: 4
+                Layout.rightMargin: 4
+            }
+
             SysTray {
                 visible: root.useShortenedForm === 0
                 Layout.fillWidth: false

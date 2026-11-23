@@ -488,5 +488,16 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "No apps are playing sound": "Tidak ada aplikasi yang memutar suara",
+  "No output device": "Tidak ada perangkat output",
+  "Audio output": "Output audio",
+  "Audio output switcher": "Pengalih keluaran audio",
+  "Audio output: Mono — click to switch to stereo": "Output audio: Mono — klik untuk beralih ke stereo",
+  "Audio output: Stereo — click to switch to mono": "Output audio: Stereo — klik untuk beralih ke mono",
+  "Mono audio toggle": "Tombol audio mono",
+  "Sleep allowed (click to stay awake)": "Tidur diizinkan (klik untuk tetap menyala)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Tetap menyala: layar tidak mati, tidak tidur (klik untuk mengizinkan tidur)",
+  "App volume mixer": "Mixer volume per aplikasi",
+  "Stay awake toggle": "Tombol tetap menyala"
 }

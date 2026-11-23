@@ -241,6 +241,10 @@ Singleton {
                 property bool showBackground: true
                 property bool verbose: true
                 property bool vertical: false
+                property bool showAppVolumeMixer: true // Per-app volume mixer button
+                property bool showSleepInhibitToggle: false // Keep-awake (sleep inhibitor) toggle
+                property bool showAudioMonoToggle: true // Mono/stereo downmix toggle
+                property bool showAudioOutputSwitcher: true // Audio output device switcher
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true

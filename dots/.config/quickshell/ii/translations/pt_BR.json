@@ -733,5 +733,15 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "No apps are playing sound": "Nenhum aplicativo está reproduzindo som",
+  "No output device": "Nenhum dispositivo de saída",
+  "Audio output switcher": "Seletor de saída de áudio",
+  "Audio output: Mono — click to switch to stereo": "Saída de áudio: Mono — clique para alternar para estéreo",
+  "Audio output: Stereo — click to switch to mono": "Saída de áudio: Estéreo — clique para alternar para mono",
+  "Mono audio toggle": "Alternar áudio mono",
+  "Sleep allowed (click to stay awake)": "Suspensão permitida (clique para manter ativo)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Mantendo ativo: a tela não apaga e não suspende (clique para permitir a suspensão)",
+  "App volume mixer": "Mixer de volume por aplicativo",
+  "Stay awake toggle": "Alternar manter ativo"
 }

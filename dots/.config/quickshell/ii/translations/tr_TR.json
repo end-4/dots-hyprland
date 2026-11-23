@@ -604,5 +604,15 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "No apps are playing sound": "Ses çalan uygulama yok",
+  "No output device": "Çıkış cihazı yok",
+  "Audio output switcher": "Ses çıkışı seçici",
+  "Audio output: Mono — click to switch to stereo": "Ses çıkışı: Mono — stereo'ya geçmek için tıkla",
+  "Audio output: Stereo — click to switch to mono": "Ses çıkışı: Stereo — mono'ya geçmek için tıkla",
+  "Mono audio toggle": "Mono ses geçişi",
+  "Sleep allowed (click to stay awake)": "Uyku serbest (uyanık kalmak için tıkla)",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "Uyanık kalınıyor: ekran kapanmaz, uyku yok (uykuya izin vermek için tıkla)",
+  "App volume mixer": "Uygulama ses mikseri",
+  "Stay awake toggle": "Uyanık kal düğmesi"
 }

@@ -428,5 +428,16 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "No apps are playing sound": "音声を再生中のアプリはありません",
+  "No output device": "出力デバイスがありません",
+  "Audio output": "音声出力",
+  "Audio output switcher": "オーディオ出力切り替え",
+  "Audio output: Mono — click to switch to stereo": "音声出力: モノラル — クリックでステレオへ",
+  "Audio output: Stereo — click to switch to mono": "音声出力: ステレオ — クリックでモノラルへ",
+  "Mono audio toggle": "モノラル音声の切り替え",
+  "Sleep allowed (click to stay awake)": "スリープ許可（クリックで起きたままにする）",
+  "Staying awake: no screen off, no sleep (click to allow sleep)": "起きたままにしています：画面は消灯せず、スリープしません（クリックでスリープを許可）",
+  "App volume mixer": "アプリ別音量ミキサー",
+  "Stay awake toggle": "スリープ防止トグル"
 }
