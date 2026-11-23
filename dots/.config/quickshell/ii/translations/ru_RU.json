@@ -756,5 +756,22 @@
   "Fr": "Пт/*keep*/",
   "Font family name": "Назв. семейства",
   "Pin": "Закреп",
-  "Unpin": "Откреп"
+  "Unpin": "Откреп",
+  "Add / Select Custom Media": "Добавить / выбрать свой файл",
+  "Choose File": "Выбрать файл",
+  "Color": "Цвет",
+  "Custom": "Свой",
+  "Enable screensaver on idle": "Включить заставку при простое",
+  "Idle timeout (minutes)": "Время простоя (минуты)",
+  "Image Animation": "Анимация изображения",
+  "No file selected (image, GIF, video, or .scr)": "Файл не выбран (изображение, GIF, видео или .scr)",
+  "Pick Color": "Выбрать цвет",
+  "Preview": "Предпросмотр",
+  "Rename": "Переименовать",
+  "Screensaver": "Заставка",
+  "Select screensaver color": "Выберите цвет заставки",
+  "Select screensaver media or .scr": "Выберите медиа заставки или .scr",
+  "Separate per monitor": "Отдельно для каждого монитора",
+  "Speed: %1x": "Скорость: %1x",
+  "Style": "Стиль"
 }

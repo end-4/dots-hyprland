@@ -45,6 +45,11 @@ ApplicationWindow {
             component: "modules/settings/BackgroundConfig.qml"
         },
         {
+            name: Translation.tr("Screensaver"),
+            icon: "tv",
+            component: "modules/settings/ScreensaverConfig.qml"
+        },
+        {
             name: Translation.tr("Interface"),
             icon: "bottom_app_bar",
             component: "modules/settings/InterfaceConfig.qml"

@@ -720,5 +720,22 @@
   "Move left": "左移",
   "Pin to Start": "固定到“开始”屏幕",
   "Pin": "固定",
-  "Unpin": "取消固定"
+  "Unpin": "取消固定",
+  "Add / Select Custom Media": "添加 / 选择自定义媒体",
+  "Choose File": "选择文件",
+  "Color": "纯色",
+  "Custom": "自定义",
+  "Enable screensaver on idle": "空闲时启用屏幕保护程序",
+  "Idle timeout (minutes)": "空闲超时（分钟）",
+  "Image Animation": "图像动画",
+  "No file selected (image, GIF, video, or .scr)": "未选择文件（图片、GIF、视频或 .scr）",
+  "Pick Color": "选择颜色",
+  "Preview": "预览",
+  "Rename": "重命名",
+  "Screensaver": "屏幕保护程序",
+  "Select screensaver color": "选择屏幕保护程序颜色",
+  "Select screensaver media or .scr": "选择屏幕保护媒体或 .scr",
+  "Separate per monitor": "按显示器分别设置",
+  "Speed: %1x": "速度：%1x",
+  "Style": "样式"
 }

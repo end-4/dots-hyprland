@@ -369,5 +369,21 @@
   "illogical-impulse Settings": "Cài đặt illogical-impulse",
   "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Trực tuyến | Model của Google\nMới hơn nhưng chậm hơn so với phiên bản trước nhưng nên cung cấp câu trả lời chất lượng cao hơn",
   "Preferred wallpaper zoom (%)": "Tỷ lệ thu phóng hình nền (%)",
-  "Function Response": "Phản hồi function"
+  "Function Response": "Phản hồi function",
+  "Add / Select Custom Media": "Thêm / Chọn tệp tùy chỉnh",
+  "Choose File": "Chọn tệp",
+  "Color": "Màu sắc",
+  "Custom": "Tùy chỉnh",
+  "Enable screensaver on idle": "Bật trình bảo vệ màn hình khi nhàn rỗi",
+  "Idle timeout (minutes)": "Thời gian chờ nhàn rỗi (phút)",
+  "Image Animation": "Hiệu ứng ảnh",
+  "No file selected (image, GIF, video, or .scr)": "Chưa chọn tệp (ảnh, GIF, video hoặc .scr)",
+  "Pick Color": "Chọn màu",
+  "Preview": "Xem trước",
+  "Rename": "Đổi tên",
+  "Screensaver": "Trình bảo vệ màn hình",
+  "Select screensaver color": "Chọn màu trình bảo vệ màn hình",
+  "Select screensaver media or .scr": "Chọn tệp bảo vệ màn hình hoặc .scr",
+  "Separate per monitor": "Riêng cho từng màn hình",
+  "Speed: %1x": "Tốc độ: %1x"
 }

@@ -733,5 +733,22 @@
   "Tint app icons": "Colorir ícones de app",
   "Color picker": "Seletor de cores",
   "Night Light | Right-click to toggle Auto mode": "Luz Noturna | Botão direito para alternar modo Auto",
-  "Inactive": "Inativo"
+  "Inactive": "Inativo",
+  "Add / Select Custom Media": "Adicionar / selecionar mídia personalizada",
+  "Choose File": "Escolher arquivo",
+  "Color": "Cor",
+  "Custom": "Personalizado",
+  "Enable screensaver on idle": "Ativar protetor de tela ao ficar ocioso",
+  "Idle timeout (minutes)": "Tempo de inatividade (minutos)",
+  "Image Animation": "Animação de imagem",
+  "No file selected (image, GIF, video, or .scr)": "Nenhum arquivo selecionado (imagem, GIF, vídeo ou .scr)",
+  "Pick Color": "Escolher cor",
+  "Preview": "Pré-visualizar",
+  "Rename": "Renomear",
+  "Screensaver": "Protetor de tela",
+  "Select screensaver color": "Selecionar cor do protetor de tela",
+  "Select screensaver media or .scr": "Selecionar mídia do protetor de tela ou .scr",
+  "Separate per monitor": "Separado por monitor",
+  "Speed: %1x": "Velocidade: %1x",
+  "Style": "Estilo"
 }

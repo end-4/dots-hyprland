@@ -29,6 +29,11 @@ MouseArea {
             forceFieldFocus();
         }
     }
+    // Screensaver is drawn below the (transparent) lock surface: keep the lock UI out of its way
+    opacity: GlobalStates.screensaverActive ? 0 : 1
+    Behavior on opacity {
+        NumberAnimation { duration: 250 }
+    }
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton
     onPressed: mouse => {

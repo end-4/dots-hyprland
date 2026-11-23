@@ -428,5 +428,21 @@
   "Lap": "ラップ",
   "Horizontal": "水平",
   "Region width": "領域の幅",
-  "Vertical": "垂直"
+  "Vertical": "垂直",
+  "Add / Select Custom Media": "カスタムメディアを追加 / 選択",
+  "Choose File": "ファイルを選択",
+  "Color": "単色",
+  "Custom": "カスタム",
+  "Enable screensaver on idle": "アイドル時にスクリーンセーバーを有効にする",
+  "Idle timeout (minutes)": "アイドル時間（分）",
+  "Image Animation": "画像アニメーション",
+  "No file selected (image, GIF, video, or .scr)": "ファイル未選択（画像、GIF、動画、または .scr）",
+  "Pick Color": "色を選択",
+  "Preview": "プレビュー",
+  "Rename": "名前を変更",
+  "Screensaver": "スクリーンセーバー",
+  "Select screensaver color": "スクリーンセーバーの色を選択",
+  "Select screensaver media or .scr": "スクリーンセーバーのメディアまたは .scr を選択",
+  "Separate per monitor": "モニターごとに個別設定",
+  "Speed: %1x": "速度: %1x"
 }

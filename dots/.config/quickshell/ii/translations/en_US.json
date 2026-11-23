@@ -611,5 +611,22 @@
   "Use varying shapes for password characters": "Use varying shapes for password characters",
   "Battery full": "Battery full",
   "Pin": "Pin",
-  "Unpin": "Unpin"
+  "Unpin": "Unpin",
+  "Add / Select Custom Media": "Add / Select Custom Media",
+  "Choose File": "Choose File",
+  "Color": "Color",
+  "Custom": "Custom",
+  "Enable screensaver on idle": "Enable screensaver on idle",
+  "Idle timeout (minutes)": "Idle timeout (minutes)",
+  "Image Animation": "Image Animation",
+  "No file selected (image, GIF, video, or .scr)": "No file selected (image, GIF, video, or .scr)",
+  "Pick Color": "Pick Color",
+  "Preview": "Preview",
+  "Rename": "Rename",
+  "Screensaver": "Screensaver",
+  "Select screensaver color": "Select screensaver color",
+  "Select screensaver media or .scr": "Select screensaver media or .scr",
+  "Separate per monitor": "Separate per monitor",
+  "Speed: %1x": "Speed: %1x",
+  "Style": "Style"
 }
