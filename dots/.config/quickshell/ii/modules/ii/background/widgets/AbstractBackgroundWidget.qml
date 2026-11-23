@@ -32,7 +32,7 @@ AbstractWidget {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }
 
-    draggable: placementStrategy === "free"
+    draggable: placementStrategy === "free" && !(configEntry?.locked ?? false)
     onReleased: {
         root.targetX = root.x;
         root.targetY = root.y;

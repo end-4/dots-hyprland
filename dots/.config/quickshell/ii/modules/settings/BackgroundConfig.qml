@@ -112,6 +112,16 @@ ContentPage {
         }
 
         ConfigSwitch {
+            visible: Config.options.background.widgets.clock.placementStrategy === "free"
+            buttonIcon: "lock"
+            text: Translation.tr("Lock position")
+            checked: Config.options.background.widgets.clock.locked
+            onCheckedChanged: {
+                Config.options.background.widgets.clock.locked = checked;
+            }
+        }
+
+        ConfigSwitch {
             buttonIcon: "lock_clock"
             text: Translation.tr("Show only when locked")
             checked: Config.options.background.widgets.clock.showOnlyWhenLocked
@@ -611,6 +621,16 @@ ContentPage {
                         value: "mostBusy"
                     },
                 ]
+            }
+        }
+
+        ConfigSwitch {
+            visible: Config.options.background.widgets.weather.enable && Config.options.background.widgets.weather.placementStrategy === "free"
+            buttonIcon: "lock"
+            text: Translation.tr("Lock position")
+            checked: Config.options.background.widgets.weather.locked
+            onCheckedChanged: {
+                Config.options.background.widgets.weather.locked = checked;
             }
         }
     }
