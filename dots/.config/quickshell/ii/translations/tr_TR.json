@@ -604,5 +604,22 @@
   "Recognize music": "Müziği tanı",
   "Stroke width": "Çizgi genişliği",
   "Use varying shapes for password characters": "Şifre karakterleri için değişen şekiller kullan",
-  "Battery full": "Pil dolu"
+  "Battery full": "Pil dolu",
+  "Add / Select Custom Media": "Özel Medya Ekle / Seç",
+  "Choose File": "Dosya Seç",
+  "Color": "Renk",
+  "Custom": "Özel",
+  "Enable screensaver on idle": "Boştayken ekran koruyucuyu etkinleştir",
+  "Idle timeout (minutes)": "Boşta kalma süresi (dakika)",
+  "Image Animation": "Görsel Animasyonu",
+  "No file selected (image, GIF, video, or .scr)": "Dosya seçilmedi (görsel, GIF, video veya .scr)",
+  "Pick Color": "Renk Seç",
+  "Preview": "Önizleme",
+  "Rename": "Yeniden adlandır",
+  "Screensaver": "Ekran Koruyucu",
+  "Select screensaver color": "Ekran koruyucu rengini seç",
+  "Select screensaver media or .scr": "Ekran koruyucu medyası veya .scr seç",
+  "Separate per monitor": "Her Monitöre Ayrı",
+  "Speed: %1x": "Hız: %1x",
+  "Style": "Stil"
 }

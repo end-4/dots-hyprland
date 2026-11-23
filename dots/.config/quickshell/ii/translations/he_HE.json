@@ -501,5 +501,22 @@
   "Fr": "Fr/*keep*/",
   "Tu": "Tu/*keep*/",
   "Th": "Th/*keep*/",
-  "We": "We/*keep*/"
+  "We": "We/*keep*/",
+  "Add / Select Custom Media": "הוסף / בחר מדיה מותאמת",
+  "Choose File": "בחר קובץ",
+  "Color": "צבע",
+  "Custom": "מותאם אישית",
+  "Enable screensaver on idle": "הפעל שומר מסך בחוסר פעילות",
+  "Idle timeout (minutes)": "זמן חוסר פעילות (דקות)",
+  "Image Animation": "אנימציית תמונה",
+  "No file selected (image, GIF, video, or .scr)": "לא נבחר קובץ (תמונה, GIF, וידאו או .scr)",
+  "Pick Color": "בחר צבע",
+  "Preview": "תצוגה מקדימה",
+  "Rename": "שנה שם",
+  "Screensaver": "שומר מסך",
+  "Select screensaver color": "בחר צבע לשומר מסך",
+  "Select screensaver media or .scr": "בחר מדיה לשומר מסך או .scr",
+  "Separate per monitor": "נפרד לכל מסך",
+  "Speed: %1x": "מהירות: %1x",
+  "Style": "סגנון"
 }

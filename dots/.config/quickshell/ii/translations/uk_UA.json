@@ -338,5 +338,21 @@
   "Tool set to: %1": "Інструмет вказано: %1",
   "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed": "Команди, редагування конфігурацій, пошук.\nВиконує додаткову дію для переходу в режим пошуку, якщо це потрібно",
   "To set an API key, pass it with the %4 command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3": "Щоб задати ключ API, передайте його командою %4\n\nЩоб переглянути ключ, передайте \"get\" командою<br/>\n\n### Для %1:\n\n**Лінк**: %2\n\n%3",
-  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді"
+  "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers": "Онлайн | Модель Google\nНовіша модель, яка повільніша за свою попередницю, але має надавати якісніші відповіді",
+  "Add / Select Custom Media": "Додати / вибрати власне медіа",
+  "Choose File": "Вибрати файл",
+  "Color": "Колір",
+  "Custom": "Власний",
+  "Enable screensaver on idle": "Увімкнути заставку під час простою",
+  "Idle timeout (minutes)": "Час простою (хвилини)",
+  "Image Animation": "Анімація зображення",
+  "No file selected (image, GIF, video, or .scr)": "Файл не вибрано (зображення, GIF, відео або .scr)",
+  "Pick Color": "Вибрати колір",
+  "Preview": "Попередній перегляд",
+  "Rename": "Перейменувати",
+  "Screensaver": "Заставка",
+  "Select screensaver color": "Виберіть колір заставки",
+  "Select screensaver media or .scr": "Виберіть медіа заставки або .scr",
+  "Separate per monitor": "Окремо для кожного монітора",
+  "Speed: %1x": "Швидкість: %1x"
 }

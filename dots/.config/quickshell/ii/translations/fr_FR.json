@@ -611,5 +611,22 @@
   "Use varying shapes for password characters": "Utiliser des formes variées pour les caractères du mot de passe",
   "Battery full": "Batterie pleine",
   "Pin": "Épingler",
-  "Unpin": "Désépingler"
+  "Unpin": "Désépingler",
+  "Add / Select Custom Media": "Ajouter / sélectionner un média personnalisé",
+  "Choose File": "Choisir un fichier",
+  "Color": "Couleur",
+  "Custom": "Personnalisé",
+  "Enable screensaver on idle": "Activer l'économiseur d'écran en cas d'inactivité",
+  "Idle timeout (minutes)": "Délai d'inactivité (minutes)",
+  "Image Animation": "Animation d'image",
+  "No file selected (image, GIF, video, or .scr)": "Aucun fichier sélectionné (image, GIF, vidéo ou .scr)",
+  "Pick Color": "Choisir une couleur",
+  "Preview": "Aperçu",
+  "Rename": "Renommer",
+  "Screensaver": "Économiseur d'écran",
+  "Select screensaver color": "Sélectionner la couleur de l'économiseur d'écran",
+  "Select screensaver media or .scr": "Sélectionner un média d'économiseur ou .scr",
+  "Separate per monitor": "Séparé par moniteur",
+  "Speed: %1x": "Vitesse : %1x",
+  "Style": "Style"
 }

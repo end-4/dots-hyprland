@@ -745,5 +745,22 @@
   "Font size": "Tamaño de fuente",
   "System": "Sistema",
   "More Internet settings": "Más ajustes de Internet",
-  "Utility buttons": "Botones de utilidad"
+  "Utility buttons": "Botones de utilidad",
+  "Add / Select Custom Media": "Agregar / seleccionar medio personalizado",
+  "Choose File": "Elegir archivo",
+  "Color": "Color",
+  "Custom": "Personalizado",
+  "Enable screensaver on idle": "Activar protector de pantalla al estar inactivo",
+  "Idle timeout (minutes)": "Tiempo de inactividad (minutos)",
+  "Image Animation": "Animación de imagen",
+  "No file selected (image, GIF, video, or .scr)": "Ningún archivo seleccionado (imagen, GIF, video o .scr)",
+  "Pick Color": "Elegir color",
+  "Preview": "Vista previa",
+  "Rename": "Renombrar",
+  "Screensaver": "Protector de pantalla",
+  "Select screensaver color": "Seleccionar color del protector de pantalla",
+  "Select screensaver media or .scr": "Seleccionar medio de protector de pantalla o .scr",
+  "Separate per monitor": "Separado por monitor",
+  "Speed: %1x": "Velocidad: %1x",
+  "Style": "Estilo"
 }

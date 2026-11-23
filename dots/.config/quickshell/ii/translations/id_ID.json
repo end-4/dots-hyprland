@@ -488,5 +488,22 @@
   "Colors": "Warna",
   "Monitors": "Monitor",
   "Fuzzy": "Fuzzy",
-  "Discord": "Discord"
+  "Discord": "Discord",
+  "Add / Select Custom Media": "Tambah / Pilih Media Kustom",
+  "Choose File": "Pilih File",
+  "Color": "Warna",
+  "Custom": "Kustom",
+  "Enable screensaver on idle": "Aktifkan pengaman layar saat menganggur",
+  "Idle timeout (minutes)": "Batas waktu menganggur (menit)",
+  "Image Animation": "Animasi Gambar",
+  "No file selected (image, GIF, video, or .scr)": "Tidak ada file dipilih (gambar, GIF, video, atau .scr)",
+  "Pick Color": "Pilih Warna",
+  "Preview": "Pratinjau",
+  "Rename": "Ubah nama",
+  "Screensaver": "Pengaman Layar",
+  "Select screensaver color": "Pilih warna pengaman layar",
+  "Select screensaver media or .scr": "Pilih media pengaman layar atau .scr",
+  "Separate per monitor": "Terpisah per monitor",
+  "Speed: %1x": "Kecepatan: %1x",
+  "Style": "Gaya"
 }

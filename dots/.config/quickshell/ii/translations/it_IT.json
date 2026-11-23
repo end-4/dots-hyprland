@@ -359,5 +359,21 @@
   "**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key": "**Istruzioni**: Accedi al tuo account Mistral, vai nella sezione \"Keys\" dal menu laterale, clicca \"Create new key\"",
   "Gives the model search capabilities (immediately)": "Abilita modalità ricerca del modello (immediatamente)",
   "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed": "Comanda, modifica la richiesta, cerca.\nRichiede un turno in più per attivare la modalità ricerca se richiesta",
-  "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls": "Online | Modello di %1 | Ritorna risposte veloci e formattate correttamente. Svantaggi: poca voglia di svolgere compiti; potrebbe fare chiamate di funzioni inesistenti"
+  "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls": "Online | Modello di %1 | Ritorna risposte veloci e formattate correttamente. Svantaggi: poca voglia di svolgere compiti; potrebbe fare chiamate di funzioni inesistenti",
+  "Add / Select Custom Media": "Aggiungi / seleziona file personalizzato",
+  "Choose File": "Scegli file",
+  "Color": "Colore",
+  "Custom": "Personalizzato",
+  "Enable screensaver on idle": "Attiva salvaschermo quando inattivo",
+  "Idle timeout (minutes)": "Tempo di inattività (minuti)",
+  "Image Animation": "Animazione immagine",
+  "No file selected (image, GIF, video, or .scr)": "Nessun file selezionato (immagine, GIF, video o .scr)",
+  "Pick Color": "Scegli colore",
+  "Preview": "Anteprima",
+  "Rename": "Rinomina",
+  "Screensaver": "Salvaschermo",
+  "Select screensaver color": "Seleziona colore salvaschermo",
+  "Select screensaver media or .scr": "Seleziona file salvaschermo o .scr",
+  "Separate per monitor": "Separato per monitor",
+  "Speed: %1x": "Velocità: %1x"
 }

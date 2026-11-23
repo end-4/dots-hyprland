@@ -604,5 +604,22 @@
   "Recognize music": "Musik erkennen",
   "Stroke width": "Strichstärke",
   "Use varying shapes for password characters": "Verschiedene Formen für Passwort-Zeichen verwenden",
-  "Battery full": "Batterie voll"
+  "Battery full": "Batterie voll",
+  "Add / Select Custom Media": "Eigene Medien hinzufügen / wählen",
+  "Choose File": "Datei wählen",
+  "Color": "Farbe",
+  "Custom": "Benutzerdefiniert",
+  "Enable screensaver on idle": "Bildschirmschoner im Leerlauf aktivieren",
+  "Idle timeout (minutes)": "Leerlaufzeit (Minuten)",
+  "Image Animation": "Bildanimation",
+  "No file selected (image, GIF, video, or .scr)": "Keine Datei gewählt (Bild, GIF, Video oder .scr)",
+  "Pick Color": "Farbe wählen",
+  "Preview": "Vorschau",
+  "Rename": "Umbenennen",
+  "Screensaver": "Bildschirmschoner",
+  "Select screensaver color": "Bildschirmschoner-Farbe wählen",
+  "Select screensaver media or .scr": "Bildschirmschoner-Medium oder .scr wählen",
+  "Separate per monitor": "Pro Monitor getrennt",
+  "Speed: %1x": "Geschwindigkeit: %1x",
+  "Style": "Stil"
 }
