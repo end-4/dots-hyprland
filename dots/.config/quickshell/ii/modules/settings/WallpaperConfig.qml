@@ -26,6 +26,42 @@ ContentPage {
     }
     readonly property bool isVideo: /\.(mp4|webm|mkv|avi|mov)$/i.test(activePath)
     readonly property bool isGif: /\.gif$/i.test(activePath)
+    property int videoSourceHeight: 2160
+    property int videoSourceMaxFps: 60
+
+    onActivePathChanged: probeVideo()
+    onIsVideoChanged: probeVideo()
+    Component.onCompleted: probeVideo()
+
+    function probeVideo() {
+        if (!isVideo || activePath === "") return;
+        const clean = activePath.replace(/^file:\/\//, "");
+        probeVideoProc.command = [
+            "bash", "-c",
+            `info=$(ffprobe -v error -select_streams v:0 -show_entries stream=height,r_frame_rate -of csv=p=0 "$1" 2>/dev/null)
+            h=$(echo "$info" | cut -d',' -f1 | tr -dc '0-9')
+            fps_raw=$(echo "$info" | cut -d',' -f2)
+            fps=$(awk -F/ '{if ($2+0>0) printf "%d", ($1/$2)+0.5; else printf "%d", $1+0}' <<< "$fps_raw")
+            [ -n "$h" ] && [ -n "$fps" ] && echo "$h|$fps"`,
+            "bash", clean
+        ];
+        probeVideoProc.running = true;
+    }
+
+    Process {
+        id: probeVideoProc
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const parts = text.trim().split("|");
+                if (parts.length >= 2) {
+                    const h = parseInt(parts[0]);
+                    const f = parseInt(parts[1]);
+                    if (!isNaN(h) && h > 0) wallpaperPage.videoSourceHeight = h;
+                    if (!isNaN(f) && f > 0) wallpaperPage.videoSourceMaxFps = f;
+                }
+            }
+        }
+    }
     readonly property string fileName: {
         const p = activePath.replace(/^file:\/\//, "");
         const parts = p.split("/");
@@ -38,6 +74,28 @@ ContentPage {
         const m = Math.floor(totalSec / 60);
         const s = totalSec % 60;
         return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
+    }
+
+    function getLiveOpt(key) {
+        if (Config.options.background.perMonitor && wallpaperPage.selectedMonitor !== "") {
+            const monLive = Config.options.background.monitors?.[wallpaperPage.selectedMonitor]?.live;
+            if (monLive && monLive[key] !== undefined) return monLive[key];
+        }
+        return Config.options.background.live[key];
+    }
+
+    function setLiveOpt(key, val) {
+        if (Config.options.background.perMonitor && wallpaperPage.selectedMonitor !== "") {
+            const monitors = Object.assign({}, Config.options.background.monitors || {});
+            const monEntry = Object.assign({}, monitors[wallpaperPage.selectedMonitor] || {});
+            const monLive = Object.assign({}, monEntry.live || {});
+            monLive[key] = val;
+            monEntry.live = monLive;
+            monitors[wallpaperPage.selectedMonitor] = monEntry;
+            Config.options.background.monitors = monitors;
+        } else {
+            Config.options.background.live[key] = val;
+        }
     }
 
     LiveWallpaperStoreDialog {
@@ -255,6 +313,7 @@ ContentPage {
                 }
 
                 RippleButtonWithIcon {
+                    visible: liveStoreDialog.available !== false
                     Layout.fillWidth: true
                     buttonRadius: Appearance.rounding.small
                     materialIcon: "storefront"
@@ -309,30 +368,30 @@ ContentPage {
 
         ConfigSlider {
             buttonIcon: "speed"
-            text: `${Translation.tr("Speed")}: ${Config.options.background.live.speed.toFixed(2)}x`
-            value: Config.options.background.live.speed
+            text: `${Translation.tr("Speed")}: ${Number(wallpaperPage.getLiveOpt("speed")).toFixed(2)}x`
+            value: wallpaperPage.getLiveOpt("speed")
             from: 0.25
             to: 2.5
             usePercentTooltip: false
             onValueChanged: {
                 const rounded = Math.round(value * 20) / 20;
-                if (Math.abs(Config.options.background.live.speed - rounded) >= 0.02) {
-                    Config.options.background.live.speed = rounded;
+                if (Math.abs(wallpaperPage.getLiveOpt("speed") - rounded) >= 0.02) {
+                    wallpaperPage.setLiveOpt("speed", rounded);
                 }
             }
         }
 
         ConfigSlider {
             buttonIcon: "swap_horiz"
-            text: `${Translation.tr("Position")}: ${Config.options.background.live.position}`
-            value: Config.options.background.live.position
+            text: `${Translation.tr("Position")}: ${wallpaperPage.getLiveOpt("position")}`
+            value: wallpaperPage.getLiveOpt("position")
             from: 0
             to: 100
             usePercentTooltip: false
             onValueChanged: {
                 const rounded = Math.round(value);
-                if (Config.options.background.live.position !== rounded) {
-                    Config.options.background.live.position = rounded;
+                if (wallpaperPage.getLiveOpt("position") !== rounded) {
+                    wallpaperPage.setLiveOpt("position", rounded);
                 }
             }
         }
@@ -340,8 +399,8 @@ ContentPage {
         ContentSubsection {
             title: Translation.tr("Fill mode")
             ConfigSelectionArray {
-                currentValue: Config.options.background.live.fillMode
-                onSelected: newValue => Config.options.background.live.fillMode = newValue
+                currentValue: wallpaperPage.getLiveOpt("fillMode")
+                onSelected: newValue => wallpaperPage.setLiveOpt("fillMode", newValue)
                 options: [
                     { displayName: Translation.tr("Crop"), icon: "crop", value: "crop" },
                     { displayName: Translation.tr("Fit"), icon: "fit_screen", value: "fit" },
@@ -350,38 +409,86 @@ ContentPage {
             }
         }
 
+        ContentSubsection {
+            title: Translation.tr("Resolution")
+            ConfigSelectionArray {
+                currentValue: {
+                    const cfg = wallpaperPage.getLiveOpt("resolution") ?? "4k";
+                    if (cfg === "4k" && wallpaperPage.videoSourceHeight < 2160) {
+                        return wallpaperPage.videoSourceHeight >= 1440 ? "2k" : "1080p";
+                    }
+                    if (cfg === "2k" && wallpaperPage.videoSourceHeight < 1440) {
+                        return "1080p";
+                    }
+                    return cfg;
+                }
+                onSelected: newValue => wallpaperPage.setLiveOpt("resolution", newValue)
+                options: [
+                    { displayName: "4K", icon: "4k", value: "4k", enabled: wallpaperPage.videoSourceHeight >= 2160 },
+                    { displayName: "2K", icon: "2k", value: "2k", enabled: wallpaperPage.videoSourceHeight >= 1440 },
+                    { displayName: "1080p", icon: "hd", value: "1080p", enabled: true }
+                ]
+            }
+        }
+
+        ConfigSlider {
+            buttonIcon: "slow_motion_video"
+            textWidth: 135
+            text: {
+                const fps = wallpaperPage.getLiveOpt("fps") ?? -1;
+                if (fps === 0) return `${Translation.tr("Frame rate")}: 0`;
+                if (fps < 0 || fps >= wallpaperPage.videoSourceMaxFps)
+                    return `${Translation.tr("Frame rate")}: ${Translation.tr("Max")}`;
+                return `${Translation.tr("Frame rate")}: ${fps} fps`;
+            }
+            value: {
+                const fps = wallpaperPage.getLiveOpt("fps") ?? -1;
+                return (fps < 0 || fps >= wallpaperPage.videoSourceMaxFps) ? wallpaperPage.videoSourceMaxFps : fps;
+            }
+            from: 0
+            to: wallpaperPage.videoSourceMaxFps
+            usePercentTooltip: false
+            onValueChanged: {
+                const rounded = Math.round(value);
+                const nextFps = rounded >= wallpaperPage.videoSourceMaxFps ? -1 : rounded;
+                if (wallpaperPage.getLiveOpt("fps") !== nextFps) {
+                    wallpaperPage.setLiveOpt("fps", nextFps);
+                }
+            }
+        }
+
         ConfigSwitch {
             buttonIcon: "repeat"
             text: Translation.tr("Loop playback")
-            checked: Config.options.background.live.loop
-            onCheckedChanged: Config.options.background.live.loop = checked
+            checked: wallpaperPage.getLiveOpt("loop")
+            onCheckedChanged: wallpaperPage.setLiveOpt("loop", checked)
         }
 
         ConfigSwitch {
             buttonIcon: "fullscreen"
             text: Translation.tr("Pause when fullscreen")
-            checked: Config.options.background.live.pauseOnFullscreen
-            onCheckedChanged: Config.options.background.live.pauseOnFullscreen = checked
+            checked: wallpaperPage.getLiveOpt("pauseOnFullscreen")
+            onCheckedChanged: wallpaperPage.setLiveOpt("pauseOnFullscreen", checked)
         }
 
         ConfigSwitch {
             buttonIcon: "volume_off"
             text: Translation.tr("Mute audio")
-            checked: Config.options.background.live.muted
-            onCheckedChanged: Config.options.background.live.muted = checked
+            checked: wallpaperPage.getLiveOpt("muted")
+            onCheckedChanged: wallpaperPage.setLiveOpt("muted", checked)
         }
 
         ConfigSlider {
-            visible: !Config.options.background.live.muted
+            visible: !wallpaperPage.getLiveOpt("muted")
             buttonIcon: "volume_up"
             text: Translation.tr("Volume")
-            value: Config.options.background.live.volume
+            value: wallpaperPage.getLiveOpt("volume")
             from: 0.0
             to: 1.0
             onValueChanged: {
                 const rounded = Math.round(value * 20) / 20;
-                if (Math.abs(Config.options.background.live.volume - rounded) >= 0.02) {
-                    Config.options.background.live.volume = rounded;
+                if (Math.abs(wallpaperPage.getLiveOpt("volume") - rounded) >= 0.02) {
+                    wallpaperPage.setLiveOpt("volume", rounded);
                 }
             }
         }

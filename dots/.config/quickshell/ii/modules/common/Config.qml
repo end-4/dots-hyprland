@@ -224,6 +224,8 @@ Singleton {
                     property int position: 50
                     property bool pauseOnFullscreen: true
                     property bool loop: true
+                    property string resolution: "4k"
+                    property int fps: -1
                 }
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
