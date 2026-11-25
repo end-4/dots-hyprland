@@ -49,8 +49,12 @@ AbstractWidget {
         return onNormalBackground ? Appearance.colors.colOnLayer0 : adaptiveColor;
     }
 
-    property bool wallpaperIsVideo: Config.options.background.wallpaperPath.endsWith(".mp4") || Config.options.background.wallpaperPath.endsWith(".webm") || Config.options.background.wallpaperPath.endsWith(".mkv") || Config.options.background.wallpaperPath.endsWith(".avi") || Config.options.background.wallpaperPath.endsWith(".mov")
-    property string wallpaperPath: wallpaperIsVideo ? Config.options.background.thumbnailPath : Config.options.background.wallpaperPath
+    readonly property string monitorName: QsWindow.window?.screen?.name ?? ""
+    readonly property var monitorCfg: (Config.options.background.perMonitor && monitorName !== "") ? (Config.options.background.monitors?.[monitorName] ?? null) : null
+    readonly property string rawWallpaperPath: (monitorCfg?.wallpaperPath && monitorCfg.wallpaperPath !== "") ? monitorCfg.wallpaperPath : Config.options.background.wallpaperPath
+    readonly property string rawThumbnailPath: (monitorCfg?.thumbnailPath && monitorCfg.thumbnailPath !== "") ? monitorCfg.thumbnailPath : Config.options.background.thumbnailPath
+    property bool wallpaperIsVideo: rawWallpaperPath.endsWith(".mp4") || rawWallpaperPath.endsWith(".webm") || rawWallpaperPath.endsWith(".mkv") || rawWallpaperPath.endsWith(".avi") || rawWallpaperPath.endsWith(".mov")
+    property string wallpaperPath: wallpaperIsVideo ? rawThumbnailPath : rawWallpaperPath
     
     onWallpaperPathChanged: refreshPlacementIfNeeded()
     onPlacementStrategyChanged: refreshPlacementIfNeeded()

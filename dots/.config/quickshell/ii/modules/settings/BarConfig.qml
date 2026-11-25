@@ -1,11 +1,68 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
+import Quickshell.Io
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 
 ContentPage {
+    id: barConfigPage
     forceWidth: true
+    readonly property int monitorCount: Quickshell.screens.length
+    readonly property bool hasMultipleMonitors: monitorCount > 1
+
+    function getMonitorSplits() {
+        const needed = Math.max(0, monitorCount - 1);
+        if (needed === 0) return [];
+        let arr = Array.from(Config.options.bar.workspaces.monitorSplits ?? []);
+        if (arr.length !== needed) {
+            arr = [];
+            for (let i = 0; i < needed; i++) {
+                arr.push(Math.round(10 * (i + 1) / monitorCount));
+            }
+        }
+        return arr;
+    }
+
+    function updateSplit(idx, val) {
+        const needed = Math.max(0, monitorCount - 1);
+        if (idx < 0 || idx >= needed) return;
+        const arr = getMonitorSplits().slice();
+        const minV = idx + 1;
+        const maxV = 10 - (needed - idx);
+        arr[idx] = Math.max(minV, Math.min(maxV, Math.round(val)));
+        for (let j = idx - 1; j >= 0; j--) {
+            if (arr[j] >= arr[j + 1]) arr[j] = arr[j + 1] - 1;
+        }
+        for (let j = idx + 1; j < needed; j++) {
+            if (arr[j] <= arr[j - 1]) arr[j] = arr[j - 1] + 1;
+        }
+        Config.options.bar.workspaces.monitorSplits = arr;
+        Config.options.bar.workspaces.leftMonitorCount = arr[0];
+        wsSplitApplyTimer.restart();
+    }
+
+    Timer {
+        id: wsSplitApplyTimer
+        interval: 120
+        repeat: false
+        onTriggered: {
+            wsSplitProc.running = false;
+            wsSplitProc.running = true;
+        }
+    }
+
+    Process {
+        id: wsSplitProc
+        command: [
+            "python3",
+            Quickshell.shellPath("scripts/apply-workspace-split.py"),
+            (barConfigPage.hasMultipleMonitors && Config.options.bar.workspaces.splitByMonitor)
+                ? barConfigPage.getMonitorSplits().join(",")
+                : "0"
+        ]
+    }
 
     ContentSection {
         icon: "notifications"
@@ -279,6 +336,81 @@ ContentPage {
             checked: Config.options.bar.workspaces.monochromeIcons
             onCheckedChanged: {
                 Config.options.bar.workspaces.monochromeIcons = checked;
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 8
+            ConfigSwitch {
+                Layout.fillWidth: true
+                buttonIcon: "splitscreen_left"
+                text: Translation.tr("Split workspaces by monitor")
+                enabled: barConfigPage.hasMultipleMonitors
+                checked: barConfigPage.hasMultipleMonitors && Config.options.bar.workspaces.splitByMonitor
+                onCheckedChanged: {
+                    if (barConfigPage.hasMultipleMonitors && Config.options.bar.workspaces.splitByMonitor !== checked) {
+                        Config.options.bar.workspaces.splitByMonitor = checked;
+                        wsSplitApplyTimer.restart();
+                    }
+                }
+            }
+            RowLayout {
+                visible: !barConfigPage.hasMultipleMonitors
+                spacing: 4
+                MaterialSymbol {
+                    text: "error"
+                    iconSize: 18
+                    color: Appearance.colors.colError
+                }
+                StyledText {
+                    text: Translation.tr("No 2nd monitor")
+                    color: Appearance.colors.colError
+                    font.pixelSize: Appearance.font.pixelSize.small
+                }
+            }
+        }
+
+        Repeater {
+            model: (barConfigPage.hasMultipleMonitors && Config.options.bar.workspaces.splitByMonitor)
+                ? Math.max(0, barConfigPage.monitorCount - 1) : 0
+            delegate: ConfigSlider {
+                required property int index
+                readonly property var splits: barConfigPage.getMonitorSplits()
+                readonly property int prevEnd: index === 0 ? 0 : splits[index - 1]
+                readonly property int curEnd: splits[index] ?? 5
+                readonly property int nextEnd: (index + 1 < splits.length) ? splits[index + 1] : 10
+                text: Translation.tr("M%1 %2–%3 | M%4 %5–%6")
+                    .arg(index + 1).arg(prevEnd + 1).arg(curEnd)
+                    .arg(index + 2).arg(curEnd + 1).arg(nextEnd)
+                value: curEnd
+                usePercentTooltip: false
+                buttonIcon: "tune"
+                from: index + 1
+                to: 10 - (barConfigPage.monitorCount - 1 - index)
+                stopIndicatorValues: [Math.round(10 * (index + 1) / barConfigPage.monitorCount)]
+                onValueChanged: {
+                    const v = Math.round(value);
+                    if (v !== curEnd) {
+                        barConfigPage.updateSplit(index, v);
+                    }
+                }
+            }
+        }
+
+        ContentSubsection {
+            visible: barConfigPage.hasMultipleMonitors
+            title: Translation.tr("Default monitor on startup")
+            ConfigSelectionArray {
+                currentValue: Config.options.bar.workspaces.defaultMonitor ?? ""
+                onSelected: newValue => Config.options.bar.workspaces.defaultMonitor = newValue
+                options: [({ displayName: Translation.tr("Auto (Largest)"), icon: "auto_awesome", value: "" })].concat(
+                    Quickshell.screens.map((s, idx) => ({
+                        displayName: "%1 · %2".arg(idx + 1).arg(s.name),
+                        icon: "desktop_windows",
+                        value: s.name
+                    }))
+                )
             }
         }
 

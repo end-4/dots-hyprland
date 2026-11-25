@@ -45,6 +45,8 @@ Flow {
             rightmost: index === root.options.length - 1
             buttonIcon: modelData.icon || ""
             buttonText: modelData.displayName
+            enabled: modelData.enabled !== false
+            opacity: enabled ? 1.0 : 0.4
             toggled: root.currentValue == modelData.value
             onClicked: {
                 root.selected(modelData.value);
