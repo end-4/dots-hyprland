@@ -30,7 +30,10 @@ esac
 case "${SKIP_FISH}" in
   true) true;;
   *)
-    install_dir__sync_exclude dots/.config/fish "$XDG_CONFIG_HOME"/fish "conf.d"
+    # Fish and its plugin managers keep user state in this directory.
+    install_dir dots/.config/fish "$XDG_CONFIG_HOME"/fish
+    # Seed universal variables only when Fish has no state file yet.
+    v rsync -a --ignore-existing sdata/subcmd-install/fish-defaults/fish_variables "$XDG_CONFIG_HOME"/fish/
     ;;
 esac
 

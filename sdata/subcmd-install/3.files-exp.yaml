@@ -1,6 +1,6 @@
 # The possible values of `mode`: (by default `sync`)
 # - `sync`: Make the destination completely the same as the source.
-# - `soft`: Skip existing files when copying
+# - `soft`: Copy source files without deleting other files in the destination
 # - `hard`: Overwrite existing files when copying
 # - `soft-backup`: If target file exists, copy source file to `*.new`. Do not create `*.new` but skip coyping when source and target HASH values are exactly the same.
 # - `hard-backup`: If target file exists, create backup by renaming it to `*.old.<n>` where `<n>` is a number increment from 1 to prevent backup gets overwritten when running twice. (Keep in mind that this script must be idempotent.) Also must compare the actual file content by using MD5 HASH value to prevent generating lots of `*.old.<n>`s when runnng multiple times. Do not create backup but skip coyping when source and target HASH values are exactly the same.
@@ -19,8 +19,13 @@ patterns:
   # Conditionally install these files
   - from: "dots/.config/fish"
     to: "$XDG_CONFIG_HOME/fish"
-    mode: "sync"
-    excludes: ["conf.d"]
+    mode: "soft"
+    condition:
+      type: "shell"
+      value: "fish"
+  - from: "sdata/subcmd-install/fish-defaults/fish_variables"
+    to: "$XDG_CONFIG_HOME/fish/fish_variables"
+    mode: "skip-if-exists"
     condition:
       type: "shell"
       value: "fish"
