@@ -172,11 +172,15 @@ Button {
                             onClicked: {
                                 root.showActions = false;
                                 const targetPath = root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath;
-                                const userAgent = Config.options?.networking?.userAgent ?? ""
-                                const userAgentHeader = userAgent ? ` -H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(userAgent)}'` : ""
-                                Quickshell.execDetached(["bash", "-c", 
-                                    `mkdir -p '${targetPath}' && curl '${StringUtils.shellSingleQuoteEscape(root.imageData.file_url)}'${userAgentHeader} -o '${targetPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
-                                ])
+                                const userAgent = Config.options?.networking?.userAgent || "QuickshellBooru/1.0";
+                                const userAgentHeader = ` -H 'User-Agent: ${StringUtils.shellSingleQuoteEscape(userAgent)}'`;
+                                const refererHeader = (root.imageData.file_url || "").includes("donmai.us") ? " -H 'Referer: https://danbooru.donmai.us/'" : "";
+                                const escapedUrl = StringUtils.shellSingleQuoteEscape(root.imageData.file_url);
+                                const escapedDest = StringUtils.shellSingleQuoteEscape(`${targetPath}/${root.fileName}`);
+                                const escapedDir = StringUtils.shellSingleQuoteEscape(targetPath);
+                                Quickshell.execDetached(["bash", "-c",
+                                    `mkdir -p '${escapedDir}' && sleep 1 && curl -fsSL${userAgentHeader}${refererHeader} '${escapedUrl}' -o '${escapedDest}' && notify-send '${Translation.tr("Download complete")}' '${escapedDest}' -a 'Shell'`
+                                ]);
                             }
                         }
                     }
