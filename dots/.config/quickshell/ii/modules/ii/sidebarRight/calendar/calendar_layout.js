@@ -40,8 +40,7 @@ function getPrevMonthDays(month, year) {
     return 31;
 }
 
-function getDateInXMonthsTime(x) {
-    var currentDate = new Date(); // Get the current date
+function getDateInXMonthsTime(x, currentDate) {
     if (x == 0) return currentDate; // If x is 0, return the current date
 
     var targetMonth = currentDate.getMonth() + x; // Calculate the target month
