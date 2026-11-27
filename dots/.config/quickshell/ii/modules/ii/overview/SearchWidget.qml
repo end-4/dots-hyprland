@@ -48,6 +48,23 @@ Item { // Wrapper
     }
 
     Keys.onPressed: event => {
+        // Ctrl+N / Ctrl+P navigate like Down / Up
+        if (event.modifiers === Qt.ControlModifier && (event.key === Qt.Key_N || event.key === Qt.Key_P)) {
+            if (appResults.activeFocus) {
+                if (event.key === Qt.Key_N)
+                    appResults.incrementCurrentIndex();
+                else if (appResults.currentIndex > 0)
+                    appResults.decrementCurrentIndex();
+                else
+                    root.focusSearchInput();
+                event.accepted = true;
+            } else if (event.key === Qt.Key_N && appResults.visible && appResults.count > 0) {
+                appResults.forceActiveFocus(); // onFocusChanged selects index 1, same as Down
+                event.accepted = true;
+            }
+            return;
+        }
+
         // Prevent Esc and Backspace from registering
         if (event.key === Qt.Key_Escape)
             return;
