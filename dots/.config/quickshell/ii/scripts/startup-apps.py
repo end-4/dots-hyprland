@@ -46,9 +46,19 @@ def _parse_desktop(path: pathlib.Path) -> dict[str, str]:
 
 
 def _friendly_hypr_name(cmd: str) -> tuple[str, str]:
-    parts = cmd.strip().split()
+    # "sleep 7 && /usr/bin/foo-tray" -> "foo-tray" (a sleep/pkill prefix must not become the name)
+    segments = [s.strip() for s in re.split(r"&&|;|\|\|", cmd) if s.strip()]
+    real = [s for s in segments if s.split()[0] not in ("sleep", "pkill")]
+    parts = (real[-1] if real else cmd).split()
     base = os.path.basename(parts[0]) if parts else cmd
     return (base, "terminal")
+
+
+def _label_from_comment(comment: str) -> str:
+    """"-- Alt+Tab window switcher (its own ...)" -> "Alt+Tab window switcher"."""
+    text = comment.lstrip("-").strip()
+    text = re.split(r"\s[\(\u2014:]|\s-\s|\.\s", text)[0].strip()
+    return text[:40]
 
 
 def list_apps() -> list[dict]:
@@ -57,13 +67,21 @@ def list_apps() -> list[dict]:
     # 1. Hyprland custom execs.lua / execs.conf entries
     if HYPR_EXECS_LUA.exists():
         mtime = HYPR_EXECS_LUA.stat().st_mtime
+        label = ""
         for idx, line in enumerate(HYPR_EXECS_LUA.read_text(encoding="utf-8", errors="replace").splitlines()):
+            stripped = line.strip()
+            if stripped.startswith("--") and "[disabled]" not in stripped:
+                label = _label_from_comment(stripped)
+                continue
             m = EXEC_LUA_RE.match(line)
             if not m:
                 continue
             disabled = bool(m.group(2))
             cmd = m.group(4)
             name, icon = _friendly_hypr_name(cmd)
+            if label:
+                name = label
+            label = ""
             items.append({
                 "id": f"hyprlua:{idx}",
                 "name": name,
